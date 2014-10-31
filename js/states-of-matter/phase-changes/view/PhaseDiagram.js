@@ -1,4 +1,4 @@
-// Copyright 2002-2011, University of Colorado
+// Copyright 2002-2014, University of Colorado Boulder
 /**
  * This class displays a phase diagram suitable for inclusion on the control
  * panel of a PhET simulation.

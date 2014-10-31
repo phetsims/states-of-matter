@@ -1,4 +1,4 @@
-// Copyright 2002-2011, University of Colorado
+// Copyright 2002-2014, University of Colorado Boulder
 /**
  * StatesOfMatterResources is a wrapper around the PhET resource loader.
  * If we decide to use a different technique to load resources in the

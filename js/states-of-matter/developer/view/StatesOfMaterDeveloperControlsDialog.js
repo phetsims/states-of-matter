@@ -1,4 +1,4 @@
-// Copyright 2002-2011, University of Colorado
+// Copyright 2002-2014, University of Colorado Boulder
 /**
  * DeveloperControlsDialog is a dialog that contains "developer only" controls.
  * These controls will not be available to the user, and are not localized.

@@ -1,4 +1,4 @@
-// Copyright 2002-2012, University of Colorado
+// Copyright 2002-2014, University of Colorado Boulder
 /**
  * This class implements what is known as an Andersen Thermostat for adjusting
  * the kinetic energy in a set of molecules toward a desired setpoint.

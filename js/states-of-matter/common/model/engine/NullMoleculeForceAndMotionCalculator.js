@@ -1,4 +1,4 @@
-// Copyright 2002-2011, University of Colorado
+// Copyright 2002-2014, University of Colorado Boulder
 /**
  * This class is the "null" version of the molecule forces and motion
  * calculator.  It essentially does nothing, and is used as a default in the

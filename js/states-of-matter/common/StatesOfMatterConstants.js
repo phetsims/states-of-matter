@@ -1,4 +1,4 @@
-// Copyright 2002-2011, University of Colorado
+// Copyright 2002-2014, University of Colorado Boulder
 /**
  * This class is a collection of constants that configure global properties.
  * If you change something here, it will change *everywhere* in this simulation.

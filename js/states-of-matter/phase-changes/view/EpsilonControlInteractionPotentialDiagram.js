@@ -1,4 +1,4 @@
-// Copyright 2002-2011, University of Colorado
+// Copyright 2002-2014, University of Colorado Boulder
 /**
  * This class extends the Interaction Potential diagram to allow the user to
  * adjust the interaction strength parameter (i.e. epsilon).

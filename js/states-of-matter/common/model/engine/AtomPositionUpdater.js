@@ -1,4 +1,4 @@
-// Copyright 2002-2011, University of Colorado
+// Copyright 2002-2014, University of Colorado Boulder
 /**
  * This interface is used to update the positions of the atoms that make up a
  * molecule based on the data that represents the molecule's position.  This

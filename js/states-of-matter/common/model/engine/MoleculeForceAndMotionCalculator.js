@@ -1,4 +1,4 @@
-// Copyright 2002-2011, University of Colorado
+// Copyright 2002-2014, University of Colorado Boulder
 /**
  * This interface is used to control an object that simulates the interaction
  * of a set of molecules.  Through this interface the simulation can be

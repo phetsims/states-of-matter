@@ -1,4 +1,4 @@
-// Copyright 2002-2011, University of Colorado
+// Copyright 2002-2014, University of Colorado Boulder
 /**
  * This class calculates the Lennard-Jones potential based on values provided
  * for the molecule size (sigma) and the interaction strength (epsilon).  Note

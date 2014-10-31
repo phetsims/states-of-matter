@@ -1,4 +1,4 @@
-// Copyright 2002-2011, University of Colorado
+// Copyright 2002-2014, University of Colorado Boulder
 /**
  * This is the base class for the objects that directly change the state of
  * the molecules within the multi-particle simulation.

@@ -1,4 +1,4 @@
-// Copyright 2002-2011, University of Colorado
+// Copyright 2002-2014, University of Colorado Boulder
 /**
  * Main application class for the States of Matter - Basics simulation.  This
  * is a somewhat simplified version of the original States of Matter

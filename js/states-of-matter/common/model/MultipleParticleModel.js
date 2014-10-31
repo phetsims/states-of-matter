@@ -1,4 +1,4 @@
-// Copyright 2002-2012, University of Colorado
+// Copyright 2002-2014, University of Colorado Boulder
 /**
  * This is the main class for the model portion of the "States of Matter"
  * simulation.  It maintains a set of data that represents a normalized model

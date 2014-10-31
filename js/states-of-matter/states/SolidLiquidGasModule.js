@@ -1,4 +1,4 @@
-// Copyright 2002-2011, University of Colorado
+// Copyright 2002-2014, University of Colorado Boulder
 /**
  * This class is where the model and view classes for the "Solid, Liquid, and
  * Gas" tab of this simulation are created and contained.

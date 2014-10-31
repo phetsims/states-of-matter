@@ -1,4 +1,4 @@
-// Copyright 2002-2011, University of Colorado
+// Copyright 2002-2014, University of Colorado Boulder
 /**
  * This class updates the positions of atoms in a water molecule based on the
  * position and rotation information for the molecule.

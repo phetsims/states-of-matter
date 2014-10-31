@@ -1,4 +1,4 @@
-// Copyright 2002-2012, University of Colorado
+// Copyright 2002-2014, University of Colorado Boulder
 /**
  * This class represents the bundle of data that represents the position,
  * motion, and forces acting upon a set of molecules.  IN CASE YOU'RE

@@ -1,4 +1,4 @@
-// Copyright 2002-2012, University of Colorado
+// Copyright 2002-2014, University of Colorado Boulder
 /**
  * This is an abstract base class for classes that implement the Verlet
  * algorithm for simulating molecular interactions based on the Lennard-

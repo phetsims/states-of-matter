@@ -1,4 +1,4 @@
-// Copyright 2002-2012, University of Colorado
+// Copyright 2002-2014, University of Colorado Boulder
 /**
  * This class implements a thermostat that adjusts the velocity of all
  * molecules in the system by the same amount in order to get the overall

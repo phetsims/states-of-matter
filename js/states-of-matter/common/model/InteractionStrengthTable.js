@@ -1,4 +1,4 @@
-// Copyright 2002-2011, University of Colorado
+// Copyright 2002-2014, University of Colorado Boulder
 /**
  * This class provides the interaction strength value between a number of
  * different pairs of atoms.  To do them all would be too much, so this is a

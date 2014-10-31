@@ -1,4 +1,4 @@
-// Copyright 2002-2011, University of Colorado
+// Copyright 2002-2014, University of Colorado Boulder
 /**
  * This is essentially an enum for the atom types used in this simulation.  We
  * are restricted to Java 1.4 at this time, so enums are not available.

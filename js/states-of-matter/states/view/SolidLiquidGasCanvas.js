@@ -1,4 +1,4 @@
-// Copyright 2002-2011, University of Colorado
+// Copyright 2002-2014, University of Colorado Boulder
 /**
  * This is the canvas that represents the play area for the "Solid, Liquid,
  * Gas" tab of this simulation.
