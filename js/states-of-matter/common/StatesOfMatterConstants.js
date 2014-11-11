@@ -78,6 +78,7 @@ define( function( require ) {
 // Distance between diatomic pairs.
 // In particle diameters.
   var DIATOMIC_PARTICLE_DISTANCE = 0.9;
+
 //----------------------------------------------------------------------------
 // Physical Constants
 //----------------------------------------------------------------------------
