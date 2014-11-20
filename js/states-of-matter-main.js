@@ -9,12 +9,14 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var StatesOfMatterScreen = require( 'STATES_OF_MATTER/states-of-matter/StatesOfMatterScreen' );
+  var SolidLiquidGasScreen = require( 'STATES_OF_MATTER/solid-liquid-gas/SolidLiquidGasScreen' );
+  var PhaseChangesScreen = require( 'STATES_OF_MATTER/phase-changes/PhaseChangesScreen' );
+
   var Sim = require( 'JOIST/Sim' );
   var SimLauncher = require( 'JOIST/SimLauncher' );
 
   // strings
-  var simTitle = require( 'string!STATES_OF_MATTER/states-of-matter.name' );
+  var simTitle = require( 'string!STATES_OF_MATTER/states-of-matter' );
 
   var simOptions = {
     credits: {
@@ -36,7 +38,7 @@ define( function( require ) {
   }
 
   SimLauncher.launch( function() {
-    var sim = new Sim( simTitle, [ new StatesOfMatterScreen() ], simOptions );
+    var sim = new Sim( simTitle, [ new SolidLiquidGasScreen(), new PhaseChangesScreen() ], simOptions );
     sim.start();
   } );
 } );

@@ -1,0 +1,14 @@
+{
+  "low": "low",
+  "solid":"Solid",
+  "gas":"Gas",
+  "liquid":"Liquid",
+  "AtomsMolecules":"Atoms & Molecules",
+  "neon":"Neon",
+  "argon":"Argon",
+  "water":"Water",
+  "oxygen":"Oxygen",
+  "solidLiquidGas":"Solid -Liquid-Gas",
+  "phaseChanges":"Phase-Changes",
+  "earth": "Earth"
+}

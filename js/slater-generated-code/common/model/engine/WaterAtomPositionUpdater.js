@@ -44,6 +44,8 @@ define( function( require ) {
       var moleculeCenterOfMassPositions = moleculeDataSet.getMoleculeCenterOfMassPositions();
       var moleculeRotationAngles = moleculeDataSet.getMoleculeRotationAngles();
       var xPos, yPos, cosineTheta, sineTheta;
+
+      //TODO: What is this for-loop for?
       for ( var i = 0; i < moleculeDataSet.getNumberOfMolecules(); i++ ) {
         cosineTheta = Math.cos( moleculeRotationAngles[i] );
         sineTheta = Math.sin( moleculeRotationAngles[i] );
