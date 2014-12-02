@@ -19,7 +19,7 @@ define( function( require ) {
   var MASS = 20.1797; // In atomic mass units.
   var EPSILON = 32.8; // epsilon/k-Boltzmann is in Kelvin.
   var ATOM_TYPE = AtomType.NEON;
-  var COLOUR = 'blue';
+  var COLOUR = '#1AFFFB';
 
   /**
    * @param {Number} x

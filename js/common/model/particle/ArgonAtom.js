@@ -18,7 +18,7 @@ define( function( require ) {
   var RADIUS = 181;  // In picometers.
   var MASS = 39.948; // In atomic mass units.
   var ATOM_TYPE = AtomType.ARGON;
-  var COLOUR = 'red';
+  var COLOUR = '#FF8A75';
 
   /**
    * @param {Number} x
