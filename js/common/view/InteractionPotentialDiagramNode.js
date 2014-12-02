@@ -1,5 +1,5 @@
- // Copyright 2002-2014, University of Colorado Boulder
- /**
+// Copyright 2002-2014, University of Colorado Boulder
+/**
  * This class displays an interaction potential diagram.
  *
  * @author John Blanco
@@ -23,47 +23,30 @@ define( function( require ) {
   //strings
   var distanceBetweenMoleculesString = require( 'string!STATES_OF_MATTER/distanceBetweenMolecules' );
   var potentialEnergyString = require( 'string!STATES_OF_MATTER/potentialEnergy' );
-
+  var sigmaString = require( 'string!STATES_OF_MATTER/sigma' );
+  var epsilonString = require( 'string!STATES_OF_MATTER/epsilon' );
 
 // Constants that control the range of data that is graphed.
 // In picometers.
   var MAX_INTER_ATOM_DISTANCE = 1200;
+
 // Constants that control the appearance of the diagram.
-
-  //private
-  var NARROW_VERSION_WIDTH = 200;
-
-  //private
+  var NARROW_VERSION_WIDTH = 130;
   var WIDE_VERSION_WIDTH = 300;
-
-  //private
   var AXIS_LINE_WIDTH = 1;
-  //private
-  var AXES_ARROW_HEAD_HEIGHT = 8 * AXIS_LINE_WIDTH;
+  var AXES_ARROW_HEAD_HEIGHT = 6 * AXIS_LINE_WIDTH;
 
 
 // Size of pos marker wrt overall width.
-
-  //private
   var POSITION_MARKER_DIAMETER_PROPORTION = 0.03;
 
-
 // Constants that control the location and size of the graph.
-
-  //private
   var VERT_AXIS_SIZE_PROPORTION = 0.85;
+
 // Font for the labels used on the axes and within the graph.
-
-  //private
-  var AXIS_LABEL_FONT_SIZE = 14;
-
-  //private
+  var AXIS_LABEL_FONT_SIZE = 10;
   var AXIS_LABEL_FONT = new PhetFont( AXIS_LABEL_FONT_SIZE );
-
-  //private
-  var GREEK_LETTER_FONT_SIZE = 16;
-
-  //private
+  var GREEK_LETTER_FONT_SIZE = 14;
   var GREEK_LETTER_FONT = new PhetFont( GREEK_LETTER_FONT_SIZE );
 
   /**
@@ -77,8 +60,6 @@ define( function( require ) {
   function InteractionPotentialDiagramNode( sigma, epsilon, wide ) {
 
     Node.call( this );
-    sigma = sigma;
-    epsilon = epsilon;
     this.positionMarkerEnabled = false;
     this.graphMin = new Vector2( 0, 0 );
     this.zeroCrossingPoint = new Vector2( 0, 0 );
@@ -88,7 +69,7 @@ define( function( require ) {
     // Set up for the normal or wide version of the graph.
     if ( wide ) {
       this.widthOfGraph = WIDE_VERSION_WIDTH;
-      this.heightOfGraph = this.widthOfGraph * 0.6;
+      this.heightOfGraph = this.widthOfGraph * 0.5;
     }
     else {
       this.widthOfGraph = NARROW_VERSION_WIDTH;
@@ -102,26 +83,26 @@ define( function( require ) {
 
     // Layer where the graph elements are added.
     this.ljPotentialGraph = new Node();
-    this.verticalScalingFactor = this.graphHeight / 2 / (StatesOfMatterConstants.MAX_EPSILON * StatesOfMatterConstants.K_BOLTZMANN);
+    this.verticalScalingFactor = this.graphHeight / 2 /
+                                 (StatesOfMatterConstants.MAX_EPSILON * StatesOfMatterConstants.K_BOLTZMANN);
 
     // Create the background that will sit behind everything.
     this.background = new Path( new Shape()
-      .rect( 0, 0, this.widthOfGraph, this.heightOfGraph ), {/*fill:'yellow'*/} );
-    //  this.ljPotentialGraph.addChild( this.background );
+      .rect( 0, 0, this.widthOfGraph, this.heightOfGraph ), {fill: 'black'} );
+    this.ljPotentialGraph.addChild( this.background );
 
 
     // Create and add the portion that depicts the Lennard-Jones potential curve.
     this.ljPotentialGraph1 = new Path( new Shape()
       .rect( 0, 0, this.graphWidth, this.graphHeight ), {fill: 'black'} );
     this.ljPotentialGraph1.setTranslation( this.graphXOrigin, this.graphYOrigin - this.graphHeight );
-    //this.ljPotentialGraph.addChild( this.ljPotentialGraph1 );
+    this.ljPotentialGraph.addChild( this.ljPotentialGraph1 );
 
     // Create and add the center axis line for the graph.
     var centerAxis = new Path( new Shape().lineTo( 0, 0 )
       .lineTo( this.graphWidth, 0 ), { lineWidth: 4, stroke: '#A7A7A7'} );
     this.ljPotentialGraph.addChild( centerAxis );
-    centerAxis.setTranslation( 0, this.graphHeight / 2 );
-
+    centerAxis.setTranslation( this.graphXOrigin, this.graphHeight / 2 );
 
     // Create and add the potential energy line.
     this.potentialEnergyLine = new Path( null, { lineWidth: 2, stroke: 'yellow'} );
@@ -138,10 +119,10 @@ define( function( require ) {
       } );
     this.ljPotentialGraph.addChild( this.epsilonArrow );
 
-    this.epsilonLabel = new Text( "ε", { font: GREEK_LETTER_FONT, fill: 'white' } );
+    this.epsilonLabel = new Text( epsilonString, { font: GREEK_LETTER_FONT, fill: 'white' } );
     this.ljPotentialGraph.addChild( this.epsilonLabel );
 
-    this.sigmaLabel = new Text( "σ", {font: GREEK_LETTER_FONT, fill: 'white'} );
+    this.sigmaLabel = new Text( sigmaString, {font: GREEK_LETTER_FONT, fill: 'white'} );
     this.ljPotentialGraph.addChild( this.sigmaLabel );
     this.sigmaArrow = new ArrowNode( 0, 0, 0, 0, { doubleHead: true, fill: 'white'} );
     this.ljPotentialGraph.addChild( this.sigmaArrow );
@@ -194,7 +175,8 @@ define( function( require ) {
     this.ljPotentialGraph.addChild( verticalAxis );
 
     var verticalAxisLabel = new Text( potentialEnergyString, {fill: 'white', font: AXIS_LABEL_FONT} );
-    verticalAxisLabel.setTranslation( this.graphXOrigin / 2, this.graphYOrigin - (  this.graphHeight / 2) + (verticalAxisLabel.width / 2) );
+    verticalAxisLabel.setTranslation( this.graphXOrigin / 2,
+        this.graphYOrigin - (  this.graphHeight / 2) + (verticalAxisLabel.width / 2) );
     verticalAxisLabel.setRotation( 3 * Math.PI / 2 );
     this.ljPotentialGraph.addChild( verticalAxisLabel );
     // Draw the curve upon the graph.
@@ -210,11 +192,7 @@ define( function( require ) {
      * @param epsilon
      */
     setLjPotentialParameters: function( sigma, epsilon ) {
-      // Update the parameters.
-      /*    console.log( "sigma = " + sigma );
-       console.log( "epsilon = " + epsilon );*/
-      sigma = sigma;
-      epsilon = epsilon;
+
       // Update the Lennard-Jones force calculator.
       this.ljPotentialCalculator.setEpsilon( epsilon );
       this.ljPotentialCalculator.setSigma( sigma );
@@ -251,7 +229,8 @@ define( function( require ) {
       if ( this.positionMarkerEnabled && (xPos > 0) && (xPos < this.graphWidth) &&
            (yPos > 0) && (yPos < this.graphHeight) ) {
         this.positionMarker.setVisible( true );
-        this.positionMarker.setTranslation( xPos - this.positionMarker.width / 2, yPos - this.positionMarker.height() / 2 );
+        this.positionMarker.setTranslation( xPos - this.positionMarker.width / 2,
+            yPos - this.positionMarker.height() / 2 );
       }
       else {
         this.positionMarker.setVisible( false );
@@ -295,7 +274,8 @@ define( function( require ) {
       else {
         this.horizontalAxisLabel.setText( 'Distance between Molecules' );
       }
-      this.horizontalAxisLabel.setTranslation( this.graphXOrigin + (  this.graphWidth / 2) - (  this.horizontalAxisLabel.width / 2),
+      this.horizontalAxisLabel.setTranslation( this.graphXOrigin + (  this.graphWidth / 2) -
+                                               (  this.horizontalAxisLabel.width / 2),
           this.graphYOrigin + (  this.horizontalAxisLabel.height ) );
     },
 
@@ -345,8 +325,8 @@ define( function( require ) {
         this.epsilonArrow.setVisible( true );
         try {
 
-          //this.epsilonArrow.setTipAndTailLocations( this.graphMin, epsilonArrowStartPt );
-          this.epsilonArrow.setTailAndTip( this.graphMin.x, this.graphMin.y, epsilonArrowStartPt.x, epsilonArrowStartPt.y );
+          this.epsilonArrow.setTailAndTip( this.graphMin.x, this.graphMin.y, epsilonArrowStartPt.x,
+            epsilonArrowStartPt.y );
         }
         catch( e ) {
           console.error( "Error: Caught exception while positioning epsilon arrow - " + e );
@@ -356,11 +336,14 @@ define( function( require ) {
         // Don't show the arrow if there isn't enough space.
         this.epsilonArrow.setVisible( false );
       }
-      this.epsilonLabel.setTranslation( this.graphMin.x + this.epsilonLabel.width + 10, ((  this.graphMin.y - (  this.graphHeight / 2)) / 3) - (  this.epsilonLabel.height / 2) + this.graphHeight / 2 );
+      this.epsilonLabel.setTranslation( this.graphMin.x + this.epsilonLabel.width,
+          ((  this.graphMin.y - (  this.graphHeight / 2)) / 3) - (  this.epsilonLabel.height / 2) +
+          this.graphHeight / 2 );
       // Position the arrow that depicts sigma along with its label.
       this.sigmaLabel.setTranslation( this.zeroCrossingPoint.x / 2 - this.sigmaLabel.width / 2, this.graphHeight / 2 );
       try {
-        this.sigmaArrow.setTailAndTip( 0, this.graphHeight / 2, this.zeroCrossingPoint.x, this.zeroCrossingPoint.y );
+        this.sigmaArrow.setTailAndTip( this.graphXOrigin, this.graphHeight / 2,
+          this.zeroCrossingPoint.x, this.zeroCrossingPoint.y );
       }
       catch( r ) {
         console.error( "Error: Caught exception while positioning sigma arrow - " + r );

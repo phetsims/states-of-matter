@@ -36,16 +36,16 @@ define( function( require ) {
 
     // Register for synchronization with model.
     var thisNode = this;
-  /*  this.particle.positionProperty.link( function( position ) {
-      var location = modelViewTransform.modelToViewPosition( position );
-      thisNode.x = location.x;
-      thisNode.y = location.y;
-    } );*/
+    /*  this.particle.positionProperty.link( function( position ) {
+     var location = modelViewTransform.modelToViewPosition( position );
+     thisNode.x = location.x;
+     thisNode.y = location.y;
+     } );*/
 
     // Decide of the diameter of the sphere/circle.
     var radius = particle.radius * MVT_SCALE;
 
-    this.circle = new Circle( radius, { fill:particle.color } );
+    this.circle = new Circle( radius, { fill: particle.color } );
     this.addChild( this.circle );
   }
 
