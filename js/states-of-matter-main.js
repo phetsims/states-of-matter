@@ -1,4 +1,4 @@
-//  Copyright 2002-2014, University of Colorado Boulder
+// Copyright (c) 2002 - 2014. University of Colorado Boulder
 
 /**
  * Main entry point for the sim.
@@ -16,7 +16,7 @@ define( function( require ) {
   var SimLauncher = require( 'JOIST/SimLauncher' );
 
   // strings
-  var simTitle = require( 'string!STATES_OF_MATTER/states-of-matter' );
+  var simTitle = require( 'string!STATES_OF_MATTER/statesOfMatter' );
 
   var simOptions = {
     credits: {
