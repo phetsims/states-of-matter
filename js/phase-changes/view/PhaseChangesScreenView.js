@@ -13,13 +13,12 @@ define( function( require ) {
   // modules
   var inherit = require( 'PHET_CORE/inherit' );
   var ScreenView = require( 'JOIST/ScreenView' );
-  var Text = require( 'SCENERY/nodes/Text' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var PlayPauseButton = require( 'SCENERY_PHET/buttons/PlayPauseButton' );
   var StepButton = require( 'SCENERY_PHET/buttons/StepButton' );
-  var ThermometerNode = require( 'SCENERY_PHET/ThermometerNode' );
+  var TemperatureNode = require( 'STATES_OF_MATTER/common/view/TemperatureNode' );
   var StoveNode = require( 'STATES_OF_MATTER/common/view/StoveNode' );
-  var AtomsAndMoleculsControlPanel = require( 'STATES_OF_MATTER/solid-liquid-gas/view/AtomsAndMoleculsControlPanel' );
+  var PhaseChangesMoleculesControlPanel = require( 'STATES_OF_MATTER/phase-changes/view/PhaseChangesMoleculesControlPanel' );
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
   var ParticleContainerNode = require( 'STATES_OF_MATTER/common/view/ParticleContainerNode' );
   var ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
@@ -29,7 +28,7 @@ define( function( require ) {
   var BicyclePumpNode = require( 'STATES_OF_MATTER/common/view/BicyclePumpNode' );
   var PhaseDiagram = require( 'STATES_OF_MATTER/phase-changes/view/PhaseDiagram' );
   var EpsilonControlInteractionPotentialDiagram = require( 'STATES_OF_MATTER/phase-changes/view/EpsilonControlInteractionPotentialDiagram' );
-
+  var ParticleCanvasNode = require( 'STATES_OF_MATTER/common/view/ParticleCanvasNode' );
   // constants
   var inset = 10;
 
@@ -43,27 +42,53 @@ define( function( require ) {
     var mvtScale = StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / StatesOfMatterConstants.CONTAINER_BOUNDS.width;
 
     // model-view transform
-    var modelViewTransform = ModelViewTransform2.createSinglePointScaleInvertedYMapping( new Vector2( 0, 0 ), new Vector2( 0, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT ), mvtScale );
+    var modelViewTransform = ModelViewTransform2.createSinglePointScaleInvertedYMapping( new Vector2( 0, 0 ),
+      new Vector2( 0, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT ), mvtScale );
+
+
+    var stoveNode = new StoveNode( model, {
+      centerX: this.layoutBounds.centerX,
+      bottom: this.layoutBounds.bottom
+    } );
+    this.addChild( stoveNode );
 
     var particleContainerNode = new ParticleContainerNode( model, modelViewTransform,
       {
-        centerX: this.layoutBounds.centerX + 150,
-        top: this.layoutBounds.top + 50, canvasBounds: new Bounds2( 0, 0, 600, 1000 )
-      } );
-    // particleContainerNode.centerX= this.layoutBounds.centerX-50;
-    this.addChild( particleContainerNode );
-    this.particlesLayer = particleContainerNode;
-    // add temperature text
-    var temperatureTextNode = new Text( 0, { font: new PhetFont( 20 ), fill: 'white', right: particleContainerNode.right, bottom: particleContainerNode.top } );
-    model.temperatureSetPointProperty.link( function( temperature ) {
+        centerX: stoveNode.centerX,
+        bottom: stoveNode.top //, canvasBounds: new Bounds2( -1000, -1000, 1000, 1000 )
 
-      temperatureTextNode.setText( Math.round( model.getTemperatureInKelvin() ) );
+      }, true, true );
+
+
+    this.particlesLayer = new ParticleCanvasNode( model.particles, modelViewTransform, {
+      centerX: stoveNode.centerX - 100,
+      bottom: stoveNode.top + 700,
+      canvasBounds: new Bounds2( -1000, -1000, 1000, 1000 )
     } );
-    this.addChild( temperatureTextNode );
+    this.addChild( this.particlesLayer );
+    this.addChild( particleContainerNode );
+    /*new ParticleCanvasNode( model.particles, modelViewTransform, {
+     canvasBounds: new Bounds2( -1000, -1000, 1000, 1000 )
+     } );
+     this.addChild( this.particlesLayer );
+     */
 
-    this.addChild( new StoveNode( model, { centerX: this.layoutBounds.centerX, bottom: this.layoutBounds.bottom } ) );
-    var atomsAndMoleculsControlPanel = new AtomsAndMoleculsControlPanel( model.atomsProperty, { right: this.layoutBounds.right + 5, top: this.layoutBounds.top + 10} );
-    this.addChild( atomsAndMoleculsControlPanel );
+
+    // add temperature node
+    var temperatureNode = new TemperatureNode( model, {
+      font: new PhetFont( 20 ),
+      fill: 'white',
+      left: stoveNode.right,
+      top: stoveNode.top - 350
+    } );
+    this.addChild( temperatureNode );
+
+
+    var phaseChangesMoleculesControlPanel = new PhaseChangesMoleculesControlPanel( model, model.atomsProperty,
+      { right: this.layoutBounds.right + 5,
+        top: this.layoutBounds.top + 10
+      } );
+    this.addChild( phaseChangesMoleculesControlPanel );
 
     // Add reset all button
     var resetAllButton = new ResetAllButton(
@@ -92,32 +117,50 @@ define( function( require ) {
     this.addChild( stepButton );
 
     var playPauseButton = new PlayPauseButton( model.isPlayingProperty,
-      { radius: 18, stroke: 'black', fill: '#005566', y: stepButton.centerY, right: stepButton.left - inset } );
+      { radius: 18, stroke: 'black',
+        fill: '#005566',
+        y: stepButton.centerY,
+        right: stepButton.left - inset
+      } );
     this.addChild( playPauseButton );
     this.addChild( resetAllButton );
 
-    // add thermometer
-    var thermometer = new ThermometerNode( 0, 600, model.temperatureInKelVinProperty, {outlineStroke: 'white', tickSpacing: 3, bulbDiameter: 25, lineWidth: 2, tubeWidth: 15, tubeHeight: 50, centerX: particleContainerNode.centerX, bottom: particleContainerNode.top + 90 } );
-    this.addChild( thermometer );
-    this.addChild( new BicyclePumpNode( 100, 200, model, {x: 0, y: 100} ) );
-    var phaseDiagram = new PhaseDiagram( model.expandedProperty, {
-      scale: 0.8,
-      right: this.layoutBounds.right + 5,
-      top: atomsAndMoleculsControlPanel.bottom + 5 } );
-    this.addChild( phaseDiagram );
-    model.atomsProperty.link( function( moleculeId ) {
-      phaseDiagram.setDepictingWater( moleculeId === StatesOfMatterConstants.WATER );
-    } );
+    this.addChild( new BicyclePumpNode( 250, 300, model, {
+      //  x: particleContainerNode.centerX,
+      bottom: particleContainerNode.bottom,
+      right: particleContainerNode.left
+    } ) );
+    var phaseDiagram = new PhaseDiagram( model.expandedProperty );
+
+    var test = this;
+
     model.temperatureSetPointProperty.link( function( temperatureSetPoint ) {
       phaseDiagram.setStateMarkerPos( temperatureSetPoint, temperatureSetPoint );
-      model.temperatureInKelVinProperty.value = Math.round( model.getTemperatureInKelvin() );
+      model.temperatureInKelvin = Math.round( model.getTemperatureInKelvin() );
     } );
-    var epsilonControlInteractionPotentialDiagram = new EpsilonControlInteractionPotentialDiagram( StatesOfMatterConstants.MAX_SIGMA, StatesOfMatterConstants.MIN_EPSILON, false, model, {
-      scale: 0.8,
-      top: phaseDiagram.bottom,
-      right: this.layoutBounds.right + 5
-    } );
+    var epsilonControlInteractionPotentialDiagram = new EpsilonControlInteractionPotentialDiagram(
+      StatesOfMatterConstants.MAX_SIGMA, StatesOfMatterConstants.MIN_EPSILON, false, model, {
+        right: this.layoutBounds.right + 5,
+        top: phaseChangesMoleculesControlPanel.bottom + 5
+      } );
     this.addChild( epsilonControlInteractionPotentialDiagram );
+    model.atomsProperty.link( function( moleculeId ) {
+      phaseDiagram.setDepictingWater( moleculeId === StatesOfMatterConstants.WATER );
+      if ( moleculeId === StatesOfMatterConstants.USER_DEFINED_MOLECULE ) {
+        if ( test.indexOfChild( phaseDiagram ) >= 0 ) {
+          test.removeChild( phaseDiagram );
+        }
+        epsilonControlInteractionPotentialDiagram.top = phaseChangesMoleculesControlPanel.bottom + 5;
+      }
+      else {
+        if ( test.indexOfChild( phaseDiagram ) < 0 ) {
+          test.addChild( phaseDiagram );
+          phaseDiagram.right = test.layoutBounds.right + 5,
+            phaseDiagram.top = phaseChangesMoleculesControlPanel.bottom + 5;
+          epsilonControlInteractionPotentialDiagram.top = phaseDiagram.bottom + 5;
+        }
+      }
+    } );
   }
 
   return inherit( ScreenView, PhaseChangesScreenView, {

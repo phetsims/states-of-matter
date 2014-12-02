@@ -12,43 +12,26 @@ define( function( require ) {
 
   // modules
   var inherit = require( 'PHET_CORE/inherit' );
-  // var Dimension2 = require( 'DOT/Dimension2' );
   var AccordionBox = require( 'SUN/AccordionBox' );
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
+  var FillHighlightListener = require( 'SCENERY_PHET/input/FillHighlightListener' );
   var Shape = require( 'KITE/Shape' );
   var Path = require( 'SCENERY/nodes/Path' );
-  // var LinearGradient = require( 'SCENERY/util/LinearGradient' );
-  //var SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
+  var SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
   var Text = require( 'SCENERY/nodes/Text' );
+  //var Property = require( 'AXON/Property' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Node = require( 'SCENERY/nodes/Node' );
-  //var ArrowNode = require( 'SCENERY_PHET/ArrowNode' );
-  var ArrowShape = require( 'SCENERY_PHET/ArrowShape' );
+  var ArrowNode = require( 'SCENERY_PHET/ArrowNode' );
   var InteractionPotentialDiagramNode = require( 'STATES_OF_MATTER/common/view/InteractionPotentialDiagramNode' );
 
 
 // Size of handles as function of node width.
-  //var RESIZE_HANDLE_SIZE_PROPORTION = 0.12;
-// Position of handle as function of node width.
+  var RESIZE_HANDLE_SIZE_PROPORTION = 0.12;
 
-  //private
+  // Position of handle as function of node width.
   var EPSILON_HANDLE_OFFSET_PROPORTION = 0.08;
-
-  //private
-  //var RESIZE_HANDLE_NORMAL_COLOR = 'green';
-
-  //private
-  //var RESIZE_HANDLE_HIGHLIGHTED_COLOR = 'yellow';
-
-  //private
   var EPSILON_LINE_WIDTH = 1;
-
-
-  //private
-  // var EPSILON_LINE_STROKE = new BasicStroke( EPSILON_LINE_WIDTH );
-
-  //private
-//  var EPSILON_LINE_COLOR = RESIZE_HANDLE_NORMAL_COLOR;
 
   /**
    *
@@ -61,51 +44,104 @@ define( function( require ) {
    */
   function EpsilonControlInteractionPotentialDiagram( sigma, epsilon, wide, model, options ) {
 
-    this.model;
+    this.model = model;
+    var epsilonControlInteractionPotentialDiagram = this;
     this.epsilonResizeHandle = null;
     this.interactionPotentialDiagramNode = new InteractionPotentialDiagramNode( sigma, epsilon, wide );
     InteractionPotentialDiagramNode.call( this, sigma, epsilon, wide, true );
-    this.model = model;
-
     this.accordinContent = new Node();
+    // Update the text when the value or units changes.
+    /*  Property.multilink( [model.atomsProperty,  model.interactionStrengthProperty],
+     function( atoms, interactionStrength ) {
+     epsilonControlInteractionPotentialDiagram.updateInteractivityState();
 
-    /*model.property.link( function() {
-     // should when molecule change
-     this.updateInteractivityState();
-     this.drawPotentialCurve();
+     epsilonControlInteractionPotentialDiagram.drawPotentialCurve();
      // call when interaction strength change
-     this.setLjPotentialParameters( model.getSigma(), model.getEpsilon() );
+     epsilonControlInteractionPotentialDiagram.setLjPotentialParameters( model.getSigma(), model.getEpsilon() );
+
      } );*/
 
+    model.atomsProperty.link( function( atoms ) {
+      epsilonControlInteractionPotentialDiagram.updateInteractivityState();
+      epsilonControlInteractionPotentialDiagram.drawPotentialCurve();
+      // call when interaction strength change
+      epsilonControlInteractionPotentialDiagram.setLjPotentialParameters( model.getSigma(), model.getEpsilon() );
+
+    } );
+    model.interactionStrengthProperty.link( function( value ) {
+      epsilonControlInteractionPotentialDiagram.updateInteractivityState();
+      epsilonControlInteractionPotentialDiagram.drawPotentialCurve();
+      // call when interaction strength change
+      epsilonControlInteractionPotentialDiagram.setLjPotentialParameters( model.getSigma(), model.getEpsilon() );
+
+    } );
+
+
+    this.accordinContent.addChild( this.ljPotentialGraph );
 
     // Add the line that will indicate the value of epsilon.
     var epsilonLineLength = EPSILON_HANDLE_OFFSET_PROPORTION * this.widthOfGraph * 2.2;
-    this.epsilonLine = new Path( new Shape().moveTo( 0, 0 )
-      .lineTo( -epsilonLineLength / 3, 0 )
+    var epsilonShape = new Path( new Shape()
+      .moveTo( -epsilonLineLength / 3, 0 )
       .lineTo( epsilonLineLength / 2, 0 ), {
-      fill: 'red'
+      lineWidth: 2,
+      stroke: '#31C431'
     } );
+    this.epsilonLine = new Node( { cursor: 'pointer', pickable: true} );
 
-    this.accordinContent.addChild( this.ljPotentialGraph );
-    this.epsilonResizeHandle = new Path( new ArrowShape( 0, 0, 0, 30 ), { fill: 'green', doubleHead: true } );
+    this.epsilonLine.addChild( epsilonShape );
+    // the epsilon parameter.
+    this.epsilonResizeHandle = new ArrowNode( 0, -20, 0, 20, {
+      headHeight: 10,
+      headWidth: 10,
+      tailWidth: 6,
+      fill: '#33FF00',
+      stroke: 'black',
+      doubleHead: true,
+      pickable: true
+    } );
     this.ljPotentialGraph.addChild( this.epsilonResizeHandle );
-
-    //this.epsilonLine.addInputEventListener( new CursorHandler( Cursor.N_RESIZE_CURSOR ) );
-    //this.epsilonLine.addInputEventListener( epsilonChangeHandler );
-    // the epsilon parameter.
-    /*  this.epsilonResizeHandle = new ResizeArrowNode( RESIZE_HANDLE_SIZE_PROPORTION * m_width, Math.PI / 2,
-     RESIZE_HANDLE_NORMAL_COLOR, RESIZE_HANDLE_HIGHLIGHTED_COLOR );
-     m_ljPotentialGraph.addChild( m_epsilonResizeHandle );*/
     this.ljPotentialGraph.addChild( this.epsilonLine );
+    var epsilonResizeHandleNode = this.epsilonResizeHandle;
+    var startDragY, endDragY;
+    this.epsilonResizeHandle.cursor = 'pointer';
+    this.epsilonResizeHandle.addInputListener( new FillHighlightListener( '#33FF00', 'yellow' ) );
+    this.epsilonResizeHandle.addInputListener( new SimpleDragHandler(
+      {
+        start: function( event ) {
+          startDragY = epsilonResizeHandleNode.globalToParentPoint( event.pointer.point ).y;
+        },
+        drag: function( event ) {
+
+          endDragY = epsilonResizeHandleNode.globalToParentPoint( event.pointer.point ).y;
+          var d = endDragY - startDragY;
+          var scaleFactor = StatesOfMatterConstants.MAX_EPSILON /
+                            ( epsilonControlInteractionPotentialDiagram.getGraphHeight() / 2);
+          model.interactionStrengthProperty.value = model.getEpsilon() + ( d * scaleFactor );
+          epsilonControlInteractionPotentialDiagram.drawPotentialCurve();
+          epsilonResizeHandleNode.setTranslation( epsilonControlInteractionPotentialDiagram.getGraphMin().x +
+                                                  (epsilonControlInteractionPotentialDiagram.width *
+                                                   EPSILON_HANDLE_OFFSET_PROPORTION),
+            epsilonControlInteractionPotentialDiagram.getGraphMin().y );
+        }
+      } ) );
+
+    // todo
+    this.epsilonLine.addInputListener( new SimpleDragHandler(
+      {
+        start: function( event ) {
+
+        },
+        drag: function( event ) {
+
+          console.log( "changing epsilon using epsilon line " );
+        }
+      } ) );
 
 
-    // the epsilon parameter.
-    // this.epsilonResizeHandle = new ArrowNode( RESIZE_HANDLE_SIZE_PROPORTION * this.width,3, 5, 7,{fill:'blue'} );
-    //this.ljPotentialGraph.addChild( this.epsilonResizeHandle );
-    // this.epsilonResizeHandle.addInputEventListener( epsilonChangeHandler );
     var accordionBox = new AccordionBox( this.accordinContent,
       {
-        titleNode: new Text( 'Interaction Diagram', { fill: "#FFFFFF", font: new PhetFont( { size: 14 } ) } ),
+        titleNode: new Text( 'Interaction Diagram', { fill: "#FFFFFF", font: new PhetFont( { size: 12 } ) } ),
         fill: 'black',
         stroke: 'white',
         expandedProperty: model.interactionExpandedProperty,
@@ -113,18 +149,23 @@ define( function( require ) {
         titleAlign: 'left',
         buttonAlign: 'left',
         cornerRadius: 4,
-        contentYSpacing: 2,
+        contentYSpacing: -25,
         contentYMargin: 5,
-        contentXMargin: 4,
+        contentXMargin: 2,
+        contentXSpacing: -10,
         buttonYMargin: 4,
         buttonXMargin: 6,
         buttonLength: 12,
-        minWidth: 200
+        minWidth: 0
       } );
     this.addChild( accordionBox );
     // Update interactivity state.
-    this.drawPotentialCurve1();
+    this.drawPotentialCurve();
     this.updateInteractivityState();
+
+    // call when interaction strength change
+    this.setLjPotentialParameters( 200, 200 );
+    this.drawPotentialCurve();
     this.mutate( options );
   }
 
@@ -135,19 +176,19 @@ define( function( require ) {
      * curve on the graph, and this override draws the controls that allow
      * the user to interact with the graph.
      */
-    drawPotentialCurve1: function() {
+    drawPotentialCurve: function() {
       // The bulk of the drawing is done by the base class.
-      this.drawPotentialCurve();
+      InteractionPotentialDiagramNode.prototype.drawPotentialCurve.call( this );
       // Now position the control handles.
       if ( this.epsilonResizeHandle !== null ) {
         var graphMin = this.getGraphMin();
-        this.epsilonResizeHandle.setTranslation( graphMin.x + (this.width * EPSILON_HANDLE_OFFSET_PROPORTION), graphMin.y );
-        // this.epsilonResizeHandle.setVisible( this.interactionEnabled );
-        // epsilonResizeHandle.setPickable( interactionEnabled );
-        // epsilonResizeHandle.setChildrenPickable( interactionEnabled );
+        this.epsilonResizeHandle.setTranslation( graphMin.x + (this.width * EPSILON_HANDLE_OFFSET_PROPORTION),
+          graphMin.y );
+        this.epsilonResizeHandle.setVisible( this.interactionEnabled );
+        this.epsilonResizeHandle.setPickable( this.interactionEnabled );
         this.epsilonLine.setTranslation( graphMin.x, graphMin.y + EPSILON_LINE_WIDTH );
-        // this.epsilonLine.setVisible( this.interactionEnabled );
-        //epsilonLine.setPickable( interactionEnabled );
+        this.epsilonLine.setVisible( this.interactionEnabled );
+        this.epsilonLine.setPickable( this.interactionEnabled );
       }
     },
 

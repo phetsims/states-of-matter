@@ -17,7 +17,7 @@ define( function( require ) {
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
 
   // strings
-  var phaseChangesString = require( 'string!STATES_OF_MATTER/phase-changes' );
+  var phaseChangesString = require( 'string!STATES_OF_MATTER/phaseChanges' );
 
   /**
    * @constructor

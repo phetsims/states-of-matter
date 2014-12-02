@@ -12,10 +12,8 @@ define( function( require ) {
   // modules
   var inherit = require( 'PHET_CORE/inherit' );
   var Color = require( 'SCENERY/util/Color' );
-  //var Dimension2 = require( 'DOT/Dimension2' );
   var AccordionBox = require( 'SUN/AccordionBox' );
   var Vector2 = require( 'DOT/Vector2' );
-  //var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
   var Shape = require( 'KITE/Shape' );
   var Path = require( 'SCENERY/nodes/Path' );
   var Text = require( 'SCENERY/nodes/Text' );
@@ -35,7 +33,7 @@ define( function( require ) {
 
 
   // Constants that control the size of the canvas.
-  var WIDTH = 200;
+  var WIDTH = 140;
   var HEIGHT = (WIDTH * 0.8);
 
   // Constants that control the look of the axes.
@@ -44,28 +42,21 @@ define( function( require ) {
   var HORIZ_AXIS_SIZE_PROPORTION = 0.88;
   var VERT_AXIS_SIZE_PROPORTION = 0.85;
 
-  // Constant for size of the close button.
-  // Button size as proportion of diagram height.
-  var CLOSE_BUTTON_PROPORTION = 0.11;
-
   // Constants that control the location of the origin for the graph.
   var X_ORIGIN_OFFSET = 0.10 * WIDTH;
   var Y_ORIGIN_OFFSET = 0.85 * HEIGHT;
   var X_USABLE_RANGE = WIDTH * HORIZ_AXIS_SIZE_PROPORTION - AXES_ARROW_HEAD_HEIGHT;
-  var Y_USABLE_RANGE = HEIGHT * (VERT_AXIS_SIZE_PROPORTION - CLOSE_BUTTON_PROPORTION);
+  var Y_USABLE_RANGE = HEIGHT * ( VERT_AXIS_SIZE_PROPORTION - 0.11 );
 
   // Font for the labels used on the axes.
-  var AXIS_LABEL_FONT_SIZE = 14;
+  var AXIS_LABEL_FONT_SIZE = 12;
   var AXIS_LABEL_FONT = new PhetFont( AXIS_LABEL_FONT_SIZE );
 
   // Fonts for labels in the interior of the diagram.
-  var LARGER_INNER_FONT_SIZE = 14;
+  var LARGER_INNER_FONT_SIZE = 12;
   var LARGER_INNER_FONT = new PhetFont( LARGER_INNER_FONT_SIZE );
-  var SMALLER_INNER_FONT_SIZE = 12;
+  var SMALLER_INNER_FONT_SIZE = 10;
   var SMALLER_INNER_FONT = new PhetFont( SMALLER_INNER_FONT_SIZE );
-
-  // Colors for the various sections of the diagram.
-  var BACKGROUND_COLOR_FOR_GAS = new Color( 0xFFBB00 );
 
 
   // Constants that control the appearance of the phase diagram for the
@@ -89,7 +80,10 @@ define( function( require ) {
       Y_ORIGIN_OFFSET - (Y_USABLE_RANGE * 0.15) );
 
   /**
-   * Constructor.
+   *
+   * @param {Property} expandedProperty is expand the phase diagram
+   * @param {Object} options that can be passed on to the underlying node
+   * @constructor
    */
   function PhaseDiagram( expandedProperty, options ) {
 
@@ -107,7 +101,7 @@ define( function( require ) {
     // gas area background
     this.gasAreaBackground = new Path( null, {
       fill: '#FFBC00',
-      stroke: BACKGROUND_COLOR_FOR_GAS
+      stroke: '#FFBC00'
     } );
     this.accordinContent.addChild( this.gasAreaBackground );
 
@@ -135,25 +129,25 @@ define( function( require ) {
     this.solidGasLine = new Path( null, { lineWidth: 1, stroke: 'black'} );
     this.accordinContent.addChild( this.solidGasLine );
 
-    this.liquidGasLine = new Path( null, {lineWidth: 1, stroke: 'black'} );
+    this.liquidGasLine = new Path( null, { lineWidth: 1, stroke: 'black'} );
     this.accordinContent.addChild( this.liquidGasLine );
 
     this.triplePoint = new Path( new Shape()
-      .ellipse( 0, 0, POINT_MARKER_DIAMETER, POINT_MARKER_DIAMETER ), {fill: 'black'} );
+      .ellipse( 0, 0, POINT_MARKER_DIAMETER, POINT_MARKER_DIAMETER ), { fill: 'black' } );
     this.accordinContent.addChild( this.triplePoint );
 
     this.criticalPoint = new Path( new Shape()
-      .ellipse( 0, 0, POINT_MARKER_DIAMETER, POINT_MARKER_DIAMETER ), {fill: 'black'} );
+      .ellipse( 0, 0, POINT_MARKER_DIAMETER, POINT_MARKER_DIAMETER ), { fill: 'black' } );
     this.accordinContent.addChild( this.criticalPoint );
 
     // Create the labels that will exist inside the phase diagram.
-    this.solidLabel = new Text( solidString, {font: LARGER_INNER_FONT, fill: 'black'} );
+    this.solidLabel = new Text( solidString, { font: LARGER_INNER_FONT, fill: 'black' } );
     this.accordinContent.addChild( this.solidLabel );
 
-    this.liquidLabel = new Text( liquidString, {font: LARGER_INNER_FONT, fill: 'black'} );
+    this.liquidLabel = new Text( liquidString, { font: LARGER_INNER_FONT, fill: 'black'} );
     this.accordinContent.addChild( this.liquidLabel );
 
-    this.gasLabel = new Text( gasString, {font: LARGER_INNER_FONT, fill: 'black'} );
+    this.gasLabel = new Text( gasString, { font: LARGER_INNER_FONT, fill: 'black'} );
     this.accordinContent.addChild( this.gasLabel );
 
     this.triplePointLabel = new Text( triplePointString, {font: SMALLER_INNER_FONT, fill: 'black'} );
@@ -164,7 +158,8 @@ define( function( require ) {
 
     var horizontalAxis = new ArrowNode( X_ORIGIN_OFFSET, Y_ORIGIN_OFFSET,
         X_ORIGIN_OFFSET + (HORIZ_AXIS_SIZE_PROPORTION * WIDTH), Y_ORIGIN_OFFSET,
-      { fill: 'white', stroke: 'white',
+      { fill: 'white',
+        stroke: 'white',
         headHeight: 8,
         headWidth: 8,
         tailWidth: 2
@@ -173,7 +168,8 @@ define( function( require ) {
 
     var verticalAxis = new ArrowNode( X_ORIGIN_OFFSET, Y_ORIGIN_OFFSET,
       X_ORIGIN_OFFSET, Y_ORIGIN_OFFSET - Y_USABLE_RANGE - AXES_ARROW_HEAD_HEIGHT,
-      {fill: 'white', stroke: 'white',
+      { fill: 'white',
+        stroke: 'white',
         headHeight: 8,
         headWidth: 8,
         tailWidth: 2
@@ -181,12 +177,12 @@ define( function( require ) {
     this.accordinContent.addChild( verticalAxis );
 
     // Create and add the labels for the axes.
-    var horizontalAxisLabel = new Text( temperatureString, {font: AXIS_LABEL_FONT, fill: 'white'} );
-    horizontalAxisLabel.setTranslation( (WIDTH / 2) - (horizontalAxisLabel.width / 2),
+    var horizontalAxisLabel = new Text( temperatureString, { font: AXIS_LABEL_FONT, fill: 'white' } );
+    horizontalAxisLabel.setTranslation( ( WIDTH / 2 ) - ( horizontalAxisLabel.width / 2),
         Y_ORIGIN_OFFSET + horizontalAxisLabel.height );
     this.accordinContent.addChild( horizontalAxisLabel );
 
-    var verticalAxisLabel = new Text( pressureString, {font: SMALLER_INNER_FONT, fill: 'white'} );
+    var verticalAxisLabel = new Text( pressureString, { font: SMALLER_INNER_FONT, fill: 'white'} );
     verticalAxisLabel.setTranslation( X_ORIGIN_OFFSET - (verticalAxisLabel.height * 1.1),
         verticalAxisLabel.width * 1.6 );
     verticalAxisLabel.setRotation( 3 * Math.PI / 2 );
@@ -194,7 +190,7 @@ define( function( require ) {
 
     // Create and add the marker that shows the current phase state.
     this.currentStateMarker = new Path( new Shape()
-      .ellipse( 0, 0, CURRENT_STATE_MARKER_DIAMETER, CURRENT_STATE_MARKER_DIAMETER ), {fill: 'red'} );
+      .ellipse( 0, 0, CURRENT_STATE_MARKER_DIAMETER, CURRENT_STATE_MARKER_DIAMETER ), { fill: 'red'} );
     this.accordinContent.addChild( this.currentStateMarker );
 
     var accordionBox = new AccordionBox( this.accordinContent,
@@ -207,8 +203,8 @@ define( function( require ) {
         titleAlign: 'left',
         buttonAlign: 'left',
         cornerRadius: 4,
-        contentYSpacing: 1,
-        contentYMargin: 3,
+        contentYSpacing: -15,
+        contentYMargin: 10,
         contentXMargin: 3,
         buttonYMargin: 4,
         buttonXMargin: 6,
@@ -221,7 +217,7 @@ define( function( require ) {
     this.drawPhaseDiagram();
 
     // Set the initial position of the current phase state marker.
-    this.setStateMarkerPos( 0.5, 0.22 );
+    this.setStateMarkerPos( 0, 0 );
     this.mutate( options );
   }
 
@@ -234,10 +230,9 @@ define( function( require ) {
           DEFAULT_TRIPLE_POINT.y - POINT_MARKER_DIAMETER / 2 );
 
       // Add the curve that separates the solid and gaseous regions.
-      var solidGasCurve = new Shape().moveTo( X_ORIGIN_OFFSET - 1, Y_ORIGIN_OFFSET )
-        .quadraticCurveTo( X_ORIGIN_OFFSET, Y_ORIGIN_OFFSET,
-        /* X_ORIGIN_OFFSET + (X_USABLE_RANGE * 0.2)+1, Y_ORIGIN_OFFSET - (Y_USABLE_RANGE * 0.02)+1,*/
-        DEFAULT_TRIPLE_POINT.x, DEFAULT_TRIPLE_POINT.y ).close();
+      var solidGasCurve = new Shape().moveTo( X_ORIGIN_OFFSET, Y_ORIGIN_OFFSET )
+        .quadraticCurveTo( X_ORIGIN_OFFSET + (X_USABLE_RANGE * 0.2), Y_ORIGIN_OFFSET - (Y_USABLE_RANGE * 0.02),
+        DEFAULT_TRIPLE_POINT.x, DEFAULT_TRIPLE_POINT.y );
       this.solidGasLine.setShape( solidGasCurve );
 
       // Add the line that separates solid and liquid.
@@ -247,11 +242,12 @@ define( function( require ) {
       this.solidLiquidLine.setShape( solidLiquidLine );
 
       // Update the shape of the background for the area that represents the solid phase.
-      var solidBackground = new Shape()
+      var solidBackground = new Shape().moveTo( X_ORIGIN_OFFSET, Y_ORIGIN_OFFSET )
+        .quadraticCurveTo( X_ORIGIN_OFFSET + (X_USABLE_RANGE * 0.2), Y_ORIGIN_OFFSET - (Y_USABLE_RANGE * 0.02),
+        DEFAULT_TRIPLE_POINT.x, DEFAULT_TRIPLE_POINT.y )
         .lineTo( this.topOfSolidLiquidLine.x, this.topOfSolidLiquidLine.y )
-        .lineTo( DEFAULT_TRIPLE_POINT.x, DEFAULT_TRIPLE_POINT.y )
-        .lineTo( X_ORIGIN_OFFSET, Y_ORIGIN_OFFSET )
         .lineTo( X_ORIGIN_OFFSET, (Y_ORIGIN_OFFSET - Y_USABLE_RANGE) )
+        .lineTo( X_ORIGIN_OFFSET, Y_ORIGIN_OFFSET )
         .close();
       this.solidAreaBackground.setShape( solidBackground );
 
@@ -260,24 +256,20 @@ define( function( require ) {
           DEFAULT_CRITICAL_POINT.y - POINT_MARKER_DIAMETER / 2 );
 
       // Add the curve that separates liquid and gas.
-      // var controlCurveXPos = DEFAULT_TRIPLE_POINT.x + ((DEFAULT_CRITICAL_POINT.x - DEFAULT_TRIPLE_POINT.x) / 2);
-      // var controlCurveYPos = DEFAULT_TRIPLE_POINT.y;
+      var controlCurveXPos = DEFAULT_TRIPLE_POINT.x + ((DEFAULT_CRITICAL_POINT.x - DEFAULT_TRIPLE_POINT.x) / 2);
+      var controlCurveYPos = DEFAULT_TRIPLE_POINT.y;
       var liquidGasCurve = new Shape().moveTo( DEFAULT_TRIPLE_POINT.x - 1, DEFAULT_TRIPLE_POINT.y )
-        .quadraticCurveTo( DEFAULT_TRIPLE_POINT.x, DEFAULT_TRIPLE_POINT.y,
+        .quadraticCurveTo( controlCurveXPos, controlCurveYPos,
         DEFAULT_CRITICAL_POINT.x, DEFAULT_CRITICAL_POINT.y );
-      /*new Shape().moveTo(DEFAULT_TRIPLE_POINT.x-1, DEFAULT_TRIPLE_POINT.y)
-       .quadraticCurveTo( DEFAULT_TRIPLE_POINT.x, DEFAULT_TRIPLE_POINT.y, DEFAULT_CRITICAL_POINT.x, DEFAULT_CRITICAL_POINT.y );
-       */
       this.liquidGasLine.setShape( liquidGasCurve );
 
-      // liquid phase.  It is expected that the solid shape overlays this one.
-      var liquidBackground = new Shape()
-        .lineTo( (this.topOfSolidLiquidLine.x), (Y_ORIGIN_OFFSET - Y_USABLE_RANGE) )
+      // liquid phase.  (It is expected that the solid shape overlays this one. )
+      var liquidBackground = new Shape().moveTo( DEFAULT_TRIPLE_POINT.x - 1, DEFAULT_TRIPLE_POINT.y )
+        .quadraticCurveTo( controlCurveXPos, controlCurveYPos,
+        DEFAULT_CRITICAL_POINT.x, DEFAULT_CRITICAL_POINT.y )
         .lineTo( (X_ORIGIN_OFFSET + X_USABLE_RANGE), (Y_ORIGIN_OFFSET - Y_USABLE_RANGE) )
-        .lineTo( (DEFAULT_CRITICAL_POINT.x), (DEFAULT_CRITICAL_POINT.y) )
-        .lineTo( (DEFAULT_TRIPLE_POINT.x), (DEFAULT_TRIPLE_POINT.y) );
-      // liquidBackground.append( liquidGasCurve, true );
-      liquidBackground.close();
+        .lineTo( (this.topOfSolidLiquidLine.x), (Y_ORIGIN_OFFSET - Y_USABLE_RANGE) )
+        .lineTo( (DEFAULT_TRIPLE_POINT.x), (DEFAULT_TRIPLE_POINT.y) ).close();
       this.liquidAreaBackground.setShape( liquidBackground );
 
       // gas phase
@@ -296,14 +288,16 @@ define( function( require ) {
         .lineTo( (X_ORIGIN_OFFSET + X_USABLE_RANGE), (Y_ORIGIN_OFFSET - Y_USABLE_RANGE) )
         .lineTo( (DEFAULT_CRITICAL_POINT.x), (DEFAULT_CRITICAL_POINT.y) )
         .close();
+
       this.superCriticalAreaBackground.setShape( superCriticalBackground );
+
       // hopefully will work better for translated strings.
       this.solidLabel.setTranslation( DEFAULT_SOLID_LABEL_LOCATION.x - this.solidLabel.width / 2,
           DEFAULT_SOLID_LABEL_LOCATION.y - this.solidLabel.height / 2 );
       this.liquidLabel.setTranslation( DEFAULT_LIQUID_LABEL_LOCATION.x - this.liquidLabel.width / 2,
           DEFAULT_LIQUID_LABEL_LOCATION.y - this.liquidLabel.height / 2 );
       this.gasLabel.setTranslation( DEFAULT_GAS_LABEL_LOCATION.x - this.gasLabel.width / 2,
-          DEFAULT_GAS_LABEL_LOCATION.y - this.gasLabel.height / 2 );
+        DEFAULT_GAS_LABEL_LOCATION.y );
       this.triplePointLabel.setTranslation( DEFAULT_TRIPLE_POINT.x - this.triplePointLabel.width / 2,
           DEFAULT_TRIPLE_POINT.y - this.triplePointLabel.height * 0.9 );
       this.criticalPointLabel.setTranslation( DEFAULT_CRITICAL_POINT.x - this.criticalPointLabel.width / 2,
