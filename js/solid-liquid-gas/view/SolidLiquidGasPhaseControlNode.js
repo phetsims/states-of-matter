@@ -64,7 +64,8 @@ define( function( require ) {
     var createItem = function( itemSpec ) {
       if ( itemSpec.icon ) {
         var strutWidth = maxWidth - itemSpec.label.width - itemSpec.icon.width + 17;
-        return new HBox( { children: [  new HStrut( 10 ), itemSpec.icon , new HStrut( strutWidth + 10 ), itemSpec.label, new HStrut( 30 )] } );
+        return new HBox( { children: [  new HStrut( 10 ), itemSpec.icon , new HStrut( strutWidth + 10 ), itemSpec.label,
+                                        new HStrut( 30 )] } );
       }
       else {
         return new HBox( { children: [ itemSpec.label] } );
@@ -84,12 +85,12 @@ define( function( require ) {
       orientation: 'vertical',
       spacing: 3,
       cornerRadius: 5,
-      baseColor: '#FFFCD3',
-      disabledBaseColor: '#FFFCD3',
+      baseColor: '#FFECCF',
+      disabledBaseColor: '#FFECCF',
       selectedLineWidth: 3,
-      selectedStroke: 'white',
+      selectedStroke: '#FFECCF',
       deselectedLineWidth: 0,
-      deselectedContentOpacity: 1
+      deselectedContentOpacity: 2
     } );
 
 
@@ -102,7 +103,8 @@ define( function( require ) {
     this.addChild( radioButtonPanel );
     this.mutate( this.options );
   }
-var imageScale =0.8;
+
+  var imageScale = 0.8;
   //Create an icon for the solid button
   var createSolidIcon = function() {
     return new Image( iceImage, {scale: imageScale} );
@@ -115,7 +117,7 @@ var imageScale =0.8;
 
   //Create an icon for the gas button
   var createGasIcon = function() {
-    return new Image( gasImage, {scale:imageScale} );
+    return new Image( gasImage, {scale: imageScale} );
   };
   return inherit( Node, SolidLiquidGasPhaseControlNode );
 } );

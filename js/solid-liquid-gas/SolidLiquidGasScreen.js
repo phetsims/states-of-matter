@@ -17,7 +17,7 @@ define( function( require ) {
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
 
   // strings
-  var solidLiquidGasString = require( 'string!STATES_OF_MATTER/solid-liquid-gas' );
+  var solidLiquidGasString = require( 'string!STATES_OF_MATTER/solidLiquidGas' );
 
   /**
    * @constructor

@@ -18,7 +18,7 @@ define( function( require ) {
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Circle = require( 'SCENERY/nodes/Circle' );
   var Node = require( 'SCENERY/nodes/Node' );
- // var Bounds2 = require( 'DOT/Bounds2' );
+  // var Bounds2 = require( 'DOT/Bounds2' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var RadioButtonGroup = require( 'SUN/buttons/RadioButtonGroup' );
 
@@ -57,7 +57,8 @@ define( function( require ) {
     var argon = { label: new Text( argonString, textOptions ), icon: createArgonIcon()};
     var water = { label: new Text( waterString, textOptions ), icon: createWaterIcon()};
     var oxygen = { label: new Text( oxygenString, textOptions ), icon: createOxygenIcon()};
-    var adjustableAttraction = { label: new Text( adjustableAttractionString, textOptions ), icon: createAdjustableAttractionIcon()};
+    var adjustableAttraction = { label: new Text( adjustableAttractionString,
+      textOptions ), icon: createAdjustableAttractionIcon()};
 
     // compute the maximum item width
     var widestItemSpec = _.max( [ neon, argon, water, oxygen, adjustableAttraction ], function( item ) {
@@ -141,7 +142,7 @@ define( function( require ) {
 
   //Create an icon for the neon  button
   var createNeonIcon = function() {
-    var dot1 = new Circle( 5, { fill: '#70D4FF' } );
+    var dot1 = new Circle( 5, { fill: '#1AFFFB' } );
     return new Node( {children: [  dot1 ]} );
   };
 
@@ -171,5 +172,5 @@ define( function( require ) {
   };
 
 
-  return inherit( Node, AtomsAndMoleculsControlPanel );
+  return inherit( Node, AtomsAndMoleculesControlPanel );
 } );
