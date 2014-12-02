@@ -84,7 +84,8 @@ define( function( require ) {
      * Returns a value indicating how many more molecules can be added.
      */
     getNumberOfRemainingSlots: function() {
-      return ( ( StatesOfMatterConstants.MAX_NUM_ATOMS / this.atomsPerMolecule ) - ( this.numberOfAtoms / this.atomsPerMolecule ) );
+      return ( ( StatesOfMatterConstants.MAX_NUM_ATOMS / this.atomsPerMolecule ) -
+               ( this.numberOfAtoms / this.atomsPerMolecule ) );
     },
 
     //
@@ -164,8 +165,10 @@ define( function( require ) {
       else {
         for ( i = 0; i < this.numberOfAtoms / this.atomsPerMolecule; i++ ) {
           translationalKineticEnergy += 0.5 * this.moleculeMass *
-                                        ( Math.pow( this.moleculeVelocities[i].x, 2 ) + Math.pow( this.moleculeVelocities[i].y, 2 ) );
-          rotationalKineticEnergy += 0.5 * this.moleculeRotationalInertia * Math.pow( this.moleculeRotationRates[i], 2 );
+                                        ( Math.pow( this.moleculeVelocities[i].x, 2 ) +
+                                          Math.pow( this.moleculeVelocities[i].y, 2 ) );
+          rotationalKineticEnergy += 0.5 * this.moleculeRotationalInertia *
+                                     Math.pow( this.moleculeRotationRates[i], 2 );
         }
         kineticEnergyPerMolecule = ( translationalKineticEnergy + rotationalKineticEnergy ) / numberOfMolecules / 1.5;
       }
@@ -249,7 +252,8 @@ define( function( require ) {
       }
 
       // Handle all data arrays that are maintained on a per-atom basis.
-      for ( i = moleculeIndex * this.atomsPerMolecule; i < this.numberOfAtoms - this.atomsPerMolecule; i += this.atomsPerMolecule ) {
+      for ( i = moleculeIndex * this.atomsPerMolecule; i < this.numberOfAtoms - this.atomsPerMolecule;
+            i += this.atomsPerMolecule ) {
 
         for ( var j = 0; j < this.atomsPerMolecule; j++ ) {
           this.atomPositions[i + this.atomsPerMolecule + j] = this.atomPositions[i + this.atomsPerMolecule];

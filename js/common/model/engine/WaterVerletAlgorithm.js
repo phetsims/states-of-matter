@@ -87,17 +87,22 @@ define( function( require ) {
       }
       else {
         // melted or frozen, so scale accordingly.
-        temperatureFactor = (temperatureSetPoint - WATER_FULLY_FROZEN_TEMPERATURE) / (WATER_FULLY_MELTED_TEMPERATURE - WATER_FULLY_FROZEN_TEMPERATURE);
-        q0 = WATER_FULLY_FROZEN_ELECTROSTATIC_FORCE - (temperatureFactor * (WATER_FULLY_FROZEN_ELECTROSTATIC_FORCE - WATER_FULLY_MELTED_ELECTROSTATIC_FORCE));
+        temperatureFactor = (temperatureSetPoint - WATER_FULLY_FROZEN_TEMPERATURE) /
+                            (WATER_FULLY_MELTED_TEMPERATURE - WATER_FULLY_FROZEN_TEMPERATURE);
+        q0 = WATER_FULLY_FROZEN_ELECTROSTATIC_FORCE -
+             (temperatureFactor * (WATER_FULLY_FROZEN_ELECTROSTATIC_FORCE - WATER_FULLY_MELTED_ELECTROSTATIC_FORCE));
       }
       var normalCharges = [ -2 * q0, q0, q0 ];
       var alteredCharges = [-2 * q0, 1.67 * q0, 0.33 * q0 ];
       // Update center of mass positions and angles for the molecules.
       for ( var i = 0; i < numberOfMolecules; i++ ) {
-        var xPos = moleculeCenterOfMassPositions[i].x + (this.TIME_STEP * moleculeVelocities[i].x) + (this.TIME_STEP_SQR_HALF * moleculeForces[i].x * massInverse);
-        var yPos = moleculeCenterOfMassPositions[i].y + (this.TIME_STEP * moleculeVelocities[i].y) + (this.TIME_STEP_SQR_HALF * moleculeForces[i].y * massInverse);
+        var xPos = moleculeCenterOfMassPositions[i].x + (this.TIME_STEP * moleculeVelocities[i].x) +
+                   (this.TIME_STEP_SQR_HALF * moleculeForces[i].x * massInverse);
+        var yPos = moleculeCenterOfMassPositions[i].y + (this.TIME_STEP * moleculeVelocities[i].y) +
+                   (this.TIME_STEP_SQR_HALF * moleculeForces[i].y * massInverse);
         moleculeCenterOfMassPositions[i].setXY( xPos, yPos );
-        moleculeRotationAngles[i] += (this.TIME_STEP * moleculeRotationRates[i]) + (this.TIME_STEP_SQR_HALF * moleculeTorques[i] * inertiaInverse);
+        moleculeRotationAngles[i] += (this.TIME_STEP * moleculeRotationRates[i]) +
+                                     (this.TIME_STEP_SQR_HALF * moleculeTorques[i] * inertiaInverse);
       }
       this.positionUpdater.updateAtomPositions( moleculeDataSet );
       // on the center of mass, so there is no torque.
@@ -106,7 +111,8 @@ define( function( require ) {
         nextMoleculeForces[i].setXY( 0, 0 );
         nextMoleculeTorques[i] = 0;
         // Get the force values caused by the container walls.
-        this.calculateWallForce( moleculeCenterOfMassPositions[i], normalizedContainerWidth, normalizedContainerHeight, nextMoleculeForces[i] );
+        this.calculateWallForce( moleculeCenterOfMassPositions[i], normalizedContainerWidth, normalizedContainerHeight,
+          nextMoleculeForces[i] );
         // exerted on the walls of the container.
         if ( nextMoleculeForces[i].y < 0 ) {
           pressureZoneWallForce += -nextMoleculeForces[i].y;
@@ -120,7 +126,8 @@ define( function( require ) {
         if ( this.model.getTemperatureSetPoint() < this.TEMPERATURE_BELOW_WHICH_GRAVITY_INCREASES ) {
           // caused by the thermostat.
           gravitationalAcceleration = gravitationalAcceleration *
-                                      ((this.TEMPERATURE_BELOW_WHICH_GRAVITY_INCREASES - this.model.getTemperatureSetPoint()) *
+                                      ((this.TEMPERATURE_BELOW_WHICH_GRAVITY_INCREASES -
+                                        this.model.getTemperatureSetPoint()) *
                                        this.LOW_TEMPERATURE_GRAVITY_INCREASE_RATE + 1);
         }
         nextMoleculeForces[i].setY( nextMoleculeForces[i].y - gravitationalAcceleration );
@@ -172,8 +179,10 @@ define( function( require ) {
             }
             else {
               // liquified, so adjust the scaling factor accordingly.
-              temperatureFactor = (temperatureSetPoint - WATER_FULLY_FROZEN_TEMPERATURE) / (WATER_FULLY_MELTED_TEMPERATURE - WATER_FULLY_FROZEN_TEMPERATURE);
-              repulsiveForceScalingFactor = MAX_REPULSIVE_SCALING_FACTOR_FOR_WATER - (temperatureFactor * (MAX_REPULSIVE_SCALING_FACTOR_FOR_WATER - 1));
+              temperatureFactor = (temperatureSetPoint - WATER_FULLY_FROZEN_TEMPERATURE) /
+                                  (WATER_FULLY_MELTED_TEMPERATURE - WATER_FULLY_FROZEN_TEMPERATURE);
+              repulsiveForceScalingFactor = MAX_REPULSIVE_SCALING_FACTOR_FOR_WATER -
+                                            (temperatureFactor * (MAX_REPULSIVE_SCALING_FACTOR_FOR_WATER - 1));
             }
             forceScalar = 48 * r2inv * r6inv * ((r6inv * repulsiveForceScalingFactor) - 0.5);
             force.setX( dx * forceScalar );
@@ -198,8 +207,10 @@ define( function( require ) {
                 force.setY( dy * forceScalar );
                 nextMoleculeForces[i].add( force );
                 nextMoleculeForces[j].subtract( force );
-                nextMoleculeTorques[i] += (atomPositions[3 * i + ii].x - moleculeCenterOfMassPositions[i].x) * force.y - (atomPositions[3 * i + ii].y - moleculeCenterOfMassPositions[i].y) * force.x;
-                nextMoleculeTorques[j] -= (atomPositions[3 * j + jj].x - moleculeCenterOfMassPositions[j].x) * force.y - (atomPositions[3 * j + jj].y - moleculeCenterOfMassPositions[j].y) * force.x;
+                nextMoleculeTorques[i] += (atomPositions[3 * i + ii].x - moleculeCenterOfMassPositions[i].x) * force.y -
+                                          (atomPositions[3 * i + ii].y - moleculeCenterOfMassPositions[i].y) * force.x;
+                nextMoleculeTorques[j] -= (atomPositions[3 * j + jj].x - moleculeCenterOfMassPositions[j].x) * force.y -
+                                          (atomPositions[3 * j + jj].y - moleculeCenterOfMassPositions[j].y) * force.x;
               }
             }
           }
@@ -214,9 +225,12 @@ define( function( require ) {
         var yVel = moleculeVelocities[i].y + this.TIME_STEP_HALF * (moleculeForces[i].y +
                                                                     nextMoleculeForces[i].y) * massInverse;
         moleculeVelocities[i].setXY( xVel, yVel );
-        moleculeRotationRates[i] += this.TIME_STEP_HALF * (moleculeTorques[i] + nextMoleculeTorques[i]) * inertiaInverse;
-        centersOfMassKineticEnergy += 0.5 * moleculeDataSet.getMoleculeMass() * (Math.pow( moleculeVelocities[i].x, 2 ) + Math.pow( moleculeVelocities[i].y, 2 ));
-        rotationalKineticEnergy += 0.5 * moleculeDataSet.getMoleculeRotationalInertia() * Math.pow( moleculeRotationRates[i], 2 );
+        moleculeRotationRates[i] += this.TIME_STEP_HALF * (moleculeTorques[i] + nextMoleculeTorques[i]) *
+                                    inertiaInverse;
+        centersOfMassKineticEnergy += 0.5 * moleculeDataSet.getMoleculeMass() *
+                                      (Math.pow( moleculeVelocities[i].x, 2 ) + Math.pow( moleculeVelocities[i].y, 2 ));
+        rotationalKineticEnergy += 0.5 * moleculeDataSet.getMoleculeRotationalInertia() *
+                                   Math.pow( moleculeRotationRates[i], 2 );
         // Move the newly calculated forces and torques into the current spots.
         moleculeForces[i].setXY( nextMoleculeForces[i].x, nextMoleculeForces[i].y );
         moleculeTorques[i] = nextMoleculeTorques[i];

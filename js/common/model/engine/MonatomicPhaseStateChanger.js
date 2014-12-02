@@ -96,7 +96,7 @@ define( function( require ) {
 
           // Assign each particle an initial velocity.
           moleculeVelocities[( i * atomsPerLayer ) + j] = new Vector2( temperatureSqrt * this.random.nextGaussian(),
-                                                                       temperatureSqrt * this.random.nextGaussian() );
+              temperatureSqrt * this.random.nextGaussian() );
         }
       }
     },
@@ -116,14 +116,16 @@ define( function( require ) {
       var moleculeVelocities = this.model.moleculeDataSet.moleculeVelocities;
       for ( var i = 0; i < numberOfAtoms; i++ ) {
         // Assign each particle an initial velocity.
-        moleculeVelocities[i].setXY( temperatureSqrt * this.random.nextGaussian(), temperatureSqrt * this.random.nextGaussian() );
+        moleculeVelocities[i].setXY( temperatureSqrt * this.random.nextGaussian(),
+            temperatureSqrt * this.random.nextGaussian() );
       }
 
       // Assign each atom to a position centered on its blob.
 
       var atomsPlaced = 0;
 
-      var centerPoint = new Vector2( this.model.normalizedContainerWidth / 2, this.model.normalizedContainerHeight / 4 );
+      var centerPoint = new Vector2( this.model.normalizedContainerWidth / 2,
+          this.model.normalizedContainerHeight / 4 );
       var currentLayer = 0;
       var particlesOnCurrentLayer = 0;
       var particlesThatWillFitOnCurrentLayer = 1;
@@ -179,7 +181,8 @@ define( function( require ) {
         moleculeCenterOfMassPositions[i].setXY( 0, 0 );
 
         // Assign each particle an initial velocity.
-        moleculeVelocities[i].setXY( temperatureSqrt * this.random.nextGaussian(), temperatureSqrt * this.random.nextGaussian() );
+        moleculeVelocities[i].setXY( temperatureSqrt * this.random.nextGaussian(),
+            temperatureSqrt * this.random.nextGaussian() );
       }
 
       // Redistribute the particles randomly around the container, but make

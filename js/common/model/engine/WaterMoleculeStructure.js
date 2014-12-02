@@ -26,10 +26,14 @@ define( function( require ) {
     this.moleculeStructureY[0] = 0;
     this.moleculeStructureX[1] = StatesOfMatterConstants.DISTANCE_FROM_OXYGEN_TO_HYDROGEN;
     this.moleculeStructureY[1] = 0;
-    this.moleculeStructureX[2] = StatesOfMatterConstants.DISTANCE_FROM_OXYGEN_TO_HYDROGEN * Math.cos( StatesOfMatterConstants.THETA_HOH );
-    this.moleculeStructureY[2] = StatesOfMatterConstants.DISTANCE_FROM_OXYGEN_TO_HYDROGEN * Math.sin( StatesOfMatterConstants.THETA_HOH );
-    var xcm0 = (  this.moleculeStructureX[0] + 0.25 * this.moleculeStructureX[1] + 0.25 * this.moleculeStructureX[2]) / 1.5;
-    var ycm0 = (  this.moleculeStructureY[0] + 0.25 * this.moleculeStructureY[1] + 0.25 * this.moleculeStructureY[2]) / 1.5;
+    this.moleculeStructureX[2] = StatesOfMatterConstants.DISTANCE_FROM_OXYGEN_TO_HYDROGEN *
+                                 Math.cos( StatesOfMatterConstants.THETA_HOH );
+    this.moleculeStructureY[2] = StatesOfMatterConstants.DISTANCE_FROM_OXYGEN_TO_HYDROGEN *
+                                 Math.sin( StatesOfMatterConstants.THETA_HOH );
+    var xcm0 = (  this.moleculeStructureX[0] + 0.25 * this.moleculeStructureX[1] + 0.25 * this.moleculeStructureX[2]) /
+               1.5;
+    var ycm0 = (  this.moleculeStructureY[0] + 0.25 * this.moleculeStructureY[1] + 0.25 * this.moleculeStructureY[2]) /
+               1.5;
     for ( var i = 0; i < 3; i++ ) {
       this.moleculeStructureX[i] -= xcm0;
       this.moleculeStructureY[i] -= ycm0;
