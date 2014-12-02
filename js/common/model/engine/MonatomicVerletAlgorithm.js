@@ -29,6 +29,22 @@ define( function( require ) {
 
   return inherit( AbstractVerletAlgorithm, MonatomicVerletAlgorithm, {
 
+    setScaledEpsilon: function( scaledEpsilon ) {
+      this.epsilon = scaledEpsilon;
+    },
+    getPressure: function() {
+      return this.pressure;
+    },
+
+    getTemperature: function() {
+      return this.temperature;
+    },
+
+
+    getScaledEpsilon: function() {
+      return this.epsilon;
+    },
+
     /**
      * Update the motion of the particles and the forces that are acting upon
      * them.  This is the heart of this class, and it is here that the actual

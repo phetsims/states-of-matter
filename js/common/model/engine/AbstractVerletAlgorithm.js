@@ -226,9 +226,19 @@ define( function( require ) {
             // Note: Don't worry about torque, since there isn't any until the molecules become "safe".
           }
           numberOfSafeMolecules++;
-          moleculeDataSet.numberOfSafeMolecules = numberOfSafeMolecules;
+          moleculeDataSet.setNumberOfSafeMolecules( numberOfSafeMolecules );
         }
       }
+    },
+
+    setScaledEpsilon: function( scaledEpsilon ) {
+      // In the base class this just issues a warning and has no effect.
+      console.log( "Warning: Setting epsilon is not implemented for this class, request ignored." );
+    },
+    getScaledEpsilon: function() {
+      // In the base class this just issues a warning and returns 0.
+      console.log( "Warning: Getting scaled epsilon is not implemented for this class, returning zero." );
+      return 0;
     },
 
     updatePressure: function( pressureZoneWallForce ) {
@@ -238,7 +248,9 @@ define( function( require ) {
       }
       else {
         this.pressure = ( 1 - PRESSURE_CALC_WEIGHTING ) *
-                        ( pressureZoneWallForce / ( this.model.normalizedContainerWidth + this.model.normalizedContainerHeight ) ) + PRESSURE_CALC_WEIGHTING * this.pressure;
+                        ( pressureZoneWallForce /
+                          ( this.model.normalizedContainerWidth + this.model.normalizedContainerHeight ) ) +
+                        PRESSURE_CALC_WEIGHTING * this.pressure;
 
         if ( ( this.pressure > EXPLOSION_PRESSURE ) && !this.model.isExploded ) {
           // The pressure has reached the point where the container should
@@ -256,7 +268,7 @@ define( function( require ) {
     // Parameters that control the increasing of gravity as the temperature
     // approaches zero.  This is done to counteract the tendency of the
     // thermostat to slow falling molecules noticeably at low temps.  This is
-      // a "hollywooding" thing.
+    // a "hollywooding" thing.
     TEMPERATURE_BELOW_WHICH_GRAVITY_INCREASES: 0.10,
     LOW_TEMPERATURE_GRAVITY_INCREASE_RATE: 50,
 

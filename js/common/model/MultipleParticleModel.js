@@ -21,6 +21,8 @@ define( function( require ) {
   var ArgonAtom = require( 'STATES_OF_MATTER/common/model/particle/ArgonAtom' );
   var OxygenAtom = require( 'STATES_OF_MATTER/common/model/particle/OxygenAtom' );
   var HydrogenAtom = require( 'STATES_OF_MATTER/common/model/particle/HydrogenAtom' );
+  var ConfigurableStatesOfMatterAtom = require( 'STATES_OF_MATTER/common/model/particle/ConfigurableStatesOfMatterAtom' );
+
   var HydrogenAtom2 = require( 'STATES_OF_MATTER/common/model/particle/HydrogenAtom2' );
   var AtomType = require( 'STATES_OF_MATTER/common/model/AtomType' );
   var InteractionStrengthTable = require( 'STATES_OF_MATTER/common/model/InteractionStrengthTable' );
@@ -56,8 +58,8 @@ define( function( require ) {
   var PHASE_SOLID = 1;
   var PHASE_LIQUID = 2;
   var PHASE_GAS = 3;
-  var INJECTION_POINT_HORIZ_PROPORTION = 0.95;
-  var INJECTION_POINT_VERT_PROPORTION = 0.5;
+  var INJECTION_POINT_HORIZ_PROPORTION = 0.03;
+  var INJECTION_POINT_VERT_PROPORTION = 0.4;
 
   // Possible thermostat settings.
   var NO_THERMOSTAT = 0;
@@ -104,8 +106,8 @@ define( function( require ) {
   // Min a max values for adjustable epsilon.  Originally there was a wider
   // allowable range, but the simulation did not work so well, so the range
   // below was arrived at empirically and seems to work reasonably well.
-  // var MIN_ADJUSTABLE_EPSILON = 1.5 * NeonAtom.EPSILON;
-  // var MAX_ADJUSTABLE_EPSILON = StatesOfMatterConstants.EPSILON_FOR_WATER;
+  var MIN_ADJUSTABLE_EPSILON = 1.5 * NeonAtom.EPSILON;
+  var MAX_ADJUSTABLE_EPSILON = StatesOfMatterConstants.EPSILON_FOR_WATER;
 
   /**
    * @constructor
@@ -147,16 +149,17 @@ define( function( require ) {
         targetContainerHeight: StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT,
         isExploded: false, // notifyContainerExplodedStateChanged
         expanded: true,// phase diagram
-        interactionExpanded: false,// interaction diagram
+        interactionExpanded: true,// interaction diagram
         numParticles: 0, // notifyParticleAdded
         temperatureSetPoint: 0, // notifyTemperatureChanged
-        temperatureInKelVin: 0,
+        temperatureInKelvin: 0,
         pressure: 0, // notifyPressureChanged
         moleculeType: 0, // notifyMoleculeTypeChanged,
         interactionStrength: 0, // notifyInteractionStrengthChanged
         atoms: 1,// number of atoms in molecule
         state: 1,//  solid phase
-        isPlaying: true
+        isPlaying: true,
+        speed: 'normal'
       }
     );
 
@@ -291,10 +294,11 @@ define( function( require ) {
           this.particleDiameter = OxygenAtom.RADIUS * 2.9;
           this.minModelTemperature = 0.5 * TRIPLE_POINT_MONATOMIC_MODEL_TEMPERATURE / WATER_TRIPLE_POINT_IN_KELVIN;
           break;
-        // case StatesOfMatterConstants.USER_DEFINED_MOLECULE:
-        //   this.particleDiameter = ConfigurableStatesOfMatterAtom.DEFAULT_RADIUS * 2;
-        //   this.minModelTemperature = 0.5 * TRIPLE_POINT_MONATOMIC_MODEL_TEMPERATURE / ADJUSTABLE_ATOM_TRIPLE_POINT_IN_KELVIN;
-        //   break;
+        case StatesOfMatterConstants.USER_DEFINED_MOLECULE:
+          this.particleDiameter = ConfigurableStatesOfMatterAtom.DEFAULT_RADIUS * 2;
+          this.minModelTemperature = 0.5 * TRIPLE_POINT_MONATOMIC_MODEL_TEMPERATURE /
+                                     ADJUSTABLE_ATOM_TRIPLE_POINT_IN_KELVIN;
+          break;
         default:
           throw new Error( 'Invalid current molecule' ); // Should never happen, so it should be debugged if it does.
       }
@@ -357,9 +361,9 @@ define( function( require ) {
         case StatesOfMatterConstants.WATER:
           sigma = StatesOfMatterConstants.SIGMA_FOR_WATER;
           break;
-        // case StatesOfMatterConstants.USER_DEFINED_MOLECULE:
-        //   sigma = ConfigurableStatesOfMatterAtom.DEFAULT_RADIUS * 2;
-        //   break;
+        case StatesOfMatterConstants.USER_DEFINED_MOLECULE:
+          sigma = ConfigurableStatesOfMatterAtom.DEFAULT_RADIUS * 2;
+          break;
         default:
           console.error( 'Error: Unrecognized molecule type when setting sigma value.' );
           sigma = 0;
@@ -389,9 +393,9 @@ define( function( require ) {
         case StatesOfMatterConstants.WATER:
           epsilon = StatesOfMatterConstants.EPSILON_FOR_WATER;
           break;
-        // case StatesOfMatterConstants.USER_DEFINED_MOLECULE:
-        //   epsilon = convertScaledEpsilonToEpsilon( this.moleculeForceAndMotionCalculator.getScaledEpsilon() );
-        //   break;
+        case StatesOfMatterConstants.USER_DEFINED_MOLECULE:
+          epsilon = this.convertScaledEpsilonToEpsilon( this.moleculeForceAndMotionCalculator.getScaledEpsilon() );
+          break;
         default:
           console.log( 'Error: Unrecognized molecule type when getting epsilon value.' );
           epsilon = 0;
@@ -407,7 +411,7 @@ define( function( require ) {
     reset: function() {
       PropertySet.prototype.reset.call( this );
       this.initializeModelParameters();
-      this.setMoleculeType( 5 );
+      this.setMoleculeType( DEFAULT_MOLECULE );
     },
 
     /**
@@ -455,8 +459,10 @@ define( function( require ) {
      */
     injectMolecule: function() {
 
-      var injectionPointX = StatesOfMatterConstants.CONTAINER_BOUNDS.width / this.particleDiameter * INJECTION_POINT_HORIZ_PROPORTION;
-      var injectionPointY = StatesOfMatterConstants.CONTAINER_BOUNDS.height / this.particleDiameter * INJECTION_POINT_VERT_PROPORTION;
+      var injectionPointX = StatesOfMatterConstants.CONTAINER_BOUNDS.width / this.particleDiameter *
+                            INJECTION_POINT_HORIZ_PROPORTION;
+      var injectionPointY = StatesOfMatterConstants.CONTAINER_BOUNDS.height / this.particleDiameter *
+                            INJECTION_POINT_VERT_PROPORTION;
 
       // Make sure that it is okay to inject a new molecule.
       if ( ( this.moleculeDataSet.getNumberOfRemainingSlots() > 1 ) &&
@@ -465,7 +471,8 @@ define( function( require ) {
 
         var angle = Math.PI + ( ( Math.random() - 0.5 ) * MAX_INJECTED_MOLECULE_ANGLE );
         var velocity = MIN_INJECTED_MOLECULE_VELOCITY + ( Math.random() *
-                                                          ( MAX_INJECTED_MOLECULE_VELOCITY - MIN_INJECTED_MOLECULE_VELOCITY ) );
+                                                          ( MAX_INJECTED_MOLECULE_VELOCITY -
+                                                            MIN_INJECTED_MOLECULE_VELOCITY ) );
         var xVel = Math.cos( angle ) * velocity;
         var yVel = Math.sin( angle ) * velocity;
         var atomsPerMolecule = this.moleculeDataSet.atomsPerMolecule;
@@ -478,7 +485,8 @@ define( function( require ) {
         }
 
         // Add the newly created molecule to the data set.
-        this.moleculeDataSet.addMolecule( atomPositions, moleculeCenterOfMassPosition, moleculeVelocity, moleculeRotationRate );
+        this.moleculeDataSet.addMolecule( atomPositions, moleculeCenterOfMassPosition, moleculeVelocity,
+          moleculeRotationRate );
 
         // Position the atoms that comprise the molecules.
         this.atomPositionUpdater.updateAtomPositions( this.moleculeDataSet );
@@ -494,9 +502,9 @@ define( function( require ) {
             case StatesOfMatterConstants.NEON:
               particle = new NeonAtom( 0, 0 );
               break;
-            // case StatesOfMatterConstants.USER_DEFINED_MOLECULE:
-            //   particle = new ConfigurableStatesOfMatterAtom( 0, 0 );
-            //   break;
+            case StatesOfMatterConstants.USER_DEFINED_MOLECULE:
+              particle = new ConfigurableStatesOfMatterAtom( 0, 0 );
+              break;
             default:
               // Use the default.
               particle = new NeonAtom( 0, 0 );
@@ -556,7 +564,8 @@ define( function( require ) {
      * number of particles.
      */
     calculateMinAllowableContainerHeight: function() {
-      this.minAllowableContainerHeight = ( this.moleculeDataSet.getNumberOfMolecules() / this.normalizedContainerWidth ) * this.particleDiameter;
+      this.minAllowableContainerHeight = ( this.moleculeDataSet.getNumberOfMolecules() /
+                                           this.normalizedContainerWidth ) * this.particleDiameter;
     },
 
     /**
@@ -625,7 +634,8 @@ define( function( require ) {
           var heightChange = this.targetContainerHeight - this.particleContainerHeight;
           if ( heightChange > 0 ) {
             // The container is growing.
-            if ( this.particleContainerHeight + heightChange <= StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT ) {
+            if ( this.particleContainerHeight + heightChange <=
+                 StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT ) {
               this.particleContainerHeight += Math.min( heightChange, MAX_PER_TICK_CONTAINER_EXPANSION );
             }
             else {
@@ -675,7 +685,8 @@ define( function( require ) {
         if ( newTemperature >= MAX_TEMPERATURE ) {
           newTemperature = MAX_TEMPERATURE;
         }
-        else if ( ( newTemperature <= StatesOfMatterConstants.SOLID_TEMPERATURE * 0.9 ) && ( this.heatingCoolingAmount < 0 ) ) {
+        else if ( ( newTemperature <= StatesOfMatterConstants.SOLID_TEMPERATURE * 0.9 ) &&
+                  ( this.heatingCoolingAmount < 0 ) ) {
           // The temperature goes down more slowly as we begin to
           // approach absolute zero.
           newTemperature = this.temperatureSetPoint * 0.95;  // Multiplier determined empirically.
@@ -729,7 +740,8 @@ define( function( require ) {
         this.setTemperature( this.moleculeDataSet.calculateTemperatureFromKineticEnergy() );
       }
       else if ( ( this.thermostatType === ISOKINETIC_THERMOSTAT ) ||
-                ( this.thermostatType === ADAPTIVE_THERMOSTAT && ( temperatureIsChanging || this.temperatureSetPoint > StatesOfMatterConstants.LIQUID_TEMPERATURE ) ) ) {
+                ( this.thermostatType === ADAPTIVE_THERMOSTAT && ( temperatureIsChanging || this.temperatureSetPoint >
+                                                                                            StatesOfMatterConstants.LIQUID_TEMPERATURE ) ) ) {
         // Use the isokinetic thermostat.
         this.isoKineticThermostat.adjustTemperature();
       }
@@ -759,7 +771,8 @@ define( function( require ) {
       // Verify that a valid molecule ID was provided.
       assert && assert( (moleculeID === StatesOfMatterConstants.DIATOMIC_OXYGEN) );
       // molecules that can fit depends on the size of the individual atom.
-      var numberOfAtoms = Math.pow( Math.round( StatesOfMatterConstants.CONTAINER_BOUNDS.width / ((OxygenAtom.RADIUS * 2.1) * 3) ), 2 );
+      var numberOfAtoms = Math.pow( Math.round( StatesOfMatterConstants.CONTAINER_BOUNDS.width /
+                                                ((OxygenAtom.RADIUS * 2.1) * 3) ), 2 );
       if ( numberOfAtoms % 2 !== 0 ) {
         numberOfAtoms--;
       }
@@ -811,7 +824,8 @@ define( function( require ) {
       assert && assert( (moleculeID === StatesOfMatterConstants.WATER) );
       // molecules that can fit depends on the size of the individual atom.
       var waterMoleculeDiameter = OxygenAtom.RADIUS * 2.1;
-      var moleculesAcrossBottom = Math.round( StatesOfMatterConstants.CONTAINER_BOUNDS.width / (waterMoleculeDiameter * 1.2) );
+      var moleculesAcrossBottom = Math.round( StatesOfMatterConstants.CONTAINER_BOUNDS.width /
+                                              (waterMoleculeDiameter * 1.2) );
       var numberOfMolecules = Math.pow( moleculesAcrossBottom / 3, 2 );
       // Create the normalized data set for the one-atom-per-molecule case.
       this.moleculeDataSet = new MoleculeForceAndMotionDataSet( 3 );
@@ -873,6 +887,22 @@ define( function( require ) {
     getMoleculeType: function() {
       return this.currentMolecule;
     },
+    setEpsilon: function( epsilon ) {
+      if ( this.currentMolecule == StatesOfMatterConstants.USER_DEFINED_MOLECULE ) {
+        if ( epsilon < MIN_ADJUSTABLE_EPSILON ) {
+          epsilon = MIN_ADJUSTABLE_EPSILON;
+        }
+        else if ( epsilon > MAX_ADJUSTABLE_EPSILON ) {
+          epsilon = MAX_ADJUSTABLE_EPSILON;
+        }
+        this.moleculeForceAndMotionCalculator.setScaledEpsilon( this.convertEpsilonToScaledEpsilon( epsilon ) );
+
+      }
+      else {
+        // used, so print and error message and ignore the request.
+        console.error( "Error: Epsilon cannot be set when non-configurable molecule is in use." );
+      }
+    },
 
     /**
      * Initialize the various model components to handle a simulation in which
@@ -897,6 +927,9 @@ define( function( require ) {
       else if ( moleculeID === StatesOfMatterConstants.ARGON ) {
         particleDiameter = ArgonAtom.RADIUS * 2;
       }
+      else if ( moleculeID === StatesOfMatterConstants.USER_DEFINED_MOLECULE ) {
+        particleDiameter = ConfigurableStatesOfMatterAtom.DEFAULT_RADIUS * 2;
+      }
       else {
         // Force it to neon.
         moleculeID = StatesOfMatterConstants.NEON;
@@ -905,7 +938,8 @@ define( function( require ) {
 
       // Initialize the number of atoms assuming that the solid form, when
       // made into a square, will consume about 1/3 the width of the container.
-      var numberOfAtoms = Math.pow( Math.round( StatesOfMatterConstants.CONTAINER_BOUNDS.width / ( ( particleDiameter * 1.05 ) * 3 ) ), 2 );
+      var numberOfAtoms = Math.pow( Math.round( StatesOfMatterConstants.CONTAINER_BOUNDS.width /
+                                                ( ( particleDiameter * 1.05 ) * 3 ) ), 2 );
 
       // Create the normalized data set for the one-atom-per-molecule case.
       this.moleculeDataSet = new MoleculeForceAndMotionDataSet( 1 );
@@ -936,6 +970,9 @@ define( function( require ) {
         }
         else if ( moleculeID === StatesOfMatterConstants.ARGON ) {
           atom = new ArgonAtom( 0, 0 );
+        }
+        else if ( moleculeID === StatesOfMatterConstants.USER_DEFINED_MOLECULE ) {
+          atom = new ConfigurableStatesOfMatterAtom( 0, 0 );
         }
         else {
           atom = new NeonAtom( 0, 0 );
@@ -1027,7 +1064,8 @@ define( function( require ) {
         }
       }
       else if ( this.temperatureSetPoint < CRITICAL_POINT_MONATOMIC_MODEL_TEMPERATURE ) {
-        var slope = ( criticalPoint - triplePoint ) / ( CRITICAL_POINT_MONATOMIC_MODEL_TEMPERATURE - TRIPLE_POINT_MONATOMIC_MODEL_TEMPERATURE );
+        var slope = ( criticalPoint - triplePoint ) /
+                    ( CRITICAL_POINT_MONATOMIC_MODEL_TEMPERATURE - TRIPLE_POINT_MONATOMIC_MODEL_TEMPERATURE );
         var offset = triplePoint - ( slope * TRIPLE_POINT_MONATOMIC_MODEL_TEMPERATURE );
         temperatureInKelvin = this.temperatureSetPoint * slope + offset;
       }
@@ -1102,10 +1140,14 @@ define( function( require ) {
      */
     mapTemperatureToPhase: function() {
       var phase;
-      if ( this.temperatureSetPoint < StatesOfMatterConstants.SOLID_TEMPERATURE + ( ( StatesOfMatterConstants.LIQUID_TEMPERATURE - StatesOfMatterConstants.SOLID_TEMPERATURE ) / 2 ) ) {
+      if ( this.temperatureSetPoint < StatesOfMatterConstants.SOLID_TEMPERATURE +
+                                      ( ( StatesOfMatterConstants.LIQUID_TEMPERATURE -
+                                          StatesOfMatterConstants.SOLID_TEMPERATURE ) / 2 ) ) {
         phase = PHASE_SOLID;
       }
-      else if ( this.temperatureSetPoint < StatesOfMatterConstants.LIQUID_TEMPERATURE + ( ( StatesOfMatterConstants.GAS_TEMPERATURE - StatesOfMatterConstants.LIQUID_TEMPERATURE ) / 2 ) ) {
+      else if ( this.temperatureSetPoint < StatesOfMatterConstants.LIQUID_TEMPERATURE +
+                                           ( ( StatesOfMatterConstants.GAS_TEMPERATURE -
+                                               StatesOfMatterConstants.LIQUID_TEMPERATURE ) / 2 ) ) {
         phase = PHASE_LIQUID;
       }
       else {
@@ -1134,6 +1176,83 @@ define( function( require ) {
       var epsilon = scaledEpsilon * StatesOfMatterConstants.MAX_EPSILON / 2;
       return epsilon;
     },
+    getContainerExploded: function() {
+      return this.isExploded;
+    },
+    /**
+     * Cause the lid to blow off the top of the container.
+     */
+    explodeContainer: function() {
+      this.setContainerExploded( true );
+    },
+    /**
+     * This method is used for an external entity to notify the model that it
+     * should explode.
+     *
+     * @param isExploded
+     */
+
+    //private
+    setContainerExploded: function( isExploded ) {
+      if ( this.isExploded != isExploded ) {
+        this.isExploded = isExploded;
+        //notifyContainerExplodedStateChanged(m_isExploded);
+        if ( !this.isExploded ) {
+          this.resetContainerSize();
+        }
+      }
+    },
+    /**
+     * Return the lid to the container.  It only makes sense to call this after
+     * the container has exploded, otherwise it has no effect.
+     */
+    returnLid: function() {
+      if ( !this.isExploded ) {
+        console.log( " - Warning: Ignoring attempt to return lid when container hadn't exploded." );
+        return;
+      }
+      // with the normalized particles for this.
+      var particlesOutsideOfContainer = 0;
+      var firstOutsideMoleculeIndex;
+      do {
+        for ( firstOutsideMoleculeIndex = 0; firstOutsideMoleculeIndex < this.moleculeDataSet.getNumberOfMolecules();
+              firstOutsideMoleculeIndex++ ) {
+          var pos = this.moleculeDataSet.getMoleculeCenterOfMassPositions()[firstOutsideMoleculeIndex];
+          if ( pos.getX() < 0 || pos.getX() > this.normalizedContainerWidth || pos.getY() < 0 ||
+               pos.getY() > StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT / m_particleDiameter ) {
+            // This particle is outside of the container.
+            break;
+          }
+        }
+        if ( firstOutsideMoleculeIndex < this.moleculeDataSet.getNumberOfMolecules() ) {
+          // Remove the particle that was found.
+          this.moleculeDataSet.removeMolecule( firstOutsideMoleculeIndex );
+          particlesOutsideOfContainer++;
+        }
+      } while ( firstOutsideMoleculeIndex != this.moleculeDataSet.getNumberOfMolecules() );
+      // explicitly synced up elsewhere.
+      var copyOfParticles = this.particles;
+      for ( var i = 0; i < copyOfParticles.length - this.moleculeDataSet.getNumberOfAtoms(); i++ ) {
+        var particle = copyOfParticles.get( i );
+        this.particles.remove( particle );
+        particle.removedFromModel();
+      }
+      // Set the container to be unexploded.
+      this.setContainerExploded( false );
+      // this generally cools them down into a more manageable state.
+      if ( particlesOutsideOfContainer > 0 ) {
+        this.phaseStateChanger.setPhase( AbstractPhaseStateChanger.PHASE_GAS );
+      }
+    },
+
+    getThermostatType: function() {
+      return this.thermostatType;
+    },
+
+    getParticleContainerHeight: function() {
+      return this.particleContainerHeight;
+    },
+
 
     PHASE_SOLID: PHASE_SOLID,
     PHASE_LIQUID: PHASE_LIQUID,
