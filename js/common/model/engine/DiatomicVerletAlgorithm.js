@@ -61,9 +61,11 @@ define( function( require ) {
       // Update center of mass positions and angles for the molecules.
       for ( var i = 0; i < numberOfMolecules; i++ ) {
         var xPos = moleculeCenterOfMassPositions[i].x +
-                   (this.TIME_STEP * moleculeVelocities[i].x) + (this.TIME_STEP_SQR_HALF * moleculeForces[i].x * massInverse);
+                   (this.TIME_STEP * moleculeVelocities[i].x) +
+                   (this.TIME_STEP_SQR_HALF * moleculeForces[i].x * massInverse);
         var yPos = moleculeCenterOfMassPositions[i].y +
-                   (this.TIME_STEP * moleculeVelocities[i].y) + (this.TIME_STEP_SQR_HALF * moleculeForces[i].y * massInverse);
+                   (this.TIME_STEP * moleculeVelocities[i].y) +
+                   (this.TIME_STEP_SQR_HALF * moleculeForces[i].y * massInverse);
         moleculeCenterOfMassPositions[i].setXY( xPos, yPos );
         moleculeRotationAngles[i] += (this.TIME_STEP * moleculeRotationRates[i]) +
                                      (this.TIME_STEP_SQR_HALF * moleculeTorques[i] * inertiaInverse);
@@ -90,7 +92,8 @@ define( function( require ) {
         if ( this.model.temperatureSetPoint < this.TEMPERATURE_BELOW_WHICH_GRAVITY_INCREASES ) {
           // caused by the thermostat.
           gravitationalAcceleration = gravitationalAcceleration *
-                                      ((this.TEMPERATURE_BELOW_WHICH_GRAVITY_INCREASES - this.model.temperatureSetPoint) *
+                                      ((this.TEMPERATURE_BELOW_WHICH_GRAVITY_INCREASES -
+                                        this.model.temperatureSetPoint) *
                                        this.LOW_TEMPERATURE_GRAVITY_INCREASE_RATE + 1);
         }
         nextMoleculeForces[i].setY( nextMoleculeForces[i].y - gravitationalAcceleration );
@@ -124,8 +127,10 @@ define( function( require ) {
                 force.setXY( fx, fy );
                 nextMoleculeForces[i].add( force );
                 nextMoleculeForces[j].subtract( force );
-                nextMoleculeTorques[i] += (atomPositions[2 * i + ii].x - moleculeCenterOfMassPositions[i].x) * fy - (atomPositions[2 * i + ii].y - moleculeCenterOfMassPositions[i].y) * fx;
-                nextMoleculeTorques[j] -= (atomPositions[2 * j + jj].x - moleculeCenterOfMassPositions[j].x) * fy - (atomPositions[2 * j + jj].y - moleculeCenterOfMassPositions[j].y) * fx;
+                nextMoleculeTorques[i] += (atomPositions[2 * i + ii].x - moleculeCenterOfMassPositions[i].x) * fy -
+                                          (atomPositions[2 * i + ii].y - moleculeCenterOfMassPositions[i].y) * fx;
+                nextMoleculeTorques[j] -= (atomPositions[2 * j + jj].x - moleculeCenterOfMassPositions[j].x) * fy -
+                                          (atomPositions[2 * j + jj].y - moleculeCenterOfMassPositions[j].y) * fx;
                 this.potentialEnergy += 4 * r6inv * (r6inv - 1) + 0.016316891136;
               }
             }
@@ -136,12 +141,17 @@ define( function( require ) {
       var centersOfMassKineticEnergy = 0;
       var rotationalKineticEnergy = 0;
       for ( i = 0; i < numberOfMolecules; i++ ) {
-        var xVel = moleculeVelocities[i].x + this.TIME_STEP_HALF * (moleculeForces[i].x + nextMoleculeForces[i].x) * massInverse;
-        var yVel = moleculeVelocities[i].y + this.TIME_STEP_HALF * (moleculeForces[i].y + nextMoleculeForces[i].y) * massInverse;
+        var xVel = moleculeVelocities[i].x +
+                   this.TIME_STEP_HALF * (moleculeForces[i].x + nextMoleculeForces[i].x) * massInverse;
+        var yVel = moleculeVelocities[i].y +
+                   this.TIME_STEP_HALF * (moleculeForces[i].y + nextMoleculeForces[i].y) * massInverse;
         moleculeVelocities[i].setXY( xVel, yVel );
-        moleculeRotationRates[i] += this.TIME_STEP_HALF * (moleculeTorques[i] + nextMoleculeTorques[i]) * inertiaInverse;
-        centersOfMassKineticEnergy += 0.5 * moleculeDataSet.moleculeMass * (Math.pow( moleculeVelocities[i].x, 2 ) + Math.pow( moleculeVelocities[i].y, 2 ));
-        rotationalKineticEnergy += 0.5 * moleculeDataSet.moleculeRotationalInertia * Math.pow( moleculeRotationRates[i], 2 );
+        moleculeRotationRates[i] += this.TIME_STEP_HALF * (moleculeTorques[i] + nextMoleculeTorques[i]) *
+                                    inertiaInverse;
+        centersOfMassKineticEnergy += 0.5 * moleculeDataSet.moleculeMass *
+                                      (Math.pow( moleculeVelocities[i].x, 2 ) + Math.pow( moleculeVelocities[i].y, 2 ));
+        rotationalKineticEnergy += 0.5 * moleculeDataSet.moleculeRotationalInertia *
+                                   Math.pow( moleculeRotationRates[i], 2 );
         // Move the newly calculated forces and torques into the current spots.
         moleculeForces[i].setXY( nextMoleculeForces[i].x, nextMoleculeForces[i].y );
         moleculeTorques[i] = nextMoleculeTorques[i];

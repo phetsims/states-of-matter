@@ -135,14 +135,16 @@ define( function( require ) {
         moleculeRotationRates[i] = Math.random() * temperatureSqrt * Math.PI * 2;
       }
       var moleculesPlaced = 0;
-      var centerPoint = new Vector2( this.model.getNormalizedContainerWidth() / 2, this.model.getNormalizedContainerHeight() / 4 );
+      var centerPoint = new Vector2( this.model.getNormalizedContainerWidth() / 2,
+          this.model.getNormalizedContainerHeight() / 4 );
       var currentLayer = 0;
       var particlesOnCurrentLayer = 0;
       var particlesThatWillFitOnCurrentLayer = 1;
       for ( i = 0; i < numberOfMolecules; i++ ) {
         for ( var j = 0; j < this.MAX_PLACEMENT_ATTEMPTS; j++ ) {
           var distanceFromCenter = currentLayer * MIN_INITIAL_DIAMETER_DISTANCE * LIQUID_SPACING_FACTOR;
-          var angle = (particlesOnCurrentLayer / particlesThatWillFitOnCurrentLayer * 2 * Math.PI) + (particlesThatWillFitOnCurrentLayer / (4 * Math.PI));
+          var angle = (particlesOnCurrentLayer / particlesThatWillFitOnCurrentLayer * 2 * Math.PI) +
+                      (particlesThatWillFitOnCurrentLayer / (4 * Math.PI));
           var xPos = centerPoint.x + (distanceFromCenter * Math.cos( angle ));
           var yPos = centerPoint.y + (distanceFromCenter * Math.sin( angle ));
           // Consider this spot used even if we don't actually put the
@@ -151,7 +153,8 @@ define( function( require ) {
           if ( particlesOnCurrentLayer >= particlesThatWillFitOnCurrentLayer ) {
             // This layer is full - move to the next one.
             currentLayer++;
-            particlesThatWillFitOnCurrentLayer = (currentLayer * 2 * Math.PI / (MIN_INITIAL_DIAMETER_DISTANCE * LIQUID_SPACING_FACTOR));
+            particlesThatWillFitOnCurrentLayer = (currentLayer * 2 * Math.PI /
+                                                  (MIN_INITIAL_DIAMETER_DISTANCE * LIQUID_SPACING_FACTOR));
             particlesOnCurrentLayer = 0;
           }
           // problem.
@@ -189,9 +192,9 @@ define( function( require ) {
         // Assign each molecule an initial velocity.
         moleculeVelocities[i].setXY( temperatureSqrt * rand.nextGaussian(), temperatureSqrt * rand.nextGaussian() );
         // Assign each molecule an initial rotational position.
-        moleculeRotationAngles[i] = /*Math.random() **/ Math.PI * 2;
+        moleculeRotationAngles[i] = Math.random() * Math.PI * 2;
         // Assign each molecule an initial rotation rate.
-        moleculeRotationRates[i] = /*Math.random() **/ temperatureSqrt * Math.PI * 2;
+        moleculeRotationRates[i] = Math.random() * temperatureSqrt * Math.PI * 2;
       }
       // disproportionate amount of kinetic energy.
       var newPosX, newPosY;
@@ -201,11 +204,12 @@ define( function( require ) {
         for ( var j = 0; j < this.MAX_PLACEMENT_ATTEMPTS; j++ ) {
           // Pick a random position.
           newPosX = this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE + ( Math.random() * rangeX);
-          newPosY = this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE + ( Math.random * rangeY);
+          newPosY = this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE + ( Math.random() * rangeY);
           var positionAvailable = true;
           // See if this position is available.
           for ( var k = 0; k < i; k++ ) {
-            if ( moleculeCenterOfMassPositions[k].distance( newPosX, newPosY ) < MIN_INITIAL_DIAMETER_DISTANCE * GAS_SPACING_FACTOR ) {
+            if ( moleculeCenterOfMassPositions[k].distance( newPosX, newPosY ) <
+                 MIN_INITIAL_DIAMETER_DISTANCE * GAS_SPACING_FACTOR ) {
               positionAvailable = false;
               break;
             }

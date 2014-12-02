@@ -15,7 +15,7 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
 
-  function DiatomicAtomPositionUpdater( ) {
+  function DiatomicAtomPositionUpdater() {
 
   }
 
@@ -33,11 +33,15 @@ define( function( require ) {
       for ( var i = 0; i < moleculeDataSet.getNumberOfMolecules(); i++ ) {
         cosineTheta = Math.cos( moleculeRotationAngles[i] );
         sineTheta = Math.sin( moleculeRotationAngles[i] );
-        xPos = moleculeCenterOfMassPositions[i].x + cosineTheta * (StatesOfMatterConstants.DIATOMIC_PARTICLE_DISTANCE / 2);
-        yPos = moleculeCenterOfMassPositions[i].y + sineTheta * (StatesOfMatterConstants.DIATOMIC_PARTICLE_DISTANCE / 2);
+        xPos = moleculeCenterOfMassPositions[i].x +
+               cosineTheta * (StatesOfMatterConstants.DIATOMIC_PARTICLE_DISTANCE / 2);
+        yPos = moleculeCenterOfMassPositions[i].y +
+               sineTheta * (StatesOfMatterConstants.DIATOMIC_PARTICLE_DISTANCE / 2);
         atomPositions[i * 2].setXY( xPos, yPos );
-        xPos = moleculeCenterOfMassPositions[i].x - cosineTheta * (StatesOfMatterConstants.DIATOMIC_PARTICLE_DISTANCE / 2);
-        yPos = moleculeCenterOfMassPositions[i].y - sineTheta * (StatesOfMatterConstants.DIATOMIC_PARTICLE_DISTANCE / 2);
+        xPos = moleculeCenterOfMassPositions[i].x -
+               cosineTheta * (StatesOfMatterConstants.DIATOMIC_PARTICLE_DISTANCE / 2);
+        yPos = moleculeCenterOfMassPositions[i].y -
+               sineTheta * (StatesOfMatterConstants.DIATOMIC_PARTICLE_DISTANCE / 2);
         atomPositions[i * 2 + 1].setXY( xPos, yPos );
       }
     }
