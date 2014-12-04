@@ -24,7 +24,7 @@
   "atomDiameterWithSymbol": " Atom Diameter(σ)",
   "sigma": "σ",
   "epsilon": "ε",
-  "kelvinUnits": "K",
-  "celsiusUnits": "C"
+  "kelvinUnits": "\u212A",
+  "celsiusUnits": "\u2103"
 
 }
