@@ -1,4 +1,4 @@
-// Copyright (c) 2002 - 2014. University of Colorado Boulder
+// Copyright 2002-2014, University of Colorado Boulder
 
 /**
  * View for the thermometer
@@ -25,8 +25,8 @@ define( function( require ) {
     Node.call( this );
 
     // add thermometer
-    var temperatureInKelvinProperty = new Property( model.temperatureInKelvinProperty.value );
-    var thermometer = new ThermometerNode( 0, 1000, temperatureInKelvinProperty, {
+    var temperatureInKelVinProperty = new Property( model.getTemperatureInKelvin() );
+    var thermometer = new ThermometerNode( 0, 1000, temperatureInKelVinProperty, {
       outlineStroke: 'white',
       tickSpacing: 3,
       bulbDiameter: 25,
@@ -37,12 +37,12 @@ define( function( require ) {
     this.addChild( thermometer );
 
     // add temperature combo box
-    var temperatureKelvinText = new Text( 0, {   font: new PhetFont( 10 )  } );
-    var temperatureCelsiusText = new Text( 0, {  font: new PhetFont( 10 ) } );
+    var temperatureKelvinText = new Text( '', {   font: new PhetFont( 10 )  } );
+    var temperatureCelsiusText = new Text( '', {  font: new PhetFont( 10 ) } );
     model.temperatureSetPointProperty.link( function( temperature ) {
       temperatureKelvinText.setText( Math.round( model.getTemperatureInKelvin() ) + " " + kelvinUnits );
       temperatureCelsiusText.setText( Math.round( model.getTemperatureInKelvin() - 273.15 ) + " " + celsiusUnits );
-      temperatureInKelvinProperty.value = Math.round( model.getTemperatureInKelvin() ) > 1000 ? 1000 :
+      temperatureInKelVinProperty.value = Math.round( model.getTemperatureInKelvin() ) > 1000 ? 1000 :
                                           Math.round( model.getTemperatureInKelvin() );
     } );
     var temperatureProperty = new Property( 0 );

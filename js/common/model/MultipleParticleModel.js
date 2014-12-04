@@ -1,4 +1,4 @@
-// Copyright 2002-2013, University of Colorado Boulder
+// Copyright 2002-2014, University of Colorado Boulder
 
 /**
  * MultipleParticleModel. Ported directly from Java version.
@@ -22,7 +22,6 @@ define( function( require ) {
   var OxygenAtom = require( 'STATES_OF_MATTER/common/model/particle/OxygenAtom' );
   var HydrogenAtom = require( 'STATES_OF_MATTER/common/model/particle/HydrogenAtom' );
   var ConfigurableStatesOfMatterAtom = require( 'STATES_OF_MATTER/common/model/particle/ConfigurableStatesOfMatterAtom' );
-
   var HydrogenAtom2 = require( 'STATES_OF_MATTER/common/model/particle/HydrogenAtom2' );
   var AtomType = require( 'STATES_OF_MATTER/common/model/AtomType' );
   var InteractionStrengthTable = require( 'STATES_OF_MATTER/common/model/InteractionStrengthTable' );
@@ -107,16 +106,13 @@ define( function( require ) {
   // allowable range, but the simulation did not work so well, so the range
   // below was arrived at empirically and seems to work reasonably well.
   var MIN_ADJUSTABLE_EPSILON = 1.5 * NeonAtom.EPSILON;
-  var MAX_ADJUSTABLE_EPSILON = StatesOfMatterConstants.EPSILON_FOR_WATER;
+  var MAX_ADJUSTABLE_EPSILON = StatesOfMatterConstants.MAX_EPSILON;// StatesOfMatterConstants.EPSILON_FOR_WATER;
 
   /**
    * @constructor
    */
   function MultipleParticleModel() {
 
-    //----------------------------------------
-    // All attributes ported from java version
-    // ---------------------------------------
 
     // Strategy patterns that are applied to the data set in order to create
     // the overall behavior of the simulation.
@@ -152,7 +148,6 @@ define( function( require ) {
         interactionExpanded: true,// interaction diagram
         numParticles: 0, // notifyParticleAdded
         temperatureSetPoint: 0, // notifyTemperatureChanged
-        temperatureInKelvin: 0,
         pressure: 0, // notifyPressureChanged
         moleculeType: 0, // notifyMoleculeTypeChanged,
         interactionStrength: 0, // notifyInteractionStrengthChanged
@@ -313,6 +308,10 @@ define( function( require ) {
       this.initializeParticles( phase );
     },
 
+    updatePressure: function() {
+      this.pressure = this.getPressureInAtmospheres();
+    },
+
     setThermostatType: function( type ) {
       if ( ( type === NO_THERMOSTAT ) ||
            ( type === ISOKINETIC_THERMOSTAT ) ||
@@ -449,7 +448,7 @@ define( function( require ) {
      *                 that the system is undergoing, ranging from -1 to +1.
      */
     setHeatingCoolingAmount: function( normalizedHeatingCoolingAmount ) {
-      assert && assert( normalizedHeatingCoolingAmount <= 1.0 ) && ( normalizedHeatingCoolingAmount >= -1.0 );
+      assert && assert( ( normalizedHeatingCoolingAmount <= 1.0 ) && ( normalizedHeatingCoolingAmount >= -1.0 ) );
       this.heatingCoolingAmount = normalizedHeatingCoolingAmount * MAX_TEMPERATURE_CHANGE_PER_ADJUSTMENT;
     },
 
@@ -549,10 +548,6 @@ define( function( require ) {
       this.calculateMinAllowableContainerHeight();
     },
 
-    //----------------------------------------------------------------------------
-    // Private Methods
-    //----------------------------------------------------------------------------
-
     removeAllParticles: function() {
       this.particles.clear();
       // Get rid of the normalized particles.
@@ -597,7 +592,7 @@ define( function( require ) {
           console.error( "ERROR: Unrecognized particle type, using default." );
           break;
       }
-
+      this.updatePressure();
       this.calculateMinAllowableContainerHeight();
     },
 
@@ -667,6 +662,9 @@ define( function( require ) {
         }
       }
 
+      // Record the pressure to see if it changes.
+      var pressureBeforeAlgorithm = this.getModelPressure();
+
       // Execute the Verlet algorithm.  The algorithm may be run several times for each time step.
       for ( var i = 0; i < VERLET_CALCULATIONS_PER_CLOCK_TICK; i++ ) {
         this.moleculeForceAndMotionCalculator.updateForcesAndMotion();
@@ -676,6 +674,11 @@ define( function( require ) {
       // Sync up the positions of the normalized particles (the molecule data
       // set) with the particles being monitored by the view (the model data set).
       this.syncParticlePositions();
+
+      // If the pressure changed
+      if ( this.getModelPressure() !== pressureBeforeAlgorithm ) {
+        this.updatePressure();
+      }
 
       // Adjust the temperature if needed.
       this.tempAdjustTickCounter++;
@@ -701,7 +704,6 @@ define( function( require ) {
     },
 
     step: function( dt ) {
-
 
       if ( this.isPlaying ) {
         this.stepInternal();
@@ -888,7 +890,7 @@ define( function( require ) {
       return this.currentMolecule;
     },
     setEpsilon: function( epsilon ) {
-      if ( this.currentMolecule == StatesOfMatterConstants.USER_DEFINED_MOLECULE ) {
+      if ( this.currentMolecule === StatesOfMatterConstants.USER_DEFINED_MOLECULE ) {
         if ( epsilon < MIN_ADJUSTABLE_EPSILON ) {
           epsilon = MIN_ADJUSTABLE_EPSILON;
         }
@@ -1103,11 +1105,17 @@ define( function( require ) {
           pressureInAtmospheres = 125 * this.getModelPressure();
           break;
 
+        case StatesOfMatterConstants.USER_DEFINED_MOLECULE:
+          // TODO: Not sure what to do here, need to figure it out.
+          // Using the value for Argon at the moment.
+          pressureInAtmospheres = 125 * this.getModelPressure();
+          break;
+
         default:
           pressureInAtmospheres = 0;
           break;
       }
-
+      //this.updatePressure();
       return pressureInAtmospheres;
     },
 
@@ -1116,7 +1124,7 @@ define( function( require ) {
      * container.  This can be important for determining whether movement
      * of the top is causing temperature changes.
      *
-     * @return - true if particles are close, false if not
+     * @return boolean - true if particles are close, false if not
      */
     particlesNearTop: function() {
       var moleculesPositions = this.moleculeDataSet.moleculeCenterOfMassPositions;
@@ -1173,8 +1181,7 @@ define( function( require ) {
     },
 
     convertScaledEpsilonToEpsilon: function( scaledEpsilon ) {
-      var epsilon = scaledEpsilon * StatesOfMatterConstants.MAX_EPSILON / 2;
-      return epsilon;
+      return scaledEpsilon * StatesOfMatterConstants.MAX_EPSILON / 2;
     },
     getContainerExploded: function() {
       return this.isExploded;
@@ -1194,7 +1201,7 @@ define( function( require ) {
 
     //private
     setContainerExploded: function( isExploded ) {
-      if ( this.isExploded != isExploded ) {
+      if ( this.isExploded !== isExploded ) {
         this.isExploded = isExploded;
         //notifyContainerExplodedStateChanged(m_isExploded);
         if ( !this.isExploded ) {
@@ -1218,8 +1225,8 @@ define( function( require ) {
         for ( firstOutsideMoleculeIndex = 0; firstOutsideMoleculeIndex < this.moleculeDataSet.getNumberOfMolecules();
               firstOutsideMoleculeIndex++ ) {
           var pos = this.moleculeDataSet.getMoleculeCenterOfMassPositions()[firstOutsideMoleculeIndex];
-          if ( pos.getX() < 0 || pos.getX() > this.normalizedContainerWidth || pos.getY() < 0 ||
-               pos.getY() > StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT / m_particleDiameter ) {
+          if ( pos.x < 0 || pos.x > this.normalizedContainerWidth || pos.y < 0 ||
+               pos.y > StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT / this.particleDiameter ) {
             // This particle is outside of the container.
             break;
           }
@@ -1229,13 +1236,13 @@ define( function( require ) {
           this.moleculeDataSet.removeMolecule( firstOutsideMoleculeIndex );
           particlesOutsideOfContainer++;
         }
-      } while ( firstOutsideMoleculeIndex != this.moleculeDataSet.getNumberOfMolecules() );
+      } while ( firstOutsideMoleculeIndex !== this.moleculeDataSet.getNumberOfMolecules() );
       // explicitly synced up elsewhere.
       var copyOfParticles = this.particles;
       for ( var i = 0; i < copyOfParticles.length - this.moleculeDataSet.getNumberOfAtoms(); i++ ) {
         var particle = copyOfParticles.get( i );
         this.particles.remove( particle );
-        particle.removedFromModel();
+        //particle.removedFromModel();
       }
       // Set the container to be unexploded.
       this.setContainerExploded( false );
