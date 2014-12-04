@@ -19,7 +19,7 @@ define( function( require ) {
   var Path = require( 'SCENERY/nodes/Path' );
   var SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
   var Text = require( 'SCENERY/nodes/Text' );
-  //var Property = require( 'AXON/Property' );
+  var Property = require( 'AXON/Property' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Node = require( 'SCENERY/nodes/Node' );
   var ArrowNode = require( 'SCENERY_PHET/ArrowNode' );
@@ -27,7 +27,7 @@ define( function( require ) {
 
 
 // Size of handles as function of node width.
-  var RESIZE_HANDLE_SIZE_PROPORTION = 0.12;
+  // var RESIZE_HANDLE_SIZE_PROPORTION = 0.12;
 
   // Position of handle as function of node width.
   var EPSILON_HANDLE_OFFSET_PROPORTION = 0.08;
@@ -46,35 +46,9 @@ define( function( require ) {
 
     this.model = model;
     var epsilonControlInteractionPotentialDiagram = this;
-    this.epsilonResizeHandle = null;
-    this.interactionPotentialDiagramNode = new InteractionPotentialDiagramNode( sigma, epsilon, wide );
+    //this.epsilonResizeHandle ;
     InteractionPotentialDiagramNode.call( this, sigma, epsilon, wide, true );
     this.accordinContent = new Node();
-    // Update the text when the value or units changes.
-    /*  Property.multilink( [model.atomsProperty,  model.interactionStrengthProperty],
-     function( atoms, interactionStrength ) {
-     epsilonControlInteractionPotentialDiagram.updateInteractivityState();
-
-     epsilonControlInteractionPotentialDiagram.drawPotentialCurve();
-     // call when interaction strength change
-     epsilonControlInteractionPotentialDiagram.setLjPotentialParameters( model.getSigma(), model.getEpsilon() );
-
-     } );*/
-
-    model.atomsProperty.link( function( atoms ) {
-      epsilonControlInteractionPotentialDiagram.updateInteractivityState();
-      epsilonControlInteractionPotentialDiagram.drawPotentialCurve();
-      // call when interaction strength change
-      epsilonControlInteractionPotentialDiagram.setLjPotentialParameters( model.getSigma(), model.getEpsilon() );
-
-    } );
-    model.interactionStrengthProperty.link( function( value ) {
-      epsilonControlInteractionPotentialDiagram.updateInteractivityState();
-      epsilonControlInteractionPotentialDiagram.drawPotentialCurve();
-      // call when interaction strength change
-      epsilonControlInteractionPotentialDiagram.setLjPotentialParameters( model.getSigma(), model.getEpsilon() );
-
-    } );
 
 
     this.accordinContent.addChild( this.ljPotentialGraph );
@@ -84,12 +58,14 @@ define( function( require ) {
     var epsilonShape = new Path( new Shape()
       .moveTo( -epsilonLineLength / 3, 0 )
       .lineTo( epsilonLineLength / 2, 0 ), {
-      lineWidth: 2,
-      stroke: '#31C431'
+      lineWidth: 3,
+      stroke: '#31C431',
+      pickable: true
     } );
-    this.epsilonLine = new Node( { cursor: 'pointer', pickable: true} );
+    this.epsilonLine = new Node();
 
     this.epsilonLine.addChild( epsilonShape );
+    this.epsilonLine.cursor = 'pointer';
     // the epsilon parameter.
     this.epsilonResizeHandle = new ArrowNode( 0, -20, 0, 20, {
       headHeight: 10,
@@ -100,33 +76,29 @@ define( function( require ) {
       doubleHead: true,
       pickable: true
     } );
-    this.ljPotentialGraph.addChild( this.epsilonResizeHandle );
-    this.ljPotentialGraph.addChild( this.epsilonLine );
-    var epsilonResizeHandleNode = this.epsilonResizeHandle;
+    this.accordinContent.addChild( this.epsilonResizeHandle );
+    this.accordinContent.addChild( this.epsilonLine );
     var startDragY, endDragY;
     this.epsilonResizeHandle.cursor = 'pointer';
     this.epsilonResizeHandle.addInputListener( new FillHighlightListener( '#33FF00', 'yellow' ) );
     this.epsilonResizeHandle.addInputListener( new SimpleDragHandler(
       {
         start: function( event ) {
-          startDragY = epsilonResizeHandleNode.globalToParentPoint( event.pointer.point ).y;
+          startDragY = epsilonControlInteractionPotentialDiagram.epsilonResizeHandle.globalToParentPoint( event.pointer.point ).y;
         },
         drag: function( event ) {
 
-          endDragY = epsilonResizeHandleNode.globalToParentPoint( event.pointer.point ).y;
+          endDragY = epsilonControlInteractionPotentialDiagram.epsilonResizeHandle.globalToParentPoint( event.pointer.point ).y;
           var d = endDragY - startDragY;
           var scaleFactor = StatesOfMatterConstants.MAX_EPSILON /
                             ( epsilonControlInteractionPotentialDiagram.getGraphHeight() / 2);
           model.interactionStrengthProperty.value = model.getEpsilon() + ( d * scaleFactor );
           epsilonControlInteractionPotentialDiagram.drawPotentialCurve();
-          epsilonResizeHandleNode.setTranslation( epsilonControlInteractionPotentialDiagram.getGraphMin().x +
-                                                  (epsilonControlInteractionPotentialDiagram.width *
-                                                   EPSILON_HANDLE_OFFSET_PROPORTION),
-            epsilonControlInteractionPotentialDiagram.getGraphMin().y );
+          /*  epsilonControlInteractionPotentialDiagram.epsilonResizeHandle.setTranslation( epsilonControlInteractionPotentialDiagram.getGraphMin().x + (epsilonControlInteractionPotentialDiagram.width * EPSILON_HANDLE_OFFSET_PROPORTION),
+           epsilonControlInteractionPotentialDiagram.getGraphMin().y );*/
+          // epsilonControlInteractionPotentialDiagram.drawPotentialCurve();
         }
       } ) );
-
-    // todo
     this.epsilonLine.addInputListener( new SimpleDragHandler(
       {
         start: function( event ) {
@@ -160,12 +132,26 @@ define( function( require ) {
       } );
     this.addChild( accordionBox );
     // Update interactivity state.
-    this.drawPotentialCurve();
     this.updateInteractivityState();
 
-    // call when interaction strength change
-    this.setLjPotentialParameters( 200, 200 );
+// call when interaction strength change
+    this.setLjPotentialParameters( model.getSigma(),model.getEpsilon() );
     this.drawPotentialCurve();
+
+    // Update the text when the value or units changes.
+    Property.multilink( [model.atomsProperty, model.interactionStrengthProperty],
+      function( atoms, interactionStrength ) {
+
+        if ( model.currentMolecule === StatesOfMatterConstants.USER_DEFINED_MOLECULE ) {
+          model.setEpsilon( interactionStrength );
+        }
+        epsilonControlInteractionPotentialDiagram.updateInteractivityState();
+        // call when interaction strength change
+        epsilonControlInteractionPotentialDiagram.setLjPotentialParameters( model.getSigma(), model.getEpsilon() );
+        epsilonControlInteractionPotentialDiagram.drawPotentialCurve();
+      } );
+
+
     this.mutate( options );
   }
 
@@ -180,10 +166,9 @@ define( function( require ) {
       // The bulk of the drawing is done by the base class.
       InteractionPotentialDiagramNode.prototype.drawPotentialCurve.call( this );
       // Now position the control handles.
-      if ( this.epsilonResizeHandle !== null ) {
+      if ( this.epsilonResizeHandle !== undefined ) {
         var graphMin = this.getGraphMin();
-        this.epsilonResizeHandle.setTranslation( graphMin.x + (this.width * EPSILON_HANDLE_OFFSET_PROPORTION),
-          graphMin.y );
+        this.epsilonResizeHandle.setTranslation( graphMin.x + (this.width * EPSILON_HANDLE_OFFSET_PROPORTION), graphMin.y );
         this.epsilonResizeHandle.setVisible( this.interactionEnabled );
         this.epsilonResizeHandle.setPickable( this.interactionEnabled );
         this.epsilonLine.setTranslation( graphMin.x, graphMin.y + EPSILON_LINE_WIDTH );
