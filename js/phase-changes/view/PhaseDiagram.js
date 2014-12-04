@@ -11,7 +11,6 @@ define( function( require ) {
 
   // modules
   var inherit = require( 'PHET_CORE/inherit' );
-  var Color = require( 'SCENERY/util/Color' );
   var AccordionBox = require( 'SUN/AccordionBox' );
   var Vector2 = require( 'DOT/Vector2' );
   var Shape = require( 'KITE/Shape' );
@@ -63,7 +62,7 @@ define( function( require ) {
   // various substances.  Note that all points are controlled as proportions
   // of the overall graph size and not as absolute values.
   var POINT_MARKER_DIAMETER = 4;
-  var CURRENT_STATE_MARKER_DIAMETER = 7;
+  var CURRENT_STATE_MARKER_DIAMETER = 5;
   var DEFAULT_TOP_OF_SOLID_LIQUID_LINE = new Vector2( X_USABLE_RANGE * 0.40 + X_ORIGIN_OFFSET,
       Y_ORIGIN_OFFSET - Y_USABLE_RANGE );
   var TOP_OF_SOLID_LIQUID_LINE_FOR_WATER = new Vector2( X_USABLE_RANGE * 0.30 + X_ORIGIN_OFFSET,
