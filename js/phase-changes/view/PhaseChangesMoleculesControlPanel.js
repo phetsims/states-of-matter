@@ -23,10 +23,11 @@ define( function( require ) {
   var RadioButtonGroup = require( 'SUN/buttons/RadioButtonGroup' );
   //var Property = require( 'AXON/Property' );
   var Dimension2 = require( 'DOT/Dimension2' );
+  // var PhaseDiagram = require( 'STATES_OF_MATTER/phase-changes/view/PhaseDiagram' );
   // var LinearGradient = require( 'SCENERY/util/LinearGradient' );
   var Path = require( 'SCENERY/nodes/Path' );
   var Shape = require( 'KITE/Shape' );
-
+  var ObservableArray = require( 'AXON/ObservableArray' );
   // strings
   var neonString = require( 'string!STATES_OF_MATTER/neon' );
   var argonString = require( 'string!STATES_OF_MATTER/argon' );
@@ -35,6 +36,24 @@ define( function( require ) {
   var adjustableAttractionString = require( 'string!STATES_OF_MATTER/adjustableAttraction' );
   var tittleString = require( 'string!STATES_OF_MATTER/AtomsMolecules' );
   var interactionStrengthTittleString = require( 'string!STATES_OF_MATTER/interactionStrengthWithSymbol' );
+  var PRESSURE_FACTOR = 35;
+
+  // var INTERACTION_POTENTIAL_DIAGRAM_WIDTH = 200;
+
+  // Constants used when mapping the model pressure and temperature to the phase diagram.
+  var TRIPLE_POINT_TEMPERATURE_IN_MODEL = StatesOfMatterConstants.TRIPLE_POINT_MONATOMIC_MODEL_TEMPERATURE;
+  var TRIPLE_POINT_TEMPERATURE_ON_DIAGRAM = 0.375;
+
+  var CRITICAL_POINT_TEMPERATURE_IN_MODEL = StatesOfMatterConstants.CRITICAL_POINT_MONATOMIC_MODEL_TEMPERATURE;
+  var CRITICAL_POINT_TEMPERATURE_ON_DIAGRAM = 0.8;
+  var SLOPE_IN_1ST_REGION = TRIPLE_POINT_TEMPERATURE_ON_DIAGRAM / TRIPLE_POINT_TEMPERATURE_IN_MODEL;
+  var SLOPE_IN_2ND_REGION = ( CRITICAL_POINT_TEMPERATURE_ON_DIAGRAM - TRIPLE_POINT_TEMPERATURE_ON_DIAGRAM ) /
+                            ( CRITICAL_POINT_TEMPERATURE_IN_MODEL - TRIPLE_POINT_TEMPERATURE_IN_MODEL );
+  var OFFSET_IN_2ND_REGION = TRIPLE_POINT_TEMPERATURE_ON_DIAGRAM -
+                             ( SLOPE_IN_2ND_REGION * TRIPLE_POINT_TEMPERATURE_IN_MODEL );
+  // Used for calculating moving averages needed to mellow out the graph
+  // behavior.  Value empirically determined.
+  var MAX_NUM_HISTORY_SAMPLES = 100;
 
   /**
    *
@@ -42,7 +61,7 @@ define( function( require ) {
    * @param {Object} options for various panel display properties
    * @constructor
    */
-  function PhaseChangesMoleculesControlPanel( model, atomsProperty, options ) {
+  function PhaseChangesMoleculesControlPanel( model, atomsProperty, phaseDiagram, options ) {
 
     var phaseChangesMoleculesControlPanel = this;
     options = _.extend( {
@@ -56,6 +75,9 @@ define( function( require ) {
 
     Node.call( this );
     var textOptions = {font: new PhetFont( 10 ), fill: "#FFFFFF"};
+    this.modelTemperatureHistory = new ObservableArray();
+    this.model = model;
+    this.phaseDiagram = phaseDiagram;
 
     // itemSpec describes the pieces that make up an item in the control panel,
     // conforms to the contract: { label: {Node}, icon: {Node} (optional) }
@@ -105,7 +127,6 @@ define( function( require ) {
     var labelFont = new PhetFont( 10 );
     var weakTitle = new Text( 'Weak', { font: labelFont, fill: 'white'} );
     var strongTitle = new Text( 'Strong', {fill: 'white', font: labelFont } );
-    //var interactionStrengthProperty = new Property( 0 );
     var interactionStrengthNode = new Node();
     var interactionTitle = new Text( interactionStrengthTittleString, { font: labelFont, fill: 'white'} );
 
@@ -120,20 +141,18 @@ define( function( require ) {
         minorTickLength: 12,
         trackStroke: 'black',
         trackLineWidth: 1,
-        // thumb
         thumbLineWidth: 1,
-        // ticks
         tickLabelSpacing: 6,
         majorTickStroke: 'white',
         majorTickLineWidth: 1,
         minorTickStroke: 'white',
         minorTickLineWidth: 1,
-        // other
+
         cursor: 'pointer'
 
       } );
     model.interactionStrengthProperty.link( function( value ) {
-      if ( model.currentMolecule == StatesOfMatterConstants.USER_DEFINED_MOLECULE ) {
+      if ( model.currentMolecule === StatesOfMatterConstants.USER_DEFINED_MOLECULE ) {
         model.setEpsilon( value );
       }
     } );
@@ -163,11 +182,13 @@ define( function( require ) {
     this.addChild( radioButtonGroup );
 
     atomsProperty.link( function( value ) {
+
+      model.temperatureSetPointProperty._notifyObservers();
+      phaseChangesMoleculesControlPanel.modelTemperatureHistory.clear();
+      phaseChangesMoleculesControlPanel.updatePhaseDiagram();
       var backgroundShape;
       if ( value === 6 ) {
-
         phaseChangesMoleculesControlPanel.addChild( interactionStrengthNode );
-
         backgroundShape = new Shape().roundRect( 0,
           -4,
             radioButtonGroup.width + 10,
@@ -179,7 +200,7 @@ define( function( require ) {
         interactionStrengthNode.top = radioButtonGroup.bottom + 10;
       }
       else {
-        if ( phaseChangesMoleculesControlPanel.indexOfChild( interactionStrengthNode ) >= 0 ) {
+        if ( phaseChangesMoleculesControlPanel.isChild( interactionStrengthNode ) ) {
           phaseChangesMoleculesControlPanel.removeChild( interactionStrengthNode );
           backgroundShape = new Shape().roundRect( 0,
             -4,
@@ -206,6 +227,11 @@ define( function( require ) {
     titleBackground.centerX = titleText.centerX;
     var tittleNode = new Node( {children: [titleBackground, titleText]} );
     this.addChild( tittleNode );
+
+    model.temperatureSetPointProperty.link( function() {
+      phaseChangesMoleculesControlPanel.modelTemperatureHistory.clear();
+      phaseChangesMoleculesControlPanel.updatePhaseDiagram();
+    } );
 
     this.mutate( options );
   }
@@ -248,5 +274,96 @@ define( function( require ) {
   };
 
 
-  return inherit( Node, PhaseChangesMoleculesControlPanel );
+  return inherit( Node, PhaseChangesMoleculesControlPanel, {
+    //todo: Move these methods out of this panel class
+    /**
+     * Update the position of the marker on the phase diagram based on the
+     * temperature and pressure values within the model.
+     */
+    updatePhaseDiagram: function() {
+
+      // If the container has exploded, don't bother showing the dot.
+      if ( this.model.getContainerExploded() ) {
+        this.phaseDiagram.setStateMarkerVisible( false );
+      }
+      else {
+        this.phaseDiagram.setStateMarkerVisible( true );
+        var movingAverageTemperature = this.updateMovingAverageTemperature( this.model.getTemperatureSetPoint() );
+        var modelPressure = this.model.getModelPressure();
+        var mappedTemperature = this.mapModelTemperatureToPhaseDiagramTemperature( movingAverageTemperature );
+        var mappedPressure = this.mapModelTempAndPressureToPhaseDiagramPressureAlternative1( modelPressure,
+          movingAverageTemperature );
+        this.phaseDiagram.setStateMarkerPos( mappedTemperature, mappedPressure );
+
+      }
+    },
+
+    updateMovingAverageTemperature: function( newTemperatureValue ) {
+      if ( this.modelTemperatureHistory.length === MAX_NUM_HISTORY_SAMPLES ) {
+        this.modelTemperatureHistory.shift();
+      }
+      this.modelTemperatureHistory.push( newTemperatureValue );
+      var totalOfAllTemperatures = 0;
+      for ( var i = 0; i < this.modelTemperatureHistory.length; i++ ) {
+        totalOfAllTemperatures += this.modelTemperatureHistory.get( i );
+      }
+      return totalOfAllTemperatures / this.modelTemperatureHistory.length;
+    },
+
+    mapModelTemperatureToPhaseDiagramTemperature: function( modelTemperature ) {
+
+      var mappedTemperature;
+
+      if ( modelTemperature < TRIPLE_POINT_TEMPERATURE_IN_MODEL ) {
+        mappedTemperature = SLOPE_IN_1ST_REGION * modelTemperature;
+      }
+      else {
+        mappedTemperature = modelTemperature * SLOPE_IN_2ND_REGION + OFFSET_IN_2ND_REGION;
+      }
+
+      return Math.min( mappedTemperature, 1 );
+    },
+
+
+    mapModelTempAndPressureToPhaseDiagramPressure: function( modelPressure, modelTemperature ) {
+      var mappedTemperature = this.mapModelTemperatureToPhaseDiagramTemperature( modelTemperature );
+      var mappedPressure;
+
+      if ( modelTemperature < TRIPLE_POINT_TEMPERATURE_IN_MODEL ) {
+        mappedPressure = 1.4 * ( Math.pow( mappedTemperature, 2 ) ) + PRESSURE_FACTOR * Math.pow( modelPressure, 2 );
+      }
+      else if ( modelTemperature < CRITICAL_POINT_TEMPERATURE_IN_MODEL ) {
+        mappedPressure = 0.19 + 1.2 * ( Math.pow( mappedTemperature - TRIPLE_POINT_TEMPERATURE_ON_DIAGRAM, 2 ) ) +
+                         PRESSURE_FACTOR * Math.pow( modelPressure, 2 );
+      }
+      else {
+        mappedPressure = 0.43 + ( 0.43 / 0.81 ) * ( mappedTemperature - 0.81 ) +
+                         PRESSURE_FACTOR * Math.pow( modelPressure, 2 );
+      }
+      return Math.min( mappedPressure, 1 );
+    },
+
+    // TODO: This was added by jblanco on 3/23/2012 as part of effort to
+    // improve phase diagram behavior, see #3287. If kept, it needs to be
+    // cleaned up, including deletion of the previous version of this method.
+
+    // Map the model temperature and pressure to a normalized pressure value
+    // suitable for use in setting the marker position on the phase chart.
+    mapModelTempAndPressureToPhaseDiagramPressureAlternative1: function( modelPressure, modelTemperature ) {
+      // This method is a total tweak fest.  All values and equations are
+      // made to map to the phase diagram, and are NOT based on any real-
+      // world equations that define phases of matter.
+      var cutOverTemperature = TRIPLE_POINT_TEMPERATURE_ON_DIAGRAM - 0.025;
+      var mappedTemperature = this.mapModelTemperatureToPhaseDiagramTemperature( modelTemperature );
+      var mappedPressure;
+      if ( mappedTemperature < cutOverTemperature ) {
+        mappedPressure = Math.pow( mappedTemperature, 1.5 );
+      }
+      else {
+        mappedPressure = Math.pow( mappedTemperature - cutOverTemperature, 1.8 ) + 0.2;
+      }
+      return Math.min( mappedPressure, 1 );
+    }
+
+  } );
 } );
