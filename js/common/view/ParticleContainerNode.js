@@ -134,7 +134,7 @@ define( function( require ) {
       // Add the finger for pressing down on the top of the container.
       // responsible for positioning itself later based on user interaction.
 
-      var fingerNode = new PointingHandNode( model );
+      var fingerNode = new PointingHandNode( model, modelViewTransform );
       this.addChild( fingerNode );
       fingerNode.bottom = this.containerLid.top;
 
