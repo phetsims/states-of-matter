@@ -33,7 +33,7 @@ define( function( require ) {
   var HOSE_CONNECTOR_WIDTH_PROPORTION = 0.05;
   var HOSE_CONNECTOR_VERT_POS_PROPORTION = 0.8;
   var HOSE_ATTACH_VERT_POS_PROPORTION = 0.075;
-  var HOSE_WIDTH_PROPORTION = 0.03;
+//  var HOSE_WIDTH_PROPORTION = 0.03;
   var PUMPING_REQUIRED_TO_INJECT_PROPORTION = PUMP_SHAFT_HEIGHT_PROPORTION / 10;
 
 
@@ -56,7 +56,7 @@ define( function( require ) {
     var pumpBaseRectangle = new Rectangle( 0, 0, pumpBaseWidth, pumpBaseHeight, {
       fill: '#B9BBBD', pickable: false } );
 
-    var pumpBase = new Node( {children: [ pumpBaseRectangle ], pickable: 'false'} );
+    var pumpBase = new Node( { children: [ pumpBaseRectangle ]} );
     pumpBase.setTranslation( 0, height - pumpBaseHeight );
     this.addChild( pumpBase );
 
@@ -153,8 +153,7 @@ define( function( require ) {
       stroke: '#F0F1F2'} );
     this.addChild( pipeConnectorPath );
     var pipeConnectorShape = new Shape()
-      .ellipticalArc( pumpBaseWidth / 2, height - pumpBaseHeight - pipeConnectorHeight, pumpBodyWidth / 2 + 1, 3, 0,
-        -Math.PI / 8, 9 * Math.PI / 8, false )
+      .ellipticalArc( pumpBaseWidth / 2, height - pumpBaseHeight - pipeConnectorHeight, pumpBodyWidth / 2 + 1, 3, 0, -Math.PI / 8, 9 * Math.PI / 8, false )
       .lineTo( (pumpBaseWidth - pipeConnectorBottomWidth) / 2, height - pumpBaseHeight )
       .ellipticalArc( pumpBaseWidth / 2, height - pumpBaseHeight, pipeConnectorBottomWidth / 2, 2, 0, Math.PI, 0, true )
       .close();
