@@ -18,7 +18,41 @@ define( function( require ) {
   var PARTICLE_CONTAINER_INITIAL_HEIGHT = PARTICLE_CONTAINER_WIDTH * 1.00;
   var SOLID_TEMPERATURE = 0.15;
 
+
+  // var TRIPLE_POINT_MONATOMIC_MODEL_TEMPERATURE = 0.26;    // Empirically determined.
+  //var CRITICAL_POINT_MONATOMIC_MODEL_TEMPERATURE = 0.8;  // Empirically determined.
+  var NEON_TRIPLE_POINT_IN_KELVIN = 23;   // Tweaked a little from actual value for better temperature mapping.
+  var NEON_CRITICAL_POINT_IN_KELVIN = 44;
+  var ARGON_TRIPLE_POINT_IN_KELVIN = 75;  // Tweaked a little from actual value for better temperature mapping.
+  var ARGON_CRITICAL_POINT_IN_KELVIN = 151;
+  var O2_TRIPLE_POINT_IN_KELVIN = 54;
+  var O2_CRITICAL_POINT_IN_KELVIN = 155;
+  var WATER_TRIPLE_POINT_IN_KELVIN = 273;
+  var WATER_CRITICAL_POINT_IN_KELVIN = 647;
+
+  // The following values are used for temperature conversion for the
+  // adjustable molecule.  These are somewhat arbitrary, since in the real
+  // world the values would change if epsilon were changed.  They have been
+  // chosen to be similar to argon, because the default epsilon value is
+  // half of the allowable range, and this value ends up being similar to
+  // argon.
+  // var ADJUSTABLE_ATOM_TRIPLE_POINT_IN_KELVIN = 75;
+  //var ADJUSTABLE_ATOM_CRITICAL_POINT_IN_KELVIN = 140;
+
   return {
+
+
+    TRIPLE_POINT_MONATOMIC_MODEL_TEMPERATURE: 0.26,    // Empirically determined.
+    CRITICAL_POINT_MONATOMIC_MODEL_TEMPERATURE: 0.8,  // Empirically determined.
+    NEON_TRIPLE_POINT_IN_KELVIN: NEON_TRIPLE_POINT_IN_KELVIN,  // Tweaked a little from actual value for better temperature mapping.
+    NEON_CRITICAL_POINT_IN_KELVIN: NEON_CRITICAL_POINT_IN_KELVIN,
+    ARGON_TRIPLE_POINT_IN_KELVIN: ARGON_TRIPLE_POINT_IN_KELVIN, // Tweaked a little from actual value for better temperature mapping.
+    ARGON_CRITICAL_POINT_IN_KELVIN: ARGON_CRITICAL_POINT_IN_KELVIN,
+    O2_TRIPLE_POINT_IN_KELVIN: O2_TRIPLE_POINT_IN_KELVIN,
+    O2_CRITICAL_POINT_IN_KELVIN: O2_CRITICAL_POINT_IN_KELVIN,
+    WATER_TRIPLE_POINT_IN_KELVIN: WATER_TRIPLE_POINT_IN_KELVIN,
+    WATER_CRITICAL_POINT_IN_KELVIN: WATER_CRITICAL_POINT_IN_KELVIN,
+
     // Maximum number of atoms that can be simulated.
     MAX_NUM_ATOMS: 500,
 
