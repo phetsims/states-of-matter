@@ -28,11 +28,12 @@ define( function( require ) {
   var LID_POSITION_TWEAK_FACTOR = 65; // Empirically determined value for aligning lid and container body.
 
   /**
-   * Main constructor.
    *
    * @param {MultipleParticleModel} model
    * @param {ModelViewTransform} modelViewTransform The model view transform for transforming particle position.
-   * @param {Object} [options]
+   * @param {Object} options
+   * @param {boolean} volumeControlEnabled - set true to enable volume control by pushing the lid using a finger from above
+   * @param {boolean} pressureGaugeEnabled - set true to show a barometer
    * @constructor
    */
   function ParticleContainerNode( model, modelViewTransform, options, volumeControlEnabled, pressureGaugeEnabled ) {
@@ -46,27 +47,38 @@ define( function( require ) {
 
     var preParticleLayer = new Node();
     var particleLayer = new Node();
-    var postParticleLayer = new Node( {opacity: 0.8} );
+    var postParticleLayer = new Node( { opacity: 0.8} );
 
-    //which contain handle node(container open/close node) and used to set pressure of container with finger
-    this.containerLid = new Node();
+    this.containerLid = new Node( { opacity: 0.8 } );
     this.addChild( preParticleLayer );
     this.addChild( particleLayer );
 
     var openEllipse = new Path( new Shape()
       .ellipticalArc( 125, 2, 25, 125, Math.PI / 2, 0, 2 * Math.PI, false ).close(), {
       lineWidth: '2',
-      stroke: '#7E7E7E',
-      fill: new LinearGradient( 0, 0, 100, 0 )
-        .addColorStop( 0, '#7E7E7E' )
-        .addColorStop( 0.3, '#6D6D6D' )
-        .addColorStop( 0.5, '# 757575' )
-        .addColorStop( 0.6, '#696969' )
+      fill: '#7E7E7E'
     } );
+    var openInnerEllipse = new Path( new Shape()
+      .ellipticalArc( 125, 2, 20, 100, Math.PI / 2, 0, 2 * Math.PI, false ).close(), {
+      lineWidth: '2',
+      stroke: '#7E7E7E',
+      fill: 'white'
+    } );
+    openInnerEllipse.centerX = openEllipse.centerX;
+    openInnerEllipse.centerY = openEllipse.centerY;
+    var open = new Path( new Shape()
+      .ellipticalArc( 125, 2, 25, 125, Math.PI / 2, 0, 2 * Math.PI, false ).close(), {
+      lineWidth: '2',
+      stroke: '#7E7E7E'
+    } );
+    open.centerX = openEllipse.centerX;
+    open.centerY = openEllipse.centerY;
+    openInnerEllipse.centerX = openEllipse.centerX;
+    openInnerEllipse.centerY = openEllipse.centerY;
     var closeEllipse = new Path( new Shape()
       .ellipticalArc( 125, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT, 125,
-      25, 0, 0, Math.PI, false ).close(), {
-      lineWidth: '2',
+      15, 0, 0, Math.PI, false ).close(), {
+      lineWidth: 0,
       stroke: '#7E7E7E',
       fill: new LinearGradient( 0, 0, 100, 0 )
         .addColorStop( 0, '#7E7E7E' )
@@ -85,9 +97,11 @@ define( function( require ) {
       .lineTo( 25, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT )
       .lineTo( 25, 25 )
       .lineTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 25, 25 )
+      .lineTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH, 10 )
+      .quadraticCurveTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / 2, 50, 0, 10 )
       .lineTo( 25, 25 )
       .close(), {
-      lineWidth: '2',
+      lineWidth: 0,
       stroke: '#7E7E7E',
       fill: new LinearGradient( 0, 0, 100, 0 )
         .addColorStop( 0, '#7E7E7E' )
@@ -95,6 +109,8 @@ define( function( require ) {
         .addColorStop( 0.5, '# 757575' )
         .addColorStop( 0.6, '#696969' )
     } );
+
+    this.addChild( open );
     this.containerLid.addChild( openEllipse );
     postParticleLayer.addChild( outerMostNode );
     preParticleLayer.addChild( this.containerLid );
@@ -111,9 +127,13 @@ define( function( require ) {
       .lineTo( 50, 25 )
       .lineTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 50, 25 )
       .lineTo( 50, 25 )
+      .lineTo( 50, 40 )
+      .lineTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 50, 40 )
+      .lineTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 50, 25 )
+      .lineTo( 50, 25 )
       .lineTo( 25, 25 )
       .close(), {
-      lineWidth: '2',
+      lineWidth: 0,
       stroke: '#4E4E4E',
       fill: new LinearGradient( 0, 0, 100, 0 )
         .addColorStop( 0, '#4E4E4E' )
@@ -125,7 +145,6 @@ define( function( require ) {
     postParticleLayer.addChild( middleNode );
     this.middleContainerLayer = new Node();
     this.addChild( this.middleContainerLayer );
-    //this.pressureMeter;
 
     if ( volumeControlEnabled ) {
       // Add the finger for pressing down on the top of the container.
@@ -133,8 +152,14 @@ define( function( require ) {
       // responsible for positioning itself later based on user interaction.
       this.addChild( this.fingerNode );
       this.fingerNode.bottom = this.containerLid.top;
+      this.fingerNode.setTranslation( this.fingerNode.x + openEllipse.width / 3,
+          Math.abs( this.modelViewTransform.modelToViewDeltaY(
+              StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT -
+              this.model.getParticleContainerRect().getHeight() ) ) +
+          this.containerLid.y - this.fingerNode.height );
 
       // Add the handle to the lid.
+      this.containerLid.addChild( openInnerEllipse );
       //  var handleNode = new HandleNode(50, 100, Color.YELLOW);
       //  handleNode.rotate(Math.PI / 2);
       //  handleNode.setOffset((m_containerLid.getWidth() / 2) + (handleNode.getFullBoundsReference().width / 2), 0);
@@ -147,13 +172,15 @@ define( function( require ) {
       this.pressureMeter.setElbowEnabled( true );
       this.middleContainerLayer.addChild( this.pressureMeter );
       this.updatePressureGauge();
-      this.pressureMeterElbowOffset = 2;//this.pressureMeter.getCenterY();
+      this.pressureMeterElbowOffset = 20;//this.pressureMeter.getCenterY();
+      this.pressureMeter.setTranslation( this.containerLid.x - 60, this.containerLid.y - 20 );
+
     }
     var particleContainerNode = this;
     model.particleContainerHeightProperty.link( function() {
       if ( pressureGaugeEnabled ) {
         particleContainerNode.updatePressureGauge();
-        // particleContainerNode.handleContainerSizeChanged();
+        particleContainerNode.handleContainerSizeChanged();
 
       }
     } );
@@ -169,8 +196,9 @@ define( function( require ) {
               StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT - containerRect.getHeight() ) ) +
           this.containerLid.y - this.fingerNode.height );
       this.updatePressureGauge();
+      this.containerLid.setTranslation( 0, 0 );
       this.containerLid.setRotation( 0 );
-      this.pressureMeter.setY( this.containerLid.y );
+      this.pressureMeter.setTranslation( this.containerLid.x - 60, this.containerLid.y - 20 );
     },
 
     /**
@@ -186,18 +214,17 @@ define( function( require ) {
           if ( this.pressureMeter.getRotation() !== 0 ) {
             this.pressureMeter.setRotation( 0 );
           }
-          this.pressureMeter.setTranslation( this.containerLid.y );
-
-          this.pressureMeter.setElbowHeight( Math.abs( this.modelViewTransform.modelToViewDeltaY( StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT -
-                                                                                                  containerRect.height -
-                                                                                                  this.pressureMeterElbowOffset ) ) );
+          //  this.pressureMeter.setTranslation(      this.pressureMeter.x, this.containerLid.y );
+          this.pressureMeter.setElbowHeight( this.pressureMeterElbowOffset +
+                                             Math.abs( this.modelViewTransform.modelToViewDeltaY( StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT -
+                                                                                                  containerRect.height ) ) );
         }
         else {
           // The container is exploding, so spin and move the gauge.
           this.pressureMeter.rotate( -Math.PI / 20 );
           // this.pressureMeter.setTranslation( this.pressureMeter.x, this.modelViewTransform.modelToViewDeltaY( PRESSURE_GAUGE_Y_OFFSET - this.model.getParticleContainerHeight() ) - this.pressureMeter.y );
-          this.pressureMeter.setY( this.y +
-                                   this.modelViewTransform.modelToViewDeltaY( containerRect.getHeight() ) );
+          this.pressureMeter.setTranslation( this.pressureMeter.x, this.y +
+                                                                   this.modelViewTransform.modelToViewDeltaY( containerRect.getHeight() ) );
         }
       }
     },
@@ -206,6 +233,7 @@ define( function( require ) {
      * Handle a notification that the container size has changed.
      * @private
      */
+    //Todo: this is not working well yet
     handleContainerSizeChanged: function() {
       // changed.
       var containerHeight = this.model.getParticleContainerHeight();
@@ -222,6 +250,9 @@ define( function( require ) {
                          LID_POSITION_TWEAK_FACTOR;
         var currentPosY = this.containerLid.y;
         var newPosX = this.containerLid.x;
+
+        this.containerLid.setCenterX( this.modelViewTransform.modelToViewDeltaX( this.containmentAreaWidth / 2 ) );
+
         var newPosY;
         if ( currentPosY > centerPosY ) {
           newPosY = centerPosY;
@@ -229,7 +260,7 @@ define( function( require ) {
         else {
           newPosY = currentPosY;
         }
-        this.containerLid.setTranslation( newPosX, newPosY );
+        //  this.containerLid.setTranslation( newPosX, newPosY );
       }
       this.updatePressureGauge();
     }
