@@ -16,7 +16,7 @@ define( function( require ) {
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var PlayPauseButton = require( 'SCENERY_PHET/buttons/PlayPauseButton' );
   var StepButton = require( 'SCENERY_PHET/buttons/StepButton' );
-  var TemperatureNode = require( 'STATES_OF_MATTER/common/view/TemperatureNode' );
+  var CompositeThermometerNode = require( 'STATES_OF_MATTER/common/view/CompositeThermometerNode' );
   var StoveNode = require( 'STATES_OF_MATTER/common/view/StoveNode' );
   var PhaseChangesMoleculesControlPanel = require( 'STATES_OF_MATTER/phase-changes/view/PhaseChangesMoleculesControlPanel' );
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
@@ -30,8 +30,24 @@ define( function( require ) {
   var EpsilonControlInteractionPotentialDiagram = require( 'STATES_OF_MATTER/phase-changes/view/EpsilonControlInteractionPotentialDiagram' );
   var ParticleCanvasNode = require( 'STATES_OF_MATTER/common/view/ParticleCanvasNode' );
   var TextPushButton = require( 'SUN/buttons/TextPushButton' );
+  var ObservableArray = require( 'AXON/ObservableArray' );
   // constants
   var inset = 10;
+  // Constants used when mapping the model pressure and temperature to the phase diagram.
+  var TRIPLE_POINT_TEMPERATURE_IN_MODEL = StatesOfMatterConstants.TRIPLE_POINT_MONATOMIC_MODEL_TEMPERATURE;
+  var TRIPLE_POINT_TEMPERATURE_ON_DIAGRAM = 0.375;
+
+  var CRITICAL_POINT_TEMPERATURE_IN_MODEL = StatesOfMatterConstants.CRITICAL_POINT_MONATOMIC_MODEL_TEMPERATURE;
+  var CRITICAL_POINT_TEMPERATURE_ON_DIAGRAM = 0.8;
+  var SLOPE_IN_1ST_REGION = TRIPLE_POINT_TEMPERATURE_ON_DIAGRAM / TRIPLE_POINT_TEMPERATURE_IN_MODEL;
+  var SLOPE_IN_2ND_REGION = ( CRITICAL_POINT_TEMPERATURE_ON_DIAGRAM - TRIPLE_POINT_TEMPERATURE_ON_DIAGRAM ) /
+                            ( CRITICAL_POINT_TEMPERATURE_IN_MODEL - TRIPLE_POINT_TEMPERATURE_IN_MODEL );
+  var OFFSET_IN_2ND_REGION = TRIPLE_POINT_TEMPERATURE_ON_DIAGRAM -
+                             ( SLOPE_IN_2ND_REGION * TRIPLE_POINT_TEMPERATURE_IN_MODEL );
+  // Used for calculating moving averages needed to mellow out the graph
+  // behavior.  Value empirically determined.
+  var MAX_NUM_HISTORY_SAMPLES = 100;
+  var PRESSURE_FACTOR = 35;
 
   /**
    * @param {MultipleParticleModel} model of the sim
@@ -48,41 +64,44 @@ define( function( require ) {
       new Vector2( 0, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT ), mvtScale );
 
     // add stove node
-    var stoveNode = new StoveNode( model, {
+    var stoveNode = new StoveNode( model, { scale: 0.8,
       centerX: this.layoutBounds.centerX,
-      bottom: this.layoutBounds.bottom
+      bottom: this.layoutBounds.bottom - inset
     } );
-    this.addChild( stoveNode );
+
+    this.model = model;
+    this.modelTemperatureHistory = new ObservableArray();
 
     // add particle container node
     var particleContainerNode = new ParticleContainerNode( model, modelViewTransform,
       {
-        centerX: stoveNode.centerX,
-        bottom: stoveNode.top
+        centerX: stoveNode.centerX - 60,
+        bottom: stoveNode.top - inset
       }, true, true );
 
     // add particle canvas layer for particle rendering
     this.particlesLayer = new ParticleCanvasNode( model.particles, modelViewTransform, {
-      centerX: stoveNode.centerX - 100,
+      centerX: stoveNode.centerX - 140,
       bottom: stoveNode.top + 720,
       canvasBounds: new Bounds2( -1000, -1000, 1000, 1000 )
     } );
     this.addChild( this.particlesLayer );
     this.addChild( particleContainerNode );
+    this.addChild( stoveNode );
 
-    // add temperature node
-    var temperatureNode = new TemperatureNode( model, {
+    // add compositeThermometer node
+    var compositeThermometerNode = new CompositeThermometerNode( model, {
       font: new PhetFont( 20 ),
       fill: 'white',
-      left: stoveNode.right,
-      top: stoveNode.top - 350
+      right: stoveNode.left + 4 * inset
     } );
-    this.addChild( temperatureNode );
-    var phaseDiagram = new PhaseDiagram( model.expandedProperty );
+    this.addChild( compositeThermometerNode );
+
+    // add phase diagram
+    this.phaseDiagram = new PhaseDiagram( model.expandedProperty );
 
     //add phase change control panel
-    var phaseChangesMoleculesControlPanel = new PhaseChangesMoleculesControlPanel( model, model.atomsProperty,
-      phaseDiagram,
+    var phaseChangesMoleculesControlPanel = new PhaseChangesMoleculesControlPanel( model,
       { right: this.layoutBounds.right + 5,
         top: this.layoutBounds.top + 10
       } );
@@ -92,9 +111,9 @@ define( function( require ) {
     var resetAllButton = new ResetAllButton(
       {
         listener: function() {
-          phaseChangesMoleculesControlPanel.modelTemperatureHistory.clear();
+          phaseChangesScreenView.modelTemperatureHistory.clear();
           model.reset();
-          temperatureNode.setRotation( 0 );
+          compositeThermometerNode.setRotation( 0 );
           particleContainerNode.reset();
         },
         bottom: this.layoutBounds.bottom - 5,
@@ -112,8 +131,9 @@ define( function( require ) {
         radius: 12,
         stroke: 'black',
         fill: '#005566',
-        right: stoveNode.left - 20,
-        bottom: this.layoutBounds.bottom - 14
+        right: stoveNode.left - 50,
+        bottom: stoveNode.bottom - 20
+
       }
     );
 
@@ -128,9 +148,10 @@ define( function( require ) {
     this.addChild( playPauseButton );
     this.addChild( resetAllButton );
 
-    this.addChild( new BicyclePumpNode( 250, 300, model, {
-      bottom: stoveNode.top + 100,
-      right: particleContainerNode.left + 45
+    // add bicycle pump node
+    this.addChild( new BicyclePumpNode( 200, 250, model, {
+      bottom: stoveNode.top + 90,
+      right: particleContainerNode.left + 100
     } ) );
 
     this.returnLidButton = new TextPushButton( 'return Lid', {
@@ -138,18 +159,21 @@ define( function( require ) {
       baseColor: 'yellow',
       listener: function() {
         model.returnLid();
+        particleContainerNode.reset();
+
+
       },
       xMargin: 10,
       right: particleContainerNode.left - 10,
-      top: particleContainerNode.centerY + 120,
-      visible: model.isExplodedProperty.value
+      top: particleContainerNode.centerY + 100
     } );
     this.addChild( this.returnLidButton );
-    model.isExplodedProperty.linkAttribute( this.returnLidButton, 'visible' );
-    model.isExplodedProperty.link( function() {
+
+    model.isExplodedProperty.link( function( isExploded ) {
       particleContainerNode.updatePressureGauge();
+      phaseChangesScreenView.returnLidButton.visible = isExploded;
       particleContainerNode.containerLid.setRotation( 0 );
-      particleContainerNode.pressureMeter.setY( particleContainerNode.containerLid.y );
+      particleContainerNode.pressureMeter.setY( particleContainerNode.containerLid.y - 20 );
     } );
 
     var epsilonControlInteractionPotentialDiagram = new EpsilonControlInteractionPotentialDiagram(
@@ -158,21 +182,27 @@ define( function( require ) {
         top: phaseChangesMoleculesControlPanel.bottom + 5
       } );
     this.addChild( epsilonControlInteractionPotentialDiagram );
-    model.atomsProperty.link( function( moleculeId ) {
-      phaseDiagram.setDepictingWater( moleculeId === StatesOfMatterConstants.WATER );
+    model.moleculeTypeProperty.link( function( moleculeId ) {
+      phaseChangesScreenView.modelTemperatureHistory.clear();
+      phaseChangesScreenView.updatePhaseDiagram();
+      phaseChangesScreenView.phaseDiagram.setDepictingWater( moleculeId === StatesOfMatterConstants.WATER );
       if ( moleculeId === StatesOfMatterConstants.USER_DEFINED_MOLECULE ) {
-        if ( phaseChangesScreenView.isChild( phaseDiagram ) ) {
-          phaseChangesScreenView.removeChild( phaseDiagram );
+        if ( phaseChangesScreenView.isChild( phaseChangesScreenView.phaseDiagram ) ) {
+          phaseChangesScreenView.removeChild( phaseChangesScreenView.phaseDiagram );
         }
+        model.interactionStrengthProperty.value = StatesOfMatterConstants.MAX_EPSILON;
         epsilonControlInteractionPotentialDiagram.top = phaseChangesMoleculesControlPanel.bottom + 5;
       }
       else {
-        if ( !phaseChangesScreenView.isChild( phaseDiagram ) ) {
-          phaseChangesScreenView.addChild( phaseDiagram );
-          phaseDiagram.right = phaseChangesScreenView.layoutBounds.right + 5;
-            phaseDiagram.top = phaseChangesMoleculesControlPanel.bottom + 5;
-          epsilonControlInteractionPotentialDiagram.top = phaseDiagram.bottom + 5;
+        if ( !phaseChangesScreenView.isChild( phaseChangesScreenView.phaseDiagram ) ) {
+          phaseChangesScreenView.addChild( phaseChangesScreenView.phaseDiagram );
+          phaseChangesScreenView.phaseDiagram.right = phaseChangesScreenView.layoutBounds.right + 5;
+          phaseChangesScreenView.phaseDiagram.top = phaseChangesMoleculesControlPanel.bottom + 5;
+          epsilonControlInteractionPotentialDiagram.top = phaseChangesScreenView.phaseDiagram.bottom + 5;
         }
+      }
+      if ( model.getContainerExploded() ) {
+        particleContainerNode.reset();
       }
     } );
     model.particleContainerHeightProperty.link( function() {
@@ -180,39 +210,141 @@ define( function( require ) {
       var containerRect = model.getParticleContainerRect();
       if ( !model.getContainerExploded() ) {
         rotationRate = 0;
-        temperatureNode.setRotation( rotationRate );
+        compositeThermometerNode.setRotation( rotationRate );
+
+        compositeThermometerNode.setTranslation( compositeThermometerNode.x,
+            particleContainerNode.y + compositeThermometerNode.height / 3 +
+            Math.abs( modelViewTransform.modelToViewDeltaY( StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT -
+                                                            containerRect.getHeight() ) )
+        );
+        particleContainerNode.containerLid.setTranslation(
+          particleContainerNode.containerLid.x,
+          ( particleContainerNode.y - compositeThermometerNode.height + 5 +
+            Math.abs( modelViewTransform.modelToViewDeltaY( StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT -
+                                                            containerRect.getHeight() ) ) )
+        );
         particleContainerNode.containerLid.setRotation( rotationRate );
-        temperatureNode.setY( particleContainerNode.y +
-                              Math.abs( particleContainerNode.modelViewTransform.modelToViewDeltaY(
-                                  StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT -
-                                  containerRect.getHeight() ) ) );
-        particleContainerNode.containerLid.setY( particleContainerNode.y - temperatureNode.height +
-                                                 Math.abs( particleContainerNode.modelViewTransform.modelToViewDeltaY(
-                                                     StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT -
-                                                     containerRect.getHeight() ) ) );
       }
       else {
         rotationRate = -( Math.PI / 100 + ( Math.random() * Math.PI / 50 ) );
-        temperatureNode.rotate( rotationRate );
+        compositeThermometerNode.rotate( rotationRate );
+
+        compositeThermometerNode.setTranslation(
+          compositeThermometerNode.x,
+          ( particleContainerNode.y -
+            modelViewTransform.modelToViewDeltaY( StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT -
+                                                  containerRect.getHeight() ) )
+        );
+
+        particleContainerNode.containerLid.setTranslation(
+          particleContainerNode.containerLid.x,
+          ( particleContainerNode.y - compositeThermometerNode.height -
+            ( modelViewTransform.modelToViewDeltaY( StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT -
+                                                    containerRect.getHeight() ) ) )
+        );
         particleContainerNode.containerLid.rotate( rotationRate );
-        temperatureNode.setY( particleContainerNode.y -
-                              particleContainerNode.modelViewTransform.modelToViewDeltaY(
-                                  StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT -
-                                  containerRect.getHeight() ) );
-
-        particleContainerNode.containerLid.setY( particleContainerNode.y - temperatureNode.height -
-                                                 Math.abs( particleContainerNode.modelViewTransform.modelToViewDeltaY(
-                                                     StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT -
-                                                     containerRect.getHeight() ) ) );
-
       }
+    } );
+
+    model.temperatureSetPointProperty.link( function() {
+      phaseChangesScreenView.modelTemperatureHistory.clear();
+      phaseChangesScreenView.updatePhaseDiagram();
     } );
   }
 
   return inherit( ScreenView, PhaseChangesScreenView, {
     step: function() {
       this.particlesLayer.step();
+    },
+    /**
+     * Update the position of the marker on the phase diagram based on the
+     * temperature and pressure values within the model.
+     */
+    updatePhaseDiagram: function() {
+
+      // If the container has exploded, don't bother showing the dot.
+      if ( this.model.getContainerExploded() ) {
+        this.phaseDiagram.setStateMarkerVisible( false );
+      }
+      else {
+        this.phaseDiagram.setStateMarkerVisible( true );
+        var movingAverageTemperature = this.updateMovingAverageTemperature( this.model.getTemperatureSetPoint() );
+        var modelPressure = this.model.getModelPressure();
+        var mappedTemperature = this.mapModelTemperatureToPhaseDiagramTemperature( movingAverageTemperature );
+        var mappedPressure = this.mapModelTempAndPressureToPhaseDiagramPressureAlternative1( modelPressure,
+          movingAverageTemperature );
+        this.phaseDiagram.setStateMarkerPos( mappedTemperature, mappedPressure );
+
+      }
+    },
+
+    updateMovingAverageTemperature: function( newTemperatureValue ) {
+      if ( this.modelTemperatureHistory.length === MAX_NUM_HISTORY_SAMPLES ) {
+        this.modelTemperatureHistory.shift();
+      }
+      this.modelTemperatureHistory.push( newTemperatureValue );
+      var totalOfAllTemperatures = 0;
+      for ( var i = 0; i < this.modelTemperatureHistory.length; i++ ) {
+        totalOfAllTemperatures += this.modelTemperatureHistory.get( i );
+      }
+      return totalOfAllTemperatures / this.modelTemperatureHistory.length;
+    },
+
+    mapModelTemperatureToPhaseDiagramTemperature: function( modelTemperature ) {
+
+      var mappedTemperature;
+
+      if ( modelTemperature < TRIPLE_POINT_TEMPERATURE_IN_MODEL ) {
+        mappedTemperature = SLOPE_IN_1ST_REGION * modelTemperature;
+      }
+      else {
+        mappedTemperature = modelTemperature * SLOPE_IN_2ND_REGION + OFFSET_IN_2ND_REGION;
+      }
+
+      return Math.min( mappedTemperature, 1 );
+    },
+
+
+    mapModelTempAndPressureToPhaseDiagramPressure: function( modelPressure, modelTemperature ) {
+      var mappedTemperature = this.mapModelTemperatureToPhaseDiagramTemperature( modelTemperature );
+      var mappedPressure;
+
+      if ( modelTemperature < TRIPLE_POINT_TEMPERATURE_IN_MODEL ) {
+        mappedPressure = 1.4 * ( Math.pow( mappedTemperature, 2 ) ) + PRESSURE_FACTOR * Math.pow( modelPressure, 2 );
+      }
+      else if ( modelTemperature < CRITICAL_POINT_TEMPERATURE_IN_MODEL ) {
+        mappedPressure = 0.19 + 1.2 * ( Math.pow( mappedTemperature - TRIPLE_POINT_TEMPERATURE_ON_DIAGRAM, 2 ) ) +
+                         PRESSURE_FACTOR * Math.pow( modelPressure, 2 );
+      }
+      else {
+        mappedPressure = 0.43 + ( 0.43 / 0.81 ) * ( mappedTemperature - 0.81 ) +
+                         PRESSURE_FACTOR * Math.pow( modelPressure, 2 );
+      }
+      return Math.min( mappedPressure, 1 );
+    },
+
+    // TODO: This was added by jblanco on 3/23/2012 as part of effort to
+    // improve phase diagram behavior, see #3287. If kept, it needs to be
+    // cleaned up, including deletion of the previous version of this method.
+
+    // Map the model temperature and pressure to a normalized pressure value
+    // suitable for use in setting the marker position on the phase chart.
+    mapModelTempAndPressureToPhaseDiagramPressureAlternative1: function( modelPressure, modelTemperature ) {
+      // This method is a total tweak fest.  All values and equations are
+      // made to map to the phase diagram, and are NOT based on any real-
+      // world equations that define phases of matter.
+      var cutOverTemperature = TRIPLE_POINT_TEMPERATURE_ON_DIAGRAM - 0.025;
+      var mappedTemperature = this.mapModelTemperatureToPhaseDiagramTemperature( modelTemperature );
+      var mappedPressure;
+      if ( mappedTemperature < cutOverTemperature ) {
+        mappedPressure = Math.pow( mappedTemperature, 1.5 );
+      }
+      else {
+        mappedPressure = Math.pow( mappedTemperature - cutOverTemperature, 1.8 ) + 0.2;
+      }
+      return Math.min( mappedPressure, 1 );
     }
+
   } );
 } );
 
