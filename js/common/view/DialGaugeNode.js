@@ -54,8 +54,13 @@ define( function( require ) {
     this.textualReadout = new Text( "pressure  ", {font: new PhetFont( 12 ), fill: 'black'} );
     this.textualReadout.center = this.textualReadoutBoxShape.center;
 
-    this.connector = new Path( null, { lineWidth: 8, stroke: 'white',
-      fill: 'white'} );
+    this.connector = new Path( null, { lineWidth: 8,
+      stroke: new LinearGradient( 0, 0, 60, 60 )
+        .addColorStop( 0, '#D8D7D8' )
+        .addColorStop( 0.4, '#E1E2E3' )
+        .addColorStop( 0.8, '#D5D7D8' )
+        .addColorStop( 0.9, '#E2E3E4' )
+    } );
     var roundedRectangle = new Rectangle( 0, 0, 30, 25, 2, 2, {fill: new LinearGradient( 0, 0, 0, 25 )
       .addColorStop( 0, '#5F6973' )
       .addColorStop( 0.6, '#F0F1F2' )
