@@ -17,13 +17,15 @@ define( function( require ) {
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
 
   // strings
-  var solidLiquidGasString = require( 'string!STATES_OF_MATTER/solidLiquidGas' );
+  var statesString = require( 'string!STATES_OF_MATTER/states' );
 
   /**
    * @constructor
    */
   function SolidLiquidGasScreen() {
-    Screen.call( this, solidLiquidGasString, new Rectangle( 0, 0, 50, 50 ),
+    Screen.call( this,
+      statesString,
+      new Rectangle( 0, 0, 50, 50 ),
       function() { return new MultipleParticleModel(); },
       function( model ) { return new SolidLiquidGasScreenView( model ); },
       { backgroundColor: 'black', navigationBarIcon: new Rectangle( 0, 0, 50, 50 ) }
