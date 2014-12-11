@@ -16,7 +16,7 @@ define( function( require ) {
   var PlayPauseButton = require( 'SCENERY_PHET/buttons/PlayPauseButton' );
   var StepButton = require( 'SCENERY_PHET/buttons/StepButton' );
   var StoveNode = require( 'STATES_OF_MATTER/common/view/StoveNode' );
-  var TemperatureNode = require( 'STATES_OF_MATTER/common/view/TemperatureNode' );
+  var CompositeThermometerNode = require( 'STATES_OF_MATTER/common/view/CompositeThermometerNode' );
   var AtomsAndMoleculesControlPanel = require( 'STATES_OF_MATTER/solid-liquid-gas/view/AtomsAndMoleculesControlPanel' );
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
   var ParticleContainerNode = require( 'STATES_OF_MATTER/common/view/ParticleContainerNode' );
@@ -43,20 +43,20 @@ define( function( require ) {
     var modelViewTransform = ModelViewTransform2.createSinglePointScaleInvertedYMapping( new Vector2( 0, 0 ),
       new Vector2( 0, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT ), mvtScale );
 
-    var stoveNode = new StoveNode( model, {
+    var stoveNode = new StoveNode( model, {scale: 0.8,
       centerX: this.layoutBounds.centerX,
-      bottom: this.layoutBounds.bottom
+      bottom: this.layoutBounds.bottom - inset
     } );
     var particleContainerNode = new ParticleContainerNode( model, modelViewTransform,
       {
-        centerX: stoveNode.centerX,
-        bottom: stoveNode.top
+        centerX: stoveNode.centerX - 10,
+        bottom: stoveNode.top - inset
 
       } );
 
 
     this.particlesLayer = new ParticleCanvasNode( model.particles, modelViewTransform, {
-      centerX: stoveNode.centerX - 120,
+      centerX: stoveNode.centerX - 130,
       bottom: stoveNode.top + 720,
       canvasBounds: new Bounds2( -1000, -1000, 1000, 1000 )
     } );
@@ -66,16 +66,16 @@ define( function( require ) {
 
     this.addChild( stoveNode );
 
-    var temperatureNode = new TemperatureNode( model, {
+    var compositeThermometerNode = new CompositeThermometerNode( model, {
       font: new PhetFont( 20 ),
       fill: 'white',
-      left: particleContainerNode.right + 10,
-      centerY: particleContainerNode.top
+      right: particleContainerNode.left + 100,
+      centerY: particleContainerNode.top + 50
     } );
 
-    this.addChild( temperatureNode );
+    this.addChild( compositeThermometerNode );
 
-    var atomsAndMoleculesControlPanel = new AtomsAndMoleculesControlPanel( model.atomsProperty, {
+    var atomsAndMoleculesControlPanel = new AtomsAndMoleculesControlPanel( model.moleculeTypeProperty, {
       right: this.layoutBounds.right + 5,
       top: this.layoutBounds.top + 10
     } );
@@ -106,7 +106,7 @@ define( function( require ) {
         radius: 12,
         stroke: 'black',
         fill: '#005566',
-        right: stoveNode.left - 20,
+        right: stoveNode.left - 50,
         bottom: stoveNode.bottom - 20
       }
     );

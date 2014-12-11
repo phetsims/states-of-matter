@@ -28,16 +28,16 @@ define( function( require ) {
   var waterString = require( 'string!STATES_OF_MATTER/water' );
   var oxygenString = require( 'string!STATES_OF_MATTER/oxygen' );
   var adjustableAttractionString = require( 'string!STATES_OF_MATTER/adjustableAttraction' );
-  var tittleString = require( 'string!STATES_OF_MATTER/AtomsMolecules' );
+  var titleString = require( 'string!STATES_OF_MATTER/AtomsMolecules' );
 
 
   /**
    *
-   * @param {atomsProperty} atomsProperty
+   * @param {Property<Number>} moleculeTypeProperty that tracks the molecule type selected in the panel
    * @param {Object} options for various panel display properties
    * @constructor
    */
-  function AtomsAndMoleculesControlPanel( atomsProperty, options ) {
+  function AtomsAndMoleculesControlPanel( moleculeTypeProperty, options ) {
 
     options = _.extend( {
       xMargin: 5,
@@ -83,7 +83,8 @@ define( function( require ) {
       { value: 4, node: createItem( oxygen )},
       { value: 5, node: createItem( water ) }
     ];
-    var radioButtonGroup = new RadioButtonGroup( atomsProperty, radioButtonContent, {
+
+    var radioButtonGroup = new RadioButtonGroup( moleculeTypeProperty, radioButtonContent, {
       orientation: 'vertical',
       spacing: 1,
       cornerRadius: 5,
@@ -94,7 +95,6 @@ define( function( require ) {
       deselectedLineWidth: 0,
       deselectedContentOpacity: 1
     } );
-
 
     var radioButtonPanel = new Panel( radioButtonGroup, {
       stroke: 'black',
@@ -113,9 +113,11 @@ define( function( require ) {
         fill: 'black'
       }
     );
+
     this.addChild( background );
     this.addChild( radioButtonGroup );
-    var titleText = new Text( tittleString,
+
+    var titleText = new Text( titleString,
       { font: new PhetFont( 14 ),
         fill: '#FFFFFF',
         fontWeight: 'bold'

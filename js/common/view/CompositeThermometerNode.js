@@ -25,8 +25,8 @@ define( function( require ) {
     Node.call( this );
 
     // add thermometer
-    var temperatureInKelVinProperty = new Property( model.getTemperatureInKelvin() );
-    var thermometer = new ThermometerNode( 0, 1000, temperatureInKelVinProperty, {
+    var temperatureInKelvinProperty = new Property( model.getTemperatureInKelvin() );
+    var thermometer = new ThermometerNode( 0, 1000, temperatureInKelvinProperty, {
       outlineStroke: 'white',
       tickSpacing: 3,
       bulbDiameter: 25,
@@ -39,12 +39,16 @@ define( function( require ) {
     // add temperature combo box
     var temperatureKelvinText = new Text( '', {   font: new PhetFont( 10 )  } );
     var temperatureCelsiusText = new Text( '', {  font: new PhetFont( 10 ) } );
-    model.temperatureSetPointProperty.link( function( temperature ) {
-      temperatureKelvinText.setText( Math.round( model.getTemperatureInKelvin() ) + " " + kelvinUnits );
-      temperatureCelsiusText.setText( Math.round( model.getTemperatureInKelvin() - 273.15 ) + " " + celsiusUnits );
-      temperatureInKelVinProperty.value = Math.round( model.getTemperatureInKelvin() ) > 1000 ? 1000 :
-                                          Math.round( model.getTemperatureInKelvin() );
+    model.temperatureSetPointProperty.link( function() {
+      var tempInKelvin = model.getTemperatureInKelvin();
+      var tempInKelvinRounded = Math.round( model.getTemperatureInKelvin() );
+      temperatureKelvinText.setText( tempInKelvinRounded + " " + kelvinUnits );
+      temperatureCelsiusText.setText( Math.round( tempInKelvin - 273.15 ) + " " + celsiusUnits );
+
+      // clamping the red mercury display at 1000
+      temperatureInKelvinProperty.value = tempInKelvinRounded > 1000 ? 1000 : tempInKelvinRounded;
     } );
+
     var temperatureProperty = new Property( 0 );
     var temperatureComboBox = new ComboBox( [
       ComboBox.createItem( temperatureKelvinText, 0 ),
