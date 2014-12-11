@@ -21,10 +21,6 @@ define( function( require ) {
   var LinearGradient = require( 'SCENERY/util/LinearGradient' );
 
 
-  //var PRESSURE_GAUGE_Y_OFFSET = -3000;
-  // var PRESSURE_METER_X_OFFSET_PROPORTION = 0.80;
-// Maximum value expected for pressure, in atmospheres.
-  //var MAX_PRESSURE = 200;
   var LID_POSITION_TWEAK_FACTOR = 65; // Empirically determined value for aligning lid and container body.
 
   /**
@@ -55,12 +51,12 @@ define( function( require ) {
 
     var openEllipse = new Path( new Shape()
       .ellipticalArc( 125, 2, 25, 125, Math.PI / 2, 0, 2 * Math.PI, false ).close(), {
-      lineWidth: '2',
+      lineWidth: 1,
       fill: '#7E7E7E'
     } );
     var openInnerEllipse = new Path( new Shape()
       .ellipticalArc( 125, 2, 20, 100, Math.PI / 2, 0, 2 * Math.PI, false ).close(), {
-      lineWidth: '2',
+      lineWidth: 1,
       stroke: '#7E7E7E',
       fill: 'white'
     } );
@@ -68,81 +64,136 @@ define( function( require ) {
     openInnerEllipse.centerY = openEllipse.centerY;
     var open = new Path( new Shape()
       .ellipticalArc( 125, 2, 25, 125, Math.PI / 2, 0, 2 * Math.PI, false ).close(), {
-      lineWidth: '2',
+      lineWidth: 1,
       stroke: '#7E7E7E'
     } );
     open.centerX = openEllipse.centerX;
     open.centerY = openEllipse.centerY;
     openInnerEllipse.centerX = openEllipse.centerX;
     openInnerEllipse.centerY = openEllipse.centerY;
-    var closeEllipse = new Path( new Shape()
-      .ellipticalArc( 125, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT, 125,
-      15, 0, 0, Math.PI, false ).close(), {
-      lineWidth: 0,
-      stroke: '#7E7E7E',
-      fill: new LinearGradient( 0, 0, 100, 0 )
-        .addColorStop( 0, '#7E7E7E' )
-        .addColorStop( 0.3, '#6D6D6D' )
-        .addColorStop( 0.5, '# 757575' )
-        .addColorStop( 0.6, '#696969' )
-    } );
 
-    var outerMostNode = new Path( new Shape()
+    // add container outer shape
+    var outerShape = new Path( new Shape()
       .moveTo( 0, 5 )
-      .lineTo( 0, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT )
+      .quadraticCurveTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / 2, 51,
+      StatesOfMatterConstants.VIEW_CONTAINER_WIDTH, 5 )
       .lineTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT )
-      .lineTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH, 5 )
-      .lineTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 25, 25 )
-      .lineTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 25, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT )
-      .lineTo( 25, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT )
-      .lineTo( 25, 25 )
-      .lineTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 25, 25 )
-      .lineTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH, 10 )
-      .quadraticCurveTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / 2, 50, 0, 10 )
-      .lineTo( 25, 25 )
+      .quadraticCurveTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / 2,
+        StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT + 30, 0, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT )
+      .lineTo( 25, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT - 10 )
+      .quadraticCurveTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / 2,
+        StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT + 25, StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 25,
+        StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT - 10 )
+      .lineTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 25, 30 )
+      .quadraticCurveTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / 2, 60, 25, 30 )
+      .lineTo( 25, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT - 10 )
+      .lineTo( 0, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT )
       .close(), {
       lineWidth: 0,
-      stroke: '#7E7E7E',
-      fill: new LinearGradient( 0, 0, 100, 0 )
-        .addColorStop( 0, '#7E7E7E' )
-        .addColorStop( 0.3, '#6D6D6D' )
-        .addColorStop( 0.5, '# 757575' )
-        .addColorStop( 0.6, '#696969' )
+      stroke: 'white',
+      fill: new LinearGradient( 0, 0, StatesOfMatterConstants.VIEW_CONTAINER_WIDTH, 0 )
+        .addColorStop( 0, '#6E6E6E' )
+        .addColorStop( 0.2, '#7A7979' )
+        .addColorStop( 0.3, '# 949696' )
+        .addColorStop( 0.4, '#BABABA' )
+        .addColorStop( 0.7, '#6A6B6B' )
+        .addColorStop( 0.9, '#606262' )
     } );
+    postParticleLayer.addChild( outerShape );
+
+    // add container inner left
+    var leftShape = new Path( new Shape()
+      .moveTo( 25, 30 )
+      .lineTo( 35, 45 )
+      .lineTo( 35, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT - 15 )
+      .lineTo( 25, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT - 10 )
+      .lineTo( 25, 30 )
+      .close(), {
+      lineWidth: 0,
+      stroke: 'white',
+      fill: new LinearGradient( 0, 0, 0, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT - 10 - 30 )
+        .addColorStop( 0, '#525252' )
+        .addColorStop( 0.2, '#515151' )
+        .addColorStop( 0.4, '# 4F4F4F' )
+        .addColorStop( 0.5, '#4E4E4E' )
+        .addColorStop( 0.7, '#3A3A3A' )
+        .addColorStop( 0.8, '# 2E2E2E' )
+        .addColorStop( 0.9, '#292929' )
+    } );
+    postParticleLayer.addChild( leftShape );
+
+    // add container inner right
+    var rightShape = new Path( new Shape()
+      .moveTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 25, 30 )
+      .lineTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 35, 45 )
+      .lineTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 35, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT - 15 )
+      .lineTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 25, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT - 10 )
+      .lineTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 25, 30 )
+      .close(), {
+      lineWidth: 0,
+      stroke: 'white',
+      fill: new LinearGradient( 0, 0, 0, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT - 10 - 30 )
+        .addColorStop( 0, '#939393' )
+        .addColorStop( 0.2, '#BABABA' )
+        .addColorStop( 0.3, '# 585858' )
+        .addColorStop( 0.4, '#525252' )
+        .addColorStop( 0.5, '#9F9F9F' )
+        .addColorStop( 0.5, '#BCBCBC' )
+        .addColorStop( 0.9, '#636363' )
+    } );
+    postParticleLayer.addChild( rightShape );
+
+    // add container inner top
+    var topShape = new Path( new Shape()
+      .moveTo( 25, 30 )
+      .quadraticCurveTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / 2, 45,
+        StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 25, 30 )
+      .lineTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 35, 45 )
+      .quadraticCurveTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / 2, 65, 35, 45 )
+      .close(), {
+      lineWidth: 0,
+      stroke: 'white',
+      fill: new LinearGradient( 0, 0, StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 25 - 30, 0 )
+        .addColorStop( 0, '#2E2E2E' )
+        .addColorStop( 0.2, '#323232' )
+        .addColorStop( 0.3, '# 363636' )
+        .addColorStop( 0.4, '#3E3E3E' )
+        .addColorStop( 0.5, '#4B4B4B' )
+        .addColorStop( 0.5, '# 515151' )
+        .addColorStop( 0.9, '#525252' )
+    } );
+    postParticleLayer.addChild( topShape );
+
+    // add container inner bottom
+    var bottomShape = new Path( new Shape()
+      .moveTo( 25, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT - 10 )
+      .quadraticCurveTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / 2,
+        StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT + 25, StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 25,
+        StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT - 10 )
+      .lineTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 35, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT - 15 )
+      .quadraticCurveTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / 2,
+        StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT + 10, 35, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT - 15 )
+      .close(), {
+      lineWidth: 0,
+      stroke: 'white',
+      fill: new LinearGradient( 0, 0, StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 25 - 30, 0 )
+        .addColorStop( 0, '#5D5D5D' )
+        .addColorStop( 0.2, '#717171' )
+        .addColorStop( 0.3, '#7C7C7C' )
+        .addColorStop( 0.4, '#8D8D8D' )
+        .addColorStop( 0.5, '#9E9E9E' )
+        .addColorStop( 0.5, '#A2A2A2' )
+        .addColorStop( 0.9, '#A3A3A3' )
+
+    } );
+    postParticleLayer.addChild( bottomShape );
+
 
     this.addChild( open );
     this.containerLid.addChild( openEllipse );
-    postParticleLayer.addChild( outerMostNode );
     preParticleLayer.addChild( this.containerLid );
-    postParticleLayer.addChild( closeEllipse );
 
-    var middleNode = new Path( new Shape()
-      .moveTo( 25, 25 )
-      .lineTo( 25, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT )
-      .lineTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 25, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT )
-      .lineTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 25, 25 )
-      .lineTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 50, 25 )
-      .lineTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 50, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT )
-      .lineTo( 50, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT )
-      .lineTo( 50, 25 )
-      .lineTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 50, 25 )
-      .lineTo( 50, 25 )
-      .lineTo( 50, 40 )
-      .lineTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 50, 40 )
-      .lineTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 50, 25 )
-      .lineTo( 50, 25 )
-      .lineTo( 25, 25 )
-      .close(), {
-      lineWidth: 0,
-      stroke: '#4E4E4E',
-      fill: new LinearGradient( 0, 0, 100, 0 )
-        .addColorStop( 0, '#4E4E4E' )
-        .addColorStop( 0.3, '#494949' )
-        .addColorStop( 0.5, '# 757575' )
-        .addColorStop( 0.6, '#9E9E9E' )
-    } );
 
-    postParticleLayer.addChild( middleNode );
     this.middleContainerLayer = new Node();
     this.addChild( this.middleContainerLayer );
 
@@ -181,7 +232,6 @@ define( function( require ) {
       if ( pressureGaugeEnabled ) {
         particleContainerNode.updatePressureGauge();
         particleContainerNode.handleContainerSizeChanged();
-
       }
     } );
     this.addChild( postParticleLayer );
