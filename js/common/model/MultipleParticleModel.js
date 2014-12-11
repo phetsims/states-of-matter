@@ -112,8 +112,7 @@ define( function( require ) {
    * @constructor
    */
   function MultipleParticleModel() {
-
-
+    var multipleParticleModel = this;
     // Strategy patterns that are applied to the data set in order to create
     // the overall behavior of the simulation.
     this.atomPositionUpdater = null;
@@ -149,25 +148,24 @@ define( function( require ) {
         numParticles: 0, // notifyParticleAdded
         temperatureSetPoint: 0, // notifyTemperatureChanged
         pressure: 0, // notifyPressureChanged
-        moleculeType: 0, // notifyMoleculeTypeChanged,
+        moleculeType: StatesOfMatterConstants.NEON, // notifyMoleculeTypeChanged,
         interactionStrength: 0, // notifyInteractionStrengthChanged
-        atoms: 1,// number of atoms in molecule
-        state: 1,//  solid phase
+        state: PHASE_SOLID,//  solid phase
         isPlaying: true,
         speed: 'normal'
       }
     );
 
     this.normalizedContainerHeight = this.particleContainerHeight / this.particleDiameter;
-    var self = this;
+
     // Do just enough initialization to allow the view and control
     // portions of the simulation to be properly created.  The rest of the
     // initialization will occur when the model is reset.
     this.initializeModelParameters();
     this.setMoleculeType( DEFAULT_MOLECULE );
 
-    this.atomsProperty.link( function( moleculeId ) {
-      self.setMoleculeType( moleculeId );
+    this.moleculeTypeProperty.link( function( moleculeId ) {
+      multipleParticleModel.setMoleculeType( moleculeId );
     } );
   }
 
@@ -1242,7 +1240,7 @@ define( function( require ) {
       for ( var i = 0; i < copyOfParticles.length - this.moleculeDataSet.getNumberOfAtoms(); i++ ) {
         var particle = copyOfParticles.get( i );
         this.particles.remove( particle );
-        //particle.removedFromModel();
+        // particle.removedFromModel();
       }
       // Set the container to be unexploded.
       this.setContainerExploded( false );
