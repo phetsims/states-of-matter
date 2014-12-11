@@ -87,7 +87,7 @@ define( function( require ) {
   function PhaseDiagram( expandedProperty, options ) {
 
     Node.call( this );
-    this.accordinContent = new Node();
+    var accordionContent = new Node();
 
     // Variable that defines the normalized position of the current phase
     // state marker.
@@ -102,58 +102,58 @@ define( function( require ) {
       fill: '#FFBC00',
       stroke: '#FFBC00'
     } );
-    this.accordinContent.addChild( this.gasAreaBackground );
+    accordionContent.addChild( this.gasAreaBackground );
 
     // super critical  area background
     this.superCriticalAreaBackground = new Path( null, {
       fill: '#C3DF53'
     } );
-    this.accordinContent.addChild( this.superCriticalAreaBackground );
+    accordionContent.addChild( this.superCriticalAreaBackground );
 
     // liquid area background
     this.liquidAreaBackground = new Path( null, {
       fill: '#83FFB9'
     } );
-    this.accordinContent.addChild( this.liquidAreaBackground );
+    accordionContent.addChild( this.liquidAreaBackground );
 
     //solid area background
     this.solidAreaBackground = new Path( null, {
       fill: '#C6BCD7'
     } );
-    this.accordinContent.addChild( this.solidAreaBackground );
+    accordionContent.addChild( this.solidAreaBackground );
 
     this.solidLiquidLine = new Path( null, { lineWidth: 1, stroke: 'black'} );
-    this.accordinContent.addChild( this.solidLiquidLine );
+    accordionContent.addChild( this.solidLiquidLine );
 
     this.solidGasLine = new Path( null, { lineWidth: 1, stroke: 'black'} );
-    this.accordinContent.addChild( this.solidGasLine );
+    accordionContent.addChild( this.solidGasLine );
 
     this.liquidGasLine = new Path( null, { lineWidth: 1, stroke: 'black'} );
-    this.accordinContent.addChild( this.liquidGasLine );
+    accordionContent.addChild( this.liquidGasLine );
 
     this.triplePoint = new Path( new Shape()
       .ellipse( 0, 0, POINT_MARKER_DIAMETER, POINT_MARKER_DIAMETER ), { fill: 'black' } );
-    this.accordinContent.addChild( this.triplePoint );
+    accordionContent.addChild( this.triplePoint );
 
     this.criticalPoint = new Path( new Shape()
       .ellipse( 0, 0, POINT_MARKER_DIAMETER, POINT_MARKER_DIAMETER ), { fill: 'black' } );
-    this.accordinContent.addChild( this.criticalPoint );
+    accordionContent.addChild( this.criticalPoint );
 
     // Create the labels that will exist inside the phase diagram.
     this.solidLabel = new Text( solidString, { font: LARGER_INNER_FONT, fill: 'black' } );
-    this.accordinContent.addChild( this.solidLabel );
+    accordionContent.addChild( this.solidLabel );
 
     this.liquidLabel = new Text( liquidString, { font: LARGER_INNER_FONT, fill: 'black'} );
-    this.accordinContent.addChild( this.liquidLabel );
+    accordionContent.addChild( this.liquidLabel );
 
     this.gasLabel = new Text( gasString, { font: LARGER_INNER_FONT, fill: 'black'} );
-    this.accordinContent.addChild( this.gasLabel );
+    accordionContent.addChild( this.gasLabel );
 
     this.triplePointLabel = new Text( triplePointString, {font: SMALLER_INNER_FONT, fill: 'black'} );
-    this.accordinContent.addChild( this.triplePointLabel );
+    accordionContent.addChild( this.triplePointLabel );
 
     this.criticalPointLabel = new Text( criticalPointString, {font: SMALLER_INNER_FONT, fill: 'black'} );
-    this.accordinContent.addChild( this.criticalPointLabel );
+    accordionContent.addChild( this.criticalPointLabel );
 
     var horizontalAxis = new ArrowNode( X_ORIGIN_OFFSET, Y_ORIGIN_OFFSET,
         X_ORIGIN_OFFSET + (HORIZ_AXIS_SIZE_PROPORTION * WIDTH), Y_ORIGIN_OFFSET,
@@ -163,7 +163,7 @@ define( function( require ) {
         headWidth: 8,
         tailWidth: 2
       } );
-    this.accordinContent.addChild( horizontalAxis );
+    accordionContent.addChild( horizontalAxis );
 
     var verticalAxis = new ArrowNode( X_ORIGIN_OFFSET, Y_ORIGIN_OFFSET,
       X_ORIGIN_OFFSET, Y_ORIGIN_OFFSET - Y_USABLE_RANGE - AXES_ARROW_HEAD_HEIGHT,
@@ -173,26 +173,26 @@ define( function( require ) {
         headWidth: 8,
         tailWidth: 2
       } );
-    this.accordinContent.addChild( verticalAxis );
+    accordionContent.addChild( verticalAxis );
 
     // Create and add the labels for the axes.
     var horizontalAxisLabel = new Text( temperatureString, { font: AXIS_LABEL_FONT, fill: 'white' } );
     horizontalAxisLabel.setTranslation( ( WIDTH / 2 ) - ( horizontalAxisLabel.width / 2),
         Y_ORIGIN_OFFSET + horizontalAxisLabel.height );
-    this.accordinContent.addChild( horizontalAxisLabel );
+    accordionContent.addChild( horizontalAxisLabel );
 
     var verticalAxisLabel = new Text( pressureString, { font: SMALLER_INNER_FONT, fill: 'white'} );
     verticalAxisLabel.setTranslation( X_ORIGIN_OFFSET - (verticalAxisLabel.height * 1.1),
         verticalAxisLabel.width * 1.6 );
     verticalAxisLabel.setRotation( 3 * Math.PI / 2 );
-    this.accordinContent.addChild( verticalAxisLabel );
+    accordionContent.addChild( verticalAxisLabel );
 
     // Create and add the marker that shows the current phase state.
     this.currentStateMarker = new Path( new Shape()
       .ellipse( 0, 0, CURRENT_STATE_MARKER_DIAMETER, CURRENT_STATE_MARKER_DIAMETER ), { fill: 'red'} );
-    this.accordinContent.addChild( this.currentStateMarker );
+    accordionContent.addChild( this.currentStateMarker );
 
-    var accordionBox = new AccordionBox( this.accordinContent,
+    var accordionBox = new AccordionBox( accordionContent,
       {
         titleNode: new Text( phaseDiagramString, { fill: "#FFFFFF", font: new PhetFont( { size: 14 } ) } ),
         fill: 'black',
