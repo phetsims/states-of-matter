@@ -19,6 +19,7 @@ define( function( require ) {
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Node = require( 'SCENERY/nodes/Node' );
   var ArrowNode = require( 'SCENERY_PHET/ArrowNode' );
+  var GridNode = require( 'ATOMIC_INTERACTIONS/atomic-interactions/view/ZoomableGridNode' );
 
   //strings
   var distanceBetweenMoleculesString = require( 'string!STATES_OF_MATTER/distanceBetweenMolecules' );
@@ -32,9 +33,9 @@ define( function( require ) {
 
 // Constants that control the appearance of the diagram.
   var NARROW_VERSION_WIDTH = 130;
-  var WIDE_VERSION_WIDTH = 300;
+  var WIDE_VERSION_WIDTH = 500;
   var AXIS_LINE_WIDTH = 1;
-  var AXES_ARROW_HEAD_HEIGHT = 6 * AXIS_LINE_WIDTH;
+  var AXES_ARROW_HEAD_HEIGHT = 8 * AXIS_LINE_WIDTH;
 
 
 // Size of pos marker wrt overall width.
@@ -69,7 +70,7 @@ define( function( require ) {
     // Set up for the normal or wide version of the graph.
     if ( wide ) {
       this.widthOfGraph = WIDE_VERSION_WIDTH;
-      this.heightOfGraph = this.widthOfGraph * 0.5;
+      this.heightOfGraph = this.widthOfGraph * 0.6;
     }
     else {
       this.widthOfGraph = NARROW_VERSION_WIDTH;
@@ -83,20 +84,17 @@ define( function( require ) {
 
     // Layer where the graph elements are added.
     this.ljPotentialGraph = new Node();
-    this.verticalScalingFactor = this.graphHeight / 2 /
+    this.verticalScalingFactor = (this.graphHeight / 2) /
                                  (StatesOfMatterConstants.MAX_EPSILON * StatesOfMatterConstants.K_BOLTZMANN);
 
-    // Create the background that will sit behind everything.
-    this.background = new Path( new Shape()
-      .rect( 0, 0, this.widthOfGraph, this.heightOfGraph ), {fill: 'black'} );
-    this.ljPotentialGraph.addChild( this.background );
 
+    if ( wide ) {
 
-    // Create and add the portion that depicts the Lennard-Jones potential curve.
-    this.ljPotentialGraph1 = new Path( new Shape()
-      .rect( 0, 0, this.graphWidth, this.graphHeight ), {fill: 'black'} );
-    this.ljPotentialGraph1.setTranslation( this.graphXOrigin, this.graphYOrigin - this.graphHeight );
-    this.ljPotentialGraph.addChild( this.ljPotentialGraph1 );
+      this.gridNode = new GridNode( this, 0, 0, this.graphWidth, this.graphHeight );
+      this.gridNode.setTranslation( this.graphXOrigin, this.graphYOrigin - this.graphHeight );
+      this.ljPotentialGraph.addChild( this.gridNode );
+    }
+
 
     // Create and add the center axis line for the graph.
     var centerAxis = new Path( new Shape().lineTo( 0, 0 )
@@ -113,9 +111,10 @@ define( function( require ) {
     this.epsilonArrow = new ArrowNode( 0, 0, 0, this.graphHeight / 2,
       { fill: 'white',
         stroke: 'white',
-        doubleHead: true, headHeight: 6,
-        headWidth: 6,
-        tailWidth: 2
+        doubleHead: true,
+        headHeight: 5,
+        headWidth: 5,
+        tailWidth: 1
       } );
     this.ljPotentialGraph.addChild( this.epsilonArrow );
 
@@ -124,7 +123,10 @@ define( function( require ) {
 
     this.sigmaLabel = new Text( sigmaString, {font: GREEK_LETTER_FONT, fill: 'white'} );
     this.ljPotentialGraph.addChild( this.sigmaLabel );
-    this.sigmaArrow = new ArrowNode( 0, 0, 0, 0, { doubleHead: true, fill: 'white'} );
+    this.sigmaArrow = new ArrowNode( 0, 0, 0, 0, {
+      headHeight: 8,
+      headWidth: 8,
+      tailWidth: 3, doubleHead: true, fill: 'white'} );
     this.ljPotentialGraph.addChild( this.sigmaArrow );
 
     // Variables for controlling the appearance, visibility, and location of
@@ -136,8 +138,8 @@ define( function( require ) {
 
     var markerDiameter = POSITION_MARKER_DIAMETER_PROPORTION * this.graphWidth;
     this.positionMarker = new Path( new Shape()
-      .ellipse( 0, 0, markerDiameter, markerDiameter, Math.PI )
-      .lineTo( markerDiameter / 2, markerDiameter ), { fill: 'red'} );
+        .ellipse( -markerDiameter / 2, -markerDiameter / 2, markerDiameter / 2, markerDiameter / 2, Math.PI )
+      , { fill: 'cyan', stroke: 'black'} );
 
     this.positionMarker.setVisible( this.positionMarkerEnabled );
     this.markerLayer.addChild( this.positionMarker );
@@ -230,7 +232,7 @@ define( function( require ) {
            (yPos > 0) && (yPos < this.graphHeight) ) {
         this.positionMarker.setVisible( true );
         this.positionMarker.setTranslation( xPos - this.positionMarker.width / 2,
-            yPos - this.positionMarker.height() / 2 );
+            yPos - this.positionMarker.height / 2 );
       }
       else {
         this.positionMarker.setVisible( false );
@@ -286,7 +288,6 @@ define( function( require ) {
      * @return
      */
 
-    //private
     calculateLennardJonesPotential: function( radius ) {
       return (  this.ljPotentialCalculator.calculateLjPotential( radius ));
     },
@@ -321,7 +322,7 @@ define( function( require ) {
       }
       this.potentialEnergyLine.setShape( potentialEnergyLineShape );
       var epsilonArrowStartPt = new Vector2( this.graphMin.x, this.graphHeight / 2 );
-      if ( epsilonArrowStartPt.distance( this.graphMin ) > 0 ) {
+      if ( epsilonArrowStartPt.distance( this.graphMin ) > 5 ) {
         this.epsilonArrow.setVisible( true );
         try {
 
@@ -340,7 +341,8 @@ define( function( require ) {
           ((  this.graphMin.y - (  this.graphHeight / 2)) / 3) - (  this.epsilonLabel.height / 2) +
           this.graphHeight / 2 );
       // Position the arrow that depicts sigma along with its label.
-      this.sigmaLabel.setTranslation( this.zeroCrossingPoint.x / 2 - this.sigmaLabel.width / 2, this.graphHeight / 2 );
+      this.sigmaLabel.setTranslation( this.zeroCrossingPoint.x / 2 + this.sigmaLabel.width / 3,
+          this.graphHeight / 2 - this.sigmaLabel.height / 3 );
       try {
         this.sigmaArrow.setTailAndTip( this.graphXOrigin, this.graphHeight / 2,
           this.zeroCrossingPoint.x, this.zeroCrossingPoint.y );
@@ -350,7 +352,9 @@ define( function( require ) {
       }
       // Update the position of the marker in case the curve has moved.
       this.setMarkerPosition( this.markerDistance );
-    }
+    },
+
+    MAX_INTER_ATOM_DISTANCE: MAX_INTER_ATOM_DISTANCE
   } );
 } );
 
