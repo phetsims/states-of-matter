@@ -13,7 +13,8 @@ define( function() {
     NEON: 'NEON',
     ARGON: 'ARGON',
     OXYGEN: 'OXYGEN',
-    HYDROGEN: 'HYDROGEN'
+    HYDROGEN: 'HYDROGEN',
+    ADJUSTABLE: 'ADJUSTABLE'
   } );
 } );
 
