@@ -10,183 +10,182 @@ define( function( require ) {
 
   // modules
   var inherit = require( 'PHET_CORE/inherit' );
-  var BasicStroke = require( 'java.awt.BasicStroke' );
   var Color = require( 'SCENERY/util/Color' );
-  var Cursor = require( 'java.awt.Cursor' );
-  var Stroke = require( 'java.awt.Stroke' );
-  var Line2D = require( 'java.awt.geom.Line2D' );
-  var Vector2 = require( 'java.awt.geom.Vector2' );
-  var CursorHandler = require( 'edu.colorado.phet.common.piccolophet.event.CursorHandler' );
-  var ResizeArrowNode = require( 'edu.colorado.phet.common.piccolophet.nodes.ResizeArrowNode' );
-  var StatesOfMatterConstants = require( 'STATES_OF_MATTER/states-of-matter/StatesOfMatterConstants' );
-  var AtomType = require( 'STATES_OF_MATTER/states-of-matter/model/AtomType' );
-  var DualAtomModel = require( 'STATES_OF_MATTER/states-of-matter/model/DualAtomModel' );
-  var StatesOfMatterAtom = require( 'STATES_OF_MATTER/states-of-matter/model/particle/StatesOfMatterAtom' );
-  var InteractionPotentialDiagramNode = require( 'STATES_OF_MATTER/states-of-matter/module/InteractionPotentialDiagramNode' );
-  var Node = require( 'SCENERY/nodes/Node' );
-  var PBasicInputEventHandler = require( 'edu.umd.cs.piccolo.event.PBasicInputEventHandler' );
-  var PDragEventHandler = require( 'edu.umd.cs.piccolo.event.PDragEventHandler' );
-  var PInputEvent = require( 'edu.umd.cs.piccolo.event.PInputEvent' );
-  var PPath = require( 'edu.umd.cs.piccolo.nodes.PPath' );
-  var PDimension = require( 'edu.umd.cs.piccolo.util.PDimension' );
+  var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
+  var AtomType = require( 'STATES_OF_MATTER/common/model/AtomType' );
+  var InteractionPotentialDiagramNode = require( 'STATES_OF_MATTER/common/view/InteractionPotentialDiagramNode' );
+  var SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
+  var FillHighlightListener = require( 'SCENERY_PHET/input/FillHighlightListener' );
+  var Property = require( 'AXON/Property' );
+  var ArrowNode = require( 'SCENERY_PHET/ArrowNode' );
+  var Rectangle = require( 'SCENERY/nodes/Rectangle' );
 
-//-----------------------------------------------------------------------------
-// Class Data
-//-----------------------------------------------------------------------------
-// Size of handles as function of node width.
-
-  //private
   var RESIZE_HANDLE_SIZE_PROPORTION = 0.05;
-// Position of handle as function of node width.
-
-  //private
   var EPSILON_HANDLE_OFFSET_PROPORTION = 0.08;
-// Position of handle as function of node width.
-
-  //private
   var SIGMA_HANDLE_OFFSET_PROPORTION = 0.08;
-
-  //private
   var RESIZE_HANDLE_NORMAL_COLOR = new Color( 51, 204, 51 );
-
-  //private
   var RESIZE_HANDLE_HIGHLIGHTED_COLOR = new Color( 153, 255, 0 );
-
-  //private
-  var EPSILON_LINE_WIDTH = 1
-  f;
-
-  //private
-  var EPSILON_LINE_STROKE = new BasicStroke( EPSILON_LINE_WIDTH );
-
-  //private
+  var EPSILON_LINE_WIDTH = 1;
   var EPSILON_LINE_COLOR = RESIZE_HANDLE_NORMAL_COLOR;
 
   /**
-   * Constructor.
    *
    * @param sigma
    * @param epsilon
-   * @param wide    - True if the widescreen version of the graph is needed, false if not.
+   * @param wide
+   * @param model
+   * @constructor
    */
-  function InteractiveInteractionPotentialDiagram( sigma, epsilon, wide, model ) {
-    //-----------------------------------------------------------------------------
-    // Instance Data
-    //-----------------------------------------------------------------------------
+  function InteractiveInteractionPotentialDiagram( sigma, epsilon, wide, model, options ) {
 
-    //private
-    this.m_model;
+    InteractionPotentialDiagramNode.call( this, sigma, epsilon, wide );
+    this.model = model;
+    var interactiveInteractionPotentialDiagram = this;
 
-    //private
-    this.m_sigmaResizeHandle;
 
-    //private
-    this.m_epsilonResizeHandle;
-
-    //private
-    this.m_epsilonLine;
-
-    //private
-    this.m_interactionEnabled;
-    InteractionPotentialDiagramNode.call( this, sigma, epsilon, wide, false );
-    this.m_model = model;
-    model.addListener( new DualAtomModel.Adapter().withAnonymousClassBody( {
-      interactionPotentialChanged: function() {
-        setLjPotentialParameters( model.getSigma(), model.getEpsilon() );
-      },
-      fixedAtomAdded: function( particle ) {
-        updateInteractivityState();
-        drawPotentialCurve();
-      },
-      movableAtomAdded: function( particle ) {
-        updateInteractivityState();
-        drawPotentialCurve();
-      }
-    } ) );
-    // changing the value of epsilon.
-    var epsilonChangeHandler = new PBasicInputEventHandler().withAnonymousClassBody( {
-      mousePressed: function( event ) {
-        m_model.setMotionPaused( true );
-      },
-      mouseReleased: function( event ) {
-        m_model.setMotionPaused( false );
-      },
-      mouseDragged: function( event ) {
-        var draggedNode = event.getPickedNode();
-        var d = event.getDeltaRelativeTo( draggedNode );
-        draggedNode.localToParent( d );
-        var scaleFactor = StatesOfMatterConstants.MAX_EPSILON / (getGraphHeight() / 2);
-        m_model.setEpsilon( m_model.getEpsilon() + d.getHeight() * scaleFactor );
-      }
-    } );
     // Add the line that will indicate the value of epsilon.
-    var epsilonLineLength = EPSILON_HANDLE_OFFSET_PROPORTION * m_width * 2.2;
-    m_epsilonLine = new PPath( new Line2D.Number( -epsilonLineLength / 3, 0, epsilonLineLength / 2.2, 0 ) );
-    m_epsilonLine.setStroke( EPSILON_LINE_STROKE );
-    m_epsilonLine.setStrokePaint( EPSILON_LINE_COLOR );
-    m_epsilonLine.addInputEventListener( new CursorHandler( Cursor.N_RESIZE_CURSOR ) );
-    m_epsilonLine.addInputEventListener( epsilonChangeHandler );
-    m_ljPotentialGraph.addChild( m_epsilonLine );
-    // parameters of the LJ potential.
-    m_epsilonResizeHandle = new ResizeArrowNode( RESIZE_HANDLE_SIZE_PROPORTION * m_width, Math.PI / 2, RESIZE_HANDLE_NORMAL_COLOR, RESIZE_HANDLE_HIGHLIGHTED_COLOR );
-    m_ljPotentialGraph.addChild( m_epsilonResizeHandle );
-    m_epsilonResizeHandle.addInputEventListener( epsilonChangeHandler );
-    m_sigmaResizeHandle = new ResizeArrowNode( RESIZE_HANDLE_SIZE_PROPORTION * m_width, 0, RESIZE_HANDLE_NORMAL_COLOR, RESIZE_HANDLE_HIGHLIGHTED_COLOR );
-    m_ljPotentialGraph.addChild( m_sigmaResizeHandle );
-    m_sigmaResizeHandle.addInputEventListener( new PBasicInputEventHandler().withAnonymousClassBody( {
-      mousePressed: function( event ) {
-        m_model.setMotionPaused( true );
-      },
-      mouseReleased: function( event ) {
-        m_model.setMotionPaused( false );
-      },
-      mouseDragged: function( event ) {
-        var draggedNode = event.getPickedNode();
-        var d = event.getDeltaRelativeTo( draggedNode );
-        draggedNode.localToParent( d );
-        var scaleFactor = MAX_INTER_ATOM_DISTANCE / getGraphWidth();
-        m_model.setAdjustableAtomSigma( m_model.getSigma() + d.getWidth() * scaleFactor );
-      }
-    } ) );
-    // This node will need to be pickable so the user can grab it.
-    m_positionMarker.setPickable( true );
-    m_positionMarker.setChildrenPickable( true );
-    m_positionMarker.addInputEventListener( new CursorHandler( Cursor.HAND_CURSOR ) );
-    m_positionMarker.addInputEventListener( new PDragEventHandler().withAnonymousClassBody( {
-      startDrag: function( event ) {
-        super.startDrag( event );
-        // Stop the particle from moving in the model.
-        m_model.setMotionPaused( true );
+    var epsilonLineLength = EPSILON_HANDLE_OFFSET_PROPORTION * this.widthOfGraph * 2.2;
+    this.epsilonLine = new Rectangle( -epsilonLineLength / 4, 0, epsilonLineLength / 2, 3, {
+      cursor: 'ns-resize',
+      pickable: true,
+      fill: EPSILON_LINE_COLOR,
+      stroke: EPSILON_LINE_COLOR
+    } );
+    this.epsilonLine.addInputListener( new FillHighlightListener( RESIZE_HANDLE_NORMAL_COLOR,
+      RESIZE_HANDLE_HIGHLIGHTED_COLOR ) );
+    var startDragY, endDragY;
+    this.epsilonLine.addInputListener( new SimpleDragHandler( {
+      start: function( event ) {
+        model.setMotionPaused( true );
+        startDragY = interactiveInteractionPotentialDiagram.epsilonLine.globalToParentPoint( event.pointer.point ).y;
       },
       drag: function( event ) {
-        var draggedNode = event.getPickedNode();
-        var d = event.getDeltaRelativeTo( draggedNode );
-        draggedNode.localToParent( d );
-        // Move the particle based on the amount of mouse movement.
-        var atom = m_model.getMovableAtomRef();
-        var scaleFactor = MAX_INTER_ATOM_DISTANCE / getGraphWidth();
-        var newPosX = Math.max( atom.getX() + (d.width * scaleFactor), atom.getRadius() * 1.8 );
-        atom.setPosition( newPosX, atom.getY() );
+        endDragY = interactiveInteractionPotentialDiagram.epsilonLine.globalToParentPoint( event.pointer.point ).y;
+        var d = endDragY - startDragY;
+        var scaleFactor = StatesOfMatterConstants.MAX_EPSILON /
+                          ( interactiveInteractionPotentialDiagram.getGraphHeight() / 2);
+        model.interactionStrengthProperty.value = model.getEpsilon() + ( d * scaleFactor);
       },
-      endDrag: function( event ) {
-        super.endDrag( event );
-        // even if the motion was paused by some other means.
-        m_model.setMotionPaused( false );
+      end: function() {
+        model.setMotionPaused( false );
       }
     } ) );
-    // Redraw the potential curve.
-    drawPotentialCurve();
+    this.ljPotentialGraph.addChild( this.epsilonLine );
+
+    // Add the arrow nodes that will allow the user to control the
+    // parameters of the LJ potential.
+    this.epsilonResizeHandle = new ArrowNode( 0, -RESIZE_HANDLE_SIZE_PROPORTION * this.widthOfGraph / 2, 0,
+        RESIZE_HANDLE_SIZE_PROPORTION * this.widthOfGraph / 2, {
+        headHeight: 10,
+        headWidth: 10,
+        tailWidth: 5,
+        fill: RESIZE_HANDLE_NORMAL_COLOR,
+        stroke: 'black',
+        doubleHead: true,
+        pickable: true,
+        cursor: 'pointer'
+      } );
+    this.epsilonResizeHandle.addInputListener( new FillHighlightListener( RESIZE_HANDLE_NORMAL_COLOR,
+      RESIZE_HANDLE_HIGHLIGHTED_COLOR ) );
+    this.ljPotentialGraph.addChild( this.epsilonResizeHandle );
+    this.epsilonResizeHandle.addInputListener( new SimpleDragHandler( {
+      start: function( event ) {
+        model.setMotionPaused( true );
+        startDragY = interactiveInteractionPotentialDiagram.epsilonResizeHandle.globalToParentPoint( event.pointer.point ).y;
+      },
+      drag: function( event ) {
+        endDragY = interactiveInteractionPotentialDiagram.epsilonResizeHandle.globalToParentPoint( event.pointer.point ).y;
+        var d = endDragY - startDragY;
+        var scaleFactor = StatesOfMatterConstants.MAX_EPSILON /
+                          ( interactiveInteractionPotentialDiagram.getGraphHeight() / 2);
+        model.interactionStrengthProperty.value = model.getEpsilon() + ( d * scaleFactor);
+      },
+      end: function() {
+        model.setMotionPaused( false );
+      }
+    } ) );
+
+    // add sigma arrow node
+    this.sigmaResizeHandle = new ArrowNode( -RESIZE_HANDLE_SIZE_PROPORTION * this.widthOfGraph / 2, 0,
+        RESIZE_HANDLE_SIZE_PROPORTION * this.widthOfGraph / 2, 0, {
+        headHeight: 10,
+        headWidth: 10,
+        tailWidth: 5,
+        fill: RESIZE_HANDLE_NORMAL_COLOR,
+        stroke: 'black',
+        doubleHead: true,
+        pickable: true,
+        cursor: 'pointer'
+      } );
+    this.sigmaResizeHandle.addInputListener( new FillHighlightListener( RESIZE_HANDLE_NORMAL_COLOR,
+      RESIZE_HANDLE_HIGHLIGHTED_COLOR ) );
+    this.ljPotentialGraph.addChild( this.sigmaResizeHandle );
+    var startDragX, endDragX;
+    this.sigmaResizeHandle.addInputListener( new SimpleDragHandler( {
+      start: function( event ) {
+        model.setMotionPaused( true );
+        startDragX = interactiveInteractionPotentialDiagram.sigmaResizeHandle.globalToParentPoint( event.pointer.point ).x;
+      },
+      drag: function( event ) {
+        endDragX = interactiveInteractionPotentialDiagram.sigmaResizeHandle.globalToParentPoint( event.pointer.point ).x;
+        var d = endDragX - startDragX;
+        var scaleFactor = interactiveInteractionPotentialDiagram.MAX_INTER_ATOM_DISTANCE /
+                          ( interactiveInteractionPotentialDiagram.getGraphWidth());
+        var atomDiameter = model.getSigma() + ( d * scaleFactor);
+        model.atomDiameterProperty.value = atomDiameter > StatesOfMatterConstants.MIN_SIGMA * 2 ?
+                                           (atomDiameter < StatesOfMatterConstants.MAX_SIGMA ? atomDiameter :
+                                            StatesOfMatterConstants.MAX_SIGMA) : 2 * StatesOfMatterConstants.MIN_SIGMA;
+      },
+      end: function() {
+        model.setMotionPaused( false );
+      }
+    } ) );
+
+    // Add the ability to grab and move the position marker.
+    // This node will need to be pickable so the user can grab it.
+    this.positionMarker.setPickable( true );
+    // this.positionMarker.addInputListener( new CursorHandler( Cursor.HAND_CURSOR ) );
+    this.positionMarker.addInputListener( new SimpleDragHandler( {
+      start: function( event ) {
+        model.setMotionPaused( true );
+        startDragX = interactiveInteractionPotentialDiagram.sigmaResizeHandle.globalToParentPoint( event.pointer.point ).x;
+      },
+      drag: function( event ) {
+        endDragX = interactiveInteractionPotentialDiagram.sigmaResizeHandle.globalToParentPoint( event.pointer.point ).x;
+        var d = endDragX - startDragX;
+        var atom = model.getMovableAtomRef();
+        var scaleFactor = interactiveInteractionPotentialDiagram.MAX_INTER_ATOM_DISTANCE /
+                          ( interactiveInteractionPotentialDiagram.getGraphWidth());
+        // var newPosX = Math.max( atom.getX() + ( d * scaleFactor ), atom.getRadius() * 1.8 );
+        // atom.positionProperty.setXY( newPosX, atom.positionProperty.y );
+      },
+      end: function() {
+        model.setMotionPaused( false );
+      }
+    } ) );
+    Property.multilink( [model.moleculeTypeProperty, model.interactionStrengthProperty, model.atomDiameterProperty],
+      function( moleculeTypeProperty, interactionStrength, atomDiameter ) {
+        model.setBothAtomTypes( moleculeTypeProperty );
+
+        if ( model.moleculeTypeProperty.value === AtomType.ADJUSTABLE ) {
+          model.setEpsilon( interactionStrength );
+          model.setAdjustableAtomSigma( atomDiameter );
+
+        }
+        interactiveInteractionPotentialDiagram.setLjPotentialParameters( model.getSigma(), model.getEpsilon() );
+        interactiveInteractionPotentialDiagram.updateInteractivityState();
+        interactiveInteractionPotentialDiagram.drawPotentialCurve();
+      } );
+
     // Update interactivity state.
-    updateInteractivityState();
+    this.updateInteractivityState();
+    // Redraw the potential curve.
+    this.drawPotentialCurve();
+    this.addChild( this.ljPotentialGraph );
+    this.mutate( options );
   }
 
   return inherit( InteractionPotentialDiagramNode, InteractiveInteractionPotentialDiagram, {
-//-----------------------------------------------------------------------------
-// Accessor Methods
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-// Other Public/Protected Methods
-//-----------------------------------------------------------------------------
     /**
      * This is an override of the method in the base class that draws the
      * curve on the graph, and this override draws the controls that allow
@@ -194,34 +193,29 @@ define( function( require ) {
      */
     drawPotentialCurve: function() {
       // The bulk of the drawing is done by the base class.
-      super.drawPotentialCurve();
+      InteractionPotentialDiagramNode.prototype.drawPotentialCurve.call( this );
       // Now position the control handles.
-      if ( m_epsilonResizeHandle != null ) {
-        var graphMin = getGraphMin();
-        m_epsilonResizeHandle.setOffset( graphMin.getX() + (m_width * EPSILON_HANDLE_OFFSET_PROPORTION), graphMin.getY() );
-        m_epsilonResizeHandle.setVisible( m_interactionEnabled );
-        m_epsilonResizeHandle.setPickable( m_interactionEnabled );
-        m_epsilonResizeHandle.setChildrenPickable( m_interactionEnabled );
-        m_epsilonLine.setOffset( graphMin.getX(), graphMin.getY() + EPSILON_LINE_WIDTH );
-        m_epsilonLine.setVisible( m_interactionEnabled );
-        m_epsilonLine.setPickable( m_interactionEnabled );
+      if ( this.epsilonResizeHandle !== undefined ) {
+        var graphMin = this.getGraphMin();
+        this.epsilonResizeHandle.setTranslation( graphMin.x +
+                                                 ( this.widthOfGraph * EPSILON_HANDLE_OFFSET_PROPORTION ), graphMin.y );
+        this.epsilonResizeHandle.setVisible( this.interactionEnabled );
+        this.epsilonResizeHandle.setPickable( this.interactionEnabled );
+        this.epsilonLine.setTranslation( graphMin.x, graphMin.y + EPSILON_LINE_WIDTH );
+        this.epsilonLine.setVisible( this.interactionEnabled );
+        this.epsilonLine.setPickable( this.interactionEnabled );
       }
-      if ( m_sigmaResizeHandle != null ) {
-        var zeroCrossingPoint = getZeroCrossingPoint();
-        m_sigmaResizeHandle.setOffset( zeroCrossingPoint.getX(), (getGraphHeight() / 2) - SIGMA_HANDLE_OFFSET_PROPORTION * m_height );
-        m_sigmaResizeHandle.setVisible( m_interactionEnabled );
-        m_sigmaResizeHandle.setPickable( m_interactionEnabled );
-        m_sigmaResizeHandle.setChildrenPickable( m_interactionEnabled );
+      if ( this.sigmaResizeHandle !== undefined ) {
+        var zeroCrossingPoint = this.getZeroCrossingPoint();
+        this.sigmaResizeHandle.setTranslation( zeroCrossingPoint.x,
+            ( this.getGraphHeight() / 2 ) - SIGMA_HANDLE_OFFSET_PROPORTION * this.heightOfGraph );
+        this.sigmaResizeHandle.setVisible( this.interactionEnabled );
+        this.sigmaResizeHandle.setPickable( this.interactionEnabled );
       }
     },
-//-----------------------------------------------------------------------------
-// Private Methods
-//-----------------------------------------------------------------------------
-
-    //private
     updateInteractivityState: function() {
-      m_interactionEnabled = m_model.getFixedAtomType() == AtomType.ADJUSTABLE;
+      this.interactionEnabled = ( this.model.getFixedAtomType() === AtomType.ADJUSTABLE );
+
     }
   } );
 } );
-
