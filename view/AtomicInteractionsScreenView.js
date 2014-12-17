@@ -26,9 +26,9 @@ define( function( require ) {
   var ForcesControlNode = require( 'ATOMIC_INTERACTIONS/atomic-interactions/view/ForcesControlPanel' );
   var AtomicInteractionsControlPanel = require( 'ATOMIC_INTERACTIONS/atomic-interactions/view/AtomicInteractionsControlPanel' );
   var TextPushButton = require( 'SUN/buttons/TextPushButton' );
-  var ParticleForceNode = require( 'STATES_OF_MATTER/common/view/ParticleForceNode' );
-  var GrabbableParticleNode = require( 'STATES_OF_MATTER/common/view/GrabbableParticleNode' );
-  var PushpinNode = require( 'STATES_OF_MATTER/common/view/PushpinNode' );
+  var ParticleForceNode = require( 'ATOMIC_INTERACTIONS/atomic-interactions/view/ParticleForceNode' );
+  var GrabbableParticleNode = require( 'ATOMIC_INTERACTIONS/atomic-interactions/view/GrabbableParticleNode' );
+  var PushpinNode = require( 'ATOMIC_INTERACTIONS/atomic-interactions/view/PushpinNode' );
   var ConfigurableStatesOfMatterAtom = require( 'STATES_OF_MATTER/common/model/particle/ConfigurableStatesOfMatterAtom' );
   var AtomType = require( 'STATES_OF_MATTER/common/model/AtomType' );
   var NeonAtom = require( 'STATES_OF_MATTER/common/model/particle/NeonAtom' );
