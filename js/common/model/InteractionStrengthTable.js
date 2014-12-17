@@ -14,6 +14,7 @@ define( function( require ) {
   //var StatesOfMatterAtom = require( 'STATES_OF_MATTER/common/model/particle/StatesOfMatterAtom' );
   var AtomType = require( 'STATES_OF_MATTER/common/model/AtomType' );
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
+  var ConfigurableStatesOfMatterAtom = require( 'STATES_OF_MATTER/common/model/particle/ConfigurableStatesOfMatterAtom' );
 
   /**
    * @constructor
@@ -39,9 +40,9 @@ define( function( require ) {
           // Source: Noah P, who got it from Robert Parsons.
           return 423.3;
         }
-        // else if ( atomType1 === AtomType.ADJUSTABLE ) {
-        //   return ConfigurableStatesOfMatterAtom.DEFAULT_INTERACTION_POTENTIAL;
-        // }
+        else if ( atomType1 === AtomType.ADJUSTABLE ) {
+          return ConfigurableStatesOfMatterAtom.DEFAULT_INTERACTION_POTENTIAL;
+        }
         else {
           console.error( 'Error: Interaction potential not available for requested atom: ' + atomType1 );
           assert && assert( false );
