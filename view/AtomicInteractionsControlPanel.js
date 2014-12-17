@@ -1,771 +1,336 @@
-// Copyright 2002-2014, University of Colorado Boulder
+// Copyright (c) 2002 - 2014. University of Colorado Boulder
+
 /**
- * This class implements the control panel for the Interaction Potential
- * portion of this simulation.
- *
- * @author John Blanco
+ * View for the panel for selecting the atoms/molecules
+ * @author Siddhartha Chinthapally (Actual Concepts)
  */
+
 define( function( require ) {
   'use strict';
 
   // modules
   var inherit = require( 'PHET_CORE/inherit' );
-  var Color = require( 'SCENERY/util/Color' );
-  var Font = require( 'SCENERY/util/Font' );
-  var GridBagConstraints = require( 'java.awt.GridBagConstraints' );
-  var GridLayout = require( 'java.awt.GridLayout' );
-  var Image = require( 'java.awt.Image' );
-  var ActionEvent = require( 'java.awt.event.ActionEvent' );
-  var ActionListener = require( 'java.awt.event.ActionListener' );
-  var MouseAdapter = require( 'java.awt.event.MouseAdapter' );
-  var MouseEvent = require( 'java.awt.event.MouseEvent' );
-  var Vector2 = require( 'java.awt.geom.Vector2' );
-  var Hashtable = require( 'java.util.Hashtable' );
-  var BorderFactory = require( 'javax.swing.BorderFactory' );
-  var Box = require( 'javax.swing.Box' );
-  var BoxLayout = require( 'javax.swing.BoxLayout' );
-  var ButtonGroup = require( 'javax.swing.ButtonGroup' );
-  var Icon = require( 'javax.swing.Icon' );
-  var ImageIcon = require( 'javax.swing.ImageIcon' );
-  var JButton = require( 'javax.swing.JButton' );
-  var JComponent = require( 'javax.swing.JComponent' );
-  var JLabel = require( 'javax.swing.JLabel' );
-  var JPanel = require( 'javax.swing.JPanel' );
-  var JRadioButton = require( 'javax.swing.JRadioButton' );
-  var BevelBorder = require( 'javax.swing.border.BevelBorder' );
-  var TitledBorder = require( 'javax.swing.border.TitledBorder' );
-  var ChangeEvent = require( 'javax.swing.event.ChangeEvent' );
-  var ChangeListener = require( 'javax.swing.event.ChangeListener' );
-  var ControlPanel = require( 'edu.colorado.phet.common.phetcommon.view.ControlPanel' );
-  var VerticalLayoutPanel = require( 'edu.colorado.phet.common.phetcommon.view.VerticalLayoutPanel' );
-  var AbstractValueControl = require( 'edu.colorado.phet.common.phetcommon.view.controls.valuecontrol.AbstractValueControl' );
-  var ILayoutStrategy = require( 'edu.colorado.phet.common.phetcommon.view.controls.valuecontrol.ILayoutStrategy' );
-  var LinearValueControl = require( 'edu.colorado.phet.common.phetcommon.view.controls.valuecontrol.LinearValueControl' );
-  var BufferedImageUtils = require( 'edu.colorado.phet.common.phetcommon.view.util.BufferedImageUtils' );
-  var EasyGridBagLayout = require( 'edu.colorado.phet.common.phetcommon.view.util.EasyGridBagLayout' );
-  var PhetFont = require( 'edu.colorado.phet.common.phetcommon.view.util.PhetFont' );
-  var ArrowNode = require( 'edu.colorado.phet.common.piccolophet.nodes.ArrowNode' );
-  var StatesOfMatterConstants = require( 'STATES_OF_MATTER/states-of-matter/StatesOfMatterConstants' );
-  var StatesOfMatterResources = require( 'STATES_OF_MATTER/states-of-matter/StatesOfMatterResources' );
-  var StatesOfMatterStrings = require( 'STATES_OF_MATTER/states-of-matter/StatesOfMatterStrings' );
-  var AtomType = require( 'STATES_OF_MATTER/states-of-matter/model/AtomType' );
-  var DualAtomModel = require( 'STATES_OF_MATTER/states-of-matter/model/DualAtomModel' );
-  var StatesOfMatterAtom = require( 'STATES_OF_MATTER/states-of-matter/model/particle/StatesOfMatterAtom' );
-  var ParticleForceNode = require( 'STATES_OF_MATTER/states-of-matter/view/ParticleForceNode' );
+  var VBox = require( 'SCENERY/nodes/VBox' );
+  var HBox = require( 'SCENERY/nodes/HBox' );
+  var HStrut = require( 'SUN/HStrut' );
+  var Panel = require( 'SUN/Panel' );
+  var Text = require( 'SCENERY/nodes/Text' );
+  var PhetFont = require( 'SCENERY_PHET/PhetFont' );
+  var Circle = require( 'SCENERY/nodes/Circle' );
+  var Node = require( 'SCENERY/nodes/Node' );
+  var Rectangle = require( 'SCENERY/nodes/Rectangle' );
+  var RadioButtonGroup = require( 'SUN/buttons/RadioButtonGroup' );
+  var HSlider = require( 'SUN/HSlider' );
+  var Property = require( 'AXON/Property' );
+  var Dimension2 = require( 'DOT/Dimension2' );
+  var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
+  var Path = require( 'SCENERY/nodes/Path' );
+  var Shape = require( 'KITE/Shape' );
+  var AtomType = require( 'STATES_OF_MATTER/common/model/AtomType' );
+  var AquaRadioButton = require( 'SUN/AquaRadioButton' );
 
-//----------------------------------------------------------------------------
-// Class Data
-//----------------------------------------------------------------------------
+  // strings
+  var neonString = require( 'string!STATES_OF_MATTER/neon' );
+  var argonString = require( 'string!STATES_OF_MATTER/argon' );
+  var oxygenString = require( 'string!STATES_OF_MATTER/oxygen' );
+  var adjustableAttractionString = require( 'string!STATES_OF_MATTER/adjustableAttraction' );
+  var tittleString = require( 'string!STATES_OF_MATTER/AtomsMolecules' );
 
-  //private
-  var LABEL_FONT = new PhetFont( Font.PLAIN, 14 );
-
-  //private
-  var BOLD_LABEL_FONT = new PhetFont( Font.BOLD, 14 );
-
-  //private
-  var ENABLED_TITLE_COLOR = Color.BLACK;
-// In pixels.
-
-  //private
-  var PIN_ICON_WIDTH = 30;
-// In pixels.
-
-  //private
-  var PIN_ICON_HEIGHT = 32;
+  var NEON_NEON = 'NEON_NEON';
+  var ARGON_ARGON = 'ARGON_ARGON';
+  var OXYGEN_OXYGEN = 'OXYGEN_OXYGEN';
+  var NEON_ARGON = 'NEON_ARGON';
+  var NEON_OXYGEN = 'NEON_OXYGEN';
+  var ARGON_OXYGEN = 'ARGON_OXYGEN';
+  var ADJUSTABLE = 'ADJUSTABLE';
 
   /**
-   * Constructor.
+   *
+   * @param model
+   * @param enableHeterogeneousAtoms
+   * @param options
+   * @constructor
    */
-  function AtomicInteractionsControlPanel( solidLiquidGasModule, enableHeterogeneousAtoms ) {
-    //----------------------------------------------------------------------------
-    // Instance Data
-    //----------------------------------------------------------------------------
+  function AtomicInteractionsControlPanel( model, enableHeterogeneousAtoms, options ) {
 
-    //private
-    this.m_model;
+    var atomicInteractionsControlPanel = this;
+    options = _.extend( {
+      xMargin: 5,
+      yMargin: 8,
+      fill: '#C8C8C8',
+      stroke: 'gray',
+      lineWidth: 1,
+      cornerRadius: 5 // radius of the rounded corners on the background
+    }, options );
 
-    //private
-    this.m_canvas;
-
-    //private
-    this.m_moleculeSelectionPanel;
-
-    //private
-    this.m_atomDiameterControlPanel;
-
-    //private
-    this.m_interactionStrengthControlPanel;
-
-    //private
-    this.m_forceControlPanel;
-
-    // non-static inner interface: AtomSelectionPanel
-    var AtomSelectionPanel =
-
-      //private
-      define( function( require ) {
-
-        return inherit( Object, AtomSelectionPanel, {
-          updateMoleculeType: function() {}
-        } );
-      } );
-    // non-static inner class: HomogeneousAtomSelectionPanel
-    var HomogeneousAtomSelectionPanel =
-    /**
-     * This class defines the selection panel that allows the user to choose
-     * the type of molecule when both are the same.
-     */
-
-      //private
-      define( function( require ) {
-        function HomogeneousAtomSelectionPanel() {
-
-          //private
-          this.m_neonRadioButton;
-
-          //private
-          this.m_argonRadioButton;
-
-          //private
-          this.m_adjustableAttractionRadioButton;
-          setLayout( new GridLayout( 0, 1 ) );
-          var baseBorder = BorderFactory.createRaisedBevelBorder();
-          var titledBorder = BorderFactory.createTitledBorder( baseBorder, StatesOfMatterStrings.INTERACTION_POTENTIAL_ATOM_SELECT_LABEL, TitledBorder.LEFT, TitledBorder.TOP, new PhetFont( Font.BOLD, 14 ), Color.BLACK );
-          setBorder( titledBorder );
-          m_neonRadioButton = new JRadioButton( StatesOfMatterStrings.NEON_SELECTION_LABEL );
-          m_neonRadioButton.setFont( LABEL_FONT );
-          m_neonRadioButton.addActionListener( new ActionListener().withAnonymousClassBody( {
-            actionPerformed: function( e ) {
-              if ( m_model.getFixedAtomType() != AtomType.NEON ) {
-                m_model.setBothAtomTypes( AtomType.NEON );
-                updateLjControlSliderState();
-              }
-            }
-          } ) );
-          m_argonRadioButton = new JRadioButton( StatesOfMatterStrings.ARGON_SELECTION_LABEL );
-          m_argonRadioButton.setFont( LABEL_FONT );
-          m_argonRadioButton.addActionListener( new ActionListener().withAnonymousClassBody( {
-            actionPerformed: function( e ) {
-              if ( m_model.getFixedAtomType() != AtomType.ARGON ) {
-                m_model.setBothAtomTypes( AtomType.ARGON );
-                updateLjControlSliderState();
-              }
-            }
-          } ) );
-          m_adjustableAttractionRadioButton = new JRadioButton( StatesOfMatterStrings.ADJUSTABLE_ATTRACTION_SELECTION_LABEL );
-          m_adjustableAttractionRadioButton.setFont( LABEL_FONT );
-          m_adjustableAttractionRadioButton.addActionListener( new ActionListener().withAnonymousClassBody( {
-            actionPerformed: function( e ) {
-              if ( m_model.getFixedAtomType() != AtomType.ADJUSTABLE ) {
-                m_model.setBothAtomTypes( AtomType.ADJUSTABLE );
-                updateLjControlSliderState();
-              }
-            }
-          } ) );
-          var buttonGroup = new ButtonGroup();
-          buttonGroup.add( m_neonRadioButton );
-          buttonGroup.add( m_argonRadioButton );
-          buttonGroup.add( m_adjustableAttractionRadioButton );
-          m_neonRadioButton.setSelected( true );
-          add( m_neonRadioButton );
-          add( m_argonRadioButton );
-          add( m_adjustableAttractionRadioButton );
-          updateLjControlSliderState();
-        }
-
-        return inherit( JPanel, HomogeneousAtomSelectionPanel, {
-          /**
-           * Update the selected molecule to match whatever the model believes
-           * it to be.
-           */
-          updateMoleculeType: function() {
-            var moleculeType = m_model.getFixedAtomType();
-            if ( moleculeType == AtomType.NEON ) {
-              m_neonRadioButton.setSelected( true );
-            }
-            else if ( moleculeType == AtomType.ARGON ) {
-              m_argonRadioButton.setSelected( true );
-            }
-            else {
-              m_adjustableAttractionRadioButton.setSelected( true );
-            }
-            updateLjControlSliderState();
-          },
-          /**
-           * Update the state (i.e. enabled or disabled) of the sliders that
-           * control the Lennard-Jones parameters.
-           */
-
-          //private
-          updateLjControlSliderState: function() {
-            m_atomDiameterControlPanel.setVisible( m_model.getFixedAtomType() == AtomType.ADJUSTABLE );
-            m_interactionStrengthControlPanel.setVisible( m_model.getFixedAtomType() == AtomType.ADJUSTABLE );
-          }
-        } );
-      } );
-    // non-static inner class: HeterogeneousAtomSelectionPanel
-    var HeterogeneousAtomSelectionPanel =
-    /**
-     * Allows user to select from a fixed list of heterogeneous and
-     * homogeneous combinations of atoms.
-     */
-
-      //private
-      define( function( require ) {
-        /**
-         * Constructor.
-         */
-        function HeterogeneousAtomSelectionPanel() {
-
-          //private
-          this.m_neonNeonRadioButton;
-
-          //private
-          this.m_argonArgonRadioButton;
-
-          //private
-          this.m_oxygenOxygenRadioButton;
-
-          //private
-          this.m_neonArgonRadioButton;
-
-          //private
-          this.m_neonOxygenRadioButton;
-
-          //private
-          this.m_argonOxygenRadioButton;
-
-          //private
-          this.m_adjustableInteractionRadioButton;
-          var baseBorder = BorderFactory.createRaisedBevelBorder();
-          var titledBorder = BorderFactory.createTitledBorder( baseBorder, StatesOfMatterStrings.INTERACTION_POTENTIAL_ATOM_SELECT_LABEL, TitledBorder.LEFT, TitledBorder.TOP, new PhetFont( Font.BOLD, 14 ), Color.BLACK );
-          setBorder( titledBorder );
-          m_neonNeonRadioButton = new JRadioButton( StatesOfMatterStrings.NEON_SELECTION_LABEL );
-          m_neonNeonRadioButton.setFont( LABEL_FONT );
-          m_neonNeonRadioButton.addActionListener( new ActionListener().withAnonymousClassBody( {
-            actionPerformed: function( e ) {
-              setFixedAtom( AtomType.NEON );
-              setMovableAtom( AtomType.NEON );
-              updateLjControlSliderState();
-            }
-          } ) );
-          m_neonArgonRadioButton = new JRadioButton( StatesOfMatterStrings.NEON_SELECTION_LABEL );
-          m_neonArgonRadioButton.setFont( LABEL_FONT );
-          m_neonArgonRadioButton.addActionListener( new ActionListener().withAnonymousClassBody( {
-            actionPerformed: function( e ) {
-              setFixedAtom( AtomType.NEON );
-              setMovableAtom( AtomType.ARGON );
-              updateLjControlSliderState();
-            }
-          } ) );
-          m_neonOxygenRadioButton = new JRadioButton( StatesOfMatterStrings.NEON_SELECTION_LABEL );
-          m_neonOxygenRadioButton.setFont( LABEL_FONT );
-          m_neonOxygenRadioButton.addActionListener( new ActionListener().withAnonymousClassBody( {
-            actionPerformed: function( e ) {
-              setFixedAtom( AtomType.NEON );
-              setMovableAtom( AtomType.OXYGEN );
-              updateLjControlSliderState();
-            }
-          } ) );
-          m_argonArgonRadioButton = new JRadioButton( StatesOfMatterStrings.ARGON_SELECTION_LABEL );
-          m_argonArgonRadioButton.setFont( LABEL_FONT );
-          m_argonArgonRadioButton.addActionListener( new ActionListener().withAnonymousClassBody( {
-            actionPerformed: function( e ) {
-              m_model.setBothAtomTypes( AtomType.ARGON );
-              updateLjControlSliderState();
-            }
-          } ) );
-          m_argonOxygenRadioButton = new JRadioButton( StatesOfMatterStrings.ARGON_SELECTION_LABEL );
-          m_argonOxygenRadioButton.setFont( LABEL_FONT );
-          m_argonOxygenRadioButton.addActionListener( new ActionListener().withAnonymousClassBody( {
-            actionPerformed: function( e ) {
-              setFixedAtom( AtomType.ARGON );
-              setMovableAtom( AtomType.OXYGEN );
-              updateLjControlSliderState();
-            }
-          } ) );
-          m_oxygenOxygenRadioButton = new JRadioButton( StatesOfMatterStrings.OXYGEN_SELECTION_LABEL );
-          m_oxygenOxygenRadioButton.setFont( LABEL_FONT );
-          m_oxygenOxygenRadioButton.addActionListener( new ActionListener().withAnonymousClassBody( {
-            actionPerformed: function( e ) {
-              m_model.setBothAtomTypes( AtomType.OXYGEN );
-              updateLjControlSliderState();
-            }
-          } ) );
-          m_adjustableInteractionRadioButton = new JRadioButton( StatesOfMatterStrings.ADJUSTABLE_ATTRACTION_SELECTION_LABEL );
-          m_adjustableInteractionRadioButton.setFont( LABEL_FONT );
-          m_adjustableInteractionRadioButton.addActionListener( new ActionListener().withAnonymousClassBody( {
-            actionPerformed: function( e ) {
-              m_model.setBothAtomTypes( AtomType.ADJUSTABLE );
-              updateLjControlSliderState();
-            }
-          } ) );
-          var buttonGroup = new ButtonGroup();
-          buttonGroup.add( m_neonNeonRadioButton );
-          buttonGroup.add( m_argonArgonRadioButton );
-          buttonGroup.add( m_oxygenOxygenRadioButton );
-          buttonGroup.add( m_neonArgonRadioButton );
-          buttonGroup.add( m_neonOxygenRadioButton );
-          buttonGroup.add( m_argonOxygenRadioButton );
-          buttonGroup.add( m_adjustableInteractionRadioButton );
-          m_neonNeonRadioButton.setSelected( true );
-          var pinImage = StatesOfMatterResources.getImage( StatesOfMatterConstants.PUSH_PIN_IMAGE );
-          var scaledPinImage = pinImage.getScaledInstance( PIN_ICON_WIDTH, PIN_ICON_HEIGHT, Image.SCALE_SMOOTH );
-          var pinIcon = new ImageIcon( scaledPinImage );
-          var fixedAtomLabel = new JLabel( StatesOfMatterStrings.FIXED_ATOM_LABEL, pinIcon, JLabel.LEFT );
-          fixedAtomLabel.setFont( BOLD_LABEL_FONT );
-          var movableAtomLabel = new JLabel( StatesOfMatterStrings.MOVABLE_ATOM_LABEL );
-          movableAtomLabel.setFont( BOLD_LABEL_FONT );
-          var labelPanel = new JPanel();
-          labelPanel.setLayout( new GridLayout( 1, 2, 0, 0 ) );
-          labelPanel.add( fixedAtomLabel );
-          labelPanel.add( movableAtomLabel );
-          var selectionPanel = new JPanel();
-          selectionPanel.setLayout( new GridLayout( 0, 2 ) );
-          selectionPanel.add( m_neonNeonRadioButton );
-          selectionPanel.add( new PhetJLabel( StatesOfMatterStrings.NEON_SELECTION_LABEL ) );
-          selectionPanel.add( m_argonArgonRadioButton );
-          selectionPanel.add( new PhetJLabel( StatesOfMatterStrings.ARGON_SELECTION_LABEL ) );
-          selectionPanel.add( m_oxygenOxygenRadioButton );
-          selectionPanel.add( new PhetJLabel( StatesOfMatterStrings.OXYGEN_SELECTION_LABEL ) );
-          selectionPanel.add( m_neonArgonRadioButton );
-          selectionPanel.add( new PhetJLabel( StatesOfMatterStrings.ARGON_SELECTION_LABEL ) );
-          selectionPanel.add( m_neonOxygenRadioButton );
-          selectionPanel.add( new PhetJLabel( StatesOfMatterStrings.OXYGEN_SELECTION_LABEL ) );
-          selectionPanel.add( m_argonOxygenRadioButton );
-          selectionPanel.add( new PhetJLabel( StatesOfMatterStrings.OXYGEN_SELECTION_LABEL ) );
-          // adjustable selection.
-          var spacePanel = new JPanel();
-          spacePanel.setLayout( new BoxLayout( spacePanel, BoxLayout.Y_AXIS ) );
-          spacePanel.add( Box.createVerticalStrut( 12 ) );
-          // mess up the grid layout.
-          var adjustableInteractionPanel = new JPanel();
-          adjustableInteractionPanel.setLayout( new GridLayout( 0, 1 ) );
-          adjustableInteractionPanel.add( m_adjustableInteractionRadioButton );
-          // Add everything to the main panel.
-          add( labelPanel );
-          add( selectionPanel );
-          add( spacePanel );
-          add( adjustableInteractionPanel );
-          // Make some updates.
-          updateMoleculeType();
-          updateLjControlSliderState();
-        }
-
-        return inherit( VerticalLayoutPanel, HeterogeneousAtomSelectionPanel, {
-          updateMoleculeType: function() {
-            var fixedMoleculeType = m_model.getFixedAtomType();
-            var movableMoleculeType = m_model.getMovableAtomType();
-            if ( fixedMoleculeType == AtomType.NEON && movableMoleculeType == AtomType.NEON ) {
-              m_neonNeonRadioButton.setSelected( true );
-            }
-            else if ( fixedMoleculeType == AtomType.NEON && movableMoleculeType == AtomType.ARGON ) {
-              m_neonArgonRadioButton.setSelected( true );
-            }
-            else if ( fixedMoleculeType == AtomType.NEON && movableMoleculeType == AtomType.OXYGEN ) {
-              m_neonOxygenRadioButton.setSelected( true );
-            }
-            else if ( fixedMoleculeType == AtomType.ARGON && movableMoleculeType == AtomType.ARGON ) {
-              m_argonArgonRadioButton.setSelected( true );
-            }
-            else if ( fixedMoleculeType == AtomType.ARGON && movableMoleculeType == AtomType.OXYGEN ) {
-              m_argonOxygenRadioButton.setSelected( true );
-            }
-            else if ( fixedMoleculeType == AtomType.OXYGEN && movableMoleculeType == AtomType.OXYGEN ) {
-              m_oxygenOxygenRadioButton.setSelected( true );
-            }
-            else if ( fixedMoleculeType == AtomType.ADJUSTABLE && movableMoleculeType == AtomType.ADJUSTABLE ) {
-              m_adjustableInteractionRadioButton.setSelected( true );
-            }
-            else {
-            }
-            updateLjControlSliderState();
-          },
-
-          //private
-          updateLjControlSliderState: function() {
-            m_atomDiameterControlPanel.setVisible( m_model.getFixedAtomType() == AtomType.ADJUSTABLE );
-            m_interactionStrengthControlPanel.setVisible( m_model.getFixedAtomType() == AtomType.ADJUSTABLE );
-          },
-
-          //private
-          setFixedAtom: function( atomType ) {
-            if ( m_model.getMovableAtomType() == AtomType.ADJUSTABLE ) {
-              // Can't have one adjustable and the other not, so we need to set both.
-              m_model.setBothAtomTypes( atomType );
-            }
-            else {
-              m_model.setFixedAtomType( atomType );
-            }
-          },
-
-          //private
-          setMovableAtom: function( atomType ) {
-            if ( m_model.getFixedAtomType() == AtomType.ADJUSTABLE ) {
-              // Can't have one adjustable and the other not, so we need to set both.
-              m_model.setBothAtomTypes( atomType );
-            }
-            else {
-              m_model.setMovableAtomType( atomType );
-            }
-          }
-        } );
-      } );
-    // non-static inner class: AtomDiameterControlPanel
-    var AtomDiameterControlPanel =
-    /**
-     * This class represents the control slider for the atom diameter.
-     */
-
-      //private
-      define( function( require ) {
-        function AtomDiameterControlPanel( model ) {
-
-          //private
-          this.LABEL_FONT = new PhetFont( 14, false );
-
-          //private
-          this.m_atomDiameterControl;
-
-          //private
-          this.m_model;
-
-          //private
-          this.m_titledBorder;
-
-          //private
-          this.m_leftLabel;
-
-          //private
-          this.m_rightLabel;
-          m_model = model;
-          setLayout( new GridLayout( 0, 1 ) );
-          // Create the border.
-          var baseBorder = BorderFactory.createRaisedBevelBorder();
-          m_titledBorder = BorderFactory.createTitledBorder( baseBorder, StatesOfMatterStrings.ATOM_DIAMETER_CONTROL_TITLE, TitledBorder.LEFT, TitledBorder.TOP, new PhetFont( Font.BOLD, 14 ), ENABLED_TITLE_COLOR );
-          setBorder( m_titledBorder );
-          // Add the control slider.
-          m_atomDiameterControl = new LinearValueControl( StatesOfMatterConstants.MIN_SIGMA, StatesOfMatterConstants.MAX_SIGMA, "", "0", "", new SliderLayoutStrategy() );
-          m_atomDiameterControl.setValue( m_model.getSigma() );
-          m_atomDiameterControl.setUpDownArrowDelta( 0.01 );
-          m_atomDiameterControl.addChangeListener( new ChangeListener().withAnonymousClassBody( {
-            stateChanged: function( e ) {
-              m_model.setAdjustableAtomSigma( m_atomDiameterControl.getValue() );
-            }
-          } ) );
-          m_atomDiameterControl.getSlider().addMouseListener( new MouseAdapter().withAnonymousClassBody( {
-            mousePressed: function( e ) {
-              m_model.setMotionPaused( true );
-            },
-            mouseReleased: function( e ) {
-              m_model.setMotionPaused( false );
-            }
-          } ) );
-          var diameterControlLabelTable = new Hashtable();
-          m_leftLabel = new JLabel( StatesOfMatterStrings.ATOM_DIAMETER_SMALL );
-          m_leftLabel.setFont( LABEL_FONT );
-          diameterControlLabelTable.put( m_atomDiameterControl.getMinimum(), m_leftLabel );
-          m_rightLabel = new JLabel( StatesOfMatterStrings.ATOM_DIAMETER_LARGE );
-          m_rightLabel.setFont( LABEL_FONT );
-          diameterControlLabelTable.put( m_atomDiameterControl.getMaximum(), m_rightLabel );
-          m_atomDiameterControl.setTickLabels( diameterControlLabelTable );
-          m_atomDiameterControl.setValue( m_model.getSigma() );
-          add( m_atomDiameterControl );
-          // Register as a listener with the model for relevant events.
-          m_model.addListener( new DualAtomModel.Adapter().withAnonymousClassBody( {
-            fixedAtomDiameterChanged: function() {
-              m_atomDiameterControl.setValue( m_model.getSigma() );
-            },
-            movableAtomDiameterChanged: function() {
-              m_atomDiameterControl.setValue( m_model.getSigma() );
-            }
-          } ) );
-        }
-
-        return inherit( JPanel, AtomDiameterControlPanel, {
-          setEnabled: function( enabled ) {
-            super.setEnabled( enabled );
-            m_atomDiameterControl.setEnabled( enabled );
-            m_leftLabel.setEnabled( enabled );
-            m_rightLabel.setEnabled( enabled );
-            if ( enabled ) {
-              m_titledBorder.setTitleColor( ENABLED_TITLE_COLOR );
-            }
-            else {
-              m_titledBorder.setTitleColor( Color.LIGHT_GRAY );
-            }
-          }
-        } );
-      } );
-    // non-static inner class: InteractionStrengthControlPanel
-    var InteractionStrengthControlPanel =
-    /**
-     * This class represents the control slider for the interaction strength.
-     */
-
-      //private
-      define( function( require ) {
-        function InteractionStrengthControlPanel( model ) {
-
-          //private
-          this.LABEL_FONT = new PhetFont( 14, false );
-
-          //private
-          this.m_interactionStrengthControl;
-
-          //private
-          this.m_model;
-
-          //private
-          this.m_titledBorder;
-
-          //private
-          this.m_leftLabel;
-
-          //private
-          this.m_rightLabel;
-          m_model = model;
-          setLayout( new GridLayout( 0, 1 ) );
-          // Create the border.
-          var baseBorder = BorderFactory.createRaisedBevelBorder();
-          m_titledBorder = BorderFactory.createTitledBorder( baseBorder, StatesOfMatterStrings.INTERACTION_STRENGTH_CONTROL_TITLE, TitledBorder.LEFT, TitledBorder.TOP, new PhetFont( Font.BOLD, 14 ), ENABLED_TITLE_COLOR );
-          setBorder( m_titledBorder );
-          // Add the control slider.
-          m_interactionStrengthControl = new LinearValueControl( StatesOfMatterConstants.MIN_EPSILON, StatesOfMatterConstants.MAX_EPSILON, "", "0", "", new SliderLayoutStrategy() );
-          m_interactionStrengthControl.setValue( m_model.getEpsilon() );
-          m_interactionStrengthControl.setUpDownArrowDelta( 0.01 );
-          m_interactionStrengthControl.addChangeListener( new ChangeListener().withAnonymousClassBody( {
-            stateChanged: function( e ) {
-              // Set the interaction strength in the model.
-              m_model.setEpsilon( m_interactionStrengthControl.getValue() );
-            }
-          } ) );
-          m_interactionStrengthControl.getSlider().addMouseListener( new MouseAdapter().withAnonymousClassBody( {
-            mousePressed: function( e ) {
-              m_model.setMotionPaused( true );
-            },
-            mouseReleased: function( e ) {
-              m_model.setMotionPaused( false );
-            }
-          } ) );
-          var diameterControlLabelTable = new Hashtable();
-          m_leftLabel = new JLabel( StatesOfMatterStrings.INTERACTION_STRENGTH_WEAK );
-          m_leftLabel.setFont( LABEL_FONT );
-          diameterControlLabelTable.put( m_interactionStrengthControl.getMinimum(), m_leftLabel );
-          m_rightLabel = new JLabel( StatesOfMatterStrings.INTERACTION_STRENGTH_STRONG );
-          m_rightLabel.setFont( LABEL_FONT );
-          diameterControlLabelTable.put( m_interactionStrengthControl.getMaximum(), m_rightLabel );
-          m_interactionStrengthControl.setTickLabels( diameterControlLabelTable );
-          // settings for potential are changed.
-          m_model.addListener( new DualAtomModel.Adapter().withAnonymousClassBody( {
-            interactionPotentialChanged: function() {
-              m_interactionStrengthControl.setValue( m_model.getEpsilon() );
-            }
-          } ) );
-          add( m_interactionStrengthControl );
-        }
-
-        return inherit( JPanel, InteractionStrengthControlPanel, {
-          setEnabled: function( enabled ) {
-            super.setEnabled( enabled );
-            m_interactionStrengthControl.setEnabled( enabled );
-            m_leftLabel.setEnabled( enabled );
-            m_rightLabel.setEnabled( enabled );
-            if ( enabled ) {
-              m_titledBorder.setTitleColor( ENABLED_TITLE_COLOR );
-            }
-            else {
-              m_titledBorder.setTitleColor( Color.LIGHT_GRAY );
-            }
-          }
-        } );
-      } );
-    // non-static inner class: ForceControlPanel
-    var ForceControlPanel =
-
-      //private
-      define( function( require ) {
-        function ForceControlPanel() {
-
-          //private
-          this.m_noForcesButton;
-
-          //private
-          this.m_totalForcesButton;
-
-          //private
-          this.m_componentForceButton;
-
-          //private
-          this.m_attractiveForceLegendEntry;
-
-          //private
-          this.m_repulsiveForceLegendEntry;
-          var baseBorder = BorderFactory.createRaisedBevelBorder();
-          var titledBorder = BorderFactory.createTitledBorder( baseBorder, StatesOfMatterStrings.INTERACTION_POTENTIAL_SHOW_FORCES, TitledBorder.LEFT, TitledBorder.TOP, new PhetFont( Font.BOLD, 14 ), Color.BLACK );
-          setBorder( titledBorder );
-          m_noForcesButton = new JRadioButton( StatesOfMatterStrings.INTERACTION_POTENTIAL_HIDE_FORCES );
-          m_noForcesButton.setFont( LABEL_FONT );
-          m_noForcesButton.addActionListener( new ActionListener().withAnonymousClassBody( {
-            actionPerformed: function( e ) {
-              m_canvas.setShowAttractiveForces( false );
-              m_canvas.setShowRepulsiveForces( false );
-              m_canvas.setShowTotalForces( false );
-            }
-          } ) );
-          m_totalForcesButton = new JRadioButton( StatesOfMatterStrings.INTERACTION_POTENTIAL_TOTAL_FORCES );
-          m_totalForcesButton.setFont( LABEL_FONT );
-          m_totalForcesButton.addActionListener( new ActionListener().withAnonymousClassBody( {
-            actionPerformed: function( e ) {
-              m_canvas.setShowAttractiveForces( false );
-              m_canvas.setShowRepulsiveForces( false );
-              m_canvas.setShowTotalForces( true );
-            }
-          } ) );
-          var totalForceButtonPanel = new JPanel();
-          totalForceButtonPanel.setLayout( new java.awt.FlowLayout( java.awt.FlowLayout.LEFT, 0, 0 ) );
-          totalForceButtonPanel.add( m_totalForcesButton );
-          totalForceButtonPanel.add( new JLabel( createArrowIcon( ParticleForceNode.TOTAL_FORCE_COLOR, false ) ) );
-          m_componentForceButton = new JRadioButton( StatesOfMatterStrings.INTERACTION_POTENTIAL_COMPONENT_FORCES );
-          m_componentForceButton.setFont( LABEL_FONT );
-          m_componentForceButton.addActionListener( new ActionListener().withAnonymousClassBody( {
-            actionPerformed: function( e ) {
-              m_canvas.setShowAttractiveForces( true );
-              m_canvas.setShowRepulsiveForces( true );
-              m_canvas.setShowTotalForces( false );
-            }
-          } ) );
-          // Group the buttons logically (not physically) together and set initial state.
-          var buttonGroup = new ButtonGroup();
-          buttonGroup.add( m_noForcesButton );
-          buttonGroup.add( m_totalForcesButton );
-          buttonGroup.add( m_componentForceButton );
-          m_noForcesButton.setSelected( true );
-          var spacePanel = new JPanel();
-          spacePanel.setLayout( new BoxLayout( spacePanel, BoxLayout.X_AXIS ) );
-          spacePanel.add( Box.createHorizontalStrut( 14 ) );
-          var attractiveForceLegendEntry = new JPanel();
-          attractiveForceLegendEntry.setLayout( new java.awt.FlowLayout( java.awt.FlowLayout.LEFT ) );
-          m_attractiveForceLegendEntry = new JLabel( StatesOfMatterStrings.ATTRACTIVE_FORCE_KEY, createArrowIcon( ParticleForceNode.ATTRACTIVE_FORCE_COLOR, false ), JLabel.LEFT );
-          attractiveForceLegendEntry.add( spacePanel );
-          attractiveForceLegendEntry.add( m_attractiveForceLegendEntry );
-          spacePanel = new JPanel();
-          spacePanel.setLayout( new BoxLayout( spacePanel, BoxLayout.X_AXIS ) );
-          spacePanel.add( Box.createHorizontalStrut( 14 ) );
-          var repulsiveForceLegendEntry = new JPanel();
-          repulsiveForceLegendEntry.setLayout( new java.awt.FlowLayout( java.awt.FlowLayout.LEFT ) );
-          m_repulsiveForceLegendEntry = new JLabel( StatesOfMatterStrings.REPULSIVE_FORCE_KEY, createArrowIcon( ParticleForceNode.REPULSIVE_FORCE_COLOR, true ), JLabel.LEFT );
-          repulsiveForceLegendEntry.add( spacePanel );
-          repulsiveForceLegendEntry.add( m_repulsiveForceLegendEntry );
-          // Add the components to the main panel.
-          add( m_noForcesButton );
-          add( totalForceButtonPanel );
-          add( m_componentForceButton );
-          add( attractiveForceLegendEntry );
-          add( repulsiveForceLegendEntry );
-        }
-
-        return inherit( VerticalLayoutPanel, ForceControlPanel, {
-
-          //private
-          reset: function() {
-            m_noForcesButton.setSelected( true );
-            m_canvas.setShowAttractiveForces( false );
-            m_canvas.setShowRepulsiveForces( false );
-            m_canvas.setShowTotalForces( false );
-          },
-
-          //private
-          createArrowIcon: function( color, pointRight ) {
-            var arrowNode = new ArrowNode( new Vector2( 0, 0 ), new Vector2( 20, 0 ), 10, 15, 6 );
-            arrowNode.setPaint( color );
-            var arrowImage = arrowNode.toImage();
-            if ( !pointRight ) {
-              arrowImage = BufferedImageUtils.flipX( BufferedImageUtils.toBufferedImage( arrowImage ) );
-            }
-            return (new ImageIcon( arrowImage ));
-          }
-        } );
-      } );
-    // non-static inner class: SliderLayoutStrategy
-    var SliderLayoutStrategy =
-    /**
-     * Layout strategy for sliders.
-     */
-      define( function( require ) {
-        function SliderLayoutStrategy() {
-        }
-
-        return inherit( Object, SliderLayoutStrategy, {
-          doLayout: function( valueControl ) {
-            // Get the components that will be part of the layout
-            var slider = valueControl.getSlider();
-            var layout = new EasyGridBagLayout( valueControl );
-            valueControl.setLayout( layout );
-            layout.addFilledComponent( slider, 1, 0, GridBagConstraints.HORIZONTAL );
-          }
-        } );
-      } );
-    // non-static inner class: PhetJLabel
-    var PhetJLabel =
-      define( function( require ) {
-        function PhetJLabel( text ) {
-          JLabel.call( this, text );
-          setFont( LABEL_FONT );
-        }
-
-        return inherit( JLabel, PhetJLabel, {
-        } );
-      } );
-    m_model = solidLiquidGasModule.getDualParticleModel();
-    m_canvas = solidLiquidGasModule.getCanvas();
-    m_model.addListener( new DualAtomModel.Adapter().withAnonymousClassBody( {
-      fixedAtomAdded: function( particle ) {
-        m_moleculeSelectionPanel.updateMoleculeType();
-      },
-      movableAtomAdded: function( particle ) {
-        m_moleculeSelectionPanel.updateMoleculeType();
+    Node.call( this );
+    var textOptions;
+    var background = new Path( null,
+      {
+        stroke: 'white',
+        lineWidth: options.lineWidth,
+        fill: 'black'
       }
-    } ) );
-    // Set the control panel's minimum width.
-    var minimumWidth = StatesOfMatterResources.getInt( "int.minControlPanelWidth", 215 );
-    setMinimumWidth( minimumWidth );
-    // Create the panel for controlling the atom diameter.
-    m_atomDiameterControlPanel = new AtomDiameterControlPanel( m_model );
-    // Create the panel for controlling the interaction strength.
-    m_interactionStrengthControlPanel = new InteractionStrengthControlPanel( m_model );
-    // Create the panel that allows the user to select molecule type.
+    );
+    this.addChild( background );
     if ( enableHeterogeneousAtoms ) {
-      m_moleculeSelectionPanel = new HeterogeneousAtomSelectionPanel();
+      textOptions = {font: new PhetFont( 12 ), fill: "black"};
+      background.fill = '#D1D2FF';
+
+      var neonAndNeon = [ new Text( neonString, textOptions ), new Text( neonString, textOptions ) ];
+      var argonAndArgon = [  new Text( argonString, textOptions ), new Text( argonString, textOptions ) ];
+      var oxygenAndOxygen = [ new Text( oxygenString, textOptions ), new Text( oxygenString, textOptions )];
+      var neonAndArgon = [ new Text( neonString, textOptions ), new Text( argonString, textOptions )];
+      var neonAndOxygen = [ new Text( neonString, textOptions ), new Text( oxygenString, textOptions )];
+      var argonAndOxygen = [ new Text( argonString, textOptions ), new Text( oxygenString, textOptions )];
+      var adjustableAttraction = new Text( adjustableAttractionString, textOptions );
+
+      var maxWidth = Math.max(
+        _.max( [neonAndNeon, argonAndArgon, oxygenAndOxygen, neonAndArgon, neonAndOxygen, argonAndOxygen],
+          function( items ) {
+            return items[0].width + items[1].width;
+          } ),
+        adjustableAttraction[0].width
+      ) / 2;
+
+      // pad inserts a spacing node (HStrut) so that the rows occupy a certain fixed width.
+      var createItem = function( itemSpec ) {
+
+        var strutWidth1 = maxWidth - itemSpec[0].width + 15;
+        var strutWidth2 = maxWidth - itemSpec[1].width;
+        return new HBox( { children: [ itemSpec[0], new HStrut( strutWidth1 ),
+                                       itemSpec[1], new HStrut( strutWidth2 ) ] } );
+      };
+
+      var neonNeonRadio = new AquaRadioButton( model.moleculeTypeProperty, NEON_NEON,
+        createItem( neonAndNeon ), { radius: 8 } );
+      var argonArgonRadio = new AquaRadioButton( model.moleculeTypeProperty, ARGON_ARGON,
+        createItem( argonAndArgon ), { radius: 8 } );
+      var oxygenOxygenRadio = new AquaRadioButton( model.moleculeTypeProperty, OXYGEN_OXYGEN,
+        createItem( oxygenAndOxygen ), { radius: 8 } );
+      var neonArgonRadio = new AquaRadioButton( model.moleculeTypeProperty, NEON_ARGON,
+        createItem( neonAndArgon ), { radius: 8 } );
+      var neonOxygenRadio = new AquaRadioButton( model.moleculeTypeProperty, NEON_OXYGEN,
+        createItem( neonAndOxygen ), { radius: 8 } );
+      var argonOxygenRadio = new AquaRadioButton( model.moleculeTypeProperty, ARGON_OXYGEN,
+        createItem( argonAndOxygen ), { radius: 8 } );
+      var adjustableAttractionRadio = new AquaRadioButton( model.moleculeTypeProperty, ADJUSTABLE,
+        new HBox( adjustableAttraction ), { radius: 8 } );
+
+      var radioButtonGroup = new VBox( {
+        children: [ neonNeonRadio, argonArgonRadio, oxygenOxygenRadio,
+                    neonArgonRadio, neonOxygenRadio, argonOxygenRadio, adjustableAttractionRadio],
+        align: 'left',
+        spacing: 2
+      } );
+
     }
+
     else {
-      m_moleculeSelectionPanel = new HomogeneousAtomSelectionPanel();
-    }
-    // shown on the atoms.
-    m_forceControlPanel = new ForceControlPanel();
-    // Add the panels we just created.
-    addControlFullWidth( m_moleculeSelectionPanel );
-    addControlFullWidth( m_atomDiameterControlPanel );
-    addControlFullWidth( m_interactionStrengthControlPanel );
-    addControlFullWidth( m_forceControlPanel );
-    // Add a reset button.
-    addVerticalSpace( 10 );
-    var resetButton = new JButton( StatesOfMatterStrings.RESET );
-    resetButton.addActionListener( new ActionListener().withAnonymousClassBody( {
-      actionPerformed: function( event ) {
-        m_model.reset();
-        if ( m_model.getClock().isPaused() ) {
-          // pressed, it must be explicitly un-paused.
-          m_model.getClock().setPaused( false );
+      textOptions = {font: new PhetFont( 12 ), fill: "#FFFFFF"};
+
+      // itemSpec describes the pieces that make up an item in the control panel,
+      // conforms to the contract: { label: {Node}, icon: {Node} (optional) }
+      var neon = { label: new Text( neonString, textOptions ), icon: createNeonIcon() };
+      var argon = { label: new Text( argonString, textOptions ), icon: createArgonIcon()};
+      adjustableAttraction = { label: new Text( adjustableAttractionString,
+        textOptions ), icon: createAdjustableAttractionIcon()};
+
+      // compute the maximum item width
+      var widestItemSpec = _.max( [ neon, argon, adjustableAttraction ], function( item ) {
+        return item.label.width + ((item.icon) ? item.icon.width : 0);
+      } );
+      maxWidth = widestItemSpec.label.width + ((widestItemSpec.icon) ? widestItemSpec.icon.width : 0);
+
+      // pad inserts a spacing node (HStrut) so that the text, space and image together occupy a certain fixed width.
+      createItem = function( itemSpec ) {
+        if ( itemSpec.icon ) {
+          var strutWidth = maxWidth - itemSpec.label.width - itemSpec.icon.width + 17;
+          return new HBox( { children: [ itemSpec.label, new HStrut( strutWidth ), itemSpec.icon ] } );
         }
-        m_forceControlPanel.reset();
+        else {
+          return new HBox( { children: [ itemSpec.label] } );
+        }
+      };
+
+      var radioButtonContent = [
+        { value: 'NEON', node: createItem( neon ) },
+        { value: 'ARGON', node: createItem( argon )},
+        { value: 'ADJUSTABLE', node: createItem( adjustableAttraction )}
+      ];
+      radioButtonGroup = new RadioButtonGroup( model.moleculeTypeProperty, radioButtonContent, {
+        orientation: 'vertical',
+        spacing: 1,
+        cornerRadius: 5,
+        baseColor: 'black',
+        disabledBaseColor: 'black',
+        selectedLineWidth: 3,
+        selectedStroke: '#FFFCD3',
+        deselectedLineWidth: 0,
+        deselectedContentOpacity: 1
+      } );
+      var titleText = new Text( tittleString,
+        { font: new PhetFont( 14 ),
+          fill: '#FFFFFF',
+          fontWeight: 'bold'
+        } );
+      var titleBackground = new Rectangle( 0, 0,
+          titleText.width + 5, titleText.height,
+        {
+          fill: 'black'
+        } );
+      titleText.centerX = background.centerX + titleText.width / 2;
+      titleBackground.centerX = titleText.centerX;
+      titleBackground.centerY = titleText.centerY;
+      var tittleNode = new Node( {children: [titleBackground, titleText]} );
+      this.addChild( tittleNode );
+      //  tittleNode.centerX = background.centerX + titleText.width / 2;
+    }
+
+    var atomDiameterTitle = new Text( 'Atom Diameter (\u03C3)', textOptions );
+    atomDiameterTitle.centerX = radioButtonGroup.centerX;
+    atomDiameterTitle.top = radioButtonGroup.bottom + 10;
+    model.atomDiameterProperty.value = model.getSigma();
+    var atomDiameterSlider = new HSlider( model.atomDiameterProperty,
+      { min: 2 * StatesOfMatterConstants.MIN_SIGMA, max: StatesOfMatterConstants.MAX_SIGMA },
+      {
+        trackSize: new Dimension2( 100, 5 ),
+        trackFill: 'white',
+        thumbSize: new Dimension2( 15, 30 ),
+        majorTickLength: 15,
+        majorTickStroke: 'white',
+        trackStroke: 'white',
+        centerX: radioButtonGroup.centerX
+      } );
+    atomDiameterSlider.addMajorTick( StatesOfMatterConstants.MIN_SIGMA, new Text( 'small', {fill: 'white'} ) );
+    atomDiameterSlider.addMajorTick( StatesOfMatterConstants.MAX_SIGMA, new Text( 'large', {fill: 'white'} ) );
+    atomDiameterSlider.centerX = atomDiameterTitle.centerX;
+    atomDiameterSlider.top = atomDiameterTitle.bottom + 5;
+    //atomDiameter.setVisible(false);
+    var atomDiameter = new Node( {
+      children: [atomDiameterTitle, atomDiameterSlider]
+    } );
+
+    var interactionStrengthTitle = new Text( 'Interaction Strength (\u03B5)', textOptions );
+    interactionStrengthTitle.centerX = atomDiameterSlider.centerX;
+    interactionStrengthTitle.top = atomDiameterSlider.bottom + 5;
+    model.interactionStrengthProperty.value = model.getEpsilon();
+    var interactionStrengthSlider = new HSlider( model.interactionStrengthProperty,
+      { min: StatesOfMatterConstants.MIN_EPSILON, max: StatesOfMatterConstants.MAX_EPSILON },
+      {
+        trackSize: new Dimension2( 100, 5 ),
+        trackFill: 'white',
+        thumbSize: new Dimension2( 15, 30 ),
+        majorTickLength: 15,
+        majorTickStroke: 'white',
+        trackStroke: 'white',
+        centerX: radioButtonGroup.centerX
+      } );
+    interactionStrengthSlider.addMajorTick( StatesOfMatterConstants.MIN_EPSILON, new Text( 'weak', {fill: 'white'} ) );
+    interactionStrengthSlider.addMajorTick( StatesOfMatterConstants.MAX_EPSILON,
+      new Text( 'strong', {fill: 'white'} ) );
+    interactionStrengthSlider.centerX = interactionStrengthTitle.centerX;
+    interactionStrengthSlider.top = interactionStrengthTitle.bottom + 5;
+    //interactionStrength.setVisible(false);
+    var interactionStrength = new Node( {
+      children: [interactionStrengthTitle, interactionStrengthSlider]
+    } );
+    var radioButtonPanel = new Panel( radioButtonGroup, {
+      stroke: 'black',
+      lineWidth: 0
+    } );
+
+    // Update the text when the value or units changes.
+    Property.multilink( [model.moleculeTypeProperty, model.interactionStrengthProperty],
+      function( moleculeType ) {
+        switch( moleculeType ) {
+          case NEON_NEON:
+          case ARGON_ARGON:
+          case OXYGEN_OXYGEN:
+            model.setBothAtomTypes( moleculeType );
+            break;
+
+          case NEON_ARGON:
+            model.settingBothAtomTypes = true;
+            model.setFixedAtomType( AtomType.NEON );
+            model.setMovableAtomType( AtomType.ARGON );
+            model.settingBothAtomTypes = false;
+            break;
+
+          case NEON_OXYGEN:
+            model.settingBothAtomTypes = true;
+            model.setFixedAtomType( AtomType.NEON );
+            model.setMovableAtomType( AtomType.OXYGEN );
+            model.settingBothAtomTypes = false;
+            break;
+
+          case ARGON_OXYGEN:
+            model.settingBothAtomTypes = true;
+            model.setFixedAtomType( AtomType.ARGON );
+            model.setMovableAtomType( AtomType.OXYGEN );
+            model.settingBothAtomTypes = false;
+            break;
+
+          case ADJUSTABLE:
+            // add atom diameter slider and interaction
+            atomicInteractionsControlPanel.addChild( atomDiameter );
+            atomicInteractionsControlPanel.addChild( interactionStrength );
+            var backgroundShape1 = new Shape().roundRect(
+              0,
+              -4,
+              (radioButtonPanel.width + 10 ),
+              (radioButtonPanel.height + atomDiameter.height + interactionStrength.height + 20 ),
+              options.cornerRadius, options.cornerRadius
+            );
+            background.setShape( backgroundShape1 );
+            break;
+
+          default:
+            //if  atom and interaction slider
+            if ( atomicInteractionsControlPanel.isChild( atomDiameter ) ||
+                 atomicInteractionsControlPanel.isChild( interactionStrength ) ) {
+              atomicInteractionsControlPanel.removeChild( atomDiameter );
+              atomicInteractionsControlPanel.removeChild( interactionStrength );
+            }
+            var backgroundShape2 = new Shape().roundRect(
+              0,
+              -4,
+              (radioButtonPanel.width + 10 ),
+              (radioButtonPanel.height + 10 ),
+              options.cornerRadius, options.cornerRadius
+            );
+            background.setShape( backgroundShape2 );
+        }
+
       }
-    } ) );
-    addControl( resetButton );
+    );
+
+
+    this.addChild( radioButtonGroup );
+
+
+    this.mutate( options );
   }
 
-  return inherit( ControlPanel, AtomicInteractionsControlPanel, {
-  } );
+  //Create an icon for the adjustable attraction  button
+  var createAdjustableAttractionIcon = function() {
+    var dot1 = new Circle( 5, {fill: '#B15AFF' } );
+    return new Node( {children: [ dot1 ]} );
+  };
+
+  //Create an icon for the neon  button
+  var createNeonIcon = function() {
+    var dot1 = new Circle( 5, { fill: '#1AFFFB' } );
+    return new Node( {children: [  dot1 ]} );
+  };
+
+  //Create an icon for the argon  button
+  var createArgonIcon = function() {
+    var dot1 = new Circle( 5, {fill: '#FF8A75'} );
+    return new Node( {children: [ dot1 ]} );
+  };
+
+
+  return inherit( Node, AtomicInteractionsControlPanel );
 } );
 
