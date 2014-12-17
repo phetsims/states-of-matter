@@ -287,7 +287,7 @@ define( function( require ) {
       atomicInteractionsScreenView.handleFixedParticleAdded( fixedParticle );
       atomicInteractionsScreenView.handleMovableParticleRemoved( movableParticle );
       atomicInteractionsScreenView.handleMovableParticleAdded( movableParticle );
-      dualAtomModel.setBothAtomTypes( atoms );
+
     } );
     this.movableParticle.positionProperty.link( function() {
       atomicInteractionsScreenView.handlePositionChanged();

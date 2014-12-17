@@ -164,14 +164,14 @@ define( function( require ) {
       }
     } ) );
     Property.multilink( [model.moleculeTypeProperty, model.interactionStrengthProperty, model.atomDiameterProperty],
-      function( moleculeTypeProperty, interactionStrength, atomDiameter ) {
-        model.setBothAtomTypes( moleculeTypeProperty );
+      function( moleculeType, interactionStrength, atomDiameter ) {
 
-        if ( model.moleculeTypeProperty.value === AtomType.ADJUSTABLE ) {
+        if ( moleculeType === AtomType.ADJUSTABLE ) {
+          model.setBothAtomTypes( AtomType.ADJUSTABLE );
           model.setEpsilon( interactionStrength );
           model.setAdjustableAtomSigma( atomDiameter );
-
         }
+
         interactiveInteractionPotentialDiagram.setLjPotentialParameters( model.getSigma(), model.getEpsilon() );
         interactiveInteractionPotentialDiagram.updateInteractivityState();
         interactiveInteractionPotentialDiagram.drawPotentialCurve();

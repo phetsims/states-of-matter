@@ -40,6 +40,18 @@ define( function( require ) {
 
   function ForcesControlPanel( forcesProperty, options ) {
 
+    options = _.extend( {
+      xMargin: 5,
+      yMargin: 8,
+      fill: '#D1D2FF',
+      stroke: 'gray',
+      tickTextColor: 'black',
+      textColor: 'black',
+      lineWidth: 1,
+      backgroundColor: '#D1D2FF',
+      cornerRadius: 5 // radius of the rounded corners on the background
+    }, options );
+
     Node.call( this );
     this.accordinContent = new Node();
 
@@ -63,13 +75,15 @@ define( function( require ) {
       tailWidth: 8
     } );
 
-    var textOptions = { font: new PhetFont( 12 ), fill: 'white' };
+    var textOptions = { font: new PhetFont( 12 ), fill: options.textColor };
     var hideForcesText = { label: new Text( hideForcesString, textOptions ) };
     var totalForceText = { label: new Text( totalForceString, textOptions ), icon: totalForceArrow};
     var attractiveText = { label: new Text( attractiveString, textOptions ), icon: attractiveArrow};
-    var vanderwaalsText = { label: new Text( vanderwaalsString, { font: new PhetFont( 10 ), fill: 'white' } )};
+    var vanderwaalsText = { label: new Text( vanderwaalsString,
+      { font: new PhetFont( 10 ), fill: options.textColor } )};
     var repulsiveText = { label: new Text( repulsiveString, textOptions ), icon: repulsiveArrow };
-    var electronOverlapText = { label: new Text( electronOverlapString, { font: new PhetFont( 10 ), fill: 'white' } )};
+    var electronOverlapText = { label: new Text( electronOverlapString,
+      { font: new PhetFont( 10 ), fill: options.textColor } )};
 
     // compute the maximum item width
     var widestItem = _.max( [ hideForcesText, totalForceText, attractiveText, vanderwaalsText, repulsiveText,
@@ -106,7 +120,7 @@ define( function( require ) {
         .lineTo( 3, componentForceText.height / 2 + 3 )
         .lineTo( 3, componentForceText.height - 8 )
         .lineTo( 8, componentForceText.height - 8 ), {
-        stroke: 'white',
+        stroke: options.textColor,
         lineWidth: 2
       }
     );
@@ -134,7 +148,7 @@ define( function( require ) {
     var accordionBox = new AccordionBox( this.accordinContent,
       {
         titleNode: new Text( forcesString, { fill: "#FFFFFF", font: new PhetFont( { size: 14 } ) } ),
-        fill: 'black',
+        fill: options.backgroundColor,
         stroke: 'white',
         // expandedProperty: expandedProperty,
         contentAlign: 'center',

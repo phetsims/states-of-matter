@@ -57,9 +57,12 @@ define( function( require ) {
     options = _.extend( {
       xMargin: 5,
       yMargin: 8,
-      fill: '#C8C8C8',
+      fill: '#D1D2FF',
       stroke: 'gray',
+      tickTextColor: 'black',
+      textColor: 'black',
       lineWidth: 1,
+      backgroundColor: '#D1D2FF',
       cornerRadius: 5 // radius of the rounded corners on the background
     }, options );
 
@@ -69,13 +72,12 @@ define( function( require ) {
       {
         stroke: 'white',
         lineWidth: options.lineWidth,
-        fill: 'black'
+        fill: options.backgroundColor
       }
     );
     this.addChild( background );
     if ( enableHeterogeneousAtoms ) {
-      textOptions = {font: new PhetFont( 12 ), fill: "black"};
-      background.fill = '#D1D2FF';
+      textOptions = {font: new PhetFont( 12 ), fill: options.textColor};
 
       var neonAndNeon = [ new Text( neonString, textOptions ), new Text( neonString, textOptions ) ];
       var argonAndArgon = [  new Text( argonString, textOptions ), new Text( argonString, textOptions ) ];
@@ -85,13 +87,15 @@ define( function( require ) {
       var argonAndOxygen = [ new Text( argonString, textOptions ), new Text( oxygenString, textOptions )];
       var adjustableAttraction = new Text( adjustableAttractionString, textOptions );
 
-      var maxWidth = Math.max(
-        _.max( [neonAndNeon, argonAndArgon, oxygenAndOxygen, neonAndArgon, neonAndOxygen, argonAndOxygen],
-          function( items ) {
-            return items[0].width + items[1].width;
-          } ),
-        adjustableAttraction[0].width
-      ) / 2;
+      /*var maxWidth = Math.max(
+       _.max( [neonAndNeon, argonAndArgon, oxygenAndOxygen, neonAndArgon, neonAndOxygen, argonAndOxygen],
+       function( items ) {
+       return items[0].width + items[1].width;
+       } ),
+       adjustableAttraction.width
+       ) / 2;*/
+
+      var maxWidth = adjustableAttraction.width / 2;
 
       // pad inserts a spacing node (HStrut) so that the rows occupy a certain fixed width.
       var createItem = function( itemSpec ) {
@@ -115,7 +119,7 @@ define( function( require ) {
       var argonOxygenRadio = new AquaRadioButton( model.moleculeTypeProperty, ARGON_OXYGEN,
         createItem( argonAndOxygen ), { radius: 8 } );
       var adjustableAttractionRadio = new AquaRadioButton( model.moleculeTypeProperty, ADJUSTABLE,
-        new HBox( adjustableAttraction ), { radius: 8 } );
+        new HBox( { children: [adjustableAttraction] } ), { radius: 8 } );
 
       var radioButtonGroup = new VBox( {
         children: [ neonNeonRadio, argonArgonRadio, oxygenOxygenRadio,
@@ -198,12 +202,14 @@ define( function( require ) {
         trackFill: 'white',
         thumbSize: new Dimension2( 15, 30 ),
         majorTickLength: 15,
-        majorTickStroke: 'white',
-        trackStroke: 'white',
+        majorTickStroke: 'black',
+        trackStroke: 'black',
         centerX: radioButtonGroup.centerX
       } );
-    atomDiameterSlider.addMajorTick( StatesOfMatterConstants.MIN_SIGMA, new Text( 'small', {fill: 'white'} ) );
-    atomDiameterSlider.addMajorTick( StatesOfMatterConstants.MAX_SIGMA, new Text( 'large', {fill: 'white'} ) );
+    atomDiameterSlider.addMajorTick( StatesOfMatterConstants.MIN_SIGMA,
+      new Text( 'small', {fill: options.tickTextColor } ) );
+    atomDiameterSlider.addMajorTick( StatesOfMatterConstants.MAX_SIGMA,
+      new Text( 'large', {fill: options.tickTextColor } ) );
     atomDiameterSlider.centerX = atomDiameterTitle.centerX;
     atomDiameterSlider.top = atomDiameterTitle.bottom + 5;
     //atomDiameter.setVisible(false);
@@ -222,13 +228,14 @@ define( function( require ) {
         trackFill: 'white',
         thumbSize: new Dimension2( 15, 30 ),
         majorTickLength: 15,
-        majorTickStroke: 'white',
-        trackStroke: 'white',
+        majorTickStroke: 'black',
+        trackStroke: 'black',
         centerX: radioButtonGroup.centerX
       } );
-    interactionStrengthSlider.addMajorTick( StatesOfMatterConstants.MIN_EPSILON, new Text( 'weak', {fill: 'white'} ) );
+    interactionStrengthSlider.addMajorTick( StatesOfMatterConstants.MIN_EPSILON,
+      new Text( 'weak', { fill: options.tickTextColor } ) );
     interactionStrengthSlider.addMajorTick( StatesOfMatterConstants.MAX_EPSILON,
-      new Text( 'strong', {fill: 'white'} ) );
+      new Text( 'strong', { fill: options.tickTextColor } ) );
     interactionStrengthSlider.centerX = interactionStrengthTitle.centerX;
     interactionStrengthSlider.top = interactionStrengthTitle.bottom + 5;
     //interactionStrength.setVisible(false);
@@ -241,13 +248,19 @@ define( function( require ) {
     } );
 
     // Update the text when the value or units changes.
-    Property.multilink( [model.moleculeTypeProperty, model.interactionStrengthProperty],
+    Property.multilink( [model.moleculeTypeProperty],
       function( moleculeType ) {
         switch( moleculeType ) {
           case NEON_NEON:
+            model.setBothAtomTypes( AtomType.NEON );
+            break;
+
           case ARGON_ARGON:
+            model.setBothAtomTypes( AtomType.ARGON );
+            break;
+
           case OXYGEN_OXYGEN:
-            model.setBothAtomTypes( moleculeType );
+            model.setBothAtomTypes( AtomType.OXYGEN );
             break;
 
           case NEON_ARGON:
@@ -270,37 +283,38 @@ define( function( require ) {
             model.setMovableAtomType( AtomType.OXYGEN );
             model.settingBothAtomTypes = false;
             break;
+        } //end of switch
 
-          case ADJUSTABLE:
-            // add atom diameter slider and interaction
-            atomicInteractionsControlPanel.addChild( atomDiameter );
-            atomicInteractionsControlPanel.addChild( interactionStrength );
-            var backgroundShape1 = new Shape().roundRect(
-              0,
-              -4,
-              (radioButtonPanel.width + 10 ),
-              (radioButtonPanel.height + atomDiameter.height + interactionStrength.height + 20 ),
-              options.cornerRadius, options.cornerRadius
-            );
-            background.setShape( backgroundShape1 );
-            break;
-
-          default:
-            //if  atom and interaction slider
-            if ( atomicInteractionsControlPanel.isChild( atomDiameter ) ||
-                 atomicInteractionsControlPanel.isChild( interactionStrength ) ) {
-              atomicInteractionsControlPanel.removeChild( atomDiameter );
-              atomicInteractionsControlPanel.removeChild( interactionStrength );
-            }
-            var backgroundShape2 = new Shape().roundRect(
-              0,
-              -4,
-              (radioButtonPanel.width + 10 ),
-              (radioButtonPanel.height + 10 ),
-              options.cornerRadius, options.cornerRadius
-            );
-            background.setShape( backgroundShape2 );
+        if ( moleculeType === ADJUSTABLE ) {
+          // add atom diameter slider and interaction
+          atomicInteractionsControlPanel.addChild( atomDiameter );
+          atomicInteractionsControlPanel.addChild( interactionStrength );
+          var backgroundShape1 = new Shape().roundRect(
+            0,
+            -4,
+            (radioButtonPanel.width + 10 ),
+            (radioButtonPanel.height + atomDiameter.height + interactionStrength.height + 20 ),
+            options.cornerRadius, options.cornerRadius
+          );
+          background.setShape( backgroundShape1 );
         }
+        else {
+          //if  atom and interaction slider
+          if ( atomicInteractionsControlPanel.isChild( atomDiameter ) ||
+               atomicInteractionsControlPanel.isChild( interactionStrength ) ) {
+            atomicInteractionsControlPanel.removeChild( atomDiameter );
+            atomicInteractionsControlPanel.removeChild( interactionStrength );
+          }
+          var backgroundShape2 = new Shape().roundRect(
+            0,
+            -4,
+            (radioButtonPanel.width + 10 ),
+            (radioButtonPanel.height + 10 ),
+            options.cornerRadius, options.cornerRadius
+          );
+          background.setShape( backgroundShape2 );
+        }
+
 
       }
     );
