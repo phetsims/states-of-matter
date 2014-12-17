@@ -217,13 +217,6 @@ define( function( require ) {
             Math.abs( modelViewTransform.modelToViewDeltaY( StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT -
                                                             containerRect.getHeight() ) )
         );
-        particleContainerNode.containerLid.setTranslation(
-          particleContainerNode.containerLid.x,
-          ( particleContainerNode.y - compositeThermometerNode.height + 5 +
-            Math.abs( modelViewTransform.modelToViewDeltaY( StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT -
-                                                            containerRect.getHeight() ) ) )
-        );
-        particleContainerNode.containerLid.setRotation( rotationRate );
       }
       else {
         rotationRate = -( Math.PI / 100 + ( Math.random() * Math.PI / 50 ) );
@@ -235,14 +228,6 @@ define( function( require ) {
             modelViewTransform.modelToViewDeltaY( StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT -
                                                   containerRect.getHeight() ) )
         );
-
-        particleContainerNode.containerLid.setTranslation(
-          particleContainerNode.containerLid.x,
-          ( particleContainerNode.y - compositeThermometerNode.height -
-            ( modelViewTransform.modelToViewDeltaY( StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT -
-                                                    containerRect.getHeight() ) ) )
-        );
-        particleContainerNode.containerLid.rotate( rotationRate );
       }
     } );
 

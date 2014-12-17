@@ -21,12 +21,17 @@ define( function( require ) {
   var LinearGradient = require( 'SCENERY/util/LinearGradient' );
 
 
+  //var PRESSURE_GAUGE_Y_OFFSET = -20;
+  // var PRESSURE_METER_X_OFFSET_PROPORTION = 0.80;
+// Maximum value expected for pressure, in atmospheres.
+  //var MAX_PRESSURE = 200;
   var LID_POSITION_TWEAK_FACTOR = 65; // Empirically determined value for aligning lid and container body.
+  var PRESSURE_GAUGE_Y_OFFSET = -20;
 
   /**
    *
    * @param {MultipleParticleModel} model
-   * @param {ModelViewTransform} modelViewTransform The model view transform for transforming particle position.
+   * @param {ModelViewTransform2} modelViewTransform The model view transform for transforming particle position.
    * @param {Object} options
    * @param {boolean} volumeControlEnabled - set true to enable volume control by pushing the lid using a finger from above
    * @param {boolean} pressureGaugeEnabled - set true to show a barometer
@@ -65,7 +70,13 @@ define( function( require ) {
     var open = new Path( new Shape()
       .ellipticalArc( 125, 2, 25, 125, Math.PI / 2, 0, 2 * Math.PI, false ).close(), {
       lineWidth: 1,
-      stroke: '#7E7E7E'
+      stroke: '#606262' /* new LinearGradient( 0, 0, StatesOfMatterConstants.VIEW_CONTAINER_WIDTH, 0 )
+       .addColorStop( 0, '#6E6E6E' )
+       .addColorStop( 0.2, '#6A6B6B' )
+       .addColorStop( 0.3, '#6A6B6B' )
+       .addColorStop( 0.4, '#6A6B6B' )
+       .addColorStop( 0.7, '#6A6B6B' )
+       .addColorStop( 0.9, '#606262' )*/
     } );
     open.centerX = openEllipse.centerX;
     open.centerY = openEllipse.centerY;
@@ -75,11 +86,28 @@ define( function( require ) {
     // add container outer shape
     var outerShape = new Path( new Shape()
       .moveTo( 0, 5 )
-      .quadraticCurveTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / 2, 51,
-      StatesOfMatterConstants.VIEW_CONTAINER_WIDTH, 5 )
+
+      .quadraticCurveTo( 25, 21, 50, 21 )
+
+      .quadraticCurveTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / 2, 31,
+        StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / 2 + 25, 25 )
+
+      //.quadraticCurveTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH/2+50, 32, StatesOfMatterConstants.VIEW_CONTAINER_WIDTH/-50, 22 )
+
+      .quadraticCurveTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 25
+      , 23, StatesOfMatterConstants.VIEW_CONTAINER_WIDTH, 5 )
       .lineTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT )
+
+      .quadraticCurveTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 2,
+        StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT + 5, StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 10,
+        StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT + 8 )
+
       .quadraticCurveTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / 2,
-        StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT + 30, 0, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT )
+        StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT + 35, 20, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT + 10 )
+
+      .quadraticCurveTo( 2, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT + 5, 0,
+      StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT )
+
       .lineTo( 25, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT - 10 )
       .quadraticCurveTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / 2,
         StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT + 25, StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 25,
@@ -104,9 +132,9 @@ define( function( require ) {
     // add container inner left
     var leftShape = new Path( new Shape()
       .moveTo( 25, 30 )
-      .lineTo( 35, 45 )
-      .lineTo( 35, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT - 15 )
-      .lineTo( 25, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT - 10 )
+      .lineTo( 36, 45 )
+      .lineTo( 36, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT - 10 )
+      .lineTo( 25, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT )
       .lineTo( 25, 30 )
       .close(), {
       lineWidth: 0,
@@ -124,22 +152,19 @@ define( function( require ) {
 
     // add container inner right
     var rightShape = new Path( new Shape()
-      .moveTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 25, 30 )
+      .moveTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 26, 30 )
       .lineTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 35, 45 )
-      .lineTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 35, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT - 15 )
-      .lineTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 25, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT - 10 )
-      .lineTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 25, 30 )
+      .lineTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 35, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT - 10 )
+      .lineTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 24, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT )
+      .lineTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 24, 30 )
       .close(), {
       lineWidth: 0,
       stroke: 'white',
       fill: new LinearGradient( 0, 0, 0, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT - 10 - 30 )
-        .addColorStop( 0, '#939393' )
-        .addColorStop( 0.2, '#BABABA' )
-        .addColorStop( 0.3, '# 585858' )
-        .addColorStop( 0.4, '#525252' )
-        .addColorStop( 0.5, '#9F9F9F' )
-        .addColorStop( 0.5, '#BCBCBC' )
-        .addColorStop( 0.9, '#636363' )
+        .addColorStop( 0, '#848484' )
+        .addColorStop( 0.3, '#515151' )
+        .addColorStop( 0.6, '# 999999' )
+        .addColorStop( 0.9, '#646464' )
     } );
     postParticleLayer.addChild( rightShape );
 
@@ -149,7 +174,7 @@ define( function( require ) {
       .quadraticCurveTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / 2, 45,
         StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 25, 30 )
       .lineTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 35, 45 )
-      .quadraticCurveTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / 2, 65, 35, 45 )
+      .quadraticCurveTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / 2, 55, 35, 45 )
       .close(), {
       lineWidth: 0,
       stroke: 'white',
@@ -166,13 +191,14 @@ define( function( require ) {
 
     // add container inner bottom
     var bottomShape = new Path( new Shape()
-      .moveTo( 25, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT - 10 )
+      .moveTo( 25, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT )
       .quadraticCurveTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / 2,
-        StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT + 25, StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 25,
-        StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT - 10 )
-      .lineTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 35, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT - 15 )
+        StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT + 26,
+        StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 25, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT )
+      .lineTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 35, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT - 10 )
       .quadraticCurveTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / 2,
-        StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT + 10, 35, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT - 15 )
+        StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT + 10,
+      35, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT - 10 )
       .close(), {
       lineWidth: 0,
       stroke: 'white',
@@ -240,15 +266,9 @@ define( function( require ) {
 
   return inherit( Node, ParticleContainerNode, {
     reset: function() {
-      var containerRect = this.model.getParticleContainerRect();
-      this.fingerNode.setTranslation( this.fingerNode.x,
-          Math.abs( this.modelViewTransform.modelToViewDeltaY(
-              StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT - containerRect.getHeight() ) ) +
-          this.containerLid.y - this.fingerNode.height );
       this.updatePressureGauge();
-      this.containerLid.setTranslation( 0, 0 );
-      this.containerLid.setRotation( 0 );
-      this.pressureMeter.setTranslation( this.containerLid.x - 60, this.containerLid.y - 20 );
+      this.handleContainerSizeChanged();
+      this.fingerNode.handleContainerSizeChanged();
     },
 
     /**
@@ -264,7 +284,7 @@ define( function( require ) {
           if ( this.pressureMeter.getRotation() !== 0 ) {
             this.pressureMeter.setRotation( 0 );
           }
-          //  this.pressureMeter.setTranslation(      this.pressureMeter.x, this.containerLid.y );
+          this.pressureMeter.setTranslation( this.pressureMeter.x, PRESSURE_GAUGE_Y_OFFSET );
           this.pressureMeter.setElbowHeight( this.pressureMeterElbowOffset +
                                              Math.abs( this.modelViewTransform.modelToViewDeltaY( StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT -
                                                                                                   containerRect.height ) ) );
@@ -272,7 +292,6 @@ define( function( require ) {
         else {
           // The container is exploding, so spin and move the gauge.
           this.pressureMeter.rotate( -Math.PI / 20 );
-          // this.pressureMeter.setTranslation( this.pressureMeter.x, this.modelViewTransform.modelToViewDeltaY( PRESSURE_GAUGE_Y_OFFSET - this.model.getParticleContainerHeight() ) - this.pressureMeter.y );
           this.pressureMeter.setTranslation( this.pressureMeter.x, this.y +
                                                                    this.modelViewTransform.modelToViewDeltaY( containerRect.getHeight() ) );
         }
@@ -283,26 +302,29 @@ define( function( require ) {
      * Handle a notification that the container size has changed.
      * @private
      */
-    //Todo: this is not working well yet
+
     handleContainerSizeChanged: function() {
-      // changed.
+
       var containerHeight = this.model.getParticleContainerHeight();
       if ( !this.model.getContainerExploded() ) {
         if ( this.containerLid.getRotation() !== 0 ) {
           this.containerLid.setRotation( 0 );
         }
-        // this.containerLid.setTranslation( (this.containmentAreaWidth - this.containerLid.width) / 2, this.containmentAreaHeight - containerHeight - (this.containerLid.height / 2) + LID_POSITION_TWEAK_FACTOR );
+        this.containerLid.setTranslation(
+            (this.modelViewTransform.modelToViewDeltaX( this.containmentAreaWidth ) - this.containerLid.width) / 2,
+          -this.modelViewTransform.modelToViewDeltaY( this.containmentAreaHeight - containerHeight )
+          /*- (this.containerLid.height / 2) + LID_POSITION_TWEAK_FACTOR*/ );
       }
       else {
+        // Rotate the lid to create the visual appearance of it being
         // blown off the top of the container.
-        // this.containerLid.rotateAboutPoint( this.rotationAmount, (this.containmentAreaWidth / 2) / this.containerLid.getScale(), 0 );
-        var centerPosY = this.containmentAreaHeight - containerHeight - (this.containerLid.height / 2) +
-                         LID_POSITION_TWEAK_FACTOR;
+        this.rotationAmount = -(Math.PI / 100 + ( Math.random() * Math.PI / 50 ));
+        var centerPosY = -this.modelViewTransform.modelToViewDeltaY( this.containmentAreaHeight - containerHeight ) -
+                         ( this.containerLid.height / 2 ) + LID_POSITION_TWEAK_FACTOR;
         var currentPosY = this.containerLid.y;
-        var newPosX = this.containerLid.x;
-
-        this.containerLid.setCenterX( this.modelViewTransform.modelToViewDeltaX( this.containmentAreaWidth / 2 ) );
-
+        this.containerLid.setCenterX(
+          this.modelViewTransform.modelToViewDeltaX( this.containmentAreaWidth / 2 )
+        );
         var newPosY;
         if ( currentPosY > centerPosY ) {
           newPosY = centerPosY;
@@ -310,7 +332,8 @@ define( function( require ) {
         else {
           newPosY = currentPosY;
         }
-        //  this.containerLid.setTranslation( newPosX, newPosY );
+        this.containerLid.setY( newPosY );
+        this.containerLid.rotate( this.rotationAmount );
       }
       this.updatePressureGauge();
     }
