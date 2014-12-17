@@ -61,7 +61,69 @@ define( function( require ) {
       }
 
       return true;
-    }
+    },
+    getVy: function() {
+      return this.velocity.y;
+    },
 
+    setVy: function( vy ) {
+      this.velocity.setY( vy );
+    },
+
+    getVx: function() {
+      return this.velocity.x;
+    },
+
+    setVx: function( vx ) {
+      this.velocity.setX( vx );
+    },
+
+    getAx: function() {
+      return this.accel.x;
+    },
+
+    getAy: function() {
+      return this.accel.y;
+    },
+
+    setAx: function( ax ) {
+      this.accel.setX( ax );
+    },
+
+    setAy: function( ay ) {
+      this.accel.setY( ay );
+
+    },
+    getX: function() {
+      return this.positionProperty.x;
+    },
+
+    getY: function() {
+      return this.positionProperty.y;
+    },
+
+    getMass: function() {
+      return this.mass;
+    },
+
+    getRadius: function() {
+      return this.radius;
+    },
+    setRadius: function( radius ) {
+      this.radius = radius;
+    },
+
+
+    getPositionReference: function() {
+      return this.position;
+    },
+
+    getVelocity: function() {
+      return this.velocity;
+    },
+
+    getAccel: function() {
+      return this.accel;
+    }
   } );
 } );
