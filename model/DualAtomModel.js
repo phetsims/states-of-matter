@@ -49,9 +49,8 @@ define( function( require ) {
       StatesOfMatterConstants.MIN_EPSILON ); // Initial values arbitrary, will be set during reset.
     PropertySet.call( this, {
         interactionStrength: 0, // notifyInteractionStrengthChanged
-        atoms: DEFAULT_ATOM_TYPE,// number of atoms in molecule
         motionPaused: false,
-        moleculeType: DEFAULT_ATOM_TYPE,
+        moleculeType: 'NEON_NEON',
         isPlaying: true,
         speed: 'normal',
         atomDiameter: 150,// atom diameter
