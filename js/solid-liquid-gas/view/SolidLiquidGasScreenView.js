@@ -36,7 +36,7 @@ define( function( require ) {
    */
   function SolidLiquidGasScreenView( model ) {
 
-    ScreenView.call( this, { renderer: 'svg' } );
+    ScreenView.call( this, StatesOfMatterConstants.SCREEN_VIEW_OPTIONS );
     var mvtScale = StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / StatesOfMatterConstants.CONTAINER_BOUNDS.width;
 
     // model-view transform

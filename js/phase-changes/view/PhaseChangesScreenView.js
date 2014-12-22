@@ -56,7 +56,7 @@ define( function( require ) {
   function PhaseChangesScreenView( model ) {
     var phaseChangesScreenView = this;
 
-    ScreenView.call( this, { renderer: 'svg' } );
+    ScreenView.call( this, StatesOfMatterConstants.SCREEN_VIEW_OPTIONS );
     var mvtScale = StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / StatesOfMatterConstants.CONTAINER_BOUNDS.width;
 
     // model-view transform
