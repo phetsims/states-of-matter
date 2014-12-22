@@ -12,8 +12,6 @@ define( function( require ) {
   // modules
   var inherit = require( 'PHET_CORE/inherit' );
   var Node = require( 'SCENERY/nodes/Node' );
-  var Circle = require( 'SCENERY/nodes/Circle' );
-  var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
   var Vector2 = require( 'DOT/Vector2' );
   var Color = require( 'SCENERY/util/Color' );
   var RadialGradient = require( 'SCENERY/util/RadialGradient' );
@@ -27,7 +25,7 @@ define( function( require ) {
   var Shape = require( 'KITE/Shape' );
   var Path = require( 'SCENERY/nodes/Path' );
   // constants
-  var MVT_SCALE = 0.3;//StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / StatesOfMatterConstants.CONTAINER_BOUNDS.width;
+  var MVT_SCALE = 0.3;
 
   var OVERLAP_ENLARGEMENT_FACTOR = 1.25;
 
@@ -51,19 +49,6 @@ define( function( require ) {
     this.overlapEnabled = enableOverlap;
     this.position = new Vector2();
 
-    // Register for synchronization with model.
-    var thisNode = this;
-
-    /*        this.position.link(function(){
-     thisNode.updatePosition();
-     });
-
-     this.particle.link(function(){
-     thisNode.handleParticleRemoved();
-     });
-     this.particle.radius.link(function(){
-     thisNode.handleParticleRadiusChanged();
-     });*/
 
     // Decide of the diameter of the circle/circle.
     var circleDiameter = particle.radius * 2 * MVT_SCALE;
@@ -95,7 +80,7 @@ define( function( require ) {
     },
 
     setGradientEnabled: function( gradientEnabled ) {
-      if ( this.useGradient != gradientEnabled ) {
+      if ( this.useGradient !== gradientEnabled ) {
 
         this.useGradient = gradientEnabled;
 
@@ -108,37 +93,14 @@ define( function( require ) {
       }
     },
 
-    //----------------------------------------------------------------------------
-    // Private Methods
-    //----------------------------------------------------------------------------
 
     updatePosition: function() {
-      if ( this.particle != null ) {
-        this.position = this.modelViewTransform.modelToViewPosition( this.particle.positionProperty.value );
+      if ( this.particle !== null ) {
+        this.position = this.modelViewTransform.modelToViewPosition( this.particle.getPositionReference() );
         this.setTranslation( this.position );
       }
     },
 
-    /**
-     * Handle the removal of the particle within the model that is being
-     * represented in the view by this particle node.  This is done by
-     * removing ourself from the canvas and by cleaning up any memory
-     * references so that we can be garbage collected.
-     */
-    handleParticleRemoved: function() {
-
-      // Remove ourself from the canvas.
-      var parent = this.getParent();
-      if ( parent != null ) {
-        parent.removeChild( this );
-      }
-
-      // Remove all children, since they have a reference to this object.
-      this.removeAllChildren();
-
-      // Explicitly clear our reference to the particle in the model.
-      this.particle = null;
-    },
 
     /**
      * If the radius of the particle changes, we need to redraw ourself to
@@ -156,7 +118,6 @@ define( function( require ) {
         // happen when the particles collide.
         circleDiameter = circleDiameter * OVERLAP_ENLARGEMENT_FACTOR;
       }
-      //  this.circle.setRadius( circleDiameter/(2*MVT_SCALE) );
       this.circle.setShape( new Shape().circle( 0, 0, circleDiameter / 2 ) );
 
     },
