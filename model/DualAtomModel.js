@@ -83,19 +83,6 @@ define( function( require ) {
         return this.movableAtom.getType();
       },
 
-      step: function( dt ) {
-
-        if ( this.isPlaying ) {
-          //this.stepInternal();
-        }
-      },
-
-      stepInternal: function() {
-        //this.movableAtom.positionProperty.value = new Vector2( 7 + Math.random(), 74 );
-        this.handleClockTicked();
-        //  console.log( "inside step internal" );
-      },
-
       setFixedAtomType: function( atomType ) {
 
         if ( this.fixedAtom === null || this.fixedAtom.getType() !== atomType ) {
@@ -308,7 +295,7 @@ define( function( require ) {
           // correct, since the potential is not continuous, but is close
           // enough for our purposes.
           this.potentialWhenAtomReleased =
-          this.ljPotentialCalculator.calculatePotentialEnergy( this.movableAtom.positionProperty.value.distance( this.fixedAtom.positionProperty.value ) );
+          this.ljPotentialCalculator.calculatePotentialEnergy( this.movableAtom.getPositionReference().distance( this.fixedAtom.getPositionReference() ) );
         }
       },
 
@@ -328,11 +315,29 @@ define( function( require ) {
         this.bondingState = BONDING_STATE_UNBONDED;
       },
 
+      clone: function( movableAtom ) {
+        this.shadowMovableAtom.setPosition( movableAtom.getX(), movableAtom.getY() );
+        this.shadowMovableAtom.velocity = movableAtom.getVelocity();
+        this.shadowMovableAtom.accel = movableAtom.getAccel();
+      },
+
+      step: function( dt ) {
+
+        if ( this.isPlaying ) {
+          var adjustedDT = this.speed === 'normal' ? dt : dt * 0.33;
+          this.stepInternal( adjustedDT );
+        }
+      },
+      stepInternal: function( dt ) {
+        this.handleClockTicked( dt );
+      },
       handleClockTicked: function( clockEvent ) {
 
-        this.shadowMovableAtom = this.movableAtom;
+        // atom type doesn't really matter for the shadowMovableAtom. Position, acceleration, velocity matter though
+        this.shadowMovableAtom = this.atomFactory.createAtom( DEFAULT_ATOM_TYPE );
+        this.clone( this.movableAtom );
 
-        //this.updateTimeStep();
+        this.updateTimeStep( clockEvent);
 
         // Update the forces and motion of the atoms.
         for ( var i = 0; i < CALCULATIONS_PER_TICK; i++ ) {
@@ -355,7 +360,7 @@ define( function( require ) {
 
             case BONDING_STATE_UNBONDED:
               if ( ( this.movableAtom.getVx() > THRESHOLD_VELOCITY ) &&
-                   ( this.movableAtom.positionProperty.value.distance( this.fixedAtom.positionProperty.value ) <
+                   ( this.movableAtom.getPositionReference().distance( this.fixedAtom.getPositionReference() ) <
                      this.fixedAtom.getRadius() * 2.5 ) ) {
                 // The atoms are close together and the movable one is
                 // starting to move away, which is the point at which we
@@ -390,7 +395,7 @@ define( function( require ) {
               // for a while, then damps out, then starts up again.
               this.movableAtom.setAx( 0 );
               this.movableAtom.setVx( 0 );
-              if ( this.movableAtom.positionProperty.x > this.minPotentialDistance ) {
+              if ( this.movableAtom.getX() > this.minPotentialDistance ) {
                 this.movableAtom.setPosition( this.bondedOscillationLeftDistance, 0 );
               }
               else {
@@ -410,6 +415,9 @@ define( function( require ) {
           }
         }
       },
+      updateTimeStep: function( dt ) {
+        this.timeStep = dt / CALCULATIONS_PER_TICK;
+      },
 
 
       syncMovableAtomWithDummy: function() {
@@ -420,7 +428,7 @@ define( function( require ) {
 
       updateForces: function() {
 
-        var distance = this.shadowMovableAtom.positionProperty.value.distance( new Vector2( 0, 0 ) );
+        var distance = this.shadowMovableAtom.getPositionReference().distance( new Vector2( 0, 0 ) );
 
         if ( distance < ( this.fixedAtom.getRadius() + this.movableAtom.getRadius() ) / 8 ) {
           // The atoms are too close together, and calculating the force
@@ -449,7 +457,7 @@ define( function( require ) {
         if ( !this.motionPaused ) {
           // Update the position and velocity of the atom.
           this.shadowMovableAtom.setVx( this.shadowMovableAtom.getVx() + ( acceleration * this.timeStep ) );
-          var xPos = this.shadowMovableAtom.positionProperty.x + ( this.shadowMovableAtom.getVx() * this.timeStep );
+          var xPos = this.shadowMovableAtom.getX() + ( this.shadowMovableAtom.getVx() * this.timeStep );
           this.shadowMovableAtom.setPosition( xPos, 0 );
         }
       },
@@ -464,7 +472,7 @@ define( function( require ) {
             // In the last part of the vibration, starting to wind it down.
             vibrationScaleFactor = this.vibrationCounter / ( VIBRATION_COUNTER_RESET_VALUE / 4 );
           }
-          if ( this.fixedAtom.positionProperty.x !== 0 ) {
+          if ( this.fixedAtom.getX() !== 0 ) {
             // Go back to the original position every other time.
             this.fixedAtom.setPosition( 0, 0 );
           }
@@ -481,8 +489,8 @@ define( function( require ) {
           // Decrement the vibration counter.
           this.vibrationCounter--;
         }
-        else if ( this.fixedAtom.positionProperty.x !== 0 ||
-                  this.fixedAtom.positionProperty.y !== 0 ) {
+        else if ( this.fixedAtom.getX() !== 0 ||
+                  this.fixedAtom.getY() !== 0 ) {
           this.fixedAtom.setPosition( 0, 0 );
         }
       },
