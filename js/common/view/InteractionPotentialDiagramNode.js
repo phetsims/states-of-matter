@@ -20,7 +20,7 @@ define( function( require ) {
   var Node = require( 'SCENERY/nodes/Node' );
   var ArrowNode = require( 'SCENERY_PHET/ArrowNode' );
   var GridNode = require( 'ATOMIC_INTERACTIONS/atomic-interactions/view/ZoomableGridNode' );
-
+  var PositionMarker = require( 'ATOMIC_INTERACTIONS/atomic-interactions/view/PositionMarker' );
   //strings
   var distanceBetweenMoleculesString = require( 'string!STATES_OF_MATTER/distanceBetweenMolecules' );
   var potentialEnergyString = require( 'string!STATES_OF_MATTER/potentialEnergy' );
@@ -135,11 +135,8 @@ define( function( require ) {
     this.markerLayer = new Node();
     this.markerLayer.setTranslation( this.graphXOrigin, this.graphYOrigin - this.graphHeight );
     this.ljPotentialGraph.addChild( this.markerLayer );
-
     var markerDiameter = POSITION_MARKER_DIAMETER_PROPORTION * this.graphWidth;
-    this.positionMarker = new Path( new Shape()
-        .ellipse( -markerDiameter / 2, -markerDiameter / 2, markerDiameter / 2, markerDiameter / 2, Math.PI )
-      , { fill: 'cyan', stroke: 'black'} );
+    this.positionMarker = new PositionMarker( markerDiameter / 2, 'rgb( 117, 217, 255 )' );
 
     this.positionMarker.setVisible( this.positionMarkerEnabled );
     this.markerLayer.addChild( this.positionMarker );
