@@ -147,7 +147,7 @@ define( function( require ) {
 
     var accordionBox = new AccordionBox( this.accordinContent,
       {
-        titleNode: new Text( forcesString, { fill: "#FFFFFF", font: new PhetFont( { size: 14 } ) } ),
+        titleNode: new Text( forcesString, { fill: options.textColor, font: new PhetFont( { size: 14 } ) } ),
         fill: options.backgroundColor,
         stroke: 'white',
         // expandedProperty: expandedProperty,
