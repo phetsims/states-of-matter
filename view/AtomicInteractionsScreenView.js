@@ -29,11 +29,6 @@ define( function( require ) {
   var ParticleForceNode = require( 'ATOMIC_INTERACTIONS/atomic-interactions/view/ParticleForceNode' );
   var GrabbableParticleNode = require( 'ATOMIC_INTERACTIONS/atomic-interactions/view/GrabbableParticleNode' );
   var PushpinNode = require( 'ATOMIC_INTERACTIONS/atomic-interactions/view/PushpinNode' );
-  var ConfigurableStatesOfMatterAtom = require( 'STATES_OF_MATTER/common/model/particle/ConfigurableStatesOfMatterAtom' );
-  var AtomType = require( 'STATES_OF_MATTER/common/model/AtomType' );
-  var NeonAtom = require( 'STATES_OF_MATTER/common/model/particle/NeonAtom' );
-  var ArgonAtom = require( 'STATES_OF_MATTER/common/model/particle/ArgonAtom' );
-  var OxygenAtom = require( 'STATES_OF_MATTER/common/model/particle/OxygenAtom' );
 
 
   // strings
@@ -45,7 +40,7 @@ define( function( require ) {
   // Canvas size in pico meters, since this is a reasonable scale at which
   // to display molecules.  Assumes a 4:3 aspect ratio.
   var CANVAS_WIDTH = 2000;
-  var CANVAS_HEIGHT = CANVAS_WIDTH * ( 3.0 / 4.0 );
+  //var CANVAS_HEIGHT = CANVAS_WIDTH * ( 3.0 / 4.0 );
 
   // Translation factors, used to set origin of canvas area.
   var WIDTH_TRANSLATION_FACTOR = 0.3;   // 0 puts the vertical origin all the way left, 1
@@ -57,10 +52,10 @@ define( function( require ) {
   var BUTTON_HEIGHT = CANVAS_WIDTH * 0.06;
 
   // Constant used to control size of wiggle me.
-  var WIGGLE_ME_HEIGHT = CANVAS_HEIGHT * 0.06;
+  // var WIGGLE_ME_HEIGHT = CANVAS_HEIGHT * 0.06;
 
   // Constant used to control size of push pin.
-  var PUSH_PIN_WIDTH = CANVAS_WIDTH * 0.10;
+  var PUSH_PIN_WIDTH = CANVAS_WIDTH * 0.01;
 
   // The following constant controls whether the wiggle me appears.  This
   // was requested in the original specification, but after being reviewed
@@ -68,18 +63,10 @@ define( function( require ) {
   // interviews conducted in late 2009, it was decide that it should be
   // added back.  The constant is being kept in case this decision is
   // reversed (again) at some point in the future.
-  var ENABLE_WIGGLE_ME = true;
+  // var ENABLE_WIGGLE_ME = true;
 
 
-  var particle;
 
-  var NEON_NEON = 'NEON_NEON';
-  var ARGON_ARGON = 'ARGON_ARGON';
-  var OXYGEN_OXYGEN = 'OXYGEN_OXYGEN';
-  var NEON_ARGON = 'NEON_ARGON';
-  var NEON_OXYGEN = 'NEON_OXYGEN';
-  var ARGON_OXYGEN = 'ARGON_OXYGEN';
-  var ADJUSTABLE = 'ADJUSTABLE';
 
   // Constant to turn on/off a set of vertical lines that can be used to
   // check the alignment between the graph and the atoms.
@@ -94,7 +81,7 @@ define( function( require ) {
 
     ScreenView.call( this );
 
-    this.atomicInteractionsModel = dualAtomModel;
+    this.dualAtomModel = dualAtomModel;
     this.movableParticle = dualAtomModel.getMovableAtomRef();
     this.fixedParticle = dualAtomModel.getFixedAtomRef();
     this.showAttractiveForces = false;
@@ -104,11 +91,10 @@ define( function( require ) {
     var atomicInteractionsScreenView = this;
 
     // model-view transform
-    var mvtScale = StatesOfMatterConstants.VIEW_CONTAINER_WIDTH /
-                   StatesOfMatterConstants.CONTAINER_BOUNDS.width;
+    var mvtScale = 0.3;
 
-    this.modelViewTransform = ModelViewTransform2.createSinglePointScaleInvertedYMapping( new Vector2( 0, 0 ),
-      new Vector2( 0, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT ), mvtScale );
+    this.modelViewTransform = ModelViewTransform2.createSinglePointScaleMapping( new Vector2( 0, 0 ),
+      new Vector2( 0, 400 ), mvtScale );
 
     var atomicInteractionsControlPanel = new AtomicInteractionsControlPanel( dualAtomModel, true, {
       right: this.layoutBounds.maxX - 10,
@@ -231,83 +217,16 @@ define( function( require ) {
     this.addChild( forceControlNode );
 
     // default molecule is neon
-    atomicInteractionsScreenView.handleFixedParticleAdded( new NeonAtom( 0, 0 ) );
-    atomicInteractionsScreenView.handleMovableParticleAdded( new NeonAtom( 0, 0 ) );
-    dualAtomModel.moleculeTypeProperty.link( function( moleculeType ) {
+    this.handleFixedParticleAdded( dualAtomModel.fixedAtom );
+    this.handleMovableParticleAdded( dualAtomModel.movableAtom );
+    dualAtomModel.moleculeTypeProperty.link( function() {
       forceControlNode.top = atomicInteractionsControlPanel.bottom + 5;
       forceControlNode.right = atomicInteractionsControlPanel.right;
+      atomicInteractionsScreenView.handleFixedParticleRemoved( dualAtomModel.fixedAtom );
+      atomicInteractionsScreenView.handleFixedParticleAdded( dualAtomModel.fixedAtom );
+      atomicInteractionsScreenView.handleMovableParticleRemoved( dualAtomModel.movableAtom );
+      atomicInteractionsScreenView.handleMovableParticleAdded( dualAtomModel.movableAtom );
     } );
-
-    dualAtomModel.moleculeTypeProperty.link( function( moleculeType ) {
-
-      var fixedParticle;
-      var movableParticle;
-
-      switch( moleculeType ) {
-        case NEON_NEON:
-          particle = new NeonAtom( 0, 0 );
-          fixedParticle = particle;
-          movableParticle = particle;
-          break;
-
-        case ARGON_ARGON:
-          particle = new ArgonAtom( 0, 0 );
-          fixedParticle = particle;
-          movableParticle = particle;
-          break;
-
-        case ADJUSTABLE:
-          particle = new ConfigurableStatesOfMatterAtom( 0, 0 );
-          fixedParticle = particle;
-          movableParticle = particle;
-          break;
-
-        case OXYGEN_OXYGEN:
-          fixedParticle = new OxygenAtom( 0, 0 );
-          movableParticle = new OxygenAtom( 0, 0 );
-          break;
-
-        case NEON_ARGON:
-          fixedParticle = new NeonAtom( 0, 0 );
-          movableParticle = new ArgonAtom( 0, 0 );
-          break;
-
-        case NEON_OXYGEN:
-          fixedParticle = new NeonAtom( 0, 0 );
-          movableParticle = new OxygenAtom( 0, 0 );
-          break;
-
-        case ARGON_OXYGEN:
-          fixedParticle = new ArgonAtom( 0, 0 );
-          movableParticle = new OxygenAtom( 0, 0 );
-          break;
-      }
-
-      atomicInteractionsScreenView.handleFixedParticleRemoved( fixedParticle );
-      atomicInteractionsScreenView.handleFixedParticleAdded( fixedParticle );
-      atomicInteractionsScreenView.handleMovableParticleRemoved( movableParticle );
-      atomicInteractionsScreenView.handleMovableParticleAdded( movableParticle );
-
-    } );
-    this.movableParticle.positionProperty.link( function() {
-      atomicInteractionsScreenView.handlePositionChanged();
-    } );
-    dualAtomModel.atomDiameterProperty.link( function() {
-      //atomicInteractionsScreenView.handleParticleRadiusChanged();
-    } );
-    /*  this.movableParticle.link(function() {
-     atomicInteractionsScreenView.updateMinimumXForMovableAtom();
-     atomicInteractionsScreenView.updateMinimumXForMovableAtom();
-     });
-     // Create the listener for monitoring particle motion.
-     this.atomListener = new StatesOfMatterAtom.Adapter() {
-     positionChanged() {
-     this.handlePositionChanged();
-     }
-     radiusChanged() {
-     this.handleParticleRadiusChanged();
-     }
-     };*/
     dualAtomModel.forcesProperty.link( function( forces ) {
       switch( forces ) {
         case 'hideForces':
@@ -328,10 +247,10 @@ define( function( require ) {
 
     } );
     dualAtomModel.atomDiameterProperty.link( function( diameter ) {
-      atomicInteractionsScreenView.fixedParticleNode.particle.setRadius( diameter / 2 );
       atomicInteractionsScreenView.fixedParticleNode.handleParticleRadiusChanged();
-      atomicInteractionsScreenView.movableParticleNode.particle.setRadius( diameter / 2 );
       atomicInteractionsScreenView.movableParticleNode.handleParticleRadiusChanged();
+      atomicInteractionsScreenView.handleParticleRadiusChanged();
+      atomicInteractionsScreenView.updateMinimumXForMovableAtom();
     } );
 
 
@@ -346,7 +265,7 @@ define( function( require ) {
      var rightSideOfChartMarker = new Path(new Shape().moveTo( 0, 0).lineTo(  0, 500 ),{fill: 'green', stroke: 'green'});
      rightSideOfChartMarker.setTranslation( 1100, 0 );
      this.addChild( rightSideOfChartMarker );*/
-    this.dualAtomModel = dualAtomModel;
+
   }
 
   return inherit( ScreenView, AtomicInteractionsScreenView, {
@@ -354,9 +273,8 @@ define( function( require ) {
     // Called by the animation loop. Optional, so if your view has no animation, you can omit this.
     step: function( dt ) {
       // Handle view animation here.
-      //  console.log("inside step func")
       if ( this.dualAtomModel.isPlaying ) {
-        //  particle.positionProperty.value = new Vector2( 300 + Math.random() * 100, 67 );
+        this.handlePositionChanged();
       }
 
     },
@@ -393,8 +311,6 @@ define( function( require ) {
 
       this.fixedParticle = particle;
       this.fixedParticleNode = new ParticleForceNode( particle, this.modelViewTransform, true, true );
-      this.fixedParticleNode.top = this.interactiveInteractionPotentialDiagram.bottom;
-      this.fixedParticleNode.left = this.layoutBounds.minX + 10;
       this.fixedParticleNode.setShowAttractiveForces( this.showAttractiveForces );
       this.fixedParticleNode.setShowRepulsiveForces( this.showRepulsiveForces );
       this.fixedParticleNode.setShowTotalForces( this.showTotalForces );
@@ -406,8 +322,9 @@ define( function( require ) {
       // Add the push pin last so that it is on top of the fixed atom.
       // Note that the particulars of how this is positioned will need to
       // change if a different image is used.
-      //this.addChild( this.pushPinNode );
-      this.pushPinNode.setTranslation( this.fixedParticle.getRadius() * 0.25, this.fixedParticle.getRadius() * 0.1 );
+      this.addChild( this.pushPinNode );
+      this.pushPinNode.setTranslation( this.modelViewTransform.modelToViewX( -this.fixedParticle.getRadius() * 0.75 ),
+        this.modelViewTransform.modelToViewY( -this.fixedParticle.getRadius() * 0.9 ) );
     },
 
     handleFixedParticleRemoved: function( particle ) {
@@ -418,7 +335,7 @@ define( function( require ) {
         this.fixedParticleLayer.removeChild( this.fixedParticleNode );
 
         // Remove the pin holding the node.
-        //this.removeChild( this.pushPinNode );
+        this.removeChild( this.pushPinNode );
       }
       else {
         console.error( "Error: Problem encountered removing node from canvas." );
@@ -432,10 +349,8 @@ define( function( require ) {
       // Add the atom node for this guy.
 
       this.movableParticle = particle;
-      this.movableParticleNode = new GrabbableParticleNode( this.atomicInteractionsModel, particle,
+      this.movableParticleNode = new GrabbableParticleNode( this.dualAtomModel, particle,
         this.modelViewTransform, true, true, 0, 1.0 / 0.0 );
-      this.movableParticleNode.top = this.interactiveInteractionPotentialDiagram.bottom;
-      this.movableParticleNode.left = this.layoutBounds.minX + 60;
       this.movableParticleNode.setShowAttractiveForces( this.showAttractiveForces );
       this.movableParticleNode.setShowRepulsiveForces( this.showRepulsiveForces );
       this.movableParticleNode.setShowTotalForces( this.showTotalForces );
@@ -480,7 +395,7 @@ define( function( require ) {
 
       // The particles are being resized, so disable the gradients if they
       // are being used and if motion is paused.
-      if ( this.atomicInteractionsModel.getMotionPaused() ) {
+      if ( this.dualAtomModel.getMotionPaused() ) {
         if ( this.fixedParticleNode.getGradientEnabled() ) {
           this.fixedParticleNode.setGradientEnabled( false );
         }
@@ -492,7 +407,7 @@ define( function( require ) {
 
     handlePositionChanged: function() {
 
-      if ( !this.atomicInteractionsModel.getMotionPaused() ) {
+      if ( !this.dualAtomModel.getMotionPaused() ) {
         if ( !this.fixedParticleNode.getGradientEnabled() ) {
           // The movable particle is moving, so turn the gradient
           // back on.
@@ -509,8 +424,8 @@ define( function( require ) {
       this.updateForceVectors();
 
       if ( ( this.layout.width > 0 ) &&
-           ( this.atomicInteractionsModel.getMovableAtomRef().getX() > ( 1 - WIDTH_TRANSLATION_FACTOR ) *
-                                                                       this.layout.width ) ) {
+           ( this.dualAtomModel.getMovableAtomRef().getX() > ( 1 - WIDTH_TRANSLATION_FACTOR ) *
+                                                             this.layout.width ) ) {
         if ( !this.retrieveAtomButtonNode.isVisible() ) {
           // The particle is off the canvas and the button is not
           // yet shown, so show it.
@@ -532,7 +447,7 @@ define( function( require ) {
     updatePositionMarkerOnDiagram: function() {
 
       if ( ( this.fixedParticle !== null ) && ( this.movableParticle !== null ) ) {
-        var distance = this.fixedParticle.positionProperty.value.distance( this.movableParticle.positionProperty.value );
+        var distance = this.fixedParticle.getPositionReference().distance( this.movableParticle.getPositionReference() );
 
         if ( distance > 0 ) {
           this.interactiveInteractionPotentialDiagram.setMarkerEnabled( true );
@@ -553,59 +468,60 @@ define( function( require ) {
      */
     updateMinimumXForMovableAtom: function() {
       if ( this.movableParticle !== null && this.fixedParticle !== null ) {
-        this.movableParticleNode.setMinX( this.atomicInteractionsModel.getSigma() * 0.9 );
+        this.movableParticleNode.setMinX( this.dualAtomModel.getSigma() * 0.9 );
       }
     },
     updateLayout: function() {
-      if ( this.layout.getWidth() <= 0 || this.layout.getHeight() <= 0 ) {
-        // The canvas hasn't been sized yet, so don't try to lay it out.
-        return;
-      }
-      if ( ( !this.wiggleMeShown ) && ( ENABLE_WIGGLE_ME ) ) {
-        // The wiggle me has not yet been shown, so show it.
-        //this.wiggleMe = new DefaultWiggleMe( this, StatesOfMatterStrings.WIGGLE_ME_CAPTION );
-        //this.wiggleMe.setArrowTailPosition( MotionHelpBalloon.LEFT_CENTER );
-        //this.wiggleMe.setTextColor( Color.YELLOW );
-        //this.wiggleMe.setArrowFillPaint( Color.YELLOW );
-        //this.wiggleMe.setArrowStrokePaint( Color.YELLOW );
-        //this.wiggleMe.setBalloonFillPaint( new Color( 0, 0, 0, 0 ) );   // Fully transparent.
-        //this.wiggleMe.setBalloonStrokePaint( new Color( 0, 0, 0, 0 ) ); // Fully transparent.
-        var wiggleMeScale = WIGGLE_ME_HEIGHT / this.wiggleMe.height;
-        this.wiggleMe.scale( wiggleMeScale );
-        this.addChild( this.wiggleMe );
+      //this.movableParticleNode.setTranslation(this.movableParticle.getX(),this.movableParticle.getY());
+      /* if ( this.layout.width <= 0 || this.layout.height <= 0 ) {
+       // The canvas hasn't been sized yet, so don't try to lay it out.
+       return;
+       }
+       if ( ( !this.wiggleMeShown ) && ( ENABLE_WIGGLE_ME ) ) {
+       // The wiggle me has not yet been shown, so show it.
+       this.wiggleMe = new DefaultWiggleMe( this, StatesOfMatterStrings.WIGGLE_ME_CAPTION );
+       this.wiggleMe.setArrowTailPosition( MotionHelpBalloon.LEFT_CENTER );
+       this.wiggleMe.setTextColor( Color.YELLOW );
+       this.wiggleMe.setArrowFillPaint( Color.YELLOW );
+       this.wiggleMe.setArrowStrokePaint( Color.YELLOW );
+       this.wiggleMe.setBalloonFillPaint( new Color( 0, 0, 0, 0 ) );   // Fully transparent.
+       this.wiggleMe.setBalloonStrokePaint( new Color( 0, 0, 0, 0 ) ); // Fully transparent.
+       var wiggleMeScale = WIGGLE_ME_HEIGHT / this.wiggleMe.height;
+       this.wiggleMe.scale( wiggleMeScale );
+       this.addChild( this.wiggleMe );
 
 
-        // Animate from off the screen to the position of the movable atom.
-        //var viewportBounds = getBounds();
-        var wiggleMeInitialXPos = new Vector2( 0 /*viewportBounds.getMaxX()*/, 0 );
-        // getPhetRootNode().screenToWorld( wiggleMeInitialXPos );
-        wiggleMeInitialXPos.setXY( wiggleMeInitialXPos.getX(), 0 );
-        this.wiggleMe.setTranslation( wiggleMeInitialXPos.getX(), this.model.getMovableAtomRef().getY() );
-        //this.wiggleMe.animateToPositionScaleRotation(
-        //this.atomicInteractionsModel.getMovableAtomRef().getX() +
-        // this.atomicInteractionsModel.getMovableAtomRef().getRadius(),
-        //this.atomicInteractionsModel.getMovableAtomRef().getY(), wiggleMeScale, 0, 2000 );
+       // Animate from off the screen to the position of the movable atom.
+       var viewportBounds = getBounds();
+       var wiggleMeInitialXPos = new Vector2( 0 viewportBounds.getMaxX(), 0 );
+       getPhetRootNode().screenToWorld( wiggleMeInitialXPos );
+       wiggleMeInitialXPos.setXY( wiggleMeInitialXPos.getX(), 0 );
+       this.wiggleMe.setTranslation( wiggleMeInitialXPos.getX(), this.model.getMovableAtomRef().getY() );
+       this.wiggleMe.animateToPositionScaleRotation(
+       this.dualAtomModel.getMovableAtomRef().getX() +
+       this.dualAtomModel.getMovableAtomRef().getRadius(),
+       this.dualAtomModel.getMovableAtomRef().getY(), wiggleMeScale, 0, 2000 );
 
-        // Clicking anywhere on the canvas makes the wiggle me go away.
-        /*              this.addInputListener( new PBasicInputEventHandler() {
-         mousePressed( event ) {
-         this.clearWiggleMe();
-         removeInputListener( this );
-         }
-         } );*/
+       // Clicking anywhere on the canvas makes the wiggle me go away.
+       this.addInputListener( new PBasicInputEventHandler() {
+       mousePressed( event ) {
+       this.clearWiggleMe();
+       removeInputListener( this );
+       }
+       } );
 
-        // Indicate that the wiggle-me has been shown so that we don't end
-        // up showing it again.
-        this.wiggleMeShown = true;
-      }
+       // Indicate that the wiggle-me has been shown so that we don't end
+       // up showing it again.
+       this.wiggleMeShown = true;
+       }*/
     },
 
     updateForceVectors: function() {
       if ( ( this.fixedParticle !== null ) && ( this.movableParticle !== null ) ) {
-        this.fixedParticleNode.setForces( this.atomicInteractionsModel.getAttractiveForce(),
-          -this.atomicInteractionsModel.getRepulsiveForce() );
-        this.movableParticleNode.setForces( -this.atomicInteractionsModel.getAttractiveForce(),
-          this.atomicInteractionsModel.getRepulsiveForce() );
+        this.fixedParticleNode.setForces( this.dualAtomModel.getAttractiveForce(),
+          -this.dualAtomModel.getRepulsiveForce() );
+        this.movableParticleNode.setForces( -this.dualAtomModel.getAttractiveForce(),
+          this.dualAtomModel.getRepulsiveForce() );
       }
     },
     clearWiggleMe: function() {
