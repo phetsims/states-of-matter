@@ -39,10 +39,6 @@ define( function( require ) {
       if ( this === other ) {
         return true;
       }
-      // if model is instance of subclass
-      // if ( other === null || !(other instanceof this ) {
-      //     return false;
-      // }
 
       if ( this.mass !== other.mass ) {
         return false;
@@ -95,11 +91,11 @@ define( function( require ) {
 
     },
     getX: function() {
-      return this.positionProperty.x;
+      return this.positionProperty.value.x;
     },
 
     getY: function() {
-      return this.positionProperty.y;
+      return this.positionProperty.value.y;
     },
 
     getMass: function() {
@@ -115,7 +111,7 @@ define( function( require ) {
 
 
     getPositionReference: function() {
-      return this.position;
+      return this.positionProperty.value;
     },
 
     getVelocity: function() {
