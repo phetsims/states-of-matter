@@ -10,7 +10,6 @@ define( function( require ) {
 
   // modules
   var inherit = require( 'PHET_CORE/inherit' );
-  var Vector2 = require( 'DOT/Vector2' );
   var ParticleForceNode = require( 'ATOMIC_INTERACTIONS/atomic-interactions/view/ParticleForceNode' );
   var SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
 
@@ -48,25 +47,22 @@ define( function( require ) {
       },
       drag: function( event ) {
         // Only allow the user to move unbonded atoms.
-        if ( model.getBondingState() != model.BONDING_STATE_UNBONDED ) {
+        if ( model.getBondingState() !== model.BONDING_STATE_UNBONDED ) {
           // Need to release the bond before we can move the atom.
           model.releaseBond();
         }
         endDragX = grabbableParticleNode.globalToParentPoint( event.pointer.point ).x;
         var d = endDragX - startDragX;
         // Make sure we don't exceed the positional limits.
-        var newPosX = mvt.modelToViewX( grabbableParticleNode.particle.positionProperty.value.x ) + d;
+        var newPosX = startDragX + d;
         if ( newPosX > maxX ) {
           newPosX = maxX;
         }
         else if ( newPosX < minX ) {
           newPosX = minX;
         }
-        particle.positionProperty.value = new Vector2( mvt.viewToModelX( newPosX ),
-          mvt.viewToModelY( grabbableParticleNode.y ) );
         // Move the particle based on the amount of mouse movement.
-        //grabbableParticleNode.particle.setPosition( mvt.viewToModelX(newPosX), grabbableParticleNode.particle.positionProperty.get().y );
-        grabbableParticleNode.setTranslation( newPosX, grabbableParticleNode.y );
+        grabbableParticleNode.particle.setPosition( mvt.viewToModelX( newPosX ), grabbableParticleNode.y );
       },
       end: function() {
         // Let the model move the particles again.  Note that this happens
@@ -74,8 +70,8 @@ define( function( require ) {
         model.setMotionPaused( false );
       }
     } ) );
-    grabbableParticleNode.particle.positionProperty.link( function( position ) {
-      //  grabbableParticleNode.setTranslation(position.x,grabbableParticleNode.y );
+    model.movableAtom.positionProperty.link( function( position ) {
+      grabbableParticleNode.setTranslation( mvt.modelToViewX( position.x ), grabbableParticleNode.y );
     } );
   }
 
