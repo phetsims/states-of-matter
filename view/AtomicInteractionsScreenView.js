@@ -79,7 +79,7 @@ define( function( require ) {
    */
   function AtomicInteractionsScreenView( dualAtomModel ) {
 
-    ScreenView.call( this );
+    ScreenView.call( this, { layoutBound: new Bounds2(  0, 0, 768, 504 ) } );
 
     this.dualAtomModel = dualAtomModel;
     this.movableParticle = dualAtomModel.getMovableAtomRef();
