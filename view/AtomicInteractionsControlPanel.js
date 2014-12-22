@@ -28,6 +28,10 @@ define( function( require ) {
   var Shape = require( 'KITE/Shape' );
   var AtomType = require( 'STATES_OF_MATTER/common/model/AtomType' );
   var AquaRadioButton = require( 'SUN/AquaRadioButton' );
+  var Image = require( 'SCENERY/nodes/Image' );
+
+  // images
+  var pushPinImg = require( 'image!ATOMIC_INTERACTIONS/push-pin.png' );
 
   // strings
   var neonString = require( 'string!STATES_OF_MATTER/neon' );
@@ -35,6 +39,14 @@ define( function( require ) {
   var oxygenString = require( 'string!STATES_OF_MATTER/oxygen' );
   var adjustableAttractionString = require( 'string!STATES_OF_MATTER/adjustableAttraction' );
   var tittleString = require( 'string!STATES_OF_MATTER/AtomsMolecules' );
+  var pinnedString = require( 'string!ATOMIC_INTERACTIONS/pinned' );
+  var movingString = require( 'string!ATOMIC_INTERACTIONS/moving' );
+  var atomDiameterString = require( 'string!ATOMIC_INTERACTIONS/atomDiameter' );
+  var interactionStrengthString = require( 'string!ATOMIC_INTERACTIONS/interactionStrength' );
+  var smallString = require( 'string!ATOMIC_INTERACTIONS/small' );
+  var largeString = require( 'string!ATOMIC_INTERACTIONS/large' );
+  var weakString = require( 'string!ATOMIC_INTERACTIONS/weak' );
+  var strongString = require( 'string!ATOMIC_INTERACTIONS/strong' );
 
   var NEON_NEON = 'NEON_NEON';
   var ARGON_ARGON = 'ARGON_ARGON';
@@ -46,7 +58,7 @@ define( function( require ) {
 
   /**
    *
-   * @param model
+   * @param {DualAtomModel}model
    * @param enableHeterogeneousAtoms
    * @param options
    * @constructor
@@ -76,16 +88,29 @@ define( function( require ) {
       }
     );
     this.addChild( background );
+    var neonAndNeon;
+    var argonAndArgon;
+    var oxygenAndOxygen;
+    var neonAndArgon;
+    var neonAndOxygen;
+    var argonAndOxygen;
+    var adjustableAttraction;
+    var radioButtonGroup;
+    var maxWidth;
+    var createItem;
+    var titleText;
+    var titleNode;
+
     if ( enableHeterogeneousAtoms ) {
       textOptions = {font: new PhetFont( 12 ), fill: options.textColor};
 
-      var neonAndNeon = [ new Text( neonString, textOptions ), new Text( neonString, textOptions ) ];
-      var argonAndArgon = [  new Text( argonString, textOptions ), new Text( argonString, textOptions ) ];
-      var oxygenAndOxygen = [ new Text( oxygenString, textOptions ), new Text( oxygenString, textOptions )];
-      var neonAndArgon = [ new Text( neonString, textOptions ), new Text( argonString, textOptions )];
-      var neonAndOxygen = [ new Text( neonString, textOptions ), new Text( oxygenString, textOptions )];
-      var argonAndOxygen = [ new Text( argonString, textOptions ), new Text( oxygenString, textOptions )];
-      var adjustableAttraction = new Text( adjustableAttractionString, textOptions );
+      neonAndNeon = [ new Text( neonString, textOptions ), new Text( neonString, textOptions ) ];
+      argonAndArgon = [  new Text( argonString, textOptions ), new Text( argonString, textOptions ) ];
+      oxygenAndOxygen = [ new Text( oxygenString, textOptions ), new Text( oxygenString, textOptions )];
+      neonAndArgon = [ new Text( neonString, textOptions ), new Text( argonString, textOptions )];
+      neonAndOxygen = [ new Text( neonString, textOptions ), new Text( oxygenString, textOptions )];
+      argonAndOxygen = [ new Text( argonString, textOptions ), new Text( oxygenString, textOptions )];
+      adjustableAttraction = new Text( adjustableAttractionString, textOptions );
 
       /*var maxWidth = Math.max(
        _.max( [neonAndNeon, argonAndArgon, oxygenAndOxygen, neonAndArgon, neonAndOxygen, argonAndOxygen],
@@ -95,10 +120,10 @@ define( function( require ) {
        adjustableAttraction.width
        ) / 2;*/
 
-      var maxWidth = adjustableAttraction.width / 2;
+      maxWidth = adjustableAttraction.width / 2;
 
       // pad inserts a spacing node (HStrut) so that the rows occupy a certain fixed width.
-      var createItem = function( itemSpec ) {
+      createItem = function( itemSpec ) {
 
         var strutWidth1 = maxWidth - itemSpec[0].width + 15;
         var strutWidth2 = maxWidth - itemSpec[1].width;
@@ -121,13 +146,20 @@ define( function( require ) {
       var adjustableAttractionRadio = new AquaRadioButton( model.moleculeTypeProperty, ADJUSTABLE,
         new HBox( { children: [adjustableAttraction] } ), { radius: 8 } );
 
-      var radioButtonGroup = new VBox( {
-        children: [ neonNeonRadio, argonArgonRadio, oxygenOxygenRadio,
-                    neonArgonRadio, neonOxygenRadio, argonOxygenRadio, adjustableAttractionRadio],
+      var imageNode = new Image( pushPinImg, {scale: 0.2} );
+      var pinnedNodeText = new HBox( {
+        children: [ imageNode, new Text( pinnedString, textOptions )],
+        spacing: 10
+      } );
+      titleText = [ pinnedNodeText , new Text( movingString, textOptions ) ];
+      titleNode = createItem( titleText );
+      radioButtonGroup = new VBox( {
+        children: [titleNode, neonNeonRadio, argonArgonRadio, oxygenOxygenRadio,
+                   neonArgonRadio, neonOxygenRadio, argonOxygenRadio, adjustableAttractionRadio],
         align: 'left',
         spacing: 2
       } );
-
+      titleNode.align = atomicInteractionsControlPanel.width / 2;
     }
 
     else {
@@ -158,8 +190,8 @@ define( function( require ) {
       };
 
       var radioButtonContent = [
-        { value: 'NEON', node: createItem( neon ) },
-        { value: 'ARGON', node: createItem( argon )},
+        { value: 'NEON_NEON', node: createItem( neon ) },
+        { value: 'ARGON_ARGON', node: createItem( argon )},
         { value: 'ADJUSTABLE', node: createItem( adjustableAttraction )}
       ];
       radioButtonGroup = new RadioButtonGroup( model.moleculeTypeProperty, radioButtonContent, {
@@ -173,7 +205,7 @@ define( function( require ) {
         deselectedLineWidth: 0,
         deselectedContentOpacity: 1
       } );
-      var titleText = new Text( tittleString,
+      titleText = new Text( tittleString,
         { font: new PhetFont( 14 ),
           fill: '#FFFFFF',
           fontWeight: 'bold'
@@ -186,12 +218,11 @@ define( function( require ) {
       titleText.centerX = background.centerX + titleText.width / 2;
       titleBackground.centerX = titleText.centerX;
       titleBackground.centerY = titleText.centerY;
-      var tittleNode = new Node( {children: [titleBackground, titleText]} );
-      this.addChild( tittleNode );
-      //  tittleNode.centerX = background.centerX + titleText.width / 2;
+      titleNode = new Node( {children: [titleBackground, titleText]} );
+      this.addChild( titleNode );
     }
 
-    var atomDiameterTitle = new Text( 'Atom Diameter (\u03C3)', textOptions );
+    var atomDiameterTitle = new Text( atomDiameterString, textOptions );
     atomDiameterTitle.centerX = radioButtonGroup.centerX;
     atomDiameterTitle.top = radioButtonGroup.bottom + 10;
     model.atomDiameterProperty.value = model.getSigma();
@@ -204,20 +235,25 @@ define( function( require ) {
         majorTickLength: 15,
         majorTickStroke: 'black',
         trackStroke: 'black',
-        centerX: radioButtonGroup.centerX
+        centerX: radioButtonGroup.centerX,
+        startDrag: function() {
+          model.setMotionPaused( true );
+        },
+        endDrag: function() {
+          model.setMotionPaused( false );
+        }
       } );
     atomDiameterSlider.addMajorTick( StatesOfMatterConstants.MIN_SIGMA,
-      new Text( 'small', {fill: options.tickTextColor } ) );
+      new Text( smallString, {fill: options.tickTextColor } ) );
     atomDiameterSlider.addMajorTick( StatesOfMatterConstants.MAX_SIGMA,
-      new Text( 'large', {fill: options.tickTextColor } ) );
+      new Text( largeString, {fill: options.tickTextColor } ) );
     atomDiameterSlider.centerX = atomDiameterTitle.centerX;
     atomDiameterSlider.top = atomDiameterTitle.bottom + 5;
-    //atomDiameter.setVisible(false);
     var atomDiameter = new Node( {
       children: [atomDiameterTitle, atomDiameterSlider]
     } );
 
-    var interactionStrengthTitle = new Text( 'Interaction Strength (\u03B5)', textOptions );
+    var interactionStrengthTitle = new Text( interactionStrengthString, textOptions );
     interactionStrengthTitle.centerX = atomDiameterSlider.centerX;
     interactionStrengthTitle.top = atomDiameterSlider.bottom + 5;
     model.interactionStrengthProperty.value = model.getEpsilon();
@@ -230,15 +266,20 @@ define( function( require ) {
         majorTickLength: 15,
         majorTickStroke: 'black',
         trackStroke: 'black',
-        centerX: radioButtonGroup.centerX
+        centerX: radioButtonGroup.centerX,
+        startDrag: function() {
+          model.setMotionPaused( true );
+        },
+        endDrag: function() {
+          model.setMotionPaused( false );
+        }
       } );
     interactionStrengthSlider.addMajorTick( StatesOfMatterConstants.MIN_EPSILON,
-      new Text( 'weak', { fill: options.tickTextColor } ) );
+      new Text( weakString, { fill: options.tickTextColor } ) );
     interactionStrengthSlider.addMajorTick( StatesOfMatterConstants.MAX_EPSILON,
-      new Text( 'strong', { fill: options.tickTextColor } ) );
+      new Text( strongString, { fill: options.tickTextColor } ) );
     interactionStrengthSlider.centerX = interactionStrengthTitle.centerX;
     interactionStrengthSlider.top = interactionStrengthTitle.bottom + 5;
-    //interactionStrength.setVisible(false);
     var interactionStrength = new Node( {
       children: [interactionStrengthTitle, interactionStrengthSlider]
     } );
