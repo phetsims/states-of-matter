@@ -40,9 +40,8 @@ define( function( require ) {
       listener: function() {
         initialHorizontalLines += ZOOM_INCREMENT;
         gridNode.addHorizontalLines( offsetX, offsetY, width, height, initialHorizontalLines );
-        //atomsView.interactiveInteractionPotentialDiagram.ljPotentialGraph.scale(1,1.9,false);
-        //  atomsView.interactiveInteractionPotentialDiagram.verticalScalingFactor *= 1.33;
-        // atomsView.interactiveInteractionPotentialDiagram.drawPotentialCurve();
+        atomsView.verticalScalingFactor *= 3.33;
+        atomsView.drawPotentialCurve();
       },
       baseColor: 'white',
       radius: 10,
@@ -56,6 +55,8 @@ define( function( require ) {
       listener: function() {
         initialHorizontalLines -= 2;
         gridNode.addHorizontalLines( offsetX, offsetY, width, height, initialHorizontalLines );
+        atomsView.verticalScalingFactor /= 3.33;
+        atomsView.drawPotentialCurve();
       },
       baseColor: 'white',
       radius: 10,
