@@ -156,8 +156,8 @@ define( function( require ) {
         var atom = model.getMovableAtomRef();
         var scaleFactor = interactiveInteractionPotentialDiagram.MAX_INTER_ATOM_DISTANCE /
                           ( interactiveInteractionPotentialDiagram.getGraphWidth());
-        // var newPosX = Math.max( atom.getX() + ( d * scaleFactor ), atom.getRadius() * 1.8 );
-        // atom.positionProperty.setXY( newPosX, atom.positionProperty.y );
+        var newPosX = Math.max( atom.getX() + ( d * scaleFactor ), atom.getRadius() * 1.8 );
+        atom.setPosition( newPosX, atom.getY() );
       },
       end: function() {
         model.setMotionPaused( false );
