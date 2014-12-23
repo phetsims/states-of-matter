@@ -91,16 +91,17 @@ define( function( require ) {
     if ( wide ) {
 
       this.gridNode = new GridNode( this, 0, 0, this.graphWidth, this.graphHeight );
-      this.gridNode.setTranslation( this.graphXOrigin, this.graphYOrigin - this.graphHeight );
       this.ljPotentialGraph.addChild( this.gridNode );
     }
 
+    // Create and add the portion that depicts the Lennard-Jones potential curve.
+    this.ljPotentialGraph.setTranslation( this.graphXOrigin, this.graphYOrigin - this.graphHeight );
 
     // Create and add the center axis line for the graph.
     var centerAxis = new Path( new Shape().lineTo( 0, 0 )
       .lineTo( this.graphWidth, 0 ), { lineWidth: 4, stroke: '#A7A7A7'} );
     this.ljPotentialGraph.addChild( centerAxis );
-    centerAxis.setTranslation( this.graphXOrigin, this.graphHeight / 2 );
+    centerAxis.setTranslation( 0, this.graphHeight / 2 );
 
     // Create and add the potential energy line.
     this.potentialEnergyLine = new Path( null, { lineWidth: 2, stroke: 'yellow'} );
@@ -132,18 +133,15 @@ define( function( require ) {
     // Variables for controlling the appearance, visibility, and location of
     // the position marker.
     // Add the position marker.
-    this.markerLayer = new Node();
-    this.markerLayer.setTranslation( this.graphXOrigin, this.graphYOrigin - this.graphHeight );
-    this.ljPotentialGraph.addChild( this.markerLayer );
     var markerDiameter = POSITION_MARKER_DIAMETER_PROPORTION * this.graphWidth;
     this.positionMarker = new PositionMarker( markerDiameter / 2, 'rgb( 117, 217, 255 )' );
 
     this.positionMarker.setVisible( this.positionMarkerEnabled );
-    this.markerLayer.addChild( this.positionMarker );
+    this.ljPotentialGraph.addChild( this.positionMarker );
 
 
     // Create and add the horizontal axis line for the graph.
-    var horizontalAxis = new ArrowNode( 0, 0, this.graphWidth + AXES_ARROW_HEAD_HEIGHT, 0,
+    this.horizontalAxis = new ArrowNode( 0, 0, this.graphWidth + AXES_ARROW_HEAD_HEIGHT, 0,
       { stroke: 'white',
         fill: 'white',
         headHeight: 8,
@@ -151,33 +149,31 @@ define( function( require ) {
         tailWidth: 2
       } );
 
-    horizontalAxis.setTranslation( this.graphXOrigin, this.graphYOrigin );
-    this.ljPotentialGraph.addChild( horizontalAxis );
+    this.horizontalAxis.setTranslation( this.graphXOrigin, this.graphYOrigin );
+
 
     this.horizontalAxisLabel = new Text( distanceBetweenMoleculesString,
       { fill: 'white',
         font: AXIS_LABEL_FONT
       } );
-    this.ljPotentialGraph.addChild( this.horizontalAxisLabel );
 
     this.setMolecular( false );
 
     // Create and add the vertical axis line for the graph.
-    var verticalAxis = new ArrowNode( 0, 0, 0, -this.graphHeight - AXES_ARROW_HEAD_HEIGHT,
+    this.verticalAxis = new ArrowNode( 0, 0, 0, -this.graphHeight - AXES_ARROW_HEAD_HEIGHT,
       { stroke: 'white',
         fill: 'white',
         headHeight: 8,
         headWidth: 8,
         tailWidth: 2
       } );
-    verticalAxis.setTranslation( this.graphXOrigin, this.graphYOrigin );
-    this.ljPotentialGraph.addChild( verticalAxis );
+    this.verticalAxis.setTranslation( this.graphXOrigin, this.graphYOrigin );
 
-    var verticalAxisLabel = new Text( potentialEnergyString, {fill: 'white', font: AXIS_LABEL_FONT} );
-    verticalAxisLabel.setTranslation( this.graphXOrigin / 2,
-        this.graphYOrigin - (  this.graphHeight / 2) + (verticalAxisLabel.width / 2) );
-    verticalAxisLabel.setRotation( 3 * Math.PI / 2 );
-    this.ljPotentialGraph.addChild( verticalAxisLabel );
+    this.verticalAxisLabel = new Text( potentialEnergyString, {fill: 'white', font: AXIS_LABEL_FONT} );
+    this.verticalAxisLabel.setTranslation( this.graphXOrigin / 2,
+        this.graphYOrigin - (  this.graphHeight / 2) + ( this.verticalAxisLabel.width / 2) );
+    this.verticalAxisLabel.setRotation( 3 * Math.PI / 2 );
+
     // Draw the curve upon the graph.
     this.drawPotentialCurve();
   }
@@ -228,8 +224,7 @@ define( function( require ) {
       if ( this.positionMarkerEnabled && (xPos > 0) && (xPos < this.graphWidth) &&
            (yPos > 0) && (yPos < this.graphHeight) ) {
         this.positionMarker.setVisible( true );
-        this.positionMarker.setTranslation( xPos - this.positionMarker.width / 2,
-            yPos - this.positionMarker.height / 2 );
+        this.positionMarker.setTranslation( xPos, yPos );
       }
       else {
         this.positionMarker.setVisible( false );
@@ -338,10 +333,10 @@ define( function( require ) {
           ((  this.graphMin.y - (  this.graphHeight / 2)) / 3) - (  this.epsilonLabel.height / 2) +
           this.graphHeight / 2 );
       // Position the arrow that depicts sigma along with its label.
-      this.sigmaLabel.setTranslation( this.zeroCrossingPoint.x / 2 + this.sigmaLabel.width / 3,
+      this.sigmaLabel.setTranslation( this.zeroCrossingPoint.x / 2 - this.sigmaLabel.width / 2,
           this.graphHeight / 2 - this.sigmaLabel.height / 3 );
       try {
-        this.sigmaArrow.setTailAndTip( this.graphXOrigin, this.graphHeight / 2,
+        this.sigmaArrow.setTailAndTip( 0, this.graphHeight / 2,
           this.zeroCrossingPoint.x, this.zeroCrossingPoint.y );
       }
       catch( r ) {
