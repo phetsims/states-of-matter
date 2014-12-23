@@ -62,6 +62,7 @@ define( function( require ) {
       drag: function( event ) {
         endDragY = interactiveInteractionPotentialDiagram.epsilonLine.globalToParentPoint( event.pointer.point ).y;
         var d = endDragY - startDragY;
+        startDragY = endDragY;
         var scaleFactor = StatesOfMatterConstants.MAX_EPSILON /
                           ( interactiveInteractionPotentialDiagram.getGraphHeight() / 2);
         model.interactionStrengthProperty.value = model.getEpsilon() + ( d * scaleFactor);
@@ -96,6 +97,7 @@ define( function( require ) {
       drag: function( event ) {
         endDragY = interactiveInteractionPotentialDiagram.epsilonResizeHandle.globalToParentPoint( event.pointer.point ).y;
         var d = endDragY - startDragY;
+        startDragY = endDragY;
         var scaleFactor = StatesOfMatterConstants.MAX_EPSILON /
                           ( interactiveInteractionPotentialDiagram.getGraphHeight() / 2);
         model.interactionStrengthProperty.value = model.getEpsilon() + ( d * scaleFactor);
@@ -129,12 +131,13 @@ define( function( require ) {
       drag: function( event ) {
         endDragX = interactiveInteractionPotentialDiagram.sigmaResizeHandle.globalToParentPoint( event.pointer.point ).x;
         var d = endDragX - startDragX;
+        startDragX = endDragX;
         var scaleFactor = interactiveInteractionPotentialDiagram.MAX_INTER_ATOM_DISTANCE /
                           ( interactiveInteractionPotentialDiagram.getGraphWidth());
         var atomDiameter = model.getSigma() + ( d * scaleFactor);
-        model.atomDiameterProperty.value = atomDiameter > StatesOfMatterConstants.MIN_SIGMA * 2 ?
+        model.atomDiameterProperty.value = atomDiameter > StatesOfMatterConstants.MIN_SIGMA ?
                                            (atomDiameter < StatesOfMatterConstants.MAX_SIGMA ? atomDiameter :
-                                            StatesOfMatterConstants.MAX_SIGMA) : 2 * StatesOfMatterConstants.MIN_SIGMA;
+                                            StatesOfMatterConstants.MAX_SIGMA) : StatesOfMatterConstants.MIN_SIGMA;
       },
       end: function() {
         model.setMotionPaused( false );
@@ -144,7 +147,6 @@ define( function( require ) {
     // Add the ability to grab and move the position marker.
     // This node will need to be pickable so the user can grab it.
     this.positionMarker.setPickable( true );
-    // this.positionMarker.addInputListener( new CursorHandler( Cursor.HAND_CURSOR ) );
     this.positionMarker.addInputListener( new SimpleDragHandler( {
       start: function( event ) {
         model.setMotionPaused( true );
@@ -153,6 +155,7 @@ define( function( require ) {
       drag: function( event ) {
         endDragX = interactiveInteractionPotentialDiagram.sigmaResizeHandle.globalToParentPoint( event.pointer.point ).x;
         var d = endDragX - startDragX;
+        startDragX = endDragX;
         var atom = model.getMovableAtomRef();
         var scaleFactor = interactiveInteractionPotentialDiagram.MAX_INTER_ATOM_DISTANCE /
                           ( interactiveInteractionPotentialDiagram.getGraphWidth());
@@ -171,7 +174,7 @@ define( function( require ) {
           model.setEpsilon( interactionStrength );
           model.setAdjustableAtomSigma( atomDiameter );
         }
-
+        interactiveInteractionPotentialDiagram.positionMarker.changeColor( model.movableAtom.color );
         interactiveInteractionPotentialDiagram.setLjPotentialParameters( model.getSigma(), model.getEpsilon() );
         interactiveInteractionPotentialDiagram.updateInteractivityState();
         interactiveInteractionPotentialDiagram.drawPotentialCurve();
@@ -181,6 +184,10 @@ define( function( require ) {
     this.updateInteractivityState();
     // Redraw the potential curve.
     this.drawPotentialCurve();
+    this.addChild( this.horizontalAxisLabel );
+    this.addChild( this.horizontalAxis );
+    this.addChild( this.verticalAxisLabel );
+    this.addChild( this.verticalAxis );
     this.addChild( this.ljPotentialGraph );
     this.mutate( options );
   }
