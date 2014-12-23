@@ -13,6 +13,7 @@ define( function( require ) {
   // modules
   var inherit = require( 'PHET_CORE/inherit' );
   var AccordionBox = require( 'SUN/AccordionBox' );
+  var Color = require( 'SCENERY/util/Color' );
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
   var FillHighlightListener = require( 'SCENERY_PHET/input/FillHighlightListener' );
   // var Shape = require( 'KITE/Shape' );
@@ -28,11 +29,14 @@ define( function( require ) {
 
 
 // Size of handles as function of node width.
-  // var RESIZE_HANDLE_SIZE_PROPORTION = 0.12;
+  var RESIZE_HANDLE_SIZE_PROPORTION = 0.12;
 
   // Position of handle as function of node width.
   var EPSILON_HANDLE_OFFSET_PROPORTION = 0.08;
   var EPSILON_LINE_WIDTH = 1;
+  var RESIZE_HANDLE_NORMAL_COLOR = new Color( 51, 204, 51 );
+  var RESIZE_HANDLE_HIGHLIGHTED_COLOR = new Color( 153, 255, 0 );
+  var EPSILON_LINE_COLOR = RESIZE_HANDLE_NORMAL_COLOR;
 
   /**
    *
@@ -51,31 +55,36 @@ define( function( require ) {
     this.model = model;
     var accordionContent = new Node();
     accordionContent.addChild( this.ljPotentialGraph );
+    accordionContent.addChild( this.horizontalAxisLabel );
+    accordionContent.addChild( this.horizontalAxis );
+    accordionContent.addChild( this.verticalAxisLabel );
+    accordionContent.addChild( this.verticalAxis );
 
     // Add the line that will indicate the value of epsilon.
     var epsilonLineLength = EPSILON_HANDLE_OFFSET_PROPORTION * this.widthOfGraph * 2.2;
     this.epsilonLine = new Rectangle( -epsilonLineLength / 2, 0, epsilonLineLength, 3, {
       cursor: 'ns-resize',
       pickable: true,
-      fill: '#33FF00',
-      stroke: "#31C431"
+      fill: EPSILON_LINE_COLOR,
+      stroke: EPSILON_LINE_COLOR
     } );
 
     // the epsilon parameter.
-    this.epsilonResizeHandle = new ArrowNode( 0, -20, 0, 20, {
-      headHeight: 10,
-      headWidth: 10,
-      tailWidth: 6,
-      fill: '#33FF00',
-      stroke: '#31C431',
-      doubleHead: true,
-      pickable: true,
-      cursor: 'pointer'
-    } );
-    accordionContent.addChild( this.epsilonLine );
-    accordionContent.addChild( this.epsilonResizeHandle );
+    this.epsilonResizeHandle = new ArrowNode( 0, -RESIZE_HANDLE_SIZE_PROPORTION * this.widthOfGraph / 2, 0,
+        RESIZE_HANDLE_SIZE_PROPORTION * this.widthOfGraph / 2, {
+        headHeight: 10,
+        headWidth: 10,
+        tailWidth: 5,
+        fill: RESIZE_HANDLE_NORMAL_COLOR,
+        stroke: 'black',
+        doubleHead: true,
+        pickable: true,
+        cursor: 'pointer'
+      } );
     var startDragY, endDragY;
-    this.epsilonResizeHandle.addInputListener( new FillHighlightListener( '#33FF00', 'yellow' ) );
+    this.epsilonResizeHandle.addInputListener( new FillHighlightListener( RESIZE_HANDLE_NORMAL_COLOR,
+      RESIZE_HANDLE_HIGHLIGHTED_COLOR ) );
+    this.ljPotentialGraph.addChild( this.epsilonResizeHandle );
     this.epsilonResizeHandle.addInputListener( new SimpleDragHandler(
       {
         start: function( event ) {
@@ -84,6 +93,7 @@ define( function( require ) {
         drag: function( event ) {
           endDragY = epsilonControlInteractionPotentialDiagram.epsilonResizeHandle.globalToParentPoint( event.pointer.point ).y;
           var d = endDragY - startDragY;
+          startDragY = endDragY;
           var scaleFactor = StatesOfMatterConstants.MAX_EPSILON /
                             ( epsilonControlInteractionPotentialDiagram.getGraphHeight() / 2);
           model.interactionStrengthProperty.value = model.getEpsilon() + ( d * scaleFactor );
@@ -91,14 +101,18 @@ define( function( require ) {
         }
       } ) );
 
+    this.epsilonLine.addInputListener( new FillHighlightListener( RESIZE_HANDLE_NORMAL_COLOR,
+      RESIZE_HANDLE_HIGHLIGHTED_COLOR ) );
+    this.ljPotentialGraph.addChild( this.epsilonLine );
     this.epsilonLine.addInputListener( new SimpleDragHandler(
       {
         start: function( event ) {
-          startDragY = epsilonControlInteractionPotentialDiagram.epsilonResizeHandle.globalToParentPoint( event.pointer.point ).y;
+          startDragY = epsilonControlInteractionPotentialDiagram.epsilonLine.globalToParentPoint( event.pointer.point ).y;
         },
         drag: function( event ) {
-          endDragY = epsilonControlInteractionPotentialDiagram.epsilonResizeHandle.globalToParentPoint( event.pointer.point ).y;
+          endDragY = epsilonControlInteractionPotentialDiagram.epsilonLine.globalToParentPoint( event.pointer.point ).y;
           var d = endDragY - startDragY;
+          startDragY = endDragY;
           var scaleFactor = StatesOfMatterConstants.MAX_EPSILON /
                             ( epsilonControlInteractionPotentialDiagram.getGraphHeight() / 2);
           model.interactionStrength = model.getEpsilon() + ( d * scaleFactor );
@@ -115,7 +129,7 @@ define( function( require ) {
         titleAlign: 'left',
         buttonAlign: 'left',
         cornerRadius: 4,
-        contentYSpacing: -25,
+        contentYSpacing: 0,
         contentYMargin: 5,
         contentXMargin: 2,
         contentXSpacing: -10,
