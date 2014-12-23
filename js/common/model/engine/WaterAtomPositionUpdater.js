@@ -46,7 +46,7 @@ define( function( require ) {
         atomPositions[i * 2 + 1].setXY( xPos, yPos );
       }
 
-      for ( var i = 0; i < moleculeDataSet.getNumberOfMolecules(); i++ ) {
+      for ( i = 0; i < moleculeDataSet.getNumberOfMolecules(); i++ ) {
         cosineTheta = Math.cos( moleculeRotationAngles[i] );
         sineTheta = Math.sin( moleculeRotationAngles[i] );
         for ( var j = 0; j < 3; j++ ) {
