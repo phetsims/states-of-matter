@@ -86,18 +86,12 @@ define( function( require ) {
     // add container outer shape
     var outerShape = new Path( new Shape()
       .moveTo( 0, 5 )
-
       .quadraticCurveTo( 25, 21, 50, 21 )
-
       .quadraticCurveTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / 2, 31,
         StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / 2 + 25, 25 )
-
-      //.quadraticCurveTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH/2+50, 32, StatesOfMatterConstants.VIEW_CONTAINER_WIDTH/-50, 22 )
-
-      .quadraticCurveTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 25
-      , 23, StatesOfMatterConstants.VIEW_CONTAINER_WIDTH, 5 )
+      .quadraticCurveTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 25, 23,
+      StatesOfMatterConstants.VIEW_CONTAINER_WIDTH, 5 )
       .lineTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT )
-
       .quadraticCurveTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 2,
         StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT + 5, StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 10,
         StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT + 8 )
