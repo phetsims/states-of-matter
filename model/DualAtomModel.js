@@ -322,6 +322,8 @@ define( function( require ) {
       },
 
       step: function( dt ) {
+        // prevent sudden dt bursts when the user comes back to the tab after a while
+        dt = ( dt > 0.04 ) ? 0.04 : dt;
 
         if ( this.isPlaying ) {
           var adjustedDT = this.speed === 'normal' ? dt : dt * 0.33;
@@ -337,7 +339,7 @@ define( function( require ) {
         this.shadowMovableAtom = this.atomFactory.createAtom( DEFAULT_ATOM_TYPE );
         this.clone( this.movableAtom );
 
-        this.updateTimeStep( clockEvent);
+        this.updateTimeStep( clockEvent );
 
         // Update the forces and motion of the atoms.
         for ( var i = 0; i < CALCULATIONS_PER_TICK; i++ ) {
