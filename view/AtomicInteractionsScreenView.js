@@ -14,7 +14,6 @@ define( function( require ) {
   var Vector2 = require( 'DOT/Vector2' );
   var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
   var InteractiveInteractionPotentialDiagram = require( 'ATOMIC_INTERACTIONS/atomic-interactions/view/InteractiveInteractionPotentialDiagram' );
-  var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
   var PlayPauseButton = require( 'SCENERY_PHET/buttons/PlayPauseButton' );
   var StepButton = require( 'SCENERY_PHET/buttons/StepButton' );
   var AquaRadioButton = require( 'SUN/AquaRadioButton' );
@@ -40,32 +39,8 @@ define( function( require ) {
   // Canvas size in pico meters, since this is a reasonable scale at which
   // to display molecules.  Assumes a 4:3 aspect ratio.
   var CANVAS_WIDTH = 2000;
-  //var CANVAS_HEIGHT = CANVAS_WIDTH * ( 3.0 / 4.0 );
-
-  // Translation factors, used to set origin of canvas area.
-  var WIDTH_TRANSLATION_FACTOR = 0.3;   // 0 puts the vertical origin all the way left, 1
-  // is all the way to the right.
-  //var HEIGHT_TRANSLATION_FACTOR = 0.78; // 0 puts the horizontal origin at the top of the
-  // window, 1 puts it at the bottom.
-
-  // Constant used to control size of button.
-  var BUTTON_HEIGHT = CANVAS_WIDTH * 0.06;
-
-  // Constant used to control size of wiggle me.
-  // var WIGGLE_ME_HEIGHT = CANVAS_HEIGHT * 0.06;
-
   // Constant used to control size of push pin.
   var PUSH_PIN_WIDTH = CANVAS_WIDTH * 0.01;
-
-  // The following constant controls whether the wiggle me appears.  This
-  // was requested in the original specification, but after being reviewed
-  // on 9/4/2008, it was requested that it be removed.  Then, after
-  // interviews conducted in late 2009, it was decide that it should be
-  // added back.  The constant is being kept in case this decision is
-  // reversed (again) at some point in the future.
-  // var ENABLE_WIGGLE_ME = true;
-
-
 
 
   // Constant to turn on/off a set of vertical lines that can be used to
@@ -74,12 +49,13 @@ define( function( require ) {
 
   /**
    *
-   * @param dualAtomModel
+   * @param{DualAtomModel} dualAtomModel
+   * @param {Boolean} enableHeterogeneousMolecules
    * @constructor
    */
-  function AtomicInteractionsScreenView( dualAtomModel ) {
+  function AtomicInteractionsScreenView( dualAtomModel, enableHeterogeneousMolecules ) {
 
-    ScreenView.call( this, { layoutBound: new Bounds2(  0, 0, 768, 504 ) } );
+    ScreenView.call( this, { layoutBound: new Bounds2( 0, 0, 768, 504 ) } );
 
     this.dualAtomModel = dualAtomModel;
     this.movableParticle = dualAtomModel.getMovableAtomRef();
@@ -96,36 +72,50 @@ define( function( require ) {
     this.modelViewTransform = ModelViewTransform2.createSinglePointScaleMapping( new Vector2( 0, 0 ),
       new Vector2( 0, 400 ), mvtScale );
 
-    var atomicInteractionsControlPanel = new AtomicInteractionsControlPanel( dualAtomModel, true, {
+    var tickTextColor;
+    var textColor;
+    var backgroundColor;
+    if ( enableHeterogeneousMolecules ) {
+      tickTextColor = 'black';
+      textColor = 'black';
+      backgroundColor = '#D1D2FF';
+    }
+    else {
+      tickTextColor = 'white';
+      textColor = 'white';
+      backgroundColor = 'black';
+
+    }
+    var atomicInteractionsControlPanel = new AtomicInteractionsControlPanel( dualAtomModel,
+      enableHeterogeneousMolecules, {
       right: this.layoutBounds.maxX - 10,
-      top: this.layoutBounds.minY + 10
+        top: this.layoutBounds.minY + 10,
+        tickTextColor: tickTextColor,
+        textColor: textColor,
+        backgroundColor: backgroundColor
     } );
     this.addChild( atomicInteractionsControlPanel );
 
     // add interactive potential diagram
     this.interactiveInteractionPotentialDiagram = new InteractiveInteractionPotentialDiagram(
-      dualAtomModel.getSigma(), dualAtomModel.getEpsilon(), true, dualAtomModel,
-      {left: this.layoutBounds.minX + 10, top: atomicInteractionsControlPanel.top + 5} );
-    /* var desiredWidth = this.interactiveInteractionPotentialDiagram.getXAxisRange() /
-     this.interactiveInteractionPotentialDiagram.getXAxisGraphProportion();
-     var diagramScaleFactor = desiredWidth / this.interactiveInteractionPotentialDiagram.width;
-     interactiveInteractionPotentialDiagram.scale( diagramScaleFactor );*/
+      dualAtomModel.getSigma(), dualAtomModel.getEpsilon(), true, dualAtomModel, {
+        left: this.layoutBounds.minX + 10,
+        top: atomicInteractionsControlPanel.top + 5
+      } );
     this.addChild( this.interactiveInteractionPotentialDiagram );
 
     // Add the button for retrieving the atom to the canvas.
     this.retrieveAtomButtonNode = new TextPushButton( 'Return Atom', {
-      font: new PhetFont( 16 ),
-      baseColor: '#ffcc66',
+      font: new PhetFont( 12 ),
+      baseColor: '#61BEE3',
       listener: function() {
         dualAtomModel.resetMovableAtomPos();
       },
-      xMargin: 10
+      centerX: this.layoutBounds.minX,
+      bottom: this.layoutBounds.bottom - 14
     } );
-    this.retrieveAtomButtonNode.setTranslation(
-        this.interactiveInteractionPotentialDiagram.maxX - this.retrieveAtomButtonNode.width,
-        StatesOfMatterConstants.MAX_SIGMA / 3 * 1.1 );  // Almost fully below the largest atom.
-    this.retrieveAtomButtonNode.scale( BUTTON_HEIGHT / this.retrieveAtomButtonNode.height );
-    this.retrieveAtomButtonNode.setVisible( false );
+
+    //  this.retrieveAtomButtonNode.setVisible( false );
     this.addChild( this.retrieveAtomButtonNode );
 
     // Create and add the Reset All Button in the bottom right, which resets the model
@@ -141,7 +131,7 @@ define( function( require ) {
     // add play pause button and step button
     var stepButton = new StepButton(
       function() {
-        dualAtomModel.stepInternal( 0.016 );
+        dualAtomModel.stepInternal( 0.04 );
       },
       dualAtomModel.isPlayingProperty,
       {
@@ -155,8 +145,17 @@ define( function( require ) {
 
 
     // add force control
-    var forceControlNode = new ForcesControlNode( dualAtomModel.forcesProperty );
+    var forceControlNode = new ForcesControlNode( dualAtomModel.forcesProperty, {
+      tickTextColor: tickTextColor,
+      textColor: textColor,
+      backgroundColor: backgroundColor
+    } );
+    if ( enableHeterogeneousMolecules ) {
+      resetAllButton.right = this.layoutBounds.maxX - 10;
+      atomicInteractionsControlPanel.right = this.layoutBounds.maxX - 60;
+      forceControlNode.right = this.layoutBounds.maxX - 60;
 
+    }
 
     // add play pause
     var playPauseButton = new PlayPauseButton( dualAtomModel.isPlayingProperty, {
@@ -272,10 +271,8 @@ define( function( require ) {
 
     // Called by the animation loop. Optional, so if your view has no animation, you can omit this.
     step: function( dt ) {
-      // Handle view animation here.
-      if ( this.dualAtomModel.isPlaying ) {
-        this.handlePositionChanged();
-      }
+
+      this.handlePositionChanged();
 
     },
     /**
@@ -361,8 +358,6 @@ define( function( require ) {
       // of the fixed particle.
       this.updateMinimumXForMovableAtom();
 
-      // Add ourself as a listener.
-      //particle.addListener( this.atomListener );
 
       // Update the position marker to represent the new particle's position.
       this.updatePositionMarkerOnDiagram();
@@ -423,20 +418,7 @@ define( function( require ) {
       this.updatePositionMarkerOnDiagram();
       this.updateForceVectors();
 
-      if ( ( this.layout.width > 0 ) &&
-           ( this.dualAtomModel.getMovableAtomRef().getX() > ( 1 - WIDTH_TRANSLATION_FACTOR ) *
-                                                             this.layout.width ) ) {
-        if ( !this.retrieveAtomButtonNode.isVisible() ) {
-          // The particle is off the canvas and the button is not
-          // yet shown, so show it.
-          this.retrieveAtomButtonNode.setVisible( true );
-        }
-      }
-      else if ( this.retrieveAtomButtonNode.isVisible() ) {
-        // The particle is on the canvas but the button is visible
-        // (which it shouldn't be), so hide it.
-        this.retrieveAtomButtonNode.setVisible( false );
-      }
+      this.retrieveAtomButtonNode.visible = this.dualAtomModel.movableAtom.getX() > 3000;
     },
 
     /**
@@ -471,50 +453,8 @@ define( function( require ) {
         this.movableParticleNode.setMinX( this.dualAtomModel.getSigma() * 0.9 );
       }
     },
-    updateLayout: function() {
-      //this.movableParticleNode.setTranslation(this.movableParticle.getX(),this.movableParticle.getY());
-      /* if ( this.layout.width <= 0 || this.layout.height <= 0 ) {
-       // The canvas hasn't been sized yet, so don't try to lay it out.
-       return;
-       }
-       if ( ( !this.wiggleMeShown ) && ( ENABLE_WIGGLE_ME ) ) {
-       // The wiggle me has not yet been shown, so show it.
-       this.wiggleMe = new DefaultWiggleMe( this, StatesOfMatterStrings.WIGGLE_ME_CAPTION );
-       this.wiggleMe.setArrowTailPosition( MotionHelpBalloon.LEFT_CENTER );
-       this.wiggleMe.setTextColor( Color.YELLOW );
-       this.wiggleMe.setArrowFillPaint( Color.YELLOW );
-       this.wiggleMe.setArrowStrokePaint( Color.YELLOW );
-       this.wiggleMe.setBalloonFillPaint( new Color( 0, 0, 0, 0 ) );   // Fully transparent.
-       this.wiggleMe.setBalloonStrokePaint( new Color( 0, 0, 0, 0 ) ); // Fully transparent.
-       var wiggleMeScale = WIGGLE_ME_HEIGHT / this.wiggleMe.height;
-       this.wiggleMe.scale( wiggleMeScale );
-       this.addChild( this.wiggleMe );
 
-
-       // Animate from off the screen to the position of the movable atom.
-       var viewportBounds = getBounds();
-       var wiggleMeInitialXPos = new Vector2( 0 viewportBounds.getMaxX(), 0 );
-       getPhetRootNode().screenToWorld( wiggleMeInitialXPos );
-       wiggleMeInitialXPos.setXY( wiggleMeInitialXPos.getX(), 0 );
-       this.wiggleMe.setTranslation( wiggleMeInitialXPos.getX(), this.model.getMovableAtomRef().getY() );
-       this.wiggleMe.animateToPositionScaleRotation(
-       this.dualAtomModel.getMovableAtomRef().getX() +
-       this.dualAtomModel.getMovableAtomRef().getRadius(),
-       this.dualAtomModel.getMovableAtomRef().getY(), wiggleMeScale, 0, 2000 );
-
-       // Clicking anywhere on the canvas makes the wiggle me go away.
-       this.addInputListener( new PBasicInputEventHandler() {
-       mousePressed( event ) {
-       this.clearWiggleMe();
-       removeInputListener( this );
-       }
-       } );
-
-       // Indicate that the wiggle-me has been shown so that we don't end
-       // up showing it again.
-       this.wiggleMeShown = true;
-       }*/
-    },
+    //Todo:add wiggle me functionality
 
     updateForceVectors: function() {
       if ( ( this.fixedParticle !== null ) && ( this.movableParticle !== null ) ) {
@@ -522,13 +462,6 @@ define( function( require ) {
           -this.dualAtomModel.getRepulsiveForce() );
         this.movableParticleNode.setForces( -this.dualAtomModel.getAttractiveForce(),
           this.dualAtomModel.getRepulsiveForce() );
-      }
-    },
-    clearWiggleMe: function() {
-      if ( this.wiggleMe !== null ) {
-        this.wiggleMe.setEnabled( false );
-        this.removeChild( this.wiggleMe );
-        this.wiggleMe = null;
       }
     }
   } );

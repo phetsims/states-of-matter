@@ -38,6 +38,7 @@ define( function( require ) {
   var argonString = require( 'string!STATES_OF_MATTER/argon' );
   var oxygenString = require( 'string!STATES_OF_MATTER/oxygen' );
   var adjustableAttractionString = require( 'string!STATES_OF_MATTER/adjustableAttraction' );
+  var customAttractionString = require( 'string!ATOMIC_INTERACTIONS/customAttraction' );
   var tittleString = require( 'string!STATES_OF_MATTER/AtomsMolecules' );
   var pinnedString = require( 'string!ATOMIC_INTERACTIONS/pinned' );
   var movingString = require( 'string!ATOMIC_INTERACTIONS/moving' );
@@ -59,11 +60,11 @@ define( function( require ) {
   /**
    *
    * @param {DualAtomModel}model
-   * @param enableHeterogeneousAtoms
+   * @param enableHeterogeneousMolecules
    * @param options
    * @constructor
    */
-  function AtomicInteractionsControlPanel( model, enableHeterogeneousAtoms, options ) {
+  function AtomicInteractionsControlPanel( model, enableHeterogeneousMolecules, options ) {
 
     var atomicInteractionsControlPanel = this;
     options = _.extend( {
@@ -101,7 +102,7 @@ define( function( require ) {
     var titleText;
     var titleNode;
 
-    if ( enableHeterogeneousAtoms ) {
+    if ( enableHeterogeneousMolecules ) {
       textOptions = {font: new PhetFont( 12 ), fill: options.textColor};
 
       neonAndNeon = [ new Text( neonString, textOptions ), new Text( neonString, textOptions ) ];
@@ -110,7 +111,7 @@ define( function( require ) {
       neonAndArgon = [ new Text( neonString, textOptions ), new Text( argonString, textOptions )];
       neonAndOxygen = [ new Text( neonString, textOptions ), new Text( oxygenString, textOptions )];
       argonAndOxygen = [ new Text( argonString, textOptions ), new Text( oxygenString, textOptions )];
-      adjustableAttraction = new Text( adjustableAttractionString, textOptions );
+      var customAttraction = new Text( customAttractionString, textOptions );
 
       /*var maxWidth = Math.max(
        _.max( [neonAndNeon, argonAndArgon, oxygenAndOxygen, neonAndArgon, neonAndOxygen, argonAndOxygen],
@@ -120,7 +121,7 @@ define( function( require ) {
        adjustableAttraction.width
        ) / 2;*/
 
-      maxWidth = adjustableAttraction.width / 2;
+      maxWidth = customAttraction.width / 2 + 10;
 
       // pad inserts a spacing node (HStrut) so that the rows occupy a certain fixed width.
       createItem = function( itemSpec ) {
@@ -144,7 +145,7 @@ define( function( require ) {
       var argonOxygenRadio = new AquaRadioButton( model.moleculeTypeProperty, ARGON_OXYGEN,
         createItem( argonAndOxygen ), { radius: 8 } );
       var adjustableAttractionRadio = new AquaRadioButton( model.moleculeTypeProperty, ADJUSTABLE,
-        new HBox( { children: [adjustableAttraction] } ), { radius: 8 } );
+        new HBox( { children: [customAttraction] } ), { radius: 8 } );
 
       var imageNode = new Image( pushPinImg, {scale: 0.2} );
       var pinnedNodeText = new HBox( {
@@ -233,8 +234,8 @@ define( function( require ) {
         trackFill: 'white',
         thumbSize: new Dimension2( 15, 30 ),
         majorTickLength: 15,
-        majorTickStroke: 'black',
-        trackStroke: 'black',
+        majorTickStroke: options.tickTextColor,
+        trackStroke: options.tickTextColor,
         centerX: radioButtonGroup.centerX,
         startDrag: function() {
           model.setMotionPaused( true );
@@ -264,8 +265,8 @@ define( function( require ) {
         trackFill: 'white',
         thumbSize: new Dimension2( 15, 30 ),
         majorTickLength: 15,
-        majorTickStroke: 'black',
-        trackStroke: 'black',
+        majorTickStroke: options.tickTextColor,
+        trackStroke: options.tickTextColor,
         centerX: radioButtonGroup.centerX,
         startDrag: function() {
           model.setMotionPaused( true );
