@@ -53,7 +53,7 @@ define( function( require ) {
    * @param {MultipleParticleModel} model of the sim
    * @constructor
    */
-  function PhaseChangesScreenView( model ) {
+  function PhaseChangesScreenView( model, isInteractionDiagramEnabled ) {
     var phaseChangesScreenView = this;
 
     ScreenView.call( this, StatesOfMatterConstants.SCREEN_VIEW_OPTIONS );
@@ -175,13 +175,15 @@ define( function( require ) {
       particleContainerNode.containerLid.setRotation( 0 );
       particleContainerNode.pressureMeter.setY( particleContainerNode.containerLid.y - 20 );
     } );
+    if ( isInteractionDiagramEnabled ) {
+      var epsilonControlInteractionPotentialDiagram = new EpsilonControlInteractionPotentialDiagram(
+        StatesOfMatterConstants.MAX_SIGMA, StatesOfMatterConstants.MIN_EPSILON, false, model, {
+          right: this.layoutBounds.right + 5,
+          top: phaseChangesMoleculesControlPanel.bottom + 5
+        } );
+      this.addChild( epsilonControlInteractionPotentialDiagram );
+    }
 
-    var epsilonControlInteractionPotentialDiagram = new EpsilonControlInteractionPotentialDiagram(
-      StatesOfMatterConstants.MAX_SIGMA, StatesOfMatterConstants.MIN_EPSILON, false, model, {
-        right: this.layoutBounds.right + 5,
-        top: phaseChangesMoleculesControlPanel.bottom + 5
-      } );
-    this.addChild( epsilonControlInteractionPotentialDiagram );
     model.moleculeTypeProperty.link( function( moleculeId ) {
       phaseChangesScreenView.modelTemperatureHistory.clear();
       phaseChangesScreenView.updatePhaseDiagram();
@@ -191,14 +193,18 @@ define( function( require ) {
           phaseChangesScreenView.removeChild( phaseChangesScreenView.phaseDiagram );
         }
         model.interactionStrengthProperty.value = StatesOfMatterConstants.MAX_EPSILON;
-        epsilonControlInteractionPotentialDiagram.top = phaseChangesMoleculesControlPanel.bottom + 5;
+        if ( isInteractionDiagramEnabled ) {
+          epsilonControlInteractionPotentialDiagram.top = phaseChangesMoleculesControlPanel.bottom + 5;
+        }
       }
       else {
         if ( !phaseChangesScreenView.isChild( phaseChangesScreenView.phaseDiagram ) ) {
           phaseChangesScreenView.addChild( phaseChangesScreenView.phaseDiagram );
           phaseChangesScreenView.phaseDiagram.right = phaseChangesScreenView.layoutBounds.right + 5;
           phaseChangesScreenView.phaseDiagram.top = phaseChangesMoleculesControlPanel.bottom + 5;
-          epsilonControlInteractionPotentialDiagram.top = phaseChangesScreenView.phaseDiagram.bottom + 5;
+          if ( isInteractionDiagramEnabled ) {
+            epsilonControlInteractionPotentialDiagram.top = phaseChangesScreenView.phaseDiagram.bottom + 5;
+          }
         }
       }
       if ( model.getContainerExploded() ) {

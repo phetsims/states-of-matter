@@ -22,10 +22,10 @@ define( function( require ) {
   /**
    * @constructor
    */
-  function PhaseChangesScreen() {
+  function PhaseChangesScreen( isInteractionDiagramEnabled ) {
     Screen.call( this, phaseChangesString, new Rectangle( 0, 0, 50, 50 ),
       function() { return new MultipleParticleModel(); },
-      function( model ) { return new PhaseChangesScreenView( model ); },
+      function( model ) { return new PhaseChangesScreenView( model, isInteractionDiagramEnabled ); },
       { backgroundColor: 'black', navigationBarIcon: new Rectangle( 0, 0, 50, 50 ) }
     );
   }
