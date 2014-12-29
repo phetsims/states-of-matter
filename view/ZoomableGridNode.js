@@ -38,7 +38,7 @@ define( function( require ) {
     this.verticalLinesNode = new Path( null, {stroke: 'white', lineWidth: 0.8} );
     this.zoomInButton = new ZoomButton( {
       listener: function() {
-        initialHorizontalLines += ZOOM_INCREMENT;
+        initialHorizontalLines -= ZOOM_INCREMENT;
         gridNode.addHorizontalLines( offsetX, offsetY, width, height, initialHorizontalLines );
         atomsView.verticalScalingFactor *= 3.33;
         atomsView.drawPotentialCurve();
@@ -49,11 +49,11 @@ define( function( require ) {
       yMargin: 3
     } );
     this.zoomInButton.setTranslation( -50, 0 );
-    this.zoomInButton.enabled = true;
+    this.zoomInButton.enabled = false;
 
     this.zoomOutButton = new ZoomButton( {
       listener: function() {
-        initialHorizontalLines -= 2;
+        initialHorizontalLines += 2;
         gridNode.addHorizontalLines( offsetX, offsetY, width, height, initialHorizontalLines );
         atomsView.verticalScalingFactor /= 3.33;
         atomsView.drawPotentialCurve();
@@ -66,7 +66,7 @@ define( function( require ) {
       top: this.zoomInButton.bottom + 5,
       left: this.zoomInButton.left
     } );
-    this.zoomOutButton.enabled = false;
+    this.zoomOutButton.enabled = true;
     this.addChild( this.zoomInButton );
     this.addChild( this.zoomOutButton );
     this.addChild( this.horizontalLinesNode );
@@ -133,8 +133,8 @@ define( function( require ) {
         horizontalLineShape.lineTo( line.x2, line.y2 );
       }
       this.horizontalLinesNode.setShape( horizontalLineShape );
-      this.zoomInButton.enabled = (noOfHorizontalLines < MAX_LINES_HORIZONTAL);
-      this.zoomOutButton.enabled = (noOfHorizontalLines > MIN_LINES_HORIZONTAL);
+      this.zoomOutButton.enabled = (noOfHorizontalLines < MAX_LINES_HORIZONTAL);
+      this.zoomInButton.enabled = (noOfHorizontalLines > MIN_LINES_HORIZONTAL);
 
     }
   } );
