@@ -225,20 +225,20 @@ define( function( require ) {
 
   //Create an icon for the water  button
   var createWaterIcon = function() {
-    var dot3 = new Circle( 5, { fill: 'white', stroke: 'white' } );
-    var dot1 = new Circle( 7, { fill: '#FF5500', top: dot3.bottom - 10, right: dot3.left + 5 } );
-    var dot2 = new Circle( 5, {
-      fill: 'white', stroke: 'white', bottom: dot1.top + 10, right: dot1.left + 10
+    var dot1 = new Circle( 5, { fill: '#D91200'} );
+    var dot2 = new Circle( 3, { fill: 'white', stroke: 'white', bottom: dot1.top + 5, right: dot1.left + 5} );
+    var dot3 = new Circle( 3, {
+      fill: 'white', stroke: 'white', bottom: dot1.top + 5, left: dot1.right - 5
     } );
 
-    return new Node( {children: [  dot3, dot1, dot2 ]} );
+    return new Node( {children: [  dot3, dot1,dot2 ]} );
 
   };
 
   //Create an icon for the oxygen  button
   var createOxygenIcon = function() {
-    var dot1 = new Circle( 5, { fill: '#FF5500' } );
-    var dot2 = new Circle( 5, {fill: '#FF5500', left: dot1.right - 4 } );
+    var dot1 = new Circle( 5, { fill: '#DA1300' } );
+    var dot2 = new Circle( 5, {fill: '#DA1300', left: dot1.right - 4 } );
     return new Node( {children: [ dot1, dot2]} );
   };
 
