@@ -250,17 +250,18 @@ define( function( require ) {
         this.moleculeTorques[i] = this.moleculeTorques[i + 1];
         this.nextMoleculeTorques[i] = this.nextMoleculeTorques[i + 1];
       }
-
-      // Handle all data arrays that are maintained on a per-atom basis.
-      for ( i = moleculeIndex * this.atomsPerMolecule; i < this.numberOfAtoms - this.atomsPerMolecule;
-            i += this.atomsPerMolecule ) {
-
-        for ( var j = 0; j < this.atomsPerMolecule; j++ ) {
-          this.atomPositions[i + this.atomsPerMolecule + j] = this.atomPositions[i + this.atomsPerMolecule];
-        }
-        // System.arraycopy( this.atomPositions, i + this.atomsPerMolecule + 0, this.atomPositions, i + 0, this.atomsPerMolecule );
+      if ( this.atomsPerMolecule !== 1 ) {
       }
-
+      else {
+        // Handle all data arrays that are maintained on a per-atom basis.
+        for ( i = moleculeIndex * this.atomsPerMolecule; i < ( this.numberOfAtoms - this.atomsPerMolecule );
+              i += this.atomsPerMolecule ) {
+          for ( var j = 0; j < this.atomsPerMolecule; j++ ) {
+            this.atomPositions[ i + this.atomsPerMolecule + j ] = this.atomPositions[ i + this.atomsPerMolecule];
+          }
+          // System.arraycopy( this.atomPositions, i + this.atomsPerMolecule + 0, this.atomPositions, i + 0, this.atomsPerMolecule );
+        }
+      }
       // Reduce the atom count.
       this.numberOfAtoms -= this.atomsPerMolecule;
     }
