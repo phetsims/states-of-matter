@@ -68,6 +68,7 @@ define( function( require ) {
         .addColorStop( 0, highlightColor )
         .addColorStop( 0.5, mainColor )
         .addColorStop( 1, shadowColor );
+      this.sphereNode.stroke = shadowColor;
     }
   } );
 } );
