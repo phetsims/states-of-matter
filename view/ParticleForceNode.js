@@ -36,6 +36,7 @@ define( function( require ) {
 
     this.attractiveForce = 0;
     this.repulsiveForce = 0;
+    var particleForceNode = this;
 
     this.attractiveForceVectorNode = new DimensionalArrowNode( 0, 0, COMPONENT_FORCE_ARROW_REFERENCE_LENGTH, 0, {
       fill: ATTRACTIVE_FORCE_COLOR,
@@ -65,6 +66,11 @@ define( function( require ) {
     } );
     this.addChild( this.totalForceVectorNode );
     this.totalForceVectorNode.setVisible( false );
+
+    particle.positionProperty.link( function( position ) {
+      particleForceNode.setTranslation( mvt.modelToViewX( position.x ),
+        mvt.modelToViewY( position.y ) );
+    } );
 
 
   }
