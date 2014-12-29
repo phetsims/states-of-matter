@@ -62,7 +62,7 @@ define( function( require ) {
           newPosX = minX;
         }
         // Move the particle based on the amount of mouse movement.
-        grabbableParticleNode.particle.setPosition( mvt.viewToModelX( newPosX ), grabbableParticleNode.y );
+        grabbableParticleNode.particle.setPosition( mvt.viewToModelX( newPosX ), particle.positionProperty.y );
       },
       end: function() {
         // Let the model move the particles again.  Note that this happens
@@ -70,9 +70,6 @@ define( function( require ) {
         model.setMotionPaused( false );
       }
     } ) );
-    model.movableAtom.positionProperty.link( function( position ) {
-      grabbableParticleNode.setTranslation( mvt.modelToViewX( position.x ), grabbableParticleNode.y );
-    } );
   }
 
   return inherit( ParticleForceNode, GrabbableParticleNode, {
