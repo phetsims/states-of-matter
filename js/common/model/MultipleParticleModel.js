@@ -1216,8 +1216,9 @@ define( function( require ) {
         console.log( " - Warning: Ignoring attempt to return lid when container hadn't exploded." );
         return;
       }
+      var particlesOutsideContainer = [];
       // with the normalized particles for this.
-      var particlesOutsideOfContainer = 0;
+      var particlesOutsideOfContainerCount = 0;
       var firstOutsideMoleculeIndex;
       do {
         for ( firstOutsideMoleculeIndex = 0; firstOutsideMoleculeIndex < this.moleculeDataSet.getNumberOfMolecules();
@@ -1226,26 +1227,37 @@ define( function( require ) {
           if ( pos.x < 0 || pos.x > this.normalizedContainerWidth || pos.y < 0 ||
                pos.y > StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT / this.particleDiameter ) {
             // This particle is outside of the container.
+
+            if ( this.moleculeType === StatesOfMatterConstants.DIATOMIC_OXYGEN ) {
+              particlesOutsideContainer.push( firstOutsideMoleculeIndex );
+              particlesOutsideContainer.push( firstOutsideMoleculeIndex + 1 );
+            }
+            else if ( this.moleculeType === StatesOfMatterConstants.WATER ) {
+              particlesOutsideContainer.push( firstOutsideMoleculeIndex );
+              particlesOutsideContainer.push( firstOutsideMoleculeIndex + 1 );
+              particlesOutsideContainer.push( firstOutsideMoleculeIndex + 2 );
+            }
+            else {
+              particlesOutsideContainer.push( firstOutsideMoleculeIndex );
+            }
             break;
           }
         }
         if ( firstOutsideMoleculeIndex < this.moleculeDataSet.getNumberOfMolecules() ) {
           // Remove the particle that was found.
           this.moleculeDataSet.removeMolecule( firstOutsideMoleculeIndex );
-          particlesOutsideOfContainer++;
+          particlesOutsideOfContainerCount++;
         }
       } while ( firstOutsideMoleculeIndex !== this.moleculeDataSet.getNumberOfMolecules() );
       // explicitly synced up elsewhere.
-      var copyOfParticles = this.particles;
-      for ( var i = 0; i < copyOfParticles.length - this.moleculeDataSet.getNumberOfAtoms(); i++ ) {
-        var particle = copyOfParticles.get( i );
+      for ( var i = 0; i < particlesOutsideContainer.length; i++ ) {
+        var particle = this.particles.get( particlesOutsideContainer[i] );
         this.particles.remove( particle );
-        // particle.removedFromModel();
       }
       // Set the container to be unexploded.
       this.setContainerExploded( false );
       // this generally cools them down into a more manageable state.
-      if ( particlesOutsideOfContainer > 0 ) {
+      if ( particlesOutsideOfContainerCount > 0 ) {
         this.phaseStateChanger.setPhase( AbstractPhaseStateChanger.PHASE_GAS );
       }
     },
