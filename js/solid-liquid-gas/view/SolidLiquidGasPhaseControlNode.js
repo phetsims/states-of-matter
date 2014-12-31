@@ -64,7 +64,7 @@ define( function( require ) {
     var createItem = function( itemSpec ) {
       if ( itemSpec.icon ) {
         var strutWidth = maxWidth - itemSpec.label.width - itemSpec.icon.width + 17;
-        return new HBox( { children: [  new HStrut( 10 ), itemSpec.icon , new HStrut( strutWidth + 10 ), itemSpec.label,
+        return new HBox( { children: [  new HStrut( 10 ), itemSpec.icon , new HStrut( strutWidth + 25 ), itemSpec.label,
                                         new HStrut( 30 )] } );
       }
       else {
@@ -90,7 +90,8 @@ define( function( require ) {
       selectedLineWidth: 3,
       selectedStroke: '#FFECCF',
       deselectedLineWidth: 0,
-      deselectedContentOpacity: 2
+      deselectedContentOpacity: 1,
+      deselectedButtonOpacity: 1
     } );
 
 
