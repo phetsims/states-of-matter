@@ -181,7 +181,7 @@ define( function( require ) {
         Y_ORIGIN_OFFSET + horizontalAxisLabel.height );
     accordionContent.addChild( horizontalAxisLabel );
 
-    var verticalAxisLabel = new Text( pressureString, { font: SMALLER_INNER_FONT, fill: 'white'} );
+    var verticalAxisLabel = new Text( pressureString, { font: AXIS_LABEL_FONT, fill: 'white'} );
     verticalAxisLabel.setTranslation( X_ORIGIN_OFFSET - (verticalAxisLabel.height * 1.1),
         verticalAxisLabel.width * 1.6 );
     verticalAxisLabel.setRotation( 3 * Math.PI / 2 );
@@ -204,7 +204,7 @@ define( function( require ) {
         cornerRadius: 4,
         contentYSpacing: -15,
         contentYMargin: 10,
-        contentXMargin: 3,
+        contentXMargin: 5,
         buttonYMargin: 4,
         buttonXMargin: 6,
         buttonLength: 12,
@@ -299,7 +299,7 @@ define( function( require ) {
         DEFAULT_GAS_LABEL_LOCATION.y );
       this.triplePointLabel.setTranslation( DEFAULT_TRIPLE_POINT.x - this.triplePointLabel.width / 2,
           DEFAULT_TRIPLE_POINT.y - this.triplePointLabel.height * 0.9 );
-      this.criticalPointLabel.setTranslation( DEFAULT_CRITICAL_POINT.x - this.criticalPointLabel.width / 2,
+      this.criticalPointLabel.setTranslation( DEFAULT_CRITICAL_POINT.x - this.criticalPointLabel.width / 1.6,
           DEFAULT_CRITICAL_POINT.y - this.criticalPointLabel.height / 2 );
 
     },
