@@ -79,8 +79,10 @@ define( function( require ) {
     pumpBaseSupportRightLower.centerX = pumpBaseSupportRightUpper.centerX + 2;
 
 
-    var pumpBase = new Node( { children: [ pumpBaseSupportLeftLower, pumpBaseSupportLeftUpper,
-                                           pumpBaseSupportRightLower, pumpBaseSupportRightUpper ]} );
+    var pumpBase = new Node( {
+      children: [pumpBaseSupportLeftLower, pumpBaseSupportLeftUpper,
+                 pumpBaseSupportRightLower, pumpBaseSupportRightUpper]
+    } );
     pumpBase.setTranslation( pumpBase.width / 9, height - pumpBaseHeight + pumpBase.height / 2 );
     this.addChild( pumpBase );
 
@@ -89,9 +91,108 @@ define( function( require ) {
     var pumpHandleWidth = width * PUMP_HANDLE_WIDTH_PROPORTION;
     var pumpHandleHeight = height * PUMP_HANDLE_HEIGHT_PROPORTION;
     var pumpHandleRectangle = new Rectangle( 0, 0, pumpHandleWidth, pumpHandleHeight, 5, 5, {
-      fill: '#B9BBBD' } );
-    var pumpHandle = new Node( {children: [ pumpHandleRectangle ], cursor: 'ns-resize'} );
-    pumpHandle.setTranslation( (pumpBaseWidth - pumpHandleWidth) / 2,
+      fill: '#B9BBBD'
+    } );
+
+    //todo: factor out the constants and use a for loop?
+    var pumpHandleNode = new Path( new Shape()
+      .moveTo( 0, 12 )
+      .quadraticCurveTo( 5, 0, 24, 9 )//1
+      .lineTo( 30, 9 )
+      .quadraticCurveTo( 39, 0, 48, 9 )//2
+      .lineTo( 54, 9 )
+      .quadraticCurveTo( 63, 0, 72, 9 ) //3
+      .lineTo( 78, 9 )
+      .quadraticCurveTo( 87, 0, 96, 9 ) //4
+      .lineTo( 102, 9 )
+      .quadraticCurveTo( 111, 2, 120, 2 )//5-1
+      .lineTo( 154, 2 )
+      .quadraticCurveTo( 163, 2, 172, 9 )//5-2
+      .lineTo( 178, 9 )
+      .quadraticCurveTo( 187, 0, 196, 9 )//6
+      .lineTo( 202, 9 )
+      .quadraticCurveTo( 211, 0, 220, 9 )//7
+      .lineTo( 226, 9 )
+      .quadraticCurveTo( 235, 0, 244, 9 )//8
+      .lineTo( 250, 9 )
+      .quadraticCurveTo( 261, 0, 265, 12 ) //9
+      .lineTo( 265, 33 )
+      .quadraticCurveTo( 261, 45, 250, 36 ) //9
+      .lineTo( 244, 36 )
+      .quadraticCurveTo( 234, 45, 226, 36 )//8
+      .lineTo( 220, 36 )
+      .quadraticCurveTo( 211, 45, 202, 36 )//7
+      .lineTo( 196, 36 )
+      .quadraticCurveTo( 187, 45, 178, 36 )//6
+      .lineTo( 172, 36 )
+      .quadraticCurveTo( 163, 43, 154, 43 )//5-1
+      .lineTo( 120, 43 )
+      .quadraticCurveTo( 111, 43, 102, 36 )//5-2
+      .lineTo( 96, 36 )
+      .quadraticCurveTo( 87, 45, 78, 36 )//4
+      .lineTo( 72, 36 )
+      .quadraticCurveTo( 63, 45, 54, 36 )//3
+      .lineTo( 48, 36 )
+      .quadraticCurveTo( 39, 45, 30, 36 )//2
+      .lineTo( 24, 36 )
+      .quadraticCurveTo( 5, 45, 0, 33 )//1
+      .lineTo( 0, 12 )
+      .close(), {
+      lineWidth: 1,
+      stroke: 'black',
+      fill: new LinearGradient( 0, 0, 265, 0 )
+
+        .addColorStop( 0, '#727374' )//1
+        .addColorStop( 0.0377, '#AFB1B2' )
+        .addColorStop( 0.0904, '#B5B7B9' )
+        .addColorStop( 0.0905, '#858687' )
+        .addColorStop( 0.1131, '#B5B7B9' )
+        .addColorStop( 0.1132, '#727374' )//2
+        .addColorStop( 0.1471, '#AFB1B2' )
+        .addColorStop( 0.1810, '#B5B7B9' )
+        .addColorStop( 0.1811, '#858687' )
+        .addColorStop( 0.2036, '#B5B7B9' )
+        .addColorStop( 0.2037, '#727374' ) //3
+        .addColorStop( 0.2377, '#AFB1B2' )
+        .addColorStop( 0.2715, '#B5B7B9' )
+        .addColorStop( 0.2716, '#858687' )
+        .addColorStop( 0.2942, '#B5B7B9' )
+        .addColorStop( 0.2943, '#727374' )//4
+        .addColorStop( 0.3283, '#AFB1B2' )
+        .addColorStop( 0.3621, '#B5B7B9' )
+        .addColorStop( 0.3622, '#858687' )
+        .addColorStop( 0.3848, '#B5B7B9' )
+        .addColorStop( 0.3849, '#727374' )//5
+        .addColorStop( 0.4188, '#AAACAE' )
+        .addColorStop( 0.6150, '#B1B3B4' )
+        .addColorStop( 0.6489, '#B1B3B4' )
+        .addColorStop( 0.6490, '#858687' )
+        .addColorStop( 0.6715, '#B5B7B9' )
+        .addColorStop( 0.6716, '#727374' )//6
+        .addColorStop( 0.7056, '#AFB1B2' )
+        .addColorStop( 0.7395, '#B5B7B9' )
+        .addColorStop( 0.7396, '#858687' )
+        .addColorStop( 0.7621, '#B5B7B9' )
+        .addColorStop( 0.7622, '#727374' )//7
+        .addColorStop( 0.7962, '#AFB1B2' )
+        .addColorStop( 0.8300, '#B5B7B9' )
+        .addColorStop( 0.8301, '#858687' )
+        .addColorStop( 0.8527, '#B5B7B9' )
+        .addColorStop( 0.8528, '#727374' )//8
+        .addColorStop( 0.8867, '#AFB1B2' )
+        .addColorStop( 0.9206, '#B5B7B9' )
+        .addColorStop( 0.9207, '#858687' )
+        .addColorStop( 0.9432, '#B5B7B9' )
+        .addColorStop( 0.9433, '#727374' )//9
+        .addColorStop( 0.9773, '#AFB1B2' )
+        .addColorStop( 0.9999, '#B5B7B9' )
+        .addColorStop( 1, '#858687' ),
+      scale: 0.3
+
+
+    } );
+    var pumpHandle = new Node( {children: [pumpHandleNode ], cursor: 'ns-resize'} );
+    pumpHandle.setTranslation( (pumpBaseWidth - pumpHandleNode.width) / 2,
         height - ( height * PUMP_HANDLE_INIT_VERT_POS_PROPORTION ) - pumpHandleHeight );
 
     var currentHandleOffset = 0;
@@ -110,8 +211,9 @@ define( function( require ) {
           var d = endY - startY;
           if ( ( currentHandleOffset + d >= maxHandleOffset ) &&
                ( currentHandleOffset + d <= 0 ) ) {
-            pumpHandle.setTranslation( (pumpBaseWidth - pumpHandleWidth) / 2, d );
+            pumpHandle.setTranslation( (pumpBaseWidth - pumpHandleNode.width) / 2, d );
             pumpShaft.setTranslation( (pumpBaseWidth - pumpShaftWidth) / 2, d );
+            pumpShaft.top = pumpHandle.bottom;
             currentHandleOffset += d;
             if ( d > 0 ) {
               // This motion is in the pumping direction, so accumulate it.
@@ -134,7 +236,8 @@ define( function( require ) {
         .addColorStop( 0, '#CBCBCB' )
         .addColorStop( 0.2, '#CACACA' ),
 
-      stroke: '#CFCFCF', pickable: false} );
+      stroke: '#CFCFCF', pickable: false
+    } );
     pumpShaft = new Node( {children: [pumpShaftRectangle]} );
     pumpShaft.setTranslation( (pumpBaseWidth - pumpShaftWidth) / 2,
         height - ( height * PUMP_HANDLE_INIT_VERT_POS_PROPORTION ) );
@@ -145,18 +248,20 @@ define( function( require ) {
     var pumpBodyWidth = width * PUMP_BODY_WIDTH_PROPORTION;
     var pumpBodyHeight = height * PUMP_BODY_HEIGHT_PROPORTION;
     var pumpBody = new Rectangle( 0, 0, pumpBodyWidth, pumpBodyHeight, 5, 5,
-      {fill: new LinearGradient( 0, 0, pumpBodyWidth, 0 )
-        .addColorStop( 0, '#DA0000' )
-        .addColorStop( 0.4, '#D50000' )
-      .addColorStop( 0.7, '#B30000' )
-    } );
+      {
+        fill: new LinearGradient( 0, 0, pumpBodyWidth, 0 )
+          .addColorStop( 0, '#DA0000' )
+          .addColorStop( 0.4, '#D50000' )
+          .addColorStop( 0.7, '#B30000' )
+      } );
     pumpBody.setTranslation( (pumpBaseWidth - pumpBodyWidth) / 2, height - pumpBodyHeight - pumpBaseHeight );
     this.addChild( pumpBody );
 
     // add pump body shape opening
     var pumpBodyOpening = new Path( new Shape()
       .ellipse( 0, 0, pumpBodyWidth / 2, pumpBodyWidth / 3 - 1, 0, 2 * Math.PI, true ), {
-      fill: 'white'} );
+      fill: 'white'
+    } );
     pumpBodyOpening.setTranslation( (pumpBaseWidth - pumpBodyWidth) / 2 + pumpBodyOpening.width / 2,
         height - pumpBodyHeight - pumpBaseHeight + pumpBodyOpening.height / 3 );
     this.addChild( pumpBodyOpening );
@@ -167,7 +272,8 @@ define( function( require ) {
     var hoseExternalAttachPtX = width - width * HOSE_CONNECTOR_WIDTH_PROPORTION;
     var hoseExternalAttachPtY = height - ( height * HOSE_CONNECTOR_VERT_POS_PROPORTION );
 
-    var hosePath = new Path( null, {lineWidth: 4, stroke: '#B3B3B3'
+    var hosePath = new Path( null, {
+      lineWidth: 4, stroke: '#B3B3B3'
     } );
     //   var hoseWidth = HOSE_WIDTH_PROPORTION * width;
     this.addChild( hosePath );
@@ -179,7 +285,7 @@ define( function( require ) {
     hosePath.setShape( newHoseShape );
 
 
-    var pipeConnectorBottomWidth = pumpBodyWidth * 1.8;
+    var pipeConnectorBottomWidth = pumpBodyWidth * 2;
     var pipeConnectorHeight = pumpBodyHeight * 0.125;
     var pipeConnectorPath = new Path( null, {
       fill: new LinearGradient( 0, 0, pipeConnectorBottomWidth, 0 )
@@ -188,7 +294,7 @@ define( function( require ) {
         .addColorStop( 0.5, '#838587' )
         .addColorStop( 0.6, '#5E5F60' )
         .addColorStop( 0.8, '#B9BBBD' )
-        .addColorStop( 0.9, '#909194' )
+        .addColorStop( 0.9, '#818285' )
     } );
     this.addChild( pipeConnectorPath );
     var pipeConnectorShape = new Shape()
@@ -203,20 +309,24 @@ define( function( require ) {
     var hoseConnectorWidth = width * HOSE_CONNECTOR_WIDTH_PROPORTION;
     var hoseConnectorHeight = height * HOSE_CONNECTOR_HEIGHT_PROPORTION;
     var hoseConnector = new Rectangle( 0, 0, hoseConnectorWidth, hoseConnectorHeight, 2, 2,
-      {fill: new LinearGradient( 0, 0, 0, hoseConnectorHeight )
-        .addColorStop( 0, '#818181' )
-        .addColorStop( 0.4, '#868686' )
-        .addColorStop( 0.6, '#ACADAE' )
-        .addColorStop( 0.8, '#A3A4A5' )
-      .addColorStop( 0.9, '#919191' )} );
+      {
+        fill: new LinearGradient( 0, 0, 0, hoseConnectorHeight )
+          .addColorStop( 0, '#818181' )
+          .addColorStop( 0.4, '#868686' )
+          .addColorStop( 0.6, '#ACADAE' )
+          .addColorStop( 0.8, '#A3A4A5' )
+          .addColorStop( 0.9, '#919191' )
+      } );
     hoseConnector.setTranslation( width - hoseConnectorWidth,
         height - ( height * HOSE_CONNECTOR_VERT_POS_PROPORTION ) - hoseConnectorHeight / 2 );
     this.addChild( hoseConnector );
     var hoseBottomConnector = new Rectangle( 0, 0, hoseConnectorWidth, hoseConnectorHeight, 2, 2,
-      {fill: new LinearGradient( 0, 0, 0, hoseConnectorHeight )
-        .addColorStop( 0, '#868686' )
-        .addColorStop( 0.7, '#A3A4A5' )
-        .addColorStop( 0.9, '#919191' )} );
+      {
+        fill: new LinearGradient( 0, 0, 0, hoseConnectorHeight )
+          .addColorStop( 0, '#868686' )
+          .addColorStop( 0.7, '#A3A4A5' )
+          .addColorStop( 0.9, '#919191' )
+      } );
     this.addChild( hoseBottomConnector );
     hoseBottomConnector.setTranslation( hoseToPumpAttachPtX + 2, hoseToPumpAttachPtY - hoseBottomConnector.height / 2 );
 
