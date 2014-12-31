@@ -216,15 +216,16 @@ define( function( require ) {
         {
           fill: 'black'
         } );
-      titleText.centerX = background.centerX + titleText.width / 2;
+
       titleBackground.centerX = titleText.centerX;
       titleBackground.centerY = titleText.centerY;
-      titleNode = new Node( {children: [titleBackground, titleText]} );
+      titleNode = new Node( {children: [ titleBackground, titleText ]} );
       this.addChild( titleNode );
+      titleNode.centerX = radioButtonGroup.centerX + 15;
     }
 
     var atomDiameterTitle = new Text( atomDiameterString, textOptions );
-    atomDiameterTitle.centerX = radioButtonGroup.centerX;
+    atomDiameterTitle.centerX = radioButtonGroup.centerX - 15;
     atomDiameterTitle.top = radioButtonGroup.bottom + 10;
     model.atomDiameterProperty.value = model.getSigma();
     var atomDiameterSlider = new HSlider( model.atomDiameterProperty,
@@ -248,14 +249,14 @@ define( function( require ) {
       new Text( smallString, {fill: options.tickTextColor } ) );
     atomDiameterSlider.addMajorTick( StatesOfMatterConstants.MAX_SIGMA,
       new Text( largeString, {fill: options.tickTextColor } ) );
-    atomDiameterSlider.centerX = atomDiameterTitle.centerX;
+    atomDiameterSlider.centerX = atomDiameterTitle.centerX + 30;
     atomDiameterSlider.top = atomDiameterTitle.bottom + 5;
     var atomDiameter = new Node( {
       children: [atomDiameterTitle, atomDiameterSlider]
     } );
 
     var interactionStrengthTitle = new Text( interactionStrengthString, textOptions );
-    interactionStrengthTitle.centerX = atomDiameterSlider.centerX;
+    interactionStrengthTitle.centerX = radioButtonGroup.centerX - 5;
     interactionStrengthTitle.top = atomDiameterSlider.bottom + 5;
     model.interactionStrengthProperty.value = model.getEpsilon();
     var interactionStrengthSlider = new HSlider( model.interactionStrengthProperty,
@@ -279,7 +280,7 @@ define( function( require ) {
       new Text( weakString, { fill: options.tickTextColor } ) );
     interactionStrengthSlider.addMajorTick( StatesOfMatterConstants.MAX_EPSILON,
       new Text( strongString, { fill: options.tickTextColor } ) );
-    interactionStrengthSlider.centerX = interactionStrengthTitle.centerX;
+    interactionStrengthSlider.centerX = interactionStrengthTitle.centerX + 20;
     interactionStrengthSlider.top = interactionStrengthTitle.bottom + 5;
     var interactionStrength = new Node( {
       children: [interactionStrengthTitle, interactionStrengthSlider]
