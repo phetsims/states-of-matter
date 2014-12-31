@@ -129,17 +129,26 @@ define( function( require ) {
       spacing: 2,
       children: [curveShape, componentForceText]
     } );
+    var totalForce = new HBox( {
+      spacing: 2,
+      children: [ new HStrut( curveShape.width ), createItem( totalForceText )]
+    } );
+    var hideForce = new HBox( {
+      spacing: 2,
+      children: [ new HStrut( curveShape.width ), createItem( hideForcesText )]
+    } );
 
-    var hideForcesRadio = new AquaRadioButton( forcesProperty, 'hideForces', createItem( hideForcesText ),
+    var hideForcesRadio = new AquaRadioButton( forcesProperty, 'hideForces', hideForce,
       { radius: 8 } );
-    var totalForceRadio = new AquaRadioButton( forcesProperty, 'totalForce', createItem( totalForceText ),
+    var totalForceRadio = new AquaRadioButton( forcesProperty, 'totalForce', totalForce,
       { radius: 8 } );
     var componentForceRadio = new AquaRadioButton( forcesProperty, 'componentForce', componentForce,
       { radius: 8 } );
 
     var radioButtonGroup = new VBox( {
       children: [ hideForcesRadio, totalForceRadio, componentForceRadio],
-      align: 'left'
+      align: 'left',
+      spacing: 3
     } );
 
     radioButtonGroup.setTranslation( 10, 0 );
@@ -153,9 +162,11 @@ define( function( require ) {
         // expandedProperty: expandedProperty,
         contentAlign: 'center',
         titleAlign: 'left',
-        buttonAlign: 'left',
+        buttonAlign: 'right',
         cornerRadius: 4,
         contentYSpacing: 1,
+        contentXSpacing: 3,
+        contentXMargin: 12,
         buttonYMargin: 4,
         buttonXMargin: 10
       } );
