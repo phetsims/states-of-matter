@@ -19,7 +19,7 @@ define( function( require ) {
   var DialGaugeNode = require( 'STATES_OF_MATTER/common/view/DialGaugeNode' );
   var PointingHandNode = require( 'STATES_OF_MATTER/common/view/PointingHandNode' );
   var LinearGradient = require( 'SCENERY/util/LinearGradient' );
-
+  var HandleNode = require( 'STATES_OF_MATTER/common/view/HandleNode' );
 
   //var PRESSURE_GAUGE_Y_OFFSET = -20;
   // var PRESSURE_METER_X_OFFSET_PROPORTION = 0.80;
@@ -62,7 +62,7 @@ define( function( require ) {
     var openInnerEllipse = new Path( new Shape()
       .ellipticalArc( 125, 2, 20, 100, Math.PI / 2, 0, 2 * Math.PI, false ).close(), {
       lineWidth: 1,
-      stroke: '#7E7E7E',
+      stroke: '#B3B3B3',
       fill: 'white'
     } );
     openInnerEllipse.centerX = openEllipse.centerX;
@@ -70,13 +70,7 @@ define( function( require ) {
     var open = new Path( new Shape()
       .ellipticalArc( 125, 2, 25, 125, Math.PI / 2, 0, 2 * Math.PI, false ).close(), {
       lineWidth: 1,
-      stroke: '#606262' /* new LinearGradient( 0, 0, StatesOfMatterConstants.VIEW_CONTAINER_WIDTH, 0 )
-       .addColorStop( 0, '#6E6E6E' )
-       .addColorStop( 0.2, '#6A6B6B' )
-       .addColorStop( 0.3, '#6A6B6B' )
-       .addColorStop( 0.4, '#6A6B6B' )
-       .addColorStop( 0.7, '#6A6B6B' )
-       .addColorStop( 0.9, '#606262' )*/
+      stroke: '#606262'
     } );
     open.centerX = openEllipse.centerX;
     open.centerY = openEllipse.centerY;
@@ -135,9 +129,7 @@ define( function( require ) {
       stroke: 'white',
       fill: new LinearGradient( 0, 0, 0, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT - 10 - 30 )
         .addColorStop( 0, '#525252' )
-        .addColorStop( 0.2, '#515151' )
-        .addColorStop( 0.4, '# 4F4F4F' )
-        .addColorStop( 0.5, '#4E4E4E' )
+        .addColorStop( 0.6, '#4E4E4E' )
         .addColorStop( 0.7, '#3A3A3A' )
         .addColorStop( 0.8, '# 2E2E2E' )
         .addColorStop( 0.9, '#292929' )
@@ -155,10 +147,10 @@ define( function( require ) {
       lineWidth: 0,
       stroke: 'white',
       fill: new LinearGradient( 0, 0, 0, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT - 10 - 30 )
-        .addColorStop( 0, '#848484' )
-        .addColorStop( 0.3, '#515151' )
-        .addColorStop( 0.6, '# 999999' )
-        .addColorStop( 0.9, '#646464' )
+        .addColorStop( 0, '#8c8c8c' )
+        .addColorStop( 0.4, '#525252' )
+        .addColorStop( 0.6, '#a1a1a1' )
+        .addColorStop( 0.8, '#686868' )
     } );
     postParticleLayer.addChild( rightShape );
 
@@ -223,18 +215,18 @@ define( function( require ) {
       // responsible for positioning itself later based on user interaction.
       this.addChild( this.fingerNode );
       this.fingerNode.bottom = this.containerLid.top;
-      this.fingerNode.setTranslation( this.fingerNode.x + openEllipse.width / 3,
+      this.fingerNode.setTranslation( this.fingerNode.x + openEllipse.width / 2.4,
           Math.abs( this.modelViewTransform.modelToViewDeltaY(
               StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT -
               this.model.getParticleContainerRect().getHeight() ) ) +
-          this.containerLid.y - this.fingerNode.height );
+          this.containerLid.y - this.fingerNode.height + 20 );
 
       // Add the handle to the lid.
       this.containerLid.addChild( openInnerEllipse );
-      //  var handleNode = new HandleNode(50, 100, Color.YELLOW);
-      //  handleNode.rotate(Math.PI / 2);
-      //  handleNode.setOffset((m_containerLid.getWidth() / 2) + (handleNode.getFullBoundsReference().width / 2), 0);
-      //m_containerLid.addChild(handleNode);
+      var handleNode = new HandleNode( model );
+      handleNode.centerX = openInnerEllipse.centerX;
+      handleNode.centerY = openInnerEllipse.centerY;
+      this.containerLid.addChild( handleNode );
     }
     if ( pressureGaugeEnabled ) {
 
