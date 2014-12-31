@@ -23,8 +23,8 @@ define( function( require ) {
   var RESIZE_HANDLE_SIZE_PROPORTION = 0.05;
   var EPSILON_HANDLE_OFFSET_PROPORTION = 0.08;
   var SIGMA_HANDLE_OFFSET_PROPORTION = 0.08;
-  var RESIZE_HANDLE_NORMAL_COLOR = new Color( 51, 204, 51 );
-  var RESIZE_HANDLE_HIGHLIGHTED_COLOR = new Color( 153, 255, 0 );
+  var RESIZE_HANDLE_NORMAL_COLOR = new Color( 153, 255, 0 );//new Color( 51, 204, 51 );
+  var RESIZE_HANDLE_HIGHLIGHTED_COLOR = 'yellow';//new Color( 153, 255, 0 );
   var EPSILON_LINE_WIDTH = 1;
   var EPSILON_LINE_COLOR = RESIZE_HANDLE_NORMAL_COLOR;
 
@@ -71,7 +71,7 @@ define( function( require ) {
         model.setMotionPaused( false );
       }
     } ) );
-    this.ljPotentialGraph.addChild( this.epsilonLine );
+    this.epsilonLineLayer.addChild( this.epsilonLine );
 
     // Add the arrow nodes that will allow the user to control the
     // parameters of the LJ potential.
@@ -205,7 +205,8 @@ define( function( require ) {
       if ( this.epsilonResizeHandle !== undefined ) {
         var graphMin = this.getGraphMin();
         this.epsilonResizeHandle.setTranslation( graphMin.x +
-                                                 ( this.widthOfGraph * EPSILON_HANDLE_OFFSET_PROPORTION ), graphMin.y );
+                                                 ( this.widthOfGraph / 2 * EPSILON_HANDLE_OFFSET_PROPORTION ),
+          graphMin.y );
         this.epsilonResizeHandle.setVisible( this.interactionEnabled );
         this.epsilonResizeHandle.setPickable( this.interactionEnabled );
         this.epsilonLine.setTranslation( graphMin.x, graphMin.y + EPSILON_LINE_WIDTH );
