@@ -17,7 +17,7 @@ define( function( require ) {
   // The following constants control some of the aspects of the appearance of
   // the force arrows.  The values are arbitrary and are chosen to look good
   // in this particular sim, so tweak them as needed for optimal appearance.
-  var ATTRACTIVE_FORCE_COLOR = new Color( 255, 255, 0, 175 );
+  var ATTRACTIVE_FORCE_COLOR = '#FC9732';
   var REPULSIVE_FORCE_COLOR = new Color( 255, 0, 255, 175 ); // Magenta.
   var TOTAL_FORCE_COLOR = new Color( 0, 255, 0, 125 );
   var COMPONENT_FORCE_ARROW_REFERENCE_LENGTH = 500;
@@ -38,6 +38,7 @@ define( function( require ) {
     this.repulsiveForce = 0;
     var particleForceNode = this;
 
+    // add attractive force node
     this.attractiveForceVectorNode = new DimensionalArrowNode( 0, 0, COMPONENT_FORCE_ARROW_REFERENCE_LENGTH, 0, {
       fill: ATTRACTIVE_FORCE_COLOR,
       headHeight: FORCE_ARROW_HEAD_LENGTH,
@@ -47,7 +48,7 @@ define( function( require ) {
     this.addChild( this.attractiveForceVectorNode );
     this.attractiveForceVectorNode.setVisible( false );
 
-
+    // add repulsive force node
     this.repulsiveForceVectorNode = new DimensionalArrowNode( 0, 0, COMPONENT_FORCE_ARROW_REFERENCE_LENGTH, 0, {
       fill: REPULSIVE_FORCE_COLOR,
       headHeight: FORCE_ARROW_HEAD_LENGTH,
@@ -57,7 +58,7 @@ define( function( require ) {
     this.addChild( this.repulsiveForceVectorNode );
     this.repulsiveForceVectorNode.setVisible( false );
 
-
+    // add total force node
     this.totalForceVectorNode = new DimensionalArrowNode( 0, 0, TOTAL_FORCE_ARROW_REFERENCE_LENGTH, 0, {
       fill: TOTAL_FORCE_COLOR,
       headHeight: FORCE_ARROW_HEAD_LENGTH,
