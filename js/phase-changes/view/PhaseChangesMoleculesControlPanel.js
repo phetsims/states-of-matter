@@ -28,6 +28,8 @@ define( function( require ) {
 
   // strings
   var neonString = require( 'string!STATES_OF_MATTER/neon' );
+  var weakString = require( 'string!STATES_OF_MATTER/weak' );
+  var strongString = require( 'string!STATES_OF_MATTER/strong' );
   var argonString = require( 'string!STATES_OF_MATTER/argon' );
   var waterString = require( 'string!STATES_OF_MATTER/water' );
   var oxygenString = require( 'string!STATES_OF_MATTER/oxygen' );
@@ -54,7 +56,7 @@ define( function( require ) {
     }, options );
 
     Node.call( this );
-    var textOptions = {font: new PhetFont( 10 ), fill: "#FFFFFF"};
+    var textOptions = {font: new PhetFont( 12 ), fill: "#FFFFFF"};
 
     // itemSpec describes the pieces that make up an item in the control panel,
     // conforms to the contract: { label: {Node}, icon: {Node} (optional) }
@@ -101,9 +103,9 @@ define( function( require ) {
       deselectedContentOpacity: 1
     } );
 
-    var labelFont = new PhetFont( 10 );
-    var weakTitle = new Text( 'Weak', { font: labelFont, fill: 'white'} );
-    var strongTitle = new Text( 'Strong', {fill: 'white', font: labelFont } );
+    var labelFont = new PhetFont( 12 );
+    var weakTitle = new Text( weakString, { font: labelFont, fill: 'white'} );
+    var strongTitle = new Text( strongString, {fill: 'white', font: labelFont } );
     var interactionStrengthNode = new Node();
     var interactionTitle = new Text( interactionStrengthTittleString, { font: labelFont, fill: 'white'} );
 
@@ -231,7 +233,7 @@ define( function( require ) {
       fill: 'white', stroke: 'white', bottom: dot1.top + 5, left: dot1.right - 5
     } );
 
-    return new Node( {children: [  dot3, dot1,dot2 ]} );
+    return new Node( {children: [  dot3, dot1, dot2 ]} );
 
   };
 

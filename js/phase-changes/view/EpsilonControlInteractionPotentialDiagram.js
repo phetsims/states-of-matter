@@ -28,6 +28,8 @@ define( function( require ) {
   var InteractionPotentialDiagramNode = require( 'STATES_OF_MATTER/common/view/InteractionPotentialDiagramNode' );
 
 
+  //strings
+  var interactionDiagramTittle = require( 'string!STATES_OF_MATTER/interactionDiagram' );
 // Size of handles as function of node width.
   var RESIZE_HANDLE_SIZE_PROPORTION = 0.12;
 
@@ -121,7 +123,7 @@ define( function( require ) {
       } ) );
     var accordionBox = new AccordionBox( accordionContent,
       {
-        titleNode: new Text( 'Interaction Diagram', { fill: "#FFFFFF", font: new PhetFont( { size: 12 } ) } ),
+        titleNode: new Text( interactionDiagramTittle, { fill: "#FFFFFF", font: new PhetFont( { size: 12 } ) } ),
         fill: 'black',
         stroke: 'white',
         expandedProperty: model.interactionExpandedProperty,
@@ -131,8 +133,8 @@ define( function( require ) {
         cornerRadius: 4,
         contentYSpacing: 0,
         contentYMargin: 5,
-        contentXMargin: 2,
-        contentXSpacing: -10,
+        contentXMargin: 6,
+        contentXSpacing: 6,
         buttonYMargin: 4,
         buttonXMargin: 6,
         buttonLength: 12,
@@ -177,7 +179,7 @@ define( function( require ) {
         this.epsilonResizeHandle.setTranslation( graphMin.x + (this.width * EPSILON_HANDLE_OFFSET_PROPORTION), graphMin.y );
         this.epsilonResizeHandle.setVisible( this.interactionEnabled );
         this.epsilonResizeHandle.setPickable( this.interactionEnabled );
-        this.epsilonLine.setTranslation( graphMin.x, graphMin.y + EPSILON_LINE_WIDTH );
+        this.epsilonLine.setTranslation( graphMin.x, graphMin.y );
         this.epsilonLine.setVisible( this.interactionEnabled );
         this.epsilonLine.setPickable( this.interactionEnabled );
       }
