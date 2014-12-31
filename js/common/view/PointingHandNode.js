@@ -14,28 +14,30 @@ define( function( require ) {
   var Node = require( 'SCENERY/nodes/Node' );
   var ArrowNode = require( 'SCENERY_PHET/ArrowNode' );
   var Image = require( 'SCENERY/nodes/Image' );
-
+  var Shape = require( 'KITE/Shape' );
+  var Path = require( 'SCENERY/nodes/Path' );
   //images
   var fingerImage = require( 'image!STATES_OF_MATTER/finger-4.png' );
-
-// Width of the finger node as a proportion of the width of the particle
-
-  // var HAND_NODE_WIDTH_PROPORTION = 0.55;
-
 
   function PointingHandNode( model, modelViewTransform ) {
 
     var pointingHandNode = this;
     Node.call( this );
     this.model = model;
-    //this.mouseMovementAmount;
-    //this.containerSizeAtDragStart;
     this.modelViewTransform = modelViewTransform;
     this.mouseOver = false;
     this.beingDragged = false;
     this.hintNode = new Node();
 
     this.model = model;
+    var backgroundNode = new Path( new Shape()
+      .moveTo( 0, 0 )
+      .lineTo( 0, 30 )
+      .lineTo( 30, 30 )
+      .lineTo( 30, 5 )
+      .lineTo( 0, 0 ), {fill: '#BCBEC0'} )
+
+    this.addChild( backgroundNode );
 
     // Add the up arrow.
     this.upArrowNode = new ArrowNode( 0, 0, 0, 25, {
@@ -62,15 +64,13 @@ define( function( require ) {
     this.downArrow.top = this.upArrowNode.bottom + 5;
     this.hintNode.addChild( this.downArrow );
     this.hintNode.setVisible( false );
-    //var containerRect = model.getParticleContainerRect();
-    // var desiredHandWidth = containerRect.getWidth() * HAND_NODE_WIDTH_PROPORTION;
-
 
     this.hintNode.setVisible( false );
-    //var scale = desiredHandWidth /fingerImage.width;
+
     // Load and scale the image.
     this.fingerImageNode = new Image( fingerImage, {scale: 0.5, cursor: 'ns-resize', pickable: true} );
-
+    backgroundNode.top = this.fingerImageNode.bottom - 28;
+    backgroundNode.right = this.fingerImageNode.left + 90
     this.hintNode.top = this.fingerImageNode.bottom - 50;
     this.hintNode.left = this.fingerImageNode.right;
 
@@ -112,7 +112,6 @@ define( function( require ) {
         pointingHandNode.updateHintVisibility();
       }
     } );
-
     // Add the finger node as a child.
     this.addChild( this.fingerImageNode );
     this.addChild( this.hintNode );
@@ -120,8 +119,6 @@ define( function( require ) {
       pointingHandNode.handleContainerSizeChanged();
       pointingHandNode.updateArrowVisibility();
     } );
-    // Set our initial offset.
-    // pointingHandNode.setTranslation( containerRect.getX() + containerRect.getWidth() * NODE_X_POS_PROPORTION, -this.height );
   }
 
   return inherit( Node, PointingHandNode, {
@@ -145,7 +142,7 @@ define( function( require ) {
       if ( !this.model.getContainerExploded() ) {
         this.setTranslation( this.x,
             Math.abs( this.modelViewTransform.modelToViewDeltaY( StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT -
-                                                                 containerRect.getHeight() ) ) - this.height );
+                                                                 containerRect.getHeight() ) ) - this.height + 20 );
       }
       else {
         // quickly.
