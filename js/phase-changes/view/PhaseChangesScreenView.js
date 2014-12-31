@@ -201,9 +201,13 @@ define( function( require ) {
         if ( !phaseChangesScreenView.isChild( phaseChangesScreenView.phaseDiagram ) ) {
           phaseChangesScreenView.addChild( phaseChangesScreenView.phaseDiagram );
           phaseChangesScreenView.phaseDiagram.right = phaseChangesScreenView.layoutBounds.right + 5;
-          phaseChangesScreenView.phaseDiagram.top = phaseChangesMoleculesControlPanel.bottom + 5;
+
           if ( isInteractionDiagramEnabled ) {
-            epsilonControlInteractionPotentialDiagram.top = phaseChangesScreenView.phaseDiagram.bottom + 5;
+            epsilonControlInteractionPotentialDiagram.top = phaseChangesMoleculesControlPanel.bottom + 5;
+            phaseChangesScreenView.phaseDiagram.top = epsilonControlInteractionPotentialDiagram.bottom + 5;
+          }
+          else {
+            phaseChangesScreenView.phaseDiagram.top = phaseChangesMoleculesControlPanel.bottom + 5;
           }
         }
       }
