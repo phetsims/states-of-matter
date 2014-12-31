@@ -28,6 +28,7 @@ define( function( require ) {
   var ParticleForceNode = require( 'ATOMIC_INTERACTIONS/atomic-interactions/view/ParticleForceNode' );
   var GrabbableParticleNode = require( 'ATOMIC_INTERACTIONS/atomic-interactions/view/GrabbableParticleNode' );
   var PushpinNode = require( 'ATOMIC_INTERACTIONS/atomic-interactions/view/PushpinNode' );
+  var HandNode = require( 'ATOMIC_INTERACTIONS/atomic-interactions/view/HandNode' );
 
 
   // strings
@@ -63,14 +64,13 @@ define( function( require ) {
     this.showAttractiveForces = false;
     this.showRepulsiveForces = false;
     this.showTotalForces = false;
-    this.wiggleMeShown = false;
     var atomicInteractionsScreenView = this;
 
     // model-view transform
     var mvtScale = 0.3;
 
     this.modelViewTransform = ModelViewTransform2.createSinglePointScaleMapping( new Vector2( 0, 0 ),
-      new Vector2( 0, 400 ), mvtScale );
+      new Vector2( 80, 380 ), mvtScale );
 
     var tickTextColor;
     var textColor;
@@ -88,12 +88,12 @@ define( function( require ) {
     }
     var atomicInteractionsControlPanel = new AtomicInteractionsControlPanel( dualAtomModel,
       enableHeterogeneousMolecules, {
-      right: this.layoutBounds.maxX - 10,
+        right: this.layoutBounds.maxX - 10,
         top: this.layoutBounds.minY + 10,
         tickTextColor: tickTextColor,
         textColor: textColor,
         backgroundColor: backgroundColor
-    } );
+      } );
     this.addChild( atomicInteractionsControlPanel );
 
     // add interactive potential diagram
@@ -122,6 +122,7 @@ define( function( require ) {
     var resetAllButton = new ResetAllButton( {
       listener: function() {
         dualAtomModel.reset();
+        atomicInteractionsScreenView.handleNode.setVisible( true );
       },
       right: this.layoutBounds.maxX - 10,
       bottom: this.layoutBounds.maxY - 10
@@ -212,6 +213,9 @@ define( function( require ) {
     this.addChild( this.fixedParticleLayer );
     this.movableParticleLayer = new Node();
     this.addChild( this.movableParticleLayer );
+    this.movableParticleWiggleMeNode = new Node();
+
+    this.addChild( this.movableParticleWiggleMeNode );
 
     this.addChild( forceControlNode );
 
@@ -225,6 +229,8 @@ define( function( require ) {
       atomicInteractionsScreenView.handleFixedParticleAdded( dualAtomModel.fixedAtom );
       atomicInteractionsScreenView.handleMovableParticleRemoved( dualAtomModel.movableAtom );
       atomicInteractionsScreenView.handleMovableParticleAdded( dualAtomModel.movableAtom );
+      dualAtomModel.interactionStrength = 300;
+      dualAtomModel.atomDiameter = 300;
     } );
     dualAtomModel.forcesProperty.link( function( forces ) {
       switch( forces ) {
@@ -348,10 +354,13 @@ define( function( require ) {
       this.movableParticle = particle;
       this.movableParticleNode = new GrabbableParticleNode( this.dualAtomModel, particle,
         this.modelViewTransform, true, true, 0, 1.0 / 0.0 );
+      this.handleNode = new HandNode( this.dualAtomModel, this.dualAtomModel.movableAtom, this.modelViewTransform, 0,
+        1200);
       this.movableParticleNode.setShowAttractiveForces( this.showAttractiveForces );
       this.movableParticleNode.setShowRepulsiveForces( this.showRepulsiveForces );
       this.movableParticleNode.setShowTotalForces( this.showTotalForces );
       this.movableParticleLayer.addChild( this.movableParticleNode );
+      this.movableParticleWiggleMeNode.addChild( this.handleNode);
 
       // Limit the particle's motion in the X direction so that it can't
       // get to where there is too much overlap, or is on the other side
@@ -375,6 +384,10 @@ define( function( require ) {
       }
       this.updatePositionMarkerOnDiagram();
       this.movableParticleNode = null;
+      if ( this.handleNode !== null ) {
+        // Remove the particle node.
+        this.movableParticleWiggleMeNode.removeChild( this.handleNode );
+      }
     },
 
     /**
@@ -453,9 +466,6 @@ define( function( require ) {
         this.movableParticleNode.setMinX( this.dualAtomModel.getSigma() * 0.9 );
       }
     },
-
-    //Todo:add wiggle me functionality
-
     updateForceVectors: function() {
       if ( ( this.fixedParticle !== null ) && ( this.movableParticle !== null ) ) {
         this.fixedParticleNode.setForces( this.dualAtomModel.getAttractiveForce(),
