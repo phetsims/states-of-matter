@@ -22,7 +22,7 @@ define( function( require ) {
   var GridNode = require( 'ATOMIC_INTERACTIONS/atomic-interactions/view/ZoomableGridNode' );
   var PositionMarker = require( 'ATOMIC_INTERACTIONS/atomic-interactions/view/PositionMarker' );
   //strings
-  var distanceBetweenMoleculesString = require( 'string!STATES_OF_MATTER/distanceBetweenMolecules' );
+  var distanceBetweenAtomsString = require( 'string!STATES_OF_MATTER/distanceBetweenAtoms' );
   var potentialEnergyString = require( 'string!STATES_OF_MATTER/potentialEnergy' );
   var sigmaString = require( 'string!STATES_OF_MATTER/sigma' );
   var epsilonString = require( 'string!STATES_OF_MATTER/epsilon' );
@@ -45,7 +45,7 @@ define( function( require ) {
   var VERT_AXIS_SIZE_PROPORTION = 0.85;
 
 // Font for the labels used on the axes and within the graph.
-  var AXIS_LABEL_FONT_SIZE = 10;
+  var AXIS_LABEL_FONT_SIZE = 12;
   var AXIS_LABEL_FONT = new PhetFont( AXIS_LABEL_FONT_SIZE );
   var GREEK_LETTER_FONT_SIZE = 14;
   var GREEK_LETTER_FONT = new PhetFont( GREEK_LETTER_FONT_SIZE );
@@ -137,6 +137,8 @@ define( function( require ) {
     this.positionMarker = new PositionMarker( markerDiameter / 2, 'rgb( 117, 217, 255 )' );
 
     this.positionMarker.setVisible( this.positionMarkerEnabled );
+    this.epsilonLineLayer = new Node();
+    this.ljPotentialGraph.addChild( this.epsilonLineLayer );
     this.ljPotentialGraph.addChild( this.positionMarker );
 
 
@@ -152,7 +154,7 @@ define( function( require ) {
     this.horizontalAxis.setTranslation( this.graphXOrigin, this.graphYOrigin );
 
 
-    this.horizontalAxisLabel = new Text( distanceBetweenMoleculesString,
+    this.horizontalAxisLabel = new Text( distanceBetweenAtomsString,
       { fill: 'white',
         font: AXIS_LABEL_FONT
       } );
@@ -262,14 +264,14 @@ define( function( require ) {
      *                  individual atoms.
      */
     setMolecular: function( molecular ) {
-      if ( molecular ) {
-        this.horizontalAxisLabel.setText( 'atoms' );
-      }
+      /*if ( molecular ) {
+       // this.horizontalAxisLabel.setText( 'atoms' );
+       }
       else {
-        this.horizontalAxisLabel.setText( 'Distance between Molecules' );
-      }
+       // this.horizontalAxisLabel.setText( 'Distance between Molecules' );
+       }*/
       this.horizontalAxisLabel.setTranslation( this.graphXOrigin + (  this.graphWidth / 2) -
-                                               (  this.horizontalAxisLabel.width / 2),
+                                               (  this.horizontalAxisLabel.width / 2.4),
           this.graphYOrigin + (  this.horizontalAxisLabel.height ) );
     },
 
