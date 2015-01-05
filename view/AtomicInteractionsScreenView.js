@@ -29,6 +29,7 @@ define( function( require ) {
   var GrabbableParticleNode = require( 'ATOMIC_INTERACTIONS/atomic-interactions/view/GrabbableParticleNode' );
   var PushpinNode = require( 'ATOMIC_INTERACTIONS/atomic-interactions/view/PushpinNode' );
   var HandNode = require( 'ATOMIC_INTERACTIONS/atomic-interactions/view/HandNode' );
+  var AtomicInteractionColors = require( 'ATOMIC_INTERACTIONS/atomic-interactions/view/AtomicInteractionColors' );
 
 
   // strings
@@ -56,7 +57,7 @@ define( function( require ) {
    */
   function AtomicInteractionsScreenView( dualAtomModel, enableHeterogeneousMolecules ) {
 
-    ScreenView.call( this, { layoutBound: new Bounds2( 0, 0, 768, 504 ) } );
+    ScreenView.call( this, { layoutBounds: new Bounds2( 0, 0, 768, 504 ) } );
 
     this.dualAtomModel = dualAtomModel;
     this.movableParticle = dualAtomModel.getMovableAtomRef();
@@ -168,11 +169,19 @@ define( function( require ) {
     } );
     this.addChild( playPauseButton );
 
+    var pauseSizeIncreaseFactor = 1.25;
+    dualAtomModel.isPlayingProperty.lazyLink( function( isPlaying ) {
+      playPauseButton.scale( isPlaying ? ( 1 / pauseSizeIncreaseFactor ) : pauseSizeIncreaseFactor );
+    } );
     // add sim speed controls
+    var slowText = new Text( slowMotionString, { fill: 'white', font: new PhetFont( 14 ) } );
     var slowMotionRadioBox = new AquaRadioButton( dualAtomModel.speedProperty, 'slow',
-      new Text( slowMotionString, {fill: 'white', font: new PhetFont( 14 ) } ), { radius: 10 } );
+      slowText, { radius: 10 } );
+    var normalText = new Text( normalString, { fill: 'white', font: new PhetFont( 14 ) } );
     var normalMotionRadioBox = new AquaRadioButton( dualAtomModel.speedProperty, 'normal',
-      new Text( normalString, { fill: 'white', font: new PhetFont( 14 ) } ), { radius: 10 } );
+      normalText, { radius: 10 } );
+    AtomicInteractionColors.linkAttribute( 'controlPanelText', slowText, 'fill' );
+    AtomicInteractionColors.linkAttribute( 'controlPanelText', normalText, 'fill' );
 
     var speedControlMaxWidth = ( slowMotionRadioBox.width > normalMotionRadioBox.width ) ? slowMotionRadioBox.width :
                                normalMotionRadioBox.width;
@@ -355,12 +364,12 @@ define( function( require ) {
       this.movableParticleNode = new GrabbableParticleNode( this.dualAtomModel, particle,
         this.modelViewTransform, true, true, 0, 1.0 / 0.0 );
       this.handleNode = new HandNode( this.dualAtomModel, this.dualAtomModel.movableAtom, this.modelViewTransform, 0,
-        1200);
+        1200 );
       this.movableParticleNode.setShowAttractiveForces( this.showAttractiveForces );
       this.movableParticleNode.setShowRepulsiveForces( this.showRepulsiveForces );
       this.movableParticleNode.setShowTotalForces( this.showTotalForces );
       this.movableParticleLayer.addChild( this.movableParticleNode );
-      this.movableParticleWiggleMeNode.addChild( this.handleNode);
+      this.movableParticleWiggleMeNode.addChild( this.handleNode );
 
       // Limit the particle's motion in the X direction so that it can't
       // get to where there is too much overlap, or is on the other side
