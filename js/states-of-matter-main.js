@@ -12,13 +12,15 @@ define( function( require ) {
   var SolidLiquidGasScreen = require( 'STATES_OF_MATTER/solid-liquid-gas/SolidLiquidGasScreen' );
   var PhaseChangesScreen = require( 'STATES_OF_MATTER/phase-changes/PhaseChangesScreen' );
   var AtomicInteractionsScreen = require( 'ATOMIC_INTERACTIONS/atomic-interactions/AtomicInteractionsScreen' );
-
   var Sim = require( 'JOIST/Sim' );
   var SimLauncher = require( 'JOIST/SimLauncher' );
+  var GlobalOptionsNode = require( 'ATOMIC_INTERACTIONS/atomic-interactions/view/GlobalOptionsNode' );
+  var Property = require( 'AXON/Property' );
 
   // strings
   var simTitle = require( 'string!STATES_OF_MATTER/statesOfMatter' );
   var interactivePotentialString = require( 'string!STATES_OF_MATTER/interactionPotential' );
+  var colorsProperty = new Property( false );
   var simOptions = {
     credits: {
       //TODO fill in proper credits, all of these fields are optional, see joist.AboutDialog
@@ -28,7 +30,7 @@ define( function( require ) {
       qualityAssurance: '',
       graphicArts: '',
       thanks: ''
-    }
+    }, optionsNode: new GlobalOptionsNode( colorsProperty )
   };
 
   // Appending '?dev' to the URL will enable developer-only features.
@@ -42,7 +44,7 @@ define( function( require ) {
     var isHeterogeneousMoleculeControlPanel = false;
     var sim = new Sim( simTitle, [ new SolidLiquidGasScreen(), new PhaseChangesScreen( true ),
                                    new AtomicInteractionsScreen( isHeterogeneousMoleculeControlPanel,
-                                     interactivePotentialString ) ], simOptions );
+                                     interactivePotentialString, colorsProperty ) ], simOptions );
     sim.start();
   } );
 } );
