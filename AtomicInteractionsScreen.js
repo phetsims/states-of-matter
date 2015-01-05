@@ -13,23 +13,27 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var Screen = require( 'JOIST/Screen' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
+  var AtomicInteractionColors = require( 'ATOMIC_INTERACTIONS/atomic-interactions/view/AtomicInteractionColors' );
 
-
-  /**
-   * @constructor
-   */
-  function AtomicInteractionsScreen( enableHeterogeneousMolecules, simTitle ) {
+  return inherit( Screen, function AtomicInteractionsScreen( enableHeterogeneousMolecules, simTitle, colorsProperty ) {
 
     //If this is a single-screen sim, then no icon is necessary.
     //If there are multiple screens, then the icon must be provided here.
-    // var icon = null;
-
+    var screen = this;
     Screen.call( this, simTitle, new Rectangle( 0, 0, 50, 50 ),
       function() { return new DualAtomModel(); },
       function( model ) { return new AtomicInteractionsScreenView( model, enableHeterogeneousMolecules ); },
-      { backgroundColor: 'black', navigationBarIcon: new Rectangle( 0, 0, 50, 50 )}
+      { backgroundColor: AtomicInteractionColors.background.toCSS(), navigationBarIcon: new Rectangle( 0, 0, 50, 50 )}
     );
-  }
 
-  return inherit( Screen, AtomicInteractionsScreen );
+    colorsProperty.link( function( color ) {
+      if ( color ) {
+        AtomicInteractionColors.applyProfile( 'projector' );
+      }
+      else {
+        AtomicInteractionColors.applyProfile( 'default' );
+      }
+    } );
+    AtomicInteractionColors.linkAttribute( 'background', screen, 'backgroundColor' );
+  } );
 } );
