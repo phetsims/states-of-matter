@@ -19,6 +19,7 @@ define( function( require ) {
   var Property = require( 'AXON/Property' );
   var ArrowNode = require( 'SCENERY_PHET/ArrowNode' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
+  var AtomicInteractionColors = require( 'ATOMIC_INTERACTIONS/atomic-interactions/view/AtomicInteractionColors' );
 
   var RESIZE_HANDLE_SIZE_PROPORTION = 0.05;
   var EPSILON_HANDLE_OFFSET_PROPORTION = 0.08;
@@ -30,12 +31,14 @@ define( function( require ) {
 
   /**
    *
-   * @param sigma
-   * @param epsilon
-   * @param wide
-   * @param model
+   * @param { Number } sigma
+   * @param { Number } epsilon
+   * @param { Number } wide
+   * @param {DualAtomModel}model
+   * @param {Object} options that can be passed on to the underlying node
    * @constructor
    */
+
   function InteractiveInteractionPotentialDiagram( sigma, epsilon, wide, model, options ) {
 
     InteractionPotentialDiagramNode.call( this, sigma, epsilon, wide );
@@ -189,6 +192,20 @@ define( function( require ) {
     this.addChild( this.verticalAxisLabel );
     this.addChild( this.verticalAxis );
     this.addChild( this.ljPotentialGraph );
+
+    // applying color scheme to lj graph elements
+    AtomicInteractionColors.linkAttribute( 'ljGraphColorsMode', this.verticalAxis, 'fill' );
+    AtomicInteractionColors.linkAttribute( 'ljGraphColorsMode', this.horizontalAxis, 'fill' );
+    AtomicInteractionColors.linkAttribute( 'ljGraphColorsMode', this.verticalAxis, 'stroke' );
+    AtomicInteractionColors.linkAttribute( 'ljGraphColorsMode', this.horizontalAxis, 'stroke' );
+    AtomicInteractionColors.linkAttribute( 'ljGraphColorsMode', this.epsilonArrow, 'fill' );
+    AtomicInteractionColors.linkAttribute( 'ljGraphColorsMode', this.sigmaArrow, 'fill' );
+    AtomicInteractionColors.linkAttribute( 'ljGraphColorsMode', this.epsilonArrow, 'stroke' );
+    AtomicInteractionColors.linkAttribute( 'ljGraphColorsMode', this.gridNode.verticalLinesNode, 'stroke' );
+    AtomicInteractionColors.linkAttribute( 'ljGraphColorsMode', this.horizontalAxisLabel, 'fill' );
+    AtomicInteractionColors.linkAttribute( 'ljGraphColorsMode', this.verticalAxisLabel, 'fill' );
+    AtomicInteractionColors.linkAttribute( 'ljGraphColorsMode', this.gridNode.horizontalLinesNode, 'stroke' );
+    AtomicInteractionColors.linkAttribute( 'potentialEnergyLine', this.potentialEnergyLine, 'stroke' );
     this.mutate( options );
   }
 
