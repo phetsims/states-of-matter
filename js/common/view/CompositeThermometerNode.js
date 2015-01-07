@@ -27,12 +27,13 @@ define( function( require ) {
     // add thermometer
     var temperatureInKelvinProperty = new Property( model.getTemperatureInKelvin() );
     var thermometer = new ThermometerNode( 0, 1000, temperatureInKelvinProperty, {
-      outlineStroke: 'white',
+      outlineStroke: 'black',
+      backgroundColor: 'white',
       tickSpacing: 3,
       bulbDiameter: 25,
       lineWidth: 2,
       tubeWidth: 15,
-      tubeHeight: 50
+      tubeHeight: 65
     } );
     this.addChild( thermometer );
 
