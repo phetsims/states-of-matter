@@ -25,7 +25,7 @@ define( function( require ) {
   var Shape = require( 'KITE/Shape' );
   var Path = require( 'SCENERY/nodes/Path' );
   // constants
-  var MVT_SCALE = 0.3;
+  var MVT_SCALE = 0.25;
 
   var OVERLAP_ENLARGEMENT_FACTOR = 1.25;
 

@@ -46,7 +46,8 @@ define( function( require ) {
       .close(), {
       lineWidth: 1,
       stroke: 'black',
-      fill: 'white'
+      fill: 'white',
+      scale: 0.7
     } );
     this.addChild( handShape );
     var startDragX;
