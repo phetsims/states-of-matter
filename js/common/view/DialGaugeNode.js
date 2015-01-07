@@ -22,6 +22,8 @@ define( function( require ) {
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
 
+  // strings
+  var pressureString = require( 'string!STATES_OF_MATTER/pressure' );
 
   // Length of non-elbowed connector wrt overall diameter.
   var CONNECTOR_LENGTH_PROPORTION = 1;
@@ -43,7 +45,7 @@ define( function( require ) {
 
     this.dialComponentsNode = new Node();
     this.dialComponentsNode.setTranslation( 0, 0 );
-    var gaugeNode = new GaugeNode( model.pressureProperty, 'pressure',
+    var gaugeNode = new GaugeNode( model.pressureProperty, pressureString,
       {min: 0, max: 200 }, {scale: 0.5} );
 
 
@@ -51,7 +53,7 @@ define( function( require ) {
     this.textualReadoutBoxShape = new Rectangle( 0, 0, 80, 15, 2, 2, { fill: 'white', stroke: 'black'} );
     this.textualReadoutBoxShape.centerX = gaugeNode.centerX;
     this.textualReadoutBoxShape.top = gaugeNode.bottom - 15;
-    this.textualReadout = new Text( "pressure  ", {font: new PhetFont( 12 ), fill: 'black'} );
+    this.textualReadout = new Text( '', { font: new PhetFont( 12 ), fill: 'black'} );
     this.textualReadout.center = this.textualReadoutBoxShape.center;
 
     this.connector = new Path( null, { lineWidth: 8,
