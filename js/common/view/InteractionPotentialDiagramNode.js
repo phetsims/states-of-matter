@@ -29,7 +29,7 @@ define( function( require ) {
 
 // Constants that control the range of data that is graphed.
 // In picometers.
-  var MAX_INTER_ATOM_DISTANCE = 1200;
+  var MAX_INTER_ATOM_DISTANCE = 1800;
 
 // Constants that control the appearance of the diagram.
   var NARROW_VERSION_WIDTH = 130;
