@@ -10,7 +10,6 @@ define( function( require ) {
 
   // modules
   var inherit = require( 'PHET_CORE/inherit' );
-  //var VBox = require( 'SCENERY/nodes/VBox' );
   var HBox = require( 'SCENERY/nodes/HBox' );
   var HStrut = require( 'SUN/HStrut' );
   var Panel = require( 'SUN/Panel' );
@@ -18,7 +17,6 @@ define( function( require ) {
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Circle = require( 'SCENERY/nodes/Circle' );
   var Node = require( 'SCENERY/nodes/Node' );
-  // var Bounds2 = require( 'DOT/Bounds2' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var RadioButtonGroup = require( 'SUN/buttons/RadioButtonGroup' );
 
@@ -30,6 +28,8 @@ define( function( require ) {
   var adjustableAttractionString = require( 'string!STATES_OF_MATTER/adjustableAttraction' );
   var titleString = require( 'string!STATES_OF_MATTER/AtomsMolecules' );
 
+  // constants
+  var inset = 10;
 
   /**
    *
@@ -37,7 +37,7 @@ define( function( require ) {
    * @param {Object} options for various panel display properties
    * @constructor
    */
-  function AtomsAndMoleculesControlPanel( moleculeTypeProperty, options ) {
+  function SolidLiquidGasMoleculesControlPanel( moleculeTypeProperty, options ) {
 
     options = _.extend( {
       xMargin: 5,
@@ -104,8 +104,8 @@ define( function( require ) {
     var background = new Rectangle(
       0,
       -4,
-      (radioButtonPanel.width + 10 ),
-      (radioButtonPanel.height + 10 ),
+      (radioButtonPanel.width + inset ),
+      (radioButtonPanel.height + inset ),
       options.cornerRadius, options.cornerRadius,
       {
         stroke: '#FFFCD3',
@@ -138,20 +138,17 @@ define( function( require ) {
 
   //Create an icon for the adjustable attraction  button
   var createAdjustableAttractionIcon = function() {
-    var dot1 = new Circle( 5, {fill: '#CC66CC' } );
-    return new Node( {children: [ dot1 ]} );
+    return new Circle( 5, { fill: '#CC66CC' } );
   };
 
   //Create an icon for the neon  button
   var createNeonIcon = function() {
-    var dot1 = new Circle( 5, { fill: '#1AFFFB' } );
-    return new Node( {children: [  dot1 ]} );
+    return new Circle( 5, { fill: '#1AFFFB' } );
   };
 
   //Create an icon for the argon  button
   var createArgonIcon = function() {
-    var dot1 = new Circle( 5, {fill: '#FFAFAF'} );
-    return new Node( {children: [ dot1 ]} );
+    return new Circle( 5, { fill: '#FFAFAF' } );
   };
   //Create an icon for the water  button
   var createWaterIcon = function() {
@@ -161,17 +158,17 @@ define( function( require ) {
       fill: 'white', stroke: 'white', bottom: dot1.top + 5, left: dot1.right - 5
     } );
 
-    return new Node( {children: [  dot3, dot1,dot2 ]} );
+    return new Node( { children: [  dot3, dot1, dot2 ] } );
 
   };
 
   //Create an icon for the oxygen  button
   var createOxygenIcon = function() {
     var dot1 = new Circle( 5, { fill: '#DA1300' } );
-    var dot2 = new Circle( 5, {fill: '#DA1300', left: dot1.right - 4 } );
-    return new Node( {children: [ dot1, dot2]} );
+    var dot2 = new Circle( 5, { fill: '#DA1300', left: dot1.right - 4 } );
+    return new Node( { children: [ dot1, dot2 ] } );
   };
 
 
-  return inherit( Node, AtomsAndMoleculesControlPanel );
+  return inherit( Node, SolidLiquidGasMoleculesControlPanel );
 } );

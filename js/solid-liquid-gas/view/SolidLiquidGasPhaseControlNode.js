@@ -30,11 +30,11 @@ define( function( require ) {
 
   /**
    *
-   * @param {MultiParticleModel}  model of the simulation
+   * @param {Property<String>} stateProperty that tracks the state(solid/liquid/gas ) selected in the panel
    * @param {Object} options for various panel display properties
    * @constructor
    */
-  function SolidLiquidGasPhaseControlNode( model, options ) {
+  function SolidLiquidGasPhaseControlNode( stateProperty, options ) {
 
     this.options = _.extend( {
       xMargin: 5,
@@ -51,8 +51,8 @@ define( function( require ) {
     // itemSpec describes the pieces that make up an item in the control panel,
     // conforms to the contract: { label: {Node}, icon: {Node} (optional) }
     var solid = { icon: createSolidIcon(), label: new Text( solidString, textOptions ) };
-    var liquid = { icon: createLiquidIcon(), label: new Text( liquidString, textOptions )};
-    var gas = {  icon: createGasIcon(), label: new Text( gasString, textOptions )};
+    var liquid = { icon: createLiquidIcon(), label: new Text( liquidString, textOptions ) };
+    var gas = {  icon: createGasIcon(), label: new Text( gasString, textOptions ) };
 
     // compute the maximum item width
     var widestItemSpec = _.max( [ solid, liquid, gas ], function( item ) {
@@ -68,20 +68,18 @@ define( function( require ) {
                                         new HStrut( 30 )] } );
       }
       else {
-        return new HBox( { children: [ itemSpec.label] } );
+        return new HBox( { children: [ itemSpec.label ] } );
       }
     };
 
 
     var radioButtonContent = [
       { value: 1, node: createItem( solid ) },
-      { value: 2, node: createItem( liquid )},
+      { value: 2, node: createItem( liquid ) },
       { value: 3, node: createItem( gas ) }
     ];
-    model.stateProperty.link( function( phase ) {
-      model.setPhase( phase );
-    } );
-    var radioButtonGroup = new RadioButtonGroup( model.stateProperty, radioButtonContent, {
+
+    var radioButtonGroup = new RadioButtonGroup( stateProperty, radioButtonContent, {
       orientation: 'vertical',
       spacing: 3,
       cornerRadius: 5,

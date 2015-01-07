@@ -17,7 +17,7 @@ define( function( require ) {
   var StepButton = require( 'SCENERY_PHET/buttons/StepButton' );
   var StoveNode = require( 'STATES_OF_MATTER/common/view/StoveNode' );
   var CompositeThermometerNode = require( 'STATES_OF_MATTER/common/view/CompositeThermometerNode' );
-  var AtomsAndMoleculesControlPanel = require( 'STATES_OF_MATTER/solid-liquid-gas/view/AtomsAndMoleculesControlPanel' );
+  var SolidLiquidGasMoleculesControlPanel = require( 'STATES_OF_MATTER/solid-liquid-gas/view/SolidLiquidGasMoleculesControlPanel' );
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
   var ParticleContainerNode = require( 'STATES_OF_MATTER/common/view/ParticleContainerNode' );
   var ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
@@ -29,6 +29,16 @@ define( function( require ) {
 
   // constants
   var inset = 10;
+  var stoveNodeXOffset = 10;
+  var stepButtonXOffset = 50;
+  var stepButtonYOffset = 20;
+  var compositeThermometerNodeLeftOffset = 100;
+  var compositeThermometerNodeYOffset = 50;
+  var layoutBoundsRightOffset = 5;
+  var layoutBoundsYOffset = 10;
+  var particlesLayerXOffset = 150;
+  var particlesLayerYOffset = 680;
+  var particleCanvasLayerBoundLimit = 1000;
 
   /**
    * @param {MultipleParticleModel} model of the sim
@@ -43,56 +53,62 @@ define( function( require ) {
     var modelViewTransform = ModelViewTransform2.createSinglePointScaleInvertedYMapping( new Vector2( 0, 0 ),
       new Vector2( 0, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT ), mvtScale );
 
-    var stoveNode = new StoveNode( model, {scale: 0.8,
+    // add stove Node
+    var stoveNode = new StoveNode( model, { scale: 0.8,
       centerX: this.layoutBounds.centerX,
       bottom: this.layoutBounds.bottom - inset
     } );
+
+    // add particle container
     var particleContainerNode = new ParticleContainerNode( model, modelViewTransform,
       {
-        centerX: stoveNode.centerX - 10,
+        centerX: stoveNode.centerX - stoveNodeXOffset,
         bottom: stoveNode.top - inset
-
       } );
 
-
+    // add particle Canvas layer
     this.particlesLayer = new ParticleCanvasNode( model.particles, modelViewTransform, {
-      centerX: stoveNode.centerX - 130,
-      bottom: stoveNode.top + 720,
-      canvasBounds: new Bounds2( -1000, -1000, 1000, 1000 )
+      centerX: stoveNode.centerX - particlesLayerXOffset,
+      bottom: stoveNode.top + particlesLayerYOffset,
+      canvasBounds: new Bounds2( -particleCanvasLayerBoundLimit, -particleCanvasLayerBoundLimit,
+        particleCanvasLayerBoundLimit, particleCanvasLayerBoundLimit )
     } );
-
     this.addChild( this.particlesLayer );
     this.addChild( particleContainerNode );
-
     this.addChild( stoveNode );
 
+    // add compositeThermometer Node
     var compositeThermometerNode = new CompositeThermometerNode( model, {
       font: new PhetFont( 20 ),
       fill: 'white',
-      right: particleContainerNode.left + 100,
-      centerY: particleContainerNode.top + 50
+      right: particleContainerNode.left + compositeThermometerNodeLeftOffset,
+      centerY: particleContainerNode.top + compositeThermometerNodeYOffset
     } );
-
     this.addChild( compositeThermometerNode );
 
-    var atomsAndMoleculesControlPanel = new AtomsAndMoleculesControlPanel( model.moleculeTypeProperty, {
-      right: this.layoutBounds.right + 5,
-      top: this.layoutBounds.top + 10
+    // add Molecule ControlPanel
+    var solidLiquidGasMoleculesControlPanel = new SolidLiquidGasMoleculesControlPanel( model.moleculeTypeProperty, {
+      right: this.layoutBounds.right + layoutBoundsRightOffset,
+      top: this.layoutBounds.top + layoutBoundsYOffset
     } );
-    this.addChild( atomsAndMoleculesControlPanel );
+    this.addChild( solidLiquidGasMoleculesControlPanel );
 
-    var solidLiquidGasPhaseControlNode = new SolidLiquidGasPhaseControlNode( model, {
-      right: this.layoutBounds.right + 5,
-      top: atomsAndMoleculesControlPanel.bottom + 10
+    // add phases control node
+    var solidLiquidGasPhaseControlNode = new SolidLiquidGasPhaseControlNode( model.stateProperty, {
+      right: this.layoutBounds.right + layoutBoundsRightOffset,
+      top: solidLiquidGasMoleculesControlPanel.bottom + layoutBoundsYOffset
     } );
     this.addChild( solidLiquidGasPhaseControlNode );
 
     // Add reset all button
     var resetAllButton = new ResetAllButton(
       {
-        listener: function() { model.reset(); },
-        bottom: this.layoutBounds.bottom - 5,
-        right: this.layoutBounds.right + 5,
+        listener: function() {
+          model.reset();
+          particleContainerNode.reset();
+        },
+        bottom: this.layoutBounds.bottom - layoutBoundsYOffset / 2,
+        right: this.layoutBounds.right + layoutBoundsRightOffset,
         radius: 18
       } );
 
@@ -106,12 +122,18 @@ define( function( require ) {
         radius: 12,
         stroke: 'black',
         fill: '#005566',
-        right: stoveNode.left - 50,
-        bottom: stoveNode.bottom - 20
+        right: stoveNode.left - stepButtonXOffset,
+        bottom: stoveNode.bottom - stepButtonYOffset
       }
     );
 
     this.addChild( stepButton );
+    model.stateProperty.link( function( phase ) {
+      model.setPhase( phase );
+    } );
+    model.moleculeTypeProperty.link( function() {
+      model.temperatureSetPointProperty._notifyObservers();
+    } );
 
     var playPauseButton = new PlayPauseButton( model.isPlayingProperty,
       {
