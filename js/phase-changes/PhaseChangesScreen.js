@@ -14,19 +14,22 @@ define( function( require ) {
   var Screen = require( 'JOIST/Screen' );
   var MultipleParticleModel = require( 'STATES_OF_MATTER/common/model/MultipleParticleModel' );
   var PhaseChangesScreenView = require( 'STATES_OF_MATTER/phase-changes/view/PhaseChangesScreenView' );
-  var Rectangle = require( 'SCENERY/nodes/Rectangle' );
+  var Image = require( 'SCENERY/nodes/Image' );
 
   // strings
   var phaseChangesString = require( 'string!STATES_OF_MATTER/phaseChanges' );
+
+  // images
+  var phaseChangesScreenIcon = require( 'image!STATES_OF_MATTER/som-phase-changes-screen.png' );
 
   /**
    * @constructor
    */
   function PhaseChangesScreen( isInteractionDiagramEnabled ) {
-    Screen.call( this, phaseChangesString, new Rectangle( 0, 0, 50, 50 ),
+    Screen.call( this, phaseChangesString, new Image( phaseChangesScreenIcon ),
       function() { return new MultipleParticleModel(); },
       function( model ) { return new PhaseChangesScreenView( model, isInteractionDiagramEnabled ); },
-      { backgroundColor: 'black', navigationBarIcon: new Rectangle( 0, 0, 50, 50 ) }
+      { backgroundColor: 'black' }
     );
   }
 
