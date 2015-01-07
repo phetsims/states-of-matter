@@ -21,10 +21,6 @@ define( function( require ) {
   var LinearGradient = require( 'SCENERY/util/LinearGradient' );
   var HandleNode = require( 'STATES_OF_MATTER/common/view/HandleNode' );
 
-  //var PRESSURE_GAUGE_Y_OFFSET = -20;
-  // var PRESSURE_METER_X_OFFSET_PROPORTION = 0.80;
-// Maximum value expected for pressure, in atmospheres.
-  //var MAX_PRESSURE = 200;
   var LID_POSITION_TWEAK_FACTOR = 65; // Empirically determined value for aligning lid and container body.
   var PRESSURE_GAUGE_Y_OFFSET = -20;
 
@@ -47,20 +43,20 @@ define( function( require ) {
     Node.call( this );
 
     var preParticleLayer = new Node();
-    var particleLayer = new Node();
     var postParticleLayer = new Node( { opacity: 0.8} );
 
     this.containerLid = new Node( { opacity: 0.8 } );
     this.addChild( preParticleLayer );
-    this.addChild( particleLayer );
 
     var openEllipse = new Path( new Shape()
-      .ellipticalArc( 125, 2, 25, 125, Math.PI / 2, 0, 2 * Math.PI, false ).close(), {
+      .ellipticalArc( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / 2, 2, 25,
+        StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / 2, Math.PI / 2, 0, 2 * Math.PI, false ).close(), {
       lineWidth: 1,
       fill: '#7E7E7E'
     } );
     var openInnerEllipse = new Path( new Shape()
-      .ellipticalArc( 125, 2, 20, 100, Math.PI / 2, 0, 2 * Math.PI, false ).close(), {
+      .ellipticalArc( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / 2, 2, 20, 100, Math.PI / 2, 0, 2 * Math.PI,
+      false ).close(), {
       lineWidth: 1,
       stroke: '#B3B3B3',
       fill: 'white'
@@ -68,7 +64,8 @@ define( function( require ) {
     openInnerEllipse.centerX = openEllipse.centerX;
     openInnerEllipse.centerY = openEllipse.centerY;
     var open = new Path( new Shape()
-      .ellipticalArc( 125, 2, 25, 125, Math.PI / 2, 0, 2 * Math.PI, false ).close(), {
+      .ellipticalArc( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / 2, 2, 25,
+        StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / 2, Math.PI / 2, 0, 2 * Math.PI, false ).close(), {
       lineWidth: 1,
       stroke: '#606262'
     } );
@@ -89,13 +86,10 @@ define( function( require ) {
       .quadraticCurveTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 2,
         StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT + 5, StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 10,
         StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT + 8 )
-
       .quadraticCurveTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / 2,
         StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT + 35, 20, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT + 10 )
-
       .quadraticCurveTo( 2, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT + 5, 0,
       StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT )
-
       .lineTo( 25, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT - 10 )
       .quadraticCurveTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / 2,
         StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT + 25, StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 25,
