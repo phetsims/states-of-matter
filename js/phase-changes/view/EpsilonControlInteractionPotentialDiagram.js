@@ -35,7 +35,7 @@ define( function( require ) {
 
   // Position of handle as function of node width.
   var EPSILON_HANDLE_OFFSET_PROPORTION = 0.08;
-  var EPSILON_LINE_WIDTH = 1;
+  // var EPSILON_LINE_WIDTH = 1;
   var RESIZE_HANDLE_NORMAL_COLOR = new Color( 51, 204, 51 );
   var RESIZE_HANDLE_HIGHLIGHTED_COLOR = new Color( 153, 255, 0 );
   var EPSILON_LINE_COLOR = RESIZE_HANDLE_NORMAL_COLOR;
@@ -56,12 +56,11 @@ define( function( require ) {
     InteractionPotentialDiagramNode.call( this, sigma, epsilon, wide, true );
     this.model = model;
     var accordionContent = new Node();
-    accordionContent.addChild( this.ljPotentialGraph );
     accordionContent.addChild( this.horizontalAxisLabel );
     accordionContent.addChild( this.horizontalAxis );
     accordionContent.addChild( this.verticalAxisLabel );
     accordionContent.addChild( this.verticalAxis );
-
+    accordionContent.addChild( this.ljPotentialGraph );
     // Add the line that will indicate the value of epsilon.
     var epsilonLineLength = EPSILON_HANDLE_OFFSET_PROPORTION * this.widthOfGraph * 2.2;
     this.epsilonLine = new Rectangle( -epsilonLineLength / 2, 0, epsilonLineLength, 3, {
