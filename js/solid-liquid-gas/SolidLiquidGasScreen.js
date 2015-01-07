@@ -14,10 +14,12 @@ define( function( require ) {
   var Screen = require( 'JOIST/Screen' );
   var SolidLiquidGasScreenView = require( 'STATES_OF_MATTER/solid-liquid-gas/view/SolidLiquidGasScreenView' );
   var MultipleParticleModel = require( 'STATES_OF_MATTER/common/model/MultipleParticleModel' );
-  var Rectangle = require( 'SCENERY/nodes/Rectangle' );
+  var Image = require( 'SCENERY/nodes/Image' );
 
   // strings
   var statesString = require( 'string!STATES_OF_MATTER/states' );
+  // images
+  var statesScreenIcon = require( 'image!STATES_OF_MATTER/som-states-screen.png' );
 
   /**
    * @constructor
@@ -25,10 +27,10 @@ define( function( require ) {
   function SolidLiquidGasScreen() {
     Screen.call( this,
       statesString,
-      new Rectangle( 0, 0, 50, 50 ),
+      new Image( statesScreenIcon ),
       function() { return new MultipleParticleModel(); },
       function( model ) { return new SolidLiquidGasScreenView( model ); },
-      { backgroundColor: 'black', navigationBarIcon: new Rectangle( 0, 0, 50, 50 ) }
+      { backgroundColor: 'black' }
     );
   }
 
