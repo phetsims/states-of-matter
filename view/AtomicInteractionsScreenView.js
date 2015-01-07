@@ -68,10 +68,10 @@ define( function( require ) {
     var atomicInteractionsScreenView = this;
 
     // model-view transform
-    var mvtScale = 0.3;
+    var mvtScale = 0.25;
 
     this.modelViewTransform = ModelViewTransform2.createSinglePointScaleMapping( new Vector2( 0, 0 ),
-      new Vector2( 80, 380 ), mvtScale );
+      new Vector2( 80, 370 ), mvtScale );
 
     var tickTextColor;
     var textColor;
@@ -95,7 +95,6 @@ define( function( require ) {
         textColor: textColor,
         backgroundColor: backgroundColor
       } );
-    this.addChild( atomicInteractionsControlPanel );
 
     // add interactive potential diagram
     this.interactiveInteractionPotentialDiagram = new InteractiveInteractionPotentialDiagram(
@@ -225,7 +224,7 @@ define( function( require ) {
     this.movableParticleWiggleMeNode = new Node();
 
     this.addChild( this.movableParticleWiggleMeNode );
-
+    this.addChild( atomicInteractionsControlPanel );
     this.addChild( forceControlNode );
 
     // default molecule is neon
@@ -472,7 +471,7 @@ define( function( require ) {
      */
     updateMinimumXForMovableAtom: function() {
       if ( this.movableParticle !== null && this.fixedParticle !== null ) {
-        this.movableParticleNode.setMinX( this.dualAtomModel.getSigma() * 0.9 );
+        this.movableParticleNode.setMinX( this.modelViewTransform.modelToViewX( this.dualAtomModel.getSigma() * 0.9 ) );
       }
     },
     updateForceVectors: function() {
