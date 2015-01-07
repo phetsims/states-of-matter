@@ -84,7 +84,7 @@ define( function( require ) {
       // Create and initialize other variables needed to do the job.
       var rand = new Random();
       var temperatureSqrt = Math.sqrt( this.model.getTemperatureSetPoint() );
-      var moleculesPerLayer = Math.round( Math.sqrt( numberOfMolecules ) );
+      var moleculesPerLayer = Math.sqrt( numberOfMolecules );
       // Initialize the velocities and angles of the molecules.
       for ( var i = 0; i < numberOfMolecules; i++ ) {
         // Assign each molecule an initial velocity.
