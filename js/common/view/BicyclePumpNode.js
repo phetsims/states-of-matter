@@ -25,7 +25,6 @@ define( function( require ) {
   var PUMP_BODY_WIDTH_PROPORTION = 0.05;
   var PUMP_SHAFT_WIDTH_PROPORTION = PUMP_BODY_WIDTH_PROPORTION * 0.25;
   var PUMP_SHAFT_HEIGHT_PROPORTION = PUMP_BODY_HEIGHT_PROPORTION;
-  var PUMP_HANDLE_WIDTH_PROPORTION = 0.15;
   var PUMP_HANDLE_HEIGHT_PROPORTION = 0.02;
   var PUMP_HANDLE_INIT_VERT_POS_PROPORTION = PUMP_BODY_HEIGHT_PROPORTION * 1.1;
   var HOSE_CONNECTOR_HEIGHT_PROPORTION = 0.04;
@@ -96,8 +95,7 @@ define( function( require ) {
 
     // Add the handle of the pump.  This is the node that the user will
     // interact with in order to use the pump.
-    var pumpHandleWidth = width * PUMP_HANDLE_WIDTH_PROPORTION;
-    var pumpHandleHeight = height * PUMP_HANDLE_HEIGHT_PROPORTION
+    var pumpHandleHeight = height * PUMP_HANDLE_HEIGHT_PROPORTION;
 
     //todo: factor out the constants and use a for loop?
     var pumpHandleNode = new Path( new Shape()
