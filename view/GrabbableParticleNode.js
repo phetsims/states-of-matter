@@ -55,11 +55,11 @@ define( function( require ) {
         var d = endDragX - startDragX;
         // Make sure we don't exceed the positional limits.
         var newPosX = startDragX + d;
-        if ( newPosX > maxX ) {
-          newPosX = maxX;
+        if ( newPosX > grabbableParticleNode.maxX ) {
+          newPosX = grabbableParticleNode.maxX;
         }
-        else if ( newPosX < minX ) {
-          newPosX = minX;
+        else if ( newPosX < grabbableParticleNode.minX ) {
+          newPosX = grabbableParticleNode.minX;
         }
         // Move the particle based on the amount of mouse movement.
         grabbableParticleNode.particle.setPosition( mvt.viewToModelX( newPosX ), particle.positionProperty.y );
