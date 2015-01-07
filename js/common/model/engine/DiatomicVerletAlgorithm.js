@@ -40,23 +40,23 @@ define( function( require ) {
       // perform fast manipulations.
       var moleculeDataSet = this.model.moleculeDataSet;
       // var numberOfAtoms = moleculeDataSet.numberOfAtoms;
-      var moleculeCenterOfMassPositions = moleculeDataSet.moleculeCenterOfMassPositions;
-      var moleculeVelocities = moleculeDataSet.moleculeVelocities;
-      var moleculeForces = moleculeDataSet.moleculeForces;
-      var nextMoleculeForces = moleculeDataSet.nextMoleculeForces;
+      var moleculeCenterOfMassPositions = moleculeDataSet.getMoleculeCenterOfMassPositions();
+      var moleculeVelocities = moleculeDataSet.getMoleculeVelocities();
+      var moleculeForces = moleculeDataSet.getMoleculeForces();
+      var nextMoleculeForces = moleculeDataSet.getNextMoleculeForces();
 
-      var numberOfMolecules = moleculeDataSet.numberOfSafeMolecules;
-      var atomPositions = moleculeDataSet.atomPositions;
+      var numberOfMolecules = moleculeDataSet.getNumberOfMolecules();
+      var atomPositions = moleculeDataSet.getAtomPositions();
 
-      var moleculeRotationAngles = moleculeDataSet.moleculeRotationAngles;
-      var moleculeRotationRates = moleculeDataSet.moleculeRotationRates;
-      var moleculeTorques = moleculeDataSet.moleculeTorques;
-      var nextMoleculeTorques = moleculeDataSet.nextMoleculeTorques;
+      var moleculeRotationAngles = moleculeDataSet.getMoleculeRotationAngles();
+      var moleculeRotationRates = moleculeDataSet.getMoleculeRotationRates();
+      var moleculeTorques = moleculeDataSet.getMoleculeTorques();
+      var nextMoleculeTorques = moleculeDataSet.getNextMoleculeTorques();
       // Initialize other values that will be needed for the calculation.
-      var massInverse = 1 / moleculeDataSet.moleculeMass;
-      var inertiaInverse = 1 / moleculeDataSet.moleculeRotationalInertia;
-      var normalizedContainerHeight = this.model.normalizedContainerHeight;
-      var normalizedContainerWidth = this.model.normalizedContainerWidth;
+      var massInverse = 1 / moleculeDataSet.getMoleculeMass();
+      var inertiaInverse = 1 / moleculeDataSet.getMoleculeRotationalInertia();
+      var normalizedContainerHeight = this.model.getNormalizedContainerHeight();
+      var normalizedContainerWidth = this.model.getNormalizedContainerWidth();
       var pressureZoneWallForce = 0;
       // Update center of mass positions and angles for the molecules.
       for ( var i = 0; i < numberOfMolecules; i++ ) {
