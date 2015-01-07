@@ -12,18 +12,21 @@ define( function( require ) {
   var AtomicInteractionsScreenView = require( 'ATOMIC_INTERACTIONS/atomic-interactions/view/AtomicInteractionsScreenView' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Screen = require( 'JOIST/Screen' );
-  var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var AtomicInteractionColors = require( 'ATOMIC_INTERACTIONS/atomic-interactions/view/AtomicInteractionColors' );
+  var Image = require( 'SCENERY/nodes/Image' );
 
-  return inherit( Screen, function AtomicInteractionsScreen( enableHeterogeneousMolecules, simTitle, colorsProperty ) {
+  // images
+  var atomicInteractionScreenIcon = require( 'image!STATES_OF_MATTER/som-atomic-interaction-screen.png' );
+
+  function AtomicInteractionsScreen( enableHeterogeneousMolecules, simTitle, colorsProperty ) {
 
     //If this is a single-screen sim, then no icon is necessary.
     //If there are multiple screens, then the icon must be provided here.
     var screen = this;
-    Screen.call( this, simTitle, new Rectangle( 0, 0, 50, 50 ),
+    Screen.call( this, simTitle, new Image( atomicInteractionScreenIcon ),
       function() { return new DualAtomModel(); },
       function( model ) { return new AtomicInteractionsScreenView( model, enableHeterogeneousMolecules ); },
-      { backgroundColor: AtomicInteractionColors.background.toCSS(), navigationBarIcon: new Rectangle( 0, 0, 50, 50 )}
+      { backgroundColor: AtomicInteractionColors.background.toCSS()}
     );
 
     colorsProperty.link( function( color ) {
@@ -35,5 +38,7 @@ define( function( require ) {
       }
     } );
     AtomicInteractionColors.linkAttribute( 'background', screen, 'backgroundColor' );
-  } );
+  }
+
+  return inherit( Screen, AtomicInteractionsScreen );
 } );
