@@ -124,7 +124,7 @@ define( function( require ) {
     // Attributes of the container and simulation as a whole.
     this.minAllowableContainerHeight = null;
     this.particles = new ObservableArray();
-
+    this.copyOfParticles = new ObservableArray();
     // Data set containing the atom and molecule position, motion, and force information.
     this.moleculeDataSet = null; // will be initialized in initializeMonatomic
 
@@ -488,7 +488,7 @@ define( function( require ) {
         // Position the atoms that comprise the molecules.
         this.atomPositionUpdater.updateAtomPositions( this.moleculeDataSet );
 
-        if ( this.moleculeDataSet.atomsPerMolecule === 1 ) {
+        if ( atomsPerMolecule === 1 ) {
 
           // Add particle to model set.
           var particle;
@@ -509,15 +509,17 @@ define( function( require ) {
           }
           this.particles.add( particle );
         }
-        else if ( this.moleculeDataSet.atomsPerMolecule === 2 ) {
+        else if ( atomsPerMolecule === 2 ) {
 
           assert && assert( this.currentMolecule === StatesOfMatterConstants.DIATOMIC_OXYGEN );
 
           // Add particles to model set.
-          for ( var j = 0; j < atomsPerMolecule; j++ ) {
-            this.particles.add( new OxygenAtom( 0, 0 ) );
-            atomPositions[j] = new Vector2();
-          }
+          //for ( var j = 0; j < atomsPerMolecule; j++ ) {
+          this.particles.add( new OxygenAtom( 0, 0 ) );
+          atomPositions[0] = new Vector2();
+          this.particles.add( new OxygenAtom( 0, 0 ) );
+          atomPositions[1] = new Vector2();
+          // }
         }
         else if ( atomsPerMolecule === 3 ) {
 
@@ -872,9 +874,9 @@ define( function( require ) {
     getMoleculeDataSetRef: function() {
       return this.moleculeDataSet;
     },
-    /*  getMoleculeCenterOfMassPositions: function() {
-     return this.moleculeCenterOfMassPositions;
-     },*/
+    getMoleculeCenterOfMassPositions: function() {
+      return this.moleculeCenterOfMassPositions;
+    },
     getNormalizedContainerHeight: function() {
       return this.normalizedContainerHeight;
     },
@@ -1216,7 +1218,6 @@ define( function( require ) {
         console.log( " - Warning: Ignoring attempt to return lid when container hadn't exploded." );
         return;
       }
-      var particlesOutsideContainer = [];
       // with the normalized particles for this.
       var particlesOutsideOfContainerCount = 0;
       var firstOutsideMoleculeIndex;
@@ -1227,19 +1228,6 @@ define( function( require ) {
           if ( pos.x < 0 || pos.x > this.normalizedContainerWidth || pos.y < 0 ||
                pos.y > StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT / this.particleDiameter ) {
             // This particle is outside of the container.
-
-            if ( this.moleculeType === StatesOfMatterConstants.DIATOMIC_OXYGEN ) {
-              particlesOutsideContainer.push( firstOutsideMoleculeIndex );
-              particlesOutsideContainer.push( firstOutsideMoleculeIndex + 1 );
-            }
-            else if ( this.moleculeType === StatesOfMatterConstants.WATER ) {
-              particlesOutsideContainer.push( firstOutsideMoleculeIndex );
-              particlesOutsideContainer.push( firstOutsideMoleculeIndex + 1 );
-              particlesOutsideContainer.push( firstOutsideMoleculeIndex + 2 );
-            }
-            else {
-              particlesOutsideContainer.push( firstOutsideMoleculeIndex );
-            }
             break;
           }
         }
@@ -1250,8 +1238,13 @@ define( function( require ) {
         }
       } while ( firstOutsideMoleculeIndex !== this.moleculeDataSet.getNumberOfMolecules() );
       // explicitly synced up elsewhere.
-      for ( var i = 0; i < particlesOutsideContainer.length; i++ ) {
-        var particle = this.particles.get( particlesOutsideContainer[i] );
+      this.copyOfParticles.clear();
+      for ( var k = 0; k < this.particles.length; k++ ) {
+        this.copyOfParticles.push( this.particles.get( k ) );
+      }
+
+      for ( var i = 0; i < this.copyOfParticles.length - this.moleculeDataSet.getNumberOfAtoms(); i++ ) {
+        var particle = this.copyOfParticles.get( i );
         this.particles.remove( particle );
       }
       // Set the container to be unexploded.
