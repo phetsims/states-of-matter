@@ -35,6 +35,14 @@ define( function( require ) {
 //  var HOSE_WIDTH_PROPORTION = 0.03;
   var PUMPING_REQUIRED_TO_INJECT_PROPORTION = PUMP_SHAFT_HEIGHT_PROPORTION / 10;
 
+  /**
+   *
+   * @param width
+   * @param height
+   * @param model
+   * @param {Object} options that can be passed on to the underlying node
+   * @constructor
+   */
   function BicyclePumpNode( width, height, model, options ) {
 
 
@@ -89,10 +97,7 @@ define( function( require ) {
     // Add the handle of the pump.  This is the node that the user will
     // interact with in order to use the pump.
     var pumpHandleWidth = width * PUMP_HANDLE_WIDTH_PROPORTION;
-    var pumpHandleHeight = height * PUMP_HANDLE_HEIGHT_PROPORTION;
-    var pumpHandleRectangle = new Rectangle( 0, 0, pumpHandleWidth, pumpHandleHeight, 5, 5, {
-      fill: '#B9BBBD'
-    } );
+    var pumpHandleHeight = height * PUMP_HANDLE_HEIGHT_PROPORTION
 
     //todo: factor out the constants and use a for loop?
     var pumpHandleNode = new Path( new Shape()

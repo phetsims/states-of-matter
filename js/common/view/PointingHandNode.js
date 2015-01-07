@@ -35,7 +35,7 @@ define( function( require ) {
       .lineTo( 0, 30 )
       .lineTo( 30, 30 )
       .lineTo( 30, 5 )
-      .lineTo( 0, 0 ), {fill: '#BCBEC0'} )
+      .lineTo( 0, 0 ), {fill: '#BCBEC0'} );
 
     this.addChild( backgroundNode );
 
@@ -70,7 +70,7 @@ define( function( require ) {
     // Load and scale the image.
     this.fingerImageNode = new Image( fingerImage, {scale: 0.5, cursor: 'ns-resize', pickable: true} );
     backgroundNode.top = this.fingerImageNode.bottom - 28;
-    backgroundNode.right = this.fingerImageNode.left + 90
+    backgroundNode.right = this.fingerImageNode.left + 90;
     this.hintNode.top = this.fingerImageNode.bottom - 50;
     this.hintNode.left = this.fingerImageNode.right;
 

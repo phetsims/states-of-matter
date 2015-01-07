@@ -133,6 +133,6 @@ define( function( require ) {
       } ) );
   }
 
-  return inherit( Node, HandleNode )
+  return inherit( Node, HandleNode );
 
 } );
