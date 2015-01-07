@@ -153,7 +153,7 @@ define( function( require ) {
     updateMoleculeSafety: function() {
 
       var moleculeDataSet = this.model.moleculeDataSet;
-      var numberOfSafeMolecules = moleculeDataSet.numberOfSafeMolecules;
+      var numberOfSafeMolecules = moleculeDataSet.getNumberOfSafeMolecules();
       var numberOfMolecules = moleculeDataSet.getNumberOfMolecules();
 
       if ( numberOfMolecules === numberOfSafeMolecules ) {
@@ -161,13 +161,13 @@ define( function( require ) {
         return;
       }
 
-      var atomsPerMolecule = moleculeDataSet.atomsPerMolecule;
-      var moleculeCenterOfMassPositions = moleculeDataSet.moleculeCenterOfMassPositions;
-      var atomPositions = moleculeDataSet.atomPositions;
-      var moleculeVelocities = moleculeDataSet.moleculeVelocities;
-      var moleculeForces = moleculeDataSet.moleculeForces;
-      var moleculeRotationRates = moleculeDataSet.moleculeRotationRates;
-      var moleculeRotationAngles = moleculeDataSet.moleculeRotationAngles;
+      var atomsPerMolecule = moleculeDataSet.getAtomsPerMolecule();
+      var moleculeCenterOfMassPositions = moleculeDataSet.getMoleculeCenterOfMassPositions();
+      var atomPositions = moleculeDataSet.getAtomPositions();
+      var moleculeVelocities = moleculeDataSet.getMoleculeVelocities();
+      var moleculeForces = moleculeDataSet.getMoleculeForces();
+      var moleculeRotationRates = moleculeDataSet.getMoleculeRotationRates();
+      var moleculeRotationAngles = moleculeDataSet.getMoleculeRotationAngles();
 
       for ( var i = numberOfSafeMolecules; i < numberOfMolecules; i++ ) {
 
