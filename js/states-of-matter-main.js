@@ -11,10 +11,10 @@ define( function( require ) {
   // modules
   var SolidLiquidGasScreen = require( 'STATES_OF_MATTER/solid-liquid-gas/SolidLiquidGasScreen' );
   var PhaseChangesScreen = require( 'STATES_OF_MATTER/phase-changes/PhaseChangesScreen' );
-  var AtomicInteractionsScreen = require( 'ATOMIC_INTERACTIONS/atomic-interactions/AtomicInteractionsScreen' );
+  var AtomicInteractionsScreen = require( 'ATOMIC_INTERACTIONS/AtomicInteractionsScreen' );
   var Sim = require( 'JOIST/Sim' );
   var SimLauncher = require( 'JOIST/SimLauncher' );
-  var GlobalOptionsNode = require( 'ATOMIC_INTERACTIONS/atomic-interactions/view/GlobalOptionsNode' );
+  var GlobalOptionsNode = require( 'ATOMIC_INTERACTIONS/view/GlobalOptionsNode' );
   var Property = require( 'AXON/Property' );
 
   // strings
