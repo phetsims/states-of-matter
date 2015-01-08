@@ -82,7 +82,7 @@ define( function( require ) {
         // Let the model move the particles again.  Note that this happens
         // even if the motion was paused by some other means.
         model.setMotionPaused( false );
-        handNode.setVisible( false )
+        handNode.setVisible( false );
       }
     } ) );
     model.movableAtom.positionProperty.link( function( position ) {
@@ -92,6 +92,6 @@ define( function( require ) {
 
   }
 
-  return inherit( Node, HandNode )
+  return inherit( Node, HandNode );
 
 } );
