@@ -50,7 +50,7 @@ define( function( require ) {
     }, options );
 
     Node.call( this );
-    var textOptions = { font: new PhetFont( 12 ), fill: '#FFFFFF', fontWeight: 550};
+    var textOptions = { font: new PhetFont( 12 ), fill: '#FFFFFF', fontWeight: 600};
 
     // itemSpec describes the pieces that make up an item in the control panel,
     // conforms to the contract: { label: {Node}, icon: {Node} (optional) }
@@ -121,7 +121,7 @@ define( function( require ) {
     var titleText = new Text( titleString,
       { font: new PhetFont( 14 ),
         fill: '#FFFFFF',
-        fontWeight: 550
+        fontWeight: 600
       } );
 
     var titleBackground = new Rectangle( background.centerX + 4, background.top - 10,
