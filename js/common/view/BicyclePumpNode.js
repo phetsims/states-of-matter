@@ -26,14 +26,14 @@ define( function( require ) {
   var PUMP_SHAFT_WIDTH_PROPORTION = PUMP_BODY_WIDTH_PROPORTION * 0.25;
   var PUMP_SHAFT_HEIGHT_PROPORTION = PUMP_BODY_HEIGHT_PROPORTION;
   var PUMP_HANDLE_HEIGHT_PROPORTION = 0.05;
-  var PUMP_HANDLE_INIT_VERT_POS_PROPORTION = PUMP_BODY_HEIGHT_PROPORTION * 1.4;
+  var PUMP_HANDLE_INIT_VERT_POS_PROPORTION = PUMP_BODY_HEIGHT_PROPORTION * 1.1;
   var PIPE_CONNECTOR_HEIGHT_PROPORTION = 0.09;
   var HOSE_CONNECTOR_HEIGHT_PROPORTION = 0.04;
   var HOSE_CONNECTOR_WIDTH_PROPORTION = 0.05;
   var HOSE_CONNECTOR_VERT_POS_PROPORTION = 0.8;
   var HOSE_ATTACH_VERT_POS_PROPORTION = 0.15;
 //  var HOSE_WIDTH_PROPORTION = 0.03;
-  var PUMPING_REQUIRED_TO_INJECT_PROPORTION = PUMP_SHAFT_HEIGHT_PROPORTION / 10;
+  var PUMPING_REQUIRED_TO_INJECT_PROPORTION = PUMP_SHAFT_HEIGHT_PROPORTION / 6;
 
   /**
    *
@@ -99,128 +99,116 @@ define( function( require ) {
     var pumpHandleHeight = height * PUMP_HANDLE_HEIGHT_PROPORTION;
 
     //todo: factor out the constants and use a for loop?
-    var pumpHandleNode = new Path( new Shape()
-      .moveTo( 0, 12 )
-      .quadraticCurveTo( 5, 0, 24, 9 )//1
-      .lineTo( 30, 9 )
-      .quadraticCurveTo( 39, 0, 48, 9 )//2
-      .lineTo( 54, 9 )
-      .quadraticCurveTo( 63, 0, 72, 9 ) //3
-      .lineTo( 78, 9 )
-      .quadraticCurveTo( 87, 0, 96, 9 ) //4
-      .lineTo( 102, 9 )
-      .quadraticCurveTo( 111, 2, 120, 2 )//5-1
-      .lineTo( 154, 2 )
-      .quadraticCurveTo( 163, 2, 172, 9 )//5-2
-      .lineTo( 178, 9 )
-      .quadraticCurveTo( 187, 0, 196, 9 )//6
-      .lineTo( 202, 9 )
-      .quadraticCurveTo( 211, 0, 220, 9 )//7
-      .lineTo( 226, 9 )
-      .quadraticCurveTo( 235, 0, 244, 9 )//8
-      .lineTo( 250, 9 )
-      .quadraticCurveTo( 261, 0, 265, 12 ) //9
-      .lineTo( 265, 33 )
-      .quadraticCurveTo( 261, 45, 250, 36 ) //9
-      .lineTo( 244, 36 )
-      .quadraticCurveTo( 234, 45, 226, 36 )//8
-      .lineTo( 220, 36 )
-      .quadraticCurveTo( 211, 45, 202, 36 )//7
-      .lineTo( 196, 36 )
-      .quadraticCurveTo( 187, 45, 178, 36 )//6
-      .lineTo( 172, 36 )
-      .quadraticCurveTo( 163, 43, 154, 43 )//5-1
-      .lineTo( 120, 43 )
-      .quadraticCurveTo( 111, 43, 102, 36 )//5-2
-      .lineTo( 96, 36 )
-      .quadraticCurveTo( 87, 45, 78, 36 )//4
-      .lineTo( 72, 36 )
-      .quadraticCurveTo( 63, 45, 54, 36 )//3
-      .lineTo( 48, 36 )
-      .quadraticCurveTo( 39, 45, 30, 36 )//2
-      .lineTo( 24, 36 )
-      .quadraticCurveTo( 5, 45, 0, 33 )//1
-      .lineTo( 0, 12 )
-      .close(), {
+    var pumpHandleNodeShape = new Shape();
+    var currentX = 0;
+    var inset = 9;
+    var maxY = 45;
+    pumpHandleNodeShape.moveTo( currentX, inset );
+    for ( var i = 0; i < 4; i++ ) {
+      pumpHandleNodeShape.quadraticCurveTo( currentX += inset, 0, currentX += inset, inset );
+      pumpHandleNodeShape.lineTo( currentX += 6, inset )
+    }
+    pumpHandleNodeShape.quadraticCurveTo( currentX += inset, 0, currentX += inset, 0 );
+    pumpHandleNodeShape.lineTo( currentX += 34, 0 );
+    pumpHandleNodeShape.quadraticCurveTo( currentX += inset, 0, currentX += inset, inset );
+    for ( i = 0; i < 4; i++ ) {
+      pumpHandleNodeShape.lineTo( currentX += 6, inset );
+      pumpHandleNodeShape.quadraticCurveTo( currentX += inset, 0, currentX += inset, inset );
+    }
+    pumpHandleNodeShape.lineTo( currentX, maxY - inset );
+    for ( i = 0; i < 4; i++ ) {
+      pumpHandleNodeShape.quadraticCurveTo( currentX -= inset, maxY, currentX -= inset, maxY - inset );
+      pumpHandleNodeShape.lineTo( currentX -= 6, maxY - inset )
+    }
+    pumpHandleNodeShape.quadraticCurveTo( currentX -= inset, maxY, currentX -= inset, maxY );
+    pumpHandleNodeShape.lineTo( currentX -= 34, maxY );
+    pumpHandleNodeShape.quadraticCurveTo( currentX -= inset, maxY, currentX -= inset, maxY - inset );
+    for ( i = 0; i < 4; i++ ) {
+      pumpHandleNodeShape.lineTo( currentX -= 6, maxY - inset );
+      pumpHandleNodeShape.quadraticCurveTo( currentX -= inset, maxY, currentX -= inset, maxY - inset );
+    }
+    pumpHandleNodeShape.close();
+    var pumpHandleNode = new Path( pumpHandleNodeShape, {
       lineWidth: 1,
       stroke: 'black',
-      fill: new LinearGradient( 0, 0, 265, 0 )
+      fill: new LinearGradient( 0, 0, 262, 0 )
 
         .addColorStop( 0, '#727374' )//1
-        .addColorStop( 0.0377, '#AFB1B2' )
-        .addColorStop( 0.0904, '#B5B7B9' )
-        .addColorStop( 0.0905, '#858687' )
-        .addColorStop( 0.1131, '#B5B7B9' )
-        .addColorStop( 0.1132, '#727374' )//2
-        .addColorStop( 0.1471, '#AFB1B2' )
-        .addColorStop( 0.1810, '#B5B7B9' )
-        .addColorStop( 0.1811, '#858687' )
-        .addColorStop( 0.2036, '#B5B7B9' )
-        .addColorStop( 0.2037, '#727374' ) //3
-        .addColorStop( 0.2377, '#AFB1B2' )
-        .addColorStop( 0.2715, '#B5B7B9' )
-        .addColorStop( 0.2716, '#858687' )
-        .addColorStop( 0.2942, '#B5B7B9' )
-        .addColorStop( 0.2943, '#727374' )//4
-        .addColorStop( 0.3283, '#AFB1B2' )
-        .addColorStop( 0.3621, '#B5B7B9' )
-        .addColorStop( 0.3622, '#858687' )
-        .addColorStop( 0.3848, '#B5B7B9' )
-        .addColorStop( 0.3849, '#727374' )//5
-        .addColorStop( 0.4188, '#AAACAE' )
-        .addColorStop( 0.6150, '#B1B3B4' )
-        .addColorStop( 0.6489, '#B1B3B4' )
-        .addColorStop( 0.6490, '#858687' )
-        .addColorStop( 0.6715, '#B5B7B9' )
-        .addColorStop( 0.6716, '#727374' )//6
-        .addColorStop( 0.7056, '#AFB1B2' )
-        .addColorStop( 0.7395, '#B5B7B9' )
-        .addColorStop( 0.7396, '#858687' )
-        .addColorStop( 0.7621, '#B5B7B9' )
-        .addColorStop( 0.7622, '#727374' )//7
-        .addColorStop( 0.7962, '#AFB1B2' )
-        .addColorStop( 0.8300, '#B5B7B9' )
-        .addColorStop( 0.8301, '#858687' )
-        .addColorStop( 0.8527, '#B5B7B9' )
-        .addColorStop( 0.8528, '#727374' )//8
-        .addColorStop( 0.8867, '#AFB1B2' )
-        .addColorStop( 0.9206, '#B5B7B9' )
-        .addColorStop( 0.9207, '#858687' )
-        .addColorStop( 0.9432, '#B5B7B9' )
-        .addColorStop( 0.9433, '#727374' )//9
-        .addColorStop( 0.9773, '#AFB1B2' )
-        .addColorStop( 0.9999, '#B5B7B9' ),
+        .addColorStop( 9 / 262, '#AFB1B2' )
+        .addColorStop( 18 / 262, '#B5B7B9' )
+        .addColorStop( 18 / 262, '#858687' )
+        .addColorStop( 24 / 262, '#B5B7B9' )
+        .addColorStop( 24 / 262, '#727374' )//2
+        .addColorStop( 33 / 262, '#AFB1B2' )
+        .addColorStop( 42 / 262, '#B5B7B9' )
+        .addColorStop( 42 / 262, '#858687' )
+        .addColorStop( 48 / 262, '#B5B7B9' )
+        .addColorStop( 48 / 262, '#727374' ) //3
+        .addColorStop( 57 / 262, '#AFB1B2' )
+        .addColorStop( 66 / 262, '#B5B7B9' )
+        .addColorStop( 66 / 262, '#858687' )
+        .addColorStop( 72 / 262, '#B5B7B9' )
+        .addColorStop( 72 / 262, '#727374' )//4
+        .addColorStop( 81 / 262, '#AFB1B2' )
+        .addColorStop( 90 / 262, '#B5B7B9' )
+        .addColorStop( 90 / 262, '#858687' )
+        .addColorStop( 96 / 262, '#B5B7B9' )
+        .addColorStop( 96 / 262, '#727374' )//5
+        .addColorStop( 105 / 262, '#AAACAE' )
+        .addColorStop( 157 / 262, '#B1B3B4' )
+        .addColorStop( 166 / 262, '#B1B3B4' )
+        .addColorStop( 166 / 262, '#858687' )
+        .addColorStop( 172 / 262, '#B5B7B9' )
+        .addColorStop( 172 / 262, '#727374' )//6
+        .addColorStop( 181 / 262, '#AFB1B2' )
+        .addColorStop( 190 / 262, '#B5B7B9' )
+        .addColorStop( 190 / 262, '#858687' )
+        .addColorStop( 196 / 262, '#B5B7B9' )
+        .addColorStop( 196 / 262, '#727374' )//7
+        .addColorStop( 205 / 262, '#AFB1B2' )
+        .addColorStop( 214 / 262, '#B5B7B9' )
+        .addColorStop( 214 / 262, '#858687' )
+        .addColorStop( 220 / 262, '#B5B7B9' )
+        .addColorStop( 220 / 262, '#727374' )//8
+        .addColorStop( 229 / 262, '#AFB1B2' )
+        .addColorStop( 238 / 262, '#B5B7B9' )
+        .addColorStop( 238 / 262, '#858687' )
+        .addColorStop( 244 / 262, '#B5B7B9' )
+        .addColorStop( 244 / 262, '#727374' )//9
+        .addColorStop( 253 / 262, '#AFB1B2' )
+        .addColorStop( 262 / 262, '#B5B7B9' ),
       cursor: 'ns-resize'
     } );
 
     pumpHandleNode.scale( pumpHandleHeight / pumpHandleNode.height );
     pumpHandleNode.setTranslation( (pumpBaseWidth - pumpHandleNode.width) / 2,
-        height - ( height * PUMP_HANDLE_INIT_VERT_POS_PROPORTION ) - pumpHandleHeight );
+        height - ( height * PUMP_HANDLE_INIT_VERT_POS_PROPORTION ) - pumpHandleHeight - pumpBaseHeight );
 
-    var currentHandleOffset = 0;
     var maxHandleOffset = -PUMP_SHAFT_HEIGHT_PROPORTION * height / 2;
 
     // Set ourself up to listen for and handle mouse dragging events on
     // the handle.
-    var startY;
-    var endY;
+    var dragStartY;
+    var dragEndY;
+    var pumpHandleStartY;
+    var pumpHandleEndY;
     pumpHandleNode.addInputListener( new SimpleDragHandler(
       {
         start: function( event ) {
-          startY = pumpHandleNode.globalToParentPoint( event.pointer.point ).y;
+          dragStartY = pumpHandleNode.globalToParentPoint( event.pointer.point ).y;
+          pumpHandleStartY = pumpHandleNode.y;
         },
         drag: function( event ) {
-          endY = pumpHandleNode.globalToParentPoint( event.pointer.point ).y;
-          var yDiff = endY - startY;
-          if ( ( currentHandleOffset + yDiff >= maxHandleOffset ) &&
-               ( currentHandleOffset + yDiff <= 0 ) ) {
-            pumpHandleNode.setTranslation( (pumpBaseWidth - pumpHandleNode.width) / 2, yDiff );
-            pumpShaft.setTranslation( (pumpBaseWidth - pumpShaftWidth) / 2, yDiff );
+          dragEndY = pumpHandleNode.globalToParentPoint( event.pointer.point ).y;
+          var yDiff = dragEndY - dragStartY;
+          if ( (  pumpHandleStartY + yDiff >= maxHandleOffset ) &&
+               (  pumpHandleStartY + yDiff <=
+                  (height - ( height * PUMP_HANDLE_INIT_VERT_POS_PROPORTION ) - pumpHandleHeight - pumpBaseHeight) ) ) {
+            pumpHandleNode.setTranslation( (pumpBaseWidth - pumpHandleNode.width) / 2, pumpHandleStartY + yDiff );
             pumpShaft.top = pumpHandleNode.bottom;
-            currentHandleOffset += yDiff;
-            if ( yDiff > 0 ) {
+            if ( dragEndY > pumpHandleEndY ) {
               // This motion is in the pumping direction, so accumulate it.
-              currentPumpingAmount += yDiff;
+              currentPumpingAmount += (dragEndY - pumpHandleEndY);
               if ( currentPumpingAmount >= pumpingRequiredToInject ) {
                 // Enough pumping has been done to inject a new particle.
                 model.injectMolecule();
@@ -228,6 +216,7 @@ define( function( require ) {
               }
             }
           }
+          pumpHandleEndY = dragEndY;
         }
       } ) );
 
@@ -242,7 +231,7 @@ define( function( require ) {
       pickable: false
     } );
     pumpShaft.setTranslation( (pumpBaseWidth - pumpShaftWidth) / 2,
-        height - ( height * PUMP_HANDLE_INIT_VERT_POS_PROPORTION ) );
+        height - ( height * PUMP_HANDLE_INIT_VERT_POS_PROPORTION ) - pumpBaseHeight );
     this.addChild( pumpShaft );
     this.addChild( pumpHandleNode );
 
