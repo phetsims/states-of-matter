@@ -38,11 +38,13 @@ define( function( require ) {
 
   /**
    *
+   * @param options
    * @param { MultipleParticleModel } model
+   * @param {Boolean} isBasicVersion
    * @param {Object} options for various panel display properties
    * @constructor
    */
-  function PhaseChangesMoleculesControlPanel( model, options ) {
+  function PhaseChangesMoleculesControlPanel( model, isBasicVersion, options ) {
 
     var phaseChangesMoleculesControlPanel = this;
     options = _.extend( {
@@ -55,7 +57,7 @@ define( function( require ) {
     }, options );
 
     Node.call( this );
-    var textOptions = {font: new PhetFont( 12 ), fill: "#FFFFFF"};
+    var textOptions = {font: new PhetFont( 12 ), fontWeight: 550, fill: "#FFFFFF"};
 
     // itemSpec describes the pieces that make up an item in the control panel,
     // conforms to the contract: { label: {Node}, icon: {Node} (optional) }
@@ -82,33 +84,45 @@ define( function( require ) {
         return new HBox( { children: [ itemSpec.label] } );
       }
     };
+    var radioButtonContent;
+    if ( !isBasicVersion ) {
+      radioButtonContent = [
+        { value: StatesOfMatterConstants.NEON, node: createItem( neon ) },
+        { value: StatesOfMatterConstants.ARGON, node: createItem( argon ) },
+        { value: StatesOfMatterConstants.DIATOMIC_OXYGEN, node: createItem( oxygen ) },
+        { value: StatesOfMatterConstants.WATER, node: createItem( water ) }
+      ];
+    }
+    else {
+      radioButtonContent = [
+        { value: StatesOfMatterConstants.NEON, node: createItem( neon ) },
+        { value: StatesOfMatterConstants.ARGON, node: createItem( argon ) },
+        { value: StatesOfMatterConstants.DIATOMIC_OXYGEN, node: createItem( oxygen ) },
+        { value: StatesOfMatterConstants.WATER, node: createItem( water ) },
+        { value: StatesOfMatterConstants.USER_DEFINED_MOLECULE, node: createItem( adjustableAttraction ) }
+      ];
+    }
 
-    var radioButtonContent = [
-      { value: StatesOfMatterConstants.NEON, node: createItem( neon ) },
-      { value: StatesOfMatterConstants.ARGON, node: createItem( argon ) },
-      { value: StatesOfMatterConstants.DIATOMIC_OXYGEN, node: createItem( oxygen ) },
-      { value: StatesOfMatterConstants.WATER, node: createItem( water ) },
-      { value: StatesOfMatterConstants.USER_DEFINED_MOLECULE, node: createItem( adjustableAttraction ) }
-    ];
     var radioButtonGroup = new RadioButtonGroup( model.moleculeTypeProperty, radioButtonContent, {
       orientation: 'vertical',
       spacing: 1,
       cornerRadius: 5,
       baseColor: 'black',
       disabledBaseColor: 'black',
-      selectedLineWidth: 3,
+      selectedLineWidth: 1,
       selectedStroke: '#FFFCD3',
       deselectedLineWidth: 0,
       deselectedContentOpacity: 1
     } );
 
     var labelFont = new PhetFont( 12 );
-    var weakTitle = new Text( weakString, { font: labelFont, fill: 'white'} );
-    var strongTitle = new Text( strongString, {fill: 'white', font: labelFont } );
+    var weakTitle = new Text( weakString, { font: labelFont, fontWeight: 550, fill: 'white'} );
+    var strongTitle = new Text( strongString, { fill: 'white', fontWeight: 550, font: labelFont } );
 
     // add interaction strength slider and tittle
     var interactionStrengthNode = new Node();
-    var interactionTitle = new Text( interactionStrengthTittleString, { font: labelFont, fill: 'white'} );
+    var interactionTitle = new Text( interactionStrengthTittleString,
+      { fontWeight: 550, font: labelFont, fill: 'white'} );
     interactionStrengthNode.addChild( interactionTitle );
     var interactionStrengthSlider = new HSlider( model.interactionStrengthProperty,
       { min: StatesOfMatterConstants.MIN_EPSILON, max: StatesOfMatterConstants.MAX_EPSILON },
@@ -217,7 +231,7 @@ define( function( require ) {
 
   //Create an icon for the argon  button
   var createArgonIcon = function() {
-    return new Circle( 5, {fill: '#FFAFAF'} );
+    return new Circle( 6, {fill: '#FFAFAF'} );
   };
 
   //Create an icon for the water  button
