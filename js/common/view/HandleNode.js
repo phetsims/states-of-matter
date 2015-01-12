@@ -21,7 +21,7 @@ define( function( require ) {
    * @param { MultipleParticleModel } model
    * @constructor
    */
-  function HandleNode( model ) {
+  function HandleNode( model, modelViewTransform ) {
 
     Node.call( this );
     var handleNode = this;
@@ -120,10 +120,11 @@ define( function( require ) {
         },
         drag: function( event ) {
           endY = handleNode.globalToParentPoint( event.pointer.point ).y;
-          handleNode.mouseMovementAmount += (endY - startY);
+          handleNode.mouseMovementAmount = (endY - startY);
           // Resize the container based on the amount that the node has moved.
           model.setTargetParticleContainerHeight(
-              handleNode.containerSizeAtDragStart - handleNode.mouseMovementAmount );
+              handleNode.containerSizeAtDragStart +
+              modelViewTransform.viewToModelDeltaY( handleNode.mouseMovementAmount ) );
         },
         end: function() {
           // in size that is currently underway.
