@@ -30,6 +30,9 @@
   "epsilon": "ε",
   "kelvinUnits": "\u212A",
   "celsiusUnits": "\u2103",
-  "interactionPotential": "Interaction Potential"
+  "interactionPotential": "Interaction Potential",
+  "returnLid": "Return Lid",
+  "pressureUnitsInAtm": "atm"
+
 
 }
