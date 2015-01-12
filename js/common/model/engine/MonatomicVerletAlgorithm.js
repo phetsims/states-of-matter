@@ -28,7 +28,10 @@ define( function( require ) {
   }
 
   return inherit( AbstractVerletAlgorithm, MonatomicVerletAlgorithm, {
-
+    /**
+     *
+     * @param {Number} scaledEpsilon
+     */
     setScaledEpsilon: function( scaledEpsilon ) {
       this.epsilon = scaledEpsilon;
     },

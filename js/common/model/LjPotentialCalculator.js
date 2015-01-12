@@ -37,12 +37,23 @@ define( function( require ) {
     getSigma: function() {
       return this.sigma;
     },
+
+    /**
+     *
+     * @param {Number} sigma
+     */
     setSigma: function( sigma ) {
       this.sigma = sigma;
     },
+
     getEpsilon: function() {
       return this.epsilon;
     },
+
+    /**
+     *
+     * @param {Number} epsilon
+     */
     setEpsilon: function( epsilon ) {
       this.epsilon = epsilon;
       this.epsilonForCalcs = this.epsilon * StatesOfMatterConstants.K_BOLTZMANN;
@@ -54,7 +65,7 @@ define( function( require ) {
      * Calculate the Lennard-Jones potential for the specified distance.
      *
      * @param distance - Distance between interacting molecules in picometers.
-     * @return - Strength of the potential in newton-meters (N*m).
+     * @returns {Number} Strength of the potential in newton-meters (N*m).
      */
     calculateLjPotential: function( distance ) {
       var distanceRatio = this.sigma / distance;
@@ -65,7 +76,7 @@ define( function( require ) {
      * the specified distance.
      *
      * @param distance - Distance between interacting molecules in picometers.
-     * @return - Force in newtons.
+     * @return {Number} Force in newtons.
      */
     calculateRepulsiveLjForce: function( distance ) {
       return (48 * this.epsilonForCalcs * Math.pow( this.sigma, 12 ) / Math.pow( distance, 13 ));
@@ -75,7 +86,7 @@ define( function( require ) {
      * the specified distance.
      *
      * @param distance - Distance between interacting molecules in picometers.
-     * @return - Force in newtons.
+     * @return {Number} - Force in newtons.
      */
     calculateAttractiveLjForce: function( distance ) {
       return (24 * this.epsilonForCalcs * Math.pow( this.sigma, 6 ) / Math.pow( distance, 7 ));
@@ -85,7 +96,7 @@ define( function( require ) {
      * and repulsive forces are balanced.  Note that this is where the
      * potential energy is at a minimum.
      *
-     * @return - Distance where force is 0 (or very close) in picometers.
+     * @return {Number} - Distance where force is 0 (or very close) in picometers.
      */
     calculateMinimumForceDistance: function() {
       // for 0.

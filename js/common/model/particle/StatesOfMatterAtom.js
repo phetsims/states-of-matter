@@ -31,6 +31,11 @@ define( function( require ) {
 
   return inherit( Object, StatesOfMatterAtom, {
 
+    /**
+     * @param {Number} x    position in picometers
+     * @param {Number} y    position in picometers
+     * @constructor
+     */
     setPosition: function( x, y ) {
       this.positionProperty.value = new Vector2( x, y );
     },
@@ -61,7 +66,10 @@ define( function( require ) {
     getVy: function() {
       return this.velocity.y;
     },
-
+    /**
+     *
+     * @param {Number} vy
+     */
     setVy: function( vy ) {
       this.velocity.setY( vy );
     },
@@ -70,6 +78,10 @@ define( function( require ) {
       return this.velocity.x;
     },
 
+    /**
+     *
+     * @param {Number} vx
+     */
     setVx: function( vx ) {
       this.velocity.setX( vx );
     },
@@ -82,10 +94,17 @@ define( function( require ) {
       return this.accel.y;
     },
 
+    /**
+     *
+     * @param {Number} ax
+     */
     setAx: function( ax ) {
       this.accel.setX( ax );
     },
-
+    /**
+     *
+     * @param {Number} ay
+     */
     setAy: function( ay ) {
       this.accel.setY( ay );
 
@@ -105,6 +124,10 @@ define( function( require ) {
     getRadius: function() {
       return this.radius;
     },
+    /**
+     *
+     * @param {Number} radius
+     */
     setRadius: function( radius ) {
       this.radius = radius;
     },

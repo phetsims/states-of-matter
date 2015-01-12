@@ -21,6 +21,11 @@ define( function( require ) {
   var MASS = 1.00794;
   var ATOM_TYPE = AtomType.HYDROGEN;
 
+  /**
+   * @param {Number} xPos  position in picometers
+   * @param {Number} yPos  position in picometers
+   * @constructor
+   */
   function HydrogenAtom2( xPos, yPos ) {
     StatesOfMatterAtom.call( this, xPos, yPos, RADIUS, MASS, COLOUR );
   }

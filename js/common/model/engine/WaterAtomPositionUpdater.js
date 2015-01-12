@@ -15,6 +15,10 @@ define( function( require ) {
 
   var BONDED_PARTICLE_DISTANCE = 0.9;
 
+  /**
+   *
+   * @constructor
+   */
   function WaterAtomPositionUpdater() {
 
     var waterMoleculeStructure = new WaterMoleculeStructure();
@@ -24,7 +28,10 @@ define( function( require ) {
   }
 
   return inherit( Object, WaterAtomPositionUpdater, {
-
+    /**
+     *
+     * @param {MoleculeForceAndMotionDataSet} moleculeDataSet
+     */
     updateAtomPositions: function( moleculeDataSet ) {
       // Make sure this is not being used on an inappropriate data set.
       assert && assert( moleculeDataSet.getAtomsPerMolecule() === 3 );
@@ -32,7 +39,10 @@ define( function( require ) {
       var atomPositions = moleculeDataSet.getAtomPositions();
       var moleculeCenterOfMassPositions = moleculeDataSet.getMoleculeCenterOfMassPositions();
       var moleculeRotationAngles = moleculeDataSet.getMoleculeRotationAngles();
-      var xPos, yPos, cosineTheta, sineTheta;
+      var xPos;
+      var yPos;
+      var cosineTheta;
+      var sineTheta;
 
       // todo: what is this for loop for? Seems to be getting over-ridden anyway
       for ( var i = 0; i < moleculeDataSet.getNumberOfMolecules(); i++ ) {

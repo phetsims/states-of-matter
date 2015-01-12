@@ -21,8 +21,8 @@ define( function( require ) {
   var COLOUR = '#DA1300';
 
   /**
-   * @param {Number} x
-   * @param {Number} y
+   * @param {Number} x    position in picometers
+   * @param {Number} y    position in picometers
    * @constructor
    */
   function OxygenAtom( x, y ) {

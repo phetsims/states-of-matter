@@ -34,7 +34,8 @@ define( function( require ) {
 
     adjustTemperature: function() {
       // Calculate the internal temperature of the system from the kinetic energy.
-      var measuredTemperature, i;
+      var measuredTemperature;
+      var i;
       var numberOfMolecules = this.moleculeDataSet.getNumberOfMolecules();
       var centersOfMassKineticEnergy = 0;
       if ( this.moleculeDataSet.atomsPerMolecule > 1 ) {
@@ -64,18 +65,15 @@ define( function( require ) {
       this.adjustMeasuredTemperature( measuredTemperature );
     },
 
-    // this was originally an overload of adjustTemperature in the Java version
+    /**
+     *
+     * @param {Number} measuredTemperature
+     */
     adjustMeasuredTemperature: function( measuredTemperature ) {
 
       // Calculate the scaling factor that will be used to adjust the temperature.
-      var temperatureScaleFactor;
-      if ( this.targetTemperature <= this.minModelTemperature ) {
-        temperatureScaleFactor = 0;
-      }
-      else {
-        temperatureScaleFactor = Math.sqrt( this.targetTemperature / measuredTemperature );
-      }
-
+      var temperatureScaleFactor = ( this.targetTemperature <= this.minModelTemperature ) ? 0 :
+                                   Math.sqrt( this.targetTemperature / measuredTemperature );
       // Adjust the temperature by scaling the velocity of each molecule by the appropriate amount.
       for ( var i = 0; i < this.moleculeDataSet.getNumberOfMolecules(); i++ ) {
         this.moleculeVelocities[i].setXY( this.moleculeVelocities[i].x * temperatureScaleFactor,

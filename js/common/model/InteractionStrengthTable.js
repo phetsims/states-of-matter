@@ -23,7 +23,12 @@ define( function( require ) {
   }
 
   return inherit( Object, InteractionStrengthTable, {}, {
-
+    /**
+     *
+     * @param {String} atomType1
+     * @param {String} atomType2
+     * @returns {*}
+     */
     getInteractionPotential: function( atomType1, atomType2 ) {
       if ( atomType1 === atomType2 ) {
         // Heterogeneous pair of atoms.

@@ -21,6 +21,8 @@ define( function( require ) {
   var MIN_INITIAL_INTER_PARTICLE_DISTANCE = 1.12;
 
   /**
+   *
+   * @param {MultipleParticleModel} model
    * @constructor
    */
   function MonatomicPhaseStateChanger( model ) {
@@ -31,6 +33,10 @@ define( function( require ) {
 
   return inherit( AbstractPhaseStateChanger, MonatomicPhaseStateChanger, {
 
+    /**
+     *
+     * @param {Number} phaseID - state(solid/liquid/gas) of Molecule
+     */
     setPhase: function( phaseID ) {
       switch( phaseID ) {
         case AbstractPhaseStateChanger.PHASE_SOLID:
@@ -81,7 +87,8 @@ define( function( require ) {
       var startingPosY = MIN_INITIAL_INTER_PARTICLE_DISTANCE;
 
       var particlesPlaced = 0;
-      var xPos, yPos;
+      var xPos;
+      var yPos;
       for ( var i = 0; particlesPlaced < numberOfAtoms; i++ ) { // One iteration per layer.
         for ( var j = 0; ( j < atomsPerLayer ) && ( particlesPlaced < numberOfAtoms ); j++ ) {
           xPos = startingPosX + ( j * MIN_INITIAL_INTER_PARTICLE_DISTANCE );

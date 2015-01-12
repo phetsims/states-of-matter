@@ -27,7 +27,7 @@ define( function( require ) {
 
   /**
    *
-   * @param {MultiParticleModel } model of the simulation
+   * @param {MultiPleParticleModel } model of the simulation
    * }
    * @constructor
    */
@@ -43,6 +43,10 @@ define( function( require ) {
 
   return inherit( AbstractPhaseStateChanger, WaterPhaseStateChanger, {
 
+    /**
+     *
+     * @param {Number} phaseID - state(solid/liquid/gas) of Molecule
+     */
     setPhase: function( phaseID ) {
 
       switch( phaseID ) {
@@ -97,7 +101,8 @@ define( function( require ) {
       var startingPosX = (this.model.getNormalizedContainerWidth() / 2) - (crystalWidth / 2);
       var startingPosY = MIN_INITIAL_DIAMETER_DISTANCE;
       var moleculesPlaced = 0;
-      var xPos, yPos;
+      var xPos;
+      var yPos;
       for ( i = 0; i < numberOfMolecules; i++ ) {
         // One iteration per layer.
         for ( var j = 0; (j < moleculesPerLayer) && (moleculesPlaced < numberOfMolecules); j++ ) {
@@ -199,7 +204,8 @@ define( function( require ) {
         moleculeRotationRates[i] = Math.random() * temperatureSqrt * Math.PI * 2;
       }
       // disproportionate amount of kinetic energy.
-      var newPosX, newPosY;
+      var newPosX;
+      var newPosY;
       var rangeX = this.model.getNormalizedContainerWidth() - (2 * this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE);
       var rangeY = this.model.getNormalizedContainerHeight() - (2 * this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE);
       for ( i = 0; i < numberOfMolecules; i++ ) {

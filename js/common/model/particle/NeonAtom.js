@@ -22,8 +22,8 @@ define( function( require ) {
   var COLOUR = '#1AFFFB';
 
   /**
-   * @param {Number} x
-   * @param {Number} y
+   * @param {Number} x  position in picometers
+   * @param {Number} y  position in picometers
    * @constructor
    */
   function NeonAtom( x, y ) {

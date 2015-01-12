@@ -25,6 +25,11 @@ define( function( require ) {
   var WATER_FULLY_FROZEN_ELECTROSTATIC_FORCE = 4.0;
   var MAX_REPULSIVE_SCALING_FACTOR_FOR_WATER = 3.0;
 
+  /**
+   *
+   * @param {MultipleParticleModel}  model
+   * @constructor
+   */
   function WaterVerletAlgorithm( model ) {
 
     this.positionUpdater = new WaterAtomPositionUpdater();
