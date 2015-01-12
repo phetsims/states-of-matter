@@ -58,7 +58,7 @@ define( function( require ) {
   var PHASE_LIQUID = 2;
   var PHASE_GAS = 3;
   var INJECTION_POINT_HORIZ_PROPORTION = 0.03;
-  var INJECTION_POINT_VERT_PROPORTION = 0.4;
+  var INJECTION_POINT_VERT_PROPORTION = 0.25;
 
   // Possible thermostat settings.
   var NO_THERMOSTAT = 0;
