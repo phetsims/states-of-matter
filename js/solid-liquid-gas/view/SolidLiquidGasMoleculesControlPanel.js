@@ -19,6 +19,7 @@ define( function( require ) {
   var Node = require( 'SCENERY/nodes/Node' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var RadioButtonGroup = require( 'SUN/buttons/RadioButtonGroup' );
+  var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
 
   // strings
   var neonString = require( 'string!STATES_OF_MATTER/neon' );
@@ -49,7 +50,7 @@ define( function( require ) {
     }, options );
 
     Node.call( this );
-    var textOptions = {font: new PhetFont( 12 ), fill: "#FFFFFF"};
+    var textOptions = { font: new PhetFont( 12 ), fill: '#FFFFFF', fontWeight: 550};
 
     // itemSpec describes the pieces that make up an item in the control panel,
     // conforms to the contract: { label: {Node}, icon: {Node} (optional) }
@@ -78,10 +79,10 @@ define( function( require ) {
     };
 
     var radioButtonContent = [
-      { value: 1, node: createItem( neon ) },
-      { value: 2, node: createItem( argon )},
-      { value: 4, node: createItem( oxygen )},
-      { value: 5, node: createItem( water ) }
+      { value: StatesOfMatterConstants.NEON, node: createItem( neon ) },
+      { value: StatesOfMatterConstants.ARGON, node: createItem( argon )},
+      { value: StatesOfMatterConstants.DIATOMIC_OXYGEN, node: createItem( oxygen )},
+      { value: StatesOfMatterConstants.WATER, node: createItem( water ) }
     ];
 
     var radioButtonGroup = new RadioButtonGroup( moleculeTypeProperty, radioButtonContent, {
@@ -90,7 +91,7 @@ define( function( require ) {
       cornerRadius: 5,
       baseColor: 'black',
       disabledBaseColor: 'black',
-      selectedLineWidth: 3,
+      selectedLineWidth: 1,
       selectedStroke: '#FFFCD3',
       deselectedLineWidth: 0,
       deselectedContentOpacity: 1
@@ -120,7 +121,7 @@ define( function( require ) {
     var titleText = new Text( titleString,
       { font: new PhetFont( 14 ),
         fill: '#FFFFFF',
-        fontWeight: 'bold'
+        fontWeight: 550
       } );
 
     var titleBackground = new Rectangle( background.centerX + 4, background.top - 10,
@@ -148,11 +149,11 @@ define( function( require ) {
 
   //Create an icon for the argon  button
   var createArgonIcon = function() {
-    return new Circle( 5, { fill: '#FFAFAF' } );
+    return new Circle( 7, { fill: '#FFAFAF' } );
   };
   //Create an icon for the water  button
   var createWaterIcon = function() {
-    var dot1 = new Circle( 5, { fill: '#D91200'} );
+    var dot1 = new Circle( 6, { fill: '#D91200'} );
     var dot2 = new Circle( 3, { fill: 'white', stroke: 'white', bottom: dot1.top + 5, right: dot1.left + 5} );
     var dot3 = new Circle( 3, {
       fill: 'white', stroke: 'white', bottom: dot1.top + 5, left: dot1.right - 5
@@ -164,8 +165,8 @@ define( function( require ) {
 
   //Create an icon for the oxygen  button
   var createOxygenIcon = function() {
-    var dot1 = new Circle( 5, { fill: '#DA1300' } );
-    var dot2 = new Circle( 5, { fill: '#DA1300', left: dot1.right - 4 } );
+    var dot1 = new Circle( 6, { fill: '#DA1300' } );
+    var dot2 = new Circle( 6, { fill: '#DA1300', left: dot1.right - 4 } );
     return new Node( { children: [ dot1, dot2 ] } );
   };
 
