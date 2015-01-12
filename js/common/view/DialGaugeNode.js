@@ -82,7 +82,7 @@ define( function( require ) {
     // Set the initial value.
     model.pressure = model.getPressureInAtmospheres();
     model.pressureProperty.link( function() {
-      dialGaugeNode.textualReadout.setText( model.getPressureInAtmospheres().toFixed( 2 ) + pressureUnitsInAtm );
+      dialGaugeNode.textualReadout.setText( model.getPressureInAtmospheres().toFixed( 2 ) + ' ' + pressureUnitsInAtm );
       dialGaugeNode.textualReadout.center = dialGaugeNode.textualReadoutBoxShape.center;
     } );
 
