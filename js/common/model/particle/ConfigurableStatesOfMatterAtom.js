@@ -21,6 +21,11 @@ define( function( require ) {
   var MASS = 25;
   var COLOUR = '#B15AFF';
 
+  /**
+   * @param {Number} x  position in picometers
+   * @param {Number} y  position in picometers
+   * @constructor
+   */
   function ConfigurableStatesOfMatterAtom( x, y ) {
     StatesOfMatterAtom.call( this, x, y, DEFAULT_RADIUS, MASS, COLOUR );
   }
@@ -29,6 +34,10 @@ define( function( require ) {
       getType: function() {
         return AtomType.ADJUSTABLE;
       },
+      /**
+       *
+       * @param {Number} radius in picometers
+       */
       setRadius: function( radius ) {
         this.radius = radius;
 

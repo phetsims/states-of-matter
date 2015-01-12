@@ -22,6 +22,10 @@ define( function( require ) {
 
   return inherit( Object, DiatomicAtomPositionUpdater, {
 
+    /**
+     *
+     * @param {MoleculeForceAndMotionDataSet} moleculeDataSet
+     */
     updateAtomPositions: function( moleculeDataSet ) {
       // Make sure this is not being used on an inappropriate data set.
       assert && assert( moleculeDataSet.atomsPerMolecule === 2 );
@@ -29,7 +33,10 @@ define( function( require ) {
       var atomPositions = moleculeDataSet.atomPositions;
       var moleculeCenterOfMassPositions = moleculeDataSet.moleculeCenterOfMassPositions;
       var moleculeRotationAngles = moleculeDataSet.moleculeRotationAngles;
-      var xPos, yPos, cosineTheta, sineTheta;
+      var xPos;
+      var yPos;
+      var cosineTheta;
+      var sineTheta;
       for ( var i = 0; i < moleculeDataSet.getNumberOfMolecules(); i++ ) {
         cosineTheta = Math.cos( moleculeRotationAngles[i] );
         sineTheta = Math.sin( moleculeRotationAngles[i] );

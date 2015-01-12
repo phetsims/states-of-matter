@@ -21,8 +21,8 @@ define( function( require ) {
   var COLOUR = '#FF8A75';
 
   /**
-   * @param {Number} x
-   * @param {Number} y
+   * @param {Number} x  position in picometers
+   * @param {Number} y  position in picometers
    * @constructor
    */
   function ArgonAtom( x, y ) {

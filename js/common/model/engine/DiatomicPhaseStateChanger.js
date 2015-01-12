@@ -28,6 +28,11 @@ define( function( require ) {
   //private
   var GAS_SPACING_FACTOR = 1.0;
 
+  /**
+   *
+   * @param {MultipleParticleModel} model
+   * @constructor
+   */
   function DiatomicPhaseStateChanger( model ) {
 
     //private
@@ -40,6 +45,10 @@ define( function( require ) {
 
   return inherit( AbstractPhaseStateChanger, DiatomicPhaseStateChanger, {
 
+    /**
+     *
+     * @param {Number} phaseID - state(solid/liquid/gas) of Molecule
+     */
     setPhase: function( phaseID ) {
       var postChangeModelSteps = 0;
       switch( phaseID ) {
@@ -91,7 +100,8 @@ define( function( require ) {
       // Multiplier can be tweaked to minimize initial "bounce".
       var startingPosY = 1.2 + this.DISTANCE_BETWEEN_PARTICLES_IN_CRYSTAL;
       var moleculesPlaced = 0;
-      var xPos, yPos;
+      var xPos;
+      var yPos;
       for ( var i = 0; i < numberOfMolecules; i++ ) {
         // One iteration per layer.
         for ( var j = 0; (j < moleculesPerLayer) && (moleculesPlaced < numberOfMolecules); j++ ) {
@@ -197,7 +207,8 @@ define( function( require ) {
         moleculeRotationRates[i] = Math.random() * temperatureSqrt * Math.PI * 2;
       }
       // disproportionate amount of kinetic energy.
-      var newPosX, newPosY;
+      var newPosX;
+      var newPosY;
       var rangeX = this.model.getNormalizedContainerWidth() - (2 * this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE);
       var rangeY = this.model.getNormalizedContainerWidth() - ( 2 * this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE);
       for ( i = 0; i < numberOfMolecules; i++ ) {

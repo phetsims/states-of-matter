@@ -18,6 +18,8 @@ define( function( require ) {
   var MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE = 2.5;
 
   /**
+   *
+   * @param { MultipleParticleModel } model
    * @constructor
    */
   function AbstractPhaseStateChanger( model ) {
@@ -36,18 +38,13 @@ define( function( require ) {
        */
       findOpenMoleculeLocation: function() {
 
-        var posX, posY;
+        var posX;
+        var posY;
         var minInitialInterParticleDistance;
         var moleculeDataSet = this.model.moleculeDataSet;
         var moleculeCenterOfMassPositions = moleculeDataSet.moleculeCenterOfMassPositions;
 
-        if ( moleculeDataSet.atomsPerMolecule === 1 ) {
-          minInitialInterParticleDistance = 1.2;
-        }
-        else {
-          minInitialInterParticleDistance = 1.5;
-        }
-
+        minInitialInterParticleDistance = ( moleculeDataSet.atomsPerMolecule === 1 ) ? 1.2 : 1.5;
         var rangeX = this.model.normalizedContainerWidth - ( 2 * MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE );
         var rangeY = this.model.normalizedContainerHeight - ( 2 * MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE );
         for ( var i = 0; i < rangeX / minInitialInterParticleDistance; i++ ) {

@@ -240,7 +240,10 @@ define( function( require ) {
       console.log( "Warning: Getting scaled epsilon is not implemented for this class, returning zero." );
       return 0;
     },
-
+    /**
+     *
+     * @param {Number} pressureZoneWallForce
+     */
     updatePressure: function( pressureZoneWallForce ) {
       if ( this.model.isExploded ) {
         // If the container has exploded, there is essentially no pressure.
