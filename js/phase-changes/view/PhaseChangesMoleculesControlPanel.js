@@ -57,7 +57,7 @@ define( function( require ) {
     }, options );
 
     Node.call( this );
-    var textOptions = {font: new PhetFont( 12 ), fontWeight: 550, fill: "#FFFFFF"};
+    var textOptions = {font: new PhetFont( 12 ), fontWeight: 600, fill: "#FFFFFF"};
 
     // itemSpec describes the pieces that make up an item in the control panel,
     // conforms to the contract: { label: {Node}, icon: {Node} (optional) }
@@ -116,13 +116,13 @@ define( function( require ) {
     } );
 
     var labelFont = new PhetFont( 12 );
-    var weakTitle = new Text( weakString, { font: labelFont, fontWeight: 550, fill: 'white'} );
-    var strongTitle = new Text( strongString, { fill: 'white', fontWeight: 550, font: labelFont } );
+    var weakTitle = new Text( weakString, { font: labelFont, fontWeight: 600, fill: 'white'} );
+    var strongTitle = new Text( strongString, { fill: 'white', fontWeight: 600, font: labelFont } );
 
     // add interaction strength slider and tittle
     var interactionStrengthNode = new Node();
     var interactionTitle = new Text( interactionStrengthTittleString,
-      { fontWeight: 550, font: labelFont, fill: 'white'} );
+      { fontWeight: 600, font: labelFont, fill: 'white'} );
     interactionStrengthNode.addChild( interactionTitle );
     var interactionStrengthSlider = new HSlider( model.interactionStrengthProperty,
       { min: StatesOfMatterConstants.MIN_EPSILON, max: StatesOfMatterConstants.MAX_EPSILON },
