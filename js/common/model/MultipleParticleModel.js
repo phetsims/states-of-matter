@@ -916,7 +916,9 @@ define( function( require ) {
     initializeMonatomic: function( moleculeID, phase ) {
 
       // Verify that a valid molecule ID was provided.
-      assert && assert( moleculeID === StatesOfMatterConstants.NEON || moleculeID === StatesOfMatterConstants.ARGON );
+      assert && assert( moleculeID === StatesOfMatterConstants.USER_DEFINED_MOLECULE ||
+                        moleculeID === StatesOfMatterConstants.NEON ||
+                        moleculeID === StatesOfMatterConstants.ARGON );
 
       // Determine the number of atoms/molecules to create.  This will be a cube
       // (really a square, since it's 2D, but you get the idea) that takes
