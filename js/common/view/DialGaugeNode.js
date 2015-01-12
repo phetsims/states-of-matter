@@ -24,6 +24,7 @@ define( function( require ) {
 
   // strings
   var pressureString = require( 'string!STATES_OF_MATTER/pressure' );
+  var pressureUnitsInAtm = require( 'string!STATES_OF_MATTER/pressureUnitsInAtm' );
 
   // Length of non-elbowed connector wrt overall diameter.
   var CONNECTOR_LENGTH_PROPORTION = 1;
@@ -81,7 +82,8 @@ define( function( require ) {
     // Set the initial value.
     model.pressure = model.getPressureInAtmospheres();
     model.pressureProperty.link( function() {
-      dialGaugeNode.textualReadout.setText( model.getPressureInAtmospheres().toFixed( 2 ) + "atm" );
+      dialGaugeNode.textualReadout.setText( model.getPressureInAtmospheres().toFixed( 2 ) + pressureUnitsInAtm );
+      dialGaugeNode.textualReadout.center = dialGaugeNode.textualReadoutBoxShape.center;
     } );
 
     this.updateConnector();
