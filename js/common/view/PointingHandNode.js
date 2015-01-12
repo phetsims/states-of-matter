@@ -14,8 +14,7 @@ define( function( require ) {
   var Node = require( 'SCENERY/nodes/Node' );
   var ArrowNode = require( 'SCENERY_PHET/ArrowNode' );
   var Image = require( 'SCENERY/nodes/Image' );
-  var Shape = require( 'KITE/Shape' );
-  var Path = require( 'SCENERY/nodes/Path' );
+
   //images
   var fingerImage = require( 'image!STATES_OF_MATTER/finger-4.png' );
 
@@ -30,14 +29,7 @@ define( function( require ) {
     this.hintNode = new Node();
 
     this.model = model;
-    var backgroundNode = new Path( new Shape()
-      .moveTo( 0, 0 )
-      .lineTo( 0, 30 )
-      .lineTo( 30, 30 )
-      .lineTo( 30, 5 )
-      .lineTo( 0, 0 ), {fill: '#BCBEC0'} );
 
-    this.addChild( backgroundNode );
 
     // Add the up arrow.
     this.upArrowNode = new ArrowNode( 0, 0, 0, 25, {
@@ -69,30 +61,27 @@ define( function( require ) {
 
     // Load and scale the image.
     this.fingerImageNode = new Image( fingerImage, {scale: 0.5, cursor: 'ns-resize', pickable: true} );
-    backgroundNode.top = this.fingerImageNode.bottom - 28;
-    backgroundNode.right = this.fingerImageNode.left + 90;
     this.hintNode.top = this.fingerImageNode.bottom - 50;
     this.hintNode.left = this.fingerImageNode.right;
 
     // Set ourself up to listen for and handle mouse dragging events.
-    var startY, endY;
+    var startY;
+    var endY;
+
     this.fingerImageNode.addInputListener( new SimpleDragHandler(
       {
         start: function( event ) {
           startY = pointingHandNode.fingerImageNode.globalToParentPoint( event.pointer.point ).y;
           pointingHandNode.beingDragged = true;
-          pointingHandNode.mouseMovementAmount = 0;
           pointingHandNode.containerSizeAtDragStart = pointingHandNode.model.getParticleContainerHeight();
           pointingHandNode.updateHintVisibility();
 
         },
         drag: function( event ) {
           endY = pointingHandNode.fingerImageNode.globalToParentPoint( event.pointer.point ).y;
-          var d = endY - startY;
-          pointingHandNode.mouseMovementAmount += d;
           // Resize the container based on the amount that the node has moved.
           pointingHandNode.model.setTargetParticleContainerHeight(
-              pointingHandNode.containerSizeAtDragStart - pointingHandNode.mouseMovementAmount );
+              pointingHandNode.containerSizeAtDragStart + modelViewTransform.viewToModelDeltaY( endY - startY ) );
           pointingHandNode.updateHintVisibility();
         },
         end: function() {
