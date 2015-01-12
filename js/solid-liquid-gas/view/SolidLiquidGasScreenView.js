@@ -34,7 +34,7 @@ define( function( require ) {
   var stepButtonYOffset = 20;
   var compositeThermometerNodeLeftOffset = 100;
   var compositeThermometerNodeYOffset = 50;
-  var layoutBoundsRightOffset = 5;
+  var layoutBoundsRightOffset = 15;
   var layoutBoundsYOffset = 10;
   var particlesLayerXOffset = 150;
   var particlesLayerYOffset = 680;
@@ -60,7 +60,7 @@ define( function( require ) {
     } );
 
     // add particle container
-    var particleContainerNode = new ParticleContainerNode( model, modelViewTransform,
+    var particleContainerNode = new ParticleContainerNode( model, modelViewTransform, false, false,
       {
         centerX: stoveNode.centerX - stoveNodeXOffset,
         bottom: stoveNode.top - inset
@@ -88,14 +88,14 @@ define( function( require ) {
 
     // add Molecule ControlPanel
     var solidLiquidGasMoleculesControlPanel = new SolidLiquidGasMoleculesControlPanel( model.moleculeTypeProperty, {
-      right: this.layoutBounds.right + layoutBoundsRightOffset,
+      right: this.layoutBounds.right - layoutBoundsRightOffset,
       top: this.layoutBounds.top + layoutBoundsYOffset
     } );
     this.addChild( solidLiquidGasMoleculesControlPanel );
 
     // add phases control node
     var solidLiquidGasPhaseControlNode = new SolidLiquidGasPhaseControlNode( model.stateProperty, {
-      right: this.layoutBounds.right + layoutBoundsRightOffset,
+      right: solidLiquidGasMoleculesControlPanel.right,
       top: solidLiquidGasMoleculesControlPanel.bottom + layoutBoundsYOffset
     } );
     this.addChild( solidLiquidGasPhaseControlNode );
@@ -108,7 +108,7 @@ define( function( require ) {
           particleContainerNode.reset();
         },
         bottom: this.layoutBounds.bottom - layoutBoundsYOffset / 2,
-        right: this.layoutBounds.right + layoutBoundsRightOffset,
+        right: this.layoutBounds.right - layoutBoundsRightOffset,
         radius: 18
       } );
 
