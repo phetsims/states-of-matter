@@ -23,17 +23,18 @@ define( function( require ) {
 
   var LID_POSITION_TWEAK_FACTOR = 65; // Empirically determined value for aligning lid and container body.
   var PRESSURE_GAUGE_Y_OFFSET = -20;
+  var PRESSURE_METER_ELBOW_OFFSET = 20;
 
   /**
    *
    * @param {MultipleParticleModel} model
    * @param {ModelViewTransform2} modelViewTransform The model view transform for transforming particle position.
-   * @param {Object} options
    * @param {boolean} volumeControlEnabled - set true to enable volume control by pushing the lid using a finger from above
    * @param {boolean} pressureGaugeEnabled - set true to show a barometer
+   * @param {Object} options
    * @constructor
    */
-  function ParticleContainerNode( model, modelViewTransform, options, volumeControlEnabled, pressureGaugeEnabled ) {
+  function ParticleContainerNode( model, modelViewTransform, volumeControlEnabled, pressureGaugeEnabled, options ) {
 
     this.model = model;
     this.modelViewTransform = modelViewTransform;
@@ -43,29 +44,34 @@ define( function( require ) {
     Node.call( this );
 
     var preParticleLayer = new Node();
-    var postParticleLayer = new Node( { opacity: 0.8} );
-
-    this.containerLid = new Node( { opacity: 0.8 } );
+    var postParticleLayer = new Node( { opacity: 0.9} );
+    this.containerLid = new Node( { opacity: 0.9 } );
     this.addChild( preParticleLayer );
-
+    var openEllipseRadiusX = 25;
+    var ellipseCenterY = 2;
     var openEllipse = new Path( new Shape()
-      .ellipticalArc( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / 2, 2, 25,
-        StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / 2, Math.PI / 2, 0, 2 * Math.PI, false ).close(), {
+      .ellipticalArc( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / 2, ellipseCenterY,
+      openEllipseRadiusX, StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / 2, Math.PI / 2, 0, 2 * Math.PI,
+      false ).close(), {
       lineWidth: 1,
       fill: '#7E7E7E'
     } );
+    var openInnerEllipseRadiusY = 100;
+    var openInnerEllipseRadiusX = 20;
     var openInnerEllipse = new Path( new Shape()
-      .ellipticalArc( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / 2, 2, 20, 100, Math.PI / 2, 0, 2 * Math.PI,
+      .ellipticalArc( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / 2, ellipseCenterY,
+      openInnerEllipseRadiusX, openInnerEllipseRadiusY, Math.PI / 2, 0, 2 * Math.PI,
       false ).close(), {
       lineWidth: 1,
       stroke: '#B3B3B3',
-      fill: 'white'
+      fill: '#B3B3B3'
     } );
     openInnerEllipse.centerX = openEllipse.centerX;
     openInnerEllipse.centerY = openEllipse.centerY;
     var open = new Path( new Shape()
-      .ellipticalArc( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / 2, 2, 25,
-        StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / 2, Math.PI / 2, 0, 2 * Math.PI, false ).close(), {
+      .ellipticalArc( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / 2, ellipseCenterY,
+      openEllipseRadiusX, StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / 2, Math.PI / 2, 0, 2 * Math.PI,
+      false ).close(), {
       lineWidth: 1,
       stroke: '#606262'
     } );
@@ -74,59 +80,82 @@ define( function( require ) {
     openInnerEllipse.centerX = openEllipse.centerX;
     openInnerEllipse.centerY = openEllipse.centerY;
 
+    var containerLeftShapeWidth = 25;
+    var distanceFromTopInnerTop = 5;
     // add container outer shape
     var outerShape = new Path( new Shape()
-      .moveTo( 0, 5 )
-      .quadraticCurveTo( 25, 21, 50, 21 )
-      .quadraticCurveTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / 2, 31,
-        StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / 2 + 25, 25 )
-      .quadraticCurveTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 25, 23,
-      StatesOfMatterConstants.VIEW_CONTAINER_WIDTH, 5 )
+      .moveTo( 0, distanceFromTopInnerTop )
+      .quadraticCurveTo( containerLeftShapeWidth, 18, 50, 21 ) //outer-top-curve -1
+      .quadraticCurveTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / 2, 30,
+        StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / 2 + containerLeftShapeWidth, 26 ) //outer-top-curve -2
+      .quadraticCurveTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - containerLeftShapeWidth, 23,
+      StatesOfMatterConstants.VIEW_CONTAINER_WIDTH, distanceFromTopInnerTop )//outer-top-curve -3
+      // line from outer top right to outer bottom right
       .lineTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT )
+
       .quadraticCurveTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 2,
-        StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT + 5, StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 10,
-        StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT + 8 )
+        StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT + 5,
+        StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 10,
+        StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT + 8 ) //outer-bottom-curve -1
+
       .quadraticCurveTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / 2,
-        StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT + 35, 20, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT + 10 )
+        StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT + 35,
+      20, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT + 10 ) //outer-bottom-curve -2
       .quadraticCurveTo( 2, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT + 5, 0,
-      StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT )
-      .lineTo( 25, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT - 10 )
+      StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT )//outer-bottom-curve -3
+
+      // line from  outer-bottom left to inner-bottom left
+      .lineTo( containerLeftShapeWidth, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT - 10 )
+
       .quadraticCurveTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / 2,
-        StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT + 25, StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 25,
-        StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT - 10 )
-      .lineTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 25, 30 )
-      .quadraticCurveTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / 2, 60, 25, 30 )
-      .lineTo( 25, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT - 10 )
-      .lineTo( 0, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT )
+        StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT + containerLeftShapeWidth,
+        StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 25,
+        StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT - 10 )// inner-bottom -curve(left t0 right )
+
+      //line from inner-bottom right to inner  top-right
+      .lineTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - containerLeftShapeWidth, 30 )
+
+      .quadraticCurveTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / 2, 60,
+      containerLeftShapeWidth, 30 ) // curve from inner-top right to inner-top left
+
+      // line from inner-top left to inner-bottom left
+      .lineTo( containerLeftShapeWidth, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT - 10 )
+      .lineTo( 0, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT )//line from inner-bottom left to outer-bottom left
       .close(), {
       lineWidth: 0,
       stroke: 'white',
       fill: new LinearGradient( 0, 0, StatesOfMatterConstants.VIEW_CONTAINER_WIDTH, 0 )
-        .addColorStop( 0, '#6E6E6E' )
-        .addColorStop( 0.2, '#7A7979' )
-        .addColorStop( 0.3, '# 949696' )
+        .addColorStop( 0, '#6D6D6D' )
+        .addColorStop( 0.1, '#8B8B8B' )
+        .addColorStop( 0.2, '#AEAFAF' )
         .addColorStop( 0.4, '#BABABA' )
-        .addColorStop( 0.7, '#6A6B6B' )
-        .addColorStop( 0.9, '#606262' )
+        .addColorStop( 0.7, '#A3A4A4' )
+        .addColorStop( 0.75, '#8E8E8E' )
+        .addColorStop( 0.8, '#737373' )
+        .addColorStop( 0.9, '#646565' )
     } );
     postParticleLayer.addChild( outerShape );
 
-    // add container inner left
+    // add container inner left shape
     var leftShape = new Path( new Shape()
-      .moveTo( 25, 30 )
-      .lineTo( 36, 45 )
+      .moveTo( containerLeftShapeWidth, 30 ) //move to inner-top  left
+      .lineTo( 36, 45 )//line from  inner-top  left to inner-top right
+      //line from  inner-top  right to inner-bottom right
       .lineTo( 36, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT - 10 )
-      .lineTo( 25, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT )
-      .lineTo( 25, 30 )
+      //line from  inner-top right to  inner-bottom  left
+      .lineTo( containerLeftShapeWidth, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT )
+      .lineTo( containerLeftShapeWidth, 30 ) //line from  inner-bottom  left to inner-top left
       .close(), {
       lineWidth: 0,
       stroke: 'white',
-      fill: new LinearGradient( 0, 0, 0, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT - 10 - 30 )
+      fill: new LinearGradient( 0, 0, 0, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT - 40 )
         .addColorStop( 0, '#525252' )
-        .addColorStop( 0.6, '#4E4E4E' )
-        .addColorStop( 0.7, '#3A3A3A' )
-        .addColorStop( 0.8, '# 2E2E2E' )
-        .addColorStop( 0.9, '#292929' )
+        .addColorStop( 0.3, '#515151' )
+        .addColorStop( 0.4, '#4E4E4E' )
+        .addColorStop( 0.5, '#424242' )
+        .addColorStop( 0.6, '#353535' )
+        .addColorStop( 0.7, '#2a2a2a' )
+        .addColorStop( 0.8, '#292929' )
     } );
     postParticleLayer.addChild( leftShape );
 
@@ -141,24 +170,26 @@ define( function( require ) {
       lineWidth: 0,
       stroke: 'white',
       fill: new LinearGradient( 0, 0, 0, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT - 10 - 30 )
-        .addColorStop( 0, '#8c8c8c' )
-        .addColorStop( 0.4, '#525252' )
-        .addColorStop( 0.6, '#a1a1a1' )
-        .addColorStop( 0.8, '#686868' )
+        .addColorStop( 0, '#8A8A8A' )
+        .addColorStop( 0.2, '#747474' )
+        .addColorStop( 0.3, '#525252' )
+        .addColorStop( 0.6, '#8A8A8A' )
+        .addColorStop( 0.9, '#A2A2A2' )
+        .addColorStop( 0.95, '#616161' )
     } );
     postParticleLayer.addChild( rightShape );
 
     // add container inner top
     var topShape = new Path( new Shape()
-      .moveTo( 25, 30 )
+      .moveTo( containerLeftShapeWidth, 30 )
       .quadraticCurveTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / 2, 45,
-        StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 25, 30 )
+        StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - containerLeftShapeWidth, 30 )
       .lineTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 35, 45 )
       .quadraticCurveTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / 2, 55, 35, 45 )
       .close(), {
       lineWidth: 0,
       stroke: 'white',
-      fill: new LinearGradient( 0, 0, StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 25 - 30, 0 )
+      fill: new LinearGradient( 0, 0, StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - containerLeftShapeWidth - 30, 0 )
         .addColorStop( 0, '#2E2E2E' )
         .addColorStop( 0.2, '#323232' )
         .addColorStop( 0.3, '# 363636' )
@@ -171,10 +202,11 @@ define( function( require ) {
 
     // add container inner bottom
     var bottomShape = new Path( new Shape()
-      .moveTo( 25, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT )
+      .moveTo( containerLeftShapeWidth, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT )
       .quadraticCurveTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / 2,
-        StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT + 26,
-        StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 25, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT )
+        StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT + containerLeftShapeWidth + 1,
+        StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - containerLeftShapeWidth,
+      StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT )
       .lineTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 35, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT - 10 )
       .quadraticCurveTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / 2,
         StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT + 10,
@@ -182,7 +214,7 @@ define( function( require ) {
       .close(), {
       lineWidth: 0,
       stroke: 'white',
-      fill: new LinearGradient( 0, 0, StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 25 - 30, 0 )
+      fill: new LinearGradient( 0, 0, StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 45, 0 )
         .addColorStop( 0, '#5D5D5D' )
         .addColorStop( 0.2, '#717171' )
         .addColorStop( 0.3, '#7C7C7C' )
@@ -217,7 +249,7 @@ define( function( require ) {
 
       // Add the handle to the lid.
       this.containerLid.addChild( openInnerEllipse );
-      var handleNode = new HandleNode( model );
+      var handleNode = new HandleNode( model, modelViewTransform );
       handleNode.centerX = openInnerEllipse.centerX;
       handleNode.centerY = openInnerEllipse.centerY;
       this.containerLid.addChild( handleNode );
@@ -225,13 +257,14 @@ define( function( require ) {
     if ( pressureGaugeEnabled ) {
 
       // Add the pressure meter.
-      this.pressureMeter = new DialGaugeNode( model, 20 );
+      this.pressureMeter = new DialGaugeNode( model );
       this.pressureMeter.setElbowEnabled( true );
       this.middleContainerLayer.addChild( this.pressureMeter );
       this.updatePressureGauge();
-      this.pressureMeterElbowOffset = 20;//this.pressureMeter.getCenterY();
-      this.pressureMeter.setTranslation( this.containerLid.x - 60, this.containerLid.y - 20 );
 
+      var pressureMeterXOffset = 60;
+      this.pressureMeter.setTranslation( this.containerLid.x - pressureMeterXOffset,
+          this.containerLid.y - PRESSURE_METER_ELBOW_OFFSET );
     }
     var particleContainerNode = this;
     model.particleContainerHeightProperty.link( function() {
@@ -265,7 +298,7 @@ define( function( require ) {
             this.pressureMeter.setRotation( 0 );
           }
           this.pressureMeter.setTranslation( this.pressureMeter.x, PRESSURE_GAUGE_Y_OFFSET );
-          this.pressureMeter.setElbowHeight( this.pressureMeterElbowOffset +
+          this.pressureMeter.setElbowHeight( PRESSURE_METER_ELBOW_OFFSET +
                                              Math.abs( this.modelViewTransform.modelToViewDeltaY( StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT -
                                                                                                   containerRect.height ) ) );
         }
@@ -298,7 +331,7 @@ define( function( require ) {
       else {
         // Rotate the lid to create the visual appearance of it being
         // blown off the top of the container.
-        this.rotationAmount = -(Math.PI / 100 + ( Math.random() * Math.PI / 50 ));
+        var rotationAmount = -(Math.PI / 100 + ( Math.random() * Math.PI / 50 ));
         var centerPosY = -this.modelViewTransform.modelToViewDeltaY( this.containmentAreaHeight - containerHeight ) -
                          ( this.containerLid.height / 2 ) + LID_POSITION_TWEAK_FACTOR;
         var currentPosY = this.containerLid.y;
@@ -313,10 +346,9 @@ define( function( require ) {
           newPosY = currentPosY;
         }
         this.containerLid.setY( newPosY );
-        this.containerLid.rotate( this.rotationAmount );
+        this.containerLid.rotate( rotationAmount );
       }
       this.updatePressureGauge();
     }
-
   } );
 } );

@@ -32,6 +32,9 @@ define( function( require ) {
   var TextPushButton = require( 'SUN/buttons/TextPushButton' );
   var ObservableArray = require( 'AXON/ObservableArray' );
 
+  //strings
+  var returnLidString = require( 'string!STATES_OF_MATTER/returnLid' );
+
   // constants
   var inset = 10;
   // Constants used when mapping the model pressure and temperature to the phase diagram.
@@ -54,7 +57,7 @@ define( function( require ) {
   var particleLayerXOffset = 150;
   var particleLayerYOffset = 680;
   var particleContainerXOffset = 60;
-  var layBoundsRightOffset = 5;
+  var layBoundsRightOffset = 15;
   var layBoundsYOffset = 10;
   var stepButtonXOffset = 50;
   var stepButtonYOffset = 20;
@@ -88,11 +91,11 @@ define( function( require ) {
     this.modelTemperatureHistory = new ObservableArray();
 
     // add particle container node
-    var particleContainerNode = new ParticleContainerNode( model, modelViewTransform,
+    var particleContainerNode = new ParticleContainerNode( model, modelViewTransform, true, true,
       {
         centerX: stoveNode.centerX - particleContainerXOffset,
         bottom: stoveNode.top - inset
-      }, true, true );
+      } );
 
     // add particle canvas layer for particle rendering
     this.particlesLayer = new ParticleCanvasNode( model.particles, modelViewTransform, {
@@ -117,8 +120,8 @@ define( function( require ) {
     this.phaseDiagram = new PhaseDiagram( model.expandedProperty );
 
     //add phase change control panel
-    var phaseChangesMoleculesControlPanel = new PhaseChangesMoleculesControlPanel( model,
-      { right: this.layoutBounds.right + layBoundsRightOffset,
+    var phaseChangesMoleculesControlPanel = new PhaseChangesMoleculesControlPanel( model, isInteractionDiagramEnabled,
+      { right: this.layoutBounds.right - layBoundsRightOffset,
         top: this.layoutBounds.top + layBoundsYOffset
       } );
     this.addChild( phaseChangesMoleculesControlPanel );
@@ -132,8 +135,8 @@ define( function( require ) {
           compositeThermometerNode.setRotation( 0 );
           particleContainerNode.reset();
         },
-        bottom: this.layoutBounds.bottom - layBoundsRightOffset,
-        right: this.layoutBounds.right + layBoundsYOffset / 2,
+        bottom: this.layoutBounds.bottom - layBoundsYOffset,
+        right: this.layoutBounds.right - layBoundsRightOffset,
         radius: 18
       } );
 
@@ -170,7 +173,7 @@ define( function( require ) {
     } ) );
 
     // add return Lid button
-    this.returnLidButton = new TextPushButton( 'return Lid', {
+    this.returnLidButton = new TextPushButton( returnLidString, {
       font: new PhetFont( 14 ),
       baseColor: 'yellow',
       listener: function() {
@@ -193,7 +196,7 @@ define( function( require ) {
     if ( isInteractionDiagramEnabled ) {
       var epsilonControlInteractionPotentialDiagram = new EpsilonControlInteractionPotentialDiagram(
         StatesOfMatterConstants.MAX_SIGMA, StatesOfMatterConstants.MIN_EPSILON, false, model, {
-          right: this.layoutBounds.right + layBoundsRightOffset,
+          right: this.layoutBounds.right - layBoundsRightOffset,
           top: phaseChangesMoleculesControlPanel.bottom + layBoundsYOffset / 2
         } );
       this.addChild( epsilonControlInteractionPotentialDiagram );
@@ -218,7 +221,7 @@ define( function( require ) {
       else {
         if ( !phaseChangesScreenView.isChild( phaseChangesScreenView.phaseDiagram ) ) {
           phaseChangesScreenView.addChild( phaseChangesScreenView.phaseDiagram );
-          phaseChangesScreenView.phaseDiagram.right = phaseChangesScreenView.layoutBounds.right + layBoundsRightOffset;
+          phaseChangesScreenView.phaseDiagram.right = phaseChangesScreenView.layoutBounds.right - layBoundsRightOffset;
           if ( isInteractionDiagramEnabled ) {
             epsilonControlInteractionPotentialDiagram.top = phaseChangesMoleculesControlPanel.bottom +
                                                             layBoundsYOffset / 2;
