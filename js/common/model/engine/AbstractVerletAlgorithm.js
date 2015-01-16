@@ -33,16 +33,16 @@ define( function( require ) {
   // when the pressure gauge hits its max value.
 
   /**
-   * @param {MultipleParticleModel} model
+   * @param {MultipleParticleModel} multipleParticleModel of the simulation
    * @constructor
    */
-  function AbstractVerletAlgorithm( model ) {
-    this.model = model;
+  function AbstractVerletAlgorithm( multipleParticleModel ) {
+    this.multipleParticleModel = multipleParticleModel;
     this.potentialEnergy = 0;
     this.temperature = 0;
 
     PropertySet.call( this, {
-      pressure: 0
+      pressure: 0 // atm units
     } );
   }
 
@@ -75,12 +75,12 @@ define( function( require ) {
       var minDistance = WALL_DISTANCE_THRESHOLD * 0.8;
       var distance;
 
-      if ( yPos < this.model.normalizedContainerWidth ) {
+      if ( yPos < this.multipleParticleModel.normalizedContainerWidth ) {
         // Calculate the force in the X direction.
         if ( xPos < WALL_DISTANCE_THRESHOLD ) {
           // Close enough to the left wall to feel the force.
           if ( xPos < minDistance ) {
-            if ( ( xPos < 0 ) && ( this.model.isExploded ) ) {
+            if ( ( xPos < 0 ) && ( this.multipleParticleModel.isExploded ) ) {
               // The particle is outside the container after the
               // container has exploded, so don't let the walls
               // exert any force.
@@ -98,7 +98,7 @@ define( function( require ) {
           // Close enough to the right wall to feel the force.
           distance = containerWidth - xPos;
           if ( distance < minDistance ) {
-            if ( ( distance < 0 ) && ( this.model.isExploded ) ) {
+            if ( ( distance < 0 ) && ( this.multipleParticleModel.isExploded ) ) {
               // The particle is outside the container after the
               // container has exploded, so don't let the walls
               // exert any force.
@@ -117,21 +117,21 @@ define( function( require ) {
       if ( yPos < WALL_DISTANCE_THRESHOLD ) {
         // Close enough to the bottom wall to feel the force.
         if ( yPos < minDistance ) {
-          if ( ( yPos < 0 ) && ( !this.model.isExploded ) ) {
+          if ( ( yPos < 0 ) && ( !this.multipleParticleModel.isExploded ) ) {
             // The particles are energetic enough to end up outside
             // the container, so consider it to be exploded (if it isn't already).
-            this.model.isExploded = true;
+            this.multipleParticleModel.isExploded = true;
           }
           yPos = minDistance;
         }
-        if ( !this.model.isExploded || ( ( xPos > 0 ) && ( xPos < containerWidth ) ) ) {
+        if ( !this.multipleParticleModel.isExploded || ( ( xPos > 0 ) && ( xPos < containerWidth ) ) ) {
           // Only calculate the force if the particle is inside the
           // container.
           resultantForce.setY( 48 / ( Math.pow( yPos, 13 ) ) - ( 24 / ( Math.pow( yPos, 7 ) ) ) );
           this.potentialEnergy += 4 / ( Math.pow( yPos, 12 ) ) - 4 / ( Math.pow( yPos, 6 ) ) + 1;
         }
       }
-      else if ( ( containerHeight - yPos < WALL_DISTANCE_THRESHOLD ) && !this.model.isExploded ) {
+      else if ( ( containerHeight - yPos < WALL_DISTANCE_THRESHOLD ) && !this.multipleParticleModel.isExploded ) {
         // Close enough to the top to feel the force.
         distance = containerHeight - yPos;
         if ( distance < minDistance ) {
@@ -152,7 +152,7 @@ define( function( require ) {
      */
     updateMoleculeSafety: function() {
 
-      var moleculeDataSet = this.model.moleculeDataSet;
+      var moleculeDataSet = this.multipleParticleModel.moleculeDataSet;
       var numberOfSafeMolecules = moleculeDataSet.getNumberOfSafeMolecules();
       var numberOfMolecules = moleculeDataSet.getNumberOfMolecules();
 
@@ -245,20 +245,20 @@ define( function( require ) {
      * @param {Number} pressureZoneWallForce
      */
     updatePressure: function( pressureZoneWallForce ) {
-      if ( this.model.isExploded ) {
+      if ( this.multipleParticleModel.isExploded ) {
         // If the container has exploded, there is essentially no pressure.
         this.pressure = 0;
       }
       else {
         this.pressure = ( 1 - PRESSURE_CALC_WEIGHTING ) *
                         ( pressureZoneWallForce /
-                          ( this.model.normalizedContainerWidth + this.model.normalizedContainerHeight ) ) +
+                          ( this.multipleParticleModel.normalizedContainerWidth + this.multipleParticleModel.normalizedContainerHeight ) ) +
                         PRESSURE_CALC_WEIGHTING * this.pressure;
 
-        if ( ( this.pressure > EXPLOSION_PRESSURE ) && !this.model.isExploded ) {
+        if ( ( this.pressure > EXPLOSION_PRESSURE ) && !this.multipleParticleModel.isExploded ) {
           // The pressure has reached the point where the container should
           // explode, so blow 'er up.
-          this.model.isExploded = true;
+          this.multipleParticleModel.isExploded = true;
         }
       }
     },
