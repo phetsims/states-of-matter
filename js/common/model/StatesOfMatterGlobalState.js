@@ -21,8 +21,7 @@ define( function( require ) {
 
   }
 
-  return inherit( Object, StatesOfMatterGlobalState, {
-    },
+  return inherit( Object, StatesOfMatterGlobalState, {},
 //statics
     {
       whiteBackground: whiteBackground,

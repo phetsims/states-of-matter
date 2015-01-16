@@ -50,16 +50,18 @@ define( function( require ) {
     }, options );
 
     Node.call( this );
-    var textOptions = { font: new PhetFont( 12 ), fill: '#FFFFFF', fontWeight: 600};
+    var textOptions = { font: new PhetFont( 12 ), fill: '#FFFFFF', fontWeight: 600 };
 
     // itemSpec describes the pieces that make up an item in the control panel,
     // conforms to the contract: { label: {Node}, icon: {Node} (optional) }
     var neon = { label: new Text( neonString, textOptions ), icon: createNeonIcon() };
-    var argon = { label: new Text( argonString, textOptions ), icon: createArgonIcon()};
-    var water = { label: new Text( waterString, textOptions ), icon: createWaterIcon()};
-    var oxygen = { label: new Text( oxygenString, textOptions ), icon: createOxygenIcon()};
-    var adjustableAttraction = { label: new Text( adjustableAttractionString,
-      textOptions ), icon: createAdjustableAttractionIcon()};
+    var argon = { label: new Text( argonString, textOptions ), icon: createArgonIcon() };
+    var water = { label: new Text( waterString, textOptions ), icon: createWaterIcon() };
+    var oxygen = { label: new Text( oxygenString, textOptions ), icon: createOxygenIcon() };
+    var adjustableAttraction = {
+      label: new Text( adjustableAttractionString,
+        textOptions ), icon: createAdjustableAttractionIcon()
+    };
 
     // compute the maximum item width
     var widestItemSpec = _.max( [ neon, argon, water, oxygen, adjustableAttraction ], function( item ) {
@@ -74,14 +76,14 @@ define( function( require ) {
         return new HBox( { children: [ itemSpec.label, new HStrut( strutWidth ), itemSpec.icon ] } );
       }
       else {
-        return new HBox( { children: [ itemSpec.label] } );
+        return new HBox( { children: [ itemSpec.label ] } );
       }
     };
 
     var radioButtonContent = [
       { value: StatesOfMatterConstants.NEON, node: createItem( neon ) },
-      { value: StatesOfMatterConstants.ARGON, node: createItem( argon )},
-      { value: StatesOfMatterConstants.DIATOMIC_OXYGEN, node: createItem( oxygen )},
+      { value: StatesOfMatterConstants.ARGON, node: createItem( argon ) },
+      { value: StatesOfMatterConstants.DIATOMIC_OXYGEN, node: createItem( oxygen ) },
       { value: StatesOfMatterConstants.WATER, node: createItem( water ) }
     ];
 
@@ -119,19 +121,20 @@ define( function( require ) {
     this.addChild( radioButtonGroup );
 
     var titleText = new Text( titleString,
-      { font: new PhetFont( 14 ),
+      {
+        font: new PhetFont( 14 ),
         fill: '#FFFFFF',
         fontWeight: 600
       } );
 
     var titleBackground = new Rectangle( background.centerX + 4, background.top - 10,
-        titleText.width + 5, titleText.height,
+      titleText.width + 5, titleText.height,
       {
         fill: 'black'
       } );
     titleText.centerX = background.centerX;
     titleBackground.centerX = titleText.centerX;
-    var tittleNode = new Node( {children: [titleBackground, titleText]} );
+    var tittleNode = new Node( { children: [ titleBackground, titleText ] } );
     this.addChild( tittleNode );
 
     this.mutate( options );
@@ -153,13 +156,13 @@ define( function( require ) {
   };
   //Create an icon for the water  button
   var createWaterIcon = function() {
-    var dot1 = new Circle( 6, { fill: '#D91200'} );
-    var dot2 = new Circle( 3, { fill: 'white', stroke: 'white', bottom: dot1.top + 5, right: dot1.left + 5} );
+    var dot1 = new Circle( 6, { fill: '#D91200' } );
+    var dot2 = new Circle( 3, { fill: 'white', stroke: 'white', bottom: dot1.top + 5, right: dot1.left + 5 } );
     var dot3 = new Circle( 3, {
       fill: 'white', stroke: 'white', bottom: dot1.top + 5, left: dot1.right - 5
     } );
 
-    return new Node( { children: [  dot3, dot1, dot2 ] } );
+    return new Node( { children: [ dot3, dot1, dot2 ] } );
 
   };
 

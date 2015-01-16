@@ -54,7 +54,8 @@ define( function( require ) {
       new Vector2( 0, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT ), mvtScale );
 
     // add stove Node
-    var stoveNode = new StoveNode( model, { scale: 0.8,
+    var stoveNode = new StoveNode( model, {
+      scale: 0.8,
       centerX: this.layoutBounds.centerX,
       bottom: this.layoutBounds.bottom - inset
     } );

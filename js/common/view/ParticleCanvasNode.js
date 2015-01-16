@@ -10,7 +10,7 @@ define( function( require ) {
   // modules
   var inherit = require( 'PHET_CORE/inherit' );
   var CanvasNode = require( 'SCENERY/nodes/CanvasNode' );
-  var HydrogenAtom = require('STATES_OF_MATTER/common/model/particle/HydrogenAtom');
+  var HydrogenAtom = require( 'STATES_OF_MATTER/common/model/particle/HydrogenAtom' );
 
   /**
    * A particle layer rendered on canvas
@@ -37,14 +37,14 @@ define( function( require ) {
       var context = wrapper.context;
       var particle, i;
       // paint the hydrogen particles
-      for (i = 0; i < this.particles.length; i++) {
-        particle = this.particles.get(i);
-        if (particle instanceof HydrogenAtom) {
+      for ( i = 0; i < this.particles.length; i++ ) {
+        particle = this.particles.get( i );
+        if ( particle instanceof HydrogenAtom ) {
           context.fillStyle = particle.color;
           context.beginPath();
-          context.arc(this.modelViewTransform.modelToViewX(particle.positionProperty.get().x),
-              this.modelViewTransform.modelToViewY(particle.positionProperty.get().y),
-              this.modelViewTransform.modelToViewDeltaX(particle.radius), 0, 2 * Math.PI, true);
+          context.arc( this.modelViewTransform.modelToViewX( particle.positionProperty.get().x ),
+            this.modelViewTransform.modelToViewY( particle.positionProperty.get().y ),
+            this.modelViewTransform.modelToViewDeltaX( particle.radius ), 0, 2 * Math.PI, true );
           context.fill();
         }
       }
@@ -52,12 +52,12 @@ define( function( require ) {
       // paint the regular particles
       for ( i = 0; i < this.particles.length; i++ ) {
         particle = this.particles.get( i );
-        if (!( particle instanceof HydrogenAtom )) {
+        if ( !( particle instanceof HydrogenAtom ) ) {
           context.fillStyle = particle.color;
           context.beginPath();
-          context.arc(this.modelViewTransform.modelToViewX(particle.positionProperty.get().x),
-              this.modelViewTransform.modelToViewY(particle.positionProperty.get().y),
-              this.modelViewTransform.modelToViewDeltaX(particle.radius), 0, 2 * Math.PI, true);
+          context.arc( this.modelViewTransform.modelToViewX( particle.positionProperty.get().x ),
+            this.modelViewTransform.modelToViewY( particle.positionProperty.get().y ),
+            this.modelViewTransform.modelToViewDeltaX( particle.radius ), 0, 2 * Math.PI, true );
           context.fill();
         }
       }

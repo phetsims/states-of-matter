@@ -96,7 +96,7 @@ define( function( require ) {
     heatCoolSlider.centerY = stoveBody.centerY;
     heatCoolSlider.centerX = stoveBody.centerX + 10;
 
-    var fireNode = new Image( fireImage, { centerX: stoveBody.centerX, centerY: stoveBody.centerY, scale: 0.6} );
+    var fireNode = new Image( fireImage, { centerX: stoveBody.centerX, centerY: stoveBody.centerY, scale: 0.6 } );
     var iceNode = new Image( iceImage, { centerX: stoveBody.centerX, centerY: stoveBody.centerY, scale: 0.6 } );
     heatProperty.link( function( heat ) {
       model.setHeatingCoolingAmount( heat );

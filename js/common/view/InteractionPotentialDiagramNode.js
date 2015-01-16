@@ -99,18 +99,19 @@ define( function( require ) {
 
     // Create and add the center axis line for the graph.
     var centerAxis = new Path( new Shape().lineTo( 0, 0 )
-      .lineTo( this.graphWidth, 0 ), { lineWidth: 4, stroke: '#A7A7A7'} );
+      .lineTo( this.graphWidth, 0 ), { lineWidth: 4, stroke: '#A7A7A7' } );
     this.ljPotentialGraph.addChild( centerAxis );
     centerAxis.setTranslation( 0, this.graphHeight / 2 );
 
     // Create and add the potential energy line.
-    this.potentialEnergyLine = new Path( null, { lineWidth: 2, stroke: 'yellow'} );
+    this.potentialEnergyLine = new Path( null, { lineWidth: 2, stroke: 'yellow' } );
 
     this.ljPotentialGraph.addChild( this.potentialEnergyLine );
 
     // Add the arrows and labels that will depict sigma and epsilon.
     this.epsilonArrow = new ArrowNode( 0, 0, 0, this.graphHeight / 2,
-      { fill: 'white',
+      {
+        fill: 'white',
         stroke: 'white',
         doubleHead: true,
         headHeight: 5,
@@ -122,12 +123,13 @@ define( function( require ) {
     this.epsilonLabel = new Text( epsilonString, { font: GREEK_LETTER_FONT, fill: 'white' } );
     this.ljPotentialGraph.addChild( this.epsilonLabel );
 
-    this.sigmaLabel = new Text( sigmaString, {font: GREEK_LETTER_FONT, fill: 'white'} );
+    this.sigmaLabel = new Text( sigmaString, { font: GREEK_LETTER_FONT, fill: 'white' } );
     this.ljPotentialGraph.addChild( this.sigmaLabel );
     this.sigmaArrow = new ArrowNode( 0, 0, 0, 0, {
       headHeight: 8,
       headWidth: 8,
-      tailWidth: 3, doubleHead: true, fill: 'white'} );
+      tailWidth: 3, doubleHead: true, fill: 'white'
+    } );
     this.ljPotentialGraph.addChild( this.sigmaArrow );
 
     // Variables for controlling the appearance, visibility, and location of
@@ -144,7 +146,8 @@ define( function( require ) {
 
     // Create and add the horizontal axis line for the graph.
     this.horizontalAxis = new ArrowNode( 0, 0, this.graphWidth + AXES_ARROW_HEAD_HEIGHT, 0,
-      { stroke: 'white',
+      {
+        stroke: 'white',
         fill: 'white',
         headHeight: 8,
         headWidth: 8,
@@ -155,7 +158,8 @@ define( function( require ) {
 
 
     this.horizontalAxisLabel = new Text( distanceBetweenAtomsString,
-      { fill: 'white',
+      {
+        fill: 'white',
         font: AXIS_LABEL_FONT
       } );
 
@@ -163,7 +167,8 @@ define( function( require ) {
 
     // Create and add the vertical axis line for the graph.
     this.verticalAxis = new ArrowNode( 0, 0, 0, -this.graphHeight - AXES_ARROW_HEAD_HEIGHT,
-      { stroke: 'white',
+      {
+        stroke: 'white',
         fill: 'white',
         headHeight: 8,
         headWidth: 8,
@@ -171,9 +176,9 @@ define( function( require ) {
       } );
     this.verticalAxis.setTranslation( this.graphXOrigin, this.graphYOrigin );
 
-    this.verticalAxisLabel = new Text( potentialEnergyString, {fill: 'white', font: AXIS_LABEL_FONT} );
+    this.verticalAxisLabel = new Text( potentialEnergyString, { fill: 'white', font: AXIS_LABEL_FONT } );
     this.verticalAxisLabel.setTranslation( this.graphXOrigin / 2,
-        this.graphYOrigin - (  this.graphHeight / 2) + ( this.verticalAxisLabel.width / 2) );
+      this.graphYOrigin - (  this.graphHeight / 2) + ( this.verticalAxisLabel.width / 2) );
     this.verticalAxisLabel.setRotation( 3 * Math.PI / 2 );
 
     // Draw the curve upon the graph.
@@ -197,16 +202,16 @@ define( function( require ) {
       this.drawPotentialCurve();
     },
     getGraphHeight: function() {
-      return   this.graphHeight;
+      return this.graphHeight;
     },
     getGraphWidth: function() {
-      return   this.graphWidth;
+      return this.graphWidth;
     },
     getZeroCrossingPoint: function() {
-      return   this.zeroCrossingPoint;
+      return this.zeroCrossingPoint;
     },
     getGraphMin: function() {
-      return   this.graphMin;
+      return this.graphMin;
     },
     setMarkerEnabled: function( enabled ) {
       this.positionMarkerEnabled = enabled;
@@ -246,7 +251,7 @@ define( function( require ) {
      * used in an environment where the scale must match the surroundings.
      */
     getXAxisGraphProportion: function() {
-      return   this.graphWidth / this.width;
+      return this.graphWidth / this.width;
     },
     /**
      * Returns a values between 0 and 1 representing the fraction of the
@@ -267,12 +272,12 @@ define( function( require ) {
       /*if ( molecular ) {
        // this.horizontalAxisLabel.setText( 'atoms' );
        }
-      else {
+       else {
        // this.horizontalAxisLabel.setText( 'Distance between Molecules' );
        }*/
       this.horizontalAxisLabel.setTranslation( this.graphXOrigin + (  this.graphWidth / 2) -
                                                (  this.horizontalAxisLabel.width / 2.4),
-          this.graphYOrigin + (  this.horizontalAxisLabel.height ) );
+        this.graphYOrigin + (  this.horizontalAxisLabel.height ) );
     },
 
     /**
@@ -332,11 +337,11 @@ define( function( require ) {
         this.epsilonArrow.setVisible( false );
       }
       this.epsilonLabel.setTranslation( this.graphMin.x + this.epsilonLabel.width,
-          ((  this.graphMin.y - (  this.graphHeight / 2)) / 3) - (  this.epsilonLabel.height / 2) +
-          this.graphHeight / 2 );
+        ((  this.graphMin.y - (  this.graphHeight / 2)) / 3) - (  this.epsilonLabel.height / 2) +
+        this.graphHeight / 2 );
       // Position the arrow that depicts sigma along with its label.
       this.sigmaLabel.setTranslation( this.zeroCrossingPoint.x / 2 - this.sigmaLabel.width / 2,
-          this.graphHeight / 2 - this.sigmaLabel.height / 3 );
+        this.graphHeight / 2 - this.sigmaLabel.height / 3 );
       try {
         this.sigmaArrow.setTailAndTip( 0, this.graphHeight / 2,
           this.zeroCrossingPoint.x, this.zeroCrossingPoint.y );

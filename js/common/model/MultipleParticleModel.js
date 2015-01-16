@@ -478,7 +478,7 @@ define( function( require ) {
         var moleculeRotationRate = ( Math.random() - 0.5 ) * ( Math.PI / 2 );
         var atomPositions = [];
         for ( var i = 0; i < atomsPerMolecule; i++ ) {
-          atomPositions[i] = new Vector2();
+          atomPositions[ i ] = new Vector2();
         }
 
         // Add the newly created molecule to the data set.
@@ -516,9 +516,9 @@ define( function( require ) {
           // Add particles to model set.
           //for ( var j = 0; j < atomsPerMolecule; j++ ) {
           this.particles.add( new OxygenAtom( 0, 0 ) );
-          atomPositions[0] = new Vector2();
+          atomPositions[ 0 ] = new Vector2();
           this.particles.add( new OxygenAtom( 0, 0 ) );
-          atomPositions[1] = new Vector2();
+          atomPositions[ 1 ] = new Vector2();
           // }
         }
         else if ( atomsPerMolecule === 3 ) {
@@ -527,11 +527,11 @@ define( function( require ) {
 
           // Add atoms to model set.
           this.particles.add( new OxygenAtom( 0, 0 ) );
-          atomPositions[0] = new Vector2();
+          atomPositions[ 0 ] = new Vector2();
           this.particles.add( new HydrogenAtom( 0, 0 ) );
-          atomPositions[1] = new Vector2();
+          atomPositions[ 1 ] = new Vector2();
           this.particles.add( new HydrogenAtom( 0, 0 ) );
-          atomPositions[2] = new Vector2();
+          atomPositions[ 2 ] = new Vector2();
         }
 
         if ( this.particles.length === 1 ) {
@@ -798,8 +798,8 @@ define( function( require ) {
         var moleculeCenterOfMassPosition = new Vector2();
         var moleculeVelocity = new Vector2();
         var atomPositions = [];
-        atomPositions[0] = new Vector2();
-        atomPositions[1] = new Vector2();
+        atomPositions[ 0 ] = new Vector2();
+        atomPositions[ 1 ] = new Vector2();
         // Add the atom to the data set.
         this.moleculeDataSet.addMolecule( atomPositions, moleculeCenterOfMassPosition, moleculeVelocity, 0 );
         // Add atoms to model set.
@@ -843,9 +843,9 @@ define( function( require ) {
         var moleculeCenterOfMassPosition = new Vector2();
         var moleculeVelocity = new Vector2();
         var atomPositions = [];
-        atomPositions[0] = new Vector2();
-        atomPositions[1] = new Vector2();
-        atomPositions[2] = new Vector2();
+        atomPositions[ 0 ] = new Vector2();
+        atomPositions[ 1 ] = new Vector2();
+        atomPositions[ 2 ] = new Vector2();
         // Add the atom to the data set.
         this.moleculeDataSet.addMolecule( atomPositions, moleculeCenterOfMassPosition, moleculeVelocity, 0 );
         // Add atoms to model set.
@@ -998,7 +998,7 @@ define( function( require ) {
       var i = 0;
 
       this.particles.forEach( function( particle ) {
-        particle.setPosition( atomPositions[i].x * positionMultiplier, atomPositions[i].y * positionMultiplier );
+        particle.setPosition( atomPositions[ i ].x * positionMultiplier, atomPositions[ i ].y * positionMultiplier );
         i++;
       } );
       /*if ( this.moleculeDataSet.numberOfAtoms !== this.particles.length ) {
@@ -1134,7 +1134,7 @@ define( function( require ) {
       var particlesNearTop = false;
 
       for ( var i = 0; i < this.moleculeDataSet.getNumberOfMolecules(); i++ ) {
-        if ( moleculesPositions[i].y > threshold ) {
+        if ( moleculesPositions[ i ].y > threshold ) {
           particlesNearTop = true;
           break;
         }
@@ -1226,7 +1226,7 @@ define( function( require ) {
       do {
         for ( firstOutsideMoleculeIndex = 0; firstOutsideMoleculeIndex < this.moleculeDataSet.getNumberOfMolecules();
               firstOutsideMoleculeIndex++ ) {
-          var pos = this.moleculeDataSet.getMoleculeCenterOfMassPositions()[firstOutsideMoleculeIndex];
+          var pos = this.moleculeDataSet.getMoleculeCenterOfMassPositions()[ firstOutsideMoleculeIndex ];
           if ( pos.x < 0 || pos.x > this.normalizedContainerWidth || pos.y < 0 ||
                pos.y > StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT / this.particleDiameter ) {
             // This particle is outside of the container.

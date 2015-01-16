@@ -42,10 +42,10 @@ define( function( require ) {
     this.moleculeTorques = [];
     this.nextMoleculeTorques = [];
     for ( var i = 0; i < StatesOfMatterConstants.MAX_NUM_ATOMS / this.atomsPerMolecule; i++ ) {
-      this.moleculeRotationAngles [i] = 0;
-      this.moleculeRotationRates[i] = 0;
-      this.moleculeTorques[i] = 0;
-      this.nextMoleculeTorques [i] = 0;
+      this.moleculeRotationAngles [ i ] = 0;
+      this.moleculeRotationRates[ i ] = 0;
+      this.moleculeTorques[ i ] = 0;
+      this.nextMoleculeTorques [ i ] = 0;
     }
 
 
@@ -157,18 +157,18 @@ define( function( require ) {
 
       if ( this.atomsPerMolecule === 1 ) {
         for ( i = 0; i < this.numberOfAtoms; i++ ) {
-          translationalKineticEnergy += ( ( this.moleculeVelocities[i].x * this.moleculeVelocities[i].x ) +
-                                          ( this.moleculeVelocities[i].y * this.moleculeVelocities[i].y ) ) / 2;
+          translationalKineticEnergy += ( ( this.moleculeVelocities[ i ].x * this.moleculeVelocities[ i ].x ) +
+                                          ( this.moleculeVelocities[ i ].y * this.moleculeVelocities[ i ].y ) ) / 2;
         }
         kineticEnergyPerMolecule = translationalKineticEnergy / this.numberOfAtoms;
       }
       else {
         for ( i = 0; i < this.numberOfAtoms / this.atomsPerMolecule; i++ ) {
           translationalKineticEnergy += 0.5 * this.moleculeMass *
-                                        ( Math.pow( this.moleculeVelocities[i].x, 2 ) +
-                                          Math.pow( this.moleculeVelocities[i].y, 2 ) );
+                                                                ( Math.pow( this.moleculeVelocities[ i ].x, 2 ) +
+                                                                  Math.pow( this.moleculeVelocities[ i ].y, 2 ) );
           rotationalKineticEnergy += 0.5 * this.moleculeRotationalInertia *
-                                     Math.pow( this.moleculeRotationRates[i], 2 );
+                                                                          Math.pow( this.moleculeRotationRates[ i ], 2 );
         }
         kineticEnergyPerMolecule = ( translationalKineticEnergy + rotationalKineticEnergy ) / numberOfMolecules / 1.5;
       }
@@ -197,22 +197,22 @@ define( function( require ) {
 
       // Add the information for this molecule to the data set.
       for ( var i = 0; i < this.atomsPerMolecule; i++ ) {
-        this.atomPositions[i + this.numberOfAtoms] = atomPositions[i].copy();
+        this.atomPositions[ i + this.numberOfAtoms ] = atomPositions[ i ].copy();
       }
       var numberOfMolecules = this.numberOfAtoms / this.atomsPerMolecule;
-      this.moleculeCenterOfMassPositions[numberOfMolecules] = moleculeCenterOfMassPosition;
-      this.moleculeVelocities[numberOfMolecules] = moleculeVelocity;
-      this.moleculeRotationRates[numberOfMolecules] = moleculeRotationRate;
+      this.moleculeCenterOfMassPositions[ numberOfMolecules ] = moleculeCenterOfMassPosition;
+      this.moleculeVelocities[ numberOfMolecules ] = moleculeVelocity;
+      this.moleculeRotationRates[ numberOfMolecules ] = moleculeRotationRate;
 
       // Allocate memory for the information that is not specified.
-      this.moleculeForces[numberOfMolecules] = new Vector2();
-      this.nextMoleculeForces[numberOfMolecules] = new Vector2();
+      this.moleculeForces[ numberOfMolecules ] = new Vector2();
+      this.nextMoleculeForces[ numberOfMolecules ] = new Vector2();
 
       // Increment the number of atoms.  Note that we DON'T increment the number of safe atoms - that must
       // be done by some outside entity.
       this.numberOfAtoms += this.atomsPerMolecule;
 
-      assert && assert( !isNaN( this.moleculeCenterOfMassPositions[numberOfMolecules].x ) );
+      assert && assert( !isNaN( this.moleculeCenterOfMassPositions[ numberOfMolecules ].x ) );
 
       return true;
     },
@@ -239,21 +239,21 @@ define( function( require ) {
       // Handle all data arrays that are maintained on a per-molecule basis.
       for ( i = moleculeIndex; i < this.numberOfAtoms / this.atomsPerMolecule - 1; i++ ) {
         // Shift the data in each array forward one slot.
-        this.moleculeCenterOfMassPositions[i] = this.moleculeCenterOfMassPositions[i + 1];
-        this.moleculeVelocities[i] = this.moleculeVelocities[i + 1];
-        this.moleculeForces[i] = this.moleculeForces[i + 1];
-        this.nextMoleculeForces[i] = this.nextMoleculeForces[i + 1];
-        this.moleculeRotationAngles[i] = this.moleculeRotationAngles[i + 1];
-        this.moleculeRotationRates[i] = this.moleculeRotationRates[i + 1];
-        this.moleculeTorques[i] = this.moleculeTorques[i + 1];
-        this.nextMoleculeTorques[i] = this.nextMoleculeTorques[i + 1];
+        this.moleculeCenterOfMassPositions[ i ] = this.moleculeCenterOfMassPositions[ i + 1 ];
+        this.moleculeVelocities[ i ] = this.moleculeVelocities[ i + 1 ];
+        this.moleculeForces[ i ] = this.moleculeForces[ i + 1 ];
+        this.nextMoleculeForces[ i ] = this.nextMoleculeForces[ i + 1 ];
+        this.moleculeRotationAngles[ i ] = this.moleculeRotationAngles[ i + 1 ];
+        this.moleculeRotationRates[ i ] = this.moleculeRotationRates[ i + 1 ];
+        this.moleculeTorques[ i ] = this.moleculeTorques[ i + 1 ];
+        this.nextMoleculeTorques[ i ] = this.nextMoleculeTorques[ i + 1 ];
       }
 
       // Handle all data arrays that are maintained on a per-atom basis.
       for ( i = moleculeIndex * this.atomsPerMolecule; i < ( this.numberOfAtoms - this.atomsPerMolecule );
             i += this.atomsPerMolecule ) {
         for ( var j = 0; j < this.atomsPerMolecule; j++ ) {
-          this.atomPositions[ i + j ] = this.atomPositions[ i + this.atomsPerMolecule + j];
+          this.atomPositions[ i + j ] = this.atomPositions[ i + this.atomsPerMolecule + j ];
         }
       }
 

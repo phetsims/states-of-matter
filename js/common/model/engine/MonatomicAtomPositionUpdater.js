@@ -35,7 +35,7 @@ define( function( require ) {
 
       // Position the atoms to match the position of the molecules.
       for ( var i = 0; i < moleculeDataSet.getNumberOfMolecules(); i++ ) {
-        atomPositions[i] = moleculeCenterOfMassPositions[i];
+        atomPositions[ i ] = moleculeCenterOfMassPositions[ i ];
       }
     }
 

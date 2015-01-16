@@ -88,8 +88,8 @@ define( function( require ) {
     pumpBaseSupportRightLower.centerX = pumpBaseSupportRightUpper.centerX + pumpBaseSupportXOffset;
 
     var pumpBase = new Node( {
-      children: [pumpBaseSupportLeftLower, pumpBaseSupportLeftUpper,
-                 pumpBaseSupportRightLower, pumpBaseSupportRightUpper]
+      children: [ pumpBaseSupportLeftLower, pumpBaseSupportLeftUpper,
+        pumpBaseSupportRightLower, pumpBaseSupportRightUpper ]
     } );
     pumpBase.setTranslation( pumpBase.width / 9, height - pumpBaseHeight + pumpBase.height / 2 );
     this.addChild( pumpBase );
@@ -182,7 +182,7 @@ define( function( require ) {
 
     pumpHandleNode.scale( pumpHandleHeight / pumpHandleNode.height );
     pumpHandleNode.setTranslation( (pumpBaseWidth - pumpHandleNode.width) / 2,
-        height - ( height * PUMP_HANDLE_INIT_VERT_POS_PROPORTION ) - pumpHandleHeight - pumpBaseHeight );
+      height - ( height * PUMP_HANDLE_INIT_VERT_POS_PROPORTION ) - pumpHandleHeight - pumpBaseHeight );
 
     var maxHandleOffset = -PUMP_SHAFT_HEIGHT_PROPORTION * height / 2;
 
@@ -231,7 +231,7 @@ define( function( require ) {
       pickable: false
     } );
     pumpShaft.setTranslation( (pumpBaseWidth - pumpShaftWidth) / 2,
-        height - ( height * PUMP_HANDLE_INIT_VERT_POS_PROPORTION ) - pumpBaseHeight );
+      height - ( height * PUMP_HANDLE_INIT_VERT_POS_PROPORTION ) - pumpBaseHeight );
     this.addChild( pumpShaft );
     this.addChild( pumpHandleNode );
 
@@ -253,7 +253,7 @@ define( function( require ) {
       fill: 'white'
     } );
     pumpBodyOpening.setTranslation( (pumpBaseWidth - pumpBodyWidth) / 2 + pumpBodyOpening.width / 2,
-        height - pumpBodyHeight - pumpBaseHeight );
+      height - pumpBodyHeight - pumpBaseHeight );
 
     // Add the hose.
     var hoseToPumpAttachPtX = (pumpBaseWidth + pumpBodyWidth) / 2;
@@ -316,7 +316,7 @@ define( function( require ) {
           .addColorStop( 0.9, '#919191' )
       } );
     hoseConnector.setTranslation( width - hoseConnectorWidth,
-        height - ( height * HOSE_CONNECTOR_VERT_POS_PROPORTION ) - hoseConnectorHeight / 2 );
+      height - ( height * HOSE_CONNECTOR_VERT_POS_PROPORTION ) - hoseConnectorHeight / 2 );
     this.addChild( hoseConnector );
     var hoseBottomConnector = new Rectangle( 0, 0, hoseConnectorWidth, hoseConnectorHeight, 2, 2,
       {

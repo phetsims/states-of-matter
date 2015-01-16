@@ -47,26 +47,28 @@ define( function( require ) {
     this.dialComponentsNode = new Node();
     this.dialComponentsNode.setTranslation( 0, 0 );
     var gaugeNode = new GaugeNode( model.pressureProperty, pressureString,
-      {min: 0, max: 200 }, {scale: 0.5} );
+      { min: 0, max: 200 }, { scale: 0.5 } );
 
 
     // Add the textual readout display.
-    this.textualReadoutBoxShape = new Rectangle( 0, 0, 80, 15, 2, 2, { fill: 'white', stroke: 'black'} );
+    this.textualReadoutBoxShape = new Rectangle( 0, 0, 80, 15, 2, 2, { fill: 'white', stroke: 'black' } );
     this.textualReadoutBoxShape.centerX = gaugeNode.centerX;
     this.textualReadoutBoxShape.top = gaugeNode.bottom - 15;
-    this.textualReadout = new Text( '', { font: new PhetFont( 12 ), fill: 'black'} );
+    this.textualReadout = new Text( '', { font: new PhetFont( 12 ), fill: 'black' } );
     this.textualReadout.center = this.textualReadoutBoxShape.center;
 
-    this.connector = new Path( null, { lineWidth: 8,
+    this.connector = new Path( null, {
+      lineWidth: 8,
       stroke: new LinearGradient( 0, 0, 60, 60 )
         .addColorStop( 0, '#D8D7D8' )
         .addColorStop( 0.4, '#E1E2E3' )
         .addColorStop( 0.8, '#D5D7D8' )
         .addColorStop( 0.9, '#E2E3E4' )
     } );
-    var roundedRectangle = new Rectangle( 0, 0, 30, 25, 2, 2, {fill: new LinearGradient( 0, 0, 0, 25 )
-      .addColorStop( 0, '#5F6973' )
-      .addColorStop( 0.6, '#F0F1F2' )
+    var roundedRectangle = new Rectangle( 0, 0, 30, 25, 2, 2, {
+      fill: new LinearGradient( 0, 0, 0, 25 )
+        .addColorStop( 0, '#5F6973' )
+        .addColorStop( 0.6, '#F0F1F2' )
     } );
 
     roundedRectangle.centerY = gaugeNode.centerY;

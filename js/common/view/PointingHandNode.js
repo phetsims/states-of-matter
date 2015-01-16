@@ -60,7 +60,7 @@ define( function( require ) {
     this.hintNode.setVisible( false );
 
     // Load and scale the image.
-    this.fingerImageNode = new Image( fingerImage, {scale: 0.5, cursor: 'ns-resize', pickable: true} );
+    this.fingerImageNode = new Image( fingerImage, { scale: 0.5, cursor: 'ns-resize', pickable: true } );
     this.hintNode.top = this.fingerImageNode.bottom - 50;
     this.hintNode.left = this.fingerImageNode.right;
 
@@ -81,7 +81,7 @@ define( function( require ) {
           endY = pointingHandNode.fingerImageNode.globalToParentPoint( event.pointer.point ).y;
           // Resize the container based on the amount that the node has moved.
           pointingHandNode.model.setTargetParticleContainerHeight(
-              pointingHandNode.containerSizeAtDragStart + modelViewTransform.viewToModelDeltaY( endY - startY ) );
+            pointingHandNode.containerSizeAtDragStart + modelViewTransform.viewToModelDeltaY( endY - startY ) );
           pointingHandNode.updateHintVisibility();
         },
         end: function() {
@@ -130,15 +130,15 @@ define( function( require ) {
       var containerRect = this.model.getParticleContainerRect();
       if ( !this.model.getContainerExploded() ) {
         this.setTranslation( this.x,
-            Math.abs( this.modelViewTransform.modelToViewDeltaY( StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT -
-                                                                 containerRect.getHeight() ) ) - this.height + 20 );
+          Math.abs( this.modelViewTransform.modelToViewDeltaY( StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT -
+                                                               containerRect.getHeight() ) ) - this.height + 20 );
       }
       else {
         // quickly.
         this.setTranslation( this.x,
-            -this.modelViewTransform.modelToViewDeltaY( StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT -
-                                                        ( containerRect.getHeight() * 2 ) ) -
-            this.height );
+          -this.modelViewTransform.modelToViewDeltaY( StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT -
+                                                      ( containerRect.getHeight() * 2 ) ) -
+          this.height );
       }
     },
 

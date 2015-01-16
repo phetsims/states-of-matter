@@ -71,11 +71,11 @@ define( function( require ) {
       // Update the positions of all particles based on their current
       // velocities and the forces acting on them.
       for ( i = 0; i < numberOfAtoms; i++ ) {
-        var xPos = moleculeCenterOfMassPositions[i].x + ( this.TIME_STEP * moleculeVelocities[i].x ) +
-                   ( this.TIME_STEP_SQR_HALF * moleculeForces[i].x );
-        var yPos = moleculeCenterOfMassPositions[i].y + ( this.TIME_STEP * moleculeVelocities[i].y ) +
-                   ( this.TIME_STEP_SQR_HALF * moleculeForces[i].y );
-        moleculeCenterOfMassPositions[i].setXY( xPos, yPos );
+        var xPos = moleculeCenterOfMassPositions[ i ].x + ( this.TIME_STEP * moleculeVelocities[ i ].x ) +
+                   ( this.TIME_STEP_SQR_HALF * moleculeForces[ i ].x );
+        var yPos = moleculeCenterOfMassPositions[ i ].y + ( this.TIME_STEP * moleculeVelocities[ i ].y ) +
+                   ( this.TIME_STEP_SQR_HALF * moleculeForces[ i ].y );
+        moleculeCenterOfMassPositions[ i ].setXY( xPos, yPos );
       }
 
       // Calculate the forces exerted on the particles by the container walls and by gravity.
@@ -83,24 +83,24 @@ define( function( require ) {
       for ( i = 0; i < numberOfAtoms; i++ ) {
 
         // Clear the previous calculation's particle forces.
-        nextMoleculeForces[i].setXY( 0, 0 );
+        nextMoleculeForces[ i ].setXY( 0, 0 );
 
         // Get the force values caused by the container walls.
-        this.calculateWallForce( moleculeCenterOfMassPositions[i], this.model.normalizedContainerWidth,
-          this.model.normalizedContainerHeight, nextMoleculeForces[i] );
+        this.calculateWallForce( moleculeCenterOfMassPositions[ i ], this.model.normalizedContainerWidth,
+          this.model.normalizedContainerHeight, nextMoleculeForces[ i ] );
 
         // Accumulate this force value as part of the pressure being
         // exerted on the walls of the container.
-        if ( nextMoleculeForces[i].y < 0 ) {
-          pressureZoneWallForce += -nextMoleculeForces[i].y;
+        if ( nextMoleculeForces[ i ].y < 0 ) {
+          pressureZoneWallForce += -nextMoleculeForces[ i ].y;
         }
-        else if ( moleculeCenterOfMassPositions[i].y > this.model.normalizedContainerHeight / 2 ) {
+        else if ( moleculeCenterOfMassPositions[ i ].y > this.model.normalizedContainerHeight / 2 ) {
           // If the particle bounced on one of the walls above the midpoint, add
           // in that value to the pressure.
-          pressureZoneWallForce += Math.abs( nextMoleculeForces[i].x );
+          pressureZoneWallForce += Math.abs( nextMoleculeForces[ i ].x );
         }
 
-        nextMoleculeForces[i].setY( nextMoleculeForces[i].y - this.model.gravitationalAcceleration );
+        nextMoleculeForces[ i ].setY( nextMoleculeForces[ i ].y - this.model.gravitationalAcceleration );
       }
 
       // Update the pressure calculation.
@@ -119,8 +119,8 @@ define( function( require ) {
       for ( i = 0; i < numberOfSafeAtoms; i++ ) {
         for ( var j = i + 1; j < numberOfSafeAtoms; j++ ) {
 
-          var dx = moleculeCenterOfMassPositions[i].x - moleculeCenterOfMassPositions[j].x;
-          var dy = moleculeCenterOfMassPositions[i].y - moleculeCenterOfMassPositions[j].y;
+          var dx = moleculeCenterOfMassPositions[ i ].x - moleculeCenterOfMassPositions[ j ].x;
+          var dy = moleculeCenterOfMassPositions[ i ].y - moleculeCenterOfMassPositions[ j ].y;
           var distanceSqrd = ( dx * dx ) + ( dy * dy );
 
           if ( distanceSqrd === 0 ) {
@@ -144,8 +144,8 @@ define( function( require ) {
             var forceScalar = 48 * r2inv * r6inv * ( r6inv - 0.5 ) * this.epsilon;
             force.setX( dx * forceScalar );
             force.setY( dy * forceScalar );
-            nextMoleculeForces[i].add( force );
-            nextMoleculeForces[j].subtract( force );
+            nextMoleculeForces[ i ].add( force );
+            nextMoleculeForces[ j ].subtract( force );
             potentialEnergy += 4 * r6inv * ( r6inv - 1 ) + 0.016316891136;
           }
         }
@@ -155,11 +155,11 @@ define( function( require ) {
       // that are acting on the particle.
       var velocityIncrement = new Vector2();
       for ( i = 0; i < numberOfAtoms; i++ ) {
-        velocityIncrement.setX( this.TIME_STEP_HALF * ( moleculeForces[i].x + nextMoleculeForces[i].x ) );
-        velocityIncrement.setY( this.TIME_STEP_HALF * ( moleculeForces[i].y + nextMoleculeForces[i].y ) );
-        moleculeVelocities[i].add( velocityIncrement );
-        kineticEnergy += ( ( moleculeVelocities[i].x * moleculeVelocities[i].x ) +
-                           ( moleculeVelocities[i].y * moleculeVelocities[i].y ) ) / 2;
+        velocityIncrement.setX( this.TIME_STEP_HALF * ( moleculeForces[ i ].x + nextMoleculeForces[ i ].x ) );
+        velocityIncrement.setY( this.TIME_STEP_HALF * ( moleculeForces[ i ].y + nextMoleculeForces[ i ].y ) );
+        moleculeVelocities[ i ].add( velocityIncrement );
+        kineticEnergy += ( ( moleculeVelocities[ i ].x * moleculeVelocities[ i ].x ) +
+                           ( moleculeVelocities[ i ].y * moleculeVelocities[ i ].y ) ) / 2;
       }
 
       // Record the calculated temperature.
@@ -170,7 +170,7 @@ define( function( require ) {
 
       // Replace the new forces with the old ones.
       for ( i = 0; i < numberOfAtoms; i++ ) {
-        moleculeForces[i].setXY( nextMoleculeForces[i].x, nextMoleculeForces[i].y );
+        moleculeForces[ i ].setXY( nextMoleculeForces[ i ].x, nextMoleculeForces[ i ].y );
       }
     }
   } );

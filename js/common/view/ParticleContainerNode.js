@@ -44,7 +44,7 @@ define( function( require ) {
     Node.call( this );
 
     var preParticleLayer = new Node();
-    var postParticleLayer = new Node( { opacity: 0.9} );
+    var postParticleLayer = new Node( { opacity: 0.9 } );
     this.containerLid = new Node( { opacity: 0.9 } );
     this.addChild( preParticleLayer );
     var openEllipseRadiusX = 25;
@@ -87,19 +87,19 @@ define( function( require ) {
       .moveTo( 0, distanceFromTopInnerTop )
       .quadraticCurveTo( containerLeftShapeWidth, 18, 50, 21 ) //outer-top-curve -1
       .quadraticCurveTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / 2, 30,
-        StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / 2 + containerLeftShapeWidth, 26 ) //outer-top-curve -2
+      StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / 2 + containerLeftShapeWidth, 26 ) //outer-top-curve -2
       .quadraticCurveTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - containerLeftShapeWidth, 23,
       StatesOfMatterConstants.VIEW_CONTAINER_WIDTH, distanceFromTopInnerTop )//outer-top-curve -3
       // line from outer top right to outer bottom right
       .lineTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT )
 
       .quadraticCurveTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 2,
-        StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT + 5,
-        StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 10,
-        StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT + 8 ) //outer-bottom-curve -1
+      StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT + 5,
+      StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 10,
+      StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT + 8 ) //outer-bottom-curve -1
 
       .quadraticCurveTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / 2,
-        StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT + 35,
+      StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT + 35,
       20, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT + 10 ) //outer-bottom-curve -2
       .quadraticCurveTo( 2, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT + 5, 0,
       StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT )//outer-bottom-curve -3
@@ -108,9 +108,9 @@ define( function( require ) {
       .lineTo( containerLeftShapeWidth, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT - 10 )
 
       .quadraticCurveTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / 2,
-        StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT + containerLeftShapeWidth,
-        StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 25,
-        StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT - 10 )// inner-bottom -curve(left t0 right )
+      StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT + containerLeftShapeWidth,
+      StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 25,
+      StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT - 10 )// inner-bottom -curve(left t0 right )
 
       //line from inner-bottom right to inner  top-right
       .lineTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - containerLeftShapeWidth, 30 )
@@ -183,7 +183,7 @@ define( function( require ) {
     var topShape = new Path( new Shape()
       .moveTo( containerLeftShapeWidth, 30 )
       .quadraticCurveTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / 2, 45,
-        StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - containerLeftShapeWidth, 30 )
+      StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - containerLeftShapeWidth, 30 )
       .lineTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 35, 45 )
       .quadraticCurveTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / 2, 55, 35, 45 )
       .close(), {
@@ -204,12 +204,12 @@ define( function( require ) {
     var bottomShape = new Path( new Shape()
       .moveTo( containerLeftShapeWidth, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT )
       .quadraticCurveTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / 2,
-        StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT + containerLeftShapeWidth + 1,
-        StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - containerLeftShapeWidth,
+      StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT + containerLeftShapeWidth + 1,
+      StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - containerLeftShapeWidth,
       StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT )
       .lineTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 35, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT - 10 )
       .quadraticCurveTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / 2,
-        StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT + 10,
+      StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT + 10,
       35, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT - 10 )
       .close(), {
       lineWidth: 0,
@@ -242,10 +242,10 @@ define( function( require ) {
       this.addChild( this.fingerNode );
       this.fingerNode.bottom = this.containerLid.top;
       this.fingerNode.setTranslation( this.fingerNode.x + openEllipse.width / 2.4,
-          Math.abs( this.modelViewTransform.modelToViewDeltaY(
-              StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT -
-              this.model.getParticleContainerRect().getHeight() ) ) +
-          this.containerLid.y - this.fingerNode.height + 20 );
+        Math.abs( this.modelViewTransform.modelToViewDeltaY(
+          StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT -
+          this.model.getParticleContainerRect().getHeight() ) ) +
+        this.containerLid.y - this.fingerNode.height + 20 );
 
       // Add the handle to the lid.
       this.containerLid.addChild( openInnerEllipse );
@@ -264,7 +264,7 @@ define( function( require ) {
 
       var pressureMeterXOffset = 60;
       this.pressureMeter.setTranslation( this.containerLid.x - pressureMeterXOffset,
-          this.containerLid.y - PRESSURE_METER_ELBOW_OFFSET );
+        this.containerLid.y - PRESSURE_METER_ELBOW_OFFSET );
     }
     var particleContainerNode = this;
     model.particleContainerHeightProperty.link( function() {
@@ -324,7 +324,7 @@ define( function( require ) {
           this.containerLid.setRotation( 0 );
         }
         this.containerLid.setTranslation(
-            (this.modelViewTransform.modelToViewDeltaX( this.containmentAreaWidth ) - this.containerLid.width) / 2,
+          (this.modelViewTransform.modelToViewDeltaX( this.containmentAreaWidth ) - this.containerLid.width) / 2,
           -this.modelViewTransform.modelToViewDeltaY( this.containmentAreaHeight - containerHeight )
           /*- (this.containerLid.height / 2) + LID_POSITION_TWEAK_FACTOR*/ );
       }

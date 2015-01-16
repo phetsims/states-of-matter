@@ -97,13 +97,13 @@ define( function( require ) {
             xPos += MIN_INITIAL_INTER_PARTICLE_DISTANCE / 2;
           }
           yPos = startingPosY + i * MIN_INITIAL_INTER_PARTICLE_DISTANCE * 0.866;
-          moleculeCenterOfMassPositions[( i * atomsPerLayer ) + j].setXY( xPos, yPos );
+          moleculeCenterOfMassPositions[ ( i * atomsPerLayer ) + j ].setXY( xPos, yPos );
 
           particlesPlaced++;
 
           // Assign each particle an initial velocity.
-          moleculeVelocities[( i * atomsPerLayer ) + j] = new Vector2( temperatureSqrt * this.random.nextGaussian(),
-              temperatureSqrt * this.random.nextGaussian() );
+          moleculeVelocities[ ( i * atomsPerLayer ) + j ] = new Vector2( temperatureSqrt * this.random.nextGaussian(),
+            temperatureSqrt * this.random.nextGaussian() );
         }
       }
     },
@@ -123,8 +123,8 @@ define( function( require ) {
       var moleculeVelocities = this.model.moleculeDataSet.moleculeVelocities;
       for ( var i = 0; i < numberOfAtoms; i++ ) {
         // Assign each particle an initial velocity.
-        moleculeVelocities[i].setXY( temperatureSqrt * this.random.nextGaussian(),
-            temperatureSqrt * this.random.nextGaussian() );
+        moleculeVelocities[ i ].setXY( temperatureSqrt * this.random.nextGaussian(),
+          temperatureSqrt * this.random.nextGaussian() );
       }
 
       // Assign each atom to a position centered on its blob.
@@ -132,7 +132,7 @@ define( function( require ) {
       var atomsPlaced = 0;
 
       var centerPoint = new Vector2( this.model.normalizedContainerWidth / 2,
-          this.model.normalizedContainerHeight / 4 );
+        this.model.normalizedContainerHeight / 4 );
       var currentLayer = 0;
       var particlesOnCurrentLayer = 0;
       var particlesThatWillFitOnCurrentLayer = 1;
@@ -164,7 +164,7 @@ define( function( require ) {
                ( xPos < this.model.normalizedContainerHeight - this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE ) ) {
 
             // This is an acceptable position.
-            moleculeCenterOfMassPositions[atomsPlaced++].setXY( xPos, yPos );
+            moleculeCenterOfMassPositions[ atomsPlaced++ ].setXY( xPos, yPos );
             break;
           }
         }
@@ -185,11 +185,11 @@ define( function( require ) {
 
       for ( var i = 0; i < numberOfAtoms; i++ ) {
         // Temporarily position the particles at (0,0).
-        moleculeCenterOfMassPositions[i].setXY( 0, 0 );
+        moleculeCenterOfMassPositions[ i ].setXY( 0, 0 );
 
         // Assign each particle an initial velocity.
-        moleculeVelocities[i].setXY( temperatureSqrt * this.random.nextGaussian(),
-            temperatureSqrt * this.random.nextGaussian() );
+        moleculeVelocities[ i ].setXY( temperatureSqrt * this.random.nextGaussian(),
+          temperatureSqrt * this.random.nextGaussian() );
       }
 
       // Redistribute the particles randomly around the container, but make
@@ -208,19 +208,19 @@ define( function( require ) {
           var positionAvailable = true;
           // See if this position is available.
           for ( var k = 0; k < i; k++ ) {
-            if ( moleculeCenterOfMassPositions[k].distance( newPosX, newPosY ) < MIN_INITIAL_INTER_PARTICLE_DISTANCE ) {
+            if ( moleculeCenterOfMassPositions[ k ].distance( newPosX, newPosY ) < MIN_INITIAL_INTER_PARTICLE_DISTANCE ) {
               positionAvailable = false;
               break;
             }
           }
           if ( positionAvailable ) {
             // We found an open position.
-            moleculeCenterOfMassPositions[i].setXY( newPosX, newPosY );
+            moleculeCenterOfMassPositions[ i ].setXY( newPosX, newPosY );
             break;
           }
           else if ( j === this.MAX_PLACEMENT_ATTEMPTS - 1 ) {
             // This is the last attempt, so use this position anyway.
-            moleculeCenterOfMassPositions[i].setXY( newPosX, newPosY );
+            moleculeCenterOfMassPositions[ i ].setXY( newPosX, newPosY );
           }
         }
       }

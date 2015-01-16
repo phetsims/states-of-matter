@@ -72,7 +72,7 @@ define( function( require ) {
 
     // the epsilon parameter.
     this.epsilonResizeHandle = new ArrowNode( 0, -RESIZE_HANDLE_SIZE_PROPORTION * this.widthOfGraph / 2, 0,
-        RESIZE_HANDLE_SIZE_PROPORTION * this.widthOfGraph / 2, {
+      RESIZE_HANDLE_SIZE_PROPORTION * this.widthOfGraph / 2, {
         headHeight: 10,
         headWidth: 10,
         tailWidth: 5,
@@ -148,7 +148,7 @@ define( function( require ) {
     this.drawPotentialCurve();
 
     // Update the text when the value or units changes.
-    Property.multilink( [model.moleculeTypeProperty, model.interactionStrengthProperty],
+    Property.multilink( [ model.moleculeTypeProperty, model.interactionStrengthProperty ],
       function( moleculeType, interactionStrength ) {
         if ( model.currentMolecule === StatesOfMatterConstants.USER_DEFINED_MOLECULE ) {
           model.setEpsilon( interactionStrength );

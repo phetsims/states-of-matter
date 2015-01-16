@@ -46,27 +46,27 @@ define( function( require ) {
 
       // todo: what is this for loop for? Seems to be getting over-ridden anyway
       for ( var i = 0; i < moleculeDataSet.getNumberOfMolecules(); i++ ) {
-        cosineTheta = Math.cos( moleculeRotationAngles[i] );
-        sineTheta = Math.sin( moleculeRotationAngles[i] );
-        xPos = moleculeCenterOfMassPositions[i].x + cosineTheta * (BONDED_PARTICLE_DISTANCE / 2);
-        yPos = moleculeCenterOfMassPositions[i].y + sineTheta * (BONDED_PARTICLE_DISTANCE / 2);
-        atomPositions[i * 2].setXY( xPos, yPos );
-        xPos = moleculeCenterOfMassPositions[i].x - cosineTheta * (BONDED_PARTICLE_DISTANCE / 2);
-        yPos = moleculeCenterOfMassPositions[i].y - sineTheta * (BONDED_PARTICLE_DISTANCE / 2);
-        atomPositions[i * 2 + 1].setXY( xPos, yPos );
+        cosineTheta = Math.cos( moleculeRotationAngles[ i ] );
+        sineTheta = Math.sin( moleculeRotationAngles[ i ] );
+        xPos = moleculeCenterOfMassPositions[ i ].x + cosineTheta * (BONDED_PARTICLE_DISTANCE / 2);
+        yPos = moleculeCenterOfMassPositions[ i ].y + sineTheta * (BONDED_PARTICLE_DISTANCE / 2);
+        atomPositions[ i * 2 ].setXY( xPos, yPos );
+        xPos = moleculeCenterOfMassPositions[ i ].x - cosineTheta * (BONDED_PARTICLE_DISTANCE / 2);
+        yPos = moleculeCenterOfMassPositions[ i ].y - sineTheta * (BONDED_PARTICLE_DISTANCE / 2);
+        atomPositions[ i * 2 + 1 ].setXY( xPos, yPos );
       }
 
       for ( i = 0; i < moleculeDataSet.getNumberOfMolecules(); i++ ) {
-        cosineTheta = Math.cos( moleculeRotationAngles[i] );
-        sineTheta = Math.sin( moleculeRotationAngles[i] );
+        cosineTheta = Math.cos( moleculeRotationAngles[ i ] );
+        sineTheta = Math.sin( moleculeRotationAngles[ i ] );
         for ( var j = 0; j < 3; j++ ) {
-          var xadd = (cosineTheta * this.structureX[j]) - (sineTheta * this.structureY[j]);
+          var xadd = (cosineTheta * this.structureX[ j ]) - (sineTheta * this.structureY[ j ]);
 
-          var yadd = (sineTheta * this.structureX[j]) + (cosineTheta * this.structureY[j]);
+          var yadd = (sineTheta * this.structureX[ j ]) + (cosineTheta * this.structureY[ j ]);
 
-          xPos = moleculeCenterOfMassPositions[i].x + xadd;
-          yPos = moleculeCenterOfMassPositions[i].y + yadd;
-          atomPositions[i * 3 + j].setXY( xPos, yPos );
+          xPos = moleculeCenterOfMassPositions[ i ].x + xadd;
+          yPos = moleculeCenterOfMassPositions[ i ].y + yadd;
+          atomPositions[ i * 3 + j ].setXY( xPos, yPos );
         }
       }
 

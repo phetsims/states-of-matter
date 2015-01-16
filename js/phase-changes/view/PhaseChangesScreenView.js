@@ -82,7 +82,8 @@ define( function( require ) {
       new Vector2( 0, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT ), mvtScale );
 
     // add stove node
-    var stoveNode = new StoveNode( model, { scale: 0.8,
+    var stoveNode = new StoveNode( model, {
+      scale: 0.8,
       centerX: this.layoutBounds.centerX,
       bottom: this.layoutBounds.bottom - inset
     } );
@@ -121,8 +122,9 @@ define( function( require ) {
 
     //add phase change control panel
     var phaseChangesMoleculesControlPanel = new PhaseChangesMoleculesControlPanel( model, isInteractionDiagramEnabled,
-      { right: this.layoutBounds.right - layBoundsRightOffset,
-        top: this.layoutBounds.top + layBoundsYOffset
+      {
+        right: this.layoutBounds.right - layBoundsRightOffset,
+        top:   this.layoutBounds.top + layBoundsYOffset
       } );
     this.addChild( phaseChangesMoleculesControlPanel );
 
@@ -158,7 +160,8 @@ define( function( require ) {
     this.addChild( stepButton );
 
     var playPauseButton = new PlayPauseButton( model.isPlayingProperty,
-      { radius: 18, stroke: 'black',
+      {
+        radius: 18, stroke: 'black',
         fill: '#005566',
         y: stepButton.centerY,
         right: stepButton.left - inset
@@ -246,9 +249,9 @@ define( function( require ) {
         rotationRate = 0;
         compositeThermometerNode.setRotation( rotationRate );
         compositeThermometerNode.setTranslation( compositeThermometerNode.x,
-            particleContainerNode.y + compositeThermometerNode.height / 3 +
-            Math.abs( modelViewTransform.modelToViewDeltaY( StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT -
-                                                            containerRect.getHeight() ) )
+          particleContainerNode.y + compositeThermometerNode.height / 3 +
+          Math.abs( modelViewTransform.modelToViewDeltaY( StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT -
+                                                          containerRect.getHeight() ) )
         );
       }
       else {

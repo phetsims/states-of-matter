@@ -57,7 +57,7 @@ define( function( require ) {
     }, options );
 
     Node.call( this );
-    var textOptions = {font: new PhetFont( 12 ), fontWeight: 600, fill: "#FFFFFF"};
+    var textOptions = { font: new PhetFont( 12 ), fontWeight: 600, fill: "#FFFFFF" };
 
     // itemSpec describes the pieces that make up an item in the control panel,
     // conforms to the contract: { label: {Node}, icon: {Node} (optional) }
@@ -65,8 +65,10 @@ define( function( require ) {
     var argon = { label: new Text( argonString, textOptions ), icon: createArgonIcon() };
     var water = { label: new Text( waterString, textOptions ), icon: createWaterIcon() };
     var oxygen = { label: new Text( oxygenString, textOptions ), icon: createOxygenIcon() };
-    var adjustableAttraction = { label: new Text( adjustableAttractionString,
-      textOptions ), icon: createAdjustableAttractionIcon()};
+    var adjustableAttraction = {
+      label: new Text( adjustableAttractionString, textOptions ),
+      icon: createAdjustableAttractionIcon()
+    };
 
     // compute the maximum item width
     var widestItemSpec = _.max( [ neon, argon, water, oxygen, adjustableAttraction ], function( item ) {
@@ -81,7 +83,7 @@ define( function( require ) {
         return new HBox( { children: [ itemSpec.label, new HStrut( strutWidth ), itemSpec.icon ] } );
       }
       else {
-        return new HBox( { children: [ itemSpec.label] } );
+        return new HBox( { children: [ itemSpec.label ] } );
       }
     };
     var radioButtonContent;
@@ -116,13 +118,13 @@ define( function( require ) {
     } );
 
     var labelFont = new PhetFont( 12 );
-    var weakTitle = new Text( weakString, { font: labelFont, fontWeight: 600, fill: 'white'} );
+    var weakTitle = new Text( weakString, { font: labelFont, fontWeight: 600, fill: 'white' } );
     var strongTitle = new Text( strongString, { fill: 'white', fontWeight: 600, font: labelFont } );
 
     // add interaction strength slider and tittle
     var interactionStrengthNode = new Node();
     var interactionTitle = new Text( interactionStrengthTittleString,
-      { fontWeight: 600, font: labelFont, fill: 'white'} );
+      { fontWeight: 600, font: labelFont, fill: 'white' } );
     interactionStrengthNode.addChild( interactionTitle );
     var interactionStrengthSlider = new HSlider( model.interactionStrengthProperty,
       { min: StatesOfMatterConstants.MIN_EPSILON, max: StatesOfMatterConstants.MAX_EPSILON },
@@ -182,8 +184,8 @@ define( function( require ) {
         phaseChangesMoleculesControlPanel.addChild( interactionStrengthNode );
         backgroundShape = new Shape().roundRect( 0,
           -4,
-            radioButtonGroup.width + 10,
-            radioButtonPanel.height + interactionStrengthNode.height + 10,
+          radioButtonGroup.width + 10,
+          radioButtonPanel.height + interactionStrengthNode.height + 10,
           options.cornerRadius,
           options.cornerRadius );
         background.setShape( backgroundShape );
@@ -202,26 +204,27 @@ define( function( require ) {
       }
     } );
     var titleText = new Text( tittleString,
-      { font: new PhetFont( 12 ),
+      {
+        font: new PhetFont( 12 ),
         fill: '#FFFFFF',
         fontWeight: 'bold'
       } );
 
     var titleBackground = new Rectangle( background.centerX + 4, background.top - 10,
-        titleText.width + 5, titleText.height,
+      titleText.width + 5, titleText.height,
       {
         fill: 'black'
       } );
     titleText.centerX = background.centerX;
     titleBackground.centerX = titleText.centerX;
-    var tittleNode = new Node( {children: [titleBackground, titleText]} );
+    var tittleNode = new Node( { children: [ titleBackground, titleText ] } );
     this.addChild( tittleNode );
     this.mutate( options );
   }
 
   //Create an icon for the adjustable attraction  button
   var createAdjustableAttractionIcon = function() {
-    return new Circle( 5, {fill: '#CC66CC' } );
+    return new Circle( 5, { fill: '#CC66CC' } );
   };
 
   //Create an icon for the neon  button
@@ -231,26 +234,26 @@ define( function( require ) {
 
   //Create an icon for the argon  button
   var createArgonIcon = function() {
-    return new Circle( 6, {fill: '#FFAFAF'} );
+    return new Circle( 6, { fill: '#FFAFAF' } );
   };
 
   //Create an icon for the water  button
   var createWaterIcon = function() {
-    var dot1 = new Circle( 5, { fill: '#D91200'} );
-    var dot2 = new Circle( 3, { fill: 'white', stroke: 'white', bottom: dot1.top + 5, right: dot1.left + 5} );
+    var dot1 = new Circle( 5, { fill: '#D91200' } );
+    var dot2 = new Circle( 3, { fill: 'white', stroke: 'white', bottom: dot1.top + 5, right: dot1.left + 5 } );
     var dot3 = new Circle( 3, {
       fill: 'white', stroke: 'white', bottom: dot1.top + 5, left: dot1.right - 5
     } );
 
-    return new Node( {children: [  dot3, dot1, dot2 ] } );
+    return new Node( { children: [ dot3, dot1, dot2 ] } );
 
   };
 
   //Create an icon for the oxygen  button
   var createOxygenIcon = function() {
     var dot1 = new Circle( 5, { fill: '#DA1300' } );
-    var dot2 = new Circle( 5, {fill: '#DA1300', left: dot1.right - 4 } );
-    return new Node( {children: [ dot1, dot2 ] } );
+    var dot2 = new Circle( 5, { fill: '#DA1300', left: dot1.right - 4 } );
+    return new Node( { children: [ dot1, dot2 ] } );
   };
 
 

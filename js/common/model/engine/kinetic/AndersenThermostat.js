@@ -54,13 +54,13 @@ define( function( require ) {
       var rotationScalingFactor = Math.sqrt( temperature * inertiaInverse * ( 1 - Math.pow( gammaX, 2 ) ) );
 
       for ( var i = 0; i < this.moleculeDataSet.getNumberOfMolecules(); i++ ) {
-        var xVel = this.moleculeVelocities[i].x * gammaX +
+        var xVel = this.moleculeVelocities[ i ].x * gammaX +
                    this.random.nextGaussian() * velocityScalingFactor;
-        var yVel = this.moleculeVelocities[i].y * gammaY +
+        var yVel = this.moleculeVelocities[ i ].y * gammaY +
                    this.random.nextGaussian() * velocityScalingFactor;
-        this.moleculeVelocities[i].setXY( xVel, yVel );
-        this.moleculeRotationRates[i] = gammaX * this.moleculeRotationRates[i] +
-                                        this.random.nextGaussian() * rotationScalingFactor;
+        this.moleculeVelocities[ i ].setXY( xVel, yVel );
+        this.moleculeRotationRates[ i ] = gammaX * this.moleculeRotationRates[ i ] +
+                                          this.random.nextGaussian() * rotationScalingFactor;
       }
     }
 

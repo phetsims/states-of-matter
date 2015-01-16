@@ -38,8 +38,8 @@ define( function( require ) {
     this.addChild( thermometer );
 
     // add temperature combo box
-    var temperatureKelvinText = new Text( '', {   font: new PhetFont( 10 )  } );
-    var temperatureCelsiusText = new Text( '', {  font: new PhetFont( 10 ) } );
+    var temperatureKelvinText = new Text( '', { font: new PhetFont( 10 ) } );
+    var temperatureCelsiusText = new Text( '', { font: new PhetFont( 10 ) } );
     model.temperatureSetPointProperty.link( function() {
       var tempInKelvin = model.getTemperatureInKelvin();
       var tempInKelvinRounded = Math.round( model.getTemperatureInKelvin() );

@@ -176,7 +176,7 @@ define( function( require ) {
         // Find out if this molecule is still too close to all the "safe"
         // molecules to become safe itself.
         for ( var j = 0; j < numberOfSafeMolecules; j++ ) {
-          if ( moleculeCenterOfMassPositions[i].distance( moleculeCenterOfMassPositions[j] ) <
+          if ( moleculeCenterOfMassPositions[ i ].distance( moleculeCenterOfMassPositions[ j ] ) <
                SAFE_INTER_MOLECULE_DISTANCE ) {
             moleculeIsUnsafe = true;
             break;
@@ -195,33 +195,33 @@ define( function( require ) {
             // first unsafe one.
             var tempAtomPosition;
             for ( j = 0; j < atomsPerMolecule; j++ ) {
-              tempAtomPosition = atomPositions[( numberOfSafeMolecules * atomsPerMolecule ) + j];
-              atomPositions[( numberOfSafeMolecules * atomsPerMolecule ) + j] =
-              atomPositions[( atomsPerMolecule * i ) + j];
-              atomPositions[( atomsPerMolecule * i ) + j] = tempAtomPosition;
+              tempAtomPosition = atomPositions[ ( numberOfSafeMolecules * atomsPerMolecule ) + j ];
+              atomPositions[ ( numberOfSafeMolecules * atomsPerMolecule ) + j ] =
+              atomPositions[ ( atomsPerMolecule * i ) + j ];
+              atomPositions[ ( atomsPerMolecule * i ) + j ] = tempAtomPosition;
             }
 
             var firstUnsafeMoleculeIndex = numberOfSafeMolecules;
 
-            var tempMoleculeCenterOfMassPosition = moleculeCenterOfMassPositions[firstUnsafeMoleculeIndex];
-            moleculeCenterOfMassPositions[firstUnsafeMoleculeIndex] = moleculeCenterOfMassPositions[i];
-            moleculeCenterOfMassPositions[i] = tempMoleculeCenterOfMassPosition;
+            var tempMoleculeCenterOfMassPosition = moleculeCenterOfMassPositions[ firstUnsafeMoleculeIndex ];
+            moleculeCenterOfMassPositions[ firstUnsafeMoleculeIndex ] = moleculeCenterOfMassPositions[ i ];
+            moleculeCenterOfMassPositions[ i ] = tempMoleculeCenterOfMassPosition;
 
-            var tempMoleculeVelocity = moleculeVelocities[firstUnsafeMoleculeIndex];
-            moleculeVelocities[firstUnsafeMoleculeIndex] = moleculeVelocities[i];
-            moleculeVelocities[i] = tempMoleculeVelocity;
+            var tempMoleculeVelocity = moleculeVelocities[ firstUnsafeMoleculeIndex ];
+            moleculeVelocities[ firstUnsafeMoleculeIndex ] = moleculeVelocities[ i ];
+            moleculeVelocities[ i ] = tempMoleculeVelocity;
 
-            var tempMoleculeForce = moleculeForces[firstUnsafeMoleculeIndex];
-            moleculeForces[firstUnsafeMoleculeIndex] = moleculeForces[i];
-            moleculeForces[i] = tempMoleculeForce;
+            var tempMoleculeForce = moleculeForces[ firstUnsafeMoleculeIndex ];
+            moleculeForces[ firstUnsafeMoleculeIndex ] = moleculeForces[ i ];
+            moleculeForces[ i ] = tempMoleculeForce;
 
-            var tempMoleculeRotationAngle = moleculeRotationAngles[firstUnsafeMoleculeIndex];
-            moleculeRotationAngles[firstUnsafeMoleculeIndex] = moleculeRotationAngles[i];
-            moleculeRotationAngles[i] = tempMoleculeRotationAngle;
+            var tempMoleculeRotationAngle = moleculeRotationAngles[ firstUnsafeMoleculeIndex ];
+            moleculeRotationAngles[ firstUnsafeMoleculeIndex ] = moleculeRotationAngles[ i ];
+            moleculeRotationAngles[ i ] = tempMoleculeRotationAngle;
 
-            var tempMoleculeRotationRate = moleculeRotationRates[firstUnsafeMoleculeIndex];
-            moleculeRotationRates[firstUnsafeMoleculeIndex] = moleculeRotationRates[i];
-            moleculeRotationRates[i] = tempMoleculeRotationRate;
+            var tempMoleculeRotationRate = moleculeRotationRates[ firstUnsafeMoleculeIndex ];
+            moleculeRotationRates[ firstUnsafeMoleculeIndex ] = moleculeRotationRates[ i ];
+            moleculeRotationRates[ i ] = tempMoleculeRotationRate;
 
             // Note: Don't worry about torque, since there isn't any until the molecules become "safe".
           }

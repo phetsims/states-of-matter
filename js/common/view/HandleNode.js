@@ -123,8 +123,8 @@ define( function( require ) {
           handleNode.mouseMovementAmount = (endY - startY);
           // Resize the container based on the amount that the node has moved.
           model.setTargetParticleContainerHeight(
-              handleNode.containerSizeAtDragStart +
-              modelViewTransform.viewToModelDeltaY( handleNode.mouseMovementAmount ) );
+            handleNode.containerSizeAtDragStart +
+            modelViewTransform.viewToModelDeltaY( handleNode.mouseMovementAmount ) );
         },
         end: function() {
           // in size that is currently underway.

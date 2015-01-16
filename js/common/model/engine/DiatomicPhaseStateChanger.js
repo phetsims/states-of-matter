@@ -111,13 +111,13 @@ define( function( require ) {
             xPos += (1 + this.DISTANCE_BETWEEN_PARTICLES_IN_CRYSTAL) / 2;
           }
           yPos = startingPosY + (i * MIN_INITIAL_DIAMETER_DISTANCE * 0.5);
-          moleculeCenterOfMassPositions[(i * moleculesPerLayer) + j].setXY( xPos, yPos );
-          moleculeRotationAngles[(i * moleculesPerLayer) + j] = 0;
+          moleculeCenterOfMassPositions[ (i * moleculesPerLayer) + j ].setXY( xPos, yPos );
+          moleculeRotationAngles[ (i * moleculesPerLayer) + j ] = 0;
           moleculesPlaced++;
           // Assign each molecule an initial velocity.
           var xVel = temperatureSqrt * rand.nextGaussian();
           var yVel = temperatureSqrt * rand.nextGaussian();
-          moleculeVelocities[(i * moleculesPerLayer) + j].setXY( xVel, yVel );
+          moleculeVelocities[ (i * moleculesPerLayer) + j ].setXY( xVel, yVel );
         }
       }
     },
@@ -140,13 +140,13 @@ define( function( require ) {
       // Initialize the velocities and angles of the molecules.
       for ( var i = 0; i < numberOfMolecules; i++ ) {
         // Assign each molecule an initial velocity.
-        moleculeVelocities[i].setXY( temperatureSqrt * rand.nextGaussian(), temperatureSqrt * rand.nextGaussian() );
+        moleculeVelocities[ i ].setXY( temperatureSqrt * rand.nextGaussian(), temperatureSqrt * rand.nextGaussian() );
         // Assign each molecule an initial rotation rate.
-        moleculeRotationRates[i] = Math.random() * temperatureSqrt * Math.PI * 2;
+        moleculeRotationRates[ i ] = Math.random() * temperatureSqrt * Math.PI * 2;
       }
       var moleculesPlaced = 0;
       var centerPoint = new Vector2( this.model.getNormalizedContainerWidth() / 2,
-          this.model.getNormalizedContainerHeight() / 4 );
+        this.model.getNormalizedContainerHeight() / 4 );
       var currentLayer = 0;
       var particlesOnCurrentLayer = 0;
       var particlesThatWillFitOnCurrentLayer = 1;
@@ -173,8 +173,8 @@ define( function( require ) {
                (yPos > this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE) &&
                (xPos < this.model.getNormalizedContainerHeight() - this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE) ) {
             // This is an acceptable position.
-            moleculeCenterOfMassPositions[moleculesPlaced].setXY( xPos, yPos );
-            moleculeRotationAngles[moleculesPlaced] = angle + Math.PI / 2;
+            moleculeCenterOfMassPositions[ moleculesPlaced ].setXY( xPos, yPos );
+            moleculeRotationAngles[ moleculesPlaced ] = angle + Math.PI / 2;
             moleculesPlaced++;
             break;
           }
@@ -198,13 +198,13 @@ define( function( require ) {
       var numberOfMolecules = moleculeDataSet.getNumberOfMolecules();
       for ( var i = 0; i < numberOfMolecules; i++ ) {
         // Temporarily position the molecules at (0,0).
-        moleculeCenterOfMassPositions[i].setXY( 0, 0 );
+        moleculeCenterOfMassPositions[ i ].setXY( 0, 0 );
         // Assign each molecule an initial velocity.
-        moleculeVelocities[i].setXY( temperatureSqrt * rand.nextGaussian(), temperatureSqrt * rand.nextGaussian() );
+        moleculeVelocities[ i ].setXY( temperatureSqrt * rand.nextGaussian(), temperatureSqrt * rand.nextGaussian() );
         // Assign each molecule an initial rotational position.
-        moleculeRotationAngles[i] = Math.random() * Math.PI * 2;
+        moleculeRotationAngles[ i ] = Math.random() * Math.PI * 2;
         // Assign each molecule an initial rotation rate.
-        moleculeRotationRates[i] = Math.random() * temperatureSqrt * Math.PI * 2;
+        moleculeRotationRates[ i ] = Math.random() * temperatureSqrt * Math.PI * 2;
       }
       // disproportionate amount of kinetic energy.
       var newPosX;
@@ -219,7 +219,7 @@ define( function( require ) {
           var positionAvailable = true;
           // See if this position is available.
           for ( var k = 0; k < i; k++ ) {
-            if ( moleculeCenterOfMassPositions[k].distance( newPosX, newPosY ) <
+            if ( moleculeCenterOfMassPositions[ k ].distance( newPosX, newPosY ) <
                  MIN_INITIAL_DIAMETER_DISTANCE * GAS_SPACING_FACTOR ) {
               positionAvailable = false;
               break;
@@ -227,14 +227,14 @@ define( function( require ) {
           }
           if ( positionAvailable ) {
             // We found an open position.
-            moleculeCenterOfMassPositions[i].setXY( newPosX, newPosY );
+            moleculeCenterOfMassPositions[ i ].setXY( newPosX, newPosY );
             break;
           }
           else if ( j === this.MAX_PLACEMENT_ATTEMPTS - 1 ) {
             // This is the last attempt, so use this position anyway.
             var openPoint = this.findOpenMoleculeLocation();
             if ( openPoint !== null ) {
-              moleculeCenterOfMassPositions[i].setXY( openPoint.x, openPoint.y );
+              moleculeCenterOfMassPositions[ i ].setXY( openPoint.x, openPoint.y );
             }
           }
         }

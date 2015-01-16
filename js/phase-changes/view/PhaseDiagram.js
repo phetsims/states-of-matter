@@ -64,19 +64,19 @@ define( function( require ) {
   var POINT_MARKER_DIAMETER = 4;
   var CURRENT_STATE_MARKER_DIAMETER = 5;
   var DEFAULT_TOP_OF_SOLID_LIQUID_LINE = new Vector2( X_USABLE_RANGE * 0.40 + X_ORIGIN_OFFSET,
-      Y_ORIGIN_OFFSET - Y_USABLE_RANGE );
+    Y_ORIGIN_OFFSET - Y_USABLE_RANGE );
   var TOP_OF_SOLID_LIQUID_LINE_FOR_WATER = new Vector2( X_USABLE_RANGE * 0.30 + X_ORIGIN_OFFSET,
-      Y_ORIGIN_OFFSET - Y_USABLE_RANGE );
+    Y_ORIGIN_OFFSET - Y_USABLE_RANGE );
   var DEFAULT_TRIPLE_POINT = new Vector2( X_ORIGIN_OFFSET + (X_USABLE_RANGE * 0.35),
-      Y_ORIGIN_OFFSET - (Y_USABLE_RANGE * 0.2) );
+    Y_ORIGIN_OFFSET - (Y_USABLE_RANGE * 0.2) );
   var DEFAULT_CRITICAL_POINT = new Vector2( X_ORIGIN_OFFSET + (X_USABLE_RANGE * 0.8),
-      Y_ORIGIN_OFFSET - (Y_USABLE_RANGE * 0.45) );
+    Y_ORIGIN_OFFSET - (Y_USABLE_RANGE * 0.45) );
   var DEFAULT_SOLID_LABEL_LOCATION = new Vector2( X_ORIGIN_OFFSET + (X_USABLE_RANGE * 0.2),
-      Y_ORIGIN_OFFSET - (Y_USABLE_RANGE * 0.72) );
+    Y_ORIGIN_OFFSET - (Y_USABLE_RANGE * 0.72) );
   var DEFAULT_LIQUID_LABEL_LOCATION = new Vector2( X_ORIGIN_OFFSET + (X_USABLE_RANGE * 0.6),
-      Y_ORIGIN_OFFSET - (Y_USABLE_RANGE * 0.60) );
+    Y_ORIGIN_OFFSET - (Y_USABLE_RANGE * 0.60) );
   var DEFAULT_GAS_LABEL_LOCATION = new Vector2( X_ORIGIN_OFFSET + (X_USABLE_RANGE * 0.6),
-      Y_ORIGIN_OFFSET - (Y_USABLE_RANGE * 0.15) );
+    Y_ORIGIN_OFFSET - (Y_USABLE_RANGE * 0.15) );
 
   /**
    *
@@ -122,13 +122,13 @@ define( function( require ) {
     } );
     accordionContent.addChild( this.solidAreaBackground );
 
-    this.solidLiquidLine = new Path( null, { lineWidth: 1, stroke: 'black'} );
+    this.solidLiquidLine = new Path( null, { lineWidth: 1, stroke: 'black' } );
     accordionContent.addChild( this.solidLiquidLine );
 
-    this.solidGasLine = new Path( null, { lineWidth: 1, stroke: 'black'} );
+    this.solidGasLine = new Path( null, { lineWidth: 1, stroke: 'black' } );
     accordionContent.addChild( this.solidGasLine );
 
-    this.liquidGasLine = new Path( null, { lineWidth: 1, stroke: 'black'} );
+    this.liquidGasLine = new Path( null, { lineWidth: 1, stroke: 'black' } );
     accordionContent.addChild( this.liquidGasLine );
 
     this.triplePoint = new Path( new Shape()
@@ -143,21 +143,22 @@ define( function( require ) {
     this.solidLabel = new Text( solidString, { font: LARGER_INNER_FONT, fill: 'black' } );
     accordionContent.addChild( this.solidLabel );
 
-    this.liquidLabel = new Text( liquidString, { font: LARGER_INNER_FONT, fill: 'black'} );
+    this.liquidLabel = new Text( liquidString, { font: LARGER_INNER_FONT, fill: 'black' } );
     accordionContent.addChild( this.liquidLabel );
 
-    this.gasLabel = new Text( gasString, { font: LARGER_INNER_FONT, fill: 'black'} );
+    this.gasLabel = new Text( gasString, { font: LARGER_INNER_FONT, fill: 'black' } );
     accordionContent.addChild( this.gasLabel );
 
-    this.triplePointLabel = new Text( triplePointString, {font: SMALLER_INNER_FONT, fill: 'black'} );
+    this.triplePointLabel = new Text( triplePointString, { font: SMALLER_INNER_FONT, fill: 'black' } );
     accordionContent.addChild( this.triplePointLabel );
 
-    this.criticalPointLabel = new Text( criticalPointString, {font: SMALLER_INNER_FONT, fill: 'black'} );
+    this.criticalPointLabel = new Text( criticalPointString, { font: SMALLER_INNER_FONT, fill: 'black' } );
     accordionContent.addChild( this.criticalPointLabel );
 
     var horizontalAxis = new ArrowNode( X_ORIGIN_OFFSET, Y_ORIGIN_OFFSET,
-        X_ORIGIN_OFFSET + (HORIZ_AXIS_SIZE_PROPORTION * WIDTH), Y_ORIGIN_OFFSET,
-      { fill: 'white',
+      X_ORIGIN_OFFSET + (HORIZ_AXIS_SIZE_PROPORTION * WIDTH), Y_ORIGIN_OFFSET,
+      {
+        fill: 'white',
         stroke: 'white',
         headHeight: 8,
         headWidth: 8,
@@ -167,7 +168,8 @@ define( function( require ) {
 
     var verticalAxis = new ArrowNode( X_ORIGIN_OFFSET, Y_ORIGIN_OFFSET,
       X_ORIGIN_OFFSET, Y_ORIGIN_OFFSET - Y_USABLE_RANGE - AXES_ARROW_HEAD_HEIGHT,
-      { fill: 'white',
+      {
+        fill: 'white',
         stroke: 'white',
         headHeight: 8,
         headWidth: 8,
@@ -178,18 +180,18 @@ define( function( require ) {
     // Create and add the labels for the axes.
     var horizontalAxisLabel = new Text( temperatureString, { font: AXIS_LABEL_FONT, fill: 'white' } );
     horizontalAxisLabel.setTranslation( ( WIDTH / 2 ) - ( horizontalAxisLabel.width / 2),
-        Y_ORIGIN_OFFSET + horizontalAxisLabel.height );
+      Y_ORIGIN_OFFSET + horizontalAxisLabel.height );
     accordionContent.addChild( horizontalAxisLabel );
 
-    var verticalAxisLabel = new Text( pressureString, { font: AXIS_LABEL_FONT, fill: 'white'} );
+    var verticalAxisLabel = new Text( pressureString, { font: AXIS_LABEL_FONT, fill: 'white' } );
     verticalAxisLabel.setTranslation( X_ORIGIN_OFFSET - (verticalAxisLabel.height * 1.1),
-        verticalAxisLabel.width * 1.6 );
+      verticalAxisLabel.width * 1.6 );
     verticalAxisLabel.setRotation( 3 * Math.PI / 2 );
     accordionContent.addChild( verticalAxisLabel );
 
     // Create and add the marker that shows the current phase state.
     this.currentStateMarker = new Path( new Shape()
-      .ellipse( 0, 0, CURRENT_STATE_MARKER_DIAMETER, CURRENT_STATE_MARKER_DIAMETER ), { fill: 'red'} );
+      .ellipse( 0, 0, CURRENT_STATE_MARKER_DIAMETER, CURRENT_STATE_MARKER_DIAMETER ), { fill: 'red' } );
     accordionContent.addChild( this.currentStateMarker );
 
     var accordionBox = new AccordionBox( accordionContent,
@@ -226,7 +228,7 @@ define( function( require ) {
     drawPhaseDiagram: function() {
       // Place the triple point marker.
       this.triplePoint.setTranslation( DEFAULT_TRIPLE_POINT.x - POINT_MARKER_DIAMETER / 2,
-          DEFAULT_TRIPLE_POINT.y - POINT_MARKER_DIAMETER / 2 );
+        DEFAULT_TRIPLE_POINT.y - POINT_MARKER_DIAMETER / 2 );
 
       // Add the curve that separates the solid and gaseous regions.
       var solidGasCurve = new Shape().moveTo( X_ORIGIN_OFFSET, Y_ORIGIN_OFFSET )
@@ -252,7 +254,7 @@ define( function( require ) {
 
       // Place the critical point marker.
       this.criticalPoint.setTranslation( DEFAULT_CRITICAL_POINT.x - POINT_MARKER_DIAMETER / 2,
-          DEFAULT_CRITICAL_POINT.y - POINT_MARKER_DIAMETER / 2 );
+        DEFAULT_CRITICAL_POINT.y - POINT_MARKER_DIAMETER / 2 );
 
       // Add the curve that separates liquid and gas.
       var controlCurveXPos = DEFAULT_TRIPLE_POINT.x + ((DEFAULT_CRITICAL_POINT.x - DEFAULT_TRIPLE_POINT.x) / 2);
@@ -292,15 +294,15 @@ define( function( require ) {
 
       // hopefully will work better for translated strings.
       this.solidLabel.setTranslation( DEFAULT_SOLID_LABEL_LOCATION.x - this.solidLabel.width / 2,
-          DEFAULT_SOLID_LABEL_LOCATION.y - this.solidLabel.height / 2 );
+        DEFAULT_SOLID_LABEL_LOCATION.y - this.solidLabel.height / 2 );
       this.liquidLabel.setTranslation( DEFAULT_LIQUID_LABEL_LOCATION.x - this.liquidLabel.width / 2,
-          DEFAULT_LIQUID_LABEL_LOCATION.y - this.liquidLabel.height / 2 );
+        DEFAULT_LIQUID_LABEL_LOCATION.y - this.liquidLabel.height / 2 );
       this.gasLabel.setTranslation( DEFAULT_GAS_LABEL_LOCATION.x - this.gasLabel.width / 2,
         DEFAULT_GAS_LABEL_LOCATION.y );
       this.triplePointLabel.setTranslation( DEFAULT_TRIPLE_POINT.x - this.triplePointLabel.width / 2,
-          DEFAULT_TRIPLE_POINT.y - this.triplePointLabel.height * 0.9 );
+        DEFAULT_TRIPLE_POINT.y - this.triplePointLabel.height * 0.9 );
       this.criticalPointLabel.setTranslation( DEFAULT_CRITICAL_POINT.x - this.criticalPointLabel.width / 1.6,
-          DEFAULT_CRITICAL_POINT.y - this.criticalPointLabel.height / 2 );
+        DEFAULT_CRITICAL_POINT.y - this.criticalPointLabel.height / 2 );
 
     },
 
