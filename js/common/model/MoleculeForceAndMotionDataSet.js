@@ -146,7 +146,7 @@ define( function( require ) {
      * Calculate the temperature of the system based on the total kinetic
      * energy of the molecules.
      *
-     * @return - temperature in model units (as opposed to Kelvin, Celsius, or whatever)
+     * @return {Number} temperature in model units (as opposed to Kelvin, Celsius, or whatever)
      */
     calculateTemperatureFromKineticEnergy: function() {
       var translationalKineticEnergy = 0;
@@ -187,7 +187,7 @@ define( function( require ) {
      * @param {Vector2} moleculeCenterOfMassPosition
      * @param {Vector2} moleculeVelocity
      * @param {Number} moleculeRotationRate
-     * @return - true if able to add, false if not.
+     * @return {Boolean} true if able to add, false if not.
      */
     addMolecule: function( atomPositions, moleculeCenterOfMassPosition, moleculeVelocity, moleculeRotationRate ) {
 
