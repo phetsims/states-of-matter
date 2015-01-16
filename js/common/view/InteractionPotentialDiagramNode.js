@@ -50,13 +50,13 @@ define( function( require ) {
   var GREEK_LETTER_FONT_SIZE = 14;
   var GREEK_LETTER_FONT = new PhetFont( GREEK_LETTER_FONT_SIZE );
 
+
   /**
-   * Constructor.
    *
-   * @param sigma   - Initial value of sigma, a.k.a. the atom diameter
-   * @param epsilon - Initial value of epsilon, a.k.a. the interaction strength
-   * @param wide    - True if the widescreen version of the graph is needed,
-   *                false if not.
+   * @param {Number} sigma - Initial value of sigma, a.k.a. the atom diameter
+   * @param {Number} epsilon - Initial value of epsilon, a.k.a. the interaction strength
+   * @param {Boolean} wide - true if the widescreen version of the graph is needed, false if not.
+   * @constructor
    */
   function InteractionPotentialDiagramNode( sigma, epsilon, wide ) {
 
@@ -180,6 +180,9 @@ define( function( require ) {
     this.verticalAxisLabel.setTranslation( this.graphXOrigin / 2,
       this.graphYOrigin - (  this.graphHeight / 2) + ( this.verticalAxisLabel.width / 2) );
     this.verticalAxisLabel.setRotation( 3 * Math.PI / 2 );
+
+    // Initializing here to reduce allocations
+    this.epsilonArrowStartPt = new Vector2( 0, 0 );
 
     // Draw the curve upon the graph.
     this.drawPotentialCurve();
@@ -320,13 +323,13 @@ define( function( require ) {
         }
       }
       this.potentialEnergyLine.setShape( potentialEnergyLineShape );
-      var epsilonArrowStartPt = new Vector2( this.graphMin.x, this.graphHeight / 2 );
-      if ( epsilonArrowStartPt.distance( this.graphMin ) > 5 ) {
+      this.epsilonArrowStartPt.setXY( this.graphMin.x, this.graphHeight / 2 );
+      if ( this.epsilonArrowStartPt.distance( this.graphMin ) > 5 ) {
         this.epsilonArrow.setVisible( true );
         try {
 
-          this.epsilonArrow.setTailAndTip( this.graphMin.x, this.graphMin.y, epsilonArrowStartPt.x,
-            epsilonArrowStartPt.y );
+          this.epsilonArrow.setTailAndTip( this.graphMin.x, this.graphMin.y, this.epsilonArrowStartPt.x,
+            this.epsilonArrowStartPt.y );
         }
         catch( e ) {
           console.error( "Error: Caught exception while positioning epsilon arrow - " + e );
