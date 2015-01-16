@@ -266,7 +266,7 @@ define( function( require ) {
     // static final
     TIME_STEP: TIME_STEP,
     TIME_STEP_SQR_HALF: TIME_STEP * TIME_STEP * 0.5,
-    TIME_STEP_HALF: TIME_STEP / 2,
+    TIME_STEP_HALF:     TIME_STEP / 2,
     PARTICLE_INTERACTION_DISTANCE_THRESH_SQRD: 6.25,
     // Parameters that control the increasing of gravity as the temperature
     // approaches zero.  This is done to counteract the tendency of the
