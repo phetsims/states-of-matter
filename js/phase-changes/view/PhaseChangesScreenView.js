@@ -95,7 +95,7 @@ define( function( require ) {
     var particleContainerNode = new ParticleContainerNode( model, modelViewTransform, true, true,
       {
         centerX: stoveNode.centerX - particleContainerXOffset,
-        bottom:  stoveNode.top - inset
+        bottom: stoveNode.top - inset
       } );
 
     // add particle canvas layer for particle rendering
