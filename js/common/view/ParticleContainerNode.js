@@ -281,7 +281,9 @@ define( function( require ) {
     reset: function() {
       this.updatePressureGauge();
       this.handleContainerSizeChanged();
-      this.fingerNode.handleContainerSizeChanged();
+      if ( this.fingerNode ) {
+        this.fingerNode.handleContainerSizeChanged();
+      }
     },
 
     /**
@@ -291,7 +293,7 @@ define( function( require ) {
      * @private
      */
     updatePressureGauge: function() {
-      if ( this.pressureMeter !== null ) {
+      if ( this.pressureMeter ) {
         var containerRect = this.model.getParticleContainerRect();
         if ( !this.model.getContainerExploded() ) {
           if ( this.pressureMeter.getRotation() !== 0 ) {
