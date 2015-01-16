@@ -14,11 +14,13 @@ define( function( require ) {
   var Property = require( 'AXON/Property' );
 
   /**
-   * @param {Number} x
-   * @param {Number} y
-   * @param {Number} radius
-   * @param {Number} mass
-   # @constructor
+   *
+   * @param {Number} x position in picometers
+   * @param {Number} y position in picometers
+   * @param {Number} radius of the atom in picometers
+   * @param {Number} mass of the atom in atomic mass units.
+   * @param {Color} color of the atom
+   * @constructor
    */
   function StatesOfMatterAtom( x, y, radius, mass, color ) {
     this.positionProperty = new Property( new Vector2( x, y ) );
@@ -32,12 +34,13 @@ define( function( require ) {
   return inherit( Object, StatesOfMatterAtom, {
 
     /**
-     * @param {Number} x    position in picometers
-     * @param {Number} y    position in picometers
+     * @param {Number} x - atom x position in picometers
+     * @param {Number} y - atom y position in picometers
      * @constructor
      */
     setPosition: function( x, y ) {
-      this.positionProperty.value = new Vector2( x, y );
+      this.positionProperty.value.setXY( x, y );
+      this.positionProperty._notifyObservers();
     },
 
     equals: function( other ) {
@@ -68,7 +71,7 @@ define( function( require ) {
     },
     /**
      *
-     * @param {Number} vy
+     * @param {Number} vy - atom velocity in y-direction
      */
     setVy: function( vy ) {
       this.velocity.setY( vy );
@@ -80,7 +83,7 @@ define( function( require ) {
 
     /**
      *
-     * @param {Number} vx
+     * @param {Number} vx - atom velocity in x-direction
      */
     setVx: function( vx ) {
       this.velocity.setX( vx );
@@ -96,14 +99,14 @@ define( function( require ) {
 
     /**
      *
-     * @param {Number} ax
+     * @param {Number} ax - atom acceleration in x-direction
      */
     setAx: function( ax ) {
       this.accel.setX( ax );
     },
     /**
      *
-     * @param {Number} ay
+     * @param {Number} ay - atom acceleration in y-direction
      */
     setAy: function( ay ) {
       this.accel.setY( ay );
@@ -126,7 +129,7 @@ define( function( require ) {
     },
     /**
      *
-     * @param {Number} radius
+     * @param {Number} radius - radius of the atom
      */
     setRadius: function( radius ) {
       this.radius = radius;
