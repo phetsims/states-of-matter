@@ -95,13 +95,13 @@ define( function( require ) {
     var particleContainerNode = new ParticleContainerNode( model, modelViewTransform, true, true,
       {
         centerX: stoveNode.centerX - particleContainerXOffset,
-        bottom: stoveNode.top - inset
+        bottom:  stoveNode.top - inset
       } );
 
     // add particle canvas layer for particle rendering
     this.particlesLayer = new ParticleCanvasNode( model.particles, modelViewTransform, {
       centerX: stoveNode.centerX - particleLayerXOffset,
-      bottom: stoveNode.top + particleLayerYOffset,
+      bottom:  stoveNode.top + particleLayerYOffset,
       canvasBounds: new Bounds2( -particleLayerCanvasBoundLimit, -particleLayerCanvasBoundLimit,
         particleLayerCanvasBoundLimit, particleLayerCanvasBoundLimit )
     } );
@@ -138,7 +138,7 @@ define( function( require ) {
           particleContainerNode.reset();
         },
         bottom: this.layoutBounds.bottom - layBoundsYOffset,
-        right: this.layoutBounds.right - layBoundsRightOffset,
+        right:  this.layoutBounds.right - layBoundsRightOffset,
         radius: 18
       } );
 
@@ -152,7 +152,7 @@ define( function( require ) {
         radius: 12,
         stroke: 'black',
         fill: '#005566',
-        right: stoveNode.left - stepButtonXOffset,
+        right:  stoveNode.left - stepButtonXOffset,
         bottom: stoveNode.bottom - stepButtonYOffset
 
       }
@@ -172,7 +172,7 @@ define( function( require ) {
     // add bicycle pump node
     this.addChild( new BicyclePumpNode( 200, 250, model, {
       bottom: stoveNode.top + bicyclePumpNodeYOffset,
-      right: particleContainerNode.left + bicyclePumpNodeXOffset
+      right:  particleContainerNode.left + bicyclePumpNodeXOffset
     } ) );
 
     // add return Lid button
@@ -185,7 +185,7 @@ define( function( require ) {
       },
       xMargin: 10,
       right: particleContainerNode.left - 2 * layBoundsRightOffset,
-      top: particleContainerNode.centerY + returnLidButtonYOffset
+      top:   particleContainerNode.centerY + returnLidButtonYOffset
     } );
     this.addChild( this.returnLidButton );
 
@@ -200,7 +200,7 @@ define( function( require ) {
       var epsilonControlInteractionPotentialDiagram = new EpsilonControlInteractionPotentialDiagram(
         StatesOfMatterConstants.MAX_SIGMA, StatesOfMatterConstants.MIN_EPSILON, false, model, {
           right: this.layoutBounds.right - layBoundsRightOffset,
-          top: phaseChangesMoleculesControlPanel.bottom + layBoundsYOffset / 2
+          top:   phaseChangesMoleculesControlPanel.bottom + layBoundsYOffset / 2
         } );
       this.addChild( epsilonControlInteractionPotentialDiagram );
     }

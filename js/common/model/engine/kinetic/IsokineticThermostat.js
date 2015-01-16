@@ -44,10 +44,10 @@ define( function( require ) {
         for ( i = 0; i < numberOfMolecules; i++ ) {
 
           centersOfMassKineticEnergy += 0.5 * this.moleculeDataSet.getMoleculeMass() *
-                                                                                     ( Math.pow( this.moleculeVelocities[ i ].x, 2 ) +
-                                                                                       Math.pow( this.moleculeVelocities[ i ].y, 2 ) );
+                                        ( Math.pow( this.moleculeVelocities[ i ].x, 2 ) +
+                                          Math.pow( this.moleculeVelocities[ i ].y, 2 ) );
           rotationalKineticEnergy += 0.5 * this.moleculeDataSet.getMoleculeRotationalInertia() *
-                                                                                               Math.pow( this.moleculeRotationRates[ i ], 2 );
+                                     Math.pow( this.moleculeRotationRates[ i ], 2 );
         }
         measuredTemperature = ( centersOfMassKineticEnergy + rotationalKineticEnergy ) / numberOfMolecules / 1.5;
       }
@@ -55,8 +55,8 @@ define( function( require ) {
         for ( i = 0; i < this.moleculeDataSet.getNumberOfMolecules(); i++ ) {
           // For single-atom molecules, exclude rotational inertia from the calculation.
           centersOfMassKineticEnergy += 0.5 * this.moleculeDataSet.moleculeMass *
-                                                                                ( Math.pow( this.moleculeVelocities[ i ].x, 2 ) +
-                                                                                  Math.pow( this.moleculeVelocities[ i ].y, 2 ) );
+                                        ( Math.pow( this.moleculeVelocities[ i ].x, 2 ) +
+                                          Math.pow( this.moleculeVelocities[ i ].y, 2 ) );
         }
         measuredTemperature = centersOfMassKineticEnergy / numberOfMolecules;
       }
