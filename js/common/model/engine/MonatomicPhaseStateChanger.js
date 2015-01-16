@@ -11,7 +11,6 @@ define( function( require ) {
 
   // modules
   var inherit = require( 'PHET_CORE/inherit' );
-  var Vector2 = require( 'DOT/Vector2' );
   var AbstractPhaseStateChanger = require( 'STATES_OF_MATTER/common/model/engine/AbstractPhaseStateChanger' );
   var Random = require( 'STATES_OF_MATTER/common/model/Random' );
   var MonatomicAtomPositionUpdater = require( 'STATES_OF_MATTER/common/model/engine/MonatomicAtomPositionUpdater' );
@@ -22,11 +21,11 @@ define( function( require ) {
 
   /**
    *
-   * @param {MultipleParticleModel} model
+   * @param {MultipleParticleModel} multipleParticleModel of the simulation
    * @constructor
    */
-  function MonatomicPhaseStateChanger( model ) {
-    AbstractPhaseStateChanger.call( this, model );
+  function MonatomicPhaseStateChanger( multipleParticleModel ) {
+    AbstractPhaseStateChanger.call( this, multipleParticleModel );
     this.positionUpdater = new MonatomicAtomPositionUpdater();
     this.random = new Random();
   }
@@ -50,10 +49,10 @@ define( function( require ) {
           break;
       }
 
-      var moleculeDataSet = this.model.moleculeDataSet;
+      var moleculeDataSet = this.multipleParticleModel.moleculeDataSet;
 
       // Assume that we've done our job correctly and that all the atoms are in safe positions.
-      this.model.moleculeDataSet.numberOfSafeMolecules = moleculeDataSet.getNumberOfMolecules();
+      this.multipleParticleModel.moleculeDataSet.numberOfSafeMolecules = moleculeDataSet.getNumberOfMolecules();
 
       // Sync up the atom positions with the molecule positions.
       this.positionUpdater.updateAtomPositions( moleculeDataSet );
@@ -61,7 +60,7 @@ define( function( require ) {
       // Step the model a number of times in order to prevent the particles
       // from looking too organized.  The number of steps was empirically determined.
       for ( var i = 0; i < 20; i++ ) {
-        this.model.step();
+        this.multipleParticleModel.step();
       }
     },
 
@@ -71,19 +70,19 @@ define( function( require ) {
     setPhaseSolid: function() {
 
       // Set the temperature in the model.
-      this.model.setTemperature( StatesOfMatterConstants.SOLID_TEMPERATURE );
+      this.multipleParticleModel.setTemperature( StatesOfMatterConstants.SOLID_TEMPERATURE );
 
       // Create the solid form, a.k.a. a crystal.
-      var numberOfAtoms = this.model.moleculeDataSet.numberOfAtoms;
-      var moleculeCenterOfMassPositions = this.model.moleculeDataSet.moleculeCenterOfMassPositions;
-      var moleculeVelocities = this.model.moleculeDataSet.moleculeVelocities;
-      var temperatureSqrt = Math.sqrt( this.model.temperatureSetPoint );
+      var numberOfAtoms = this.multipleParticleModel.moleculeDataSet.numberOfAtoms;
+      var moleculeCenterOfMassPositions = this.multipleParticleModel.moleculeDataSet.moleculeCenterOfMassPositions;
+      var moleculeVelocities = this.multipleParticleModel.moleculeDataSet.moleculeVelocities;
+      var temperatureSqrt = Math.sqrt( this.multipleParticleModel.temperatureSetPoint );
       var atomsPerLayer = Math.round( Math.sqrt( numberOfAtoms ) );
 
       // Establish the starting position, which will be the lower left corner of the "cube".
       var crystalWidth = ( atomsPerLayer - 1 ) * MIN_INITIAL_INTER_PARTICLE_DISTANCE;
 
-      var startingPosX = ( this.model.normalizedContainerWidth / 2 ) - ( crystalWidth / 2 );
+      var startingPosX = ( this.multipleParticleModel.normalizedContainerWidth / 2 ) - ( crystalWidth / 2 );
       var startingPosY = MIN_INITIAL_INTER_PARTICLE_DISTANCE;
 
       var particlesPlaced = 0;
@@ -102,8 +101,8 @@ define( function( require ) {
           particlesPlaced++;
 
           // Assign each particle an initial velocity.
-          moleculeVelocities[ ( i * atomsPerLayer ) + j ] = new Vector2( temperatureSqrt * this.random.nextGaussian(),
-            temperatureSqrt * this.random.nextGaussian() );
+          moleculeVelocities[ ( i * atomsPerLayer ) + j ].x = temperatureSqrt * this.random.nextGaussian();
+          moleculeVelocities[ ( i * atomsPerLayer ) + j ].y = temperatureSqrt * this.random.nextGaussian();
         }
       }
     },
@@ -113,14 +112,14 @@ define( function( require ) {
      */
     setPhaseLiquid: function() {
 
-      this.model.setTemperature( StatesOfMatterConstants.LIQUID_TEMPERATURE );
+      this.multipleParticleModel.setTemperature( StatesOfMatterConstants.LIQUID_TEMPERATURE );
       var temperatureSqrt = Math.sqrt( StatesOfMatterConstants.LIQUID_TEMPERATURE );
 
       // Set the initial velocity for each of the atoms based on the new temperature.
 
-      var numberOfAtoms = this.model.moleculeDataSet.numberOfAtoms;
-      var moleculeCenterOfMassPositions = this.model.moleculeDataSet.moleculeCenterOfMassPositions;
-      var moleculeVelocities = this.model.moleculeDataSet.moleculeVelocities;
+      var numberOfAtoms = this.multipleParticleModel.moleculeDataSet.numberOfAtoms;
+      var moleculeCenterOfMassPositions = this.multipleParticleModel.moleculeDataSet.moleculeCenterOfMassPositions;
+      var moleculeVelocities = this.multipleParticleModel.moleculeDataSet.moleculeVelocities;
       for ( var i = 0; i < numberOfAtoms; i++ ) {
         // Assign each particle an initial velocity.
         moleculeVelocities[ i ].setXY( temperatureSqrt * this.random.nextGaussian(),
@@ -130,9 +129,8 @@ define( function( require ) {
       // Assign each atom to a position centered on its blob.
 
       var atomsPlaced = 0;
-
-      var centerPoint = new Vector2( this.model.normalizedContainerWidth / 2,
-        this.model.normalizedContainerHeight / 4 );
+      var centerPointX = this.multipleParticleModel.normalizedContainerWidth / 2;
+      var centerPointY = this.multipleParticleModel.normalizedContainerHeight / 4;
       var currentLayer = 0;
       var particlesOnCurrentLayer = 0;
       var particlesThatWillFitOnCurrentLayer = 1;
@@ -143,8 +141,8 @@ define( function( require ) {
           var distanceFromCenter = currentLayer * MIN_INITIAL_INTER_PARTICLE_DISTANCE;
           var angle = ( particlesOnCurrentLayer / particlesThatWillFitOnCurrentLayer * 2 * Math.PI ) +
                       ( particlesThatWillFitOnCurrentLayer / ( 4 * Math.PI ) );
-          var xPos = centerPoint.x + ( distanceFromCenter * Math.cos( angle ) );
-          var yPos = centerPoint.y + ( distanceFromCenter * Math.sin( angle ) );
+          var xPos = centerPointX + ( distanceFromCenter * Math.cos( angle ) );
+          var yPos = centerPointY + ( distanceFromCenter * Math.sin( angle ) );
           particlesOnCurrentLayer++;  // Consider this spot used even if we don't actually put the particle there.
           if ( particlesOnCurrentLayer >= particlesThatWillFitOnCurrentLayer ) {
 
@@ -159,9 +157,9 @@ define( function( require ) {
           // rely on the placement algorithm to make sure that we don't
           // run into problems with this.
           if ( ( xPos > this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE ) &&
-               ( xPos < this.model.normalizedContainerWidth - this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE ) &&
+               ( xPos < this.multipleParticleModel.normalizedContainerWidth - this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE ) &&
                ( yPos > this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE ) &&
-               ( xPos < this.model.normalizedContainerHeight - this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE ) ) {
+               ( xPos < this.multipleParticleModel.normalizedContainerHeight - this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE ) ) {
 
             // This is an acceptable position.
             moleculeCenterOfMassPositions[ atomsPlaced++ ].setXY( xPos, yPos );
@@ -177,11 +175,11 @@ define( function( require ) {
     setPhaseGas: function() {
 
       // Set the temperature for the new state.
-      this.model.setTemperature( StatesOfMatterConstants.GAS_TEMPERATURE );
+      this.multipleParticleModel.setTemperature( StatesOfMatterConstants.GAS_TEMPERATURE );
       var temperatureSqrt = Math.sqrt( StatesOfMatterConstants.GAS_TEMPERATURE );
-      var numberOfAtoms = this.model.moleculeDataSet.numberOfAtoms;
-      var moleculeCenterOfMassPositions = this.model.moleculeDataSet.moleculeCenterOfMassPositions;
-      var moleculeVelocities = this.model.moleculeDataSet.moleculeVelocities;
+      var numberOfAtoms = this.multipleParticleModel.moleculeDataSet.numberOfAtoms;
+      var moleculeCenterOfMassPositions = this.multipleParticleModel.moleculeDataSet.moleculeCenterOfMassPositions;
+      var moleculeVelocities = this.multipleParticleModel.moleculeDataSet.moleculeVelocities;
 
       for ( var i = 0; i < numberOfAtoms; i++ ) {
         // Temporarily position the particles at (0,0).
@@ -195,10 +193,10 @@ define( function( require ) {
       // Redistribute the particles randomly around the container, but make
       // sure that they are not too close together or they end up with a
       // disproportionate amount of kinetic energy.
-      var newPosX, newPosY;
-      var rangeX = this.model.normalizedContainerWidth - ( 2 * this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE );
-      var rangeY = this.model.normalizedContainerWidth - ( 2 * this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE );
-      // var rangeY = this.model.normalizedContainerHeight - ( 2 * this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE );
+      var newPosX;
+      var newPosY;
+      var rangeX = this.multipleParticleModel.normalizedContainerWidth - ( 2 * this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE );
+      var rangeY = this.multipleParticleModel.normalizedContainerWidth - ( 2 * this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE );
       for ( i = 0; i < numberOfAtoms; i++ ) {
         for ( var j = 0; j < this.MAX_PLACEMENT_ATTEMPTS; j++ ) {
 

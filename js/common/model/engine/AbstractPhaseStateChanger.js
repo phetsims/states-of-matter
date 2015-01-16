@@ -19,11 +19,12 @@ define( function( require ) {
 
   /**
    *
-   * @param { MultipleParticleModel } model
+   * @param { MultipleParticleModel } multipleParticleModel of the simulation
    * @constructor
    */
-  function AbstractPhaseStateChanger( model ) {
-    this.model = model;
+  function AbstractPhaseStateChanger( multipleParticleModel ) {
+    this.multipleParticleModel = multipleParticleModel;
+    this.moleculeLocation = new Vector2();
   }
 
   return inherit( Object, AbstractPhaseStateChanger, {
@@ -41,12 +42,12 @@ define( function( require ) {
         var posX;
         var posY;
         var minInitialInterParticleDistance;
-        var moleculeDataSet = this.model.moleculeDataSet;
+        var moleculeDataSet = this.multipleParticleModel.moleculeDataSet;
         var moleculeCenterOfMassPositions = moleculeDataSet.moleculeCenterOfMassPositions;
 
         minInitialInterParticleDistance = ( moleculeDataSet.atomsPerMolecule === 1 ) ? 1.2 : 1.5;
-        var rangeX = this.model.normalizedContainerWidth - ( 2 * MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE );
-        var rangeY = this.model.normalizedContainerHeight - ( 2 * MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE );
+        var rangeX = this.multipleParticleModel.normalizedContainerWidth - ( 2 * MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE );
+        var rangeY = this.multipleParticleModel.normalizedContainerHeight - ( 2 * MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE );
         for ( var i = 0; i < rangeX / minInitialInterParticleDistance; i++ ) {
           for ( var j = 0; j < rangeY / minInitialInterParticleDistance; j++ ) {
             posX = MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE + ( i * minInitialInterParticleDistance );
@@ -62,7 +63,8 @@ define( function( require ) {
             }
             if ( positionAvailable ) {
               // We found an open position.
-              return new Vector2( posX, posY );
+              this.moleculeLocation.setXY( posX, posY );
+              return this.moleculeLocation;
             }
           }
         }

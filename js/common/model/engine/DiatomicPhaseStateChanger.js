@@ -30,17 +30,18 @@ define( function( require ) {
 
   /**
    *
-   * @param {MultipleParticleModel} model
+   * @param {MultipleParticleModel} multipleParticleModel of the simulation
    * @constructor
    */
-  function DiatomicPhaseStateChanger( model ) {
+  function DiatomicPhaseStateChanger( multipleParticleModel ) {
 
     //private
     this.positionUpdater = new DiatomicAtomPositionUpdater();
-    AbstractPhaseStateChanger.call( this, model );
-    this.model = model;
+    AbstractPhaseStateChanger.call( this, multipleParticleModel );
+    this.multipleParticleModel = multipleParticleModel;
+    this.rand = new Random();
     // Make sure this is not being used on an inappropriate data set.
-    assert && assert( model.getMoleculeDataSetRef().getAtomsPerMolecule() === 2 );
+    assert && assert( multipleParticleModel.getMoleculeDataSetRef().getAtomsPerMolecule() === 2 );
   }
 
   return inherit( AbstractPhaseStateChanger, DiatomicPhaseStateChanger, {
@@ -66,16 +67,16 @@ define( function( require ) {
           break;
       }
 
-      var moleculeDataSet = this.model.moleculeDataSet;
+      var moleculeDataSet = this.multipleParticleModel.moleculeDataSet;
       // in safe positions.
       // Assume that we've done our job correctly and that all the atoms are in safe positions.
-      this.model.moleculeDataSet.numberOfSafeMolecules = moleculeDataSet.getNumberOfMolecules();
+      this.multipleParticleModel.moleculeDataSet.numberOfSafeMolecules = moleculeDataSet.getNumberOfMolecules();
       // moleculeDataSet.numberOfSafeMolecules = moleculeDataSet.numberOfSafeMolecules;
       // Sync up the atom positions with the molecule positions.
       this.positionUpdater.updateAtomPositions( moleculeDataSet );
       // determined.
       for ( var i = 0; i < postChangeModelSteps; i++ ) {
-        this.model.step();
+        this.multipleParticleModel.step();
       }
     },
 
@@ -83,20 +84,19 @@ define( function( require ) {
 
     setPhaseSolid: function() {
       // Set the model temperature for this phase.
-      this.model.setTemperature( StatesOfMatterConstants.SOLID_TEMPERATURE );
+      this.multipleParticleModel.setTemperature( StatesOfMatterConstants.SOLID_TEMPERATURE );
       // Get references to the various elements of the data set.
-      var moleculeDataSet = this.model.moleculeDataSet;
+      var moleculeDataSet = this.multipleParticleModel.moleculeDataSet;
       var numberOfMolecules = moleculeDataSet.getNumberOfMolecules();
       var moleculeCenterOfMassPositions = moleculeDataSet.moleculeCenterOfMassPositions;
       var moleculeVelocities = moleculeDataSet.moleculeVelocities;
       var moleculeRotationAngles = moleculeDataSet.moleculeRotationAngles;
       // Create and initialize other variables needed to do the job.
-      var rand = new Random();
-      var temperatureSqrt = Math.sqrt( this.model.temperatureSetPoint );
+      var temperatureSqrt = Math.sqrt( this.multipleParticleModel.temperatureSetPoint );
       var moleculesPerLayer = (Math.round( Math.sqrt( numberOfMolecules * 2 ) ) / 2);
       // Final term is a fudge factor that can be adjusted to center the cube.
       var crystalWidth = moleculesPerLayer * (2.0 - 0.3);
-      var startingPosX = (this.model.normalizedContainerWidth / 2) - (crystalWidth / 2);
+      var startingPosX = (this.multipleParticleModel.normalizedContainerWidth / 2) - (crystalWidth / 2);
       // Multiplier can be tweaked to minimize initial "bounce".
       var startingPosY = 1.2 + this.DISTANCE_BETWEEN_PARTICLES_IN_CRYSTAL;
       var moleculesPlaced = 0;
@@ -115,8 +115,8 @@ define( function( require ) {
           moleculeRotationAngles[ (i * moleculesPerLayer) + j ] = 0;
           moleculesPlaced++;
           // Assign each molecule an initial velocity.
-          var xVel = temperatureSqrt * rand.nextGaussian();
-          var yVel = temperatureSqrt * rand.nextGaussian();
+          var xVel = temperatureSqrt * this.rand.nextGaussian();
+          var yVel = temperatureSqrt * this.rand.nextGaussian();
           moleculeVelocities[ (i * moleculesPerLayer) + j ].setXY( xVel, yVel );
         }
       }
@@ -126,27 +126,27 @@ define( function( require ) {
     //   Set the phase to the liquid state.
     setPhaseLiquid: function() {
       // Set the model temperature for this phase.
-      this.model.setTemperature( StatesOfMatterConstants.LIQUID_TEMPERATURE );
+      this.multipleParticleModel.setTemperature( StatesOfMatterConstants.LIQUID_TEMPERATURE );
       // Get references to the various elements of the data set.
-      var moleculeDataSet = this.model.getMoleculeDataSetRef();
+      var moleculeDataSet = this.multipleParticleModel.getMoleculeDataSetRef();
       var moleculeCenterOfMassPositions = moleculeDataSet.getMoleculeCenterOfMassPositions();
       var moleculeVelocities = moleculeDataSet.getMoleculeVelocities();
       var moleculeRotationAngles = moleculeDataSet.getMoleculeRotationAngles();
       var moleculeRotationRates = moleculeDataSet.getMoleculeRotationRates();
       // Create and initialize other variables needed to do the job.
-      var rand = new Random();
-      var temperatureSqrt = Math.sqrt( this.model.getTemperatureSetPoint() );
+
+      var temperatureSqrt = Math.sqrt( this.multipleParticleModel.getTemperatureSetPoint() );
       var numberOfMolecules = moleculeDataSet.getNumberOfMolecules();
       // Initialize the velocities and angles of the molecules.
       for ( var i = 0; i < numberOfMolecules; i++ ) {
         // Assign each molecule an initial velocity.
-        moleculeVelocities[ i ].setXY( temperatureSqrt * rand.nextGaussian(), temperatureSqrt * rand.nextGaussian() );
+        moleculeVelocities[ i ].setXY( temperatureSqrt * this.rand.nextGaussian(), temperatureSqrt * this.rand.nextGaussian() );
         // Assign each molecule an initial rotation rate.
         moleculeRotationRates[ i ] = Math.random() * temperatureSqrt * Math.PI * 2;
       }
       var moleculesPlaced = 0;
-      var centerPoint = new Vector2( this.model.getNormalizedContainerWidth() / 2,
-        this.model.getNormalizedContainerHeight() / 4 );
+      var centerPointX = this.multipleParticleModel.getNormalizedContainerWidth() / 2;
+      var centerPointY = this.multipleParticleModel.getNormalizedContainerHeight() / 4;
       var currentLayer = 0;
       var particlesOnCurrentLayer = 0;
       var particlesThatWillFitOnCurrentLayer = 1;
@@ -155,8 +155,8 @@ define( function( require ) {
           var distanceFromCenter = currentLayer * MIN_INITIAL_DIAMETER_DISTANCE * LIQUID_SPACING_FACTOR;
           var angle = (particlesOnCurrentLayer / particlesThatWillFitOnCurrentLayer * 2 * Math.PI) +
                       (particlesThatWillFitOnCurrentLayer / (4 * Math.PI));
-          var xPos = centerPoint.x + (distanceFromCenter * Math.cos( angle ));
-          var yPos = centerPoint.y + (distanceFromCenter * Math.sin( angle ));
+          var xPos = centerPointX + (distanceFromCenter * Math.cos( angle ));
+          var yPos = centerPointY + (distanceFromCenter * Math.sin( angle ));
           // Consider this spot used even if we don't actually put the
           particlesOnCurrentLayer++;
           // particle there.
@@ -169,9 +169,9 @@ define( function( require ) {
           }
           // problem.
           if ( (xPos > this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE) &&
-               (xPos < this.model.getNormalizedContainerWidth() - this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE) &&
+               (xPos < this.multipleParticleModel.getNormalizedContainerWidth() - this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE) &&
                (yPos > this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE) &&
-               (xPos < this.model.getNormalizedContainerHeight() - this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE) ) {
+               (xPos < this.multipleParticleModel.getNormalizedContainerHeight() - this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE) ) {
             // This is an acceptable position.
             moleculeCenterOfMassPositions[ moleculesPlaced ].setXY( xPos, yPos );
             moleculeRotationAngles[ moleculesPlaced ] = angle + Math.PI / 2;
@@ -185,22 +185,21 @@ define( function( require ) {
     // Set the phase to the gaseous state.
     setPhaseGas: function() {
       // Set the model temperature for this phase.
-      this.model.setTemperature( StatesOfMatterConstants.GAS_TEMPERATURE );
+      this.multipleParticleModel.setTemperature( StatesOfMatterConstants.GAS_TEMPERATURE );
       // Get references to the various elements of the data set.
-      var moleculeDataSet = this.model.getMoleculeDataSetRef();
+      var moleculeDataSet = this.multipleParticleModel.getMoleculeDataSetRef();
       var moleculeCenterOfMassPositions = moleculeDataSet.getMoleculeCenterOfMassPositions();
       var moleculeVelocities = moleculeDataSet.getMoleculeVelocities();
       var moleculeRotationAngles = moleculeDataSet.getMoleculeRotationAngles();
       var moleculeRotationRates = moleculeDataSet.getMoleculeRotationRates();
       // Create and initialize other variables needed to do the job.
-      var rand = new Random();
-      var temperatureSqrt = Math.sqrt( this.model.getTemperatureSetPoint() );
+      var temperatureSqrt = Math.sqrt( this.multipleParticleModel.getTemperatureSetPoint() );
       var numberOfMolecules = moleculeDataSet.getNumberOfMolecules();
       for ( var i = 0; i < numberOfMolecules; i++ ) {
         // Temporarily position the molecules at (0,0).
         moleculeCenterOfMassPositions[ i ].setXY( 0, 0 );
         // Assign each molecule an initial velocity.
-        moleculeVelocities[ i ].setXY( temperatureSqrt * rand.nextGaussian(), temperatureSqrt * rand.nextGaussian() );
+        moleculeVelocities[ i ].setXY( temperatureSqrt * this.rand.nextGaussian(), temperatureSqrt * this.rand.nextGaussian() );
         // Assign each molecule an initial rotational position.
         moleculeRotationAngles[ i ] = Math.random() * Math.PI * 2;
         // Assign each molecule an initial rotation rate.
@@ -209,8 +208,8 @@ define( function( require ) {
       // disproportionate amount of kinetic energy.
       var newPosX;
       var newPosY;
-      var rangeX = this.model.getNormalizedContainerWidth() - (2 * this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE);
-      var rangeY = this.model.getNormalizedContainerWidth() - ( 2 * this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE);
+      var rangeX = this.multipleParticleModel.getNormalizedContainerWidth() - (2 * this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE);
+      var rangeY = this.multipleParticleModel.getNormalizedContainerWidth() - ( 2 * this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE);
       for ( i = 0; i < numberOfMolecules; i++ ) {
         for ( var j = 0; j < this.MAX_PLACEMENT_ATTEMPTS; j++ ) {
           // Pick a random position.
