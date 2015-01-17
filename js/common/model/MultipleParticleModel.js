@@ -406,9 +406,9 @@ define( function( require ) {
     //----------------------------------------------------------------------------
 
     reset: function() {
-      PropertySet.prototype.reset.call( this );
       this.initializeModelParameters();
       this.setMoleculeType( DEFAULT_MOLECULE );
+      PropertySet.prototype.reset.call( this );
     },
 
     /**
