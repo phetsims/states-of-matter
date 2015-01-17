@@ -64,7 +64,6 @@ define( function( require ) {
   var bicyclePumpNodeYOffset = 90;
   var bicyclePumpNodeXOffset = 100;
   var returnLidButtonYOffset = 100;
-  var pressureMeterYOffset = 20;
 
   /**
    *
@@ -115,7 +114,7 @@ define( function( require ) {
     var compositeThermometerNode = new CompositeThermometerNode( multipleParticleModel, {
       font: new PhetFont( 20 ),
       fill: 'white',
-      right: stoveNode.left + 2 * inset
+      right: stoveNode.left + 3 * inset
     } );
     this.addChild( compositeThermometerNode );
 
@@ -176,7 +175,6 @@ define( function( require ) {
       bottom: stoveNode.top + bicyclePumpNodeYOffset,
       right: particleContainerNode.left + bicyclePumpNodeXOffset
     } ) );
-
     // add return Lid button
     this.returnLidButton = new TextPushButton( returnLidString, {
       font: new PhetFont( 14 ),
@@ -185,18 +183,15 @@ define( function( require ) {
         multipleParticleModel.returnLid();
         particleContainerNode.reset();
       },
+      visible: false,
       xMargin: 10,
       right: particleContainerNode.left - 2 * layBoundsRightOffset,
       top: particleContainerNode.centerY + returnLidButtonYOffset
     } );
     this.addChild( this.returnLidButton );
+    multipleParticleModel.isExplodedProperty.linkAttribute( this.returnLidButton, 'visible' );
 
-    multipleParticleModel.isExplodedProperty.link( function( isExploded ) {
-      particleContainerNode.updatePressureGauge();
-      phaseChangesScreenView.returnLidButton.visible = isExploded;
-      particleContainerNode.containerLid.setRotation( 0 );
-      particleContainerNode.pressureMeter.setY( particleContainerNode.containerLid.y - pressureMeterYOffset );
-    } );
+
     // add interaction Potential Diagram
     if ( isInteractionDiagramEnabled ) {
       var epsilonControlInteractionPotentialDiagram = new EpsilonControlInteractionPotentialDiagram(
@@ -368,4 +363,3 @@ define( function( require ) {
 
   } );
 } );
-
