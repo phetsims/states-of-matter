@@ -32,7 +32,7 @@ define( function( require ) {
   var MAX_INTER_ATOM_DISTANCE = 1800;
 
 // Constants that control the appearance of the diagram.
-  var NARROW_VERSION_WIDTH = 130;
+  var NARROW_VERSION_WIDTH = 135;
   var WIDE_VERSION_WIDTH = 500;
   var AXIS_LINE_WIDTH = 1;
   var AXES_ARROW_HEAD_HEIGHT = 8 * AXIS_LINE_WIDTH;
@@ -47,7 +47,7 @@ define( function( require ) {
 // Font for the labels used on the axes and within the graph.
   var AXIS_LABEL_FONT_SIZE = 12;
   var AXIS_LABEL_FONT = new PhetFont( AXIS_LABEL_FONT_SIZE );
-  var GREEK_LETTER_FONT_SIZE = 14;
+  var GREEK_LETTER_FONT_SIZE = 16;
   var GREEK_LETTER_FONT = new PhetFont( GREEK_LETTER_FONT_SIZE );
 
 
@@ -177,7 +177,7 @@ define( function( require ) {
     this.verticalAxis.setTranslation( this.graphXOrigin, this.graphYOrigin );
 
     this.verticalAxisLabel = new Text( potentialEnergyString, { fill: 'white', font: AXIS_LABEL_FONT } );
-    this.verticalAxisLabel.setTranslation( this.graphXOrigin / 2,
+    this.verticalAxisLabel.setTranslation( this.graphXOrigin / 2 - 5,
       this.graphYOrigin - (  this.graphHeight / 2) + ( this.verticalAxisLabel.width / 2) );
     this.verticalAxisLabel.setRotation( 3 * Math.PI / 2 );
 

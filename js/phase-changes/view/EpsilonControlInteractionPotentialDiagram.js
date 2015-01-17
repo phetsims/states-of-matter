@@ -16,8 +16,6 @@ define( function( require ) {
   var Color = require( 'SCENERY/util/Color' );
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
   var FillHighlightListener = require( 'SCENERY_PHET/input/FillHighlightListener' );
-  // var Shape = require( 'KITE/Shape' );
-  // var Path = require( 'SCENERY/nodes/Path' );
   var SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
   var Text = require( 'SCENERY/nodes/Text' );
   var Property = require( 'AXON/Property' );
@@ -29,32 +27,32 @@ define( function( require ) {
 
 
   //strings
-  var interactionDiagramTittle = require( 'string!STATES_OF_MATTER/interactionDiagram' );
+  var interactionDiagramTitle = require( 'string!STATES_OF_MATTER/interactionPotential' );
 // Size of handles as function of node width.
-  var RESIZE_HANDLE_SIZE_PROPORTION = 0.12;
+  var RESIZE_HANDLE_SIZE_PROPORTION = 0.18;
 
   // Position of handle as function of node width.
   var EPSILON_HANDLE_OFFSET_PROPORTION = 0.08;
   // var EPSILON_LINE_WIDTH = 1;
-  var RESIZE_HANDLE_NORMAL_COLOR = new Color( 51, 204, 51 );
-  var RESIZE_HANDLE_HIGHLIGHTED_COLOR = new Color( 153, 255, 0 );
+  var RESIZE_HANDLE_NORMAL_COLOR = new Color( 153, 255, 0 );
+  var RESIZE_HANDLE_HIGHLIGHTED_COLOR = 'yellow';
   var EPSILON_LINE_COLOR = RESIZE_HANDLE_NORMAL_COLOR;
 
   /**
    *
-   * @param sigma
-   * @param epsilon
-   * @param wide - True if the widescreen version of the graph is needed, false if not.
-   * @param model
-   * @param options
+   * @param {Number} sigma - atom diameter
+   * @param {Number} epsilon - interaction strength
+   * @param {Boolean} wide - true if the wide screen version of the graph is needed, false if not.
+   * @param {MultipleParticleModel} multipleParticleModel - model of the simulation
+   * @param {Object} options that can be passed on to the underlying node
    * @constructor
    */
-  function EpsilonControlInteractionPotentialDiagram( sigma, epsilon, wide, model, options ) {
+  function EpsilonControlInteractionPotentialDiagram( sigma, epsilon, wide, multipleParticleModel, options ) {
 
 
     var epsilonControlInteractionPotentialDiagram = this;
     InteractionPotentialDiagramNode.call( this, sigma, epsilon, wide, true );
-    this.model = model;
+    this.multipleParticleModel = multipleParticleModel;
     var accordionContent = new Node();
     accordionContent.addChild( this.horizontalAxisLabel );
     accordionContent.addChild( this.horizontalAxis );
@@ -63,7 +61,7 @@ define( function( require ) {
     accordionContent.addChild( this.ljPotentialGraph );
     // Add the line that will indicate the value of epsilon.
     var epsilonLineLength = EPSILON_HANDLE_OFFSET_PROPORTION * this.widthOfGraph * 2.2;
-    this.epsilonLine = new Rectangle( -epsilonLineLength / 2, 0, epsilonLineLength, 3, {
+    this.epsilonLine = new Rectangle( -epsilonLineLength / 2, 0, epsilonLineLength, 1, {
       cursor: 'ns-resize',
       pickable: true,
       fill: EPSILON_LINE_COLOR,
@@ -97,7 +95,7 @@ define( function( require ) {
           startDragY = endDragY;
           var scaleFactor = StatesOfMatterConstants.MAX_EPSILON /
                             ( epsilonControlInteractionPotentialDiagram.getGraphHeight() / 2);
-          model.interactionStrengthProperty.value = model.getEpsilon() + ( d * scaleFactor );
+          multipleParticleModel.interactionStrengthProperty.value = multipleParticleModel.getEpsilon() + ( d * scaleFactor );
           epsilonControlInteractionPotentialDiagram.drawPotentialCurve();
         }
       } ) );
@@ -116,16 +114,16 @@ define( function( require ) {
           startDragY = endDragY;
           var scaleFactor = StatesOfMatterConstants.MAX_EPSILON /
                             ( epsilonControlInteractionPotentialDiagram.getGraphHeight() / 2);
-          model.interactionStrength = model.getEpsilon() + ( d * scaleFactor );
+          multipleParticleModel.interactionStrength = multipleParticleModel.getEpsilon() + ( d * scaleFactor );
           epsilonControlInteractionPotentialDiagram.drawPotentialCurve();
         }
       } ) );
     var accordionBox = new AccordionBox( accordionContent,
       {
-        titleNode: new Text( interactionDiagramTittle, { fill: "#FFFFFF", font: new PhetFont( { size: 12 } ) } ),
+        titleNode: new Text( interactionDiagramTitle, { fill: "#FFFFFF", font: new PhetFont( { size: 12 } ) } ),
         fill: 'black',
         stroke: 'white',
-        expandedProperty: model.interactionExpandedProperty,
+        expandedProperty: multipleParticleModel.interactionExpandedProperty,
         contentAlign: 'center',
         titleAlign: 'left',
         buttonAlign: 'left',
@@ -144,18 +142,18 @@ define( function( require ) {
     this.updateInteractivityState();
 
 // call when interaction strength change
-    this.setLjPotentialParameters( model.getSigma(), model.getEpsilon() );
+    this.setLjPotentialParameters( multipleParticleModel.getSigma(), multipleParticleModel.getEpsilon() );
     this.drawPotentialCurve();
 
     // Update the text when the value or units changes.
-    Property.multilink( [ model.moleculeTypeProperty, model.interactionStrengthProperty ],
+    Property.multilink( [ multipleParticleModel.moleculeTypeProperty, multipleParticleModel.interactionStrengthProperty ],
       function( moleculeType, interactionStrength ) {
-        if ( model.currentMolecule === StatesOfMatterConstants.USER_DEFINED_MOLECULE ) {
-          model.setEpsilon( interactionStrength );
+        if ( multipleParticleModel.currentMolecule === StatesOfMatterConstants.USER_DEFINED_MOLECULE ) {
+          multipleParticleModel.setEpsilon( interactionStrength );
         }
         epsilonControlInteractionPotentialDiagram.updateInteractivityState();
         // call when interaction strength change
-        epsilonControlInteractionPotentialDiagram.setLjPotentialParameters( model.getSigma(), model.getEpsilon() );
+        epsilonControlInteractionPotentialDiagram.setLjPotentialParameters( multipleParticleModel.getSigma(), multipleParticleModel.getEpsilon() );
         epsilonControlInteractionPotentialDiagram.drawPotentialCurve();
       } );
 
@@ -186,7 +184,7 @@ define( function( require ) {
 
     //private
     updateInteractivityState: function() {
-      this.interactionEnabled = ( this.model.getMoleculeType() === StatesOfMatterConstants.USER_DEFINED_MOLECULE );
+      this.interactionEnabled = ( this.multipleParticleModel.getMoleculeType() === StatesOfMatterConstants.USER_DEFINED_MOLECULE );
     }
   } );
 } );
