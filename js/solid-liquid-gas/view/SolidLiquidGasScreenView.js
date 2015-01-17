@@ -64,13 +64,13 @@ define( function( require ) {
     var particleContainerNode = new ParticleContainerNode( model, modelViewTransform, false, false,
       {
         centerX: stoveNode.centerX - stoveNodeXOffset,
-        bottom: stoveNode.top - inset
+        bottom:  stoveNode.top - inset
       } );
 
     // add particle Canvas layer
     this.particlesLayer = new ParticleCanvasNode( model.particles, modelViewTransform, {
       centerX: stoveNode.centerX - particlesLayerXOffset,
-      bottom: stoveNode.top + particlesLayerYOffset,
+      bottom:  stoveNode.top + particlesLayerYOffset,
       canvasBounds: new Bounds2( -particleCanvasLayerBoundLimit, -particleCanvasLayerBoundLimit,
         particleCanvasLayerBoundLimit, particleCanvasLayerBoundLimit )
     } );
@@ -82,7 +82,7 @@ define( function( require ) {
     var compositeThermometerNode = new CompositeThermometerNode( model, {
       font: new PhetFont( 20 ),
       fill: 'white',
-      right: particleContainerNode.left + compositeThermometerNodeLeftOffset,
+      right:   particleContainerNode.left + compositeThermometerNodeLeftOffset,
       centerY: particleContainerNode.top + compositeThermometerNodeYOffset
     } );
     this.addChild( compositeThermometerNode );
@@ -90,7 +90,7 @@ define( function( require ) {
     // add Molecule ControlPanel
     var solidLiquidGasMoleculesControlPanel = new SolidLiquidGasMoleculesControlPanel( model.moleculeTypeProperty, {
       right: this.layoutBounds.right - layoutBoundsRightOffset,
-      top: this.layoutBounds.top + layoutBoundsYOffset
+      top:   this.layoutBounds.top + layoutBoundsYOffset
     } );
     this.addChild( solidLiquidGasMoleculesControlPanel );
 
@@ -109,7 +109,7 @@ define( function( require ) {
           particleContainerNode.reset();
         },
         bottom: this.layoutBounds.bottom - layoutBoundsYOffset / 2,
-        right: this.layoutBounds.right - layoutBoundsRightOffset,
+        right:  this.layoutBounds.right - layoutBoundsRightOffset,
         radius: 18
       } );
 
@@ -123,7 +123,7 @@ define( function( require ) {
         radius: 12,
         stroke: 'black',
         fill: '#005566',
-        right: stoveNode.left - stepButtonXOffset,
+        right:  stoveNode.left - stepButtonXOffset,
         bottom: stoveNode.bottom - stepButtonYOffset
       }
     );

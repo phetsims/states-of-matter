@@ -165,10 +165,10 @@ define( function( require ) {
       else {
         for ( i = 0; i < this.numberOfAtoms / this.atomsPerMolecule; i++ ) {
           translationalKineticEnergy += 0.5 * this.moleculeMass *
-                                                                ( Math.pow( this.moleculeVelocities[ i ].x, 2 ) +
-                                                                  Math.pow( this.moleculeVelocities[ i ].y, 2 ) );
+                                        ( Math.pow( this.moleculeVelocities[ i ].x, 2 ) +
+                                          Math.pow( this.moleculeVelocities[ i ].y, 2 ) );
           rotationalKineticEnergy += 0.5 * this.moleculeRotationalInertia *
-                                                                          Math.pow( this.moleculeRotationRates[ i ], 2 );
+                                     Math.pow( this.moleculeRotationRates[ i ], 2 );
         }
         kineticEnergyPerMolecule = ( translationalKineticEnergy + rotationalKineticEnergy ) / numberOfMolecules / 1.5;
       }

@@ -92,7 +92,8 @@ define( function( require ) {
     MIN_EPSILON: 20,     // Epsilon/k-Boltzmann is in Kelvin.
 
     // Constants used to describe the the spatial relationship between
-    THETA_HOH: 120 * Math.PI / 180,  // This is not quite the real value for a water
+    THETA_HOH: ( 120 * Math.PI / 180 ),  // This is not quite the real value for a water
+
     // molecule, but it is close and worked better in
     // the simulation.
     DISTANCE_FROM_OXYGEN_TO_HYDROGEN: 1.0 / 3.12,  // Number supplied by Paul Beale.

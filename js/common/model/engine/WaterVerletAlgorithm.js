@@ -235,9 +235,9 @@ define( function( require ) {
         moleculeRotationRates[ i ] += this.TIME_STEP_HALF * (moleculeTorques[ i ] + nextMoleculeTorques[ i ]) *
                                       inertiaInverse;
         centersOfMassKineticEnergy += 0.5 * moleculeDataSet.getMoleculeMass() *
-                                                                              (Math.pow( moleculeVelocities[ i ].x, 2 ) + Math.pow( moleculeVelocities[ i ].y, 2 ));
+                                      (Math.pow( moleculeVelocities[ i ].x, 2 ) + Math.pow( moleculeVelocities[ i ].y, 2 ));
         rotationalKineticEnergy += 0.5 * moleculeDataSet.getMoleculeRotationalInertia() *
-                                                                                        Math.pow( moleculeRotationRates[ i ], 2 );
+                                   Math.pow( moleculeRotationRates[ i ], 2 );
         // Move the newly calculated forces and torques into the current spots.
         moleculeForces[ i ].setXY( nextMoleculeForces[ i ].x, nextMoleculeForces[ i ].y );
         moleculeTorques[ i ] = nextMoleculeTorques[ i ];
