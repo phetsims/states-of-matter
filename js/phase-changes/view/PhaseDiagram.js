@@ -32,8 +32,8 @@ define( function( require ) {
 
 
   // Constants that control the size of the canvas.
-  var WIDTH = 140;
-  var HEIGHT = (WIDTH * 0.8);
+  var WIDTH = 155;
+  var HEIGHT = (WIDTH * 0.75);
 
   // Constants that control the look of the axes.
   var AXES_LINE_WIDTH = 1;
@@ -62,7 +62,7 @@ define( function( require ) {
   // various substances.  Note that all points are controlled as proportions
   // of the overall graph size and not as absolute values.
   var POINT_MARKER_DIAMETER = 4;
-  var CURRENT_STATE_MARKER_DIAMETER = 5;
+  var CURRENT_STATE_MARKER_DIAMETER = 4;
   var DEFAULT_TOP_OF_SOLID_LIQUID_LINE = new Vector2( X_USABLE_RANGE * 0.40 + X_ORIGIN_OFFSET,
     Y_ORIGIN_OFFSET - Y_USABLE_RANGE );
   var TOP_OF_SOLID_LIQUID_LINE_FOR_WATER = new Vector2( X_USABLE_RANGE * 0.30 + X_ORIGIN_OFFSET,
@@ -80,7 +80,7 @@ define( function( require ) {
 
   /**
    *
-   * @param {Property} expandedProperty is expand the phase diagram
+   * @param {Property<Boolean>} expandedProperty - is to expand the phase diagram
    * @param {Object} options that can be passed on to the underlying node
    * @constructor
    */
@@ -184,7 +184,7 @@ define( function( require ) {
     accordionContent.addChild( horizontalAxisLabel );
 
     var verticalAxisLabel = new Text( pressureString, { font: AXIS_LABEL_FONT, fill: 'white' } );
-    verticalAxisLabel.setTranslation( X_ORIGIN_OFFSET - (verticalAxisLabel.height * 1.1),
+    verticalAxisLabel.setTranslation( X_ORIGIN_OFFSET - (verticalAxisLabel.height ),
       verticalAxisLabel.width * 1.6 );
     verticalAxisLabel.setRotation( 3 * Math.PI / 2 );
     accordionContent.addChild( verticalAxisLabel );
@@ -329,7 +329,7 @@ define( function( require ) {
       if ( markerYPos < Y_ORIGIN_OFFSET - Y_USABLE_RANGE ) {
         markerYPos = Y_ORIGIN_OFFSET - Y_USABLE_RANGE;
       }
-      this.currentStateMarker.setTranslation( markerXPos, markerYPos );
+      this.currentStateMarker.setTranslation( markerXPos, markerYPos + this.currentStateMarker.height / 3 );
     },
 
     /**
