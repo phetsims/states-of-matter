@@ -33,18 +33,21 @@ define( function( require ) {
   var waterString = require( 'string!STATES_OF_MATTER/water' );
   var oxygenString = require( 'string!STATES_OF_MATTER/oxygen' );
   var adjustableAttractionString = require( 'string!STATES_OF_MATTER/adjustableAttraction' );
-  var tittleString = require( 'string!STATES_OF_MATTER/AtomsMolecules' );
+  var titleString = require( 'string!STATES_OF_MATTER/AtomsMolecules' );
   var interactionStrengthTitleString = require( 'string!STATES_OF_MATTER/interactionStrengthWithSymbol' );
+
+  // constants
+  var inset = 10;
 
   /**
    *
    * @param options
-   * @param { MultipleParticleModel } model
+   * @param { MultipleParticleModel } multipleParticleModel - model of the simulation
    * @param {Boolean} isBasicVersion
    * @param {Object} options for various panel display properties
    * @constructor
    */
-  function PhaseChangesMoleculesControlPanel( model, isBasicVersion, options ) {
+  function PhaseChangesMoleculesControlPanel( multipleParticleModel, isBasicVersion, options ) {
 
     var phaseChangesMoleculesControlPanel = this;
     options = _.extend( {
@@ -87,6 +90,7 @@ define( function( require ) {
       }
     };
     var radioButtonContent;
+    var controlPanelOffset;
     if ( !isBasicVersion ) {
       radioButtonContent = [
         { value: StatesOfMatterConstants.NEON, node: createItem( neon ) },
@@ -94,6 +98,7 @@ define( function( require ) {
         { value: StatesOfMatterConstants.DIATOMIC_OXYGEN, node: createItem( oxygen ) },
         { value: StatesOfMatterConstants.WATER, node: createItem( water ) }
       ];
+      controlPanelOffset = 10;
     }
     else {
       radioButtonContent = [
@@ -103,9 +108,10 @@ define( function( require ) {
         { value: StatesOfMatterConstants.WATER, node: createItem( water ) },
         { value: StatesOfMatterConstants.USER_DEFINED_MOLECULE, node: createItem( adjustableAttraction ) }
       ];
+      controlPanelOffset = 0;
     }
 
-    var radioButtonGroup = new RadioButtonGroup( model.moleculeTypeProperty, radioButtonContent, {
+    var radioButtonGroup = new RadioButtonGroup( multipleParticleModel.moleculeTypeProperty, radioButtonContent, {
       orientation: 'vertical',
       spacing: 1,
       cornerRadius: 5,
@@ -121,12 +127,12 @@ define( function( require ) {
     var weakTitle = new Text( weakString, { font: labelFont, fontWeight: 600, fill: 'white' } );
     var strongTitle = new Text( strongString, { fill: 'white', fontWeight: 600, font: labelFont } );
 
-    // add interaction strength slider and tittle
+    // add interaction strength slider and title
     var interactionStrengthNode = new Node();
     var interactionTitle = new Text( interactionStrengthTitleString,
       { fontWeight: 600, font: labelFont, fill: 'white' } );
     interactionStrengthNode.addChild( interactionTitle );
-    var interactionStrengthSlider = new HSlider( model.interactionStrengthProperty,
+    var interactionStrengthSlider = new HSlider( multipleParticleModel.interactionStrengthProperty,
       { min: StatesOfMatterConstants.MIN_EPSILON, max: StatesOfMatterConstants.MAX_EPSILON },
       {
 
@@ -151,9 +157,9 @@ define( function( require ) {
     interactionStrengthSlider.addMajorTick( StatesOfMatterConstants.MIN_EPSILON, weakTitle );
 
 
-    model.interactionStrengthProperty.link( function( value ) {
-      if ( model.currentMolecule === StatesOfMatterConstants.USER_DEFINED_MOLECULE ) {
-        model.setEpsilon( value );
+    multipleParticleModel.interactionStrengthProperty.link( function( value ) {
+      if ( multipleParticleModel.currentMolecule === StatesOfMatterConstants.USER_DEFINED_MOLECULE ) {
+        multipleParticleModel.setEpsilon( value );
       }
     } );
 
@@ -161,10 +167,8 @@ define( function( require ) {
       stroke: 'black',
       lineWidth: 0
     } );
-    var background = new Path( new Shape().roundRect( 0,
-      -4,
-      (radioButtonGroup.width + 10 ),
-      (radioButtonPanel.height + 10 ),
+    var background = new Path( new Shape().roundRect( 0, -4,
+      radioButtonPanel.width, radioButtonPanel.height + controlPanelOffset,
       options.cornerRadius, options.cornerRadius ), {
       stroke: '#FFFCD3',
       lineWidth: options.lineWidth,
@@ -172,59 +176,52 @@ define( function( require ) {
     } );
     interactionTitle.bottom = interactionStrengthSlider.top - 5;
     interactionTitle.centerX = interactionStrengthSlider.centerX;
+    interactionStrengthNode.centerX = radioButtonGroup.centerX;
+    interactionStrengthNode.top = radioButtonGroup.bottom + inset;
     this.addChild( background );
-
     this.addChild( radioButtonGroup );
 
-    model.moleculeTypeProperty.link( function( value ) {
-      model.temperatureSetPointProperty._notifyObservers();
+    multipleParticleModel.moleculeTypeProperty.link( function( value ) {
+      multipleParticleModel.temperatureSetPointProperty._notifyObservers();
+
       // adjust the control panel border when adjustable attraction selected or deselect
-      var backgroundShape;
       if ( value === StatesOfMatterConstants.USER_DEFINED_MOLECULE ) {
         phaseChangesMoleculesControlPanel.addChild( interactionStrengthNode );
-        backgroundShape = new Shape().roundRect( 0,
-          -4,
-          radioButtonGroup.width + 10,
-          radioButtonPanel.height + interactionStrengthNode.height + 10,
-          options.cornerRadius,
-          options.cornerRadius );
-        background.setShape( backgroundShape );
-        interactionStrengthNode.centerX = radioButtonGroup.centerX;
-        interactionStrengthNode.top = radioButtonGroup.bottom + 10;
+        var panelHeight = radioButtonPanel.height + interactionStrengthNode.height + inset;
+        background.setShape( new Shape().roundRect( 0, -4,
+          radioButtonPanel.width, panelHeight,
+          options.cornerRadius, options.cornerRadius ) );
       }
       else {
         if ( phaseChangesMoleculesControlPanel.isChild( interactionStrengthNode ) ) {
           phaseChangesMoleculesControlPanel.removeChild( interactionStrengthNode );
-          backgroundShape = new Shape().roundRect( 0,
-            -4,
-            (radioButtonGroup.width + 10 ),
-            (radioButtonPanel.height + 10 ), options.cornerRadius, options.cornerRadius );
-          background.setShape( backgroundShape );
+          background.setShape( new Shape().roundRect( 0, -4,
+            radioButtonPanel.width, radioButtonPanel.height,
+            options.cornerRadius, options.cornerRadius ) );
         }
       }
     } );
-    var titleText = new Text( tittleString,
-      {
-        font: new PhetFont( 12 ),
-        fill: '#FFFFFF',
-        fontWeight: 'bold'
-      } );
+    var titleText = new Text( titleString, {
+      font: new PhetFont( 14 ),
+      fill: '#FFFFFF',
+      fontWeight: 'bold'
+    } );
 
     var titleBackground = new Rectangle( background.centerX + 4, background.top - 10,
-      titleText.width + 5, titleText.height,
-      {
+      titleText.width + 5, titleText.height, {
         fill: 'black'
       } );
     titleText.centerX = background.centerX;
     titleBackground.centerX = titleText.centerX;
-    var tittleNode = new Node( { children: [ titleBackground, titleText ] } );
-    this.addChild( tittleNode );
+
+    //add the title node
+    this.addChild( new Node( { children: [ titleBackground, titleText ] } ) );
     this.mutate( options );
   }
 
   //Create an icon for the adjustable attraction  button
   var createAdjustableAttractionIcon = function() {
-    return new Circle( 5, { fill: '#CC66CC' } );
+    return new Circle( 6, { fill: '#CC66CC' } );
   };
 
   //Create an icon for the neon  button
