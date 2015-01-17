@@ -11,7 +11,6 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var HBox = require( 'SCENERY/nodes/HBox' );
   var HStrut = require( 'SUN/HStrut' );
-  var Panel = require( 'SUN/Panel' );
   var Text = require( 'SCENERY/nodes/Text' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Shape = require( 'KITE/Shape' );
@@ -67,7 +66,7 @@ define( function( require ) {
       if ( itemSpec.icon ) {
         var strutWidth = maxWidth - itemSpec.label.width - itemSpec.icon.width + 17;
         return new HBox( {
-          children: [ new HStrut( 10 ), itemSpec.icon, new HStrut( strutWidth + 25 ), itemSpec.label,
+          children: [ new HStrut( 10 ), itemSpec.icon, new HStrut( strutWidth + 30 ), itemSpec.label,
             new HStrut( 30 ) ]
         } );
       }
@@ -75,7 +74,6 @@ define( function( require ) {
         return new HBox( { children: [ itemSpec.label ] } );
       }
     };
-
 
     var radioButtonContent = [
       { value: SOLID_STATE, node: createItem( solid ) },
@@ -91,19 +89,14 @@ define( function( require ) {
       disabledBaseColor: '#FFECCF',
       selectedLineWidth: 1,
       selectedStroke: '#FFECCF',
+      selectedButtonOpacity: 0.6,
       deselectedLineWidth: 0,
       deselectedContentOpacity: 1,
       deselectedButtonOpacity: 1
     } );
 
 
-    var radioButtonPanel = new Panel( radioButtonGroup, {
-      stroke: '#FFFCD3',
-      lineWidth: 0,
-      fill: 'black'
-    } );
-
-    this.addChild( radioButtonPanel );
+    this.addChild( radioButtonGroup );
     this.mutate( this.options );
   }
 
@@ -160,17 +153,20 @@ define( function( require ) {
     var mediumCircleRadius = 10;
     var smallCircleRadius = 5;
     var circle1 = new Circle( largeCircleRadius, {
-      stroke: '#3DACFF', fill: new RadialGradient( 0, 0, 0, 0, 0, 15 )
+      stroke: '#3DACFF',
+      fill: new RadialGradient( 0, 0, 0, 0, 0, 15 )
         .addColorStop( 0, '#6BBFF5' )
         .addColorStop( 1, '#3DACFF' )
     } );
     var circle2 = new Circle( largeCircleRadius, {
-      stroke: '#3DACFF', fill: new RadialGradient( 0, 0, 0, 0, 0, 15 )
+      stroke: '#3DACFF',
+      fill: new RadialGradient( 0, 0, 0, 0, 0, 15 )
         .addColorStop( 0, '#6BBFF5' )
         .addColorStop( 1, '#3DACFF' )
     } );
     var circle3 = new Circle( 10, {
-      stroke: '#3DACFF', fill: new RadialGradient( 0, 0, 0, 0, 0, 10 )
+      stroke: '#3DACFF',
+      fill: new RadialGradient( 0, 0, 0, 0, 0, 10 )
         .addColorStop( 0, '#6BBFF5' )
         .addColorStop( 1, '#3DACFF' )
     } );
@@ -181,7 +177,8 @@ define( function( require ) {
         .addColorStop( 1, '#3DACFF' )
     } );
     var circle5 = new Circle( 8, {
-      stroke: '#3DACFF', fill: new RadialGradient( 0, 0, 0, 0, 0, 8 )
+      stroke: '#3DACFF',
+      fill: new RadialGradient( 0, 0, 0, 0, 0, 8 )
         .addColorStop( 0, '#6BBFF5' )
         .addColorStop( 1, '#3DACFF' )
     } );
