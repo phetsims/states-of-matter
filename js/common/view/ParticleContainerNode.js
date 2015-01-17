@@ -22,21 +22,21 @@ define( function( require ) {
   var HandleNode = require( 'STATES_OF_MATTER/common/view/HandleNode' );
 
   var LID_POSITION_TWEAK_FACTOR = 65; // Empirically determined value for aligning lid and container body.
-  var PRESSURE_GAUGE_Y_OFFSET = -20;
-  var PRESSURE_METER_ELBOW_OFFSET = 20;
+  var PRESSURE_METER_ELBOW_OFFSET = 30;
+  var PRESSURE_GAUGE_Y_OFFSET = -PRESSURE_METER_ELBOW_OFFSET;
 
   /**
    *
-   * @param {MultipleParticleModel} model
+   * @param {MultipleParticleModel} multipleParticleModel - model of the simulation
    * @param {ModelViewTransform2} modelViewTransform The model view transform for transforming particle position.
    * @param {boolean} volumeControlEnabled - set true to enable volume control by pushing the lid using a finger from above
    * @param {boolean} pressureGaugeEnabled - set true to show a barometer
-   * @param {Object} options
+   * @param {Object} options that can be passed on to the underlying node
    * @constructor
    */
-  function ParticleContainerNode( model, modelViewTransform, volumeControlEnabled, pressureGaugeEnabled, options ) {
+  function ParticleContainerNode( multipleParticleModel, modelViewTransform, volumeControlEnabled, pressureGaugeEnabled, options ) {
 
-    this.model = model;
+    this.multipleParticleModel = multipleParticleModel;
     this.modelViewTransform = modelViewTransform;
     this.containmentAreaWidth = StatesOfMatterConstants.CONTAINER_BOUNDS.width;
     this.containmentAreaHeight = StatesOfMatterConstants.CONTAINER_BOUNDS.height;
@@ -56,7 +56,7 @@ define( function( require ) {
       lineWidth: 1,
       fill: '#7E7E7E'
     } );
-    var openInnerEllipseRadiusY = 100;
+    var openInnerEllipseRadiusY = 125;
     var openInnerEllipseRadiusX = 20;
     var openInnerEllipse = new Path( new Shape()
       .ellipticalArc( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / 2, ellipseCenterY,
@@ -237,19 +237,19 @@ define( function( require ) {
 
     if ( volumeControlEnabled ) {
       // Add the finger for pressing down on the top of the container.
-      this.fingerNode = new PointingHandNode( model, modelViewTransform );
+      this.fingerNode = new PointingHandNode( multipleParticleModel, modelViewTransform );
       // responsible for positioning itself later based on user interaction.
       this.addChild( this.fingerNode );
       this.fingerNode.bottom = this.containerLid.top;
       this.fingerNode.setTranslation( this.fingerNode.x + openEllipse.width / 2.4,
         Math.abs( this.modelViewTransform.modelToViewDeltaY(
           StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT -
-          this.model.getParticleContainerRect().getHeight() ) ) +
+          this.multipleParticleModel.getParticleContainerRect().getHeight() ) ) +
         this.containerLid.y - this.fingerNode.height + 20 );
 
       // Add the handle to the lid.
       this.containerLid.addChild( openInnerEllipse );
-      var handleNode = new HandleNode( model, modelViewTransform );
+      var handleNode = new HandleNode( multipleParticleModel, modelViewTransform );
       handleNode.centerX = openInnerEllipse.centerX;
       handleNode.centerY = openInnerEllipse.centerY;
       this.containerLid.addChild( handleNode );
@@ -257,19 +257,16 @@ define( function( require ) {
     if ( pressureGaugeEnabled ) {
 
       // Add the pressure meter.
-      this.pressureMeter = new DialGaugeNode( model );
+      this.pressureMeter = new DialGaugeNode( multipleParticleModel );
       this.pressureMeter.setElbowEnabled( true );
       this.middleContainerLayer.addChild( this.pressureMeter );
-      this.updatePressureGauge();
-
       var pressureMeterXOffset = 60;
       this.pressureMeter.setTranslation( this.containerLid.x - pressureMeterXOffset,
         this.containerLid.y - PRESSURE_METER_ELBOW_OFFSET );
     }
     var particleContainerNode = this;
-    model.particleContainerHeightProperty.link( function() {
+    multipleParticleModel.particleContainerHeightProperty.link( function() {
       if ( pressureGaugeEnabled ) {
-        particleContainerNode.updatePressureGauge();
         particleContainerNode.handleContainerSizeChanged();
       }
     } );
@@ -279,7 +276,6 @@ define( function( require ) {
 
   return inherit( Node, ParticleContainerNode, {
     reset: function() {
-      this.updatePressureGauge();
       this.handleContainerSizeChanged();
       if ( this.fingerNode ) {
         this.fingerNode.handleContainerSizeChanged();
@@ -294,8 +290,8 @@ define( function( require ) {
      */
     updatePressureGauge: function() {
       if ( this.pressureMeter ) {
-        var containerRect = this.model.getParticleContainerRect();
-        if ( !this.model.getContainerExploded() ) {
+        var containerRect = this.multipleParticleModel.getParticleContainerRect();
+        if ( !this.multipleParticleModel.getContainerExploded() ) {
           if ( this.pressureMeter.getRotation() !== 0 ) {
             this.pressureMeter.setRotation( 0 );
           }
@@ -320,8 +316,8 @@ define( function( require ) {
 
     handleContainerSizeChanged: function() {
 
-      var containerHeight = this.model.getParticleContainerHeight();
-      if ( !this.model.getContainerExploded() ) {
+      var containerHeight = this.multipleParticleModel.getParticleContainerHeight();
+      if ( !this.multipleParticleModel.getContainerExploded() ) {
         if ( this.containerLid.getRotation() !== 0 ) {
           this.containerLid.setRotation( 0 );
         }
