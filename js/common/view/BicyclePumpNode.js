@@ -32,18 +32,17 @@ define( function( require ) {
   var HOSE_CONNECTOR_WIDTH_PROPORTION = 0.05;
   var HOSE_CONNECTOR_VERT_POS_PROPORTION = 0.8;
   var HOSE_ATTACH_VERT_POS_PROPORTION = 0.15;
-//  var HOSE_WIDTH_PROPORTION = 0.03;
   var PUMPING_REQUIRED_TO_INJECT_PROPORTION = PUMP_SHAFT_HEIGHT_PROPORTION / 6;
 
   /**
    *
-   * @param {Number} width
-   * @param {Number} height
-   * @param {MultipleParticleModel}model
+   * @param {Number} width  - width of the BicyclePump
+   * @param {Number} height - height of the BicyclePump
+   * @param {MultipleParticleModel} multipleParticleModel - model of the simulation
    * @param {Object} options that can be passed on to the underlying node
    * @constructor
    */
-  function BicyclePumpNode( width, height, model, options ) {
+  function BicyclePumpNode( width, height, multipleParticleModel, options ) {
 
 
     Node.call( this );
@@ -211,7 +210,7 @@ define( function( require ) {
               currentPumpingAmount += (dragEndY - pumpHandleEndY);
               if ( currentPumpingAmount >= pumpingRequiredToInject ) {
                 // Enough pumping has been done to inject a new particle.
-                model.injectMolecule();
+                multipleParticleModel.injectMolecule();
                 currentPumpingAmount = 0;
               }
             }
@@ -279,13 +278,13 @@ define( function( require ) {
       .lineTo( ( -pipeConnectorBottomWidth / 2), pipeConnectorHeight )
       .ellipticalArc( 0, pipeConnectorHeight, pipeConnectorBottomWidth / 2, 4, 0, Math.PI, 0, true )
       .lineTo( pipeConnectorTopWidth / 2, 0 ), {
-      fill: new LinearGradient( 0, 0, pipeConnectorBottomWidth, 0 )
-        .addColorStop( 0, '#77797B' )
-        .addColorStop( 0.04, '#A2A4A7' )
-        .addColorStop( 0.05, '#B9BBBD' )
-        .addColorStop( 0.14, '#B5B7B9' )
-        .addColorStop( 0.15, '#A2A4A7' )
-        .addColorStop( 0.3, '#77797B' )
+      fill: new LinearGradient( -pipeConnectorBottomWidth / 2, 0, pipeConnectorBottomWidth / 2, 0 )
+        .addColorStop( 0, '#5A5B5D' )
+        .addColorStop( 0.50, '#A1A3A6' )
+        .addColorStop( 0.55, '#B9BBBD' )
+        .addColorStop( 0.65, '#B9BBBD' )
+        .addColorStop( 0.7, '#A0A2A5' )
+        .addColorStop( 1, '#727375' )
     } );
     pipeConnectorPath.setTranslation( pumpBaseWidth / 2, height - pumpBaseHeight - pipeConnectorHeight - 3 );
 
@@ -309,11 +308,11 @@ define( function( require ) {
     var hoseConnector = new Rectangle( 0, 0, hoseConnectorWidth, hoseConnectorHeight, 2, 2,
       {
         fill: new LinearGradient( 0, 0, 0, hoseConnectorHeight )
-          .addColorStop( 0, '#818181' )
-          .addColorStop( 0.4, '#868686' )
-          .addColorStop( 0.6, '#ACADAE' )
-          .addColorStop( 0.8, '#A3A4A5' )
-          .addColorStop( 0.9, '#919191' )
+          .addColorStop( 0, '#828282' )
+          .addColorStop( 0.3, '#A2A3A4' )
+          .addColorStop( 0.35, '#C6C8CA' )
+          .addColorStop( 0.4, '#BFC1C3' )
+          .addColorStop( 1, '#808080' )
       } );
     hoseConnector.setTranslation( width - hoseConnectorWidth,
       height - ( height * HOSE_CONNECTOR_VERT_POS_PROPORTION ) - hoseConnectorHeight / 2 );
@@ -321,9 +320,11 @@ define( function( require ) {
     var hoseBottomConnector = new Rectangle( 0, 0, hoseConnectorWidth, hoseConnectorHeight, 2, 2,
       {
         fill: new LinearGradient( 0, 0, 0, hoseConnectorHeight )
-          .addColorStop( 0, '#868686' )
-          .addColorStop( 0.7, '#A3A4A5' )
-          .addColorStop( 0.9, '#919191' )
+          .addColorStop( 0, '#828282' )
+          .addColorStop( 0.3, '#A2A3A4' )
+          .addColorStop( 0.35, '#C6C8CA' )
+          .addColorStop( 0.4, '#BFC1C3' )
+          .addColorStop( 1, '#808080' )
       } );
     this.addChild( hoseBottomConnector );
     hoseBottomConnector.setTranslation( hoseToPumpAttachPtX + 2, hoseToPumpAttachPtY - hoseBottomConnector.height / 2 );
