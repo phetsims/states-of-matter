@@ -15,16 +15,22 @@ define( function( require ) {
   /**
    * A particle layer rendered on canvas
    * @param {ObservableArray<Particle>} particles that need to be rendered on the canvas
-   *  @param {ModelViewTransform2} modelViewTransform to convert between model and view co-ordinate frames
+   * @param {ModelViewTransform2} modelViewTransform to convert between model and view co-ordinate frames
+   * @param {Property<Boolean>} projectorColorsProperty - true to use apply black stroke to particle, false to particle color stroke
    * @param {Object} options that can be passed on to the underlying node
    * @constructor
    */
-  function ParticleCanvasNode( particles, modelViewTransform, options ) {
+  function ParticleCanvasNode( particles, modelViewTransform, projectorColorsProperty, options ) {
 
     this.particles = particles;
     this.modelViewTransform = modelViewTransform;
     CanvasNode.call( this, options );
     this.invalidatePaint();
+
+    var particleCanvasNode = this;
+    projectorColorsProperty.link( function( projectorColors ) {
+      particleCanvasNode.projectorColors = projectorColors;
+    } )
   }
 
   return inherit( CanvasNode, ParticleCanvasNode, {
@@ -41,11 +47,14 @@ define( function( require ) {
         particle = this.particles.get( i );
         if ( particle instanceof HydrogenAtom ) {
           context.fillStyle = particle.color;
+          context.strokeStyle = this.projectorColors ? '#000000' : particle.color;
+          context.lineWidth = 0.4;
           context.beginPath();
           context.arc( this.modelViewTransform.modelToViewX( particle.positionProperty.get().x ),
             this.modelViewTransform.modelToViewY( particle.positionProperty.get().y ),
             this.modelViewTransform.modelToViewDeltaX( particle.radius ), 0, 2 * Math.PI, true );
           context.fill();
+          context.stroke();
         }
       }
 
@@ -54,11 +63,14 @@ define( function( require ) {
         particle = this.particles.get( i );
         if ( !( particle instanceof HydrogenAtom ) ) {
           context.fillStyle = particle.color;
+          context.strokeStyle = this.projectorColors ? '#000000' : particle.color;
+          context.lineWidth = 0.4;
           context.beginPath();
           context.arc( this.modelViewTransform.modelToViewX( particle.positionProperty.get().x ),
             this.modelViewTransform.modelToViewY( particle.positionProperty.get().y ),
             this.modelViewTransform.modelToViewDeltaX( particle.radius ), 0, 2 * Math.PI, true );
           context.fill();
+          context.stroke();
         }
       }
 

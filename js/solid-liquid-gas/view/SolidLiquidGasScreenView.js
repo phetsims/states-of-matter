@@ -41,10 +41,12 @@ define( function( require ) {
   var particleCanvasLayerBoundLimit = 1000;
 
   /**
-   * @param {MultipleParticleModel} model of the sim
+   *
+   * @param {MultipleParticleModel} multipleParticleModel - model of the simulation
+   * @param {Property<Boolean>} projectorColorsProperty - true for projector color scheme (white back ground), false for regular black back ground
    * @constructor
    */
-  function SolidLiquidGasScreenView( model ) {
+  function SolidLiquidGasScreenView( multipleParticleModel, projectorColorsProperty ) {
 
     ScreenView.call( this, StatesOfMatterConstants.SCREEN_VIEW_OPTIONS );
     var mvtScale = StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / StatesOfMatterConstants.CONTAINER_BOUNDS.width;
@@ -54,21 +56,21 @@ define( function( require ) {
       new Vector2( 0, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT ), mvtScale );
 
     // add stove Node
-    var stoveNode = new StoveNode( model, {
+    var stoveNode = new StoveNode( multipleParticleModel, {
       scale: 0.8,
       centerX: this.layoutBounds.centerX,
       bottom: this.layoutBounds.bottom - inset
     } );
 
     // add particle container
-    var particleContainerNode = new ParticleContainerNode( model, modelViewTransform, false, false,
+    var particleContainerNode = new ParticleContainerNode( multipleParticleModel, modelViewTransform, false, false,
       {
         centerX: stoveNode.centerX - stoveNodeXOffset,
         bottom:  stoveNode.top - inset
       } );
 
     // add particle Canvas layer
-    this.particlesLayer = new ParticleCanvasNode( model.particles, modelViewTransform, {
+    this.particlesLayer = new ParticleCanvasNode( multipleParticleModel.particles, modelViewTransform, projectorColorsProperty, {
       centerX: stoveNode.centerX - particlesLayerXOffset,
       bottom:  stoveNode.top + particlesLayerYOffset,
       canvasBounds: new Bounds2( -particleCanvasLayerBoundLimit, -particleCanvasLayerBoundLimit,
@@ -79,7 +81,7 @@ define( function( require ) {
     this.addChild( stoveNode );
 
     // add compositeThermometer Node
-    var compositeThermometerNode = new CompositeThermometerNode( model, {
+    var compositeThermometerNode = new CompositeThermometerNode( multipleParticleModel, {
       font: new PhetFont( 20 ),
       fill: 'white',
       right:   particleContainerNode.left + compositeThermometerNodeLeftOffset,
@@ -88,14 +90,14 @@ define( function( require ) {
     this.addChild( compositeThermometerNode );
 
     // add Molecule ControlPanel
-    var solidLiquidGasMoleculesControlPanel = new SolidLiquidGasMoleculesControlPanel( model.moleculeTypeProperty, {
+    var solidLiquidGasMoleculesControlPanel = new SolidLiquidGasMoleculesControlPanel( multipleParticleModel.moleculeTypeProperty, {
       right: this.layoutBounds.right - layoutBoundsRightOffset,
       top:   this.layoutBounds.top + layoutBoundsYOffset
     } );
     this.addChild( solidLiquidGasMoleculesControlPanel );
 
     // add phases control node
-    var solidLiquidGasPhaseControlNode = new SolidLiquidGasPhaseControlNode( model.stateProperty, {
+    var solidLiquidGasPhaseControlNode = new SolidLiquidGasPhaseControlNode( multipleParticleModel.stateProperty, {
       right: solidLiquidGasMoleculesControlPanel.right,
       top: solidLiquidGasMoleculesControlPanel.bottom + layoutBoundsYOffset
     } );
@@ -105,7 +107,7 @@ define( function( require ) {
     var resetAllButton = new ResetAllButton(
       {
         listener: function() {
-          model.reset();
+          multipleParticleModel.reset();
           particleContainerNode.reset();
         },
         bottom: this.layoutBounds.bottom - layoutBoundsYOffset / 2,
@@ -116,9 +118,9 @@ define( function( require ) {
     // add play pause button and step button
     var stepButton = new StepButton(
       function() {
-        model.stepInternal( 0.016 );
+        multipleParticleModel.stepInternal( 0.016 );
       },
-      model.isPlayingProperty,
+      multipleParticleModel.isPlayingProperty,
       {
         radius: 12,
         stroke: 'black',
@@ -129,14 +131,14 @@ define( function( require ) {
     );
 
     this.addChild( stepButton );
-    model.stateProperty.link( function( phase ) {
-      model.setPhase( phase );
+    multipleParticleModel.stateProperty.link( function( phase ) {
+      multipleParticleModel.setPhase( phase );
     } );
-    model.moleculeTypeProperty.link( function() {
-      model.temperatureSetPointProperty._notifyObservers();
+    multipleParticleModel.moleculeTypeProperty.link( function() {
+      multipleParticleModel.temperatureSetPointProperty._notifyObservers();
     } );
 
-    var playPauseButton = new PlayPauseButton( model.isPlayingProperty,
+    var playPauseButton = new PlayPauseButton( multipleParticleModel.isPlayingProperty,
       {
         radius: 18,
         stroke: 'black',

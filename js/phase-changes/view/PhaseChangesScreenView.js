@@ -67,11 +67,13 @@ define( function( require ) {
   var pressureMeterYOffset = 20;
 
   /**
-   * @param { MultipleParticleModel }  multipleParticleModel - model of the simulation
-   * @param { Boolean } isInteractionDiagramEnabled
+   *
+   * @param {MultipleParticleModel} multipleParticleModel - model of the simulation
+   * @param {Boolean} isInteractionDiagramEnabled
+   * @param {Property<Boolean>} projectorColorsProperty - true to use the projector color scheme, false to use regular color scheme
    * @constructor
    */
-  function PhaseChangesScreenView( multipleParticleModel, isInteractionDiagramEnabled ) {
+  function PhaseChangesScreenView( multipleParticleModel, isInteractionDiagramEnabled, projectorColorsProperty ) {
     var phaseChangesScreenView = this;
 
     ScreenView.call( this, StatesOfMatterConstants.SCREEN_VIEW_OPTIONS );
@@ -99,7 +101,7 @@ define( function( require ) {
       } );
 
     // add particle canvas layer for particle rendering
-    this.particlesLayer = new ParticleCanvasNode( multipleParticleModel.particles, modelViewTransform, {
+    this.particlesLayer = new ParticleCanvasNode( multipleParticleModel.particles, modelViewTransform, projectorColorsProperty, {
       centerX: stoveNode.centerX - particleLayerXOffset,
       bottom: stoveNode.top + particleLayerYOffset,
       canvasBounds: new Bounds2( -particleLayerCanvasBoundLimit, -particleLayerCanvasBoundLimit,

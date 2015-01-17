@@ -26,17 +26,17 @@ define( function( require ) {
   /**
    *
    * @param {Boolean} isInteractionDiagramEnabled
-   * @param {Property<Boolean>}colorsProperty - true to use apply white back ground,false to black back ground
+   * @param {Property<Boolean>} projectorColorsProperty - true for projector color scheme (white back ground), false for regular black back ground
    * @constructor
    */
-  function PhaseChangesScreen( isInteractionDiagramEnabled, colorsProperty ) {
+  function PhaseChangesScreen( isInteractionDiagramEnabled, projectorColorsProperty ) {
     Screen.call( this, phaseChangesString, new Image( phaseChangesScreenIcon ),
       function() { return new MultipleParticleModel(); },
-      function( model ) { return new PhaseChangesScreenView( model, isInteractionDiagramEnabled ); },
+      function( model ) { return new PhaseChangesScreenView( model, isInteractionDiagramEnabled, projectorColorsProperty ); },
       { backgroundColor: 'black' }
     );
     var screen = this;
-    colorsProperty.link( function( color ) {
+    projectorColorsProperty.link( function( color ) {
       if ( color ) {
         AtomicInteractionColors.applyProfile( 'projector' );
       }

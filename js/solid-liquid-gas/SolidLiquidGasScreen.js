@@ -15,23 +15,35 @@ define( function( require ) {
   var SolidLiquidGasScreenView = require( 'STATES_OF_MATTER/solid-liquid-gas/view/SolidLiquidGasScreenView' );
   var MultipleParticleModel = require( 'STATES_OF_MATTER/common/model/MultipleParticleModel' );
   var Image = require( 'SCENERY/nodes/Image' );
-
+  var AtomicInteractionColors = require( 'ATOMIC_INTERACTIONS/view/AtomicInteractionColors' );
   // strings
   var statesString = require( 'string!STATES_OF_MATTER/states' );
   // images
   var statesScreenIcon = require( 'image!STATES_OF_MATTER/som-states-screen.png' );
 
   /**
+   *
+   * @param {Property<Boolean>} projectorColorsProperty - true for projector color scheme (white back ground), false for regular black back ground
    * @constructor
    */
-  function SolidLiquidGasScreen() {
+  function SolidLiquidGasScreen( projectorColorsProperty ) {
     Screen.call( this,
       statesString,
       new Image( statesScreenIcon ),
       function() { return new MultipleParticleModel(); },
-      function( model ) { return new SolidLiquidGasScreenView( model ); },
+      function( model ) { return new SolidLiquidGasScreenView( model, projectorColorsProperty ); },
       { backgroundColor: 'black' }
     );
+    var screen = this;
+    projectorColorsProperty.link( function( color ) {
+      if ( color ) {
+        AtomicInteractionColors.applyProfile( 'projector' );
+      }
+      else {
+        AtomicInteractionColors.applyProfile( 'default' );
+      }
+    } );
+    AtomicInteractionColors.linkAttribute( 'background', screen, 'backgroundColor' );
   }
 
   return inherit( Screen, SolidLiquidGasScreen );

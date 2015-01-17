@@ -60,7 +60,7 @@ define( function( require ) {
       buttonCornerRadius: 5,
       itemXMargin: 2,
       itemYMargin: 2,
-      buttonLineWidth: 0,
+      buttonLineWidth: 0.4,
       bottom: thermometer.top - 10,
       centerX: thermometer.centerX
     } );
