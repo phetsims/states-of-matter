@@ -19,7 +19,7 @@ define( function( require ) {
 
   // strings
   var simTitle = require( 'string!STATES_OF_MATTER/statesOfMatter' );
-  var interactivePotentialString = require( 'string!STATES_OF_MATTER/interactionPotential' );
+  var interactionString = require( 'string!STATES_OF_MATTER/interaction' );
   var colorsProperty = new Property( false );
   var simOptions = {
     credits: {
@@ -42,9 +42,9 @@ define( function( require ) {
 
   SimLauncher.launch( function() {
     var isHeterogeneousMoleculeControlPanel = false;
-    var sim = new Sim( simTitle, [ new SolidLiquidGasScreen(), new PhaseChangesScreen( true ),
+    var sim = new Sim( simTitle, [ new SolidLiquidGasScreen( colorsProperty ), new PhaseChangesScreen( true, colorsProperty ),
       new AtomicInteractionsScreen( isHeterogeneousMoleculeControlPanel,
-        interactivePotentialString, colorsProperty ) ], simOptions );
+        interactionString, colorsProperty ) ], simOptions );
     sim.start();
   } );
 } );

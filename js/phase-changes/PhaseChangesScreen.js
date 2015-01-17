@@ -15,6 +15,7 @@ define( function( require ) {
   var MultipleParticleModel = require( 'STATES_OF_MATTER/common/model/MultipleParticleModel' );
   var PhaseChangesScreenView = require( 'STATES_OF_MATTER/phase-changes/view/PhaseChangesScreenView' );
   var Image = require( 'SCENERY/nodes/Image' );
+  var AtomicInteractionColors = require( 'ATOMIC_INTERACTIONS/view/AtomicInteractionColors' );
 
   // strings
   var phaseChangesString = require( 'string!STATES_OF_MATTER/phaseChanges' );
@@ -23,14 +24,27 @@ define( function( require ) {
   var phaseChangesScreenIcon = require( 'image!STATES_OF_MATTER/som-phase-changes-screen.png' );
 
   /**
+   *
+   * @param {Boolean} isInteractionDiagramEnabled
+   * @param {Property<Boolean>}colorsProperty - true to use apply white back ground,false to black back ground
    * @constructor
    */
-  function PhaseChangesScreen( isInteractionDiagramEnabled ) {
+  function PhaseChangesScreen( isInteractionDiagramEnabled, colorsProperty ) {
     Screen.call( this, phaseChangesString, new Image( phaseChangesScreenIcon ),
       function() { return new MultipleParticleModel(); },
       function( model ) { return new PhaseChangesScreenView( model, isInteractionDiagramEnabled ); },
       { backgroundColor: 'black' }
     );
+    var screen = this;
+    colorsProperty.link( function( color ) {
+      if ( color ) {
+        AtomicInteractionColors.applyProfile( 'projector' );
+      }
+      else {
+        AtomicInteractionColors.applyProfile( 'default' );
+      }
+    } );
+    AtomicInteractionColors.linkAttribute( 'background', screen, 'backgroundColor' );
   }
 
   return inherit( Screen, PhaseChangesScreen );
