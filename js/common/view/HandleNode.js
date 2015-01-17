@@ -18,13 +18,15 @@ define( function( require ) {
 
   /**
    *
-   * @param { MultipleParticleModel } model
+   * @param {MultipleParticleModel} multipleParticleModel
+   * @param {ModelViewTransform2} modelViewTransform to convert between model and view co-ordinate frames
    * @constructor
    */
-  function HandleNode( model, modelViewTransform ) {
+  function HandleNode( multipleParticleModel, modelViewTransform ) {
 
     Node.call( this );
     var handleNode = this;
+    var handleScale = 0.22;
     // add handle middle shape
     var middleShape = new Path( new Shape()
       .moveTo( 0, 67 )
@@ -36,11 +38,8 @@ define( function( require ) {
       .quadraticCurveTo( 89, 5, 98, 10 )
       .quadraticCurveTo( 106, 30, 116, 10 )
       .quadraticCurveTo( 127, 5, 137, 10 )
-      .quadraticCurveTo( 146, 30, 156, 10 )
-      .quadraticCurveTo( 166, 5, 176, 10 )
-      .lineTo( 176, 66 )
-      .quadraticCurveTo( 167, 69, 162, 65 )
-      .quadraticCurveTo( 146, 49, 136, 65 )
+
+      .lineTo( 137, 66 )
       .quadraticCurveTo( 130, 69, 120, 65 )
       .quadraticCurveTo( 109, 49, 99, 65 )
       .quadraticCurveTo( 89, 69, 83, 65 )
@@ -51,7 +50,7 @@ define( function( require ) {
       .close(), {
       lineWidth: 3,
       stroke: 'black',
-      scale: 0.25,
+      scale: handleScale,
       fill: new LinearGradient( 0, 0, 0, 70 )
         .addColorStop( 0, '#8C8E90' )
         .addColorStop( 0.3, '#B7B8B9' )
@@ -76,7 +75,8 @@ define( function( require ) {
       .close(), {
       lineWidth: 3,
       stroke: 'black',
-      fill: 'black', scale: 0.25
+      fill: 'black',
+      scale: handleScale
     } );
 
 
@@ -99,10 +99,12 @@ define( function( require ) {
       .close(), {
       lineWidth: 3,
       stroke: 'black',
-      fill: 'black', scale: 0.25
+      fill: 'black',
+      scale: handleScale
     } );
     this.addChild( rightShape );
-
+    leftShape.setScaleMagnitude( handleScale, 0.16 );
+    rightShape.setScaleMagnitude( handleScale, 0.16 );
     leftShape.right = middleShape.left;
     leftShape.y = middleShape.centerY - 3;
     rightShape.y = middleShape.centerY - 2;
@@ -116,19 +118,19 @@ define( function( require ) {
         start: function( event ) {
           startY = handleNode.globalToParentPoint( event.pointer.point ).y;
           handleNode.mouseMovementAmount = 0;
-          handleNode.containerSizeAtDragStart = model.getParticleContainerHeight();
+          handleNode.containerSizeAtDragStart = multipleParticleModel.getParticleContainerHeight();
         },
         drag: function( event ) {
           endY = handleNode.globalToParentPoint( event.pointer.point ).y;
           handleNode.mouseMovementAmount = (endY - startY);
           // Resize the container based on the amount that the node has moved.
-          model.setTargetParticleContainerHeight(
+          multipleParticleModel.setTargetParticleContainerHeight(
             handleNode.containerSizeAtDragStart +
             modelViewTransform.viewToModelDeltaY( handleNode.mouseMovementAmount ) );
         },
         end: function() {
           // in size that is currently underway.
-          model.setTargetParticleContainerHeight( model.getParticleContainerHeight() );
+          multipleParticleModel.setTargetParticleContainerHeight( multipleParticleModel.getParticleContainerHeight() );
 
         }
       } ) );
