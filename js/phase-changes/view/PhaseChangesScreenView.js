@@ -67,11 +67,11 @@ define( function( require ) {
   var pressureMeterYOffset = 20;
 
   /**
-   * @param { MultipleParticleModel } model of the sim
+   * @param { MultipleParticleModel }  multipleParticleModel - model of the simulation
    * @param { Boolean } isInteractionDiagramEnabled
    * @constructor
    */
-  function PhaseChangesScreenView( model, isInteractionDiagramEnabled ) {
+  function PhaseChangesScreenView( multipleParticleModel, isInteractionDiagramEnabled ) {
     var phaseChangesScreenView = this;
 
     ScreenView.call( this, StatesOfMatterConstants.SCREEN_VIEW_OPTIONS );
@@ -82,24 +82,24 @@ define( function( require ) {
       new Vector2( 0, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT ), mvtScale );
 
     // add stove node
-    var stoveNode = new StoveNode( model, {
+    var stoveNode = new StoveNode( multipleParticleModel, {
       scale: 0.8,
       centerX: this.layoutBounds.centerX,
       bottom: this.layoutBounds.bottom - inset
     } );
 
-    this.model = model;
+    this.multipleParticleModel = multipleParticleModel;
     this.modelTemperatureHistory = new ObservableArray();
 
     // add particle container node
-    var particleContainerNode = new ParticleContainerNode( model, modelViewTransform, true, true,
+    var particleContainerNode = new ParticleContainerNode( multipleParticleModel, modelViewTransform, true, true,
       {
         centerX: stoveNode.centerX - particleContainerXOffset,
         bottom: stoveNode.top - inset
       } );
 
     // add particle canvas layer for particle rendering
-    this.particlesLayer = new ParticleCanvasNode( model.particles, modelViewTransform, {
+    this.particlesLayer = new ParticleCanvasNode( multipleParticleModel.particles, modelViewTransform, {
       centerX: stoveNode.centerX - particleLayerXOffset,
       bottom: stoveNode.top + particleLayerYOffset,
       canvasBounds: new Bounds2( -particleLayerCanvasBoundLimit, -particleLayerCanvasBoundLimit,
@@ -110,18 +110,18 @@ define( function( require ) {
     this.addChild( stoveNode );
 
     // add compositeThermometer node
-    var compositeThermometerNode = new CompositeThermometerNode( model, {
+    var compositeThermometerNode = new CompositeThermometerNode( multipleParticleModel, {
       font: new PhetFont( 20 ),
       fill: 'white',
-      right: stoveNode.left + 4 * inset
+      right: stoveNode.left + 2 * inset
     } );
     this.addChild( compositeThermometerNode );
 
     // add phase diagram
-    this.phaseDiagram = new PhaseDiagram( model.expandedProperty );
+    this.phaseDiagram = new PhaseDiagram( multipleParticleModel.expandedProperty );
 
     //add phase change control panel
-    var phaseChangesMoleculesControlPanel = new PhaseChangesMoleculesControlPanel( model, isInteractionDiagramEnabled,
+    var phaseChangesMoleculesControlPanel = new PhaseChangesMoleculesControlPanel( multipleParticleModel, isInteractionDiagramEnabled,
       {
         right: this.layoutBounds.right - layBoundsRightOffset,
         top:   this.layoutBounds.top + layBoundsYOffset
@@ -133,21 +133,21 @@ define( function( require ) {
       {
         listener: function() {
           phaseChangesScreenView.modelTemperatureHistory.clear();
-          model.reset();
+          multipleParticleModel.reset();
           compositeThermometerNode.setRotation( 0 );
           particleContainerNode.reset();
         },
-        bottom: this.layoutBounds.bottom - layBoundsYOffset,
-        right: this.layoutBounds.right - layBoundsRightOffset,
+        bottom: this.layoutBounds.bottom - layBoundsYOffset / 2,
+        right:  this.layoutBounds.right - layBoundsRightOffset,
         radius: 18
       } );
 
     // add play pause button and step button
     var stepButton = new StepButton(
       function() {
-        model.stepInternal( 0.016 );
+        multipleParticleModel.stepInternal( 0.016 );
       },
-      model.isPlayingProperty,
+      multipleParticleModel.isPlayingProperty,
       {
         radius: 12,
         stroke: 'black',
@@ -159,7 +159,7 @@ define( function( require ) {
     );
     this.addChild( stepButton );
 
-    var playPauseButton = new PlayPauseButton( model.isPlayingProperty,
+    var playPauseButton = new PlayPauseButton( multipleParticleModel.isPlayingProperty,
       {
         radius: 18, stroke: 'black',
         fill: '#005566',
@@ -170,7 +170,7 @@ define( function( require ) {
     this.addChild( resetAllButton );
 
     // add bicycle pump node
-    this.addChild( new BicyclePumpNode( 200, 250, model, {
+    this.addChild( new BicyclePumpNode( 200, 250, multipleParticleModel, {
       bottom: stoveNode.top + bicyclePumpNodeYOffset,
       right: particleContainerNode.left + bicyclePumpNodeXOffset
     } ) );
@@ -180,7 +180,7 @@ define( function( require ) {
       font: new PhetFont( 14 ),
       baseColor: 'yellow',
       listener: function() {
-        model.returnLid();
+        multipleParticleModel.returnLid();
         particleContainerNode.reset();
       },
       xMargin: 10,
@@ -189,7 +189,7 @@ define( function( require ) {
     } );
     this.addChild( this.returnLidButton );
 
-    model.isExplodedProperty.link( function( isExploded ) {
+    multipleParticleModel.isExplodedProperty.link( function( isExploded ) {
       particleContainerNode.updatePressureGauge();
       phaseChangesScreenView.returnLidButton.visible = isExploded;
       particleContainerNode.containerLid.setRotation( 0 );
@@ -198,14 +198,14 @@ define( function( require ) {
     // add interaction Potential Diagram
     if ( isInteractionDiagramEnabled ) {
       var epsilonControlInteractionPotentialDiagram = new EpsilonControlInteractionPotentialDiagram(
-        StatesOfMatterConstants.MAX_SIGMA, StatesOfMatterConstants.MIN_EPSILON, false, model, {
+        StatesOfMatterConstants.MAX_SIGMA, StatesOfMatterConstants.MIN_EPSILON, false, multipleParticleModel, {
           right: this.layoutBounds.right - layBoundsRightOffset,
           top: phaseChangesMoleculesControlPanel.bottom + layBoundsYOffset / 2
         } );
       this.addChild( epsilonControlInteractionPotentialDiagram );
     }
 
-    model.moleculeTypeProperty.link( function( moleculeId ) {
+    multipleParticleModel.moleculeTypeProperty.link( function( moleculeId ) {
       phaseChangesScreenView.modelTemperatureHistory.clear();
       phaseChangesScreenView.updatePhaseDiagram();
       phaseChangesScreenView.phaseDiagram.setDepictingWater( moleculeId === StatesOfMatterConstants.WATER );
@@ -215,7 +215,7 @@ define( function( require ) {
         if ( phaseChangesScreenView.isChild( phaseChangesScreenView.phaseDiagram ) ) {
           phaseChangesScreenView.removeChild( phaseChangesScreenView.phaseDiagram );
         }
-        model.interactionStrengthProperty.value = StatesOfMatterConstants.MAX_EPSILON;
+        multipleParticleModel.interactionStrengthProperty.value = StatesOfMatterConstants.MAX_EPSILON;
         if ( isInteractionDiagramEnabled ) {
           epsilonControlInteractionPotentialDiagram.top = phaseChangesMoleculesControlPanel.bottom +
                                                           layBoundsYOffset / 2;
@@ -236,16 +236,16 @@ define( function( require ) {
           }
         }
       }
-      if ( model.getContainerExploded() ) {
+      if ( multipleParticleModel.getContainerExploded() ) {
         particleContainerNode.reset();
       }
     } );
-    model.particleContainerHeightProperty.link( function() {
+    multipleParticleModel.particleContainerHeightProperty.link( function() {
       var rotationRate = 0;
-      var containerRect = model.getParticleContainerRect();
+      var containerRect = multipleParticleModel.getParticleContainerRect();
 
       // adjust composite thermometer node position
-      if ( !model.getContainerExploded() ) {
+      if ( !multipleParticleModel.getContainerExploded() ) {
         rotationRate = 0;
         compositeThermometerNode.setRotation( rotationRate );
         compositeThermometerNode.setTranslation( compositeThermometerNode.x,
@@ -266,7 +266,7 @@ define( function( require ) {
       }
     } );
 
-    model.temperatureSetPointProperty.link( function() {
+    multipleParticleModel.temperatureSetPointProperty.link( function() {
       phaseChangesScreenView.modelTemperatureHistory.clear();
       phaseChangesScreenView.updatePhaseDiagram();
     } );
@@ -283,13 +283,13 @@ define( function( require ) {
     updatePhaseDiagram: function() {
 
       // If the container has exploded, don't bother showing the dot.
-      if ( this.model.getContainerExploded() ) {
+      if ( this.multipleParticleModel.getContainerExploded() ) {
         this.phaseDiagram.setStateMarkerVisible( false );
       }
       else {
         this.phaseDiagram.setStateMarkerVisible( true );
-        var movingAverageTemperature = this.updateMovingAverageTemperature( this.model.getTemperatureSetPoint() );
-        var modelPressure = this.model.getModelPressure();
+        var movingAverageTemperature = this.updateMovingAverageTemperature( this.multipleParticleModel.getTemperatureSetPoint() );
+        var modelPressure = this.multipleParticleModel.getModelPressure();
         var mappedTemperature = this.mapModelTemperatureToPhaseDiagramTemperature( movingAverageTemperature );
         var mappedPressure = this.mapModelTempAndPressureToPhaseDiagramPressureAlternative1( modelPressure,
           movingAverageTemperature );
