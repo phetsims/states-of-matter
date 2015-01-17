@@ -34,7 +34,7 @@ define( function( require ) {
   var oxygenString = require( 'string!STATES_OF_MATTER/oxygen' );
   var adjustableAttractionString = require( 'string!STATES_OF_MATTER/adjustableAttraction' );
   var tittleString = require( 'string!STATES_OF_MATTER/AtomsMolecules' );
-  var interactionStrengthTittleString = require( 'string!STATES_OF_MATTER/interactionStrengthWithSymbol' );
+  var interactionStrengthTitleString = require( 'string!STATES_OF_MATTER/interactionStrengthWithSymbol' );
 
   /**
    *
@@ -123,7 +123,7 @@ define( function( require ) {
 
     // add interaction strength slider and tittle
     var interactionStrengthNode = new Node();
-    var interactionTitle = new Text( interactionStrengthTittleString,
+    var interactionTitle = new Text( interactionStrengthTitleString,
       { fontWeight: 600, font: labelFont, fill: 'white' } );
     interactionStrengthNode.addChild( interactionTitle );
     var interactionStrengthSlider = new HSlider( model.interactionStrengthProperty,
