@@ -18,7 +18,7 @@ define( function( require ) {
 
   /**
    *
-   * @param {MultipleParticleModel} multipleParticleModel
+   * @param {MultipleParticleModel} multipleParticleModel - model of the simulation
    * @param {ModelViewTransform2} modelViewTransform to convert between model and view co-ordinate frames
    * @constructor
    */
@@ -28,24 +28,29 @@ define( function( require ) {
     var handleNode = this;
     var handleScale = 0.22;
     // add handle middle shape
+    var handleNodeUpperMiddleShapeTopY = 5;
+    var handleNodeUpperMiddleShapeMiddleY = 10;
+    var handleNodeUpperMiddleShapeBottomY = 30;
+    var handleNodeLowerMiddleShapeTopY = 49;
+    var handleNodeLowerMiddleShapeMiddleY = 65;
+    var handleNodeLowerMiddleShapeBottomY = 69;
     var middleShape = new Path( new Shape()
       .moveTo( 0, 67 )
       .lineTo( 0, 7 )
-      .quadraticCurveTo( 10, 5, 16, 10 )
-      .quadraticCurveTo( 28, 30, 39, 10 )
-      .quadraticCurveTo( 48, 5, 55, 10 )
-      .quadraticCurveTo( 67, 30, 77, 10 )
-      .quadraticCurveTo( 89, 5, 98, 10 )
-      .quadraticCurveTo( 106, 30, 116, 10 )
-      .quadraticCurveTo( 127, 5, 137, 10 )
-
+      .quadraticCurveTo( 10, handleNodeUpperMiddleShapeTopY, 16, handleNodeUpperMiddleShapeMiddleY )
+      .quadraticCurveTo( 28, handleNodeUpperMiddleShapeBottomY, 39, handleNodeUpperMiddleShapeMiddleY )
+      .quadraticCurveTo( 48, handleNodeUpperMiddleShapeTopY, 55, handleNodeUpperMiddleShapeMiddleY )
+      .quadraticCurveTo( 67, handleNodeUpperMiddleShapeBottomY, 77, handleNodeUpperMiddleShapeMiddleY )
+      .quadraticCurveTo( 89, handleNodeUpperMiddleShapeTopY, 98, handleNodeUpperMiddleShapeMiddleY )
+      .quadraticCurveTo( 106, handleNodeUpperMiddleShapeBottomY, 116, handleNodeUpperMiddleShapeMiddleY )
+      .quadraticCurveTo( 127, handleNodeUpperMiddleShapeTopY, 137, handleNodeUpperMiddleShapeMiddleY )
       .lineTo( 137, 66 )
-      .quadraticCurveTo( 130, 69, 120, 65 )
-      .quadraticCurveTo( 109, 49, 99, 65 )
-      .quadraticCurveTo( 89, 69, 83, 65 )
-      .quadraticCurveTo( 70, 49, 60, 65 )
-      .quadraticCurveTo( 48, 69, 42, 65 )
-      .quadraticCurveTo( 30, 49, 20, 65 )
+      .quadraticCurveTo( 130, handleNodeLowerMiddleShapeBottomY, 120, handleNodeLowerMiddleShapeMiddleY )
+      .quadraticCurveTo( 109, handleNodeLowerMiddleShapeTopY, 99, handleNodeLowerMiddleShapeMiddleY )
+      .quadraticCurveTo( 89, handleNodeLowerMiddleShapeBottomY, 83, handleNodeLowerMiddleShapeMiddleY )
+      .quadraticCurveTo( 70, handleNodeLowerMiddleShapeTopY, 60, handleNodeLowerMiddleShapeMiddleY )
+      .quadraticCurveTo( 48, handleNodeLowerMiddleShapeBottomY, 42, handleNodeLowerMiddleShapeMiddleY )
+      .quadraticCurveTo( 30, handleNodeLowerMiddleShapeTopY, 20, handleNodeLowerMiddleShapeMiddleY )
       .lineTo( 0, 66 )
       .close(), {
       lineWidth: 3,
