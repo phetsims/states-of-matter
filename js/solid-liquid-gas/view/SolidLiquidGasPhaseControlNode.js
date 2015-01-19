@@ -47,7 +47,7 @@ define( function( require ) {
     }, options );
 
     Node.call( this );
-    var textOptions = { font: new PhetFont( 14 ), fill: 'black', fontWeight: 600 };
+    var textOptions = { font: new PhetFont( 14 ), fill: 'black' };
 
     // itemSpec describes the pieces that make up an item in the control panel,
     // conforms to the contract: { label: {Node}, icon: {Node} (optional) }

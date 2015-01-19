@@ -50,7 +50,7 @@ define( function( require ) {
     }, options );
 
     Node.call( this );
-    var textOptions = { font: new PhetFont( 12 ), fill: '#FFFFFF', fontWeight: 600 };
+    var textOptions = { font: new PhetFont( 12 ), fill: '#FFFFFF' };
 
     // itemSpec describes the pieces that make up an item in the control panel,
     // conforms to the contract: { label: {Node}, icon: {Node} (optional) }
@@ -72,7 +72,7 @@ define( function( require ) {
     // pad inserts a spacing node (HStrut) so that the text, space and image together occupy a certain fixed width.
     var createItem = function( itemSpec ) {
       if ( itemSpec.icon ) {
-        var strutWidth = maxWidth - itemSpec.label.width - itemSpec.icon.width + 17;
+        var strutWidth = maxWidth - itemSpec.label.width - itemSpec.icon.width + 27;
         return new HBox( { children: [ itemSpec.label, new HStrut( strutWidth ), itemSpec.icon ] } );
       }
       else {
@@ -119,8 +119,7 @@ define( function( require ) {
     var titleText = new Text( titleString,
       {
         font: new PhetFont( 14 ),
-        fill: '#FFFFFF',
-        fontWeight: 600
+        fill: '#FFFFFF'
       } );
 
     var titleBackground = new Rectangle( background.centerX + 4, background.top - 10,
