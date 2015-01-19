@@ -15,17 +15,32 @@ define( function( require ) {
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var ThermometerNode = require( 'SCENERY_PHET/ThermometerNode' );
   var Text = require( 'SCENERY/nodes/Text' );
+  var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
+
+  // constants
+  var inset = 10;
+  var LID_POSITION_TWEAK_FACTOR = 65; // Empirically determined value for aligning lid and container body.
 
   // strings
   var kelvinUnits = require( 'string!STATES_OF_MATTER/kelvinUnits' );
   var celsiusUnits = require( 'string!STATES_OF_MATTER/celsiusUnits' );
 
-  function TemperatureNode( model, options ) {
+
+  /**
+   *
+   * @param {MultipleParticleModel} multipleParticleModel - model of the simulation
+   * @param {ModelViewTransform2} modelViewTransform The model view transform for transforming particle position.
+   * @param {Object} options that can be passed on to the underlying node
+   * @constructor
+   */
+  function CompositeThermometerNode( multipleParticleModel, modelViewTransform, options ) {
 
     Node.call( this );
+    this.multipleParticleModel = multipleParticleModel;
+    this.modelViewTransform = modelViewTransform;
 
     // add thermometer
-    var temperatureInKelvinProperty = new Property( model.getTemperatureInKelvin() );
+    var temperatureInKelvinProperty = new Property( multipleParticleModel.getTemperatureInKelvin() );
     var thermometer = new ThermometerNode( 0, 1000, temperatureInKelvinProperty, {
       outlineStroke: 'black',
       backgroundColor: 'white',
@@ -40,9 +55,9 @@ define( function( require ) {
     // add temperature combo box
     var temperatureKelvinText = new Text( '', { font: new PhetFont( 10 ) } );
     var temperatureCelsiusText = new Text( '', { font: new PhetFont( 10 ) } );
-    model.temperatureSetPointProperty.link( function() {
-      var tempInKelvin = model.getTemperatureInKelvin();
-      var tempInKelvinRounded = Math.round( model.getTemperatureInKelvin() );
+    multipleParticleModel.temperatureSetPointProperty.link( function() {
+      var tempInKelvin = multipleParticleModel.getTemperatureInKelvin();
+      var tempInKelvinRounded = Math.round( multipleParticleModel.getTemperatureInKelvin() );
       temperatureKelvinText.setText( tempInKelvinRounded + " " + kelvinUnits );
       temperatureCelsiusText.setText( Math.round( tempInKelvin - 273.15 ) + " " + celsiusUnits );
 
@@ -68,5 +83,40 @@ define( function( require ) {
     this.mutate( options );
   }
 
-  return inherit( Node, TemperatureNode );
+  return inherit( Node, CompositeThermometerNode, {
+    /**
+     * Updates the thermometers position and rotation.
+     * When the container explodes, the thermometer rotates in anti-clockwise director and moves up in the air.
+     */
+    updatePositionAndOrientation: function() {
+
+      var containerHeight = this.multipleParticleModel.getParticleContainerHeight();
+      if ( !this.multipleParticleModel.getContainerExploded() ) {
+        if ( this.getRotation() !== 0 ) {
+          this.setRotation( 0 );
+        }
+        this.setTranslation( this.x,
+          -this.modelViewTransform.modelToViewDeltaY(
+            StatesOfMatterConstants.CONTAINER_BOUNDS.width - containerHeight
+          ) + this.height - inset );
+      }
+      else {
+        var rotationAmount = -(Math.PI / 100 + ( Math.random() * Math.PI / 50 ));
+        var centerPosY = -this.modelViewTransform.modelToViewDeltaY(
+            StatesOfMatterConstants.CONTAINER_BOUNDS.height - containerHeight ) +
+                         LID_POSITION_TWEAK_FACTOR;
+        var currentPosY = this.y;
+        var newPosY;
+        if ( currentPosY > centerPosY ) {
+          newPosY = centerPosY;
+        }
+        else {
+          newPosY = currentPosY;
+        }
+        this.setY( newPosY );
+        this.rotate( rotationAmount );
+      }
+
+    }
+  } );
 } );

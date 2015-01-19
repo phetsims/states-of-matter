@@ -111,7 +111,7 @@ define( function( require ) {
     this.addChild( stoveNode );
 
     // add compositeThermometer node
-    var compositeThermometerNode = new CompositeThermometerNode( multipleParticleModel, {
+    var compositeThermometerNode = new CompositeThermometerNode( multipleParticleModel, modelViewTransform, {
       font: new PhetFont( 20 ),
       fill: 'white',
       right: stoveNode.left + 3 * inset
@@ -238,29 +238,7 @@ define( function( require ) {
       }
     } );
     multipleParticleModel.particleContainerHeightProperty.link( function() {
-      var rotationRate = 0;
-      var containerRect = multipleParticleModel.getParticleContainerRect();
-
-      // adjust composite thermometer node position
-      if ( !multipleParticleModel.getContainerExploded() ) {
-        rotationRate = 0;
-        compositeThermometerNode.setRotation( rotationRate );
-        compositeThermometerNode.setTranslation( compositeThermometerNode.x,
-          particleContainerNode.y + compositeThermometerNode.height / 3 +
-          Math.abs( modelViewTransform.modelToViewDeltaY( StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT -
-                                                          containerRect.getHeight() ) )
-        );
-      }
-      else {
-        rotationRate = -( Math.PI / 100 + ( Math.random() * Math.PI / 50 ) );
-        compositeThermometerNode.rotate( rotationRate );
-        compositeThermometerNode.setTranslation(
-          compositeThermometerNode.x,
-          ( particleContainerNode.y -
-            modelViewTransform.modelToViewDeltaY( StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT -
-                                                  containerRect.getHeight() ) )
-        );
-      }
+      compositeThermometerNode.updatePositionAndOrientation();
     } );
 
     multipleParticleModel.temperatureSetPointProperty.link( function() {

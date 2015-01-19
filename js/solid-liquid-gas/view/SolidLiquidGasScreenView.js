@@ -81,7 +81,7 @@ define( function( require ) {
     this.addChild( stoveNode );
 
     // add compositeThermometer Node
-    var compositeThermometerNode = new CompositeThermometerNode( multipleParticleModel, {
+    var compositeThermometerNode = new CompositeThermometerNode( multipleParticleModel, modelViewTransform, {
       font: new PhetFont( 20 ),
       fill: 'white',
       right:   particleContainerNode.left + compositeThermometerNodeLeftOffset,
@@ -148,6 +148,9 @@ define( function( require ) {
       } );
     this.addChild( playPauseButton );
     this.addChild( resetAllButton );
+    multipleParticleModel.particleContainerHeightProperty.link( function() {
+      compositeThermometerNode.updatePositionAndOrientation();
+    } );
   }
 
   return inherit( ScreenView, SolidLiquidGasScreenView, {
