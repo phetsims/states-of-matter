@@ -37,8 +37,13 @@ define( function( require ) {
   // Basic color used for the stove.
   var BASE_COLOR = new Color( 159, 182, 205 );
 
-
-  function StoveNode( model, options ) {
+  /**
+   *
+   * @param {MultipleParticleModel} multipleParticleModel - model of the simulation
+   * @param {Object} options that can be passed on to the underlying node
+   * @constructor
+   */
+  function StoveNode( multipleParticleModel, options ) {
 
     Node.call( this );
 
@@ -99,7 +104,7 @@ define( function( require ) {
     var fireNode = new Image( fireImage, { centerX: stoveBody.centerX, centerY: stoveBody.centerY, scale: 0.6 } );
     var iceNode = new Image( iceImage, { centerX: stoveBody.centerX, centerY: stoveBody.centerY, scale: 0.6 } );
     heatProperty.link( function( heat ) {
-      model.setHeatingCoolingAmount( heat );
+      multipleParticleModel.setHeatingCoolingAmount( heat );
       if ( heat > 0 ) {
         fireNode.setTranslation( (stoveBody.width - fireNode.width) / 2, -heat * fireImage.height * 0.5 );
       }
