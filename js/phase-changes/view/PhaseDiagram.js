@@ -196,12 +196,12 @@ define( function( require ) {
 
     var accordionBox = new AccordionBox( accordionContent,
       {
-        titleNode: new Text( phaseDiagramString, { fill: "#FFFFFF", font: new PhetFont( { size: 14 } ) } ),
+        titleNode: new Text( phaseDiagramString, { fill: "#FFFFFF", font: new PhetFont( { size: 13 } ) } ),
         fill: 'black',
         stroke: 'white',
         expandedProperty: expandedProperty,
         contentAlign: 'center',
-        titleAlign: 'left',
+        titleAlign: 'center',
         buttonAlign: 'left',
         cornerRadius: 4,
         contentYSpacing: -15,
