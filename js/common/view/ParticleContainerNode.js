@@ -169,7 +169,7 @@ define( function( require ) {
       .close(), {
       lineWidth: 0,
       stroke: 'white',
-      fill: new LinearGradient( 0, 0, 0, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT - 10 - 30 )
+      fill: new LinearGradient( 0, 0, 0, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT - 40 )
         .addColorStop( 0, '#8A8A8A' )
         .addColorStop( 0.2, '#747474' )
         .addColorStop( 0.3, '#525252' )
@@ -266,9 +266,7 @@ define( function( require ) {
     }
     var particleContainerNode = this;
     multipleParticleModel.particleContainerHeightProperty.link( function() {
-      if ( pressureGaugeEnabled ) {
-        particleContainerNode.handleContainerSizeChanged();
-      }
+      particleContainerNode.handleContainerSizeChanged();
     } );
     this.addChild( postParticleLayer );
     this.mutate( options );
