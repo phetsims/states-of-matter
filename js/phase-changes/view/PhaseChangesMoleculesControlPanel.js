@@ -60,7 +60,7 @@ define( function( require ) {
     }, options );
 
     Node.call( this );
-    var textOptions = { font: new PhetFont( 12 ), fontWeight: 600, fill: "#FFFFFF" };
+    var textOptions = { font: new PhetFont( 12 ), fill: "#FFFFFF" };
 
     // itemSpec describes the pieces that make up an item in the control panel,
     // conforms to the contract: { label: {Node}, icon: {Node} (optional) }
@@ -82,7 +82,7 @@ define( function( require ) {
     // pad inserts a spacing node (HStrut) so that the text, space and image together occupy a certain fixed width.
     var createItem = function( itemSpec ) {
       if ( itemSpec.icon ) {
-        var strutWidth = maxWidth - itemSpec.label.width - itemSpec.icon.width + 17;
+        var strutWidth = maxWidth - itemSpec.label.width - itemSpec.icon.width + 27;
         return new HBox( { children: [ itemSpec.label, new HStrut( strutWidth ), itemSpec.icon ] } );
       }
       else {
@@ -124,13 +124,13 @@ define( function( require ) {
     } );
 
     var labelFont = new PhetFont( 12 );
-    var weakTitle = new Text( weakString, { font: labelFont, fontWeight: 600, fill: 'white' } );
-    var strongTitle = new Text( strongString, { fill: 'white', fontWeight: 600, font: labelFont } );
+    var weakTitle = new Text( weakString, { font: labelFont, fill: 'white' } );
+    var strongTitle = new Text( strongString, { fill: 'white', font: labelFont } );
 
     // add interaction strength slider and title
     var interactionStrengthNode = new Node();
     var interactionTitle = new Text( interactionStrengthTitleString,
-      { fontWeight: 600, font: labelFont, fill: 'white' } );
+      { font: labelFont, fill: 'white' } );
     interactionStrengthNode.addChild( interactionTitle );
     var interactionStrengthSlider = new HSlider( multipleParticleModel.interactionStrengthProperty,
       { min: StatesOfMatterConstants.MIN_EPSILON, max: StatesOfMatterConstants.MAX_EPSILON },
@@ -203,8 +203,7 @@ define( function( require ) {
     } );
     var titleText = new Text( titleString, {
       font: new PhetFont( 14 ),
-      fill: '#FFFFFF',
-      fontWeight: 'bold'
+      fill: '#FFFFFF'
     } );
 
     var titleBackground = new Rectangle( background.centerX + 4, background.top - 10,
