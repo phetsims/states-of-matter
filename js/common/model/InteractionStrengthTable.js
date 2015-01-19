@@ -43,7 +43,7 @@ define( function( require ) {
         }
         else if ( atomType1 === AtomType.OXYGEN ) {
           // Source: Noah P, who got it from Robert Parsons.
-          return 423.3;
+          return 59500;
         }
         else if ( atomType1 === AtomType.ADJUSTABLE ) {
           return ConfigurableStatesOfMatterAtom.DEFAULT_INTERACTION_POTENTIAL;

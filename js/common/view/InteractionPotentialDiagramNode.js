@@ -306,12 +306,11 @@ define( function( require ) {
       for ( var i = 1; i < this.graphWidth; i++ ) {
         var potential = this.calculateLennardJonesPotential( i * horizontalIndexMultiplier );
         var yPos = ((  this.graphHeight / 2) - (potential * this.verticalScalingFactor));
+        if ( yPos > this.graphMin.y ) {
+          this.graphMin.setXY( i, yPos );
+        }
         if ( (yPos > 0) && (yPos < this.graphHeight) ) {
           potentialEnergyLineShape.lineTo( i, (yPos) );
-          if ( yPos > this.graphMin.y ) {
-            // PNode.
-            this.graphMin.setXY( i, yPos );
-          }
           if ( (potential > 0) || (  this.zeroCrossingPoint.x === 0) ) {
             // zero crossing point.
             this.zeroCrossingPoint.setXY( i, this.graphHeight / 2 );
@@ -319,7 +318,16 @@ define( function( require ) {
         }
         else {
           // Move to a good location from which to start graphing.
-          potentialEnergyLineShape.moveTo( i + 1, 0 );
+          if ( yPos > this.graphHeight ) {
+            potentialEnergyLineShape.lineTo( i, this.graphHeight );
+            if ( (potential > 0) || (  this.zeroCrossingPoint.x === 0) ) {
+              // zero crossing point.
+              this.zeroCrossingPoint.setXY( i, this.graphHeight / 2 );
+            }
+          }
+          if ( yPos < 0 ) {
+            potentialEnergyLineShape.moveTo( i + 1, 0 );
+          }
         }
       }
       this.potentialEnergyLine.setShape( potentialEnergyLineShape );
@@ -327,9 +335,16 @@ define( function( require ) {
       if ( this.epsilonArrowStartPt.distance( this.graphMin ) > 5 ) {
         this.epsilonArrow.setVisible( true );
         try {
-
-          this.epsilonArrow.setTailAndTip( this.graphMin.x, this.graphMin.y, this.epsilonArrowStartPt.x,
-            this.epsilonArrowStartPt.y );
+          if ( this.graphMin.y > this.graphHeight ) {
+            this.epsilonArrow.setTailAndTip( this.graphMin.x, this.graphHeight,
+              this.epsilonArrowStartPt.x, this.epsilonArrowStartPt.y );
+            this.epsilonArrow.doubleHead = false;
+          }
+          else {
+            this.epsilonArrow.setTailAndTip( this.graphMin.x, this.graphMin.y, this.epsilonArrowStartPt.x,
+              this.epsilonArrowStartPt.y );
+            this.epsilonArrow.doubleHead = true;
+          }
         }
         catch( e ) {
           console.error( "Error: Caught exception while positioning epsilon arrow - " + e );
