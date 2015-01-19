@@ -146,7 +146,7 @@ define( function( require ) {
         expanded: true,// phase diagram
         interactionExpanded: true,// interaction diagram
         numParticles: 0, // notifyParticleAdded
-        temperatureSetPoint: 0, // notifyTemperatureChanged
+        temperatureSetPoint: INITIAL_TEMPERATURE, // notifyTemperatureChanged
         pressure: 0, // notifyPressureChanged
         moleculeType: StatesOfMatterConstants.NEON, // notifyMoleculeTypeChanged,
         interactionStrength: 0, // notifyInteractionStrengthChanged
@@ -703,7 +703,7 @@ define( function( require ) {
       }
     },
 
-    step: function( dt ) {
+    step: function() {
 
       if ( this.isPlaying ) {
         this.stepInternal();
@@ -813,14 +813,15 @@ define( function( require ) {
       // Initialize the particle positions according the to requested phase.
       this.setPhase( phase );
     },
+
     /**
      * Initialize the various model components to handle a simulation in which
      * each molecule consists of three atoms, e.g. water.
      *
      * @param moleculeID
+     * @param phase
+     * @private
      */
-
-    //private
     initializeTriatomic: function( moleculeID, phase ) {
       // Only water is supported so far.
       assert && assert( (moleculeID === StatesOfMatterConstants.WATER) );
@@ -1188,12 +1189,7 @@ define( function( require ) {
     getContainerExploded: function() {
       return this.isExploded;
     },
-    /**
-     * Cause the lid to blow off the top of the container.
-     */
-    explodeContainer: function() {
-      this.setContainerExploded( true );
-    },
+
     /**
      * This method is used for an external entity to notify the model that it
      * should explode.
@@ -1257,14 +1253,9 @@ define( function( require ) {
       }
     },
 
-    getThermostatType: function() {
-      return this.thermostatType;
-    },
-
     getParticleContainerHeight: function() {
       return this.particleContainerHeight;
     },
-
 
     PHASE_SOLID: PHASE_SOLID,
     PHASE_LIQUID: PHASE_LIQUID,
