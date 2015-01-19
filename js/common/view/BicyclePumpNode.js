@@ -97,7 +97,6 @@ define( function( require ) {
     // interact with in order to use the pump.
     var pumpHandleHeight = height * PUMP_HANDLE_HEIGHT_PROPORTION;
 
-    //todo: factor out the constants and use a for loop?
     var pumpHandleNodeShape = new Shape();
     var currentX = 0;
     var inset = 9;
@@ -105,7 +104,7 @@ define( function( require ) {
     pumpHandleNodeShape.moveTo( currentX, inset );
     for ( var i = 0; i < 4; i++ ) {
       pumpHandleNodeShape.quadraticCurveTo( currentX += inset, 0, currentX += inset, inset );
-      pumpHandleNodeShape.lineTo( currentX += 6, inset )
+      pumpHandleNodeShape.lineTo( currentX += 6, inset );
     }
     pumpHandleNodeShape.quadraticCurveTo( currentX += inset, 0, currentX += inset, 0 );
     pumpHandleNodeShape.lineTo( currentX += 34, 0 );
@@ -117,7 +116,7 @@ define( function( require ) {
     pumpHandleNodeShape.lineTo( currentX, maxY - inset );
     for ( i = 0; i < 4; i++ ) {
       pumpHandleNodeShape.quadraticCurveTo( currentX -= inset, maxY, currentX -= inset, maxY - inset );
-      pumpHandleNodeShape.lineTo( currentX -= 6, maxY - inset )
+      pumpHandleNodeShape.lineTo( currentX -= 6, maxY - inset );
     }
     pumpHandleNodeShape.quadraticCurveTo( currentX -= inset, maxY, currentX -= inset, maxY );
     pumpHandleNodeShape.lineTo( currentX -= 34, maxY );
