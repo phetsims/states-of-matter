@@ -11,6 +11,7 @@ define( function( require ) {
   // modules
   var inherit = require( 'PHET_CORE/inherit' );
   var HBox = require( 'SCENERY/nodes/HBox' );
+  var VBox = require( 'SCENERY/nodes/VBox' );
   var HStrut = require( 'SUN/HStrut' );
   var Panel = require( 'SUN/Panel' );
   var Text = require( 'SCENERY/nodes/Text' );
@@ -49,7 +50,6 @@ define( function( require ) {
    */
   function PhaseChangesMoleculesControlPanel( multipleParticleModel, isBasicVersion, options ) {
 
-    var phaseChangesMoleculesControlPanel = this;
     options = _.extend( {
       xMargin: 5,
       yMargin: 8,
@@ -62,6 +62,37 @@ define( function( require ) {
     Node.call( this );
     var textOptions = { font: new PhetFont( 12 ), fill: "#FFFFFF" };
 
+    var weakTitle = new Text( weakString, textOptions );
+    var strongTitle = new Text( strongString, textOptions );
+
+    // add interaction strength slider and title
+    var interactionStrengthNode = new Node();
+    var interactionTitle = new Text( interactionStrengthTitleString, textOptions );
+    interactionStrengthNode.addChild( interactionTitle );
+    var interactionStrengthSlider = new HSlider( multipleParticleModel.interactionStrengthProperty,
+      { min: StatesOfMatterConstants.MIN_EPSILON, max: StatesOfMatterConstants.MAX_EPSILON },
+      {
+        trackFill: 'white',
+        thumbSize: new Dimension2( 15, 30 ),
+        majorTickLength: 15,
+        minorTickLength: 12,
+        trackStroke: 'black',
+        trackLineWidth: 1,
+        thumbLineWidth: 1,
+        tickLabelSpacing: 6,
+        majorTickStroke: 'white',
+        majorTickLineWidth: 1,
+        minorTickStroke: 'white',
+        minorTickLineWidth: 1,
+
+        cursor: 'pointer'
+
+      } );
+    interactionStrengthNode.addChild( interactionStrengthSlider );
+    interactionStrengthSlider.addMajorTick( StatesOfMatterConstants.MAX_EPSILON, strongTitle );
+    interactionStrengthSlider.addMajorTick( StatesOfMatterConstants.MIN_EPSILON, weakTitle );
+
+
     // itemSpec describes the pieces that make up an item in the control panel,
     // conforms to the contract: { label: {Node}, icon: {Node} (optional) }
     var neon = { label: new Text( neonString, textOptions ), icon: createNeonIcon() };
@@ -72,17 +103,23 @@ define( function( require ) {
       label: new Text( adjustableAttractionString, textOptions ),
       icon: createAdjustableAttractionIcon()
     };
+    var titleText = {
+      label: new Text( titleString, {
+        font: new PhetFont( 14 ),
+        fill: '#FFFFFF'
+      } )
+    };
 
     // compute the maximum item width
-    var widestItemSpec = _.max( [ neon, argon, water, oxygen, adjustableAttraction ], function( item ) {
+    var widestItemSpec = _.max( [ neon, argon, water, oxygen, adjustableAttraction, titleText ], function( item ) {
       return item.label.width + ((item.icon) ? item.icon.width : 0);
     } );
     var maxWidth = widestItemSpec.label.width + ((widestItemSpec.icon) ? widestItemSpec.icon.width : 0);
-
+    maxWidth = Math.max( maxWidth, interactionStrengthNode.width );
     // pad inserts a spacing node (HStrut) so that the text, space and image together occupy a certain fixed width.
     var createItem = function( itemSpec ) {
       if ( itemSpec.icon ) {
-        var strutWidth = maxWidth - itemSpec.label.width - itemSpec.icon.width + 27;
+        var strutWidth = maxWidth - itemSpec.label.width - itemSpec.icon.width + 12;
         return new HBox( { children: [ itemSpec.label, new HStrut( strutWidth ), itemSpec.icon ] } );
       }
       else {
@@ -123,51 +160,19 @@ define( function( require ) {
       deselectedContentOpacity: 1
     } );
 
-    var labelFont = new PhetFont( 12 );
-    var weakTitle = new Text( weakString, { font: labelFont, fill: 'white' } );
-    var strongTitle = new Text( strongString, { fill: 'white', font: labelFont } );
-
-    // add interaction strength slider and title
-    var interactionStrengthNode = new Node();
-    var interactionTitle = new Text( interactionStrengthTitleString,
-      { font: labelFont, fill: 'white' } );
-    interactionStrengthNode.addChild( interactionTitle );
-    var interactionStrengthSlider = new HSlider( multipleParticleModel.interactionStrengthProperty,
-      { min: StatesOfMatterConstants.MIN_EPSILON, max: StatesOfMatterConstants.MAX_EPSILON },
-      {
-
-        trackFill: 'white',
-        thumbSize: new Dimension2( 15, 30 ),
-        majorTickLength: 15,
-        minorTickLength: 12,
-        trackStroke: 'black',
-        trackLineWidth: 1,
-        thumbLineWidth: 1,
-        tickLabelSpacing: 6,
-        majorTickStroke: 'white',
-        majorTickLineWidth: 1,
-        minorTickStroke: 'white',
-        minorTickLineWidth: 1,
-
-        cursor: 'pointer'
-
-      } );
-    interactionStrengthNode.addChild( interactionStrengthSlider );
-    interactionStrengthSlider.addMajorTick( StatesOfMatterConstants.MAX_EPSILON, strongTitle );
-    interactionStrengthSlider.addMajorTick( StatesOfMatterConstants.MIN_EPSILON, weakTitle );
-
 
     multipleParticleModel.interactionStrengthProperty.link( function( value ) {
       if ( multipleParticleModel.currentMolecule === StatesOfMatterConstants.USER_DEFINED_MOLECULE ) {
         multipleParticleModel.setEpsilon( value );
       }
     } );
-
-    var radioButtonPanel = new Panel( radioButtonGroup, {
+    var content = new VBox( { spacing: 4, children: [ radioButtonGroup ] } );
+    var radioButtonPanel = new Panel( content, {
       stroke: 'black',
-      lineWidth: 0
+      lineWidth: 0,
+      fill: options.backgroundColor
     } );
-    var background = new Path( new Shape().roundRect( 0, -4,
+    var background = new Path( new Shape().roundRect( -2, -4,
       radioButtonPanel.width, radioButtonPanel.height + controlPanelOffset,
       options.cornerRadius, options.cornerRadius ), {
       stroke: '#FFFCD3',
@@ -179,42 +184,37 @@ define( function( require ) {
     interactionStrengthNode.centerX = radioButtonGroup.centerX;
     interactionStrengthNode.top = radioButtonGroup.bottom + inset;
     this.addChild( background );
-    this.addChild( radioButtonGroup );
 
     multipleParticleModel.moleculeTypeProperty.link( function( value ) {
       multipleParticleModel.temperatureSetPointProperty._notifyObservers();
 
       // adjust the control panel border when adjustable attraction selected or deselect
       if ( value === StatesOfMatterConstants.USER_DEFINED_MOLECULE ) {
-        phaseChangesMoleculesControlPanel.addChild( interactionStrengthNode );
-        var panelHeight = radioButtonPanel.height + interactionStrengthNode.height + inset;
-        background.setShape( new Shape().roundRect( 0, -4,
-          radioButtonPanel.width, panelHeight,
+        content.addChild( interactionStrengthNode );
+        background.setShape( new Shape().roundRect( -2, -4,
+          radioButtonPanel.width, radioButtonPanel.height + inset,
           options.cornerRadius, options.cornerRadius ) );
       }
       else {
-        if ( phaseChangesMoleculesControlPanel.isChild( interactionStrengthNode ) ) {
-          phaseChangesMoleculesControlPanel.removeChild( interactionStrengthNode );
-          background.setShape( new Shape().roundRect( 0, -4,
+        if ( content.isChild( interactionStrengthNode ) ) {
+          content.removeChild( interactionStrengthNode );
+          background.setShape( new Shape().roundRect( -2, -4,
             radioButtonPanel.width, radioButtonPanel.height,
             options.cornerRadius, options.cornerRadius ) );
         }
       }
     } );
-    var titleText = new Text( titleString, {
-      font: new PhetFont( 14 ),
-      fill: '#FFFFFF'
-    } );
 
     var titleBackground = new Rectangle( background.centerX + 4, background.top - 10,
-      titleText.width + 5, titleText.height, {
+      titleText.label.width + 5, titleText.label.height, {
         fill: 'black'
       } );
-    titleText.centerX = background.centerX;
-    titleBackground.centerX = titleText.centerX;
+    titleText.label.centerX = background.centerX;
+    titleBackground.centerX = titleText.label.centerX;
 
     //add the title node
-    this.addChild( new Node( { children: [ titleBackground, titleText ] } ) );
+    this.addChild( new Node( { children: [ titleBackground, titleText.label ] } ) );
+    this.addChild( radioButtonPanel );
     this.mutate( options );
   }
 

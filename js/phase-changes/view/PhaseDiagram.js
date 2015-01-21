@@ -194,9 +194,10 @@ define( function( require ) {
       .ellipse( 0, 0, CURRENT_STATE_MARKER_DIAMETER, CURRENT_STATE_MARKER_DIAMETER ), { fill: 'red' } );
     accordionContent.addChild( this.currentStateMarker );
 
+    var titleNode = new Text( phaseDiagramString, { fill: "#FFFFFF", font: new PhetFont( { size: 13 } ) } );
     var accordionBox = new AccordionBox( accordionContent,
       {
-        titleNode: new Text( phaseDiagramString, { fill: "#FFFFFF", font: new PhetFont( { size: 13 } ) } ),
+        titleNode: titleNode,
         fill: 'black',
         stroke: 'white',
         expandedProperty: expandedProperty,
@@ -209,8 +210,7 @@ define( function( require ) {
         contentXMargin: 5,
         buttonYMargin: 4,
         buttonXMargin: 6,
-        buttonLength: 12,
-        minWidth: 0
+        buttonLength: 12
       } );
     this.addChild( accordionBox );
 
