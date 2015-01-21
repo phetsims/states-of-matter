@@ -354,9 +354,14 @@ define( function( require ) {
         // Don't show the arrow if there isn't enough space.
         this.epsilonArrow.setVisible( false );
       }
-      this.epsilonLabel.setTranslation( this.graphMin.x + this.epsilonLabel.width,
-        ((  this.graphMin.y - (  this.graphHeight / 2)) / 3) - (  this.epsilonLabel.height / 2) +
-        this.graphHeight / 2 );
+      if ( this.graphMin.y / 2 < this.graphHeight ) {
+        this.epsilonLabel.setTranslation( this.graphMin.x + this.epsilonLabel.width,
+          ( this.graphMin.y - this.epsilonLabel.height / 2 + this.graphHeight / 2) / 2 );
+      }
+      else {
+        this.epsilonLabel.setTranslation( this.graphMin.x + this.epsilonLabel.width,
+          this.graphHeight - this.epsilonLabel.height / 2 );
+      }
       // Position the arrow that depicts sigma along with its label.
       this.sigmaLabel.setTranslation( this.zeroCrossingPoint.x / 2 - this.sigmaLabel.width / 2,
         this.graphHeight / 2 - this.sigmaLabel.height / 3 );
