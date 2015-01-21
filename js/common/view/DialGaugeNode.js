@@ -24,6 +24,7 @@ define( function( require ) {
 
   // strings
   var pressureString = require( 'string!STATES_OF_MATTER/pressure' );
+  var pressureOverloadString = require( 'string!STATES_OF_MATTER/pressureOverload' );
   var pressureUnitsInAtm = require( 'string!STATES_OF_MATTER/pressureUnitsInAtm' );
 
   // Length of non-elbowed connector wrt overall diameter.
@@ -32,6 +33,7 @@ define( function( require ) {
   // Width of connector wrt overall diameter.
   var CONNECTOR_WIDTH_PROPORTION = 0.2;
 
+  var MAX_PRESSURE = 200; // in atm units
   /**
    * @param {MultipleParticleModel} multipleParticleModel - model  of the simulation
    * @constructor
@@ -46,7 +48,7 @@ define( function( require ) {
 
 
     var gaugeNode = new GaugeNode( multipleParticleModel.pressureProperty, pressureString,
-      { min: 0, max: 200 }, { scale: 0.5, radius: 80 } );
+      { min: 0, max: MAX_PRESSURE }, { scale: 0.5, radius: 80, backgroundLineWidth: 3 } );
 
     // Add the textual readout display.
     this.textualReadoutBoxShape = new Rectangle( 0, 0, 80, 15, 2, 2, { fill: 'white', stroke: 'black' } );
@@ -79,7 +81,14 @@ define( function( require ) {
     // Set the initial value.
     multipleParticleModel.pressure = multipleParticleModel.getPressureInAtmospheres();
     multipleParticleModel.pressureProperty.link( function() {
-      dialGaugeNode.textualReadout.setText( multipleParticleModel.getPressureInAtmospheres().toFixed( 2 ) + ' ' + pressureUnitsInAtm );
+      if ( (multipleParticleModel.getPressureInAtmospheres()) < MAX_PRESSURE ) {
+        dialGaugeNode.textualReadout.setText( multipleParticleModel.getPressureInAtmospheres().toFixed( 2 ) + ' ' + pressureUnitsInAtm );
+        dialGaugeNode.textualReadout.fill = 'black';
+      }
+      else {
+        dialGaugeNode.textualReadout.setText( pressureOverloadString );
+        dialGaugeNode.textualReadout.fill = 'red';
+      }
       dialGaugeNode.textualReadout.center = dialGaugeNode.textualReadoutBoxShape.center;
     } );
 

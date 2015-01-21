@@ -32,7 +32,6 @@
   "celsiusUnits": "\u2103",
   "interactionPotential": "Interaction Potential",
   "returnLid": "Return Lid",
-  "pressureUnitsInAtm": "atm"
-
-
+  "pressureUnitsInAtm": "atm",
+  "pressureOverload": "Overloaded"
 }
