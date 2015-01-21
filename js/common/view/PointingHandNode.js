@@ -109,6 +109,7 @@ define( function( require ) {
       pointingHandNode.handleContainerSizeChanged();
       pointingHandNode.updateArrowVisibility();
     } );
+    this.touchArea = this.localBounds.dilatedXY( 10, 10 );
   }
 
   return inherit( Node, PointingHandNode, {
