@@ -27,6 +27,10 @@ define( function( require ) {
   var fireImage = require( 'image!STATES_OF_MATTER/flame.png' );
   var iceImage = require( 'image!STATES_OF_MATTER/ice-cube-stack.png' );
 
+  // strings
+  var heatString = require( 'string!STATES_OF_MATTER/heat' );
+  var coolString = require( 'string!STATES_OF_MATTER/cool' );
+
   // Width of the burner output - much of the rest of the size of the stove
   // derives from this value.
   var WIDTH = 120; // In screen coords, which are close to pixels.
@@ -76,8 +80,8 @@ define( function( require ) {
     var TOP_SIDE_TRACK_COLOR = '#0A00F0';
     var BOTTOM_SIDE_TRACK_COLOR = '#EF000F';
     var labelFont = new PhetFont( 14 );
-    var heatTitle = new Text( 'Heat', { font: labelFont } );
-    var coolTitle = new Text( 'Cool', { font: labelFont } );
+    var heatTitle = new Text( heatString, { font: labelFont } );
+    var coolTitle = new Text( coolString, { font: labelFont } );
     var heatCoolSlider = new HSlider( heatProperty, { min: -1, max: 1 },
       {
         endDrag: function() {

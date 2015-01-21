@@ -1,5 +1,8 @@
 {
   "low": "low",
+  "heat": "Heat",
+  "cool": "Cool",
+  "pressureOverload": "OVERLOADED",
   "statesOfMatter": "States of Matter",
   "solid": "Solid",
   "states": "States",
@@ -25,13 +28,12 @@
   "triplePoint": "Triple Point",
   "criticalPoint": "Critical Point",
   "interactionStrengthWithSymbol": "Interaction Strength (ε)",
-  "atomDiameterWithSymbol": " Atom Diameter(σ)",
+  "atomDiameterWithSymbol": " Atom Diameter (σ)",
   "sigma": "σ",
   "epsilon": "ε",
   "kelvinUnits": "\u212A",
   "celsiusUnits": "\u2103",
   "interactionPotential": "Interaction Potential",
   "returnLid": "Return Lid",
-  "pressureUnitsInAtm": "atm",
-  "pressureOverload": "Overloaded"
+  "pressureUnitsInAtm": "atm"
 }
