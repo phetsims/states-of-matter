@@ -24,7 +24,7 @@ define( function( require ) {
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var ArrowNode = require( 'SCENERY_PHET/ArrowNode' );
   var InteractionPotentialDiagramNode = require( 'STATES_OF_MATTER/common/view/InteractionPotentialDiagramNode' );
-
+  var HBox = require( 'SCENERY/nodes/HBox' );
 
   //strings
   var interactionDiagramTitle = require( 'string!STATES_OF_MATTER/interactionPotential' );
@@ -103,6 +103,9 @@ define( function( require ) {
     this.epsilonLine.addInputListener( new FillHighlightListener( RESIZE_HANDLE_NORMAL_COLOR,
       RESIZE_HANDLE_HIGHLIGHTED_COLOR ) );
     this.ljPotentialGraph.addChild( this.epsilonLine );
+
+    //touch area
+    this.epsilonLine.touchArea = this.epsilonLine.localBounds.dilatedXY( 20, 20 );
     this.epsilonLine.addInputListener( new SimpleDragHandler(
       {
         start: function( event ) {
@@ -118,7 +121,8 @@ define( function( require ) {
           epsilonControlInteractionPotentialDiagram.drawPotentialCurve();
         }
       } ) );
-    var accordionBox = new AccordionBox( accordionContent,
+    var accordionContentHBox = new HBox( { children: [ accordionContent ] } );
+    var accordionBox = new AccordionBox( accordionContentHBox,
       {
         titleNode: new Text( interactionDiagramTitle, { fill: "#FFFFFF", font: new PhetFont( { size: 13 } ) } ),
         fill: 'black',
@@ -135,8 +139,7 @@ define( function( require ) {
         contentXSpacing: 6,
         buttonYMargin: 4,
         buttonXMargin: 6,
-        buttonLength: 12,
-        minWidth: 0
+        buttonLength: 12
       } );
     this.addChild( accordionBox );
     // Update interactivity state.
