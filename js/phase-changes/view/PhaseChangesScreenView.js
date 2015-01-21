@@ -51,7 +51,6 @@ define( function( require ) {
   // Used for calculating moving averages needed to mellow out the graph
   // behavior.  Value empirically determined.
   var MAX_NUM_HISTORY_SAMPLES = 100;
-  var PRESSURE_FACTOR = 35;
 
   var particleLayerCanvasBoundLimit = 1000;
   var particleLayerXOffset = 150;
@@ -266,13 +265,18 @@ define( function( require ) {
         var movingAverageTemperature = this.updateMovingAverageTemperature( this.multipleParticleModel.getTemperatureSetPoint() );
         var modelPressure = this.multipleParticleModel.getModelPressure();
         var mappedTemperature = this.mapModelTemperatureToPhaseDiagramTemperature( movingAverageTemperature );
-        var mappedPressure = this.mapModelTempAndPressureToPhaseDiagramPressureAlternative1( modelPressure,
+        var mappedPressure = this.mapModelTempAndPressureToPhaseDiagramPressure( modelPressure,
           movingAverageTemperature );
         this.phaseDiagram.setStateMarkerPos( mappedTemperature, mappedPressure );
 
       }
     },
 
+    /**
+     * Update and returns the moving average taking into account the new temperature value
+     * @param {Number} newTemperatureValue
+     * @returns {Number}
+     */
     updateMovingAverageTemperature: function( newTemperatureValue ) {
       if ( this.modelTemperatureHistory.length === MAX_NUM_HISTORY_SAMPLES ) {
         this.modelTemperatureHistory.shift();
@@ -285,6 +289,11 @@ define( function( require ) {
       return totalOfAllTemperatures / this.modelTemperatureHistory.length;
     },
 
+    /**
+     * Map the model temperature to phase diagram temperature based on the phase chart shape.
+     * @param {Number} modelTemperature
+     * @returns {Number}
+     */
     mapModelTemperatureToPhaseDiagramTemperature: function( modelTemperature ) {
 
       var mappedTemperature;
@@ -299,31 +308,14 @@ define( function( require ) {
     },
 
 
+    /**
+     * Map the model temperature and pressure to a normalized pressure value
+     * suitable for use in setting the marker position on the phase chart.
+     * @param {Number} modelPressure
+     * @param {Number} modelTemperature
+     * @returns {Number}
+     */
     mapModelTempAndPressureToPhaseDiagramPressure: function( modelPressure, modelTemperature ) {
-      var mappedTemperature = this.mapModelTemperatureToPhaseDiagramTemperature( modelTemperature );
-      var mappedPressure;
-
-      if ( modelTemperature < TRIPLE_POINT_TEMPERATURE_IN_MODEL ) {
-        mappedPressure = 1.4 * ( Math.pow( mappedTemperature, 2 ) ) + PRESSURE_FACTOR * Math.pow( modelPressure, 2 );
-      }
-      else if ( modelTemperature < CRITICAL_POINT_TEMPERATURE_IN_MODEL ) {
-        mappedPressure = 0.19 + 1.2 * ( Math.pow( mappedTemperature - TRIPLE_POINT_TEMPERATURE_ON_DIAGRAM, 2 ) ) +
-                         PRESSURE_FACTOR * Math.pow( modelPressure, 2 );
-      }
-      else {
-        mappedPressure = 0.43 + ( 0.43 / 0.81 ) * ( mappedTemperature - 0.81 ) +
-                         PRESSURE_FACTOR * Math.pow( modelPressure, 2 );
-      }
-      return Math.min( mappedPressure, 1 );
-    },
-
-    // TODO: This was added by jblanco on 3/23/2012 as part of effort to
-    // improve phase diagram behavior, see #3287. If kept, it needs to be
-    // cleaned up, including deletion of the previous version of this method.
-
-    // Map the model temperature and pressure to a normalized pressure value
-    // suitable for use in setting the marker position on the phase chart.
-    mapModelTempAndPressureToPhaseDiagramPressureAlternative1: function( modelPressure, modelTemperature ) {
       // This method is a total tweak fest.  All values and equations are
       // made to map to the phase diagram, and are NOT based on any real-
       // world equations that define phases of matter.
