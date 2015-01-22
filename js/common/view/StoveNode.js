@@ -80,8 +80,8 @@ define( function( require ) {
     var TOP_SIDE_TRACK_COLOR = '#0A00F0';
     var BOTTOM_SIDE_TRACK_COLOR = '#EF000F';
     var labelFont = new PhetFont( 14 );
-    var heatTitle = new Text( heatString, { font: labelFont } );
-    var coolTitle = new Text( coolString, { font: labelFont } );
+    var heatTitle = new Text( heatString, { font: labelFont, rotation: Math.PI / 2 } );
+    var coolTitle = new Text( coolString, { font: labelFont, rotation: Math.PI / 2 } );
     var heatCoolSlider = new HSlider( heatProperty, { min: -1, max: 1 },
       {
         endDrag: function() {
@@ -93,27 +93,24 @@ define( function( require ) {
           .addColorStop( 1, BOTTOM_SIDE_TRACK_COLOR ),
         thumbSize: new Dimension2( 15, 30 ),
         majorTickLength: 15,
-        minorTickLength: 12
-
+        minorTickLength: 12,
+        rotation: -Math.PI / 2,
+        centerY: stoveBody.centerY,
+        centerX:  stoveBody.centerX + 10
       } );
-    heatCoolSlider.rotation = -Math.PI / 2;
-    heatTitle.rotation = Math.PI / 2;
-    coolTitle.rotation = Math.PI / 2;
     heatCoolSlider.addMajorTick( 1, heatTitle );
     heatCoolSlider.addMinorTick( 0 );
     heatCoolSlider.addMajorTick( -1, coolTitle );
-    heatCoolSlider.centerY = stoveBody.centerY;
-    heatCoolSlider.centerX = stoveBody.centerX + 10;
 
-    var fireNode = new Image( fireImage, { centerX: stoveBody.centerX, centerY: stoveBody.centerY, scale: 0.6 } );
-    var iceNode = new Image( iceImage, { centerX: stoveBody.centerX, centerY: stoveBody.centerY, scale: 0.6 } );
+    var fireNode = new Image( fireImage, { centerX: stoveBody.centerX, centerY: stoveBody.centerY } );
+    var iceNode = new Image( iceImage, { centerX: stoveBody.centerX, centerY: stoveBody.centerY } );
     heatProperty.link( function( heat ) {
       multipleParticleModel.setHeatingCoolingAmount( heat );
       if ( heat > 0 ) {
-        fireNode.setTranslation( (stoveBody.width - fireNode.width) / 2, -heat * fireImage.height * 0.5 );
+        fireNode.setTranslation( (stoveBody.width - fireNode.width) / 2, -heat * fireImage.height * 0.85 );
       }
       else if ( heat < 0 ) {
-        iceNode.setTranslation( (stoveBody.width - iceNode.width) / 2, heat * iceImage.height * 0.5 );
+        iceNode.setTranslation( (stoveBody.width - iceNode.width) / 2, heat * iceImage.height * 0.85 );
       }
       iceNode.setVisible( heat < 0 );
       fireNode.setVisible( heat > 0 );
