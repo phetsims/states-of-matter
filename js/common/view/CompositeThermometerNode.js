@@ -17,14 +17,16 @@ define( function( require ) {
   var Text = require( 'SCENERY/nodes/Text' );
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
 
-  // constants
-  var inset = 10;
-  var LID_POSITION_TWEAK_FACTOR = 65; // Empirically determined value for aligning lid and container body.
-
   // strings
   var kelvinUnits = require( 'string!STATES_OF_MATTER/kelvinUnits' );
   var celsiusUnits = require( 'string!STATES_OF_MATTER/celsiusUnits' );
 
+  // constants
+  var inset = 10;
+  var LID_POSITION_TWEAK_FACTOR = 65; // Empirically determined value for aligning lid and container body.
+
+  // clamping the red mercury display at 1000
+  var MAX_TEMPERATURE_tO_CLAMP_RED_MERCURY = 1000;
 
   /**
    *
@@ -41,13 +43,15 @@ define( function( require ) {
 
     // add thermometer
     var temperatureInKelvinProperty = new Property( multipleParticleModel.getTemperatureInKelvin() );
-    var thermometer = new ThermometerNode( 0, 1000, temperatureInKelvinProperty, {
+    var thermometer = new ThermometerNode( 0, MAX_TEMPERATURE_tO_CLAMP_RED_MERCURY, temperatureInKelvinProperty, {
       outlineStroke: 'black',
       backgroundColor: 'white',
-      tickSpacing: 3,
-      bulbDiameter: 25,
-      lineWidth: 2,
-      tubeWidth: 15,
+      tickSpacing: 8,
+      majorTickLength: 8,
+      minorTickLength: 4,
+      bulbDiameter: 23,
+      lineWidth: 1.4,
+      tubeWidth: 13,
       tubeHeight: 65
     } );
     this.addChild( thermometer );
@@ -61,8 +65,9 @@ define( function( require ) {
       temperatureKelvinText.setText( tempInKelvinRounded + " " + kelvinUnits );
       temperatureCelsiusText.setText( Math.round( tempInKelvin - 273.15 ) + " " + celsiusUnits );
 
-      // clamping the red mercury display at 1000
-      temperatureInKelvinProperty.value = tempInKelvinRounded > 1000 ? 1000 : tempInKelvinRounded;
+
+      temperatureInKelvinProperty.value = tempInKelvinRounded > MAX_TEMPERATURE_tO_CLAMP_RED_MERCURY ?
+                                          MAX_TEMPERATURE_tO_CLAMP_RED_MERCURY : tempInKelvinRounded;
     } );
 
     var temperatureProperty = new Property( 0 );
