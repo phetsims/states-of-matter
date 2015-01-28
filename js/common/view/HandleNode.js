@@ -81,7 +81,9 @@ define( function( require ) {
       lineWidth: 3,
       stroke: 'black',
       fill: 'black',
-      scale: handleScale
+      scale: handleScale,
+      right: middleShape.left,
+      y: middleShape.centerY - 3
     } );
 
 
@@ -105,18 +107,17 @@ define( function( require ) {
       lineWidth: 3,
       stroke: 'black',
       fill: 'black',
-      scale: handleScale
+      scale: handleScale,
+      y: middleShape.centerY - 2,
+      left: middleShape.right
     } );
     this.addChild( rightShape );
     leftShape.setScaleMagnitude( handleScale, 0.16 );
     rightShape.setScaleMagnitude( handleScale, 0.16 );
-    leftShape.right = middleShape.left;
-    leftShape.y = middleShape.centerY - 3;
-    rightShape.y = middleShape.centerY - 2;
-    rightShape.left = middleShape.right;
 
     // Set ourself up to listen for and handle mouse dragging events.
-    var startY, endY;
+    var startY;
+    var endY;
 
     this.addInputListener( new SimpleDragHandler(
       {
