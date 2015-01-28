@@ -26,7 +26,7 @@ define( function( require ) {
   var LID_POSITION_TWEAK_FACTOR = 65; // Empirically determined value for aligning lid and container body.
 
   // clamping the red mercury display at 1000
-  var MAX_TEMPERATURE_tO_CLAMP_RED_MERCURY = 1000;
+  var MAX_TEMPERATURE_TO_CLAMP_RED_MERCURY = 1000;
 
   /**
    *
@@ -43,7 +43,7 @@ define( function( require ) {
 
     // add thermometer
     var temperatureInKelvinProperty = new Property( multipleParticleModel.getTemperatureInKelvin() );
-    var thermometer = new ThermometerNode( 0, MAX_TEMPERATURE_tO_CLAMP_RED_MERCURY, temperatureInKelvinProperty, {
+    var thermometer = new ThermometerNode( 0, MAX_TEMPERATURE_TO_CLAMP_RED_MERCURY, temperatureInKelvinProperty, {
       outlineStroke: 'black',
       backgroundColor: 'white',
       tickSpacing: 8,
@@ -66,8 +66,8 @@ define( function( require ) {
       temperatureCelsiusText.setText( Math.round( tempInKelvin - 273.15 ) + " " + celsiusUnits );
 
 
-      temperatureInKelvinProperty.value = tempInKelvinRounded > MAX_TEMPERATURE_tO_CLAMP_RED_MERCURY ?
-                                          MAX_TEMPERATURE_tO_CLAMP_RED_MERCURY : tempInKelvinRounded;
+      temperatureInKelvinProperty.value = tempInKelvinRounded > MAX_TEMPERATURE_TO_CLAMP_RED_MERCURY ?
+                                          MAX_TEMPERATURE_TO_CLAMP_RED_MERCURY : tempInKelvinRounded;
     } );
 
     var temperatureProperty = new Property( 0 );
