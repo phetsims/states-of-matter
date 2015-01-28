@@ -40,10 +40,9 @@ define( function( require ) {
       tailWidth: 6,
       fill: '#33FF00',
       stroke: '#33FF00',
-      pickable: true
+      pickable: true,
+      rotation: 2 * Math.PI / 2
     } );
-    this.upArrowNode.setRotation( 2 * Math.PI / 2 );
-
 
     // Add the down arrow.
     this.downArrow = new ArrowNode( 0, 0, 0, 25, {
@@ -52,9 +51,9 @@ define( function( require ) {
       tailWidth: 6,
       fill: '#33FF00',
       stroke: '#33FF00',
-      pickable: true
+      pickable: true,
+      top: this.upArrowNode.bottom + 5
     } );
-    this.downArrow.top = this.upArrowNode.bottom + 5;
     // Load and scale the image.
     this.fingerImageNode = new Image( fingerImage, { scale: 0.5, cursor: 'ns-resize', pickable: true } );
 
@@ -124,22 +123,21 @@ define( function( require ) {
       }
       else {
         this.upArrowNode.setVisible( true );
-        this.upArrowNode.setVisible( true );
       }
     },
 
     handleContainerSizeChanged: function() {
-      var containerRect = this.multipleParticleModel.getParticleContainerRect();
+      var containerHeight = this.multipleParticleModel.getParticleContainerHeight();
       if ( !this.multipleParticleModel.getContainerExploded() ) {
         this.setTranslation( this.x,
           Math.abs( this.modelViewTransform.modelToViewDeltaY( StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT -
-                                                               containerRect.getHeight() ) ) - this.height + 20 );
+                                                               containerHeight ) ) - this.height + 20 );
       }
       else {
         // quickly.
         this.setTranslation( this.x,
           -this.modelViewTransform.modelToViewDeltaY( StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT -
-                                                      ( containerRect.getHeight() * 2 ) ) -
+                                                      ( containerHeight * 2 ) ) -
           this.height );
       }
     },

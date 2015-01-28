@@ -13,7 +13,6 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var PropertySet = require( 'AXON/PropertySet' );
   var ObservableArray = require( 'AXON/ObservableArray' );
-  var Rectangle = require( 'DOT/Rectangle' );
   var Vector2 = require( 'DOT/Vector2' );
   var Util = require( 'DOT/Util' );
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
@@ -176,12 +175,6 @@ define( function( require ) {
       return this.particles.length / this.moleculeDataSet.atomsPerMolecule;
     },
 
-    /**
-     * Get a rectangle that represents the current size and position of the particle container.
-     */
-    getParticleContainerRect: function() {
-      return new Rectangle( 0, 0, StatesOfMatterConstants.PARTICLE_CONTAINER_WIDTH, this.particleContainerHeight );
-    },
 
     /**
      * @param {Number} newTemperature

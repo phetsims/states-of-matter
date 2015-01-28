@@ -244,7 +244,7 @@ define( function( require ) {
       this.fingerNode.setTranslation( this.fingerNode.x + openEllipse.width / 2.4,
         Math.abs( this.modelViewTransform.modelToViewDeltaY(
           StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT -
-          this.multipleParticleModel.getParticleContainerRect().getHeight() ) ) +
+          this.multipleParticleModel.getParticleContainerHeight() ) ) +
         this.containerLid.y - this.fingerNode.height + 20 );
 
       // Add the handle to the lid.
@@ -288,7 +288,7 @@ define( function( require ) {
      */
     updatePressureGauge: function() {
       if ( this.pressureMeter ) {
-        var containerRect = this.multipleParticleModel.getParticleContainerRect();
+        var containerHeight = this.multipleParticleModel.getParticleContainerHeight();
         if ( !this.multipleParticleModel.getContainerExploded() ) {
           if ( this.pressureMeter.getRotation() !== 0 ) {
             this.pressureMeter.setRotation( 0 );
@@ -296,13 +296,13 @@ define( function( require ) {
           this.pressureMeter.setTranslation( this.pressureMeter.x, PRESSURE_GAUGE_Y_OFFSET );
           this.pressureMeter.setElbowHeight( PRESSURE_METER_ELBOW_OFFSET +
                                              Math.abs( this.modelViewTransform.modelToViewDeltaY( StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT -
-                                                                                                  containerRect.height ) ) );
+                                                                                                  containerHeight ) ) );
         }
         else {
           // The container is exploding, so spin and move the gauge.
           this.pressureMeter.rotate( -Math.PI / 20 );
           this.pressureMeter.setTranslation( this.pressureMeter.x, this.y +
-                                                                   this.modelViewTransform.modelToViewDeltaY( containerRect.getHeight() ) );
+                                                                   this.modelViewTransform.modelToViewDeltaY( containerHeight ) );
         }
       }
     },
