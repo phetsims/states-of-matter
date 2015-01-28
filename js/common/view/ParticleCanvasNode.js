@@ -31,6 +31,7 @@ define( function( require ) {
     projectorColorsProperty.link( function( projectorColors ) {
       particleCanvasNode.projectorColors = projectorColors;
     } );
+    this.mutate( options );
   }
 
   return inherit( CanvasNode, ParticleCanvasNode, {

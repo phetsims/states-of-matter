@@ -52,9 +52,9 @@ define( function( require ) {
   // behavior.  Value empirically determined.
   var MAX_NUM_HISTORY_SAMPLES = 100;
 
-  var particleLayerCanvasBoundLimit = 1000;
-  var particleLayerXOffset = 150;
-  var particleLayerYOffset = 680;
+  var particleCanvasLayerBoundLimit = 600;
+  var particleLayerXOffset = 100;
+  var particleLayerYOffset = 280;
   var particleContainerXOffset = 60;
   var layBoundsRightOffset = 15;
   var layBoundsYOffset = 10;
@@ -100,10 +100,10 @@ define( function( require ) {
 
     // add particle canvas layer for particle rendering
     this.particlesLayer = new ParticleCanvasNode( multipleParticleModel.particles, modelViewTransform, projectorColorsProperty, {
-      centerX: stoveNode.centerX - particleLayerXOffset,
-      bottom: stoveNode.top + particleLayerYOffset,
-      canvasBounds: new Bounds2( -particleLayerCanvasBoundLimit, -particleLayerCanvasBoundLimit,
-        particleLayerCanvasBoundLimit, particleLayerCanvasBoundLimit )
+      centerX: stoveNode.centerX + particleLayerXOffset,
+      bottom:  stoveNode.top + particleLayerYOffset,
+      canvasBounds: new Bounds2( -100, -particleCanvasLayerBoundLimit,
+        particleCanvasLayerBoundLimit, particleCanvasLayerBoundLimit )
     } );
     this.addChild( this.particlesLayer );
     this.addChild( particleContainerNode );
