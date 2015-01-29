@@ -30,17 +30,23 @@ define( function( require ) {
      */
     createAtom: function( atomType ) {
       var atom = null;
-      if ( atomType === AtomType.ADJUSTABLE ) {
-        atom = new ConfigurableStatesOfMatterAtom( 0, 0 );
-      }
-      else if ( atomType === AtomType.ARGON ) {
-        atom = new ArgonAtom( 0, 0 );
-      }
-      else if ( atomType === AtomType.NEON ) {
-        atom = new NeonAtom( 0, 0 );
-      }
-      else if ( atomType === AtomType.OXYGEN ) {
-        atom = new OxygenAtom( 0, 0 );
+      switch( atomType ) {
+        case AtomType.ADJUSTABLE:
+          atom = new ConfigurableStatesOfMatterAtom( 0, 0 );
+          break;
+        case AtomType.ARGON:
+          atom = new ArgonAtom( 0, 0 );
+          break;
+        case  AtomType.NEON:
+          atom = new NeonAtom( 0, 0 );
+          break;
+        case AtomType.OXYGEN:
+          atom = new OxygenAtom( 0, 0 );
+          break;
+        default:
+          atom = null;
+          break;
+
       }
       return atom;
     }

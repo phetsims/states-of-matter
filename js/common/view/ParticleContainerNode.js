@@ -40,9 +40,8 @@ define( function( require ) {
     this.modelViewTransform = modelViewTransform;
     this.containmentAreaWidth = StatesOfMatterConstants.CONTAINER_BOUNDS.width;
     this.containmentAreaHeight = StatesOfMatterConstants.CONTAINER_BOUNDS.height;
-
+    var particleContainerNode = this;
     Node.call( this );
-
     var preParticleLayer = new Node();
     var postParticleLayer = new Node( { opacity: 0.9 } );
     this.containerLid = new Node( { opacity: 0.9 } );
@@ -64,22 +63,19 @@ define( function( require ) {
       false ).close(), {
       lineWidth: 1,
       stroke: '#B3B3B3',
-      fill: '#B3B3B3'
+      fill: '#B3B3B3',
+      centerX: openEllipse.centerX,
+      centerY: openEllipse.centerY
     } );
-    openInnerEllipse.centerX = openEllipse.centerX;
-    openInnerEllipse.centerY = openEllipse.centerY;
     var open = new Path( new Shape()
       .ellipticalArc( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / 2, ellipseCenterY,
       openEllipseRadiusX, StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / 2, Math.PI / 2, 0, 2 * Math.PI,
       false ).close(), {
       lineWidth: 1,
-      stroke: '#606262'
+      stroke: '#606262',
+      centerX: openEllipse.centerX,
+      centerY: openEllipse.centerY
     } );
-    open.centerX = openEllipse.centerX;
-    open.centerY = openEllipse.centerY;
-    openInnerEllipse.centerX = openEllipse.centerX;
-    openInnerEllipse.centerY = openEllipse.centerY;
-
     var containerLeftShapeWidth = 25;
     var distanceFromTopInnerTop = 5;
     // add container outer shape
@@ -264,7 +260,6 @@ define( function( require ) {
       this.pressureMeter.setTranslation( this.containerLid.x - pressureMeterXOffset,
         this.containerLid.y - PRESSURE_METER_ELBOW_OFFSET );
     }
-    var particleContainerNode = this;
     multipleParticleModel.particleContainerHeightProperty.link( function() {
       particleContainerNode.handleContainerSizeChanged();
     } );
