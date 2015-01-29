@@ -144,7 +144,6 @@ define( function( require ) {
         isExploded: false, // notifyContainerExplodedStateChanged
         expanded: true,// phase diagram
         interactionExpanded: true,// interaction diagram
-        numParticles: 0, // notifyParticleAdded
         temperatureSetPoint: INITIAL_TEMPERATURE, // notifyTemperatureChanged
         pressure: 0, // notifyPressureChanged
         moleculeType: StatesOfMatterConstants.NEON, // notifyMoleculeTypeChanged,
@@ -470,8 +469,9 @@ define( function( require ) {
         var moleculeVelocity = new Vector2( xVel, yVel );
         var moleculeRotationRate = ( Math.random() - 0.5 ) * ( Math.PI / 2 );
         var atomPositions = [];
+        var atomPositionInVector = new Vector2();
         for ( var i = 0; i < atomsPerMolecule; i++ ) {
-          atomPositions[ i ] = new Vector2();
+          atomPositions[ i ] = atomPositionInVector;
         }
 
         // Add the newly created molecule to the data set.
@@ -507,12 +507,8 @@ define( function( require ) {
           assert && assert( this.currentMolecule === StatesOfMatterConstants.DIATOMIC_OXYGEN );
 
           // Add particles to model set.
-          //for ( var j = 0; j < atomsPerMolecule; j++ ) {
           this.particles.add( new OxygenAtom( 0, 0 ) );
-          atomPositions[ 0 ] = new Vector2();
           this.particles.add( new OxygenAtom( 0, 0 ) );
-          atomPositions[ 1 ] = new Vector2();
-          // }
         }
         else if ( atomsPerMolecule === 3 ) {
 
@@ -520,11 +516,8 @@ define( function( require ) {
 
           // Add atoms to model set.
           this.particles.add( new OxygenAtom( 0, 0 ) );
-          atomPositions[ 0 ] = new Vector2();
           this.particles.add( new HydrogenAtom( 0, 0 ) );
-          atomPositions[ 1 ] = new Vector2();
           this.particles.add( new HydrogenAtom( 0, 0 ) );
-          atomPositions[ 2 ] = new Vector2();
         }
 
         if ( this.particles.length === 1 ) {
@@ -784,24 +777,21 @@ define( function( require ) {
       this.andersenThermostat = new AndersenThermostat( this.moleculeDataSet, this.minModelTemperature );
 
       var numberOfMolecules = numberOfAtoms / 2;
-
+      var atomPositionInVector = new Vector2();
+      var atomPositions = [];
+      atomPositions[ 0 ] = atomPositionInVector;
+      atomPositions[ 1 ] = atomPositionInVector;
       // Create the individual atoms and add them to the data set.
       for ( var i = 0; i < numberOfMolecules; i++ ) {
         // Create the molecule.
         var moleculeCenterOfMassPosition = new Vector2();
         var moleculeVelocity = new Vector2();
-        var atomPositions = [];
-        atomPositions[ 0 ] = new Vector2();
-        atomPositions[ 1 ] = new Vector2();
         // Add the atom to the data set.
         this.moleculeDataSet.addMolecule( atomPositions, moleculeCenterOfMassPosition, moleculeVelocity, 0 );
-        // Add atoms to model set.
-        var atom;
-        atom = new OxygenAtom( 0, 0 );
-        this.particles.push( atom );
 
-        atom = new OxygenAtom( 0, 0 );
-        this.particles.push( atom );
+        // Add atoms to model set.
+        this.particles.push( new OxygenAtom( 0, 0 ) );
+        this.particles.push( new OxygenAtom( 0, 0 ) );
       }
       // Initialize the particle positions according the to requested phase.
       this.setPhase( phase );
@@ -832,32 +822,25 @@ define( function( require ) {
       this.isoKineticThermostat = new IsokineticThermostat( this.moleculeDataSet, this.minModelTemperature );
       this.andersenThermostat = new AndersenThermostat( this.moleculeDataSet, this.minModelTemperature );
       // Create the individual atoms and add them to the data set.
+      var atomPositionInVector = new Vector2();
+      var atomPositions = [];
+      atomPositions[ 0 ] = atomPositionInVector;
+      atomPositions[ 1 ] = atomPositionInVector;
+      atomPositions[ 2 ] = atomPositionInVector;
       for ( var i = 0; i < numberOfMolecules; i++ ) {
         // Create the molecule.
         var moleculeCenterOfMassPosition = new Vector2();
         var moleculeVelocity = new Vector2();
-        var atomPositions = [];
-        atomPositions[ 0 ] = new Vector2();
-        atomPositions[ 1 ] = new Vector2();
-        atomPositions[ 2 ] = new Vector2();
+
         // Add the atom to the data set.
         this.moleculeDataSet.addMolecule( atomPositions, moleculeCenterOfMassPosition, moleculeVelocity, 0 );
         // Add atoms to model set.
-        var atom;
-        atom = new OxygenAtom( 0, 0 );
-        this.particles.add( atom );
 
-        atom = new HydrogenAtom( 0, 0 );
-        this.particles.add( atom );
+        this.particles.add( new OxygenAtom( 0, 0 ) );
+        this.particles.add( new HydrogenAtom( 0, 0 ) );
         // is more on this in the algorithm implementation for water.
-        if ( i % 2 === 0 ) {
-          atom = new HydrogenAtom( 0, 0 );
-          this.particles.add( atom );
-        }
-        else {
-          atom = new HydrogenAtom2( 0, 0 );
-          this.particles.add( atom );
-        }
+        var atom = ( i % 2 === 0 ) ? new HydrogenAtom( 0, 0 ) : new HydrogenAtom2( 0, 0 );
+        this.particles.add( atom );
       }
       // Initialize the particle positions according the to requested phase.
       this.setPhase( phase );
@@ -950,14 +933,13 @@ define( function( require ) {
       this.andersenThermostat = new AndersenThermostat( this.moleculeDataSet, this.minModelTemperature );
 
       // Create the individual atoms and add them to the data set.
+      var atomPositions = [];
+      atomPositions.push( new Vector2() );
       for ( var i = 0; i < numberOfAtoms; i++ ) {
 
         // Create the atom.
         var moleculeCenterOfMassPosition = new Vector2();
         var moleculeVelocity = new Vector2();
-        var atomPositions = [];
-        atomPositions.push( new Vector2() );
-
         // Add the atom to the data set.
         this.moleculeDataSet.addMolecule( atomPositions, moleculeCenterOfMassPosition, moleculeVelocity, 0 );
 
