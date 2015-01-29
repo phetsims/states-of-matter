@@ -241,30 +241,7 @@ define( function( require ) {
         this.positionMarker.setVisible( false );
       }
     },
-    /**
-     * Get the range of values over which the potential curve is graphed.  It
-     * is assumed to go from 0 to the value returned by this function.
-     */
-    getXAxisRange: function() {
-      return MAX_INTER_ATOM_DISTANCE;
-    },
-    /**
-     * Returns a value between 0 and 1 representing the fraction of the
-     * overall node that is actually used for graphing in the x direction.
-     * This is generally used for determining how to scale the graph when
-     * used in an environment where the scale must match the surroundings.
-     */
-    getXAxisGraphProportion: function() {
-      return this.graphWidth / this.width;
-    },
-    /**
-     * Returns a values between 0 and 1 representing the fraction of the
-     * overall node that exists to the left of the X axis.  This is generally
-     * used for alignment and positioning of this node on a canvas.
-     */
-    getXAxisOffsetProportion: function() {
-      return 1 - (  this.graphWidth + AXES_ARROW_HEAD_HEIGHT) / this.width;
-    },
+
     /**
      * Set whether the graph is showing the potential between individual atoms
      * or multi-atom molecules.

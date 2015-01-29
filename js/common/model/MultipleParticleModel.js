@@ -44,7 +44,6 @@ define( function( require ) {
   var MAX_TEMPERATURE = 50.0;
   var MIN_TEMPERATURE = 0.0001;
   var INITIAL_GRAVITATIONAL_ACCEL = 0.045;
-  var MAX_GRAVITATIONAL_ACCEL = 0.4;
   var MAX_TEMPERATURE_CHANGE_PER_ADJUSTMENT = 0.025;
   var TICKS_PER_TEMP_ADJUSTMENT = 10;
   var MIN_INJECTED_MOLECULE_VELOCITY = 0.5;
@@ -60,7 +59,6 @@ define( function( require ) {
   var INJECTION_POINT_VERT_PROPORTION = 0.25;
 
   // Possible thermostat settings.
-  var NO_THERMOSTAT = 0;
   var ISOKINETIC_THERMOSTAT = 1;
   var ANDERSEN_THERMOSTAT = 2;
   var ADAPTIVE_THERMOSTAT = 3;
@@ -169,12 +167,6 @@ define( function( require ) {
 
   return inherit( PropertySet, MultipleParticleModel, {
 
-
-    getNumMolecules: function() {
-      return this.particles.length / this.moleculeDataSet.atomsPerMolecule;
-    },
-
-
     /**
      * @param {Number} newTemperature
      */
@@ -205,19 +197,6 @@ define( function( require ) {
       return this.convertInternalTemperatureToKelvin();
     },
 
-    setGravitationalAcceleration: function( acceleration ) {
-      if ( acceleration > MAX_GRAVITATIONAL_ACCEL ) {
-        console.warning( 'WARNING: Attempt to set out-of-range value for gravitational acceleration.' );
-        this.gravitationalAcceleration = MAX_GRAVITATIONAL_ACCEL;
-      }
-      else if ( acceleration < 0 ) {
-        console.warning( 'WARNING: Attempt to set out-of-range value for gravitational acceleration.' );
-        this.gravitationalAcceleration = 0;
-      }
-      else {
-        this.gravitationalAcceleration = acceleration;
-      }
-    },
 
     /**
      * Get the pressure value which is being calculated by the model and is
@@ -302,17 +281,6 @@ define( function( require ) {
       this.pressure = this.getPressureInAtmospheres();
     },
 
-    setThermostatType: function( type ) {
-      if ( ( type === NO_THERMOSTAT ) ||
-           ( type === ISOKINETIC_THERMOSTAT ) ||
-           ( type === ANDERSEN_THERMOSTAT ) ||
-           ( type === ADAPTIVE_THERMOSTAT ) ) {
-        this.thermostatType = type;
-      }
-      else {
-        throw new Error( "Thermostat type setting out of range: " + type );
-      }
-    },
 
     /**
      * Sets the target height of the container.  The target height is set
@@ -393,9 +361,6 @@ define( function( require ) {
       return epsilon;
     },
 
-    //----------------------------------------------------------------------------
-    // Other Public Methods
-    //----------------------------------------------------------------------------
 
     reset: function() {
       this.initializeModelParameters();
