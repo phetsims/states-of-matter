@@ -20,6 +20,7 @@
   "earth": "Earth",
   "interaction": "Interaction",
   "distanceBetweenAtoms": "Distance Between Atoms",
+  "distanceBetweenMolecules": "Distance Between Molecules",
   "potentialEnergy": "Potential Energy",
   "pressure": "Pressure",
   "adjustableAttraction": "Adjustable Attraction",
