@@ -21,8 +21,10 @@ define( function( require ) {
   var ArrowNode = require( 'SCENERY_PHET/ArrowNode' );
   var GridNode = require( 'ATOMIC_INTERACTIONS/view/ZoomableGridNode' );
   var PositionMarker = require( 'ATOMIC_INTERACTIONS/view/PositionMarker' );
+
   //strings
   var distanceBetweenAtomsString = require( 'string!STATES_OF_MATTER/distanceBetweenAtoms' );
+  var distanceBetweenMoleculesString = require( 'string!STATES_OF_MATTER/distanceBetweenMolecules' );
   var potentialEnergyString = require( 'string!STATES_OF_MATTER/potentialEnergy' );
   var sigmaString = require( 'string!STATES_OF_MATTER/sigma' );
   var epsilonString = require( 'string!STATES_OF_MATTER/epsilon' );
@@ -89,7 +91,6 @@ define( function( require ) {
 
 
     if ( wide ) {
-
       this.gridNode = new GridNode( this, 0, 0, this.graphWidth, this.graphHeight );
       this.ljPotentialGraph.addChild( this.gridNode );
     }
@@ -268,25 +269,26 @@ define( function( require ) {
      * Set whether the graph is showing the potential between individual atoms
      * or multi-atom molecules.
      *
-     * @param molecular - true if graph is portraying molecules, false for
+     * @param {Boolean} molecular - true if graph is portraying molecules, false for
      *                  individual atoms.
      */
     setMolecular: function( molecular ) {
-      /*if ( molecular ) {
-       // this.horizontalAxisLabel.setText( 'atoms' );
-       }
-       else {
-       // this.horizontalAxisLabel.setText( 'Distance between Molecules' );
-       }*/
-      this.horizontalAxisLabel.setTranslation( this.graphXOrigin + (  this.graphWidth / 2) -
-                                               (  this.horizontalAxisLabel.width / 2.4),
-        this.graphYOrigin + (  this.horizontalAxisLabel.height ) );
+      var horizontalAxisLabelX;
+      if ( molecular ) {
+        this.horizontalAxisLabel.setText( distanceBetweenMoleculesString );
+        horizontalAxisLabelX = this.graphXOrigin + (  this.graphWidth / 2) - (  this.horizontalAxisLabel.width / 2);
+      }
+      else {
+        this.horizontalAxisLabel.setText( distanceBetweenAtomsString );
+        horizontalAxisLabelX = this.graphXOrigin + (  this.graphWidth / 2) - (  this.horizontalAxisLabel.width / 2.4);
+      }
+      this.horizontalAxisLabel.setTranslation( horizontalAxisLabelX, this.graphYOrigin + (  this.horizontalAxisLabel.height ) );
     },
 
     /**
      * Calculate the Lennard-Jones potential for the given distance.
      *
-     * @param radius
+     * @param {Number} radius
      * @return
      */
 

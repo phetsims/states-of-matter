@@ -95,7 +95,7 @@ define( function( require ) {
     var particleContainerNode = new ParticleContainerNode( multipleParticleModel, modelViewTransform, true, true,
       {
         centerX: stoveNode.centerX - particleContainerXOffset,
-        bottom: stoveNode.top - inset
+        bottom:  stoveNode.top - inset
       } );
 
     // add particle canvas layer for particle rendering
@@ -152,7 +152,7 @@ define( function( require ) {
         radius: 12,
         stroke: 'black',
         fill: '#005566',
-        right: stoveNode.left - stepButtonXOffset,
+        right:  stoveNode.left - stepButtonXOffset,
         bottom: stoveNode.bottom - stepButtonYOffset
 
       }
@@ -172,7 +172,7 @@ define( function( require ) {
     // add bicycle pump node
     this.addChild( new BicyclePumpNode( 200, 250, multipleParticleModel, {
       bottom: stoveNode.top + bicyclePumpNodeYOffset,
-      right: particleContainerNode.left + bicyclePumpNodeXOffset
+      right:  particleContainerNode.left + bicyclePumpNodeXOffset
     } ) );
     // add return Lid button
     this.returnLidButton = new TextPushButton( returnLidString, {
@@ -185,7 +185,7 @@ define( function( require ) {
       visible: false,
       xMargin: 10,
       right: particleContainerNode.left - 2 * layBoundsRightOffset,
-      top: particleContainerNode.centerY + returnLidButtonYOffset
+      top:   particleContainerNode.centerY + returnLidButtonYOffset
     } );
     this.addChild( this.returnLidButton );
     multipleParticleModel.isExplodedProperty.linkAttribute( this.returnLidButton, 'visible' );
@@ -196,7 +196,7 @@ define( function( require ) {
       var epsilonControlInteractionPotentialDiagram = new EpsilonControlInteractionPotentialDiagram(
         StatesOfMatterConstants.MAX_SIGMA, StatesOfMatterConstants.MIN_EPSILON, false, multipleParticleModel, {
           right: this.layoutBounds.right - layBoundsRightOffset,
-          top: phaseChangesMoleculesControlPanel.bottom + layBoundsYOffset / 2
+          top:   phaseChangesMoleculesControlPanel.bottom + layBoundsYOffset / 2
         } );
       this.addChild( epsilonControlInteractionPotentialDiagram );
     }
@@ -205,7 +205,14 @@ define( function( require ) {
       phaseChangesScreenView.modelTemperatureHistory.clear();
       phaseChangesScreenView.updatePhaseDiagram();
       phaseChangesScreenView.phaseDiagram.setDepictingWater( moleculeId === StatesOfMatterConstants.WATER );
-
+      if ( moleculeId === StatesOfMatterConstants.USER_DEFINED_MOLECULE ||
+           moleculeId === StatesOfMatterConstants.DIATOMIC_OXYGEN ||
+           moleculeId === StatesOfMatterConstants.WATER ) {
+        epsilonControlInteractionPotentialDiagram.setMolecular( true );
+      }
+      else {
+        epsilonControlInteractionPotentialDiagram.setMolecular( false );
+      }
       // enable/disable phase diagram on molecule type change
       if ( moleculeId === StatesOfMatterConstants.USER_DEFINED_MOLECULE ) {
         if ( phaseChangesScreenView.isChild( phaseChangesScreenView.phaseDiagram ) ) {
