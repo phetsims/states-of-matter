@@ -205,13 +205,15 @@ define( function( require ) {
       phaseChangesScreenView.modelTemperatureHistory.clear();
       phaseChangesScreenView.updatePhaseDiagram();
       phaseChangesScreenView.phaseDiagram.setDepictingWater( moleculeId === StatesOfMatterConstants.WATER );
-      if ( moleculeId === StatesOfMatterConstants.USER_DEFINED_MOLECULE ||
-           moleculeId === StatesOfMatterConstants.DIATOMIC_OXYGEN ||
-           moleculeId === StatesOfMatterConstants.WATER ) {
-        epsilonControlInteractionPotentialDiagram.setMolecular( true );
-      }
-      else {
-        epsilonControlInteractionPotentialDiagram.setMolecular( false );
+      if ( isInteractionDiagramEnabled ) {
+        if ( moleculeId === StatesOfMatterConstants.USER_DEFINED_MOLECULE ||
+             moleculeId === StatesOfMatterConstants.DIATOMIC_OXYGEN ||
+             moleculeId === StatesOfMatterConstants.WATER ) {
+          epsilonControlInteractionPotentialDiagram.setMolecular( true );
+        }
+        else {
+          epsilonControlInteractionPotentialDiagram.setMolecular( false );
+        }
       }
       // enable/disable phase diagram on molecule type change
       if ( moleculeId === StatesOfMatterConstants.USER_DEFINED_MOLECULE ) {
