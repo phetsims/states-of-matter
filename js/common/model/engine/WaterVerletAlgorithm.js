@@ -208,7 +208,11 @@ define( function( require ) {
                 }
                 dx = atomPositions[ 3 * i + ii ].x - atomPositions[ 3 * j + jj ].x;
                 dy = atomPositions[ 3 * i + ii ].y - atomPositions[ 3 * j + jj ].y;
-                r2inv = 1 / (dx * dx + dy * dy);
+                distanceSquared = (dx * dx + dy * dy);
+                if ( distanceSquared < this.MIN_DISTANCE_SQUARED ) {
+                  distanceSquared = this.MIN_DISTANCE_SQUARED;
+                }
+                r2inv = 1 / distanceSquared;
                 forceScalar = chargesA[ ii ] * chargesB[ jj ] * r2inv * r2inv;
                 this.force.setX( dx * forceScalar );
                 this.force.setY( dy * forceScalar );
