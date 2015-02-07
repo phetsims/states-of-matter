@@ -67,7 +67,9 @@ define( function( require ) {
       centerX: openEllipse.centerX,
       centerY: openEllipse.centerY
     } );
-    var open = new Path( new Shape()
+
+    // container back node
+    this.openNode = new Path( new Shape()
       .ellipticalArc( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / 2, ellipseCenterY,
       openEllipseRadiusX, StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / 2, Math.PI / 2, 0, 2 * Math.PI,
       false ).close(), {
@@ -222,8 +224,6 @@ define( function( require ) {
     } );
     postParticleLayer.addChild( bottomShape );
 
-
-    this.addChild( open );
     this.containerLid.addChild( openEllipse );
     preParticleLayer.addChild( this.containerLid );
 

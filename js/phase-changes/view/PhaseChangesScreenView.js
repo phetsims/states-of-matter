@@ -97,6 +97,8 @@ define( function( require ) {
         centerX: stoveNode.centerX - particleContainerXOffset,
         bottom:  stoveNode.top - inset
       } );
+    // add particle container back node  before  particle Canvas layer
+    this.addChild( particleContainerNode.openNode );
 
     // add particle canvas layer for particle rendering
     this.particlesLayer = new ParticleCanvasNode( multipleParticleModel.particles, modelViewTransform, projectorColorsProperty, {
@@ -107,6 +109,12 @@ define( function( require ) {
     } );
     this.addChild( this.particlesLayer );
     this.addChild( particleContainerNode );
+
+    // adjust the container back node position
+    var containerOpenNodeXOffset = 50.4;
+    var containerOpenNodeYOffset = particleContainerNode.fingerNode.fingerImageNode.height - 10;
+    particleContainerNode.openNode.centerX = particleContainerNode.centerX + containerOpenNodeXOffset;
+    particleContainerNode.openNode.centerY = particleContainerNode.top + containerOpenNodeYOffset;
     this.addChild( stoveNode );
 
     // add compositeThermometer node
