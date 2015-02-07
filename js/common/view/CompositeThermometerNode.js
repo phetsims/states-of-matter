@@ -45,7 +45,7 @@ define( function( require ) {
     var temperatureInKelvinProperty = new Property( multipleParticleModel.getTemperatureInKelvin() );
     var thermometer = new ThermometerNode( 0, MAX_TEMPERATURE_TO_CLAMP_RED_MERCURY, temperatureInKelvinProperty, {
       outlineStroke: 'black',
-      backgroundColor: 'white',
+      backgroundFill: 'white',
       tickSpacing: 8,
       majorTickLength: 8,
       minorTickLength: 4,
