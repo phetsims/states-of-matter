@@ -15,7 +15,7 @@ define( function( require ) {
   var SolidLiquidGasScreenView = require( 'STATES_OF_MATTER/solid-liquid-gas/view/SolidLiquidGasScreenView' );
   var MultipleParticleModel = require( 'STATES_OF_MATTER/common/model/MultipleParticleModel' );
   var Image = require( 'SCENERY/nodes/Image' );
-  var AtomicInteractionColors = require( 'ATOMIC_INTERACTIONS/view/AtomicInteractionColors' );
+  var AtomicInteractionColors = require( 'ATOMIC_INTERACTIONS/atomic-interactions/view/AtomicInteractionColors' );
   // strings
   var statesString = require( 'string!STATES_OF_MATTER/states' );
   // images

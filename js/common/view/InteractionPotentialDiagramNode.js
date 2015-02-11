@@ -19,8 +19,8 @@ define( function( require ) {
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Node = require( 'SCENERY/nodes/Node' );
   var ArrowNode = require( 'SCENERY_PHET/ArrowNode' );
-  var GridNode = require( 'ATOMIC_INTERACTIONS/view/ZoomableGridNode' );
-  var PositionMarker = require( 'ATOMIC_INTERACTIONS/view/PositionMarker' );
+  var GridNode = require( 'ATOMIC_INTERACTIONS/atomic-interactions/view/ZoomableGridNode' );
+  var PositionMarker = require( 'ATOMIC_INTERACTIONS/atomic-interactions/view/PositionMarker' );
 
   //strings
   var distanceBetweenAtomsString = require( 'string!STATES_OF_MATTER/distanceBetweenAtoms' );
