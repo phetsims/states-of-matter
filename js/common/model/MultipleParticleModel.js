@@ -55,7 +55,7 @@ define( function( require ) {
   var PHASE_SOLID = 1;
   var PHASE_LIQUID = 2;
   var PHASE_GAS = 3;
-  var INJECTION_POINT_HORIZ_PROPORTION = 0.03;
+  var INJECTION_POINT_HORIZ_PROPORTION = 0.05;
   var INJECTION_POINT_VERT_PROPORTION = 0.25;
 
   // Possible thermostat settings.
@@ -423,7 +423,7 @@ define( function( require ) {
            ( this.normalizedContainerHeight > injectionPointY * 1.05 ) &&
            ( !this.isExploded ) ) {
 
-        var angle = Math.PI + ( ( Math.random() - 0.5 ) * MAX_INJECTED_MOLECULE_ANGLE );
+        var angle =  ( Math.random() - 0.5 ) * MAX_INJECTED_MOLECULE_ANGLE ;
         var velocity = MIN_INJECTED_MOLECULE_VELOCITY + ( Math.random() *
                                                           ( MAX_INJECTED_MOLECULE_VELOCITY -
                                                             MIN_INJECTED_MOLECULE_VELOCITY ) );
