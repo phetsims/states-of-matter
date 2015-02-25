@@ -103,7 +103,7 @@ define( function( require ) {
     this.addChild( solidLiquidGasMoleculesControlPanel );
 
     // add phases control node
-    var solidLiquidGasPhaseControlNode = new SolidLiquidGasPhaseControlNode( multipleParticleModel.stateProperty, {
+    var solidLiquidGasPhaseControlNode = new SolidLiquidGasPhaseControlNode(multipleParticleModel.heatingCoolingAmountProperty, multipleParticleModel.stateProperty, {
       right: solidLiquidGasMoleculesControlPanel.right,
       top: solidLiquidGasMoleculesControlPanel.bottom + layoutBoundsYOffset
     } );

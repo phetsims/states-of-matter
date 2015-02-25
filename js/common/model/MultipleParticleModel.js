@@ -128,7 +128,6 @@ define( function( require ) {
     this.particleDiameter = 1;
     this.normalizedContainerWidth = StatesOfMatterConstants.PARTICLE_CONTAINER_WIDTH / this.particleDiameter;
     this.gravitationalAcceleration = null;
-    this.heatingCoolingAmount = null;
     this.tempAdjustTickCounter = null;
     this.currentMolecule = null;
     this.thermostatType = ADAPTIVE_THERMOSTAT;
@@ -148,7 +147,8 @@ define( function( require ) {
         interactionStrength: 0, // notifyInteractionStrengthChanged
         state: PHASE_SOLID,//  solid phase
         isPlaying: true,
-        speed: 'normal'
+        speed: 'normal',
+        heatingCoolingAmount: 0
       }
     );
 
@@ -291,10 +291,8 @@ define( function( require ) {
      * @param {Number} desiredContainerHeight
      */
     setTargetParticleContainerHeight: function( desiredContainerHeight ) {
-      desiredContainerHeight = Util.clamp( this.minAllowableContainerHeight,
-        desiredContainerHeight,
+      this.targetContainerHeight = Util.clamp( desiredContainerHeight, this.minAllowableContainerHeight,
         StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT );
-      this.targetContainerHeight = desiredContainerHeight;
     },
 
     /**
@@ -423,7 +421,7 @@ define( function( require ) {
            ( this.normalizedContainerHeight > injectionPointY * 1.05 ) &&
            ( !this.isExploded ) ) {
 
-        var angle =  ( Math.random() - 0.5 ) * MAX_INJECTED_MOLECULE_ANGLE ;
+        var angle = ( Math.random() - 0.5 ) * MAX_INJECTED_MOLECULE_ANGLE;
         var velocity = MIN_INJECTED_MOLECULE_VELOCITY + ( Math.random() *
                                                           ( MAX_INJECTED_MOLECULE_VELOCITY -
                                                             MIN_INJECTED_MOLECULE_VELOCITY ) );
