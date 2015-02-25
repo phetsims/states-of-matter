@@ -16,9 +16,11 @@ define( function( require ) {
   var Shape = require( 'KITE/Shape' );
   var Path = require( 'SCENERY/nodes/Path' );
   var Node = require( 'SCENERY/nodes/Node' );
-  var RadioButtonGroup = require( 'SUN/buttons/RadioButtonGroup' );
   var Circle = require( 'SCENERY/nodes/Circle' );
   var RadialGradient = require( 'SCENERY/util/RadialGradient' );
+  var RectangularPushButton = require( 'SUN/buttons/RectangularPushButton' );
+  var VBox = require( 'SCENERY/nodes/VBox' );
+  var Color = require( 'SCENERY/util/Color' );
 
   //strings
   var solidString = require( 'string!STATES_OF_MATTER/solid' );
@@ -31,11 +33,12 @@ define( function( require ) {
 
   /**
    *
-   * @param {Property<String>} stateProperty that tracks the state(solid/liquid/gas ) selected in the panel
-   * @param {Object} options for various panel display properties
+   * @param {Property<Number>} heatingCoolingAmountProperty
+   * @param {Property<Number>} stateProperty
+   * @param {Object} options that can be passed on to the underlying node
    * @constructor
    */
-  function SolidLiquidGasPhaseControlNode( stateProperty, options ) {
+  function SolidLiquidGasPhaseControlNode( heatingCoolingAmountProperty, stateProperty, options ) {
 
     this.options = _.extend( {
       xMargin: 5,
@@ -66,7 +69,7 @@ define( function( require ) {
       if ( itemSpec.icon ) {
         var strutWidth = maxWidth - itemSpec.label.width - itemSpec.icon.width + 17;
         return new HBox( {
-          children: [ new HStrut( 10 ), itemSpec.icon, new HStrut( strutWidth + 30 ), itemSpec.label,
+          children: [ new HStrut( 10 ), itemSpec.icon, new HStrut( strutWidth + 25 ), itemSpec.label,
             new HStrut( 30 ) ]
         } );
       }
@@ -75,32 +78,68 @@ define( function( require ) {
       }
     };
 
-    var radioButtonContent = [
-      { value: SOLID_STATE, node: createItem( solid ) },
-      { value: LIQUID_STATE, node: createItem( liquid ) },
-      { value: GAS_STATE, node: createItem( gas ) }
-    ];
-
-    var radioButtonGroup = new RadioButtonGroup( stateProperty, radioButtonContent, {
-      orientation: 'vertical',
-      spacing: 3,
-      cornerRadius: 5,
-      baseColor: '#FFECCF',
-      disabledBaseColor: '#FFECCF',
-      selectedLineWidth: 1,
-      selectedStroke: '#FFECCF',
-      selectedButtonOpacity: 0.6,
-      deselectedLineWidth: 0,
-      deselectedContentOpacity: 1,
-      deselectedButtonOpacity: 1
+    // solid state button
+    var solidStateButton = new RectangularPushButton( {
+      content: createItem( solid ),
+      listener: function() {
+        stateProperty.value = SOLID_STATE;
+      }
     } );
-
-
-    this.addChild( radioButtonGroup );
+    // liquid state button
+    var liquidStateButton = new RectangularPushButton( {
+      content: createItem( liquid ),
+      listener: function() {
+        stateProperty.value = LIQUID_STATE;
+      },
+      baseColor: new Color( 250, 0, 0 )
+    } );
+    // gas state button
+    var gasStateButton = new RectangularPushButton( {
+      content: createItem( gas ),
+      listener: function() {
+        stateProperty.value = GAS_STATE;
+      },
+      baseColor: 'rgb( 204, 102, 204 )'
+    } );
+    stateProperty.link( function( state ) {
+      switch( state ) {
+        case SOLID_STATE:
+          solidStateButton.baseColor = '#998D7C';
+          liquidStateButton.baseColor = '#FFECCF';
+          gasStateButton.baseColor = '#FFECCF';
+          break;
+        case LIQUID_STATE:
+          solidStateButton.baseColor = '#FFECCF';
+          liquidStateButton.baseColor = '#998D7C';
+          gasStateButton.baseColor = '#FFECCF';
+          break;
+        case GAS_STATE:
+          solidStateButton.baseColor = '#FFECCF';
+          liquidStateButton.baseColor = '#FFECCF';
+          gasStateButton.baseColor = '#998D7C';
+          break;
+      }
+    } );
+    heatingCoolingAmountProperty.link( function() {
+      switch( stateProperty.value ) {
+        case SOLID_STATE:
+          solidStateButton.baseColor = '#FFECCF';
+          break;
+        case LIQUID_STATE:
+          liquidStateButton.baseColor = '#FFECCF';
+          break;
+        case GAS_STATE:
+          gasStateButton.baseColor = '#FFECCF';
+          break;
+      }
+    } );
+    var buttons = new VBox( { children: [ solidStateButton, liquidStateButton, gasStateButton ], spacing: 10, align: 'center' } );
+    this.addChild( buttons );
     this.mutate( this.options );
   }
 
   var imageScale = 0.5;
+  // solid icon
   var createSolidIcon = function() {
 
     var frontShape = new Path( new Shape()
@@ -126,6 +165,7 @@ define( function( require ) {
     );
     return new Node( { children: [ frontShape, topShape, sidShape ], scale: imageScale } );
   };
+  // liquid icon
   var createLiquidIcon = function() {
 
     // bucket shape
@@ -147,6 +187,7 @@ define( function( require ) {
 
     return new Node( { children: [ outerShape, innerShape ], scale: imageScale } );
   };
+  // gas icon
   var createGasIcon = function() {
 
     var largeCircleRadius = 15;
