@@ -71,14 +71,14 @@ define( function( require ) {
     this.fingerImageNode.addInputListener( new SimpleDragHandler(
       {
         start: function( event ) {
-          startY = pointingHandNode.fingerImageNode.globalToParentPoint( event.pointer.point ).y;
+          startY = pointingHandNode.globalToParentPoint( event.pointer.point ).y;
           pointingHandNode.beingDragged = true;
           pointingHandNode.containerSizeAtDragStart = multipleParticleModel.getParticleContainerHeight();
           pointingHandNode.updateHintVisibility();
 
         },
         drag: function( event ) {
-          endY = pointingHandNode.fingerImageNode.globalToParentPoint( event.pointer.point ).y;
+          endY = pointingHandNode.globalToParentPoint( event.pointer.point ).y;
           // Resize the container based on the amount that the node has moved.
           multipleParticleModel.setTargetParticleContainerHeight(
             pointingHandNode.containerSizeAtDragStart + modelViewTransform.viewToModelDeltaY( endY - startY ) );

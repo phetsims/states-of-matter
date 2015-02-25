@@ -245,7 +245,7 @@ define( function( require ) {
 
       // Add the handle to the lid.
       this.containerLid.addChild( openInnerEllipse );
-      var handleNode = new HandleNode( multipleParticleModel, modelViewTransform );
+      var handleNode = new HandleNode();
       handleNode.centerX = openInnerEllipse.centerX;
       handleNode.centerY = openInnerEllipse.centerY;
       this.containerLid.addChild( handleNode );

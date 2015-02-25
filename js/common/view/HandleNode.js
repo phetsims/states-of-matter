@@ -13,19 +13,15 @@ define( function( require ) {
   var Node = require( 'SCENERY/nodes/Node' );
   var Path = require( 'SCENERY/nodes/Path' );
   var Shape = require( 'KITE/Shape' );
-  var SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
   var LinearGradient = require( 'SCENERY/util/LinearGradient' );
 
   /**
    *
-   * @param {MultipleParticleModel} multipleParticleModel - model of the simulation
-   * @param {ModelViewTransform2} modelViewTransform to convert between model and view co-ordinate frames
    * @constructor
    */
-  function HandleNode( multipleParticleModel, modelViewTransform ) {
+  function HandleNode() {
 
     Node.call( this );
-    var handleNode = this;
     var handleScale = 0.22;
     // add handle middle shape
     var handleNodeUpperMiddleShapeTopY = 5;
@@ -114,33 +110,6 @@ define( function( require ) {
     this.addChild( rightShape );
     leftShape.setScaleMagnitude( handleScale, 0.16 );
     rightShape.setScaleMagnitude( handleScale, 0.16 );
-
-    // Set ourself up to listen for and handle mouse dragging events.
-    var startY;
-    var endY;
-
-    this.addInputListener( new SimpleDragHandler(
-      {
-        start: function( event ) {
-          startY = handleNode.globalToParentPoint( event.pointer.point ).y;
-          handleNode.mouseMovementAmount = 0;
-          handleNode.containerSizeAtDragStart = multipleParticleModel.getParticleContainerHeight();
-        },
-        drag: function( event ) {
-          endY = handleNode.globalToParentPoint( event.pointer.point ).y;
-          handleNode.mouseMovementAmount = (endY - startY);
-          // Resize the container based on the amount that the node has moved.
-          multipleParticleModel.setTargetParticleContainerHeight(
-            handleNode.containerSizeAtDragStart +
-            modelViewTransform.viewToModelDeltaY( handleNode.mouseMovementAmount ) );
-        },
-        end: function() {
-          // in size that is currently underway.
-          multipleParticleModel.setTargetParticleContainerHeight( multipleParticleModel.getParticleContainerHeight() );
-
-        }
-      } ) );
-    this.touchArea = this.localBounds.dilatedXY( 10, 10 );
   }
 
   return inherit( Node, HandleNode );
