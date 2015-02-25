@@ -77,8 +77,6 @@ define( function( require ) {
 
     // Create the slider.
     var heatProperty = new Property( 0 );
-    var TOP_SIDE_TRACK_COLOR = '#0A00F0';
-    var BOTTOM_SIDE_TRACK_COLOR = '#EF000F';
     var labelFont = new PhetFont( 14 );
     var heatTitle = new Text( heatString, { font: labelFont, rotation: Math.PI / 2 } );
     var coolTitle = new Text( coolString, { font: labelFont, rotation: Math.PI / 2 } );
@@ -87,16 +85,16 @@ define( function( require ) {
         endDrag: function() {
           heatProperty.value = 0;
         },
-        trackSize: new Dimension2( 60, 10 ),
-        trackFill: new LinearGradient( 0, 0, 60, 0 )
-          .addColorStop( 0, TOP_SIDE_TRACK_COLOR )
-          .addColorStop( 1, BOTTOM_SIDE_TRACK_COLOR ),
+        trackSize: new Dimension2( WIDTH / 2, 10 ),
+        trackFill: new LinearGradient( 0, 0, WIDTH / 2, 0 )
+          .addColorStop( 0, '#0A00F0' )
+          .addColorStop( 1, '#EF000F' ),
         thumbSize: new Dimension2( 15, 30 ),
         majorTickLength: 15,
         minorTickLength: 12,
         rotation: -Math.PI / 2,
         centerY: stoveBody.centerY,
-        centerX:  stoveBody.centerX + 10
+        right:    stoveBody.right - WIDTH / 8
       } );
     heatCoolSlider.addMajorTick( 1, heatTitle );
     heatCoolSlider.addMinorTick( 0 );
