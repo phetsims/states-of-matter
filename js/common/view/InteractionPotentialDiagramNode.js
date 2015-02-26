@@ -35,7 +35,7 @@ define( function( require ) {
 
 // Constants that control the appearance of the diagram.
   var NARROW_VERSION_WIDTH = 135;
-  var WIDE_VERSION_WIDTH = 500;
+  var WIDE_VERSION_WIDTH = 450;
   var AXIS_LINE_WIDTH = 1;
   var AXES_ARROW_HEAD_HEIGHT = 8 * AXIS_LINE_WIDTH;
 
@@ -49,7 +49,7 @@ define( function( require ) {
 // Font for the labels used on the axes and within the graph.
   var AXIS_LABEL_FONT_SIZE = 12;
   var AXIS_LABEL_FONT = new PhetFont( AXIS_LABEL_FONT_SIZE );
-  var GREEK_LETTER_FONT_SIZE = 16;
+  var GREEK_LETTER_FONT_SIZE = 18;
   var GREEK_LETTER_FONT = new PhetFont( GREEK_LETTER_FONT_SIZE );
 
 
@@ -100,7 +100,7 @@ define( function( require ) {
 
     // Create and add the center axis line for the graph.
     var centerAxis = new Path( new Shape().lineTo( 0, 0 )
-      .lineTo( this.graphWidth, 0 ), { lineWidth: 4, stroke: '#A7A7A7' } );
+      .lineTo( this.graphWidth, 0 ), { lineWidth: 2, stroke: '#A7A7A7' } );
     this.ljPotentialGraph.addChild( centerAxis );
     centerAxis.setTranslation( 0, this.graphHeight / 2 );
 
@@ -204,6 +204,12 @@ define( function( require ) {
       this.ljPotentialCalculator.setSigma( sigma );
       // Redraw the graph to reflect the new parameters.
       this.drawPotentialCurve();
+    },
+    reset: function() {
+      this.verticalScalingFactor = (this.graphHeight / 2) /
+                                   (StatesOfMatterConstants.MAX_EPSILON * StatesOfMatterConstants.K_BOLTZMANN);
+      this.drawPotentialCurve();
+
     },
     getGraphHeight: function() {
       return this.graphHeight;
