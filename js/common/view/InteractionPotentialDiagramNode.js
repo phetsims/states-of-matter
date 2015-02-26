@@ -206,8 +206,11 @@ define( function( require ) {
       this.drawPotentialCurve();
     },
     reset: function() {
+
+      // reset   the lj graph
       this.verticalScalingFactor = (this.graphHeight / 2) /
                                    (StatesOfMatterConstants.MAX_EPSILON * StatesOfMatterConstants.K_BOLTZMANN);
+      this.gridNode.addHorizontalLines( 0, 0, this.graphWidth, this.graphHeight, 5 );
       this.drawPotentialCurve();
 
     },
