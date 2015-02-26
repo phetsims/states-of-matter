@@ -200,7 +200,7 @@ define( function( require ) {
     this.addChild( this.horizontalAxisLabel );
 
     this.addChild( this.verticalAxisLabel );
-    var ljGraPhAxisLabelFont = new PhetFont( 20 );
+    var ljGraPhAxisLabelFont = new PhetFont( 16 );
 
     this.verticalAxisLabel.setTranslation(
       this.graphXOrigin / 2,
@@ -209,8 +209,8 @@ define( function( require ) {
     this.verticalAxisLabel.font = ljGraPhAxisLabelFont;
 
     this.horizontalAxisLabel.setTranslation(
-      this.graphXOrigin + this.graphWidth / 2 - this.horizontalAxisLabel.width / 2.4,
-      this.graphYOrigin + 1.3 * this.horizontalAxisLabel.height
+      this.graphXOrigin + this.graphWidth / 2 - this.horizontalAxisLabel.width,
+      this.graphYOrigin + 1.8 * this.horizontalAxisLabel.height
     );
     this.horizontalAxisLabel.font = ljGraPhAxisLabelFont;
 

@@ -35,8 +35,8 @@ define( function( require ) {
     Node.call( this );
     var gridNode = this;
     var horizontalLineCount = MIN_LINES_HORIZONTAL;
-    this.horizontalLinesNode = new Path( null, { stroke: 'white', lineWidth: 0.8 } );
-    this.verticalLinesNode = new Path( null, { stroke: 'white', lineWidth: 0.8 } );
+    this.horizontalLinesNode = new Path( null, { stroke: 'white', lineWidth: 0.8, opacity: 0.6 } );
+    this.verticalLinesNode = new Path( null, { stroke: 'white', lineWidth: 0.8, opacity: 0.6 } );
     this.zoomInButton = new ZoomButton( {
       listener: function() {
         horizontalLineCount -= ZOOM_INCREMENT;
@@ -45,7 +45,7 @@ define( function( require ) {
         atomsView.drawPotentialCurve();
       },
       baseColor: 'white',
-      radius: 10,
+      radius: 8,
       xMargin: 3,
       yMargin: 3,
       disabledBaseColor: '#4A4A4A',
@@ -62,7 +62,7 @@ define( function( require ) {
         atomsView.drawPotentialCurve();
       },
       baseColor: 'white',
-      radius: 10,
+      radius: 8,
       xMargin: 3,
       yMargin: 3,
       disabledBaseColor: 'gray',

@@ -94,12 +94,12 @@ define( function( require ) {
 
     // Add the button for retrieving the atom to the canvas.
     this.retrieveAtomButton = new TextPushButton( returnAtomString, {
-      font: new PhetFont( 12 ),
+      font: new PhetFont( 18 ),
       baseColor: '#61BEE3',
       listener: function() {
         dualAtomModel.resetMovableAtomPos();
       },
-      left:   this.layoutBounds.minX + inset,
+      left:   this.layoutBounds.minX + 3 * inset,
       bottom: this.layoutBounds.bottom - 2 * inset
     } );
 
@@ -110,6 +110,7 @@ define( function( require ) {
       listener: function() {
         dualAtomModel.reset();
         atomicInteractionsScreenView.handNode.setVisible( true );
+        atomicInteractionsScreenView.interactiveInteractionPotentialDiagram.reset();
       },
       right:  this.layoutBounds.maxX - inset,
       bottom: this.layoutBounds.maxY - 2 * inset,
@@ -128,7 +129,7 @@ define( function( require ) {
         stroke: 'black',
         fill: '#005566',
         centerX: this.layoutBounds.centerX + 110,
-        bottom: this.layoutBounds.bottom - 2 * inset
+        bottom:  this.layoutBounds.bottom - 2 * inset
       } );
     this.addChild( stepButton );
 
@@ -138,7 +139,8 @@ define( function( require ) {
       textColor: textColor,
       backgroundColor: backgroundColor,
       buttonAlign: forceControlPanelButtonAlign,
-      showTitleWhenExpand: showTitleWhenExpand
+      showTitleWhenExpand: showTitleWhenExpand,
+      panelMinWidth: atomicInteractionsControlPanel.width
     } );
     var atomicInteractionsControlPanelRightOffset = 60;
     if ( enableHeterogeneousMolecules ) {
@@ -411,7 +413,7 @@ define( function( require ) {
       this.updatePositionMarkerOnDiagram();
       this.updateForceVectors();
 
-      this.retrieveAtomButton.visible = this.dualAtomModel.movableAtom.getX() > 3000;
+      this.retrieveAtomButton.visible = this.dualAtomModel.movableAtom.getX() > 3800;
     },
 
     /**

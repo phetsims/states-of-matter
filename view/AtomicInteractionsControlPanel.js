@@ -103,7 +103,7 @@ define( function( require ) {
     var createItem;
     var titleText;
     var titleNode;
-
+    var sliderTrackWidth = enableHeterogeneousMolecules ? 130 : 120;
     // add atom diameter slider
     var atomDiameterTitle = new Text( atomDiameterString, {
       font: new PhetFont( 12 ),
@@ -113,7 +113,7 @@ define( function( require ) {
     var atomDiameterSlider = new HSlider( dualAtomModel.atomDiameterProperty,
       { min: StatesOfMatterConstants.MIN_SIGMA, max: StatesOfMatterConstants.MAX_SIGMA },
       {
-        trackSize: new Dimension2( 100, 5 ),
+        trackSize: new Dimension2( sliderTrackWidth, 5 ),
         trackFill: 'white',
         thumbSize: new Dimension2( 15, 30 ),
         majorTickLength: 15,
@@ -127,10 +127,14 @@ define( function( require ) {
         }
       } );
     var tickTextOptions = { fill: options.tickTextColor };
-    atomDiameterSlider.addMajorTick( StatesOfMatterConstants.MIN_SIGMA, new Text( smallString, tickTextOptions ) );
-    atomDiameterSlider.addMajorTick( StatesOfMatterConstants.MAX_SIGMA, new Text( largeString, tickTextOptions ) );
-    var atomDiameter = new Node( { children: [ atomDiameterTitle, atomDiameterSlider ] } );
+    var smallText = new Text( smallString, tickTextOptions );
+    var largeText = new Text( largeString, tickTextOptions );
+    atomDiameterSlider.addMajorTick( StatesOfMatterConstants.MIN_SIGMA, smallText );
+    smallText.visible = !enableHeterogeneousMolecules;
+    largeText.visible = !enableHeterogeneousMolecules;
+    atomDiameterSlider.addMajorTick( StatesOfMatterConstants.MAX_SIGMA, largeText );
 
+    var atomDiameter = new VBox( { spacing: 4, align: 'left', children: [ atomDiameterTitle, atomDiameterSlider ] } );
     // add interaction strength slider
     var interactionStrengthTitle = new Text( interactionStrengthString, {
       font: new PhetFont( 12 ),
@@ -141,7 +145,7 @@ define( function( require ) {
     var interactionStrengthSlider = new HSlider( dualAtomModel.interactionStrengthProperty,
       { min: StatesOfMatterConstants.MIN_EPSILON, max: StatesOfMatterConstants.MAX_EPSILON },
       {
-        trackSize: new Dimension2( 100, 5 ),
+        trackSize: new Dimension2( sliderTrackWidth, 5 ),
         trackFill: 'white',
         thumbSize: new Dimension2( 15, 30 ),
         majorTickLength: 15,
@@ -156,7 +160,7 @@ define( function( require ) {
       } );
     interactionStrengthSlider.addMajorTick( StatesOfMatterConstants.MIN_EPSILON, new Text( weakString, tickTextOptions ) );
     interactionStrengthSlider.addMajorTick( StatesOfMatterConstants.MAX_EPSILON, new Text( strongString, tickTextOptions ) );
-    var interactionStrength = new Node( { children: [ interactionStrengthTitle, interactionStrengthSlider ] } );
+    var interactionStrength = new VBox( { spacing: 4, align: 'left', children: [ interactionStrengthTitle, interactionStrengthSlider ] } );
 
     if ( enableHeterogeneousMolecules ) {
       textOptions = { font: new PhetFont( 12 ), fill: options.textColor };
@@ -168,23 +172,19 @@ define( function( require ) {
       argonAndOxygen = [ new Text( argonString, textOptions ), new Text( oxygenString, textOptions ) ];
       var customAttraction = new Text( customAttractionString, textOptions );
 
-      /*var maxWidth = Math.max(
-       _.max( [neonAndNeon, argonAndArgon, oxygenAndOxygen, neonAndArgon, neonAndOxygen, argonAndOxygen],
-       function( items ) {
-       return items[0].width + items[1].width;
-       } ),
-       adjustableAttraction.width
-       ) / 2;*/
-
-      maxWidth = Math.max( atomDiameter.width / 2 - inset, interactionStrength.width / 2 - inset,
-        customAttraction.width / 2 + inset );
+      maxWidth = Math.max(
+        neonAndArgon[ 0 ].width + neonAndArgon[ 1 ].width,
+        argonAndArgon[ 0 ].width + argonAndArgon[ 1 ].width,
+        oxygenAndOxygen[ 0 ].width + oxygenAndOxygen[ 1 ].width,
+        neonAndNeon[ 0 ].width + neonAndNeon[ 1 ].width,
+        neonAndOxygen[ 0 ].width + neonAndOxygen[ 1 ].width );
 
       // pad inserts a spacing node (HStrut) so that the rows occupy a certain fixed width.
       createItem = function( itemSpec ) {
-        var strutWidth1 = maxWidth - itemSpec[ 0 ].width + 15;
-        var strutWidth2 = maxWidth - itemSpec[ 1 ].width + 15;
+        var strutWidth1 = ( maxWidth - itemSpec[ 0 ].width ) / 2;
+        var strutWidth2 = ( maxWidth - itemSpec[ 1 ].width ) / 2;
         return new HBox( {
-          children: [ itemSpec[ 0 ], new HStrut( strutWidth1 ),
+          children: [ itemSpec[ 0 ], new HStrut( strutWidth1 + 20 ),
             itemSpec[ 1 ], new HStrut( strutWidth2 ) ]
         } );
       };
@@ -205,10 +205,11 @@ define( function( require ) {
         new HBox( { children: [ customAttraction ] } ), { radius: particleRadius } );
       var pushpinImage = new Image( pushPinImg, { scale: 0.2 } );
       var pinnedNodeText = new HBox( {
-        children: [ pushpinImage, new Text( pinnedString, textOptions ), new HStrut( pushpinImage.width ) ],
+        children: [ pushpinImage, new Text( pinnedString,
+          { font: new PhetFont( 10 ), fill: options.textColor } ), new HStrut( pushpinImage.width ) ],
         spacing: 10
       } );
-      titleText = [ pinnedNodeText, new Text( movingString, textOptions ) ];
+      titleText = [ pinnedNodeText, new Text( movingString, { font: new PhetFont( 10 ), fill: options.textColor } ) ];
       titleNode = createItem( titleText );
       radioButtonGroup = new VBox( {
         children: [ titleNode, neonNeonRadio, argonArgonRadio, oxygenOxygenRadio,
@@ -253,9 +254,9 @@ define( function( require ) {
       };
       titleText = {
         label: new Text( tittleString, {
-            font: new PhetFont( 14 ),
-            fill: '#FFFFFF'
-          } )
+          font: new PhetFont( 14 ),
+          fill: '#FFFFFF'
+        } )
       };
 
       // compute the maximum item width
@@ -303,16 +304,11 @@ define( function( require ) {
       this.addChild( titleNode );
       titleNode.centerX = radioButtonGroup.centerX + 15;
     }
-    // adjust the slider
-    atomDiameterTitle.centerX = radioButtonGroup.centerX - 15;
-    atomDiameterTitle.top = radioButtonGroup.bottom + 10;
-    atomDiameterSlider.centerX = atomDiameterTitle.centerX + 30;
-    atomDiameterSlider.top = atomDiameterTitle.bottom + 5;
-    interactionStrengthTitle.centerX = radioButtonGroup.centerX - 5;
-    interactionStrengthTitle.top = atomDiameterSlider.bottom + 5;
-    interactionStrengthSlider.centerX = interactionStrengthTitle.centerX + 20;
-    interactionStrengthSlider.top = interactionStrengthTitle.bottom + 5;
-    var content = new VBox( { spacing: 4, children: [ radioButtonGroup ] } );
+
+    var content = new VBox( {
+      spacing: 4,
+      align: 'left', children: [ radioButtonGroup, atomDiameter, interactionStrengthSlider ]
+    } );
 
     var radioButtonPanel = new Panel( content, { lineWidth: 0, fill: options.backgroundColor } );
 

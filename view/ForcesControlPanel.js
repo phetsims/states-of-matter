@@ -52,6 +52,7 @@ define( function( require ) {
       buttonAlign: 'left',
       lineWidth: 1,
       showTitleWhenExpand: true,
+      panelMinWidth:168,
       backgroundColor: '#D1D2FF',
       cornerRadius: 5 // radius of the rounded corners on the background
     }, options );
@@ -81,13 +82,22 @@ define( function( require ) {
 
     var textOptions = { font: new PhetFont( 12 ), fill: options.textColor };
     var hideForcesText = { label: new Text( hideForcesString, textOptions ) };
-    var totalForceText = { label: new Text( totalForceString, textOptions ), icon: totalForceArrow };
-    var attractiveText = { label: new Text( attractiveString, textOptions ), icon: attractiveArrow };
+    var totalForceText = {
+      label: new Text( totalForceString, textOptions ),
+      icon: totalForceArrow
+    };
+    var attractiveText = {
+      label: new Text( attractiveString, { font: new PhetFont( 11 ), fill: options.textColor } ),
+      icon: attractiveArrow
+    };
     var vanderwaalsText = {
       label: new Text( vanderwaalsString,
         { font: new PhetFont( 10 ), fill: options.textColor } )
     };
-    var repulsiveText = { label: new Text( repulsiveString, textOptions ), icon: repulsiveArrow };
+    var repulsiveText = {
+      label: new Text( repulsiveString, { font: new PhetFont( 11 ), fill: options.textColor } ),
+      icon: repulsiveArrow
+    };
     var electronOverlapText = {
       label: new Text( electronOverlapString,
         { font: new PhetFont( 10 ), fill: options.textColor } )
@@ -103,7 +113,7 @@ define( function( require ) {
     // pad inserts a spacing node (HStrut) so that the text, space and image together occupy a certain fixed width.
     var createItem = function( itemSpec ) {
       if ( itemSpec.icon ) {
-        var strutWidth = maxWidth - itemSpec.label.width - itemSpec.icon.width + 20;
+        var strutWidth = maxWidth - itemSpec.label.width - itemSpec.icon.width ;
         return new HBox( { children: [ itemSpec.label, new HStrut( strutWidth ), itemSpec.icon ] } );
       }
       else {
@@ -137,13 +147,21 @@ define( function( require ) {
       spacing: 2,
       children: [ curveShape, componentForceText ]
     } );
+    var totalForceStrutWidth = maxWidth - totalForceText.label.width -
+                               totalForceText.icon.width + curveShape.width;
+    var totalForceItem = new HBox( {
+      children: [ totalForceText.label,
+        new HStrut( totalForceStrutWidth ),
+        totalForceText.icon ]
+    } );
+
     var totalForce = new HBox( {
       spacing: 2,
-      children: [ new HStrut( curveShape.width ), createItem( totalForceText ) ]
+      children: [ totalForceItem ]
     } );
     var hideForce = new HBox( {
       spacing: 2,
-      children: [ new HStrut( curveShape.width ), createItem( hideForcesText ) ]
+      children: [ createItem( hideForcesText ) ]
     } );
 
     var hideForcesRadio = new AquaRadioButton( forcesProperty, 'hideForces', hideForce,
@@ -172,6 +190,7 @@ define( function( require ) {
         titleAlign: 'left',
         buttonAlign: options.buttonAlign,
         cornerRadius: 4,
+        minWidth:options.panelMinWidth,
         contentYSpacing: 1,
         contentXSpacing: 3,
         contentXMargin: 12,
