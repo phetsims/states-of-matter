@@ -51,33 +51,41 @@ define( function( require ) {
       textColor: 'black',
       buttonAlign: 'left',
       lineWidth: 1,
+      totalForceArrowColor: '#49B649',
+      attractiveArrowColor: '#FC9732',
+      repulsiveArrowColor: '#FD17FF',
       showTitleWhenExpand: true,
-      panelMinWidth:168,
+      panelMinWidth: 168,
       backgroundColor: '#D1D2FF',
       cornerRadius: 5 // radius of the rounded corners on the background
     }, options );
 
     Node.call( this );
-    this.accordinContent = new Node();
-
-    var totalForceArrow = new ArrowNode( 25, 0, 0, 0, {
-      fill: '#49B649',
-      headHeight: 12,
-      headWidth: 20,
-      tailWidth: 8
+    var accordionContent = new Node();
+    var arrowHeadHeight = 12;
+    var arrowTailWidth = 8;
+    var arrowHeadWidth = 20;
+    var arrowEndX = 25;
+    var arrowStartX = 0;
+    var arrowY = 0;
+    var totalForceArrow = new ArrowNode( arrowEndX, arrowY, arrowStartX, arrowY, {
+      fill: options.totalForceArrowColor,
+      headHeight: arrowHeadHeight,
+      headWidth: arrowHeadWidth,
+      tailWidth: arrowTailWidth
     } );
-    var attractiveArrow = new ArrowNode( 25, 0, 0, 0, {
-      fill: '#FC9732',
-      headHeight: 12,
-      headWidth: 20,
-      tailWidth: 8
+    var attractiveArrow = new ArrowNode( arrowEndX, arrowY, arrowStartX, arrowY, {
+      fill: options.attractiveArrowColor,
+      headHeight: arrowHeadHeight,
+      headWidth: arrowHeadWidth,
+      tailWidth: arrowTailWidth
     } );
 
-    var repulsiveArrow = new ArrowNode( 0, 0, 25, 0, {
-      fill: '#FD17FF',
-      headHeight: 12,
-      headWidth: 20,
-      tailWidth: 8
+    var repulsiveArrow = new ArrowNode( arrowStartX, arrowY, arrowEndX, arrowY, {
+      fill: options.repulsiveArrowColor,
+      headHeight: arrowHeadHeight,
+      headWidth: arrowHeadWidth,
+      tailWidth: arrowTailWidth
     } );
 
     var textOptions = { font: new PhetFont( 12 ), fill: options.textColor };
@@ -113,7 +121,7 @@ define( function( require ) {
     // pad inserts a spacing node (HStrut) so that the text, space and image together occupy a certain fixed width.
     var createItem = function( itemSpec ) {
       if ( itemSpec.icon ) {
-        var strutWidth = maxWidth - itemSpec.label.width - itemSpec.icon.width ;
+        var strutWidth = maxWidth - itemSpec.label.width - itemSpec.icon.width;
         return new HBox( { children: [ itemSpec.label, new HStrut( strutWidth ), itemSpec.icon ] } );
       }
       else {
@@ -178,9 +186,9 @@ define( function( require ) {
     } );
 
     radioButtonGroup.setTranslation( 10, 0 );
-    this.accordinContent.addChild( radioButtonGroup );
+    accordionContent.addChild( radioButtonGroup );
 
-    var accordionBox = new AccordionBox( this.accordinContent,
+    var accordionBox = new AccordionBox( accordionContent,
       {
         titleNode: new Text( forcesString, { fill: options.textColor, font: new PhetFont( { size: 14 } ) } ),
         fill: options.backgroundColor,
@@ -190,7 +198,7 @@ define( function( require ) {
         titleAlign: 'left',
         buttonAlign: options.buttonAlign,
         cornerRadius: 4,
-        minWidth:options.panelMinWidth,
+        minWidth: options.panelMinWidth,
         contentYSpacing: 1,
         contentXSpacing: 3,
         contentXMargin: 12,
