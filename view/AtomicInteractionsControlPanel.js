@@ -103,64 +103,7 @@ define( function( require ) {
     var createItem;
     var titleText;
     var titleNode;
-    var sliderTrackWidth = enableHeterogeneousMolecules ? 130 : 120;
-    // add atom diameter slider
-    var atomDiameterTitle = new Text( atomDiameterString, {
-      font: new PhetFont( 12 ),
-      fill: options.textColor
-    } );
-    dualAtomModel.atomDiameterProperty.value = dualAtomModel.getSigma();
-    var atomDiameterSlider = new HSlider( dualAtomModel.atomDiameterProperty,
-      { min: StatesOfMatterConstants.MIN_SIGMA, max: StatesOfMatterConstants.MAX_SIGMA },
-      {
-        trackSize: new Dimension2( sliderTrackWidth, 5 ),
-        trackFill: 'white',
-        thumbSize: new Dimension2( 15, 30 ),
-        majorTickLength: 15,
-        majorTickStroke: options.tickTextColor,
-        trackStroke: options.tickTextColor,
-        startDrag: function() {
-          dualAtomModel.setMotionPaused( true );
-        },
-        endDrag: function() {
-          dualAtomModel.setMotionPaused( false );
-        }
-      } );
-    var tickTextOptions = { fill: options.tickTextColor };
-    var smallText = new Text( smallString, tickTextOptions );
-    var largeText = new Text( largeString, tickTextOptions );
-    atomDiameterSlider.addMajorTick( StatesOfMatterConstants.MIN_SIGMA, smallText );
-    smallText.visible = !enableHeterogeneousMolecules;
-    largeText.visible = !enableHeterogeneousMolecules;
-    atomDiameterSlider.addMajorTick( StatesOfMatterConstants.MAX_SIGMA, largeText );
-
-    var atomDiameter = new VBox( { spacing: 4, align: 'left', children: [ atomDiameterTitle, atomDiameterSlider ] } );
-    // add interaction strength slider
-    var interactionStrengthTitle = new Text( interactionStrengthString, {
-      font: new PhetFont( 12 ),
-      fill: options.textColor,
-      top: atomDiameterSlider.bottom + 5
-    } );
-    dualAtomModel.interactionStrength = dualAtomModel.getEpsilon();
-    var interactionStrengthSlider = new HSlider( dualAtomModel.interactionStrengthProperty,
-      { min: StatesOfMatterConstants.MIN_EPSILON, max: StatesOfMatterConstants.MAX_EPSILON },
-      {
-        trackSize: new Dimension2( sliderTrackWidth, 5 ),
-        trackFill: 'white',
-        thumbSize: new Dimension2( 15, 30 ),
-        majorTickLength: 15,
-        majorTickStroke: options.tickTextColor,
-        trackStroke: options.tickTextColor,
-        startDrag: function() {
-          dualAtomModel.setMotionPaused( true );
-        },
-        endDrag: function() {
-          dualAtomModel.setMotionPaused( false );
-        }
-      } );
-    interactionStrengthSlider.addMajorTick( StatesOfMatterConstants.MIN_EPSILON, new Text( weakString, tickTextOptions ) );
-    interactionStrengthSlider.addMajorTick( StatesOfMatterConstants.MAX_EPSILON, new Text( strongString, tickTextOptions ) );
-    var interactionStrength = new VBox( { spacing: 4, align: 'left', children: [ interactionStrengthTitle, interactionStrengthSlider ] } );
+    var sliderTrackWidth;
 
     if ( enableHeterogeneousMolecules ) {
       textOptions = { font: new PhetFont( 12 ), fill: options.textColor };
@@ -171,20 +114,26 @@ define( function( require ) {
       neonAndOxygen = [ new Text( neonString, textOptions ), new Text( oxygenString, textOptions ) ];
       argonAndOxygen = [ new Text( argonString, textOptions ), new Text( oxygenString, textOptions ) ];
       var customAttraction = new Text( customAttractionString, textOptions );
-
+      var pushpinImage = new Image( pushPinImg, { scale: 0.2 } );
+      var pinnedNodeText = new HBox( {
+        children: [ pushpinImage, new Text( pinnedString,
+          { font: new PhetFont( 10 ), fill: options.textColor } ), new HStrut( pushpinImage.width ) ],
+        spacing: 5
+      } );
+      titleText = [ pinnedNodeText, new Text( movingString, { font: new PhetFont( 10 ), fill: options.textColor } ) ];
       maxWidth = Math.max(
         neonAndArgon[ 0 ].width + neonAndArgon[ 1 ].width,
         argonAndArgon[ 0 ].width + argonAndArgon[ 1 ].width,
         oxygenAndOxygen[ 0 ].width + oxygenAndOxygen[ 1 ].width,
         neonAndNeon[ 0 ].width + neonAndNeon[ 1 ].width,
         neonAndOxygen[ 0 ].width + neonAndOxygen[ 1 ].width );
-
+      maxWidth = 2 * Math.max( titleText[ 0 ].width, titleText[ 1 ].width, maxWidth / 2 );
       // pad inserts a spacing node (HStrut) so that the rows occupy a certain fixed width.
       createItem = function( itemSpec ) {
-        var strutWidth1 = ( maxWidth - itemSpec[ 0 ].width ) / 2;
-        var strutWidth2 = ( maxWidth - itemSpec[ 1 ].width ) / 2;
+        var strutWidth1 = ( maxWidth / 2 - itemSpec[ 0 ].width );
+        var strutWidth2 = ( maxWidth / 2 - itemSpec[ 1 ].width );
         return new HBox( {
-          children: [ itemSpec[ 0 ], new HStrut( strutWidth1 + 20 ),
+          children: [ itemSpec[ 0 ], new HStrut( strutWidth1 + 5 ),
             itemSpec[ 1 ], new HStrut( strutWidth2 ) ]
         } );
       };
@@ -203,14 +152,16 @@ define( function( require ) {
         createItem( argonAndOxygen ), { radius: particleRadius } );
       var adjustableAttractionRadio = new AquaRadioButton( dualAtomModel.moleculeTypeProperty, ADJUSTABLE,
         new HBox( { children: [ customAttraction ] } ), { radius: particleRadius } );
-      var pushpinImage = new Image( pushPinImg, { scale: 0.2 } );
-      var pinnedNodeText = new HBox( {
-        children: [ pushpinImage, new Text( pinnedString,
-          { font: new PhetFont( 10 ), fill: options.textColor } ), new HStrut( pushpinImage.width ) ],
-        spacing: 10
-      } );
-      titleText = [ pinnedNodeText, new Text( movingString, { font: new PhetFont( 10 ), fill: options.textColor } ) ];
-      titleNode = createItem( titleText );
+      var createTitle = function( itemSpec ) {
+        var strutWidth1 = 2 * particleRadius;
+        var strutWidth2 = ( maxWidth / 2 - itemSpec[ 0 ].width );
+        var strutWidth3 = ( maxWidth / 2 - itemSpec[ 1 ].width );
+        return new HBox( {
+          children: [ new HStrut( strutWidth1 ), itemSpec[ 0 ], new HStrut( strutWidth2 + 13 ),
+            itemSpec[ 1 ], new HStrut( strutWidth3 ) ]
+        } );
+      };
+      titleNode = createTitle( titleText );
       radioButtonGroup = new VBox( {
         children: [ titleNode, neonNeonRadio, argonArgonRadio, oxygenOxygenRadio,
           neonArgonRadio, neonOxygenRadio, argonOxygenRadio, adjustableAttractionRadio ],
@@ -264,7 +215,7 @@ define( function( require ) {
         return item.label.width + ((item.icon) ? item.icon.width : 0);
       } );
       maxWidth = widestItemSpec.label.width + ((widestItemSpec.icon) ? widestItemSpec.icon.width : 0);
-      maxWidth = Math.max( atomDiameter.width, interactionStrength.width, maxWidth );
+      maxWidth = Math.max( maxWidth );
       // pad inserts a spacing node (HStrut) so that the text, space and image together occupy a certain fixed width.
       createItem = function( itemSpec ) {
         if ( itemSpec.icon ) {
@@ -302,8 +253,66 @@ define( function( require ) {
 
       titleNode = new Node( { children: [ titleBackground, titleText.label ] } );
       this.addChild( titleNode );
-      titleNode.centerX = radioButtonGroup.centerX + 15;
+      titleNode.centerX = radioButtonGroup.centerX + 5;
     }
+    // add atom diameter slider
+    var atomDiameterTitle = new Text( atomDiameterString, {
+      font: new PhetFont( 12 ),
+      fill: options.textColor
+    } );
+    sliderTrackWidth = maxWidth;
+    dualAtomModel.atomDiameterProperty.value = dualAtomModel.getSigma();
+    var atomDiameterSlider = new HSlider( dualAtomModel.atomDiameterProperty,
+      { min: StatesOfMatterConstants.MIN_SIGMA, max: StatesOfMatterConstants.MAX_SIGMA },
+      {
+        trackSize: new Dimension2( sliderTrackWidth, 5 ),
+        trackFill: 'white',
+        thumbSize: new Dimension2( 15, 30 ),
+        majorTickLength: 15,
+        majorTickStroke: options.tickTextColor,
+        trackStroke: options.tickTextColor,
+        startDrag: function() {
+          dualAtomModel.setMotionPaused( true );
+        },
+        endDrag: function() {
+          dualAtomModel.setMotionPaused( false );
+        }
+      } );
+    var tickTextOptions = { fill: options.tickTextColor };
+    var smallText = new Text( smallString, tickTextOptions );
+    var largeText = new Text( largeString, tickTextOptions );
+    atomDiameterSlider.addMajorTick( StatesOfMatterConstants.MIN_SIGMA, smallText );
+    smallText.visible = !enableHeterogeneousMolecules;
+    largeText.visible = !enableHeterogeneousMolecules;
+    atomDiameterSlider.addMajorTick( StatesOfMatterConstants.MAX_SIGMA, largeText );
+
+    var atomDiameter = new VBox( { spacing: 4, align: 'left', children: [ atomDiameterTitle, atomDiameterSlider ] } );
+    // add interaction strength slider
+    var interactionStrengthTitle = new Text( interactionStrengthString, {
+      font: new PhetFont( 12 ),
+      fill: options.textColor,
+      top: atomDiameterSlider.bottom + 5
+    } );
+    dualAtomModel.interactionStrength = dualAtomModel.getEpsilon();
+    var interactionStrengthSlider = new HSlider( dualAtomModel.interactionStrengthProperty,
+      { min: StatesOfMatterConstants.MIN_EPSILON, max: StatesOfMatterConstants.MAX_EPSILON },
+      {
+        trackSize: new Dimension2( sliderTrackWidth, 5 ),
+        trackFill: 'white',
+        thumbSize: new Dimension2( 15, 30 ),
+        majorTickLength: 15,
+        majorTickStroke: options.tickTextColor,
+        trackStroke: options.tickTextColor,
+        startDrag: function() {
+          dualAtomModel.setMotionPaused( true );
+        },
+        endDrag: function() {
+          dualAtomModel.setMotionPaused( false );
+        }
+      } );
+    interactionStrengthSlider.addMajorTick( StatesOfMatterConstants.MIN_EPSILON, new Text( weakString, tickTextOptions ) );
+    interactionStrengthSlider.addMajorTick( StatesOfMatterConstants.MAX_EPSILON, new Text( strongString, tickTextOptions ) );
+    var interactionStrength = new VBox( { spacing: 4, align: 'left', children: [ interactionStrengthTitle, interactionStrengthSlider ] } );
 
     var content = new VBox( {
       spacing: 4,
@@ -354,9 +363,6 @@ define( function( require ) {
           // add atom diameter slider and interaction
           content.addChild( atomDiameter );
           content.addChild( interactionStrength );
-          background.setShape( new Shape().roundRect( 0, -4,
-            radioButtonPanel.width, radioButtonPanel.height + inset,
-            options.cornerRadius, options.cornerRadius ) );
         }
         else {
           //if  atom and interaction slider
@@ -364,10 +370,11 @@ define( function( require ) {
             content.removeChild( atomDiameter );
             content.removeChild( interactionStrength );
           }
-          background.setShape( new Shape().roundRect( 0, -4, radioButtonPanel.width, radioButtonPanel.height + inset,
-            options.cornerRadius, options.cornerRadius
-          ) );
         }
+        background.setShape( new Shape().roundRect( -5, -4,
+          radioButtonPanel.width + inset,
+          radioButtonPanel.height + inset,
+          options.cornerRadius, options.cornerRadius ) );
       } );
     this.addChild( radioButtonPanel );
     this.mutate( options );
