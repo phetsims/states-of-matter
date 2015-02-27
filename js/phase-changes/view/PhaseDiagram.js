@@ -202,7 +202,7 @@ define( function( require ) {
         stroke: 'white',
         expandedProperty: expandedProperty,
         contentAlign: 'center',
-        titleAlign: 'center',
+        titleAlignX: 'center',
         buttonAlign: 'left',
         cornerRadius: 4,
         contentYSpacing: -15,

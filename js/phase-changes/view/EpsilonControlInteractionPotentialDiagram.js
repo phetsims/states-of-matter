@@ -129,7 +129,7 @@ define( function( require ) {
         stroke: 'white',
         expandedProperty: multipleParticleModel.interactionExpandedProperty,
         contentAlign: 'center',
-        titleAlign: 'center',
+        titleAlignX: 'center',
         buttonAlign: 'left',
         cornerRadius: 4,
         contentYSpacing: 0,
