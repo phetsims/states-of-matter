@@ -220,25 +220,27 @@ define( function( require ) {
 
   //Create an icon for the adjustable attraction  button
   var createAdjustableAttractionIcon = function() {
-    return new Circle( 6, { fill: '#CC66CC' } );
+    return new Circle( 6, { fill: StatesOfMatterConstants.ADJUSTABLE_ATTRACTION_COLOR } );
   };
 
   //Create an icon for the neon  button
   var createNeonIcon = function() {
-    return new Circle( 5, { fill: '#1AFFFB' } );
+    return new Circle( 5, { fill: StatesOfMatterConstants.NEON_COLOR } );
   };
 
   //Create an icon for the argon  button
   var createArgonIcon = function() {
-    return new Circle( 6, { fill: '#FFAFAF' } );
+    return new Circle( 6, { fill: StatesOfMatterConstants.ARGON_COLOR } );
   };
 
   //Create an icon for the water  button
   var createWaterIcon = function() {
-    var dot1 = new Circle( 5, { fill: '#D91200' } );
-    var dot2 = new Circle( 3, { fill: 'white', stroke: 'white', bottom: dot1.top + 5, right: dot1.left + 5 } );
+    var dot1 = new Circle( 5, { fill: StatesOfMatterConstants.OXYGEN_COLOR } );
+    var dot2 = new Circle( 3, { fill: StatesOfMatterConstants.HYDROGEN_COLOR,
+      stroke: StatesOfMatterConstants.HYDROGEN_COLOR, bottom: dot1.top + 5, right: dot1.left + 5 } );
     var dot3 = new Circle( 3, {
-      fill: 'white', stroke: 'white', bottom: dot1.top + 5, left: dot1.right - 5
+      fill: StatesOfMatterConstants.HYDROGEN_COLOR,
+      stroke:StatesOfMatterConstants.HYDROGEN_COLOR, bottom: dot1.top + 5, left: dot1.right - 5
     } );
 
     return new Node( { children: [ dot3, dot1, dot2 ] } );
@@ -247,8 +249,8 @@ define( function( require ) {
 
   //Create an icon for the oxygen  button
   var createOxygenIcon = function() {
-    var dot1 = new Circle( 5, { fill: '#DA1300' } );
-    var dot2 = new Circle( 5, { fill: '#DA1300', left: dot1.right - 4 } );
+    var dot1 = new Circle( 5, { fill: StatesOfMatterConstants.OXYGEN_COLOR } );
+    var dot2 = new Circle( 5, { fill: StatesOfMatterConstants.OXYGEN_COLOR, left: dot1.right - 4 } );
     return new Node( { children: [ dot1, dot2 ] } );
   };
 

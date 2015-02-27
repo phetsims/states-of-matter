@@ -101,6 +101,12 @@ define( function( require ) {
     // Distance between diatomic pairs.
     DIATOMIC_PARTICLE_DISTANCE: 0.9,  // In particle diameters.
 
+    //atoms and molecules colors
+    OXYGEN_COLOR: '#DA1300',
+    NEON_COLOR: '#1AFFFB',
+    ARGON_COLOR: '#FF8A75',
+    HYDROGEN_COLOR: 'white',
+    ADJUSTABLE_ATTRACTION_COLOR: '#B15AFF',
 
     //----------------------------------------------------------------------------
     // Physical Constants

@@ -19,7 +19,6 @@ define( function( require ) {
   var DEFAULT_RADIUS = 175;
   // In atomic mass units.
   var MASS = 25;
-  var COLOUR = '#B15AFF';
 
   /**
    * @param {Number} x  position in picometers
@@ -27,7 +26,7 @@ define( function( require ) {
    * @constructor
    */
   function ConfigurableStatesOfMatterAtom( x, y ) {
-    StatesOfMatterAtom.call( this, x, y, DEFAULT_RADIUS, MASS, COLOUR );
+    StatesOfMatterAtom.call( this, x, y, DEFAULT_RADIUS, MASS, StatesOfMatterConstants.ADJUSTABLE_ATTRACTION_COLOR );
   }
 
   return inherit( StatesOfMatterAtom, ConfigurableStatesOfMatterAtom, {

@@ -12,12 +12,11 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var StatesOfMatterAtom = require( 'STATES_OF_MATTER/common/model/particle/StatesOfMatterAtom' );
   var AtomType = require( 'STATES_OF_MATTER/common/model/AtomType' );
+  var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
 
 // In picometers.
   var RADIUS = 120;
 // In atomic mass units.
-  var COLOUR = 'white';
-  //private
   var MASS = 1.00794;
   var ATOM_TYPE = AtomType.HYDROGEN;
 
@@ -27,7 +26,7 @@ define( function( require ) {
    * @constructor
    */
   function HydrogenAtom2( xPos, yPos ) {
-    StatesOfMatterAtom.call( this, xPos, yPos, RADIUS, MASS, COLOUR );
+    StatesOfMatterAtom.call( this, xPos, yPos, RADIUS, MASS, StatesOfMatterConstants.HYDROGEN_COLOR );
   }
 
   return inherit( StatesOfMatterAtom, HydrogenAtom2, {

@@ -13,12 +13,12 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var StatesOfMatterAtom = require( 'STATES_OF_MATTER/common/model/particle/StatesOfMatterAtom' );
   var AtomType = require( 'STATES_OF_MATTER/common/model/AtomType' );
+  var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
 
   // constants
   var RADIUS = 162;   // In picometers.
   var MASS = 15.9994; // In atomic mass units.
   var ATOM_TYPE = AtomType.OXYGEN;
-  var COLOUR = '#DA1300';
 
   /**
    * @param {Number} x    position in picometers
@@ -26,7 +26,7 @@ define( function( require ) {
    * @constructor
    */
   function OxygenAtom( x, y ) {
-    StatesOfMatterAtom.call( this, x, y, RADIUS, MASS, COLOUR );
+    StatesOfMatterAtom.call( this, x, y, RADIUS, MASS, StatesOfMatterConstants.OXYGEN_COLOR );
   }
 
   return inherit( StatesOfMatterAtom, OxygenAtom, {
