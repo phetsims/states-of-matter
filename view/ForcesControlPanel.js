@@ -187,7 +187,7 @@ define( function( require ) {
         stroke: 'white',
         expandedProperty: forceControlPanelExpandProperty,
         contentAlign: 'left',
-        titleAlign: 'left',
+        titleAlignX: 'left',
         buttonAlign: options.buttonAlign,
         cornerRadius: 4,
         minWidth: options.panelMinWidth,
