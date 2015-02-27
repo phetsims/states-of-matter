@@ -204,12 +204,11 @@ define( function( require ) {
 
     this.verticalAxisLabel.setTranslation(
       this.graphXOrigin / 2,
-      this.graphYOrigin - this.graphHeight / 2 + 1.3 * this.verticalAxisLabel.height
-    );
+      this.graphYOrigin );
     this.verticalAxisLabel.font = ljGraPhAxisLabelFont;
 
     this.horizontalAxisLabel.setTranslation(
-      this.graphXOrigin + this.graphWidth / 2 - this.horizontalAxisLabel.width,
+      this.graphWidth / 2 - this.horizontalAxisLabel.width / 2,
       this.graphYOrigin + 1.8 * this.horizontalAxisLabel.height
     );
     this.horizontalAxisLabel.font = ljGraPhAxisLabelFont;
