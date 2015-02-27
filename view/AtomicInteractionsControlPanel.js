@@ -375,17 +375,17 @@ define( function( require ) {
 
   //Create an icon for the adjustable attraction  button
   var createAdjustableAttractionIcon = function() {
-    return new Circle( 6, { fill: '#B15AFF' } );
+    return new Circle( 6, { fill: StatesOfMatterConstants.ADJUSTABLE_ATTRACTION_COLOR } );
   };
 
   //Create an icon for the neon  button
   var createNeonIcon = function() {
-    return new Circle( 5, { fill: '#1AFFFB' } );
+    return new Circle( 5, { fill: StatesOfMatterConstants.NEON_COLOR } );
   };
 
   //Create an icon for the argon  button
   var createArgonIcon = function() {
-    return new Circle( 6, { fill: '#FF8A75' } );
+    return new Circle( 6, { fill: StatesOfMatterConstants.ARGON_COLOR } );
   };
 
   return inherit( Node, AtomicInteractionsControlPanel );
