@@ -34,13 +34,13 @@ define( function( require ) {
 
     Node.call( this );
     var gridNode = this;
-    var horizontalLineCount = MIN_LINES_HORIZONTAL;
+    atomsView.horizontalLineCount = MIN_LINES_HORIZONTAL;
     this.horizontalLinesNode = new Path( null, { stroke: 'white', lineWidth: 0.8, opacity: 0.6 } );
     this.verticalLinesNode = new Path( null, { stroke: 'white', lineWidth: 0.8, opacity: 0.6 } );
     this.zoomInButton = new ZoomButton( {
       listener: function() {
-        horizontalLineCount -= ZOOM_INCREMENT;
-        gridNode.addHorizontalLines( offsetX, offsetY, width, height, horizontalLineCount );
+        atomsView.horizontalLineCount -= ZOOM_INCREMENT;
+        gridNode.addHorizontalLines( offsetX, offsetY, width, height, atomsView.horizontalLineCount );
         atomsView.verticalScalingFactor *= 3.33;
         atomsView.drawPotentialCurve();
       },
@@ -56,8 +56,8 @@ define( function( require ) {
 
     this.zoomOutButton = new ZoomButton( {
       listener: function() {
-        horizontalLineCount += 2;
-        gridNode.addHorizontalLines( offsetX, offsetY, width, height, horizontalLineCount );
+        atomsView.horizontalLineCount += 2;
+        gridNode.addHorizontalLines( offsetX, offsetY, width, height, atomsView.horizontalLineCount );
         atomsView.verticalScalingFactor /= 3.33;
         atomsView.drawPotentialCurve();
       },
@@ -95,8 +95,8 @@ define( function( require ) {
     this.verticalLinesNode.setShape( verticalLineShape );
 
     this.horizontalLines = [];
-    for ( var y = 0; y < horizontalLineCount; y++ ) {
-      var viewY = y * (height / (horizontalLineCount - 1));
+    for ( var y = 0; y < atomsView.horizontalLineCount; y++ ) {
+      var viewY = y * (height / (atomsView.horizontalLineCount - 1));
       this.horizontalLines.push( {
         x1: offsetX,
         y1: viewY + offsetY,
