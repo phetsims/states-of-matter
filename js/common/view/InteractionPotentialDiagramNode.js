@@ -19,6 +19,7 @@ define( function( require ) {
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Node = require( 'SCENERY/nodes/Node' );
   var ArrowNode = require( 'SCENERY_PHET/ArrowNode' );
+  var ArrowShape = require( 'SCENERY_PHET/ArrowShape' );
   var GridNode = require( 'ATOMIC_INTERACTIONS/atomic-interactions/view/ZoomableGridNode' );
   var PositionMarker = require( 'ATOMIC_INTERACTIONS/atomic-interactions/view/PositionMarker' );
 
@@ -31,7 +32,7 @@ define( function( require ) {
 
 // Constants that control the range of data that is graphed.
 // In picometers.
-  var MAX_INTER_ATOM_DISTANCE = 1800;
+  var MAX_INTER_ATOM_DISTANCE = 1200;
 
 // Constants that control the appearance of the diagram.
   var NARROW_VERSION_WIDTH = 135;
@@ -89,7 +90,7 @@ define( function( require ) {
     this.verticalScalingFactor = (this.graphHeight / 2) /
                                  (StatesOfMatterConstants.MAX_EPSILON * StatesOfMatterConstants.K_BOLTZMANN);
 
-
+    this.horizontalLineCount = 5;
     if ( wide ) {
       this.gridNode = new GridNode( this, 0, 0, this.graphWidth, this.graphHeight );
       this.ljPotentialGraph.addChild( this.gridNode );
@@ -110,15 +111,14 @@ define( function( require ) {
     this.ljPotentialGraph.addChild( this.potentialEnergyLine );
 
     // Add the arrows and labels that will depict sigma and epsilon.
-    this.epsilonArrow = new ArrowNode( 0, 0, 0, this.graphHeight / 2,
+    this.epsilonArrowShape = new ArrowShape( 0, 0, 0, this.graphHeight / 2,
       {
-        fill: 'white',
-        stroke: 'white',
         doubleHead: true,
         headHeight: 5,
         headWidth: 5,
         tailWidth: 1
       } );
+    this.epsilonArrow = new Path( this.epsilonArrowShape );
     this.ljPotentialGraph.addChild( this.epsilonArrow );
 
     this.epsilonLabel = new Text( epsilonString, { font: GREEK_LETTER_FONT, fill: 'white' } );
@@ -210,7 +210,8 @@ define( function( require ) {
       // reset   the lj graph
       this.verticalScalingFactor = (this.graphHeight / 2) /
                                    (StatesOfMatterConstants.MAX_EPSILON * StatesOfMatterConstants.K_BOLTZMANN);
-      this.gridNode.addHorizontalLines( 0, 0, this.graphWidth, this.graphHeight, 5 );
+      this.horizontalLineCount = 5;
+      this.gridNode.addHorizontalLines( 0, 0, this.graphWidth, this.graphHeight, this.horizontalLineCount );
       this.drawPotentialCurve();
 
     },
@@ -324,14 +325,26 @@ define( function( require ) {
         this.epsilonArrow.setVisible( true );
         try {
           if ( this.graphMin.y > this.graphHeight ) {
-            this.epsilonArrow.setTailAndTip( this.graphMin.x, this.graphHeight,
-              this.epsilonArrowStartPt.x, this.epsilonArrowStartPt.y );
-            this.epsilonArrow.doubleHead = false;
+            this.epsilonArrowShape = new ArrowShape( this.graphMin.x, this.graphHeight,
+              this.epsilonArrowStartPt.x, this.epsilonArrowStartPt.y,
+              {
+                doubleHead: this.graphMin.y - 10 < this.graphHeight,
+                headHeight: 5,
+                headWidth: 5,
+                tailWidth: 1
+              } );
+            this.epsilonArrow.setShape( this.epsilonArrowShape );
           }
           else {
-            this.epsilonArrow.setTailAndTip( this.graphMin.x, this.graphMin.y, this.epsilonArrowStartPt.x,
-              this.epsilonArrowStartPt.y );
-            this.epsilonArrow.doubleHead = true;
+            this.epsilonArrowShape = new ArrowShape( this.graphMin.x, this.graphMin.y,
+              this.epsilonArrowStartPt.x, this.epsilonArrowStartPt.y,
+              {
+                doubleHead: true,
+                headHeight: 5,
+                headWidth: 5,
+                tailWidth: 1
+              } );
+            this.epsilonArrow.setShape( this.epsilonArrowShape );
           }
         }
         catch( e ) {
