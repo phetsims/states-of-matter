@@ -23,13 +23,11 @@ define( function( require ) {
   var colorsProperty = new Property( false );
   var simOptions = {
     credits: {
-      //TODO fill in proper credits, all of these fields are optional, see joist.AboutDialog
-      leadDesign: '',
-      softwareDevelopment: '',
-      team: '',
-      qualityAssurance: '',
-      graphicArts: '',
-      thanks: ''
+      leadDesign: 'Paul Beale, Sarah McKagan, Emily Moore, Noah Podolefsky, Amy Rouinfar',
+      softwareDevelopment: 'John Blanco',
+      team: 'Wendy Adams, Jack Barbera, Kelly Lancaster, Kathy Perkins',
+      qualityAssurance: 'Steele Dalton',
+      thanks: 'Thanks to Actual Concepts for working with the PhET development team\nto convert this simulation to HTML5.'
     }, optionsNode: new GlobalOptionsNode( colorsProperty )
   };
 
