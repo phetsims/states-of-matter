@@ -240,9 +240,9 @@ define( function( require ) {
           phaseChangesScreenView.phaseDiagram.right = phaseChangesScreenView.layoutBounds.right - layBoundsRightOffset;
           if ( isInteractionDiagramEnabled ) {
             epsilonControlInteractionPotentialDiagram.top = phaseChangesMoleculesControlPanel.bottom +
-                                                            layBoundsYOffset / 2;
+                                                            layBoundsYOffset / 4;
             phaseChangesScreenView.phaseDiagram.top = epsilonControlInteractionPotentialDiagram.bottom +
-                                                      layBoundsYOffset / 2;
+                                                      layBoundsYOffset / 3;
           }
           else {
             phaseChangesScreenView.phaseDiagram.top = phaseChangesMoleculesControlPanel.bottom + layBoundsYOffset / 2;

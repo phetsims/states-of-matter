@@ -76,7 +76,7 @@ define( function( require ) {
         thumbSize: new Dimension2( 15, 30 ),
         majorTickLength: 15,
         minorTickLength: 12,
-        trackSize: new Dimension2( 140, 5 ),
+        trackSize: new Dimension2( 100, 5 ),
         trackStroke: 'white',
         trackLineWidth: 1,
         thumbLineWidth: 1,
