@@ -128,7 +128,7 @@ define( function( require ) {
         radius: 12,
         stroke: 'black',
         fill: '#005566',
-        centerX: this.layoutBounds.centerX + 110,
+        centerX: this.layoutBounds.centerX + 80,
         bottom:  this.layoutBounds.bottom - 2 * inset
       } );
     this.addChild( stepButton );
@@ -155,7 +155,7 @@ define( function( require ) {
       stroke: 'black',
       fill: '#005566',
       y: stepButton.centerY,
-      right: stepButton.left - inset
+      right: stepButton.left - 2 * inset
     } );
     this.addChild( playPauseButton );
 
@@ -195,7 +195,7 @@ define( function( require ) {
       spacing: radioButtonSpacing,
       children: [ slowMotionRadioBox, normalMotionRadioBox ]
     } );
-    this.addChild( speedControl.mutate( { right: playPauseButton.left - 8, bottom: playPauseButton.bottom } ) );
+    this.addChild( speedControl.mutate( { right: playPauseButton.left - 2 * inset, bottom: playPauseButton.bottom } ) );
 
     // Create the push pin node that will be used to convey the idea that
     // the fixed atom is pinned to the canvas.  It will be added to the
