@@ -101,7 +101,7 @@ define( function( require ) {
 
     // Create and add the center axis line for the graph.
     var centerAxis = new Path( new Shape().lineTo( 0, 0 )
-      .lineTo( this.graphWidth, 0 ), { lineWidth: 2, stroke: '#A7A7A7' } );
+      .lineTo( this.graphWidth, 0 ), { lineWidth: 0.8, stroke: '#A7A7A7' } );
     this.ljPotentialGraph.addChild( centerAxis );
     centerAxis.setTranslation( 0, this.graphHeight / 2 );
 
@@ -163,6 +163,14 @@ define( function( require ) {
         fill: 'white',
         font: AXIS_LABEL_FONT
       } );
+    // restricted horizontal axis label
+    if ( this.horizontalAxisLabel.width > this.horizontalAxis.width ) {
+      var sizeOfChar = this.horizontalAxisLabel.width / distanceBetweenAtomsString.length;
+      var charactersLength = Math.max( this.horizontalAxis.width / sizeOfChar, 26 );
+      distanceBetweenAtomsString = distanceBetweenAtomsString.slice( 0, charactersLength );
+      distanceBetweenMoleculesString = distanceBetweenMoleculesString.slice( 0, charactersLength );
+      this.horizontalAxisLabel.setText( distanceBetweenAtomsString );
+    }
 
     this.setMolecular( false );
 
@@ -178,6 +186,13 @@ define( function( require ) {
     this.verticalAxis.setTranslation( this.graphXOrigin, this.graphYOrigin );
 
     this.verticalAxisLabel = new Text( potentialEnergyString, { fill: 'white', font: AXIS_LABEL_FONT } );
+
+    // restricted vertical  axis label
+    if ( this.verticalAxisLabel.width > this.verticalAxis.height ) {
+      sizeOfChar = this.verticalAxisLabel.width / potentialEnergyString.length;
+      this.verticalAxisLabel.setText( potentialEnergyString.slice( 0, this.verticalAxis.height / sizeOfChar ) )
+    }
+
     this.verticalAxisLabel.setTranslation( this.graphXOrigin / 2 - 5,
       this.graphYOrigin - (  this.graphHeight / 2) + ( this.verticalAxisLabel.width / 2) );
     this.verticalAxisLabel.setRotation( 3 * Math.PI / 2 );
@@ -249,6 +264,12 @@ define( function( require ) {
       }
       else {
         this.positionMarker.setVisible( false );
+      }
+      //  made position marker  visible  on oxygen oxygen fully zoomed out  case
+      if ( this.positionMarkerEnabled && (xPos > 0) && (xPos < this.graphWidth) &&
+           (yPos > 0) && (yPos > this.graphHeight + 1 ) && p( yPos < this.graphHeight + 10 ) ) {
+        this.positionMarker.setVisible( true );
+        this.positionMarker.setTranslation( xPos, yPos - 10 );
       }
     },
 
