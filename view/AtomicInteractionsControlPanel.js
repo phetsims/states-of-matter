@@ -316,7 +316,7 @@ define( function( require ) {
 
     var content = new VBox( {
       spacing: 4,
-      align: 'left', children: [ radioButtonGroup, atomDiameter, interactionStrengthSlider ]
+      align: 'left', children: [ radioButtonGroup ]
     } );
 
     var radioButtonPanel = new Panel( content, { lineWidth: 0, fill: options.backgroundColor } );
