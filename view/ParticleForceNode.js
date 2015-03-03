@@ -18,7 +18,7 @@ define( function( require ) {
   // in this particular sim, so tweak them as needed for optimal appearance.
   var ATTRACTIVE_FORCE_COLOR = '#FC9732';
   var REPULSIVE_FORCE_COLOR = new Color( 255, 0, 255, 175 ); // Magenta.
-  var TOTAL_FORCE_COLOR = new Color( 0, 255, 0, 125 );
+  var TOTAL_FORCE_COLOR = '#49B649';
   var COMPONENT_FORCE_ARROW_REFERENCE_LENGTH = 150;
   var COMPONENT_FORCE_ARROW_REFERENCE_MAGNITUDE = 1E-22;
   var TOTAL_FORCE_ARROW_REFERENCE_LENGTH = 200;
