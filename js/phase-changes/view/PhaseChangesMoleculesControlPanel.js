@@ -76,7 +76,8 @@ define( function( require ) {
         thumbSize: new Dimension2( 15, 30 ),
         majorTickLength: 15,
         minorTickLength: 12,
-        trackStroke: 'black',
+        trackSize: new Dimension2( 140, 5 ),
+        trackStroke: 'white',
         trackLineWidth: 1,
         thumbLineWidth: 1,
         tickLabelSpacing: 6,
@@ -175,7 +176,7 @@ define( function( require ) {
     var background = new Path( new Shape().roundRect( -2, -4,
       radioButtonPanel.width, radioButtonPanel.height + controlPanelOffset,
       options.cornerRadius, options.cornerRadius ), {
-      stroke: '#FFFCD3',
+      stroke: 'white',
       lineWidth: options.lineWidth,
       fill: 'black'
     } );
@@ -191,14 +192,14 @@ define( function( require ) {
       // adjust the control panel border when adjustable attraction selected or deselect
       if ( value === StatesOfMatterConstants.USER_DEFINED_MOLECULE ) {
         content.addChild( interactionStrengthNode );
-        background.setShape( new Shape().roundRect( -2, -4,
+        background.setShape( new Shape().roundRect( -2, -2,
           radioButtonPanel.width, radioButtonPanel.height + inset,
           options.cornerRadius, options.cornerRadius ) );
       }
       else {
         if ( content.isChild( interactionStrengthNode ) ) {
           content.removeChild( interactionStrengthNode );
-          background.setShape( new Shape().roundRect( -2, -4,
+          background.setShape( new Shape().roundRect( -2, -2,
             radioButtonPanel.width, radioButtonPanel.height,
             options.cornerRadius, options.cornerRadius ) );
         }
@@ -236,11 +237,13 @@ define( function( require ) {
   //Create an icon for the water  button
   var createWaterIcon = function() {
     var dot1 = new Circle( 5, { fill: StatesOfMatterConstants.OXYGEN_COLOR } );
-    var dot2 = new Circle( 3, { fill: StatesOfMatterConstants.HYDROGEN_COLOR,
-      stroke: StatesOfMatterConstants.HYDROGEN_COLOR, bottom: dot1.top + 5, right: dot1.left + 5 } );
+    var dot2 = new Circle( 3, {
+      fill: StatesOfMatterConstants.HYDROGEN_COLOR,
+      stroke: StatesOfMatterConstants.HYDROGEN_COLOR, bottom: dot1.top + 5, right: dot1.left + 5
+    } );
     var dot3 = new Circle( 3, {
       fill: StatesOfMatterConstants.HYDROGEN_COLOR,
-      stroke:StatesOfMatterConstants.HYDROGEN_COLOR, bottom: dot1.top + 5, left: dot1.right - 5
+      stroke: StatesOfMatterConstants.HYDROGEN_COLOR, bottom: dot1.top + 5, left: dot1.right - 5
     } );
 
     return new Node( { children: [ dot3, dot1, dot2 ] } );

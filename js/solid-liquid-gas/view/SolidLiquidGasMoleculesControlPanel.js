@@ -29,8 +29,6 @@ define( function( require ) {
   var adjustableAttractionString = require( 'string!STATES_OF_MATTER/adjustableAttraction' );
   var titleString = require( 'string!STATES_OF_MATTER/AtomsMolecules' );
 
-  // constants
-  var inset = 10;
 
   /**
    *
@@ -104,10 +102,10 @@ define( function( require ) {
       lineWidth: 0
     } );
 
-    var background = new Rectangle( 0, -4,
-      radioButtonPanel.width, radioButtonPanel.height + inset,
+    var background = new Rectangle( 0, -3,
+      radioButtonPanel.width, radioButtonPanel.height + 1,
       options.cornerRadius, options.cornerRadius, {
-        stroke: '#FFFCD3',
+        stroke: 'white',
         lineWidth: options.lineWidth,
         fill: 'black'
       }
@@ -116,15 +114,13 @@ define( function( require ) {
     this.addChild( background );
     this.addChild( radioButtonGroup );
 
-    var titleText = new Text( titleString,
-      {
-        font: new PhetFont( 14 ),
-        fill: '#FFFFFF'
-      } );
+    var titleText = new Text( titleString, {
+      font: new PhetFont( 14 ),
+      fill: '#FFFFFF'
+    } );
 
     var titleBackground = new Rectangle( background.centerX + 4, background.top - 10,
-      titleText.width + 5, titleText.height,
-      {
+      titleText.width + 5, titleText.height, {
         fill: 'black'
       } );
     titleText.centerX = background.centerX;
