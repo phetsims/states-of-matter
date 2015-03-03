@@ -366,8 +366,10 @@ define( function( require ) {
         }
         else {
           //if  atom and interaction slider
-          if ( content.isChild( atomDiameter ) || content.isChild( interactionStrength ) ) {
+          if ( content.isChild( atomDiameter ) ) {
             content.removeChild( atomDiameter );
+          }
+          if ( content.isChild( interactionStrength ) ) {
             content.removeChild( interactionStrength );
           }
         }
