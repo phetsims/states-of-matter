@@ -44,11 +44,11 @@ define( function( require ) {
         atomsView.verticalScalingFactor *= 3.33;
         atomsView.drawPotentialCurve();
       },
-      baseColor: 'white',
+      baseColor: '#FFD333',
       radius: 8,
       xMargin: 3,
       yMargin: 3,
-      disabledBaseColor: '#4A4A4A',
+      disabledBaseColor: '#EDEDED',
       buttonAppearanceStrategy: rectangularButtonView.flatAppearanceStrategy
     } );
     this.zoomInButton.setTranslation( -50, 0 );
@@ -61,11 +61,11 @@ define( function( require ) {
         atomsView.verticalScalingFactor /= 3.33;
         atomsView.drawPotentialCurve();
       },
-      baseColor: 'white',
+      baseColor: '#FFD333',
       radius: 8,
       xMargin: 3,
       yMargin: 3,
-      disabledBaseColor: 'gray',
+      disabledBaseColor: '#EDEDED',
       buttonAppearanceStrategy: rectangularButtonView.flatAppearanceStrategy,
       in: false,
       top: this.zoomInButton.bottom + 5,

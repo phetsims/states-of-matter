@@ -87,8 +87,8 @@ define( function( require ) {
     // add interactive potential diagram
     this.interactiveInteractionPotentialDiagram = new InteractiveInteractionPotentialDiagram(
       dualAtomModel.getSigma(), dualAtomModel.getEpsilon(), true, dualAtomModel, {
-        left: this.layoutBounds.minX + 3 * inset,
-        top:  atomicInteractionsControlPanel.top + inset / 2
+        left: this.layoutBounds.minX + 6 * inset,
+        top:  atomicInteractionsControlPanel.top + 15
       } );
     this.addChild( this.interactiveInteractionPotentialDiagram );
 
@@ -128,7 +128,7 @@ define( function( require ) {
         radius: 12,
         stroke: 'black',
         fill: '#005566',
-        centerX: this.layoutBounds.centerX + 80,
+        centerX: this.layoutBounds.centerX + 100,
         bottom:  this.layoutBounds.bottom - 2 * inset
       } );
     this.addChild( stepButton );
@@ -310,8 +310,8 @@ define( function( require ) {
       // Note that the particulars of how this is positioned will need to
       // change if a different image is used.
       this.addChild( this.pushPinNode );
-      this.pushPinNode.setTranslation( this.modelViewTransform.modelToViewX( -this.fixedParticle.getRadius() * 0.75 ),
-        this.modelViewTransform.modelToViewY( -this.fixedParticle.getRadius() * 0.9 ) );
+      this.pushPinNode.setTranslation( this.modelViewTransform.modelToViewX( -this.fixedParticle.getRadius() * 1.05 ),
+        this.modelViewTransform.modelToViewY( -this.fixedParticle.getRadius() * 1.42 ) );
     },
 
     handleFixedParticleRemoved: function() {
