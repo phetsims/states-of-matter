@@ -118,7 +118,7 @@ define( function( require ) {
         headWidth: 5,
         tailWidth: 1
       } );
-    this.epsilonArrow = new Path( this.epsilonArrowShape ,{fill:'white'});
+    this.epsilonArrow = new Path( this.epsilonArrowShape, { fill: 'white' } );
     this.ljPotentialGraph.addChild( this.epsilonArrow );
 
     this.epsilonLabel = new Text( epsilonString, { font: GREEK_LETTER_FONT, fill: 'white' } );
@@ -202,6 +202,8 @@ define( function( require ) {
 
     // Draw the curve upon the graph.
     this.drawPotentialCurve();
+    this.epsilonLabel.setTranslation( this.graphMin.x + this.epsilonLabel.width,
+      ( this.graphMin.y - this.epsilonLabel.height / 2 + this.graphHeight / 2) / 2 );
   }
 
   return inherit( Node, InteractionPotentialDiagramNode, {
@@ -267,7 +269,7 @@ define( function( require ) {
       }
       //  made position marker  visible  on oxygen oxygen fully zoomed out  case
       if ( this.positionMarkerEnabled && (xPos > 0) && (xPos < this.graphWidth) &&
-                                                                                (yPos > 0) && (yPos > this.graphHeight + 1 ) && ( yPos < this.graphHeight + 10 ) ) {
+           (yPos > 0) && (yPos > this.graphHeight + 1 ) && ( yPos < this.graphHeight + 10 ) ) {
         this.positionMarker.setVisible( true );
         this.positionMarker.setTranslation( xPos, yPos - 10 );
       }
@@ -376,14 +378,10 @@ define( function( require ) {
         // Don't show the arrow if there isn't enough space.
         this.epsilonArrow.setVisible( false );
       }
-      if ( this.graphMin.y / 2 < this.graphHeight ) {
-        this.epsilonLabel.setTranslation( this.graphMin.x + this.epsilonLabel.width,
-          ( this.graphMin.y - this.epsilonLabel.height / 2 + this.graphHeight / 2) / 2 );
-      }
-      else {
-        this.epsilonLabel.setTranslation( this.graphMin.x + this.epsilonLabel.width,
-          this.graphHeight - this.epsilonLabel.height / 2 );
-      }
+
+      this.epsilonLabel.setTranslation( this.graphMin.x + this.epsilonLabel.width,
+        this.epsilonLabel.y );
+
       // Position the arrow that depicts sigma along with its label.
       this.sigmaLabel.setTranslation( this.zeroCrossingPoint.x / 2 - this.sigmaLabel.width / 2,
         this.graphHeight / 2 - this.sigmaLabel.height / 3 );
