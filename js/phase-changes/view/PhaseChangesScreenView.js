@@ -126,6 +126,8 @@ define( function( require ) {
     this.addChild( compositeThermometerNode );
 
     // add phase diagram
+    // in SOM basic version by default phase diagram should be closed.
+    multipleParticleModel.expandedProperty.value = isInteractionDiagramEnabled;
     this.phaseDiagram = new PhaseDiagram( multipleParticleModel.expandedProperty );
 
     //add phase change control panel
@@ -144,6 +146,8 @@ define( function( require ) {
           multipleParticleModel.reset();
           compositeThermometerNode.setRotation( 0 );
           particleContainerNode.reset();
+          //Reset  phase diagram state in SOM basic version
+          multipleParticleModel.expandedProperty.value = isInteractionDiagramEnabled;
         },
         bottom: this.layoutBounds.bottom - layBoundsYOffset / 2,
         right:  this.layoutBounds.right - layBoundsRightOffset,
