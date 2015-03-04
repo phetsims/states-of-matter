@@ -118,7 +118,7 @@ define( function( require ) {
         headWidth: 5,
         tailWidth: 1
       } );
-    this.epsilonArrow = new Path( this.epsilonArrowShape, { fill: 'white' } );
+    this.epsilonArrow = new Path( this.epsilonArrowShape, { fill: 'white', stroke: 'white' } );
     this.ljPotentialGraph.addChild( this.epsilonArrow );
 
     this.epsilonLabel = new Text( epsilonString, { font: GREEK_LETTER_FONT, fill: 'white' } );
