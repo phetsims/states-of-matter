@@ -254,6 +254,12 @@ define( function( require ) {
       atomicInteractionsScreenView.updateMinimumXForMovableAtom();
     } );
 
+    this.movableParticle.positionProperty.link( function() {
+      if ( !dualAtomModel.isPlaying ) {
+        dualAtomModel.positionChanged();
+      }
+    } );
+
     atomicInteractionsScreenView.handNode.setVisible( true );
   }
 

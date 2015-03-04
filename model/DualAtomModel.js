@@ -443,6 +443,20 @@ define( function( require ) {
           }
         }
       },
+      // Called when the movable atom is moved
+      positionChanged: function() {
+        if ( this.motionPaused ) {
+          // The user must be moving the atom from the view.
+          // Update the forces correspondingly.
+          try {
+            this.clone( this.movableAtom );
+          }
+          catch( e ) {
+            console.log( e );
+          }
+          this.updateForces();
+        }
+      },
       /**
        *
        * @param {Number} dt -- time in seconds
