@@ -239,7 +239,7 @@ define( function( require ) {
         baseColor: 'black',
         disabledBaseColor: 'black',
         selectedLineWidth: 1,
-        selectedStroke: '#FFFCD3',
+        selectedStroke: 'white',
         deselectedLineWidth: 0,
         deselectedContentOpacity: 1
       } );
