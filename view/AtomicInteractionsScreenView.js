@@ -109,6 +109,7 @@ define( function( require ) {
     var resetAllButton = new ResetAllButton( {
       listener: function() {
         dualAtomModel.reset();
+        dualAtomModel.isHandNodeVisible = true;
         atomicInteractionsScreenView.handNode.setVisible( true );
         atomicInteractionsScreenView.interactiveInteractionPotentialDiagram.reset();
       },
@@ -226,7 +227,7 @@ define( function( require ) {
       atomicInteractionsScreenView.handleMovableParticleAdded( dualAtomModel.movableAtom );
       dualAtomModel.interactionStrength = 300;
       dualAtomModel.atomDiameter = 300;
-      atomicInteractionsScreenView.handNode.setVisible( false );
+      atomicInteractionsScreenView.handNode.setVisible( dualAtomModel.isHandNodeVisible );
     } );
     dualAtomModel.forcesProperty.link( function( forces ) {
       switch( forces ) {

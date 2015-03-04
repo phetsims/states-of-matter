@@ -74,6 +74,7 @@ define( function( require ) {
         // Let the model move the particles again.  Note that this happens
         // even if the motion was paused by some other means.
         dualAtomModel.setMotionPaused( false );
+        dualAtomModel.isHandNodeVisible=false;
         handNode.setVisible( false );
       }
     } ) );

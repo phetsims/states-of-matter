@@ -49,6 +49,7 @@ define( function( require ) {
     this.rand = new Random();
     this.sigmaTable = new SigmaTable();
     this.atomFactory = new AtomFactory();
+    this.isHandNodeVisible=true;// indicate moving hand node visible or not
     this.ljPotentialCalculator = new LjPotentialCalculator( StatesOfMatterConstants.MIN_SIGMA,
       StatesOfMatterConstants.MIN_EPSILON ); // Initial values arbitrary, will be set during reset.
     PropertySet.call( this, {
