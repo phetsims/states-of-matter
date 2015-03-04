@@ -46,6 +46,9 @@ define( function( require ) {
     this.elbowEnabled = false;
     this.elbowHeight = 0;
 
+    // restricted pressure string length to 10 characters
+    pressureString = pressureString.substr( 0, 10 );
+    pressureOverloadString = pressureOverloadString.substr( 0, 10 );
 
     var gaugeNode = new GaugeNode( multipleParticleModel.pressureProperty, pressureString,
       { min: 0, max: MAX_PRESSURE }, { scale: 0.5, radius: 80, backgroundLineWidth: 3 } );

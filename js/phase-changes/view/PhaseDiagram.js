@@ -176,16 +176,22 @@ define( function( require ) {
         tailWidth: 2
       } );
     accordionContent.addChild( verticalAxis );
-
+    var sizeOfChar;
     // Create and add the labels for the axes.
     var horizontalAxisLabel = new Text( temperatureString, { font: AXIS_LABEL_FONT, fill: 'white' } );
-    horizontalAxisLabel.setTranslation( ( WIDTH / 2 ) - ( horizontalAxisLabel.width / 2),
-      Y_ORIGIN_OFFSET + horizontalAxisLabel.height );
+    if ( horizontalAxisLabel.width > horizontalAxis.width ) {
+      sizeOfChar = horizontalAxisLabel.width / temperatureString.length;
+      horizontalAxisLabel.setText( temperatureString.slice( 0, horizontalAxis.width / sizeOfChar ) )
+    }
+    horizontalAxisLabel.setTranslation( horizontalAxis.centerX - horizontalAxisLabel.width / 2, horizontalAxis.centerY + horizontalAxisLabel.height );
     accordionContent.addChild( horizontalAxisLabel );
 
     var verticalAxisLabel = new Text( pressureString, { font: AXIS_LABEL_FONT, fill: 'white' } );
-    verticalAxisLabel.setTranslation( X_ORIGIN_OFFSET - (verticalAxisLabel.height ),
-      verticalAxisLabel.width * 1.6 );
+    if ( verticalAxisLabel.width > verticalAxis.height ) {
+      sizeOfChar = verticalAxisLabel.width / pressureString.length;
+      verticalAxisLabel.setText( pressureString.slice( 0, verticalAxis.height / sizeOfChar ) )
+    }
+    verticalAxisLabel.setTranslation(  verticalAxis.centerX - (verticalAxisLabel.height /1.3 ), verticalAxis.centerY + verticalAxisLabel.width / 2 );
     verticalAxisLabel.setRotation( 3 * Math.PI / 2 );
     accordionContent.addChild( verticalAxisLabel );
 
@@ -195,6 +201,11 @@ define( function( require ) {
     accordionContent.addChild( this.currentStateMarker );
 
     var titleNode = new Text( phaseDiagramString, { fill: "#FFFFFF", font: new PhetFont( { size: 13 } ) } );
+
+    if ( titleNode.width > horizontalAxis.width ) {
+      sizeOfChar = titleNode.width / phaseDiagramString.length;
+      titleNode.setText( phaseDiagramString.slice( 0, horizontalAxis.width / sizeOfChar ) )
+    }
     var accordionBox = new AccordionBox( accordionContent,
       {
         titleNode: titleNode,

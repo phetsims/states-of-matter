@@ -122,9 +122,14 @@ define( function( require ) {
         }
       } ) );
     var accordionContentHBox = new HBox( { children: [ accordionContent ] } );
+    var titleNode = new Text( interactionDiagramTitle, { fill: "#FFFFFF", font: new PhetFont( { size: 13 } ) } );
+    if ( titleNode.width > this.horizontalAxis.width ) {
+      var sizeOfChar = titleNode.width / interactionDiagramTitle.length;
+      titleNode.setText( interactionDiagramTitle.slice( 0, this.horizontalAxis.width / sizeOfChar ) )
+    }
     var accordionBox = new AccordionBox( accordionContentHBox,
       {
-        titleNode: new Text( interactionDiagramTitle, { fill: "#FFFFFF", font: new PhetFont( { size: 13 } ) } ),
+        titleNode: titleNode,
         fill: 'black',
         stroke: 'white',
         expandedProperty: multipleParticleModel.interactionExpandedProperty,
