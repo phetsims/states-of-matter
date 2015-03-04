@@ -54,7 +54,7 @@ define( function( require ) {
    */
   function AtomicInteractionsScreenView( dualAtomModel, enableHeterogeneousMolecules ) {
 
-    ScreenView.call( this, { renderer: 'svg', layoutBounds: new Bounds2( 0, 0, 834, 504 ) } );
+    ScreenView.call( this, { layoutBounds: new Bounds2( 0, 0, 834, 504 ) } );
 
     this.dualAtomModel = dualAtomModel;
     this.movableParticle = dualAtomModel.getMovableAtomRef();
