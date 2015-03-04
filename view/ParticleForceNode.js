@@ -45,34 +45,31 @@ define( function( require ) {
     this.attractiveForce = 0;
     this.repulsiveForce = 0;
     var particleForceNode = this;
-
-    // add attractive force node
-    this.attractiveForceVectorNode = new DimensionalArrowNode( 0, 0, COMPONENT_FORCE_ARROW_REFERENCE_LENGTH, 0, {
-      fill: ATTRACTIVE_FORCE_COLOR,
+    var forceArrowNodeOptions = {
       headHeight: FORCE_ARROW_HEAD_LENGTH,
       headWidth: FORCE_ARROW_HEAD_WIDTH,
-      tailWidth: FORCE_ARROW_TAIL_WIDTH
-    } );
+      tailWidth: FORCE_ARROW_TAIL_WIDTH,
+      opacity: 0.7
+    };
+
+    // add attractive force node
+    this.attractiveForceVectorNode = new DimensionalArrowNode( 0, 0, COMPONENT_FORCE_ARROW_REFERENCE_LENGTH, 0, _.extend( {
+      fill: ATTRACTIVE_FORCE_COLOR
+    }, forceArrowNodeOptions ) );
     this.addChild( this.attractiveForceVectorNode );
     this.attractiveForceVectorNode.setVisible( false );
 
     // add repulsive force node
-    this.repulsiveForceVectorNode = new DimensionalArrowNode( 0, 0, COMPONENT_FORCE_ARROW_REFERENCE_LENGTH, 0, {
-      fill: REPULSIVE_FORCE_COLOR,
-      headHeight: FORCE_ARROW_HEAD_LENGTH,
-      headWidth: FORCE_ARROW_HEAD_WIDTH,
-      tailWidth: FORCE_ARROW_TAIL_WIDTH
-    } );
+    this.repulsiveForceVectorNode = new DimensionalArrowNode( 0, 0, COMPONENT_FORCE_ARROW_REFERENCE_LENGTH, 0, _.extend( {
+      fill: REPULSIVE_FORCE_COLOR
+    }, forceArrowNodeOptions ) );
     this.addChild( this.repulsiveForceVectorNode );
     this.repulsiveForceVectorNode.setVisible( false );
 
     // add total force node
-    this.totalForceVectorNode = new DimensionalArrowNode( 0, 0, TOTAL_FORCE_ARROW_REFERENCE_LENGTH, 0, {
-      fill: TOTAL_FORCE_COLOR,
-      headHeight: FORCE_ARROW_HEAD_LENGTH,
-      headWidth: FORCE_ARROW_HEAD_WIDTH,
-      tailWidth: FORCE_ARROW_TAIL_WIDTH
-    } );
+    this.totalForceVectorNode = new DimensionalArrowNode( 0, 0, TOTAL_FORCE_ARROW_REFERENCE_LENGTH, 0, _.extend( {
+      fill: TOTAL_FORCE_COLOR
+    }, forceArrowNodeOptions ) );
     this.addChild( this.totalForceVectorNode );
     this.totalForceVectorNode.setVisible( false );
 
