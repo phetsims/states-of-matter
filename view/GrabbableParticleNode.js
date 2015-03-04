@@ -78,6 +78,11 @@ define( function( require ) {
         handNode.setVisible( false );
       }
     } ) );
+    particle.positionProperty.link( function() {
+      if ( !dualAtomModel.isPlaying ) {
+        dualAtomModel.positionChanged();
+      }
+    } );
   }
 
   return inherit( ParticleForceNode, GrabbableParticleNode, {
