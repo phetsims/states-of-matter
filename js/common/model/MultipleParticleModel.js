@@ -64,8 +64,8 @@ define( function( require ) {
   var ADAPTIVE_THERMOSTAT = 3;
 
   // Parameters to control rates of change of the container size.
-  var MAX_PER_TICK_CONTAINER_SHRINKAGE = 50;
-  var MAX_PER_TICK_CONTAINER_EXPANSION = 200;
+  var MAX_PER_TICK_CONTAINER_SHRINKAGE = 25;
+  var MAX_PER_TICK_CONTAINER_EXPANSION = 100;
 
   // Countdown value used when recalculating temperature when the container size is changing.
   var CONTAINER_SIZE_CHANGE_RESET_COUNT = 25;
