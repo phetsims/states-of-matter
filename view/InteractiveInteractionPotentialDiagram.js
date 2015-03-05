@@ -27,8 +27,8 @@ define( function( require ) {
   var RESIZE_HANDLE_SIZE_PROPORTION = 0.05;
   var EPSILON_HANDLE_OFFSET_PROPORTION = 0.08;
   var SIGMA_HANDLE_OFFSET_PROPORTION = 0.08;
-  var RESIZE_HANDLE_NORMAL_COLOR = new Color( 153, 255, 0 );//new Color( 51, 204, 51 );
-  var RESIZE_HANDLE_HIGHLIGHTED_COLOR = 'yellow';//new Color( 153, 255, 0 );
+  var RESIZE_HANDLE_NORMAL_COLOR = '#32FE00';
+  var RESIZE_HANDLE_HIGHLIGHTED_COLOR = new Color( 153, 255, 0 );
   var EPSILON_LINE_WIDTH = 1;
   var EPSILON_LINE_COLOR = RESIZE_HANDLE_NORMAL_COLOR;
 
@@ -50,8 +50,8 @@ define( function( require ) {
 
     this.interactionEnabled = false;
     // Add the line that will indicate the value of epsilon.
-    var epsilonLineLength = EPSILON_HANDLE_OFFSET_PROPORTION * this.widthOfGraph * 2.2;
-    this.epsilonLine = new Rectangle( -epsilonLineLength / 4, 0, epsilonLineLength / 2, 3, {
+    var epsilonLineLength = EPSILON_HANDLE_OFFSET_PROPORTION * this.widthOfGraph * 1.2;
+    this.epsilonLine = new Rectangle( -epsilonLineLength / 2, 0, epsilonLineLength, 1, {
       cursor: 'ns-resize',
       pickable: true,
       fill: EPSILON_LINE_COLOR,
@@ -81,19 +81,21 @@ define( function( require ) {
     } ) );
     this.epsilonLineLayer.addChild( this.epsilonLine );
 
+    var arrowNodeOptions = {
+      headHeight: 10,
+      headWidth: 18,
+      tailWidth: 7,
+      fill: RESIZE_HANDLE_NORMAL_COLOR,
+      stroke: 'black',
+      doubleHead: true,
+      pickable: true,
+      cursor: 'pointer'
+    };
+
     // Add the arrow nodes that will allow the user to control the
     // parameters of the LJ potential.
     this.epsilonResizeHandle = new ArrowNode( 0, -RESIZE_HANDLE_SIZE_PROPORTION * this.widthOfGraph / 2, 0,
-      RESIZE_HANDLE_SIZE_PROPORTION * this.widthOfGraph / 2, {
-        headHeight: 10,
-        headWidth: 10,
-        tailWidth: 5,
-        fill: RESIZE_HANDLE_NORMAL_COLOR,
-        stroke: 'black',
-        doubleHead: true,
-        pickable: true,
-        cursor: 'pointer'
-      } );
+      RESIZE_HANDLE_SIZE_PROPORTION * this.widthOfGraph, arrowNodeOptions );
     this.epsilonResizeHandle.addInputListener( new FillHighlightListener( RESIZE_HANDLE_NORMAL_COLOR,
       RESIZE_HANDLE_HIGHLIGHTED_COLOR ) );
     this.ljPotentialGraph.addChild( this.epsilonResizeHandle );
@@ -118,16 +120,7 @@ define( function( require ) {
 
     // add sigma arrow node
     this.sigmaResizeHandle = new ArrowNode( -RESIZE_HANDLE_SIZE_PROPORTION * this.widthOfGraph / 2, 0,
-      RESIZE_HANDLE_SIZE_PROPORTION * this.widthOfGraph / 2, 0, {
-        headHeight: 10,
-        headWidth: 10,
-        tailWidth: 5,
-        fill: RESIZE_HANDLE_NORMAL_COLOR,
-        stroke: 'black',
-        doubleHead: true,
-        pickable: true,
-        cursor: 'pointer'
-      } );
+      RESIZE_HANDLE_SIZE_PROPORTION * this.widthOfGraph, 0, arrowNodeOptions );
     this.sigmaResizeHandle.addInputListener( new FillHighlightListener( RESIZE_HANDLE_NORMAL_COLOR,
       RESIZE_HANDLE_HIGHLIGHTED_COLOR ) );
     this.ljPotentialGraph.addChild( this.sigmaResizeHandle );
@@ -249,9 +242,10 @@ define( function( require ) {
       // Now position the control handles.
       if ( this.epsilonResizeHandle !== undefined ) {
         var graphMin = this.getGraphMin();
-        this.epsilonResizeHandle.setTranslation( graphMin.x +
+        var epsilonResizeOffset = 5;
+        this.epsilonResizeHandle.setTranslation( graphMin.x + epsilonResizeOffset +
                                                  ( this.widthOfGraph / 2 * EPSILON_HANDLE_OFFSET_PROPORTION ),
-          graphMin.y );
+          graphMin.y - epsilonResizeOffset );
         this.epsilonResizeHandle.setVisible( this.interactionEnabled );
         this.epsilonResizeHandle.setPickable( this.interactionEnabled );
         this.epsilonLine.setTranslation( graphMin.x, graphMin.y + EPSILON_LINE_WIDTH );
@@ -260,7 +254,8 @@ define( function( require ) {
       }
       if ( this.sigmaResizeHandle !== undefined ) {
         var zeroCrossingPoint = this.getZeroCrossingPoint();
-        this.sigmaResizeHandle.setTranslation( zeroCrossingPoint.x,
+        var arrowNodeXOffset = 5;
+        this.sigmaResizeHandle.setTranslation( zeroCrossingPoint.x - arrowNodeXOffset,
           ( this.getGraphHeight() / 2 ) - SIGMA_HANDLE_OFFSET_PROPORTION * this.heightOfGraph );
         this.sigmaResizeHandle.setVisible( this.interactionEnabled );
         this.sigmaResizeHandle.setPickable( this.interactionEnabled );
