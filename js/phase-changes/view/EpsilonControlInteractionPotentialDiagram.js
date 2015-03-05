@@ -33,9 +33,8 @@ define( function( require ) {
 
   // Position of handle as function of node width.
   var EPSILON_HANDLE_OFFSET_PROPORTION = 0.08;
-  // var EPSILON_LINE_WIDTH = 1;
-  var RESIZE_HANDLE_NORMAL_COLOR = new Color( 153, 255, 0 );
-  var RESIZE_HANDLE_HIGHLIGHTED_COLOR = 'yellow';
+  var RESIZE_HANDLE_NORMAL_COLOR = '#32FE00';
+  var RESIZE_HANDLE_HIGHLIGHTED_COLOR = new Color( 153, 255, 0 );
   var EPSILON_LINE_COLOR = RESIZE_HANDLE_NORMAL_COLOR;
 
   /**
@@ -72,8 +71,8 @@ define( function( require ) {
     this.epsilonResizeHandle = new ArrowNode( 0, -RESIZE_HANDLE_SIZE_PROPORTION * this.widthOfGraph / 2, 0,
       RESIZE_HANDLE_SIZE_PROPORTION * this.widthOfGraph / 2, {
         headHeight: 10,
-        headWidth: 10,
-        tailWidth: 5,
+        headWidth: 15,
+        tailWidth: 6,
         fill: RESIZE_HANDLE_NORMAL_COLOR,
         stroke: 'black',
         doubleHead: true,
