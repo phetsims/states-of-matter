@@ -26,7 +26,7 @@ define( function( require ) {
    */
   function HandNode( dualAtomModel, particle, modelViewTransform, minX, maxX ) {
 
-    Node.call( this );
+    Node.call( this, { cursor: 'pointer' } );
     var handNode = this;
     this.minX = minX;
     this.maxX = maxX;
