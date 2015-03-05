@@ -252,8 +252,7 @@ define( function( require ) {
         } );
 
       titleNode = new Node( { children: [ titleBackground, titleText.label ] } );
-      this.addChild( titleNode );
-      titleNode.centerX = radioButtonGroup.centerX + 5;
+
     }
     // add atom diameter slider
     var atomDiameterTitle = new Text( atomDiameterString, {
@@ -373,12 +372,18 @@ define( function( require ) {
             content.removeChild( interactionStrength );
           }
         }
-        background.setShape( new Shape().roundRect( -5, -4,
+        background.setShape( new Shape().roundRect( -5, -2,
           radioButtonPanel.width + inset,
-          radioButtonPanel.height + inset,
+          radioButtonPanel.height + 3,
           options.cornerRadius, options.cornerRadius ) );
       } );
     this.addChild( radioButtonPanel );
+    // add the tittle node after radio button panel added in SOM full version.
+    // here around the panel we are drawing a rectangle and on top rectangle added title node
+    if ( !enableHeterogeneousMolecules ) {
+      this.addChild( titleNode );
+      titleNode.centerX = radioButtonGroup.centerX + 5;
+    }
     this.mutate( options );
   }
 
