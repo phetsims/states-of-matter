@@ -23,6 +23,8 @@ define( function( require ) {
   var ConfigurableStatesOfMatterAtom = require( 'STATES_OF_MATTER/common/model/particle/ConfigurableStatesOfMatterAtom' );
   var Shape = require( 'KITE/Shape' );
   var Path = require( 'SCENERY/nodes/Path' );
+  var PhetColorScheme = require( 'SCENERY_PHET/PhetColorScheme' );
+
   // constants
   var MVT_SCALE = 0.25;
   var OVERLAP_ENLARGEMENT_FACTOR = 1.25;
@@ -161,7 +163,7 @@ define( function( require ) {
         baseColor = new Color( 112, 212, 255 );
       }
       else if ( atom instanceof OxygenAtom ) {
-        baseColor = new Color( 255, 85, 0 );
+        baseColor = PhetColorScheme.RED_COLORBLIND;
       }
       else if ( atom instanceof HydrogenAtom ) {
         baseColor = new Color( 255, 255, 255 );
