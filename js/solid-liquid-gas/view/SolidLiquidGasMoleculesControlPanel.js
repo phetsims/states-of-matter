@@ -25,9 +25,8 @@ define( function( require ) {
   var neonString = require( 'string!STATES_OF_MATTER/neon' );
   var argonString = require( 'string!STATES_OF_MATTER/argon' );
   var waterString = require( 'string!STATES_OF_MATTER/water' );
-  var oxygenString = require( 'string!STATES_OF_MATTER/oxygen' );
+  var oxygenString = require( 'string!STATES_OF_MATTER/diatomicOxygen' );
   var titleString = require( 'string!STATES_OF_MATTER/AtomsMolecules' );
-
 
   /**
    *

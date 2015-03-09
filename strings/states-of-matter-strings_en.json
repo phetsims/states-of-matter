@@ -18,6 +18,7 @@
   "strong": "strong",
   "water": "Water",
   "oxygen": "Oxygen",
+  "diatomicOxygen": "Oxygen",
   "solidLiquidGas": "Solid -Liquid-Gas",
   "phaseChanges": "Phase Changes",
   "earth": "Earth",
