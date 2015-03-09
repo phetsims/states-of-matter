@@ -16,6 +16,7 @@ define( function( require ) {
   var Shape = require( 'KITE/Shape' );
   var Path = require( 'SCENERY/nodes/Path' );
   var Text = require( 'SCENERY/nodes/Text' );
+  var HTMLText = require( 'SCENERY/nodes/HTMLText' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Node = require( 'SCENERY/nodes/Node' );
   var ArrowNode = require( 'SCENERY_PHET/ArrowNode' );
@@ -32,7 +33,7 @@ define( function( require ) {
 
 
   // Constants that control the size of the canvas.
-  var WIDTH = 155;
+  var WIDTH = 150;
   var HEIGHT = (WIDTH * 0.75);
 
   // Constants that control the look of the axes.
@@ -40,6 +41,8 @@ define( function( require ) {
   var AXES_ARROW_HEAD_HEIGHT = 8 * AXES_LINE_WIDTH;
   var HORIZ_AXIS_SIZE_PROPORTION = 0.88;
   var VERT_AXIS_SIZE_PROPORTION = 0.85;
+  var STATES_MAX_WIDTH = 35;
+  var SMALLER_INNER_TEXT_WIDTH = 60;
 
   // Constants that control the location of the origin for the graph.
   var X_ORIGIN_OFFSET = 0.10 * WIDTH;
@@ -72,11 +75,11 @@ define( function( require ) {
   var DEFAULT_CRITICAL_POINT = new Vector2( X_ORIGIN_OFFSET + (X_USABLE_RANGE * 0.8),
     Y_ORIGIN_OFFSET - (Y_USABLE_RANGE * 0.45) );
   var DEFAULT_SOLID_LABEL_LOCATION = new Vector2( X_ORIGIN_OFFSET + (X_USABLE_RANGE * 0.2),
-    Y_ORIGIN_OFFSET - (Y_USABLE_RANGE * 0.72) );
+    Y_ORIGIN_OFFSET - (Y_USABLE_RANGE * 0.7) );
   var DEFAULT_LIQUID_LABEL_LOCATION = new Vector2( X_ORIGIN_OFFSET + (X_USABLE_RANGE * 0.6),
-    Y_ORIGIN_OFFSET - (Y_USABLE_RANGE * 0.60) );
+    Y_ORIGIN_OFFSET - (Y_USABLE_RANGE * 0.7) );
   var DEFAULT_GAS_LABEL_LOCATION = new Vector2( X_ORIGIN_OFFSET + (X_USABLE_RANGE * 0.6),
-    Y_ORIGIN_OFFSET - (Y_USABLE_RANGE * 0.15) );
+    Y_ORIGIN_OFFSET - (Y_USABLE_RANGE * 0.1) );
 
   /**
    *
@@ -142,18 +145,33 @@ define( function( require ) {
     // Create the labels that will exist inside the phase diagram.
     this.solidLabel = new Text( solidString, { font: LARGER_INNER_FONT, fill: 'black' } );
     accordionContent.addChild( this.solidLabel );
+    if ( this.solidLabel.width > STATES_MAX_WIDTH ) {
+      this.solidLabel.setScaleMagnitude( STATES_MAX_WIDTH / this.solidLabel.width );
+    }
 
     this.liquidLabel = new Text( liquidString, { font: LARGER_INNER_FONT, fill: 'black' } );
     accordionContent.addChild( this.liquidLabel );
+    if ( this.liquidLabel.width > STATES_MAX_WIDTH ) {
+      this.liquidLabel.setScaleMagnitude( STATES_MAX_WIDTH / this.liquidLabel.width );
+    }
 
     this.gasLabel = new Text( gasString, { font: LARGER_INNER_FONT, fill: 'black' } );
     accordionContent.addChild( this.gasLabel );
+    if ( this.gasLabel.width > STATES_MAX_WIDTH ) {
+      this.gasLabel.setScaleMagnitude( STATES_MAX_WIDTH / this.gasLabel.width );
+    }
 
-    this.triplePointLabel = new Text( triplePointString, { font: SMALLER_INNER_FONT, fill: 'black' } );
+    this.triplePointLabel = new HTMLText( triplePointString, { font: SMALLER_INNER_FONT, fill: 'black' } );
     accordionContent.addChild( this.triplePointLabel );
+    if ( this.triplePointLabel.width > SMALLER_INNER_TEXT_WIDTH ) {
+      this.triplePointLabel.setScaleMagnitude( SMALLER_INNER_TEXT_WIDTH / this.triplePointLabel.width );
+    }
 
-    this.criticalPointLabel = new Text( criticalPointString, { font: SMALLER_INNER_FONT, fill: 'black' } );
+    this.criticalPointLabel = new HTMLText( criticalPointString, { font: SMALLER_INNER_FONT, fill: 'black' } );
     accordionContent.addChild( this.criticalPointLabel );
+    if ( this.criticalPointLabel.width > SMALLER_INNER_TEXT_WIDTH ) {
+      this.criticalPointLabel.setScaleMagnitude( SMALLER_INNER_TEXT_WIDTH / this.criticalPointLabel.width );
+    }
 
     var horizontalAxis = new ArrowNode( X_ORIGIN_OFFSET, Y_ORIGIN_OFFSET,
       X_ORIGIN_OFFSET + (HORIZ_AXIS_SIZE_PROPORTION * WIDTH), Y_ORIGIN_OFFSET,
@@ -183,7 +201,7 @@ define( function( require ) {
       sizeOfChar = horizontalAxisLabel.width / temperatureString.length;
       horizontalAxisLabel.setText( temperatureString.slice( 0, horizontalAxis.width / sizeOfChar ) )
     }
-    horizontalAxisLabel.setTranslation( horizontalAxis.centerX - horizontalAxisLabel.width / 2, horizontalAxis.centerY + horizontalAxisLabel.height );
+    horizontalAxisLabel.setTranslation( horizontalAxis.centerX - horizontalAxisLabel.width / 2, Y_ORIGIN_OFFSET + horizontalAxisLabel.height * 1.2 );
     accordionContent.addChild( horizontalAxisLabel );
 
     var verticalAxisLabel = new Text( pressureString, { font: AXIS_LABEL_FONT, fill: 'white' } );
@@ -191,7 +209,7 @@ define( function( require ) {
       sizeOfChar = verticalAxisLabel.width / pressureString.length;
       verticalAxisLabel.setText( pressureString.slice( 0, verticalAxis.height / sizeOfChar ) )
     }
-    verticalAxisLabel.setTranslation(  verticalAxis.centerX - (verticalAxisLabel.height /1.3 ), verticalAxis.centerY + verticalAxisLabel.width / 2 );
+    verticalAxisLabel.setTranslation( X_ORIGIN_OFFSET - (verticalAxisLabel.height / 1.5  ), verticalAxis.centerY + verticalAxisLabel.width / 2 );
     verticalAxisLabel.setRotation( 3 * Math.PI / 2 );
     accordionContent.addChild( verticalAxisLabel );
 
@@ -217,8 +235,8 @@ define( function( require ) {
         buttonAlign: 'left',
         cornerRadius: 4,
         contentYSpacing: -15,
-        contentYMargin: 10,
-        contentXMargin: 5,
+        contentYMargin: 5,
+        contentXMargin: 9,
         buttonYMargin: 4,
         buttonXMargin: 6,
         buttonLength: 12
@@ -313,7 +331,7 @@ define( function( require ) {
       this.triplePointLabel.setTranslation( DEFAULT_TRIPLE_POINT.x - this.triplePointLabel.width / 2,
         DEFAULT_TRIPLE_POINT.y - this.triplePointLabel.height * 0.9 );
       this.criticalPointLabel.setTranslation( DEFAULT_CRITICAL_POINT.x - this.criticalPointLabel.width / 1.6,
-        DEFAULT_CRITICAL_POINT.y - this.criticalPointLabel.height / 2 );
+        DEFAULT_CRITICAL_POINT.y - this.criticalPointLabel.height * 0.9 );
 
     },
 
