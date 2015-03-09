@@ -63,6 +63,7 @@ define( function( require ) {
   var bicyclePumpNodeYOffset = 90;
   var bicyclePumpNodeXOffset = 100;
   var returnLidButtonYOffset = 100;
+  var panelsYOffset=4;
 
   /**
    *
@@ -208,7 +209,7 @@ define( function( require ) {
       var epsilonControlInteractionPotentialDiagram = new EpsilonControlInteractionPotentialDiagram(
         StatesOfMatterConstants.MAX_SIGMA, StatesOfMatterConstants.MIN_EPSILON, false, multipleParticleModel, {
           right: this.layoutBounds.right - layBoundsRightOffset,
-          top:   phaseChangesMoleculesControlPanel.bottom + layBoundsYOffset / 2
+          top: phaseChangesMoleculesControlPanel.bottom
         } );
       this.addChild( epsilonControlInteractionPotentialDiagram );
     }
@@ -234,8 +235,7 @@ define( function( require ) {
         }
         multipleParticleModel.interactionStrengthProperty.value = StatesOfMatterConstants.MAX_EPSILON;
         if ( isInteractionDiagramEnabled ) {
-          epsilonControlInteractionPotentialDiagram.top = phaseChangesMoleculesControlPanel.bottom +
-                                                          layBoundsYOffset / 2;
+          epsilonControlInteractionPotentialDiagram.top = phaseChangesMoleculesControlPanel.bottom + panelsYOffset
         }
       }
       else {
@@ -243,13 +243,11 @@ define( function( require ) {
           phaseChangesScreenView.addChild( phaseChangesScreenView.phaseDiagram );
           phaseChangesScreenView.phaseDiagram.right = phaseChangesScreenView.layoutBounds.right - layBoundsRightOffset;
           if ( isInteractionDiagramEnabled ) {
-            epsilonControlInteractionPotentialDiagram.top = phaseChangesMoleculesControlPanel.bottom +
-                                                            layBoundsYOffset / 4;
-            phaseChangesScreenView.phaseDiagram.top = epsilonControlInteractionPotentialDiagram.bottom +
-                                                      layBoundsYOffset / 3;
+            epsilonControlInteractionPotentialDiagram.top = phaseChangesMoleculesControlPanel.bottom + panelsYOffset;
+            phaseChangesScreenView.phaseDiagram.top = epsilonControlInteractionPotentialDiagram.bottom + panelsYOffset
           }
           else {
-            phaseChangesScreenView.phaseDiagram.top = phaseChangesMoleculesControlPanel.bottom + layBoundsYOffset / 2;
+            phaseChangesScreenView.phaseDiagram.top = phaseChangesMoleculesControlPanel.bottom + panelsYOffset;
           }
         }
       }
