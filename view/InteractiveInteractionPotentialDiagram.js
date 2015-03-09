@@ -158,6 +158,7 @@ define( function( require ) {
         startDragX = interactiveInteractionPotentialDiagram.sigmaResizeHandle.globalToParentPoint( event.pointer.point ).x;
       },
       drag: function( event ) {
+        dualAtomModel.isHandNodeVisible=false;
         endDragX = interactiveInteractionPotentialDiagram.sigmaResizeHandle.globalToParentPoint( event.pointer.point ).x;
         var d = endDragX - startDragX;
         startDragX = endDragX;

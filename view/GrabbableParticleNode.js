@@ -75,13 +75,13 @@ define( function( require ) {
         // even if the motion was paused by some other means.
         dualAtomModel.setMotionPaused( false );
         dualAtomModel.isHandNodeVisible=false;
-        handNode.setVisible( false );
       }
     } ) );
     particle.positionProperty.link( function() {
       if ( !dualAtomModel.isPlaying ) {
         dualAtomModel.positionChanged();
       }
+      handNode.setVisible(  dualAtomModel.isHandNodeVisible );
     } );
   }
 
