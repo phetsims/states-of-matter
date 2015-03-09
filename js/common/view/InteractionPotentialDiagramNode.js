@@ -49,7 +49,7 @@ define( function( require ) {
 
 // Font for the labels used on the axes and within the graph.
   var AXIS_LABEL_FONT_SIZE = 12;
-  var AXIS_LABEL_FONT = new PhetFont( AXIS_LABEL_FONT_SIZE );
+  var AXIS_LABEL_FONT;
   var GREEK_LETTER_FONT_SIZE = 18;
   var GREEK_LETTER_FONT = new PhetFont( GREEK_LETTER_FONT_SIZE );
 
@@ -74,10 +74,15 @@ define( function( require ) {
     if ( wide ) {
       this.widthOfGraph = WIDE_VERSION_WIDTH;
       this.heightOfGraph = this.widthOfGraph * 0.6;
+      GREEK_LETTER_FONT = new PhetFont( 22 );
+      AXIS_LABEL_FONT = new PhetFont( 16 );
     }
     else {
       this.widthOfGraph = NARROW_VERSION_WIDTH;
       this.heightOfGraph = this.widthOfGraph * 0.8;
+      AXIS_LABEL_FONT = new PhetFont( AXIS_LABEL_FONT_SIZE );
+      GREEK_LETTER_FONT = new PhetFont( GREEK_LETTER_FONT_SIZE );
+
     }
     this.graphXOrigin = 0.10 * this.widthOfGraph;
     this.graphYOrigin = 0.85 * this.heightOfGraph;
@@ -91,10 +96,6 @@ define( function( require ) {
                                  (StatesOfMatterConstants.MAX_EPSILON * StatesOfMatterConstants.K_BOLTZMANN);
 
     this.horizontalLineCount = 5;
-    if ( wide ) {
-      this.gridNode = new GridNode( this, 0, 0, this.graphWidth, this.graphHeight );
-      this.ljPotentialGraph.addChild( this.gridNode );
-    }
 
     // Create and add the portion that depicts the Lennard-Jones potential curve.
     this.ljPotentialGraph.setTranslation( this.graphXOrigin, this.graphYOrigin - this.graphHeight );
@@ -193,8 +194,8 @@ define( function( require ) {
       this.verticalAxisLabel.setText( potentialEnergyString.slice( 0, this.verticalAxis.height / sizeOfChar ) )
     }
 
-    this.verticalAxisLabel.setTranslation( this.graphXOrigin / 2 - 5,
-      this.graphYOrigin - (  this.graphHeight / 2) + ( this.verticalAxisLabel.width / 2) );
+    this.verticalAxisLabel.setTranslation( this.graphXOrigin / 2-this.verticalAxisLabel.height/2,
+      this.graphYOrigin);
     this.verticalAxisLabel.setRotation( 3 * Math.PI / 2 );
 
     // Initializing here to reduce allocations
@@ -204,6 +205,15 @@ define( function( require ) {
     this.drawPotentialCurve();
     this.epsilonLabel.setTranslation( this.graphMin.x + this.epsilonLabel.width,
       ( this.graphMin.y - this.epsilonLabel.height / 2 + this.graphHeight / 2) / 2 );
+    if ( wide ) {
+      this.gridNode = new GridNode( this, 0, 0, this.graphWidth, this.graphHeight );
+      this.ljPotentialGraph.addChild( this.gridNode );
+      // adjusting zoom buttons  position on interaction diagram
+      this.gridNode.zoomInButton.right = this.verticalAxis.left - 1.8 * this.gridNode.zoomInButton.width;
+      this.gridNode.zoomOutButton.right = this.verticalAxis.left - 1.8 * this.gridNode.zoomInButton.width;
+      this.gridNode.zoomInButton.top = this.verticalAxis.top - AXES_ARROW_HEAD_HEIGHT / 2;
+      this.gridNode.zoomOutButton.top = this.gridNode.zoomInButton.bottom + 5;
+    }
   }
 
   return inherit( Node, InteractionPotentialDiagramNode, {
