@@ -16,7 +16,7 @@ define( function( require ) {
   var Image = require( 'SCENERY/nodes/Image' );
 
   //images
-  var fingerImage = require( 'image!STATES_OF_MATTER/finger-4.png' );
+  var pointingHandImage = require( 'image!STATES_OF_MATTER/pointing-hand.png' );
 
   /**
    *
@@ -54,8 +54,9 @@ define( function( require ) {
       pickable: true,
       top: this.upArrowNode.bottom + 5
     } );
-    // Load and scale the image.
-    this.fingerImageNode = new Image( fingerImage, { scale: 0.5, cursor: 'ns-resize', pickable: true } );
+
+    // Load and scale the image.  Scale was empirically determined.
+    this.fingerImageNode = new Image( pointingHandImage, { scale: 0.5, cursor: 'ns-resize', pickable: true } );
 
     this.hintNode = new Node( {
       children: [ this.upArrowNode, this.downArrow ],
