@@ -23,13 +23,14 @@ define( function( require ) {
   var Color = require( 'SCENERY/util/Color' );
 
   //strings
-  var solidString = require( 'string!STATES_OF_MATTER/solid' );
-  var liquidString = require( 'string!STATES_OF_MATTER/liquid' );
-  var gasString = require( 'string!STATES_OF_MATTER/gas' );
+  var solidString = require( 'string!STATES_OF_MATTER/Solid' );
+  var liquidString = require( 'string!STATES_OF_MATTER/Liquid' );
+  var gasString = require( 'string!STATES_OF_MATTER/Gas' );
 
   var SOLID_STATE = 1;
   var LIQUID_STATE = 2;
   var GAS_STATE = 3;
+  var MAX_WIDTH = 150;
 
   /**
    *
@@ -54,23 +55,35 @@ define( function( require ) {
 
     // itemSpec describes the pieces that make up an item in the control panel,
     // conforms to the contract: { label: {Node}, icon: {Node} (optional) }
-    var solid = { icon: createSolidIcon(), label: new Text( solidString, textOptions ) };
-    var liquid = { icon: createLiquidIcon(), label: new Text( liquidString, textOptions ) };
-    var gas = { icon: createGasIcon(), label: new Text( gasString, textOptions ) };
+    var solidText = new Text( solidString, textOptions );
+    var liquidText = new Text( liquidString, textOptions );
+    var gasText = new Text( gasString, textOptions );
 
-    // compute the maximum item width
-    var widestItemSpec = _.max( [ solid, liquid, gas ], function( item ) {
-      return item.label.width + ((item.icon) ? item.icon.width : 0);
-    } );
-    var maxWidth = widestItemSpec.label.width + ((widestItemSpec.icon) ? widestItemSpec.icon.width : 0);
+    var sizeOfChar;
+    if ( solidText.width > MAX_WIDTH / 2 ) {
+      sizeOfChar = solidText.width / solidString.length;
+      solidText.setText( solidString.slice( 0, MAX_WIDTH / (2 * sizeOfChar) ) )
+    }
+    if ( liquidText.width > MAX_WIDTH / 2 ) {
+      sizeOfChar = liquidText.width / liquidString.length;
+      liquidText.setText( liquidString.slice( 0, MAX_WIDTH / (2 * sizeOfChar) ) )
+    }
+    if ( gasText.width > MAX_WIDTH / 2 ) {
+      sizeOfChar = gasText.width / gasString.length;
+      gasText.setText( gasString.slice( 0, MAX_WIDTH / (2 * sizeOfChar) ) )
+    }
+    var solid = { icon: createSolidIcon(), label: solidText };
+    var liquid = { icon: createLiquidIcon(), label: liquidText };
+    var gas = { icon: createGasIcon(), label: gasText };
 
     // pad inserts a spacing node (HStrut) so that the text, space and image together occupy a certain fixed width.
     var createItem = function( itemSpec ) {
       if ( itemSpec.icon ) {
-        var strutWidth = maxWidth - itemSpec.label.width - itemSpec.icon.width + 17;
+        var strutWidth1 = MAX_WIDTH / 2 - itemSpec.icon.width;
+        var strutWidth2 = MAX_WIDTH / 2 - itemSpec.label.width;
         return new HBox( {
-          children: [ new HStrut( 10 ), itemSpec.icon, new HStrut( strutWidth + 25 ), itemSpec.label,
-            new HStrut( 30 ) ]
+          children: [ new HStrut( 10 ), itemSpec.icon, new HStrut( strutWidth1 ), itemSpec.label,
+            new HStrut( strutWidth2 ) ]
         } );
       }
       else {
