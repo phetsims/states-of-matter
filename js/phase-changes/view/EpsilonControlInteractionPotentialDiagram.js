@@ -79,7 +79,8 @@ define( function( require ) {
         pickable: true,
         cursor: 'pointer'
       } );
-    var startDragY, endDragY;
+    var startDragY;
+    var endDragY;
     this.epsilonResizeHandle.addInputListener( new FillHighlightListener( RESIZE_HANDLE_NORMAL_COLOR,
       RESIZE_HANDLE_HIGHLIGHTED_COLOR ) );
     this.ljPotentialGraph.addChild( this.epsilonResizeHandle );
