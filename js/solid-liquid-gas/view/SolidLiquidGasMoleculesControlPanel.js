@@ -26,7 +26,6 @@ define( function( require ) {
   var argonString = require( 'string!STATES_OF_MATTER/argon' );
   var waterString = require( 'string!STATES_OF_MATTER/water' );
   var oxygenString = require( 'string!STATES_OF_MATTER/oxygen' );
-  var adjustableAttractionString = require( 'string!STATES_OF_MATTER/adjustableAttraction' );
   var titleString = require( 'string!STATES_OF_MATTER/AtomsMolecules' );
 
 
@@ -56,13 +55,16 @@ define( function( require ) {
     var argon = { label: new Text( argonString, textOptions ), icon: createArgonIcon() };
     var water = { label: new Text( waterString, textOptions ), icon: createWaterIcon() };
     var oxygen = { label: new Text( oxygenString, textOptions ), icon: createOxygenIcon() };
-    var adjustableAttraction = {
-      label: new Text( adjustableAttractionString,
-        textOptions ), icon: createAdjustableAttractionIcon()
+
+    var titleText = {
+      label: new Text( titleString, {
+        font: new PhetFont( 14 ),
+        fill: '#FFFFFF'
+      } )
     };
 
     // compute the maximum item width
-    var widestItemSpec = _.max( [ neon, argon, water, oxygen, adjustableAttraction ], function( item ) {
+    var widestItemSpec = _.max( [ neon, argon, water, oxygen, titleText ], function( item ) {
       return item.label.width + ((item.icon) ? item.icon.width : 0);
     } );
     var maxWidth = widestItemSpec.label.width + ((widestItemSpec.icon) ? widestItemSpec.icon.width : 0);
@@ -70,7 +72,7 @@ define( function( require ) {
     // pad inserts a spacing node (HStrut) so that the text, space and image together occupy a certain fixed width.
     var createItem = function( itemSpec ) {
       if ( itemSpec.icon ) {
-        var strutWidth = maxWidth - itemSpec.label.width - itemSpec.icon.width + 27;
+        var strutWidth = maxWidth - itemSpec.label.width - itemSpec.icon.width + 32;
         return new HBox( { children: [ itemSpec.label, new HStrut( strutWidth ), itemSpec.icon ] } );
       }
       else {
@@ -114,27 +116,17 @@ define( function( require ) {
     this.addChild( background );
     this.addChild( radioButtonGroup );
 
-    var titleText = new Text( titleString, {
-      font: new PhetFont( 14 ),
-      fill: '#FFFFFF'
-    } );
-
     var titleBackground = new Rectangle( background.centerX + 4, background.top - 10,
-      titleText.width + 5, titleText.height, {
+      titleText.label.width + 5, titleText.label.height, {
         fill: 'black'
       } );
-    titleText.centerX = background.centerX;
-    titleBackground.centerX = titleText.centerX;
-    var tittleNode = new Node( { children: [ titleBackground, titleText ] } );
+    titleText.label.centerX = background.centerX;
+    titleBackground.centerX = titleText.label.centerX;
+    var tittleNode = new Node( { children: [ titleBackground, titleText.label ] } );
     this.addChild( tittleNode );
 
     this.mutate( options );
   }
-
-  //Create an icon for the adjustable attraction  button
-  var createAdjustableAttractionIcon = function() {
-    return new Circle( 6, { fill: StatesOfMatterConstants.ADJUSTABLE_ATTRACTION_COLOR } );
-  };
 
   //Create an icon for the neon  button
   var createNeonIcon = function() {
