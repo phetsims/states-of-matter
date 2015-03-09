@@ -76,7 +76,7 @@ define( function( require ) {
         thumbSize: new Dimension2( 15, 30 ),
         majorTickLength: 15,
         minorTickLength: 12,
-        trackSize: new Dimension2( 100, 5 ),
+        trackSize: new Dimension2( 110, 4 ),
         trackStroke: 'white',
         trackLineWidth: 1,
         thumbLineWidth: 1,
@@ -116,7 +116,7 @@ define( function( require ) {
       return item.label.width + ((item.icon) ? item.icon.width : 0);
     } );
     var maxWidth = widestItemSpec.label.width + ((widestItemSpec.icon) ? widestItemSpec.icon.width : 0);
-    maxWidth = Math.max( maxWidth, interactionStrengthNode.width );
+    maxWidth = Math.max( maxWidth, interactionStrengthNode.width - 5 );
     // pad inserts a spacing node (HStrut) so that the text, space and image together occupy a certain fixed width.
     var createItem = function( itemSpec ) {
       if ( itemSpec.icon ) {
@@ -193,14 +193,14 @@ define( function( require ) {
       if ( value === StatesOfMatterConstants.USER_DEFINED_MOLECULE ) {
         content.addChild( interactionStrengthNode );
         background.setShape( new Shape().roundRect( -2, -2,
-          radioButtonPanel.width, radioButtonPanel.height + inset,
+          radioButtonPanel.width, radioButtonPanel.height + inset / 2,
           options.cornerRadius, options.cornerRadius ) );
       }
       else {
         if ( content.isChild( interactionStrengthNode ) ) {
           content.removeChild( interactionStrengthNode );
           background.setShape( new Shape().roundRect( -2, -2,
-            radioButtonPanel.width, radioButtonPanel.height,
+            radioButtonPanel.width, radioButtonPanel.height + inset / 2,
             options.cornerRadius, options.cornerRadius ) );
         }
       }
