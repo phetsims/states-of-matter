@@ -21,7 +21,7 @@ define( function( require ) {
   var phaseChangesString = require( 'string!STATES_OF_MATTER/phaseChanges' );
 
   // images
-  var phaseChangesScreenIcon = require( 'image!STATES_OF_MATTER/som-phase-changes-screen.png' );
+  var phaseChangesScreenIcon = require( 'image!STATES_OF_MATTER/som-phase-changes-icon.png' );
 
   /**
    *

@@ -19,7 +19,7 @@ define( function( require ) {
   // strings
   var statesString = require( 'string!STATES_OF_MATTER/states' );
   // images
-  var statesScreenIcon = require( 'image!STATES_OF_MATTER/som-states-screen.png' );
+  var statesScreenIcon = require( 'image!STATES_OF_MATTER/som-states-icon.png' );
 
   /**
    *
