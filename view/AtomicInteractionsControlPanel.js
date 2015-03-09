@@ -114,7 +114,7 @@ define( function( require ) {
       neonAndOxygen = [ new Text( neonString, textOptions ), new Text( oxygenString, textOptions ) ];
       argonAndOxygen = [ new Text( argonString, textOptions ), new Text( oxygenString, textOptions ) ];
       var customAttraction = new Text( customAttractionString, textOptions );
-      var pushpinImage = new Image( pushPinImg, { scale: 0.2 } );
+      var pushpinImage = new Image( pushPinImg, { scale: 0.15 } );
       var pinnedNodeText = new HBox( {
         children: [ pushpinImage, new Text( pinnedString,
           { font: new PhetFont( 10 ), fill: options.textColor } ), new HStrut( pushpinImage.width ) ],
@@ -153,12 +153,12 @@ define( function( require ) {
       var adjustableAttractionRadio = new AquaRadioButton( dualAtomModel.moleculeTypeProperty, ADJUSTABLE,
         new HBox( { children: [ customAttraction ] } ), { radius: particleRadius } );
       var createTitle = function( itemSpec ) {
-        var strutWidth1 = 2 * particleRadius;
+        var strutWidth1 = particleRadius;
         var strutWidth2 = ( maxWidth / 2 - itemSpec[ 0 ].width );
         var strutWidth3 = ( maxWidth / 2 - itemSpec[ 1 ].width );
         return new HBox( {
-          children: [ new HStrut( strutWidth1 ), itemSpec[ 0 ], new HStrut( strutWidth2 + 13 ),
-            itemSpec[ 1 ], new HStrut( strutWidth3 ) ]
+          children: [ new HStrut( strutWidth1 ), itemSpec[ 0 ], new HStrut( strutWidth2 + 13 + particleRadius ),
+            itemSpec[ 1 ], new HStrut( strutWidth3 + 10 ) ]
         } );
       };
       titleNode = createTitle( titleText );

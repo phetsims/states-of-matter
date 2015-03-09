@@ -155,11 +155,11 @@ define( function( require ) {
     this.positionMarker.addInputListener( new SimpleDragHandler( {
       start: function( event ) {
         dualAtomModel.setMotionPaused( true );
-        startDragX = interactiveInteractionPotentialDiagram.sigmaResizeHandle.globalToParentPoint( event.pointer.point ).x;
+        startDragX = interactiveInteractionPotentialDiagram.positionMarker.globalToParentPoint( event.pointer.point ).x;
       },
       drag: function( event ) {
-        dualAtomModel.isHandNodeVisible=false;
-        endDragX = interactiveInteractionPotentialDiagram.sigmaResizeHandle.globalToParentPoint( event.pointer.point ).x;
+        dualAtomModel.isHandNodeVisible = false;
+        endDragX = interactiveInteractionPotentialDiagram.positionMarker.globalToParentPoint( event.pointer.point ).x;
         var d = endDragX - startDragX;
         startDragX = endDragX;
         var atom = dualAtomModel.getMovableAtomRef();
@@ -194,18 +194,6 @@ define( function( require ) {
     this.addChild( this.horizontalAxisLabel );
 
     this.addChild( this.verticalAxisLabel );
-    var ljGraPhAxisLabelFont = new PhetFont( 16 );
-
-    this.verticalAxisLabel.setTranslation(
-      this.graphXOrigin / 2,
-      this.graphYOrigin );
-    this.verticalAxisLabel.font = ljGraPhAxisLabelFont;
-
-    this.horizontalAxisLabel.setTranslation(
-      this.graphWidth / 2 - this.horizontalAxisLabel.width / 2,
-      this.graphYOrigin + 1.8 * this.horizontalAxisLabel.height
-    );
-    this.horizontalAxisLabel.font = ljGraPhAxisLabelFont;
 
     this.addChild( this.verticalAxis );
     this.addChild( this.ljPotentialGraph );

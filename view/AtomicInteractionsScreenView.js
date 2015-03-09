@@ -68,7 +68,7 @@ define( function( require ) {
     var mvtScale = 0.25;
 
     this.modelViewTransform = ModelViewTransform2.createSinglePointScaleMapping( new Vector2( 0, 0 ),
-      new Vector2( 80, 370 ), mvtScale );
+      new Vector2( 110, 370 ), mvtScale );
 
     var tickTextColor = enableHeterogeneousMolecules ? 'black' : 'white';
     var showTitleWhenExpand = !enableHeterogeneousMolecules; // force control panel title
@@ -94,12 +94,12 @@ define( function( require ) {
 
     // Add the button for retrieving the atom to the canvas.
     this.retrieveAtomButton = new TextPushButton( returnAtomString, {
-      font: new PhetFont( 18 ),
+      font: new PhetFont( 17 ),
       baseColor: '#61BEE3',
       listener: function() {
         dualAtomModel.resetMovableAtomPos();
       },
-      left:   this.layoutBounds.minX + 3 * inset,
+      left:   this.layoutBounds.minX + 6 * inset,
       bottom: this.layoutBounds.bottom - 2 * inset
     } );
 
@@ -143,9 +143,9 @@ define( function( require ) {
       showTitleWhenExpand: showTitleWhenExpand,
       panelMinWidth: atomicInteractionsControlPanel.width
     } );
-    var atomicInteractionsControlPanelRightOffset = 60;
+    var atomicInteractionsControlPanelRightOffset = 80;
     if ( enableHeterogeneousMolecules ) {
-      resetAllButton.right = this.layoutBounds.maxX - inset;
+      resetAllButton.right = this.layoutBounds.maxX - 2 * inset;
       atomicInteractionsControlPanel.right = this.layoutBounds.maxX - atomicInteractionsControlPanelRightOffset;
       forceControlNode.right = atomicInteractionsControlPanel.right;
     }
