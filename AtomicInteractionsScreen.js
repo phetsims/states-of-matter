@@ -16,7 +16,7 @@ define( function( require ) {
   var Image = require( 'SCENERY/nodes/Image' );
 
   // images
-  var atomicInteractionScreenIcon = require( 'image!STATES_OF_MATTER/som-atomic-interaction-screen.png' );
+  var atomicInteractionScreenIcon = require( 'image!STATES_OF_MATTER/som-atomic-interactions-icon.png' );
 
   function AtomicInteractionsScreen( enableHeterogeneousMolecules, simTitle, colorsProperty ) {
 
