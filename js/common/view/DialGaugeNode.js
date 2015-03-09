@@ -19,6 +19,7 @@ define( function( require ) {
   var LinearGradient = require( 'SCENERY/util/LinearGradient' );
   var GaugeNode = require( 'SCENERY_PHET/GaugeNode' );
   var Text = require( 'SCENERY/nodes/Text' );
+  var PhetColorScheme = require( 'SCENERY_PHET/PhetColorScheme' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
 
@@ -90,7 +91,7 @@ define( function( require ) {
       }
       else {
         dialGaugeNode.textualReadout.setText( pressureOverloadString );
-        dialGaugeNode.textualReadout.fill = 'red';
+        dialGaugeNode.textualReadout.fill = PhetColorScheme.RED_COLORBLIND;
       }
       dialGaugeNode.textualReadout.center = dialGaugeNode.textualReadoutBoxShape.center;
     } );

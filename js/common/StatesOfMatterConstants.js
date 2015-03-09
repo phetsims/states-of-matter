@@ -12,6 +12,7 @@ define( function( require ) {
 
   // modules
   var Bounds2 = require( 'DOT/Bounds2' );
+  var PhetColorScheme = require( 'SCENERY_PHET/PhetColorScheme' );
 
   // constants (these are vars because other constants refer to them)
   var PARTICLE_CONTAINER_WIDTH = 10000;
@@ -102,7 +103,7 @@ define( function( require ) {
     DIATOMIC_PARTICLE_DISTANCE: 0.9,  // In particle diameters.
 
     //atoms and molecules colors
-    OXYGEN_COLOR: '#FF5500', // color-blind red
+    OXYGEN_COLOR: PhetColorScheme.RED_COLORBLIND,
     NEON_COLOR: '#1AFFFB',
     ARGON_COLOR: '#FF8A75',
     HYDROGEN_COLOR: 'white',
