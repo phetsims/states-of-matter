@@ -193,14 +193,14 @@ define( function( require ) {
       if ( value === StatesOfMatterConstants.USER_DEFINED_MOLECULE ) {
         content.addChild( interactionStrengthNode );
         background.setShape( new Shape().roundRect( -2, -2,
-          radioButtonPanel.width, radioButtonPanel.height + inset / 2,
+          radioButtonPanel.width, radioButtonPanel.height,
           options.cornerRadius, options.cornerRadius ) );
       }
       else {
         if ( content.isChild( interactionStrengthNode ) ) {
           content.removeChild( interactionStrengthNode );
           background.setShape( new Shape().roundRect( -2, -2,
-            radioButtonPanel.width, radioButtonPanel.height + inset / 2,
+            radioButtonPanel.width, radioButtonPanel.height,
             options.cornerRadius, options.cornerRadius ) );
         }
       }

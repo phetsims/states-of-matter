@@ -63,7 +63,6 @@ define( function( require ) {
   var bicyclePumpNodeYOffset = 90;
   var bicyclePumpNodeXOffset = 100;
   var returnLidButtonYOffset = 100;
-  var panelsYOffset=4;
 
   /**
    *
@@ -203,7 +202,6 @@ define( function( require ) {
     this.addChild( this.returnLidButton );
     multipleParticleModel.isExplodedProperty.linkAttribute( this.returnLidButton, 'visible' );
 
-
     // add interaction Potential Diagram
     if ( isInteractionDiagramEnabled ) {
       var epsilonControlInteractionPotentialDiagram = new EpsilonControlInteractionPotentialDiagram(
@@ -213,7 +211,7 @@ define( function( require ) {
         } );
       this.addChild( epsilonControlInteractionPotentialDiagram );
     }
-
+    var panelsYOffset = 2;
     multipleParticleModel.moleculeTypeProperty.link( function( moleculeId ) {
       phaseChangesScreenView.modelTemperatureHistory.clear();
       phaseChangesScreenView.updatePhaseDiagram();
@@ -230,6 +228,7 @@ define( function( require ) {
       }
       // enable/disable phase diagram on molecule type change
       if ( moleculeId === StatesOfMatterConstants.USER_DEFINED_MOLECULE ) {
+        panelsYOffset = 4;
         if ( phaseChangesScreenView.isChild( phaseChangesScreenView.phaseDiagram ) ) {
           phaseChangesScreenView.removeChild( phaseChangesScreenView.phaseDiagram );
         }
@@ -244,10 +243,10 @@ define( function( require ) {
           phaseChangesScreenView.phaseDiagram.right = phaseChangesScreenView.layoutBounds.right - layBoundsRightOffset;
           if ( isInteractionDiagramEnabled ) {
             epsilonControlInteractionPotentialDiagram.top = phaseChangesMoleculesControlPanel.bottom + panelsYOffset;
-            phaseChangesScreenView.phaseDiagram.top = epsilonControlInteractionPotentialDiagram.bottom + panelsYOffset
+            phaseChangesScreenView.phaseDiagram.top = epsilonControlInteractionPotentialDiagram.bottom + inset/2;
           }
           else {
-            phaseChangesScreenView.phaseDiagram.top = phaseChangesMoleculesControlPanel.bottom + panelsYOffset;
+            phaseChangesScreenView.phaseDiagram.top = phaseChangesMoleculesControlPanel.bottom + inset/2;
           }
         }
       }
