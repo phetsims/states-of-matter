@@ -30,6 +30,7 @@ define( function( require ) {
   var PushpinNode = require( 'ATOMIC_INTERACTIONS/atomic-interactions/view/PushpinNode' );
   var HandNode = require( 'ATOMIC_INTERACTIONS/atomic-interactions/view/HandNode' );
   var AtomicInteractionColors = require( 'ATOMIC_INTERACTIONS/atomic-interactions/view/AtomicInteractionColors' );
+  var HomeScreenView = require( 'JOIST/HomeScreenView' );
 
 
   // strings
@@ -44,7 +45,6 @@ define( function( require ) {
   var CANVAS_WIDTH = 2000;
   // Constant used to control size of push pin.
   var PUSH_PIN_WIDTH = CANVAS_WIDTH * 0.01;
-
 
   /**
    *
@@ -87,7 +87,7 @@ define( function( require ) {
     // add interactive potential diagram
     this.interactiveInteractionPotentialDiagram = new InteractiveInteractionPotentialDiagram(
       dualAtomModel.getSigma(), dualAtomModel.getEpsilon(), true, dualAtomModel, {
-        left: this.layoutBounds.minX + 6 * inset,
+        left: this.layoutBounds.minX + 7 * inset,
         top:  atomicInteractionsControlPanel.top + 15
       } );
     this.addChild( this.interactiveInteractionPotentialDiagram );
@@ -143,10 +143,10 @@ define( function( require ) {
       showTitleWhenExpand: showTitleWhenExpand,
       panelMinWidth: atomicInteractionsControlPanel.width
     } );
-    var atomicInteractionsControlPanelRightOffset = 80;
+    var atomicInteractionsControlPanelRightOffset = 20;
     if ( enableHeterogeneousMolecules ) {
-      resetAllButton.right = this.layoutBounds.maxX - 2 * inset;
-      atomicInteractionsControlPanel.right = this.layoutBounds.maxX - atomicInteractionsControlPanelRightOffset;
+      resetAllButton.right = this.layoutBounds.maxX - inset;
+      atomicInteractionsControlPanel.right = resetAllButton.left - atomicInteractionsControlPanelRightOffset;
       forceControlNode.right = atomicInteractionsControlPanel.right;
     }
 
@@ -415,7 +415,21 @@ define( function( require ) {
       this.updatePositionMarkerOnDiagram();
       this.updateForceVectors();
 
-      this.retrieveAtomButton.visible = this.dualAtomModel.movableAtom.getX() > 3800;
+
+      var scale = Math.min( window.innerWidth / HomeScreenView.LAYOUT_BOUNDS.width, window.innerHeight / HomeScreenView.LAYOUT_BOUNDS.height );
+      if ( (scale * this.modelViewTransform.modelToViewX(
+          this.dualAtomModel.getMovableAtomRef().getX() )) > window.innerWidth ) {
+        if ( !this.retrieveAtomButton.isVisible() ) {
+          // The particle is off the canvas and the button is not
+          // yet shown, so show it.
+          this.retrieveAtomButton.setVisible( true );
+        }
+      }
+      else if ( this.retrieveAtomButton.isVisible() ) {
+        // The particle is on the canvas but the button is visible
+        // (which it shouldn't be), so hide it.
+        this.retrieveAtomButton.setVisible( false );
+      }
     },
 
     /**
