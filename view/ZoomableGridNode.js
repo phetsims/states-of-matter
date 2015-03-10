@@ -51,7 +51,6 @@ define( function( require ) {
       disabledBaseColor: '#EDEDED',
       buttonAppearanceStrategy: rectangularButtonView.flatAppearanceStrategy
     } );
-    this.zoomInButton.setTranslation( -50, 0 );
     this.zoomInButton.enabled = false;
 
     this.zoomOutButton = new ZoomButton( {
@@ -67,9 +66,7 @@ define( function( require ) {
       yMargin: 3,
       disabledBaseColor: '#EDEDED',
       buttonAppearanceStrategy: rectangularButtonView.flatAppearanceStrategy,
-      in: false,
-      top: this.zoomInButton.bottom + 5,
-      left: this.zoomInButton.left
+      in: false
     } );
     this.zoomOutButton.enabled = true;
     this.addChild( this.zoomInButton );
