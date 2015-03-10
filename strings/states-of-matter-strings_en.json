@@ -1,9 +1,9 @@
 {
+  "states-of-matter.name": "States of Matter",
   "low": "low",
   "heat": "Heat",
   "cool": "Cool",
   "pressureOverload": "OVERLOADED",
-  "statesOfMatter": "States of Matter",
   "states": "States",
   "Solid": "Solid",
   "Liquid": "Liquid",

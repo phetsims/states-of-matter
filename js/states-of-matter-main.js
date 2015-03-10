@@ -18,7 +18,7 @@ define( function( require ) {
   var Property = require( 'AXON/Property' );
 
   // strings
-  var simTitle = require( 'string!STATES_OF_MATTER/statesOfMatter' );
+  var simTitle = require( 'string!STATES_OF_MATTER/states-of-matter.name' );
   var interactionString = require( 'string!STATES_OF_MATTER/interaction' );
   var colorsProperty = new Property( false );
   var simOptions = {
