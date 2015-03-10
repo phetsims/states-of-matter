@@ -32,11 +32,11 @@ define( function( require ) {
 
 // Constants that control the range of data that is graphed.
 // In picometers.
-  var MAX_INTER_ATOM_DISTANCE = 1200;
+  var MAX_INTER_ATOM_DISTANCE = 1700;
 
 // Constants that control the appearance of the diagram.
   var NARROW_VERSION_WIDTH = 135;
-  var WIDE_VERSION_WIDTH = 450;
+  var WIDE_VERSION_WIDTH = 473;
   var AXIS_LINE_WIDTH = 1;
   var AXES_ARROW_HEAD_HEIGHT = 8 * AXIS_LINE_WIDTH;
 
@@ -53,6 +53,9 @@ define( function( require ) {
   var GREEK_LETTER_FONT_SIZE = 18;
   var GREEK_LETTER_FONT = new PhetFont( GREEK_LETTER_FONT_SIZE );
 
+
+// each character size in pixel
+  var horizontalLabelCharacterSize;
 
   /**
    *
@@ -84,7 +87,7 @@ define( function( require ) {
       GREEK_LETTER_FONT = new PhetFont( GREEK_LETTER_FONT_SIZE );
 
     }
-    this.graphXOrigin = 0.10 * this.widthOfGraph;
+    this.graphXOrigin = 0.05 * this.widthOfGraph;
     this.graphYOrigin = 0.85 * this.heightOfGraph;
     this.graphWidth = this.widthOfGraph - this.graphXOrigin - AXES_ARROW_HEAD_HEIGHT;
 
@@ -166,11 +169,7 @@ define( function( require ) {
       } );
     // restricted horizontal axis label
     if ( this.horizontalAxisLabel.width > this.horizontalAxis.width ) {
-      var sizeOfChar = this.horizontalAxisLabel.width / distanceBetweenAtomsString.length;
-      var charactersLength = Math.max( this.horizontalAxis.width / sizeOfChar, 26 );
-      distanceBetweenAtomsString = distanceBetweenAtomsString.slice( 0, charactersLength );
-      distanceBetweenMoleculesString = distanceBetweenMoleculesString.slice( 0, charactersLength );
-      this.horizontalAxisLabel.setText( distanceBetweenAtomsString );
+      horizontalLabelCharacterSize = this.horizontalAxisLabel.width / distanceBetweenAtomsString.length;
     }
 
     this.setMolecular( false );
@@ -190,12 +189,12 @@ define( function( require ) {
 
     // restricted vertical  axis label
     if ( this.verticalAxisLabel.width > this.verticalAxis.height ) {
-      sizeOfChar = this.verticalAxisLabel.width / potentialEnergyString.length;
+      var sizeOfChar = this.verticalAxisLabel.width / potentialEnergyString.length;
       this.verticalAxisLabel.setText( potentialEnergyString.slice( 0, this.verticalAxis.height / sizeOfChar ) )
     }
 
-    this.verticalAxisLabel.setTranslation( this.graphXOrigin / 2-this.verticalAxisLabel.height/2,
-      this.graphYOrigin);
+    this.verticalAxisLabel.setTranslation( this.graphXOrigin / 2 - this.verticalAxisLabel.height / 2,
+      this.graphYOrigin );
     this.verticalAxisLabel.setRotation( 3 * Math.PI / 2 );
 
     // Initializing here to reduce allocations
@@ -209,8 +208,8 @@ define( function( require ) {
       this.gridNode = new GridNode( this, 0, 0, this.graphWidth, this.graphHeight );
       this.ljPotentialGraph.addChild( this.gridNode );
       // adjusting zoom buttons  position on interaction diagram
-      this.gridNode.zoomInButton.right = this.verticalAxis.left - 1.8 * this.gridNode.zoomInButton.width;
-      this.gridNode.zoomOutButton.right = this.verticalAxis.left - 1.8 * this.gridNode.zoomInButton.width;
+      this.gridNode.zoomInButton.right = this.verticalAxis.left - this.gridNode.zoomInButton.width;
+      this.gridNode.zoomOutButton.right = this.verticalAxis.left - this.gridNode.zoomInButton.width;
       this.gridNode.zoomInButton.top = this.verticalAxis.top - AXES_ARROW_HEAD_HEIGHT / 2;
       this.gridNode.zoomOutButton.top = this.gridNode.zoomInButton.bottom + 5;
     }
@@ -294,12 +293,17 @@ define( function( require ) {
      */
     setMolecular: function( molecular ) {
       var horizontalAxisLabelX;
+      var charactersLength;
+      if ( this.horizontalAxisLabel.width > this.horizontalAxis.width ) {
+        charactersLength = Math.max( Math.ceil( this.horizontalAxis.width / horizontalLabelCharacterSize ), 22 );
+      }
+
       if ( molecular ) {
-        this.horizontalAxisLabel.setText( distanceBetweenMoleculesString );
+        this.horizontalAxisLabel.setText( distanceBetweenMoleculesString.slice( 0, charactersLength ) );
         horizontalAxisLabelX = this.graphXOrigin + (  this.graphWidth / 2) - (  this.horizontalAxisLabel.width / 2);
       }
       else {
-        this.horizontalAxisLabel.setText( distanceBetweenAtomsString );
+        this.horizontalAxisLabel.setText( distanceBetweenAtomsString.slice( 0, charactersLength ) );
         horizontalAxisLabelX = this.graphXOrigin + (  this.graphWidth / 2) - (  this.horizontalAxisLabel.width / 2.4);
       }
       this.horizontalAxisLabel.setTranslation( horizontalAxisLabelX, this.graphYOrigin + (  this.horizontalAxisLabel.height ) );
