@@ -162,11 +162,16 @@ define( function( require ) {
         } );
       };
       titleNode = createTitle( titleText );
-      radioButtonGroup = new VBox( {
-        children: [ titleNode, neonNeonRadio, argonArgonRadio, oxygenOxygenRadio,
+      var radioButtons = new VBox( {
+        children: [ neonNeonRadio, argonArgonRadio, oxygenOxygenRadio,
           neonArgonRadio, neonOxygenRadio, argonOxygenRadio, adjustableAttractionRadio ],
         align: 'left',
-        spacing: 6
+        spacing: 8
+      } );
+      radioButtonGroup = new VBox( {
+        children: [ titleNode, radioButtons ],
+        align: 'left',
+        spacing: 1
       } );
       var maxRadioButtonWidth = _.max( [ neonNeonRadio, argonArgonRadio, oxygenOxygenRadio, neonArgonRadio,
             neonOxygenRadio, argonOxygenRadio, adjustableAttractionRadio ],
@@ -404,4 +409,3 @@ define( function( require ) {
 
   return inherit( Node, AtomicInteractionsControlPanel );
 } );
-
