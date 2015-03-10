@@ -142,6 +142,7 @@ define( function( require ) {
         contentXMargin: 6,
         titleYMargin: 5,
         contentXSpacing: 6,
+        minWidth: 170,
         buttonYMargin: 4,
         buttonXMargin: 6,
         buttonLength: 12
