@@ -13,7 +13,7 @@ define( function( require ) {
   var ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
   var Vector2 = require( 'DOT/Vector2' );
   var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
-  var InteractiveInteractionPotentialDiagram = require( 'ATOMIC_INTERACTIONS/atomic-interactions/view/InteractiveInteractionPotentialDiagram' );
+  var InteractiveInteractionPotentialDiagram = require( 'STATES_OF_MATTER/atomic-interactions/view/InteractiveInteractionPotentialDiagram' );
   var PlayPauseButton = require( 'SCENERY_PHET/buttons/PlayPauseButton' );
   var StepButton = require( 'SCENERY_PHET/buttons/StepButton' );
   var AquaRadioButton = require( 'SUN/AquaRadioButton' );
@@ -22,21 +22,21 @@ define( function( require ) {
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Text = require( 'SCENERY/nodes/Text' );
   var Node = require( 'SCENERY/nodes/Node' );
-  var ForcesControlNode = require( 'ATOMIC_INTERACTIONS/atomic-interactions/view/ForcesControlPanel' );
-  var AtomicInteractionsControlPanel = require( 'ATOMIC_INTERACTIONS/atomic-interactions/view/AtomicInteractionsControlPanel' );
+  var ForcesControlNode = require( 'STATES_OF_MATTER/atomic-interactions/view/ForcesControlPanel' );
+  var AtomicInteractionsControlPanel = require( 'STATES_OF_MATTER/atomic-interactions/view/AtomicInteractionsControlPanel' );
   var TextPushButton = require( 'SUN/buttons/TextPushButton' );
-  var ParticleForceNode = require( 'ATOMIC_INTERACTIONS/atomic-interactions/view/ParticleForceNode' );
-  var GrabbableParticleNode = require( 'ATOMIC_INTERACTIONS/atomic-interactions/view/GrabbableParticleNode' );
-  var PushpinNode = require( 'ATOMIC_INTERACTIONS/atomic-interactions/view/PushpinNode' );
-  var HandNode = require( 'ATOMIC_INTERACTIONS/atomic-interactions/view/HandNode' );
-  var AtomicInteractionColors = require( 'ATOMIC_INTERACTIONS/atomic-interactions/view/AtomicInteractionColors' );
+  var ParticleForceNode = require( 'STATES_OF_MATTER/atomic-interactions/view/ParticleForceNode' );
+  var GrabbableParticleNode = require( 'STATES_OF_MATTER/atomic-interactions/view/GrabbableParticleNode' );
+  var PushpinNode = require( 'STATES_OF_MATTER/atomic-interactions/view/PushpinNode' );
+  var HandNode = require( 'STATES_OF_MATTER/atomic-interactions/view/HandNode' );
+  var AtomicInteractionColors = require( 'STATES_OF_MATTER/atomic-interactions/view/AtomicInteractionColors' );
   var HomeScreenView = require( 'JOIST/HomeScreenView' );
 
 
   // strings
-  var normalString = require( 'string!ATOMIC_INTERACTIONS/normal' );
-  var slowMotionString = require( 'string!ATOMIC_INTERACTIONS/slowMotion' );
-  var returnAtomString = require( 'string!ATOMIC_INTERACTIONS/returnAtom' );
+  var normalString = require( 'string!STATES_OF_MATTER/normal' );
+  var slowMotionString = require( 'string!STATES_OF_MATTER/slowMotion' );
+  var returnAtomString = require( 'string!STATES_OF_MATTER/returnAtom' );
   var inset = 10;
 
 

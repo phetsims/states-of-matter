@@ -20,8 +20,8 @@ define( function( require ) {
   var Node = require( 'SCENERY/nodes/Node' );
   var ArrowNode = require( 'SCENERY_PHET/ArrowNode' );
   var ArrowShape = require( 'SCENERY_PHET/ArrowShape' );
-  var GridNode = require( 'ATOMIC_INTERACTIONS/atomic-interactions/view/ZoomableGridNode' );
-  var PositionMarker = require( 'ATOMIC_INTERACTIONS/atomic-interactions/view/PositionMarker' );
+  var GridNode = require( 'STATES_OF_MATTER/atomic-interactions/view/ZoomableGridNode' );
+  var PositionMarker = require( 'STATES_OF_MATTER/atomic-interactions/view/PositionMarker' );
 
   //strings
   var distanceBetweenAtomsString = require( 'string!STATES_OF_MATTER/distanceBetweenAtoms' );

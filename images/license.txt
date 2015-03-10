@@ -1,0 +1,7 @@
+flame.png source=PhET
+ice-cube-stack.png source=PhET
+pointing-hand.png source=PhET
+push-pin.png source=PhET
+som-atomic-interactions-icon.png source=PhET
+som-phase-changes-icon.png source=PhET
+som-states-icon.png source=PhET

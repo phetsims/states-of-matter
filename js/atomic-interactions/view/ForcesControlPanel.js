@@ -24,13 +24,13 @@ define( function( require ) {
   var Shape = require( 'KITE/Shape' );
 
   //strings
-  var forcesString = require( 'string!ATOMIC_INTERACTIONS/forces' );
-  var hideForcesString = require( 'string!ATOMIC_INTERACTIONS/hideForces' );
-  var totalForceString = require( 'string!ATOMIC_INTERACTIONS/totalForce' );
-  var attractiveString = require( 'string!ATOMIC_INTERACTIONS/attractive' );
-  var repulsiveString = require( 'string!ATOMIC_INTERACTIONS/repulsive' );
-  var vanderwaalsString = require( 'string!ATOMIC_INTERACTIONS/vanderwaals' );
-  var electronOverlapString = require( 'string!ATOMIC_INTERACTIONS/electronOverlap' );
+  var forcesString = require( 'string!STATES_OF_MATTER/forces' );
+  var hideForcesString = require( 'string!STATES_OF_MATTER/hideForces' );
+  var totalForceString = require( 'string!STATES_OF_MATTER/totalForce' );
+  var attractiveString = require( 'string!STATES_OF_MATTER/attractive' );
+  var repulsiveString = require( 'string!STATES_OF_MATTER/repulsive' );
+  var vanderwaalsString = require( 'string!STATES_OF_MATTER/vanderwaals' );
+  var electronOverlapString = require( 'string!STATES_OF_MATTER/electronOverlap' );
 
   /**
    *

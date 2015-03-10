@@ -31,23 +31,23 @@ define( function( require ) {
   var Bounds2 = require( 'DOT/Bounds2' );
 
   // images
-  var pushPinImg = require( 'image!ATOMIC_INTERACTIONS/push-pin.png' );
+  var pushPinImg = require( 'image!STATES_OF_MATTER/push-pin.png' );
 
   // strings
   var neonString = require( 'string!STATES_OF_MATTER/neon' );
   var argonString = require( 'string!STATES_OF_MATTER/argon' );
   var oxygenString = require( 'string!STATES_OF_MATTER/oxygen' );
   var adjustableAttractionString = require( 'string!STATES_OF_MATTER/adjustableAttraction' );
-  var customAttractionString = require( 'string!ATOMIC_INTERACTIONS/customAttraction' );
+  var customAttractionString = require( 'string!STATES_OF_MATTER/customAttraction' );
   var tittleString = require( 'string!STATES_OF_MATTER/AtomsMolecules' );
-  var pinnedString = require( 'string!ATOMIC_INTERACTIONS/pinned' );
-  var movingString = require( 'string!ATOMIC_INTERACTIONS/moving' );
-  var atomDiameterString = require( 'string!ATOMIC_INTERACTIONS/atomDiameter' );
-  var interactionStrengthString = require( 'string!ATOMIC_INTERACTIONS/interactionStrength' );
-  var smallString = require( 'string!ATOMIC_INTERACTIONS/small' );
-  var largeString = require( 'string!ATOMIC_INTERACTIONS/large' );
-  var weakString = require( 'string!ATOMIC_INTERACTIONS/weak' );
-  var strongString = require( 'string!ATOMIC_INTERACTIONS/strong' );
+  var pinnedString = require( 'string!STATES_OF_MATTER/pinned' );
+  var movingString = require( 'string!STATES_OF_MATTER/moving' );
+  var atomDiameterString = require( 'string!STATES_OF_MATTER/atomDiameter' );
+  var interactionStrengthString = require( 'string!STATES_OF_MATTER/interactionStrength' );
+  var smallString = require( 'string!STATES_OF_MATTER/small' );
+  var largeString = require( 'string!STATES_OF_MATTER/large' );
+  var weakString = require( 'string!STATES_OF_MATTER/weak' );
+  var strongString = require( 'string!STATES_OF_MATTER/strong' );
 
   var NEON_NEON = 'NEON_NEON';
   var ARGON_ARGON = 'ARGON_ARGON';

@@ -17,7 +17,7 @@ define( function( require ) {
   var OptionsDialog = require( 'JOIST/OptionsDialog' );
 
   // strings
-  var projectorColorsString = require( 'string!ATOMIC_INTERACTIONS/projectorColors' );
+  var projectorColorsString = require( 'string!STATES_OF_MATTER/projectorColors' );
 
   /**
    *

@@ -12,7 +12,7 @@ define( function( require ) {
   var Image = require( 'SCENERY/nodes/Image' );
 
   // images
-  var pushPinImg = require( 'image!ATOMIC_INTERACTIONS/push-pin.png' );
+  var pushPinImg = require( 'image!STATES_OF_MATTER/push-pin.png' );
 
   function PushpinNode() {
     Node.call( this );
