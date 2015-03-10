@@ -33,7 +33,7 @@ define( function( require ) {
 
 
   // Constants that control the size of the canvas.
-  var WIDTH = 150;
+  var WIDTH = 148;
   var HEIGHT = (WIDTH * 0.75);
 
   // Constants that control the look of the axes.
