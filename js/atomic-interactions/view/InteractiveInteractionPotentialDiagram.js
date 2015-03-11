@@ -58,7 +58,7 @@ define( function( require ) {
     } );
     this.epsilonLine.addInputListener( new FillHighlightListener( RESIZE_HANDLE_NORMAL_COLOR,
       RESIZE_HANDLE_HIGHLIGHTED_COLOR ) );
-    this.epsilonLine.touchArea = this.epsilonLine.localBounds.dilatedXY( 20, 20 );
+    this.epsilonLine.touchArea = this.epsilonLine.localBounds.dilatedXY( 8, 8 );
     var startDragY;
     var endDragY;
     this.epsilonLine.addInputListener( new SimpleDragHandler( {
@@ -98,7 +98,7 @@ define( function( require ) {
     this.epsilonResizeHandle.addInputListener( new FillHighlightListener( RESIZE_HANDLE_NORMAL_COLOR,
       RESIZE_HANDLE_HIGHLIGHTED_COLOR ) );
     this.ljPotentialGraph.addChild( this.epsilonResizeHandle );
-    this.epsilonResizeHandle.touchArea = this.epsilonResizeHandle.localBounds.dilatedXY( 20, 20 );
+    this.epsilonResizeHandle.touchArea = this.epsilonResizeHandle.localBounds.dilatedXY( 3, 10 );
     this.epsilonResizeHandle.addInputListener( new SimpleDragHandler( {
       start: function( event ) {
         dualAtomModel.setMotionPaused( true );
@@ -123,7 +123,7 @@ define( function( require ) {
     this.sigmaResizeHandle.addInputListener( new FillHighlightListener( RESIZE_HANDLE_NORMAL_COLOR,
       RESIZE_HANDLE_HIGHLIGHTED_COLOR ) );
     this.ljPotentialGraph.addChild( this.sigmaResizeHandle );
-    this.sigmaResizeHandle.touchArea = this.sigmaResizeHandle.localBounds.dilatedXY( 20, 20 );
+    this.sigmaResizeHandle.touchArea = this.sigmaResizeHandle.localBounds.dilatedXY( 10, 5 );
     var startDragX;
     var endDragX;
     this.sigmaResizeHandle.addInputListener( new SimpleDragHandler( {
@@ -150,7 +150,7 @@ define( function( require ) {
     // Add the ability to grab and move the position marker.
     // This node will need to be pickable so the user can grab it.
     this.positionMarker.setPickable( true );
-    this.positionMarker.touchArea = Shape.circle( 0, 0, 20 );
+    this.positionMarker.touchArea = Shape.circle( 0, 0, 13 );
     this.positionMarker.addInputListener( new SimpleDragHandler( {
       start: function( event ) {
         dualAtomModel.setMotionPaused( true );
