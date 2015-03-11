@@ -271,7 +271,7 @@ define( function( require ) {
       {
         trackSize: new Dimension2( sliderTrackWidth, 5 ),
         trackFill: 'white',
-        thumbSize: new Dimension2( 15, 30 ),
+        thumbSize: new Dimension2( 14, 25 ),
         majorTickLength: 15,
         majorTickStroke: options.tickTextColor,
         trackStroke: options.tickTextColor,
@@ -303,7 +303,7 @@ define( function( require ) {
       {
         trackSize: new Dimension2( sliderTrackWidth, 5 ),
         trackFill: 'white',
-        thumbSize: new Dimension2( 15, 30 ),
+        thumbSize: new Dimension2( 14, 25 ),
         majorTickLength: 15,
         majorTickStroke: options.tickTextColor,
         trackStroke: options.tickTextColor,

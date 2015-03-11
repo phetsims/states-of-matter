@@ -73,7 +73,7 @@ define( function( require ) {
       { min: StatesOfMatterConstants.MIN_EPSILON, max: StatesOfMatterConstants.MAX_EPSILON },
       {
         trackFill: 'white',
-        thumbSize: new Dimension2( 15, 30 ),
+        thumbSize: new Dimension2( 14, 25 ),
         majorTickLength: 15,
         minorTickLength: 12,
         trackSize: new Dimension2( 110, 4 ),
