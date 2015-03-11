@@ -62,15 +62,15 @@ define( function( require ) {
     var sizeOfChar;
     if ( solidText.width > MAX_WIDTH / 2 ) {
       sizeOfChar = solidText.width / solidString.length;
-      solidText.setText( solidString.slice( 0, MAX_WIDTH / (2 * sizeOfChar) ) )
+      solidText.setText( solidString.slice( 0, MAX_WIDTH / (2 * sizeOfChar) ) );
     }
     if ( liquidText.width > MAX_WIDTH / 2 ) {
       sizeOfChar = liquidText.width / liquidString.length;
-      liquidText.setText( liquidString.slice( 0, MAX_WIDTH / (2 * sizeOfChar) ) )
+      liquidText.setText( liquidString.slice( 0, MAX_WIDTH / (2 * sizeOfChar) ) );
     }
     if ( gasText.width > MAX_WIDTH / 2 ) {
       sizeOfChar = gasText.width / gasString.length;
-      gasText.setText( gasString.slice( 0, MAX_WIDTH / (2 * sizeOfChar) ) )
+      gasText.setText( gasString.slice( 0, MAX_WIDTH / (2 * sizeOfChar) ) );
     }
     var solid = { icon: createSolidIcon(), label: solidText };
     var liquid = { icon: createLiquidIcon(), label: liquidText };

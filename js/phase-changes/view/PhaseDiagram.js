@@ -199,7 +199,7 @@ define( function( require ) {
     var horizontalAxisLabel = new Text( temperatureString, { font: AXIS_LABEL_FONT, fill: 'white' } );
     if ( horizontalAxisLabel.width > horizontalAxis.width ) {
       sizeOfChar = horizontalAxisLabel.width / temperatureString.length;
-      horizontalAxisLabel.setText( temperatureString.slice( 0, horizontalAxis.width / sizeOfChar ) )
+      horizontalAxisLabel.setText( temperatureString.slice( 0, horizontalAxis.width / sizeOfChar ) );
     }
     horizontalAxisLabel.setTranslation( horizontalAxis.centerX - horizontalAxisLabel.width / 2, Y_ORIGIN_OFFSET + horizontalAxisLabel.height * 1.2 );
     accordionContent.addChild( horizontalAxisLabel );
@@ -207,7 +207,7 @@ define( function( require ) {
     var verticalAxisLabel = new Text( pressureString, { font: AXIS_LABEL_FONT, fill: 'white' } );
     if ( verticalAxisLabel.width > verticalAxis.height ) {
       sizeOfChar = verticalAxisLabel.width / pressureString.length;
-      verticalAxisLabel.setText( pressureString.slice( 0, verticalAxis.height / sizeOfChar ) )
+      verticalAxisLabel.setText( pressureString.slice( 0, verticalAxis.height / sizeOfChar ) );
     }
     verticalAxisLabel.setTranslation( X_ORIGIN_OFFSET - (verticalAxisLabel.height / 1.5  ), verticalAxis.centerY + verticalAxisLabel.width / 2 );
     verticalAxisLabel.setRotation( 3 * Math.PI / 2 );
@@ -222,7 +222,7 @@ define( function( require ) {
 
     if ( titleNode.width > horizontalAxis.width ) {
       sizeOfChar = titleNode.width / phaseDiagramString.length;
-      titleNode.setText( phaseDiagramString.slice( 0, horizontalAxis.width / sizeOfChar ) )
+      titleNode.setText( phaseDiagramString.slice( 0, horizontalAxis.width / sizeOfChar ) );
     }
     var accordionBox = new AccordionBox( accordionContent,
       {

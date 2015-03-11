@@ -125,7 +125,7 @@ define( function( require ) {
     var titleNode = new Text( interactionDiagramTitle, { fill: "#FFFFFF", font: new PhetFont( { size: 13 } ) } );
     if ( titleNode.width > this.horizontalAxis.width ) {
       var sizeOfChar = titleNode.width / interactionDiagramTitle.length;
-      titleNode.setText( interactionDiagramTitle.slice( 0, this.horizontalAxis.width / sizeOfChar ) )
+      titleNode.setText( interactionDiagramTitle.slice( 0, this.horizontalAxis.width / sizeOfChar ) );
     }
     var accordionBox = new AccordionBox( accordionContentHBox,
       {

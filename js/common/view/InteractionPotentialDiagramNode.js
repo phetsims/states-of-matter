@@ -190,7 +190,7 @@ define( function( require ) {
     // restricted vertical  axis label
     if ( this.verticalAxisLabel.width > this.verticalAxis.height ) {
       var sizeOfChar = this.verticalAxisLabel.width / potentialEnergyString.length;
-      this.verticalAxisLabel.setText( potentialEnergyString.slice( 0, this.verticalAxis.height / sizeOfChar ) )
+      this.verticalAxisLabel.setText( potentialEnergyString.slice( 0, this.verticalAxis.height / sizeOfChar ) );
     }
 
     this.verticalAxisLabel.setTranslation( this.graphXOrigin / 2 - this.verticalAxisLabel.height / 2,
