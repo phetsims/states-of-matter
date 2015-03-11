@@ -119,7 +119,7 @@ define( function( require ) {
 
     // add sigma arrow node
     this.sigmaResizeHandle = new ArrowNode( -RESIZE_HANDLE_SIZE_PROPORTION * this.widthOfGraph / 2, 0,
-      RESIZE_HANDLE_SIZE_PROPORTION * this.widthOfGraph, 0, arrowNodeOptions );
+      RESIZE_HANDLE_SIZE_PROPORTION * this.widthOfGraph * 1.2, 0, arrowNodeOptions );
     this.sigmaResizeHandle.addInputListener( new FillHighlightListener( RESIZE_HANDLE_NORMAL_COLOR,
       RESIZE_HANDLE_HIGHLIGHTED_COLOR ) );
     this.ljPotentialGraph.addChild( this.sigmaResizeHandle );
@@ -244,7 +244,7 @@ define( function( require ) {
         var zeroCrossingPoint = this.getZeroCrossingPoint();
         var arrowNodeXOffset = 5;
         this.sigmaResizeHandle.setTranslation( zeroCrossingPoint.x - arrowNodeXOffset,
-          ( this.getGraphHeight() / 2 ) - SIGMA_HANDLE_OFFSET_PROPORTION * this.heightOfGraph );
+          ( this.getGraphHeight() / 2 ) - 2 * SIGMA_HANDLE_OFFSET_PROPORTION * this.heightOfGraph );
         this.sigmaResizeHandle.setVisible( this.interactionEnabled );
         this.sigmaResizeHandle.setPickable( this.interactionEnabled );
       }
