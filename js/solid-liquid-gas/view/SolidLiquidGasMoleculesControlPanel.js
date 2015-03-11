@@ -71,7 +71,7 @@ define( function( require ) {
     // pad inserts a spacing node (HStrut) so that the text, space and image together occupy a certain fixed width.
     var createItem = function( itemSpec ) {
       if ( itemSpec.icon ) {
-        var strutWidth = maxWidth - itemSpec.label.width - itemSpec.icon.width + 32;
+        var strutWidth = maxWidth - itemSpec.label.width - itemSpec.icon.width + 36;
         return new HBox( { children: [ itemSpec.label, new HStrut( strutWidth ), itemSpec.icon ] } );
       }
       else {
@@ -88,7 +88,7 @@ define( function( require ) {
 
     var radioButtonGroup = new RadioButtonGroup( moleculeTypeProperty, radioButtonContent, {
       orientation: 'vertical',
-      spacing: 1,
+      spacing: 2,
       cornerRadius: 5,
       baseColor: 'black',
       disabledBaseColor: 'black',
@@ -99,27 +99,18 @@ define( function( require ) {
     } );
 
     var radioButtonPanel = new Panel( radioButtonGroup, {
-      stroke: 'black',
-      lineWidth: 0
+      stroke: 'white',
+      align: 'center',
+      lineWidth: options.lineWidth,
+      fill: 'black'
     } );
+    this.addChild( radioButtonPanel );
 
-    var background = new Rectangle( 0, -3,
-      radioButtonPanel.width, radioButtonPanel.height + 1,
-      options.cornerRadius, options.cornerRadius, {
-        stroke: 'white',
-        lineWidth: options.lineWidth,
-        fill: 'black'
-      }
-    );
-
-    this.addChild( background );
-    this.addChild( radioButtonGroup );
-
-    var titleBackground = new Rectangle( background.centerX + 4, background.top - 10,
+    var titleBackground = new Rectangle( radioButtonPanel.centerX, radioButtonPanel.top - 13,
       titleText.label.width + 5, titleText.label.height, {
         fill: 'black'
       } );
-    titleText.label.centerX = background.centerX;
+    titleText.label.centerX = radioButtonPanel.centerX;
     titleBackground.centerX = titleText.label.centerX;
     var tittleNode = new Node( { children: [ titleBackground, titleText.label ] } );
     this.addChild( tittleNode );
