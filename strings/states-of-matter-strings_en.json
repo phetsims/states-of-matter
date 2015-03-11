@@ -41,7 +41,6 @@
   "interactionPotential": "Interaction Potential",
   "returnLid": "Return Lid",
   "pressureUnitsInAtm": "atm",
-  "atomic-interactions.name": "Atomic Interactions",
   "forces": "Forces",
   "hideForces": "Hide Forces",
   "totalForce": "Total Force",
