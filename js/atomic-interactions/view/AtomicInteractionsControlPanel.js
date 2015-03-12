@@ -85,7 +85,7 @@ define( function( require ) {
     var textOptions;
     var background = new Path( null,
       {
-        stroke: 'white',
+        stroke: 'black',
         lineWidth: options.lineWidth,
         fill: options.backgroundColor
       }

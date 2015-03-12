@@ -184,7 +184,7 @@ define( function( require ) {
       {
         titleNode: new Text( forcesString, { fill: options.textColor, font: new PhetFont( { size: 14 } ) } ),
         fill: options.backgroundColor,
-        stroke: 'white',
+        stroke: 'black',
         expandedProperty: forceControlPanelExpandProperty,
         contentAlign: 'left',
         titleAlignX: 'left',
