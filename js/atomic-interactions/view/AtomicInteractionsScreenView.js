@@ -30,7 +30,6 @@ define( function( require ) {
   var PushpinNode = require( 'STATES_OF_MATTER/atomic-interactions/view/PushpinNode' );
   var HandNode = require( 'STATES_OF_MATTER/atomic-interactions/view/HandNode' );
   var AtomicInteractionColors = require( 'STATES_OF_MATTER/atomic-interactions/view/AtomicInteractionColors' );
-  var HomeScreenView = require( 'JOIST/HomeScreenView' );
 
 
   // strings
@@ -346,7 +345,7 @@ define( function( require ) {
       this.movableParticleNode.setShowRepulsiveForces( this.showRepulsiveForces );
       this.movableParticleNode.setShowTotalForces( this.showTotalForces );
       this.movableParticleLayer.addChild( this.movableParticleNode );
-      this.addChild( this.handNode );
+      this.movableParticleLayer.addChild( this.handNode );
 
       // Limit the particle's motion in the X direction so that it can't
       // get to where there is too much overlap, or is on the other side
@@ -372,7 +371,7 @@ define( function( require ) {
 
       if ( this.handNode !== null ) {
         // Remove the particle node.
-        this.removeChild( this.handNode );
+        this.movableParticleLayer.removeChild( this.handNode );
       }
     },
 
@@ -416,9 +415,14 @@ define( function( require ) {
       this.updateForceVectors();
 
 
-      var scale = Math.min( window.innerWidth / HomeScreenView.LAYOUT_BOUNDS.width, window.innerHeight / HomeScreenView.LAYOUT_BOUNDS.height );
-      if ( (scale * this.modelViewTransform.modelToViewX(
-          this.dualAtomModel.getMovableAtomRef().getX() )) > window.innerWidth ) {
+      var scale = Math.min( window.innerWidth / this.layoutBounds.width, window.innerHeight / this.layoutBounds.height );
+      var atomWindowPosition = scale * (this.modelViewTransform.modelToViewX(
+          this.dualAtomModel.getMovableAtomRef().getX() ) );
+      // account for the view centering
+      if ( scale === window.innerHeight / this.layoutBounds.height ) {
+        atomWindowPosition += (window.innerWidth - this.layoutBounds.width * scale) / 2 - 50;
+      }
+      if ( atomWindowPosition > window.innerWidth ) {
         if ( !this.retrieveAtomButton.isVisible() ) {
           // The particle is off the canvas and the button is not
           // yet shown, so show it.
