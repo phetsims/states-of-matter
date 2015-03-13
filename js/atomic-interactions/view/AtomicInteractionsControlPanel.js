@@ -83,9 +83,11 @@ define( function( require ) {
 
     Node.call( this );
     var textOptions;
+    // show white stroke around the atoms & molecules panel within SOM  full version  else  show black stroke
+    var panelStroke = enableHeterogeneousMolecules ? 'black' : 'white';
     var background = new Path( null,
       {
-        stroke: 'black',
+        stroke: panelStroke,
         lineWidth: options.lineWidth,
         fill: options.backgroundColor
       }

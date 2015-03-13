@@ -179,12 +179,13 @@ define( function( require ) {
 
     radioButtonGroup.setTranslation( 10, 0 );
     accordionContent.addChild( radioButtonGroup );
-
+    // show white stroke around the force panel within SOM  full version  else  show black stroke
+    var panelStroke = options.showTitleWhenExpand ? 'white' : 'black';
     var accordionBox = new AccordionBox( accordionContent,
       {
         titleNode: new Text( forcesString, { fill: options.textColor, font: new PhetFont( { size: 14 } ) } ),
         fill: options.backgroundColor,
-        stroke: 'black',
+        stroke: panelStroke,
         expandedProperty: forceControlPanelExpandProperty,
         contentAlign: 'left',
         titleAlignX: 'left',
