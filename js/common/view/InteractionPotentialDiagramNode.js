@@ -52,6 +52,8 @@ define( function( require ) {
   var AXIS_LABEL_FONT;
   var GREEK_LETTER_FONT_SIZE = 18;
   var GREEK_LETTER_FONT = new PhetFont( GREEK_LETTER_FONT_SIZE );
+// zoom buttons height
+  var zoomButtonsHeight = 65;
 
 
 // each character size in pixel
@@ -188,9 +190,10 @@ define( function( require ) {
     this.verticalAxisLabel = new Text( potentialEnergyString, { fill: 'white', font: AXIS_LABEL_FONT } );
 
     // restricted vertical  axis label
-    if ( this.verticalAxisLabel.width > this.verticalAxis.height ) {
+    var verticalAxisHeight = wide ? this.verticalAxis.height - zoomButtonsHeight : this.verticalAxis.height;
+    if ( this.verticalAxisLabel.width > verticalAxisHeight ) {
       var sizeOfChar = this.verticalAxisLabel.width / potentialEnergyString.length;
-      this.verticalAxisLabel.setText( potentialEnergyString.slice( 0, this.verticalAxis.height / sizeOfChar ) );
+      this.verticalAxisLabel.setText( potentialEnergyString.slice( 0, verticalAxisHeight / sizeOfChar ) )
     }
 
     this.verticalAxisLabel.setTranslation( this.graphXOrigin / 2 - this.verticalAxisLabel.height / 2,
@@ -300,12 +303,11 @@ define( function( require ) {
 
       if ( molecular ) {
         this.horizontalAxisLabel.setText( distanceBetweenMoleculesString.slice( 0, charactersLength ) );
-        horizontalAxisLabelX = this.graphXOrigin + (  this.graphWidth / 2) - (  this.horizontalAxisLabel.width / 2);
       }
       else {
         this.horizontalAxisLabel.setText( distanceBetweenAtomsString.slice( 0, charactersLength ) );
-        horizontalAxisLabelX = this.graphXOrigin + (  this.graphWidth / 2) - (  this.horizontalAxisLabel.width / 2.4);
       }
+      horizontalAxisLabelX = this.graphXOrigin + (  this.graphWidth / 2) - (  this.horizontalAxisLabel.width / 2);
       this.horizontalAxisLabel.setTranslation( horizontalAxisLabelX, this.graphYOrigin + (  this.horizontalAxisLabel.height ) );
     },
 
