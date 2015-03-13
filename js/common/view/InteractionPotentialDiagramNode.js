@@ -36,7 +36,7 @@ define( function( require ) {
 
 // Constants that control the appearance of the diagram.
   var NARROW_VERSION_WIDTH = 135;
-  var WIDE_VERSION_WIDTH = 473;
+  var WIDE_VERSION_WIDTH = 450;
   var AXIS_LINE_WIDTH = 1;
   var AXES_ARROW_HEAD_HEIGHT = 8 * AXIS_LINE_WIDTH;
 
@@ -193,7 +193,7 @@ define( function( require ) {
     var verticalAxisHeight = wide ? this.verticalAxis.height - zoomButtonsHeight : this.verticalAxis.height;
     if ( this.verticalAxisLabel.width > verticalAxisHeight ) {
       var sizeOfChar = this.verticalAxisLabel.width / potentialEnergyString.length;
-      this.verticalAxisLabel.setText( potentialEnergyString.slice( 0, verticalAxisHeight / sizeOfChar ) )
+      this.verticalAxisLabel.setText( potentialEnergyString.slice( 0, verticalAxisHeight / sizeOfChar ) );
     }
 
     this.verticalAxisLabel.setTranslation( this.graphXOrigin / 2 - this.verticalAxisLabel.height / 2,
