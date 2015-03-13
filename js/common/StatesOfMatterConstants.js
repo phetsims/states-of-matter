@@ -18,6 +18,7 @@ define( function( require ) {
   var PARTICLE_CONTAINER_WIDTH = 10000;
   var PARTICLE_CONTAINER_INITIAL_HEIGHT = PARTICLE_CONTAINER_WIDTH * 1.00;
   var SOLID_TEMPERATURE = 0.15;
+  var NEON_ATOM_EPSILON = 32.8; // epsilon/k-Boltzmann is in Kelvin.
 
 
   // var TRIPLE_POINT_MONATOMIC_MODEL_TEMPERATURE = 0.26;    // Empirically determined.
@@ -108,7 +109,8 @@ define( function( require ) {
     ARGON_COLOR: '#FF8A75',
     HYDROGEN_COLOR: 'white',
     ADJUSTABLE_ATTRACTION_COLOR: '#B15AFF',
-
+    // adjustable attraction min epsilon
+    MIN_ADJUSTABLE_EPSILON: (1.5 * NEON_ATOM_EPSILON),
     //----------------------------------------------------------------------------
     // Physical Constants
     //----------------------------------------------------------------------------

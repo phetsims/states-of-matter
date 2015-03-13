@@ -102,8 +102,8 @@ define( function( require ) {
   // Min a max values for adjustable epsilon.  Originally there was a wider
   // allowable range, but the simulation did not work so well, so the range
   // below was arrived at empirically and seems to work reasonably well.
-  var MIN_ADJUSTABLE_EPSILON = 1.5 * NeonAtom.EPSILON;
-  var MAX_ADJUSTABLE_EPSILON = StatesOfMatterConstants.MAX_EPSILON;// StatesOfMatterConstants.EPSILON_FOR_WATER;
+  var MIN_ADJUSTABLE_EPSILON = StatesOfMatterConstants.MIN_ADJUSTABLE_EPSILON;
+  var MAX_ADJUSTABLE_EPSILON = StatesOfMatterConstants.EPSILON_FOR_WATER;
 
   /**
    * @constructor
@@ -1197,6 +1197,9 @@ define( function( require ) {
 
     PHASE_SOLID: PHASE_SOLID,
     PHASE_LIQUID: PHASE_LIQUID,
-    PHASE_GAS: PHASE_GAS
+    PHASE_GAS: PHASE_GAS,
+
+    MAX_ADJUSTABLE_EPSILON: MAX_ADJUSTABLE_EPSILON
+
   } );
 } );

@@ -70,7 +70,7 @@ define( function( require ) {
     var interactionTitle = new Text( interactionStrengthTitleString, textOptions );
     interactionStrengthNode.addChild( interactionTitle );
     var interactionStrengthSlider = new HSlider( multipleParticleModel.interactionStrengthProperty,
-      { min: StatesOfMatterConstants.MIN_EPSILON, max: StatesOfMatterConstants.MAX_EPSILON },
+      { min: StatesOfMatterConstants.MIN_ADJUSTABLE_EPSILON, max: StatesOfMatterConstants.EPSILON_FOR_WATER },
       {
         trackFill: 'white',
         thumbSize: new Dimension2( 14, 25 ),
@@ -90,8 +90,8 @@ define( function( require ) {
 
       } );
     interactionStrengthNode.addChild( interactionStrengthSlider );
-    interactionStrengthSlider.addMajorTick( StatesOfMatterConstants.MAX_EPSILON, strongTitle );
-    interactionStrengthSlider.addMajorTick( StatesOfMatterConstants.MIN_EPSILON, weakTitle );
+    interactionStrengthSlider.addMajorTick( StatesOfMatterConstants.EPSILON_FOR_WATER, strongTitle );
+    interactionStrengthSlider.addMajorTick( StatesOfMatterConstants.MIN_ADJUSTABLE_EPSILON, weakTitle );
 
 
     // itemSpec describes the pieces that make up an item in the control panel,
