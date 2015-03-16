@@ -104,7 +104,7 @@ define( function( require ) {
     DIATOMIC_PARTICLE_DISTANCE: 0.9,  // In particle diameters.
 
     //atoms and molecules colors
-    OXYGEN_COLOR: PhetColorScheme.RED_COLORBLIND,
+    OXYGEN_COLOR: '#ff5500', // color blind friendly red
     NEON_COLOR: '#1AFFFB',
     ARGON_COLOR: '#FF8A75',
     HYDROGEN_COLOR: 'white',
