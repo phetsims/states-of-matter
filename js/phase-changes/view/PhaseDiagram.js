@@ -16,7 +16,7 @@ define( function( require ) {
   var Shape = require( 'KITE/Shape' );
   var Path = require( 'SCENERY/nodes/Path' );
   var Text = require( 'SCENERY/nodes/Text' );
-  var HTMLText = require( 'SCENERY/nodes/HTMLText' );
+  var MultiLineText = require( 'SCENERY_PHET/MultiLineText' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Node = require( 'SCENERY/nodes/Node' );
   var ArrowNode = require( 'SCENERY_PHET/ArrowNode' );
@@ -161,13 +161,13 @@ define( function( require ) {
       this.gasLabel.setScaleMagnitude( STATES_MAX_WIDTH / this.gasLabel.width );
     }
 
-    this.triplePointLabel = new HTMLText( triplePointString, { font: SMALLER_INNER_FONT, fill: 'black' } );
+    this.triplePointLabel = new MultiLineText( triplePointString, { font: SMALLER_INNER_FONT, fill: 'black', align: 'right' } );
     accordionContent.addChild( this.triplePointLabel );
     if ( this.triplePointLabel.width > SMALLER_INNER_TEXT_WIDTH ) {
       this.triplePointLabel.setScaleMagnitude( SMALLER_INNER_TEXT_WIDTH / this.triplePointLabel.width );
     }
 
-    this.criticalPointLabel = new HTMLText( criticalPointString, { font: SMALLER_INNER_FONT, fill: 'black' } );
+    this.criticalPointLabel = new MultiLineText( criticalPointString, { font: SMALLER_INNER_FONT, fill: 'black', align: 'right' } );
     accordionContent.addChild( this.criticalPointLabel );
     if ( this.criticalPointLabel.width > SMALLER_INNER_TEXT_WIDTH ) {
       this.criticalPointLabel.setScaleMagnitude( SMALLER_INNER_TEXT_WIDTH / this.criticalPointLabel.width );
@@ -238,10 +238,10 @@ define( function( require ) {
         contentYMargin: 5,
         contentXMargin: 9,
         buttonYMargin: 4,
-        buttonXMargin: 6,
+        buttonXMargin: 5,
         buttonLength: 12,
         buttonTouchAreaDilatedX: 15,
-        buttonTouchAreaDilatedY: 6
+        buttonTouchAreaDilatedY: 5
       } );
     this.addChild( accordionBox );
 
@@ -330,9 +330,9 @@ define( function( require ) {
         DEFAULT_LIQUID_LABEL_LOCATION.y - this.liquidLabel.height / 2 );
       this.gasLabel.setTranslation( DEFAULT_GAS_LABEL_LOCATION.x - this.gasLabel.width / 2,
         DEFAULT_GAS_LABEL_LOCATION.y );
-      this.triplePointLabel.setTranslation( DEFAULT_TRIPLE_POINT.x - this.triplePointLabel.width / 2,
-        DEFAULT_TRIPLE_POINT.y - this.triplePointLabel.height * 0.9 );
-      this.criticalPointLabel.setTranslation( DEFAULT_CRITICAL_POINT.x - this.criticalPointLabel.width / 1.6,
+      this.triplePointLabel.setTranslation( DEFAULT_TRIPLE_POINT.x - this.triplePointLabel.width - 7,
+        DEFAULT_TRIPLE_POINT.y - this.triplePointLabel.height );
+      this.criticalPointLabel.setTranslation( DEFAULT_CRITICAL_POINT.x - this.criticalPointLabel.width - 7,
         DEFAULT_CRITICAL_POINT.y - this.criticalPointLabel.height * 0.9 );
 
     },
@@ -395,4 +395,3 @@ define( function( require ) {
 
   } );
 } );
-
