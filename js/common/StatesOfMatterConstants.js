@@ -12,7 +12,6 @@ define( function( require ) {
 
   // modules
   var Bounds2 = require( 'DOT/Bounds2' );
-  var PhetColorScheme = require( 'SCENERY_PHET/PhetColorScheme' );
 
   // constants (these are vars because other constants refer to them)
   var PARTICLE_CONTAINER_WIDTH = 10000;
