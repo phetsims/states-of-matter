@@ -146,7 +146,7 @@ define( function( require ) {
 
     var radioButtonGroup = new RadioButtonGroup( multipleParticleModel.moleculeTypeProperty, radioButtonContent, {
       orientation: 'vertical',
-      spacing: 1,
+      spacing: 3,
       cornerRadius: 5,
       baseColor: 'black',
       disabledBaseColor: 'black',

@@ -232,7 +232,7 @@ define( function( require ) {
         }
         multipleParticleModel.interactionStrengthProperty.value = StatesOfMatterConstants.MAX_EPSILON;
         if ( isInteractionDiagramEnabled ) {
-          epsilonControlInteractionPotentialDiagram.top = phaseChangesMoleculesControlPanel.bottom + inset / 2;
+          epsilonControlInteractionPotentialDiagram.top = phaseChangesMoleculesControlPanel.bottom + inset * 0.3;
         }
       }
       else {
@@ -240,11 +240,11 @@ define( function( require ) {
           phaseChangesScreenView.addChild( phaseChangesScreenView.phaseDiagram );
           phaseChangesScreenView.phaseDiagram.right = phaseChangesScreenView.layoutBounds.right - layBoundsRightOffset;
           if ( isInteractionDiagramEnabled ) {
-            epsilonControlInteractionPotentialDiagram.top = phaseChangesMoleculesControlPanel.bottom + inset / 2;
-            phaseChangesScreenView.phaseDiagram.top = epsilonControlInteractionPotentialDiagram.bottom + inset / 2;
+            epsilonControlInteractionPotentialDiagram.top = phaseChangesMoleculesControlPanel.bottom + inset * 0.3;
+            phaseChangesScreenView.phaseDiagram.top = epsilonControlInteractionPotentialDiagram.bottom + inset * 0.3;
           }
           else {
-            phaseChangesScreenView.phaseDiagram.top = phaseChangesMoleculesControlPanel.bottom + inset / 2;
+            phaseChangesScreenView.phaseDiagram.top = phaseChangesMoleculesControlPanel.bottom + inset * 0.3;
           }
         }
       }

@@ -88,7 +88,7 @@ define( function( require ) {
 
     var radioButtonGroup = new RadioButtonGroup( moleculeTypeProperty, radioButtonContent, {
       orientation: 'vertical',
-      spacing: 2,
+      spacing: 3,
       cornerRadius: 5,
       baseColor: 'black',
       disabledBaseColor: 'black',
