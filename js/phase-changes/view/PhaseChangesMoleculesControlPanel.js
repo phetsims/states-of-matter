@@ -23,8 +23,6 @@ define( function( require ) {
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var RadioButtonGroup = require( 'SUN/buttons/RadioButtonGroup' );
   var Dimension2 = require( 'DOT/Dimension2' );
-  var Path = require( 'SCENERY/nodes/Path' );
-  var Shape = require( 'KITE/Shape' );
 
   // strings
   var neonString = require( 'string!STATES_OF_MATTER/neon' );
@@ -128,7 +126,6 @@ define( function( require ) {
       }
     };
     var radioButtonContent;
-    var controlPanelOffset;
     if ( !isBasicVersion ) {
       radioButtonContent = [
         { value: StatesOfMatterConstants.NEON, node: createItem( neon ) },
@@ -136,7 +133,6 @@ define( function( require ) {
         { value: StatesOfMatterConstants.DIATOMIC_OXYGEN, node: createItem( oxygen ) },
         { value: StatesOfMatterConstants.WATER, node: createItem( water ) }
       ];
-      controlPanelOffset = 10;
     }
     else {
       radioButtonContent = [
@@ -146,7 +142,6 @@ define( function( require ) {
         { value: StatesOfMatterConstants.WATER, node: createItem( water ) },
         { value: StatesOfMatterConstants.USER_DEFINED_MOLECULE, node: createItem( adjustableAttraction ) }
       ];
-      controlPanelOffset = 0;
     }
 
     var radioButtonGroup = new RadioButtonGroup( multipleParticleModel.moleculeTypeProperty, radioButtonContent, {
@@ -169,22 +164,14 @@ define( function( require ) {
     } );
     var content = new VBox( { spacing: 4, children: [ radioButtonGroup ] } );
     var radioButtonPanel = new Panel( content, {
-      stroke: 'black',
-      lineWidth: 0,
-      fill: options.backgroundColor
-    } );
-    var background = new Path( new Shape().roundRect( -2, -4,
-      radioButtonPanel.width, radioButtonPanel.height + controlPanelOffset,
-      options.cornerRadius, options.cornerRadius ), {
       stroke: 'white',
-      lineWidth: options.lineWidth,
+      align: 'center',
       fill: 'black'
     } );
     interactionTitle.bottom = interactionStrengthSlider.top - 5;
     interactionTitle.centerX = interactionStrengthSlider.centerX;
     interactionStrengthNode.centerX = radioButtonGroup.centerX;
     interactionStrengthNode.top = radioButtonGroup.bottom + inset;
-    this.addChild( background );
 
     multipleParticleModel.moleculeTypeProperty.link( function( value ) {
       multipleParticleModel.temperatureSetPointProperty._notifyObservers();
@@ -192,30 +179,23 @@ define( function( require ) {
       // adjust the control panel border when adjustable attraction selected or deselect
       if ( value === StatesOfMatterConstants.USER_DEFINED_MOLECULE ) {
         content.addChild( interactionStrengthNode );
-        background.setShape( new Shape().roundRect( -2, -2,
-          radioButtonPanel.width, radioButtonPanel.height,
-          options.cornerRadius, options.cornerRadius ) );
       }
       else {
         if ( content.isChild( interactionStrengthNode ) ) {
           content.removeChild( interactionStrengthNode );
-          background.setShape( new Shape().roundRect( -2, -2,
-            radioButtonPanel.width, radioButtonPanel.height,
-            options.cornerRadius, options.cornerRadius ) );
         }
       }
     } );
-
-    var titleBackground = new Rectangle( background.centerX + 4, background.top - 10,
+    var titleBackground = new Rectangle( radioButtonPanel.centerX + 4, radioButtonPanel.top - 12,
       titleText.label.width + 5, titleText.label.height, {
         fill: 'black'
       } );
-    titleText.label.centerX = background.centerX;
+    titleText.label.centerX = radioButtonPanel.centerX;
     titleBackground.centerX = titleText.label.centerX;
 
+    this.addChild( radioButtonPanel );
     //add the title node
     this.addChild( new Node( { children: [ titleBackground, titleText.label ] } ) );
-    this.addChild( radioButtonPanel );
     this.mutate( options );
   }
 

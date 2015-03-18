@@ -211,7 +211,6 @@ define( function( require ) {
         } );
       this.addChild( epsilonControlInteractionPotentialDiagram );
     }
-    var panelsYOffset = 2;
     multipleParticleModel.moleculeTypeProperty.link( function( moleculeId ) {
       phaseChangesScreenView.modelTemperatureHistory.clear();
       phaseChangesScreenView.updatePhaseDiagram();
@@ -228,13 +227,12 @@ define( function( require ) {
       }
       // enable/disable phase diagram on molecule type change
       if ( moleculeId === StatesOfMatterConstants.USER_DEFINED_MOLECULE ) {
-        panelsYOffset = 4;
         if ( phaseChangesScreenView.isChild( phaseChangesScreenView.phaseDiagram ) ) {
           phaseChangesScreenView.removeChild( phaseChangesScreenView.phaseDiagram );
         }
         multipleParticleModel.interactionStrengthProperty.value = StatesOfMatterConstants.MAX_EPSILON;
         if ( isInteractionDiagramEnabled ) {
-          epsilonControlInteractionPotentialDiagram.top = phaseChangesMoleculesControlPanel.bottom + panelsYOffset;
+          epsilonControlInteractionPotentialDiagram.top = phaseChangesMoleculesControlPanel.bottom + inset / 2;
         }
       }
       else {
@@ -242,7 +240,7 @@ define( function( require ) {
           phaseChangesScreenView.addChild( phaseChangesScreenView.phaseDiagram );
           phaseChangesScreenView.phaseDiagram.right = phaseChangesScreenView.layoutBounds.right - layBoundsRightOffset;
           if ( isInteractionDiagramEnabled ) {
-            epsilonControlInteractionPotentialDiagram.top = phaseChangesMoleculesControlPanel.bottom + panelsYOffset;
+            epsilonControlInteractionPotentialDiagram.top = phaseChangesMoleculesControlPanel.bottom + inset / 2;
             phaseChangesScreenView.phaseDiagram.top = epsilonControlInteractionPotentialDiagram.bottom + inset / 2;
           }
           else {
