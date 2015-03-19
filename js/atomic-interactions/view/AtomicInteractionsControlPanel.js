@@ -255,7 +255,7 @@ define( function( require ) {
       ];
       radioButtonGroup = new RadioButtonGroup( dualAtomModel.moleculeTypeProperty, radioButtonContent, {
         orientation: 'vertical',
-        spacing: 1,
+        spacing: 4,
         cornerRadius: 5,
         baseColor: 'black',
         disabledBaseColor: 'black',
