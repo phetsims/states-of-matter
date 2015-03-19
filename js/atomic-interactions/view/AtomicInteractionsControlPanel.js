@@ -128,12 +128,19 @@ define( function( require ) {
       argonAndOxygen = [ createText( argonString, MAX_WIDTH / 2 ), createText( oxygenString, MAX_WIDTH / 2 ) ];
       var customAttraction = createText( customAttractionString, MAX_WIDTH );
       var pushpinImage = new Image( pushPinImg, { scale: 0.15 } );
+      var createTitleText = function( string, width, fontSize ) {
+        var text = new Text( string, { font: new PhetFont( fontSize ), fill: options.textColor } );
+        if ( text.width > width ) {
+          text.setFont( new PhetFont( fontSize * width / text.width ) );
+        }
+        return text;
+      };
+      var maxWidthOfTitleText = 40;
       var pinnedNodeText = new HBox( {
-        children: [ pushpinImage, new Text( pinnedString,
-          { font: new PhetFont( 10 ), fill: options.textColor } ), new HStrut( pushpinImage.width ) ],
+        children: [ pushpinImage, createTitleText( pinnedString, maxWidthOfTitleText, 10 ), new HStrut( pushpinImage.width ) ],
         spacing: 5
       } );
-      titleText = [ pinnedNodeText, new Text( movingString, { font: new PhetFont( 10 ), fill: options.textColor } ) ];
+      titleText = [ pinnedNodeText, createTitleText( movingString, maxWidthOfTitleText, 10 ) ];
       maxWidth = Math.max(
         neonAndArgon[ 0 ].width + neonAndArgon[ 1 ].width,
         argonAndArgon[ 0 ].width + argonAndArgon[ 1 ].width,

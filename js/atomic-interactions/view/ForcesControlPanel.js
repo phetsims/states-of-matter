@@ -32,6 +32,9 @@ define( function( require ) {
   var vanderwaalsString = require( 'string!STATES_OF_MATTER/vanderwaals' );
   var electronOverlapString = require( 'string!STATES_OF_MATTER/electronOverlap' );
 
+  //constants
+  var MAX_WIDTH = 130; // max width of text label  in the panel
+
   /**
    *
    * @param {Property<String>} forcesProperty that determines which forces to display
@@ -79,28 +82,35 @@ define( function( require ) {
     var repulsiveArrow = new ArrowNode( arrowStartX, arrowY, arrowEndX, arrowY, _.extend( {
       fill: '#FD17FF'
     }, arrowNodeOptions ) );
+    var createText = function( string, width, fontSize ) {
+      var text = new Text( string, { font: new PhetFont( fontSize ), fill: options.textColor } );
+      if ( text.width > width ) {
+        text.setFont( new PhetFont( fontSize * width / text.width ) );
+      }
+      return text;
+    };
 
-    var textOptions = { font: new PhetFont( 12 ), fill: options.textColor };
-    var hideForcesText = { label: new Text( hideForcesString, textOptions ) };
+    // hide forces
+    var hideForcesText = { label: createText( hideForcesString, MAX_WIDTH / 2, 12 ) };
+
+    // total force
     var totalForceText = {
-      label: new Text( totalForceString, textOptions ),
+      label: createText( totalForceString, MAX_WIDTH / 2, 12 ),
       icon: totalForceArrow
     };
     var attractiveText = {
-      label: new Text( attractiveString, { font: new PhetFont( 11 ), fill: options.textColor } ),
+      label: createText( attractiveString, MAX_WIDTH / 2, 11 ),
       icon: attractiveArrow
     };
     var vanderwaalsText = {
-      label: new Text( vanderwaalsString,
-        { font: new PhetFont( 10 ), fill: options.textColor } )
+      label: createText( vanderwaalsString, MAX_WIDTH / 2, 10 )
     };
     var repulsiveText = {
-      label: new Text( repulsiveString, { font: new PhetFont( 11 ), fill: options.textColor } ),
+      label: createText( repulsiveString, MAX_WIDTH / 2, 11 ),
       icon: repulsiveArrow
     };
     var electronOverlapText = {
-      label: new Text( electronOverlapString,
-        { font: new PhetFont( 10 ), fill: options.textColor } )
+      label: createText( electronOverlapString, MAX_WIDTH / 2, 10 )
     };
 
     // compute the maximum item width
@@ -155,35 +165,29 @@ define( function( require ) {
         totalForceText.icon ]
     } );
 
-    var totalForce = new HBox( {
-      spacing: 2,
-      children: [ totalForceItem ]
-    } );
-    var hideForce = new HBox( {
-      spacing: 2,
-      children: [ createItem( hideForcesText ) ]
-    } );
+    var totalForce = new HBox( { spacing: 2, children: [ totalForceItem ] } );
+    var hideForce = new HBox( { spacing: 2, children: [ createItem( hideForcesText ) ] } );
 
-    var hideForcesRadio = new AquaRadioButton( forcesProperty, 'hideForces', hideForce,
-      { radius: 8 } );
-    var totalForceRadio = new AquaRadioButton( forcesProperty, 'totalForce', totalForce,
-      { radius: 8 } );
-    var componentForceRadio = new AquaRadioButton( forcesProperty, 'componentForce', componentForce,
-      { radius: 8 } );
+    var hideForcesRadio = new AquaRadioButton( forcesProperty, 'hideForces', hideForce, { radius: 8 } );
+    var totalForceRadio = new AquaRadioButton( forcesProperty, 'totalForce', totalForce, { radius: 8 } );
+    var componentForceRadio = new AquaRadioButton( forcesProperty, 'componentForce', componentForce, {
+      radius: 8
+    } );
 
     var radioButtonGroup = new VBox( {
       children: [ hideForcesRadio, totalForceRadio, componentForceRadio ],
       align: 'left',
       spacing: 3
     } );
-
+    // panel width of atomic interaction and  atomic interaction in SOM full version is different
+    var panelMinWidth = options.showTitleWhenExpand ? 190 : 195;
     radioButtonGroup.setTranslation( 10, 0 );
     accordionContent.addChild( radioButtonGroup );
     // show white stroke around the force panel within SOM  full version  else  show black stroke
     var panelStroke = options.showTitleWhenExpand ? 'white' : 'black';
     var accordionBox = new AccordionBox( accordionContent,
       {
-        titleNode: new Text( forcesString, { fill: options.textColor, font: new PhetFont( { size: 14 } ) } ),
+        titleNode: createText( forcesString, MAX_WIDTH / 2, 14 ),
         fill: options.backgroundColor,
         stroke: panelStroke,
         expandedProperty: forceControlPanelExpandProperty,
@@ -191,7 +195,7 @@ define( function( require ) {
         titleAlignX: 'left',
         buttonAlign: options.buttonAlign,
         cornerRadius: 4,
-        minWidth: options.panelMinWidth,
+        minWidth: panelMinWidth,
         contentYSpacing: 1,
         contentXSpacing: 3,
         contentXMargin: 12,
