@@ -55,10 +55,6 @@ define( function( require ) {
 // zoom buttons height
   var zoomButtonsHeight = 65;
 
-
-// each character size in pixel
-  var horizontalLabelCharacterSize;
-
   /**
    *
    * @param {Number} sigma - Initial value of sigma, a.k.a. the atom diameter
@@ -169,9 +165,8 @@ define( function( require ) {
         fill: 'white',
         font: AXIS_LABEL_FONT
       } );
-    // restricted horizontal axis label
     if ( this.horizontalAxisLabel.width > this.horizontalAxis.width ) {
-      horizontalLabelCharacterSize = this.horizontalAxisLabel.width / distanceBetweenAtomsString.length;
+      this.horizontalAxisLabel.setFont( new PhetFont( AXIS_LABEL_FONT_SIZE * this.horizontalAxis.width / this.horizontalAxisLabel.width ) );
     }
 
     this.setMolecular( false );
@@ -192,8 +187,7 @@ define( function( require ) {
     // restricted vertical  axis label
     var verticalAxisHeight = wide ? this.verticalAxis.height - zoomButtonsHeight : this.verticalAxis.height;
     if ( this.verticalAxisLabel.width > verticalAxisHeight ) {
-      var sizeOfChar = this.verticalAxisLabel.width / potentialEnergyString.length;
-      this.verticalAxisLabel.setText( potentialEnergyString.slice( 0, verticalAxisHeight / sizeOfChar ) );
+      this.verticalAxisLabel.setFont( new PhetFont( AXIS_LABEL_FONT_SIZE * verticalAxisHeight / this.verticalAxisLabel.width ) );
     }
 
     this.verticalAxisLabel.setTranslation( this.graphXOrigin / 2 - this.verticalAxisLabel.height / 2,
@@ -295,20 +289,16 @@ define( function( require ) {
      *                  individual atoms.
      */
     setMolecular: function( molecular ) {
-      var horizontalAxisLabelX;
-      var charactersLength;
-      if ( this.horizontalAxisLabel.width > this.horizontalAxis.width ) {
-        charactersLength = Math.max( Math.ceil( this.horizontalAxis.width / horizontalLabelCharacterSize ), 22 );
-      }
 
       if ( molecular ) {
-        this.horizontalAxisLabel.setText( distanceBetweenMoleculesString.slice( 0, charactersLength ) );
+        this.horizontalAxisLabel.setText( distanceBetweenMoleculesString );
       }
       else {
-        this.horizontalAxisLabel.setText( distanceBetweenAtomsString.slice( 0, charactersLength ) );
+        this.horizontalAxisLabel.setText( distanceBetweenAtomsString );
       }
-      horizontalAxisLabelX = this.graphXOrigin + (  this.graphWidth / 2) - (  this.horizontalAxisLabel.width / 2);
-      this.horizontalAxisLabel.setTranslation( horizontalAxisLabelX, this.graphYOrigin + (  this.horizontalAxisLabel.height ) );
+      this.horizontalAxisLabel.setTranslation(
+        this.graphXOrigin + (  this.graphWidth / 2) - (  this.horizontalAxisLabel.width / 2),
+        this.graphYOrigin + (  this.horizontalAxisLabel.height ) );
     },
 
     /**

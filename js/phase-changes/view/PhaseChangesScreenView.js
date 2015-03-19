@@ -134,7 +134,7 @@ define( function( require ) {
     var phaseChangesMoleculesControlPanel = new PhaseChangesMoleculesControlPanel( multipleParticleModel, isInteractionDiagramEnabled,
       {
         right: this.layoutBounds.right - layBoundsRightOffset,
-        top:   this.layoutBounds.top + layBoundsYOffset
+        top: this.layoutBounds.top + layBoundsYOffset / 2
       } );
     this.addChild( phaseChangesMoleculesControlPanel );
 

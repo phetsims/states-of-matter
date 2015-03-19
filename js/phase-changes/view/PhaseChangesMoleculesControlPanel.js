@@ -37,6 +37,9 @@ define( function( require ) {
 
   // constants
   var inset = 10;
+  var MAX_WIDTH = 120;
+  var TickTextWidth = 20;
+  var NORMAL_TEXT_FONT_SIZE = 12;
 
   /**
    *
@@ -58,14 +61,23 @@ define( function( require ) {
     }, options );
 
     Node.call( this );
-    var textOptions = { font: new PhetFont( 12 ), fill: "#FFFFFF" };
+    var textOptions = { font: new PhetFont( NORMAL_TEXT_FONT_SIZE ), fill: "#FFFFFF" };
 
     var weakTitle = new Text( weakString, textOptions );
+    if ( weakTitle.width > TickTextWidth ) {
+      weakTitle.setFont( new PhetFont( NORMAL_TEXT_FONT_SIZE * TickTextWidth / weakTitle.width ) );
+    }
     var strongTitle = new Text( strongString, textOptions );
+    if ( strongTitle.width > TickTextWidth ) {
+      strongTitle.setFont( new PhetFont( NORMAL_TEXT_FONT_SIZE * TickTextWidth / strongTitle.width ) );
+    }
 
     // add interaction strength slider and title
     var interactionStrengthNode = new Node();
     var interactionTitle = new Text( interactionStrengthTitleString, textOptions );
+    if ( interactionTitle.width > MAX_WIDTH ) {
+      interactionTitle.setFont( new PhetFont( NORMAL_TEXT_FONT_SIZE * MAX_WIDTH / interactionTitle.width ) );
+    }
     interactionStrengthNode.addChild( interactionTitle );
     var interactionStrengthSlider = new HSlider( multipleParticleModel.interactionStrengthProperty,
       { min: StatesOfMatterConstants.MIN_ADJUSTABLE_EPSILON, max: StatesOfMatterConstants.EPSILON_FOR_WATER },
@@ -92,21 +104,46 @@ define( function( require ) {
     interactionStrengthSlider.addMajorTick( StatesOfMatterConstants.MIN_ADJUSTABLE_EPSILON, weakTitle );
 
 
+    var neonText = new Text( neonString, textOptions );
+    if ( neonText.width > MAX_WIDTH ) {
+      neonText.setFont( new PhetFont( NORMAL_TEXT_FONT_SIZE * MAX_WIDTH / neonText.width ) );
+    }
+    var argonText = new Text( argonString, textOptions );
+    if ( argonText.width > MAX_WIDTH ) {
+      argonText.setFont( new PhetFont( NORMAL_TEXT_FONT_SIZE * MAX_WIDTH / argonText.width ) );
+    }
+    var waterText = new Text( waterString, textOptions );
+    if ( waterText.width > MAX_WIDTH ) {
+      waterText.setFont( new PhetFont( NORMAL_TEXT_FONT_SIZE * MAX_WIDTH / waterText.width ) );
+    }
+    var oxygenText = new Text( oxygenString, textOptions );
+    if ( oxygenText.width > MAX_WIDTH ) {
+      oxygenText.setFont( new PhetFont( NORMAL_TEXT_FONT_SIZE * MAX_WIDTH / oxygenText.width ) );
+    }
+    var adjustableAttractionText = new Text( adjustableAttractionString, textOptions );
+    if ( adjustableAttractionText.width > MAX_WIDTH ) {
+      adjustableAttractionText.setFont( new PhetFont( NORMAL_TEXT_FONT_SIZE * MAX_WIDTH / adjustableAttractionText.width ) );
+    }
+    var title = new Text( titleString, {
+      font: new PhetFont( 14 ),
+      fill: '#FFFFFF'
+    } );
+    if ( title.width > MAX_WIDTH ) {
+      title.setFont( new PhetFont( 14 * MAX_WIDTH / title.width ) );
+    }
+
     // itemSpec describes the pieces that make up an item in the control panel,
     // conforms to the contract: { label: {Node}, icon: {Node} (optional) }
-    var neon = { label: new Text( neonString, textOptions ), icon: createNeonIcon() };
-    var argon = { label: new Text( argonString, textOptions ), icon: createArgonIcon() };
-    var water = { label: new Text( waterString, textOptions ), icon: createWaterIcon() };
-    var oxygen = { label: new Text( oxygenString, textOptions ), icon: createOxygenIcon() };
+    var neon = { label: neonText, icon: createNeonIcon() };
+    var argon = { label: argonText, icon: createArgonIcon() };
+    var water = { label: waterText, icon: createWaterIcon() };
+    var oxygen = { label: oxygenText, icon: createOxygenIcon() };
     var adjustableAttraction = {
-      label: new Text( adjustableAttractionString, textOptions ),
+      label: adjustableAttractionText,
       icon: createAdjustableAttractionIcon()
     };
     var titleText = {
-      label: new Text( titleString, {
-        font: new PhetFont( 14 ),
-        fill: '#FFFFFF'
-      } )
+      label: title
     };
 
     // compute the maximum item width
@@ -164,9 +201,11 @@ define( function( require ) {
     } );
     var content = new VBox( { spacing: 4, children: [ radioButtonGroup ] } );
     var radioButtonPanel = new Panel( content, {
+      yMargin: 10,
       stroke: 'white',
       align: 'center',
-      fill: 'black'
+      fill: 'black',
+      minWidth: 160
     } );
     interactionTitle.bottom = interactionStrengthSlider.top - 5;
     interactionTitle.centerX = interactionStrengthSlider.centerX;
@@ -186,12 +225,14 @@ define( function( require ) {
         }
       }
     } );
-    var titleBackground = new Rectangle( radioButtonPanel.centerX + 4, radioButtonPanel.top - 12,
+    var titleBackground = new Rectangle( 0, 0,
       titleText.label.width + 5, titleText.label.height, {
         fill: 'black'
       } );
-    titleText.label.centerX = radioButtonPanel.centerX;
-    titleBackground.centerX = titleText.label.centerX;
+    titleBackground.centerX = radioButtonPanel.centerX;
+    titleBackground.centerY = radioButtonPanel.top;
+    titleText.label.centerX = titleBackground.centerX;
+    titleText.label.centerY = titleBackground.centerY;
 
     this.addChild( radioButtonPanel );
     //add the title node

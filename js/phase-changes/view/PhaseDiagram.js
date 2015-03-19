@@ -39,10 +39,10 @@ define( function( require ) {
   // Constants that control the look of the axes.
   var AXES_LINE_WIDTH = 1;
   var AXES_ARROW_HEAD_HEIGHT = 8 * AXES_LINE_WIDTH;
-  var HORIZ_AXIS_SIZE_PROPORTION = 0.88;
+  var HORIZ_AXIS_SIZE_PROPORTION = 0.85;
   var VERT_AXIS_SIZE_PROPORTION = 0.85;
   var STATES_MAX_WIDTH = 35;
-  var SMALLER_INNER_TEXT_WIDTH = 60;
+  var SMALLER_INNER_TEXT_WIDTH = 30;
 
   // Constants that control the location of the origin for the graph.
   var X_ORIGIN_OFFSET = 0.10 * WIDTH;
@@ -146,19 +146,19 @@ define( function( require ) {
     this.solidLabel = new Text( solidString, { font: LARGER_INNER_FONT, fill: 'black' } );
     accordionContent.addChild( this.solidLabel );
     if ( this.solidLabel.width > STATES_MAX_WIDTH ) {
-      this.solidLabel.setScaleMagnitude( STATES_MAX_WIDTH / this.solidLabel.width );
+      this.solidLabel.setFont( new PhetFont( LARGER_INNER_FONT_SIZE * STATES_MAX_WIDTH / this.solidLabel.width ) );
     }
 
     this.liquidLabel = new Text( liquidString, { font: LARGER_INNER_FONT, fill: 'black' } );
     accordionContent.addChild( this.liquidLabel );
     if ( this.liquidLabel.width > STATES_MAX_WIDTH ) {
-      this.liquidLabel.setScaleMagnitude( STATES_MAX_WIDTH / this.liquidLabel.width );
+      this.liquidLabel.setFont( new PhetFont( LARGER_INNER_FONT_SIZE * STATES_MAX_WIDTH / this.liquidLabel.width ) );
     }
 
     this.gasLabel = new Text( gasString, { font: LARGER_INNER_FONT, fill: 'black' } );
     accordionContent.addChild( this.gasLabel );
     if ( this.gasLabel.width > STATES_MAX_WIDTH ) {
-      this.gasLabel.setScaleMagnitude( STATES_MAX_WIDTH / this.gasLabel.width );
+      this.gasLabel.setFont( new PhetFont( LARGER_INNER_FONT_SIZE * STATES_MAX_WIDTH / this.gasLabel.width ) );
     }
 
     this.triplePointLabel = new MultiLineText( triplePointString, { font: SMALLER_INNER_FONT, fill: 'black', align: 'right' } );
@@ -194,20 +194,17 @@ define( function( require ) {
         tailWidth: 2
       } );
     accordionContent.addChild( verticalAxis );
-    var sizeOfChar;
     // Create and add the labels for the axes.
     var horizontalAxisLabel = new Text( temperatureString, { font: AXIS_LABEL_FONT, fill: 'white' } );
     if ( horizontalAxisLabel.width > horizontalAxis.width ) {
-      sizeOfChar = horizontalAxisLabel.width / temperatureString.length;
-      horizontalAxisLabel.setText( temperatureString.slice( 0, horizontalAxis.width / sizeOfChar ) );
+      horizontalAxisLabel.setFont( new PhetFont( AXIS_LABEL_FONT_SIZE * horizontalAxis.width / horizontalAxisLabel.width ) );
     }
     horizontalAxisLabel.setTranslation( horizontalAxis.centerX - horizontalAxisLabel.width / 2, Y_ORIGIN_OFFSET + horizontalAxisLabel.height * 1.2 );
     accordionContent.addChild( horizontalAxisLabel );
 
     var verticalAxisLabel = new Text( pressureString, { font: AXIS_LABEL_FONT, fill: 'white' } );
     if ( verticalAxisLabel.width > verticalAxis.height ) {
-      sizeOfChar = verticalAxisLabel.width / pressureString.length;
-      verticalAxisLabel.setText( pressureString.slice( 0, verticalAxis.height / sizeOfChar ) );
+      verticalAxisLabel.setFont( new PhetFont( AXIS_LABEL_FONT_SIZE * verticalAxis.height / verticalAxisLabel.width ) );
     }
     verticalAxisLabel.setTranslation( X_ORIGIN_OFFSET - (verticalAxisLabel.height / 1.5  ), verticalAxis.centerY + verticalAxisLabel.width / 2 );
     verticalAxisLabel.setRotation( 3 * Math.PI / 2 );
@@ -221,8 +218,7 @@ define( function( require ) {
     var titleNode = new Text( phaseDiagramString, { fill: "#FFFFFF", font: new PhetFont( { size: 13 } ) } );
 
     if ( titleNode.width > horizontalAxis.width ) {
-      sizeOfChar = titleNode.width / phaseDiagramString.length;
-      titleNode.setText( phaseDiagramString.slice( 0, horizontalAxis.width / sizeOfChar ) );
+      titleNode.setFont( new PhetFont( 13 * horizontalAxis.width / titleNode.width ) );
     }
     var accordionBox = new AccordionBox( accordionContent,
       {
@@ -236,7 +232,8 @@ define( function( require ) {
         cornerRadius: 4,
         contentYSpacing: -15,
         contentYMargin: 5,
-        contentXMargin: 9,
+        contentXMargin: 5,
+        minWidth: 169,
         buttonYMargin: 4,
         buttonXMargin: 5,
         buttonLength: 12,
