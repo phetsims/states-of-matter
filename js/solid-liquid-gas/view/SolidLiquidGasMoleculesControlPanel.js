@@ -28,6 +28,10 @@ define( function( require ) {
   var oxygenString = require( 'string!STATES_OF_MATTER/diatomicOxygen' );
   var titleString = require( 'string!STATES_OF_MATTER/AtomsMolecules' );
 
+  //constants
+  var MAX_WIDTH = 118;
+
+
   /**
    *
    * @param {Property<Number>} moleculeTypeProperty that tracks the molecule type selected in the panel
@@ -48,18 +52,39 @@ define( function( require ) {
     Node.call( this );
     var textOptions = { font: new PhetFont( 12 ), fill: '#FFFFFF' };
 
+    var neonText = new Text( neonString, textOptions );
+    if ( neonText.width > MAX_WIDTH ) {
+      neonText.setFont( new PhetFont( 12 * MAX_WIDTH / neonText.width ) );
+    }
+    var argonText = new Text( argonString, textOptions );
+    if ( argonText.width > MAX_WIDTH ) {
+      argonText.setFont( new PhetFont( 12 * MAX_WIDTH / argonText.width ) );
+    }
+    var waterText = new Text( waterString, textOptions );
+    if ( waterText.width > MAX_WIDTH ) {
+      waterText.setFont( new PhetFont( 12 * MAX_WIDTH / waterText.width ) );
+    }
+    var oxygenText = new Text( oxygenString, textOptions );
+    if ( oxygenText.width > MAX_WIDTH ) {
+      oxygenText.setFont( new PhetFont( 12 * MAX_WIDTH / oxygenText.width ) );
+    }
+    var title = new Text( titleString, {
+      font: new PhetFont( 14 ),
+      fill: '#FFFFFF'
+    } );
+    if ( title.width > MAX_WIDTH ) {
+      title.setFont( new PhetFont( 14 * MAX_WIDTH / title.width ) );
+    }
+
     // itemSpec describes the pieces that make up an item in the control panel,
     // conforms to the contract: { label: {Node}, icon: {Node} (optional) }
-    var neon = { label: new Text( neonString, textOptions ), icon: createNeonIcon() };
-    var argon = { label: new Text( argonString, textOptions ), icon: createArgonIcon() };
-    var water = { label: new Text( waterString, textOptions ), icon: createWaterIcon() };
-    var oxygen = { label: new Text( oxygenString, textOptions ), icon: createOxygenIcon() };
+    var neon = { label: neonText, icon: createNeonIcon() };
+    var argon = { label: argonText, icon: createArgonIcon() };
+    var water = { label: waterText, icon: createWaterIcon() };
+    var oxygen = { label: oxygenText, icon: createOxygenIcon() };
 
     var titleText = {
-      label: new Text( titleString, {
-        font: new PhetFont( 14 ),
-        fill: '#FFFFFF'
-      } )
+      label: title
     };
 
     // compute the maximum item width
@@ -99,19 +124,23 @@ define( function( require ) {
     } );
 
     var radioButtonPanel = new Panel( radioButtonGroup, {
+      yMargin: 10,
       stroke: 'white',
       align: 'center',
       lineWidth: options.lineWidth,
-      fill: 'black'
+      fill: 'black',
+      minWidth: 166
     } );
     this.addChild( radioButtonPanel );
 
-    var titleBackground = new Rectangle( radioButtonPanel.centerX, radioButtonPanel.top - 13,
+    var titleBackground = new Rectangle( 0, 0,
       titleText.label.width + 5, titleText.label.height, {
         fill: 'black'
       } );
-    titleText.label.centerX = radioButtonPanel.centerX;
-    titleBackground.centerX = titleText.label.centerX;
+    titleBackground.centerX = radioButtonPanel.centerX;
+    titleBackground.centerY = radioButtonPanel.top;
+    titleText.label.centerX = titleBackground.centerX;
+    titleText.label.centerY = titleBackground.centerY;
     var tittleNode = new Node( { children: [ titleBackground, titleText.label ] } );
     this.addChild( tittleNode );
 
