@@ -12,7 +12,7 @@ define( function( require ) {
    * @param {Number} tailY - arrowNode tail Y position
    * @param {Number} tipX - arrowNode tip X position
    * @param {Number} tipY - arrowNode tip Y position
-   * @param {Object} options that can be passed on to the underlying node
+   * @param {Object} [options] that can be passed on to the underlying node
    * @constructor
    */
   function DimensionalArrowNode( tailX, tailY, tipX, tipY, options ) {
