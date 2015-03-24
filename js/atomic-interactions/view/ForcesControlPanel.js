@@ -180,7 +180,7 @@ define( function( require ) {
       spacing: 3
     } );
     // panel width of atomic interaction and  atomic interaction in SOM full version is different
-    var panelMinWidth = options.showTitleWhenExpand ? 189 : 195;
+    var panelMinWidth = options.showTitleWhenExpand ? 178 : 185;
     radioButtonGroup.setTranslation( 10, 0 );
     accordionContent.addChild( radioButtonGroup );
     // show white stroke around the force panel within SOM  full version  else  show black stroke

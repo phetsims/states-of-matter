@@ -23,8 +23,6 @@ define( function( require ) {
   var HSlider = require( 'SUN/HSlider' );
   var Dimension2 = require( 'DOT/Dimension2' );
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
-  var Path = require( 'SCENERY/nodes/Path' );
-  var Shape = require( 'KITE/Shape' );
   var AtomType = require( 'STATES_OF_MATTER/common/model/AtomType' );
   var AquaRadioButton = require( 'SUN/AquaRadioButton' );
   var Image = require( 'SCENERY/nodes/Image' );
@@ -57,9 +55,8 @@ define( function( require ) {
   var ARGON_OXYGEN = 'ARGON_OXYGEN';
   var ADJUSTABLE = 'ADJUSTABLE';
 
-  var inset = 10;
   var MAX_WIDTH = 130;
-  var TickTextWidth = 20;
+  var TickTextWidth = 26;
   var NORMAL_TEXT_FONT_SIZE = 12;
 
   /**
@@ -88,14 +85,6 @@ define( function( require ) {
     var textOptions;
     // show white stroke around the atoms & molecules panel within SOM  full version  else  show black stroke
     var panelStroke = enableHeterogeneousMolecules ? 'black' : 'white';
-    var background = new Path( null,
-      {
-        stroke: panelStroke,
-        lineWidth: options.lineWidth,
-        fill: options.backgroundColor
-      }
-    );
-    this.addChild( background );
     var neonAndNeon;
     var argonAndArgon;
     var oxygenAndOxygen;
@@ -262,7 +251,6 @@ define( function( require ) {
       ];
       radioButtonGroup = new RadioButtonGroup( dualAtomModel.moleculeTypeProperty, radioButtonContent, {
         orientation: 'vertical',
-        spacing: 4,
         cornerRadius: 5,
         baseColor: 'black',
         disabledBaseColor: 'black',
@@ -366,12 +354,15 @@ define( function( require ) {
     var interactionStrength = new Node( { children: [ interactionStrengthTitle, interactionStrengthSlider ] } );
 
     var content = new VBox( {
-      spacing: 4,
       align: 'left', children: [ radioButtonGroup ]
     } );
     var verticalSpaceOffset = 3;
 
-    var radioButtonPanel = new Panel( content, { lineWidth: 0, fill: options.backgroundColor } );
+    var radioButtonPanel = new Panel( content, {
+      stroke: panelStroke,
+      lineWidth: options.lineWidth,
+      fill: options.backgroundColor
+    } );
     // sliders and title adjustments
     atomDiameterTitle.left = content.left;
     atomDiameterSlider.top = atomDiameterTitle.bottom + verticalSpaceOffset;
@@ -433,10 +424,6 @@ define( function( require ) {
             content.removeChild( interactionStrength );
           }
         }
-        background.setShape( new Shape().roundRect( -7, -2,
-          radioButtonPanel.width + inset,
-          radioButtonPanel.height + 3,
-          options.cornerRadius, options.cornerRadius ) );
       } );
     this.addChild( radioButtonPanel );
     // add the tittle node after radio button panel added in SOM full version.
