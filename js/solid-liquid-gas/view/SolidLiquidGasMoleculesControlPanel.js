@@ -35,7 +35,7 @@ define( function( require ) {
   /**
    *
    * @param {Property<Number>} moleculeTypeProperty that tracks the molecule type selected in the panel
-   * @param {Object} options for various panel display properties
+   * @param {Object} [options] for various panel display properties
    * @constructor
    */
   function SolidLiquidGasMoleculesControlPanel( moleculeTypeProperty, options ) {

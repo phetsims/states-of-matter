@@ -37,7 +37,7 @@ define( function( require ) {
    * @param {Number} epsilon - Initial value of epsilon, a.k.a. the interaction strength
    * @param {Boolean} wide - true if the wide screen version of the graph is needed, false if not.
    * @param {DualAtomModel} dualAtomModel - model of the simulation
-   * @param {Object} options that can be passed on to the underlying node
+   * @param {Object} [options] that can be passed on to the underlying node
    * @constructor
    */
 

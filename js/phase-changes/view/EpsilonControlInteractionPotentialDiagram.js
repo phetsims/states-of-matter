@@ -43,7 +43,7 @@ define( function( require ) {
    * @param {Number} epsilon - interaction strength
    * @param {Boolean} wide - true if the wide screen version of the graph is needed, false if not.
    * @param {MultipleParticleModel} multipleParticleModel - model of the simulation
-   * @param {Object} options that can be passed on to the underlying node
+   * @param {Object} [options] that can be passed on to the underlying node
    * @constructor
    */
   function EpsilonControlInteractionPotentialDiagram( sigma, epsilon, wide, multipleParticleModel, options ) {

@@ -63,7 +63,7 @@ define( function( require ) {
    *
    * @param {DualAtomModel} dualAtomModel - model of the simulation
    * @param {Boolean} enableHeterogeneousMolecules - true to use a enable heterogeneous molecules , false if not.
-   * @param {Object} options that can be passed on to the underlying node
+   * @param {Object} [options] that can be passed on to the underlying node
    * @constructor
    */
   function AtomicInteractionsControlPanel( dualAtomModel, enableHeterogeneousMolecules, options ) {

@@ -17,7 +17,7 @@ define( function( require ) {
    * @param {ObservableArray<Particle>} particles that need to be rendered on the canvas
    * @param {ModelViewTransform2} modelViewTransform to convert between model and view co-ordinate frames
    * @param {Property<Boolean>} projectorColorsProperty - true to use apply black stroke to particle, false to particle color stroke
-   * @param {Object} options that can be passed on to the underlying node
+   * @param {Object} [options] that can be passed on to the underlying node
    * @constructor
    */
   function ParticleCanvasNode( particles, modelViewTransform, projectorColorsProperty, options ) {

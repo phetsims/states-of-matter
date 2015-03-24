@@ -39,7 +39,7 @@ define( function( require ) {
    *
    * @param {Property<String>} forcesProperty that determines which forces to display
    * @param {Property<Boolean>} forceControlPanelExpandProperty -true to use force panel expand,false if not
-   * @param {Object} options for various panel display properties
+   * @param {Object} [options] for various panel display properties
    * @constructor
    */
 

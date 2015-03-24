@@ -84,7 +84,7 @@ define( function( require ) {
   /**
    *
    * @param {Property<Boolean>} expandedProperty - is to expand the phase diagram
-   * @param {Object} options that can be passed on to the underlying node
+   * @param {Object} [options] that can be passed on to the underlying node
    * @constructor
    */
   function PhaseDiagram( expandedProperty, options ) {

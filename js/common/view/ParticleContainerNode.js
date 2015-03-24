@@ -31,7 +31,7 @@ define( function( require ) {
    * @param {ModelViewTransform2} modelViewTransform The model view transform for transforming particle position.
    * @param {boolean} volumeControlEnabled - set true to enable volume control by pushing the lid using a finger from above
    * @param {boolean} pressureGaugeEnabled - set true to show a barometer
-   * @param {Object} options that can be passed on to the underlying node
+   * @param {Object} [options] that can be passed on to the underlying node
    * @constructor
    */
   function ParticleContainerNode( multipleParticleModel, modelViewTransform, volumeControlEnabled, pressureGaugeEnabled, options ) {

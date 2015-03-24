@@ -32,7 +32,7 @@ define( function( require ) {
    *
    * @param {MultipleParticleModel} multipleParticleModel - model of the simulation
    * @param {ModelViewTransform2} modelViewTransform The model view transform for transforming particle position.
-   * @param {Object} options that can be passed on to the underlying node
+   * @param {Object} [options] that can be passed on to the underlying node
    * @constructor
    */
   function CompositeThermometerNode( multipleParticleModel, modelViewTransform, options ) {

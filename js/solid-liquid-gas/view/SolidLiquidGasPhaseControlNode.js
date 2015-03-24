@@ -36,7 +36,7 @@ define( function( require ) {
    *
    * @param {Property<Number>} heatingCoolingAmountProperty
    * @param {Property<Number>} stateProperty
-   * @param {Object} options that can be passed on to the underlying node
+   * @param {Object} [options] that can be passed on to the underlying node
    * @constructor
    */
   function SolidLiquidGasPhaseControlNode( heatingCoolingAmountProperty, stateProperty, options ) {

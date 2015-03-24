@@ -44,7 +44,7 @@ define( function( require ) {
   /**
    *
    * @param {MultipleParticleModel} multipleParticleModel - model of the simulation
-   * @param {Object} options that can be passed on to the underlying node
+   * @param {Object} [options] that can be passed on to the underlying node
    * @constructor
    */
   function StoveNode( multipleParticleModel, options ) {
