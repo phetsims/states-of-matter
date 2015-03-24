@@ -43,10 +43,9 @@ define( function( require ) {
 
   /**
    *
-   * @param options
    * @param { MultipleParticleModel } multipleParticleModel - model of the simulation
    * @param {Boolean} isBasicVersion
-   * @param {Object} options for various panel display properties
+   * @param {Object} [options] options for various panel display properties
    * @constructor
    */
   function PhaseChangesMoleculesControlPanel( multipleParticleModel, isBasicVersion, options ) {
