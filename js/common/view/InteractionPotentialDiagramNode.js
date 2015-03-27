@@ -274,10 +274,11 @@ define( function( require ) {
         this.positionMarker.setVisible( false );
       }
       //  made position marker  visible  on oxygen oxygen fully zoomed out  case
+      var graphYOffset = 30;
       if ( this.positionMarkerEnabled && (xPos > 0) && (xPos < this.graphWidth) &&
-           (yPos > 0) && (yPos > this.graphHeight + 1 ) && ( yPos < this.graphHeight + 10 ) ) {
+                                                                                (yPos > 0) && (yPos > this.graphHeight + 1 ) && ( yPos < this.graphHeight + graphYOffset ) ) {
         this.positionMarker.setVisible( true );
-        this.positionMarker.setTranslation( xPos, yPos - 10 );
+        this.positionMarker.setTranslation( xPos, this.graphHeight - 10 );
       }
     },
 

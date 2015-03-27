@@ -157,14 +157,19 @@ define( function( require ) {
         startDragX = interactiveInteractionPotentialDiagram.positionMarker.globalToParentPoint( event.pointer.point ).x;
       },
       drag: function( event ) {
+        // Only allow the user to move unbonded atoms.
+        if ( dualAtomModel.getBondingState() !== dualAtomModel.BONDING_STATE_UNBONDED ) {
+          // Need to release the bond before we can move the atom.
+          dualAtomModel.releaseBond();
+        }
         dualAtomModel.isHandNodeVisible = false;
         endDragX = interactiveInteractionPotentialDiagram.positionMarker.globalToParentPoint( event.pointer.point ).x;
-        var d = endDragX - startDragX;
+        var xDifference = endDragX - startDragX;
         startDragX = endDragX;
         var atom = dualAtomModel.getMovableAtomRef();
         var scaleFactor = interactiveInteractionPotentialDiagram.MAX_INTER_ATOM_DISTANCE /
                           ( interactiveInteractionPotentialDiagram.getGraphWidth());
-        var newPosX = Math.max( atom.getX() + ( d * scaleFactor ), atom.getRadius() * 1.8 );
+        var newPosX = Math.max( atom.getX() + ( xDifference * scaleFactor ), atom.getRadius() * 1.8 );
         atom.setPosition( newPosX, atom.getY() );
       },
       end: function() {
