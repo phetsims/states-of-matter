@@ -217,8 +217,8 @@ define( function( require ) {
      * Set the parameters that define the shape of the Lennard-Jones
      * potential curve.
      *
-     * @param sigma
-     * @param epsilon
+     * @param{Number} sigma -  atom diameter
+     * @param {Number }epsilon - interaction strength
      */
     setLjPotentialParameters: function( sigma, epsilon ) {
 
@@ -250,6 +250,10 @@ define( function( require ) {
     getGraphMin: function() {
       return this.graphMin;
     },
+    /**
+     *
+     * @param {Boolean} enabled - indicate to whether enable the position marker or not.
+     */
     setMarkerEnabled: function( enabled ) {
       this.positionMarkerEnabled = enabled;
     },
@@ -258,7 +262,7 @@ define( function( require ) {
      * to set the x axis position, which is distance.  The y axis position is
      * always on the LJ potential curve.
      *
-     * @param distance - distance from the center of the interacting molecules.
+     * @param {Number}distance - distance from the center of the interacting molecules.
      */
     setMarkerPosition: function( distance ) {
       this.markerDistance = distance;
@@ -276,7 +280,7 @@ define( function( require ) {
       //  made position marker  visible  on oxygen oxygen fully zoomed out  case
       var graphYOffset = 100;
       if ( this.positionMarkerEnabled && (xPos > 0) && (xPos < this.graphWidth) &&
-                                                                                (yPos > 0) && (yPos > this.graphHeight + 1 ) && ( yPos < this.graphHeight + graphYOffset ) ) {
+                                                                                (yPos > 0) && (yPos > this.graphHeight) && ( yPos < this.graphHeight + graphYOffset ) ) {
         this.positionMarker.setVisible( true );
         this.positionMarker.setTranslation( xPos, this.graphHeight - 10 );
       }
