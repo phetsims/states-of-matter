@@ -274,7 +274,7 @@ define( function( require ) {
         this.positionMarker.setVisible( false );
       }
       //  made position marker  visible  on oxygen oxygen fully zoomed out  case
-      var graphYOffset = 30;
+      var graphYOffset = 100;
       if ( this.positionMarkerEnabled && (xPos > 0) && (xPos < this.graphWidth) &&
                                                                                 (yPos > 0) && (yPos > this.graphHeight + 1 ) && ( yPos < this.graphHeight + graphYOffset ) ) {
         this.positionMarker.setVisible( true );
