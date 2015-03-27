@@ -189,7 +189,8 @@ define( function( require ) {
       selectedLineWidth: 1,
       selectedStroke: 'white',
       deselectedLineWidth: 0,
-      deselectedContentOpacity: 1
+      deselectedContentOpacity: 1,
+      yTouchExpansion: 0
     } );
 
 
