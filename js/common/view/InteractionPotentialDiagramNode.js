@@ -272,7 +272,8 @@ define( function( require ) {
       if ( this.positionMarkerEnabled && (xPos > 0) && (xPos < this.graphWidth) &&
            (yPos > 0) && (yPos < this.graphHeight) ) {
         this.positionMarker.setVisible( true );
-        this.positionMarker.setTranslation( xPos, yPos );
+        var newYPos = yPos > this.graphHeight ? this.graphHeight - 5 : yPos;
+        this.positionMarker.setTranslation( xPos, newYPos );
       }
       else {
         this.positionMarker.setVisible( false );
@@ -282,7 +283,7 @@ define( function( require ) {
       if ( this.positionMarkerEnabled && (xPos > 0) && (xPos < this.graphWidth) &&
                                                                                 (yPos > 0) && (yPos > this.graphHeight) && ( yPos < this.graphHeight + graphYOffset ) ) {
         this.positionMarker.setVisible( true );
-        this.positionMarker.setTranslation( xPos, this.graphHeight - 10 );
+        this.positionMarker.setTranslation( xPos, this.graphHeight - 5 );
       }
     },
 
