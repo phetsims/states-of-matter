@@ -1,7 +1,6 @@
 // Copyright 2002-2014, University of Colorado Boulder
 /**
- * This is the model for two atoms interacting with a Lennard-Jones
- * interaction potential.
+ * This is the model for two atoms interacting with a Lennard-Jones interaction potential.
  *
  * @author John Blanco
  * @author Siddhartha Chinthapally (Actual Concepts)
@@ -29,10 +28,8 @@ define( function( require ) {
   var CALCULATIONS_PER_TICK = 8;
   var THRESHOLD_VELOCITY = 100;  // Used to distinguish small oscillations from real movement.
   var VIBRATION_DURATION = 1200;  // In milliseconds.
-  var VIBRATION_COUNTER_RESET_VALUE = VIBRATION_DURATION;
   var BONDED_OSCILLATION_PROPORTION = 0.06; // Proportion of atom radius.
   var MAX_APPROXIMATION_ITERATIONS = 100;
-
 
   /**
    * This is the model for two atoms interacting with a Lennard-Jones interaction potential.
@@ -510,15 +507,15 @@ define( function( require ) {
       },
 
       startFixedAtomVibration: function() {
-        this.vibrationCounter = VIBRATION_COUNTER_RESET_VALUE;
+        this.vibrationCounter = VIBRATION_DURATION;
       },
 
       stepFixedAtomVibration: function() {
         if ( this.vibrationCounter > 0 ) {
           var vibrationScaleFactor = 1;
-          if ( this.vibrationCounter < VIBRATION_COUNTER_RESET_VALUE / 4 ) {
+          if ( this.vibrationCounter < VIBRATION_DURATION / 4 ) {
             // In the last part of the vibration, starting to wind it down.
-            vibrationScaleFactor = this.vibrationCounter / ( VIBRATION_COUNTER_RESET_VALUE / 4 );
+            vibrationScaleFactor = this.vibrationCounter / ( VIBRATION_DURATION / 4 );
           }
           if ( this.fixedAtom.getX() !== 0 ) {
             // Go back to the original position every other time.
