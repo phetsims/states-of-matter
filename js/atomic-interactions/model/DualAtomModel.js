@@ -46,7 +46,7 @@ define( function( require ) {
     this.rand = new Random();
     this.sigmaTable = new SigmaTable();
     this.atomFactory = new AtomFactory();
-    this.isHandNodeVisible=true;// indicate moving hand node visible or not
+    this.isHandNodeVisible = true; // indicate moving hand node visible or not
     this.ljPotentialCalculator = new LjPotentialCalculator( StatesOfMatterConstants.MIN_SIGMA,
       StatesOfMatterConstants.MIN_EPSILON ); // Initial values arbitrary, will be set during reset.
     PropertySet.call( this, {
@@ -55,11 +55,12 @@ define( function( require ) {
         moleculeType: 'NEON_NEON',
         isPlaying: true,
         speed: 'normal',
-        atomDiameter: 150,// atom diameter
+        atomDiameter: 150,
         forces: 'hideForces',
         forceControlPanelExpand: false
       }
     );
+
     // Put the model into its initial state.
     this.reset();
   }
@@ -84,6 +85,10 @@ define( function( require ) {
       getMovableAtomType: function() {
         return this.movableAtom.getType();
       },
+      getMotionPaused: function() {
+        return this.motionPaused;
+      },
+
       /**
        *
        * @param {String} atomType indicates type of molecule
@@ -123,6 +128,7 @@ define( function( require ) {
           this.resetMovableAtomPos();
         }
       },
+
       /**
        *
        * @param {String} atomType indicates type of molecule
@@ -176,6 +182,7 @@ define( function( require ) {
           'Error: Unsupported atom type.' );
 
       },
+
       /**
        *
        * @param {String} atomType indicates type of molecule
@@ -265,32 +272,6 @@ define( function( require ) {
         return this.bondingState;
       },
 
-      reset: function() {
-        PropertySet.prototype.reset.call( this );
-        if ( this.fixedAtom === null || this.fixedAtom.getType() !== DEFAULT_ATOM_TYPE ||
-             this.movableAtom === null || this.movableAtom.getType() !== DEFAULT_ATOM_TYPE ) {
-          this.setBothAtomTypes( DEFAULT_ATOM_TYPE );
-        }
-        else {
-          this.resetMovableAtomPos();
-        }
-        // Make sure we are not paused.
-        this.motionPaused = false;
-
-      },
-
-      /**
-       * Put the movable atom back to the location where the force is
-       * minimized, and reset the velocity and acceleration to 0.
-       */
-      resetMovableAtomPos: function() {
-        if ( this.movableAtom !== null ) {
-          this.movableAtom.setPosition( this.ljPotentialCalculator.calculateMinimumForceDistance(), 0 );
-          this.movableAtom.setVx( 0 );
-          this.movableAtom.setAx( 0 );
-        }
-      },
-
       /**
        *
        * @param {Boolean} paused  is to set particle motion
@@ -311,10 +292,6 @@ define( function( require ) {
         }
       },
 
-      getMotionPaused: function() {
-        return this.motionPaused;
-      },
-
       /**
        * Release the bond that exists between the two atoms (if there is one).
        */
@@ -331,6 +308,31 @@ define( function( require ) {
         this.shadowMovableAtom.setPosition( movableAtom.getX(), movableAtom.getY() );
         this.shadowMovableAtom.velocity = movableAtom.getVelocity();
         this.shadowMovableAtom.accel = movableAtom.getAccel();
+      },
+
+      reset: function() {
+        PropertySet.prototype.reset.call( this );
+        if ( this.fixedAtom === null || this.fixedAtom.getType() !== DEFAULT_ATOM_TYPE ||
+             this.movableAtom === null || this.movableAtom.getType() !== DEFAULT_ATOM_TYPE ) {
+          this.setBothAtomTypes( DEFAULT_ATOM_TYPE );
+        }
+        else {
+          this.resetMovableAtomPos();
+        }
+        // Make sure we are not paused.
+        this.motionPaused = false;
+      },
+
+      /**
+       * Put the movable atom back to the location where the force is
+       * minimized, and reset the velocity and acceleration to 0.
+       */
+      resetMovableAtomPos: function() {
+        if ( this.movableAtom !== null ) {
+          this.movableAtom.setPosition( this.ljPotentialCalculator.calculateMinimumForceDistance(), 0 );
+          this.movableAtom.setVx( 0 );
+          this.movableAtom.setAx( 0 );
+        }
       },
 
       /**
