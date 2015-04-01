@@ -217,7 +217,7 @@ define( function( require ) {
     // default molecule is neon
     this.handleFixedParticleAdded( dualAtomModel.fixedAtom );
     this.handleMovableParticleAdded( dualAtomModel.movableAtom );
-    dualAtomModel.moleculeTypeProperty.link( function() {
+    dualAtomModel.atomPairProperty.link( function() {
       forceControlNode.top = atomicInteractionsControlPanel.bottom + inset / 2;
       forceControlNode.right = atomicInteractionsControlPanel.right;
       atomicInteractionsScreenView.handleFixedParticleRemoved( dualAtomModel.fixedAtom );

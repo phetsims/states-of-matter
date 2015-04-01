@@ -177,7 +177,7 @@ define( function( require ) {
       }
     } ) );
 
-    Property.multilink( [ dualAtomModel.moleculeTypeProperty, dualAtomModel.interactionStrengthProperty, dualAtomModel.atomDiameterProperty ],
+    Property.multilink( [ dualAtomModel.atomPairProperty, dualAtomModel.interactionStrengthProperty, dualAtomModel.atomDiameterProperty ],
       function( moleculeType, interactionStrength, atomDiameter ) {
 
         if ( moleculeType === AtomType.ADJUSTABLE ) {

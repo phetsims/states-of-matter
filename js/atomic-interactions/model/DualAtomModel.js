@@ -52,7 +52,7 @@ define( function( require ) {
     PropertySet.call( this, {
         interactionStrength: 0,
         motionPaused: false,
-        moleculeType: 'NEON_NEON',
+        atomPair: 'NEON_NEON',
         isPlaying: true,
         speed: 'normal',
         atomDiameter: 150,

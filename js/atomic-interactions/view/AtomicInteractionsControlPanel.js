@@ -147,19 +147,19 @@ define( function( require ) {
         } );
       };
       var particleRadius = 8;
-      var neonNeonRadio = new AquaRadioButton( dualAtomModel.moleculeTypeProperty, NEON_NEON,
+      var neonNeonRadio = new AquaRadioButton( dualAtomModel.atomPairProperty, NEON_NEON,
         createItem( neonAndNeon ), { radius: particleRadius } );
-      var argonArgonRadio = new AquaRadioButton( dualAtomModel.moleculeTypeProperty, ARGON_ARGON,
+      var argonArgonRadio = new AquaRadioButton( dualAtomModel.atomPairProperty, ARGON_ARGON,
         createItem( argonAndArgon ), { radius: particleRadius } );
-      var oxygenOxygenRadio = new AquaRadioButton( dualAtomModel.moleculeTypeProperty, OXYGEN_OXYGEN,
+      var oxygenOxygenRadio = new AquaRadioButton( dualAtomModel.atomPairProperty, OXYGEN_OXYGEN,
         createItem( oxygenAndOxygen ), { radius: particleRadius } );
-      var neonArgonRadio = new AquaRadioButton( dualAtomModel.moleculeTypeProperty, NEON_ARGON,
+      var neonArgonRadio = new AquaRadioButton( dualAtomModel.atomPairProperty, NEON_ARGON,
         createItem( neonAndArgon ), { radius: particleRadius } );
-      var neonOxygenRadio = new AquaRadioButton( dualAtomModel.moleculeTypeProperty, NEON_OXYGEN,
+      var neonOxygenRadio = new AquaRadioButton( dualAtomModel.atomPairProperty, NEON_OXYGEN,
         createItem( neonAndOxygen ), { radius: particleRadius } );
-      var argonOxygenRadio = new AquaRadioButton( dualAtomModel.moleculeTypeProperty, ARGON_OXYGEN,
+      var argonOxygenRadio = new AquaRadioButton( dualAtomModel.atomPairProperty, ARGON_OXYGEN,
         createItem( argonAndOxygen ), { radius: particleRadius } );
-      var adjustableAttractionRadio = new AquaRadioButton( dualAtomModel.moleculeTypeProperty, ADJUSTABLE,
+      var adjustableAttractionRadio = new AquaRadioButton( dualAtomModel.atomPairProperty, ADJUSTABLE,
         new HBox( { children: [ customAttraction ] } ), { radius: particleRadius } );
       var createTitle = function( itemSpec ) {
         var strutWidth1 = particleRadius;
@@ -249,7 +249,7 @@ define( function( require ) {
         { value: ARGON_ARGON, node: createItem( argon ) },
         { value: ADJUSTABLE, node: createItem( adjustableAttraction ) }
       ];
-      radioButtonGroup = new RadioButtonGroup( dualAtomModel.moleculeTypeProperty, radioButtonContent, {
+      radioButtonGroup = new RadioButtonGroup( dualAtomModel.atomPairProperty, radioButtonContent, {
         orientation: 'vertical',
         cornerRadius: 5,
         baseColor: 'black',
@@ -373,7 +373,7 @@ define( function( require ) {
     interactionStrengthSlider.centerX = radioButtonPanel.centerX;
 
     // Update the text when the value or units changes.
-    dualAtomModel.moleculeTypeProperty.link(
+    dualAtomModel.atomPairProperty.link(
       function( moleculeType ) {
         switch( moleculeType ) {
           case NEON_NEON:
