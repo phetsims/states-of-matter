@@ -180,7 +180,6 @@ define( function( require ) {
                           ( atomType === AtomType.OXYGEN ) ||
                           ( atomType === AtomType.ADJUSTABLE ),
           'Error: Unsupported atom type.' );
-
       },
 
       /**

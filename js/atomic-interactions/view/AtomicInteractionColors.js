@@ -1,7 +1,9 @@
 //  Copyright 2002-2014, University of Colorado Boulder
 
 /**
- * Location for all colors
+ * An object that contains the colors used for various major components of the Atomic Interactions simulation.  This
+ * is used to support different color schemes, such as a default that looks good on a laptop or tablet, and a
+ * "projector mode" that looks good when projected on a large screen.
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  * @author Siddhartha Chinthapally (Actual Concepts)
@@ -23,7 +25,6 @@ define( function( require ) {
     potentialEnergyLine: {
       default: new Color( 233, 233, 41 ),
       projector: new Color( 255, 0, 0 )
-
     },
     controlPanelText: {
       default: new Color( 230, 230, 230 ),
