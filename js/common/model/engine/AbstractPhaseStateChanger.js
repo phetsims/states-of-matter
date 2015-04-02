@@ -30,6 +30,7 @@ define( function( require ) {
   return inherit( Object, AbstractPhaseStateChanger, {
 
       /**
+       * @public
        * Does a linear search for a location that is suitably far away enough
        * from all other molecules.  This is generally used when the attempt to
        * place a molecule at a random location fails.  This is expensive in

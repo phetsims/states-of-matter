@@ -50,6 +50,7 @@ define( function( require ) {
       return this.temperature;
     },
     /**
+     * @public
      * Update the motion of the particles and the forces that are acting upon
      * them.  This is the heart of this class, and it is here that the actual
      * Verlet algorithm is contained.

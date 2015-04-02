@@ -34,10 +34,12 @@ define( function( require ) {
   }
 
   return inherit( Object, AndersenThermostat, {
-
+    /**
+     * @public
+     */
     adjustTemperature: function() {
       var gammaX = 0.9999;
-      var gammaY = gammaX;
+      var gammaY = 0.9999;
       var temperature = this.targetTemperature;
       if ( temperature <= this.minModelTemperature ) {
         // Use a values that will cause the molecules to stop

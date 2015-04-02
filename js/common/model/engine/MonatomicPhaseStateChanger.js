@@ -33,7 +33,7 @@ define( function( require ) {
   return inherit( AbstractPhaseStateChanger, MonatomicPhaseStateChanger, {
 
     /**
-     *
+     * @public
      * @param {Number} phaseID - state(solid/liquid/gas) of Molecule
      */
     setPhase: function( phaseID ) {
@@ -65,6 +65,7 @@ define( function( require ) {
     },
 
     /**
+     * @private
      * Set the phase to the solid state.
      */
     setPhaseSolid: function() {
@@ -108,6 +109,7 @@ define( function( require ) {
     },
 
     /**
+     * @private
      * Set the phase to the liquid state.
      */
     setPhaseLiquid: function() {
@@ -170,6 +172,7 @@ define( function( require ) {
     },
 
     /**
+     * @private
      * Set the phase to the gaseous state.
      */
     setPhaseGas: function() {

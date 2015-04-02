@@ -29,7 +29,7 @@ define( function( require ) {
 
   return inherit( Object, WaterAtomPositionUpdater, {
     /**
-     *
+     * @public
      * @param {MoleculeForceAndMotionDataSet} moleculeDataSet
      */
     updateAtomPositions: function( moleculeDataSet ) {

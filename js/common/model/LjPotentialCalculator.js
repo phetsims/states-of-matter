@@ -39,19 +39,22 @@ define( function( require ) {
     },
 
     /**
-     *
+     * @public
      * @param {Number} sigma
      */
     setSigma: function( sigma ) {
       this.sigma = sigma;
     },
-
+    /**
+     * @public
+     * @returns {Number|*}
+     */
     getEpsilon: function() {
       return this.epsilon;
     },
 
     /**
-     *
+     * @public
      * @param {Number} epsilon
      */
     setEpsilon: function( epsilon ) {
@@ -63,7 +66,7 @@ define( function( require ) {
 //-----------------------------------------------------------------------------
     /**
      * Calculate the Lennard-Jones potential for the specified distance.
-     *
+     * @public
      * @param distance - Distance between interacting molecules in picometers.
      * @returns {Number} Strength of the potential in newton-meters (N*m).
      */
@@ -74,7 +77,7 @@ define( function( require ) {
     /**
      * Calculate only the repulsive component of the Lennard-Jones force for
      * the specified distance.
-     *
+     * @public
      * @param distance - Distance between interacting molecules in picometers.
      * @return {Number} Force in newtons.
      */
@@ -84,7 +87,7 @@ define( function( require ) {
     /**
      * Calculate only the attractive component of the Lennard-Jones force for
      * the specified distance.
-     *
+     * @public
      * @param distance - Distance between interacting molecules in picometers.
      * @return {Number} - Force in newtons.
      */
@@ -95,7 +98,7 @@ define( function( require ) {
      * Calculate the distance at which the force is 0 because the attractive
      * and repulsive forces are balanced.  Note that this is where the
      * potential energy is at a minimum.
-     *
+     * @public
      * @return {Number} - Distance where force is 0 (or very close) in picometers.
      */
     calculateMinimumForceDistance: function() {
@@ -107,8 +110,9 @@ define( function( require ) {
      * Calculate the potential energy of a particle at the given distance.
      * This calculation is performed by calculating the potential at the
      * given point and subtracting the potential at the minimum point.
-     *
-     * @return
+     * @public
+     * @param distance
+     * @returns {number}
      */
     calculatePotentialEnergy: function( distance ) {
       return this.calculateLjPotential( distance ) - this.calculateLjPotential( this.calculateMinimumForceDistance() );

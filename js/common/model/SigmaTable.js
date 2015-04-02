@@ -25,6 +25,7 @@ define( function( require ) {
 
   return inherit( Object, SigmaTable, {
     /**
+     * @public
      * Get the value of sigma, in picometers, for the atom types specified.
      */
     getSigma: function( atomType1, atomType2 ) {

@@ -26,25 +26,25 @@ define( function( require ) {
 
   /**
    *
-   * @param { MultiPleParticleModel } multiPleParticleModel of the simulation
+   * @param { MultipleParticleModel } multipleParticleModel  - model of the simulation
    * }
    * @constructor
    */
-  function WaterPhaseStateChanger( multiPleParticleModel ) {
+  function WaterPhaseStateChanger( multipleParticleModel ) {
 
-    this.multiPleParticleModel = multiPleParticleModel;
+    this.multiPleParticleModel = multipleParticleModel;
     this.rand = new Random();
     //private
     this.positionUpdater = new WaterAtomPositionUpdater();
-    AbstractPhaseStateChanger.call( this, multiPleParticleModel );
+    AbstractPhaseStateChanger.call( this, multipleParticleModel );
     // Make sure this is not being used on an inappropriate data set.
-    assert && assert( multiPleParticleModel.getMoleculeDataSetRef().getAtomsPerMolecule() === 3 );
+    assert && assert( multipleParticleModel.getMoleculeDataSetRef().getAtomsPerMolecule() === 3 );
   }
 
   return inherit( AbstractPhaseStateChanger, WaterPhaseStateChanger, {
 
     /**
-     *
+     * @public
      * @param {Number} phaseID - state(solid/liquid/gas) of Molecule
      */
     setPhase: function( phaseID ) {
@@ -71,10 +71,9 @@ define( function( require ) {
       }
     },
     /**
+     * @private
      * Set the phase to the solid state.
      */
-
-    //private
     setPhaseSolid: function() {
       // Set the multiPleParticleModel temperature for this phase.
       this.multiPleParticleModel.setTemperature( StatesOfMatterConstants.SOLID_TEMPERATURE );
@@ -118,8 +117,11 @@ define( function( require ) {
       }
     },
 
-    // Set the phase to the liquid state.
 
+    /**
+     * @private
+     * Set the phase to the liquid state.
+     */
     setPhaseLiquid: function() {
       // Set the model temperature for this phase.
       this.multiPleParticleModel.setTemperature( StatesOfMatterConstants.LIQUID_TEMPERATURE );
@@ -177,7 +179,10 @@ define( function( require ) {
       }
     },
 
-    // Set the phase to the gaseous state.
+    /**
+     * @private
+     * Set the phase to the gaseous state.
+     */
     setPhaseGas: function() {
       // Set the multiPleParticleModel temperature for this phase.
       this.multiPleParticleModel.setTemperature( StatesOfMatterConstants.GAS_TEMPERATURE );

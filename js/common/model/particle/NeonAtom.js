@@ -31,7 +31,10 @@ define( function( require ) {
   }
 
   return inherit( StatesOfMatterAtom, NeonAtom, {
-
+      /**
+       * @public
+       * @returns {exports.NEON|*}
+       */
       getType: function() {
         return ATOM_TYPE;
       }

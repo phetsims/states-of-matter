@@ -34,7 +34,7 @@ define( function( require ) {
    */
   function DiatomicPhaseStateChanger( multipleParticleModel ) {
 
-    //private
+    // @private
     this.positionUpdater = new DiatomicAtomPositionUpdater();
     AbstractPhaseStateChanger.call( this, multipleParticleModel );
     this.multipleParticleModel = multipleParticleModel;
@@ -46,7 +46,7 @@ define( function( require ) {
   return inherit( AbstractPhaseStateChanger, DiatomicPhaseStateChanger, {
 
     /**
-     *
+     * @public
      * @param {Number} phaseID - state(solid/liquid/gas) of Molecule
      */
     setPhase: function( phaseID ) {
@@ -79,8 +79,10 @@ define( function( require ) {
       }
     },
 
-    // Set the phase to the solid state.
-
+    /**
+     * @private
+     * Set the phase to the solid state.
+     */
     setPhaseSolid: function() {
       // Set the model temperature for this phase.
       this.multipleParticleModel.setTemperature( StatesOfMatterConstants.SOLID_TEMPERATURE );
@@ -120,9 +122,10 @@ define( function( require ) {
         }
       }
     },
-
-
-    //   Set the phase to the liquid state.
+    /**
+     * @private
+     * Set the phase to the liquid state.
+     */
     setPhaseLiquid: function() {
       // Set the model temperature for this phase.
       this.multipleParticleModel.setTemperature( StatesOfMatterConstants.LIQUID_TEMPERATURE );
@@ -181,7 +184,10 @@ define( function( require ) {
       }
     },
 
-    // Set the phase to the gaseous state.
+    /**
+     * @private
+     * Set the phase to the gaseous state.
+     */
     setPhaseGas: function() {
       // Set the model temperature for this phase.
       this.multipleParticleModel.setTemperature( StatesOfMatterConstants.GAS_TEMPERATURE );

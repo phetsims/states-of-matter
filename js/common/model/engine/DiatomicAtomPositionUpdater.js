@@ -23,7 +23,7 @@ define( function( require ) {
   return inherit( Object, DiatomicAtomPositionUpdater, {
 
     /**
-     *
+     * @public
      * @param {MoleculeForceAndMotionDataSet} moleculeDataSet
      */
     updateAtomPositions: function( moleculeDataSet ) {

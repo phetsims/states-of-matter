@@ -69,75 +69,131 @@ define( function( require ) {
   }
 
   return inherit( Object, MoleculeForceAndMotionDataSet, {
-
+    /**
+     * @public
+     * @returns {number}
+     */
     getNumberOfMolecules: function() {
       return this.numberOfAtoms / this.atomsPerMolecule;
     },
-
+    /**
+     * @public
+     * @returns {number|*}
+     */
     getMoleculeRotationalInertia: function() {
       return this.moleculeRotationalInertia;
     },
+    /**
+     * @public
+     * @returns {number}
+     */
     getMoleculeMass: function() {
       return this.moleculeMass;
     },
     /**
      * Returns a value indicating how many more molecules can be added.
+     * @public
      */
     getNumberOfRemainingSlots: function() {
       return ( ( StatesOfMatterConstants.MAX_NUM_ATOMS / this.atomsPerMolecule ) -
                ( this.numberOfAtoms / this.atomsPerMolecule ) );
     },
 
-    //
+    /**
+     * @public
+     * @returns {Number|*}
+     */
     getAtomsPerMolecule: function() {
       return this.atomsPerMolecule;
     },
+    /**
+     * @public
+     * @returns {Array}
+     */
     getAtomPositions: function() {
       return this.atomPositions;
     },
-
+    /**
+     * @public
+     * @returns {Number|*}
+     */
     getNumberOfAtoms: function() {
       return this.numberOfAtoms;
     },
-
+    /**
+     * @public
+     * @returns {*}
+     */
     getNumberOfSafeMolecules: function() {
       return this.numberOfSafeMolecules;
     },
-
+    /**
+     * @public
+     * @returns {Array}
+     */
     getMoleculeCenterOfMassPositions: function() {
       return this.moleculeCenterOfMassPositions;
     },
-
+    /**
+     * @public
+     * @returns {IsokineticThermostat.moleculeVelocities|*}
+     */
     getMoleculeVelocities: function() {
       return this.moleculeVelocities;
     },
-
+    /**
+     * @public
+     * @returns {Array}
+     */
     getMoleculeForces: function() {
       return this.moleculeForces;
     },
-
+    /**
+     * @public
+     * @returns {Array}
+     */
     getNextMoleculeForces: function() {
       return this.nextMoleculeForces;
     },
-
+    /**
+     * @public
+     * @returns {*}
+     */
     getMoleculeRotationAngles: function() {
       return this.moleculeRotationAngles;
     },
+    /**
+     * @public
+     * @param rotationAngles
+     */
     setMoleculeRotationAngles: function( rotationAngles ) {
       this.moleculeRotationAngles = rotationAngles;
     },
-
+    /**
+     * @public
+     * @returns {IsokineticThermostat.moleculeRotationRates|*}
+     */
     getMoleculeRotationRates: function() {
       return this.moleculeRotationRates;
     },
-
+    /**
+     * @public
+     * @returns {Array}
+     */
     getMoleculeTorques: function() {
       return this.moleculeTorques;
     },
-
+    /**
+     * @public
+     * @returns {Array}
+     */
     getNextMoleculeTorques: function() {
       return this.nextMoleculeTorques;
     },
+    /**
+     * @public
+     * @param numSafeMolecules
+     */
     setNumberOfSafeMolecules: function( numSafeMolecules ) {
       this.numberOfSafeMolecules = numSafeMolecules;
     },
@@ -145,7 +201,7 @@ define( function( require ) {
     /**
      * Calculate the temperature of the system based on the total kinetic
      * energy of the molecules.
-     *
+     * @public
      * @return {Number} temperature in model units (as opposed to Kelvin, Celsius, or whatever)
      */
     calculateTemperatureFromKineticEnergy: function() {
@@ -182,7 +238,7 @@ define( function( require ) {
      * meaning that it can't interact with other molecules, until an external
      * entity (generally the motion-and-force calculator) changes that
      * designation.
-     *
+     * @public
      * @param {Array<Vector2>} atomPositions
      * @param {Vector2} moleculeCenterOfMassPosition
      * @param {Vector2} moleculeVelocity

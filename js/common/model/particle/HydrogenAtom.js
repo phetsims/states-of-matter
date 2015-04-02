@@ -30,7 +30,10 @@ define( function( require ) {
   }
 
   return inherit( StatesOfMatterAtom, HydrogenAtom, {
-
+      /**
+       * @public
+       * @returns {exports.HYDROGEN|*}
+       */
       getType: function() {
         return ATOM_TYPE;
       }

@@ -168,6 +168,7 @@ define( function( require ) {
   return inherit( PropertySet, MultipleParticleModel, {
 
     /**
+     * @public
      * @param {Number} newTemperature
      */
     setTemperature: function( newTemperature ) {
@@ -191,6 +192,7 @@ define( function( require ) {
     },
 
     /**
+     * @public
      * Get the current temperature in degrees Kelvin.
      */
     getTemperatureInKelvin: function() {
@@ -201,7 +203,7 @@ define( function( require ) {
     /**
      * Get the pressure value which is being calculated by the model and is
      * not adjusted to represent any "real" units (such as atmospheres).
-     *
+     * @public
      * @return
      */
     getModelPressure: function() {
@@ -210,7 +212,7 @@ define( function( require ) {
 
     /**
      * Set the molecule type to be simulated.
-     *
+     * @private
      * @param {Number} moleculeID
      */
     setMoleculeType: function( moleculeID ) {
@@ -276,7 +278,9 @@ define( function( require ) {
       // locations and energy levels.
       this.initializeParticles( phase );
     },
-
+    /**
+     *  @private
+     */
     updatePressure: function() {
       this.pressure = this.getPressureInAtmospheres();
     },
@@ -287,7 +291,7 @@ define( function( require ) {
      * rather than the actual height because the model limits the rate at
      * which the height can changed.  The model will gradually move towards
      * the target height.
-     *
+     * @public
      * @param {Number} desiredContainerHeight
      */
     setTargetParticleContainerHeight: function( desiredContainerHeight ) {
@@ -296,6 +300,7 @@ define( function( require ) {
     },
 
     /**
+     * @public
      * Get the sigma value, which is one of the two parameters that describes the Lennard-Jones potential.
      */
     getSigma: function() {
@@ -359,7 +364,9 @@ define( function( require ) {
       return epsilon;
     },
 
-
+    /**
+     * @public
+     */
     reset: function() {
       this.initializeModelParameters();
       this.setMoleculeType( DEFAULT_MOLECULE );
@@ -368,6 +375,7 @@ define( function( require ) {
 
     /**
      * Set the phase of the particles in the simulation.
+     * @public
      * @param {Number} state
      */
     setPhase: function( state ) {
@@ -396,7 +404,7 @@ define( function( require ) {
 
     /**
      * Sets the amount of heating or cooling that the system is undergoing.
-     *
+     * @public
      * @param {Number} normalizedHeatingCoolingAmount Normalized amount of heating or cooling
      *                 that the system is undergoing, ranging from -1 to +1.
      */
@@ -406,6 +414,7 @@ define( function( require ) {
     },
 
     /**
+     * @public
      * Inject a new molecule of the current type into the model. This uses
      * the current temperature to assign an initial velocity.
      */
@@ -496,7 +505,9 @@ define( function( require ) {
       // Recalculate the minimum allowable container size, since it depends on the number of particles.
       this.calculateMinAllowableContainerHeight();
     },
-
+    /**
+     *  @private
+     */
     removeAllParticles: function() {
       this.particles.clear();
       // Get rid of the normalized particles.
@@ -504,6 +515,7 @@ define( function( require ) {
     },
 
     /**
+     * @private
      * Calculate the minimum allowable container height based on the current
      * number of particles.
      */
@@ -515,7 +527,7 @@ define( function( require ) {
     /**
      * Initialize the particles by calling the appropriate initialization
      * routine, which will set their positions, velocities, etc.
-     *
+     * @public
      * @param {Number} phase
      */
     initializeParticles: function( phase ) {
@@ -544,7 +556,9 @@ define( function( require ) {
       this.updatePressure();
       this.calculateMinAllowableContainerHeight();
     },
-
+    /**
+     * @private
+     */
     initializeModelParameters: function() {
       // Initialize the system parameters
       this.gravitationalAcceleration = INITIAL_GRAVITATIONAL_ACCEL;
@@ -555,6 +569,7 @@ define( function( require ) {
     },
 
     /**
+     * @private
      * Reset both the normalized and non-normalized sizes of the container.
      * Note that the particle diameter must be valid before this will work properly.
      */
@@ -567,6 +582,7 @@ define( function( require ) {
     },
 
     /**
+     * @public
      * Step the model.  There is no time step used, as a fixed internal time step is assumed.
      * TODO: use dt instead of fixed timestep
      */
@@ -808,27 +824,59 @@ define( function( require ) {
       // Initialize the particle positions according the to requested phase.
       this.setPhase( phase );
     },
+    /***
+     * @public
+     * @returns {number|*}
+     */
     getNormalizedContainerWidth: function() {
       return this.normalizedContainerWidth;
     },
+    /**
+     * @public
+     * @returns {null|*}
+     */
     getMoleculeDataSetRef: function() {
       return this.moleculeDataSet;
     },
+    /**
+     * @public
+     * @returns {Array}
+     */
     getMoleculeCenterOfMassPositions: function() {
       return this.moleculeCenterOfMassPositions;
     },
+    /**
+     * @public
+     * @returns {number|*}
+     */
     getNormalizedContainerHeight: function() {
       return this.normalizedContainerHeight;
     },
+    /**
+     * @public
+     * @returns {number|*}
+     */
     getTemperatureSetPoint: function() {
       return this.temperatureSetPoint;
     },
+    /**
+     * @public
+     * @returns {number|*}
+     */
     getGravitationalAcceleration: function() {
       return this.gravitationalAcceleration;
     },
+    /**
+     * @public
+     * @returns {Number|*}
+     */
     getMoleculeType: function() {
       return this.currentMolecule;
     },
+    /**
+     * @public
+     * @param epsilon
+     */
     setEpsilon: function( epsilon ) {
       if ( this.currentMolecule === StatesOfMatterConstants.USER_DEFINED_MOLECULE ) {
         if ( epsilon < MIN_ADJUSTABLE_EPSILON ) {
@@ -849,7 +897,7 @@ define( function( require ) {
     /**
      * Initialize the various model components to handle a simulation in which
      * all the molecules are single atoms.
-     *
+     * @private
      * @param {Number} moleculeID
      * @param {Number} phase
      */
@@ -928,6 +976,7 @@ define( function( require ) {
     },
 
     /**
+     * @private
      * Set the positions of the non-normalized particles based on the positions
      * of the normalized ones.
      */
@@ -1019,6 +1068,7 @@ define( function( require ) {
     },
 
     /**
+     * @public
      * Take the internal pressure value and convert it to atmospheres.  This
      * is dependent on the type of molecule selected.  The values and ranges
      * used in this method were derived from information provided by Paul
@@ -1064,7 +1114,7 @@ define( function( require ) {
      * Determine whether there are particles close to the top of the
      * container.  This can be important for determining whether movement
      * of the top is causing temperature changes.
-     *
+     * @public
      * @return boolean - true if particles are close, false if not
      */
     particlesNearTop: function() {
@@ -1084,7 +1134,7 @@ define( function( require ) {
 
     /**
      * Return a phase value based on the current temperature.
-     *
+     * @private
      * @return
      */
     mapTemperatureToPhase: function() {
@@ -1110,7 +1160,7 @@ define( function( require ) {
      * Convert a value for epsilon that is in the real range of values into a
      * scaled value that is suitable for use with the motion and force
      * calculators.
-     *
+     * @private
      * @param {Number} epsilon
      */
     convertEpsilonToScaledEpsilon: function( epsilon ) {
@@ -1120,10 +1170,18 @@ define( function( require ) {
       // roughly matched that of the existing monatomic molecules.
       return epsilon / ( StatesOfMatterConstants.MAX_EPSILON / 2 );
     },
-
+    /**
+     * @private
+     * @param {Number}scaledEpsilon
+     * @returns {number}
+     */
     convertScaledEpsilonToEpsilon: function( scaledEpsilon ) {
       return scaledEpsilon * StatesOfMatterConstants.MAX_EPSILON / 2;
     },
+    /**
+     * @public
+     * @returns {boolean|*}
+     */
     getContainerExploded: function() {
       return this.isExploded;
     },
@@ -1131,11 +1189,9 @@ define( function( require ) {
     /**
      * This method is used for an external entity to notify the model that it
      * should explode.
-     *
-     * @param isExploded
+     *  @private
+     * @param {Boolean} isExploded
      */
-
-    //private
     setContainerExploded: function( isExploded ) {
       if ( this.isExploded !== isExploded ) {
         this.isExploded = isExploded;
@@ -1146,6 +1202,7 @@ define( function( require ) {
       }
     },
     /**
+     * @public
      * Return the lid to the container.  It only makes sense to call this after
      * the container has exploded, otherwise it has no effect.
      */
@@ -1190,7 +1247,10 @@ define( function( require ) {
         this.phaseStateChanger.setPhase( AbstractPhaseStateChanger.PHASE_GAS );
       }
     },
-
+    /**
+     * @public
+     * @returns {exports.PARTICLE_CONTAINER_INITIAL_HEIGHT|*}
+     */
     getParticleContainerHeight: function() {
       return this.particleContainerHeight;
     },

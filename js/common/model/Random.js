@@ -17,7 +17,10 @@ define( function( require ) {
   }
 
   return inherit( Object, Random, {
-
+    /**
+     * @public
+     * @returns {*}
+     */
     nextGaussian: function() {
       if ( this.haveNextNextGaussian ) {
         this.haveNextNextGaussian = false;

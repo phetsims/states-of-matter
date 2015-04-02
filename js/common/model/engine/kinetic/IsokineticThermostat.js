@@ -31,7 +31,9 @@ define( function( require ) {
   }
 
   return inherit( Object, IsokineticThermostat, {
-
+    /**
+     * @public
+     */
     adjustTemperature: function() {
       // Calculate the internal temperature of the system from the kinetic energy.
       var measuredTemperature;

@@ -23,7 +23,7 @@ define( function( require ) {
 
   return inherit( Object, InteractionStrengthTable, {}, {
     /**
-     *
+     * @public
      * @param {String} atomType1
      * @param {String} atomType2
      * @returns {*}

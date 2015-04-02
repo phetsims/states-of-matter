@@ -30,11 +30,15 @@ define( function( require ) {
   }
 
   return inherit( StatesOfMatterAtom, ConfigurableStatesOfMatterAtom, {
+      /**
+       * @public
+       * @returns {exports.ADJUSTABLE|*}
+       */
       getType: function() {
         return AtomType.ADJUSTABLE;
       },
       /**
-       *
+       * @public
        * @param {Number} radius in picometers
        */
       setRadius: function( radius ) {

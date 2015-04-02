@@ -33,13 +33,22 @@ define( function( require ) {
 
   return inherit( AbstractVerletAlgorithm, DiatomicVerletAlgorithm, {
 
+    /**
+     * @public
+     * @returns {pressure|*|number|PropertySet.pressure}
+     */
     getPressure: function() {
       return this.pressure;
     },
+    /**
+     * @public
+     * @returns {number|*|AbstractVerletAlgorithm.temperature}
+     */
     getTemperature: function() {
       return this.temperature;
     },
     /**
+     * @public
      * Update the motion of the particles and the forces that are acting upon
      * them.  This is the heart of this class, and it is here that the actual
      * Verlet algorithm is contained.

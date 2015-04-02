@@ -34,6 +34,7 @@ define( function( require ) {
   return inherit( Object, StatesOfMatterAtom, {
 
     /**
+     * @public
      * @param {Number} x - atom x position in picometers
      * @param {Number} y - atom y position in picometers
      * @constructor
@@ -42,7 +43,11 @@ define( function( require ) {
       this.positionProperty.value.setXY( x, y );
       this.positionProperty._notifyObservers();
     },
-
+    /**
+     * @public
+     * @param other
+     * @returns {boolean}
+     */
     equals: function( other ) {
       if ( this === other ) {
         return true;
@@ -66,11 +71,15 @@ define( function( require ) {
 
       return true;
     },
+    /**
+     * @public
+     * @returns {Vector2.y|*}
+     */
     getVy: function() {
       return this.velocity.y;
     },
     /**
-     *
+     * @public
      * @param {Number} vy - atom velocity in y-direction
      */
     setVy: function( vy ) {
@@ -98,52 +107,74 @@ define( function( require ) {
     },
 
     /**
-     *
+     * @public
      * @param {Number} ax - atom acceleration in x-direction
      */
     setAx: function( ax ) {
       this.accel.setX( ax );
     },
     /**
-     *
+     * @public
      * @param {Number} ay - atom acceleration in y-direction
      */
     setAy: function( ay ) {
       this.accel.setY( ay );
 
     },
+    /**
+     * @public
+     * @returns {*}
+     */
     getX: function() {
       return this.positionProperty.value.x;
     },
-
+    /**
+     * @public
+     * @returns {.positionProperty.value.y|*}
+     */
     getY: function() {
       return this.positionProperty.value.y;
     },
-
+    /**
+     * @public
+     * @returns {Object.mass|*}
+     */
     getMass: function() {
       return this.mass;
     },
-
+    /**
+     * @public
+     * @returns {Number|*}
+     */
     getRadius: function() {
       return this.radius;
     },
     /**
-     *
+     * @public
      * @param {Number} radius - radius of the atom
      */
     setRadius: function( radius ) {
       this.radius = radius;
     },
 
-
+    /**
+     * @public
+     * @returns {*}
+     */
     getPositionReference: function() {
       return this.positionProperty.value;
     },
-
+    /**
+     * @public
+     * @returns {Vector2|*}
+     */
     getVelocity: function() {
       return this.velocity;
     },
-
+    /**
+     * @public
+     * @returns {Vector2|*}
+     */
     getAccel: function() {
       return this.accel;
     }

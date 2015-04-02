@@ -52,7 +52,7 @@ define( function( require ) {
      * Calculate the force exerted on a particle at the provided position by
      * the walls of the container.  The result is returned in the provided
      * vector.
-     *
+     * @public
      * @param {Vector2} position       - Current position of the particle.
      * @param {Number} containerWidth  - Width of the container where particles are held.
      * @param {Number} containerHeight - Height of the container where particles are held.
@@ -143,6 +143,7 @@ define( function( require ) {
     },
 
     /**
+     * @protected
      * Update the safety status of any molecules that may have previously been
      * designated as unsafe.  An "unsafe" molecule is one that was injected
      * into the container and was found to be so close to one or more of the
@@ -231,7 +232,7 @@ define( function( require ) {
       }
     },
 
-    setScaledEpsilon: function( scaledEpsilon ) {
+    setScaledEpsilon: function() {
       // In the base class this just issues a warning and has no effect.
       console.log( "Warning: Setting epsilon is not implemented for this class, request ignored." );
     },

@@ -41,18 +41,34 @@ define( function( require ) {
   }
 
   return inherit( Object, WaterMoleculeStructure, {
+    /**
+     *  @public
+     * @returns {*}
+     */
     getInstance: function() {
       if ( instance === null ) {
         instance = new WaterMoleculeStructure();
       }
       return instance;
     },
+    /**
+     * @public
+     * @returns {Array}
+     */
     getStructureArrayX: function() {
       return this.moleculeStructureX;
     },
+    /**
+     * @public
+     * @returns {Array}
+     */
     getStructureArrayY: function() {
       return this.moleculeStructureY;
     },
+    /**
+     * @public
+     * @returns {number}
+     */
     getRotationalInertia: function() {
       return (Math.pow( this.moleculeStructureX[ 0 ], 2 ) + Math.pow( this.moleculeStructureY[ 0 ], 2 )) +
              0.25 * (Math.pow( this.moleculeStructureX[ 1 ], 2 ) + Math.pow( this.moleculeStructureY[ 1 ], 2 )) +
