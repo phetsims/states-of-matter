@@ -66,31 +66,58 @@ define( function( require ) {
   }
 
   return inherit( PropertySet, DualAtomModel, {
-
+      /**
+       * @public
+       * @returns {null|*}
+       */
       getFixedAtomRef: function() {
         return this.fixedAtom;
       },
+      /**
+       *  @public
+       * @returns {null|*}
+       */
       getMovableAtomRef: function() {
         return this.movableAtom;
       },
+      /**
+       * @public
+       * @returns {Number|*}
+       */
       getAttractiveForce: function() {
         return this.attractiveForce;
       },
+      /**
+       * @public
+       * @returns {Number|*}
+       */
       getRepulsiveForce: function() {
         return this.repulsiveForce;
       },
+      /**
+       * @public
+       * @returns {*}
+       */
       getFixedAtomType: function() {
         return this.fixedAtom.getType();
       },
+      /**
+       * @public
+       * @returns {*}
+       */
       getMovableAtomType: function() {
         return this.movableAtom.getType();
       },
+      /***
+       * @public
+       * @returns {Boolean|*}
+       */
       getMotionPaused: function() {
         return this.motionPaused;
       },
 
       /**
-       *
+       * @public
        * @param {String} atomType indicates type of molecule
        */
       setFixedAtomType: function( atomType ) {
@@ -130,7 +157,7 @@ define( function( require ) {
       },
 
       /**
-       *
+       * @public
        * @param {String} atomType indicates type of molecule
        */
       setMovableAtomType: function( atomType ) {
@@ -170,7 +197,7 @@ define( function( require ) {
       },
 
       /**
-       *
+       * @public
        * @param {String} atomType indicates type of molecule
        */
       ensureValidAtomType: function( atomType ) {
@@ -183,7 +210,7 @@ define( function( require ) {
       },
 
       /**
-       *
+       * @public
        * @param {String} atomType indicates type of molecule
        */
       setBothAtomTypes: function( atomType ) {
@@ -202,7 +229,7 @@ define( function( require ) {
        * adjustable atom.  This is one of the two parameters that are used
        * for calculating the Lennard-Jones potential. If an attempt is made to
        * set this value when the adjustable atom is not selected, it is ignored.
-       *
+       * @public
        * @param sigma - distance parameter
        */
       setAdjustableAtomSigma: function( sigma ) {
@@ -228,7 +255,7 @@ define( function( require ) {
        * calculations.  If the atoms are the same, it will be the diameter
        * of one atom.  If they are not, it will be a function of the
        * diameters.
-       *
+       * @public
        * @return
        */
       getSigma: function() {
@@ -238,7 +265,7 @@ define( function( require ) {
       /**
        * Set the epsilon value, a.k.a. the Interaction Strength Parameter, which
        * is one of the two parameters that describes the Lennard-Jones potential.
-       *
+       * @public
        * @param epsilon - interaction strength parameter
        */
       setEpsilon: function( epsilon ) {
@@ -260,19 +287,22 @@ define( function( require ) {
       /**
        * Get the epsilon value, a.k.a. the Interaction Strength Parameter, which
        * is one of the two parameters that describes the Lennard-Jones potential.
-       *
+       * @public
        * @return
        */
       getEpsilon: function() {
         return this.ljPotentialCalculator.getEpsilon();
       },
-
+      /**
+       * @public
+       * @returns {number|*}
+       */
       getBondingState: function() {
         return this.bondingState;
       },
 
       /**
-       *
+       * @public
        * @param {Boolean} paused  is to set particle motion
        */
       setMotionPaused: function( paused ) {
@@ -293,6 +323,7 @@ define( function( require ) {
 
       /**
        * Release the bond that exists between the two atoms (if there is one).
+       * @public
        */
       releaseBond: function() {
         if ( this.bondingState === BONDING_STATE_BONDING ) {
@@ -302,13 +333,18 @@ define( function( require ) {
         }
         this.bondingState = BONDING_STATE_UNBONDED;
       },
-
+      /**
+       * @private
+       * @param movableAtom
+       */
       clone: function( movableAtom ) {
         this.shadowMovableAtom.setPosition( movableAtom.getX(), movableAtom.getY() );
         this.shadowMovableAtom.velocity = movableAtom.getVelocity();
         this.shadowMovableAtom.accel = movableAtom.getAccel();
       },
-
+      /**
+       * @public
+       */
       reset: function() {
         PropertySet.prototype.reset.call( this );
         if ( this.fixedAtom === null || this.fixedAtom.getType() !== DEFAULT_ATOM_TYPE ||
@@ -325,6 +361,7 @@ define( function( require ) {
       /**
        * Put the movable atom back to the location where the force is
        * minimized, and reset the velocity and acceleration to 0.
+       * @public
        */
       resetMovableAtomPos: function() {
         if ( this.movableAtom !== null ) {
@@ -351,12 +388,13 @@ define( function( require ) {
       /**
        *
        * @param {Number} dt -- time in seconds
+       * @public
        */
       stepInternal: function( dt ) {
         this.handleClockTicked( dt );
       },
       /**
-       *
+       * @private
        * @param { Number } dt --- time in seconds
        */
       handleClockTicked: function( dt ) {
@@ -442,7 +480,10 @@ define( function( require ) {
           }
         }
       },
-      // Called when the movable atom is moved
+      /**
+       * Called when the movable atom is moved
+       * @public
+       */
       positionChanged: function() {
         if ( this.motionPaused ) {
           // The user must be moving the atom from the view.
@@ -459,6 +500,7 @@ define( function( require ) {
       /**
        *
        * @param {Number} dt -- time in seconds
+       * @private
        */
       updateTimeStep: function( dt ) {
         if ( this.atomPair === AtomPair.OXYGEN_OXYGEN ) {
@@ -470,13 +512,17 @@ define( function( require ) {
 
       },
 
-
+      /**
+       * @private
+       */
       syncMovableAtomWithDummy: function() {
         this.movableAtom.setAx( this.shadowMovableAtom.getAx() );
         this.movableAtom.setVx( this.shadowMovableAtom.getVx() );
         this.movableAtom.setPosition( this.shadowMovableAtom.getX(), this.shadowMovableAtom.getY() );
       },
-
+      /**
+       * @private
+       */
       updateForces: function() {
 
         var distance = this.shadowMovableAtom.getPositionReference().distance( Vector2.ZERO );
@@ -494,6 +540,7 @@ define( function( require ) {
 
       /**
        * Update the position, velocity, and acceleration of the dummy movable atom.
+       * @private
        */
       updateAtomMotion: function() {
 
@@ -512,11 +559,15 @@ define( function( require ) {
           this.shadowMovableAtom.setPosition( xPos, 0 );
         }
       },
-
+      /**
+       * @private
+       */
       startFixedAtomVibration: function() {
         this.vibrationCounter = VIBRATION_DURATION;
       },
-
+      /**
+       * @private
+       */
       stepFixedAtomVibration: function() {
         if ( this.vibrationCounter > 0 ) {
           var vibrationScaleFactor = 1;
@@ -554,6 +605,7 @@ define( function( require ) {
        *
        * @param distance - inter-atom distance, must be greater than the point at
        * which the potential is at the minimum value.
+       * @private
        * @return
        */
       approximateEquivalentPotentialDistance: function( distance ) {
@@ -579,7 +631,10 @@ define( function( require ) {
 
         return equivalentPotentialDistance;
       },
-
+      /**
+       *  @private
+       * @returns {boolean}
+       */
       isFixedAtomVibrating: function() {
         return this.vibrationCounter > 0;
       }

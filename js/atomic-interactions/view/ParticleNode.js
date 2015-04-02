@@ -74,11 +74,17 @@ define( function( require ) {
   }
 
   return inherit( Node, ParticleNode, {
-
+    /**
+     * @public
+     * @returns {*}
+     */
     getGradientEnabled: function() {
       return this.useGradient;
     },
-
+    /**
+     * @public
+     * @param gradientEnabled
+     */
     setGradientEnabled: function( gradientEnabled ) {
       if ( this.useGradient !== gradientEnabled ) {
         this.useGradient = gradientEnabled;
@@ -92,7 +98,9 @@ define( function( require ) {
       }
     },
 
-
+    /**
+     * @public
+     */
     updatePosition: function() {
       if ( this.particle !== null ) {
         this.position = this.modelViewTransform.modelToViewPosition( this.particle.getPositionReference() );
@@ -102,10 +110,11 @@ define( function( require ) {
 
 
     /**
+     * @public
      * If the radius of the particle changes, we need to redraw ourself to
      * correspond.
      */
-    handleParticleRadiusChanged: function( radius ) {
+    handleParticleRadiusChanged: function() {
 
       if ( this.useGradient ) {
         // If the size changes, the gradient must also change to match.

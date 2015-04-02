@@ -113,6 +113,9 @@ define( function( require ) {
   }
 
   return inherit( Node, PointingHandNode, {
+    /**
+     * @public
+     */
     updateArrowVisibility: function() {
       if ( this.multipleParticleModel.getParticleContainerHeight() === StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT ) {
         // At the height limit, so only show the down arrow.
@@ -126,7 +129,9 @@ define( function( require ) {
         this.upArrowNode.setVisible( true );
       }
     },
-
+    /**
+     * @public
+     */
     handleContainerSizeChanged: function() {
       var containerHeight = this.multipleParticleModel.getParticleContainerHeight();
       if ( !this.multipleParticleModel.getContainerExploded() ) {
@@ -142,7 +147,9 @@ define( function( require ) {
           this.height );
       }
     },
-
+    /**
+     * @public
+     */
     updateHintVisibility: function() {
       this.hintNode.setVisible( this.mouseOver || this.beingDragged );
     }

@@ -252,7 +252,9 @@ define( function( require ) {
 
   return inherit( Node, PhaseDiagram, {
 
-    //private
+    /**
+     * @public
+     */
     drawPhaseDiagram: function() {
       // Place the triple point marker.
       this.triplePoint.setTranslation( DEFAULT_TRIPLE_POINT.x - POINT_MARKER_DIAMETER / 2,
@@ -336,7 +338,7 @@ define( function( require ) {
 
     /**
      * Set the normalized position for this marker.
-     *
+     * @public
      * @param normalizedTemperature - Temperature (X position) value between 0 and 1 (inclusive).
      * @param normalizedPressure    - Pressure (Y position) value between 0 and 1 (inclusive).
      */
@@ -362,8 +364,8 @@ define( function( require ) {
 
     /**
      * Set the visibility of the state marker.
-     *
-     * @param isVisible
+     * @public
+     * @param {Boolean} isVisible
      */
     setStateMarkerVisible: function( isVisible ) {
       this.currentStateMarker.setVisible( isVisible );
@@ -377,8 +379,8 @@ define( function( require ) {
      * points in the graph (e.g. triple point, critical point) to be
      * positioned anywhere, but currently it isn't worth the extra effort to
      * do so.  Feel free if it is ever needed.
-     *
-     * @param depictingWater
+     * @public
+     * @param {Boolean} depictingWater
      */
     setDepictingWater: function( depictingWater ) {
       if ( depictingWater ) {

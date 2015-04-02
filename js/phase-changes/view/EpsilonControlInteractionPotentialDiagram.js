@@ -174,6 +174,7 @@ define( function( require ) {
   return inherit( InteractionPotentialDiagramNode, EpsilonControlInteractionPotentialDiagram, {
 
     /**
+     * @private
      * This is an override of the method in the base class that draws the
      * curve on the graph, and this override draws the controls that allow
      * the user to interact with the graph.
@@ -193,7 +194,9 @@ define( function( require ) {
       }
     },
 
-    //private
+    /**
+     * @private
+     */
     updateInteractivityState: function() {
       this.interactionEnabled = ( this.multipleParticleModel.getMoleculeType() === StatesOfMatterConstants.USER_DEFINED_MOLECULE );
     }

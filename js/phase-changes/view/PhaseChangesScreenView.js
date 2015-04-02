@@ -267,6 +267,7 @@ define( function( require ) {
       this.particlesLayer.step();
     },
     /**
+     * @private
      * Update the position of the marker on the phase diagram based on the
      * temperature and pressure values within the model.
      */
@@ -290,6 +291,7 @@ define( function( require ) {
 
     /**
      * Update and returns the moving average taking into account the new temperature value
+     * @private
      * @param {Number} newTemperatureValue
      * @returns {Number}
      */
@@ -307,6 +309,7 @@ define( function( require ) {
 
     /**
      * Map the model temperature to phase diagram temperature based on the phase chart shape.
+     * @private
      * @param {Number} modelTemperature
      * @returns {Number}
      */
@@ -327,6 +330,7 @@ define( function( require ) {
     /**
      * Map the model temperature and pressure to a normalized pressure value
      * suitable for use in setting the marker position on the phase chart.
+     * @private
      * @param {Number} modelPressure
      * @param {Number} modelTemperature
      * @returns {Number}

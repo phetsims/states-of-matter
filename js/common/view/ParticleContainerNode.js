@@ -268,6 +268,9 @@ define( function( require ) {
   }
 
   return inherit( Node, ParticleContainerNode, {
+    /**
+     * @public
+     */
     reset: function() {
       this.handleContainerSizeChanged();
       if ( this.fingerNode ) {
@@ -304,7 +307,7 @@ define( function( require ) {
 
     /**
      * Handle a notification that the container size has changed.
-     * @private
+     * @public
      */
 
     handleContainerSizeChanged: function() {

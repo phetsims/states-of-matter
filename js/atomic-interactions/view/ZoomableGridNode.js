@@ -113,6 +113,7 @@ define( function( require ) {
   return inherit( Node, ZoomableGridNode, {
 
     /**
+     * @public
      * @param {Number} offsetX
      * @param {Number} offsetY
      * @param {Number} width -- width of the grid

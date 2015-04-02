@@ -216,7 +216,7 @@ define( function( require ) {
     /**
      * Set the parameters that define the shape of the Lennard-Jones
      * potential curve.
-     *
+     *@public
      * @param{Number} sigma -  atom diameter
      * @param {Number }epsilon - interaction strength
      */
@@ -228,8 +228,10 @@ define( function( require ) {
       // Redraw the graph to reflect the new parameters.
       this.drawPotentialCurve();
     },
+    /**
+     * @public
+     */
     reset: function() {
-
       // reset   the lj graph
       this.verticalScalingFactor = (this.graphHeight / 2) /
                                    (StatesOfMatterConstants.MAX_EPSILON * StatesOfMatterConstants.K_BOLTZMANN);
@@ -238,20 +240,36 @@ define( function( require ) {
       this.drawPotentialCurve();
 
     },
+    /**
+     * @public
+     * @returns {number|*}
+     */
     getGraphHeight: function() {
       return this.graphHeight;
     },
+    /**
+     * @public
+     * @returns {number|*}
+     */
     getGraphWidth: function() {
       return this.graphWidth;
     },
+    /**
+     * @public
+     * @returns {Vector2|*}
+     */
     getZeroCrossingPoint: function() {
       return this.zeroCrossingPoint;
     },
+    /**
+     * @public
+     * @returns {Vector2|*}
+     */
     getGraphMin: function() {
       return this.graphMin;
     },
     /**
-     *
+     * @public
      * @param {Boolean} enabled - indicate to whether enable the position marker or not.
      */
     setMarkerEnabled: function( enabled ) {
@@ -261,7 +279,7 @@ define( function( require ) {
      * Set the position of the position marker.  Note that is is only possible
      * to set the x axis position, which is distance.  The y axis position is
      * always on the LJ potential curve.
-     *
+     * @public
      * @param {Number}distance - distance from the center of the interacting molecules.
      */
     setMarkerPosition: function( distance ) {
@@ -290,7 +308,7 @@ define( function( require ) {
     /**
      * Set whether the graph is showing the potential between individual atoms
      * or multi-atom molecules.
-     *
+     * @public
      * @param {Boolean} molecular - true if graph is portraying molecules, false for
      *                  individual atoms.
      */
@@ -309,7 +327,7 @@ define( function( require ) {
 
     /**
      * Calculate the Lennard-Jones potential for the given distance.
-     *
+     * @private
      * @param {Number} radius
      * @return
      */
@@ -318,6 +336,7 @@ define( function( require ) {
       return (  this.ljPotentialCalculator.calculateLjPotential( radius ));
     },
     /**
+     *
      * Draw the curve that reflects the Lennard-Jones potential based upon the
      * current values for sigma and epsilon.
      */

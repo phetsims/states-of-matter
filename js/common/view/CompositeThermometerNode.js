@@ -90,6 +90,7 @@ define( function( require ) {
 
   return inherit( Node, CompositeThermometerNode, {
     /**
+     * @public
      * Updates the thermometers position and rotation.
      * When the container explodes, the thermometer rotates in anti-clockwise director and moves up in the air.
      */

@@ -108,7 +108,7 @@ define( function( require ) {
     /**
      * This turns on/off the "elbow" portion of the connector, which allows
      * the pressure gauge to connect to something above or below it.
-     *
+     * @public
      * @param elbowEnabled
      */
     setElbowEnabled: function( elbowEnabled ) {
@@ -116,14 +116,18 @@ define( function( require ) {
       this.updateConnector();
     },
     /**
+     * @public
      * Set the height of the elbow.  Height is specified with respect to the
      * vertical center of the node.
+     * @param height
      */
     setElbowHeight: function( height ) {
       this.elbowHeight = height;
       this.updateConnector();
     },
-
+    /**
+     * @public
+     */
     updateConnector: function() {
       var width = (CONNECTOR_WIDTH_PROPORTION * 30);
       var length = (CONNECTOR_LENGTH_PROPORTION * 60);
