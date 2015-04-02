@@ -86,26 +86,32 @@ define( function( require ) {
   }
 
   return inherit( ParticleForceNode, GrabbableParticleNode, {
-
+    /**
+     * @public
+     * @returns {Number|*}
+     */
     getMinX: function() {
       return this.minX;
     },
 
     /**
-     *
+     * @public
      * @param {Number} minX - min x position
      */
     setMinX: function( minX ) {
       this.minX = minX;
     },
 
-
+    /**
+     * @public
+     * @returns {Number|*}
+     */
     getMaxX: function() {
       return this.maxX;
     },
 
     /**
-     *
+     * @public
      * @param {Number} maxX - grabbable particle  max x position
      */
     setMaxX: function( maxX ) {

@@ -268,6 +268,7 @@ define( function( require ) {
     },
 
     /**
+     * @public
      * Turn on/off the displaying of the force arrows that represent the attractive force.
      */
     setShowAttractiveForces: function( showForces ) {
@@ -277,6 +278,7 @@ define( function( require ) {
     },
 
     /**
+     * @public
      * Turn on/off the displaying of the force arrows that represent the repulsive force.
      */
     setShowRepulsiveForces: function( showForces ) {
@@ -286,6 +288,7 @@ define( function( require ) {
     },
 
     /**
+     * @public
      * Turn on/off the displaying of the force arrows that represent the
      * total force, i.e. attractive plus repulsive.
      */
@@ -294,7 +297,10 @@ define( function( require ) {
       this.fixedParticleNode.setShowTotalForces( showForces );
       this.showTotalForces = showForces;
     },
-
+    /**
+     * @public
+     * @param particle
+     */
     handleFixedParticleAdded: function( particle ) {
 
       this.fixedParticle = particle;
@@ -314,7 +320,9 @@ define( function( require ) {
       this.pushPinNode.setTranslation( this.modelViewTransform.modelToViewX( -this.fixedParticle.getRadius() * 1.05 ),
         this.modelViewTransform.modelToViewY( -this.fixedParticle.getRadius() * 1.42 ) );
     },
-
+    /**
+     * @public
+     */
     handleFixedParticleRemoved: function() {
       // Get rid of the node for this guy.
       if ( this.fixedParticleLayer.isChild( this.fixedParticleNode ) ) {
@@ -331,7 +339,10 @@ define( function( require ) {
       this.updatePositionMarkerOnDiagram();
       this.fixedParticleNode = null;
     },
-
+    /**
+     * @public
+     * @param particle
+     */
     handleMovableParticleAdded: function( particle ) {
 
       // Add the atom node for this guy.
@@ -355,7 +366,9 @@ define( function( require ) {
       // Update the position marker to represent the new particle's position.
       this.updatePositionMarkerOnDiagram();
     },
-
+    /**
+     * @private
+     */
     handleMovableParticleRemoved: function() {
       // Get rid of the node for this guy.
       if ( this.movableParticleNode !== null ) {
@@ -376,6 +389,7 @@ define( function( require ) {
     },
 
     /**
+     * @public
      * Handle a notification of a change in the radius of a particle.
      * IMPORTANT NOTE: This is part of a workaround for a problem with
      * rendering the spherical nodes.  To make a long story short, there were
@@ -397,7 +411,9 @@ define( function( require ) {
         }
       }
     },
-
+    /**
+     * @private
+     */
     handlePositionChanged: function() {
       if ( !this.dualAtomModel.getMotionPaused() ) {
         if ( !this.fixedParticleNode.getGradientEnabled() ) {
@@ -437,6 +453,7 @@ define( function( require ) {
     },
 
     /**
+     * @private
      * Update the position marker on the Lennard-Jones potential diagram.
      * This will indicate the amount of potential being experienced between
      * the two atoms in the model.
@@ -460,6 +477,7 @@ define( function( require ) {
     },
 
     /**
+     * @public
      * Update the minimum X value allowed for the movable atom.  This prevents
      * too much overlap between the atoms.
      */
@@ -469,7 +487,9 @@ define( function( require ) {
         this.handNode.setMinX( this.modelViewTransform.modelToViewX( this.dualAtomModel.getSigma() * 0.9 ) );
       }
     },
-
+    /**
+     * @private
+     */
     updateForceVectors: function() {
       if ( ( this.fixedParticle !== null ) && ( this.movableParticle !== null ) ) {
         this.fixedParticleNode.setForces( this.dualAtomModel.getAttractiveForce(),

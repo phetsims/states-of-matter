@@ -39,7 +39,7 @@ define( function( require ) {
 
   return inherit( Path, DimensionalArrowNode, {
     /**
-     *
+     * @public
      * @param {Number} tailX - tail X position
      * @param {Number} tailY - tail Y position
      * @param {Number} tipX - tip X position

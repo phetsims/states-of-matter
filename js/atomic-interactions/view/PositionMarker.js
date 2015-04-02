@@ -47,9 +47,9 @@ define( function( require ) {
 
     // halo visibility
     this.sphereNode.addInputListener( new ButtonListener( {
-        up: function( event ) { positionMarker.haloNode.visible = false; },
-        down: function( event ) { positionMarker.haloNode.visible = true; },
-        over: function( event ) { positionMarker.haloNode.visible = true; }
+        up: function() { positionMarker.haloNode.visible = false; },
+        down: function() { positionMarker.haloNode.visible = true; },
+        over: function() { positionMarker.haloNode.visible = true; }
       } )
     );
 
@@ -58,6 +58,10 @@ define( function( require ) {
   }
 
   return inherit( Node, PositionMarker, {
+    /**
+     * @public
+     * @param color
+     */
     changeColor: function( color ) {
       this.haloNode.fill = Color.toColor( color ).withAlpha( 0.5 );
       var mainColor = Color.toColor( color );
