@@ -43,7 +43,6 @@ define( function( require ) {
     this.bondingState = BONDING_STATE_UNBONDED; // Tracks whether the atoms have formed a chemical bond.
     this.vibrationCounter = 0; // Used to vibrate fixed atom during bonding.
     this.potentialWhenAtomReleased = 0; // Used to set magnitude of vibration.
-    this.rand = new Random();
     this.sigmaTable = new SigmaTable();
     this.atomFactory = new AtomFactory();
     this.isHandNodeVisible = true; // indicate moving hand node visible or not
