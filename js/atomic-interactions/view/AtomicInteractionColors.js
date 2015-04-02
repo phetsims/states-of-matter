@@ -42,7 +42,9 @@ define( function( require ) {
   // initial properties object, to load into the PropertySet (so reset works nicely)
   var initialProperties = {};
   for ( var key in colors ) {
-    initialProperties[ key ] = colors[ key ].default;
+    if ( colors.hasOwnProperty( key ) ) {
+      initialProperties[ key ] = colors[ key ].default;
+    }
   }
 
   var AtomicInteractionColors = extend( new PropertySet( initialProperties ), {
@@ -55,12 +57,14 @@ define( function( require ) {
       assert && assert( profileName === 'default' || profileName === 'projector' );
 
       for ( var key in colors ) {
-        if ( profileName in colors[ key ] ) {
-          var oldColor = this[ key ];
-          var newColor = colors[ key ][ profileName ];
-          if ( !newColor.equals( oldColor ) ) {
-            this[ key ] = newColor;
-            reportColor( key );
+        if ( colors.hasOwnProperty( key ) ) {
+          if ( profileName in colors[ key ] ) {
+            var oldColor = this[ key ];
+            var newColor = colors[ key ][ profileName ];
+            if ( !newColor.equals( oldColor ) ) {
+              this[ key ] = newColor;
+              reportColor( key );
+            }
           }
         }
       }
@@ -87,7 +91,9 @@ define( function( require ) {
 
   // initial communication
   for ( var colorName in colors ) {
-    reportColor( colorName );
+    if ( colors.hasOwnProperty( colorName ) ) {
+      reportColor( colorName );
+    }
   }
 
   // receives iframe communication to set a color
