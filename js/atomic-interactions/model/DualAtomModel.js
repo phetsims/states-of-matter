@@ -461,7 +461,13 @@ define( function( require ) {
        * @param {Number} dt -- time in seconds
        */
       updateTimeStep: function( dt ) {
-        this.timeStep = dt / CALCULATIONS_PER_TICK;
+        if ( this.atomPair === AtomPair.OXYGEN_OXYGEN ) {
+          this.timeStep = dt / CALCULATIONS_PER_TICK;
+        }
+        else {
+          this.timeStep = dt / 1.6;
+        }
+
       },
 
 
