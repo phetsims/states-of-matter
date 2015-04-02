@@ -19,6 +19,7 @@ define( function( require ) {
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
   var AtomType = require( 'STATES_OF_MATTER/common/model/AtomType' );
   var AtomFactory = require( 'STATES_OF_MATTER/common/model/AtomFactory' );
+  var AtomPair = require( 'STATES_OF_MATTER/atomic-interactions/model/AtomPair' );
 
   var BONDING_STATE_UNBONDED = 0;
   var BONDING_STATE_BONDING = 1;
@@ -51,7 +52,7 @@ define( function( require ) {
     PropertySet.call( this, {
         interactionStrength: 0,
         motionPaused: false,
-        atomPair: 'NEON_NEON',
+        atomPair: AtomPair.NEON_NEON,
         isPlaying: true,
         speed: 'normal',
         atomDiameter: 150,
