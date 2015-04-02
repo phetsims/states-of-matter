@@ -1,7 +1,8 @@
 // Copyright (c) 2002 - 2014. University of Colorado Boulder
 
 /**
- * View for the panel used for selecting the atoms/molecules
+ * Control panel used for selecting atom combinations.
+ *
  * @author Siddhartha Chinthapally (Actual Concepts)
  */
 
@@ -49,17 +50,16 @@ define( function( require ) {
   var strongString = require( 'string!STATES_OF_MATTER/strong' );
 
   var MAX_WIDTH = 130;
-  var TickTextWidth = 26;
+  var SLIDER_TICK_TEXT_MAX_WIDTH = 26;
   var NORMAL_TEXT_FONT_SIZE = 12;
 
   /**
-   *
    * @param {DualAtomModel} dualAtomModel - model of the simulation
-   * @param {Boolean} enableHeterogeneousMolecules - true to use a enable heterogeneous molecules , false if not.
+   * @param {Boolean} enableHeterogeneousAtoms - flag for enabling heterogeneous atom combinations
    * @param {Object} [options] that can be passed on to the underlying node
    * @constructor
    */
-  function AtomicInteractionsControlPanel( dualAtomModel, enableHeterogeneousMolecules, options ) {
+  function AtomicInteractionsControlPanel( dualAtomModel, enableHeterogeneousAtoms, options ) {
 
     var atomicInteractionsControlPanel = this;
     options = _.extend( {
@@ -68,16 +68,18 @@ define( function( require ) {
       fill: '#D1D2FF',
       stroke: 'gray',
       tickTextColor: 'black',
-      textColor: enableHeterogeneousMolecules ? 'black' : 'white',
+      textColor: enableHeterogeneousAtoms ? 'black' : 'white',
       lineWidth: 1,
       backgroundColor: '#D1D2FF',
       cornerRadius: 5 // radius of the rounded corners on the background
     }, options );
 
     Node.call( this );
-    var textOptions;
-    // show white stroke around the atoms & molecules panel within SOM  full version  else  show black stroke
-    var panelStroke = enableHeterogeneousMolecules ? 'black' : 'white';
+
+    // white text within SOM full version  else  black text
+    var textOptions = { font: new PhetFont( NORMAL_TEXT_FONT_SIZE ), fill: options.textColor };
+    // show white stroke around the atoms & molecules panel within SOM full version  else  show black stroke
+    var panelStroke = enableHeterogeneousAtoms ? 'black' : 'white';
     var neonAndNeon;
     var argonAndArgon;
     var oxygenAndOxygen;
@@ -90,9 +92,10 @@ define( function( require ) {
     var createItem;
     var titleText;
     var titleNode;
-    var sliderTrackWidth;
-    sliderTrackWidth = 140;
+    var sliderTrackWidth = 140; // empirically determined
     textOptions = { font: new PhetFont( NORMAL_TEXT_FONT_SIZE ), fill: options.textColor };
+
+    // convenience function that scales the text node if it is too wide
     var createText = function( string, width ) {
       var text = new Text( string, textOptions );
       if ( text.width > width ) {
@@ -100,7 +103,8 @@ define( function( require ) {
       }
       return text;
     };
-    if ( enableHeterogeneousMolecules ) {
+
+    if ( enableHeterogeneousAtoms ) {
 
       neonAndNeon = [ createText( neonString, MAX_WIDTH / 2 ), createText( neonString, MAX_WIDTH / 2 ) ];
       argonAndArgon = [ createText( argonString, MAX_WIDTH / 2 ), createText( argonString, MAX_WIDTH / 2 ) ];
@@ -130,6 +134,7 @@ define( function( require ) {
         neonAndNeon[ 0 ].width + neonAndNeon[ 1 ].width,
         neonAndOxygen[ 0 ].width + neonAndOxygen[ 1 ].width );
       maxWidth = 2 * Math.max( titleText[ 0 ].width, titleText[ 1 ].width, maxWidth / 2, sliderTrackWidth / 2 );
+
       // pad inserts a spacing node (HStrut) so that the rows occupy a certain fixed width.
       createItem = function( itemSpec ) {
         var strutWidth1 = ( maxWidth / 2 - itemSpec[ 0 ].width );
@@ -181,6 +186,7 @@ define( function( require ) {
             return item.width;
           } ).width + 5;
       titleNode.align = atomicInteractionsControlPanel.width / 2;
+
       //touch Areas
       neonNeonRadio.touchArea = new Bounds2( neonNeonRadio.localBounds.minX - 5, neonNeonRadio.localBounds.minY,
         neonNeonRadio.localBounds.minX + maxRadioButtonWidth, neonNeonRadio.localBounds.maxY );
@@ -199,7 +205,6 @@ define( function( require ) {
       adjustableAttractionRadio.touchArea = new Bounds2( adjustableAttractionRadio.localBounds.minX - 5, adjustableAttractionRadio.localBounds.minY,
         adjustableAttractionRadio.localBounds.minX + maxRadioButtonWidth, adjustableAttractionRadio.localBounds.maxY );
     }
-
     else {
       var title = new Text( titleString, {
         font: new PhetFont( 14 ),
@@ -261,16 +266,18 @@ define( function( require ) {
         } );
 
       titleNode = new Node( { children: [ titleBackground, titleText.label ] } );
-
     }
+
     // add atom diameter slider
     var atomDiameterTitle = new Text( atomDiameterString, {
       font: new PhetFont( NORMAL_TEXT_FONT_SIZE ),
       fill: options.textColor
     } );
+
     if ( atomDiameterTitle.width > MAX_WIDTH ) {
       atomDiameterTitle.setFont( new PhetFont( NORMAL_TEXT_FONT_SIZE * MAX_WIDTH / atomDiameterTitle.width ) );
     }
+
     dualAtomModel.atomDiameterProperty.value = dualAtomModel.getSigma();
     var atomDiameterSlider = new HSlider( dualAtomModel.atomDiameterProperty,
       { min: StatesOfMatterConstants.MIN_SIGMA, max: StatesOfMatterConstants.MAX_SIGMA },
@@ -290,15 +297,17 @@ define( function( require ) {
       } );
     var tickTextOptions = { fill: options.tickTextColor };
     var smallText = new Text( smallString, tickTextOptions );
-    if ( smallText.width > TickTextWidth ) {
-      smallText.setFont( new PhetFont( NORMAL_TEXT_FONT_SIZE * TickTextWidth / smallText.width ) );
-    }
-    var largeText = new Text( largeString, tickTextOptions );
-    if ( largeText.width > TickTextWidth ) {
-      largeText.setFont( new PhetFont( NORMAL_TEXT_FONT_SIZE * TickTextWidth / largeText.width ) );
+
+    if ( smallText.width > SLIDER_TICK_TEXT_MAX_WIDTH ) {
+      smallText.setFont( new PhetFont( NORMAL_TEXT_FONT_SIZE * SLIDER_TICK_TEXT_MAX_WIDTH / smallText.width ) );
     }
 
-    if ( enableHeterogeneousMolecules ) {
+    var largeText = new Text( largeString, tickTextOptions );
+    if ( largeText.width > SLIDER_TICK_TEXT_MAX_WIDTH ) {
+      largeText.setFont( new PhetFont( NORMAL_TEXT_FONT_SIZE * SLIDER_TICK_TEXT_MAX_WIDTH / largeText.width ) );
+    }
+
+    if ( enableHeterogeneousAtoms ) {
       atomDiameterSlider.addMajorTick( StatesOfMatterConstants.MIN_SIGMA );
       atomDiameterSlider.addMajorTick( StatesOfMatterConstants.MAX_SIGMA );
     }
@@ -335,12 +344,12 @@ define( function( require ) {
         }
       } );
     var weakText = new Text( weakString, tickTextOptions );
-    if ( weakText.width > TickTextWidth ) {
-      weakText.setFont( new PhetFont( NORMAL_TEXT_FONT_SIZE * TickTextWidth / weakText.width ) );
+    if ( weakText.width > SLIDER_TICK_TEXT_MAX_WIDTH ) {
+      weakText.setFont( new PhetFont( NORMAL_TEXT_FONT_SIZE * SLIDER_TICK_TEXT_MAX_WIDTH / weakText.width ) );
     }
     var strongText = new Text( strongString, tickTextOptions );
-    if ( strongText.width > TickTextWidth ) {
-      strongText.setFont( new PhetFont( NORMAL_TEXT_FONT_SIZE * TickTextWidth / strongText.width ) );
+    if ( strongText.width > SLIDER_TICK_TEXT_MAX_WIDTH ) {
+      strongText.setFont( new PhetFont( NORMAL_TEXT_FONT_SIZE * SLIDER_TICK_TEXT_MAX_WIDTH / strongText.width ) );
     }
     interactionStrengthSlider.addMajorTick( StatesOfMatterConstants.MIN_EPSILON, weakText );
     interactionStrengthSlider.addMajorTick( StatesOfMatterConstants.MAX_EPSILON, strongText );
@@ -421,7 +430,7 @@ define( function( require ) {
     this.addChild( radioButtonPanel );
     // add the tittle node after radio button panel added in SOM full version.
     // here around the panel we are drawing a rectangle and on top rectangle added title node
-    if ( !enableHeterogeneousMolecules ) {
+    if ( !enableHeterogeneousAtoms ) {
       this.addChild( titleNode );
       titleNode.centerX = radioButtonGroup.centerX + 5;
     }
