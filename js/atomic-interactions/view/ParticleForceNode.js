@@ -2,6 +2,7 @@
 
 /**
  * This class adds the ability to display force-depicting arrows to its super class.
+ *
  * @author Siddhartha Chinthapally (Actual Concepts)
  */
 define( function( require ) {
@@ -14,8 +15,8 @@ define( function( require ) {
   var DimensionalArrowNode = require( 'STATES_OF_MATTER/atomic-interactions/view/DimensionalArrowNode' );
 
   // The following constants control some of the aspects of the appearance of
-  // the force arrows.  The values are arbitrary and are chosen to look good
-  // in this particular sim, so tweak them as needed for optimal appearance.
+  // the force arrows.  The values were empirically chosen to look good in
+  // this particular sim.
   var ATTRACTIVE_FORCE_COLOR = '#FC9732';
   var REPULSIVE_FORCE_COLOR = new Color( 255, 0, 255, 175 ); // Magenta.
   var TOTAL_FORCE_COLOR = '#49B649';
@@ -29,7 +30,6 @@ define( function( require ) {
   var FORCE_ARROW_HEAD_LENGTH = 50;
 
   /**
-   *
    * @param {Particle} particle - The particle in the model that this node will represent in the view.
    * @param {ModelViewTransform2} modelViewTransform to convert between model and view co-ordinates
    * @param {Boolean} useGradient - true to use a gradient when displaying the node, false if not.
@@ -39,37 +39,36 @@ define( function( require ) {
    */
   function ParticleForceNode( particle, modelViewTransform, useGradient, enableOverlap ) {
 
-
     ParticleNode.call( this, particle, modelViewTransform, useGradient, enableOverlap );
 
     this.attractiveForce = 0;
     this.repulsiveForce = 0;
     var particleForceNode = this;
-    var forceArrowNodeOptions = {
+    var commonForceArrowNodeOptions = {
       headHeight: FORCE_ARROW_HEAD_LENGTH,
       headWidth: FORCE_ARROW_HEAD_WIDTH,
       tailWidth: FORCE_ARROW_TAIL_WIDTH,
-      opacity: 0.7
+      opacity: 0.7 // empirically determined
     };
 
     // add attractive force node
     this.attractiveForceVectorNode = new DimensionalArrowNode( 0, 0, COMPONENT_FORCE_ARROW_REFERENCE_LENGTH, 0, _.extend( {
       fill: ATTRACTIVE_FORCE_COLOR
-    }, forceArrowNodeOptions ) );
+    }, commonForceArrowNodeOptions ) );
     this.addChild( this.attractiveForceVectorNode );
     this.attractiveForceVectorNode.setVisible( false );
 
     // add repulsive force node
     this.repulsiveForceVectorNode = new DimensionalArrowNode( 0, 0, COMPONENT_FORCE_ARROW_REFERENCE_LENGTH, 0, _.extend( {
       fill: REPULSIVE_FORCE_COLOR
-    }, forceArrowNodeOptions ) );
+    }, commonForceArrowNodeOptions ) );
     this.addChild( this.repulsiveForceVectorNode );
     this.repulsiveForceVectorNode.setVisible( false );
 
     // add total force node
     this.totalForceVectorNode = new DimensionalArrowNode( 0, 0, TOTAL_FORCE_ARROW_REFERENCE_LENGTH, 0, _.extend( {
       fill: TOTAL_FORCE_COLOR
-    }, forceArrowNodeOptions ) );
+    }, commonForceArrowNodeOptions ) );
     this.addChild( this.totalForceVectorNode );
     this.totalForceVectorNode.setVisible( false );
 
@@ -77,15 +76,13 @@ define( function( require ) {
       particleForceNode.setTranslation( modelViewTransform.modelToViewX( position.x ),
         modelViewTransform.modelToViewY( position.y ) );
     } );
-
-
   }
 
   return inherit( ParticleNode, ParticleForceNode, {
 
     /**
      * Set the levels of attractive and repulsive forces being experienced by
-     * the particles in the model so that they may be represented as force
+     * the particle in the model so that they may be represented as force
      * vectors.
      * @param {Number}attractiveForce
      * @param {Number}repulsiveForce
@@ -97,8 +94,7 @@ define( function( require ) {
     },
 
     /**
-     *
-     * @param {Boolean} showAttractiveForces - true to show attractive force,false is to not show
+     * @param {Boolean} showAttractiveForces - true to show attractive force, false to hide
      */
     setShowAttractiveForces: function( showAttractiveForces ) {
       this.attractiveForceVectorNode.setVisible( showAttractiveForces );
@@ -106,23 +102,21 @@ define( function( require ) {
 
     /**
      *
-     * @param {Boolean} showRepulsiveForces - true to show repulsive force,false is to not show
+     * @param {Boolean} showRepulsiveForces - true to show repulsive force, false to hide
      */
     setShowRepulsiveForces: function( showRepulsiveForces ) {
       this.repulsiveForceVectorNode.setVisible( showRepulsiveForces );
     },
 
     /**
-     *
-     * @param {Boolean} showTotalForce - true to show total force,false is to not show
+     * @param {Boolean} showTotalForce - true to show total force, false to hide
      */
     setShowTotalForces: function( showTotalForce ) {
       this.totalForceVectorNode.setVisible( showTotalForce );
     },
 
     /**
-     * Update the force vectors to reflect the forces being experienced by the
-     * atom.
+     * Update the force vectors to reflect the forces being experienced by the atom.
      */
     updateForceVectors: function() {
       var angle = 0;
