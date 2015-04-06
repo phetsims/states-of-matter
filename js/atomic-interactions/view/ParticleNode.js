@@ -29,7 +29,6 @@ define( function( require ) {
   var OVERLAP_ENLARGEMENT_FACTOR = 1.25;
 
   /**
-   *
    * @param {Particle} particle  - The particle in the model that this node will represent in the view.
    * @param {ModelViewTransform2} modelViewTransform to convert between model and view co-ordinates
    * @param {Boolean}useGradient - true to use a gradient when displaying the node, false if not.
@@ -48,8 +47,7 @@ define( function( require ) {
     this.overlapEnabled = enableOverlap;
     this.position = new Vector2();
 
-
-    // Decide of the diameter of the circle/circle.
+    // Calculate the diameter of the circle.
     var circleDiameter = particle.radius * 2 * MVT_SCALE;
     if ( this.overlapEnabled ) {
       // Overlap is enabled, so make the shape slightly larger than
@@ -58,28 +56,26 @@ define( function( require ) {
       circleDiameter = circleDiameter * OVERLAP_ENLARGEMENT_FACTOR;
     }
 
-    // Create the node that will represent this particle.  If we are
-    // using a gradient, specify that an image should be used, since it
-    // will be less computationally intensive to move it around.
-    //this.circle = new Circle( circleDiameter/2, { fill: this.choosePaint( particle ) } );
+    // Create the node that will represent this particle.
     this.circle = new Path( new Shape().circle( 0, 0, circleDiameter / 2 ), { fill: this.choosePaint( particle ) } );
     this.addChild( this.circle );
 
-    // Set ourself to be non-pickable so that we don't get mouse events.
+    // Set ourself to be initially non-pickable so that we don't get mouse events.
     this.setPickable( false );
 
     this.updatePosition();
-
   }
 
   return inherit( Node, ParticleNode, {
+
     /**
      * @public
-     * @returns {*}
+     * @returns {boolean}
      */
     getGradientEnabled: function() {
       return this.useGradient;
     },
+
     /**
      * @public
      * @param gradientEnabled
@@ -107,11 +103,9 @@ define( function( require ) {
       }
     },
 
-
     /**
      * @public
-     * If the radius of the particle changes, we need to redraw ourself to
-     * correspond.
+     * If the radius of the particle changes, we need to redraw ourself to correspond.
      */
     handleParticleRadiusChanged: function() {
 
@@ -126,13 +120,12 @@ define( function( require ) {
         circleDiameter = circleDiameter * OVERLAP_ENLARGEMENT_FACTOR;
       }
       this.circle.setShape( new Shape().circle( 0, 0, circleDiameter / 2 ) );
-
     },
 
     /**
-     * Select the color for this particle.
+     * Select the color and create the solid or gradient paint for this particle.
      *
-     * @return Color to use for this particle.
+     * @return paint to use for this particle
      */
     choosePaint: function( atom ) {
 
@@ -189,4 +182,3 @@ define( function( require ) {
     }
   } );
 } );
-
