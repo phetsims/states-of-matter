@@ -1,7 +1,7 @@
 // Copyright 2002-2015, University of Colorado Boulder
 
 /**
- * This class displays a control panel for controlling the display of attractive, repulsive and total force.
+ * This class displays a control panel for controlling the display of attractive, repulsive, and total force.
  *
  * @author John Blanco
  * @author Siddhartha Chinthapally (Actual Concepts)
@@ -36,7 +36,6 @@ define( function( require ) {
   var MAX_WIDTH = 130; // max width of text label  in the panel
 
   /**
-   *
    * @param {Property<String>} forcesProperty that determines which forces to display
    * @param {Property<Boolean>} forceControlPanelExpandProperty -true to use force panel expand,false if not
    * @param {Object} [options] for various panel display properties
@@ -82,6 +81,7 @@ define( function( require ) {
     var repulsiveArrow = new ArrowNode( arrowStartX, arrowY, arrowEndX, arrowY, _.extend( {
       fill: '#FD17FF'
     }, arrowNodeOptions ) );
+
     var createText = function( string, width, fontSize ) {
       var text = new Text( string, { font: new PhetFont( fontSize ), fill: options.textColor } );
       if ( text.width > width ) {
@@ -90,25 +90,27 @@ define( function( require ) {
       return text;
     };
 
-    // hide forces
     var hideForcesText = { label: createText( hideForcesString, MAX_WIDTH / 2, 12 ) };
 
-    // total force
     var totalForceText = {
       label: createText( totalForceString, MAX_WIDTH / 2, 12 ),
       icon: totalForceArrow
     };
+
     var attractiveText = {
       label: createText( attractiveString, MAX_WIDTH / 2, 11 ),
       icon: attractiveArrow
     };
+
     var vanderwaalsText = {
       label: createText( vanderwaalsString, MAX_WIDTH / 2, 10 )
     };
+
     var repulsiveText = {
       label: createText( repulsiveString, MAX_WIDTH / 2, 11 ),
       icon: repulsiveArrow
     };
+
     var electronOverlapText = {
       label: createText( electronOverlapString, MAX_WIDTH / 2, 10 )
     };
@@ -116,11 +118,11 @@ define( function( require ) {
     // compute the maximum item width
     var widestItem = _.max( [ hideForcesText, totalForceText, attractiveText, vanderwaalsText, repulsiveText,
       electronOverlapText ], function( item ) {
-      return item.label.width + ((item.icon) ? item.icon.width : 0);
+      return item.label.width + ( ( item.icon ) ? item.icon.width : 0 );
     } );
-    var maxWidth = widestItem.label.width + ((widestItem.icon) ? widestItem.icon.width : 0);
+    var maxWidth = widestItem.label.width + ( ( widestItem.icon ) ? widestItem.icon.width : 0);
 
-    // pad inserts a spacing node (HStrut) so that the text, space and image together occupy a certain fixed width.
+    // inserts a spacing node (HStrut) so that the text, space and image together occupy a certain fixed width
     var createItem = function( itemSpec ) {
       if ( itemSpec.icon ) {
         var strutWidth = maxWidth - itemSpec.label.width - itemSpec.icon.width;
@@ -132,14 +134,15 @@ define( function( require ) {
     };
 
     var componentForceText = new VBox( {
-      children: [ createItem( attractiveText ),
+      children: [
+        createItem( attractiveText ),
         createItem( vanderwaalsText ),
         createItem( repulsiveText ),
         createItem( electronOverlapText ) ],
       align: 'left'
     } );
 
-    // the big left curly brace
+    // the big left bracket
     var curveShape = new Path( new Shape()
         .moveTo( 8, 8 )
         .lineTo( 3, 8 )
@@ -157,8 +160,7 @@ define( function( require ) {
       spacing: 2,
       children: [ curveShape, componentForceText ]
     } );
-    var totalForceStrutWidth = maxWidth - totalForceText.label.width -
-                               totalForceText.icon.width + curveShape.width;
+    var totalForceStrutWidth = maxWidth - totalForceText.label.width - totalForceText.icon.width + curveShape.width;
     var totalForceItem = new HBox( {
       children: [ totalForceText.label,
         new HStrut( totalForceStrutWidth ),
@@ -170,45 +172,43 @@ define( function( require ) {
 
     var hideForcesRadio = new AquaRadioButton( forcesProperty, 'hideForces', hideForce, { radius: 8 } );
     var totalForceRadio = new AquaRadioButton( forcesProperty, 'totalForce', totalForce, { radius: 8 } );
-    var componentForceRadio = new AquaRadioButton( forcesProperty, 'componentForce', componentForce, {
-      radius: 8
-    } );
+    var componentForceRadio = new AquaRadioButton( forcesProperty, 'componentForce', componentForce, { radius: 8 } );
 
     var radioButtonGroup = new VBox( {
       children: [ hideForcesRadio, totalForceRadio, componentForceRadio ],
       align: 'left',
       spacing: 3
     } );
-    // panel width of atomic interaction and  atomic interaction in SOM full version is different
+
+    // The panel width in the Atomic Interaction sim and on the Interaction screen in SOM is different.
     var panelMinWidth = options.showTitleWhenExpand ? 178 : 185;
     radioButtonGroup.setTranslation( 10, 0 );
     accordionContent.addChild( radioButtonGroup );
-    // show white stroke around the force panel within SOM  full version  else  show black stroke
+
+    // show white stroke around the force panel within SOM full version  else  show black stroke
     var panelStroke = options.showTitleWhenExpand ? 'white' : 'black';
-    var accordionBox = new AccordionBox( accordionContent,
-      {
-        titleNode: createText( forcesString, MAX_WIDTH / 2, 14 ),
-        fill: options.backgroundColor,
-        stroke: panelStroke,
-        expandedProperty: forceControlPanelExpandProperty,
-        contentAlign: 'left',
-        titleAlignX: 'left',
-        buttonAlign: options.buttonAlign,
-        cornerRadius: 4,
-        minWidth: panelMinWidth,
-        contentYSpacing: 1,
-        contentXSpacing: 3,
-        contentXMargin: 12,
-        buttonYMargin: 4,
-        buttonXMargin: 10,
-        buttonTouchAreaDilatedX: 15,
-        buttonTouchAreaDilatedY: 6,
-        showTitleWhenExpanded: options.showTitleWhenExpand
-      } );
+    var accordionBox = new AccordionBox( accordionContent, {
+      titleNode: createText( forcesString, MAX_WIDTH / 2, 14 ),
+      fill: options.backgroundColor,
+      stroke: panelStroke,
+      expandedProperty: forceControlPanelExpandProperty,
+      contentAlign: 'left',
+      titleAlignX: 'left',
+      buttonAlign: options.buttonAlign,
+      cornerRadius: 4,
+      minWidth: panelMinWidth,
+      contentYSpacing: 1,
+      contentXSpacing: 3,
+      contentXMargin: 12,
+      buttonYMargin: 4,
+      buttonXMargin: 10,
+      buttonTouchAreaDilatedX: 15,
+      buttonTouchAreaDilatedY: 6,
+      showTitleWhenExpanded: options.showTitleWhenExpand
+    } );
     this.addChild( accordionBox );
 
     this.mutate( options );
-
   }
 
   return inherit( Node, ForcesControlPanel );

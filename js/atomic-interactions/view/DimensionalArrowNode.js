@@ -27,9 +27,11 @@ define( function( require ) {
       stroke: 'black',
       lineWidth: 1
     }, options );
+
     // arrowNode tip and tail locations
     this.tailLocation = new Vector2( 0, 0 );
     this.tipLocation = new Vector2( 0, 0 );
+
     // things you're likely to mess up, add more as needed
     assert && assert( options.headWidth > options.tailWidth );
 
@@ -38,6 +40,7 @@ define( function( require ) {
   }
 
   return inherit( Path, DimensionalArrowNode, {
+
     /**
      * @public
      * @param {Number} tailX - tail X position
@@ -75,4 +78,3 @@ define( function( require ) {
     }
   } );
 } );
-
