@@ -1,4 +1,5 @@
 // Copyright 2002-2011, University of Colorado
+
 /**
  * View for the hand node which looks like a human hand with thumb and pointing finger expanded and the other three
  * fingers folded.

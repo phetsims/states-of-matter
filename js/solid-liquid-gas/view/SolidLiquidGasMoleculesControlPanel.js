@@ -4,7 +4,6 @@
  * View for the panel for selecting the atoms/molecules
  * @author Siddhartha Chinthapally (Actual Concepts)
  */
-
 define( function( require ) {
   'use strict';
 

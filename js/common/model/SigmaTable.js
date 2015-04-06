@@ -1,4 +1,5 @@
-// Copyright 2002-2014, University of Colorado Boulder
+// Copyright 2002-2015, University of Colorado Boulder
+
 /**
  * This class provides the value of sigma for Lennard-Jones calculations.  The
  * value of sigma is in units of distance, and is (apparently) different for

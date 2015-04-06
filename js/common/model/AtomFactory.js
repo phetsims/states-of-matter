@@ -1,4 +1,5 @@
 // Copyright 2002-2011, University of Colorado
+
 /**
  * This class is used to create an instance of the desired type of atom.
  *

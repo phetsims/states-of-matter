@@ -1,4 +1,5 @@
 // Copyright 2002-2011, University of Colorado
+
 /**
  * PushpinNode represents the pushpin used to "pin" an atom in one location.
  * @author Siddhartha Chinthapally (Actual Concepts)

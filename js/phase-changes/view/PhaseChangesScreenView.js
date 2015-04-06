@@ -6,7 +6,6 @@
  * @author Aaron Davis
  * @author Siddhartha Chinthapally (Actual Concepts)
  */
-
 define( function( require ) {
   'use strict';
 

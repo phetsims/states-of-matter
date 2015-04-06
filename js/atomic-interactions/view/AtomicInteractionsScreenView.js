@@ -1,6 +1,7 @@
-//  Copyright 2002-2014, University of Colorado Boulder
+//  Copyright 2002-2015, University of Colorado Boulder
 
 /**
+ * Main view for the "Atomic Interactions" sim and for the "Interactions" screen in the States of Matter simulation.
  *
  * @author John Blanco
  */
@@ -31,27 +32,21 @@ define( function( require ) {
   var HandNode = require( 'STATES_OF_MATTER/atomic-interactions/view/HandNode' );
   var AtomicInteractionColors = require( 'STATES_OF_MATTER/atomic-interactions/view/AtomicInteractionColors' );
 
-
   // strings
   var normalString = require( 'string!STATES_OF_MATTER/normal' );
   var slowMotionString = require( 'string!STATES_OF_MATTER/slowMotion' );
   var returnAtomString = require( 'string!STATES_OF_MATTER/returnAtom' );
   var inset = 10;
 
-
-  // Canvas size in pico meters, since this is a reasonable scale at which
-  // to display molecules.  Assumes a 4:3 aspect ratio.
-  var CANVAS_WIDTH = 2000;
-  // Constant used to control size of push pin.
-  var PUSH_PIN_WIDTH = CANVAS_WIDTH * 0.01;
+  // Constant used to control size of push pin, empirically determined.
+  var PUSH_PIN_WIDTH = 20;
 
   /**
-   *
    * @param {DualAtomModel} dualAtomModel of the simulation
-   * @param {Boolean} enableHeterogeneousMolecules - true to use a enable heterogeneous molecules, false otherwise.
+   * @param {Boolean} enableHeterogeneousAtoms - true to use a enable heterogeneous molecules, false otherwise.
    * @constructor
    */
-  function AtomicInteractionsScreenView( dualAtomModel, enableHeterogeneousMolecules ) {
+  function AtomicInteractionsScreenView( dualAtomModel, enableHeterogeneousAtoms ) {
 
     ScreenView.call( this, { layoutBounds: new Bounds2( 0, 0, 834, 504 ) } );
 
@@ -64,24 +59,21 @@ define( function( require ) {
     var atomicInteractionsScreenView = this;
 
     // model-view transform
-    var mvtScale = 0.25;
-
     this.modelViewTransform = ModelViewTransform2.createSinglePointScaleMapping( new Vector2( 0, 0 ),
-      new Vector2( 110, 370 ), mvtScale );
+      new Vector2( 110, 370 ), 0.25 );
 
-    var tickTextColor = enableHeterogeneousMolecules ? 'black' : 'white';
-    var showTitleWhenExpand = !enableHeterogeneousMolecules; // force control panel title
-    var textColor = enableHeterogeneousMolecules ? 'black' : 'white';
-    var backgroundColor = enableHeterogeneousMolecules ? '#D1D2FF' : 'black';
-    var forceControlPanelButtonAlign = enableHeterogeneousMolecules ? 'right' : 'left';
-    var atomicInteractionsControlPanel = new AtomicInteractionsControlPanel( dualAtomModel,
-      enableHeterogeneousMolecules, {
-        right: this.layoutBounds.maxX - inset,
-        top:   this.layoutBounds.minY + inset,
-        tickTextColor: tickTextColor,
-        textColor: textColor,
-        backgroundColor: backgroundColor
-      } );
+    var tickTextColor = enableHeterogeneousAtoms ? 'black' : 'white';
+    var showTitleWhenExpand = !enableHeterogeneousAtoms; // force control panel title
+    var textColor = enableHeterogeneousAtoms ? 'black' : 'white';
+    var backgroundColor = enableHeterogeneousAtoms ? '#D1D2FF' : 'black';
+    var forceControlPanelButtonAlign = enableHeterogeneousAtoms ? 'right' : 'left';
+    var atomicInteractionsControlPanel = new AtomicInteractionsControlPanel( dualAtomModel, enableHeterogeneousAtoms, {
+      right: this.layoutBounds.maxX - inset,
+      top:   this.layoutBounds.minY + inset,
+      tickTextColor: tickTextColor,
+      textColor: textColor,
+      backgroundColor: backgroundColor
+    } );
 
     // add interactive potential diagram
     this.interactiveInteractionPotentialDiagram = new InteractiveInteractionPotentialDiagram(
@@ -91,8 +83,8 @@ define( function( require ) {
       } );
     this.addChild( this.interactiveInteractionPotentialDiagram );
 
-    // Add the button for retrieving the atom to the canvas.
-    this.retrieveAtomButton = new TextPushButton( returnAtomString, {
+    // Add the button for returning the atom to the screen.
+    this.returnAtomButton = new TextPushButton( returnAtomString, {
       font: new PhetFont( 17 ),
       baseColor: '#61BEE3',
       listener: function() {
@@ -101,10 +93,9 @@ define( function( require ) {
       left:   this.layoutBounds.minX + 6 * inset,
       bottom: this.layoutBounds.bottom - 2 * inset
     } );
+    this.addChild( this.returnAtomButton );
 
-    this.addChild( this.retrieveAtomButton );
-
-    // Create and add the Reset All Button in the bottom right, which resets the model
+    // Create and add the Reset All Button in the bottom right.
     var resetAllButton = new ResetAllButton( {
       listener: function() {
         dualAtomModel.reset();
@@ -118,7 +109,7 @@ define( function( require ) {
     } );
     this.addChild( resetAllButton );
 
-    // add play pause button and step button
+    // add play/pause and step buttons
     var stepButton = new StepButton(
       function() {
         dualAtomModel.stepInternal( 0.04 );
@@ -143,7 +134,7 @@ define( function( require ) {
       panelMinWidth: atomicInteractionsControlPanel.width
     } );
     var atomicInteractionsControlPanelRightOffset = 20;
-    if ( enableHeterogeneousMolecules ) {
+    if ( enableHeterogeneousAtoms ) {
       resetAllButton.right = this.layoutBounds.maxX - inset;
       atomicInteractionsControlPanel.right = resetAllButton.left - atomicInteractionsControlPanelRightOffset;
       forceControlNode.right = atomicInteractionsControlPanel.right;
@@ -206,15 +197,17 @@ define( function( require ) {
     // Create the nodes that will act as layers for the fixed and movable
     // particles.  This is done so that the fixed particle can always
     // appear to be on top.
-    this.fixedParticleLayer = new Node();
-    this.addChild( this.fixedParticleLayer );
     this.movableParticleLayer = new Node();
     this.addChild( this.movableParticleLayer );
+    this.fixedParticleLayer = new Node();
+    this.addChild( this.fixedParticleLayer );
 
+    // Add the control panels to the screen after the atoms so that the atoms
+    // with go behind them.
     this.addChild( atomicInteractionsControlPanel );
     this.addChild( forceControlNode );
 
-    // default molecule is neon
+    // set up the default particles
     this.handleFixedParticleAdded( dualAtomModel.fixedAtom );
     this.handleMovableParticleAdded( dualAtomModel.movableAtom );
     dualAtomModel.atomPairProperty.link( function() {
@@ -439,16 +432,16 @@ define( function( require ) {
         atomWindowPosition += (window.innerWidth - this.layoutBounds.width * scale) / 2 - 50;
       }
       if ( atomWindowPosition > window.innerWidth ) {
-        if ( !this.retrieveAtomButton.isVisible() ) {
+        if ( !this.returnAtomButton.isVisible() ) {
           // The particle is off the canvas and the button is not
           // yet shown, so show it.
-          this.retrieveAtomButton.setVisible( true );
+          this.returnAtomButton.setVisible( true );
         }
       }
-      else if ( this.retrieveAtomButton.isVisible() ) {
+      else if ( this.returnAtomButton.isVisible() ) {
         // The particle is on the canvas but the button is visible
         // (which it shouldn't be), so hide it.
-        this.retrieveAtomButton.setVisible( false );
+        this.returnAtomButton.setVisible( false );
       }
     },
 

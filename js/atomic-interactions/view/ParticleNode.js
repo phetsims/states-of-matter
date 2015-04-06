@@ -5,7 +5,6 @@
  *
  * @author Aaron Davis
  */
-
 define( function( require ) {
   'use strict';
 

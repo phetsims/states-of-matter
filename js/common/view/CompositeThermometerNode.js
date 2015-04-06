@@ -1,7 +1,8 @@
-// Copyright 2002-2014, University of Colorado Boulder
+// Copyright 2002-2015, University of Colorado Boulder
 
 /**
  * View for the thermometer
+ *
  * @author Siddhartha Chinthapally (Actual Concepts)
  */
 define( function( require ) {

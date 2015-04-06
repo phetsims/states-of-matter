@@ -1,10 +1,10 @@
-// Copyright 2002-2014, University of Colorado Boulder
+// Copyright 2002-2015, University of Colorado Boulder
 
 /**
- * View for the particle container handle node. It looks like a smooth sinewave at the top and the bottom.
+ * View for the particle container handle node. It looks like a smooth sine wave at the top and the bottom.
+ *
  * @author Siddhartha Chinthapally (Actual Concepts)
  */
-
 define( function( require ) {
   'use strict';
 

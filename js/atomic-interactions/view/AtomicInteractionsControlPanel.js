@@ -5,7 +5,6 @@
  *
  * @author Siddhartha Chinthapally (Actual Concepts)
  */
-
 define( function( require ) {
   'use strict';
 
@@ -362,6 +361,7 @@ define( function( require ) {
       lineWidth: options.lineWidth,
       fill: options.backgroundColor
     } );
+
     // sliders and title adjustments
     atomDiameterTitle.left = content.left;
     atomDiameterSlider.top = atomDiameterTitle.bottom + verticalSpaceOffset;

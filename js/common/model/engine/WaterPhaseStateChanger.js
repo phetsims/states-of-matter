@@ -1,4 +1,5 @@
-// Copyright 2002-2014, University of Colorado Boulder
+// Copyright 2002-2015, University of Colorado Boulder
+
 /**
  * This class is used to change the phase state (i.e. solid, liquid, or gas)
  * for a set of water molecules.  It only works for water and would need to be

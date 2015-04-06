@@ -1,4 +1,5 @@
-// Copyright 2002-2014, University of Colorado Boulder
+// Copyright 2002-2015, University of Colorado Boulder
+
 /**
  * This class is used to change the phase state (i.e. solid, liquid, or gas)
  * for a set of multi-atomic (i.e. more than one atom/molecule) molecules.

@@ -1,4 +1,5 @@
-// Copyright 2002-2014, University of Colorado
+// Copyright 2002-2015, University of Colorado
+
 /**
  * This class represents a node that looks like a large finger, which can be
  * used to push down on things.

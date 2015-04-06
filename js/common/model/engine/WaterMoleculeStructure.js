@@ -1,4 +1,5 @@
-// Copyright 2002-2014, University of Colorado Boulder
+// Copyright 2002-2015, University of Colorado Boulder
+
 /**
  * This class is a singleton that provides information about the structure
  * of a water molecule (i.e. the spatial and angular relationships between

@@ -1,4 +1,5 @@
-// Copyright 2002-2014, University of Colorado
+// Copyright 2002-2015, University of Colorado
+
 /**
  * This class represents a node that displays a dial gauge, which is a
  * circular instrument that can be used to portray measurements of temperature,
