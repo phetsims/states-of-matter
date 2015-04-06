@@ -1,3 +1,6 @@
+Implementation Notes
+
+This repo contains the code for three simulations: States of Matter, States of Matter Basics, and Atomic Interactions.
 
 This was ported from a Java simulation, so some elements of the code look quite "Javaesque".  For example, there are a
 number of getter/setter methods that would probably be done using direct access if this had originally been a
