@@ -28,7 +28,6 @@ define( function( require ) {
    */
   function GrabbableParticleNode( handNode, dualAtomModel, particle, modelViewTransform, useGradient, enableOverlap, minX, maxX ) {
 
-
     ParticleForceNode.call( this, particle, modelViewTransform, useGradient, enableOverlap );
 
     this.minX = minX;
@@ -40,6 +39,7 @@ define( function( require ) {
 
     // Put a cursor handler into place.
     this.cursor = 'pointer';
+
     var startDragX;
     var endDragX;
     var initialStartX = this.x;

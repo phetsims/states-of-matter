@@ -33,7 +33,6 @@ define( function( require ) {
   var EPSILON_LINE_COLOR = RESIZE_HANDLE_NORMAL_COLOR;
 
   /**
-   *
    * @param {Number} sigma - Initial value of sigma, a.k.a. the atom diameter
    * @param {Number} epsilon - Initial value of epsilon, a.k.a. the interaction strength
    * @param {Boolean} wide - true if the wide screen version of the graph is needed, false if not.
@@ -49,6 +48,7 @@ define( function( require ) {
     var interactiveInteractionPotentialDiagram = this;
 
     this.interactionEnabled = false;
+
     // Add the line that will indicate the value of epsilon.
     var epsilonLineLength = EPSILON_HANDLE_OFFSET_PROPORTION * this.widthOfGraph * 1.2;
     this.epsilonLine = new Rectangle( -epsilonLineLength / 2, 0, epsilonLineLength, 1, {
@@ -63,10 +63,12 @@ define( function( require ) {
     var startDragY;
     var endDragY;
     this.epsilonLine.addInputListener( new SimpleDragHandler( {
+
       start: function( event ) {
         dualAtomModel.setMotionPaused( true );
         startDragY = interactiveInteractionPotentialDiagram.epsilonLine.globalToParentPoint( event.pointer.point ).y;
       },
+
       drag: function( event ) {
         endDragY = interactiveInteractionPotentialDiagram.epsilonLine.globalToParentPoint( event.pointer.point ).y;
         var d = endDragY - startDragY;
@@ -75,6 +77,7 @@ define( function( require ) {
                           ( interactiveInteractionPotentialDiagram.getGraphHeight() / 2);
         dualAtomModel.interactionStrengthProperty.value = dualAtomModel.getEpsilon() + ( d * scaleFactor);
       },
+
       end: function() {
         dualAtomModel.setMotionPaused( false );
       }
@@ -92,8 +95,7 @@ define( function( require ) {
       cursor: 'pointer'
     };
 
-    // Add the arrow nodes that will allow the user to control the
-    // parameters of the LJ potential.
+    // Add the arrow nodes that will allow the user to control the parameters of the LJ potential.
     this.epsilonResizeHandle = new ArrowNode( 0, -RESIZE_HANDLE_SIZE_PROPORTION * this.widthOfGraph / 2, 0,
       RESIZE_HANDLE_SIZE_PROPORTION * this.widthOfGraph, arrowNodeOptions );
     this.epsilonResizeHandle.addInputListener( new FillHighlightListener( RESIZE_HANDLE_NORMAL_COLOR,
@@ -101,10 +103,12 @@ define( function( require ) {
     this.ljPotentialGraph.addChild( this.epsilonResizeHandle );
     this.epsilonResizeHandle.touchArea = this.epsilonResizeHandle.localBounds.dilatedXY( 3, 10 );
     this.epsilonResizeHandle.addInputListener( new SimpleDragHandler( {
+
       start: function( event ) {
         dualAtomModel.setMotionPaused( true );
         startDragY = interactiveInteractionPotentialDiagram.epsilonResizeHandle.globalToParentPoint( event.pointer.point ).y;
       },
+
       drag: function( event ) {
         endDragY = interactiveInteractionPotentialDiagram.epsilonResizeHandle.globalToParentPoint( event.pointer.point ).y;
         var d = endDragY - startDragY;
@@ -113,6 +117,7 @@ define( function( require ) {
                           ( interactiveInteractionPotentialDiagram.getGraphHeight() / 2);
         dualAtomModel.interactionStrengthProperty.value = dualAtomModel.getEpsilon() + ( d * scaleFactor);
       },
+
       end: function() {
         dualAtomModel.setMotionPaused( false );
       }
@@ -128,10 +133,12 @@ define( function( require ) {
     var startDragX;
     var endDragX;
     this.sigmaResizeHandle.addInputListener( new SimpleDragHandler( {
+
       start: function( event ) {
         dualAtomModel.setMotionPaused( true );
         startDragX = interactiveInteractionPotentialDiagram.sigmaResizeHandle.globalToParentPoint( event.pointer.point ).x;
       },
+
       drag: function( event ) {
         endDragX = interactiveInteractionPotentialDiagram.sigmaResizeHandle.globalToParentPoint( event.pointer.point ).x;
         var d = endDragX - startDragX;
@@ -143,20 +150,22 @@ define( function( require ) {
                                                    (atomDiameter < StatesOfMatterConstants.MAX_SIGMA ? atomDiameter :
                                                     StatesOfMatterConstants.MAX_SIGMA) : StatesOfMatterConstants.MIN_SIGMA;
       },
+
       end: function() {
         dualAtomModel.setMotionPaused( false );
       }
     } ) );
 
     // Add the ability to grab and move the position marker.
-    // This node will need to be pickable so the user can grab it.
     this.positionMarker.setPickable( true );
     this.positionMarker.touchArea = Shape.circle( 0, 0, 13 );
     this.positionMarker.addInputListener( new SimpleDragHandler( {
+
       start: function( event ) {
         dualAtomModel.setMotionPaused( true );
         startDragX = interactiveInteractionPotentialDiagram.positionMarker.globalToParentPoint( event.pointer.point ).x;
       },
+
       drag: function( event ) {
         // Only allow the user to move unbonded atoms.
         if ( dualAtomModel.getBondingState() !== dualAtomModel.BONDING_STATE_UNBONDED ) {
@@ -173,6 +182,7 @@ define( function( require ) {
         var newPosX = Math.max( atom.getX() + ( xDifference * scaleFactor ), atom.getRadius() * 1.8 );
         atom.setPosition( newPosX, atom.getY() );
       },
+
       end: function() {
         dualAtomModel.setMotionPaused( false );
       }
@@ -190,10 +200,12 @@ define( function( require ) {
         interactiveInteractionPotentialDiagram.setLjPotentialParameters( dualAtomModel.getSigma(), dualAtomModel.getEpsilon() );
         interactiveInteractionPotentialDiagram.updateInteractivityState();
         interactiveInteractionPotentialDiagram.drawPotentialCurve();
-      } );
+      }
+    );
 
     // Update interactivity state.
     this.updateInteractivityState();
+
     // Redraw the potential curve.
     this.drawPotentialCurve();
     this.addChild( this.horizontalAxisLabel );
@@ -205,7 +217,6 @@ define( function( require ) {
     this.addChild( this.horizontalAxis );
 
     // applying color scheme to lj graph elements
-    // Todo: Is a single link better than multiple linkAttributes for the same property?
     AtomicInteractionColors.linkAttribute( 'ljGraphColorsMode', this.verticalAxis, 'fill' );
     AtomicInteractionColors.linkAttribute( 'ljGraphColorsMode', this.horizontalAxis, 'fill' );
     AtomicInteractionColors.linkAttribute( 'ljGraphColorsMode', this.verticalAxis, 'stroke' );
@@ -221,10 +232,10 @@ define( function( require ) {
     AtomicInteractionColors.linkAttribute( 'ljGraphColorsMode', this.gridNode.horizontalLinesNode, 'stroke' );
     AtomicInteractionColors.linkAttribute( 'potentialEnergyLine', this.potentialEnergyLine, 'stroke' );
     this.mutate( options );
-
   }
 
   return inherit( InteractionPotentialDiagramNode, InteractiveInteractionPotentialDiagram, {
+
     /**
      * @protected
      * This is an override of the method in the base class that draws the
@@ -256,6 +267,7 @@ define( function( require ) {
         this.sigmaResizeHandle.setPickable( this.interactionEnabled );
       }
     },
+
     /**
      * @private
      */
