@@ -53,6 +53,15 @@ define( function( require ) {
   var SLIDER_TICK_TEXT_MAX_WIDTH = 26;
   var NORMAL_TEXT_FONT_SIZE = 12;
 
+  // Icon for the adjustable attraction  button
+  var ADJUSTABLE_ATTRACTION_ICON = new Circle( 6, { fill: StatesOfMatterConstants.ADJUSTABLE_ATTRACTION_COLOR } );
+  // Icon for the neon  button
+  var NEON_ICON = new Circle( 5, { fill: StatesOfMatterConstants.NEON_COLOR } );
+
+  // Icon for the argon  button
+  var ARGON_ICON = new Circle( 6, { fill: StatesOfMatterConstants.ARGON_COLOR } );
+
+
   /**
    * @param {DualAtomModel} dualAtomModel - model of the simulation
    * @param {Boolean} enableHeterogeneousAtoms - flag for enabling heterogeneous atom combinations
@@ -215,11 +224,11 @@ define( function( require ) {
       }
       // itemSpec describes the pieces that make up an item in the control panel,
       // conforms to the contract: { label: {Node}, icon: {Node} (optional) }
-      var neon = { label: createText( neonString, MAX_WIDTH ), icon: createNeonIcon() };
-      var argon = { label: createText( argonString, MAX_WIDTH ), icon: createArgonIcon() };
+      var neon = { label: createText( neonString, MAX_WIDTH ), icon: NEON_ICON };
+      var argon = { label: createText( argonString, MAX_WIDTH ), icon: ARGON_ICON };
       adjustableAttraction = {
         label: createText( adjustableAttractionString, MAX_WIDTH ),
-        icon: createAdjustableAttractionIcon()
+        icon: ADJUSTABLE_ATTRACTION_ICON
       };
       titleText = {
         label: title
@@ -436,21 +445,5 @@ define( function( require ) {
     }
     this.mutate( options );
   }
-
-  //Create an icon for the adjustable attraction  button
-  var createAdjustableAttractionIcon = function() {
-    return new Circle( 6, { fill: StatesOfMatterConstants.ADJUSTABLE_ATTRACTION_COLOR } );
-  };
-
-  //Create an icon for the neon  button
-  var createNeonIcon = function() {
-    return new Circle( 5, { fill: StatesOfMatterConstants.NEON_COLOR } );
-  };
-
-  //Create an icon for the argon  button
-  var createArgonIcon = function() {
-    return new Circle( 6, { fill: StatesOfMatterConstants.ARGON_COLOR } );
-  };
-
   return inherit( Node, AtomicInteractionsControlPanel );
 } );

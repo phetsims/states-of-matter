@@ -41,6 +41,32 @@ define( function( require ) {
   var TickTextWidth = 20;
   var NORMAL_TEXT_FONT_SIZE = 12;
 
+  // Icon for the adjustable attraction  button
+  var ADJUSTABLE_ATTRACTION_ICON = new Circle( 6, { fill: StatesOfMatterConstants.ADJUSTABLE_ATTRACTION_COLOR } );
+
+  // Icon for the neon  button
+  var NEON_ICON = new Circle( 5, { fill: StatesOfMatterConstants.NEON_COLOR } );
+
+  // Icon for the argon  button
+  var ARGON_ICON = new Circle( 6, { fill: StatesOfMatterConstants.ARGON_COLOR } );
+
+  // Icon for the water  button
+  var dot1 = new Circle( 5, { fill: StatesOfMatterConstants.OXYGEN_COLOR } );
+  var dot2 = new Circle( 3, {
+    fill: StatesOfMatterConstants.HYDROGEN_COLOR,
+    stroke: StatesOfMatterConstants.HYDROGEN_COLOR, bottom: dot1.top + 5, right: dot1.left + 5
+  } );
+  var dot3 = new Circle( 3, {
+    fill: StatesOfMatterConstants.HYDROGEN_COLOR,
+    stroke: StatesOfMatterConstants.HYDROGEN_COLOR, bottom: dot1.top + 5, left: dot1.right - 5
+  } );
+  var WATER_ICON = new Node( { children: [ dot3, dot1, dot2 ] } );
+  //Icon for the oxygen  button
+  var oxygen1 = new Circle( 5, { fill: StatesOfMatterConstants.OXYGEN_COLOR } );
+  var oxygen2 = new Circle( 5, { fill: StatesOfMatterConstants.OXYGEN_COLOR, left: oxygen1.right - 4 } );
+  var OXYGEN_ICON = new Node( { children: [ oxygen1, oxygen2 ] } );
+
+
   /**
    *
    * @param { MultipleParticleModel } multipleParticleModel - model of the simulation
@@ -133,13 +159,13 @@ define( function( require ) {
 
     // itemSpec describes the pieces that make up an item in the control panel,
     // conforms to the contract: { label: {Node}, icon: {Node} (optional) }
-    var neon = { label: neonText, icon: createNeonIcon() };
-    var argon = { label: argonText, icon: createArgonIcon() };
-    var water = { label: waterText, icon: createWaterIcon() };
-    var oxygen = { label: oxygenText, icon: createOxygenIcon() };
+    var neon = { label: neonText, icon: NEON_ICON };
+    var argon = { label: argonText, icon: ARGON_ICON };
+    var water = { label: waterText, icon: WATER_ICON };
+    var oxygen = { label: oxygenText, icon: OXYGEN_ICON };
     var adjustableAttraction = {
       label: adjustableAttractionText,
-      icon: createAdjustableAttractionIcon()
+      icon: ADJUSTABLE_ATTRACTION_ICON
     };
     var titleText = {
       label: title
@@ -239,45 +265,6 @@ define( function( require ) {
     this.addChild( new Node( { children: [ titleBackground, titleText.label ] } ) );
     this.mutate( options );
   }
-
-  //Create an icon for the adjustable attraction  button
-  var createAdjustableAttractionIcon = function() {
-    return new Circle( 6, { fill: StatesOfMatterConstants.ADJUSTABLE_ATTRACTION_COLOR } );
-  };
-
-  //Create an icon for the neon  button
-  var createNeonIcon = function() {
-    return new Circle( 5, { fill: StatesOfMatterConstants.NEON_COLOR } );
-  };
-
-  //Create an icon for the argon  button
-  var createArgonIcon = function() {
-    return new Circle( 6, { fill: StatesOfMatterConstants.ARGON_COLOR } );
-  };
-
-  //Create an icon for the water  button
-  var createWaterIcon = function() {
-    var dot1 = new Circle( 5, { fill: StatesOfMatterConstants.OXYGEN_COLOR } );
-    var dot2 = new Circle( 3, {
-      fill: StatesOfMatterConstants.HYDROGEN_COLOR,
-      stroke: StatesOfMatterConstants.HYDROGEN_COLOR, bottom: dot1.top + 5, right: dot1.left + 5
-    } );
-    var dot3 = new Circle( 3, {
-      fill: StatesOfMatterConstants.HYDROGEN_COLOR,
-      stroke: StatesOfMatterConstants.HYDROGEN_COLOR, bottom: dot1.top + 5, left: dot1.right - 5
-    } );
-
-    return new Node( { children: [ dot3, dot1, dot2 ] } );
-
-  };
-
-  //Create an icon for the oxygen  button
-  var createOxygenIcon = function() {
-    var dot1 = new Circle( 5, { fill: StatesOfMatterConstants.OXYGEN_COLOR } );
-    var dot2 = new Circle( 5, { fill: StatesOfMatterConstants.OXYGEN_COLOR, left: dot1.right - 4 } );
-    return new Node( { children: [ dot1, dot2 ] } );
-  };
-
 
   return inherit( Node, PhaseChangesMoleculesControlPanel );
 } );
