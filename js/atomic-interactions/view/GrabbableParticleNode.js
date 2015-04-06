@@ -43,7 +43,9 @@ define( function( require ) {
     var startDragX;
     var endDragX;
     var initialStartX = this.x;
+
     this.addInputListener( new SimpleDragHandler( {
+
       start: function( event ) {
         // Stop the model from moving the particle at the same time the user
         // is moving it.
@@ -51,6 +53,7 @@ define( function( require ) {
         initialStartX = grabbableParticleNode.x;
         startDragX = grabbableParticleNode.globalToParentPoint( event.pointer.point ).x;
       },
+
       drag: function( event ) {
         // Only allow the user to move unbonded atoms.
         if ( dualAtomModel.getBondingState() !== dualAtomModel.BONDING_STATE_UNBONDED ) {
@@ -71,6 +74,7 @@ define( function( require ) {
         grabbableParticleNode.particle.setPosition( modelViewTransform.viewToModelX( newPosX ),
           particle.positionProperty.value.y );
       },
+
       end: function() {
         // Let the model move the particles again.  Note that this happens
         // even if the motion was paused by some other means.
@@ -78,6 +82,7 @@ define( function( require ) {
         dualAtomModel.isHandNodeVisible=false;
       }
     } ) );
+
     particle.positionProperty.link( function() {
       if ( !dualAtomModel.isPlaying ) {
         dualAtomModel.positionChanged();
@@ -87,6 +92,7 @@ define( function( require ) {
   }
 
   return inherit( ParticleForceNode, GrabbableParticleNode, {
+
     /**
      * @public
      * @returns {Number|*}

@@ -41,7 +41,6 @@ define( function( require ) {
    * @param {Object} [options] for various panel display properties
    * @constructor
    */
-
   function ForcesControlPanel( forcesProperty, forceControlPanelExpandProperty, options ) {
 
     options = _.extend( {

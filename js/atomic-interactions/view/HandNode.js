@@ -55,13 +55,15 @@ define( function( require ) {
     this.addChild( handShape );
     var startDragX;
     var endDragX;
+
     this.addInputListener( new SimpleDragHandler( {
+
       start: function( event ) {
-        // Stop the model from moving the particle at the same time the user
-        // is moving it.
+        // Stop the model from moving the particle at the same time the user is moving it.
         dualAtomModel.setMotionPaused( true );
         startDragX = handNode.globalToParentPoint( event.pointer.point ).x;
       },
+
       drag: function( event ) {
         // Only allow the user to move unbonded atoms.
         if ( dualAtomModel.getBondingState() !== dualAtomModel.BONDING_STATE_UNBONDED ) {
@@ -81,14 +83,16 @@ define( function( require ) {
         // Move the particle based on the amount of mouse movement.
         particle.setPosition( modelViewTransform.viewToModelX( newPosX ), particle.getY() );
       },
+
       end: function() {
-        // Let the model move the particles again.  Note that this happens
-        // even if the motion was paused by some other means.
+        // Let the model move the particles again.  Note that this happens even if the motion was paused by some otherz
+        // means.
         dualAtomModel.setMotionPaused( false );
         dualAtomModel.isHandNodeVisible = false;
         handNode.setVisible( false );
       }
     } ) );
+
     dualAtomModel.movableAtom.positionProperty.link( function( position ) {
       handNode.setTranslation( modelViewTransform.modelToViewX( position.x ),
         modelViewTransform.modelToViewY( position.y ) );
@@ -109,17 +113,15 @@ define( function( require ) {
       this.minX = minX;
     },
 
-
     getMaxX: function() {
       return this.maxX;
     },
+
     /**
-     *
      * @param {Number} maxX - particle max x  position
      */
     setMaxX: function( maxX ) {
       this.maxX = maxX;
     }
   } );
-
 } );
