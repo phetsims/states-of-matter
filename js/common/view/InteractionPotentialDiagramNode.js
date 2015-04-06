@@ -237,7 +237,7 @@ define( function( require ) {
       this.verticalScalingFactor = (this.graphHeight / 2) /
                                    (StatesOfMatterConstants.MAX_EPSILON * StatesOfMatterConstants.K_BOLTZMANN);
       this.horizontalLineCount = 5;
-      this.gridNode.addHorizontalLines( 0, 0, this.graphWidth, this.graphHeight, this.horizontalLineCount );
+      this.gridNode.setHorizontalLines( 0, 0, this.graphWidth, this.graphHeight, this.horizontalLineCount );
       this.drawPotentialCurve();
 
     },

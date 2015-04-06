@@ -2,6 +2,7 @@
 
 /**
  * PushpinNode represents the pushpin used to "pin" an atom in one location.
+ *
  * @author Siddhartha Chinthapally (Actual Concepts)
  */
 define( function( require ) {
@@ -15,12 +16,15 @@ define( function( require ) {
   // images
   var pushPinImg = require( 'image!STATES_OF_MATTER/push-pin.png' );
 
+  /**
+   * @constructor
+   */
   function PushpinNode() {
     Node.call( this );
     this.setPickable( false );
 
     var imageNode = new Image( pushPinImg );
-    this.addChild( imageNode, { scale: 0.3 } );
+    this.addChild( imageNode, { scale: 0.3 } ); // scale empirically determined
   }
 
   return inherit( Node, PushpinNode );

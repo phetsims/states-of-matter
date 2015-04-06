@@ -1,8 +1,8 @@
 // Copyright 2002-2013, University of Colorado Boulder
 
 /**
- * Scenery node that shows the grid lines.
- * Modified from energy-skate-park's GridNode implementation.
+ * Scenery node that shows the grid lines.  Highly leveraged from energy-skate-park's GridNode implementation.
+ *
  * @author Sam Reid
  * @author Siddhartha Chinthapally
  */
@@ -17,12 +17,12 @@ define( function( require ) {
   var ZoomButton = require( 'SCENERY_PHET/buttons/ZoomButton' );
   var rectangularButtonView = require( 'SUN/buttons/RectangularButtonView' );
 
+  // constants
   var MAX_LINES_HORIZONTAL = 13;
   var MIN_LINES_HORIZONTAL = 5;
   var ZOOM_INCREMENT = 2; // 2 lines per zoom
 
   /**
-   *
    * @param atomsView
    * @param {Number} offsetX
    * @param {Number} offsetY
@@ -40,7 +40,7 @@ define( function( require ) {
     this.zoomInButton = new ZoomButton( {
       listener: function() {
         atomsView.horizontalLineCount -= ZOOM_INCREMENT;
-        gridNode.addHorizontalLines( offsetX, offsetY, width, height, atomsView.horizontalLineCount );
+        gridNode.setHorizontalLines( offsetX, offsetY, width, height, atomsView.horizontalLineCount );
         atomsView.verticalScalingFactor *= 3.33;
         atomsView.drawPotentialCurve();
       },
@@ -56,7 +56,7 @@ define( function( require ) {
     this.zoomOutButton = new ZoomButton( {
       listener: function() {
         atomsView.horizontalLineCount += 2;
-        gridNode.addHorizontalLines( offsetX, offsetY, width, height, atomsView.horizontalLineCount );
+        gridNode.setHorizontalLines( offsetX, offsetY, width, height, atomsView.horizontalLineCount );
         atomsView.verticalScalingFactor /= 3.33;
         atomsView.drawPotentialCurve();
       },
@@ -120,7 +120,7 @@ define( function( require ) {
      * @param {Number} height -- height of the grid
      * @param {Number} horizontalLineCount -- number of horizontal lines
      */
-    addHorizontalLines: function( offsetX, offsetY, width, height, horizontalLineCount ) {
+    setHorizontalLines: function( offsetX, offsetY, width, height, horizontalLineCount ) {
 
       this.horizontalLines = [];
       for ( var y = 0; y < horizontalLineCount; y++ ) {
@@ -142,7 +142,6 @@ define( function( require ) {
       this.horizontalLinesNode.setShape( horizontalLineShape );
       this.zoomOutButton.enabled = (horizontalLineCount < MAX_LINES_HORIZONTAL);
       this.zoomInButton.enabled = (horizontalLineCount > MIN_LINES_HORIZONTAL);
-
     }
   } );
 } );

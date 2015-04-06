@@ -1,11 +1,11 @@
 // Copyright 2002-2015, University of Colorado Boulder
 
 /**
- * Copied from GraphingLines.
- * Base type for all line manipulators.
- * A pseudo-3D sphere with a halo that appears during interactions.
+ * A pseudo-3D sphere with a halo that appears during interactions.  This was highly leveraged from Manipulator.js
+ * in the Graphing Lins simulation.
  *
  * @author Chris Malley (PixelZoom, Inc.)
+ * @author Siddhartha Chinthapally (Actual Concepts)
  */
 define( function( require ) {
   'use strict';
@@ -59,8 +59,8 @@ define( function( require ) {
 
   return inherit( Node, PositionMarker, {
     /**
-     * @public
      * @param color
+     * @public
      */
     changeColor: function( color ) {
       this.haloNode.fill = Color.toColor( color ).withAlpha( 0.5 );

@@ -18,10 +18,16 @@ define( function( require ) {
   // images
   var atomicInteractionScreenIcon = require( 'image!STATES_OF_MATTER/som-atomic-interactions-icon.png' );
 
+  /**
+   * @param enableHeterogeneousMolecules
+   * @param simTitle
+   * @param colorsProperty
+   * @constructor
+   */
   function AtomicInteractionsScreen( enableHeterogeneousMolecules, simTitle, colorsProperty ) {
 
-    //If this is a single-screen sim, then no icon is necessary.
-    //If there are multiple screens, then the icon must be provided here.
+    //If this is a single-screen sim, then no icon is necessary.  If there are multiple screens, then the icon must be
+    // provided here.
     var screen = this;
     Screen.call( this, simTitle, new Image( atomicInteractionScreenIcon ),
       function() { return new DualAtomModel(); },
