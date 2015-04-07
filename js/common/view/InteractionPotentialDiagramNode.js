@@ -167,7 +167,7 @@ define( function( require ) {
         font: AXIS_LABEL_FONT
       } );
     if ( this.horizontalAxisLabel.width > this.horizontalAxis.width ) {
-      this.horizontalAxisLabel.setFont( new PhetFont( AXIS_LABEL_FONT_SIZE * this.horizontalAxis.width / this.horizontalAxisLabel.width ) );
+      this.horizontalAxisLabel.scale( this.horizontalAxis.width / this.horizontalAxisLabel.width );
     }
 
     this.setMolecular( false );
@@ -188,7 +188,7 @@ define( function( require ) {
     // restricted vertical  axis label
     var verticalAxisHeight = wide ? this.verticalAxis.height - zoomButtonsHeight : this.verticalAxis.height;
     if ( this.verticalAxisLabel.width > verticalAxisHeight ) {
-      this.verticalAxisLabel.setFont( new PhetFont( AXIS_LABEL_FONT_SIZE * verticalAxisHeight / this.verticalAxisLabel.width ) );
+      this.verticalAxisLabel.scale( verticalAxisHeight / this.verticalAxisLabel.width );
     }
 
     this.verticalAxisLabel.setTranslation( this.graphXOrigin / 2 - this.verticalAxisLabel.height / 2,

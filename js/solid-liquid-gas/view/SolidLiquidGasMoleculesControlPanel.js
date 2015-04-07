@@ -75,26 +75,26 @@ define( function( require ) {
 
     var neonText = new Text( neonString, textOptions );
     if ( neonText.width > MAX_WIDTH ) {
-      neonText.setFont( new PhetFont( 12 * MAX_WIDTH / neonText.width ) );
+      neonText.scale( MAX_WIDTH / neonText.width );
     }
     var argonText = new Text( argonString, textOptions );
     if ( argonText.width > MAX_WIDTH ) {
-      argonText.setFont( new PhetFont( 12 * MAX_WIDTH / argonText.width ) );
+      argonText.scale( MAX_WIDTH / argonText.width );
     }
     var waterText = new Text( waterString, textOptions );
     if ( waterText.width > MAX_WIDTH ) {
-      waterText.setFont( new PhetFont( 12 * MAX_WIDTH / waterText.width ) );
+      waterText.scale( MAX_WIDTH / waterText.width );
     }
     var oxygenText = new Text( oxygenString, textOptions );
     if ( oxygenText.width > MAX_WIDTH ) {
-      oxygenText.setFont( new PhetFont( 12 * MAX_WIDTH / oxygenText.width ) );
+      oxygenText.scale( MAX_WIDTH / oxygenText.width );
     }
     var title = new Text( titleString, {
       font: new PhetFont( 14 ),
       fill: '#FFFFFF'
     } );
     if ( title.width > MAX_WIDTH ) {
-      title.setFont( new PhetFont( 14 * MAX_WIDTH / title.width ) );
+      title.scale( MAX_WIDTH / title.width );
     }
 
     // itemSpec describes the pieces that make up an item in the control panel,

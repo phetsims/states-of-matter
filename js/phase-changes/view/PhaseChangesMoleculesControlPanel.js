@@ -89,18 +89,18 @@ define( function( require ) {
 
     var weakTitle = new Text( weakString, textOptions );
     if ( weakTitle.width > TickTextWidth ) {
-      weakTitle.setFont( new PhetFont( NORMAL_TEXT_FONT_SIZE * TickTextWidth / weakTitle.width ) );
+      weakTitle.scale( TickTextWidth / weakTitle.width );
     }
     var strongTitle = new Text( strongString, textOptions );
     if ( strongTitle.width > TickTextWidth ) {
-      strongTitle.setFont( new PhetFont( NORMAL_TEXT_FONT_SIZE * TickTextWidth / strongTitle.width ) );
+      strongTitle.scale( TickTextWidth / strongTitle.width );
     }
 
     // add interaction strength slider and title
     var interactionStrengthNode = new Node();
     var interactionTitle = new Text( interactionStrengthTitleString, textOptions );
     if ( interactionTitle.width > MAX_WIDTH ) {
-      interactionTitle.setFont( new PhetFont( NORMAL_TEXT_FONT_SIZE * MAX_WIDTH / interactionTitle.width ) );
+      interactionTitle.scale( MAX_WIDTH / interactionTitle.width );
     }
     interactionStrengthNode.addChild( interactionTitle );
     var interactionStrengthSlider = new HSlider( multipleParticleModel.interactionStrengthProperty,
@@ -130,30 +130,30 @@ define( function( require ) {
 
     var neonText = new Text( neonString, textOptions );
     if ( neonText.width > MAX_WIDTH ) {
-      neonText.setFont( new PhetFont( NORMAL_TEXT_FONT_SIZE * MAX_WIDTH / neonText.width ) );
+      neonText.scale( MAX_WIDTH / neonText.width );
     }
     var argonText = new Text( argonString, textOptions );
     if ( argonText.width > MAX_WIDTH ) {
-      argonText.setFont( new PhetFont( NORMAL_TEXT_FONT_SIZE * MAX_WIDTH / argonText.width ) );
+      argonText.scale( MAX_WIDTH / argonText.width );
     }
     var waterText = new Text( waterString, textOptions );
     if ( waterText.width > MAX_WIDTH ) {
-      waterText.setFont( new PhetFont( NORMAL_TEXT_FONT_SIZE * MAX_WIDTH / waterText.width ) );
+      waterText.scale( MAX_WIDTH / waterText.width );
     }
     var oxygenText = new Text( oxygenString, textOptions );
     if ( oxygenText.width > MAX_WIDTH ) {
-      oxygenText.setFont( new PhetFont( NORMAL_TEXT_FONT_SIZE * MAX_WIDTH / oxygenText.width ) );
+      oxygenText.scale( MAX_WIDTH / oxygenText.width );
     }
     var adjustableAttractionText = new Text( adjustableAttractionString, textOptions );
     if ( adjustableAttractionText.width > MAX_WIDTH ) {
-      adjustableAttractionText.setFont( new PhetFont( NORMAL_TEXT_FONT_SIZE * MAX_WIDTH / adjustableAttractionText.width ) );
+      adjustableAttractionText.scale( MAX_WIDTH / adjustableAttractionText.width );
     }
     var title = new Text( titleString, {
       font: new PhetFont( 14 ),
       fill: '#FFFFFF'
     } );
     if ( title.width > MAX_WIDTH ) {
-      title.setFont( new PhetFont( 14 * MAX_WIDTH / title.width ) );
+      title.scale( MAX_WIDTH / title.width );
     }
 
     // itemSpec describes the pieces that make up an item in the control panel,

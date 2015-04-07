@@ -147,19 +147,19 @@ define( function( require ) {
     this.solidLabel = new Text( solidString, { font: LARGER_INNER_FONT, fill: 'black' } );
     accordionContent.addChild( this.solidLabel );
     if ( this.solidLabel.width > STATES_MAX_WIDTH ) {
-      this.solidLabel.setFont( new PhetFont( LARGER_INNER_FONT_SIZE * STATES_MAX_WIDTH / this.solidLabel.width ) );
+      this.solidLabel.scale( STATES_MAX_WIDTH / this.solidLabel.width );
     }
 
     this.liquidLabel = new Text( liquidString, { font: LARGER_INNER_FONT, fill: 'black' } );
     accordionContent.addChild( this.liquidLabel );
     if ( this.liquidLabel.width > STATES_MAX_WIDTH ) {
-      this.liquidLabel.setFont( new PhetFont( LARGER_INNER_FONT_SIZE * STATES_MAX_WIDTH / this.liquidLabel.width ) );
+      this.liquidLabel.scale( STATES_MAX_WIDTH / this.liquidLabel.width );
     }
 
     this.gasLabel = new Text( gasString, { font: LARGER_INNER_FONT, fill: 'black' } );
     accordionContent.addChild( this.gasLabel );
     if ( this.gasLabel.width > STATES_MAX_WIDTH ) {
-      this.gasLabel.setFont( new PhetFont( LARGER_INNER_FONT_SIZE * STATES_MAX_WIDTH / this.gasLabel.width ) );
+      this.gasLabel.scale( STATES_MAX_WIDTH / this.gasLabel.width );
     }
 
     this.triplePointLabel = new MultiLineText( triplePointString, { font: SMALLER_INNER_FONT, fill: 'black', align: 'right' } );
@@ -198,14 +198,14 @@ define( function( require ) {
     // Create and add the labels for the axes.
     var horizontalAxisLabel = new Text( temperatureString, { font: AXIS_LABEL_FONT, fill: 'white' } );
     if ( horizontalAxisLabel.width > horizontalAxis.width ) {
-      horizontalAxisLabel.setFont( new PhetFont( AXIS_LABEL_FONT_SIZE * horizontalAxis.width / horizontalAxisLabel.width ) );
+      horizontalAxisLabel.scale( horizontalAxis.width / horizontalAxisLabel.width );
     }
     horizontalAxisLabel.setTranslation( horizontalAxis.centerX - horizontalAxisLabel.width / 2, Y_ORIGIN_OFFSET + horizontalAxisLabel.height * 1.2 );
     accordionContent.addChild( horizontalAxisLabel );
 
     var verticalAxisLabel = new Text( pressureString, { font: AXIS_LABEL_FONT, fill: 'white' } );
     if ( verticalAxisLabel.width > verticalAxis.height ) {
-      verticalAxisLabel.setFont( new PhetFont( AXIS_LABEL_FONT_SIZE * verticalAxis.height / verticalAxisLabel.width ) );
+      verticalAxisLabel.scale( verticalAxis.height / verticalAxisLabel.width );
     }
     verticalAxisLabel.setTranslation( X_ORIGIN_OFFSET - (verticalAxisLabel.height / 1.5  ), verticalAxis.centerY + verticalAxisLabel.width / 2 );
     verticalAxisLabel.setRotation( 3 * Math.PI / 2 );
@@ -219,7 +219,7 @@ define( function( require ) {
     var titleNode = new Text( phaseDiagramString, { fill: "#FFFFFF", font: new PhetFont( { size: 13 } ) } );
 
     if ( titleNode.width > horizontalAxis.width ) {
-      titleNode.setFont( new PhetFont( 13 * horizontalAxis.width / titleNode.width ) );
+      titleNode.scale( horizontalAxis.width / titleNode.width );
     }
     var accordionBox = new AccordionBox( accordionContent,
       {

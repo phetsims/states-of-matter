@@ -124,7 +124,7 @@ define( function( require ) {
     var accordionContentHBox = new HBox( { children: [ accordionContent ] } );
     var titleNode = new Text( interactionDiagramTitle, { fill: "#FFFFFF", font: new PhetFont( { size: 13 } ) } );
     if ( titleNode.width > this.horizontalAxis.width ) {
-      titleNode.setFont( new PhetFont( 13 * this.horizontalAxis.width / titleNode.width ) );
+      titleNode.scale( this.horizontalAxis.width / titleNode.width );
     }
     var accordionBox = new AccordionBox( accordionContentHBox,
       {

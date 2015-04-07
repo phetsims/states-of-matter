@@ -84,7 +84,7 @@ define( function( require ) {
     var createText = function( string, width, fontSize ) {
       var text = new Text( string, { font: new PhetFont( fontSize ), fill: options.textColor } );
       if ( text.width > width ) {
-        text.setFont( new PhetFont( fontSize * width / text.width ) );
+        text.scale( width / text.width );
       }
       return text;
     };
