@@ -1,8 +1,8 @@
 // Copyright 2002-2013, University of Colorado Boulder
 
 /**
- * Model for IsokineticThermostat. It is for adjusting the kinetic energy in a set of molecules toward a desired
- * setpoint.
+ * Model for an isokinetic thermostat that controls the kinetic energy of a set of particles such that the remain at
+ * a certain temperature.
  *
  * @author John Blanco
  * @author Aaron Davis
@@ -16,16 +16,15 @@ define( function( require ) {
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
 
   /**
-   * Constructor for the Andersen thermostat.
+   * Constructor for the Isokinetic thermostat.
    * @param {MoleculeForceAndMotionDataSet} moleculeDataSet Data set on which operations will be performed.
    * @param {Number} minTemperature The temperature that should be considered absolute zero, below which motion should cease.
    * @constructor
    */
   function IsokineticThermostat( moleculeDataSet, minTemperature ) {
     this.moleculeDataSet = moleculeDataSet;
-    this.targetTemperature = StatesOfMatterConstants.INITIAL_TEMPERATURE;
     this.minModelTemperature = minTemperature;
-
+    this.targetTemperature = StatesOfMatterConstants.INITIAL_TEMPERATURE;
     this.moleculeVelocities = moleculeDataSet.moleculeVelocities;
     this.moleculeRotationRates = moleculeDataSet.moleculeRotationRates;
   }
@@ -40,7 +39,9 @@ define( function( require ) {
       var i;
       var numberOfMolecules = this.moleculeDataSet.getNumberOfMolecules();
       var centersOfMassKineticEnergy = 0;
+
       if ( this.moleculeDataSet.atomsPerMolecule > 1 ) {
+
         // Include rotational inertia in the calculation.
         var rotationalKineticEnergy = 0;
         for ( i = 0; i < numberOfMolecules; i++ ) {
@@ -55,6 +56,7 @@ define( function( require ) {
       }
       else {
         for ( i = 0; i < this.moleculeDataSet.getNumberOfMolecules(); i++ ) {
+
           // For single-atom molecules, exclude rotational inertia from the calculation.
           centersOfMassKineticEnergy += 0.5 * this.moleculeDataSet.getMoleculeMass() *
                                         ( Math.pow( this.moleculeVelocities[ i ].x, 2 ) +
@@ -88,6 +90,5 @@ define( function( require ) {
         this.moleculeRotationRates[ i ] *= temperatureScaleFactor; // Doesn't hurt anything in the monatomic case.
       }
     }
-
   } );
 } );

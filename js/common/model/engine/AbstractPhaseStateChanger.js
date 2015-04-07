@@ -18,7 +18,6 @@ define( function( require ) {
   var MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE = 2.5;
 
   /**
-   *
    * @param { MultipleParticleModel } multipleParticleModel of the simulation
    * @constructor
    */
@@ -30,13 +29,13 @@ define( function( require ) {
   return inherit( Object, AbstractPhaseStateChanger, {
 
       /**
-       * @public
        * Does a linear search for a location that is suitably far away enough
        * from all other molecules.  This is generally used when the attempt to
        * place a molecule at a random location fails.  This is expensive in
        * terms of computational power, and should thus be used sparingly.
        *
-       * @return
+       * @return {Vector2}
+       * @public
        */
       findOpenMoleculeLocation: function() {
 

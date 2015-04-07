@@ -18,7 +18,7 @@ define( function( require ) {
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
 
   /**
-   * Constructor for the Isokinetic thermostat.
+   * Constructor for the Andersen thermostat.
    * @param {MoleculeForceAndMotionDataSet} moleculeDataSet Data set on which operations will be performed.
    * @param {Number} minTemperature The temperature that should be considered absolute zero, below which motion should cease
    * @constructor
