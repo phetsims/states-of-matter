@@ -1,3 +1,10 @@
+// Copyright 2002-2015, University of Colorado Boulder
+
+/**
+ * Arrow node for attractive, repulsive, and total forces.
+ *
+ * @author Chandrashekar Bemagoni (Actual Concepts)
+ */
 define( function( require ) {
   'use strict';
 

@@ -1,8 +1,9 @@
 //  Copyright 2002-2015, University of Colorado Boulder
 
 /**
- *
+ * The 'Atomic Interaction' screen. Conforms to the contract specified in joist/Screen.
  * @author John Blanco
+ * @author Siddhartha Chinthapally (Actual Concepts)
  */
 define( function( require ) {
   'use strict';
@@ -19,9 +20,9 @@ define( function( require ) {
   var atomicInteractionScreenIcon = require( 'image!STATES_OF_MATTER/som-atomic-interactions-icon.png' );
 
   /**
-   * @param enableHeterogeneousMolecules
-   * @param simTitle
-   * @param colorsProperty
+   * @param {Boolean} enableHeterogeneousMolecules
+   * @param {String} simTitle
+   * @param {Property<Boolean>} colorsProperty
    * @constructor
    */
   function AtomicInteractionsScreen( enableHeterogeneousMolecules, simTitle, colorsProperty ) {

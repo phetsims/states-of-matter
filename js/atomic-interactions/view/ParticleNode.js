@@ -1,9 +1,9 @@
-// Copyright 2002-2013, University of Colorado Boulder
+// Copyright 2002-2015, University of Colorado Boulder
 
 /**
- * ParticleNode
- *
+ * View for Atom .
  * @author Aaron Davis
+ * @author Chandrashekar Bemagoni (Actual Concepts)
  */
 define( function( require ) {
   'use strict';

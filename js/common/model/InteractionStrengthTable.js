@@ -1,10 +1,16 @@
-// Copyright 2002-2013, University of Colorado Boulder
+// Copyright 2002-2015, University of Colorado Boulder
 
 /**
- * The class represents a single atom of argon in the model.
- *
+ * This class provides the interaction strength value between a number of
+ * different pairs of atoms.  To do them all would be too much, so this is a
+ * sparse table.  Feel free to fill them in as more are needed.
+ * <p/>
+ * The value provided by this table is generally designated as "epsilon" in
+ * Lennard-Jones potential calculations.
+ * <p/>
  * @author John Blanco
  * @author Aaron Davis
+ * @author Chandrashekar Bemagoni (Actual Concepts)
  */
 define( function( require ) {
   'use strict';
@@ -23,6 +29,10 @@ define( function( require ) {
 
   return inherit( Object, InteractionStrengthTable, {}, {
     /**
+     * Get the interaction potential between two atoms.  Units are such that
+     * the value divided by k-boltzmann is in Kelvin.  This is apparently how
+     * it is generally done.  Note that this value is used as the "epsilon"
+     * parameter in Lennard-Jones potential calculations.
      * @public
      * @param {String} atomType1
      * @param {String} atomType2
