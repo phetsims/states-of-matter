@@ -36,7 +36,7 @@ define( function( require ) {
     this.multiPleParticleModel = multipleParticleModel;
     this.rand = new Random();
     //private
-    this.positionUpdater = new WaterAtomPositionUpdater();
+    this.positionUpdater = WaterAtomPositionUpdater;
     AbstractPhaseStateChanger.call( this, multipleParticleModel );
     // Make sure this is not being used on an inappropriate data set.
     assert && assert( multipleParticleModel.getMoleculeDataSetRef().getAtomsPerMolecule() === 3 );

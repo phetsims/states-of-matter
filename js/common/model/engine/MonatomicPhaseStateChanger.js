@@ -26,7 +26,7 @@ define( function( require ) {
    */
   function MonatomicPhaseStateChanger( multipleParticleModel ) {
     AbstractPhaseStateChanger.call( this, multipleParticleModel );
-    this.positionUpdater = new MonatomicAtomPositionUpdater();
+    this.positionUpdater = MonatomicAtomPositionUpdater;
     this.random = new Random();
   }
 

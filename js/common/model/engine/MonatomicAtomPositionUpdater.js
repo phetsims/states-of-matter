@@ -1,8 +1,8 @@
 // Copyright 2002-2013, University of Colorado Boulder
 
 /**
- * This class updates the positions of atoms in a monatomic data set (i.e.
- * where each molecule is just a single atom).
+ * This class updates the positions of atoms in a monatomic data set, i.e.
+ * where each molecule is just a single atom.
  *
  * @author John Blanco
  * @author Aaron Davis
@@ -13,13 +13,7 @@ define( function( require ) {
   // modules
   var inherit = require( 'PHET_CORE/inherit' );
 
-  /**
-   * @constructor
-   */
-  function MonatomicAtomPositionUpdater() {
-  }
-
-  return inherit( Object, MonatomicAtomPositionUpdater, {
+  return {
 
     /**
      * @public
@@ -40,5 +34,5 @@ define( function( require ) {
       }
     }
 
-  } );
+  };
 } );

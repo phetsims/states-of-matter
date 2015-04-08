@@ -36,7 +36,7 @@ define( function( require ) {
   function DiatomicPhaseStateChanger( multipleParticleModel ) {
 
     // @private
-    this.positionUpdater = new DiatomicAtomPositionUpdater();
+    this.positionUpdater = DiatomicAtomPositionUpdater;
     AbstractPhaseStateChanger.call( this, multipleParticleModel );
     this.multipleParticleModel = multipleParticleModel;
     this.rand = new Random();

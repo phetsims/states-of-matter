@@ -24,7 +24,7 @@ define( function( require ) {
    */
   function DiatomicVerletAlgorithm( multipleParticleModel ) {
 
-    this.positionUpdater = new DiatomicAtomPositionUpdater();
+    this.positionUpdater = DiatomicAtomPositionUpdater;
     AbstractVerletAlgorithm.call( this, multipleParticleModel );
 
     // Calculate the force and torque due to inter-particle interactions.

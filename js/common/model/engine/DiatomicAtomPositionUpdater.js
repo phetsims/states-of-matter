@@ -16,11 +16,7 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
 
-  function DiatomicAtomPositionUpdater() {
-
-  }
-
-  return inherit( Object, DiatomicAtomPositionUpdater, {
+  return {
 
     /**
      * @public
@@ -52,5 +48,5 @@ define( function( require ) {
         atomPositions[ i * 2 + 1 ].setXY( xPos, yPos );
       }
     }
-  } );
+  };
 } );

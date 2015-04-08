@@ -33,7 +33,7 @@ define( function( require ) {
    */
   function WaterVerletAlgorithm( multipleParticleModel ) {
 
-    this.positionUpdater = new WaterAtomPositionUpdater();
+    this.positionUpdater = WaterAtomPositionUpdater;
     AbstractVerletAlgorithm.call( this, multipleParticleModel );
 
     // Creating here to reduce allocations.

@@ -14,21 +14,14 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var WaterMoleculeStructure = require( 'STATES_OF_MATTER/common/model/engine/WaterMoleculeStructure' );
 
+  // constants
   var BONDED_PARTICLE_DISTANCE = 0.9;
+  var WATER_MOLECULE_STRUCTURE = new WaterMoleculeStructure();
+  var STRUCTURE_X = WATER_MOLECULE_STRUCTURE.getStructureArrayX();
+  var STRUCTURE_Y = WATER_MOLECULE_STRUCTURE.getStructureArrayY();
 
-  /**
-   *
-   * @constructor
-   */
-  function WaterAtomPositionUpdater() {
-
-    var waterMoleculeStructure = new WaterMoleculeStructure();
-    // Get the relational data necessary for doing the positional updates.
-    this.structureX = waterMoleculeStructure.getStructureArrayX();
-    this.structureY = waterMoleculeStructure.getStructureArrayY();
-  }
-
-  return inherit( Object, WaterAtomPositionUpdater, {
+  // static object (no constructor)
+  return {
     /**
      * @public
      * @param {MoleculeForceAndMotionDataSet} moleculeDataSet
@@ -61,17 +54,16 @@ define( function( require ) {
         cosineTheta = Math.cos( moleculeRotationAngles[ i ] );
         sineTheta = Math.sin( moleculeRotationAngles[ i ] );
         for ( var j = 0; j < 3; j++ ) {
-          var xadd = (cosineTheta * this.structureX[ j ]) - (sineTheta * this.structureY[ j ]);
+          var xadd = (cosineTheta * STRUCTURE_X[ j ]) - (sineTheta * STRUCTURE_Y[ j ]);
 
-          var yadd = (sineTheta * this.structureX[ j ]) + (cosineTheta * this.structureY[ j ]);
+          var yadd = (sineTheta * STRUCTURE_X[ j ]) + (cosineTheta * STRUCTURE_Y[ j ]);
 
           xPos = moleculeCenterOfMassPositions[ i ].x + xadd;
           yPos = moleculeCenterOfMassPositions[ i ].y + yadd;
           atomPositions[ i * 3 + j ].setXY( xPos, yPos );
         }
       }
-
     }
-  } );
+  };
 } );
 

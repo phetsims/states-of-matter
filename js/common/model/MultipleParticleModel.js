@@ -750,7 +750,7 @@ define( function( require ) {
 
       // Create the strategies that will work on this data set.
       this.phaseStateChanger = new DiatomicPhaseStateChanger( this );
-      this.atomPositionUpdater = new DiatomicAtomPositionUpdater();
+      this.atomPositionUpdater = DiatomicAtomPositionUpdater;
       this.moleculeForceAndMotionCalculator = new DiatomicVerletAlgorithm( this );
       this.isoKineticThermostat = new IsokineticThermostat( this.moleculeDataSet, this.minModelTemperature );
       this.andersenThermostat = new AndersenThermostat( this.moleculeDataSet, this.minModelTemperature );
@@ -796,7 +796,7 @@ define( function( require ) {
       this.moleculeDataSet = new MoleculeForceAndMotionDataSet( 3 );
       // Create the strategies that will work on this data set.
       this.phaseStateChanger = new WaterPhaseStateChanger( this );
-      this.atomPositionUpdater = new WaterAtomPositionUpdater();
+      this.atomPositionUpdater = WaterAtomPositionUpdater;
       this.moleculeForceAndMotionCalculator = new WaterVerletAlgorithm( this );
       this.isoKineticThermostat = new IsokineticThermostat( this.moleculeDataSet, this.minModelTemperature );
       this.andersenThermostat = new AndersenThermostat( this.moleculeDataSet, this.minModelTemperature );
@@ -938,7 +938,7 @@ define( function( require ) {
 
       // Create the strategies that will work on this data set.
       this.phaseStateChanger = new MonatomicPhaseStateChanger( this );
-      this.atomPositionUpdater = new MonatomicAtomPositionUpdater();
+      this.atomPositionUpdater = MonatomicAtomPositionUpdater;
       this.moleculeForceAndMotionCalculator = new MonatomicVerletAlgorithm( this );
       this.isoKineticThermostat = new IsokineticThermostat( this.moleculeDataSet, this.minModelTemperature );
       this.andersenThermostat = new AndersenThermostat( this.moleculeDataSet, this.minModelTemperature );

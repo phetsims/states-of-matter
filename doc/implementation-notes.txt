@@ -4,4 +4,5 @@ This repo contains the code for three simulations: States of Matter, States of M
 
 This was ported from a Java simulation, so some elements of the code look quite "Javaesque".  For example, there are a
 number of getter/setter methods that would probably be done using direct access if this had originally been a
-JavaScript sim.
+JavaScript sim.  There are also a lot of places where inheritance is used that probably wouldn't be done in this way
+in a started-from-scratch JavaScript sim.

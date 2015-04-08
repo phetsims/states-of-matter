@@ -23,7 +23,7 @@ define( function( require ) {
    */
   function MonatomicVerletAlgorithm( multipleParticleModel ) {
     AbstractVerletAlgorithm.call( this, multipleParticleModel );
-    this.positionUpdater = new MonatomicAtomPositionUpdater();
+    this.positionUpdater = MonatomicAtomPositionUpdater;
     this.epsilon = 1; // Controls the strength of particle interaction.
 
     // Calculate the forces created through interactions with other particles.
