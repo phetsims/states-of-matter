@@ -16,9 +16,8 @@ define( function( require ) {
 
   // constants
   var BONDED_PARTICLE_DISTANCE = 0.9;
-  var WATER_MOLECULE_STRUCTURE = new WaterMoleculeStructure();
-  var STRUCTURE_X = WATER_MOLECULE_STRUCTURE.getStructureArrayX();
-  var STRUCTURE_Y = WATER_MOLECULE_STRUCTURE.getStructureArrayY();
+  var STRUCTURE_X = WaterMoleculeStructure.moleculeStructureX;
+  var STRUCTURE_Y = WaterMoleculeStructure.moleculeStructureY;
 
   // static object (no constructor)
   return {

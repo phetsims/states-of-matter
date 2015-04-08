@@ -64,7 +64,7 @@ define( function( require ) {
       // need to be changed.
       this.moleculeMass = 1.5; // Two molecules, assumed to be the same.
 
-      this.moleculeRotationalInertia = (new WaterMoleculeStructure()).getRotationalInertia();
+      this.moleculeRotationalInertia = WaterMoleculeStructure.rotationalInertia;
     }
   }
 

@@ -18,63 +18,35 @@ define( function( require ) {
   //private
   var instance;
 
-  function WaterMoleculeStructure() {
-    this.moleculeStructureX = [];
-    this.moleculeStructureY = [];
+  var moleculeStructureX = [];
+  var moleculeStructureY = [];
 
-    // oxygen at 0,0
-    this.moleculeStructureX[ 0 ] = 0;
-    this.moleculeStructureY[ 0 ] = 0;
-    this.moleculeStructureX[ 1 ] = StatesOfMatterConstants.DISTANCE_FROM_OXYGEN_TO_HYDROGEN;
-    this.moleculeStructureY[ 1 ] = 0;
-    this.moleculeStructureX[ 2 ] = StatesOfMatterConstants.DISTANCE_FROM_OXYGEN_TO_HYDROGEN *
-                                   Math.cos( StatesOfMatterConstants.THETA_HOH );
-    this.moleculeStructureY[ 2 ] = StatesOfMatterConstants.DISTANCE_FROM_OXYGEN_TO_HYDROGEN *
-                                   Math.sin( StatesOfMatterConstants.THETA_HOH );
-    var xcm0 = (  this.moleculeStructureX[ 0 ] + 0.25 * this.moleculeStructureX[ 1 ] + 0.25 * this.moleculeStructureX[ 2 ]) /
-               1.5;
-    var ycm0 = (  this.moleculeStructureY[ 0 ] + 0.25 * this.moleculeStructureY[ 1 ] + 0.25 * this.moleculeStructureY[ 2 ]) /
-               1.5;
-    for ( var i = 0; i < 3; i++ ) {
-      this.moleculeStructureX[ i ] -= xcm0;
-      this.moleculeStructureY[ i ] -= ycm0;
-    }
+  // oxygen at 0,0
+  moleculeStructureX[ 0 ] = 0;
+  moleculeStructureY[ 0 ] = 0;
+  moleculeStructureX[ 1 ] = StatesOfMatterConstants.DISTANCE_FROM_OXYGEN_TO_HYDROGEN;
+  moleculeStructureY[ 1 ] = 0;
+  moleculeStructureX[ 2 ] = StatesOfMatterConstants.DISTANCE_FROM_OXYGEN_TO_HYDROGEN *
+                            Math.cos( StatesOfMatterConstants.THETA_HOH );
+  moleculeStructureY[ 2 ] = StatesOfMatterConstants.DISTANCE_FROM_OXYGEN_TO_HYDROGEN *
+                            Math.sin( StatesOfMatterConstants.THETA_HOH );
+  var xcm0 = (  moleculeStructureX[ 0 ] + 0.25 * moleculeStructureX[ 1 ] + 0.25 * moleculeStructureX[ 2 ]) /
+             1.5;
+  var ycm0 = (  moleculeStructureY[ 0 ] + 0.25 * moleculeStructureY[ 1 ] + 0.25 * moleculeStructureY[ 2 ]) /
+             1.5;
+  for ( var i = 0; i < 3; i++ ) {
+    moleculeStructureX[ i ] -= xcm0;
+    moleculeStructureY[ i ] -= ycm0;
   }
 
-  return inherit( Object, WaterMoleculeStructure, {
-    /**
-     *  @public
-     * @returns {*}
-     */
-    getInstance: function() {
-      if ( instance === null ) {
-        instance = new WaterMoleculeStructure();
-      }
-      return instance;
-    },
-    /**
-     * @public
-     * @returns {Array}
-     */
-    getStructureArrayX: function() {
-      return this.moleculeStructureX;
-    },
-    /**
-     * @public
-     * @returns {Array}
-     */
-    getStructureArrayY: function() {
-      return this.moleculeStructureY;
-    },
-    /**
-     * @public
-     * @returns {number}
-     */
-    getRotationalInertia: function() {
-      return (Math.pow( this.moleculeStructureX[ 0 ], 2 ) + Math.pow( this.moleculeStructureY[ 0 ], 2 )) +
-             0.25 * (Math.pow( this.moleculeStructureX[ 1 ], 2 ) + Math.pow( this.moleculeStructureY[ 1 ], 2 )) +
-             0.25 * (Math.pow( this.moleculeStructureX[ 2 ], 2 ) + Math.pow( this.moleculeStructureY[ 2 ], 2 ));
-    }
-  } );
+  var rotationalInertia = ( Math.pow( moleculeStructureX[ 0 ], 2 ) + Math.pow( moleculeStructureY[ 0 ], 2 )) +
+                          0.25 * ( Math.pow( moleculeStructureX[ 1 ], 2 ) + Math.pow( moleculeStructureY[ 1 ], 2 ) ) +
+                          0.25 * ( Math.pow( moleculeStructureX[ 2 ], 2 ) + Math.pow( moleculeStructureY[ 2 ], 2 ) );
+
+  return {
+    moleculeStructureX: moleculeStructureX,
+    moleculeStructureY: moleculeStructureY,
+    rotationalInertia: rotationalInertia
+  };
 } );
 
