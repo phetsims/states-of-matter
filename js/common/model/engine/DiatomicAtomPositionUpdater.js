@@ -3,8 +3,8 @@
 /**
  * This class updates the positions of atoms in a diatomic data set (i.e.
  * where each molecule is made up of two molecules).  IMPORTANT: This class
- * assumes that they molecules are the same, e.g. O2 (diatomic oxygen), and
- * not different, such as OH.
+ * assumes that the two atoms that comprise each molecule are the same, e.g.
+ * O2 (diatomic oxygen), and not different, such as OH.
  *
  * @author John Blanco
  * @author Siddhartha Chinthapally (Actual Concepts)
@@ -19,7 +19,6 @@ define( function( require ) {
   function DiatomicAtomPositionUpdater() {
 
   }
-
 
   return inherit( Object, DiatomicAtomPositionUpdater, {
 
@@ -55,4 +54,3 @@ define( function( require ) {
     }
   } );
 } );
-
