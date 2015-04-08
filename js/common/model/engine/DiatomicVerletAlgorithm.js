@@ -2,8 +2,8 @@
 
 /**
  * Implementation of the Verlet algorithm for simulating molecular interaction
- * based on the Lennard-Jones potential - diatomic (i.e. two atoms per
- * molecule) version.
+ * based on the Lennard-Jones potential.  This is the diatomic (i.e. two atoms
+ * per molecule) version.
  *
  * @author John Blanco
  * @author Siddhartha Chinthapally (Actual Concepts)
@@ -18,8 +18,7 @@ define( function( require ) {
   var DiatomicAtomPositionUpdater = require( 'STATES_OF_MATTER/common/model/engine/DiatomicAtomPositionUpdater' );
 
   /**
-   *
-   * @param { MultipleParticleModel } multipleParticleModel of the simulation
+   * @param {MultipleParticleModel} multipleParticleModel - Model of a set of particles
    * @constructor
    */
   function DiatomicVerletAlgorithm( multipleParticleModel ) {
@@ -27,55 +26,56 @@ define( function( require ) {
     this.positionUpdater = DiatomicAtomPositionUpdater;
     AbstractVerletAlgorithm.call( this, multipleParticleModel );
 
-    // Calculate the force and torque due to inter-particle interactions.
-    // Creating here to reduce allocations.
+    // Reusable force vector, created here to reduce allocations.
     this.force = new Vector2();
   }
 
   return inherit( AbstractVerletAlgorithm, DiatomicVerletAlgorithm, {
 
     /**
-     * @public
      * @returns {pressure|*|number|PropertySet.pressure}
+     * @public
      */
     getPressure: function() {
       return this.pressure;
     },
+
     /**
-     * @public
      * @returns {number|*|AbstractVerletAlgorithm.temperature}
+     * @public
      */
     getTemperature: function() {
       return this.temperature;
     },
+
     /**
-     * @public
      * Update the motion of the particles and the forces that are acting upon
      * them.  This is the heart of this class, and it is here that the actual
      * Verlet algorithm is contained.
+     * @public
      */
     updateForcesAndMotion: function() {
-      // perform fast manipulations.
+
+      // convenience vars
       var moleculeDataSet = this.multipleParticleModel.moleculeDataSet;
-      // var numberOfAtoms = moleculeDataSet.numberOfAtoms;
       var moleculeCenterOfMassPositions = moleculeDataSet.getMoleculeCenterOfMassPositions();
       var moleculeVelocities = moleculeDataSet.getMoleculeVelocities();
       var moleculeForces = moleculeDataSet.getMoleculeForces();
       var nextMoleculeForces = moleculeDataSet.getNextMoleculeForces();
-
       var numberOfMolecules = moleculeDataSet.getNumberOfMolecules();
       var atomPositions = moleculeDataSet.getAtomPositions();
-
       var moleculeRotationAngles = moleculeDataSet.getMoleculeRotationAngles();
       var moleculeRotationRates = moleculeDataSet.getMoleculeRotationRates();
       var moleculeTorques = moleculeDataSet.getMoleculeTorques();
       var nextMoleculeTorques = moleculeDataSet.getNextMoleculeTorques();
+
       // Initialize other values that will be needed for the calculation.
       var massInverse = 1 / moleculeDataSet.getMoleculeMass();
       var inertiaInverse = 1 / moleculeDataSet.getMoleculeRotationalInertia();
       var normalizedContainerHeight = this.multipleParticleModel.getNormalizedContainerHeight();
       var normalizedContainerWidth = this.multipleParticleModel.getNormalizedContainerWidth();
       var pressureZoneWallForce = 0;
+
       // Update center of mass positions and angles for the molecules.
       for ( var i = 0; i < numberOfMolecules; i++ ) {
         var xPos = moleculeCenterOfMassPositions[ i ].x +
@@ -177,4 +177,3 @@ define( function( require ) {
     }
   } );
 } );
-
