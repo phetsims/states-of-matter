@@ -13,6 +13,7 @@ define( function( require ) {
   // modules
   var inherit = require( 'PHET_CORE/inherit' );
 
+  // static object (no constructor)
   return {
 
     /**
