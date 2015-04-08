@@ -21,16 +21,9 @@ define( function( require ) {
   var WALL_DISTANCE_THRESHOLD = 1.122462048309373017;
   var SAFE_INTER_MOLECULE_DISTANCE = 2.0;
 
-  // Parameters that control the increasing of gravity as the temperature
-  // approaches zero.  This is done to counteract the tendency of the
-  // thermostat to slow falling molecules noticeably at low temps.  This is
-  // a "hollywooding" thing.
-  // var TEMPERATURE_BELOW_WHICH_GRAVITY_INCREASES = 0.10;
-  // var LOW_TEMPERATURE_GRAVITY_INCREASE_RATE = 50;
-
-  // Pressure at which explosion of the container will occur.
-  var EXPLOSION_PRESSURE = 1.05;  // Currently set so that container blows roughly
+  // Pressure at which explosion of the container will occur.  This is currently set so that container blows roughly
   // when the pressure gauge hits its max value.
+  var EXPLOSION_PRESSURE = 1.05;
 
   /**
    * @param {MultipleParticleModel} multipleParticleModel of the simulation
@@ -50,24 +43,21 @@ define( function( require ) {
 
     /**
      * Calculate the force exerted on a particle at the provided position by
-     * the walls of the container.  The result is returned in the provided
-     * vector.
-     * @public
+     * the walls of the container.  The upper left corner of the container is
+     * assumed to be at (0,0), so only the width and height are provided as
+     * parameters.  The force is returned in the provided vector.
+     *
      * @param {Vector2} position       - Current position of the particle.
      * @param {Number} containerWidth  - Width of the container where particles are held.
      * @param {Number} containerHeight - Height of the container where particles are held.
      * @param {Vector2} resultantForce - Vector in which the resulting force is returned.
+     * @public
      */
     calculateWallForce: function( position, containerWidth, containerHeight, resultantForce ) {
 
-      // Debug stuff - make sure this is being used correctly.
-      assert && assert( resultantForce );
-      assert && assert( position );
-
-      // Non-debug run time check.
-      if ( ( resultantForce === null ) || ( position === null ) ) {
-        return;
-      }
+      // parameter checking
+      assert && assert( position && position.isVector2 );
+      assert && assert( resultantForce && resultantForce.isVector2 );
 
       var xPos = position.x;
       var yPos = position.y;
@@ -236,11 +226,13 @@ define( function( require ) {
       // In the base class this just issues a warning and has no effect.
       console.log( "Warning: Setting epsilon is not implemented for this class, request ignored." );
     },
+
     getScaledEpsilon: function() {
       // In the base class this just issues a warning and returns 0.
       console.log( "Warning: Getting scaled epsilon is not implemented for this class, returning zero." );
       return 0;
     },
+
     /**
      *
      * @param {Number} pressureZoneWallForce
@@ -269,6 +261,7 @@ define( function( require ) {
     TIME_STEP_SQR_HALF: TIME_STEP * TIME_STEP * 0.5,
     TIME_STEP_HALF:     TIME_STEP / 2,
     PARTICLE_INTERACTION_DISTANCE_THRESH_SQRD: 6.25,
+
     // Parameters that control the increasing of gravity as the temperature
     // approaches zero.  This is done to counteract the tendency of the
     // thermostat to slow falling molecules noticeably at low temps.  This is
