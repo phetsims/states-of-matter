@@ -1,7 +1,7 @@
 // Copyright 2002-2013, University of Colorado Boulder
 
 /**
- * The class represents a single atom of argon in the model.
+ * This class represents a single atom of argon in the model.
  *
  * @author John Blanco
  * @author Aaron Davis
@@ -30,14 +30,14 @@ define( function( require ) {
   }
 
   return inherit( StatesOfMatterAtom, ArgonAtom, {
+
       /**
-       *  @public
-       * @returns {exports.ARGON|*}
+       * @returns {AtomType}
+       * @public
        */
       getType: function() {
         return ATOM_TYPE;
       }
-
     },
 
     // public static final

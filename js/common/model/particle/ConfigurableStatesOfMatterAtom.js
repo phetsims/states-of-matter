@@ -14,16 +14,15 @@ define( function( require ) {
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
   var AtomType = require( 'STATES_OF_MATTER/common/model/AtomType' );
   var StatesOfMatterAtom = require( 'STATES_OF_MATTER/common/model/particle/StatesOfMatterAtom' );
-  var DEFAULT_INTERACTION_POTENTIAL = StatesOfMatterConstants.MAX_EPSILON / 2;
 
-  // In picometers.
-  var DEFAULT_RADIUS = 175;
-  // In atomic mass units.
-  var MASS = 25;
+  // constants
+  var DEFAULT_INTERACTION_POTENTIAL = StatesOfMatterConstants.MAX_EPSILON / 2;
+  var DEFAULT_RADIUS = 175; // in picometers
+  var MASS = 25; // in atomic mass units
 
   /**
-   * @param {Number} x  position in picometers
-   * @param {Number} y  position in picometers
+   * @param {Number} x position
+   * @param {Number} y position
    * @constructor
    */
   function ConfigurableStatesOfMatterAtom( x, y ) {
@@ -31,23 +30,24 @@ define( function( require ) {
   }
 
   return inherit( StatesOfMatterAtom, ConfigurableStatesOfMatterAtom, {
+
       /**
+       * @returns {AtomType}
        * @public
-       * @returns {exports.ADJUSTABLE|*}
        */
       getType: function() {
         return AtomType.ADJUSTABLE;
       },
+
       /**
-       * @public
        * @param {Number} radius in picometers
+       * @public
        */
       setRadius: function( radius ) {
         this.radius = radius;
-
       }
     },
-//statics
+    // statics
     {
       DEFAULT_INTERACTION_POTENTIAL: DEFAULT_INTERACTION_POTENTIAL,
       DEFAULT_RADIUS: DEFAULT_RADIUS
