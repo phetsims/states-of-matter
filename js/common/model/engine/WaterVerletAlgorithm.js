@@ -17,9 +17,7 @@ define( function( require ) {
   var AbstractVerletAlgorithm = require( 'STATES_OF_MATTER/common/model/engine/AbstractVerletAlgorithm' );
   var WaterAtomPositionUpdater = require( 'STATES_OF_MATTER/common/model/engine/WaterAtomPositionUpdater' );
 
-// Parameters used for "hollywooding" of the water crystal.
-
-
+  // parameters used for "hollywooding" of the water crystal
   var WATER_FULLY_MELTED_TEMPERATURE = 0.3;
   var WATER_FULLY_MELTED_ELECTROSTATIC_FORCE = 1.0;
   var WATER_FULLY_FROZEN_TEMPERATURE = 0.22;
@@ -27,7 +25,6 @@ define( function( require ) {
   var MAX_REPULSIVE_SCALING_FACTOR_FOR_WATER = 3.0;
 
   /**
-   *
    * @param {MultipleParticleModel}  multipleParticleModel of the simulation
    * @constructor
    */
@@ -36,28 +33,31 @@ define( function( require ) {
     this.positionUpdater = WaterAtomPositionUpdater;
     AbstractVerletAlgorithm.call( this, multipleParticleModel );
 
-    // Creating here to reduce allocations.
+    // reusable vector, used in order to reduce allocations
     this.force = new Vector2();
   }
 
   return inherit( AbstractVerletAlgorithm, WaterVerletAlgorithm, {
-//----------------------------------------------------------------------------
-// Public Methods
-//----------------------------------------------------------------------------
+
+    // @public
     getPressure: function() {
       return this.pressure;
     },
+
+    // @public
     getTemperature: function() {
       return this.temperature;
     },
+
     /**
-     * @public
      * Update the motion of the particles and the forces that are acting upon
      * them.  This is the heart of this class, and it is here that the actual
      * Verlet algorithm is contained.
+     * @public
      */
     updateForcesAndMotion: function() {
-      // perform fast manipulations.
+
+      // Get references to all data needed for the algorithm.
       var moleculeDataSet = this.multipleParticleModel.getMoleculeDataSetRef();
       var numberOfMolecules = moleculeDataSet.getNumberOfMolecules();
       var moleculeCenterOfMassPositions = moleculeDataSet.getMoleculeCenterOfMassPositions();
@@ -69,6 +69,7 @@ define( function( require ) {
       var moleculeRotationRates = moleculeDataSet.getMoleculeRotationRates();
       var moleculeTorques = moleculeDataSet.getMoleculeTorques();
       var nextMoleculeTorques = moleculeDataSet.getNextMoleculeTorques();
+
       // Initialize other values that will be needed for the calculation.
       var massInverse = 1 / moleculeDataSet.getMoleculeMass();
       var inertiaInverse = 1 / moleculeDataSet.getMoleculeRotationalInertia();
@@ -76,63 +77,77 @@ define( function( require ) {
       var normalizedContainerWidth = this.multipleParticleModel.getNormalizedContainerWidth();
       var pressureZoneWallForce = 0;
       var temperatureSetPoint = this.multipleParticleModel.getTemperatureSetPoint();
+
       // Verify that this is being used on an appropriate data set.
       assert && assert( moleculeDataSet.getAtomsPerMolecule() === 3 );
-      // calculating the coloumb interactions.
+
+      // vars for calculating the coulomb interactions.
       var q0;
       var temperatureFactor;
       var repulsiveForceScalingFactor;
       var r2inv;
       var r6inv;
       var forceScalar;
+
       // Calculate the force and torque due to inter-particle interactions.
       if ( temperatureSetPoint < WATER_FULLY_FROZEN_TEMPERATURE ) {
+
         // a crystal structure.
         q0 = WATER_FULLY_FROZEN_ELECTROSTATIC_FORCE;
       }
       else if ( temperatureSetPoint > WATER_FULLY_MELTED_TEMPERATURE ) {
+
         // appearance of liquid.
         q0 = WATER_FULLY_MELTED_ELECTROSTATIC_FORCE;
       }
       else {
+
         // melted or frozen, so scale accordingly.
-        temperatureFactor = (temperatureSetPoint - WATER_FULLY_FROZEN_TEMPERATURE) /
-                            (WATER_FULLY_MELTED_TEMPERATURE - WATER_FULLY_FROZEN_TEMPERATURE);
+        temperatureFactor = ( temperatureSetPoint - WATER_FULLY_FROZEN_TEMPERATURE ) /
+                            ( WATER_FULLY_MELTED_TEMPERATURE - WATER_FULLY_FROZEN_TEMPERATURE );
         q0 = WATER_FULLY_FROZEN_ELECTROSTATIC_FORCE -
-             (temperatureFactor * (WATER_FULLY_FROZEN_ELECTROSTATIC_FORCE - WATER_FULLY_MELTED_ELECTROSTATIC_FORCE));
+             ( temperatureFactor * ( WATER_FULLY_FROZEN_ELECTROSTATIC_FORCE - WATER_FULLY_MELTED_ELECTROSTATIC_FORCE ) );
       }
       var normalCharges = [ -2 * q0, q0, q0 ];
       var alteredCharges = [ -2 * q0, 1.67 * q0, 0.33 * q0 ];
+
       // Update center of mass positions and angles for the molecules.
       for ( var i = 0; i < numberOfMolecules; i++ ) {
-        var xPos = moleculeCenterOfMassPositions[ i ].x + (this.TIME_STEP * moleculeVelocities[ i ].x) +
-                   (this.TIME_STEP_SQR_HALF * moleculeForces[ i ].x * massInverse);
-        var yPos = moleculeCenterOfMassPositions[ i ].y + (this.TIME_STEP * moleculeVelocities[ i ].y) +
-                   (this.TIME_STEP_SQR_HALF * moleculeForces[ i ].y * massInverse);
+        var xPos = moleculeCenterOfMassPositions[ i ].x + ( this.TIME_STEP * moleculeVelocities[ i ].x ) +
+                   ( this.TIME_STEP_SQR_HALF * moleculeForces[ i ].x * massInverse);
+        var yPos = moleculeCenterOfMassPositions[ i ].y + ( this.TIME_STEP * moleculeVelocities[ i ].y ) +
+                   ( this.TIME_STEP_SQR_HALF * moleculeForces[ i ].y * massInverse );
         moleculeCenterOfMassPositions[ i ].setXY( xPos, yPos );
-        moleculeRotationAngles[ i ] += (this.TIME_STEP * moleculeRotationRates[ i ]) +
-                                       (this.TIME_STEP_SQR_HALF * moleculeTorques[ i ] * inertiaInverse);
+        moleculeRotationAngles[ i ] += ( this.TIME_STEP * moleculeRotationRates[ i ] ) +
+                                       ( this.TIME_STEP_SQR_HALF * moleculeTorques[ i ] * inertiaInverse );
       }
       this.positionUpdater.updateAtomPositions( moleculeDataSet );
+
       // on the center of mass, so there is no torque.
       for ( i = 0; i < numberOfMolecules; i++ ) {
+
         // Clear the previous calculation's particle forces and torques.
         nextMoleculeForces[ i ].setXY( 0, 0 );
         nextMoleculeTorques[ i ] = 0;
+
         // Get the force values caused by the container walls.
         this.calculateWallForce( moleculeCenterOfMassPositions[ i ], normalizedContainerWidth, normalizedContainerHeight,
           nextMoleculeForces[ i ] );
+
         // exerted on the walls of the container.
         if ( nextMoleculeForces[ i ].y < 0 ) {
           pressureZoneWallForce += -nextMoleculeForces[ i ].y;
         }
         else if ( moleculeCenterOfMassPositions[ i ].y > this.multipleParticleModel.getNormalizedContainerHeight() / 2 ) {
+
           // in that value to the pressure.
           pressureZoneWallForce += Math.abs( nextMoleculeForces[ i ].x );
         }
+
         // Add in the effect of gravity.
         var gravitationalAcceleration = this.multipleParticleModel.getGravitationalAcceleration();
         if ( this.multipleParticleModel.getTemperatureSetPoint() < this.TEMPERATURE_BELOW_WHICH_GRAVITY_INCREASES ) {
+
           // caused by the thermostat.
           gravitationalAcceleration = gravitationalAcceleration *
                                       ((this.TEMPERATURE_BELOW_WHICH_GRAVITY_INCREASES -
@@ -141,14 +156,17 @@ define( function( require ) {
         }
         nextMoleculeForces[ i ].setY( nextMoleculeForces[ i ].y - gravitationalAcceleration );
       }
+
       // Update the pressure calculation.
       this.updatePressure( pressureZoneWallForce );
+
       // check them to see if they can be moved into the "safe" category.
       if ( moleculeDataSet.getNumberOfSafeMolecules() < numberOfMolecules ) {
         this.updateMoleculeSafety();
       }
 
       for ( i = 0; i < moleculeDataSet.getNumberOfSafeMolecules(); i++ ) {
+
         // the "hollywooding" to make the solid form appear more crystalline.
         var chargesA;
         if ( i % 2 === 0 ) {
@@ -158,6 +176,7 @@ define( function( require ) {
           chargesA = alteredCharges;
         }
         for ( var j = i + 1; j < moleculeDataSet.getNumberOfSafeMolecules(); j++ ) {
+
           // Select charges for this molecule.
           var chargesB;
           if ( j % 2 === 0 ) {
@@ -166,6 +185,7 @@ define( function( require ) {
           else {
             chargesB = alteredCharges;
           }
+
           // Calculate Lennard-Jones potential between mass centers.
           var dx = moleculeCenterOfMassPositions[ i ].x - moleculeCenterOfMassPositions[ j ].x;
           var dy = moleculeCenterOfMassPositions[ i ].y - moleculeCenterOfMassPositions[ j ].y;
@@ -176,17 +196,20 @@ define( function( require ) {
             }
             r2inv = 1 / distanceSquared;
             r6inv = r2inv * r2inv * r2inv;
-            // crystalline behavior we need for ice.
 
+            // crystalline behavior we need for ice.
             if ( temperatureSetPoint > WATER_FULLY_MELTED_TEMPERATURE ) {
+
               // No scaling of the repulsive force.
               repulsiveForceScalingFactor = 1;
             }
             else if ( temperatureSetPoint < WATER_FULLY_FROZEN_TEMPERATURE ) {
+
               // Scale by the max to force space in the crystal.
               repulsiveForceScalingFactor = MAX_REPULSIVE_SCALING_FACTOR_FOR_WATER;
             }
             else {
+
               // liquified, so adjust the scaling factor accordingly.
               temperatureFactor = (temperatureSetPoint - WATER_FULLY_FROZEN_TEMPERATURE) /
                                   (WATER_FULLY_MELTED_TEMPERATURE - WATER_FULLY_FROZEN_TEMPERATURE);
@@ -201,6 +224,7 @@ define( function( require ) {
             this.potentialEnergy += 4 * r6inv * (r6inv - 1) + 0.016316891136;
           }
           if ( distanceSquared < this.PARTICLE_INTERACTION_DISTANCE_THRESH_SQRD ) {
+
             // individual water molecules.
             for ( var ii = 0; ii < 3; ii++ ) {
               for ( var jj = 0; jj < 3; jj++ ) {
@@ -229,6 +253,7 @@ define( function( require ) {
           }
         }
       }
+
       // energy.
       var centersOfMassKineticEnergy = 0;
       var rotationalKineticEnergy = 0;
@@ -244,10 +269,12 @@ define( function( require ) {
                                       (Math.pow( moleculeVelocities[ i ].x, 2 ) + Math.pow( moleculeVelocities[ i ].y, 2 ));
         rotationalKineticEnergy += 0.5 * moleculeDataSet.getMoleculeRotationalInertia() *
                                    Math.pow( moleculeRotationRates[ i ], 2 );
+
         // Move the newly calculated forces and torques into the current spots.
         moleculeForces[ i ].setXY( nextMoleculeForces[ i ].x, nextMoleculeForces[ i ].y );
         moleculeTorques[ i ] = nextMoleculeTorques[ i ];
       }
+
       // Record the calculated temperature.
       this.temperature = (centersOfMassKineticEnergy + rotationalKineticEnergy) / numberOfMolecules / 1.5;
     }
