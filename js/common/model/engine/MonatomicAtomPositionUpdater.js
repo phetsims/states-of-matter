@@ -17,8 +17,8 @@ define( function( require ) {
   return {
 
     /**
-     * @public
      * @param {MoleculeForceAndMotionDataSet} moleculeDataSet
+     * @public
      */
     updateAtomPositions: function( moleculeDataSet ) {
 
@@ -34,6 +34,5 @@ define( function( require ) {
         atomPositions[ i ] = moleculeCenterOfMassPositions[ i ];
       }
     }
-
   };
 } );

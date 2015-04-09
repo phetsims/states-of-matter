@@ -89,25 +89,33 @@ define( function( require ) {
                                        (this.TIME_STEP_SQR_HALF * moleculeTorques[ i ] * inertiaInverse);
       }
       this.positionUpdater.updateAtomPositions( moleculeDataSet );
-      // walls and by gravity.
+
+      // Calculate the forces exerted on the particles by the container walls
+      // and by gravity.
       for ( i = 0; i < numberOfMolecules; i++ ) {
+
         // Clear the previous calculation's particle forces and torques.
         nextMoleculeForces[ i ].setXY( 0, 0 );
         nextMoleculeTorques[ i ] = 0;
+
         // Get the force values caused by the container walls.
         this.calculateWallForce( moleculeCenterOfMassPositions[ i ], normalizedContainerWidth,
           normalizedContainerHeight, nextMoleculeForces[ i ] );
+
         // exerted on the walls of the container.
         if ( nextMoleculeForces[ i ].y < 0 ) {
           pressureZoneWallForce += -nextMoleculeForces[ i ].y;
         }
         else if ( moleculeCenterOfMassPositions[ i ].y > this.multipleParticleModel.normalizedContainerHeight / 2 ) {
+
           // in that value to the pressure.
           pressureZoneWallForce += Math.abs( nextMoleculeForces[ i ].x );
         }
+
         // Add in the effect of gravity.
         var gravitationalAcceleration = this.multipleParticleModel.gravitationalAcceleration;
         if ( this.multipleParticleModel.temperatureSetPoint < this.TEMPERATURE_BELOW_WHICH_GRAVITY_INCREASES ) {
+
           // caused by the thermostat.
           gravitationalAcceleration = gravitationalAcceleration *
                                       ((this.TEMPERATURE_BELOW_WHICH_GRAVITY_INCREASES -
@@ -116,8 +124,10 @@ define( function( require ) {
         }
         nextMoleculeForces[ i ].setY( nextMoleculeForces[ i ].y - gravitationalAcceleration );
       }
+
       // Update the pressure calculation.
       this.updatePressure( pressureZoneWallForce );
+
       // check them to see if they can be moved into the "safe" category.
       if ( moleculeDataSet.numberOfSafeMolecules < numberOfMolecules ) {
         this.updateMoleculeSafety();
@@ -153,6 +163,7 @@ define( function( require ) {
           }
         }
       }
+
       // energy.
       var centersOfMassKineticEnergy = 0;
       var rotationalKineticEnergy = 0;

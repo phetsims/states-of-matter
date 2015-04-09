@@ -20,26 +20,25 @@ define( function( require ) {
 
   //private
   var MIN_INITIAL_DIAMETER_DISTANCE = 1.4;
-// The following constants can be adjusted to make the the corresponding
-// phase more or less dense.
+
+  // The following constants can be adjusted to make the the corresponding
+  // phase more or less dense.
   var LIQUID_SPACING_FACTOR = 0.8;
   var GAS_SPACING_FACTOR = 1.0;
 
   /**
-   *
-   * @param { MultipleParticleModel } multipleParticleModel  - model of the simulation
-   * }
+   * @param { MultipleParticleModel } multipleParticleModel - model of a set of particles
    * @constructor
    */
   function WaterPhaseStateChanger( multipleParticleModel ) {
 
-    this.multiPleParticleModel = multipleParticleModel;
-    this.rand = new Random();
-    //private
-    this.positionUpdater = WaterAtomPositionUpdater;
-    AbstractPhaseStateChanger.call( this, multipleParticleModel );
     // Make sure this is not being used on an inappropriate data set.
     assert && assert( multipleParticleModel.getMoleculeDataSetRef().getAtomsPerMolecule() === 3 );
+
+    this.multiPleParticleModel = multipleParticleModel;
+    this.rand = new Random(); //@private
+    this.positionUpdater = WaterAtomPositionUpdater; // @private
+    AbstractPhaseStateChanger.call( this, multipleParticleModel );
   }
 
   return inherit( AbstractPhaseStateChanger, WaterPhaseStateChanger, {
@@ -62,15 +61,19 @@ define( function( require ) {
           break;
       }
       var moleculeDataSet = this.multiPleParticleModel.getMoleculeDataSetRef();
+
       // in safe positions.
       this.multiPleParticleModel.getMoleculeDataSetRef().setNumberOfSafeMolecules( moleculeDataSet.getNumberOfMolecules() );
+
       // Sync up the atom positions with the molecule positions.
       this.positionUpdater.updateAtomPositions( moleculeDataSet );
+
       // determined.
       for ( var i = 0; i < 100; i++ ) {
         this.multiPleParticleModel.step();
       }
     },
+
     /**
      * @private
      * Set the phase to the solid state.

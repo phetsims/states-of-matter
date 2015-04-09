@@ -1,9 +1,9 @@
 // Copyright 2002-2015, University of Colorado Boulder
 
 /**
- * This class is a singleton that provides information about the structure
- * of a water molecule (i.e. the spatial and angular relationships between
- * the atoms that comprise the molecule).
+ * This object provides information about the structure of a water molecule,
+ * i.e. the spatial and angular relationships between the atoms that comprise
+ * the molecule.
  *
  * @author John Blanco
  * @author Siddhartha Chinthapally (Actual Concepts)
@@ -14,9 +14,6 @@ define( function( require ) {
   // modules
   var inherit = require( 'PHET_CORE/inherit' );
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
-
-  //private
-  var instance;
 
   var moleculeStructureX = [];
   var moleculeStructureY = [];
@@ -30,10 +27,8 @@ define( function( require ) {
                             Math.cos( StatesOfMatterConstants.THETA_HOH );
   moleculeStructureY[ 2 ] = StatesOfMatterConstants.DISTANCE_FROM_OXYGEN_TO_HYDROGEN *
                             Math.sin( StatesOfMatterConstants.THETA_HOH );
-  var xcm0 = (  moleculeStructureX[ 0 ] + 0.25 * moleculeStructureX[ 1 ] + 0.25 * moleculeStructureX[ 2 ]) /
-             1.5;
-  var ycm0 = (  moleculeStructureY[ 0 ] + 0.25 * moleculeStructureY[ 1 ] + 0.25 * moleculeStructureY[ 2 ]) /
-             1.5;
+  var xcm0 = (  moleculeStructureX[ 0 ] + 0.25 * moleculeStructureX[ 1 ] + 0.25 * moleculeStructureX[ 2 ]) / 1.5;
+  var ycm0 = (  moleculeStructureY[ 0 ] + 0.25 * moleculeStructureY[ 1 ] + 0.25 * moleculeStructureY[ 2 ]) / 1.5;
   for ( var i = 0; i < 3; i++ ) {
     moleculeStructureX[ i ] -= xcm0;
     moleculeStructureY[ i ] -= ycm0;

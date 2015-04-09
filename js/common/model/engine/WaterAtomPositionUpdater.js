@@ -15,7 +15,6 @@ define( function( require ) {
   var WaterMoleculeStructure = require( 'STATES_OF_MATTER/common/model/engine/WaterMoleculeStructure' );
 
   // constants
-  var BONDED_PARTICLE_DISTANCE = 0.9;
   var STRUCTURE_X = WaterMoleculeStructure.moleculeStructureX;
   var STRUCTURE_Y = WaterMoleculeStructure.moleculeStructureY;
 
@@ -26,43 +25,34 @@ define( function( require ) {
      * @param {MoleculeForceAndMotionDataSet} moleculeDataSet
      */
     updateAtomPositions: function( moleculeDataSet ) {
+
       // Make sure this is not being used on an inappropriate data set.
       assert && assert( moleculeDataSet.getAtomsPerMolecule() === 3 );
+
       // Get direct references to the data in the data set.
       var atomPositions = moleculeDataSet.getAtomPositions();
       var moleculeCenterOfMassPositions = moleculeDataSet.getMoleculeCenterOfMassPositions();
       var moleculeRotationAngles = moleculeDataSet.getMoleculeRotationAngles();
+
+      // other vars
       var xPos;
       var yPos;
       var cosineTheta;
       var sineTheta;
 
-      // todo: what is this for loop for? Seems to be getting over-ridden anyway
+      // Loop through all molecules and position the individual atoms based on
+      // center of gravity position, molecule structure, and rotational angle.
       for ( var i = 0; i < moleculeDataSet.getNumberOfMolecules(); i++ ) {
         cosineTheta = Math.cos( moleculeRotationAngles[ i ] );
         sineTheta = Math.sin( moleculeRotationAngles[ i ] );
-        xPos = moleculeCenterOfMassPositions[ i ].x + cosineTheta * (BONDED_PARTICLE_DISTANCE / 2);
-        yPos = moleculeCenterOfMassPositions[ i ].y + sineTheta * (BONDED_PARTICLE_DISTANCE / 2);
-        atomPositions[ i * 2 ].setXY( xPos, yPos );
-        xPos = moleculeCenterOfMassPositions[ i ].x - cosineTheta * (BONDED_PARTICLE_DISTANCE / 2);
-        yPos = moleculeCenterOfMassPositions[ i ].y - sineTheta * (BONDED_PARTICLE_DISTANCE / 2);
-        atomPositions[ i * 2 + 1 ].setXY( xPos, yPos );
-      }
-
-      for ( i = 0; i < moleculeDataSet.getNumberOfMolecules(); i++ ) {
-        cosineTheta = Math.cos( moleculeRotationAngles[ i ] );
-        sineTheta = Math.sin( moleculeRotationAngles[ i ] );
         for ( var j = 0; j < 3; j++ ) {
-          var xadd = (cosineTheta * STRUCTURE_X[ j ]) - (sineTheta * STRUCTURE_Y[ j ]);
-
-          var yadd = (sineTheta * STRUCTURE_X[ j ]) + (cosineTheta * STRUCTURE_Y[ j ]);
-
-          xPos = moleculeCenterOfMassPositions[ i ].x + xadd;
-          yPos = moleculeCenterOfMassPositions[ i ].y + yadd;
+          var xOffset = ( cosineTheta * STRUCTURE_X[ j ] ) - ( sineTheta * STRUCTURE_Y[ j ] );
+          var yOffset = ( sineTheta * STRUCTURE_X[ j ] ) + ( cosineTheta * STRUCTURE_Y[ j ] );
+          xPos = moleculeCenterOfMassPositions[ i ].x + xOffset;
+          yPos = moleculeCenterOfMassPositions[ i ].y + yOffset;
           atomPositions[ i * 3 + j ].setXY( xPos, yPos );
         }
       }
     }
   };
 } );
-

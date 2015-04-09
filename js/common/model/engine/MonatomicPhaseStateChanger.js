@@ -1,7 +1,7 @@
 // Copyright 2002-2013, University of Colorado Boulder
 
 /**
- * This class is used to change the phase state (i.e. solid, liquid, or gas) for a set of molecules.
+ * This class is used to change the phase state (i.e. solid, liquid, or gas) for a set of atoms.
  *
  * @author John Blanco
  * @author Aaron Davis
@@ -17,10 +17,9 @@ define( function( require ) {
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
 
   // constants
-  var MIN_INITIAL_INTER_PARTICLE_DISTANCE = 1.12;
+  var MIN_INITIAL_INTER_PARTICLE_DISTANCE = 1.12; // empirically determined
 
   /**
-   *
    * @param {MultipleParticleModel} multipleParticleModel of the simulation
    * @constructor
    */
@@ -65,8 +64,8 @@ define( function( require ) {
     },
 
     /**
-     * @private
      * Set the phase to the solid state.
+     * @private
      */
     setPhaseSolid: function() {
 
@@ -109,8 +108,8 @@ define( function( require ) {
     },
 
     /**
-     * @private
      * Set the phase to the liquid state.
+     * @private
      */
     setPhaseLiquid: function() {
 
@@ -118,7 +117,6 @@ define( function( require ) {
       var temperatureSqrt = Math.sqrt( StatesOfMatterConstants.LIQUID_TEMPERATURE );
 
       // Set the initial velocity for each of the atoms based on the new temperature.
-
       var numberOfAtoms = this.multipleParticleModel.moleculeDataSet.numberOfAtoms;
       var moleculeCenterOfMassPositions = this.multipleParticleModel.moleculeDataSet.moleculeCenterOfMassPositions;
       var moleculeVelocities = this.multipleParticleModel.moleculeDataSet.moleculeVelocities;
@@ -129,7 +127,6 @@ define( function( require ) {
       }
 
       // Assign each atom to a position centered on its blob.
-
       var atomsPlaced = 0;
       var centerPointX = this.multipleParticleModel.normalizedContainerWidth / 2;
       var centerPointY = this.multipleParticleModel.normalizedContainerHeight / 4;
@@ -172,8 +169,8 @@ define( function( require ) {
     },
 
     /**
-     * @private
      * Set the phase to the gaseous state.
+     * @private
      */
     setPhaseGas: function() {
 
@@ -226,6 +223,5 @@ define( function( require ) {
         }
       }
     }
-
   } );
 } );

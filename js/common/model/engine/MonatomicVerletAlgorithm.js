@@ -26,36 +26,41 @@ define( function( require ) {
     this.positionUpdater = MonatomicAtomPositionUpdater;
     this.epsilon = 1; // Controls the strength of particle interaction.
 
-    // Calculate the forces created through interactions with other particles.
-    // Creating the below vectors here to reduce allocations
+    // reusable vectors for reducing allocations
     this.force = new Vector2();
     this.velocityIncrement = new Vector2();
   }
 
   return inherit( AbstractVerletAlgorithm, MonatomicVerletAlgorithm, {
+
     /**
-     * @public
      * @param {Number} scaledEpsilon
+     * @public
      */
     setScaledEpsilon: function( scaledEpsilon ) {
       this.epsilon = scaledEpsilon;
     },
+
     /**
+     * @returns {Number}
      * @public
-     * @returns {pressure|*|number|PropertySet.pressure}
      */
     getPressure: function() {
       return this.pressure;
     },
+
     /**
+     * @returns {Number}
      * @public
-     * @returns {number|*|AbstractVerletAlgorithm.temperature}
      */
     getTemperature: function() {
       return this.temperature;
     },
 
-
+    /**
+     * @returns {Number}
+     * @public
+     */
     getScaledEpsilon: function() {
       return this.epsilon;
     },
