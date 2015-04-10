@@ -24,6 +24,7 @@ define( function( require ) {
   }
 
   return inherit( Object, AtomFactory, {
+
     /**
      * @public
      * @param {String} atomType
@@ -47,7 +48,6 @@ define( function( require ) {
         default:
           atom = null;
           break;
-
       }
       return atom;
     }

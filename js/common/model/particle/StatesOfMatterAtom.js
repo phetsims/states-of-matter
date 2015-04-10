@@ -43,6 +43,7 @@ define( function( require ) {
       this.positionProperty.value.setXY( x, y );
       this.positionProperty._notifyObservers();
     },
+
     /**
      * @public
      * @param other
@@ -52,7 +53,6 @@ define( function( require ) {
       if ( this === other ) {
         return true;
       }
-
       if ( this.mass !== other.mass ) {
         return false;
       }
@@ -65,12 +65,13 @@ define( function( require ) {
       if ( !this.positionProperty.equals( other.positionProperty ) ) {
         return false;
       }
-      if ( !this.accel.equals( other.accel ) ) {
+      else if ( !this.accel.equals( other.accel ) ) {
         return false;
       }
 
       return true;
     },
+
     /**
      * @public
      * @returns {Vector2.y|*}

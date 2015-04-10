@@ -1,7 +1,7 @@
 // Copyright 2002-2013, University of Colorado Boulder
 
 /**
- * The class represents a single atom of oxygen in the model.
+ * This class represents a single atom of oxygen in the model.
  *
  * @author John Blanco
  * @author Aaron Davis
@@ -30,6 +30,7 @@ define( function( require ) {
   }
 
   return inherit( StatesOfMatterAtom, OxygenAtom, {
+
       /**
        * @public
        * @returns {exports.OXYGEN|*}
@@ -37,8 +38,8 @@ define( function( require ) {
       getType: function() {
         return ATOM_TYPE;
       }
-
     },
+
     // public static final
     {
       RADIUS: RADIUS
