@@ -1,11 +1,15 @@
 // Copyright 2002-2015, University of Colorado Boulder
 
 /**
- * The class represents a single atom of hydrogen in the model.
+ * The class represents a single atom of hydrogen in the model.  This
+ * variation of Hydrogen Atom exists primarily to allow the appearance of
+ * water to vary.
+ *
+ * TODO: Consider alternative ways to make water appearance vary.
+ *
  *
  * @author John Blanco
  */
-// TODO: Can this be deleted?
 define( function( require ) {
   'use strict';
 
