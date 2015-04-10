@@ -16,14 +16,8 @@ define( function( require ) {
   var OxygenAtom = require( 'STATES_OF_MATTER/common/model/particle/OxygenAtom' );
   var AtomType = require( 'STATES_OF_MATTER/common/model/AtomType' );
 
-  /**
-   *
-   * @constructor
-   */
-  function AtomFactory() {
-  }
-
-  return inherit( Object, AtomFactory, {
+  // static object, no constructor
+  return {
 
     /**
      * @public
@@ -51,6 +45,6 @@ define( function( require ) {
       }
       return atom;
     }
-  } );
+  };
 } );
 

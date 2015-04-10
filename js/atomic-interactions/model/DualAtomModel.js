@@ -45,7 +45,7 @@ define( function( require ) {
     this.vibrationCounter = 0; // Used to vibrate fixed atom during bonding.
     this.potentialWhenAtomReleased = 0; // Used to set magnitude of vibration.
     this.sigmaTable = new SigmaTable();
-    this.atomFactory = new AtomFactory();
+    this.atomFactory = AtomFactory;
     this.isHandNodeVisible = true; // indicate moving hand node visible or not
     this.ljPotentialCalculator = new LjPotentialCalculator( StatesOfMatterConstants.MIN_SIGMA,
       StatesOfMatterConstants.MIN_EPSILON ); // Initial values arbitrary, will be set during reset.
