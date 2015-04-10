@@ -24,36 +24,35 @@ define( function( require ) {
   var GridNode = require( 'STATES_OF_MATTER/atomic-interactions/view/ZoomableGridNode' );
   var PositionMarker = require( 'STATES_OF_MATTER/atomic-interactions/view/PositionMarker' );
 
-  //strings
+  // strings
   var distanceBetweenAtomsString = require( 'string!STATES_OF_MATTER/distanceBetweenAtoms' );
   var distanceBetweenMoleculesString = require( 'string!STATES_OF_MATTER/distanceBetweenMolecules' );
   var potentialEnergyString = require( 'string!STATES_OF_MATTER/potentialEnergy' );
   var sigmaString = require( 'string!STATES_OF_MATTER/sigma' );
   var epsilonString = require( 'string!STATES_OF_MATTER/epsilon' );
 
-// Constants that control the range of data that is graphed.
-// In picometers.
-  var MAX_INTER_ATOM_DISTANCE = 1700;
+  // Constant that controls the range of data that is graphed.
+  var MAX_INTER_ATOM_DISTANCE = 1700; // in picometers
 
-// Constants that control the appearance of the diagram.
+  // Constants that control the appearance of the diagram.
   var NARROW_VERSION_WIDTH = 135;
   var WIDE_VERSION_WIDTH = 450;
   var AXIS_LINE_WIDTH = 1;
   var AXES_ARROW_HEAD_HEIGHT = 8 * AXIS_LINE_WIDTH;
 
-
-// Size of pos marker wrt overall width.
+  // Size of pos marker wrt overall width.
   var POSITION_MARKER_DIAMETER_PROPORTION = 0.03;
 
-// Constants that control the location and size of the graph.
+  // Constants that control the location and size of the graph.
   var VERT_AXIS_SIZE_PROPORTION = 0.85;
 
-// Font for the labels used on the axes and within the graph.
+  // Font for the labels used on the axes and within the graph.
   var AXIS_LABEL_FONT_SIZE = 12;
   var AXIS_LABEL_FONT;
   var GREEK_LETTER_FONT_SIZE = 18;
   var GREEK_LETTER_FONT = new PhetFont( GREEK_LETTER_FONT_SIZE );
-// zoom buttons height
+
+  // zoom buttons height
   var zoomButtonsHeight = 65;
 
   /**
@@ -84,7 +83,6 @@ define( function( require ) {
       this.heightOfGraph = this.widthOfGraph * 0.8;
       AXIS_LABEL_FONT = new PhetFont( AXIS_LABEL_FONT_SIZE );
       GREEK_LETTER_FONT = new PhetFont( GREEK_LETTER_FONT_SIZE );
-
     }
     this.graphXOrigin = 0.05 * this.widthOfGraph;
     this.graphYOrigin = 0.85 * this.heightOfGraph;
@@ -94,9 +92,9 @@ define( function( require ) {
 
     // Layer where the graph elements are added.
     this.ljPotentialGraph = new Node();
+
     this.verticalScalingFactor = (this.graphHeight / 2) /
                                  (StatesOfMatterConstants.MAX_EPSILON * StatesOfMatterConstants.K_BOLTZMANN);
-
     this.horizontalLineCount = 5;
 
     // Create and add the portion that depicts the Lennard-Jones potential curve.
@@ -110,17 +108,15 @@ define( function( require ) {
 
     // Create and add the potential energy line.
     this.potentialEnergyLine = new Path( null, { lineWidth: 2, stroke: 'yellow' } );
-
     this.ljPotentialGraph.addChild( this.potentialEnergyLine );
 
     // Add the arrows and labels that will depict sigma and epsilon.
-    this.epsilonArrowShape = new ArrowShape( 0, 0, 0, this.graphHeight / 2,
-      {
-        doubleHead: true,
-        headHeight: 5,
-        headWidth: 5,
-        tailWidth: 1
-      } );
+    this.epsilonArrowShape = new ArrowShape( 0, 0, 0, this.graphHeight / 2, {
+      doubleHead: true,
+      headHeight: 5,
+      headWidth: 5,
+      tailWidth: 1
+    } );
     this.epsilonArrow = new Path( this.epsilonArrowShape, { fill: 'white', stroke: 'white' } );
     this.ljPotentialGraph.addChild( this.epsilonArrow );
 
@@ -136,36 +132,30 @@ define( function( require ) {
     } );
     this.ljPotentialGraph.addChild( this.sigmaArrow );
 
-    // Variables for controlling the appearance, visibility, and location of
-    // the position marker.
     // Add the position marker.
     var markerDiameter = POSITION_MARKER_DIAMETER_PROPORTION * this.graphWidth;
     this.positionMarker = new PositionMarker( markerDiameter / 2, 'rgb( 117, 217, 255 )' );
-
     this.positionMarker.setVisible( this.positionMarkerEnabled );
+
     this.epsilonLineLayer = new Node();
     this.ljPotentialGraph.addChild( this.epsilonLineLayer );
     this.ljPotentialGraph.addChild( this.positionMarker );
 
-
     // Create and add the horizontal axis line for the graph.
-    this.horizontalAxis = new ArrowNode( 0, 0, this.graphWidth + AXES_ARROW_HEAD_HEIGHT, 0,
-      {
-        stroke: 'white',
-        fill: 'white',
-        headHeight: 8,
-        headWidth: 8,
-        tailWidth: 2
-      } );
+    this.horizontalAxis = new ArrowNode( 0, 0, this.graphWidth + AXES_ARROW_HEAD_HEIGHT, 0, {
+      stroke: 'white',
+      fill: 'white',
+      headHeight: 8,
+      headWidth: 8,
+      tailWidth: 2
+    } );
 
     this.horizontalAxis.setTranslation( this.graphXOrigin, this.graphYOrigin );
 
-
-    this.horizontalAxisLabel = new Text( distanceBetweenAtomsString,
-      {
-        fill: 'white',
-        font: AXIS_LABEL_FONT
-      } );
+    this.horizontalAxisLabel = new Text( distanceBetweenAtomsString, {
+      fill: 'white',
+      font: AXIS_LABEL_FONT
+    } );
     if ( this.horizontalAxisLabel.width > this.horizontalAxis.width ) {
       this.horizontalAxisLabel.scale( this.horizontalAxis.width / this.horizontalAxisLabel.width );
     }
@@ -173,14 +163,13 @@ define( function( require ) {
     this.setMolecular( false );
 
     // Create and add the vertical axis line for the graph.
-    this.verticalAxis = new ArrowNode( 0, 0, 0, -this.graphHeight - AXES_ARROW_HEAD_HEIGHT,
-      {
-        stroke: 'white',
-        fill: 'white',
-        headHeight: 8,
-        headWidth: 8,
-        tailWidth: 2
-      } );
+    this.verticalAxis = new ArrowNode( 0, 0, 0, -this.graphHeight - AXES_ARROW_HEAD_HEIGHT, {
+      stroke: 'white',
+      fill: 'white',
+      headHeight: 8,
+      headWidth: 8,
+      tailWidth: 2
+    } );
     this.verticalAxis.setTranslation( this.graphXOrigin, this.graphYOrigin );
 
     this.verticalAxisLabel = new Text( potentialEnergyString, { fill: 'white', font: AXIS_LABEL_FONT } );
@@ -214,6 +203,7 @@ define( function( require ) {
   }
 
   return inherit( Node, InteractionPotentialDiagramNode, {
+
     /**
      * Set the parameters that define the shape of the Lennard-Jones
      * potential curve.
@@ -229,6 +219,7 @@ define( function( require ) {
       // Redraw the graph to reflect the new parameters.
       this.drawPotentialCurve();
     },
+
     /**
      * @public
      */
@@ -239,8 +230,8 @@ define( function( require ) {
       this.horizontalLineCount = 5;
       this.gridNode.setHorizontalLines( 0, 0, this.graphWidth, this.graphHeight, this.horizontalLineCount );
       this.drawPotentialCurve();
-
     },
+
     /**
      * @public
      * @returns {number|*}
@@ -248,6 +239,7 @@ define( function( require ) {
     getGraphHeight: function() {
       return this.graphHeight;
     },
+
     /**
      * @public
      * @returns {number|*}
@@ -255,6 +247,7 @@ define( function( require ) {
     getGraphWidth: function() {
       return this.graphWidth;
     },
+
     /**
      * @public
      * @returns {Vector2|*}
@@ -262,6 +255,7 @@ define( function( require ) {
     getZeroCrossingPoint: function() {
       return this.zeroCrossingPoint;
     },
+
     /**
      * @public
      * @returns {Vector2|*}
@@ -269,6 +263,7 @@ define( function( require ) {
     getGraphMin: function() {
       return this.graphMin;
     },
+
     /**
      * @public
      * @param {Boolean} enabled - indicate to whether enable the position marker or not.
@@ -276,6 +271,7 @@ define( function( require ) {
     setMarkerEnabled: function( enabled ) {
       this.positionMarkerEnabled = enabled;
     },
+
     /**
      * Set the position of the position marker.  Note that is is only possible
      * to set the x axis position, which is distance.  The y axis position is
@@ -332,10 +328,10 @@ define( function( require ) {
      * @param {Number} radius
      * @return
      */
-
     calculateLennardJonesPotential: function( radius ) {
       return (  this.ljPotentialCalculator.calculateLjPotential( radius ));
     },
+
     /**
      *
      * Draw the curve that reflects the Lennard-Jones potential based upon the

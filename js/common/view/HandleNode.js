@@ -16,13 +16,13 @@ define( function( require ) {
   var LinearGradient = require( 'SCENERY/util/LinearGradient' );
 
   /**
-   *
    * @constructor
    */
   function HandleNode() {
 
     Node.call( this );
     var handleScale = 0.22;
+
     // add handle middle shape
     var handleNodeUpperMiddleShapeTopY = 5;
     var handleNodeUpperMiddleShapeMiddleY = 10;
@@ -82,9 +82,7 @@ define( function( require ) {
       y: middleShape.centerY - 3
     } );
 
-
     this.addChild( leftShape );
-
 
     // add handle right shape
     var rightShape = new Path( new Shape()
