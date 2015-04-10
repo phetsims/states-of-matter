@@ -65,8 +65,6 @@ define( function( require ) {
       var tempInKelvinRounded = Math.round( multipleParticleModel.getTemperatureInKelvin() );
       temperatureKelvinText.setText( tempInKelvinRounded + " " + kelvinUnits );
       temperatureCelsiusText.setText( Math.round( tempInKelvin - 273.15 ) + " " + celsiusUnits );
-
-
       temperatureInKelvinProperty.value = tempInKelvinRounded > MAX_TEMPERATURE_TO_CLAMP_RED_MERCURY ?
                                           MAX_TEMPERATURE_TO_CLAMP_RED_MERCURY : tempInKelvinRounded;
     } );
@@ -90,13 +88,13 @@ define( function( require ) {
   }
 
   return inherit( Node, CompositeThermometerNode, {
+
     /**
      * @public
      * Updates the thermometers position and rotation.
      * When the container explodes, the thermometer rotates in anti-clockwise director and moves up in the air.
      */
     updatePositionAndOrientation: function() {
-
       var containerHeight = this.multipleParticleModel.getParticleContainerHeight();
       if ( !this.multipleParticleModel.getContainerExploded() ) {
         if ( this.getRotation() !== 0 ) {
@@ -123,7 +121,6 @@ define( function( require ) {
         this.setY( newPosY );
         this.rotate( rotationAmount );
       }
-
     }
   } );
 } );

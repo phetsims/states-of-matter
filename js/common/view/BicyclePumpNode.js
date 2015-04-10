@@ -3,6 +3,7 @@
 /**
  * View for the bicycle pump
  *
+ * @author John Blanco
  * @author Siddhartha Chinthapally (Actual Concepts)
  */
 define( function( require ) {

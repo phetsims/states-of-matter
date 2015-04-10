@@ -16,6 +16,11 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
 
+  /**
+   * @param {number} sigma
+   * @param {number} epsilon
+   * @constructor
+   */
   function LjPotentialCalculator( sigma, epsilon ) {
 
     if ( sigma === 0 ) {
@@ -27,14 +32,12 @@ define( function( require ) {
     this.epsilonForCalcs = this.epsilon * StatesOfMatterConstants.K_BOLTZMANN;  // Epsilon multiplied by k-boltzmann.
   }
 
-//-----------------------------------------------------------------------------
-// Private Methods
-//-----------------------------------------------------------------------------
-
   return inherit( Object, LjPotentialCalculator, {
-//-----------------------------------------------------------------------------
-// Accessor Methods
-//-----------------------------------------------------------------------------
+
+    /**
+     * @public
+     * @returns {Number|*}
+     */
     getSigma: function() {
       return this.sigma;
     },
@@ -46,6 +49,7 @@ define( function( require ) {
     setSigma: function( sigma ) {
       this.sigma = sigma;
     },
+
     /**
      * @public
      * @returns {Number|*}
@@ -62,9 +66,7 @@ define( function( require ) {
       this.epsilon = epsilon;
       this.epsilonForCalcs = this.epsilon * StatesOfMatterConstants.K_BOLTZMANN;
     },
-//-----------------------------------------------------------------------------
-// Other Public Methods
-//-----------------------------------------------------------------------------
+
     /**
      * Calculate the Lennard-Jones potential for the specified distance.
      * @public
@@ -75,6 +77,7 @@ define( function( require ) {
       var distanceRatio = this.sigma / distance;
       return (4 * this.epsilonForCalcs * ( Math.pow( distanceRatio, 12 ) - Math.pow( distanceRatio, 6 )));
     },
+
     /**
      * Calculate only the repulsive component of the Lennard-Jones force for
      * the specified distance.
@@ -85,6 +88,7 @@ define( function( require ) {
     calculateRepulsiveLjForce: function( distance ) {
       return (48 * this.epsilonForCalcs * Math.pow( this.sigma, 12 ) / Math.pow( distance, 13 ));
     },
+
     /**
      * Calculate only the attractive component of the Lennard-Jones force for
      * the specified distance.
@@ -95,6 +99,7 @@ define( function( require ) {
     calculateAttractiveLjForce: function( distance ) {
       return (24 * this.epsilonForCalcs * Math.pow( this.sigma, 6 ) / Math.pow( distance, 7 ));
     },
+
     /**
      * Calculate the distance at which the force is 0 because the attractive
      * and repulsive forces are balanced.  Note that this is where the

@@ -28,6 +28,7 @@ define( function( require ) {
   }
 
   return inherit( Object, InteractionStrengthTable, {}, {
+
     /**
      * Get the interaction potential between two atoms.  Units are such that
      * the value divided by k-boltzmann is in Kelvin.  This is apparently how
@@ -84,12 +85,11 @@ define( function( require ) {
           return ( StatesOfMatterConstants.MAX_EPSILON - StatesOfMatterConstants.MIN_EPSILON ) / 2;
         }
         else {
-          console.error( 'Error: Do not have data for this combination of molecules, using default.' );
-          console.error( '       atomType1 = ' + atomType1 + ', atomType2 = ' + atomType2 );
+          console.error( 'Warning: No data for this combination of molecules, using default.' );
+          console.error( '         atomType1 = ' + atomType1 + ', atomType2 = ' + atomType2 );
           return ( StatesOfMatterConstants.MAX_EPSILON - StatesOfMatterConstants.MIN_EPSILON ) / 2;
         }
       }
     }
-
   } );
 } );

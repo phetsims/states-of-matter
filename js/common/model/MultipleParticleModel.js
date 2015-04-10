@@ -3,6 +3,7 @@
 /**
  * MultipleParticleModel. Ported directly from Java version.
  *
+ * @author John Blanco
  * @author Aaron Davis
  * @author Siddhartha Chinthapally (Actual Concepts)
  */
@@ -109,7 +110,9 @@ define( function( require ) {
    * @constructor
    */
   function MultipleParticleModel() {
+
     var multipleParticleModel = this;
+
     // Strategy patterns that are applied to the data set in order to create
     // the overall behavior of the simulation.
     this.atomPositionUpdater = null;
@@ -122,8 +125,9 @@ define( function( require ) {
     this.minAllowableContainerHeight = null;
     this.particles = new ObservableArray();
     this.copyOfParticles = new ObservableArray();
+
     // Data set containing the atom and molecule position, motion, and force information.
-    this.moleculeDataSet = null; // will be initialized in initializeMonatomic
+    this.moleculeDataSet = null;
 
     this.particleDiameter = 1;
     this.normalizedContainerWidth = StatesOfMatterConstants.PARTICLE_CONTAINER_WIDTH / this.particleDiameter;
@@ -172,6 +176,7 @@ define( function( require ) {
      * @param {Number} newTemperature
      */
     setTemperature: function( newTemperature ) {
+
       if ( newTemperature > MAX_TEMPERATURE ) {
         this.temperatureSetPoint = MAX_TEMPERATURE;
       }
@@ -199,7 +204,6 @@ define( function( require ) {
       return this.convertInternalTemperatureToKelvin();
     },
 
-
     /**
      * Get the pressure value which is being calculated by the model and is
      * not adjusted to represent any "real" units (such as atmospheres).
@@ -216,6 +220,7 @@ define( function( require ) {
      * @param {Number} moleculeID
      */
     setMoleculeType: function( moleculeID ) {
+
       // Verify that this is a supported value.
       if ( ( moleculeID !== StatesOfMatterConstants.DIATOMIC_OXYGEN ) &&
            ( moleculeID !== StatesOfMatterConstants.NEON ) &&
@@ -278,13 +283,13 @@ define( function( require ) {
       // locations and energy levels.
       this.initializeParticles( phase );
     },
+
     /**
      *  @private
      */
     updatePressure: function() {
       this.pressure = this.getPressureInAtmospheres();
     },
-
 
     /**
      * Sets the target height of the container.  The target height is set
@@ -505,6 +510,7 @@ define( function( require ) {
       // Recalculate the minimum allowable container size, since it depends on the number of particles.
       this.calculateMinAllowableContainerHeight();
     },
+
     /**
      *  @private
      */
@@ -556,6 +562,7 @@ define( function( require ) {
       this.updatePressure();
       this.calculateMinAllowableContainerHeight();
     },
+
     /**
      * @private
      */
@@ -669,7 +676,6 @@ define( function( require ) {
     },
 
     step: function() {
-
       if ( this.isPlaying ) {
         this.stepInternal();
       }
@@ -697,11 +703,12 @@ define( function( require ) {
       }
 
       if ( this.heightChangeCounter !== 0 && this.particlesNearTop() ) {
+
         // The height of the container is currently changing and there
         // are particles close enough to the top that they may be
         // interacting with it.  Since this can end up adding or removing
         // kinetic energy (i.e. heat) from the system, no thermostat is
-        // run in this case.  Instead, the temperature determined by
+        // run in this case.  Instead, the temperature is determined by
         // looking at the kinetic energy of the molecules and that value
         // is used to set the system temperature set point.
         this.setTemperature( this.moleculeDataSet.calculateTemperatureFromKineticEnergy() );
@@ -733,7 +740,7 @@ define( function( require ) {
      * @param {Number} phase
      */
 
-    //private
+    //@private
     initializeDiatomic: function( moleculeID, phase ) {
       // Verify that a valid molecule ID was provided.
       assert && assert( (moleculeID === StatesOfMatterConstants.DIATOMIC_OXYGEN) );
@@ -743,7 +750,6 @@ define( function( require ) {
       if ( numberOfAtoms % 2 !== 0 ) {
         numberOfAtoms--;
       }
-
 
       // Create the normalized data set for the one-atom-per-molecule case.
       this.moleculeDataSet = new MoleculeForceAndMotionDataSet( 2 );
@@ -760,11 +766,14 @@ define( function( require ) {
       var atomPositions = [];
       atomPositions[ 0 ] = atomPositionInVector;
       atomPositions[ 1 ] = atomPositionInVector;
+
       // Create the individual atoms and add them to the data set.
       for ( var i = 0; i < numberOfMolecules; i++ ) {
+
         // Create the molecule.
         var moleculeCenterOfMassPosition = new Vector2();
         var moleculeVelocity = new Vector2();
+
         // Add the atom to the data set.
         this.moleculeDataSet.addMolecule( atomPositions, moleculeCenterOfMassPosition, moleculeVelocity, 0 );
 
@@ -772,6 +781,7 @@ define( function( require ) {
         this.particles.push( new OxygenAtom( 0, 0 ) );
         this.particles.push( new OxygenAtom( 0, 0 ) );
       }
+
       // Initialize the particle positions according the to requested phase.
       this.setPhase( phase );
     },
@@ -785,21 +795,26 @@ define( function( require ) {
      * @private
      */
     initializeTriatomic: function( moleculeID, phase ) {
+
       // Only water is supported so far.
       assert && assert( (moleculeID === StatesOfMatterConstants.WATER) );
+
       // molecules that can fit depends on the size of the individual atom.
       var waterMoleculeDiameter = OxygenAtom.RADIUS * 2.1;
       var moleculesAcrossBottom = Math.round( StatesOfMatterConstants.CONTAINER_BOUNDS.width /
                                               (waterMoleculeDiameter * 1.2) );
       var numberOfMolecules = Math.pow( moleculesAcrossBottom / 3, 2 );
+
       // Create the normalized data set for the one-atom-per-molecule case.
       this.moleculeDataSet = new MoleculeForceAndMotionDataSet( 3 );
+
       // Create the strategies that will work on this data set.
       this.phaseStateChanger = new WaterPhaseStateChanger( this );
       this.atomPositionUpdater = WaterAtomPositionUpdater;
       this.moleculeForceAndMotionCalculator = new WaterVerletAlgorithm( this );
       this.isoKineticThermostat = new IsokineticThermostat( this.moleculeDataSet, this.minModelTemperature );
       this.andersenThermostat = new AndersenThermostat( this.moleculeDataSet, this.minModelTemperature );
+
       // Create the individual atoms and add them to the data set.
       var atomPositionInVector = new Vector2();
       var atomPositions = [];
@@ -807,16 +822,18 @@ define( function( require ) {
       atomPositions[ 1 ] = atomPositionInVector;
       atomPositions[ 2 ] = atomPositionInVector;
       for ( var i = 0; i < numberOfMolecules; i++ ) {
+
         // Create the molecule.
         var moleculeCenterOfMassPosition = new Vector2();
         var moleculeVelocity = new Vector2();
 
         // Add the atom to the data set.
         this.moleculeDataSet.addMolecule( atomPositions, moleculeCenterOfMassPosition, moleculeVelocity, 0 );
-        // Add atoms to model set.
 
+        // Add atoms to model set.
         this.particles.add( new OxygenAtom( 0, 0 ) );
         this.particles.add( new HydrogenAtom( 0, 0 ) );
+
         // is more on this in the algorithm implementation for water.
         var atom = ( i % 2 === 0 ) ? new HydrogenAtom( 0, 0 ) : new HydrogenAtom2( 0, 0 );
         this.particles.add( atom );
@@ -824,6 +841,7 @@ define( function( require ) {
       // Initialize the particle positions according the to requested phase.
       this.setPhase( phase );
     },
+
     /***
      * @public
      * @returns {number|*}
@@ -831,6 +849,7 @@ define( function( require ) {
     getNormalizedContainerWidth: function() {
       return this.normalizedContainerWidth;
     },
+
     /**
      * @public
      * @returns {null|*}
@@ -838,6 +857,7 @@ define( function( require ) {
     getMoleculeDataSetRef: function() {
       return this.moleculeDataSet;
     },
+
     /**
      * @public
      * @returns {Array}
@@ -845,6 +865,7 @@ define( function( require ) {
     getMoleculeCenterOfMassPositions: function() {
       return this.moleculeCenterOfMassPositions;
     },
+
     /**
      * @public
      * @returns {number|*}
@@ -852,6 +873,7 @@ define( function( require ) {
     getNormalizedContainerHeight: function() {
       return this.normalizedContainerHeight;
     },
+
     /**
      * @public
      * @returns {number|*}
@@ -859,6 +881,7 @@ define( function( require ) {
     getTemperatureSetPoint: function() {
       return this.temperatureSetPoint;
     },
+
     /**
      * @public
      * @returns {number|*}
@@ -866,6 +889,7 @@ define( function( require ) {
     getGravitationalAcceleration: function() {
       return this.gravitationalAcceleration;
     },
+
     /**
      * @public
      * @returns {Number|*}
@@ -873,6 +897,7 @@ define( function( require ) {
     getMoleculeType: function() {
       return this.currentMolecule;
     },
+
     /**
      * @public
      * @param epsilon
@@ -1170,6 +1195,7 @@ define( function( require ) {
       // roughly matched that of the existing monatomic molecules.
       return epsilon / ( StatesOfMatterConstants.MAX_EPSILON / 2 );
     },
+
     /**
      * @private
      * @param {Number}scaledEpsilon
@@ -1178,6 +1204,7 @@ define( function( require ) {
     convertScaledEpsilonToEpsilon: function( scaledEpsilon ) {
       return scaledEpsilon * StatesOfMatterConstants.MAX_EPSILON / 2;
     },
+
     /**
      * @public
      * @returns {boolean|*}
@@ -1201,6 +1228,7 @@ define( function( require ) {
         }
       }
     },
+
     /**
      * @public
      * Return the lid to the container.  It only makes sense to call this after
@@ -1247,6 +1275,7 @@ define( function( require ) {
         this.phaseStateChanger.setPhase( AbstractPhaseStateChanger.PHASE_GAS );
       }
     },
+
     /**
      * @public
      * @returns {exports.PARTICLE_CONTAINER_INITIAL_HEIGHT|*}
@@ -1258,7 +1287,6 @@ define( function( require ) {
     PHASE_SOLID: PHASE_SOLID,
     PHASE_LIQUID: PHASE_LIQUID,
     PHASE_GAS: PHASE_GAS,
-
     MAX_ADJUSTABLE_EPSILON: MAX_ADJUSTABLE_EPSILON
 
   } );

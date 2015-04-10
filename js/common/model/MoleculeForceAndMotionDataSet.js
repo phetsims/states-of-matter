@@ -48,7 +48,6 @@ define( function( require ) {
       this.nextMoleculeTorques [ i ] = 0;
     }
 
-
     // Set default values.
     if ( atomsPerMolecule === 1 ) {
       this.moleculeMass = 1;
@@ -69,6 +68,7 @@ define( function( require ) {
   }
 
   return inherit( Object, MoleculeForceAndMotionDataSet, {
+
     /**
      * @public
      * @returns {number}
@@ -76,6 +76,7 @@ define( function( require ) {
     getNumberOfMolecules: function() {
       return this.numberOfAtoms / this.atomsPerMolecule;
     },
+
     /**
      * @public
      * @returns {number|*}
@@ -83,6 +84,7 @@ define( function( require ) {
     getMoleculeRotationalInertia: function() {
       return this.moleculeRotationalInertia;
     },
+
     /**
      * @public
      * @returns {number}
@@ -90,6 +92,7 @@ define( function( require ) {
     getMoleculeMass: function() {
       return this.moleculeMass;
     },
+
     /**
      * Returns a value indicating how many more molecules can be added.
      * @public
@@ -106,6 +109,7 @@ define( function( require ) {
     getAtomsPerMolecule: function() {
       return this.atomsPerMolecule;
     },
+
     /**
      * @public
      * @returns {Array}
@@ -113,6 +117,7 @@ define( function( require ) {
     getAtomPositions: function() {
       return this.atomPositions;
     },
+
     /**
      * @public
      * @returns {Number|*}
@@ -120,6 +125,7 @@ define( function( require ) {
     getNumberOfAtoms: function() {
       return this.numberOfAtoms;
     },
+
     /**
      * @public
      * @returns {*}
@@ -127,6 +133,7 @@ define( function( require ) {
     getNumberOfSafeMolecules: function() {
       return this.numberOfSafeMolecules;
     },
+
     /**
      * @public
      * @returns {Array}
@@ -134,6 +141,7 @@ define( function( require ) {
     getMoleculeCenterOfMassPositions: function() {
       return this.moleculeCenterOfMassPositions;
     },
+
     /**
      * @public
      * @returns {IsokineticThermostat.moleculeVelocities|*}
@@ -141,6 +149,7 @@ define( function( require ) {
     getMoleculeVelocities: function() {
       return this.moleculeVelocities;
     },
+
     /**
      * @public
      * @returns {Array}
@@ -148,6 +157,7 @@ define( function( require ) {
     getMoleculeForces: function() {
       return this.moleculeForces;
     },
+
     /**
      * @public
      * @returns {Array}
@@ -155,6 +165,7 @@ define( function( require ) {
     getNextMoleculeForces: function() {
       return this.nextMoleculeForces;
     },
+
     /**
      * @public
      * @returns {*}
@@ -162,6 +173,7 @@ define( function( require ) {
     getMoleculeRotationAngles: function() {
       return this.moleculeRotationAngles;
     },
+
     /**
      * @public
      * @param rotationAngles
@@ -169,6 +181,7 @@ define( function( require ) {
     setMoleculeRotationAngles: function( rotationAngles ) {
       this.moleculeRotationAngles = rotationAngles;
     },
+
     /**
      * @public
      * @returns {IsokineticThermostat.moleculeRotationRates|*}
@@ -176,6 +189,7 @@ define( function( require ) {
     getMoleculeRotationRates: function() {
       return this.moleculeRotationRates;
     },
+
     /**
      * @public
      * @returns {Array}
@@ -183,6 +197,7 @@ define( function( require ) {
     getMoleculeTorques: function() {
       return this.moleculeTorques;
     },
+
     /**
      * @public
      * @returns {Array}
@@ -190,6 +205,7 @@ define( function( require ) {
     getNextMoleculeTorques: function() {
       return this.nextMoleculeTorques;
     },
+
     /**
      * @public
      * @param numSafeMolecules
