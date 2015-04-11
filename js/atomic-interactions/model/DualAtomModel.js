@@ -44,7 +44,6 @@ define( function( require ) {
     this.bondingState = BONDING_STATE_UNBONDED; // Tracks whether the atoms have formed a chemical bond.
     this.vibrationCounter = 0; // Used to vibrate fixed atom during bonding.
     this.potentialWhenAtomReleased = 0; // Used to set magnitude of vibration.
-    this.sigmaTable = new SigmaTable();
     this.atomFactory = AtomFactory;
     this.isHandNodeVisible = true; // indicate moving hand node visible or not
     this.ljPotentialCalculator = new LjPotentialCalculator( StatesOfMatterConstants.MIN_SIGMA,
@@ -140,7 +139,7 @@ define( function( require ) {
 
           // Set the value for sigma used in the LJ potential calculations.
           if ( this.movableAtom !== null ) {
-            this.ljPotentialCalculator.setSigma( this.sigmaTable.getSigma( this.getFixedAtomType(),
+            this.ljPotentialCalculator.setSigma( SigmaTable.getSigma( this.getFixedAtomType(),
               this.getMovableAtomType() ) );
           }
 
@@ -182,7 +181,7 @@ define( function( require ) {
 
           // Set the value for sigma used in the LJ potential calculations.
           if ( this.movableAtom !== null ) {
-            this.ljPotentialCalculator.setSigma( this.sigmaTable.getSigma( this.getFixedAtomType(),
+            this.ljPotentialCalculator.setSigma( SigmaTable.getSigma( this.getFixedAtomType(),
               this.getMovableAtomType() ) );
           }
 
