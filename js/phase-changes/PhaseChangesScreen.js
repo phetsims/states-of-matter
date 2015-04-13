@@ -24,7 +24,6 @@ define( function( require ) {
   var phaseChangesScreenIcon = require( 'image!STATES_OF_MATTER/som-phase-changes-icon.png' );
 
   /**
-   *
    * @param {Boolean} isInteractionDiagramEnabled
    * @param {Property<Boolean>} projectorColorsProperty - true for projector color scheme (white back ground), false for regular black back ground
    * @constructor

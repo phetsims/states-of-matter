@@ -32,12 +32,11 @@ define( function( require ) {
   var triplePointString = require( 'string!STATES_OF_MATTER/triplePoint' );
   var criticalPointString = require( 'string!STATES_OF_MATTER/criticalPoint' );
 
-
-  // Constants that control the size of the canvas.
+  // constants that control the size of the canvas.
   var WIDTH = 148;
   var HEIGHT = (WIDTH * 0.75);
 
-  // Constants that control the look of the axes.
+  // constants that control the look of the axes.
   var AXES_LINE_WIDTH = 1;
   var AXES_ARROW_HEAD_HEIGHT = 8 * AXES_LINE_WIDTH;
   var HORIZ_AXIS_SIZE_PROPORTION = 0.85;
@@ -45,22 +44,21 @@ define( function( require ) {
   var STATES_MAX_WIDTH = 35;
   var SMALLER_INNER_TEXT_WIDTH = 30;
 
-  // Constants that control the location of the origin for the graph.
+  // constants that control the location of the origin for the graph.
   var X_ORIGIN_OFFSET = 0.10 * WIDTH;
   var Y_ORIGIN_OFFSET = 0.85 * HEIGHT;
   var X_USABLE_RANGE = WIDTH * HORIZ_AXIS_SIZE_PROPORTION - AXES_ARROW_HEAD_HEIGHT;
   var Y_USABLE_RANGE = HEIGHT * ( VERT_AXIS_SIZE_PROPORTION - 0.11 );
 
-  // Font for the labels used on the axes.
+  // font for the labels used on the axes.
   var AXIS_LABEL_FONT_SIZE = 12;
   var AXIS_LABEL_FONT = new PhetFont( AXIS_LABEL_FONT_SIZE );
 
-  // Fonts for labels in the interior of the diagram.
+  // fonts for labels in the interior of the diagram.
   var LARGER_INNER_FONT_SIZE = 12;
   var LARGER_INNER_FONT = new PhetFont( LARGER_INNER_FONT_SIZE );
   var SMALLER_INNER_FONT_SIZE = 10;
   var SMALLER_INNER_FONT = new PhetFont( SMALLER_INNER_FONT_SIZE );
-
 
   // Constants that control the appearance of the phase diagram for the
   // various substances.  Note that all points are controlled as proportions
@@ -83,7 +81,6 @@ define( function( require ) {
     Y_ORIGIN_OFFSET - (Y_USABLE_RANGE * 0.1) );
 
   /**
-   *
    * @param {Property<Boolean>} expandedProperty - is to expand the phase diagram
    * @param {Object} [options] that can be passed on to the underlying node
    * @constructor
@@ -97,9 +94,8 @@ define( function( require ) {
     // state marker.
     this.currentStateMarkerPos = new Vector2();
 
-    // phase diagram.  The order in which these are added is important.
-    this.topOfSolidLiquidLine = new Vector2( DEFAULT_TOP_OF_SOLID_LIQUID_LINE.x,
-      DEFAULT_TOP_OF_SOLID_LIQUID_LINE.y );
+    // phase diagram - the order in which these are added is important
+    this.topOfSolidLiquidLine = new Vector2( DEFAULT_TOP_OF_SOLID_LIQUID_LINE.x, DEFAULT_TOP_OF_SOLID_LIQUID_LINE.y );
 
     // gas area background
     this.gasAreaBackground = new Path( null, {
@@ -108,7 +104,7 @@ define( function( require ) {
     } );
     accordionContent.addChild( this.gasAreaBackground );
 
-    // super critical  area background
+    // super critical area background
     this.superCriticalAreaBackground = new Path( null, {
       fill: '#C3DF53'
     } );
@@ -120,7 +116,7 @@ define( function( require ) {
     } );
     accordionContent.addChild( this.liquidAreaBackground );
 
-    //solid area background
+    // solid area background
     this.solidAreaBackground = new Path( null, {
       fill: '#C6BCD7'
     } );
@@ -162,13 +158,21 @@ define( function( require ) {
       this.gasLabel.scale( STATES_MAX_WIDTH / this.gasLabel.width );
     }
 
-    this.triplePointLabel = new MultiLineText( triplePointString, { font: SMALLER_INNER_FONT, fill: 'black', align: 'right' } );
+    this.triplePointLabel = new MultiLineText( triplePointString, {
+      font: SMALLER_INNER_FONT,
+      fill: 'black',
+      align: 'right'
+    } );
     accordionContent.addChild( this.triplePointLabel );
     if ( this.triplePointLabel.width > SMALLER_INNER_TEXT_WIDTH ) {
       this.triplePointLabel.setScaleMagnitude( SMALLER_INNER_TEXT_WIDTH / this.triplePointLabel.width );
     }
 
-    this.criticalPointLabel = new MultiLineText( criticalPointString, { font: SMALLER_INNER_FONT, fill: 'black', align: 'right' } );
+    this.criticalPointLabel = new MultiLineText( criticalPointString, {
+      font: SMALLER_INNER_FONT,
+      fill: 'black',
+      align: 'right'
+    } );
     accordionContent.addChild( this.criticalPointLabel );
     if ( this.criticalPointLabel.width > SMALLER_INNER_TEXT_WIDTH ) {
       this.criticalPointLabel.setScaleMagnitude( SMALLER_INNER_TEXT_WIDTH / this.criticalPointLabel.width );
@@ -182,7 +186,8 @@ define( function( require ) {
         headHeight: 8,
         headWidth: 8,
         tailWidth: 2
-      } );
+      }
+    );
     accordionContent.addChild( horizontalAxis );
 
     var verticalAxis = new ArrowNode( X_ORIGIN_OFFSET, Y_ORIGIN_OFFSET,
@@ -193,8 +198,10 @@ define( function( require ) {
         headHeight: 8,
         headWidth: 8,
         tailWidth: 2
-      } );
+      }
+    );
     accordionContent.addChild( verticalAxis );
+
     // Create and add the labels for the axes.
     var horizontalAxisLabel = new Text( temperatureString, { font: AXIS_LABEL_FONT, fill: 'white' } );
     if ( horizontalAxisLabel.width > horizontalAxis.width ) {
@@ -221,26 +228,25 @@ define( function( require ) {
     if ( titleNode.width > horizontalAxis.width ) {
       titleNode.scale( horizontalAxis.width / titleNode.width );
     }
-    var accordionBox = new AccordionBox( accordionContent,
-      {
-        titleNode: titleNode,
-        fill: 'black',
-        stroke: 'white',
-        expandedProperty: expandedProperty,
-        contentAlign: 'center',
-        titleAlignX: 'center',
-        buttonAlign: 'left',
-        cornerRadius: 4,
-        contentYSpacing: -15,
-        contentYMargin: 5,
-        contentXMargin: 5,
-        minWidth: 169,
-        buttonYMargin: 4,
-        buttonXMargin: 5,
-        buttonLength: 12,
-        buttonTouchAreaDilatedX: 15,
-        buttonTouchAreaDilatedY: 5
-      } );
+    var accordionBox = new AccordionBox( accordionContent, {
+      titleNode: titleNode,
+      fill: 'black',
+      stroke: 'white',
+      expandedProperty: expandedProperty,
+      contentAlign: 'center',
+      titleAlignX: 'center',
+      buttonAlign: 'left',
+      cornerRadius: 4,
+      contentYSpacing: -15,
+      contentYMargin: 5,
+      contentXMargin: 5,
+      minWidth: 169,
+      buttonYMargin: 4,
+      buttonXMargin: 5,
+      buttonLength: 12,
+      buttonTouchAreaDilatedX: 15,
+      buttonTouchAreaDilatedY: 5
+    } );
     this.addChild( accordionBox );
 
     // Draw the initial phase diagram.
@@ -257,6 +263,7 @@ define( function( require ) {
      * @public
      */
     drawPhaseDiagram: function() {
+
       // Place the triple point marker.
       this.triplePoint.setTranslation( DEFAULT_TRIPLE_POINT.x - POINT_MARKER_DIAMETER / 2,
         DEFAULT_TRIPLE_POINT.y - POINT_MARKER_DIAMETER / 2 );
@@ -334,7 +341,6 @@ define( function( require ) {
         DEFAULT_TRIPLE_POINT.y - this.triplePointLabel.height );
       this.criticalPointLabel.setTranslation( DEFAULT_CRITICAL_POINT.x - this.criticalPointLabel.width - 7,
         DEFAULT_CRITICAL_POINT.y - this.criticalPointLabel.height * 0.9 );
-
     },
 
     /**

@@ -71,6 +71,7 @@ define( function( require ) {
 
     // add particle container back before  particle Canvas layer
     this.addChild( particleContainerNode.openNode );
+
     // add particle Canvas layer
     this.particlesLayer = new ParticleCanvasNode( multipleParticleModel.particles, modelViewTransform, projectorColorsProperty, {
       centerX: stoveNode.centerX + particlesLayerXOffset,
@@ -103,13 +104,13 @@ define( function( require ) {
     this.addChild( solidLiquidGasMoleculesControlPanel );
 
     // add phases control node
-    var solidLiquidGasPhaseControlNode = new SolidLiquidGasPhaseControlNode(multipleParticleModel.heatingCoolingAmountProperty, multipleParticleModel.stateProperty, {
+    var solidLiquidGasPhaseControlNode = new SolidLiquidGasPhaseControlNode( multipleParticleModel.heatingCoolingAmountProperty, multipleParticleModel.stateProperty, {
       right: solidLiquidGasMoleculesControlPanel.right,
       top: solidLiquidGasMoleculesControlPanel.bottom + layoutBoundsYOffset
     } );
     this.addChild( solidLiquidGasPhaseControlNode );
 
-    // Add reset all button
+    // add reset all button
     var resetAllButton = new ResetAllButton(
       {
         listener: function() {
@@ -144,14 +145,13 @@ define( function( require ) {
       multipleParticleModel.temperatureSetPointProperty._notifyObservers();
     } );
 
-    var playPauseButton = new PlayPauseButton( multipleParticleModel.isPlayingProperty,
-      {
-        radius: 18,
-        stroke: 'black',
-        fill: '#005566',
-        y: stepButton.centerY,
-        right: stepButton.left - inset
-      } );
+    var playPauseButton = new PlayPauseButton( multipleParticleModel.isPlayingProperty, {
+      radius: 18,
+      stroke: 'black',
+      fill: '#005566',
+      y: stepButton.centerY,
+      right: stepButton.left - inset
+    } );
     this.addChild( playPauseButton );
     this.addChild( resetAllButton );
     multipleParticleModel.particleContainerHeightProperty.link( function() {

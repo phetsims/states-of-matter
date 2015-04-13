@@ -18,10 +18,6 @@ define( function( require ) {
   var PARTICLE_CONTAINER_INITIAL_HEIGHT = PARTICLE_CONTAINER_WIDTH * 1.00;
   var SOLID_TEMPERATURE = 0.15;
   var NEON_ATOM_EPSILON = 32.8; // epsilon/k-Boltzmann is in Kelvin.
-
-
-  // var TRIPLE_POINT_MONATOMIC_MODEL_TEMPERATURE = 0.26;    // Empirically determined.
-  //var CRITICAL_POINT_MONATOMIC_MODEL_TEMPERATURE = 0.8;  // Empirically determined.
   var NEON_TRIPLE_POINT_IN_KELVIN = 23;   // Tweaked a little from actual value for better temperature mapping.
   var NEON_CRITICAL_POINT_IN_KELVIN = 44;
   var ARGON_TRIPLE_POINT_IN_KELVIN = 75;  // Tweaked a little from actual value for better temperature mapping.
@@ -30,15 +26,6 @@ define( function( require ) {
   var O2_CRITICAL_POINT_IN_KELVIN = 155;
   var WATER_TRIPLE_POINT_IN_KELVIN = 273;
   var WATER_CRITICAL_POINT_IN_KELVIN = 647;
-
-  // The following values are used for temperature conversion for the
-  // adjustable molecule.  These are somewhat arbitrary, since in the real
-  // world the values would change if epsilon were changed.  They have been
-  // chosen to be similar to argon, because the default epsilon value is
-  // half of the allowable range, and this value ends up being similar to
-  // argon.
-  // var ADJUSTABLE_ATOM_TRIPLE_POINT_IN_KELVIN = 75;
-  //var ADJUSTABLE_ATOM_CRITICAL_POINT_IN_KELVIN = 140;
 
   return {
 
@@ -108,8 +95,10 @@ define( function( require ) {
     ARGON_COLOR: '#FF8A75',
     HYDROGEN_COLOR: 'white',
     ADJUSTABLE_ATTRACTION_COLOR: '#B15AFF',
+
     // adjustable attraction min epsilon
     MIN_ADJUSTABLE_EPSILON: (1.5 * NEON_ATOM_EPSILON),
+
     //----------------------------------------------------------------------------
     // Physical Constants
     //----------------------------------------------------------------------------

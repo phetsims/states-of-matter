@@ -21,12 +21,12 @@ define( function( require ) {
   var LinearGradient = require( 'SCENERY/util/LinearGradient' );
   var HandleNode = require( 'STATES_OF_MATTER/common/view/HandleNode' );
 
+  // constants
   var LID_POSITION_TWEAK_FACTOR = 65; // Empirically determined value for aligning lid and container body.
   var PRESSURE_METER_ELBOW_OFFSET = 30;
   var PRESSURE_GAUGE_Y_OFFSET = -PRESSURE_METER_ELBOW_OFFSET;
 
   /**
-   *
    * @param {MultipleParticleModel} multipleParticleModel - model of the simulation
    * @param {ModelViewTransform2} modelViewTransform The model view transform for transforming particle position.
    * @param {boolean} volumeControlEnabled - set true to enable volume control by pushing the lid using a finger from above
@@ -80,6 +80,7 @@ define( function( require ) {
     } );
     var containerLeftShapeWidth = 25;
     var distanceFromTopInnerTop = 5;
+
     // add container outer shape
     var outerShape = new Path( new Shape()
       .moveTo( 0, distanceFromTopInnerTop )
@@ -88,6 +89,7 @@ define( function( require ) {
       StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / 2 + containerLeftShapeWidth, 26 ) //outer-top-curve -2
       .quadraticCurveTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - containerLeftShapeWidth, 23,
       StatesOfMatterConstants.VIEW_CONTAINER_WIDTH, distanceFromTopInnerTop )//outer-top-curve -3
+
       // line from outer top right to outer bottom right
       .lineTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT )
 
@@ -110,7 +112,7 @@ define( function( require ) {
       StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 25,
       StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT - 10 )// inner-bottom -curve(left t0 right )
 
-      //line from inner-bottom right to inner  top-right
+      // line from inner-bottom right to inner top-right
       .lineTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - containerLeftShapeWidth, 30 )
 
       .quadraticCurveTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / 2, 60,
@@ -227,13 +229,14 @@ define( function( require ) {
     this.containerLid.addChild( openEllipse );
     preParticleLayer.addChild( this.containerLid );
 
-
     this.middleContainerLayer = new Node();
     this.addChild( this.middleContainerLayer );
 
     if ( volumeControlEnabled ) {
+
       // Add the finger for pressing down on the top of the container.
       this.fingerNode = new PointingHandNode( multipleParticleModel, modelViewTransform );
+
       // responsible for positioning itself later based on user interaction.
       this.addChild( this.fingerNode );
       this.fingerNode.bottom = this.containerLid.top;
@@ -250,6 +253,7 @@ define( function( require ) {
       handleNode.centerY = openInnerEllipse.centerY;
       this.containerLid.addChild( handleNode );
     }
+
     if ( pressureGaugeEnabled ) {
 
       // Add the pressure meter.
@@ -268,6 +272,7 @@ define( function( require ) {
   }
 
   return inherit( Node, ParticleContainerNode, {
+
     /**
      * @public
      */
@@ -309,7 +314,6 @@ define( function( require ) {
      * Handle a notification that the container size has changed.
      * @public
      */
-
     handleContainerSizeChanged: function() {
 
       var containerHeight = this.multipleParticleModel.getParticleContainerHeight();

@@ -16,13 +16,14 @@ define( function( require ) {
   var MultipleParticleModel = require( 'STATES_OF_MATTER/common/model/MultipleParticleModel' );
   var Image = require( 'SCENERY/nodes/Image' );
   var AtomicInteractionColors = require( 'STATES_OF_MATTER/atomic-interactions/view/AtomicInteractionColors' );
+
   // strings
   var statesString = require( 'string!STATES_OF_MATTER/states' );
+
   // images
   var statesScreenIcon = require( 'image!STATES_OF_MATTER/som-states-icon.png' );
 
   /**
-   *
    * @param {Property<Boolean>} projectorColorsProperty - true for projector color scheme (white back ground), false for regular black back ground
    * @constructor
    */

@@ -2,6 +2,7 @@
 
 /**
  * View for the panel for selecting the atoms/molecules
+ * 
  * @author Siddhartha Chinthapally (Actual Concepts)
  */
 define( function( require ) {
@@ -40,16 +41,16 @@ define( function( require ) {
   var TickTextWidth = 20;
   var NORMAL_TEXT_FONT_SIZE = 12;
 
-  // Icon for the adjustable attraction  button
+  // icon for the adjustable attraction button
   var ADJUSTABLE_ATTRACTION_ICON = new Circle( 6, { fill: StatesOfMatterConstants.ADJUSTABLE_ATTRACTION_COLOR } );
 
-  // Icon for the neon  button
+  // icon for the neon button
   var NEON_ICON = new Circle( 5, { fill: StatesOfMatterConstants.NEON_COLOR } );
 
-  // Icon for the argon  button
+  // icon for the argon button
   var ARGON_ICON = new Circle( 6, { fill: StatesOfMatterConstants.ARGON_COLOR } );
 
-  // Icon for the water  button
+  // icon for the water button
   var dot1 = new Circle( 5, { fill: StatesOfMatterConstants.OXYGEN_COLOR } );
   var dot2 = new Circle( 3, {
     fill: StatesOfMatterConstants.HYDROGEN_COLOR,
@@ -60,14 +61,13 @@ define( function( require ) {
     stroke: StatesOfMatterConstants.HYDROGEN_COLOR, bottom: dot1.top + 5, left: dot1.right - 5
   } );
   var WATER_ICON = new Node( { children: [ dot3, dot1, dot2 ] } );
-  //Icon for the oxygen  button
+
+  // icon for the oxygen button
   var oxygen1 = new Circle( 5, { fill: StatesOfMatterConstants.OXYGEN_COLOR } );
   var oxygen2 = new Circle( 5, { fill: StatesOfMatterConstants.OXYGEN_COLOR, left: oxygen1.right - 4 } );
   var OXYGEN_ICON = new Node( { children: [ oxygen1, oxygen2 ] } );
 
-
   /**
-   *
    * @param { MultipleParticleModel } multipleParticleModel - model of the simulation
    * @param {Boolean} isBasicVersion
    * @param {Object} [options] options for various panel display properties
@@ -91,6 +91,7 @@ define( function( require ) {
     if ( weakTitle.width > TickTextWidth ) {
       weakTitle.scale( TickTextWidth / weakTitle.width );
     }
+
     var strongTitle = new Text( strongString, textOptions );
     if ( strongTitle.width > TickTextWidth ) {
       strongTitle.scale( TickTextWidth / strongTitle.width );
@@ -126,7 +127,6 @@ define( function( require ) {
     interactionStrengthNode.addChild( interactionStrengthSlider );
     interactionStrengthSlider.addMajorTick( StatesOfMatterConstants.EPSILON_FOR_WATER, strongTitle );
     interactionStrengthSlider.addMajorTick( StatesOfMatterConstants.MIN_ADJUSTABLE_EPSILON, weakTitle );
-
 
     var neonText = new Text( neonString, textOptions );
     if ( neonText.width > MAX_WIDTH ) {
@@ -217,7 +217,6 @@ define( function( require ) {
       deselectedContentOpacity: 1,
       yTouchExpansion: 0
     } );
-
 
     multipleParticleModel.interactionStrengthProperty.link( function( value ) {
       if ( multipleParticleModel.currentMolecule === StatesOfMatterConstants.USER_DEFINED_MOLECULE ) {

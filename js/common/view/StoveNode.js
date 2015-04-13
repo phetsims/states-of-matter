@@ -3,6 +3,7 @@
 /**
  * This class is the graphical representation of a stove that can be used to
  * heat or cool things.
+ *
  * @author Siddhartha Chinthapally (Actual Concepts) on 20-11-2014.
  */
 

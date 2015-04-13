@@ -35,11 +35,11 @@ define( function( require ) {
   var returnLidString = require( 'string!STATES_OF_MATTER/returnLid' );
 
   // constants
-  var inset = 10;
+  var INSET = 10;
+
   // Constants used when mapping the model pressure and temperature to the phase diagram.
   var TRIPLE_POINT_TEMPERATURE_IN_MODEL = StatesOfMatterConstants.TRIPLE_POINT_MONATOMIC_MODEL_TEMPERATURE;
   var TRIPLE_POINT_TEMPERATURE_ON_DIAGRAM = 0.375;
-
   var CRITICAL_POINT_TEMPERATURE_IN_MODEL = StatesOfMatterConstants.CRITICAL_POINT_MONATOMIC_MODEL_TEMPERATURE;
   var CRITICAL_POINT_TEMPERATURE_ON_DIAGRAM = 0.8;
   var SLOPE_IN_1ST_REGION = TRIPLE_POINT_TEMPERATURE_ON_DIAGRAM / TRIPLE_POINT_TEMPERATURE_IN_MODEL;
@@ -47,24 +47,25 @@ define( function( require ) {
                             ( CRITICAL_POINT_TEMPERATURE_IN_MODEL - TRIPLE_POINT_TEMPERATURE_IN_MODEL );
   var OFFSET_IN_2ND_REGION = TRIPLE_POINT_TEMPERATURE_ON_DIAGRAM -
                              ( SLOPE_IN_2ND_REGION * TRIPLE_POINT_TEMPERATURE_IN_MODEL );
+
   // Used for calculating moving averages needed to mellow out the graph
   // behavior.  Value empirically determined.
   var MAX_NUM_HISTORY_SAMPLES = 100;
 
-  var particleCanvasLayerBoundLimit = 600;
-  var particleLayerXOffset = 100;
-  var particleLayerYOffset = 280;
-  var particleContainerXOffset = 60;
-  var layBoundsRightOffset = 15;
-  var layBoundsYOffset = 10;
-  var stepButtonXOffset = 50;
-  var stepButtonYOffset = 20;
-  var bicyclePumpNodeYOffset = 90;
-  var bicyclePumpNodeXOffset = 100;
-  var returnLidButtonYOffset = 100;
+  // constants used in the layout process
+  var PARTICLE_CANVAS_LAYER_BOUND_LIMIT = 600;
+  var PARTICLE_LAYER_X_OFFSET = 100;
+  var PARTICLE_LAYER_Y_OFFSET = 280;
+  var PARTICLE_CONTAINER_X_OFFSET = 60;
+  var LAY_BOUNDS_RIGHT_OFFSET = 15;
+  var LAY_BOUNDS_Y_OFFSET = 10;
+  var STEP_BUTTON_X_OFFSET = 50;
+  var STEP_BUTTON_Y_OFFSET = 20;
+  var BICYCLE_PUMP_NODE_X_OFFSET = 100;
+  var BICYCLE_PUMP_NODE_Y_OFFSET = 90;
+  var RETURN_LID_BUTTON_Y_OFFSET = 100;
 
   /**
-   *
    * @param {MultipleParticleModel} multipleParticleModel - model of the simulation
    * @param {Boolean} isInteractionDiagramEnabled
    * @param {Property<Boolean>} projectorColorsProperty - true to use the projector color scheme, false to use regular color scheme
@@ -84,27 +85,27 @@ define( function( require ) {
     var stoveNode = new StoveNode( multipleParticleModel, {
       scale: 0.8,
       centerX: this.layoutBounds.centerX,
-      bottom: this.layoutBounds.bottom - inset
+      bottom: this.layoutBounds.bottom - INSET
     } );
 
     this.multipleParticleModel = multipleParticleModel;
     this.modelTemperatureHistory = new ObservableArray();
 
     // add particle container node
-    var particleContainerNode = new ParticleContainerNode( multipleParticleModel, modelViewTransform, true, true,
-      {
-        centerX: stoveNode.centerX - particleContainerXOffset,
-        bottom:  stoveNode.top - inset
-      } );
+    var particleContainerNode = new ParticleContainerNode( multipleParticleModel, modelViewTransform, true, true, {
+      centerX: stoveNode.centerX - PARTICLE_CONTAINER_X_OFFSET,
+      bottom:  stoveNode.top - INSET
+    } );
+
     // add particle container back node  before  particle Canvas layer
     this.addChild( particleContainerNode.openNode );
 
     // add particle canvas layer for particle rendering
     this.particlesLayer = new ParticleCanvasNode( multipleParticleModel.particles, modelViewTransform, projectorColorsProperty, {
-      centerX: stoveNode.centerX + particleLayerXOffset,
-      bottom:  stoveNode.top + particleLayerYOffset,
-      canvasBounds: new Bounds2( -100, -particleCanvasLayerBoundLimit,
-        particleCanvasLayerBoundLimit, particleCanvasLayerBoundLimit )
+      centerX: stoveNode.centerX + PARTICLE_LAYER_X_OFFSET,
+      bottom:  stoveNode.top + PARTICLE_LAYER_Y_OFFSET,
+      canvasBounds: new Bounds2( -100, -PARTICLE_CANVAS_LAYER_BOUND_LIMIT,
+        PARTICLE_CANVAS_LAYER_BOUND_LIMIT, PARTICLE_CANVAS_LAYER_BOUND_LIMIT )
     } );
     this.addChild( this.particlesLayer );
     this.addChild( particleContainerNode );
@@ -120,38 +121,35 @@ define( function( require ) {
     var compositeThermometerNode = new CompositeThermometerNode( multipleParticleModel, modelViewTransform, {
       font: new PhetFont( 20 ),
       fill: 'white',
-      right: stoveNode.left + 3 * inset
+      right: stoveNode.left + 3 * INSET
     } );
     this.addChild( compositeThermometerNode );
 
-    // add phase diagram
-    // in SOM basic version by default phase diagram should be closed.
+    // add phase diagram - in SOM basic version by default phase diagram should be closed.
     multipleParticleModel.expandedProperty.value = isInteractionDiagramEnabled;
     this.phaseDiagram = new PhaseDiagram( multipleParticleModel.expandedProperty );
 
-    //add phase change control panel
-    var phaseChangesMoleculesControlPanel = new PhaseChangesMoleculesControlPanel( multipleParticleModel, isInteractionDiagramEnabled,
-      {
-        right: this.layoutBounds.right - layBoundsRightOffset,
-        top: this.layoutBounds.top + layBoundsYOffset / 2
-      } );
+    // add phase change control panel
+    var phaseChangesMoleculesControlPanel = new PhaseChangesMoleculesControlPanel( multipleParticleModel, isInteractionDiagramEnabled, {
+      right: this.layoutBounds.right - LAY_BOUNDS_RIGHT_OFFSET,
+      top:   this.layoutBounds.top + LAY_BOUNDS_Y_OFFSET / 2
+    } );
     this.addChild( phaseChangesMoleculesControlPanel );
 
-    // Add reset all button
-    var resetAllButton = new ResetAllButton(
-      {
-        listener: function() {
-          phaseChangesScreenView.modelTemperatureHistory.clear();
-          multipleParticleModel.reset();
-          compositeThermometerNode.setRotation( 0 );
-          particleContainerNode.reset();
-          //Reset  phase diagram state in SOM basic version
-          multipleParticleModel.expandedProperty.value = isInteractionDiagramEnabled;
-        },
-        bottom: this.layoutBounds.bottom - layBoundsYOffset / 2,
-        right:  this.layoutBounds.right - layBoundsRightOffset,
-        radius: 18
-      } );
+    // add reset all button
+    var resetAllButton = new ResetAllButton( {
+      listener: function() {
+        phaseChangesScreenView.modelTemperatureHistory.clear();
+        multipleParticleModel.reset();
+        compositeThermometerNode.setRotation( 0 );
+        particleContainerNode.reset();
+        //Reset  phase diagram state in SOM basic version
+        multipleParticleModel.expandedProperty.value = isInteractionDiagramEnabled;
+      },
+      bottom: this.layoutBounds.bottom - LAY_BOUNDS_Y_OFFSET / 2,
+      right:  this.layoutBounds.right - LAY_BOUNDS_RIGHT_OFFSET,
+      radius: 18
+    } );
 
     // add play pause button and step button
     var stepButton = new StepButton(
@@ -163,29 +161,28 @@ define( function( require ) {
         radius: 12,
         stroke: 'black',
         fill: '#005566',
-        right:  stoveNode.left - stepButtonXOffset,
-        bottom: stoveNode.bottom - stepButtonYOffset
-
+        right:  stoveNode.left - STEP_BUTTON_X_OFFSET,
+        bottom: stoveNode.bottom - STEP_BUTTON_Y_OFFSET
       }
     );
     this.addChild( stepButton );
 
-    var playPauseButton = new PlayPauseButton( multipleParticleModel.isPlayingProperty,
-      {
-        radius: 18, stroke: 'black',
-        fill: '#005566',
-        y: stepButton.centerY,
-        right: stepButton.left - inset
-      } );
+    var playPauseButton = new PlayPauseButton( multipleParticleModel.isPlayingProperty, {
+      radius: 18, stroke: 'black',
+      fill: '#005566',
+      y: stepButton.centerY,
+      right: stepButton.left - INSET
+    } );
     this.addChild( playPauseButton );
     this.addChild( resetAllButton );
 
     // add bicycle pump node
     this.addChild( new BicyclePumpNode( 200, 250, multipleParticleModel, {
-      bottom: stoveNode.top + bicyclePumpNodeYOffset,
-      right:  particleContainerNode.left + bicyclePumpNodeXOffset
+      bottom: stoveNode.top + BICYCLE_PUMP_NODE_Y_OFFSET,
+      right:  particleContainerNode.left + BICYCLE_PUMP_NODE_X_OFFSET
     } ) );
-    // add return Lid button
+
+    // add return lid button
     this.returnLidButton = new TextPushButton( returnLidString, {
       font: new PhetFont( 14 ),
       baseColor: 'yellow',
@@ -195,17 +192,17 @@ define( function( require ) {
       },
       visible: false,
       xMargin: 10,
-      right: particleContainerNode.left - 2 * layBoundsRightOffset,
-      top:   particleContainerNode.centerY + returnLidButtonYOffset
+      right: particleContainerNode.left - 2 * LAY_BOUNDS_RIGHT_OFFSET,
+      top:   particleContainerNode.centerY + RETURN_LID_BUTTON_Y_OFFSET
     } );
     this.addChild( this.returnLidButton );
     multipleParticleModel.isExplodedProperty.linkAttribute( this.returnLidButton, 'visible' );
 
-    // add interaction Potential Diagram
+    // add interaction potential diagram
     if ( isInteractionDiagramEnabled ) {
       var epsilonControlInteractionPotentialDiagram = new EpsilonControlInteractionPotentialDiagram(
         StatesOfMatterConstants.MAX_SIGMA, StatesOfMatterConstants.MIN_EPSILON, false, multipleParticleModel, {
-          right: this.layoutBounds.right - layBoundsRightOffset,
+          right: this.layoutBounds.right - LAY_BOUNDS_RIGHT_OFFSET,
           top: phaseChangesMoleculesControlPanel.bottom
         } );
       this.addChild( epsilonControlInteractionPotentialDiagram );
@@ -231,19 +228,19 @@ define( function( require ) {
         }
         multipleParticleModel.interactionStrengthProperty.value = StatesOfMatterConstants.MAX_EPSILON;
         if ( isInteractionDiagramEnabled ) {
-          epsilonControlInteractionPotentialDiagram.top = phaseChangesMoleculesControlPanel.bottom + inset * 0.3;
+          epsilonControlInteractionPotentialDiagram.top = phaseChangesMoleculesControlPanel.bottom + INSET * 0.3;
         }
       }
       else {
         if ( !phaseChangesScreenView.isChild( phaseChangesScreenView.phaseDiagram ) ) {
           phaseChangesScreenView.addChild( phaseChangesScreenView.phaseDiagram );
-          phaseChangesScreenView.phaseDiagram.right = phaseChangesScreenView.layoutBounds.right - layBoundsRightOffset;
+          phaseChangesScreenView.phaseDiagram.right = phaseChangesScreenView.layoutBounds.right - LAY_BOUNDS_RIGHT_OFFSET;
           if ( isInteractionDiagramEnabled ) {
-            epsilonControlInteractionPotentialDiagram.top = phaseChangesMoleculesControlPanel.bottom + inset * 0.3;
-            phaseChangesScreenView.phaseDiagram.top = epsilonControlInteractionPotentialDiagram.bottom + inset * 0.3;
+            epsilonControlInteractionPotentialDiagram.top = phaseChangesMoleculesControlPanel.bottom + INSET * 0.3;
+            phaseChangesScreenView.phaseDiagram.top = epsilonControlInteractionPotentialDiagram.bottom + INSET * 0.3;
           }
           else {
-            phaseChangesScreenView.phaseDiagram.top = phaseChangesMoleculesControlPanel.bottom + inset * 0.3;
+            phaseChangesScreenView.phaseDiagram.top = phaseChangesMoleculesControlPanel.bottom + INSET * 0.3;
           }
         }
       }
@@ -262,9 +259,11 @@ define( function( require ) {
   }
 
   return inherit( ScreenView, PhaseChangesScreenView, {
+
     step: function() {
       this.particlesLayer.step();
     },
+
     /**
      * @private
      * Update the position of the marker on the phase diagram based on the

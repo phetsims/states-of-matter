@@ -2,6 +2,7 @@
 
 /**
  * View for the panel for selecting the atoms/molecules
+ *
  * @author Siddhartha Chinthapally (Actual Concepts)
  */
 define( function( require ) {
@@ -27,16 +28,16 @@ define( function( require ) {
   var oxygenString = require( 'string!STATES_OF_MATTER/diatomicOxygen' );
   var titleString = require( 'string!STATES_OF_MATTER/AtomsMolecules' );
 
-  //constants
+  // constants
   var MAX_WIDTH = 118;
 
-  // Icon for the neon  button
+  // icon for the neon button
   var NEON_ICON = new Circle( 5, { fill: StatesOfMatterConstants.NEON_COLOR } );
 
-  // Icon for the argon  button
+  // icon for the argon button
   var ARGON_ICON = new Circle( 6, { fill: StatesOfMatterConstants.ARGON_COLOR } );
 
-  // Icon for the water  button
+  // icon for the water button
   var dot1 = new Circle( 5, { fill: StatesOfMatterConstants.OXYGEN_COLOR } );
   var dot2 = new Circle( 3, {
     fill: StatesOfMatterConstants.HYDROGEN_COLOR,
@@ -47,14 +48,13 @@ define( function( require ) {
     stroke: StatesOfMatterConstants.HYDROGEN_COLOR, bottom: dot1.top + 5, left: dot1.right - 5
   } );
   var WATER_ICON = new Node( { children: [ dot3, dot1, dot2 ] } );
-  //Icon for the oxygen  button
+
+  // icon for the oxygen button
   var oxygen1 = new Circle( 5, { fill: StatesOfMatterConstants.OXYGEN_COLOR } );
   var oxygen2 = new Circle( 5, { fill: StatesOfMatterConstants.OXYGEN_COLOR, left: oxygen1.right - 4 } );
   var OXYGEN_ICON = new Node( { children: [ oxygen1, oxygen2 ] } );
 
-
   /**
-   *
    * @param {Property<Number>} moleculeTypeProperty that tracks the molecule type selected in the panel
    * @param {Object} [options] for various panel display properties
    * @constructor
@@ -153,10 +153,9 @@ define( function( require ) {
     } );
     this.addChild( radioButtonPanel );
 
-    var titleBackground = new Rectangle( 0, 0,
-      titleText.label.width + 5, titleText.label.height, {
-        fill: 'black'
-      } );
+    var titleBackground = new Rectangle( 0, 0, titleText.label.width + 5, titleText.label.height, {
+      fill: 'black'
+    } );
     titleBackground.centerX = radioButtonPanel.centerX;
     titleBackground.centerY = radioButtonPanel.top;
     titleText.label.centerX = titleBackground.centerX;

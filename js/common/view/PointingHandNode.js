@@ -3,6 +3,7 @@
 /**
  * This class represents a node that looks like a large finger, which can be
  * used to push down on things.
+ *
  * @author Siddhartha Chinthapally (Actual Concepts)
  */
 define( function( require ) {

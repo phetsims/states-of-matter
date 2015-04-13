@@ -1,7 +1,7 @@
 // Copyright (c) 2002 - 2014. University of Colorado Boulder
 
 /**
- * A particle layer rendered on canvas
+ * A particle layer rendered on canvas.  This exists for performance reasons.
  *
  * @author Siddhartha Chinthapally (Actual Concepts)
  */
@@ -16,7 +16,7 @@ define( function( require ) {
   /**
    * A particle layer rendered on canvas
    * @param {ObservableArray<Particle>} particles that need to be rendered on the canvas
-   * @param {ModelViewTransform2} modelViewTransform to convert between model and view co-ordinate frames
+   * @param {ModelViewTransform2} modelViewTransform to convert between model and view coordinate frames
    * @param {Property<Boolean>} projectorColorsProperty - true to use apply black stroke to particle, false to particle color stroke
    * @param {Object} [options] that can be passed on to the underlying node
    * @constructor
@@ -44,7 +44,11 @@ define( function( require ) {
     paintCanvas: function( wrapper ) {
       var context = wrapper.context;
       var particle, i;
-      // paint the hydrogen particles
+
+      // Paint the regular hydrogen atoms first.  This is done so that when
+      // water is rendered, some of the hydrogen ends up in the back and some
+      // (the Hydrogen2) ends up in front so that there is some variation in
+      // the appearance of the molecules.
       for ( i = 0; i < this.particles.length; i++ ) {
         particle = this.particles.get( i );
         if ( particle instanceof HydrogenAtom ) {
@@ -75,7 +79,6 @@ define( function( require ) {
           context.stroke();
         }
       }
-
     },
 
     step: function() {

@@ -48,7 +48,6 @@ define( function( require ) {
    */
   function EpsilonControlInteractionPotentialDiagram( sigma, epsilon, wide, multipleParticleModel, options ) {
 
-
     var epsilonControlInteractionPotentialDiagram = this;
     InteractionPotentialDiagramNode.call( this, sigma, epsilon, wide, true );
     this.multipleParticleModel = multipleParticleModel;
@@ -84,75 +83,74 @@ define( function( require ) {
     this.epsilonResizeHandle.addInputListener( new FillHighlightListener( RESIZE_HANDLE_NORMAL_COLOR,
       RESIZE_HANDLE_HIGHLIGHTED_COLOR ) );
     this.ljPotentialGraph.addChild( this.epsilonResizeHandle );
-    this.epsilonResizeHandle.addInputListener( new SimpleDragHandler(
-      {
-        start: function( event ) {
-          startDragY = epsilonControlInteractionPotentialDiagram.epsilonResizeHandle.globalToParentPoint( event.pointer.point ).y;
-        },
-        drag: function( event ) {
-          endDragY = epsilonControlInteractionPotentialDiagram.epsilonResizeHandle.globalToParentPoint( event.pointer.point ).y;
-          var d = endDragY - startDragY;
-          startDragY = endDragY;
-          var scaleFactor = StatesOfMatterConstants.MAX_EPSILON /
-                            ( epsilonControlInteractionPotentialDiagram.getGraphHeight() / 2);
-          multipleParticleModel.interactionStrengthProperty.value = multipleParticleModel.getEpsilon() + ( d * scaleFactor );
-          epsilonControlInteractionPotentialDiagram.drawPotentialCurve();
-        }
-      } ) );
+    this.epsilonResizeHandle.addInputListener( new SimpleDragHandler( {
+      start: function( event ) {
+        startDragY = epsilonControlInteractionPotentialDiagram.epsilonResizeHandle.globalToParentPoint( event.pointer.point ).y;
+      },
+      drag: function( event ) {
+        endDragY = epsilonControlInteractionPotentialDiagram.epsilonResizeHandle.globalToParentPoint( event.pointer.point ).y;
+        var d = endDragY - startDragY;
+        startDragY = endDragY;
+        var scaleFactor = StatesOfMatterConstants.MAX_EPSILON /
+                          ( epsilonControlInteractionPotentialDiagram.getGraphHeight() / 2);
+        multipleParticleModel.interactionStrengthProperty.value = multipleParticleModel.getEpsilon() + ( d * scaleFactor );
+        epsilonControlInteractionPotentialDiagram.drawPotentialCurve();
+      }
+    } ) );
 
     this.epsilonLine.addInputListener( new FillHighlightListener( RESIZE_HANDLE_NORMAL_COLOR,
       RESIZE_HANDLE_HIGHLIGHTED_COLOR ) );
     this.ljPotentialGraph.addChild( this.epsilonLine );
 
-    //touch area
+    // touch area
     this.epsilonLine.touchArea = this.epsilonLine.localBounds.dilatedXY( 20, 20 );
-    this.epsilonLine.addInputListener( new SimpleDragHandler(
-      {
-        start: function( event ) {
-          startDragY = epsilonControlInteractionPotentialDiagram.epsilonLine.globalToParentPoint( event.pointer.point ).y;
-        },
-        drag: function( event ) {
-          endDragY = epsilonControlInteractionPotentialDiagram.epsilonLine.globalToParentPoint( event.pointer.point ).y;
-          var d = endDragY - startDragY;
-          startDragY = endDragY;
-          var scaleFactor = StatesOfMatterConstants.MAX_EPSILON /
-                            ( epsilonControlInteractionPotentialDiagram.getGraphHeight() / 2);
-          multipleParticleModel.interactionStrength = multipleParticleModel.getEpsilon() + ( d * scaleFactor );
-          epsilonControlInteractionPotentialDiagram.drawPotentialCurve();
-        }
-      } ) );
+
+    this.epsilonLine.addInputListener( new SimpleDragHandler( {
+      start: function( event ) {
+        startDragY = epsilonControlInteractionPotentialDiagram.epsilonLine.globalToParentPoint( event.pointer.point ).y;
+      },
+      drag: function( event ) {
+        endDragY = epsilonControlInteractionPotentialDiagram.epsilonLine.globalToParentPoint( event.pointer.point ).y;
+        var d = endDragY - startDragY;
+        startDragY = endDragY;
+        var scaleFactor = StatesOfMatterConstants.MAX_EPSILON /
+                          ( epsilonControlInteractionPotentialDiagram.getGraphHeight() / 2);
+        multipleParticleModel.interactionStrength = multipleParticleModel.getEpsilon() + ( d * scaleFactor );
+        epsilonControlInteractionPotentialDiagram.drawPotentialCurve();
+      }
+    } ) );
+
     var accordionContentHBox = new HBox( { children: [ accordionContent ] } );
     var titleNode = new Text( interactionDiagramTitle, { fill: "#FFFFFF", font: new PhetFont( { size: 13 } ) } );
     if ( titleNode.width > this.horizontalAxis.width ) {
       titleNode.scale( this.horizontalAxis.width / titleNode.width );
     }
-    var accordionBox = new AccordionBox( accordionContentHBox,
-      {
-        titleNode: titleNode,
-        fill: 'black',
-        stroke: 'white',
-        expandedProperty: multipleParticleModel.interactionExpandedProperty,
-        contentAlign: 'center',
-        titleAlignX: 'center',
-        buttonAlign: 'left',
-        cornerRadius: 4,
-        contentYSpacing: 0,
-        contentYMargin: 5,
-        contentXMargin: 6,
-        titleYMargin: 5,
-        contentXSpacing: 6,
-        minWidth: 169,
-        buttonYMargin: 4,
-        buttonXMargin: 6,
-        buttonLength: 12,
-        buttonTouchAreaDilatedX: 15,
-        buttonTouchAreaDilatedY: 6
-      } );
+    var accordionBox = new AccordionBox( accordionContentHBox, {
+      titleNode: titleNode,
+      fill: 'black',
+      stroke: 'white',
+      expandedProperty: multipleParticleModel.interactionExpandedProperty,
+      contentAlign: 'center',
+      titleAlignX: 'center',
+      buttonAlign: 'left',
+      cornerRadius: 4,
+      contentYSpacing: 0,
+      contentYMargin: 5,
+      contentXMargin: 6,
+      titleYMargin: 5,
+      contentXSpacing: 6,
+      minWidth: 169,
+      buttonYMargin: 4,
+      buttonXMargin: 6,
+      buttonLength: 12,
+      buttonTouchAreaDilatedX: 15,
+      buttonTouchAreaDilatedY: 6
+    } );
     this.addChild( accordionBox );
-    // Update interactivity state.
+
+    // update interactivity state
     this.updateInteractivityState();
 
-// call when interaction strength change
     this.setLjPotentialParameters( multipleParticleModel.getSigma(), multipleParticleModel.getEpsilon() );
     this.drawPotentialCurve();
 
@@ -166,7 +164,8 @@ define( function( require ) {
         // call when interaction strength change
         epsilonControlInteractionPotentialDiagram.setLjPotentialParameters( multipleParticleModel.getSigma(), multipleParticleModel.getEpsilon() );
         epsilonControlInteractionPotentialDiagram.drawPotentialCurve();
-      } );
+      }
+    );
 
     this.mutate( options );
   }

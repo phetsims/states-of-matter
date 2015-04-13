@@ -1,6 +1,8 @@
 // Copyright (c) 2002 - 2014. University of Colorado Boulder
 
 /**
+ * A node that allows user to select the phase of a substance.
+ *
  * @author Siddhartha Chinthapally (Actual Concepts)
  */
 define( function( require ) {
@@ -21,18 +23,18 @@ define( function( require ) {
   var VBox = require( 'SCENERY/nodes/VBox' );
   var Color = require( 'SCENERY/util/Color' );
 
-  //strings
+  // strings
   var solidString = require( 'string!STATES_OF_MATTER/Solid' );
   var liquidString = require( 'string!STATES_OF_MATTER/Liquid' );
   var gasString = require( 'string!STATES_OF_MATTER/Gas' );
 
+  // constants
   var SOLID_STATE = 1;
   var LIQUID_STATE = 2;
   var GAS_STATE = 3;
   var MAX_WIDTH = 150;
 
   /**
-   *
    * @param {Property<Number>} heatingCoolingAmountProperty
    * @param {Property<Number>} stateProperty
    * @param {Object} [options] that can be passed on to the underlying node
@@ -97,6 +99,7 @@ define( function( require ) {
         stateProperty.value = SOLID_STATE;
       }
     } );
+
     // liquid state button
     var liquidStateButton = new RectangularPushButton( {
       content: createItem( liquid ),
@@ -105,6 +108,7 @@ define( function( require ) {
       },
       baseColor: new Color( 250, 0, 0 )
     } );
+
     // gas state button
     var gasStateButton = new RectangularPushButton( {
       content: createItem( gas ),
@@ -113,6 +117,7 @@ define( function( require ) {
       },
       baseColor: 'rgb( 204, 102, 204 )'
     } );
+
     stateProperty.link( function( state ) {
       switch( state ) {
         case SOLID_STATE:
@@ -132,6 +137,7 @@ define( function( require ) {
           break;
       }
     } );
+
     heatingCoolingAmountProperty.link( function() {
       switch( stateProperty.value ) {
         case SOLID_STATE:
@@ -177,6 +183,7 @@ define( function( require ) {
     );
     return new Node( { children: [ frontShape, topShape, sidShape ], scale: imageScale } );
   };
+
   // liquid icon
   var createLiquidIcon = function() {
 
@@ -199,6 +206,7 @@ define( function( require ) {
 
     return new Node( { children: [ outerShape, innerShape ], scale: imageScale } );
   };
+
   // gas icon
   var createGasIcon = function() {
 
@@ -262,5 +270,6 @@ define( function( require ) {
         circle8, circle9, circle10 ], scale: imageScale
     } );
   };
+
   return inherit( Node, SolidLiquidGasPhaseControlNode );
 } );
