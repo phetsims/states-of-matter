@@ -21,13 +21,8 @@ define( function( require ) {
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
   var ConfigurableStatesOfMatterAtom = require( 'STATES_OF_MATTER/common/model/particle/ConfigurableStatesOfMatterAtom' );
 
-  /**
-   * @constructor
-   */
-  function InteractionStrengthTable() {
-  }
 
-  return inherit( Object, InteractionStrengthTable, {}, {
+  return ( {
 
     /**
      * Get the interaction potential between two atoms.  Units are such that

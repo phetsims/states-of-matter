@@ -20,11 +20,7 @@ define( function( require ) {
   var OxygenAtom = require( 'STATES_OF_MATTER/common/model/particle/OxygenAtom' );
   var AtomType = require( 'STATES_OF_MATTER/common/model/AtomType' );
 
-  function SigmaTable() {
-
-  }
-
-  return inherit( Object, SigmaTable, {
+  return ( {
     /**
      * @public
      * Get the value of sigma, in picometers, for the atom types specified.
