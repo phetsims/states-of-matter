@@ -12,7 +12,6 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var inherit = require( 'PHET_CORE/inherit' );
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
   var ArgonAtom = require( 'STATES_OF_MATTER/common/model/particle/ArgonAtom' );
   var ConfigurableStatesOfMatterAtom = require( 'STATES_OF_MATTER/common/model/particle/ConfigurableStatesOfMatterAtom' );
@@ -20,6 +19,7 @@ define( function( require ) {
   var OxygenAtom = require( 'STATES_OF_MATTER/common/model/particle/OxygenAtom' );
   var AtomType = require( 'STATES_OF_MATTER/common/model/AtomType' );
 
+  // static object (no constructor)
   return ( {
     /**
      * @public
