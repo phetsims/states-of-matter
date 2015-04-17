@@ -179,7 +179,7 @@ define( function( require ) {
     } );
 
     // The panel width in the Atomic Interaction sim and on the Interaction screen in SOM is different.
-    var panelMinWidth = options.showTitleWhenExpand ? 178 : 185;
+    var panelMinWidth = options.showTitleWhenExpand ? 183 : 190;
     radioButtonGroup.setTranslation( 10, 0 );
     accordionContent.addChild( radioButtonGroup );
 
@@ -197,7 +197,7 @@ define( function( require ) {
       minWidth: panelMinWidth,
       contentYSpacing: 1,
       contentXSpacing: 3,
-      contentXMargin: 12,
+      contentXMargin: 10,
       buttonYMargin: 4,
       buttonXMargin: 10,
       buttonTouchAreaDilatedX: 15,

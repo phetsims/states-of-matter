@@ -100,7 +100,7 @@ define( function( require ) {
     var createItem;
     var titleText;
     var titleNode;
-    var sliderTrackWidth = 140; // empirically determined
+    var sliderTrackWidth = 135; // empirically determined
 
     // convenience function that scales the text node if it is too wide
     var createText = function( string, width, fontSize ) {
@@ -360,6 +360,7 @@ define( function( require ) {
     var radioButtonPanel = new Panel( content, {
       stroke: panelStroke,
       cornerRadius: 6,
+      xMargin: 10,
       lineWidth: options.lineWidth,
       fill: options.backgroundColor
     } );
