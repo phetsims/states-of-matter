@@ -49,12 +49,12 @@ define( function( require ) {
     this.ljPotentialCalculator = new LjPotentialCalculator( StatesOfMatterConstants.MIN_SIGMA,
       StatesOfMatterConstants.MIN_EPSILON ); // Initial values arbitrary, will be set during reset.
     PropertySet.call( this, {
-        interactionStrength: 0,
+        interactionStrength: 100, // Epsilon/k-Boltzmann is in Kelvin.
         motionPaused: false,
         atomPair: AtomPair.NEON_NEON,
         isPlaying: true,
         speed: 'normal',
-        atomDiameter: 150,
+        atomDiameter: 300,
         forces: 'hideForces',
         forceControlPanelExpand: false
       }

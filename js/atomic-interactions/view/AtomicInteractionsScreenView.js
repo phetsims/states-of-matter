@@ -31,6 +31,7 @@ define( function( require ) {
   var PushpinNode = require( 'STATES_OF_MATTER/atomic-interactions/view/PushpinNode' );
   var HandNode = require( 'STATES_OF_MATTER/atomic-interactions/view/HandNode' );
   var AtomicInteractionColors = require( 'STATES_OF_MATTER/atomic-interactions/view/AtomicInteractionColors' );
+  var AtomPair = require( 'STATES_OF_MATTER/atomic-interactions/model/AtomPair' );
 
   // strings
   var normalString = require( 'string!STATES_OF_MATTER/normal' );
@@ -210,15 +211,17 @@ define( function( require ) {
     // set up the default particles
     this.handleFixedParticleAdded( dualAtomModel.fixedAtom );
     this.handleMovableParticleAdded( dualAtomModel.movableAtom );
-    dualAtomModel.atomPairProperty.link( function() {
+    dualAtomModel.atomPairProperty.link( function( atomPair ) {
       forceControlNode.top = atomicInteractionsControlPanel.bottom + inset / 2;
       forceControlNode.right = atomicInteractionsControlPanel.right;
+      if ( atomPair === AtomPair.ADJUSTABLE ) {
+        dualAtomModel.interactionStrength = 100;
+        dualAtomModel.atomDiameter = 300;
+      }
       atomicInteractionsScreenView.handleFixedParticleRemoved( dualAtomModel.fixedAtom );
       atomicInteractionsScreenView.handleFixedParticleAdded( dualAtomModel.fixedAtom );
       atomicInteractionsScreenView.handleMovableParticleRemoved( dualAtomModel.movableAtom );
       atomicInteractionsScreenView.handleMovableParticleAdded( dualAtomModel.movableAtom );
-      dualAtomModel.interactionStrength = 300;
-      dualAtomModel.atomDiameter = 300;
       atomicInteractionsScreenView.handNode.setVisible( dualAtomModel.isHandNodeVisible );
     } );
     dualAtomModel.forcesProperty.link( function( forces ) {

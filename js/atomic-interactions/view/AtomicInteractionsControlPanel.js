@@ -274,7 +274,6 @@ define( function( require ) {
       atomDiameterTitle.scale( MAX_WIDTH / atomDiameterTitle.width );
     }
 
-    dualAtomModel.atomDiameterProperty.value = dualAtomModel.getSigma();
     var atomDiameterSlider = new HSlider( dualAtomModel.atomDiameterProperty,
       { min: StatesOfMatterConstants.MIN_SIGMA, max: StatesOfMatterConstants.MAX_SIGMA },
       {
@@ -322,7 +321,6 @@ define( function( require ) {
     if ( interactionStrengthTitle.width > MAX_WIDTH ) {
       interactionStrengthTitle.scale( MAX_WIDTH / interactionStrengthTitle.width );
     }
-    dualAtomModel.interactionStrength = dualAtomModel.getEpsilon();
     var interactionStrengthSlider = new HSlider( dualAtomModel.interactionStrengthProperty,
       { min: StatesOfMatterConstants.MIN_EPSILON, max: StatesOfMatterConstants.MAX_EPSILON },
       {
