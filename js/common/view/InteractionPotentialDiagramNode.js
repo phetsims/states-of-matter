@@ -53,7 +53,7 @@ define( function( require ) {
   var GREEK_LETTER_FONT = new PhetFont( GREEK_LETTER_FONT_SIZE );
 
   // zoom buttons height
-  var zoomButtonsHeight = 65;
+  var zoomButtonsHeight = 72;
 
   /**
    *
