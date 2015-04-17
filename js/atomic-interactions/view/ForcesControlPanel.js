@@ -54,8 +54,7 @@ define( function( require ) {
       lineWidth: 1,
       showTitleWhenExpand: true,
       panelMinWidth: 168,
-      backgroundColor: '#D1D2FF',
-      cornerRadius: 5 // radius of the rounded corners on the background
+      backgroundColor: '#D1D2FF'
     }, options );
 
     Node.call( this );
@@ -194,7 +193,7 @@ define( function( require ) {
       contentAlign: 'left',
       titleAlignX: 'left',
       buttonAlign: options.buttonAlign,
-      cornerRadius: 4,
+      cornerRadius: 6,
       minWidth: panelMinWidth,
       contentYSpacing: 1,
       contentXSpacing: 3,

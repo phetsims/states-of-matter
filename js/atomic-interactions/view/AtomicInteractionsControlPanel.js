@@ -358,6 +358,7 @@ define( function( require ) {
 
     var radioButtonPanel = new Panel( content, {
       stroke: panelStroke,
+      cornerRadius: 6,
       lineWidth: options.lineWidth,
       fill: options.backgroundColor
     } );
