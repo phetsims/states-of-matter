@@ -173,12 +173,12 @@ define( function( require ) {
         children: [ neonNeonRadio, argonArgonRadio, oxygenOxygenRadio,
           neonArgonRadio, neonOxygenRadio, argonOxygenRadio, adjustableAttractionRadio ],
         align: 'left',
-        spacing: 8
+        spacing: 11
       } );
       radioButtonGroup = new VBox( {
         children: [ titleNode, radioButtons ],
         align: 'left',
-        spacing: 1
+        spacing: 5
       } );
       var maxRadioButtonWidth = _.max( [ neonNeonRadio, argonArgonRadio, oxygenOxygenRadio, neonArgonRadio,
             neonOxygenRadio, argonOxygenRadio, adjustableAttractionRadio ],
@@ -352,9 +352,10 @@ define( function( require ) {
     var interactionStrength = new Node( { children: [ interactionStrengthTitle, interactionStrengthSlider ] } );
 
     var content = new VBox( {
-      align: 'left', children: [ radioButtonGroup ]
+      align: 'left', children: [ radioButtonGroup ],
+      spacing: 5
     } );
-    var verticalSpaceOffset = 3;
+    var verticalSpaceOffset = 7;
 
     var radioButtonPanel = new Panel( content, {
       stroke: panelStroke,
