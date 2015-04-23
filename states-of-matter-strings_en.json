@@ -1,0 +1,182 @@
+{
+  "states-of-matter.name": {
+    "value": "States of Matter"
+  },
+  "low": {
+    "value": "low"
+  },
+  "heat": {
+    "value": "Heat"
+  },
+  "cool": {
+    "value": "Cool"
+  },
+  "pressureOverload": {
+    "value": "OVERLOADED"
+  },
+  "states": {
+    "value": "States"
+  },
+  "Solid": {
+    "value": "Solid"
+  },
+  "Liquid": {
+    "value": "Liquid"
+  },
+  "Gas": {
+    "value": "Gas"
+  },
+  "solid": {
+    "value": "solid"
+  },
+  "liquid": {
+    "value": "liquid"
+  },
+  "gas": {
+    "value": "gas"
+  },
+  "AtomsMolecules": {
+    "value": "Atoms & Molecules"
+  },
+  "neon": {
+    "value": "Neon"
+  },
+  "argon": {
+    "value": "Argon"
+  },
+  "weak": {
+    "value": "weak"
+  },
+  "strong": {
+    "value": "strong"
+  },
+  "water": {
+    "value": "Water"
+  },
+  "oxygen": {
+    "value": "Oxygen"
+  },
+  "diatomicOxygen": {
+    "value": "Oxygen"
+  },
+  "solidLiquidGas": {
+    "value": "Solid -Liquid-Gas"
+  },
+  "phaseChanges": {
+    "value": "Phase Changes"
+  },
+  "earth": {
+    "value": "Earth"
+  },
+  "interaction": {
+    "value": "Interaction"
+  },
+  "distanceBetweenAtoms": {
+    "value": "Distance Between Atoms"
+  },
+  "distanceBetweenMolecules": {
+    "value": "Distance Between Molecules"
+  },
+  "potentialEnergy": {
+    "value": "Potential Energy"
+  },
+  "pressure": {
+    "value": "Pressure"
+  },
+  "adjustableAttraction": {
+    "value": "Adjustable Attraction"
+  },
+  "phaseDiagram": {
+    "value": "Phase Diagram"
+  },
+  "temperature": {
+    "value": "Temperature"
+  },
+  "triplePoint": {
+    "value": "triple\npoint"
+  },
+  "criticalPoint": {
+    "value": "critical\npoint"
+  },
+  "interactionStrengthWithSymbol": {
+    "value": "Interaction Strength (ε)"
+  },
+  "atomDiameterWithSymbol": {
+    "value": " Atom Diameter (σ)"
+  },
+  "sigma": {
+    "value": "σ"
+  },
+  "epsilon": {
+    "value": "ε"
+  },
+  "kelvinUnits": {
+    "value": "K"
+  },
+  "celsiusUnits": {
+    "value": "℃"
+  },
+  "interactionPotential": {
+    "value": "Interaction Potential"
+  },
+  "returnLid": {
+    "value": "Return Lid"
+  },
+  "pressureUnitsInAtm": {
+    "value": "atm"
+  },
+  "forces": {
+    "value": "Forces"
+  },
+  "hideForces": {
+    "value": "Hide Forces"
+  },
+  "totalForce": {
+    "value": "Total Force"
+  },
+  "attractive": {
+    "value": "Attractive"
+  },
+  "repulsive": {
+    "value": "Repulsive"
+  },
+  "vanderwaals": {
+    "value": "(van der Waals)"
+  },
+  "electronOverlap": {
+    "value": "(electron overlap)"
+  },
+  "normal": {
+    "value": "Normal"
+  },
+  "slowMotion": {
+    "value": "Slow Motion"
+  },
+  "pinned": {
+    "value": "Pinned"
+  },
+  "moving": {
+    "value": "Moving"
+  },
+  "atomDiameter": {
+    "value": "Atom Diameter (σ)"
+  },
+  "interactionStrength": {
+    "value": "Interaction Strength (ε)"
+  },
+  "small": {
+    "value": "small"
+  },
+  "large": {
+    "value": "large"
+  },
+  "returnAtom": {
+    "value": "Return Atom"
+  },
+  "customAttraction": {
+    "value": "Custom Attraction"
+  },
+  "projectorColors": {
+    "value": "Projector Colors"
+  }
+}
