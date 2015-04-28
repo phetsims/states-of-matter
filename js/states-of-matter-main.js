@@ -31,13 +31,6 @@ define( function( require ) {
     }, optionsNode: new GlobalOptionsNode( colorsProperty )
   };
 
-  // Appending '?dev' to the URL will enable developer-only features.
-  if ( phet.chipper.getQueryParameter( 'dev' ) ) {
-    simOptions = _.extend( {
-      // add dev-specific options here
-    }, simOptions );
-  }
-
   SimLauncher.launch( function() {
     var isHeterogeneousMoleculeControlPanel = false;
     var sim = new Sim( simTitle, [ new SolidLiquidGasScreen( colorsProperty ), new PhaseChangesScreen( true, colorsProperty ),
