@@ -151,7 +151,11 @@ define( function( require ) {
           break;
       }
     } );
-    var buttons = new VBox( { children: [ solidStateButton, liquidStateButton, gasStateButton ], spacing: 10, align: 'center' } );
+    var buttons = new VBox( {
+      children: [ solidStateButton, liquidStateButton, gasStateButton ],
+      spacing: 10,
+      align: 'center'
+    } );
     this.addChild( buttons );
     this.mutate( this.options );
   }
