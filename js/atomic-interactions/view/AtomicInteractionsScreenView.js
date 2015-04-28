@@ -44,7 +44,7 @@ define( function( require ) {
 
   /**
    * @param {DualAtomModel} dualAtomModel of the simulation
-   * @param {Boolean} enableHeterogeneousAtoms - true to use a enable heterogeneous molecules, false otherwise.
+   * @param {boolean} enableHeterogeneousAtoms - true to use a enable heterogeneous molecules, false otherwise.
    * @constructor
    */
   function AtomicInteractionsScreenView( dualAtomModel, enableHeterogeneousAtoms ) {

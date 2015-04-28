@@ -34,7 +34,7 @@ define( function( require ) {
   return inherit( AbstractVerletAlgorithm, MonatomicVerletAlgorithm, {
 
     /**
-     * @param {Number} scaledEpsilon
+     * @param {number} scaledEpsilon
      * @public
      */
     setScaledEpsilon: function( scaledEpsilon ) {
@@ -42,7 +42,7 @@ define( function( require ) {
     },
 
     /**
-     * @returns {Number}
+     * @returns {number}
      * @public
      */
     getPressure: function() {
@@ -50,7 +50,7 @@ define( function( require ) {
     },
 
     /**
-     * @returns {Number}
+     * @returns {number}
      * @public
      */
     getTemperature: function() {
@@ -58,7 +58,7 @@ define( function( require ) {
     },
 
     /**
-     * @returns {Number}
+     * @returns {number}
      * @public
      */
     getScaledEpsilon: function() {

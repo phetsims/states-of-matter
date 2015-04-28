@@ -22,8 +22,8 @@ define( function( require ) {
   var ATOM_TYPE = AtomType.NEON;
 
   /**
-   * @param {Number} x  position in picometers
-   * @param {Number} y  position in picometers
+   * @param {number} x  position in picometers
+   * @param {number} y  position in picometers
    * @constructor
    */
   function NeonAtom( x, y ) {

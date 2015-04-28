@@ -29,8 +29,8 @@ define( function( require ) {
      * it is generally done.  Note that this value is used as the "epsilon"
      * parameter in Lennard-Jones potential calculations.
      * @public
-     * @param {String} atomType1
-     * @param {String} atomType2
+     * @param {string} atomType1
+     * @param {string} atomType2
      * @returns {*}
      */
     getInteractionPotential: function( atomType1, atomType2 ) {

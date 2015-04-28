@@ -20,10 +20,10 @@ define( function( require ) {
    * @param {DualAtomModel} dualAtomModel - model of the simulation
    * @param {StatesOfMatterAtom} particle
    * @param {ModelViewTransform2} modelViewTransform to convert between model and view co-ordinates
-   * @param {Boolean} useGradient - true to use a gradient when displaying the node, false if not.
-   * @param {Boolean} enableOverlap - true if the node should be larger than the actual particle, thus allowing particles
-   * @param {Number} minX - grabbable particle  min x position
-   * @param {Number} maxX - grabbable particle  max x position
+   * @param {boolean} useGradient - true to use a gradient when displaying the node, false if not.
+   * @param {boolean} enableOverlap - true if the node should be larger than the actual particle, thus allowing particles
+   * @param {number} minX - grabbable particle  min x position
+   * @param {number} maxX - grabbable particle  max x position
    * @constructor
    */
   function GrabbableParticleNode( handNode, dualAtomModel, particle, modelViewTransform, useGradient, enableOverlap, minX, maxX ) {
@@ -95,7 +95,7 @@ define( function( require ) {
 
     /**
      * @public
-     * @returns {Number|*}
+     * @returns {number|*}
      */
     getMinX: function() {
       return this.minX;
@@ -103,7 +103,7 @@ define( function( require ) {
 
     /**
      * @public
-     * @param {Number} minX - min x position
+     * @param {number} minX - min x position
      */
     setMinX: function( minX ) {
       this.minX = minX;
@@ -111,7 +111,7 @@ define( function( require ) {
 
     /**
      * @public
-     * @returns {Number|*}
+     * @returns {number|*}
      */
     getMaxX: function() {
       return this.maxX;
@@ -119,7 +119,7 @@ define( function( require ) {
 
     /**
      * @public
-     * @param {Number} maxX - grabbable particle  max x position
+     * @param {number} maxX - grabbable particle  max x position
      */
     setMaxX: function( maxX ) {
       this.maxX = maxX;

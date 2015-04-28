@@ -43,7 +43,7 @@ define( function( require ) {
   return inherit( AbstractPhaseStateChanger, DiatomicPhaseStateChanger, {
 
     /**
-     * @param {Number} phaseID - state(solid/liquid/gas) of Molecule
+     * @param {number} phaseID - state(solid/liquid/gas) of Molecule
      * @public
      */
     setPhase: function( phaseID ) {

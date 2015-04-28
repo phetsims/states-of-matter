@@ -21,8 +21,8 @@ define( function( require ) {
   var ATOM_TYPE = AtomType.ARGON;
 
   /**
-   * @param {Number} x  position in picometers
-   * @param {Number} y  position in picometers
+   * @param {number} x  position in picometers
+   * @param {number} y  position in picometers
    * @constructor
    */
   function ArgonAtom( x, y ) {

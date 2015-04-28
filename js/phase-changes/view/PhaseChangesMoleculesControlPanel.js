@@ -69,7 +69,7 @@ define( function( require ) {
 
   /**
    * @param { MultipleParticleModel } multipleParticleModel - model of the simulation
-   * @param {Boolean} isBasicVersion
+   * @param {boolean} isBasicVersion
    * @param {Object} [options] options for various panel display properties
    * @constructor
    */

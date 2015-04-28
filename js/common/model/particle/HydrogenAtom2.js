@@ -26,8 +26,8 @@ define( function( require ) {
   var ATOM_TYPE = AtomType.HYDROGEN;
 
   /**
-   * @param {Number} xPos  position in picometers
-   * @param {Number} yPos  position in picometers
+   * @param {number} xPos  position in picometers
+   * @param {number} yPos  position in picometers
    * @constructor
    */
   function HydrogenAtom2( xPos, yPos ) {

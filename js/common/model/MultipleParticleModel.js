@@ -173,7 +173,7 @@ define( function( require ) {
 
     /**
      * @public
-     * @param {Number} newTemperature
+     * @param {number} newTemperature
      */
     setTemperature: function( newTemperature ) {
 
@@ -217,7 +217,7 @@ define( function( require ) {
     /**
      * Set the molecule type to be simulated.
      * @private
-     * @param {Number} moleculeID
+     * @param {number} moleculeID
      */
     setMoleculeType: function( moleculeID ) {
 
@@ -297,7 +297,7 @@ define( function( require ) {
      * which the height can changed.  The model will gradually move towards
      * the target height.
      * @public
-     * @param {Number} desiredContainerHeight
+     * @param {number} desiredContainerHeight
      */
     setTargetParticleContainerHeight: function( desiredContainerHeight ) {
       this.targetContainerHeight = Util.clamp( desiredContainerHeight, this.minAllowableContainerHeight,
@@ -381,7 +381,7 @@ define( function( require ) {
     /**
      * Set the phase of the particles in the simulation.
      * @public
-     * @param {Number} state
+     * @param {number} state
      */
     setPhase: function( state ) {
       switch( state ) {
@@ -410,7 +410,7 @@ define( function( require ) {
     /**
      * Sets the amount of heating or cooling that the system is undergoing.
      * @public
-     * @param {Number} normalizedHeatingCoolingAmount Normalized amount of heating or cooling
+     * @param {number} normalizedHeatingCoolingAmount Normalized amount of heating or cooling
      *                 that the system is undergoing, ranging from -1 to +1.
      */
     setHeatingCoolingAmount: function( normalizedHeatingCoolingAmount ) {
@@ -534,7 +534,7 @@ define( function( require ) {
      * Initialize the particles by calling the appropriate initialization
      * routine, which will set their positions, velocities, etc.
      * @public
-     * @param {Number} phase
+     * @param {number} phase
      */
     initializeParticles: function( phase ) {
 
@@ -736,8 +736,8 @@ define( function( require ) {
      * Initialize the various model components to handle a simulation in which
      * all the molecules are single atoms.
      *
-     * @param {Number} moleculeID
-     * @param {Number} phase
+     * @param {number} moleculeID
+     * @param {number} phase
      */
 
     //@private
@@ -892,7 +892,7 @@ define( function( require ) {
 
     /**
      * @public
-     * @returns {Number|*}
+     * @returns {number|*}
      */
     getMoleculeType: function() {
       return this.currentMolecule;
@@ -923,8 +923,8 @@ define( function( require ) {
      * Initialize the various model components to handle a simulation in which
      * all the molecules are single atoms.
      * @private
-     * @param {Number} moleculeID
-     * @param {Number} phase
+     * @param {number} moleculeID
+     * @param {number} phase
      */
     initializeMonatomic: function( moleculeID, phase ) {
 
@@ -1186,7 +1186,7 @@ define( function( require ) {
      * scaled value that is suitable for use with the motion and force
      * calculators.
      * @private
-     * @param {Number} epsilon
+     * @param {number} epsilon
      */
     convertEpsilonToScaledEpsilon: function( epsilon ) {
       // The following conversion of the target value for epsilon
@@ -1198,7 +1198,7 @@ define( function( require ) {
 
     /**
      * @private
-     * @param {Number}scaledEpsilon
+     * @param {number}scaledEpsilon
      * @returns {number}
      */
     convertScaledEpsilonToEpsilon: function( scaledEpsilon ) {
@@ -1217,7 +1217,7 @@ define( function( require ) {
      * This method is used for an external entity to notify the model that it
      * should explode.
      *  @private
-     * @param {Boolean} isExploded
+     * @param {boolean} isExploded
      */
     setContainerExploded: function( isExploded ) {
       if ( this.isExploded !== isExploded ) {

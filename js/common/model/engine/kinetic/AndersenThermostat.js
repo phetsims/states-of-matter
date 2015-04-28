@@ -20,7 +20,7 @@ define( function( require ) {
   /**
    * Constructor for the Andersen thermostat.
    * @param {MoleculeForceAndMotionDataSet} moleculeDataSet Data set on which operations will be performed.
-   * @param {Number} minTemperature The temperature that should be considered absolute zero, below which motion should cease
+   * @param {number} minTemperature The temperature that should be considered absolute zero, below which motion should cease
    * @constructor
    */
   function AndersenThermostat( moleculeDataSet, minTemperature ) {

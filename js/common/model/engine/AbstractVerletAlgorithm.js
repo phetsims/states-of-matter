@@ -48,8 +48,8 @@ define( function( require ) {
      * parameters.  The force is returned in the provided vector.
      *
      * @param {Vector2} position       - Current position of the particle.
-     * @param {Number} containerWidth  - Width of the container where particles are held.
-     * @param {Number} containerHeight - Height of the container where particles are held.
+     * @param {number} containerWidth  - Width of the container where particles are held.
+     * @param {number} containerHeight - Height of the container where particles are held.
      * @param {Vector2} resultantForce - Vector in which the resulting force is returned.
      * @public
      */
@@ -235,7 +235,7 @@ define( function( require ) {
 
     /**
      *
-     * @param {Number} pressureZoneWallForce
+     * @param {number} pressureZoneWallForce
      */
     updatePressure: function( pressureZoneWallForce ) {
       if ( this.multipleParticleModel.isExploded ) {

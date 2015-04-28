@@ -67,7 +67,7 @@ define( function( require ) {
 
   /**
    * @param {MultipleParticleModel} multipleParticleModel - model of the simulation
-   * @param {Boolean} isInteractionDiagramEnabled
+   * @param {boolean} isInteractionDiagramEnabled
    * @param {Property<Boolean>} projectorColorsProperty - true to use the projector color scheme, false to use regular color scheme
    * @constructor
    */
@@ -290,8 +290,8 @@ define( function( require ) {
     /**
      * Update and returns the moving average taking into account the new temperature value
      * @private
-     * @param {Number} newTemperatureValue
-     * @returns {Number}
+     * @param {number} newTemperatureValue
+     * @returns {number}
      */
     updateMovingAverageTemperature: function( newTemperatureValue ) {
       if ( this.modelTemperatureHistory.length === MAX_NUM_HISTORY_SAMPLES ) {
@@ -308,8 +308,8 @@ define( function( require ) {
     /**
      * Map the model temperature to phase diagram temperature based on the phase chart shape.
      * @private
-     * @param {Number} modelTemperature
-     * @returns {Number}
+     * @param {number} modelTemperature
+     * @returns {number}
      */
     mapModelTemperatureToPhaseDiagramTemperature: function( modelTemperature ) {
 
@@ -329,9 +329,9 @@ define( function( require ) {
      * Map the model temperature and pressure to a normalized pressure value
      * suitable for use in setting the marker position on the phase chart.
      * @private
-     * @param {Number} modelPressure
-     * @param {Number} modelTemperature
-     * @returns {Number}
+     * @param {number} modelPressure
+     * @param {number} modelTemperature
+     * @returns {number}
      */
     mapModelTempAndPressureToPhaseDiagramPressure: function( modelPressure, modelTemperature ) {
       // This method is a total tweak fest.  All values and equations are

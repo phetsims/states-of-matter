@@ -57,9 +57,9 @@ define( function( require ) {
 
   /**
    *
-   * @param {Number} sigma - Initial value of sigma, a.k.a. the atom diameter
-   * @param {Number} epsilon - Initial value of epsilon, a.k.a. the interaction strength
-   * @param {Boolean} wide - true if the widescreen version of the graph is needed, false if not.
+   * @param {number} sigma - Initial value of sigma, a.k.a. the atom diameter
+   * @param {number} epsilon - Initial value of epsilon, a.k.a. the interaction strength
+   * @param {boolean} wide - true if the widescreen version of the graph is needed, false if not.
    * @constructor
    */
   function InteractionPotentialDiagramNode( sigma, epsilon, wide ) {
@@ -208,8 +208,8 @@ define( function( require ) {
      * Set the parameters that define the shape of the Lennard-Jones
      * potential curve.
      *@public
-     * @param{Number} sigma -  atom diameter
-     * @param {Number }epsilon - interaction strength
+     * @param{number} sigma -  atom diameter
+     * @param {number }epsilon - interaction strength
      */
     setLjPotentialParameters: function( sigma, epsilon ) {
 
@@ -266,7 +266,7 @@ define( function( require ) {
 
     /**
      * @public
-     * @param {Boolean} enabled - indicate to whether enable the position marker or not.
+     * @param {boolean} enabled - indicate to whether enable the position marker or not.
      */
     setMarkerEnabled: function( enabled ) {
       this.positionMarkerEnabled = enabled;
@@ -277,7 +277,7 @@ define( function( require ) {
      * to set the x axis position, which is distance.  The y axis position is
      * always on the LJ potential curve.
      * @public
-     * @param {Number}distance - distance from the center of the interacting molecules.
+     * @param {number}distance - distance from the center of the interacting molecules.
      */
     setMarkerPosition: function( distance ) {
       this.markerDistance = distance;
@@ -306,7 +306,7 @@ define( function( require ) {
      * Set whether the graph is showing the potential between individual atoms
      * or multi-atom molecules.
      * @public
-     * @param {Boolean} molecular - true if graph is portraying molecules, false for
+     * @param {boolean} molecular - true if graph is portraying molecules, false for
      *                  individual atoms.
      */
     setMolecular: function( molecular ) {
@@ -325,7 +325,7 @@ define( function( require ) {
     /**
      * Calculate the Lennard-Jones potential for the given distance.
      * @private
-     * @param {Number} radius
+     * @param {number} radius
      * @return
      */
     calculateLennardJonesPotential: function( radius ) {

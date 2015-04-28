@@ -24,10 +24,10 @@ define( function( require ) {
 
   /**
    * @param atomsView
-   * @param {Number} offsetX
-   * @param {Number} offsetY
-   * @param {Number} width - width of the graph
-   * @param {Number} height - height of the graph
+   * @param {number} offsetX
+   * @param {number} offsetY
+   * @param {number} width - width of the graph
+   * @param {number} height - height of the graph
    * @constructor
    */
   function ZoomableGridNode( atomsView, offsetX, offsetY, width, height ) {
@@ -114,11 +114,11 @@ define( function( require ) {
 
     /**
      * @public
-     * @param {Number} offsetX
-     * @param {Number} offsetY
-     * @param {Number} width -- width of the grid
-     * @param {Number} height -- height of the grid
-     * @param {Number} horizontalLineCount -- number of horizontal lines
+     * @param {number} offsetX
+     * @param {number} offsetY
+     * @param {number} width -- width of the grid
+     * @param {number} height -- height of the grid
+     * @param {number} horizontalLineCount -- number of horizontal lines
      */
     setHorizontalLines: function( offsetX, offsetY, width, height, horizontalLineCount ) {
 

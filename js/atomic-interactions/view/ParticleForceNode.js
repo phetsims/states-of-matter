@@ -32,9 +32,9 @@ define( function( require ) {
   /**
    * @param {Particle} particle - The particle in the model that this node will represent in the view.
    * @param {ModelViewTransform2} modelViewTransform to convert between model and view co-ordinates
-   * @param {Boolean} useGradient - true to use a gradient when displaying the node, false if not.
+   * @param {boolean} useGradient - true to use a gradient when displaying the node, false if not.
    * The gradient is computationally intensive to create, so use only when needed.
-   * @param {Boolean} enableOverlap - true if the node should be larger than the actual particle, thus allowing particles
+   * @param {boolean} enableOverlap - true if the node should be larger than the actual particle, thus allowing particles
    * @constructor
    */
   function ParticleForceNode( particle, modelViewTransform, useGradient, enableOverlap ) {
@@ -84,8 +84,8 @@ define( function( require ) {
      * Set the levels of attractive and repulsive forces being experienced by
      * the particle in the model so that they may be represented as force
      * vectors.
-     * @param {Number}attractiveForce
-     * @param {Number}repulsiveForce
+     * @param {number}attractiveForce
+     * @param {number}repulsiveForce
      */
     setForces: function( attractiveForce, repulsiveForce ) {
       this.attractiveForce = attractiveForce;
@@ -94,7 +94,7 @@ define( function( require ) {
     },
 
     /**
-     * @param {Boolean} showAttractiveForces - true to show attractive force, false to hide
+     * @param {boolean} showAttractiveForces - true to show attractive force, false to hide
      */
     setShowAttractiveForces: function( showAttractiveForces ) {
       this.attractiveForceVectorNode.setVisible( showAttractiveForces );
@@ -102,14 +102,14 @@ define( function( require ) {
 
     /**
      *
-     * @param {Boolean} showRepulsiveForces - true to show repulsive force, false to hide
+     * @param {boolean} showRepulsiveForces - true to show repulsive force, false to hide
      */
     setShowRepulsiveForces: function( showRepulsiveForces ) {
       this.repulsiveForceVectorNode.setVisible( showRepulsiveForces );
     },
 
     /**
-     * @param {Boolean} showTotalForce - true to show total force, false to hide
+     * @param {boolean} showTotalForce - true to show total force, false to hide
      */
     setShowTotalForces: function( showTotalForce ) {
       this.totalForceVectorNode.setVisible( showTotalForce );

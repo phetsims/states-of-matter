@@ -39,9 +39,9 @@ define( function( require ) {
 
   /**
    *
-   * @param {Number} sigma - atom diameter
-   * @param {Number} epsilon - interaction strength
-   * @param {Boolean} wide - true if the wide screen version of the graph is needed, false if not.
+   * @param {number} sigma - atom diameter
+   * @param {number} epsilon - interaction strength
+   * @param {boolean} wide - true if the wide screen version of the graph is needed, false if not.
    * @param {MultipleParticleModel} multipleParticleModel - model of the simulation
    * @param {Object} [options] that can be passed on to the underlying node
    * @constructor

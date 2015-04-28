@@ -18,7 +18,7 @@ define( function( require ) {
   /**
    * Constructor for the Isokinetic thermostat.
    * @param {MoleculeForceAndMotionDataSet} moleculeDataSet Data set on which operations will be performed.
-   * @param {Number} minTemperature The temperature that should be considered absolute zero, below which motion should cease.
+   * @param {number} minTemperature The temperature that should be considered absolute zero, below which motion should cease.
    * @constructor
    */
   function IsokineticThermostat( moleculeDataSet, minTemperature ) {
@@ -71,7 +71,7 @@ define( function( require ) {
 
     /**
      *
-     * @param {Number} measuredTemperature
+     * @param {number} measuredTemperature
      */
     adjustMeasuredTemperature: function( measuredTemperature ) {
 

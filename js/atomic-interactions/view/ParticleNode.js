@@ -31,9 +31,9 @@ define( function( require ) {
   /**
    * @param {Particle} particle  - The particle in the model that this node will represent in the view.
    * @param {ModelViewTransform2} modelViewTransform to convert between model and view co-ordinates
-   * @param {Boolean}useGradient - true to use a gradient when displaying the node, false if not.
+   * @param {boolean}useGradient - true to use a gradient when displaying the node, false if not.
    * The gradient is computationally intensive to create, so use only when needed.
-   * @param {Boolean}enableOverlap - true if the node should be larger than the actual particle, thus allowing particles
+   * @param {boolean}enableOverlap - true if the node should be larger than the actual particle, thus allowing particles
    * @constructor
    */
   function ParticleNode( particle, modelViewTransform, useGradient, enableOverlap ) {

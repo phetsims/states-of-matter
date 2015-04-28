@@ -21,7 +21,7 @@ define( function( require ) {
    * This creates the data set with the capacity to hold the
    * maximum number of atoms/molecules, but does not create the individual
    * data for them.  That must be done explicitly through other calls.
-   * @param {Number} atomsPerMolecule
+   * @param {number} atomsPerMolecule
    * @constructor
    */
   function MoleculeForceAndMotionDataSet( atomsPerMolecule ) {
@@ -104,7 +104,7 @@ define( function( require ) {
 
     /**
      * @public
-     * @returns {Number|*}
+     * @returns {number|*}
      */
     getAtomsPerMolecule: function() {
       return this.atomsPerMolecule;
@@ -120,7 +120,7 @@ define( function( require ) {
 
     /**
      * @public
-     * @returns {Number|*}
+     * @returns {number|*}
      */
     getNumberOfAtoms: function() {
       return this.numberOfAtoms;
@@ -218,7 +218,7 @@ define( function( require ) {
      * Calculate the temperature of the system based on the total kinetic
      * energy of the molecules.
      * @public
-     * @return {Number} temperature in model units (as opposed to Kelvin, Celsius, or whatever)
+     * @return {number} temperature in model units (as opposed to Kelvin, Celsius, or whatever)
      */
     calculateTemperatureFromKineticEnergy: function() {
       var translationalKineticEnergy = 0;
@@ -258,8 +258,8 @@ define( function( require ) {
      * @param {Array<Vector2>} atomPositions
      * @param {Vector2} moleculeCenterOfMassPosition
      * @param {Vector2} moleculeVelocity
-     * @param {Number} moleculeRotationRate
-     * @return {Boolean} true if able to add, false if not.
+     * @param {number} moleculeRotationRate
+     * @return {boolean} true if able to add, false if not.
      */
     addMolecule: function( atomPositions, moleculeCenterOfMassPosition, moleculeVelocity, moleculeRotationRate ) {
 
@@ -298,7 +298,7 @@ define( function( require ) {
      * was originally created to support the feature where the lid is returned
      * and any molecules outside of the container disappear.
      *
-     * @param {Number} moleculeIndex
+     * @param {number} moleculeIndex
      */
     removeMolecule: function( moleculeIndex ) {
       // assert moleculeIndex < this.numberOfAtoms / this.atomsPerMolecule;

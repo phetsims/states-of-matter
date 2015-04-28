@@ -33,9 +33,9 @@ define( function( require ) {
   var EPSILON_LINE_COLOR = RESIZE_HANDLE_NORMAL_COLOR;
 
   /**
-   * @param {Number} sigma - Initial value of sigma, a.k.a. the atom diameter
-   * @param {Number} epsilon - Initial value of epsilon, a.k.a. the interaction strength
-   * @param {Boolean} wide - true if the wide screen version of the graph is needed, false if not.
+   * @param {number} sigma - Initial value of sigma, a.k.a. the atom diameter
+   * @param {number} epsilon - Initial value of epsilon, a.k.a. the interaction strength
+   * @param {boolean} wide - true if the wide screen version of the graph is needed, false if not.
    * @param {DualAtomModel} dualAtomModel - model of the simulation
    * @param {Object} [options] that can be passed on to the underlying node
    * @constructor

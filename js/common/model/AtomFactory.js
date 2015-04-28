@@ -20,7 +20,7 @@ define( function( require ) {
 
     /**
      * @public
-     * @param {String} atomType
+     * @param {string} atomType
      * @returns {*}
      */
     createAtom: function( atomType ) {

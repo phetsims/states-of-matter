@@ -372,7 +372,7 @@ define( function( require ) {
     /**
      * Set the visibility of the state marker.
      * @public
-     * @param {Boolean} isVisible
+     * @param {boolean} isVisible
      */
     setStateMarkerVisible: function( isVisible ) {
       this.currentStateMarker.setVisible( isVisible );
@@ -387,7 +387,7 @@ define( function( require ) {
      * positioned anywhere, but currently it isn't worth the extra effort to
      * do so.  Feel free if it is ever needed.
      * @public
-     * @param {Boolean} depictingWater
+     * @param {boolean} depictingWater
      */
     setDepictingWater: function( depictingWater ) {
       if ( depictingWater ) {

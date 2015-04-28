@@ -38,8 +38,8 @@ define( function( require ) {
 
   /**
    *
-   * @param {Number} width  - width of the BicyclePump
-   * @param {Number} height - height of the BicyclePump
+   * @param {number} width  - width of the BicyclePump
+   * @param {number} height - height of the BicyclePump
    * @param {MultipleParticleModel} multipleParticleModel - model of the simulation
    * @param {Object} [options] that can be passed on to the underlying node
    * @constructor

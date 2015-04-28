@@ -81,14 +81,14 @@ define( function( require ) {
       },
       /**
        * @public
-       * @returns {Number|*}
+       * @returns {number|*}
        */
       getAttractiveForce: function() {
         return this.attractiveForce;
       },
       /**
        * @public
-       * @returns {Number|*}
+       * @returns {number|*}
        */
       getRepulsiveForce: function() {
         return this.repulsiveForce;
@@ -109,7 +109,7 @@ define( function( require ) {
       },
       /***
        * @public
-       * @returns {Boolean|*}
+       * @returns {boolean|*}
        */
       getMotionPaused: function() {
         return this.motionPaused;
@@ -117,7 +117,7 @@ define( function( require ) {
 
       /**
        * @public
-       * @param {String} atomType indicates type of molecule
+       * @param {string} atomType indicates type of molecule
        */
       setFixedAtomType: function( atomType ) {
 
@@ -157,7 +157,7 @@ define( function( require ) {
 
       /**
        * @public
-       * @param {String} atomType indicates type of molecule
+       * @param {string} atomType indicates type of molecule
        */
       setMovableAtomType: function( atomType ) {
 
@@ -197,7 +197,7 @@ define( function( require ) {
 
       /**
        * @public
-       * @param {String} atomType indicates type of molecule
+       * @param {string} atomType indicates type of molecule
        */
       ensureValidAtomType: function( atomType ) {
         // Verify that this is a supported value.
@@ -210,7 +210,7 @@ define( function( require ) {
 
       /**
        * @public
-       * @param {String} atomType indicates type of molecule
+       * @param {string} atomType indicates type of molecule
        */
       setBothAtomTypes: function( atomType ) {
 
@@ -302,7 +302,7 @@ define( function( require ) {
 
       /**
        * @public
-       * @param {Boolean} paused  is to set particle motion
+       * @param {boolean} paused  is to set particle motion
        */
       setMotionPaused: function( paused ) {
         this.motionPaused = paused;
@@ -372,7 +372,7 @@ define( function( require ) {
 
       /**
        * Called by the animation loop.
-       * @param {Number} dt -- time in seconds
+       * @param {number} dt -- time in seconds
        */
       step: function( dt ) {
         // prevent sudden dt bursts when the user comes back to the tab after a while
@@ -386,7 +386,7 @@ define( function( require ) {
 
       /**
        *
-       * @param {Number} dt -- time in seconds
+       * @param {number} dt -- time in seconds
        * @public
        */
       stepInternal: function( dt ) {
@@ -498,7 +498,7 @@ define( function( require ) {
       },
       /**
        *
-       * @param {Number} dt -- time in seconds
+       * @param {number} dt -- time in seconds
        * @private
        */
       updateTimeStep: function( dt ) {

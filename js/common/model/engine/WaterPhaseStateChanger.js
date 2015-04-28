@@ -45,7 +45,7 @@ define( function( require ) {
 
     /**
      * @public
-     * @param {Number} phaseID - state(solid/liquid/gas) of Molecule
+     * @param {number} phaseID - state(solid/liquid/gas) of Molecule
      */
     setPhase: function( phaseID ) {
 

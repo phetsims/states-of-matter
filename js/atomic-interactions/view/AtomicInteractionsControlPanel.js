@@ -64,7 +64,7 @@ define( function( require ) {
 
   /**
    * @param {DualAtomModel} dualAtomModel - model of the simulation
-   * @param {Boolean} enableHeterogeneousAtoms - flag for enabling heterogeneous atom combinations
+   * @param {boolean} enableHeterogeneousAtoms - flag for enabling heterogeneous atom combinations
    * @param {Object} [options] that can be passed on to the underlying node
    * @constructor
    */

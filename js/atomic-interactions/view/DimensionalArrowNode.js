@@ -15,10 +15,10 @@ define( function( require ) {
   var Vector2 = require( 'DOT/Vector2' );
 
   /*
-   * @param {Number} tailX - arrowNode tail X position
-   * @param {Number} tailY - arrowNode tail Y position
-   * @param {Number} tipX - arrowNode tip X position
-   * @param {Number} tipY - arrowNode tip Y position
+   * @param {number} tailX - arrowNode tail X position
+   * @param {number} tailY - arrowNode tail Y position
+   * @param {number} tipX - arrowNode tip X position
+   * @param {number} tipY - arrowNode tip Y position
    * @param {Object} [options] that can be passed on to the underlying node
    * @constructor
    */
@@ -50,10 +50,10 @@ define( function( require ) {
 
     /**
      * @public
-     * @param {Number} tailX - tail X position
-     * @param {Number} tailY - tail Y position
-     * @param {Number} tipX - tip X position
-     * @param {Number} tipY - tip Y position
+     * @param {number} tailX - tail X position
+     * @param {number} tailY - tail Y position
+     * @param {number} tipX - tip X position
+     * @param {number} tipY - tip Y position
      */
     setTailAndTip: function( tailX, tailY, tipX, tipY ) {
       this.tailLocation.setXY( tailX, tailY );

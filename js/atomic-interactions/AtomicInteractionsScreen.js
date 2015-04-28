@@ -20,8 +20,8 @@ define( function( require ) {
   var atomicInteractionScreenIcon = require( 'image!STATES_OF_MATTER/som-atomic-interactions-icon.png' );
 
   /**
-   * @param {Boolean} enableHeterogeneousMolecules
-   * @param {String} simTitle
+   * @param {boolean} enableHeterogeneousMolecules
+   * @param {string} simTitle
    * @param {Property<Boolean>} colorsProperty
    * @constructor
    */

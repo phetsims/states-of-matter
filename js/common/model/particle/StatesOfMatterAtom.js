@@ -15,10 +15,10 @@ define( function( require ) {
 
   /**
    *
-   * @param {Number} x position in picometers
-   * @param {Number} y position in picometers
-   * @param {Number} radius of the atom in picometers
-   * @param {Number} mass of the atom in atomic mass units.
+   * @param {number} x position in picometers
+   * @param {number} y position in picometers
+   * @param {number} radius of the atom in picometers
+   * @param {number} mass of the atom in atomic mass units.
    * @param {Color} color of the atom
    * @constructor
    */
@@ -35,8 +35,8 @@ define( function( require ) {
 
     /**
      * @public
-     * @param {Number} x - atom x position in picometers
-     * @param {Number} y - atom y position in picometers
+     * @param {number} x - atom x position in picometers
+     * @param {number} y - atom y position in picometers
      * @constructor
      */
     setPosition: function( x, y ) {
@@ -81,7 +81,7 @@ define( function( require ) {
     },
     /**
      * @public
-     * @param {Number} vy - atom velocity in y-direction
+     * @param {number} vy - atom velocity in y-direction
      */
     setVy: function( vy ) {
       this.velocity.setY( vy );
@@ -93,7 +93,7 @@ define( function( require ) {
 
     /**
      *
-     * @param {Number} vx - atom velocity in x-direction
+     * @param {number} vx - atom velocity in x-direction
      */
     setVx: function( vx ) {
       this.velocity.setX( vx );
@@ -109,14 +109,14 @@ define( function( require ) {
 
     /**
      * @public
-     * @param {Number} ax - atom acceleration in x-direction
+     * @param {number} ax - atom acceleration in x-direction
      */
     setAx: function( ax ) {
       this.accel.setX( ax );
     },
     /**
      * @public
-     * @param {Number} ay - atom acceleration in y-direction
+     * @param {number} ay - atom acceleration in y-direction
      */
     setAy: function( ay ) {
       this.accel.setY( ay );
@@ -145,14 +145,14 @@ define( function( require ) {
     },
     /**
      * @public
-     * @returns {Number|*}
+     * @returns {number|*}
      */
     getRadius: function() {
       return this.radius;
     },
     /**
      * @public
-     * @param {Number} radius - radius of the atom
+     * @param {number} radius - radius of the atom
      */
     setRadius: function( radius ) {
       this.radius = radius;

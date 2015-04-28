@@ -21,8 +21,8 @@ define( function( require ) {
   var MASS = 25; // in atomic mass units
 
   /**
-   * @param {Number} x position
-   * @param {Number} y position
+   * @param {number} x position
+   * @param {number} y position
    * @constructor
    */
   function ConfigurableStatesOfMatterAtom( x, y ) {
@@ -40,7 +40,7 @@ define( function( require ) {
       },
 
       /**
-       * @param {Number} radius in picometers
+       * @param {number} radius in picometers
        * @public
        */
       setRadius: function( radius ) {

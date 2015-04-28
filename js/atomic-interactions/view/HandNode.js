@@ -21,8 +21,8 @@ define( function( require ) {
    * @param {DualAtomModel} dualAtomModel - model of the atomic interactions screen
    * @param {StatesOfMatterAtom} particle - model of the atom that is draggable
    * @param {ModelViewTransform2} modelViewTransform to convert between model and view co-ordinates
-   * @param {Number} minX - grabbable particle min x position // view
-   * @param {Number} maxX - grabbable particle max x position // view
+   * @param {number} minX - grabbable particle min x position // view
+   * @param {number} maxX - grabbable particle max x position // view
    * @constructor
    */
   function HandNode( dualAtomModel, particle, modelViewTransform, minX, maxX ) {
@@ -107,7 +107,7 @@ define( function( require ) {
 
     /**
      *
-     * @param {Number} minX - particle min x  position
+     * @param {number} minX - particle min x  position
      */
     setMinX: function( minX ) {
       this.minX = minX;
@@ -118,7 +118,7 @@ define( function( require ) {
     },
 
     /**
-     * @param {Number} maxX - particle max x  position
+     * @param {number} maxX - particle max x  position
      */
     setMaxX: function( maxX ) {
       this.maxX = maxX;
