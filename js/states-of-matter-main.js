@@ -33,9 +33,11 @@ define( function( require ) {
 
   SimLauncher.launch( function() {
     var isHeterogeneousMoleculeControlPanel = false;
-    var sim = new Sim( simTitle, [ new SolidLiquidGasScreen( colorsProperty ), new PhaseChangesScreen( true, colorsProperty ),
-      new AtomicInteractionsScreen( isHeterogeneousMoleculeControlPanel,
-        interactionString, colorsProperty ) ], simOptions );
+    var sim = new Sim( simTitle, [
+        new SolidLiquidGasScreen( colorsProperty ),
+        new PhaseChangesScreen( true, colorsProperty ),
+        new AtomicInteractionsScreen( isHeterogeneousMoleculeControlPanel, interactionString, colorsProperty )
+      ], simOptions );
     sim.start();
   } );
 } );
