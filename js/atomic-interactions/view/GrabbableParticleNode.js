@@ -95,7 +95,7 @@ define( function( require ) {
 
     /**
      * @public
-     * @returns {number|*}
+     * @returns {number}
      */
     getMinX: function() {
       return this.minX;
@@ -111,7 +111,7 @@ define( function( require ) {
 
     /**
      * @public
-     * @returns {number|*}
+     * @returns {number}
      */
     getMaxX: function() {
       return this.maxX;

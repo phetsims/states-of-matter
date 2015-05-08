@@ -1,4 +1,4 @@
-// Copyright (c) 2002 - 2014. University of Colorado Boulder
+// Copyright (c) 2002 - 2015, University of Colorado Boulder
 
 /**
  * Control panel used for selecting atom combinations.
@@ -48,6 +48,7 @@ define( function( require ) {
   var weakString = require( 'string!STATES_OF_MATTER/weak' );
   var strongString = require( 'string!STATES_OF_MATTER/strong' );
 
+//  Constants
   var MAX_WIDTH = 130;
   var SLIDER_TICK_TEXT_MAX_WIDTH = 26;
   var NORMAL_TEXT_FONT_SIZE = 12;

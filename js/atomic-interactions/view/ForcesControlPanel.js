@@ -36,8 +36,8 @@ define( function( require ) {
   var MAX_WIDTH = 130; // max width of text label  in the panel
 
   /**
-   * @param {Property<String>} forcesProperty that determines which forces to display
-   * @param {Property<Boolean>} forceControlPanelExpandProperty -true to use force panel expand,false if not
+   * @param {Property<string>} forcesProperty that determines which forces to display
+   * @param {Property<boolean>} forceControlPanelExpandProperty -true to use force panel expand,false if not
    * @param {Object} [options] for various panel display properties
    * @constructor
    */

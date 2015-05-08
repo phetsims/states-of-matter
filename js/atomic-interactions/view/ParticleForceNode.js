@@ -1,4 +1,4 @@
-// Copyright 2002-2011, University of Colorado
+// Copyright 2002-2015, University of Colorado Boulder
 
 /**
  * This class adds the ability to display force-depicting arrows to its super class.

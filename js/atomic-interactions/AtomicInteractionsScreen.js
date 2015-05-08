@@ -22,7 +22,7 @@ define( function( require ) {
   /**
    * @param {boolean} enableHeterogeneousMolecules
    * @param {string} simTitle
-   * @param {Property<Boolean>} colorsProperty
+   * @param {Property<boolean>} colorsProperty
    * @constructor
    */
   function AtomicInteractionsScreen( enableHeterogeneousMolecules, simTitle, colorsProperty ) {
