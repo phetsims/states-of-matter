@@ -1,4 +1,4 @@
-// Copyright (c) 2002 - 2014. University of Colorado Boulder
+// Copyright  2002 - 2015, University of Colorado Boulder
 
 /**
  * View for the phase changes screen
@@ -68,7 +68,7 @@ define( function( require ) {
   /**
    * @param {MultipleParticleModel} multipleParticleModel - model of the simulation
    * @param {boolean} isInteractionDiagramEnabled
-   * @param {Property<Boolean>} projectorColorsProperty - true to use the projector color scheme, false to use regular color scheme
+   * @param {Property<boolean>} projectorColorsProperty - true to use the projector color scheme, false to use regular color scheme
    * @constructor
    */
   function PhaseChangesScreenView( multipleParticleModel, isInteractionDiagramEnabled, projectorColorsProperty ) {

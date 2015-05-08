@@ -1,4 +1,4 @@
-// Copyright 2002-2015, University of Colorado
+// Copyright 2002-2015, University of Colorado Boulder
 
 /**
  * This class represents a node that looks like a large finger, which can be
@@ -115,6 +115,7 @@ define( function( require ) {
   }
 
   return inherit( Node, PointingHandNode, {
+
     /**
      * @public
      */
@@ -131,6 +132,7 @@ define( function( require ) {
         this.upArrowNode.setVisible( true );
       }
     },
+
     /**
      * @public
      */
@@ -149,6 +151,7 @@ define( function( require ) {
           this.height );
       }
     },
+
     /**
      * @public
      */

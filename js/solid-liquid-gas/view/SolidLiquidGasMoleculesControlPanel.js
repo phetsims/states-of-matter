@@ -1,4 +1,4 @@
-// Copyright (c) 2002 - 2014. University of Colorado Boulder
+// Copyright 2002 - 2015, University of Colorado Boulder
 
 /**
  * View for the panel for selecting the atoms/molecules
@@ -55,7 +55,7 @@ define( function( require ) {
   var OXYGEN_ICON = new Node( { children: [ oxygen1, oxygen2 ] } );
 
   /**
-   * @param {Property<Number>} moleculeTypeProperty that tracks the molecule type selected in the panel
+   * @param {Property<number>} moleculeTypeProperty that tracks the molecule type selected in the panel
    * @param {Object} [options] for various panel display properties
    * @constructor
    */

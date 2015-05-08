@@ -1,4 +1,4 @@
-// Copyright (c) 2002 - 2014. University of Colorado Boulder
+// Copyright  2002 - 2015, University of Colorado Boulder
 
 /**
  * The 'Solid Liquid Gas' screen. Conforms to the contract specified in joist/Screen.
@@ -24,7 +24,7 @@ define( function( require ) {
   var statesScreenIcon = require( 'image!STATES_OF_MATTER/som-states-icon.png' );
 
   /**
-   * @param {Property<Boolean>} projectorColorsProperty - true for projector color scheme (white back ground), false for regular black back ground
+   * @param {Property<boolean>} projectorColorsProperty - true for projector color scheme (white back ground), false for regular black back ground
    * @constructor
    */
   function SolidLiquidGasScreen( projectorColorsProperty ) {

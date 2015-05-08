@@ -1,4 +1,4 @@
-// Copyright (c) 2002 - 2014. University of Colorado Boulder
+// Copyright 2002 - 2015, University of Colorado Boulder
 
 /**
  * This class displays a phase diagram suitable for inclusion on the control
@@ -81,7 +81,7 @@ define( function( require ) {
     Y_ORIGIN_OFFSET - (Y_USABLE_RANGE * 0.1) );
 
   /**
-   * @param {Property<Boolean>} expandedProperty - is to expand the phase diagram
+   * @param {Property<boolean>} expandedProperty - is to expand the phase diagram
    * @param {Object} [options] that can be passed on to the underlying node
    * @constructor
    */

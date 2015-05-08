@@ -25,7 +25,7 @@ define( function( require ) {
 
   /**
    * @param {boolean} isInteractionDiagramEnabled
-   * @param {Property<Boolean>} projectorColorsProperty - true for projector color scheme (white back ground), false for regular black back ground
+   * @param {Property<boolean>} projectorColorsProperty - true for projector color scheme (white back ground), false for regular black back ground
    * @constructor
    */
   function PhaseChangesScreen( isInteractionDiagramEnabled, projectorColorsProperty ) {

@@ -1,4 +1,4 @@
-// Copyright 2002-2015, University of Colorado
+// Copyright 2002-2015, University of Colorado Boulder
 
 /**
  * This class represents a node that displays a dial gauge, which is a
@@ -109,22 +109,24 @@ define( function( require ) {
      * This turns on/off the "elbow" portion of the connector, which allows
      * the pressure gauge to connect to something above or below it.
      * @public
-     * @param elbowEnabled
+     * @param {boolean} elbowEnabled
      */
     setElbowEnabled: function( elbowEnabled ) {
       this.elbowEnabled = elbowEnabled;
       this.updateConnector();
     },
+
     /**
      * @public
      * Set the height of the elbow.  Height is specified with respect to the
      * vertical center of the node.
-     * @param height
+     * @param {number} height
      */
     setElbowHeight: function( height ) {
       this.elbowHeight = height;
       this.updateConnector();
     },
+
     /**
      * @public
      */

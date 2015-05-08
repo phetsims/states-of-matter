@@ -1,4 +1,4 @@
-// Copyright (c) 2002 - 2014. University of Colorado Boulder
+// Copyright 2002 - 2015, University of Colorado Boulder
 
 /**
  * A particle layer rendered on canvas.  This exists for performance reasons.
@@ -17,7 +17,7 @@ define( function( require ) {
    * A particle layer rendered on canvas
    * @param {ObservableArray<Particle>} particles that need to be rendered on the canvas
    * @param {ModelViewTransform2} modelViewTransform to convert between model and view coordinate frames
-   * @param {Property<Boolean>} projectorColorsProperty - true to use apply black stroke to particle, false to particle color stroke
+   * @param {Property<boolean>} projectorColorsProperty - true to use apply black stroke to particle, false to particle color stroke
    * @param {Object} [options] that can be passed on to the underlying node
    * @constructor
    */

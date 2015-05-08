@@ -21,7 +21,7 @@ define( function( require ) {
 
   /**
    *
-   * @param { Property<Boolean> } projectorColorsProperty
+   * @param { Property<boolean> } projectorColorsProperty
    * @constructor
    */
   function GlobalOptionsNode( projectorColorsProperty ) {
