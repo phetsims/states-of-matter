@@ -1,4 +1,4 @@
-// Copyright 2002-2013, University of Colorado Boulder
+// Copyright 2002-2015, University of Colorado Boulder
 
 /**
  * Replacement for Java's Random.nextGaussian()
@@ -17,9 +17,10 @@ define( function( require ) {
   }
 
   return inherit( Object, Random, {
+
     /**
      * @public
-     * @returns {*}
+     * @returns {number}
      */
     nextGaussian: function() {
       if ( this.haveNextNextGaussian ) {

@@ -371,6 +371,7 @@ define( function( require ) {
 
     /**
      * @public
+     * @override
      */
     reset: function() {
       this.initializeModelParameters();
@@ -735,12 +736,10 @@ define( function( require ) {
     /**
      * Initialize the various model components to handle a simulation in which
      * all the molecules are single atoms.
-     *
+     * @private
      * @param {number} moleculeID
      * @param {number} phase
      */
-
-    //@private
     initializeDiatomic: function( moleculeID, phase ) {
       // Verify that a valid molecule ID was provided.
       assert && assert( (moleculeID === StatesOfMatterConstants.DIATOMIC_OXYGEN) );
@@ -789,10 +788,9 @@ define( function( require ) {
     /**
      * Initialize the various model components to handle a simulation in which
      * each molecule consists of three atoms, e.g. water.
-     *
-     * @param moleculeID
-     * @param phase
      * @private
+     * @param {number} moleculeID
+     * @param {number} phase
      */
     initializeTriatomic: function( moleculeID, phase ) {
 
@@ -844,7 +842,7 @@ define( function( require ) {
 
     /***
      * @public
-     * @returns {number|*}
+     * @returns {number}
      */
     getNormalizedContainerWidth: function() {
       return this.normalizedContainerWidth;
@@ -852,7 +850,7 @@ define( function( require ) {
 
     /**
      * @public
-     * @returns {null|*}
+     * @returns {MoleculeForceAndMotionDataSet}
      */
     getMoleculeDataSetRef: function() {
       return this.moleculeDataSet;
@@ -868,7 +866,7 @@ define( function( require ) {
 
     /**
      * @public
-     * @returns {number|*}
+     * @returns {number}
      */
     getNormalizedContainerHeight: function() {
       return this.normalizedContainerHeight;
@@ -876,7 +874,7 @@ define( function( require ) {
 
     /**
      * @public
-     * @returns {number|*}
+     * @returns {number}
      */
     getTemperatureSetPoint: function() {
       return this.temperatureSetPoint;
@@ -884,7 +882,7 @@ define( function( require ) {
 
     /**
      * @public
-     * @returns {number|*}
+     * @returns {number}
      */
     getGravitationalAcceleration: function() {
       return this.gravitationalAcceleration;
@@ -892,7 +890,7 @@ define( function( require ) {
 
     /**
      * @public
-     * @returns {number|*}
+     * @returns {number}
      */
     getMoleculeType: function() {
       return this.currentMolecule;
@@ -900,7 +898,7 @@ define( function( require ) {
 
     /**
      * @public
-     * @param epsilon
+     * @param {number} epsilon
      */
     setEpsilon: function( epsilon ) {
       if ( this.currentMolecule === StatesOfMatterConstants.USER_DEFINED_MOLECULE ) {
@@ -1098,6 +1096,7 @@ define( function( require ) {
      * is dependent on the type of molecule selected.  The values and ranges
      * used in this method were derived from information provided by Paul
      * Beale.
+     * @returns {number}
      */
     getPressureInAtmospheres: function() {
 
@@ -1140,7 +1139,7 @@ define( function( require ) {
      * container.  This can be important for determining whether movement
      * of the top is causing temperature changes.
      * @public
-     * @return boolean - true if particles are close, false if not
+     * @return {boolean} true if particles are close, false if not
      */
     particlesNearTop: function() {
       var moleculesPositions = this.moleculeDataSet.moleculeCenterOfMassPositions;
@@ -1160,7 +1159,7 @@ define( function( require ) {
     /**
      * Return a phase value based on the current temperature.
      * @private
-     * @return
+     * @return{number}
      */
     mapTemperatureToPhase: function() {
       var phase;
@@ -1198,7 +1197,7 @@ define( function( require ) {
 
     /**
      * @private
-     * @param {number}scaledEpsilon
+     * @param {number} scaledEpsilon
      * @returns {number}
      */
     convertScaledEpsilonToEpsilon: function( scaledEpsilon ) {
@@ -1207,7 +1206,7 @@ define( function( require ) {
 
     /**
      * @public
-     * @returns {boolean|*}
+     * @returns {boolean}
      */
     getContainerExploded: function() {
       return this.isExploded;

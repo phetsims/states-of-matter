@@ -21,8 +21,8 @@ define( function( require ) {
   var ATOM_TYPE = AtomType.ARGON;
 
   /**
-   * @param {number} x  position in picometers
-   * @param {number} y  position in picometers
+   * @param {number} x  - atom x position in picometers
+   * @param {number} y  - atom y position in picometers
    * @constructor
    */
   function ArgonAtom( x, y ) {
@@ -32,7 +32,7 @@ define( function( require ) {
   return inherit( StatesOfMatterAtom, ArgonAtom, {
 
       /**
-       * @returns {AtomType}
+       * @returns {string}
        * @public
        */
       getType: function() {

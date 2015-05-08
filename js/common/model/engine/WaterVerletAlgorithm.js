@@ -39,12 +39,18 @@ define( function( require ) {
 
   return inherit( AbstractVerletAlgorithm, WaterVerletAlgorithm, {
 
-    // @public
+    /**
+     * @public
+     * @returns {number}
+     */
     getPressure: function() {
       return this.pressure;
     },
 
-    // @public
+    /**
+     * @public
+     * @returns {number}
+     */
     getTemperature: function() {
       return this.temperature;
     },

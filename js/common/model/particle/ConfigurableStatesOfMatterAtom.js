@@ -32,7 +32,7 @@ define( function( require ) {
   return inherit( StatesOfMatterAtom, ConfigurableStatesOfMatterAtom, {
 
       /**
-       * @returns {AtomType}
+       * @returns {string}
        * @public
        */
       getType: function() {
@@ -40,7 +40,7 @@ define( function( require ) {
       },
 
       /**
-       * @param {number} radius in picometers
+       * @param {number} radius - atom radius in picometers
        * @public
        */
       setRadius: function( radius ) {

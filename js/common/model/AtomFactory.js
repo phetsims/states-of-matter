@@ -21,7 +21,7 @@ define( function( require ) {
     /**
      * @public
      * @param {string} atomType
-     * @returns {*}
+     * @returns {StatesOfMatterAtom}
      */
     createAtom: function( atomType ) {
       var atom = null;

@@ -18,7 +18,7 @@ define( function( require ) {
   var WaterAtomPositionUpdater = require( 'STATES_OF_MATTER/common/model/engine/WaterAtomPositionUpdater' );
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
 
-  //private
+  // @private
   var MIN_INITIAL_DIAMETER_DISTANCE = 1.4;
 
   // The following constants can be adjusted to make the the corresponding

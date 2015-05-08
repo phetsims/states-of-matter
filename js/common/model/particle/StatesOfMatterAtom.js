@@ -74,7 +74,7 @@ define( function( require ) {
 
     /**
      * @public
-     * @returns {Vector2.y|*}
+     * @returns {number}
      */
     getVy: function() {
       return this.velocity.y;
@@ -87,6 +87,10 @@ define( function( require ) {
       this.velocity.setY( vy );
     },
 
+    /**
+     * @public
+     * @returns {number}
+     */
     getVx: function() {
       return this.velocity.x;
     },
@@ -99,10 +103,18 @@ define( function( require ) {
       this.velocity.setX( vx );
     },
 
+    /**
+     * @public
+     * @returns {number}
+     */
     getAx: function() {
       return this.accel.x;
     },
 
+    /**
+     * @public
+     * @returns {number}
+     */
     getAy: function() {
       return this.accel.y;
     },
@@ -114,6 +126,7 @@ define( function( require ) {
     setAx: function( ax ) {
       this.accel.setX( ax );
     },
+
     /**
      * @public
      * @param {number} ay - atom acceleration in y-direction
@@ -124,32 +137,36 @@ define( function( require ) {
     },
     /**
      * @public
-     * @returns {*}
+     * @returns {number}
      */
     getX: function() {
       return this.positionProperty.value.x;
     },
+
     /**
      * @public
-     * @returns {.positionProperty.value.y|*}
+     * @returns {number}
      */
     getY: function() {
       return this.positionProperty.value.y;
     },
+
     /**
      * @public
-     * @returns {Object.mass|*}
+     * @returns {number}
      */
     getMass: function() {
       return this.mass;
     },
+
     /**
      * @public
-     * @returns {number|*}
+     * @returns {number}
      */
     getRadius: function() {
       return this.radius;
     },
+
     /**
      * @public
      * @param {number} radius - radius of the atom
@@ -160,21 +177,23 @@ define( function( require ) {
 
     /**
      * @public
-     * @returns {*}
+     * @returns {Vector2}
      */
     getPositionReference: function() {
       return this.positionProperty.value;
     },
+
     /**
      * @public
-     * @returns {Vector2|*}
+     * @returns {Vector2}
      */
     getVelocity: function() {
       return this.velocity;
     },
+
     /**
      * @public
-     * @returns {Vector2|*}
+     * @returns {Vector2}
      */
     getAccel: function() {
       return this.accel;

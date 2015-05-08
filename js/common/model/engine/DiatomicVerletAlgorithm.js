@@ -33,16 +33,16 @@ define( function( require ) {
   return inherit( AbstractVerletAlgorithm, DiatomicVerletAlgorithm, {
 
     /**
-     * @returns {pressure|*|number|PropertySet.pressure}
      * @public
+     * @returns {number}
      */
     getPressure: function() {
       return this.pressure;
     },
 
     /**
-     * @returns {number|*|AbstractVerletAlgorithm.temperature}
      * @public
+     * @returns {number}
      */
     getTemperature: function() {
       return this.temperature;

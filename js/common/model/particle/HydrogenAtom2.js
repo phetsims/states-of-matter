@@ -35,9 +35,10 @@ define( function( require ) {
   }
 
   return inherit( StatesOfMatterAtom, HydrogenAtom2, {
+
       /**
        * @public
-       * @returns {exports.HYDROGEN|*}
+       * @returns {string}
        */
       getType: function() {
         return ATOM_TYPE;

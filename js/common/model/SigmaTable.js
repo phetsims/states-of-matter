@@ -21,9 +21,13 @@ define( function( require ) {
 
   // static object (no constructor)
   return ( {
+
     /**
-     * @public
      * Get the value of sigma, in picometers, for the atom types specified.
+     * @public
+     * @param {string} atomType1
+     * @param {string} atomType2
+     * @returns {*}
      */
     getSigma: function( atomType1, atomType2 ) {
       if ( atomType1 === atomType2 ) {

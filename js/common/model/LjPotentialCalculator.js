@@ -36,7 +36,7 @@ define( function( require ) {
 
     /**
      * @public
-     * @returns {number|*}
+     * @returns {number}
      */
     getSigma: function() {
       return this.sigma;
@@ -52,7 +52,7 @@ define( function( require ) {
 
     /**
      * @public
-     * @returns {number|*}
+     * @returns {number}
      */
     getEpsilon: function() {
       return this.epsilon;
@@ -70,7 +70,7 @@ define( function( require ) {
     /**
      * Calculate the Lennard-Jones potential for the specified distance.
      * @public
-     * @param distance - Distance between interacting molecules in picometers.
+     * @param {number} distance - Distance between interacting molecules in picometers.
      * @returns {number} Strength of the potential in newton-meters (N*m).
      */
     calculateLjPotential: function( distance ) {
@@ -82,7 +82,7 @@ define( function( require ) {
      * Calculate only the repulsive component of the Lennard-Jones force for
      * the specified distance.
      * @public
-     * @param distance - Distance between interacting molecules in picometers.
+     * @param {number} distance - Distance between interacting molecules in picometers.
      * @return {number} Force in newtons.
      */
     calculateRepulsiveLjForce: function( distance ) {
@@ -93,7 +93,7 @@ define( function( require ) {
      * Calculate only the attractive component of the Lennard-Jones force for
      * the specified distance.
      * @public
-     * @param distance - Distance between interacting molecules in picometers.
+     * @param {number} distance - Distance between interacting molecules in picometers.
      * @return {number} - Force in newtons.
      */
     calculateAttractiveLjForce: function( distance ) {
@@ -117,7 +117,7 @@ define( function( require ) {
      * This calculation is performed by calculating the potential at the
      * given point and subtracting the potential at the minimum point.
      * @public
-     * @param distance
+     * @param {number} distance
      * @returns {number}
      */
     calculatePotentialEnergy: function( distance ) {

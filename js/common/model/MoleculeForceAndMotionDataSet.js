@@ -1,4 +1,4 @@
-// Copyright 2002-2013, University of Colorado Boulder
+// Copyright 2002-2015, University of Colorado Boulder
 
 /**
  * This class represents the bundle of data that represents the position,
@@ -79,7 +79,7 @@ define( function( require ) {
 
     /**
      * @public
-     * @returns {number|*}
+     * @returns {number}
      */
     getMoleculeRotationalInertia: function() {
       return this.moleculeRotationalInertia;
@@ -96,6 +96,7 @@ define( function( require ) {
     /**
      * Returns a value indicating how many more molecules can be added.
      * @public
+     * @returns {number}
      */
     getNumberOfRemainingSlots: function() {
       return ( ( StatesOfMatterConstants.MAX_NUM_ATOMS / this.atomsPerMolecule ) -
@@ -104,7 +105,7 @@ define( function( require ) {
 
     /**
      * @public
-     * @returns {number|*}
+     * @returns {number}
      */
     getAtomsPerMolecule: function() {
       return this.atomsPerMolecule;
@@ -120,7 +121,7 @@ define( function( require ) {
 
     /**
      * @public
-     * @returns {number|*}
+     * @returns {number|}
      */
     getNumberOfAtoms: function() {
       return this.numberOfAtoms;
@@ -128,7 +129,7 @@ define( function( require ) {
 
     /**
      * @public
-     * @returns {*}
+     * @returns {number}
      */
     getNumberOfSafeMolecules: function() {
       return this.numberOfSafeMolecules;
@@ -144,7 +145,7 @@ define( function( require ) {
 
     /**
      * @public
-     * @returns {IsokineticThermostat.moleculeVelocities|*}
+     * @returns {Array}
      */
     getMoleculeVelocities: function() {
       return this.moleculeVelocities;
@@ -168,7 +169,7 @@ define( function( require ) {
 
     /**
      * @public
-     * @returns {*}
+     * @returns {Array}
      */
     getMoleculeRotationAngles: function() {
       return this.moleculeRotationAngles;
@@ -176,7 +177,7 @@ define( function( require ) {
 
     /**
      * @public
-     * @param rotationAngles
+     * @param {[]}rotationAngles
      */
     setMoleculeRotationAngles: function( rotationAngles ) {
       this.moleculeRotationAngles = rotationAngles;
@@ -184,7 +185,7 @@ define( function( require ) {
 
     /**
      * @public
-     * @returns {IsokineticThermostat.moleculeRotationRates|*}
+     * @returns {Array}
      */
     getMoleculeRotationRates: function() {
       return this.moleculeRotationRates;
@@ -208,7 +209,7 @@ define( function( require ) {
 
     /**
      * @public
-     * @param numSafeMolecules
+     * @param {number} numSafeMolecules
      */
     setNumberOfSafeMolecules: function( numSafeMolecules ) {
       this.numberOfSafeMolecules = numSafeMolecules;

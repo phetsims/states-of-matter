@@ -34,7 +34,7 @@ define( function( require ) {
 
       /**
        * @public
-       * @returns {exports.NEON|*}
+       * @returns {string}
        */
       getType: function() {
         return ATOM_TYPE;

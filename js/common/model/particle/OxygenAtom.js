@@ -21,8 +21,8 @@ define( function( require ) {
   var ATOM_TYPE = AtomType.OXYGEN;
 
   /**
-   * @param {number} x    position in picometers
-   * @param {number} y    position in picometers
+   * @param {number} x   - atom x position in picometers
+   * @param {number} y   - atom y  position in picometers
    * @constructor
    */
   function OxygenAtom( x, y ) {
@@ -33,7 +33,7 @@ define( function( require ) {
 
       /**
        * @public
-       * @returns {exports.OXYGEN|*}
+       * @returns {string}
        */
       getType: function() {
         return ATOM_TYPE;

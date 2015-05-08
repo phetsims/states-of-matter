@@ -31,7 +31,7 @@ define( function( require ) {
      * @public
      * @param {string} atomType1
      * @param {string} atomType2
-     * @returns {*}
+     * @returns {number}
      */
     getInteractionPotential: function( atomType1, atomType2 ) {
       if ( atomType1 === atomType2 ) {
