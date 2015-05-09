@@ -24,11 +24,11 @@ define( function( require ) {
   var phaseChangesScreenIcon = require( 'image!STATES_OF_MATTER/som-phase-changes-icon.png' );
 
   /**
-   * @param {boolean} isInteractionDiagramEnabled
    * @param {Property<boolean>} projectorColorsProperty - true for projector color scheme (white back ground), false for regular black back ground
+   * @param {boolean} isInteractionDiagramEnabled
    * @constructor
    */
-  function PhaseChangesScreen( isInteractionDiagramEnabled, projectorColorsProperty ) {
+  function PhaseChangesScreen( projectorColorsProperty, isInteractionDiagramEnabled ) {
     Screen.call( this, phaseChangesString, new Image( phaseChangesScreenIcon ),
       function() { return new MultipleParticleModel(); },
       function( model ) { return new PhaseChangesScreenView( model, isInteractionDiagramEnabled, projectorColorsProperty ); },

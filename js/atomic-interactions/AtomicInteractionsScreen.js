@@ -20,12 +20,13 @@ define( function( require ) {
   var atomicInteractionScreenIcon = require( 'image!STATES_OF_MATTER/som-atomic-interactions-icon.png' );
 
   /**
+   *
+   * @param {Property<boolean>} colorsProperty
    * @param {boolean} enableHeterogeneousMolecules
    * @param {string} simTitle
-   * @param {Property<boolean>} colorsProperty
    * @constructor
    */
-  function AtomicInteractionsScreen( enableHeterogeneousMolecules, simTitle, colorsProperty ) {
+  function AtomicInteractionsScreen( colorsProperty, enableHeterogeneousMolecules, simTitle ) {
 
     //If this is a single-screen sim, then no icon is necessary.  If there are multiple screens, then the icon must be
     // provided here.

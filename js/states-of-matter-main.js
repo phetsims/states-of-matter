@@ -20,7 +20,9 @@ define( function( require ) {
   // strings
   var simTitle = require( 'string!STATES_OF_MATTER/states-of-matter.name' );
   var interactionString = require( 'string!STATES_OF_MATTER/interaction' );
+
   var colorsProperty = new Property( false );
+
   var simOptions = {
     credits: {
       leadDesign: 'Paul Beale, Sarah McKagan, Emily Moore, Noah Podolefsky, Amy Rouinfar',
@@ -32,11 +34,10 @@ define( function( require ) {
   };
 
   SimLauncher.launch( function() {
-    var isHeterogeneousMoleculeControlPanel = false;
     var sim = new Sim( simTitle, [
         new SolidLiquidGasScreen( colorsProperty ),
-        new PhaseChangesScreen( true, colorsProperty ),
-        new AtomicInteractionsScreen( isHeterogeneousMoleculeControlPanel, interactionString, colorsProperty )
+      new PhaseChangesScreen( colorsProperty, true ),
+      new AtomicInteractionsScreen( colorsProperty, false, interactionString )
       ], simOptions );
     sim.start();
   } );
