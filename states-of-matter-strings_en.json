@@ -176,7 +176,7 @@
   "customAttraction": {
     "value": "Custom Attraction"
   },
-  "projectorColors": {
-    "value": "Projector Colors"
+  "projectorMode": {
+    "value": "Projector Mode"
   }
 }

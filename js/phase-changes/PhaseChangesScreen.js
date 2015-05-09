@@ -24,19 +24,19 @@ define( function( require ) {
   var phaseChangesScreenIcon = require( 'image!STATES_OF_MATTER/som-phase-changes-icon.png' );
 
   /**
-   * @param {Property<boolean>} projectorColorsProperty - true for projector color scheme (white back ground), false for regular black back ground
+   * @param {Property<boolean>} projectorModeProperty - true for projector color scheme (white back ground), false for regular black back ground
    * @param {boolean} isInteractionDiagramEnabled
    * @constructor
    */
-  function PhaseChangesScreen( projectorColorsProperty, isInteractionDiagramEnabled ) {
+  function PhaseChangesScreen( projectorModeProperty, isInteractionDiagramEnabled ) {
     Screen.call( this, phaseChangesString, new Image( phaseChangesScreenIcon ),
       function() { return new MultipleParticleModel(); },
-      function( model ) { return new PhaseChangesScreenView( model, isInteractionDiagramEnabled, projectorColorsProperty ); },
+      function( model ) { return new PhaseChangesScreenView( model, isInteractionDiagramEnabled, projectorModeProperty ); },
       { backgroundColor: 'black' }
     );
     var screen = this;
-    projectorColorsProperty.link( function( color ) {
-      if ( color ) {
+    projectorModeProperty.link( function( projectorMode ) {
+      if ( projectorMode ) {
         AtomicInteractionColors.applyProfile( 'projector' );
       }
       else {

@@ -24,20 +24,20 @@ define( function( require ) {
   var statesScreenIcon = require( 'image!STATES_OF_MATTER/som-states-icon.png' );
 
   /**
-   * @param {Property<boolean>} projectorColorsProperty - true for projector color scheme (white back ground), false for regular black back ground
+   * @param {Property<boolean>} projectorModeProperty - true for projector color scheme (white back ground), false for regular black back ground
    * @constructor
    */
-  function SolidLiquidGasScreen( projectorColorsProperty ) {
+  function SolidLiquidGasScreen( projectorModeProperty ) {
     Screen.call( this,
       statesString,
       new Image( statesScreenIcon ),
       function() { return new MultipleParticleModel(); },
-      function( model ) { return new SolidLiquidGasScreenView( model, projectorColorsProperty ); },
+      function( model ) { return new SolidLiquidGasScreenView( model, projectorModeProperty ); },
       { backgroundColor: 'black' }
     );
     var screen = this;
-    projectorColorsProperty.link( function( color ) {
-      if ( color ) {
+    projectorModeProperty.link( function( projectorMode ) {
+      if ( projectorMode ) {
         AtomicInteractionColors.applyProfile( 'projector' );
       }
       else {

@@ -43,10 +43,10 @@ define( function( require ) {
   /**
    *
    * @param {MultipleParticleModel} multipleParticleModel - model of the simulation
-   * @param {Property<boolean>} projectorColorsProperty - true for projector color scheme (white back ground), false for regular black back ground
+   * @param {Property<boolean>} projectorModeProperty - true for projector color scheme (white back ground), false for regular black back ground
    * @constructor
    */
-  function SolidLiquidGasScreenView( multipleParticleModel, projectorColorsProperty ) {
+  function SolidLiquidGasScreenView( multipleParticleModel, projectorModeProperty ) {
 
     ScreenView.call( this, StatesOfMatterConstants.SCREEN_VIEW_OPTIONS );
     var mvtScale = StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / StatesOfMatterConstants.CONTAINER_BOUNDS.width;
@@ -73,7 +73,7 @@ define( function( require ) {
     this.addChild( particleContainerNode.openNode );
 
     // add particle Canvas layer
-    this.particlesLayer = new ParticleCanvasNode( multipleParticleModel.particles, modelViewTransform, projectorColorsProperty, {
+    this.particlesLayer = new ParticleCanvasNode( multipleParticleModel.particles, modelViewTransform, projectorModeProperty, {
       centerX: stoveNode.centerX + particlesLayerXOffset,
       bottom:  stoveNode.top + particlesLayerYOffset,
       canvasBounds: new Bounds2( -100, -particleCanvasLayerBoundLimit,

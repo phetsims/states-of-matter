@@ -17,18 +17,18 @@ define( function( require ) {
   var OptionsDialog = require( 'JOIST/OptionsDialog' );
 
   // strings
-  var projectorColorsString = require( 'string!STATES_OF_MATTER/projectorColors' );
+  var projectorModeString = require( 'string!STATES_OF_MATTER/projectorMode' );
 
   /**
    *
-   * @param { Property<boolean> } projectorColorsProperty
+   * @param { Property<boolean> } projectorModeProperty
    * @constructor
    */
-  function GlobalOptionsNode( projectorColorsProperty ) {
+  function GlobalOptionsNode( projectorModeProperty ) {
     var children = [];
 
-    children.push( new CheckBox( new Text( projectorColorsString, { font: OptionsDialog.DEFAULT_FONT } ),
-      projectorColorsProperty, {} ) );
+    children.push( new CheckBox( new Text( projectorModeString, { font: OptionsDialog.DEFAULT_FONT } ),
+      projectorModeProperty, {} ) );
 
     VBox.call( this, _.extend( {
       children: children,

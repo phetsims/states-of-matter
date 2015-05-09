@@ -21,12 +21,12 @@ define( function( require ) {
 
   /**
    *
-   * @param {Property<boolean>} colorsProperty
+   * @param {Property<boolean>} projectorModeProperty
    * @param {boolean} enableHeterogeneousMolecules
    * @param {string} simTitle
    * @constructor
    */
-  function AtomicInteractionsScreen( colorsProperty, enableHeterogeneousMolecules, simTitle ) {
+  function AtomicInteractionsScreen( projectorModeProperty, enableHeterogeneousMolecules, simTitle ) {
 
     //If this is a single-screen sim, then no icon is necessary.  If there are multiple screens, then the icon must be
     // provided here.
@@ -37,8 +37,8 @@ define( function( require ) {
       { backgroundColor: AtomicInteractionColors.background.toCSS() }
     );
 
-    colorsProperty.link( function( color ) {
-      if ( color ) {
+    projectorModeProperty.link( function( projectorMode ) {
+      if ( projectorMode ) {
         AtomicInteractionColors.applyProfile( 'projector' );
       }
       else {

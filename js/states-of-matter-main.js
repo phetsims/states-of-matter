@@ -21,7 +21,7 @@ define( function( require ) {
   var simTitle = require( 'string!STATES_OF_MATTER/states-of-matter.name' );
   var interactionString = require( 'string!STATES_OF_MATTER/interaction' );
 
-  var colorsProperty = new Property( false );
+  var projectorModeProperty = new Property( false );
 
   var simOptions = {
     credits: {
@@ -30,14 +30,14 @@ define( function( require ) {
       team: 'Wendy Adams, Jack Barbera, Kelly Lancaster, Kathy Perkins',
       qualityAssurance: 'Steele Dalton',
       thanks: 'Thanks to Actual Concepts for working with the PhET development team\nto convert this simulation to HTML5.'
-    }, optionsNode: new GlobalOptionsNode( colorsProperty )
+    }, optionsNode: new GlobalOptionsNode( projectorModeProperty )
   };
 
   SimLauncher.launch( function() {
     var sim = new Sim( simTitle, [
-        new SolidLiquidGasScreen( colorsProperty ),
-      new PhaseChangesScreen( colorsProperty, true ),
-      new AtomicInteractionsScreen( colorsProperty, false, interactionString )
+      new SolidLiquidGasScreen( projectorModeProperty ),
+      new PhaseChangesScreen( projectorModeProperty, true ),
+      new AtomicInteractionsScreen( projectorModeProperty, false, interactionString )
       ], simOptions );
     sim.start();
   } );

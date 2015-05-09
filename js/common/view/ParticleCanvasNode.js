@@ -17,11 +17,11 @@ define( function( require ) {
    * A particle layer rendered on canvas
    * @param {ObservableArray<Particle>} particles that need to be rendered on the canvas
    * @param {ModelViewTransform2} modelViewTransform to convert between model and view coordinate frames
-   * @param {Property<boolean>} projectorColorsProperty - true to use apply black stroke to particle, false to particle color stroke
+   * @param {Property<boolean>} projectorModeProperty - true to use apply black stroke to particle, false to particle color stroke
    * @param {Object} [options] that can be passed on to the underlying node
    * @constructor
    */
-  function ParticleCanvasNode( particles, modelViewTransform, projectorColorsProperty, options ) {
+  function ParticleCanvasNode( particles, modelViewTransform, projectorModeProperty, options ) {
 
     this.particles = particles;
     this.modelViewTransform = modelViewTransform;
@@ -29,8 +29,8 @@ define( function( require ) {
     this.invalidatePaint();
 
     var particleCanvasNode = this;
-    projectorColorsProperty.link( function( projectorColors ) {
-      particleCanvasNode.projectorColors = projectorColors;
+    projectorModeProperty.link( function( projectorMode ) {
+      particleCanvasNode.projectorMode = projectorMode;
     } );
     this.mutate( options );
   }
@@ -53,7 +53,7 @@ define( function( require ) {
         particle = this.particles.get( i );
         if ( particle instanceof HydrogenAtom ) {
           context.fillStyle = particle.color;
-          context.strokeStyle = this.projectorColors ? '#000000' : particle.color;
+          context.strokeStyle = this.projectorMode ? '#000000' : particle.color;
           context.lineWidth = 0.4;
           context.beginPath();
           context.arc( this.modelViewTransform.modelToViewX( particle.positionProperty.get().x ),
@@ -69,7 +69,7 @@ define( function( require ) {
         particle = this.particles.get( i );
         if ( !( particle instanceof HydrogenAtom ) ) {
           context.fillStyle = particle.color;
-          context.strokeStyle = this.projectorColors ? '#000000' : particle.color;
+          context.strokeStyle = this.projectorMode ? '#000000' : particle.color;
           context.lineWidth = 0.4;
           context.beginPath();
           context.arc( this.modelViewTransform.modelToViewX( particle.positionProperty.get().x ),
