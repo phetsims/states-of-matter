@@ -197,8 +197,9 @@ define( function( require ) {
     },
 
     /**
-     * @public
      * Get the current temperature in degrees Kelvin.
+     * @public
+     * @returns {number}
      */
     getTemperatureInKelvin: function() {
       return this.convertInternalTemperatureToKelvin();
@@ -208,7 +209,7 @@ define( function( require ) {
      * Get the pressure value which is being calculated by the model and is
      * not adjusted to represent any "real" units (such as atmospheres).
      * @public
-     * @return
+     * @return {number}
      */
     getModelPressure: function() {
       return this.moleculeForceAndMotionCalculator.pressure;
@@ -305,8 +306,9 @@ define( function( require ) {
     },
 
     /**
-     * @public
      * Get the sigma value, which is one of the two parameters that describes the Lennard-Jones potential.
+     * @public
+     * @returns {number}
      */
     getSigma: function() {
       var sigma;
@@ -339,6 +341,8 @@ define( function( require ) {
 
     /**
      * Get the epsilon value, which is one of the two parameters that describes the Lennard-Jones potential.
+     * @public
+     * @returns {number}
      */
     getEpsilon: function() {
       var epsilon;

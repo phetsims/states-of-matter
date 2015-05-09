@@ -173,10 +173,12 @@ define( function( require ) {
   return inherit( InteractionPotentialDiagramNode, EpsilonControlInteractionPotentialDiagram, {
 
     /**
-     * @private
+     *
      * This is an override of the method in the base class that draws the
      * curve on the graph, and this override draws the controls that allow
      * the user to interact with the graph.
+     * @private
+     * @override
      */
     drawPotentialCurve: function() {
       // The bulk of the drawing is done by the base class.

@@ -68,10 +68,10 @@ define( function( require ) {
   /**
    * @param {MultipleParticleModel} multipleParticleModel - model of the simulation
    * @param {boolean} isInteractionDiagramEnabled
-   * @param {Property<boolean>} projectorColorsProperty - true to use the projector color scheme, false to use regular color scheme
+   * @param {Property<boolean>} projectorModeProperty - true to use the projector color scheme, false to use regular color scheme
    * @constructor
    */
-  function PhaseChangesScreenView( multipleParticleModel, isInteractionDiagramEnabled, projectorColorsProperty ) {
+  function PhaseChangesScreenView( multipleParticleModel, isInteractionDiagramEnabled, projectorModeProperty ) {
     var phaseChangesScreenView = this;
 
     ScreenView.call( this, StatesOfMatterConstants.SCREEN_VIEW_OPTIONS );
@@ -101,7 +101,7 @@ define( function( require ) {
     this.addChild( particleContainerNode.openNode );
 
     // add particle canvas layer for particle rendering
-    this.particlesLayer = new ParticleCanvasNode( multipleParticleModel.particles, modelViewTransform, projectorColorsProperty, {
+    this.particlesLayer = new ParticleCanvasNode( multipleParticleModel.particles, modelViewTransform, projectorModeProperty, {
       centerX: stoveNode.centerX + PARTICLE_LAYER_X_OFFSET,
       bottom:  stoveNode.top + PARTICLE_LAYER_Y_OFFSET,
       canvasBounds: new Bounds2( -100, -PARTICLE_CANVAS_LAYER_BOUND_LIMIT,

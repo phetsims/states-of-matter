@@ -18,7 +18,6 @@ define( function( require ) {
   // constants
   var RADIUS = 162;   // In picometers.
   var MASS = 15.9994; // In atomic mass units.
-  var ATOM_TYPE = AtomType.OXYGEN;
 
   /**
    * @param {number} x   - atom x position in picometers
@@ -36,7 +35,7 @@ define( function( require ) {
        * @returns {string}
        */
       getType: function() {
-        return ATOM_TYPE;
+        return AtomType.OXYGEN;
       }
     },
 

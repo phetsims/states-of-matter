@@ -19,7 +19,6 @@ define( function( require ) {
   var RADIUS = 154;   // In picometers.
   var MASS = 20.1797; // In atomic mass units.
   var EPSILON = 32.8; // epsilon/k-Boltzmann is in Kelvin.
-  var ATOM_TYPE = AtomType.NEON;
 
   /**
    * @param {number} x  position in picometers
@@ -37,7 +36,7 @@ define( function( require ) {
        * @returns {string}
        */
       getType: function() {
-        return ATOM_TYPE;
+        return  AtomType.NEON;
       }
     },
 

@@ -35,8 +35,8 @@ define( function( require ) {
   var MAX_WIDTH = 150;
 
   /**
-   * @param {Property<Number>} heatingCoolingAmountProperty
-   * @param {Property<Number>} stateProperty
+   * @param {Property<number>} heatingCoolingAmountProperty
+   * @param {Property<number>} stateProperty
    * @param {Object} [options] that can be passed on to the underlying node
    * @constructor
    */

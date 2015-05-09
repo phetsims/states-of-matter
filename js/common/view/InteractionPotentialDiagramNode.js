@@ -234,7 +234,7 @@ define( function( require ) {
 
     /**
      * @public
-     * @returns {number|*}
+     * @returns {number}
      */
     getGraphHeight: function() {
       return this.graphHeight;
@@ -242,7 +242,7 @@ define( function( require ) {
 
     /**
      * @public
-     * @returns {number|*}
+     * @returns {number}
      */
     getGraphWidth: function() {
       return this.graphWidth;
@@ -250,7 +250,7 @@ define( function( require ) {
 
     /**
      * @public
-     * @returns {Vector2|*}
+     * @returns {Vector2}
      */
     getZeroCrossingPoint: function() {
       return this.zeroCrossingPoint;
@@ -258,7 +258,7 @@ define( function( require ) {
 
     /**
      * @public
-     * @returns {Vector2|*}
+     * @returns {Vector2}
      */
     getGraphMin: function() {
       return this.graphMin;
@@ -326,7 +326,7 @@ define( function( require ) {
      * Calculate the Lennard-Jones potential for the given distance.
      * @private
      * @param {number} radius
-     * @return
+     * @return {number}
      */
     calculateLennardJonesPotential: function( radius ) {
       return (  this.ljPotentialCalculator.calculateLjPotential( radius ));

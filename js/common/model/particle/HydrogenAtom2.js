@@ -23,7 +23,6 @@ define( function( require ) {
   var RADIUS = 120;
 // In atomic mass units.
   var MASS = 1.00794;
-  var ATOM_TYPE = AtomType.HYDROGEN;
 
   /**
    * @param {number} xPos  position in picometers
@@ -41,7 +40,7 @@ define( function( require ) {
        * @returns {string}
        */
       getType: function() {
-        return ATOM_TYPE;
+        return AtomType.HYDROGEN;
       }
     },
 //statics

@@ -227,6 +227,10 @@ define( function( require ) {
       console.log( "Warning: Setting epsilon is not implemented for this class, request ignored." );
     },
 
+    /**
+     * @public
+     * @returns {number}
+     */
     getScaledEpsilon: function() {
       // In the base class this just issues a warning and returns 0.
       console.log( "Warning: Getting scaled epsilon is not implemented for this class, returning zero." );
