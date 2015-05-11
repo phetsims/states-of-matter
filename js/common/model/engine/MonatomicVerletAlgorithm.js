@@ -131,7 +131,8 @@ define( function( require ) {
       }
 
       var numberOfSafeAtoms = moleculeDataSet.numberOfSafeMolecules;
-
+      // Calculate the forces created through interactions with other
+      // particles.
       for ( i = 0; i < numberOfSafeAtoms; i++ ) {
         for ( var j = i + 1; j < numberOfSafeAtoms; j++ ) {
 

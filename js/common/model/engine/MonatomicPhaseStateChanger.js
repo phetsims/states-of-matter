@@ -1,4 +1,4 @@
-// Copyright 2002-2013, University of Colorado Boulder
+// Copyright 2002-2015, University of Colorado Boulder
 
 /**
  * This class is used to change the phase state (i.e. solid, liquid, or gas) for a set of atoms.
@@ -92,6 +92,7 @@ define( function( require ) {
         for ( var j = 0; ( j < atomsPerLayer ) && ( particlesPlaced < numberOfAtoms ); j++ ) {
           xPos = startingPosX + ( j * MIN_INITIAL_INTER_PARTICLE_DISTANCE );
           if ( i % 2 !== 0 ) {
+
             // Every other row is shifted a bit to create hexagonal pattern.
             xPos += MIN_INITIAL_INTER_PARTICLE_DISTANCE / 2;
           }
@@ -121,6 +122,7 @@ define( function( require ) {
       var moleculeCenterOfMassPositions = this.multipleParticleModel.moleculeDataSet.moleculeCenterOfMassPositions;
       var moleculeVelocities = this.multipleParticleModel.moleculeDataSet.moleculeVelocities;
       for ( var i = 0; i < numberOfAtoms; i++ ) {
+
         // Assign each particle an initial velocity.
         moleculeVelocities[ i ].setXY( temperatureSqrt * this.random.nextGaussian(),
           temperatureSqrt * this.random.nextGaussian() );

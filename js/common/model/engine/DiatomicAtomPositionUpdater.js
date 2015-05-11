@@ -1,6 +1,7 @@
 // Copyright 2002-2015, University of Colorado Boulder
 
 /**
+ *
  * This class updates the positions of atoms in a diatomic data set (i.e.
  * where each molecule is made up of two molecules).  IMPORTANT: This class
  * assumes that the two atoms that comprise each molecule are the same, e.g.
@@ -23,8 +24,10 @@ define( function( require ) {
      * @param {MoleculeForceAndMotionDataSet} moleculeDataSet
      */
     updateAtomPositions: function( moleculeDataSet ) {
+
       // Make sure this is not being used on an inappropriate data set.
       assert && assert( moleculeDataSet.atomsPerMolecule === 2 );
+
       // Get direct references to the data in the data set.
       var atomPositions = moleculeDataSet.atomPositions;
       var moleculeCenterOfMassPositions = moleculeDataSet.moleculeCenterOfMassPositions;

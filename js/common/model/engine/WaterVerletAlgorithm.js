@@ -63,7 +63,8 @@ define( function( require ) {
      */
     updateForcesAndMotion: function() {
 
-      // Get references to all data needed for the algorithm.
+      // Obtain references to the model data and parameters so that we can
+      // perform fast manipulations.
       var moleculeDataSet = this.multipleParticleModel.getMoleculeDataSetRef();
       var numberOfMolecules = moleculeDataSet.getNumberOfMolecules();
       var moleculeCenterOfMassPositions = moleculeDataSet.getMoleculeCenterOfMassPositions();
@@ -87,27 +88,36 @@ define( function( require ) {
       // Verify that this is being used on an appropriate data set.
       assert && assert( moleculeDataSet.getAtomsPerMolecule() === 3 );
 
-      // vars for calculating the coulomb interactions.
+      // Set up the values for the charges that will be used when
+      // calculating the coloumb interactions.
       var q0;
       var temperatureFactor;
+
+      // A scaling factor is added here for the repulsive
+      // portion of the Lennard-Jones force.  The idea is that
+      // the force goes up at lower temperatures in order to
+      // make the ice appear more spacious.  This is not real
+      // physics, it is "hollywooding" in order to get the
+      // crystalline behavior we need for ice.
       var repulsiveForceScalingFactor;
       var r2inv;
       var r6inv;
       var forceScalar;
 
-      // Calculate the force and torque due to inter-particle interactions.
       if ( temperatureSetPoint < WATER_FULLY_FROZEN_TEMPERATURE ) {
 
+        // Use stronger electrostatic forces in order to create more of
         // a crystal structure.
         q0 = WATER_FULLY_FROZEN_ELECTROSTATIC_FORCE;
       }
       else if ( temperatureSetPoint > WATER_FULLY_MELTED_TEMPERATURE ) {
 
+        // Use weaker electrostatic forces in order to create more of an
         // appearance of liquid.
         q0 = WATER_FULLY_MELTED_ELECTROSTATIC_FORCE;
       }
       else {
-
+        // We are somewhere in between the temperature for being fully
         // melted or frozen, so scale accordingly.
         temperatureFactor = ( temperatureSetPoint - WATER_FULLY_FROZEN_TEMPERATURE ) /
                             ( WATER_FULLY_MELTED_TEMPERATURE - WATER_FULLY_FROZEN_TEMPERATURE );
@@ -129,6 +139,7 @@ define( function( require ) {
       }
       this.positionUpdater.updateAtomPositions( moleculeDataSet );
 
+      // Calculate the force from the walls.  This force is assumed to act
       // on the center of mass, so there is no torque.
       for ( i = 0; i < numberOfMolecules; i++ ) {
 
@@ -140,12 +151,14 @@ define( function( require ) {
         this.calculateWallForce( moleculeCenterOfMassPositions[ i ], normalizedContainerWidth, normalizedContainerHeight,
           nextMoleculeForces[ i ] );
 
-        // exerted on the walls of the container.
+        // Accumulate this force value as part of the pressure being
+        // exerted on the walls of the container
         if ( nextMoleculeForces[ i ].y < 0 ) {
           pressureZoneWallForce += -nextMoleculeForces[ i ].y;
         }
         else if ( moleculeCenterOfMassPositions[ i ].y > this.multipleParticleModel.getNormalizedContainerHeight() / 2 ) {
 
+          // If the particle bounced on one of the walls above the midpoint, add
           // in that value to the pressure.
           pressureZoneWallForce += Math.abs( nextMoleculeForces[ i ].x );
         }
@@ -154,6 +167,7 @@ define( function( require ) {
         var gravitationalAcceleration = this.multipleParticleModel.getGravitationalAcceleration();
         if ( this.multipleParticleModel.getTemperatureSetPoint() < this.TEMPERATURE_BELOW_WHICH_GRAVITY_INCREASES ) {
 
+          // Below a certain temperature, gravity is increased to counteract some odd-looking behavior
           // caused by the thermostat.
           gravitationalAcceleration = gravitationalAcceleration *
                                       ((this.TEMPERATURE_BELOW_WHICH_GRAVITY_INCREASES -
@@ -166,13 +180,16 @@ define( function( require ) {
       // Update the pressure calculation.
       this.updatePressure( pressureZoneWallForce );
 
+      // If there are any atoms that are currently designated as "unsafe",
       // check them to see if they can be moved into the "safe" category.
       if ( moleculeDataSet.getNumberOfSafeMolecules() < numberOfMolecules ) {
         this.updateMoleculeSafety();
       }
 
+      // Calculate the force and torque due to inter-particle interactions.
       for ( i = 0; i < moleculeDataSet.getNumberOfSafeMolecules(); i++ ) {
 
+        // Select which charges to use for this molecule.  This is part of
         // the "hollywooding" to make the solid form appear more crystalline.
         var chargesA;
         if ( i % 2 === 0 ) {
@@ -197,15 +214,15 @@ define( function( require ) {
           var dy = moleculeCenterOfMassPositions[ i ].y - moleculeCenterOfMassPositions[ j ].y;
           var distanceSquared = dx * dx + dy * dy;
           if ( distanceSquared < this.PARTICLE_INTERACTION_DISTANCE_THRESH_SQRD ) {
+
+            // Calculate the Lennard-Jones interaction forces.
             if ( distanceSquared < this.MIN_DISTANCE_SQUARED ) {
               distanceSquared = this.MIN_DISTANCE_SQUARED;
             }
             r2inv = 1 / distanceSquared;
             r6inv = r2inv * r2inv * r2inv;
 
-            // crystalline behavior we need for ice.
             if ( temperatureSetPoint > WATER_FULLY_MELTED_TEMPERATURE ) {
-
               // No scaling of the repulsive force.
               repulsiveForceScalingFactor = 1;
             }
@@ -216,6 +233,7 @@ define( function( require ) {
             }
             else {
 
+              // We are somewhere between fully frozen and fully
               // liquified, so adjust the scaling factor accordingly.
               temperatureFactor = (temperatureSetPoint - WATER_FULLY_FROZEN_TEMPERATURE) /
                                   (WATER_FULLY_MELTED_TEMPERATURE - WATER_FULLY_FROZEN_TEMPERATURE);
@@ -231,10 +249,16 @@ define( function( require ) {
           }
           if ( distanceSquared < this.PARTICLE_INTERACTION_DISTANCE_THRESH_SQRD ) {
 
+            // Calculate coulomb-like interactions between atoms on
             // individual water molecules.
             for ( var ii = 0; ii < 3; ii++ ) {
               for ( var jj = 0; jj < 3; jj++ ) {
                 if ( ((3 * i + ii + 1) % 6 === 0) || ((3 * j + jj + 1) % 6 === 0) ) {
+
+                  // This is a hydrogen atom that is not going to be included
+                  // in the calculation in order to try to create a more
+                  // crystalline solid.  This is part of the "hollywooding"
+                  // that we do to create a better looking water crystal at
                   // low temperatures.
                   continue;
                 }
@@ -260,7 +284,8 @@ define( function( require ) {
         }
       }
 
-      // energy.
+      // Update the velocities and rotation rates and calculate kinetic
+      // energy
       var centersOfMassKineticEnergy = 0;
       var rotationalKineticEnergy = 0;
       for ( i = 0; i < numberOfMolecules; i++ ) {

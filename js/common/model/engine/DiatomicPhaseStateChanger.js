@@ -71,7 +71,9 @@ define( function( require ) {
       // Sync up the atom positions with the molecule positions.
       this.positionUpdater.updateAtomPositions( moleculeDataSet );
 
-      // Step the model if needed so that the molecules can get into reasonable positions and have reasonable velocities.
+      // Step the model a number of times in order to prevent the particles
+      // from looking too organized.  The number of steps was empirically
+      // determined.
       for ( var i = 0; i < postChangeModelSteps; i++ ) {
         this.multipleParticleModel.step();
       }
@@ -97,17 +99,20 @@ define( function( require ) {
       var temperatureSqrt = Math.sqrt( this.multipleParticleModel.temperatureSetPoint );
       var moleculesPerLayer = (Math.round( Math.sqrt( numberOfMolecules * 2 ) ) / 2 );
 
-      // Final term is a fudge factor that can be adjusted to center the cube.
-      var crystalWidth = moleculesPerLayer * ( 2.0 - 0.3 );
+      // Establish the starting position, which will be the lower left corner
+      // of the "cube".  The molecules will all be rotated so that they are
+      // lying down.
+      var crystalWidth = moleculesPerLayer * ( 2.0 - 0.3 ); // Final term is a fudge factor that can be adjusted to center the cube.
       var startingPosX = ( this.multipleParticleModel.normalizedContainerWidth / 2 ) - ( crystalWidth / 2);
 
       var startingPosY = 1.2 + this.DISTANCE_BETWEEN_PARTICLES_IN_CRYSTAL; // multiplier can be tweaked to minimize initial "bounce"
+
+      // Place the molecules by placing their centers of mass.
       var moleculesPlaced = 0;
       var xPos;
       var yPos;
-      for ( var i = 0; i < numberOfMolecules; i++ ) {
+      for ( var i = 0; i < numberOfMolecules; i++ ) {      // One iteration per layer.
 
-        // One iteration per layer.
         for ( var j = 0; (j < moleculesPerLayer ) && ( moleculesPlaced < numberOfMolecules ); j++ ) {
           xPos = startingPosX + (j * MIN_INITIAL_DIAMETER_DISTANCE);
           if ( i % 2 !== 0 ) {
@@ -157,6 +162,7 @@ define( function( require ) {
         // Assign each molecule an initial rotation rate.
         moleculeRotationRates[ i ] = Math.random() * temperatureSqrt * Math.PI * 2;
       }
+      // Assign each molecule to a position.
       var moleculesPlaced = 0;
       var centerPointX = this.multipleParticleModel.getNormalizedContainerWidth() / 2;
       var centerPointY = this.multipleParticleModel.getNormalizedContainerHeight() / 4;

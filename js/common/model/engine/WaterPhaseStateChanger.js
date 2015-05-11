@@ -62,12 +62,15 @@ define( function( require ) {
       }
       var moleculeDataSet = this.multiPleParticleModel.getMoleculeDataSetRef();
 
+      // Assume that we've done our job correctly and that all the atoms are
       // in safe positions.
       this.multiPleParticleModel.getMoleculeDataSetRef().setNumberOfSafeMolecules( moleculeDataSet.getNumberOfMolecules() );
 
       // Sync up the atom positions with the molecule positions.
       this.positionUpdater.updateAtomPositions( moleculeDataSet );
 
+      // Step the model a number of times in order to prevent the particles
+      // from looking too organized.  The number of steps was empirically
       // determined.
       for ( var i = 0; i < 100; i++ ) {
         this.multiPleParticleModel.step();
@@ -105,10 +108,13 @@ define( function( require ) {
         moleculeRotationRates[ i ] = Math.random() * temperatureSqrt * Math.PI * 2;
       }
 
+      // Establish the starting position, which will be the lower left corner
       // of the "cube".
       var crystalWidth = (moleculesPerLayer - 1) * MIN_INITIAL_DIAMETER_DISTANCE;
       var startingPosX = (this.multiPleParticleModel.getNormalizedContainerWidth() / 2) - (crystalWidth / 2);
       var startingPosY = MIN_INITIAL_DIAMETER_DISTANCE;
+
+      // Place the molecules by placing their centers of mass.
       var moleculesPlaced = 0;
       var xPos;
       var yPos;
@@ -159,6 +165,9 @@ define( function( require ) {
         // Assign each molecule an initial rotation rate.
         moleculeRotationRates[ i ] = Math.random() * temperatureSqrt * Math.PI * 2;
       }
+
+
+      // Assign each molecule to a position.
       var moleculesPlaced = 0;
       var centerPointX = this.multiPleParticleModel.getNormalizedContainerWidth() / 2;
       var centerPointY = this.multiPleParticleModel.getNormalizedContainerHeight() / 4;
@@ -173,10 +182,10 @@ define( function( require ) {
           var xPos = centerPointX + (distanceFromCenter * Math.cos( angle ));
           var yPos = centerPointY + (distanceFromCenter * Math.sin( angle ));
 
-          // Consider this spot used even if we don't actually put the
+          // Consider this spot used even if we don't actually put the particle there.
           particlesOnCurrentLayer++;
 
-          // particle there.
+
           if ( particlesOnCurrentLayer >= particlesThatWillFitOnCurrentLayer ) {
 
             // This layer is full - move to the next one.
@@ -186,6 +195,9 @@ define( function( require ) {
             particlesOnCurrentLayer = 0;
           }
 
+          // Check if the position is too close to the wall.  Note
+          // that we don't check inter-particle distances here - we rely
+          // on the placement algorithm to make sure that this is not a
           // problem.
           if ( (xPos > this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE) &&
                (xPos < this.multiPleParticleModel.getNormalizedContainerWidth() - this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE) &&
@@ -236,6 +248,8 @@ define( function( require ) {
         moleculeRotationRates[ i ] = Math.random() * temperatureSqrt * Math.PI * 2;
       }
 
+      // Redistribute the molecules randomly around the container, but make
+      // sure that they are not too close together or they end up with a
       // disproportionate amount of kinetic energy.
       var newPosX;
       var newPosY;
@@ -265,7 +279,8 @@ define( function( require ) {
           }
           else if ( j === this.MAX_PLACEMENT_ATTEMPTS - 1 ) {
 
-            // usable spot.
+            // This is the last attempt, so do a linear search for a
+            // usable spot
             var openPoint = this.findOpenMoleculeLocation();
             if ( openPoint !== null ) {
               moleculeCenterOfMassPositions[ i ].setXY( openPoint );

@@ -56,7 +56,8 @@ define( function( require ) {
      */
     updateForcesAndMotion: function() {
 
-      // convenience vars
+      // Obtain references to the model data and parameters so that we can
+      // perform fast manipulations.
       var moleculeDataSet = this.multipleParticleModel.moleculeDataSet;
       var moleculeCenterOfMassPositions = moleculeDataSet.getMoleculeCenterOfMassPositions();
       var moleculeVelocities = moleculeDataSet.getMoleculeVelocities();
@@ -90,8 +91,10 @@ define( function( require ) {
       }
       this.positionUpdater.updateAtomPositions( moleculeDataSet );
 
-      // Calculate the forces exerted on the particles by the container walls
-      // and by gravity.
+      // Calculate the force from the walls.  This force is assumed to act
+      // on the center of mass, so there is no torque.
+      // Calculate the forces exerted on the particles by the container
+      // walls and by gravity.
       for ( i = 0; i < numberOfMolecules; i++ ) {
 
         // Clear the previous calculation's particle forces and torques.
@@ -102,13 +105,15 @@ define( function( require ) {
         this.calculateWallForce( moleculeCenterOfMassPositions[ i ], normalizedContainerWidth,
           normalizedContainerHeight, nextMoleculeForces[ i ] );
 
+        // Accumulate this force value as part of the pressure being
         // exerted on the walls of the container.
         if ( nextMoleculeForces[ i ].y < 0 ) {
           pressureZoneWallForce += -nextMoleculeForces[ i ].y;
         }
         else if ( moleculeCenterOfMassPositions[ i ].y > this.multipleParticleModel.normalizedContainerHeight / 2 ) {
 
-          // in that value to the pressure.
+          // If the particle bounced on one of the walls above the midpoint, add
+          // in that value to the press
           pressureZoneWallForce += Math.abs( nextMoleculeForces[ i ].x );
         }
 
@@ -116,6 +121,7 @@ define( function( require ) {
         var gravitationalAcceleration = this.multipleParticleModel.gravitationalAcceleration;
         if ( this.multipleParticleModel.temperatureSetPoint < this.TEMPERATURE_BELOW_WHICH_GRAVITY_INCREASES ) {
 
+          // Below a certain temperature, gravity is increased to counteract some odd-looking behavior
           // caused by the thermostat.
           gravitationalAcceleration = gravitationalAcceleration *
                                       ((this.TEMPERATURE_BELOW_WHICH_GRAVITY_INCREASES -
@@ -128,14 +134,18 @@ define( function( require ) {
       // Update the pressure calculation.
       this.updatePressure( pressureZoneWallForce );
 
+      // If there are any atoms that are currently designated as "unsafe",
       // check them to see if they can be moved into the "safe" category.
       if ( moleculeDataSet.numberOfSafeMolecules < numberOfMolecules ) {
         this.updateMoleculeSafety();
       }
+      // Calculate the force and torque due to inter-particle interactions.
       for ( i = 0; i < moleculeDataSet.numberOfSafeMolecules; i++ ) {
         for ( var j = i + 1; j < moleculeDataSet.numberOfSafeMolecules; j++ ) {
           for ( var ii = 0; ii < 2; ii++ ) {
             for ( var jj = 0; jj < 2; jj++ ) {
+
+              // Calculate the distance between the potentially
               // interacting atoms.
               var dx = atomPositions[ 2 * i + ii ].x - atomPositions[ 2 * j + jj ].x;
               var dy = atomPositions[ 2 * i + ii ].y - atomPositions[ 2 * j + jj ].y;
@@ -164,6 +174,7 @@ define( function( require ) {
         }
       }
 
+      // Update center of mass velocities and angles and calculate kinetic
       // energy.
       var centersOfMassKineticEnergy = 0;
       var rotationalKineticEnergy = 0;
