@@ -105,6 +105,7 @@ define( function( require ) {
       content: createItem( liquid ),
       listener: function() {
         stateProperty.value = LIQUID_STATE;
+        stateProperty._notifyObservers();
       },
       baseColor: new Color( 250, 0, 0 )
     } );
