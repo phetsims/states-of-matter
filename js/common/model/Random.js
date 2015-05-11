@@ -33,7 +33,7 @@ define( function( require ) {
         v1 = 2 * Math.random() - 1; // Between -1.0 and 1.0.
         v2 = 2 * Math.random() - 1; // Between -1.0 and 1.0.
         s = v1 * v1 + v2 * v2;
-      } while ( s >= 1 );
+      } while ( s >= 1 || s == 0 );
 
       var norm = Math.sqrt( -2 * Math.log( s ) / s );
       this.nextNextGaussian = v2 * norm;
