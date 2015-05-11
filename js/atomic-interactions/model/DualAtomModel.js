@@ -518,7 +518,7 @@ define( function( require ) {
           this.timeStep = dt / CALCULATIONS_PER_TICK;
         }
         else {
-          this.timeStep = dt / 1.6;
+          this.timeStep = dt / 3.2;
         }
 
       },
