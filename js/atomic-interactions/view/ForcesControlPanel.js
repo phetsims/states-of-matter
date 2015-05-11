@@ -33,7 +33,7 @@ define( function( require ) {
   var electronOverlapString = require( 'string!STATES_OF_MATTER/electronOverlap' );
 
   //constants
-  var MAX_WIDTH = 130; // max width of text label  in the panel
+  var TEXT_LABEL_MAX_WIDTH = 130; // max width of text label  in the panel
 
   /**
    * @param {Property<string>} forcesProperty that determines which forces to display
@@ -88,29 +88,29 @@ define( function( require ) {
       return text;
     };
 
-    var hideForcesText = { label: createText( hideForcesString, MAX_WIDTH / 2, 12 ) };
+    var hideForcesText = { label: createText( hideForcesString, TEXT_LABEL_MAX_WIDTH * 0.65, 12 ) };
 
     var totalForceText = {
-      label: createText( totalForceString, MAX_WIDTH / 2, 12 ),
+      label: createText( totalForceString, TEXT_LABEL_MAX_WIDTH * 0.65, 12 ),
       icon: totalForceArrow
     };
 
     var attractiveText = {
-      label: createText( attractiveString, MAX_WIDTH / 2, 11 ),
+      label: createText( attractiveString, TEXT_LABEL_MAX_WIDTH * 0.6, 11 ),
       icon: attractiveArrow
     };
 
     var vanderwaalsText = {
-      label: createText( vanderwaalsString, MAX_WIDTH / 2, 10 )
+      label: createText( vanderwaalsString, TEXT_LABEL_MAX_WIDTH * 0.7, 10 )
     };
 
     var repulsiveText = {
-      label: createText( repulsiveString, MAX_WIDTH / 2, 11 ),
+      label: createText( repulsiveString, TEXT_LABEL_MAX_WIDTH * 0.6, 11 ),
       icon: repulsiveArrow
     };
 
     var electronOverlapText = {
-      label: createText( electronOverlapString, MAX_WIDTH / 2, 10 )
+      label: createText( electronOverlapString, TEXT_LABEL_MAX_WIDTH * 0.7, 10 )
     };
 
     // compute the maximum item width
@@ -186,7 +186,7 @@ define( function( require ) {
     // show white stroke around the force panel within SOM full version  else  show black stroke
     var panelStroke = options.showTitleWhenExpand ? 'white' : 'black';
     var accordionBox = new AccordionBox( accordionContent, {
-      titleNode: createText( forcesString, MAX_WIDTH / 2, 14 ),
+      titleNode: createText( forcesString, TEXT_LABEL_MAX_WIDTH / 2, 14 ),
       fill: options.backgroundColor,
       stroke: panelStroke,
       expandedProperty: forceControlPanelExpandProperty,
