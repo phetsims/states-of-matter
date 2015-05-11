@@ -59,7 +59,7 @@ define( function( require ) {
       // Step the model a number of times in order to prevent the particles
       // from looking too organized.  The number of steps was empirically determined.
       for ( var i = 0; i < 20; i++ ) {
-        this.multipleParticleModel.step();
+        this.multipleParticleModel.stepInternal();
       }
     },
 
@@ -149,7 +149,7 @@ define( function( require ) {
 
             // This layer is full - move to the next one.
             currentLayer++;
-            particlesThatWillFitOnCurrentLayer = currentLayer * 2 * Math.PI / MIN_INITIAL_INTER_PARTICLE_DISTANCE;
+            particlesThatWillFitOnCurrentLayer = Math.floor( currentLayer * 2 * Math.PI / MIN_INITIAL_INTER_PARTICLE_DISTANCE );
             particlesOnCurrentLayer = 0;
           }
 
@@ -208,7 +208,7 @@ define( function( require ) {
           var positionAvailable = true;
           // See if this position is available.
           for ( var k = 0; k < i; k++ ) {
-            if ( moleculeCenterOfMassPositions[ k ].distance( newPosX, newPosY ) < MIN_INITIAL_INTER_PARTICLE_DISTANCE ) {
+            if ( moleculeCenterOfMassPositions[ k ].distanceXY( newPosX, newPosY ) < MIN_INITIAL_INTER_PARTICLE_DISTANCE ) {
               positionAvailable = false;
               break;
             }

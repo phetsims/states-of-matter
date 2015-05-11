@@ -75,7 +75,7 @@ define( function( require ) {
       // from looking too organized.  The number of steps was empirically
       // determined.
       for ( var i = 0; i < postChangeModelSteps; i++ ) {
-        this.multipleParticleModel.step();
+        this.multipleParticleModel.stepInternal();
       }
     },
 
@@ -183,8 +183,8 @@ define( function( require ) {
 
             // This layer is full - move to the next one.
             currentLayer++;
-            particlesThatWillFitOnCurrentLayer = ( currentLayer * 2 * Math.PI /
-                                                   ( MIN_INITIAL_DIAMETER_DISTANCE * LIQUID_SPACING_FACTOR ) );
+            particlesThatWillFitOnCurrentLayer = Math.floor( currentLayer * 2 * Math.PI /
+                                                             ( MIN_INITIAL_DIAMETER_DISTANCE * LIQUID_SPACING_FACTOR ) );
             particlesOnCurrentLayer = 0;
           }
           // Check if the position is too close to the wall.  Note
@@ -257,7 +257,7 @@ define( function( require ) {
 
           // See if this position is available.
           for ( var k = 0; k < i; k++ ) {
-            if ( moleculeCenterOfMassPositions[ k ].distance( newPosX, newPosY ) <
+            if ( moleculeCenterOfMassPositions[ k ].distanceXY( newPosX, newPosY ) <
                  MIN_INITIAL_DIAMETER_DISTANCE * GAS_SPACING_FACTOR ) {
               positionAvailable = false;
               break;

@@ -83,7 +83,6 @@ define( function( require ) {
       else {
         temperatureScaleFactor = Math.sqrt( this.targetTemperature / measuredTemperature );
       }
-      temperatureScaleFactor = temperatureScaleFactor < 0.9 ? 0.9 : temperatureScaleFactor;
       for ( var i = 0; i < this.moleculeDataSet.getNumberOfMolecules(); i++ ) {
         this.moleculeVelocities[ i ].setXY( this.moleculeVelocities[ i ].x * temperatureScaleFactor,
           this.moleculeVelocities[ i ].y * temperatureScaleFactor );

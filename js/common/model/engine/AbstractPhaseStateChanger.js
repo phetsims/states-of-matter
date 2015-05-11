@@ -56,7 +56,7 @@ define( function( require ) {
             // See if this position is available.
             var positionAvailable = true;
             for ( var k = 0; k < moleculeDataSet.getNumberOfMolecules(); k++ ) {
-              if ( moleculeCenterOfMassPositions[ k ].distance( posX, posY ) < minInitialInterParticleDistance ) {
+              if ( moleculeCenterOfMassPositions[ k ].distanceXY( posX, posY ) < minInitialInterParticleDistance ) {
                 positionAvailable = false;
                 break;
               }

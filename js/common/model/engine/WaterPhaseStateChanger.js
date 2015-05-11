@@ -73,7 +73,7 @@ define( function( require ) {
       // from looking too organized.  The number of steps was empirically
       // determined.
       for ( var i = 0; i < 100; i++ ) {
-        this.multiPleParticleModel.step();
+        this.multiPleParticleModel.stepInternal();
       }
     },
 
@@ -96,7 +96,7 @@ define( function( require ) {
 
       // Create and initialize other variables needed to do the job
       var temperatureSqrt = Math.sqrt( this.multiPleParticleModel.getTemperatureSetPoint() );
-      var moleculesPerLayer = Math.sqrt( numberOfMolecules );
+      var moleculesPerLayer = Math.floor( Math.sqrt( numberOfMolecules ) );
 
       // Initialize the velocities and angles of the molecules.
       for ( var i = 0; i < numberOfMolecules; i++ ) {
@@ -190,8 +190,8 @@ define( function( require ) {
 
             // This layer is full - move to the next one.
             currentLayer++;
-            particlesThatWillFitOnCurrentLayer = (currentLayer * 2 * Math.PI /
-                                                  (MIN_INITIAL_DIAMETER_DISTANCE * LIQUID_SPACING_FACTOR));
+            particlesThatWillFitOnCurrentLayer = Math.floor( currentLayer * 2 * Math.PI /
+                                                             (MIN_INITIAL_DIAMETER_DISTANCE * LIQUID_SPACING_FACTOR) );
             particlesOnCurrentLayer = 0;
           }
 
@@ -265,7 +265,7 @@ define( function( require ) {
 
           // See if this position is available.
           for ( var k = 0; k < i; k++ ) {
-            if ( moleculeCenterOfMassPositions[ k ].distance( newPosX, newPosY ) <
+            if ( moleculeCenterOfMassPositions[ k ].distanceXY( newPosX, newPosY ) <
                  MIN_INITIAL_DIAMETER_DISTANCE * GAS_SPACING_FACTOR ) {
               positionAvailable = false;
               break;
