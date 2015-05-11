@@ -24,9 +24,9 @@ define( function( require ) {
   var Shape = require( 'KITE/Shape' );
 
   //constants
-  var RESIZE_HANDLE_SIZE_PROPORTION = 0.05;
-  var EPSILON_HANDLE_OFFSET_PROPORTION = 0.08;
-  var SIGMA_HANDLE_OFFSET_PROPORTION = 0.08;
+  var RESIZE_HANDLE_SIZE_PROPORTION = 0.05;  // Size of handles as function of node width.
+  var EPSILON_HANDLE_OFFSET_PROPORTION = 0.08; // Position of handle as function of node width.
+  var SIGMA_HANDLE_OFFSET_PROPORTION = 0.08;  // Position of handle as function of node width.
   var RESIZE_HANDLE_NORMAL_COLOR = '#32FE00';
   var RESIZE_HANDLE_HIGHLIGHTED_COLOR = new Color( 153, 255, 0 );
   var EPSILON_LINE_WIDTH = 1;
@@ -157,11 +157,13 @@ define( function( require ) {
     } ) );
 
     // Add the ability to grab and move the position marker.
+    // This node will need to be pickable so the user can grab it.
     this.positionMarker.setPickable( true );
     this.positionMarker.touchArea = Shape.circle( 0, 0, 13 );
     this.positionMarker.addInputListener( new SimpleDragHandler( {
 
       start: function( event ) {
+        // Stop the particle from moving in the model.
         dualAtomModel.setMotionPaused( true );
         startDragX = interactiveInteractionPotentialDiagram.positionMarker.globalToParentPoint( event.pointer.point ).x;
       },
@@ -173,9 +175,13 @@ define( function( require ) {
           dualAtomModel.releaseBond();
         }
         dualAtomModel.isHandNodeVisible = false;
+
+
         endDragX = interactiveInteractionPotentialDiagram.positionMarker.globalToParentPoint( event.pointer.point ).x;
         var xDifference = endDragX - startDragX;
         startDragX = endDragX;
+
+        // Move the particle based on the amount of mouse movement.
         var atom = dualAtomModel.getMovableAtomRef();
         var scaleFactor = interactiveInteractionPotentialDiagram.MAX_INTER_ATOM_DISTANCE /
                           ( interactiveInteractionPotentialDiagram.getGraphWidth());
@@ -184,6 +190,8 @@ define( function( require ) {
       },
 
       end: function() {
+        // Let the model move the particle again.  Note that this happens
+        // even if the motion was paused by some other means.
         dualAtomModel.setMotionPaused( false );
       }
     } ) );
@@ -237,14 +245,18 @@ define( function( require ) {
   return inherit( InteractionPotentialDiagramNode, InteractiveInteractionPotentialDiagram, {
 
     /**
-     * @protected
+     *
      * This is an override of the method in the base class that draws the
      * curve on the graph, and this override draws the controls that allow
      * the user to interact with the graph.
+     * @override
+     * @protected
      */
     drawPotentialCurve: function() {
+
       // The bulk of the drawing is done by the base class.
       InteractionPotentialDiagramNode.prototype.drawPotentialCurve.call( this );
+
       // Now position the control handles.
       if ( this.epsilonResizeHandle !== undefined ) {
         var graphMin = this.getGraphMin();

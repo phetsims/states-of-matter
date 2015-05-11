@@ -1,4 +1,4 @@
-// Copyright 2002-2013, University of Colorado Boulder
+// Copyright 2002-2015, University of Colorado Boulder
 
 /**
  * Model for an isokinetic thermostat that controls the kinetic energy of a set of particles such that the remain at

@@ -112,6 +112,8 @@ define( function( require ) {
       return text;
     };
 
+    // Allows user to select from a fixed list of heterogeneous and
+    // homogeneous combinations of atoms.
     if ( enableHeterogeneousAtoms ) {
 
       neonAndNeon = [ createText( neonString, MAX_WIDTH / 2, NORMAL_TEXT_FONT_SIZE ), createText( neonString, MAX_WIDTH / 2, NORMAL_TEXT_FONT_SIZE ) ];
@@ -206,6 +208,9 @@ define( function( require ) {
         adjustableAttractionRadio.localBounds.minX + maxRadioButtonWidth - 4, adjustableAttractionRadio.localBounds.maxY + 3 );
     }
     else {
+
+      // allows the user to choose
+      // the type of molecule when both are the same.
       var title = new Text( titleString, { font: new PhetFont( 14 ), fill: '#FFFFFF' } );
       if ( title.width > TITLE_TEXT_WIDTH ) {
         title.scale( TITLE_TEXT_WIDTH / title.width );

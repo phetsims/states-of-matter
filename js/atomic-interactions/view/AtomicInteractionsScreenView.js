@@ -264,8 +264,9 @@ define( function( require ) {
     },
 
     /**
-     * @public
      * Turn on/off the displaying of the force arrows that represent the attractive force.
+     * @public
+     * @param {boolean} showForces
      */
     setShowAttractiveForces: function( showForces ) {
       this.movableParticleNode.setShowAttractiveForces( showForces );
@@ -274,8 +275,9 @@ define( function( require ) {
     },
 
     /**
-     * @public
      * Turn on/off the displaying of the force arrows that represent the repulsive force.
+     * @public
+     * @param {boolean} showForces
      */
     setShowRepulsiveForces: function( showForces ) {
       this.movableParticleNode.setShowRepulsiveForces( showForces );
@@ -284,18 +286,20 @@ define( function( require ) {
     },
 
     /**
-     * @public
      * Turn on/off the displaying of the force arrows that represent the
      * total force, i.e. attractive plus repulsive.
+     * @public
+     * @param {boolean} showForces
      */
     setShowTotalForces: function( showForces ) {
       this.movableParticleNode.setShowTotalForces( showForces );
       this.fixedParticleNode.setShowTotalForces( showForces );
       this.showTotalForces = showForces;
     },
+
     /**
      * @public
-     * @param particle
+     * @param {StatesOfMatterAtom} particle
      */
     handleFixedParticleAdded: function( particle ) {
 
