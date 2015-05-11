@@ -93,7 +93,11 @@ define( function( require ) {
     // Layer where the graph elements are added.
     this.ljPotentialGraph = new Node();
 
-    this.verticalScalingFactor = (this.graphHeight / 2) /
+    //  Using ~45% (1/2.2) of graph height instead of 50 % graph height as in the Java version.
+    // This is done to fix the point flickering at the bottom most point.
+    // see https://github.com/phetsims/states-of-matter/issues/63 and
+    // https://github.com/phetsims/states-of-matter/issues/25
+    this.verticalScalingFactor = (this.graphHeight / 2.2) /
                                  (StatesOfMatterConstants.MAX_EPSILON * StatesOfMatterConstants.K_BOLTZMANN);
     this.horizontalLineCount = 5;
 
@@ -287,18 +291,10 @@ define( function( require ) {
       if ( this.positionMarkerEnabled && (xPos > 0) && (xPos < this.graphWidth) &&
            (yPos > 0) && (yPos < this.graphHeight) ) {
         this.positionMarker.setVisible( true );
-        var newYPos = yPos > this.graphHeight ? this.graphHeight - 5 : yPos;
-        this.positionMarker.setTranslation( xPos, newYPos );
+        this.positionMarker.setTranslation( xPos, yPos );
       }
       else {
         this.positionMarker.setVisible( false );
-      }
-      //  made position marker  visible  on oxygen oxygen fully zoomed out  case
-      var graphYOffset = 100;
-      if ( this.positionMarkerEnabled && (xPos > 0) && (xPos < this.graphWidth) &&
-           (yPos > 0) && (yPos > this.graphHeight) && ( yPos < this.graphHeight + graphYOffset ) ) {
-        this.positionMarker.setVisible( true );
-        this.positionMarker.setTranslation( xPos, this.graphHeight - 5 );
       }
     },
 
@@ -427,4 +423,3 @@ define( function( require ) {
     MAX_INTER_ATOM_DISTANCE: MAX_INTER_ATOM_DISTANCE
   } );
 } );
-
