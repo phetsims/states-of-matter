@@ -1,9 +1,7 @@
 // Copyright 2002-2015, University of Colorado Boulder
 
 /**
- * This class is the "view" for the particle container.  This is where the
- * information about the nature of the image that is used to depict the
- * container is encapsulated.
+ * This class is the "view" for the particle container.
  *
  * @author Siddhartha Chinthapally (Actual Concepts)
  */
@@ -24,6 +22,8 @@ define( function( require ) {
   // constants
   var LID_POSITION_TWEAK_FACTOR = 65; // Empirically determined value for aligning lid and container body.
   var PRESSURE_METER_ELBOW_OFFSET = 30;
+
+  // Constants the control the positioning of non-container portions of this node.
   var PRESSURE_GAUGE_Y_OFFSET = -PRESSURE_METER_ELBOW_OFFSET;
 
   /**
@@ -316,6 +316,11 @@ define( function( require ) {
      */
     handleContainerSizeChanged: function() {
 
+      // IMPORTANT NOTE: This routine assumes that only the height of the
+      // container can change, since this was true when this routine was
+      // created and it isn't worth the effort to make it more general.  If
+      // this assumption is ever invalidated, this routine will need to be
+      // changed.
       var containerHeight = this.multipleParticleModel.getParticleContainerHeight();
       if ( !this.multipleParticleModel.getContainerExploded() ) {
         if ( this.containerLid.getRotation() !== 0 ) {
@@ -324,7 +329,7 @@ define( function( require ) {
         this.containerLid.setTranslation(
           (this.modelViewTransform.modelToViewDeltaX( this.containmentAreaWidth ) - this.containerLid.width) / 2,
           -this.modelViewTransform.modelToViewDeltaY( this.containmentAreaHeight - containerHeight )
-          /*- (this.containerLid.height / 2) + LID_POSITION_TWEAK_FACTOR*/ );
+        );
       }
       else {
         // Rotate the lid to create the visual appearance of it being

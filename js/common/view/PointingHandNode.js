@@ -82,12 +82,15 @@ define( function( require ) {
         },
         drag: function( event ) {
           endY = pointingHandNode.globalToParentPoint( event.pointer.point ).y;
+
           // Resize the container based on the amount that the node has moved.
           multipleParticleModel.setTargetParticleContainerHeight(
             pointingHandNode.containerSizeAtDragStart + modelViewTransform.viewToModelDeltaY( endY - startY ) );
           pointingHandNode.updateHintVisibility();
         },
         end: function() {
+
+          // Set the target size to the current size, which will stop any change
           // in size that is currently underway.
           multipleParticleModel.setTargetParticleContainerHeight( multipleParticleModel.getParticleContainerHeight() );
           pointingHandNode.beingDragged = false;
@@ -120,11 +123,14 @@ define( function( require ) {
      * @public
      */
     updateArrowVisibility: function() {
+
       if ( this.multipleParticleModel.getParticleContainerHeight() === StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT ) {
+
         // At the height limit, so only show the down arrow.
         this.upArrowNode.setVisible( false );
       }
       else if ( this.multipleParticleModel.getParticleContainerHeight() === 0 ) {
+
         // Particle container all the way down, so show only the up arrow.
         this.upArrowNode.setVisible( false );
       }
@@ -144,6 +150,8 @@ define( function( require ) {
                                                                containerHeight ) ) - this.height + 20 );
       }
       else {
+
+        // If the container is exploding that hand is retracted more
         // quickly.
         this.setTranslation( this.x,
           -this.modelViewTransform.modelToViewDeltaY( StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT -

@@ -1,7 +1,9 @@
 // Copyright 2002-2015, University of Colorado Boulder
 
 /**
- * View for the thermometer
+ * This class defines  Node that has a liquid thermometer and a numerical
+ * readout that can display the temperature in degrees Kelvin or degrees
+ * Celsius.
  *
  * @author Siddhartha Chinthapally (Actual Concepts)
  */

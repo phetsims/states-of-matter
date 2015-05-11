@@ -1,7 +1,9 @@
 // Copyright 2002-2015, University of Colorado Boulder
 
 /**
- * View for the bicycle pump
+ * This class represents creates a graphical display that is meant to look
+ * like a bicycle pump.  It allows the user to interact with it to move the
+ * handle up and down.
  *
  * @author John Blanco
  * @author Siddhartha Chinthapally (Actual Concepts)
@@ -208,9 +210,11 @@ define( function( require ) {
             pumpHandleNode.setTranslation( (pumpBaseWidth - pumpHandleNode.width) / 2, pumpHandleStartY + yDiff );
             pumpShaft.top = pumpHandleNode.bottom;
             if ( dragEndY > pumpHandleEndY ) {
+
               // This motion is in the pumping direction, so accumulate it.
               currentPumpingAmount += (dragEndY - pumpHandleEndY);
               if ( currentPumpingAmount >= pumpingRequiredToInject ) {
+
                 // Enough pumping has been done to inject a new particle.
                 multipleParticleModel.injectMolecule();
                 currentPumpingAmount = 0;
