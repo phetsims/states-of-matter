@@ -26,13 +26,17 @@ define( function( require ) {
   var InteractionPotentialDiagramNode = require( 'STATES_OF_MATTER/common/view/InteractionPotentialDiagramNode' );
   var HBox = require( 'SCENERY/nodes/HBox' );
 
-  //strings
+  // strings
   var interactionDiagramTitle = require( 'string!STATES_OF_MATTER/interactionPotential' );
+
+  // constants
+
 // Size of handles as function of node width.
   var RESIZE_HANDLE_SIZE_PROPORTION = 0.18;
 
   // Position of handle as function of node width.
   var EPSILON_HANDLE_OFFSET_PROPORTION = 0.08;
+
   var RESIZE_HANDLE_NORMAL_COLOR = '#32FE00';
   var RESIZE_HANDLE_HIGHLIGHTED_COLOR = new Color( 153, 255, 0 );
   var EPSILON_LINE_COLOR = RESIZE_HANDLE_NORMAL_COLOR;
@@ -59,6 +63,8 @@ define( function( require ) {
     accordionContent.addChild( this.ljPotentialGraph );
     // Add the line that will indicate the value of epsilon.
     var epsilonLineLength = EPSILON_HANDLE_OFFSET_PROPORTION * this.widthOfGraph * 2.2;
+
+    // Add the line that will indicate the value of epsilon.
     this.epsilonLine = new Rectangle( -epsilonLineLength / 2, 0, epsilonLineLength, 1, {
       cursor: 'ns-resize',
       pickable: true,
@@ -66,6 +72,7 @@ define( function( require ) {
       stroke: EPSILON_LINE_COLOR
     } );
 
+    // Add the arrow node that will allow the user to control the value of
     // the epsilon parameter.
     this.epsilonResizeHandle = new ArrowNode( 0, -RESIZE_HANDLE_SIZE_PROPORTION * this.widthOfGraph / 2, 0,
       RESIZE_HANDLE_SIZE_PROPORTION * this.widthOfGraph / 2, {
@@ -181,8 +188,10 @@ define( function( require ) {
      * @override
      */
     drawPotentialCurve: function() {
+
       // The bulk of the drawing is done by the base class.
       InteractionPotentialDiagramNode.prototype.drawPotentialCurve.call( this );
+
       // Now position the control handles.
       if ( this.epsilonResizeHandle !== undefined ) {
         var graphMin = this.getGraphMin();
