@@ -49,7 +49,7 @@ define( function( require ) {
   var strongString = require( 'string!STATES_OF_MATTER/strong' );
 
 //  Constants
-  var NORMAL_TEXT__MAX_WIDTH = 120;
+
   var SLIDER_TICK_TEXT_MAX_WIDTH = 26;
   var NORMAL_TEXT_FONT_SIZE = 12;
   var TITLE_TEXT_WIDTH = 130;
@@ -85,6 +85,11 @@ define( function( require ) {
     }, options );
 
     Node.call( this );
+
+    //  Atomic controlPanel width in SOM full version and Atomic  sim is different ,
+    // so we are using different scale factor values
+    var SLIDER_TITTLE_MAX_WIDTH = enableHeterogeneousAtoms ? 170 : 120;
+    var NORMAL_TEXT__MAX_WIDTH = enableHeterogeneousAtoms ? 130 : 120;
 
     // white text within SOM full version  else  black text
     // show white stroke around the atoms & molecules panel within SOM full version  else  show black stroke
@@ -276,8 +281,8 @@ define( function( require ) {
       fill: options.textColor
     } );
 
-    if ( atomDiameterTitle.width > NORMAL_TEXT__MAX_WIDTH ) {
-      atomDiameterTitle.scale( NORMAL_TEXT__MAX_WIDTH / atomDiameterTitle.width );
+    if ( atomDiameterTitle.width > SLIDER_TITTLE_MAX_WIDTH ) {
+      atomDiameterTitle.scale( SLIDER_TITTLE_MAX_WIDTH / atomDiameterTitle.width );
     }
 
     var atomDiameterSlider = new HSlider( dualAtomModel.atomDiameterProperty,
@@ -324,8 +329,8 @@ define( function( require ) {
       fill: options.textColor,
       top: atomDiameterSlider.bottom + 5
     } );
-    if ( interactionStrengthTitle.width > NORMAL_TEXT__MAX_WIDTH ) {
-      interactionStrengthTitle.scale( NORMAL_TEXT__MAX_WIDTH / interactionStrengthTitle.width );
+    if ( interactionStrengthTitle.width > SLIDER_TITTLE_MAX_WIDTH ) {
+      interactionStrengthTitle.scale( SLIDER_TITTLE_MAX_WIDTH / interactionStrengthTitle.width );
     }
     var interactionStrengthSlider = new HSlider( dualAtomModel.interactionStrengthProperty,
       { min: StatesOfMatterConstants.MIN_EPSILON, max: StatesOfMatterConstants.MAX_EPSILON },
