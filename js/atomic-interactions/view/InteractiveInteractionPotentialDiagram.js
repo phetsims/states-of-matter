@@ -20,7 +20,7 @@ define( function( require ) {
   var Property = require( 'AXON/Property' );
   var ArrowNode = require( 'SCENERY_PHET/ArrowNode' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
-  var AtomicInteractionColors = require( 'STATES_OF_MATTER/atomic-interactions/view/AtomicInteractionColors' );
+  var StatesOfMatterColors = require( 'STATES_OF_MATTER/common/view/StatesOfMatterColors' );
   var Shape = require( 'KITE/Shape' );
 
   //constants
@@ -225,20 +225,20 @@ define( function( require ) {
     this.addChild( this.horizontalAxis );
 
     // applying color scheme to lj graph elements
-    AtomicInteractionColors.linkAttribute( 'ljGraphColorsMode', this.verticalAxis, 'fill' );
-    AtomicInteractionColors.linkAttribute( 'ljGraphColorsMode', this.horizontalAxis, 'fill' );
-    AtomicInteractionColors.linkAttribute( 'ljGraphColorsMode', this.verticalAxis, 'stroke' );
-    AtomicInteractionColors.linkAttribute( 'ljGraphColorsMode', this.horizontalAxis, 'stroke' );
-    AtomicInteractionColors.linkAttribute( 'ljGraphColorsMode', this.epsilonArrow, 'fill' );
-    AtomicInteractionColors.linkAttribute( 'ljGraphColorsMode', this.sigmaArrow, 'fill' );
-    AtomicInteractionColors.linkAttribute( 'ljGraphColorsMode', this.epsilonLabel, 'fill' );
-    AtomicInteractionColors.linkAttribute( 'ljGraphColorsMode', this.sigmaLabel, 'fill' );
-    AtomicInteractionColors.linkAttribute( 'ljGraphColorsMode', this.epsilonArrow, 'stroke' );
-    AtomicInteractionColors.linkAttribute( 'ljGraphColorsMode', this.gridNode.verticalLinesNode, 'stroke' );
-    AtomicInteractionColors.linkAttribute( 'ljGraphColorsMode', this.horizontalAxisLabel, 'fill' );
-    AtomicInteractionColors.linkAttribute( 'ljGraphColorsMode', this.verticalAxisLabel, 'fill' );
-    AtomicInteractionColors.linkAttribute( 'ljGraphColorsMode', this.gridNode.horizontalLinesNode, 'stroke' );
-    AtomicInteractionColors.linkAttribute( 'potentialEnergyLine', this.potentialEnergyLine, 'stroke' );
+    StatesOfMatterColors.linkAttribute( 'ljGraphColorsMode', this.verticalAxis, 'fill' );
+    StatesOfMatterColors.linkAttribute( 'ljGraphColorsMode', this.horizontalAxis, 'fill' );
+    StatesOfMatterColors.linkAttribute( 'ljGraphColorsMode', this.verticalAxis, 'stroke' );
+    StatesOfMatterColors.linkAttribute( 'ljGraphColorsMode', this.horizontalAxis, 'stroke' );
+    StatesOfMatterColors.linkAttribute( 'ljGraphColorsMode', this.epsilonArrow, 'fill' );
+    StatesOfMatterColors.linkAttribute( 'ljGraphColorsMode', this.sigmaArrow, 'fill' );
+    StatesOfMatterColors.linkAttribute( 'ljGraphColorsMode', this.epsilonLabel, 'fill' );
+    StatesOfMatterColors.linkAttribute( 'ljGraphColorsMode', this.sigmaLabel, 'fill' );
+    StatesOfMatterColors.linkAttribute( 'ljGraphColorsMode', this.epsilonArrow, 'stroke' );
+    StatesOfMatterColors.linkAttribute( 'ljGraphColorsMode', this.gridNode.verticalLinesNode, 'stroke' );
+    StatesOfMatterColors.linkAttribute( 'ljGraphColorsMode', this.horizontalAxisLabel, 'fill' );
+    StatesOfMatterColors.linkAttribute( 'ljGraphColorsMode', this.verticalAxisLabel, 'fill' );
+    StatesOfMatterColors.linkAttribute( 'ljGraphColorsMode', this.gridNode.horizontalLinesNode, 'stroke' );
+    StatesOfMatterColors.linkAttribute( 'potentialEnergyLine', this.potentialEnergyLine, 'stroke' );
     this.mutate( options );
   }
 

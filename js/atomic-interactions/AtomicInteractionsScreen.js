@@ -13,7 +13,7 @@ define( function( require ) {
   var AtomicInteractionsScreenView = require( 'STATES_OF_MATTER/atomic-interactions/view/AtomicInteractionsScreenView' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Screen = require( 'JOIST/Screen' );
-  var AtomicInteractionColors = require( 'STATES_OF_MATTER/atomic-interactions/view/AtomicInteractionColors' );
+  var StatesOfMatterColors = require( 'STATES_OF_MATTER/common/view/StatesOfMatterColors' );
   var Image = require( 'SCENERY/nodes/Image' );
 
   // images
@@ -34,18 +34,18 @@ define( function( require ) {
     Screen.call( this, simTitle, new Image( atomicInteractionScreenIcon ),
       function() { return new DualAtomModel(); },
       function( model ) { return new AtomicInteractionsScreenView( model, enableHeterogeneousMolecules ); },
-      { backgroundColor: AtomicInteractionColors.background.toCSS() }
+      { backgroundColor: StatesOfMatterColors.background.toCSS() }
     );
 
     projectorModeProperty.link( function( projectorMode ) {
       if ( projectorMode ) {
-        AtomicInteractionColors.applyProfile( 'projector' );
+        StatesOfMatterColors.applyProfile( 'projector' );
       }
       else {
-        AtomicInteractionColors.applyProfile( 'default' );
+        StatesOfMatterColors.applyProfile( 'default' );
       }
     } );
-    AtomicInteractionColors.linkAttribute( 'background', screen, 'backgroundColor' );
+    StatesOfMatterColors.linkAttribute( 'background', screen, 'backgroundColor' );
   }
 
   return inherit( Screen, AtomicInteractionsScreen );

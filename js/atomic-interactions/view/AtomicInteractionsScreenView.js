@@ -30,7 +30,7 @@ define( function( require ) {
   var GrabbableParticleNode = require( 'STATES_OF_MATTER/atomic-interactions/view/GrabbableParticleNode' );
   var PushpinNode = require( 'STATES_OF_MATTER/atomic-interactions/view/PushpinNode' );
   var HandNode = require( 'STATES_OF_MATTER/atomic-interactions/view/HandNode' );
-  var AtomicInteractionColors = require( 'STATES_OF_MATTER/atomic-interactions/view/AtomicInteractionColors' );
+  var StatesOfMatterColors = require( 'STATES_OF_MATTER/common/view/StatesOfMatterColors' );
   var AtomPair = require( 'STATES_OF_MATTER/atomic-interactions/model/AtomPair' );
 
   // strings
@@ -161,8 +161,8 @@ define( function( require ) {
     var slowMotionRadioBox = new AquaRadioButton( dualAtomModel.speedProperty, 'slow', slowText, { radius: 10 } );
     var normalText = new Text( normalString, { fill: 'white', font: new PhetFont( 14 ) } );
     var normalMotionRadioBox = new AquaRadioButton( dualAtomModel.speedProperty, 'normal', normalText, { radius: 10 } );
-    AtomicInteractionColors.linkAttribute( 'controlPanelText', slowText, 'fill' );
-    AtomicInteractionColors.linkAttribute( 'controlPanelText', normalText, 'fill' );
+    StatesOfMatterColors.linkAttribute( 'controlPanelText', slowText, 'fill' );
+    StatesOfMatterColors.linkAttribute( 'controlPanelText', normalText, 'fill' );
 
     var speedControlMaxWidth = ( slowMotionRadioBox.width > normalMotionRadioBox.width ) ? slowMotionRadioBox.width : normalMotionRadioBox.width;
 

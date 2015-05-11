@@ -1,7 +1,7 @@
 // Copyright 2002-2015, University of Colorado Boulder
 
 /**
- * An object that contains the colors used for various major components of the Atomic Interactions simulation.  This
+ * An object that contains the colors used for various major components of the States of Matter simulation.  This
  * is used to support different color schemes, such as a default that looks good on a laptop or tablet, and a
  * "projector mode" that looks good when projected on a large screen.
  *
@@ -47,7 +47,7 @@ define( function( require ) {
     }
   }
 
-  var AtomicInteractionColors = extend( new PropertySet( initialProperties ), {
+  var StatesOfMatterColors = extend( new PropertySet( initialProperties ), {
     /*
      * Applies all colors for the specific named color scheme, ignoring colors that aren't specified for it.
      *
@@ -77,7 +77,7 @@ define( function( require ) {
 
   // sends iframe communication to report the current color for the key name
   function reportColor( key ) {
-    var hexColor = AtomicInteractionColors[ key ].toNumber().toString( 16 );
+    var hexColor = StatesOfMatterColors[ key ].toNumber().toString( 16 );
     while ( hexColor.length < 6 ) {
       hexColor = '0' + hexColor;
     }
@@ -100,10 +100,10 @@ define( function( require ) {
   window.addEventListener( 'message', function( evt ) {
     var data = JSON.parse( evt.data );
     if ( data.type === 'setColor' ) {
-      AtomicInteractionColors[ data.name ] = new Color( data.value );
+      StatesOfMatterColors[ data.name ] = new Color( data.value );
     }
   } );
 
-  return AtomicInteractionColors;
+  return StatesOfMatterColors;
 } );
 

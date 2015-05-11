@@ -15,7 +15,7 @@ define( function( require ) {
   var SolidLiquidGasScreenView = require( 'STATES_OF_MATTER/solid-liquid-gas/view/SolidLiquidGasScreenView' );
   var MultipleParticleModel = require( 'STATES_OF_MATTER/common/model/MultipleParticleModel' );
   var Image = require( 'SCENERY/nodes/Image' );
-  var AtomicInteractionColors = require( 'STATES_OF_MATTER/atomic-interactions/view/AtomicInteractionColors' );
+  var StatesOfMatterColors = require( 'STATES_OF_MATTER/common/view/StatesOfMatterColors' );
 
   // strings
   var statesString = require( 'string!STATES_OF_MATTER/states' );
@@ -38,13 +38,13 @@ define( function( require ) {
     var screen = this;
     projectorModeProperty.link( function( projectorMode ) {
       if ( projectorMode ) {
-        AtomicInteractionColors.applyProfile( 'projector' );
+        StatesOfMatterColors.applyProfile( 'projector' );
       }
       else {
-        AtomicInteractionColors.applyProfile( 'default' );
+        StatesOfMatterColors.applyProfile( 'default' );
       }
     } );
-    AtomicInteractionColors.linkAttribute( 'background', screen, 'backgroundColor' );
+    StatesOfMatterColors.linkAttribute( 'background', screen, 'backgroundColor' );
   }
 
   return inherit( Screen, SolidLiquidGasScreen );
