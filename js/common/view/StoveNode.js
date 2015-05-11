@@ -81,6 +81,14 @@ define( function( require ) {
     var labelFont = new PhetFont( 14 );
     var heatTitle = new Text( heatString, { font: labelFont, rotation: Math.PI / 2 } );
     var coolTitle = new Text( coolString, { font: labelFont, rotation: Math.PI / 2 } );
+    var sliderTextMaxWidth = stoveBody.width / 9;
+    if ( heatTitle.width > sliderTextMaxWidth ) {
+      heatTitle.scale( sliderTextMaxWidth / heatTitle.width );
+    }
+    if ( coolTitle.width > sliderTextMaxWidth ) {
+      coolTitle.scale( sliderTextMaxWidth / coolTitle.width );
+    }
+
     var heatCoolSlider = new HSlider( heatProperty, { min: -1, max: 1 },
       {
         endDrag: function() {

@@ -49,10 +49,10 @@ define( function( require ) {
   var strongString = require( 'string!STATES_OF_MATTER/strong' );
 
 //  Constants
-  var MAX_WIDTH = 130;
+  var NORMAL_TEXT__MAX_WIDTH = 120;
   var SLIDER_TICK_TEXT_MAX_WIDTH = 26;
   var NORMAL_TEXT_FONT_SIZE = 12;
-  var TITLE_TEXT_WIDTH = 150;
+  var TITLE_TEXT_WIDTH = 130;
 
   // Icon for the adjustable attraction  button
   var ADJUSTABLE_ATTRACTION_ICON = new Circle( 6, { fill: StatesOfMatterConstants.ADJUSTABLE_ATTRACTION_COLOR } );
@@ -116,13 +116,13 @@ define( function( require ) {
     // homogeneous combinations of atoms.
     if ( enableHeterogeneousAtoms ) {
 
-      neonAndNeon = [ createText( neonString, MAX_WIDTH / 2, NORMAL_TEXT_FONT_SIZE ), createText( neonString, MAX_WIDTH / 2, NORMAL_TEXT_FONT_SIZE ) ];
-      argonAndArgon = [ createText( argonString, MAX_WIDTH / 2, NORMAL_TEXT_FONT_SIZE ), createText( argonString, MAX_WIDTH / 2, NORMAL_TEXT_FONT_SIZE ) ];
-      oxygenAndOxygen = [ createText( oxygenString, MAX_WIDTH / 2, NORMAL_TEXT_FONT_SIZE ), createText( oxygenString, MAX_WIDTH / 2, NORMAL_TEXT_FONT_SIZE ) ];
-      neonAndArgon = [ createText( neonString, MAX_WIDTH / 2, NORMAL_TEXT_FONT_SIZE ), createText( argonString, MAX_WIDTH / 2, NORMAL_TEXT_FONT_SIZE ) ];
-      neonAndOxygen = [ createText( neonString, MAX_WIDTH / 2, NORMAL_TEXT_FONT_SIZE ), createText( oxygenString, MAX_WIDTH / 2, NORMAL_TEXT_FONT_SIZE ) ];
-      argonAndOxygen = [ createText( argonString, MAX_WIDTH / 2, NORMAL_TEXT_FONT_SIZE ), createText( oxygenString, MAX_WIDTH / 2, NORMAL_TEXT_FONT_SIZE ) ];
-      var customAttraction = createText( customAttractionString, MAX_WIDTH, NORMAL_TEXT_FONT_SIZE );
+      neonAndNeon = [ createText( neonString, NORMAL_TEXT__MAX_WIDTH / 2, NORMAL_TEXT_FONT_SIZE ), createText( neonString, NORMAL_TEXT__MAX_WIDTH / 2, NORMAL_TEXT_FONT_SIZE ) ];
+      argonAndArgon = [ createText( argonString, NORMAL_TEXT__MAX_WIDTH / 2, NORMAL_TEXT_FONT_SIZE ), createText( argonString, NORMAL_TEXT__MAX_WIDTH / 2, NORMAL_TEXT_FONT_SIZE ) ];
+      oxygenAndOxygen = [ createText( oxygenString, NORMAL_TEXT__MAX_WIDTH / 2, NORMAL_TEXT_FONT_SIZE ), createText( oxygenString, NORMAL_TEXT__MAX_WIDTH / 2, NORMAL_TEXT_FONT_SIZE ) ];
+      neonAndArgon = [ createText( neonString, NORMAL_TEXT__MAX_WIDTH / 2, NORMAL_TEXT_FONT_SIZE ), createText( argonString, NORMAL_TEXT__MAX_WIDTH / 2, NORMAL_TEXT_FONT_SIZE ) ];
+      neonAndOxygen = [ createText( neonString, NORMAL_TEXT__MAX_WIDTH / 2, NORMAL_TEXT_FONT_SIZE ), createText( oxygenString, NORMAL_TEXT__MAX_WIDTH / 2, NORMAL_TEXT_FONT_SIZE ) ];
+      argonAndOxygen = [ createText( argonString, NORMAL_TEXT__MAX_WIDTH / 2, NORMAL_TEXT_FONT_SIZE ), createText( oxygenString, NORMAL_TEXT__MAX_WIDTH / 2, NORMAL_TEXT_FONT_SIZE ) ];
+      var customAttraction = createText( customAttractionString, NORMAL_TEXT__MAX_WIDTH, NORMAL_TEXT_FONT_SIZE );
       var pushpinImage = new Image( pushPinImg, { scale: 0.15 } );
       var maxWidthOfTitleText = 40;
       var pinnedNodeText = new HBox( {
@@ -217,10 +217,10 @@ define( function( require ) {
       }
       // itemSpec describes the pieces that make up an item in the control panel,
       // conforms to the contract: { label: {Node}, icon: {Node} (optional) }
-      var neon = { label: createText( neonString, MAX_WIDTH ), icon: NEON_ICON };
-      var argon = { label: createText( argonString, MAX_WIDTH ), icon: ARGON_ICON };
+      var neon = { label: createText( neonString, NORMAL_TEXT__MAX_WIDTH ), icon: NEON_ICON };
+      var argon = { label: createText( argonString, NORMAL_TEXT__MAX_WIDTH ), icon: ARGON_ICON };
       adjustableAttraction = {
-        label: createText( adjustableAttractionString, MAX_WIDTH ),
+        label: createText( adjustableAttractionString, NORMAL_TEXT__MAX_WIDTH ),
         icon: ADJUSTABLE_ATTRACTION_ICON
       };
       titleText = {
@@ -276,8 +276,8 @@ define( function( require ) {
       fill: options.textColor
     } );
 
-    if ( atomDiameterTitle.width > MAX_WIDTH ) {
-      atomDiameterTitle.scale( MAX_WIDTH / atomDiameterTitle.width );
+    if ( atomDiameterTitle.width > NORMAL_TEXT__MAX_WIDTH ) {
+      atomDiameterTitle.scale( NORMAL_TEXT__MAX_WIDTH / atomDiameterTitle.width );
     }
 
     var atomDiameterSlider = new HSlider( dualAtomModel.atomDiameterProperty,
@@ -324,8 +324,8 @@ define( function( require ) {
       fill: options.textColor,
       top: atomDiameterSlider.bottom + 5
     } );
-    if ( interactionStrengthTitle.width > MAX_WIDTH ) {
-      interactionStrengthTitle.scale( MAX_WIDTH / interactionStrengthTitle.width );
+    if ( interactionStrengthTitle.width > NORMAL_TEXT__MAX_WIDTH ) {
+      interactionStrengthTitle.scale( NORMAL_TEXT__MAX_WIDTH / interactionStrengthTitle.width );
     }
     var interactionStrengthSlider = new HSlider( dualAtomModel.interactionStrengthProperty,
       { min: StatesOfMatterConstants.MIN_EPSILON, max: StatesOfMatterConstants.MAX_EPSILON },
