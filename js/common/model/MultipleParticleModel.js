@@ -1,7 +1,20 @@
 // Copyright 2002-2015, University of Colorado Boulder
 
+
 /**
- * MultipleParticleModel. Ported directly from Java version.
+ * This is the main class for the model portion of the "States of Matter"
+ * simulation.  It maintains a set of data that represents a normalized model
+ * in which all atoms are assumed to have a diameter of 1, since this allows
+ * for very quick calculations, and also a set of data for particles that have
+ * the actual diameter of the particles being simulated (e.g. Argon).
+ * Throughout the comments and in the variable naming, I've tried to use the
+ * terminology of "normalized data set" (or sometimes simply "normalized
+ * set") for the former and "model data set" for the latter.  When the
+ * simulation is running, the normalized data set is updated first, since that
+ * is where the hardcore calculations are performed, and then the model data
+ * set is synchronized with the normalized data.  It is the model data set that
+ * is monitored by the view components that actually display the molecule
+ * positions to the user.
  *
  * @author John Blanco
  * @author Aaron Davis
@@ -520,7 +533,10 @@ define( function( require ) {
      *  @private
      */
     removeAllParticles: function() {
+
+      // Get rid of any existing particles from the model set.
       this.particles.clear();
+
       // Get rid of the normalized particles.
       this.moleculeDataSet = null;
     },
@@ -539,7 +555,7 @@ define( function( require ) {
      * Initialize the particles by calling the appropriate initialization
      * routine, which will set their positions, velocities, etc.
      * @public
-     * @param {number} phase
+     * @param {number} phase - phase of atoms
      */
     initializeParticles: function( phase ) {
 
@@ -564,6 +580,8 @@ define( function( require ) {
           console.error( "ERROR: Unrecognized particle type, using default." );
           break;
       }
+      // This is needed in case we were switching from another molecule
+      // that was under pressure.
       this.updatePressure();
       this.calculateMinAllowableContainerHeight();
     },
@@ -572,6 +590,7 @@ define( function( require ) {
      * @private
      */
     initializeModelParameters: function() {
+
       // Initialize the system parameters
       this.gravitationalAcceleration = INITIAL_GRAVITATIONAL_ACCEL;
       this.heatingCoolingAmount = 0;
@@ -745,8 +764,13 @@ define( function( require ) {
      * @param {number} phase
      */
     initializeDiatomic: function( moleculeID, phase ) {
+
       // Verify that a valid molecule ID was provided.
       assert && assert( (moleculeID === StatesOfMatterConstants.DIATOMIC_OXYGEN) );
+
+      // Determine the number of atoms/molecules to create.  This will be a cube
+      // (really a square, since it's 2D, but you get the idea) that takes
+      // up a fixed amount of the bottom of the container, so the number of
       // molecules that can fit depends on the size of the individual atom.
       var numberOfAtoms = Math.pow( Math.round( StatesOfMatterConstants.CONTAINER_BOUNDS.width /
                                                 ((OxygenAtom.RADIUS * 2.1) * 3) ), 2 );
@@ -801,6 +825,9 @@ define( function( require ) {
       // Only water is supported so far.
       assert && assert( (moleculeID === StatesOfMatterConstants.WATER) );
 
+      // Determine the number of atoms/molecules to create.  This will be a cube
+      // (really a square, since it's 2D, but you get the idea) that takes
+      // up a fixed amount of the bottom of the container, so the number of
       // molecules that can fit depends on the size of the individual atom.
       var waterMoleculeDiameter = OxygenAtom.RADIUS * 2.1;
       var moleculesAcrossBottom = Math.round( StatesOfMatterConstants.CONTAINER_BOUNDS.width /
@@ -836,6 +863,8 @@ define( function( require ) {
         this.particles.add( new OxygenAtom( 0, 0 ) );
         this.particles.add( new HydrogenAtom( 0, 0 ) );
 
+        // For the sake of making water actually crystallize, we have a
+        // proportion of the hydrogen atoms be of a different type.  There
         // is more on this in the algorithm implementation for water.
         var atom = ( i % 2 === 0 ) ? new HydrogenAtom( 0, 0 ) : new HydrogenAtom2( 0, 0 );
         this.particles.add( atom );
@@ -1242,6 +1271,8 @@ define( function( require ) {
         console.log( " - Warning: Ignoring attempt to return lid when container hadn't exploded." );
         return;
       }
+
+      // Remove any particles that are outside of the container.  We work
       // with the normalized particles for this.
       var particlesOutsideOfContainerCount = 0;
       var firstOutsideMoleculeIndex;
@@ -1261,6 +1292,10 @@ define( function( require ) {
           particlesOutsideOfContainerCount++;
         }
       } while ( firstOutsideMoleculeIndex !== this.moleculeDataSet.getNumberOfMolecules() );
+
+      // Remove enough of the non-normalized particles so that we have the
+      // same number as the normalized.  They don't have to be the same
+      // particles since the normalized and non-normalized particles are
       // explicitly synced up elsewhere.
       this.copyOfParticles.clear();
       for ( var k = 0; k < this.particles.length; k++ ) {
@@ -1273,6 +1308,10 @@ define( function( require ) {
       }
       // Set the container to be unexploded.
       this.setContainerExploded( false );
+
+      // Set the phase to be gas, since otherwise the extremely high
+      // kinetic energy of the particles causes an unreasonably high
+      // temperature for the particles that remain in the container. Doing
       // this generally cools them down into a more manageable state.
       if ( particlesOutsideOfContainerCount > 0 ) {
         this.phaseStateChanger.setPhase( AbstractPhaseStateChanger.PHASE_GAS );
@@ -1281,7 +1320,7 @@ define( function( require ) {
 
     /**
      * @public
-     * @returns {exports.PARTICLE_CONTAINER_INITIAL_HEIGHT|*}
+     * @returns {number}
      */
     getParticleContainerHeight: function() {
       return this.particleContainerHeight;

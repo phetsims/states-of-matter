@@ -25,11 +25,15 @@ define( function( require ) {
    * @constructor
    */
   function MoleculeForceAndMotionDataSet( atomsPerMolecule ) {
+
+    // Attributes that describe the data set as a whole.
     this.numberOfAtoms = 0;
     this.numberOfSafeMolecules = 0;
 
+    // Attributes that apply to all elements of the data set.
     this.atomsPerMolecule = atomsPerMolecule;
 
+    // Attributes of the individual molecules and the atoms that comprise them.
     this.atomPositions = [];
     this.moleculeCenterOfMassPositions = [];
     this.moleculeVelocities = [];

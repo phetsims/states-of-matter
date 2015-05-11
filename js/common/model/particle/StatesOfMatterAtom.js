@@ -1,7 +1,7 @@
-// Copyright 2002-2013, University of Colorado Boulder
+// Copyright 2002-2015, University of Colorado Boulder
 
 /**
- * Model of a photon for single bulb screen.
+ * Model of Atom
  *
  * @author Aaron Davis
  */
@@ -15,11 +15,11 @@ define( function( require ) {
 
   /**
    *
-   * @param {number} x position in picometers
-   * @param {number} y position in picometers
-   * @param {number} radius of the atom in picometers
-   * @param {number} mass of the atom in atomic mass units.
-   * @param {Color} color of the atom
+   * @param {number} x  - x position in picometers
+   * @param {number} y  - y position in picometers
+   * @param {number} radius - radius  of the atom in picometers
+   * @param {number} mass - mass  of the atom in atomic mass units.
+   * @param {Color} color  - color of the atom
    * @constructor
    */
   function StatesOfMatterAtom( x, y, radius, mass, color ) {
