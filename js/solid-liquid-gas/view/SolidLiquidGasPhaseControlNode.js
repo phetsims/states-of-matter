@@ -97,6 +97,7 @@ define( function( require ) {
       content: createItem( solid ),
       listener: function() {
         stateProperty.value = SOLID_STATE;
+        stateProperty._notifyObservers();
       }
     } );
 
@@ -115,6 +116,7 @@ define( function( require ) {
       content: createItem( gas ),
       listener: function() {
         stateProperty.value = GAS_STATE;
+        stateProperty._notifyObservers();
       },
       baseColor: 'rgb( 204, 102, 204 )'
     } );
