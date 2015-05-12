@@ -28,7 +28,8 @@ define( function( require ) {
   var DEFAULT_ATOM_TYPE = AtomType.NEON;
   var CALCULATIONS_PER_TICK = 8;
   var THRESHOLD_VELOCITY = 100;  // Used to distinguish small oscillations from real movement.
-  var VIBRATION_DURATION = 1200;  // In milliseconds.
+
+  var VIBRATION_COUNTER_RESET_VALUE = 72;
   var BONDED_OSCILLATION_PROPORTION = 0.06; // Proportion of atom radius.
   var MAX_APPROXIMATION_ITERATIONS = 100;
 
@@ -230,10 +231,9 @@ define( function( require ) {
       },
 
       /**
-       * Set the sigma value, a.k.a. the Atomic Diameter Parameter, for the
-       * adjustable atom.  This is one of the two parameters that are used
-       * for calculating the Lennard-Jones potential. If an attempt is made to
-       * set this value when the adjustable atom is not selected, it is ignored.
+       * Set the sigma value, a.k.a. the Atomic Diameter Parameter, for the adjustable atom.  This is one of the two
+       * parameters that are used for calculating the Lennard-Jones potential. If an attempt is made to set this value
+       * when the adjustable atom is not selected, it is ignored.
        * @public
        * @param {number}sigma - distance parameter
        */
@@ -256,10 +256,8 @@ define( function( require ) {
       },
 
       /**
-       * Get the value of the sigma parameter that is being used for the motion
-       * calculations.  If the atoms are the same, it will be the diameter
-       * of one atom.  If they are not, it will be a function of the
-       * diameters.
+       * Get the value of the sigma parameter that is being used for the motion calculations.  If the atoms are the
+       * same, it will be the diameter of one atom.  If they are not, it will be a function of the diameters.
        * @public
        * @return {number}
        */
@@ -268,8 +266,8 @@ define( function( require ) {
       },
 
       /**
-       * Set the epsilon value, a.k.a. the Interaction Strength Parameter, which
-       * is one of the two parameters that describes the Lennard-Jones potential.
+       * Set the epsilon value, a.k.a. the Interaction Strength Parameter, which is one of the two parameters that
+       * describes the Lennard-Jones potential.
        * @public
        * @param {number}epsilon - interaction strength parameter
        */
@@ -290,8 +288,8 @@ define( function( require ) {
       },
 
       /**
-       * Get the epsilon value, a.k.a. the Interaction Strength Parameter, which
-       * is one of the two parameters that describes the Lennard-Jones potential.
+       * Get the epsilon value, a.k.a. the Interaction Strength Parameter, which is one of the two parameters that
+       * describes the Lennard-Jones potential.
        * @public
        * @returns {number}
        */
@@ -315,15 +313,13 @@ define( function( require ) {
         this.motionPaused = paused;
         this.movableAtom.setVx( 0 );
         if ( !paused ) {
-          // The atom is being released by the user.  Record the amount of
-          // energy that the atom has at this point in time for later use.  The
-          // calculation is made be evaluating the force at the current
-          // location and multiplying it by the distance to the point where
-          // the LJ potential is minimized.  Note that this is not precisely
-          // correct, since the potential is not continuous, but is close
-          // enough for our purposes.
+          // The atom is being released by the user.  Record the amount of energy that the atom has at this point in
+          // time for later use.  The calculation is made be evaluating the force at the current location and
+          // multiplying it by the distance to the point where the LJ potential is minimized.  Note that this is not
+          // precisely correct, since the potential is not continuous, but is close enough for our purposes.
           this.potentialWhenAtomReleased =
-          this.ljPotentialCalculator.calculatePotentialEnergy( this.movableAtom.getPositionReference().distance( this.fixedAtom.getPositionReference() ) );
+          this.ljPotentialCalculator.calculatePotentialEnergy( this.movableAtom.getPositionReference().distance(
+            this.fixedAtom.getPositionReference() ) );
         }
       },
 
@@ -333,8 +329,7 @@ define( function( require ) {
        */
       releaseBond: function() {
         if ( this.bondingState === BONDING_STATE_BONDING ) {
-          // A bond is in the process of forming, so reset everything that
-          // is involved in the bonding process.
+          // A bond is in the process of forming, so reset everything that is involved in the bonding process.
           this.vibrationCounter = 0;
         }
         this.bondingState = BONDING_STATE_UNBONDED;
@@ -367,8 +362,8 @@ define( function( require ) {
       },
 
       /**
-       * Put the movable atom back to the location where the force is
-       * minimized, and reset the velocity and acceleration to 0.
+       * Put the movable atom back to the location where the force is minimized, and reset the velocity and
+       * acceleration to 0.
        * @public
        */
       resetMovableAtomPos: function() {
@@ -437,9 +432,9 @@ define( function( require ) {
               if ( ( this.movableAtom.getVx() > THRESHOLD_VELOCITY ) &&
                    ( this.movableAtom.getPositionReference().distance( this.fixedAtom.getPositionReference() ) <
                      this.fixedAtom.getRadius() * 2.5 ) ) {
-                // The atoms are close together and the movable one is
-                // starting to move away, which is the point at which we
-                // consider the bond to start forming.
+
+                // The atoms are close together and the movable one is starting to move away, which is the point at
+                // which we consider the bond to start forming.
                 this.bondingState = BONDING_STATE_BONDING;
                 this.startFixedAtomVibration();
               }
@@ -447,26 +442,26 @@ define( function( require ) {
 
             case BONDING_STATE_BONDING:
               if ( this.attractiveForce > this.repulsiveForce ) {
-                // A bond is forming and the force just exceeded the
-                // repulsive force, meaning that the atom is starting
+
+                // A bond is forming and the force just exceeded the repulsive force, meaning that the atom is starting
                 // to pass the bottom of the well.
                 this.movableAtom.setAx( 0 );
                 this.movableAtom.setVx( 0 );
                 this.minPotentialDistance = this.ljPotentialCalculator.calculateMinimumForceDistance();
                 this.bondedOscillationRightDistance = this.minPotentialDistance +
                                                       BONDED_OSCILLATION_PROPORTION * this.movableAtom.getRadius();
-                this.bondedOscillationLeftDistance = this.approximateEquivalentPotentialDistance( this.bondedOscillationRightDistance );
+                this.bondedOscillationLeftDistance = this.approximateEquivalentPotentialDistance(
+                  this.bondedOscillationRightDistance );
                 this.bondingState = BONDING_STATE_BONDED;
                 this.stepFixedAtomVibration();
               }
               break;
 
             case BONDING_STATE_BONDED:
-              // Override the atom motion calculations and cause the atom to
-              // oscillate a fixed distance from the bottom of the well.
-              // This is necessary because otherwise we tend to have an
-              // aliasing problem where it appears that the atom oscillates
-              // for a while, then damps out, then starts up again.
+
+              // Override the atom motion calculations and cause the atom to oscillate a fixed distance from the bottom
+              // of the well. This is necessary because otherwise we tend to have an aliasing problem where it appears
+              // that the atom oscillates for a while, then damps out, then starts up again.
               this.movableAtom.setAx( 0 );
               this.movableAtom.setVx( 0 );
               if ( this.movableAtom.getX() > this.minPotentialDistance ) {
@@ -496,8 +491,7 @@ define( function( require ) {
        */
       positionChanged: function() {
         if ( this.motionPaused ) {
-          // The user must be moving the atom from the view.
-          // Update the forces correspondingly.
+          // The user must be moving the atom from the view. Update the forces correspondingly.
           try {
             this.clone( this.movableAtom );
           }
@@ -539,8 +533,8 @@ define( function( require ) {
         var distance = this.shadowMovableAtom.getPositionReference().distance( Vector2.ZERO );
 
         if ( distance < ( this.fixedAtom.getRadius() + this.movableAtom.getRadius() ) / 8 ) {
-          // The atoms are too close together, and calculating the force
-          // will cause unusable levels of speed later, so we limit it.
+          // The atoms are too close together, and calculating the force will cause unusable levels of speed later, so
+          // we limit it.
           distance = ( this.fixedAtom.getRadius() + this.movableAtom.getRadius() ) / 8;
         }
 
@@ -558,9 +552,8 @@ define( function( require ) {
         var mass = this.shadowMovableAtom.getMass() * 1.6605402E-27;  // Convert mass to kilograms.
         var acceleration = ( this.repulsiveForce - this.attractiveForce ) / mass;
 
-        // Update the acceleration for the movable atom.  We do this
-        // regardless of whether movement is paused so that the force vectors
-        // can be shown appropriately if the user moves the atoms.
+        // Update the acceleration for the movable atom.  We do this regardless of whether movement is paused so that
+        // the force vectors can be shown appropriately if the user moves the atoms.
         this.shadowMovableAtom.setAx( acceleration );
 
         if ( !this.motionPaused ) {
@@ -575,7 +568,7 @@ define( function( require ) {
        * @private
        */
       startFixedAtomVibration: function() {
-        this.vibrationCounter = VIBRATION_DURATION;
+        this.vibrationCounter = VIBRATION_COUNTER_RESET_VALUE;
       },
 
       /**
@@ -584,19 +577,17 @@ define( function( require ) {
       stepFixedAtomVibration: function() {
         if ( this.vibrationCounter > 0 ) {
           var vibrationScaleFactor = 1;
-          if ( this.vibrationCounter < VIBRATION_DURATION / 4 ) {
+          if ( this.vibrationCounter < VIBRATION_COUNTER_RESET_VALUE / 4 ) {
             // In the last part of the vibration, starting to wind it down.
-            vibrationScaleFactor = this.vibrationCounter / ( VIBRATION_DURATION / 4 );
+            vibrationScaleFactor = this.vibrationCounter / ( VIBRATION_COUNTER_RESET_VALUE / 4 );
           }
           if ( this.fixedAtom.getX() !== 0 ) {
             // Go back to the original position every other time.
             this.fixedAtom.setPosition( 0, 0 );
           }
           else {
-            // Move some distance from the original position based on the
-            // energy contained at the time of bonding.  The
-            // multiplication factor in the equation below is empirically
-            // determined to look good on the screen.
+            // Move some distance from the original position based on the energy contained at the time of bonding.  The
+            // multiplication factor in the equation below is empirically determined to look good on the screen.
             var xPos = ( Math.random() * 2 - 1 ) * this.potentialWhenAtomReleased * 5e19 * vibrationScaleFactor;
             var yPos = ( Math.random() * 2 - 1 ) * this.potentialWhenAtomReleased * 5e19 * vibrationScaleFactor;
             this.fixedAtom.setPosition( xPos, yPos );
@@ -611,14 +602,13 @@ define( function( require ) {
       },
 
       /**
-       * This is a highly specialized function that is used for figuring out
-       * the inter-atom distance at which the value of the potential on the left
-       * side of the of the min of the LJ potential curve is equal to that at the
-       * given distance to the right of the min of the LJ potential curve.
+       * This is a highly specialized function that is used for figuring out the inter-atom distance at which the value
+       * of the potential on the left side of the of the min of the LJ potential curve is equal to that at the given
+       * distance to the right of the min of the LJ potential curve.
        *
        * @private
-       * @param {number} distance - inter-atom distance, must be greater than the point at
-       * which the potential is at the minimum value.
+       * @param {number} distance - inter-atom distance, must be greater than the point at which the potential is at the
+       * minimum value.
        * @return{number}
        */
       approximateEquivalentPotentialDistance: function( distance ) {
@@ -635,8 +625,7 @@ define( function( require ) {
         var equivalentPotentialDistance = this.ljPotentialCalculator.calculateMinimumForceDistance();
         for ( var i = 0; i < MAX_APPROXIMATION_ITERATIONS; i++ ) {
           if ( this.ljPotentialCalculator.calculateLjPotential( equivalentPotentialDistance ) > targetPotential ) {
-            // We've crossed over to where the potential is less negative.
-            // Close enough.
+            // We've crossed over to where the potential is less negative. Close enough.
             break;
           }
           equivalentPotentialDistance -= distanceChangePerIteration;
