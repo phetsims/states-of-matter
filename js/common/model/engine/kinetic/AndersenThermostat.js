@@ -19,17 +19,25 @@ define( function( require ) {
 
   /**
    * Constructor for the Andersen thermostat.
-   * @param {MoleculeForceAndMotionDataSet} moleculeDataSet Data set on which operations will be performed.
-   * @param {number} minTemperature The temperature that should be considered absolute zero, below which motion should cease
+   * @param {MoleculeForceAndMotionDataSet} moleculeDataSet  - Data set on which operations will be performed.
+   * @param {number} minTemperature  - The temperature that should be considered absolute zero, below which motion should cease
    * @constructor
    */
   function AndersenThermostat( moleculeDataSet, minTemperature ) {
 
     this.moleculeDataSet = moleculeDataSet;
+
+    // Target temperature in normalized model units.
     this.targetTemperature = StatesOfMatterConstants.INITIAL_TEMPERATURE;
+
+    // Minimum temperature in normalized model units, below this is considered absolute 0;
     this.minModelTemperature = minTemperature;
+
+    // Set up references to the various arrays within the data set so that
+    // the calculations can be performed as fast as is possible.
     this.moleculeVelocities = moleculeDataSet.moleculeVelocities;
     this.moleculeRotationRates = moleculeDataSet.moleculeRotationRates;
+
     this.random = new Random();
   }
 

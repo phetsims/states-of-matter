@@ -238,7 +238,7 @@ define( function( require ) {
     },
 
     /**
-     *
+     *  @public
      * @param {number} pressureZoneWallForce
      */
     updatePressure: function( pressureZoneWallForce ) {
