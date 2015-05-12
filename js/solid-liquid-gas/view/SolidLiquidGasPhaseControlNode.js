@@ -32,7 +32,7 @@ define( function( require ) {
   var SOLID_STATE = 1;
   var LIQUID_STATE = 2;
   var GAS_STATE = 3;
-  var MAX_WIDTH = 150;
+  var STATES_BUTTON_MAX_WIDTH = 150;
 
   /**
    * @param {Property<number>} heatingCoolingAmountProperty
@@ -60,18 +60,14 @@ define( function( require ) {
     var liquidText = new Text( liquidString, textOptions );
     var gasText = new Text( gasString, textOptions );
 
-    var sizeOfChar;
-    if ( solidText.width > MAX_WIDTH / 2 ) {
-      sizeOfChar = solidText.width / solidString.length;
-      solidText.setText( solidString.slice( 0, MAX_WIDTH / (2 * sizeOfChar) ) );
+    if ( solidText.width > STATES_BUTTON_MAX_WIDTH / 2 ) {
+      solidText.scale( (STATES_BUTTON_MAX_WIDTH / 2) / solidText.width );
     }
-    if ( liquidText.width > MAX_WIDTH / 2 ) {
-      sizeOfChar = liquidText.width / liquidString.length;
-      liquidText.setText( liquidString.slice( 0, MAX_WIDTH / (2 * sizeOfChar) ) );
+    if ( liquidText.width > STATES_BUTTON_MAX_WIDTH / 2 ) {
+      liquidText.scale( (STATES_BUTTON_MAX_WIDTH / 2) / Math.round( liquidText.width ) );
     }
-    if ( gasText.width > MAX_WIDTH / 2 ) {
-      sizeOfChar = gasText.width / gasString.length;
-      gasText.setText( gasString.slice( 0, MAX_WIDTH / (2 * sizeOfChar) ) );
+    if ( gasText.width > STATES_BUTTON_MAX_WIDTH / 2 ) {
+      gasText.scale( (STATES_BUTTON_MAX_WIDTH / 2) / gasText.width );
     }
     var solid = { icon: createSolidIcon(), label: solidText };
     var liquid = { icon: createLiquidIcon(), label: liquidText };
@@ -80,8 +76,8 @@ define( function( require ) {
     // pad inserts a spacing node (HStrut) so that the text, space and image together occupy a certain fixed width.
     var createItem = function( itemSpec ) {
       if ( itemSpec.icon ) {
-        var strutWidth1 = MAX_WIDTH / 2 - itemSpec.icon.width;
-        var strutWidth2 = MAX_WIDTH / 2 - itemSpec.label.width;
+        var strutWidth1 = STATES_BUTTON_MAX_WIDTH / 2 - itemSpec.icon.width;
+        var strutWidth2 = STATES_BUTTON_MAX_WIDTH / 2 - itemSpec.label.width;
         return new HBox( {
           children: [ new HStrut( 10 ), itemSpec.icon, new HStrut( strutWidth1 ), itemSpec.label,
             new HStrut( strutWidth2 ) ]
