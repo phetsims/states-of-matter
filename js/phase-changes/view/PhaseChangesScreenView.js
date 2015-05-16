@@ -16,7 +16,7 @@ define( function( require ) {
   var PlayPauseButton = require( 'SCENERY_PHET/buttons/PlayPauseButton' );
   var StepButton = require( 'SCENERY_PHET/buttons/StepButton' );
   var CompositeThermometerNode = require( 'STATES_OF_MATTER/common/view/CompositeThermometerNode' );
-  var StoveNode = require( 'STATES_OF_MATTER/common/view/StoveNode' );
+  var HeaterCoolerNode = require( 'SCENERY_PHET/HeaterCoolerNode' );
   var PhaseChangesMoleculesControlPanel = require( 'STATES_OF_MATTER/phase-changes/view/PhaseChangesMoleculesControlPanel' );
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
   var ParticleContainerNode = require( 'STATES_OF_MATTER/common/view/ParticleContainerNode' );
@@ -81,20 +81,24 @@ define( function( require ) {
     var modelViewTransform = ModelViewTransform2.createSinglePointScaleInvertedYMapping( new Vector2( 0, 0 ),
       new Vector2( 0, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT ), mvtScale );
 
-    // add stove node
-    var stoveNode = new StoveNode( multipleParticleModel, {
+    // add heater/cooler node
+    var heaterCoolerNode = new HeaterCoolerNode( {
       scale: 0.8,
       centerX: this.layoutBounds.centerX,
       bottom: this.layoutBounds.bottom - INSET
     } );
+    heaterCoolerNode.heatCoolLevelProperty.link( function( heat ) {
+      multipleParticleModel.setHeatingCoolingAmount( heat )
+    } );
+
 
     this.multipleParticleModel = multipleParticleModel;
     this.modelTemperatureHistory = new ObservableArray();
 
     // add particle container node
     var particleContainerNode = new ParticleContainerNode( multipleParticleModel, modelViewTransform, true, true, {
-      centerX: stoveNode.centerX - PARTICLE_CONTAINER_X_OFFSET,
-      bottom:  stoveNode.top - INSET
+      centerX: heaterCoolerNode.centerX - PARTICLE_CONTAINER_X_OFFSET,
+      bottom: heaterCoolerNode.top - INSET
     } );
 
     // add particle container back node  before  particle Canvas layer
@@ -102,8 +106,8 @@ define( function( require ) {
 
     // add particle canvas layer for particle rendering
     this.particlesLayer = new ParticleCanvasNode( multipleParticleModel.particles, modelViewTransform, projectorModeProperty, {
-      centerX: stoveNode.centerX + PARTICLE_LAYER_X_OFFSET,
-      bottom:  stoveNode.top + PARTICLE_LAYER_Y_OFFSET,
+      centerX: heaterCoolerNode.centerX + PARTICLE_LAYER_X_OFFSET,
+      bottom: heaterCoolerNode.top + PARTICLE_LAYER_Y_OFFSET,
       canvasBounds: new Bounds2( -100, -PARTICLE_CANVAS_LAYER_BOUND_LIMIT,
         PARTICLE_CANVAS_LAYER_BOUND_LIMIT, PARTICLE_CANVAS_LAYER_BOUND_LIMIT )
     } );
@@ -115,13 +119,13 @@ define( function( require ) {
     var containerOpenNodeYOffset = particleContainerNode.fingerNode.fingerImageNode.height - 10;
     particleContainerNode.openNode.centerX = particleContainerNode.centerX + containerOpenNodeXOffset;
     particleContainerNode.openNode.centerY = particleContainerNode.top + containerOpenNodeYOffset;
-    this.addChild( stoveNode );
+    this.addChild( heaterCoolerNode );
 
     // add compositeThermometer node
     var compositeThermometerNode = new CompositeThermometerNode( multipleParticleModel, modelViewTransform, {
       font: new PhetFont( 20 ),
       fill: 'white',
-      right: stoveNode.left + 3 * INSET
+      right: heaterCoolerNode.left + 3 * INSET
     } );
     this.addChild( compositeThermometerNode );
 
@@ -132,7 +136,7 @@ define( function( require ) {
     // add phase change control panel
     var phaseChangesMoleculesControlPanel = new PhaseChangesMoleculesControlPanel( multipleParticleModel, isInteractionDiagramEnabled, {
       right: this.layoutBounds.right - LAY_BOUNDS_RIGHT_OFFSET,
-      top:   this.layoutBounds.top + LAY_BOUNDS_Y_OFFSET / 2
+      top: this.layoutBounds.top + LAY_BOUNDS_Y_OFFSET / 2
     } );
     this.addChild( phaseChangesMoleculesControlPanel );
 
@@ -147,7 +151,7 @@ define( function( require ) {
         multipleParticleModel.expandedProperty.value = isInteractionDiagramEnabled;
       },
       bottom: this.layoutBounds.bottom - LAY_BOUNDS_Y_OFFSET / 2,
-      right:  this.layoutBounds.right - LAY_BOUNDS_RIGHT_OFFSET,
+      right: this.layoutBounds.right - LAY_BOUNDS_RIGHT_OFFSET,
       radius: 18
     } );
 
@@ -161,8 +165,8 @@ define( function( require ) {
         radius: 12,
         stroke: 'black',
         fill: '#005566',
-        right:  stoveNode.left - STEP_BUTTON_X_OFFSET,
-        bottom: stoveNode.bottom - STEP_BUTTON_Y_OFFSET
+        right: heaterCoolerNode.left - STEP_BUTTON_X_OFFSET,
+        bottom: heaterCoolerNode.bottom - STEP_BUTTON_Y_OFFSET
       }
     );
     this.addChild( stepButton );
@@ -178,8 +182,8 @@ define( function( require ) {
 
     // add bicycle pump node
     this.addChild( new BicyclePumpNode( 200, 250, multipleParticleModel, {
-      bottom: stoveNode.top + BICYCLE_PUMP_NODE_Y_OFFSET,
-      right:  particleContainerNode.left + BICYCLE_PUMP_NODE_X_OFFSET
+      bottom: heaterCoolerNode.top + BICYCLE_PUMP_NODE_Y_OFFSET,
+      right: particleContainerNode.left + BICYCLE_PUMP_NODE_X_OFFSET
     } ) );
 
     // add return lid button
@@ -193,7 +197,7 @@ define( function( require ) {
       visible: false,
       xMargin: 10,
       right: particleContainerNode.left - 2 * LAY_BOUNDS_RIGHT_OFFSET,
-      top:   particleContainerNode.centerY + RETURN_LID_BUTTON_Y_OFFSET
+      top: particleContainerNode.centerY + RETURN_LID_BUTTON_Y_OFFSET
     } );
     this.addChild( this.returnLidButton );
     multipleParticleModel.isExplodedProperty.linkAttribute( this.returnLidButton, 'visible' );

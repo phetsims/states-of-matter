@@ -15,7 +15,7 @@ define( function( require ) {
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var PlayPauseButton = require( 'SCENERY_PHET/buttons/PlayPauseButton' );
   var StepButton = require( 'SCENERY_PHET/buttons/StepButton' );
-  var StoveNode = require( 'STATES_OF_MATTER/common/view/StoveNode' );
+  var HeaterCoolerNode = require( 'SCENERY_PHET/HeaterCoolerNode' );
   var CompositeThermometerNode = require( 'STATES_OF_MATTER/common/view/CompositeThermometerNode' );
   var SolidLiquidGasMoleculesControlPanel = require( 'STATES_OF_MATTER/solid-liquid-gas/view/SolidLiquidGasMoleculesControlPanel' );
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
@@ -29,7 +29,7 @@ define( function( require ) {
 
   // constants
   var inset = 10;
-  var stoveNodeXOffset = 10;
+  var heaterCoolerXOffset = 10;
   var stepButtonXOffset = 50;
   var stepButtonYOffset = 20;
   var compositeThermometerNodeLeftOffset = 100;
@@ -55,18 +55,21 @@ define( function( require ) {
     var modelViewTransform = ModelViewTransform2.createSinglePointScaleInvertedYMapping( new Vector2( 0, 0 ),
       new Vector2( 0, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT ), mvtScale );
 
-    // add stove Node
-    var stoveNode = new StoveNode( multipleParticleModel, {
+    // add heater/cooler Node
+    var heaterCoolerNode = new HeaterCoolerNode( {
       scale: 0.8,
       centerX: this.layoutBounds.centerX,
       bottom: this.layoutBounds.bottom - inset
+    } );
+    heaterCoolerNode.heatCoolLevelProperty.link( function( heat ) {
+      multipleParticleModel.setHeatingCoolingAmount( heat )
     } );
 
     // add particle container
     var particleContainerNode = new ParticleContainerNode( multipleParticleModel, modelViewTransform, false, false,
       {
-        centerX: stoveNode.centerX - stoveNodeXOffset,
-        bottom:  stoveNode.top - inset
+        centerX: heaterCoolerNode.centerX - heaterCoolerXOffset,
+        bottom: heaterCoolerNode.top - inset
       } );
 
     // add particle container back before  particle Canvas layer
@@ -74,8 +77,8 @@ define( function( require ) {
 
     // add particle Canvas layer
     this.particlesLayer = new ParticleCanvasNode( multipleParticleModel.particles, modelViewTransform, projectorModeProperty, {
-      centerX: stoveNode.centerX + particlesLayerXOffset,
-      bottom:  stoveNode.top + particlesLayerYOffset,
+      centerX: heaterCoolerNode.centerX + particlesLayerXOffset,
+      bottom: heaterCoolerNode.top + particlesLayerYOffset,
       canvasBounds: new Bounds2( -100, -particleCanvasLayerBoundLimit,
         particleCanvasLayerBoundLimit, particleCanvasLayerBoundLimit )
     } );
@@ -85,13 +88,13 @@ define( function( require ) {
     // adjust the container back node position
     particleContainerNode.openNode.centerX = particleContainerNode.centerX;
     particleContainerNode.openNode.centerY = particleContainerNode.top + 25;
-    this.addChild( stoveNode );
+    this.addChild( heaterCoolerNode );
 
     // add compositeThermometer Node
     var compositeThermometerNode = new CompositeThermometerNode( multipleParticleModel, modelViewTransform, {
       font: new PhetFont( 20 ),
       fill: 'white',
-      right:   particleContainerNode.left + compositeThermometerNodeLeftOffset,
+      right: particleContainerNode.left + compositeThermometerNodeLeftOffset,
       centerY: particleContainerNode.top + compositeThermometerNodeYOffset
     } );
     this.addChild( compositeThermometerNode );
@@ -99,7 +102,7 @@ define( function( require ) {
     // add Molecule ControlPanel
     var solidLiquidGasMoleculesControlPanel = new SolidLiquidGasMoleculesControlPanel( multipleParticleModel.moleculeTypeProperty, {
       right: this.layoutBounds.right - layoutBoundsRightOffset,
-      top:   this.layoutBounds.top + layoutBoundsYOffset
+      top: this.layoutBounds.top + layoutBoundsYOffset
     } );
     this.addChild( solidLiquidGasMoleculesControlPanel );
 
@@ -118,7 +121,7 @@ define( function( require ) {
           particleContainerNode.reset();
         },
         bottom: this.layoutBounds.bottom - layoutBoundsYOffset / 2,
-        right:  this.layoutBounds.right - layoutBoundsRightOffset,
+        right: this.layoutBounds.right - layoutBoundsRightOffset,
         radius: 18
       } );
 
@@ -132,8 +135,8 @@ define( function( require ) {
         radius: 12,
         stroke: 'black',
         fill: '#005566',
-        right:  stoveNode.left - stepButtonXOffset,
-        bottom: stoveNode.bottom - stepButtonYOffset
+        right: heaterCoolerNode.left - stepButtonXOffset,
+        bottom: heaterCoolerNode.bottom - stepButtonYOffset
       }
     );
 
