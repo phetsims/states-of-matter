@@ -88,7 +88,7 @@ define( function( require ) {
       bottom: this.layoutBounds.bottom - INSET
     } );
     heaterCoolerNode.heatCoolLevelProperty.link( function( heat ) {
-      multipleParticleModel.setHeatingCoolingAmount( heat )
+      multipleParticleModel.setHeatingCoolingAmount( heat );
     } );
 
 
