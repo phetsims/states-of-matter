@@ -37,7 +37,7 @@ define( function( require ) {
   var layoutBoundsRightOffset = 15;
   var layoutBoundsYOffset = 10;
   var particlesLayerXOffset = 148;
-  var particlesLayerYOffset = 684;
+  var particlesLayerYOffset = 680;
   var particleCanvasLayerBoundLimit = 1000;
 
   /**
