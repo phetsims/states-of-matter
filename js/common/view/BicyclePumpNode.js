@@ -182,7 +182,7 @@ define( function( require ) {
       cursor: 'ns-resize'
     } );
 
-    pumpHandleNode.touchArea = pumpHandleNode.localBounds.dilatedXY( 60, 60 );
+    pumpHandleNode.touchArea = pumpHandleNode.localBounds.dilatedXY( 100, 100 );
     pumpHandleNode.scale( pumpHandleHeight / pumpHandleNode.height );
     pumpHandleNode.setTranslation( (pumpBaseWidth - pumpHandleNode.width) / 2,
       height - ( height * PUMP_HANDLE_INIT_VERT_POS_PROPORTION ) - pumpHandleHeight - pumpBaseHeight );

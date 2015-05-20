@@ -36,9 +36,9 @@ define( function( require ) {
   var compositeThermometerNodeYOffset = 50;
   var layoutBoundsRightOffset = 15;
   var layoutBoundsYOffset = 10;
-  var particlesLayerXOffset = 100;
-  var particlesLayerYOffset = 280;
-  var particleCanvasLayerBoundLimit = 600;
+  var particlesLayerXOffset = 148;
+  var particlesLayerYOffset = 684;
+  var particleCanvasLayerBoundLimit = 1000;
 
   /**
    *
@@ -77,9 +77,9 @@ define( function( require ) {
 
     // add particle Canvas layer
     this.particlesLayer = new ParticleCanvasNode( multipleParticleModel.particles, modelViewTransform, projectorModeProperty, {
-      centerX: heaterCoolerNode.centerX + particlesLayerXOffset,
-      bottom: heaterCoolerNode.top + particlesLayerYOffset,
-      canvasBounds: new Bounds2( -100, -particleCanvasLayerBoundLimit,
+      centerX: heaterCoolerNode.centerX - particlesLayerXOffset,
+      bottom:  heaterCoolerNode.top + particlesLayerYOffset,
+      canvasBounds: new Bounds2( -particleCanvasLayerBoundLimit, -particleCanvasLayerBoundLimit,
         particleCanvasLayerBoundLimit, particleCanvasLayerBoundLimit )
     } );
     this.addChild( this.particlesLayer );

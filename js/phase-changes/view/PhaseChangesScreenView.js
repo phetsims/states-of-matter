@@ -53,9 +53,9 @@ define( function( require ) {
   var MAX_NUM_HISTORY_SAMPLES = 100;
 
   // constants used in the layout process
-  var PARTICLE_CANVAS_LAYER_BOUND_LIMIT = 600;
-  var PARTICLE_LAYER_X_OFFSET = 100;
-  var PARTICLE_LAYER_Y_OFFSET = 280;
+  var PARTICLE_CANVAS_LAYER_BOUND_LIMIT = 1000;
+  var PARTICLE_LAYER_X_OFFSET = 148;
+  var PARTICLE_LAYER_Y_OFFSET = 684;
   var PARTICLE_CONTAINER_X_OFFSET = 60;
   var LAY_BOUNDS_RIGHT_OFFSET = 15;
   var LAY_BOUNDS_Y_OFFSET = 10;
@@ -106,9 +106,9 @@ define( function( require ) {
 
     // add particle canvas layer for particle rendering
     this.particlesLayer = new ParticleCanvasNode( multipleParticleModel.particles, modelViewTransform, projectorModeProperty, {
-      centerX: heaterCoolerNode.centerX + PARTICLE_LAYER_X_OFFSET,
-      bottom: heaterCoolerNode.top + PARTICLE_LAYER_Y_OFFSET,
-      canvasBounds: new Bounds2( -100, -PARTICLE_CANVAS_LAYER_BOUND_LIMIT,
+      centerX: heaterCoolerNode.centerX - PARTICLE_LAYER_X_OFFSET,
+      bottom:  heaterCoolerNode.top + PARTICLE_LAYER_Y_OFFSET,
+      canvasBounds: new Bounds2( -PARTICLE_CANVAS_LAYER_BOUND_LIMIT, -PARTICLE_CANVAS_LAYER_BOUND_LIMIT,
         PARTICLE_CANVAS_LAYER_BOUND_LIMIT, PARTICLE_CANVAS_LAYER_BOUND_LIMIT )
     } );
     this.addChild( this.particlesLayer );
