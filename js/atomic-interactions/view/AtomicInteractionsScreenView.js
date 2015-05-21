@@ -116,7 +116,7 @@ define( function( require ) {
     // add play/pause and step buttons
     var stepButton = new StepButton(
       function() {
-        dualAtomModel.stepInternal( 0.04 );
+        dualAtomModel.stepInternal( 0.016 );
       },
       dualAtomModel.isPlayingProperty,
       {
