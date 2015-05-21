@@ -22,10 +22,6 @@ define( function( require ) {
       basics: new Color( 198, 226, 246 ),
       projector: new Color( 255, 255, 255 )
     },
-    potentialEnergyLine: {
-      default: new Color( 233, 233, 41 ),
-      projector: new Color( 255, 0, 0 )
-    },
     controlPanelText: {
       default: new Color( 230, 230, 230 ),
       projector: new Color( 0, 0, 0 )

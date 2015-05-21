@@ -205,7 +205,8 @@ define( function( require ) {
     // add interaction potential diagram
     if ( isInteractionDiagramEnabled ) {
       var epsilonControlInteractionPotentialDiagram = new EpsilonControlInteractionPotentialDiagram(
-        StatesOfMatterConstants.MAX_SIGMA, StatesOfMatterConstants.MIN_EPSILON, false, multipleParticleModel, {
+        StatesOfMatterConstants.MAX_SIGMA, StatesOfMatterConstants.MIN_EPSILON, false,
+        multipleParticleModel, projectorModeProperty, {
           right: this.layoutBounds.right - LAY_BOUNDS_RIGHT_OFFSET,
           top: phaseChangesMoleculesControlPanel.bottom
         } );

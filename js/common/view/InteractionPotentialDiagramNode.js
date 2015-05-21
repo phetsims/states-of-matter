@@ -110,9 +110,6 @@ define( function( require ) {
     this.ljPotentialGraph.addChild( centerAxis );
     centerAxis.setTranslation( 0, this.graphHeight / 2 );
 
-    // Create and add the potential energy line.
-    this.potentialEnergyLine = new Path( null, { lineWidth: 2, stroke: 'yellow' } );
-    this.ljPotentialGraph.addChild( this.potentialEnergyLine );
 
     // Add the arrows and labels that will depict sigma and epsilon.
     this.epsilonArrowShape = new ArrowShape( 0, 0, 0, this.graphHeight / 2, {
@@ -193,8 +190,9 @@ define( function( require ) {
 
     // Draw the curve upon the graph.
     this.drawPotentialCurve();
+    var epsilonLabelYOffset = wide ? 60 : 24;
     this.epsilonLabel.setTranslation( this.graphMin.x + this.epsilonLabel.width,
-      ( this.graphMin.y - this.epsilonLabel.height / 2 + this.graphHeight / 2) / 2 );
+      ( this.graphMin.y - this.epsilonLabel.height / 2 + this.graphHeight / 2) / 2 + epsilonLabelYOffset );
     if ( wide ) {
       this.gridNode = new GridNode( this, 0, 0, this.graphWidth, this.graphHeight );
       this.ljPotentialGraph.addChild( this.gridNode );
@@ -320,7 +318,7 @@ define( function( require ) {
 
     /**
      * Calculate the Lennard-Jones potential for the given distance.
-     * @private
+     * @public
      * @param {number} radius
      * @return {number}
      */
@@ -334,90 +332,6 @@ define( function( require ) {
      * current values for sigma and epsilon.
      */
     drawPotentialCurve: function() {
-      var potentialEnergyLineShape = new Shape();
-      potentialEnergyLineShape.moveTo( 0, 0 );
-      this.graphMin.setXY( 0, 0 );
-      this.zeroCrossingPoint.setXY( 0, 0 );
-      var horizontalIndexMultiplier = MAX_INTER_ATOM_DISTANCE / this.graphWidth;
-      for ( var i = 1; i < this.graphWidth; i++ ) {
-        var potential = this.calculateLennardJonesPotential( i * horizontalIndexMultiplier );
-        var yPos = ((  this.graphHeight / 2) - (potential * this.verticalScalingFactor));
-        if ( yPos > this.graphMin.y ) {
-          this.graphMin.setXY( i, yPos );
-        }
-        if ( (yPos > 0) && (yPos < this.graphHeight) ) {
-          potentialEnergyLineShape.lineTo( i, (yPos) );
-          if ( (potential > 0) || (  this.zeroCrossingPoint.x === 0) ) {
-            // zero crossing point.
-            this.zeroCrossingPoint.setXY( i, this.graphHeight / 2 );
-          }
-        }
-        else {
-          // Move to a good location from which to start graphing.
-          if ( yPos > this.graphHeight ) {
-            potentialEnergyLineShape.lineTo( i, this.graphHeight );
-            if ( (potential > 0) || (  this.zeroCrossingPoint.x === 0) ) {
-              // zero crossing point.
-              this.zeroCrossingPoint.setXY( i, this.graphHeight / 2 );
-            }
-          }
-          if ( yPos < 0 ) {
-            potentialEnergyLineShape.moveTo( i + 1, 0 );
-          }
-        }
-      }
-      this.potentialEnergyLine.setShape( potentialEnergyLineShape );
-      this.epsilonArrowStartPt.setXY( this.graphMin.x, this.graphHeight / 2 );
-      if ( this.epsilonArrowStartPt.distance( this.graphMin ) > 5 ) {
-        this.epsilonArrow.setVisible( true );
-        try {
-          if ( this.graphMin.y > this.graphHeight ) {
-            this.epsilonArrowShape = new ArrowShape( this.graphMin.x, this.graphHeight,
-              this.epsilonArrowStartPt.x, this.epsilonArrowStartPt.y,
-              {
-                doubleHead: this.graphMin.y - 10 < this.graphHeight,
-                headHeight: 5,
-                headWidth: 5,
-                tailWidth: 1
-              } );
-            this.epsilonArrow.setShape( this.epsilonArrowShape );
-          }
-          else {
-            this.epsilonArrowShape = new ArrowShape( this.graphMin.x, this.graphMin.y,
-              this.epsilonArrowStartPt.x, this.epsilonArrowStartPt.y,
-              {
-                doubleHead: true,
-                headHeight: 5,
-                headWidth: 5,
-                tailWidth: 1
-              } );
-            this.epsilonArrow.setShape( this.epsilonArrowShape );
-          }
-        }
-        catch( e ) {
-          console.error( "Error: Caught exception while positioning epsilon arrow - " + e );
-        }
-      }
-      else {
-        // Don't show the arrow if there isn't enough space.
-        this.epsilonArrow.setVisible( false );
-      }
-
-      this.epsilonLabel.setTranslation( this.graphMin.x + this.epsilonLabel.width,
-        this.epsilonLabel.y );
-
-      // Position the arrow that depicts sigma along with its label.
-      this.sigmaLabel.setTranslation( this.zeroCrossingPoint.x / 2 - this.sigmaLabel.width / 2,
-        this.graphHeight / 2 - this.sigmaLabel.height / 3 );
-      try {
-        this.sigmaArrow.setTailAndTip( 0, this.graphHeight / 2,
-          this.zeroCrossingPoint.x, this.zeroCrossingPoint.y );
-      }
-      catch( r ) {
-        console.error( "Error: Caught exception while positioning sigma arrow - " + r );
-      }
-      // Update the position of the marker in case the curve has moved.
-      this.setMarkerPosition( this.markerDistance );
     },
 
     MAX_INTER_ATOM_DISTANCE: MAX_INTER_ATOM_DISTANCE

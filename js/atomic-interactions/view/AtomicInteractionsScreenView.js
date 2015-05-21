@@ -43,11 +43,14 @@ define( function( require ) {
   var PUSH_PIN_WIDTH = 20;
 
   /**
+   *
    * @param {DualAtomModel} dualAtomModel of the simulation
    * @param {boolean} enableHeterogeneousAtoms - true to use a enable heterogeneous molecules, false otherwise.
+   * @param {Property<boolean>} projectorModeProperty - true to use the projector color scheme, false to use
+   * regular color scheme
    * @constructor
    */
-  function AtomicInteractionsScreenView( dualAtomModel, enableHeterogeneousAtoms ) {
+  function AtomicInteractionsScreenView( dualAtomModel, enableHeterogeneousAtoms, projectorModeProperty ) {
 
     ScreenView.call( this, { layoutBounds: new Bounds2( 0, 0, 834, 504 ) } );
 
@@ -77,10 +80,10 @@ define( function( require ) {
     } );
 
     // add interactive potential diagram
-    this.interactiveInteractionPotentialDiagram = new InteractiveInteractionPotentialDiagram(
+    this.interactiveInteractionPotentialDiagram = new InteractiveInteractionPotentialDiagram( projectorModeProperty,
       dualAtomModel.getSigma(), dualAtomModel.getEpsilon(), true, dualAtomModel, {
         left: this.layoutBounds.minX + 7 * inset,
-        top:  atomicInteractionsControlPanel.top + 15
+        top: atomicInteractionsControlPanel.top + 6
       } );
     this.addChild( this.interactiveInteractionPotentialDiagram );
 

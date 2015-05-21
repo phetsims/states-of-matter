@@ -25,6 +25,8 @@ define( function( require ) {
   var ArrowNode = require( 'SCENERY_PHET/ArrowNode' );
   var InteractionPotentialDiagramNode = require( 'STATES_OF_MATTER/common/view/InteractionPotentialDiagramNode' );
   var HBox = require( 'SCENERY/nodes/HBox' );
+  var InteractionPotentialCanvasNode = require( 'STATES_OF_MATTER/common/view/InteractionPotentialCanvasNode' );
+  var Bounds2 = require( 'DOT/Bounds2' );
 
   // strings
   var interactionDiagramTitle = require( 'string!STATES_OF_MATTER/interactionPotential' );
@@ -47,20 +49,17 @@ define( function( require ) {
    * @param {number} epsilon - interaction strength
    * @param {boolean} wide - true if the wide screen version of the graph is needed, false if not.
    * @param {MultipleParticleModel} multipleParticleModel - model of the simulation
+   * @param {Property<boolean>} projectorModeProperty - true to use the projector color scheme, false to use regular color scheme
    * @param {Object} [options] that can be passed on to the underlying node
    * @constructor
    */
-  function EpsilonControlInteractionPotentialDiagram( sigma, epsilon, wide, multipleParticleModel, options ) {
+  function EpsilonControlInteractionPotentialDiagram( sigma, epsilon, wide, multipleParticleModel, projectorModeProperty, options ) {
 
     var epsilonControlInteractionPotentialDiagram = this;
     InteractionPotentialDiagramNode.call( this, sigma, epsilon, wide, true );
     this.multipleParticleModel = multipleParticleModel;
     var accordionContent = new Node();
-    accordionContent.addChild( this.horizontalAxisLabel );
-    accordionContent.addChild( this.horizontalAxis );
-    accordionContent.addChild( this.verticalAxisLabel );
-    accordionContent.addChild( this.verticalAxis );
-    accordionContent.addChild( this.ljPotentialGraph );
+
     // Add the line that will indicate the value of epsilon.
     var epsilonLineLength = EPSILON_HANDLE_OFFSET_PROPORTION * this.widthOfGraph * 2.2;
 
@@ -127,6 +126,19 @@ define( function( require ) {
       }
     } ) );
 
+    this.interactionPotentialCanvasNode = new InteractionPotentialCanvasNode( this, false, projectorModeProperty, {
+      canvasBounds: new Bounds2( 0, 0, 125, this.graphHeight )
+    } );
+    projectorModeProperty.link( function() {
+      epsilonControlInteractionPotentialDiagram.interactionPotentialCanvasNode.step();
+    } );
+    accordionContent.addChild( this.horizontalAxisLabel );
+    accordionContent.addChild( this.horizontalAxis );
+    accordionContent.addChild( this.verticalAxisLabel );
+    accordionContent.addChild( this.verticalAxis );
+    accordionContent.addChild( this.interactionPotentialCanvasNode );
+    accordionContent.addChild( this.ljPotentialGraph );
+
     var accordionContentHBox = new HBox( { children: [ accordionContent ] } );
     var titleNode = new Text( interactionDiagramTitle, { fill: "#FFFFFF", font: new PhetFont( { size: 13 } ) } );
     if ( titleNode.width > this.horizontalAxis.width ) {
@@ -141,7 +153,7 @@ define( function( require ) {
       titleAlignX: 'center',
       buttonAlign: 'left',
       cornerRadius: 4,
-      contentYSpacing: 0,
+      contentYSpacing: -3,
       contentYMargin: 5,
       contentXMargin: 6,
       titleYMargin: 5,
@@ -189,18 +201,9 @@ define( function( require ) {
      */
     drawPotentialCurve: function() {
 
-      // The bulk of the drawing is done by the base class.
-      InteractionPotentialDiagramNode.prototype.drawPotentialCurve.call( this );
-
-      // Now position the control handles.
-      if ( this.epsilonResizeHandle !== undefined ) {
-        var graphMin = this.getGraphMin();
-        this.epsilonResizeHandle.setTranslation( graphMin.x + (this.width * EPSILON_HANDLE_OFFSET_PROPORTION), graphMin.y );
-        this.epsilonResizeHandle.setVisible( this.interactionEnabled );
-        this.epsilonResizeHandle.setPickable( this.interactionEnabled );
-        this.epsilonLine.setTranslation( graphMin.x, graphMin.y );
-        this.epsilonLine.setVisible( this.interactionEnabled );
-        this.epsilonLine.setPickable( this.interactionEnabled );
+      //  draw potential curve
+      if ( this.interactionPotentialCanvasNode !== undefined ) {
+        this.interactionPotentialCanvasNode.step();
       }
     },
 

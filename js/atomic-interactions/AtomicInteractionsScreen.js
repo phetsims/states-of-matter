@@ -21,7 +21,8 @@ define( function( require ) {
 
   /**
    *
-   * @param {Property<boolean>} projectorModeProperty
+   * @param {Property<boolean>} projectorModeProperty - true to use the projector color scheme, false to use
+   * regular color scheme
    * @param {boolean} enableHeterogeneousMolecules
    * @param {string} simTitle
    * @constructor
@@ -33,7 +34,7 @@ define( function( require ) {
     var screen = this;
     Screen.call( this, simTitle, new Image( atomicInteractionScreenIcon ),
       function() { return new DualAtomModel(); },
-      function( model ) { return new AtomicInteractionsScreenView( model, enableHeterogeneousMolecules ); },
+      function( model ) { return new AtomicInteractionsScreenView( model, enableHeterogeneousMolecules, projectorModeProperty ); },
       { backgroundColor: StatesOfMatterColors.background.toCSS() }
     );
 

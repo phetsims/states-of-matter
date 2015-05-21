@@ -22,17 +22,20 @@ define( function( require ) {
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var StatesOfMatterColors = require( 'STATES_OF_MATTER/common/view/StatesOfMatterColors' );
   var Shape = require( 'KITE/Shape' );
+  var InteractionPotentialCanvasNode = require( 'STATES_OF_MATTER/common/view/InteractionPotentialCanvasNode' );
+  var Bounds2 = require( 'DOT/Bounds2' );
 
   //constants
   var RESIZE_HANDLE_SIZE_PROPORTION = 0.05;  // Size of handles as function of node width.
   var EPSILON_HANDLE_OFFSET_PROPORTION = 0.08; // Position of handle as function of node width.
-  var SIGMA_HANDLE_OFFSET_PROPORTION = 0.08;  // Position of handle as function of node width.
   var RESIZE_HANDLE_NORMAL_COLOR = '#32FE00';
   var RESIZE_HANDLE_HIGHLIGHTED_COLOR = new Color( 153, 255, 0 );
-  var EPSILON_LINE_WIDTH = 1;
   var EPSILON_LINE_COLOR = RESIZE_HANDLE_NORMAL_COLOR;
 
   /**
+   *
+   * @param {Property<boolean>} projectorModeProperty - true to use the projector color scheme, false to use
+   * regular color scheme
    * @param {number} sigma - Initial value of sigma, a.k.a. the atom diameter
    * @param {number} epsilon - Initial value of epsilon, a.k.a. the interaction strength
    * @param {boolean} wide - true if the wide screen version of the graph is needed, false if not.
@@ -41,7 +44,7 @@ define( function( require ) {
    * @constructor
    */
 
-  function InteractiveInteractionPotentialDiagram( sigma, epsilon, wide, dualAtomModel, options ) {
+  function InteractiveInteractionPotentialDiagram( projectorModeProperty, sigma, epsilon, wide, dualAtomModel, options ) {
 
     InteractionPotentialDiagramNode.call( this, sigma, epsilon, wide );
     this.dualAtomModel = dualAtomModel;
@@ -211,6 +214,13 @@ define( function( require ) {
       }
     );
 
+    this.interactionPotentialCanvasNode = new InteractionPotentialCanvasNode( this, true, projectorModeProperty, {
+      canvasBounds: new Bounds2( 0, 0, 500, this.graphHeight + 10 )
+    } );
+    this.addChild( this.interactionPotentialCanvasNode );
+    projectorModeProperty.link( function() {
+      interactiveInteractionPotentialDiagram.interactionPotentialCanvasNode.step();
+    } );
     // Update interactivity state.
     this.updateInteractivityState();
 
@@ -238,7 +248,6 @@ define( function( require ) {
     StatesOfMatterColors.linkAttribute( 'ljGraphColorsMode', this.horizontalAxisLabel, 'fill' );
     StatesOfMatterColors.linkAttribute( 'ljGraphColorsMode', this.verticalAxisLabel, 'fill' );
     StatesOfMatterColors.linkAttribute( 'ljGraphColorsMode', this.gridNode.horizontalLinesNode, 'stroke' );
-    StatesOfMatterColors.linkAttribute( 'potentialEnergyLine', this.potentialEnergyLine, 'stroke' );
     this.mutate( options );
   }
 
@@ -254,30 +263,11 @@ define( function( require ) {
      */
     drawPotentialCurve: function() {
 
-      // The bulk of the drawing is done by the base class.
-      InteractionPotentialDiagramNode.prototype.drawPotentialCurve.call( this );
+      //  draw potential curve
+      if ( this.interactionPotentialCanvasNode !== undefined ) {
+        this.interactionPotentialCanvasNode.step();
+      }
 
-      // Now position the control handles.
-      if ( this.epsilonResizeHandle !== undefined ) {
-        var graphMin = this.getGraphMin();
-        var epsilonResizeOffset = 5;
-        this.epsilonResizeHandle.setTranslation( graphMin.x + epsilonResizeOffset +
-                                                 ( this.widthOfGraph / 2 * EPSILON_HANDLE_OFFSET_PROPORTION ),
-          graphMin.y - epsilonResizeOffset );
-        this.epsilonResizeHandle.setVisible( this.interactionEnabled );
-        this.epsilonResizeHandle.setPickable( this.interactionEnabled );
-        this.epsilonLine.setTranslation( graphMin.x, graphMin.y + EPSILON_LINE_WIDTH );
-        this.epsilonLine.setVisible( this.interactionEnabled );
-        this.epsilonLine.setPickable( this.interactionEnabled );
-      }
-      if ( this.sigmaResizeHandle !== undefined ) {
-        var zeroCrossingPoint = this.getZeroCrossingPoint();
-        var arrowNodeXOffset = 5;
-        this.sigmaResizeHandle.setTranslation( zeroCrossingPoint.x - arrowNodeXOffset,
-          ( this.getGraphHeight() / 2 ) - 2 * SIGMA_HANDLE_OFFSET_PROPORTION * this.heightOfGraph );
-        this.sigmaResizeHandle.setVisible( this.interactionEnabled );
-        this.sigmaResizeHandle.setPickable( this.interactionEnabled );
-      }
     },
 
     /**
