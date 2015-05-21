@@ -18,11 +18,9 @@ define( function( require ) {
   var AXIS_LINE_WIDTH = 1;
   var AXES_ARROW_HEAD_HEIGHT = 8 * AXIS_LINE_WIDTH;
 
-
   var EPSILON_HANDLE_OFFSET_PROPORTION = 0.08; // Position of handle as function of node width.
   var SIGMA_HANDLE_OFFSET_PROPORTION = 0.08;  // Position of handle as function of node width.
   var EPSILON_LINE_WIDTH = 1;
-
 
   /**
    *
@@ -88,30 +86,22 @@ define( function( require ) {
       context.lineWidth = 2;
       context.stroke();
 
-
       this.interactionDiagram.epsilonArrowStartPt.setXY( this.interactionDiagram.graphMin.x, this.interactionDiagram.graphHeight / 2 );
       if ( this.interactionDiagram.epsilonArrowStartPt.distance( this.interactionDiagram.graphMin ) > 5 ) {
         this.interactionDiagram.epsilonArrow.setVisible( true );
         try {
           if ( this.interactionDiagram.graphMin.y > this.interactionDiagram.graphHeight ) {
             this.interactionDiagram.epsilonArrowShape = new ArrowShape( this.interactionDiagram.graphMin.x, this.interactionDiagram.graphHeight,
-              this.interactionDiagram.epsilonArrowStartPt.x, this.interactionDiagram.epsilonArrowStartPt.y,
-              {
+              this.interactionDiagram.epsilonArrowStartPt.x, this.interactionDiagram.epsilonArrowStartPt.y, {
                 doubleHead: this.interactionDiagram.graphMin.y - 10 < this.interactionDiagram.graphHeight,
-                headHeight: 5,
-                headWidth: 5,
-                tailWidth: 1
+                headHeight: 5, headWidth: 5, tailWidth: 1
               } );
             this.interactionDiagram.epsilonArrow.setShape( this.interactionDiagram.epsilonArrowShape );
           }
           else {
             this.interactionDiagram.epsilonArrowShape = new ArrowShape( this.interactionDiagram.graphMin.x, this.interactionDiagram.graphMin.y,
-              this.interactionDiagram.epsilonArrowStartPt.x, this.interactionDiagram.epsilonArrowStartPt.y,
-              {
-                doubleHead: true,
-                headHeight: 5,
-                headWidth: 5,
-                tailWidth: 1
+              this.interactionDiagram.epsilonArrowStartPt.x, this.interactionDiagram.epsilonArrowStartPt.y, {
+                doubleHead: true, headHeight: 5, headWidth: 5, tailWidth: 1
               } );
             this.interactionDiagram.epsilonArrow.setShape( this.interactionDiagram.epsilonArrowShape );
           }
@@ -138,9 +128,9 @@ define( function( require ) {
       catch( r ) {
         console.error( "Error: Caught exception while positioning sigma arrow - " + r );
       }
+
       // Update the position of the marker in case the curve has moved.
       this.interactionDiagram.setMarkerPosition( this.interactionDiagram.markerDistance );
-
 
       // Now position the control handles.
       if ( this.interactionDiagram.epsilonResizeHandle !== undefined ) {
@@ -153,18 +143,13 @@ define( function( require ) {
           this.interactionDiagram.epsilonResizeHandle.setVisible( this.interactionDiagram.interactionEnabled );
           this.interactionDiagram.epsilonLine.setTranslation( graphMin.x, graphMin.y + EPSILON_LINE_WIDTH );
           this.interactionDiagram.epsilonLine.setVisible( this.interactionDiagram.interactionEnabled );
-
-
         }
         else {
           this.interactionDiagram.epsilonResizeHandle.setTranslation( graphMin.x + (this.interactionDiagram.width * EPSILON_HANDLE_OFFSET_PROPORTION), graphMin.y );
           this.interactionDiagram.epsilonResizeHandle.setVisible( this.interactionDiagram.interactionEnabled );
           this.interactionDiagram.epsilonLine.setTranslation( graphMin.x, graphMin.y );
           this.interactionDiagram.epsilonLine.setVisible( this.interactionDiagram.interactionEnabled );
-
-
         }
-
       }
       if ( this.interactionDiagram.sigmaResizeHandle !== undefined ) {
         var zeroCrossingPoint = this.interactionDiagram.getZeroCrossingPoint();
@@ -173,11 +158,6 @@ define( function( require ) {
           ( this.interactionDiagram.getGraphHeight() / 2 ) - 2 * SIGMA_HANDLE_OFFSET_PROPORTION * this.interactionDiagram.heightOfGraph );
         this.interactionDiagram.sigmaResizeHandle.setVisible( this.interactionDiagram.interactionEnabled );
       }
-      // Now position the control handles.
-      if ( this.interactionDiagram.epsilonResizeHandle !== undefined ) {
-
-      }
-
     },
 
     step: function() {
