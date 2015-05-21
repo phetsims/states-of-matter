@@ -17,11 +17,8 @@ define( function( require ) {
   var MAX_INTER_ATOM_DISTANCE = 1700; // in picometers
   var AXIS_LINE_WIDTH = 1;
   var AXES_ARROW_HEAD_HEIGHT = 8 * AXIS_LINE_WIDTH;
-  // Constant that controls the range of data that is graphe
 
 
-  // Constants that control the location and size of the graph.
-  // Font for the labels used on the axes and within the graph.
   var EPSILON_HANDLE_OFFSET_PROPORTION = 0.08; // Position of handle as function of node width.
   var SIGMA_HANDLE_OFFSET_PROPORTION = 0.08;  // Position of handle as function of node width.
   var EPSILON_LINE_WIDTH = 1;
@@ -50,7 +47,7 @@ define( function( require ) {
 
 
     /**
-     * Paints the particles on the canvas node.
+     * Paints the potential  energy curve  on the canvas node.
      * @param {CanvasContextWrapper} wrapper
      */
     paintCanvas: function( wrapper ) {
@@ -154,20 +151,16 @@ define( function( require ) {
                                                                       (     this.interactionDiagram.widthOfGraph / 2 * EPSILON_HANDLE_OFFSET_PROPORTION ),
             graphMin.y - epsilonResizeOffset );
           this.interactionDiagram.epsilonResizeHandle.setVisible( this.interactionDiagram.interactionEnabled );
-          this.interactionDiagram.epsilonResizeHandle.setPickable( this.interactionDiagram.interactionEnabled );
           this.interactionDiagram.epsilonLine.setTranslation( graphMin.x, graphMin.y + EPSILON_LINE_WIDTH );
           this.interactionDiagram.epsilonLine.setVisible( this.interactionDiagram.interactionEnabled );
-          this.interactionDiagram.epsilonLine.setPickable( this.interactionDiagram.interactionEnabled );
 
 
         }
         else {
           this.interactionDiagram.epsilonResizeHandle.setTranslation( graphMin.x + (this.interactionDiagram.width * EPSILON_HANDLE_OFFSET_PROPORTION), graphMin.y );
           this.interactionDiagram.epsilonResizeHandle.setVisible( this.interactionDiagram.interactionEnabled );
-          this.interactionDiagram.epsilonResizeHandle.setPickable( this.interactionDiagram.interactionEnabled );
           this.interactionDiagram.epsilonLine.setTranslation( graphMin.x, graphMin.y );
           this.interactionDiagram.epsilonLine.setVisible( this.interactionDiagram.interactionEnabled );
-          this.interactionDiagram.epsilonLine.setPickable( this.interactionDiagram.interactionEnabled );
 
 
         }
@@ -179,7 +172,6 @@ define( function( require ) {
         this.interactionDiagram.sigmaResizeHandle.setTranslation( zeroCrossingPoint.x - arrowNodeXOffset,
           ( this.interactionDiagram.getGraphHeight() / 2 ) - 2 * SIGMA_HANDLE_OFFSET_PROPORTION * this.interactionDiagram.heightOfGraph );
         this.interactionDiagram.sigmaResizeHandle.setVisible( this.interactionDiagram.interactionEnabled );
-        this.interactionDiagram.sigmaResizeHandle.setPickable( this.interactionDiagram.interactionEnabled );
       }
       // Now position the control handles.
       if ( this.interactionDiagram.epsilonResizeHandle !== undefined ) {
