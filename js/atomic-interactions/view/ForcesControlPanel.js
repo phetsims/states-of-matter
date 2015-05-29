@@ -20,9 +20,7 @@ define( function( require ) {
   var VBox = require( 'SCENERY/nodes/VBox' );
   var HBox = require( 'SCENERY/nodes/HBox' );
   var HStrut = require( 'SUN/HStrut' );
-  var Path = require( 'SCENERY/nodes/Path' );
   var BracketNode = require( 'SCENERY_PHET/BracketNode' );
-  var Shape = require( 'KITE/Shape' );
   var VStrut = require( 'SUN/VStrut' );
 
   //strings
