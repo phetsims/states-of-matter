@@ -21,7 +21,9 @@ define( function( require ) {
   var HBox = require( 'SCENERY/nodes/HBox' );
   var HStrut = require( 'SUN/HStrut' );
   var Path = require( 'SCENERY/nodes/Path' );
+  var BracketNode = require( 'SCENERY_PHET/BracketNode' );
   var Shape = require( 'KITE/Shape' );
+  var VStrut = require( 'SUN/VStrut' );
 
   //strings
   var forcesString = require( 'string!STATES_OF_MATTER/forces' );
@@ -140,25 +142,25 @@ define( function( require ) {
       align: 'left'
     } );
 
-    // the big left bracket
-    var curveShape = new Path( new Shape()
-        .moveTo( 8, 8 )
-        .lineTo( 3, 8 )
-        .lineTo( 3, componentForceText.height / 2 - 3 )
-        .lineTo( 0, componentForceText.height / 2 )
-        .lineTo( 3, componentForceText.height / 2 + 3 )
-        .lineTo( 3, componentForceText.height - 8 )
-        .lineTo( 8, componentForceText.height - 8 ), {
-        stroke: options.textColor,
-        lineWidth: 2
-      }
-    );
+    // the bracket at the left - this is tweaked a bit for optimal appearance
+    var bracket = new VBox( {
+      spacing: 0,
+      children: [
+        new VStrut( 4 ),
+        new BracketNode( {
+          orientation: 'left',
+          bracketLength: componentForceText.height,
+          bracketLineWidth: 2,
+          bracketTipLocation: 0.475
+        } )
+      ]
+    } );
 
     var componentForce = new HBox( {
       spacing: 2,
-      children: [ curveShape, componentForceText ]
+      children: [ bracket, componentForceText ]
     } );
-    var totalForceStrutWidth = maxWidth - totalForceText.label.width - totalForceText.icon.width + curveShape.width;
+    var totalForceStrutWidth = maxWidth - totalForceText.label.width - totalForceText.icon.width + bracket.width;
     var totalForceItem = new HBox( {
       children: [ totalForceText.label,
         new HStrut( totalForceStrutWidth ),
