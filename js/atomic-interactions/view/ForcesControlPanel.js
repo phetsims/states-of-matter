@@ -149,6 +149,7 @@ define( function( require ) {
           orientation: 'left',
           bracketLength: componentForceText.height,
           bracketLineWidth: 2,
+          bracketStroke: options.textColor,
           bracketTipLocation: 0.475
         } )
       ]
