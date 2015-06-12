@@ -19,9 +19,9 @@ define( function( require ) {
   var ArrowNode = require( 'SCENERY_PHET/ArrowNode' );
   var VBox = require( 'SCENERY/nodes/VBox' );
   var HBox = require( 'SCENERY/nodes/HBox' );
-  var HStrut = require( 'SUN/HStrut' );
+  var HStrut = require( 'SCENERY/nodes/HStrut' );
   var BracketNode = require( 'SCENERY_PHET/BracketNode' );
-  var VStrut = require( 'SUN/VStrut' );
+  var VStrut = require( 'SCENERY/nodes/VStrut' );
 
   //strings
   var forcesString = require( 'string!STATES_OF_MATTER/forces' );
