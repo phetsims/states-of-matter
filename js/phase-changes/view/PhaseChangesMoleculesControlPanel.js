@@ -81,7 +81,8 @@ define( function( require ) {
       fill: '#C8C8C8  ',
       stroke: 'gray',
       lineWidth: 1,
-      cornerRadius: 5 // radius of the rounded corners on the background
+      cornerRadius: 5, // radius of the rounded corners on the background
+      minWidth: 0
     }, options );
 
     Node.call( this );
@@ -104,9 +105,10 @@ define( function( require ) {
       interactionTitle.scale( MAX_WIDTH / interactionTitle.width );
     }
     interactionStrengthNode.addChild( interactionTitle );
-    var interactionStrengthSlider = new HSlider( multipleParticleModel.interactionStrengthProperty,
-      { min: StatesOfMatterConstants.MIN_ADJUSTABLE_EPSILON, max: StatesOfMatterConstants.EPSILON_FOR_WATER },
-      {
+    var interactionStrengthSlider = new HSlider(
+      multipleParticleModel.interactionStrengthProperty, {
+        min: StatesOfMatterConstants.MIN_ADJUSTABLE_EPSILON, max: StatesOfMatterConstants.EPSILON_FOR_WATER
+      }, {
         trackFill: 'white',
         thumbSize: new Dimension2( 14, 25 ),
         majorTickLength: 15,
@@ -175,7 +177,7 @@ define( function( require ) {
       return item.label.width + ((item.icon) ? item.icon.width : 0);
     } );
     var maxWidth = widestItemSpec.label.width + ((widestItemSpec.icon) ? widestItemSpec.icon.width : 0);
-    maxWidth = Math.max( maxWidth, interactionStrengthNode.width - 5 );
+    maxWidth = Math.max( maxWidth, interactionStrengthNode.width );
     // pad inserts a spacing node (HStrut) so that the text, space and image together occupy a certain fixed width.
     var createItem = function( itemSpec ) {
       if ( itemSpec.icon ) {
@@ -229,7 +231,7 @@ define( function( require ) {
       stroke: 'white',
       align: 'center',
       fill: 'black',
-      minWidth: 160
+      minWidth: options.minWidth
     } );
     interactionTitle.bottom = interactionStrengthSlider.top - 5;
     interactionTitle.centerX = interactionStrengthSlider.centerX;
