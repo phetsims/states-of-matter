@@ -19,6 +19,7 @@ define( function( require ) {
   var ThermometerNode = require( 'SCENERY_PHET/ThermometerNode' );
   var Text = require( 'SCENERY/nodes/Text' );
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
+  var Util = require( 'DOT/Util' );
 
   // strings
   var kelvinUnits = require( 'string!STATES_OF_MATTER/kelvinUnits' );
@@ -66,7 +67,7 @@ define( function( require ) {
       var tempInKelvin = multipleParticleModel.getTemperatureInKelvin();
       var tempInKelvinRounded = Math.round( multipleParticleModel.getTemperatureInKelvin() );
       temperatureKelvinText.setText( tempInKelvinRounded + " " + kelvinUnits );
-      temperatureCelsiusText.setText( Math.round( tempInKelvin - 273.15 ) + " " + celsiusUnits );
+      temperatureCelsiusText.setText( Util.roundSymmetric( tempInKelvin - 273.15 ) + " " + celsiusUnits );
       temperatureInKelvinProperty.value = tempInKelvinRounded > MAX_TEMPERATURE_TO_CLAMP_RED_MERCURY ?
                                           MAX_TEMPERATURE_TO_CLAMP_RED_MERCURY : tempInKelvinRounded;
     } );
