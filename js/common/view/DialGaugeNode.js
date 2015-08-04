@@ -22,6 +22,7 @@ define( function( require ) {
   var PhetColorScheme = require( 'SCENERY_PHET/PhetColorScheme' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
+  var Util = require( 'DOT/Util' );
 
   // strings
   var pressureString = require( 'string!STATES_OF_MATTER/pressure' );
@@ -86,7 +87,7 @@ define( function( require ) {
     multipleParticleModel.pressure = multipleParticleModel.getPressureInAtmospheres();
     multipleParticleModel.pressureProperty.link( function() {
       if ( (multipleParticleModel.getPressureInAtmospheres()) < MAX_PRESSURE ) {
-        dialGaugeNode.textualReadout.setText( multipleParticleModel.getPressureInAtmospheres().toFixed( 2 ) + ' ' + pressureUnitsInAtm );
+        dialGaugeNode.textualReadout.setText( Util.toFixed( multipleParticleModel.getPressureInAtmospheres(), 2 ) + ' ' + pressureUnitsInAtm );
         dialGaugeNode.textualReadout.fill = 'black';
       }
       else {
