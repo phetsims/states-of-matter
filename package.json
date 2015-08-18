@@ -15,9 +15,6 @@
   },
   "phet": {
     "requirejsNamespace": "STATES_OF_MATTER",
-    "simTitleStringKey": "STATES_OF_MATTER/states-of-matter.name",
-    "phetLibs": [
-      "states-of-matter"
-    ]
+    "simTitleStringKey": "STATES_OF_MATTER/states-of-matter.name"
   }
 }
