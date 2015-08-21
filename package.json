@@ -14,7 +14,6 @@
     "requirejs": "~2.1.8"
   },
   "phet": {
-    "requirejsNamespace": "STATES_OF_MATTER",
-    "simTitleStringKey": "STATES_OF_MATTER/states-of-matter.name"
+    "requirejsNamespace": "STATES_OF_MATTER"
   }
 }
