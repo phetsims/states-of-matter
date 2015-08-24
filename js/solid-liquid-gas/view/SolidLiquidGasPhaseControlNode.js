@@ -9,30 +9,37 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var inherit = require( 'PHET_CORE/inherit' );
+  var Circle = require( 'SCENERY/nodes/Circle' );
+  var Color = require( 'SCENERY/util/Color' );
   var HBox = require( 'SCENERY/nodes/HBox' );
   var HStrut = require( 'SCENERY/nodes/HStrut' );
-  var Text = require( 'SCENERY/nodes/Text' );
-  var PhetFont = require( 'SCENERY_PHET/PhetFont' );
-  var Shape = require( 'KITE/Shape' );
-  var Path = require( 'SCENERY/nodes/Path' );
+  var Image = require( 'SCENERY/nodes/Image' );
+  var inherit = require( 'PHET_CORE/inherit' );
   var Node = require( 'SCENERY/nodes/Node' );
-  var Circle = require( 'SCENERY/nodes/Circle' );
+  var Path = require( 'SCENERY/nodes/Path' );
+  var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var RadialGradient = require( 'SCENERY/util/RadialGradient' );
   var RectangularPushButton = require( 'SUN/buttons/RectangularPushButton' );
+  var Shape = require( 'KITE/Shape' );
+  var Text = require( 'SCENERY/nodes/Text' );
   var VBox = require( 'SCENERY/nodes/VBox' );
-  var Color = require( 'SCENERY/util/Color' );
 
   // strings
   var solidString = require( 'string!STATES_OF_MATTER/Solid' );
   var liquidString = require( 'string!STATES_OF_MATTER/Liquid' );
   var gasString = require( 'string!STATES_OF_MATTER/Gas' );
 
+  // images
+  var gasIconImage = require( 'image!STATES_OF_MATTER/gas-icon.png' );
+  var liquidIconImage = require( 'image!STATES_OF_MATTER/liquid-icon.png' );
+  var solidIconImage = require( 'image!STATES_OF_MATTER/solid-icon.png' );
+
   // constants
   var SOLID_STATE = 1;
   var LIQUID_STATE = 2;
   var GAS_STATE = 3;
   var STATES_BUTTON_MAX_WIDTH = 150;
+  var ICON_HEIGHT = 25; // in screen coordinates, empirically determined
 
   /**
    * @param {Property<number>} heatingCoolingAmountProperty
@@ -69,9 +76,9 @@ define( function( require ) {
     if ( gasText.width > STATES_BUTTON_MAX_WIDTH / 2 ) {
       gasText.scale( (STATES_BUTTON_MAX_WIDTH / 2) / gasText.width );
     }
-    var solid = { icon: createSolidIcon(), label: solidText };
-    var liquid = { icon: createLiquidIcon(), label: liquidText };
-    var gas = { icon: createGasIcon(), label: gasText };
+    var solid = { icon: createButtonIcon( solidIconImage), label: solidText };
+    var liquid = { icon: createButtonIcon( liquidIconImage), label: liquidText };
+    var gas = { icon: createButtonIcon( gasIconImage ), label: gasText };
 
     // pad inserts a spacing node (HStrut) so that the text, space and image together occupy a certain fixed width.
     var createItem = function( itemSpec ) {
@@ -80,7 +87,8 @@ define( function( require ) {
         var strutWidth2 = STATES_BUTTON_MAX_WIDTH / 2 - itemSpec.label.width;
         return new HBox( {
           children: [ new HStrut( 10 ), itemSpec.icon, new HStrut( strutWidth1 ), itemSpec.label,
-            new HStrut( strutWidth2 ) ]
+            new HStrut( strutWidth2 ) ],
+          align: 'center'
         } );
       }
       else {
@@ -159,119 +167,11 @@ define( function( require ) {
     this.mutate( this.options );
   }
 
-  var imageScale = 0.5;
-  // solid icon
-  var createSolidIcon = function() {
-
-    var frontShape = new Path( new Shape()
-        .moveTo( 2, 6 )
-        .lineTo( 2, 39 )
-        .lineTo( 17, 49 )
-        .lineTo( 17, 14 )
-        .close(), { stroke: '#15597F', fill: '#15597F' }
-    );
-    var topShape = new Path( new Shape()
-        .moveTo( 2, 6 )
-        .lineTo( 33, 0 )
-        .lineTo( 49, 9 )
-        .lineTo( 17, 14 )
-        .close(), { stroke: '#2874B2', fill: '#2874B2' }
-    );
-    var sidShape = new Path( new Shape()
-        .moveTo( 17, 14 )
-        .lineTo( 17, 49 )
-        .lineTo( 50, 44 )
-        .lineTo( 49, 9 )
-        .close(), { stroke: '#2990DF', fill: '#2990DF' }
-    );
-    return new Node( { children: [ frontShape, topShape, sidShape ], scale: imageScale } );
-  };
-
-  // liquid icon
-  var createLiquidIcon = function() {
-
-    // bucket shape
-    var outerShape = new Path( new Shape()
-        .moveTo( 2, 7 )
-        .quadraticCurveTo( 20, 2, 46, 7 )
-        .lineTo( 41, 50 )
-        .quadraticCurveTo( 21, 52, 8, 50 )
-        .close(), { lineWidth: 1.2, stroke: '#7B7B7B' }
-    );
-    // liquid shape
-    var innerShape = new Path( new Shape()
-        .moveTo( 6, 24 )
-        .quadraticCurveTo( 21, 20, 45, 24 )
-        .lineTo( 41, 50 )
-        .quadraticCurveTo( 21, 52, 8, 50 )
-        .close(), { lineWidth: 1.2, stroke: '#7B7B7B', fill: '#3DACFF' }
-    );
-
-    return new Node( { children: [ outerShape, innerShape ], scale: imageScale } );
-  };
-
-  // gas icon
-  var createGasIcon = function() {
-
-    var largeCircleRadius = 15;
-    var mediumCircleRadius = 10;
-    var smallCircleRadius = 5;
-    var circle1 = new Circle( largeCircleRadius, {
-      stroke: '#3DACFF',
-      fill: new RadialGradient( 0, 0, 0, 0, 0, 15 )
-        .addColorStop( 0, '#6BBFF5' )
-        .addColorStop( 1, '#3DACFF' )
-    } );
-    var circle2 = new Circle( largeCircleRadius, {
-      stroke: '#3DACFF',
-      fill: new RadialGradient( 0, 0, 0, 0, 0, 15 )
-        .addColorStop( 0, '#6BBFF5' )
-        .addColorStop( 1, '#3DACFF' )
-    } );
-    var circle3 = new Circle( 10, {
-      stroke: '#3DACFF',
-      fill: new RadialGradient( 0, 0, 0, 0, 0, 10 )
-        .addColorStop( 0, '#6BBFF5' )
-        .addColorStop( 1, '#3DACFF' )
-    } );
-    var circle4 = new Circle( mediumCircleRadius, {
-      stroke: '#3DACFF',
-      fill: new RadialGradient( 0, 0, 0, 0, 0, mediumCircleRadius )
-        .addColorStop( 0, '#6BBFF5' )
-        .addColorStop( 1, '#3DACFF' )
-    } );
-    var circle5 = new Circle( 8, {
-      stroke: '#3DACFF',
-      fill: new RadialGradient( 0, 0, 0, 0, 0, 8 )
-        .addColorStop( 0, '#6BBFF5' )
-        .addColorStop( 1, '#3DACFF' )
-    } );
-
-    circle2.top = circle1.bottom - largeCircleRadius;
-    circle2.left = circle1.right - 20;
-    circle3.top = circle1.top;
-    circle3.left = circle1.right - 5;
-    circle4.top = circle3.bottom - 5;
-    circle4.left = circle3.right - mediumCircleRadius;
-    circle5.top = circle1.bottom - 5;
-    circle5.right = circle1.left + 15;
-
-    var circle6 = new Circle( smallCircleRadius, { stroke: '#3DACFF', fill: '#6BBFF5' } );
-    var circle7 = new Circle( smallCircleRadius, { stroke: '#3DACFF', fill: '#6BBFF5' } );
-    var circle8 = new Circle( smallCircleRadius, { stroke: '#3DACFF', fill: '#6BBFF5' } );
-    var circle9 = new Circle( smallCircleRadius, { stroke: '#3DACFF', fill: '#6BBFF5' } );
-    var circle10 = new Circle( smallCircleRadius, { stroke: '#3DACFF', fill: '#6BBFF5' } );
-    circle6.left = circle1.right + 40;
-    circle7.right = circle6.left;
-    circle8.left = circle6.right;
-    circle9.top = circle6.bottom - 2;
-    circle10.bottom = circle6.top + 2;
-    circle9.left = circle7.right - smallCircleRadius;
-    circle10.right = circle8.left - smallCircleRadius;
-    return new Node( {
-      children: [ circle1, circle2, circle3, circle4, circle5, circle6, circle7,
-        circle8, circle9, circle10 ], scale: imageScale
-    } );
+  // @private - create icon scaled to the appropriate size for the phase selection buttons
+  var createButtonIcon = function( rawImage) {
+    var image = new Image( rawImage );
+    image.scale( ICON_HEIGHT / image.height );
+    return image;
   };
 
   return inherit( Node, SolidLiquidGasPhaseControlNode );
