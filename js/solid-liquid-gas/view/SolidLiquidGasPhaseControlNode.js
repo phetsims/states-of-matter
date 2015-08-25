@@ -34,8 +34,50 @@ define( function( require ) {
   var SOLID_STATE = 1;
   var LIQUID_STATE = 2;
   var GAS_STATE = 3;
-  var STATES_BUTTON_MAX_WIDTH = 150;
+  var STATES_BUTTON_WIDTH = 160;
   var ICON_HEIGHT = 25; // in screen coordinates, empirically determined
+  var SELECTED_BUTTON_COLOR = '#998D7C';
+  var DESELECTED_BUTTON_COLOR = '#ffeccf';
+
+  // function that puts icon and label together with some struts into an HBox for using as content node on button
+  function createButtonContent( iconImage, string ) {
+
+    assert && assert( iconImage && string, 'both icon and label must be defined' );
+
+    // Create the image node and scale it so that it is the desired height.  Note that the width may vary.
+    var imageNode = new Image( iconImage );
+    imageNode.scale( ICON_HEIGHT / imageNode.height );
+
+    // Create the text node and, if it consumes more than 1/2 the button width, scale it.
+    var label = new Text( string, { font: new PhetFont( 14 ), fill: 'black' } );
+    if ( label.width > STATES_BUTTON_WIDTH / 2 ) {
+      label.scale( (STATES_BUTTON_WIDTH / 2) / label.width );
+    }
+
+    // create the left strut such that the icons will be centered around the same horizontal location
+    var desiredIconHorizontalCenter = STATES_BUTTON_WIDTH * 0.25; // multiplier is empirically determined
+    var leftStrutWidth = Math.max( desiredIconHorizontalCenter - ( imageNode.width / 2 ), 0 );
+    assert && assert( leftStrutWidth > 0, 'icon is too wide, either adjust it or adjust the icon position multiplier' );
+
+    // create the center strut such that the labels are centered around the same horizontal location
+    var desiredLabelHorizontalCenter = STATES_BUTTON_WIDTH * 0.65;
+    var centerStrutWidth = Math.max( desiredLabelHorizontalCenter - ( label.width / 2 ) - leftStrutWidth - imageNode.width, 0 );
+    assert && assert( centerStrutWidth >= 0, 'label is too wide - was it scaled properly?' );
+
+    // create the right strut to fill out the reset of the button
+    var rightStrutWidth = STATES_BUTTON_WIDTH - leftStrutWidth - imageNode.width - centerStrutWidth - label.width;
+
+    return new HBox( {
+      children: [
+        new HStrut( leftStrutWidth ),
+        imageNode,
+        new HStrut( centerStrutWidth ),
+        label,
+        new HStrut( rightStrutWidth )
+      ],
+      spacing: 0
+    } );
+  }
 
   /**
    * @param {Property<number>} heatingCoolingAmountProperty
@@ -55,55 +97,19 @@ define( function( require ) {
     }, options );
 
     Node.call( this );
-    var textOptions = { font: new PhetFont( 14 ), fill: 'black' };
 
-    // itemSpec describes the pieces that make up an item in the control panel,
-    // conforms to the contract: { label: {Node}, icon: {Node} (optional) }
-    var solidText = new Text( solidString, textOptions );
-    var liquidText = new Text( liquidString, textOptions );
-    var gasText = new Text( gasString, textOptions );
-
-    if ( solidText.width > STATES_BUTTON_MAX_WIDTH / 2 ) {
-      solidText.scale( (STATES_BUTTON_MAX_WIDTH / 2) / solidText.width );
-    }
-    if ( liquidText.width > STATES_BUTTON_MAX_WIDTH / 2 ) {
-      liquidText.scale( (STATES_BUTTON_MAX_WIDTH / 2) / Math.round( liquidText.width ) );
-    }
-    if ( gasText.width > STATES_BUTTON_MAX_WIDTH / 2 ) {
-      gasText.scale( (STATES_BUTTON_MAX_WIDTH / 2) / gasText.width );
-    }
-    var solid = { icon: createButtonIcon( solidIconImage), label: solidText };
-    var liquid = { icon: createButtonIcon( liquidIconImage), label: liquidText };
-    var gas = { icon: createButtonIcon( gasIconImage ), label: gasText };
-
-    // pad inserts a spacing node (HStrut) so that the text, space and image together occupy a certain fixed width.
-    var createItem = function( itemSpec ) {
-      if ( itemSpec.icon ) {
-        var strutWidth1 = STATES_BUTTON_MAX_WIDTH / 2 - itemSpec.icon.width;
-        var strutWidth2 = STATES_BUTTON_MAX_WIDTH / 2 - itemSpec.label.width;
-        return new HBox( {
-          children: [ new HStrut( 10 ), itemSpec.icon, new HStrut( strutWidth1 ), itemSpec.label,
-            new HStrut( strutWidth2 ) ],
-          align: 'center'
-        } );
-      }
-      else {
-        return new HBox( { children: [ itemSpec.label ] } );
-      }
-    };
-
-    // solid state button
+    // solid state selection button
     var solidStateButton = new RectangularPushButton( {
-      content: createItem( solid ),
+      content: createButtonContent( solidIconImage, solidString ),
       listener: function() {
         stateProperty.value = SOLID_STATE;
         stateProperty._notifyObservers();
       }
     } );
 
-    // liquid state button
+    // liquid state selection button
     var liquidStateButton = new RectangularPushButton( {
-      content: createItem( liquid ),
+      content: createButtonContent( liquidIconImage, liquidString ),
       listener: function() {
         stateProperty.value = LIQUID_STATE;
         stateProperty._notifyObservers();
@@ -111,9 +117,9 @@ define( function( require ) {
       baseColor: new Color( 250, 0, 0 )
     } );
 
-    // gas state button
+    // gas state selection button
     var gasStateButton = new RectangularPushButton( {
-      content: createItem( gas ),
+      content: createButtonContent( gasIconImage, gasString ),
       listener: function() {
         stateProperty.value = GAS_STATE;
         stateProperty._notifyObservers();
@@ -121,39 +127,43 @@ define( function( require ) {
       baseColor: 'rgb( 204, 102, 204 )'
     } );
 
+    // change the base color of the buttons in order to indicate which state is currently selected
     stateProperty.link( function( state ) {
       switch( state ) {
         case SOLID_STATE:
-          solidStateButton.baseColor = '#998D7C';
-          liquidStateButton.baseColor = '#FFECCF';
-          gasStateButton.baseColor = '#FFECCF';
+          solidStateButton.baseColor = SELECTED_BUTTON_COLOR;
+          liquidStateButton.baseColor = DESELECTED_BUTTON_COLOR;
+          gasStateButton.baseColor = DESELECTED_BUTTON_COLOR;
           break;
         case LIQUID_STATE:
-          solidStateButton.baseColor = '#FFECCF';
-          liquidStateButton.baseColor = '#998D7C';
-          gasStateButton.baseColor = '#FFECCF';
+          solidStateButton.baseColor = DESELECTED_BUTTON_COLOR;
+          liquidStateButton.baseColor = SELECTED_BUTTON_COLOR;
+          gasStateButton.baseColor = DESELECTED_BUTTON_COLOR;
           break;
         case GAS_STATE:
-          solidStateButton.baseColor = '#FFECCF';
-          liquidStateButton.baseColor = '#FFECCF';
-          gasStateButton.baseColor = '#998D7C';
+          solidStateButton.baseColor = DESELECTED_BUTTON_COLOR;
+          liquidStateButton.baseColor = DESELECTED_BUTTON_COLOR;
+          gasStateButton.baseColor = SELECTED_BUTTON_COLOR;
           break;
       }
     } );
 
+    // if the user changes the temperature, un-highlight all buttons, since the phase may be changing
     heatingCoolingAmountProperty.link( function() {
       switch( stateProperty.value ) {
         case SOLID_STATE:
-          solidStateButton.baseColor = '#FFECCF';
+          solidStateButton.baseColor = DESELECTED_BUTTON_COLOR;
           break;
         case LIQUID_STATE:
-          liquidStateButton.baseColor = '#FFECCF';
+          liquidStateButton.baseColor = DESELECTED_BUTTON_COLOR;
           break;
         case GAS_STATE:
-          gasStateButton.baseColor = '#FFECCF';
+          gasStateButton.baseColor = DESELECTED_BUTTON_COLOR;
           break;
       }
     } );
+
+    // put the buttons together in a single VBox
     var buttons = new VBox( {
       children: [ solidStateButton, liquidStateButton, gasStateButton ],
       spacing: 10,
@@ -162,13 +172,6 @@ define( function( require ) {
     this.addChild( buttons );
     this.mutate( this.options );
   }
-
-  // @private - create icon scaled to the appropriate size for the phase selection buttons
-  var createButtonIcon = function( rawImage) {
-    var image = new Image( rawImage );
-    image.scale( ICON_HEIGHT / image.height );
-    return image;
-  };
 
   return inherit( Node, SolidLiquidGasPhaseControlNode );
 } );
