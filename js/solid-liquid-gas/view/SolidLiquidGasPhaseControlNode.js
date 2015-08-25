@@ -4,6 +4,7 @@
  * A node that allows user to select the phase of a substance.
  *
  * @author Siddhartha Chinthapally (Actual Concepts)
+ * @author John Blanco
  */
 define( function( require ) {
   'use strict';
