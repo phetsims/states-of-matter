@@ -26,7 +26,7 @@ define( function( require ) {
   var argonString = require( 'string!STATES_OF_MATTER/argon' );
   var waterString = require( 'string!STATES_OF_MATTER/water' );
   var oxygenString = require( 'string!STATES_OF_MATTER/diatomicOxygen' );
-  var titleString = require( 'string!STATES_OF_MATTER/AtomsMolecules' );
+  var titleString = require( 'string!STATES_OF_MATTER/AtomsAndMolecules' );
 
   // constants
   var MAX_WIDTH = 118;

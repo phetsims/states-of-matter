@@ -32,7 +32,7 @@ define( function( require ) {
   var waterString = require( 'string!STATES_OF_MATTER/water' );
   var oxygenString = require( 'string!STATES_OF_MATTER/diatomicOxygen' );
   var adjustableAttractionString = require( 'string!STATES_OF_MATTER/adjustableAttraction' );
-  var titleString = require( 'string!STATES_OF_MATTER/AtomsMolecules' );
+  var titleString = require( 'string!STATES_OF_MATTER/AtomsAndMolecules' );
   var interactionStrengthTitleString = require( 'string!STATES_OF_MATTER/interactionStrengthWithSymbol' );
 
   // constants

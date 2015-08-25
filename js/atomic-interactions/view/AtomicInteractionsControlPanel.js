@@ -38,7 +38,7 @@ define( function( require ) {
   var oxygenString = require( 'string!STATES_OF_MATTER/oxygen' );
   var adjustableAttractionString = require( 'string!STATES_OF_MATTER/adjustableAttraction' );
   var customAttractionString = require( 'string!STATES_OF_MATTER/customAttraction' );
-  var titleString = require( 'string!STATES_OF_MATTER/AtomsMolecules' );
+  var titleString = require( 'string!STATES_OF_MATTER/Atoms' );
   var pinnedString = require( 'string!STATES_OF_MATTER/pinned' );
   var movingString = require( 'string!STATES_OF_MATTER/moving' );
   var atomDiameterString = require( 'string!STATES_OF_MATTER/atomDiameter' );

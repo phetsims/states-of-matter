@@ -35,8 +35,11 @@
   "gas": {
     "value": "gas"
   },
-  "AtomsMolecules": {
+  "AtomsAndMolecules": {
     "value": "Atoms & Molecules"
+  },
+  "Atoms": {
+    "value": "Atoms"
   },
   "neon": {
     "value": "Neon"
