@@ -15,7 +15,6 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var Screen = require( 'JOIST/Screen' );
   var StatesOfMatterColors = require( 'STATES_OF_MATTER/common/view/StatesOfMatterColors' );
-  var Image = require( 'SCENERY/nodes/Image' );
 
   /**
    *

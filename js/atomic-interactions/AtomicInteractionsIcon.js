@@ -9,7 +9,6 @@ define( function( require ) {
     'use strict';
 
     // modules
-    var ArrowNode = require( 'SCENERY_PHET/ArrowNode' );
     var Circle = require( 'SCENERY/nodes/Circle' );
     var Color = require( 'SCENERY/util/Color' );
     var inherit = require( 'PHET_CORE/inherit' );
@@ -17,11 +16,6 @@ define( function( require ) {
     var RadialGradient = require( 'SCENERY/util/RadialGradient' );
     var Rectangle = require( 'SCENERY/nodes/Rectangle' );
     var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
-
-    // images
-    var gasIconImage = require( 'image!STATES_OF_MATTER/gas-icon.png' );
-    var liquidIconImage = require( 'image!STATES_OF_MATTER/liquid-icon.png' );
-    var solidIconImage = require( 'image!STATES_OF_MATTER/solid-icon.png' );
 
     // constants
     var PARTICLE_COLOR = new Color( StatesOfMatterConstants.ADJUSTABLE_ATTRACTION_COLOR );
@@ -31,7 +25,6 @@ define( function( require ) {
      * @constructor
      */
     function AtomicInteractionsIcon( size ) {
-      var self = this;
       Node.call( this );
 
       // background

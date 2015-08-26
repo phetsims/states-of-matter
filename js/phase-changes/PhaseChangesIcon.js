@@ -11,17 +11,10 @@ define( function( require ) {
     // modules
     var ArrowNode = require( 'SCENERY_PHET/ArrowNode' );
     var Circle = require( 'SCENERY/nodes/Circle' );
-    var HBox = require( 'SCENERY/nodes/HBox' );
-    var Image = require( 'SCENERY/nodes/Image' );
     var inherit = require( 'PHET_CORE/inherit' );
     var Node = require( 'SCENERY/nodes/Node' );
     var Rectangle = require( 'SCENERY/nodes/Rectangle' );
     var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
-
-    // images
-    var gasIconImage = require( 'image!STATES_OF_MATTER/gas-icon.png' );
-    var liquidIconImage = require( 'image!STATES_OF_MATTER/liquid-icon.png' );
-    var solidIconImage = require( 'image!STATES_OF_MATTER/solid-icon.png' );
 
     // constants
     var PARTICLE_COLOR = StatesOfMatterConstants.NEON_COLOR;
