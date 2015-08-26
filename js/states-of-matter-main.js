@@ -9,7 +9,7 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var SolidLiquidGasScreen = require( 'STATES_OF_MATTER/solid-liquid-gas/SolidLiquidGasScreen' );
+  var StatesScreen = require( 'STATES_OF_MATTER/states/StatesScreen' );
   var PhaseChangesScreen = require( 'STATES_OF_MATTER/phase-changes/PhaseChangesScreen' );
   var AtomicInteractionsScreen = require( 'STATES_OF_MATTER/atomic-interactions/AtomicInteractionsScreen' );
   var Sim = require( 'JOIST/Sim' );
@@ -37,7 +37,7 @@ define( function( require ) {
 
   SimLauncher.launch( function() {
     var sim = new Sim( simTitle, [
-      new SolidLiquidGasScreen( projectorModeProperty ),
+      new StatesScreen( projectorModeProperty ),
       new PhaseChangesScreen( projectorModeProperty, true ),
       new AtomicInteractionsScreen( projectorModeProperty, false, interactionString )
       ], simOptions );

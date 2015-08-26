@@ -59,7 +59,7 @@ define( function( require ) {
    * @param {Object} [options] for various panel display properties
    * @constructor
    */
-  function SolidLiquidGasMoleculesControlPanel( moleculeTypeProperty, options ) {
+  function StatesMoleculesControlPanel( moleculeTypeProperty, options ) {
 
     options = _.extend( {
       xMargin: 5,
@@ -166,5 +166,5 @@ define( function( require ) {
     this.mutate( options );
   }
 
-  return inherit( Node, SolidLiquidGasMoleculesControlPanel );
+  return inherit( Node, StatesMoleculesControlPanel );
 } );

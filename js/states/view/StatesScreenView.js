@@ -1,7 +1,7 @@
 // Copyright  2002 - 2015, University of Colorado Boulder
 
 /**
- * View for the solid-liquid-gas screen
+ * View for the states screen
  *
  * @author Aaron Davis
  * @author Siddhartha Chinthapally (Actual Concepts)
@@ -17,13 +17,13 @@ define( function( require ) {
   var StepButton = require( 'SCENERY_PHET/buttons/StepButton' );
   var HeaterCoolerNode = require( 'SCENERY_PHET/HeaterCoolerNode' );
   var CompositeThermometerNode = require( 'STATES_OF_MATTER/common/view/CompositeThermometerNode' );
-  var SolidLiquidGasMoleculesControlPanel = require( 'STATES_OF_MATTER/solid-liquid-gas/view/SolidLiquidGasMoleculesControlPanel' );
+  var StatesMoleculesControlPanel = require( 'STATES_OF_MATTER/states/view/StatesMoleculesControlPanel' );
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
   var ParticleContainerNode = require( 'STATES_OF_MATTER/common/view/ParticleContainerNode' );
   var ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
   var Vector2 = require( 'DOT/Vector2' );
   var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
-  var SolidLiquidGasPhaseControlNode = require( 'STATES_OF_MATTER/solid-liquid-gas/view/SolidLiquidGasPhaseControlNode' );
+  var StatesPhaseControlNode = require( 'STATES_OF_MATTER/states/view/StatesPhaseControlNode' );
   var Bounds2 = require( 'DOT/Bounds2' );
   var ParticleCanvasNode = require( 'STATES_OF_MATTER/common/view/ParticleCanvasNode' );
 
@@ -46,7 +46,7 @@ define( function( require ) {
    * @param {Property<boolean>} projectorModeProperty - true for projector color scheme (white back ground), false for regular black back ground
    * @constructor
    */
-  function SolidLiquidGasScreenView( multipleParticleModel, projectorModeProperty ) {
+  function StatesScreenView( multipleParticleModel, projectorModeProperty ) {
 
     ScreenView.call( this, StatesOfMatterConstants.SCREEN_VIEW_OPTIONS );
     var mvtScale = StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / StatesOfMatterConstants.CONTAINER_BOUNDS.width;
@@ -100,14 +100,14 @@ define( function( require ) {
     this.addChild( compositeThermometerNode );
 
     // add Molecule ControlPanel
-    var solidLiquidGasMoleculesControlPanel = new SolidLiquidGasMoleculesControlPanel( multipleParticleModel.moleculeTypeProperty, {
+    var solidLiquidGasMoleculesControlPanel = new StatesMoleculesControlPanel( multipleParticleModel.moleculeTypeProperty, {
       right: this.layoutBounds.right - layoutBoundsRightOffset,
       top: this.layoutBounds.top + layoutBoundsYOffset
     } );
     this.addChild( solidLiquidGasMoleculesControlPanel );
 
     // add phases control node
-    var solidLiquidGasPhaseControlNode = new SolidLiquidGasPhaseControlNode( multipleParticleModel.heatingCoolingAmountProperty, multipleParticleModel.stateProperty, {
+    var solidLiquidGasPhaseControlNode = new StatesPhaseControlNode( multipleParticleModel.heatingCoolingAmountProperty, multipleParticleModel.stateProperty, {
       right: solidLiquidGasMoleculesControlPanel.right,
       top: solidLiquidGasMoleculesControlPanel.bottom + layoutBoundsYOffset
     } );
@@ -162,7 +162,7 @@ define( function( require ) {
     } );
   }
 
-  return inherit( ScreenView, SolidLiquidGasScreenView, {
+  return inherit( ScreenView, StatesScreenView, {
     step: function() {
       this.particlesLayer.step();
     }

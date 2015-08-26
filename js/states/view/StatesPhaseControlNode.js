@@ -86,7 +86,7 @@ define( function( require ) {
    * @param {Object} [options] that can be passed on to the underlying node
    * @constructor
    */
-  function SolidLiquidGasPhaseControlNode( heatingCoolingAmountProperty, stateProperty, options ) {
+  function StatesPhaseControlNode( heatingCoolingAmountProperty, stateProperty, options ) {
 
     this.options = _.extend( {
       xMargin: 5,
@@ -174,5 +174,5 @@ define( function( require ) {
     this.mutate( this.options );
   }
 
-  return inherit( Node, SolidLiquidGasPhaseControlNode );
+  return inherit( Node, StatesPhaseControlNode );
 } );
