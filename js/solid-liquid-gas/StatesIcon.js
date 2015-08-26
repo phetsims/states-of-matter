@@ -16,9 +16,9 @@ define( function( require ) {
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
 
   // images
-  var gasIconImage = require( 'image!STATES_OF_MATTER/gas-icon.png' );
-  var liquidIconImage = require( 'image!STATES_OF_MATTER/liquid-icon.png' );
-  var solidIconImage = require( 'image!STATES_OF_MATTER/solid-icon.png' );
+  var gasIconImage = require( 'mipmap!STATES_OF_MATTER/gas-icon.png,level=5' );
+  var liquidIconImage = require( 'mipmap!STATES_OF_MATTER/liquid-icon.png,level=5' );
+  var solidIconImage = require( 'mipmap!STATES_OF_MATTER/solid-icon.png,level=5' );
 
   /**
    * {Dimension2} size
