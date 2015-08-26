@@ -10,6 +10,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var BondingState = require( 'STATES_OF_MATTER/atomic-interactions/model/BondingState' );
   var inherit = require( 'PHET_CORE/inherit' );
   var PropertySet = require( 'AXON/PropertySet' );
   var Vector2 = require( 'DOT/Vector2' );
@@ -20,10 +21,6 @@ define( function( require ) {
   var AtomType = require( 'STATES_OF_MATTER/common/model/AtomType' );
   var AtomFactory = require( 'STATES_OF_MATTER/common/model/AtomFactory' );
   var AtomPair = require( 'STATES_OF_MATTER/atomic-interactions/model/AtomPair' );
-
-  var BONDING_STATE_UNBONDED = 0;
-  var BONDING_STATE_BONDING = 1;
-  var BONDING_STATE_BONDED = 2;
 
   var DEFAULT_ATOM_TYPE = AtomType.NEON;
   var CALCULATIONS_PER_TICK = 8;
@@ -42,7 +39,7 @@ define( function( require ) {
     this.fixedAtom = null;
     this.movableAtom = null;
     this.settingBothAtomTypes = false;  // Flag used to prevent getting in disallowed state.
-    this.bondingState = BONDING_STATE_UNBONDED; // Tracks whether the atoms have formed a chemical bond.
+    this.bondingState = BondingState.UNBONDED; // Tracks whether the atoms have formed a chemical bond.
     this.vibrationCounter = 0; // Used to vibrate fixed atom during bonding.
     this.potentialWhenAtomReleased = 0; // Used to set magnitude of vibration.
     this.atomFactory = AtomFactory;
@@ -136,7 +133,7 @@ define( function( require ) {
             return;
           }
           this.ensureValidAtomType( atomType );
-          this.bondingState = BONDING_STATE_UNBONDED;
+          this.bondingState = BondingState.UNBONDED;
 
           if ( this.fixedAtom !== null ) {
             this.fixedAtom = null;
@@ -178,7 +175,7 @@ define( function( require ) {
           }
 
           this.ensureValidAtomType( atomType );
-          this.bondingState = BONDING_STATE_UNBONDED;
+          this.bondingState = BondingState.UNBONDED;
 
           if ( this.movableAtom !== null ) {
             this.movableAtom = null;
@@ -328,11 +325,11 @@ define( function( require ) {
        * @public
        */
       releaseBond: function() {
-        if ( this.bondingState === BONDING_STATE_BONDING ) {
+        if ( this.bondingState === BondingState.BONDING ) {
           // A bond is in the process of forming, so reset everything that is involved in the bonding process.
           this.vibrationCounter = 0;
         }
-        this.bondingState = BONDING_STATE_UNBONDED;
+        this.bondingState = BondingState.UNBONDED;
       },
 
       /**
@@ -416,7 +413,7 @@ define( function( require ) {
           this.updateForces();
 
           // Update the motion information (unless the atoms are bonded).
-          if ( this.bondingState !== BONDING_STATE_BONDED ) {
+          if ( this.bondingState !== BondingState.BONDED ) {
             this.updateAtomMotion();
           }
         }
@@ -428,19 +425,19 @@ define( function( require ) {
         if ( this.movableAtom.getType() === AtomType.OXYGEN && this.fixedAtom.getType() === AtomType.OXYGEN ) {
           switch( this.bondingState ) {
 
-            case BONDING_STATE_UNBONDED:
+            case BondingState.UNBONDED:
               if ( ( this.movableAtom.getVx() > THRESHOLD_VELOCITY ) &&
                    ( this.movableAtom.getPositionReference().distance( this.fixedAtom.getPositionReference() ) <
                      this.fixedAtom.getRadius() * 2.5 ) ) {
 
                 // The atoms are close together and the movable one is starting to move away, which is the point at
                 // which we consider the bond to start forming.
-                this.bondingState = BONDING_STATE_BONDING;
+                this.bondingState = BondingState.BONDING;
                 this.startFixedAtomVibration();
               }
               break;
 
-            case BONDING_STATE_BONDING:
+            case BondingState.BONDING:
               if ( this.attractiveForce > this.repulsiveForce ) {
 
                 // A bond is forming and the force just exceeded the repulsive force, meaning that the atom is starting
@@ -452,12 +449,12 @@ define( function( require ) {
                                                       BONDED_OSCILLATION_PROPORTION * this.movableAtom.getRadius();
                 this.bondedOscillationLeftDistance = this.approximateEquivalentPotentialDistance(
                   this.bondedOscillationRightDistance );
-                this.bondingState = BONDING_STATE_BONDED;
+                this.bondingState = BondingState.BONDED;
                 this.stepFixedAtomVibration();
               }
               break;
 
-            case BONDING_STATE_BONDED:
+            case BondingState.BONDED:
 
               // Override the atom motion calculations and cause the atom to oscillate a fixed distance from the bottom
               // of the well. This is necessary because otherwise we tend to have an aliasing problem where it appears
@@ -479,7 +476,7 @@ define( function( require ) {
             default:
               console.log( " - Error: Unrecognized bonding state." );
               // assert false;
-              this.bondingState = BONDING_STATE_UNBONDED;
+              this.bondingState = BondingState.UNBONDED;
               break;
           }
         }
@@ -642,11 +639,5 @@ define( function( require ) {
         return this.vibrationCounter > 0;
       }
 
-    },
-    // statics
-    {
-      BONDING_STATE_UNBONDED: BONDING_STATE_UNBONDED,
-      BONDING_STATE_BONDING: BONDING_STATE_BONDING,
-      BONDING_STATE_BONDED: BONDING_STATE_BONDED
     } );
 } );
