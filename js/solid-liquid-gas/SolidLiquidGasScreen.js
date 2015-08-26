@@ -14,23 +14,21 @@ define( function( require ) {
   var Screen = require( 'JOIST/Screen' );
   var SolidLiquidGasScreenView = require( 'STATES_OF_MATTER/solid-liquid-gas/view/SolidLiquidGasScreenView' );
   var MultipleParticleModel = require( 'STATES_OF_MATTER/common/model/MultipleParticleModel' );
-  var Image = require( 'SCENERY/nodes/Image' );
+  var StatesIcon = require( 'STATES_OF_MATTER/solid-liquid-gas/StatesIcon' );
   var StatesOfMatterColors = require( 'STATES_OF_MATTER/common/view/StatesOfMatterColors' );
 
   // strings
   var statesString = require( 'string!STATES_OF_MATTER/states' );
 
-  // images
-  var statesScreenIcon = require( 'image!STATES_OF_MATTER/som-states-icon.png' );
-
   /**
-   * @param {Property<boolean>} projectorModeProperty - true for projector color scheme (white back ground), false for regular black back ground
+   * @param {Property<boolean>} projectorModeProperty - true for projector color scheme (white back ground), false for
+   * regular black back ground
    * @constructor
    */
   function SolidLiquidGasScreen( projectorModeProperty ) {
     Screen.call( this,
       statesString,
-      new Image( statesScreenIcon ),
+      new StatesIcon( Screen.HOME_SCREEN_ICON_SIZE ),
       function() { return new MultipleParticleModel(); },
       function( model ) { return new SolidLiquidGasScreenView( model, projectorModeProperty ); },
       { backgroundColor: 'black' }

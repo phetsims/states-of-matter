@@ -30,7 +30,9 @@ define( function( require ) {
       team: 'Wendy Adams, Jack Barbera, Kelly Lancaster, Kathy Perkins',
       qualityAssurance: 'Steele Dalton',
       thanks: 'Thanks to Actual Concepts for working with the PhET development team\nto convert this simulation to HTML5.'
-    }, optionsNode: new GlobalOptionsNode( projectorModeProperty )
+    },
+    optionsNode: new GlobalOptionsNode( projectorModeProperty ),
+    showSmallHomeScreenIconFrame: true
   };
 
   SimLauncher.launch( function() {
