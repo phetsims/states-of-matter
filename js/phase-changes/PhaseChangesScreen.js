@@ -13,6 +13,7 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var Screen = require( 'JOIST/Screen' );
   var MultipleParticleModel = require( 'STATES_OF_MATTER/common/model/MultipleParticleModel' );
+  var PhaseChangesIcon = require( 'STATES_OF_MATTER/phase-changes/PhaseChangesIcon' );
   var PhaseChangesScreenView = require( 'STATES_OF_MATTER/phase-changes/view/PhaseChangesScreenView' );
   var Image = require( 'SCENERY/nodes/Image' );
   var StatesOfMatterColors = require( 'STATES_OF_MATTER/common/view/StatesOfMatterColors' );
@@ -20,16 +21,13 @@ define( function( require ) {
   // strings
   var phaseChangesString = require( 'string!STATES_OF_MATTER/phaseChanges' );
 
-  // images
-  var phaseChangesScreenIcon = require( 'image!STATES_OF_MATTER/som-phase-changes-icon.png' );
-
   /**
    * @param {Property<boolean>} projectorModeProperty - true for projector color scheme (white back ground), false for regular black back ground
    * @param {boolean} isInteractionDiagramEnabled
    * @constructor
    */
   function PhaseChangesScreen( projectorModeProperty, isInteractionDiagramEnabled ) {
-    Screen.call( this, phaseChangesString, new Image( phaseChangesScreenIcon ),
+    Screen.call( this, phaseChangesString, new PhaseChangesIcon( Screen.HOME_SCREEN_ICON_SIZE ),
       function() { return new MultipleParticleModel(); },
       function( model ) { return new PhaseChangesScreenView( model, isInteractionDiagramEnabled, projectorModeProperty ); },
       { backgroundColor: 'black' }

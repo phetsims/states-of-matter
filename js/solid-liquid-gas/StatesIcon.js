@@ -1,9 +1,7 @@
 // Copyright 2002-2015, University of Colorado Boulder
 
-// Copyright 2002 - 2015, University of Colorado Boulder
-
 /**
- * Programmatically generated icon for the "States" screen.
+ * Programmatically generated icon for the 'States' screen.
  *
  * @author John Blanco
  */
@@ -35,7 +33,7 @@ define( function( require ) {
       fill: 'black'
     } ) );
 
-    // icons packed into a nice
+    // icons packed into a nice little box
     var iconsBox = new HBox( {
       children: [ new Image( solidIconImage ), new Image( liquidIconImage ), new Image( gasIconImage ) ],
       spacing: 20 // empirically determined
