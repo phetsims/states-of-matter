@@ -10,14 +10,12 @@ define( function( require ) {
 
   // modules
   var DualAtomModel = require( 'STATES_OF_MATTER/atomic-interactions/model/DualAtomModel' );
+  var AtomicInteractionsIcon = require( 'STATES_OF_MATTER/atomic-interactions/AtomicInteractionsIcon' );
   var AtomicInteractionsScreenView = require( 'STATES_OF_MATTER/atomic-interactions/view/AtomicInteractionsScreenView' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Screen = require( 'JOIST/Screen' );
   var StatesOfMatterColors = require( 'STATES_OF_MATTER/common/view/StatesOfMatterColors' );
   var Image = require( 'SCENERY/nodes/Image' );
-
-  // images
-  var atomicInteractionScreenIcon = require( 'image!STATES_OF_MATTER/som-atomic-interactions-icon.png' );
 
   /**
    *
@@ -32,7 +30,7 @@ define( function( require ) {
     //If this is a single-screen sim, then no icon is necessary.  If there are multiple screens, then the icon must be
     // provided here.
     var screen = this;
-    Screen.call( this, simTitle, new Image( atomicInteractionScreenIcon ),
+    Screen.call( this, simTitle, new AtomicInteractionsIcon( Screen.HOME_SCREEN_ICON_SIZE),
       function() { return new DualAtomModel(); },
       function( model ) { return new AtomicInteractionsScreenView( model, enableHeterogeneousMolecules, projectorModeProperty ); },
       { backgroundColor: StatesOfMatterColors.background.toCSS() }
