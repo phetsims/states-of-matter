@@ -337,9 +337,9 @@ define( function( require ) {
         DEFAULT_LIQUID_LABEL_LOCATION.y - this.liquidLabel.height / 2 );
       this.gasLabel.setTranslation( DEFAULT_GAS_LABEL_LOCATION.x - this.gasLabel.width / 2,
         DEFAULT_GAS_LABEL_LOCATION.y );
-      this.triplePointLabel.setTranslation( DEFAULT_TRIPLE_POINT.x - this.triplePointLabel.width - 7,
+      this.triplePointLabel.setTranslation( DEFAULT_TRIPLE_POINT.x - this.triplePointLabel.width - 8,
         DEFAULT_TRIPLE_POINT.y - this.triplePointLabel.height );
-      this.criticalPointLabel.setTranslation( DEFAULT_CRITICAL_POINT.x - this.criticalPointLabel.width - 7,
+      this.criticalPointLabel.setTranslation( DEFAULT_CRITICAL_POINT.x - this.criticalPointLabel.width - 8,
         DEFAULT_CRITICAL_POINT.y - this.criticalPointLabel.height * 0.9 );
     },
 
