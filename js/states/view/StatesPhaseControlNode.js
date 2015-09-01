@@ -10,8 +10,6 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var Color = require( 'SCENERY/util/Color' );
-  var DerivedProperty = require( 'AXON/DerivedProperty' );
   var HBox = require( 'SCENERY/nodes/HBox' );
   var HStrut = require( 'SCENERY/nodes/HStrut' );
   var Image = require( 'SCENERY/nodes/Image' );
@@ -125,9 +123,9 @@ define( function( require ) {
     } );
 
     // set the state when the buttons are pushed
-    solidSelectedProperty.link( function( selected ) { if ( selected ){ stateProperty.value = SOLID_STATE } } );
-    liquidSelectedProperty.link( function( selected ) { if ( selected ){ stateProperty.value = LIQUID_STATE } } );
-    gasSelectedProperty.link( function( selected ) { if ( selected ){ stateProperty.value = GAS_STATE } } );
+    solidSelectedProperty.link( function( selected ) { if ( selected ){ stateProperty.value = SOLID_STATE; } } );
+    liquidSelectedProperty.link( function( selected ) { if ( selected ){ stateProperty.value = LIQUID_STATE; } } );
+    gasSelectedProperty.link( function( selected ) { if ( selected ){ stateProperty.value = GAS_STATE; } } );
 
     // Set the model state and update the button appearances when the user presses one of the buttons.
     stateProperty.link( function( state ) {
@@ -151,7 +149,7 @@ define( function( require ) {
     } );
 
     // if the model gets reset, set the local phase state value to be undefined until the user selects a phase
-    model.on( 'reset', function(){ stateProperty.value = UNDEFINED_STATE } );
+    model.on( 'reset', function(){ stateProperty.value = UNDEFINED_STATE; } );
 
     // put the buttons together in a single VBox
     var buttons = new VBox( {
