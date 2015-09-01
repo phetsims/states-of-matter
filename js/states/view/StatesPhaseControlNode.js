@@ -11,13 +11,15 @@ define( function( require ) {
 
   // modules
   var Color = require( 'SCENERY/util/Color' );
+  var DerivedProperty = require( 'AXON/DerivedProperty' );
   var HBox = require( 'SCENERY/nodes/HBox' );
   var HStrut = require( 'SCENERY/nodes/HStrut' );
   var Image = require( 'SCENERY/nodes/Image' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Node = require( 'SCENERY/nodes/Node' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
-  var RectangularPushButton = require( 'SUN/buttons/RectangularPushButton' );
+  var Property = require( 'AXON/Property' );
+  var BooleanRectangularStickyToggleButton = require( 'SUN/buttons/BooleanRectangularStickyToggleButton' );
   var Text = require( 'SCENERY/nodes/Text' );
   var VBox = require( 'SCENERY/nodes/VBox' );
 
@@ -32,6 +34,7 @@ define( function( require ) {
   var solidIconImage = require( 'image!STATES_OF_MATTER/solid-icon.png' );
 
   // constants
+  var UNDEFINED_STATE = 0;
   var SOLID_STATE = 1;
   var LIQUID_STATE = 2;
   var GAS_STATE = 3;
@@ -65,7 +68,7 @@ define( function( require ) {
     var centerStrutWidth = Math.max( desiredLabelHorizontalCenter - ( label.width / 2 ) - leftStrutWidth - imageNode.width, 0 );
     assert && assert( centerStrutWidth >= 0, 'label is too wide - was it scaled properly?' );
 
-    // create the right strut to fill out the reset of the button
+    // create the right strut to fill out the rest of the button
     var rightStrutWidth = STATES_BUTTON_WIDTH - leftStrutWidth - imageNode.width - centerStrutWidth - label.width;
 
     return new HBox( {
@@ -81,17 +84,16 @@ define( function( require ) {
   }
 
   /**
-   * @param {Property<number>} heatingCoolingAmountProperty
-   * @param {Property<number>} stateProperty
+   * @param {MultiParticleModel} model
    * @param {Object} [options] that can be passed on to the underlying node
    * @constructor
    */
-  function StatesPhaseControlNode( heatingCoolingAmountProperty, stateProperty, options ) {
+  function StatesPhaseControlNode( model, options ) {
 
     this.options = _.extend( {
       xMargin: 5,
       yMargin: 8,
-      fill: '#C8C8C8  ',
+      fill: '#C8C8C8',
       stroke: 'gray',
       lineWidth: 1,
       cornerRadius: 5 // radius of the rounded corners on the background
@@ -99,70 +101,57 @@ define( function( require ) {
 
     Node.call( this );
 
-    // solid state selection button
-    var solidStateButton = new RectangularPushButton( {
-      content: createButtonContent( solidIconImage, solidString ),
-      listener: function() {
-        stateProperty.value = SOLID_STATE;
-        stateProperty._notifyObservers();
-      }
+    // state of the atoms/molecules
+    var stateProperty = new Property( UNDEFINED_STATE );
+
+    // boolean properties corresponding to each state
+    var solidSelectedProperty = new Property( false );
+    var liquidSelectedProperty = new Property( false );
+    var gasSelectedProperty = new Property( false );
+
+    // create solid state selection button
+    var solidStateButton = new BooleanRectangularStickyToggleButton( solidSelectedProperty, {
+      content: createButtonContent( solidIconImage, solidString )
     } );
 
-    // liquid state selection button
-    var liquidStateButton = new RectangularPushButton( {
-      content: createButtonContent( liquidIconImage, liquidString ),
-      listener: function() {
-        stateProperty.value = LIQUID_STATE;
-        stateProperty._notifyObservers();
-      },
-      baseColor: new Color( 250, 0, 0 )
+    // create liquid state selection button
+    var liquidStateButton = new BooleanRectangularStickyToggleButton( liquidSelectedProperty, {
+      content: createButtonContent( liquidIconImage, liquidString )
     } );
 
-    // gas state selection button
-    var gasStateButton = new RectangularPushButton( {
-      content: createButtonContent( gasIconImage, gasString ),
-      listener: function() {
-        stateProperty.value = GAS_STATE;
-        stateProperty._notifyObservers();
-      },
-      baseColor: 'rgb( 204, 102, 204 )'
+    // create gas state selection button
+    var gasStateButton = new BooleanRectangularStickyToggleButton( gasSelectedProperty, {
+      content: createButtonContent( gasIconImage, gasString )
     } );
 
-    // change the base color of the buttons in order to indicate which state is currently selected
+    // set the state when the buttons are pushed
+    solidSelectedProperty.link( function( selected ) { if ( selected ){ stateProperty.value = SOLID_STATE } } );
+    liquidSelectedProperty.link( function( selected ) { if ( selected ){ stateProperty.value = LIQUID_STATE } } );
+    gasSelectedProperty.link( function( selected ) { if ( selected ){ stateProperty.value = GAS_STATE } } );
+
+    // Set the model state and update the button appearances when the user presses one of the buttons.
     stateProperty.link( function( state ) {
-      switch( state ) {
-        case SOLID_STATE:
-          solidStateButton.baseColor = SELECTED_BUTTON_COLOR;
-          liquidStateButton.baseColor = DESELECTED_BUTTON_COLOR;
-          gasStateButton.baseColor = DESELECTED_BUTTON_COLOR;
-          break;
-        case LIQUID_STATE:
-          solidStateButton.baseColor = DESELECTED_BUTTON_COLOR;
-          liquidStateButton.baseColor = SELECTED_BUTTON_COLOR;
-          gasStateButton.baseColor = DESELECTED_BUTTON_COLOR;
-          break;
-        case GAS_STATE:
-          solidStateButton.baseColor = DESELECTED_BUTTON_COLOR;
-          liquidStateButton.baseColor = DESELECTED_BUTTON_COLOR;
-          gasStateButton.baseColor = SELECTED_BUTTON_COLOR;
-          break;
+      if ( state !== UNDEFINED_STATE ){
+        model.setPhase( state );
       }
+      solidStateButton.baseColor = state === SOLID_STATE ? SELECTED_BUTTON_COLOR : DESELECTED_BUTTON_COLOR;
+      solidStateButton.pickable = state !== SOLID_STATE;
+      liquidStateButton.baseColor = state === LIQUID_STATE ? SELECTED_BUTTON_COLOR : DESELECTED_BUTTON_COLOR;
+      liquidStateButton.pickable = state !== LIQUID_STATE;
+      gasStateButton.baseColor = state === GAS_STATE ? SELECTED_BUTTON_COLOR : DESELECTED_BUTTON_COLOR;
+      gasStateButton.pickable = state !== GAS_STATE;
+      solidSelectedProperty.value = state === SOLID_STATE;
+      liquidSelectedProperty.value = state === LIQUID_STATE;
+      gasSelectedProperty.value = state === GAS_STATE;
     } );
 
-    // if the user changes the temperature, un-highlight all buttons, since the phase may be changing
-    heatingCoolingAmountProperty.link( function() {
-      switch( stateProperty.value ) {
-        case SOLID_STATE:
-          solidStateButton.baseColor = DESELECTED_BUTTON_COLOR;
-          break;
-        case LIQUID_STATE:
-          liquidStateButton.baseColor = DESELECTED_BUTTON_COLOR;
-          break;
-        case GAS_STATE:
-          gasStateButton.baseColor = DESELECTED_BUTTON_COLOR;
-          break;
-      }
+    // if the user changes the temperature, the phase state becomes undefined
+    model.heatingCoolingAmountProperty.lazyLink( function() {
+      stateProperty.value = UNDEFINED_STATE;
     } );
+
+    // if the model gets reset, set the local phase state value to be undefined until the user selects a phase
+    model.on( 'reset', function(){ stateProperty.value = UNDEFINED_STATE } );
 
     // put the buttons together in a single VBox
     var buttons = new VBox( {

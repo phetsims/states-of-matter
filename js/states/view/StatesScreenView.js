@@ -107,7 +107,7 @@ define( function( require ) {
     this.addChild( solidLiquidGasMoleculesControlPanel );
 
     // add phases control node
-    var solidLiquidGasPhaseControlNode = new StatesPhaseControlNode( multipleParticleModel.heatingCoolingAmountProperty, multipleParticleModel.stateProperty, {
+    var solidLiquidGasPhaseControlNode = new StatesPhaseControlNode( multipleParticleModel, {
       right: solidLiquidGasMoleculesControlPanel.right,
       top: solidLiquidGasMoleculesControlPanel.bottom + layoutBoundsYOffset
     } );
@@ -141,9 +141,6 @@ define( function( require ) {
     );
 
     this.addChild( stepButton );
-    multipleParticleModel.stateProperty.link( function( phase ) {
-      multipleParticleModel.setPhase( phase );
-    } );
     multipleParticleModel.moleculeTypeProperty.link( function() {
       multipleParticleModel.temperatureSetPointProperty._notifyObservers();
     } );

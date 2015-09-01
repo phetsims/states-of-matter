@@ -162,7 +162,6 @@ define( function( require ) {
         pressure: 0, // notifyPressureChanged
         moleculeType: StatesOfMatterConstants.NEON, // notifyMoleculeTypeChanged,
         interactionStrength: 0, // notifyInteractionStrengthChanged
-        state: PHASE_SOLID,//  solid phase
         isPlaying: true,
         speed: 'normal',
         heatingCoolingAmount: 0
@@ -394,6 +393,7 @@ define( function( require ) {
       this.initializeModelParameters();
       this.setMoleculeType( DEFAULT_MOLECULE );
       PropertySet.prototype.reset.call( this );
+      this.trigger( 'reset' );
     },
 
     /**
