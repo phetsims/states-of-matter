@@ -37,8 +37,8 @@ define( function( require ) {
   var GAS_STATE = 3;
   var STATES_BUTTON_WIDTH = 160;
   var ICON_HEIGHT = 25; // in screen coordinates, empirically determined
-  var SELECTED_BUTTON_COLOR = '#998D7C';
-  var DESELECTED_BUTTON_COLOR = '#ffeccf';
+  var SELECTED_BUTTON_COLOR = '#866891';
+  var DESELECTED_BUTTON_COLOR = '#d7bd9f';
 
   // function that puts icon and label together with some struts into an HBox for using as content node on button
   function createButtonContent( iconImage, string ) {
