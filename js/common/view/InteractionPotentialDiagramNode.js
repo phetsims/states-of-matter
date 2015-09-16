@@ -105,20 +105,19 @@ define( function( require ) {
     this.ljPotentialGraph.setTranslation( this.graphXOrigin, this.graphYOrigin - this.graphHeight );
 
     // Create and add the center axis line for the graph.
-    var centerAxis = new Path( new Shape().lineTo( 0, 0 )
-      .lineTo( this.graphWidth, 0 ), { lineWidth: 0.8, stroke: '#A7A7A7' } );
+    var centerAxis = new Path( Shape.lineSegment( 0, 0, this.graphWidth, 0 ), { lineWidth: 0.8, stroke: '#A7A7A7' } );
     this.ljPotentialGraph.addChild( centerAxis );
     centerAxis.setTranslation( 0, this.graphHeight / 2 );
 
-
     // Add the arrows and labels that will depict sigma and epsilon.
-    this.epsilonArrowShape = new ArrowShape( 0, 0, 0, this.graphHeight / 2, {
-      doubleHead: true,
-      headHeight: 5,
-      headWidth: 5,
-      tailWidth: 1
+    this.epsilonArrow = new ArrowNode( 0, 0, 0, 0, {
+      headHeight: 8,
+      headWidth: 20,
+      tailWidth: 9,
+      doubleHead: false,
+      fill: 'white',
+      lineWidth: 0.5
     } );
-    this.epsilonArrow = new Path( this.epsilonArrowShape, { fill: 'white', stroke: 'white' } );
     this.ljPotentialGraph.addChild( this.epsilonArrow );
 
     this.epsilonLabel = new Text( epsilonString, { font: GREEK_LETTER_FONT, fill: 'white' } );
@@ -129,7 +128,10 @@ define( function( require ) {
     this.sigmaArrow = new ArrowNode( 0, 0, 0, 0, {
       headHeight: 8,
       headWidth: 8,
-      tailWidth: 3, doubleHead: true, fill: 'white'
+      tailWidth: 3,
+      doubleHead: true,
+      fill: 'white',
+      lineWidth: 0.5
     } );
     this.ljPotentialGraph.addChild( this.sigmaArrow );
 

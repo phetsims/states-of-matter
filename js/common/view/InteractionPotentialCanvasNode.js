@@ -94,14 +94,14 @@ define( function( require ) {
             this.interactionDiagram.epsilonArrowShape = new ArrowShape( this.interactionDiagram.graphMin.x, this.interactionDiagram.graphHeight,
               this.interactionDiagram.epsilonArrowStartPt.x, this.interactionDiagram.epsilonArrowStartPt.y, {
                 doubleHead: this.interactionDiagram.graphMin.y - 10 < this.interactionDiagram.graphHeight,
-                headHeight: 5, headWidth: 5, tailWidth: 1
+                headHeight: 5, headWidth: 6, tailWidth: 2
               } );
             this.interactionDiagram.epsilonArrow.setShape( this.interactionDiagram.epsilonArrowShape );
           }
           else {
             this.interactionDiagram.epsilonArrowShape = new ArrowShape( this.interactionDiagram.graphMin.x, this.interactionDiagram.graphMin.y,
               this.interactionDiagram.epsilonArrowStartPt.x, this.interactionDiagram.epsilonArrowStartPt.y, {
-                doubleHead: true, headHeight: 5, headWidth: 5, tailWidth: 1
+                doubleHead: true, headHeight: 5, headWidth: 6, tailWidth: 2
               } );
             this.interactionDiagram.epsilonArrow.setShape( this.interactionDiagram.epsilonArrowShape );
           }
