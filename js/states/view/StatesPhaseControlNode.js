@@ -10,14 +10,15 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var BooleanRectangularStickyToggleButton = require( 'SUN/buttons/BooleanRectangularStickyToggleButton' );
   var HBox = require( 'SCENERY/nodes/HBox' );
   var HStrut = require( 'SCENERY/nodes/HStrut' );
   var Image = require( 'SCENERY/nodes/Image' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Node = require( 'SCENERY/nodes/Node' );
+  var PhaseStateEnum = require( 'STATES_OF_MATTER/common/PhaseStateEnum' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Property = require( 'AXON/Property' );
-  var BooleanRectangularStickyToggleButton = require( 'SUN/buttons/BooleanRectangularStickyToggleButton' );
   var Text = require( 'SCENERY/nodes/Text' );
   var VBox = require( 'SCENERY/nodes/VBox' );
 
@@ -32,10 +33,6 @@ define( function( require ) {
   var solidIconImage = require( 'image!STATES_OF_MATTER/solid-icon.png' );
 
   // constants
-  var UNDEFINED_STATE = 0;
-  var SOLID_STATE = 1;
-  var LIQUID_STATE = 2;
-  var GAS_STATE = 3;
   var STATES_BUTTON_WIDTH = 160;
   var ICON_HEIGHT = 25; // in screen coordinates, empirically determined
   var SELECTED_BUTTON_COLOR = '#866891';
@@ -100,7 +97,7 @@ define( function( require ) {
     Node.call( this );
 
     // state of the atoms/molecules
-    var stateProperty = new Property( UNDEFINED_STATE );
+    var stateProperty = new Property( PhaseStateEnum.UNKNOWN );
 
     // boolean properties corresponding to each state
     var solidSelectedProperty = new Property( false );
@@ -123,33 +120,33 @@ define( function( require ) {
     } );
 
     // set the state when the buttons are pushed
-    solidSelectedProperty.link( function( selected ) { if ( selected ){ stateProperty.value = SOLID_STATE; } } );
-    liquidSelectedProperty.link( function( selected ) { if ( selected ){ stateProperty.value = LIQUID_STATE; } } );
-    gasSelectedProperty.link( function( selected ) { if ( selected ){ stateProperty.value = GAS_STATE; } } );
+    solidSelectedProperty.link( function( selected ) { if ( selected ) { stateProperty.value = PhaseStateEnum.SOLID; } } );
+    liquidSelectedProperty.link( function( selected ) { if ( selected ) { stateProperty.value = PhaseStateEnum.LIQUID; } } );
+    gasSelectedProperty.link( function( selected ) { if ( selected ) { stateProperty.value = PhaseStateEnum.GAS; } } );
 
     // Set the model state and update the button appearances when the user presses one of the buttons.
     stateProperty.link( function( state ) {
-      if ( state !== UNDEFINED_STATE ){
+      if ( state !== PhaseStateEnum.UNKNOWN ) {
         model.setPhase( state );
       }
-      solidStateButton.baseColor = state === SOLID_STATE ? SELECTED_BUTTON_COLOR : DESELECTED_BUTTON_COLOR;
-      solidStateButton.pickable = state !== SOLID_STATE;
-      liquidStateButton.baseColor = state === LIQUID_STATE ? SELECTED_BUTTON_COLOR : DESELECTED_BUTTON_COLOR;
-      liquidStateButton.pickable = state !== LIQUID_STATE;
-      gasStateButton.baseColor = state === GAS_STATE ? SELECTED_BUTTON_COLOR : DESELECTED_BUTTON_COLOR;
-      gasStateButton.pickable = state !== GAS_STATE;
-      solidSelectedProperty.value = state === SOLID_STATE;
-      liquidSelectedProperty.value = state === LIQUID_STATE;
-      gasSelectedProperty.value = state === GAS_STATE;
+      solidStateButton.baseColor = state === PhaseStateEnum.SOLID ? SELECTED_BUTTON_COLOR : DESELECTED_BUTTON_COLOR;
+      solidStateButton.pickable = state !== PhaseStateEnum.SOLID;
+      liquidStateButton.baseColor = state === PhaseStateEnum.LIQUID ? SELECTED_BUTTON_COLOR : DESELECTED_BUTTON_COLOR;
+      liquidStateButton.pickable = state !== PhaseStateEnum.LIQUID;
+      gasStateButton.baseColor = state === PhaseStateEnum.GAS ? SELECTED_BUTTON_COLOR : DESELECTED_BUTTON_COLOR;
+      gasStateButton.pickable = state !== PhaseStateEnum.GAS;
+      solidSelectedProperty.value = state === PhaseStateEnum.SOLID;
+      liquidSelectedProperty.value = state === PhaseStateEnum.LIQUID;
+      gasSelectedProperty.value = state === PhaseStateEnum.GAS;
     } );
 
     // if the user changes the temperature, the phase state becomes undefined
     model.heatingCoolingAmountProperty.lazyLink( function() {
-      stateProperty.value = UNDEFINED_STATE;
+      stateProperty.value = PhaseStateEnum.UNKNOWN;
     } );
 
     // if the model gets reset, set the local phase state value to be undefined until the user selects a phase
-    model.on( 'reset', function(){ stateProperty.value = UNDEFINED_STATE; } );
+    model.on( 'reset', function() { stateProperty.value = PhaseStateEnum.UNKNOWN; } );
 
     // put the buttons together in a single VBox
     var buttons = new VBox( {

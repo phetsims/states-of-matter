@@ -51,6 +51,7 @@ define( function( require ) {
   var WaterAtomPositionUpdater = require( 'STATES_OF_MATTER/common/model/engine/WaterAtomPositionUpdater' );
   var IsokineticThermostat = require( 'STATES_OF_MATTER/common/model/engine/kinetic/IsokineticThermostat' );
   var AndersenThermostat = require( 'STATES_OF_MATTER/common/model/engine/kinetic/AndersenThermostat' );
+  var PhaseStateEnum = require( 'STATES_OF_MATTER/common/PhaseStateEnum' );
 
   // Constants that control various aspects of the model behavior.
   var DEFAULT_MOLECULE = StatesOfMatterConstants.NEON;
@@ -64,11 +65,6 @@ define( function( require ) {
   var MAX_INJECTED_MOLECULE_VELOCITY = 2.0;
   var MAX_INJECTED_MOLECULE_ANGLE = Math.PI * 0.8;
   var VERLET_CALCULATIONS_PER_CLOCK_TICK = 8;
-
-  // Constants used for setting the phase directly.
-  var PHASE_SOLID = 1;
-  var PHASE_LIQUID = 2;
-  var PHASE_GAS = 3;
   var INJECTION_POINT_HORIZ_PROPORTION = 0.05;
   var INJECTION_POINT_VERT_PROPORTION = 0.25;
 
@@ -398,30 +394,13 @@ define( function( require ) {
 
     /**
      * Set the phase of the particles in the simulation.
+     * @param {number} phaseSate
      * @public
-     * @param {number} state
      */
-    setPhase: function( state ) {
-      switch( state ) {
-        case PHASE_SOLID:
-          this.phaseStateChanger.setPhase( AbstractPhaseStateChanger.PHASE_SOLID );
-          break;
-
-        case PHASE_LIQUID:
-          this.phaseStateChanger.setPhase( AbstractPhaseStateChanger.PHASE_LIQUID );
-          break;
-
-        case PHASE_GAS:
-          this.phaseStateChanger.setPhase( AbstractPhaseStateChanger.PHASE_GAS );
-          break;
-
-        default:
-          console.error( 'Error: Invalid state specified.' );
-          // Treat it as a solid.
-          this.phaseStateChanger.setPhase( AbstractPhaseStateChanger.PHASE_SOLID );
-          break;
-      }
-
+    setPhase: function( phaseSate ) {
+      assert && assert( phaseSate === PhaseStateEnum.SOLID || phaseSate === PhaseStateEnum.LIQUID || phaseSate === PhaseStateEnum.GAS,
+        'invalid phase state specified' );
+      this.phaseStateChanger.setPhase( phaseSate );
       this.syncParticlePositions();
     },
 
@@ -1199,15 +1178,15 @@ define( function( require ) {
       if ( this.temperatureSetPoint < StatesOfMatterConstants.SOLID_TEMPERATURE +
                                       ( ( StatesOfMatterConstants.LIQUID_TEMPERATURE -
                                           StatesOfMatterConstants.SOLID_TEMPERATURE ) / 2 ) ) {
-        phase = PHASE_SOLID;
+        phase = PhaseStateEnum.SOLID;
       }
       else if ( this.temperatureSetPoint < StatesOfMatterConstants.LIQUID_TEMPERATURE +
                                            ( ( StatesOfMatterConstants.GAS_TEMPERATURE -
                                                StatesOfMatterConstants.LIQUID_TEMPERATURE ) / 2 ) ) {
-        phase = PHASE_LIQUID;
+        phase = PhaseStateEnum.LIQUID;
       }
       else {
-        phase = PHASE_GAS;
+        phase = PhaseStateEnum.GAS;
       }
 
       return phase;
@@ -1314,7 +1293,7 @@ define( function( require ) {
       // temperature for the particles that remain in the container. Doing
       // this generally cools them down into a more manageable state.
       if ( particlesOutsideOfContainerCount > 0 ) {
-        this.phaseStateChanger.setPhase( AbstractPhaseStateChanger.PHASE_GAS );
+        this.phaseStateChanger.setPhase( PhaseStateEnum.GAS );
       }
     },
 
@@ -1326,10 +1305,6 @@ define( function( require ) {
       return this.particleContainerHeight;
     },
 
-    PHASE_SOLID: PHASE_SOLID,
-    PHASE_LIQUID: PHASE_LIQUID,
-    PHASE_GAS: PHASE_GAS,
     MAX_ADJUSTABLE_EPSILON: MAX_ADJUSTABLE_EPSILON
-
   } );
 } );

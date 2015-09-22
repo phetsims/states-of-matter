@@ -10,10 +10,11 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var inherit = require( 'PHET_CORE/inherit' );
   var AbstractPhaseStateChanger = require( 'STATES_OF_MATTER/common/model/engine/AbstractPhaseStateChanger' );
-  var Random = require( 'DOT/Random' );
+  var inherit = require( 'PHET_CORE/inherit' );
   var MonatomicAtomPositionUpdater = require( 'STATES_OF_MATTER/common/model/engine/MonatomicAtomPositionUpdater' );
+  var PhaseStateEnum = require( 'STATES_OF_MATTER/common/PhaseStateEnum' );
+  var Random = require( 'DOT/Random' );
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
 
   // constants
@@ -37,13 +38,13 @@ define( function( require ) {
      */
     setPhase: function( phaseID ) {
       switch( phaseID ) {
-        case AbstractPhaseStateChanger.PHASE_SOLID:
+        case PhaseStateEnum.SOLID:
           this.setPhaseSolid();
           break;
-        case AbstractPhaseStateChanger.PHASE_LIQUID:
+        case PhaseStateEnum.LIQUID:
           this.setPhaseLiquid();
           break;
-        case AbstractPhaseStateChanger.PHASE_GAS:
+        case PhaseStateEnum.GAS:
           this.setPhaseGas();
           break;
       }

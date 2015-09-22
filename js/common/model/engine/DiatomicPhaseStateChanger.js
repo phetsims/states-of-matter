@@ -11,10 +11,11 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var inherit = require( 'PHET_CORE/inherit' );
-  var Random = require( 'DOT/Random' );
   var AbstractPhaseStateChanger = require( 'STATES_OF_MATTER/common/model/engine/AbstractPhaseStateChanger' );
   var DiatomicAtomPositionUpdater = require( 'STATES_OF_MATTER/common/model/engine/DiatomicAtomPositionUpdater' );
+  var inherit = require( 'PHET_CORE/inherit' );
+  var PhaseStateEnum = require( 'STATES_OF_MATTER/common/PhaseStateEnum' );
+  var Random = require( 'DOT/Random' );
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
 
   // constants
@@ -43,21 +44,21 @@ define( function( require ) {
   return inherit( AbstractPhaseStateChanger, DiatomicPhaseStateChanger, {
 
     /**
-     * @param {number} phaseID - state(solid/liquid/gas) of Molecule
+     * @param {number} phaseState - phase state (solid/liquid/gas) of the collection of molecules
      * @public
      */
-    setPhase: function( phaseID ) {
+    setPhase: function( phaseState ) {
       var postChangeModelSteps = 0;
-      switch( phaseID ) {
-        case AbstractPhaseStateChanger.PHASE_SOLID:
+      switch( phaseState ) {
+        case PhaseStateEnum.SOLID:
           this.setPhaseSolid();
           postChangeModelSteps = 0;
           break;
-        case AbstractPhaseStateChanger.PHASE_LIQUID:
+        case PhaseStateEnum.LIQUID:
           this.setPhaseLiquid();
           postChangeModelSteps = 200;
           break;
-        case AbstractPhaseStateChanger.PHASE_GAS:
+        case PhaseStateEnum.GAS:
           this.setPhaseGas();
           postChangeModelSteps = 0;
           break;

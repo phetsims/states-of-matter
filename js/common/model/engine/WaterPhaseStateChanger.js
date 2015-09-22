@@ -12,11 +12,12 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var inherit = require( 'PHET_CORE/inherit' );
-  var Random = require( 'DOT/Random' );
   var AbstractPhaseStateChanger = require( 'STATES_OF_MATTER/common/model/engine/AbstractPhaseStateChanger' );
-  var WaterAtomPositionUpdater = require( 'STATES_OF_MATTER/common/model/engine/WaterAtomPositionUpdater' );
+  var inherit = require( 'PHET_CORE/inherit' );
+  var PhaseStateEnum = require( 'STATES_OF_MATTER/common/PhaseStateEnum' );
+  var Random = require( 'DOT/Random' );
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
+  var WaterAtomPositionUpdater = require( 'STATES_OF_MATTER/common/model/engine/WaterAtomPositionUpdater' );
 
   // @private
   var MIN_INITIAL_DIAMETER_DISTANCE = 1.4;
@@ -50,13 +51,13 @@ define( function( require ) {
     setPhase: function( phaseID ) {
 
       switch( phaseID ) {
-        case AbstractPhaseStateChanger.PHASE_SOLID:
+        case PhaseStateEnum.SOLID:
           this.setPhaseSolid();
           break;
-        case AbstractPhaseStateChanger.PHASE_LIQUID:
+        case PhaseStateEnum.LIQUID:
           this.setPhaseLiquid();
           break;
-        case AbstractPhaseStateChanger.PHASE_GAS:
+        case PhaseStateEnum.GAS:
           this.setPhaseGas();
           break;
       }

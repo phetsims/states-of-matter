@@ -75,12 +75,6 @@ define( function( require ) {
       MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE: MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE,
       DISTANCE_BETWEEN_PARTICLES_IN_CRYSTAL: 0.12,  // In particle diameters.
       MAX_PLACEMENT_ATTEMPTS: 500 // For random placement of particles.
-    },
-
-    // public static final
-    {
-      PHASE_SOLID: 1,
-      PHASE_LIQUID: 2,
-      PHASE_GAS: 3
-    } );
+    }
+  );
 } );
