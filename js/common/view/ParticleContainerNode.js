@@ -23,7 +23,7 @@ define( function( require ) {
   var LID_POSITION_TWEAK_FACTOR = 65; // Empirically determined value for aligning lid and container body.
   var PRESSURE_METER_ELBOW_OFFSET = 30;
 
-  // Constants the control the positioning of non-container portions of this node.
+  // constants the control the positioning of non-container portions of this node.
   var PRESSURE_GAUGE_Y_OFFSET = -PRESSURE_METER_ELBOW_OFFSET;
 
   /**

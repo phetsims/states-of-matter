@@ -53,7 +53,7 @@ define( function( require ) {
   var AndersenThermostat = require( 'STATES_OF_MATTER/common/model/engine/kinetic/AndersenThermostat' );
   var PhaseStateEnum = require( 'STATES_OF_MATTER/common/PhaseStateEnum' );
 
-  // Constants that control various aspects of the model behavior.
+  // constants that control various aspects of the model behavior.
   var DEFAULT_MOLECULE = StatesOfMatterConstants.NEON;
   var INITIAL_TEMPERATURE = StatesOfMatterConstants.SOLID_TEMPERATURE;
   var MAX_TEMPERATURE = 50.0;

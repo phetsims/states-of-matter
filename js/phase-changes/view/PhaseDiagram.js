@@ -60,7 +60,7 @@ define( function( require ) {
   var SMALLER_INNER_FONT_SIZE = 10;
   var SMALLER_INNER_FONT = new PhetFont( SMALLER_INNER_FONT_SIZE );
 
-  // Constants that control the appearance of the phase diagram for the
+  // constants that control the appearance of the phase diagram for the
   // various substances.  Note that all points are controlled as proportions
   // of the overall graph size and not as absolute values.
   var POINT_MARKER_DIAMETER = 4;

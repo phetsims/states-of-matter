@@ -34,7 +34,7 @@ define( function( require ) {
   // Constant that controls the range of data that is graphed.
   var MAX_INTER_ATOM_DISTANCE = 1700; // in picometers
 
-  // Constants that control the appearance of the diagram.
+  // constants that control the appearance of the diagram.
   var NARROW_VERSION_WIDTH = 135;
   var WIDE_VERSION_WIDTH = 450;
   var AXIS_LINE_WIDTH = 1;
@@ -43,7 +43,7 @@ define( function( require ) {
   // Size of pos marker wrt overall width.
   var POSITION_MARKER_DIAMETER_PROPORTION = 0.03;
 
-  // Constants that control the location and size of the graph.
+  // constants that control the location and size of the graph.
   var VERT_AXIS_SIZE_PROPORTION = 0.85;
 
   // Font for the labels used on the axes and within the graph.

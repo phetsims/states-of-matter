@@ -79,7 +79,7 @@ define( function( require ) {
     MAX_EPSILON: 450,    // Epsilon/k-Boltzmann is in Kelvin.
     MIN_EPSILON: 20,     // Epsilon/k-Boltzmann is in Kelvin.
 
-    // Constants used to describe the the spatial relationship between
+    // constants used to describe the the spatial relationship between
     THETA_HOH: ( 120 * Math.PI / 180 ),  // This is not quite the real value for a water
 
     // molecule, but it is close and worked better in
@@ -104,7 +104,7 @@ define( function( require ) {
     //----------------------------------------------------------------------------
     K_BOLTZMANN: 1.38E-23, // Boltzmann's constant.
 
-    // Constants moved from MultipleParticleModel
+    // constants moved from MultipleParticleModel
     SOLID_TEMPERATURE: SOLID_TEMPERATURE,
     SLUSH_TEMPERATURE: 0.33,
     LIQUID_TEMPERATURE: 0.34,

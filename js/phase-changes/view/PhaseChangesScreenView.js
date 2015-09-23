@@ -37,7 +37,7 @@ define( function( require ) {
   // constants
   var INSET = 10;
 
-  // Constants used when mapping the model pressure and temperature to the phase diagram.
+  // constants used when mapping the model pressure and temperature to the phase diagram.
   var TRIPLE_POINT_TEMPERATURE_IN_MODEL = StatesOfMatterConstants.TRIPLE_POINT_MONATOMIC_MODEL_TEMPERATURE;
   var TRIPLE_POINT_TEMPERATURE_ON_DIAGRAM = 0.375;
   var CRITICAL_POINT_TEMPERATURE_IN_MODEL = StatesOfMatterConstants.CRITICAL_POINT_MONATOMIC_MODEL_TEMPERATURE;
