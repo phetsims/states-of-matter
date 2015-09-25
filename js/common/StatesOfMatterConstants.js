@@ -12,6 +12,8 @@ define( function( require ) {
 
   // modules
   var Bounds2 = require( 'DOT/Bounds2' );
+  var Color = require( 'SCENERY/util/Color' );
+  var Element = require( 'NITROGLYCERIN/Element' );
 
   // constants (these are vars because other constants refer to them)
   var PARTICLE_CONTAINER_WIDTH = 10000;
@@ -90,10 +92,10 @@ define( function( require ) {
     DIATOMIC_PARTICLE_DISTANCE: 0.9,  // In particle diameters.
 
     // atoms and molecules colors
-    OXYGEN_COLOR: '#ff5500', // color blind friendly red
-    NEON_COLOR: '#70D4FF',
-    ARGON_COLOR: '#FFAFAF',
-    HYDROGEN_COLOR: 'white',
+    OXYGEN_COLOR: Element.O.color.toCSS(), // TODO: handled uniquely until Element is fixed, see https://github.com/phetsims/nitroglycerin/issues/8
+    NEON_COLOR: Element.Ne.color,
+    ARGON_COLOR: Element.Ar.color,
+    HYDROGEN_COLOR: Element.H.color,
     ADJUSTABLE_ATTRACTION_COLOR: '#CC66CC',
 
     // adjustable attraction min epsilon
