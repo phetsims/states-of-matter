@@ -10,19 +10,18 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var ArrowNode = require( 'SCENERY_PHET/ArrowNode' );
+  var GridNode = require( 'STATES_OF_MATTER/atomic-interactions/view/ZoomableGridNode' );
   var inherit = require( 'PHET_CORE/inherit' );
   var LjPotentialCalculator = require( 'STATES_OF_MATTER/common/model/LjPotentialCalculator' );
-  var Vector2 = require( 'DOT/Vector2' );
-  var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
-  var Shape = require( 'KITE/Shape' );
-  var Path = require( 'SCENERY/nodes/Path' );
-  var Text = require( 'SCENERY/nodes/Text' );
-  var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Node = require( 'SCENERY/nodes/Node' );
-  var ArrowNode = require( 'SCENERY_PHET/ArrowNode' );
-  var ArrowShape = require( 'SCENERY_PHET/ArrowShape' );
-  var GridNode = require( 'STATES_OF_MATTER/atomic-interactions/view/ZoomableGridNode' );
+  var Path = require( 'SCENERY/nodes/Path' );
+  var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var PositionMarker = require( 'STATES_OF_MATTER/atomic-interactions/view/PositionMarker' );
+  var Shape = require( 'KITE/Shape' );
+  var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
+  var Text = require( 'SCENERY/nodes/Text' );
+  var Vector2 = require( 'DOT/Vector2' );
 
   // strings
   var distanceBetweenAtomsString = require( 'string!STATES_OF_MATTER/distanceBetweenAtoms' );

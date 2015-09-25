@@ -39,7 +39,6 @@ define( function( require ) {
   var PUMPING_REQUIRED_TO_INJECT_PROPORTION = PUMP_SHAFT_HEIGHT_PROPORTION / 6;
 
   /**
-   *
    * @param {number} width  - width of the BicyclePump
    * @param {number} height - height of the BicyclePump
    * @param {MultipleParticleModel} multipleParticleModel - model of the simulation
@@ -47,7 +46,6 @@ define( function( require ) {
    * @constructor
    */
   function BicyclePumpNode( width, height, multipleParticleModel, options ) {
-
 
     Node.call( this );
 
@@ -134,7 +132,6 @@ define( function( require ) {
       lineWidth: 1,
       stroke: 'black',
       fill: new LinearGradient( 0, 0, 262, 0 )
-
         .addColorStop( 0, '#727374' )//1
         .addColorStop( 9 / 262, '#AFB1B2' )
         .addColorStop( 18 / 262, '#B5B7B9' )

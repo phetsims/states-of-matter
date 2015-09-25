@@ -12,7 +12,6 @@ define( function( require ) {
 
   // modules
   var Bounds2 = require( 'DOT/Bounds2' );
-  var Color = require( 'SCENERY/util/Color' );
   var Element = require( 'NITROGLYCERIN/Element' );
 
   // constants (these are vars because other constants refer to them)

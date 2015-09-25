@@ -19,7 +19,6 @@ define( function( require ) {
   var NeonAtom = require( 'STATES_OF_MATTER/common/model/particle/NeonAtom' );
   var OxygenAtom = require( 'STATES_OF_MATTER/common/model/particle/OxygenAtom' );
   var Path = require( 'SCENERY/nodes/Path' );
-  var PhetColorScheme = require( 'SCENERY_PHET/PhetColorScheme' );
   var RadialGradient = require( 'SCENERY/util/RadialGradient' );
   var Shape = require( 'KITE/Shape' );
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
