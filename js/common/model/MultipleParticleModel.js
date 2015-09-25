@@ -1016,17 +1016,14 @@ define( function( require ) {
      * of the normalized ones.
      */
     syncParticlePositions: function() {
+      assert && assert( this.moleculeDataSet.numberOfAtoms === this.particles.length,
+        'Inconsistent number of normalized versus non-normalized particles' );
       var positionMultiplier = this.particleDiameter;
       var atomPositions = this.moleculeDataSet.atomPositions;
-      var i = 0;
 
-      this.particles.forEach( function( particle ) {
-        particle.setPosition( atomPositions[ i ].x * positionMultiplier, atomPositions[ i ].y * positionMultiplier );
-        i++;
+      this.particles.forEach( function( particle, index ) {
+        particle.setPosition( atomPositions[ index ].x * positionMultiplier, atomPositions[ index ].y * positionMultiplier );
       } );
-      /*if ( this.moleculeDataSet.numberOfAtoms !== this.particles.length ) {
-       console.log( 'Inconsistent number of normalized versus non-normalized particles.' );
-       }*/
     },
 
     /**
