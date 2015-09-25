@@ -91,10 +91,10 @@ define( function( require ) {
 
     // atoms and molecules colors
     OXYGEN_COLOR: '#ff5500', // color blind friendly red
-    NEON_COLOR: '#1AFFFB',
-    ARGON_COLOR: '#FF8A75',
+    NEON_COLOR: '#70D4FF',
+    ARGON_COLOR: '#FFAFAF',
     HYDROGEN_COLOR: 'white',
-    ADJUSTABLE_ATTRACTION_COLOR: '#B15AFF',
+    ADJUSTABLE_ATTRACTION_COLOR: '#CC66CC',
 
     // adjustable attraction min epsilon
     MIN_ADJUSTABLE_EPSILON: (1.5 * NEON_ATOM_EPSILON),
