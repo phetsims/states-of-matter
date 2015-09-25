@@ -9,20 +9,21 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var inherit = require( 'PHET_CORE/inherit' );
-  var Node = require( 'SCENERY/nodes/Node' );
-  var Vector2 = require( 'DOT/Vector2' );
-  var Color = require( 'SCENERY/util/Color' );
-  var RadialGradient = require( 'SCENERY/util/RadialGradient' );
-  var NeonAtom = require( 'STATES_OF_MATTER/common/model/particle/NeonAtom' );
   var ArgonAtom = require( 'STATES_OF_MATTER/common/model/particle/ArgonAtom' );
-  var OxygenAtom = require( 'STATES_OF_MATTER/common/model/particle/OxygenAtom' );
+  var Color = require( 'SCENERY/util/Color' );
+  var ConfigurableStatesOfMatterAtom = require( 'STATES_OF_MATTER/common/model/particle/ConfigurableStatesOfMatterAtom' );
   var HydrogenAtom = require( 'STATES_OF_MATTER/common/model/particle/HydrogenAtom' );
   var HydrogenAtom2 = require( 'STATES_OF_MATTER/common/model/particle/HydrogenAtom2' );
-  var ConfigurableStatesOfMatterAtom = require( 'STATES_OF_MATTER/common/model/particle/ConfigurableStatesOfMatterAtom' );
-  var Shape = require( 'KITE/Shape' );
+  var inherit = require( 'PHET_CORE/inherit' );
+  var Node = require( 'SCENERY/nodes/Node' );
+  var NeonAtom = require( 'STATES_OF_MATTER/common/model/particle/NeonAtom' );
+  var OxygenAtom = require( 'STATES_OF_MATTER/common/model/particle/OxygenAtom' );
   var Path = require( 'SCENERY/nodes/Path' );
   var PhetColorScheme = require( 'SCENERY_PHET/PhetColorScheme' );
+  var RadialGradient = require( 'SCENERY/util/RadialGradient' );
+  var Shape = require( 'KITE/Shape' );
+  var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
+  var Vector2 = require( 'DOT/Vector2' );
 
   // constants
   var MVT_SCALE = 0.25;
@@ -158,25 +159,26 @@ define( function( require ) {
       var baseColor;
 
       if ( atom instanceof ArgonAtom ) {
-        baseColor = new Color( 255, 138, 117 );
+        baseColor = new Color( StatesOfMatterConstants.ARGON_COLOR );
       }
       else if ( atom instanceof NeonAtom ) {
-        baseColor = new Color( 112, 212, 255 );
+        baseColor = new Color( StatesOfMatterConstants.NEON_COLOR );
       }
       else if ( atom instanceof OxygenAtom ) {
-        baseColor = PhetColorScheme.RED_COLORBLIND;
+        baseColor = new Color( StatesOfMatterConstants.OXYGEN_COLOR );
       }
       else if ( atom instanceof HydrogenAtom ) {
-        baseColor = new Color( 255, 255, 255 );
+        baseColor = new Color( StatesOfMatterConstants.HYDROGEN_COLOR );
       }
       else if ( atom instanceof HydrogenAtom2 ) {
-        baseColor = new Color( 255, 255, 255 );
+        baseColor = new Color( StatesOfMatterConstants.HYDROGEN_COLOR );
       }
       else if ( atom instanceof ConfigurableStatesOfMatterAtom ) {
-        baseColor = new Color( 204, 102, 204 );
+        baseColor = new Color( StatesOfMatterConstants.ADJUSTABLE_ATTRACTION_COLOR );
       }
       else {
-        baseColor = new Color( 255, 138, 117 );
+        assert && assert( false, 'unrecognized atom type, unable to assign a color' );
+        baseColor = new Color( 'black' );
       }
       return baseColor;
     }
