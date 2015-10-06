@@ -1,4 +1,4 @@
-// Copyright 2002 - 2015, University of Colorado Boulder
+// Copyright 2002-2015, University of Colorado Boulder
 
 /**
  * A particle layer rendered on canvas.  This exists for performance reasons.

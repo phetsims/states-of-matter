@@ -107,7 +107,7 @@ define( function( require ) {
           }
         }
         catch( e ) {
-          console.error( "Error: Caught exception while positioning epsilon arrow - " + e );
+          console.error( 'Error: Caught exception while positioning epsilon arrow - ' + e );
         }
       }
       else {
@@ -126,7 +126,7 @@ define( function( require ) {
           this.interactionDiagram.zeroCrossingPoint.x, this.interactionDiagram.zeroCrossingPoint.y );
       }
       catch( r ) {
-        console.error( "Error: Caught exception while positioning sigma arrow - " + r );
+        console.error( 'Error: Caught exception while positioning sigma arrow - ' + r );
       }
 
       // Update the position of the marker in case the curve has moved.

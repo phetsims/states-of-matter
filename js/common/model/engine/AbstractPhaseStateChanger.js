@@ -68,7 +68,7 @@ define( function( require ) {
             }
           }
         }
-        console.error( "Error: No open positions available for molecule." );
+        console.error( 'Error: No open positions available for molecule.' );
         return null;
       },
 

@@ -1,4 +1,4 @@
-// Copyright  2002 - 2015, University of Colorado Boulder
+// Copyright 2002-2015, University of Colorado Boulder
 
 /**
  * View for the panel for selecting the atoms/molecules
@@ -86,7 +86,7 @@ define( function( require ) {
     }, options );
 
     Node.call( this );
-    var textOptions = { font: new PhetFont( NORMAL_TEXT_FONT_SIZE ), fill: "#FFFFFF" };
+    var textOptions = { font: new PhetFont( NORMAL_TEXT_FONT_SIZE ), fill: '#FFFFFF' };
 
     var weakTitle = new Text( weakString, textOptions );
     if ( weakTitle.width > TickTextWidth ) {

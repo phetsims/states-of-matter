@@ -129,7 +129,7 @@ define( function( require ) {
           if ( !this.settingBothAtomTypes &&
                ( ( atomType === AtomType.ADJUSTABLE && this.movableAtom.getType() !== AtomType.ADJUSTABLE ) ||
                  ( atomType !== AtomType.ADJUSTABLE && this.movableAtom.getType() === AtomType.ADJUSTABLE ) ) ) {
-            console.log( " - Error: Cannot set just one atom to be adjustable, ignoring request." );
+            console.log( ' - Error: Cannot set just one atom to be adjustable, ignoring request.' );
             return;
           }
           this.ensureValidAtomType( atomType );
@@ -170,7 +170,7 @@ define( function( require ) {
           if ( !this.settingBothAtomTypes &&
                ( ( atomType === AtomType.ADJUSTABLE && this.movableAtom.getType() !== AtomType.ADJUSTABLE ) ||
                  ( atomType !== AtomType.ADJUSTABLE && this.movableAtom.getType() === AtomType.ADJUSTABLE ) ) ) {
-            console.log( " - Error: Cannot set just one atom to be adjustable, ignoring request." );
+            console.log( ' - Error: Cannot set just one atom to be adjustable, ignoring request.' );
             return;
           }
 
@@ -474,7 +474,7 @@ define( function( require ) {
               break;
 
             default:
-              console.log( " - Error: Unrecognized bonding state." );
+              console.log( ' - Error: Unrecognized bonding state.' );
               // assert false;
               this.bondingState = BondingState.UNBONDED;
               break;
@@ -611,7 +611,7 @@ define( function( require ) {
       approximateEquivalentPotentialDistance: function( distance ) {
 
         if ( distance < this.ljPotentialCalculator.calculateMinimumForceDistance() ) {
-          console.log( "- Error: Distance value out of range." );
+          console.log( '- Error: Distance value out of range.' );
           return 0;
         }
 

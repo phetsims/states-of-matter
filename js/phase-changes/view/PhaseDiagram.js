@@ -1,4 +1,4 @@
-// Copyright 2002 - 2015, University of Colorado Boulder
+// Copyright 2002-2015, University of Colorado Boulder
 
 /**
  * This class displays a phase diagram suitable for inclusion on the control
@@ -223,7 +223,7 @@ define( function( require ) {
       .ellipse( 0, 0, CURRENT_STATE_MARKER_DIAMETER, CURRENT_STATE_MARKER_DIAMETER ), { fill: 'red' } );
     accordionContent.addChild( this.currentStateMarker );
 
-    var titleNode = new Text( phaseDiagramString, { fill: "#FFFFFF", font: new PhetFont( { size: 13 } ) } );
+    var titleNode = new Text( phaseDiagramString, { fill: '#FFFFFF', font: new PhetFont( { size: 13 } ) } );
 
     if ( titleNode.width > horizontalAxis.width ) {
       titleNode.scale( horizontalAxis.width / titleNode.width );
@@ -353,7 +353,7 @@ define( function( require ) {
       if ( (normalizedTemperature < 0) || (normalizedTemperature > 1.0) || (normalizedPressure < 0) ||
            (normalizedPressure > 1.0) ) {
         // Parameter out of range - throw exception.
-        console.error( "Value out of range, temperature = " + normalizedTemperature + ", pressure = " +
+        console.error( 'Value out of range, temperature = ' + normalizedTemperature + ', pressure = ' +
                        normalizedPressure );
       }
       this.currentStateMarkerPos.setXY( normalizedTemperature, normalizedPressure );

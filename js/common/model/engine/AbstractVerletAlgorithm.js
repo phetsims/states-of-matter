@@ -224,7 +224,7 @@ define( function( require ) {
 
     setScaledEpsilon: function() {
       // In the base class this just issues a warning and has no effect.
-      console.log( "Warning: Setting epsilon is not implemented for this class, request ignored." );
+      console.log( 'Warning: Setting epsilon is not implemented for this class, request ignored.' );
     },
 
     /**
@@ -233,7 +233,7 @@ define( function( require ) {
      */
     getScaledEpsilon: function() {
       // In the base class this just issues a warning and returns 0.
-      console.log( "Warning: Getting scaled epsilon is not implemented for this class, returning zero." );
+      console.log( 'Warning: Getting scaled epsilon is not implemented for this class, returning zero.' );
       return 0;
     },
 

@@ -24,7 +24,7 @@ define( function( require ) {
   function LjPotentialCalculator( sigma, epsilon ) {
 
     if ( sigma === 0 ) {
-      console.log( "Illegal value for the sigma parameter: " + sigma );
+      console.log( 'Illegal value for the sigma parameter: ' + sigma );
     }
 
     this.sigma = sigma;  // Molecular diameter in picometers.

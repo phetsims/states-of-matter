@@ -555,7 +555,7 @@ define( function( require ) {
           this.initializeTriatomic( this.currentMolecule, phase );
           break;
         default:
-          console.error( "ERROR: Unrecognized particle type, using default." );
+          console.error( 'ERROR: Unrecognized particle type, using default.' );
           break;
       }
       // This is needed in case we were switching from another molecule
@@ -924,7 +924,7 @@ define( function( require ) {
       }
       else {
         // used, so print and error message and ignore the request.
-        console.error( "Error: Epsilon cannot be set when non-configurable molecule is in use." );
+        console.error( 'Error: Epsilon cannot be set when non-configurable molecule is in use.' );
       }
     },
 
@@ -1243,7 +1243,7 @@ define( function( require ) {
      */
     returnLid: function() {
       if ( !this.isExploded ) {
-        console.log( " - Warning: Ignoring attempt to return lid when container hadn't exploded." );
+        console.log( ' - Warning: Ignoring attempt to return lid when container hadn\'t exploded.' );
         return;
       }
 

@@ -1,4 +1,4 @@
-// Copyright 2002 - 2015, University of Colorado Boulder
+// Copyright 2002-2015, University of Colorado Boulder
 
 /**
  * A node that allows user to select the phase of a substance.

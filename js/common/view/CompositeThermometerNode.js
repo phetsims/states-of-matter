@@ -66,8 +66,8 @@ define( function( require ) {
     multipleParticleModel.temperatureSetPointProperty.link( function() {
       var tempInKelvin = multipleParticleModel.getTemperatureInKelvin();
       var tempInKelvinRounded = Math.round( multipleParticleModel.getTemperatureInKelvin() );
-      temperatureKelvinText.setText( tempInKelvinRounded + " " + kelvinUnits );
-      temperatureCelsiusText.setText( Util.roundSymmetric( tempInKelvin - 273.15 ) + " " + celsiusUnits );
+      temperatureKelvinText.setText( tempInKelvinRounded + ' ' + kelvinUnits );
+      temperatureCelsiusText.setText( Util.roundSymmetric( tempInKelvin - 273.15 ) + ' ' + celsiusUnits );
       temperatureInKelvinProperty.value = tempInKelvinRounded > MAX_TEMPERATURE_TO_CLAMP_RED_MERCURY ?
                                           MAX_TEMPERATURE_TO_CLAMP_RED_MERCURY : tempInKelvinRounded;
     } );

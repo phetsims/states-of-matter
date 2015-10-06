@@ -1,4 +1,4 @@
-// Copyright (c) 2002 - 2015, University of Colorado Boulder
+// Copyright 2002-2015, University of Colorado Boulder
 
 /**
  * Control panel used for selecting atom combinations.

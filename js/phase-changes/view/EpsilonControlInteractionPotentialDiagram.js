@@ -1,4 +1,4 @@
-// Copyright  2002 - 2015, University of Colorado Boulder
+// Copyright 2002-2015, University of Colorado Boulder
 
 /**
  * This class extends the Interaction Potential diagram to allow the user to
@@ -140,7 +140,7 @@ define( function( require ) {
     accordionContent.addChild( this.ljPotentialGraph );
 
     var accordionContentHBox = new HBox( { children: [ accordionContent ] } );
-    var titleNode = new Text( interactionDiagramTitle, { fill: "#FFFFFF", font: new PhetFont( { size: 13 } ) } );
+    var titleNode = new Text( interactionDiagramTitle, { fill: '#FFFFFF', font: new PhetFont( { size: 13 } ) } );
     if ( titleNode.width > this.horizontalAxis.width ) {
       titleNode.scale( this.horizontalAxis.width / titleNode.width );
     }

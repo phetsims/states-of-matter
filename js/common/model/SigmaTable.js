@@ -48,7 +48,7 @@ define( function( require ) {
           return ConfigurableStatesOfMatterAtom.DEFAULT_RADIUS * 2;
         }
         else {
-          console.log( "Error: Interaction potential not available for requested atom: " + atomType1 );
+          console.log( 'Error: Interaction potential not available for requested atom: ' + atomType1 );
           assert && assert( (false) );
           // In the real world, default to an arbitrary value.
           return StatesOfMatterConstants.MAX_EPSILON / 2;
@@ -75,8 +75,8 @@ define( function( require ) {
           return ConfigurableStatesOfMatterAtom.DEFAULT_RADIUS * 2;
         }
         else {
-          console.log( "Error: Do not have sigma data for this combination of molecules, using default." );
-          console.log( "       atomType1 = " + atomType1 + ", atomType2 = " + atomType2 );
+          console.log( 'Error: Do not have sigma data for this combination of molecules, using default.' );
+          console.log( '       atomType1 = ' + atomType1 + ', atomType2 = ' + atomType2 );
           return (StatesOfMatterConstants.MAX_SIGMA - StatesOfMatterConstants.MIN_SIGMA) / 2;
         }
       }
