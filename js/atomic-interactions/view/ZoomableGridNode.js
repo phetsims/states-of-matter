@@ -15,7 +15,7 @@ define( function( require ) {
   var Path = require( 'SCENERY/nodes/Path' );
   var Shape = require( 'KITE/Shape' );
   var ZoomButton = require( 'SCENERY_PHET/buttons/ZoomButton' );
-  var rectangularButtonView = require( 'SUN/buttons/RectangularButtonView' );
+  var RectangularButtonView = require( 'SUN/buttons/RectangularButtonView' );
 
   // constants
   var MAX_LINES_HORIZONTAL = 13;
@@ -49,7 +49,7 @@ define( function( require ) {
       xMargin: 3,
       yMargin: 3,
       disabledBaseColor: '#EDEDED',
-      buttonAppearanceStrategy: rectangularButtonView.flatAppearanceStrategy
+      buttonAppearanceStrategy: RectangularButtonView.flatAppearanceStrategy
     } );
     this.zoomInButton.enabled = false;
 
@@ -65,7 +65,7 @@ define( function( require ) {
       xMargin: 3,
       yMargin: 3,
       disabledBaseColor: '#EDEDED',
-      buttonAppearanceStrategy: rectangularButtonView.flatAppearanceStrategy,
+      buttonAppearanceStrategy: RectangularButtonView.flatAppearanceStrategy,
       in: false
     } );
     this.zoomOutButton.enabled = true;

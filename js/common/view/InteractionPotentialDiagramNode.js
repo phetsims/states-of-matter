@@ -11,7 +11,7 @@ define( function( require ) {
 
   // modules
   var ArrowNode = require( 'SCENERY_PHET/ArrowNode' );
-  var GridNode = require( 'STATES_OF_MATTER/atomic-interactions/view/ZoomableGridNode' );
+  var ZoomableGridNode = require( 'STATES_OF_MATTER/atomic-interactions/view/ZoomableGridNode' );
   var inherit = require( 'PHET_CORE/inherit' );
   var LjPotentialCalculator = require( 'STATES_OF_MATTER/common/model/LjPotentialCalculator' );
   var Node = require( 'SCENERY/nodes/Node' );
@@ -195,7 +195,7 @@ define( function( require ) {
     this.epsilonLabel.setTranslation( this.graphMin.x + this.epsilonLabel.width,
       ( this.graphMin.y - this.epsilonLabel.height / 2 + this.graphHeight / 2) / 2 + epsilonLabelYOffset );
     if ( wide ) {
-      this.gridNode = new GridNode( this, 0, 0, this.graphWidth, this.graphHeight );
+      this.gridNode = new ZoomableGridNode( this, 0, 0, this.graphWidth, this.graphHeight );
       this.ljPotentialGraph.addChild( this.gridNode );
       // adjusting zoom buttons  position on interaction diagram
       this.gridNode.zoomInButton.right = this.verticalAxis.left - this.gridNode.zoomInButton.width;

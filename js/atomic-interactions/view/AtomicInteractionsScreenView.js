@@ -23,7 +23,7 @@ define( function( require ) {
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Text = require( 'SCENERY/nodes/Text' );
   var Node = require( 'SCENERY/nodes/Node' );
-  var ForcesControlNode = require( 'STATES_OF_MATTER/atomic-interactions/view/ForcesControlPanel' );
+  var ForcesControlPanel = require( 'STATES_OF_MATTER/atomic-interactions/view/ForcesControlPanel' );
   var AtomicInteractionsControlPanel = require( 'STATES_OF_MATTER/atomic-interactions/view/AtomicInteractionsControlPanel' );
   var TextPushButton = require( 'SUN/buttons/TextPushButton' );
   var ParticleForceNode = require( 'STATES_OF_MATTER/atomic-interactions/view/ParticleForceNode' );
@@ -129,7 +129,7 @@ define( function( require ) {
     this.addChild( stepButton );
 
     // add force control
-    var forceControlNode = new ForcesControlNode( dualAtomModel.forcesProperty, dualAtomModel.forceControlPanelExpandProperty, {
+    var forceControlNode = new ForcesControlPanel( dualAtomModel.forcesProperty, dualAtomModel.forceControlPanelExpandProperty, {
       tickTextColor: tickTextColor,
       textColor: textColor,
       backgroundColor: backgroundColor,
