@@ -17,7 +17,7 @@ define( function( require ) {
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
 
   // constants
-  var RADIUS = 154;   // In picometers.
+  var RADIUS = Element.Ne.vanDerWaalsRadius;   // In picometers.
   var MASS = Element.Ne.atomicWeight; // In atomic mass units.
   var EPSILON = 32.8; // epsilon/k-Boltzmann is in Kelvin.
 

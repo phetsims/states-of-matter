@@ -17,7 +17,7 @@ define( function( require ) {
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
 
   // constants
-  var RADIUS = 181;  // In picometers.
+  var RADIUS = Element.Ar.vanDerWaalsRadius;  // In picometers.
   var MASS = Element.Ar.atomicWeight; // In atomic mass units.
 
   /**
