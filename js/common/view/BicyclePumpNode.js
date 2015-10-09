@@ -13,18 +13,18 @@ define( function( require ) {
 
   // modules
   var inherit = require( 'PHET_CORE/inherit' );
+  var LinearGradient = require( 'SCENERY/util/LinearGradient' );
   var Node = require( 'SCENERY/nodes/Node' );
+  var Path = require( 'SCENERY/nodes/Path' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var Shape = require( 'KITE/Shape' );
-  var Path = require( 'SCENERY/nodes/Path' );
   var SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
-  var LinearGradient = require( 'SCENERY/util/LinearGradient' );
 
   // The follow constants define the size and positions of the various
   // components of the pump as proportions of the overall width and height
   // of the node.
-  var PUMP_BASE_WIDTH_PROPORTION = 0.2;
-  var PUMP_BASE_HEIGHT_PROPORTION = 0.1;
+  var PUMP_BASE_WIDTH_PROPORTION = 0.35;
+  var PUMP_BASE_HEIGHT_PROPORTION = 0.075;
   var PUMP_BODY_HEIGHT_PROPORTION = 0.7;
   var PUMP_BODY_WIDTH_PROPORTION = 0.06;
   var PUMP_SHAFT_WIDTH_PROPORTION = PUMP_BODY_WIDTH_PROPORTION * 0.25;
@@ -57,46 +57,36 @@ define( function( require ) {
     var pumpBaseWidth = width * PUMP_BASE_WIDTH_PROPORTION;
     var pumpBaseHeight = height * PUMP_BASE_HEIGHT_PROPORTION;
 
-    var pumpBaseSupportShape = new Shape()
-      .moveTo( pumpBaseWidth * 0.54, 0 )
-      .quadraticCurveTo( pumpBaseWidth * 0.4, height * 0.1, pumpBaseWidth * 0.5, height * 0.1334 )
-      .moveTo( pumpBaseWidth * 0.82, 0 )
-      .quadraticCurveTo( pumpBaseWidth * 0.98, 0.116 * height, pumpBaseWidth * 0.84, height * 0.1334 )
-      .quadraticCurveTo( pumpBaseWidth * 0.7, height * 0.1666, pumpBaseWidth * 0.5, height * 0.1334 )
-      .lineTo( pumpBaseWidth * 0.54, 0 )
+    var topOfBaseHeight = pumpBaseHeight * 0.7;
+    var topOfBaseNode = new Rectangle( -pumpBaseWidth / 2, -topOfBaseHeight / 2, pumpBaseWidth, topOfBaseHeight, 20, 20, {
+      fill: new LinearGradient( -pumpBaseWidth / 2, 0, pumpBaseWidth / 2, 0 )
+        .addColorStop( 0, '#bbbbbb' )
+        .addColorStop( 1, '#888888' )
+    } );
+
+    var pumpBaseEdgeHeight = pumpBaseHeight * 0.75;
+    var pumpEdgeShape = new Shape()
+      .moveTo( -pumpBaseWidth / 2, 0 )
+      .quadraticCurveTo( -pumpBaseWidth * 0.55, pumpBaseEdgeHeight * 1.1, -pumpBaseWidth * 0.25, pumpBaseEdgeHeight )
+      .lineTo( pumpBaseWidth * 0.25, pumpBaseEdgeHeight )
+      .quadraticCurveTo( pumpBaseWidth * 0.55, pumpBaseEdgeHeight * 1.1, pumpBaseWidth / 2, 0 )
       .close();
 
-    var pumpBaseSupportLeftLower = new Path( pumpBaseSupportShape, {
-      fill: '#3C2712', rotation: Math.PI / 3
+    var pumpEdgeNode = new Path( pumpEdgeShape, {
+      fill: new LinearGradient( -pumpBaseWidth / 2, 0, pumpBaseWidth / 2, 0 )
+        .addColorStop( 0, '#666666' )
+        .addColorStop( 0.85, '#888888' )
+        .addColorStop( 1, '#555555' )
     } );
-    var pumpBaseSupportLeftUpper = new Path( pumpBaseSupportShape, {
-      fill: '#6A4521', rotation: Math.PI / 3
-    } );
-
-    var pumpBaseSupportRightLower = new Path( pumpBaseSupportShape, {
-      fill: '#3C2712', rotation: -Math.PI / 3
-    } );
-    var pumpBaseSupportRightUpper = new Path( pumpBaseSupportShape, {
-      fill: '#6A4521', rotation: -Math.PI / 3
-    } );
-    pumpBaseSupportLeftUpper.right = pumpBaseSupportRightLower.left + 6;
-    pumpBaseSupportLeftUpper.top = pumpBaseSupportRightLower.top;
-    var pumpBaseSupportYOffset = 3;
-    var pumpBaseSupportXOffset = 2;
-    pumpBaseSupportLeftLower.centerY = pumpBaseSupportLeftUpper.centerY + pumpBaseSupportYOffset;
-    pumpBaseSupportLeftLower.centerX = pumpBaseSupportLeftUpper.centerX + pumpBaseSupportXOffset;
-    pumpBaseSupportRightLower.centerY = pumpBaseSupportRightUpper.centerY + pumpBaseSupportYOffset;
-    pumpBaseSupportRightLower.centerX = pumpBaseSupportRightUpper.centerX + pumpBaseSupportXOffset;
 
     var pumpBase = new Node( {
-      children: [ pumpBaseSupportLeftLower, pumpBaseSupportLeftUpper,
-        pumpBaseSupportRightLower, pumpBaseSupportRightUpper ]
+      children: [ pumpEdgeNode, topOfBaseNode ],
+      left: 0,
+      bottom: height
     } );
-    pumpBase.setTranslation( pumpBase.width / 9, height - pumpBaseHeight + pumpBase.height / 2 );
     this.addChild( pumpBase );
 
-    // Add the handle of the pump.  This is the node that the user will
-    // interact with in order to use the pump.
+    // Add the handle of the pump.  This is the node that the user will interact with in order to use the pump.
     var pumpHandleHeight = height * PUMP_HANDLE_HEIGHT_PROPORTION;
 
     var pumpHandleNodeShape = new Shape();
@@ -181,8 +171,10 @@ define( function( require ) {
 
     pumpHandleNode.touchArea = pumpHandleNode.localBounds.dilatedXY( 100, 100 );
     pumpHandleNode.scale( pumpHandleHeight / pumpHandleNode.height );
-    pumpHandleNode.setTranslation( (pumpBaseWidth - pumpHandleNode.width) / 2,
-      height - ( height * PUMP_HANDLE_INIT_VERT_POS_PROPORTION ) - pumpHandleHeight - pumpBaseHeight );
+    pumpHandleNode.setTranslation(
+      ( pumpBaseWidth - pumpHandleNode.width ) / 2,
+      height - ( height * PUMP_HANDLE_INIT_VERT_POS_PROPORTION ) - pumpHandleHeight - pumpBaseHeight
+    );
 
     var maxHandleOffset = -PUMP_SHAFT_HEIGHT_PROPORTION * height / 2;
 
@@ -289,7 +281,7 @@ define( function( require ) {
         .addColorStop( 0.7, '#A0A2A5' )
         .addColorStop( 1, '#727375' )
     } );
-    pipeConnectorPath.setTranslation( pumpBaseWidth / 2, height - pumpBaseHeight - pipeConnectorHeight - 3 );
+    pipeConnectorPath.setTranslation( pumpBaseWidth / 2, height - pumpBaseHeight * 0.65 - pipeConnectorHeight - 3 );
 
     var pipeConnectorOpening = new Path( new Shape()
       .ellipse( 0, 0, pipeConnectorTopWidth / 2, 3, 0, 0, true ), {
