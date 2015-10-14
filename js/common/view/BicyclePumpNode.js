@@ -53,7 +53,8 @@ define( function( require ) {
     var pumpingRequiredToInject = height * PUMPING_REQUIRED_TO_INJECT_PROPORTION;
     var currentPumpingAmount = 0;
 
-    // Add the base of the pump.
+    // Add the base of the pump.  Many of the multipliers and point positions were arrived at empirically in the
+    // process of trying to make the base look good.
     var pumpBaseWidth = width * PUMP_BASE_WIDTH_PROPORTION;
     var pumpBaseHeight = height * PUMP_BASE_HEIGHT_PROPORTION;
 
@@ -64,12 +65,14 @@ define( function( require ) {
         .addColorStop( 1, '#888888' )
     } );
 
-    var pumpBaseEdgeHeight = pumpBaseHeight * 0.75;
+    var pumpBaseEdgeHeight = pumpBaseHeight * 0.65;
     var pumpEdgeShape = new Shape()
       .moveTo( -pumpBaseWidth / 2, 0 )
-      .quadraticCurveTo( -pumpBaseWidth * 0.55, pumpBaseEdgeHeight * 1.1, -pumpBaseWidth * 0.25, pumpBaseEdgeHeight )
-      .lineTo( pumpBaseWidth * 0.25, pumpBaseEdgeHeight )
-      .quadraticCurveTo( pumpBaseWidth * 0.55, pumpBaseEdgeHeight * 1.1, pumpBaseWidth / 2, 0 )
+      .lineTo( -pumpBaseWidth / 2, pumpBaseEdgeHeight / 2 )
+      .quadraticCurveTo( -pumpBaseWidth * 0.5, pumpBaseEdgeHeight * 1.05, -pumpBaseWidth * 0.35, pumpBaseEdgeHeight )
+      .lineTo( pumpBaseWidth * 0.35, pumpBaseEdgeHeight )
+      .quadraticCurveTo( pumpBaseWidth * 0.5, pumpBaseEdgeHeight * 1.05, pumpBaseWidth / 2, pumpBaseEdgeHeight / 2 )
+      .lineTo( pumpBaseWidth / 2, 0 )
       .close();
 
     var pumpEdgeNode = new Path( pumpEdgeShape, {
