@@ -35,7 +35,7 @@ define( function( require ) {
   var HOSE_CONNECTOR_HEIGHT_PROPORTION = 0.04;
   var HOSE_CONNECTOR_WIDTH_PROPORTION = 0.05;
   var HOSE_CONNECTOR_VERT_POS_PROPORTION = 0.8;
-  var HOSE_ATTACH_VERT_POS_PROPORTION = 0.15;
+  var HOSE_ATTACH_VERT_POS_PROPORTION = 0.11;
   var PUMPING_REQUIRED_TO_INJECT_PROPORTION = PUMP_SHAFT_HEIGHT_PROPORTION / 6;
 
   /**
@@ -235,20 +235,19 @@ define( function( require ) {
     // Add the body of the pump
     var pumpBodyWidth = width * PUMP_BODY_WIDTH_PROPORTION;
     var pumpBodyHeight = height * PUMP_BODY_HEIGHT_PROPORTION;
-    var pumpBody = new Rectangle( 0, 0, pumpBodyWidth, pumpBodyHeight, 3, 3,
-      {
-        fill: new LinearGradient( 0, 0, pumpBodyWidth, 0 )
-          .addColorStop( 0, '#DA0000' )
-          .addColorStop( 0.4, '#D50000' )
-          .addColorStop( 0.7, '#B30000' )
-      } );
+    var pumpBody = new Rectangle( 0, 0, pumpBodyWidth, pumpBodyHeight, 3, 3, {
+      fill: new LinearGradient( 0, 0, pumpBodyWidth, 0 )
+        .addColorStop( 0, '#DA0000' )
+        .addColorStop( 0.4, '#D50000' )
+        .addColorStop( 0.7, '#B30000' )
+    } );
     pumpBody.setTranslation( (pumpBaseWidth - pumpBodyWidth) / 2, height - pumpBodyHeight - pumpBaseHeight );
 
     // add pump body shape opening
-    var pumpBodyOpening = new Path( new Shape()
-      .ellipse( 0, 0, pumpBodyWidth / 2, pumpBodyWidth / 3 - 2, 0, 2 * Math.PI, true ), {
-      fill: 'white'
-    } );
+    var pumpBodyOpening = new Path(
+      Shape.ellipse( 0, 0, pumpBodyWidth / 2, pumpBodyWidth / 3 - 2, 0, 2 * Math.PI, true ),
+      { fill: 'white' }
+    );
     pumpBodyOpening.setTranslation( (pumpBaseWidth - pumpBodyWidth) / 2 + pumpBodyOpening.width / 2,
       height - pumpBodyHeight - pumpBaseHeight );
 
@@ -291,14 +290,14 @@ define( function( require ) {
       fill: new LinearGradient( 0, 0, pipeConnectorTopWidth, 0 )
         .addColorStop( 0, '#727375' )
         .addColorStop( 1, '#575859' ),
-      stroke: 'black'
+      stroke: 'black',
+      centerX: pumpBaseWidth / 2,
+      centerY: height - pumpBaseHeight - pipeConnectorHeight + 4
     } );
-    pipeConnectorOpening.setTranslation( pumpBaseWidth / 2, height - pumpBaseHeight - pipeConnectorHeight - 3 );
     this.addChild( pipeConnectorOpening );
     this.addChild( pumpBody );
     this.addChild( pumpBodyOpening );
     this.addChild( pipeConnectorPath );
-
 
     // Add the hose connector.
     var hoseConnectorWidth = width * HOSE_CONNECTOR_WIDTH_PROPORTION;

@@ -62,7 +62,6 @@ define( function( require ) {
   var STEP_BUTTON_X_OFFSET = 50;
   var STEP_BUTTON_Y_OFFSET = 20;
   var BICYCLE_PUMP_NODE_X_OFFSET = 100;
-  var BICYCLE_PUMP_NODE_Y_OFFSET = 90;
   var RETURN_LID_BUTTON_Y_OFFSET = 100;
 
   /**
@@ -183,7 +182,7 @@ define( function( require ) {
 
     // add bicycle pump node
     this.addChild( new BicyclePumpNode( 200, 250, multipleParticleModel, {
-      bottom: heaterCoolerNode.top + BICYCLE_PUMP_NODE_Y_OFFSET,
+      bottom: heaterCoolerNode.bottom,
       right: particleContainerNode.left + BICYCLE_PUMP_NODE_X_OFFSET
     } ) );
 
