@@ -302,29 +302,27 @@ define( function( require ) {
     // Add the hose connector.
     var hoseConnectorWidth = width * HOSE_CONNECTOR_WIDTH_PROPORTION;
     var hoseConnectorHeight = height * HOSE_CONNECTOR_HEIGHT_PROPORTION;
-    var hoseConnector = new Rectangle( 0, 0, hoseConnectorWidth, hoseConnectorHeight, 2, 2,
-      {
-        fill: new LinearGradient( 0, 0, 0, hoseConnectorHeight )
-          .addColorStop( 0, '#828282' )
-          .addColorStop( 0.3, '#A2A3A4' )
-          .addColorStop( 0.35, '#C6C8CA' )
-          .addColorStop( 0.4, '#BFC1C3' )
-          .addColorStop( 1, '#808080' )
-      } );
+    var hoseConnector = new Rectangle( 0, 0, hoseConnectorWidth, hoseConnectorHeight, 2, 2, {
+      fill: new LinearGradient( 0, 0, 0, hoseConnectorHeight )
+        .addColorStop( 0, '#828282' )
+        .addColorStop( 0.3, '#A2A3A4' )
+        .addColorStop( 0.35, '#C6C8CA' )
+        .addColorStop( 0.4, '#BFC1C3' )
+        .addColorStop( 1, '#808080' )
+    } );
     hoseConnector.setTranslation( width - hoseConnectorWidth,
       height - ( height * HOSE_CONNECTOR_VERT_POS_PROPORTION ) - hoseConnectorHeight / 2 );
     this.addChild( hoseConnector );
-    var hoseBottomConnector = new Rectangle( 0, 0, hoseConnectorWidth, hoseConnectorHeight, 2, 2,
-      {
-        fill: new LinearGradient( 0, 0, 0, hoseConnectorHeight )
+    var hoseBottomConnector = new Rectangle( 0, 0, hoseConnectorWidth, hoseConnectorHeight, 2, 2, {
+      fill: new LinearGradient( 0, 0, 0, hoseConnectorHeight )
           .addColorStop( 0, '#828282' )
           .addColorStop( 0.3, '#A2A3A4' )
           .addColorStop( 0.35, '#C6C8CA' )
           .addColorStop( 0.4, '#BFC1C3' )
           .addColorStop( 1, '#808080' )
-      } );
+    } );
     this.addChild( hoseBottomConnector );
-    hoseBottomConnector.setTranslation( hoseToPumpAttachPtX + 2, hoseToPumpAttachPtY - hoseBottomConnector.height / 2 );
+    hoseBottomConnector.setTranslation( hoseToPumpAttachPtX + 1, hoseToPumpAttachPtY - hoseBottomConnector.height / 2 );
 
     this.mutate( options );
   }
