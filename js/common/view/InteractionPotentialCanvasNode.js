@@ -46,10 +46,9 @@ define( function( require ) {
 
     /**
      * Paints the potential  energy curve  on the canvas node.
-     * @param {CanvasContextWrapper} wrapper
+     * @param {CanvasRenderingContext2D} context
      */
-    paintCanvas: function( wrapper ) {
-      var context = wrapper.context;
+    paintCanvas: function( context ) {
       context.beginPath();
       context.moveTo( 0, 0 );
       this.interactionDiagram.graphMin.setXY( 0, 0 );

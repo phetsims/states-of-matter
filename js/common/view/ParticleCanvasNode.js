@@ -39,10 +39,9 @@ define( function( require ) {
 
     /**
      * Paints the particles on the canvas node.
-     * @param {CanvasContextWrapper} wrapper
+     * @param {CanvasRenderingContext2D} context
      */
-    paintCanvas: function( wrapper ) {
-      var context = wrapper.context;
+    paintCanvas: function( context ) {
       var particle, i;
 
       // Paint the regular hydrogen atoms first.  This is done so that when
