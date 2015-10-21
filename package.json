@@ -1,7 +1,7 @@
 {
   "name": "states-of-matter",
   "version": "1.0.0-dev.5",
-  "license": "GPLv3",
+  "license": "GPL-3.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/phetsims/states-of-matter.git"
