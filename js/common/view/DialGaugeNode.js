@@ -136,7 +136,7 @@ define( function( require ) {
       var length = (CONNECTOR_LENGTH_PROPORTION * 60);
       this.connectorPath = new Shape();
       if ( !this.elbowEnabled ) {
-        var connectorShape = new Shape.rect( 0, 0, length, width );
+        var connectorShape = Shape.rect( 0, 0, length, width );
         this.connector.setShape( connectorShape );
         this.connector.setTranslation( this.roundedRectangle.centerX + this.roundedRectangle.width / 2,
           ( this.roundedRectangle.centerY - width / 2) );
