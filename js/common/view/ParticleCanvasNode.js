@@ -42,7 +42,8 @@ define( function( require ) {
      * @param {CanvasRenderingContext2D} context
      */
     paintCanvas: function( context ) {
-      var particle, i;
+      var particle;
+      var i;
 
       // Paint the regular hydrogen atoms first.  This is done so that when
       // water is rendered, some of the hydrogen ends up in the back and some
