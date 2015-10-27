@@ -19,6 +19,7 @@ define( function( require ) {
   var AXES_ARROW_HEAD_HEIGHT = 8 * AXIS_LINE_WIDTH;
 
   // other constants
+  var NUM_POINTS_IN_GRAPH = 40; // number of points used to portray the line, empirically determined to look decent
   var EPSILON_HANDLE_OFFSET_PROPORTION = 0.08; // Position of handle as function of node width.
   var SIGMA_HANDLE_OFFSET_PROPORTION = 0.08;  // Position of handle as function of node width.
   var EPSILON_LINE_WIDTH = 1;
@@ -36,6 +37,7 @@ define( function( require ) {
     this.interactionDiagram = interactionDiagram;
     this.isLjGraphWider = isLjGraphWider;
     this.projectorModeProperty = projectorModeProperty;
+    this.called = 0;
   }
 
   return inherit( CanvasNode, InteractionPotentialCanvasNode, {
@@ -45,6 +47,7 @@ define( function( require ) {
      * @param {CanvasRenderingContext2D} context
      */
     paintCanvas: function( context ) {
+      console.log( 'called = ' + this.called++ );
       context.beginPath();
       context.moveTo( 0, 0 );
       this.interactionDiagram.graphMin.setXY( 0, 0 );
@@ -168,7 +171,7 @@ define( function( require ) {
       //}
     },
 
-    step: function() {
+    update: function() {
       this.invalidatePaint();
     }
   } );

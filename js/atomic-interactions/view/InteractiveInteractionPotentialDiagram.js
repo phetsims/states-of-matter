@@ -219,7 +219,7 @@ define( function( require ) {
     } );
     this.addChild( this.interactionPotentialCanvasNode );
     projectorModeProperty.link( function() {
-      interactiveInteractionPotentialDiagram.interactionPotentialCanvasNode.step();
+      interactiveInteractionPotentialDiagram.interactionPotentialCanvasNode.update();
     } );
     // Update interactivity state.
     this.updateInteractivityState();
@@ -265,9 +265,8 @@ define( function( require ) {
 
       //  draw potential curve
       if ( this.interactionPotentialCanvasNode !== undefined ) {
-        this.interactionPotentialCanvasNode.step();
+        this.interactionPotentialCanvasNode.update();
       }
-
     },
 
     /**

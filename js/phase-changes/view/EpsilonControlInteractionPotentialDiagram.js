@@ -130,7 +130,7 @@ define( function( require ) {
       canvasBounds: new Bounds2( 0, 0, 125, this.graphHeight )
     } );
     projectorModeProperty.link( function() {
-      epsilonControlInteractionPotentialDiagram.interactionPotentialCanvasNode.step();
+      epsilonControlInteractionPotentialDiagram.interactionPotentialCanvasNode.update();
     } );
     accordionContent.addChild( this.horizontalAxisLabel );
     accordionContent.addChild( this.horizontalAxis );
@@ -203,7 +203,7 @@ define( function( require ) {
 
       //  draw potential curve
       if ( this.interactionPotentialCanvasNode !== undefined ) {
-        this.interactionPotentialCanvasNode.step();
+        this.interactionPotentialCanvasNode.update();
       }
     },
 
