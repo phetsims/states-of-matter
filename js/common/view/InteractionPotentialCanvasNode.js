@@ -37,7 +37,6 @@ define( function( require ) {
     this.interactionDiagram = interactionDiagram;
     this.isLjGraphWider = isLjGraphWider;
     this.projectorModeProperty = projectorModeProperty;
-    this.called = 0;
   }
 
   return inherit( CanvasNode, InteractionPotentialCanvasNode, {
@@ -47,7 +46,6 @@ define( function( require ) {
      * @param {CanvasRenderingContext2D} context
      */
     paintCanvas: function( context ) {
-      console.log( 'called = ' + this.called++ );
       context.beginPath();
       context.moveTo( 0, 0 );
       this.interactionDiagram.graphMin.setXY( 0, 0 );
