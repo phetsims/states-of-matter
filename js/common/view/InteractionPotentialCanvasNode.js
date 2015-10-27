@@ -31,14 +31,14 @@ define( function( require ) {
    * @param {Object} [options] that can be passed on to the underlying node
    * @constructor
    */
-  function InteractionCanvasNode( interactionDiagram, isLjGraphWider, projectorModeProperty, options ) {
+  function InteractionPotentialCanvasNode( interactionDiagram, isLjGraphWider, projectorModeProperty, options ) {
     CanvasNode.call( this, options );
     this.interactionDiagram = interactionDiagram;
     this.isLjGraphWider = isLjGraphWider;
     this.projectorModeProperty = projectorModeProperty;
   }
 
-  return inherit( CanvasNode, InteractionCanvasNode, {
+  return inherit( CanvasNode, InteractionPotentialCanvasNode, {
 
     /**
      * Paints the potential energy curve on the canvas node.
