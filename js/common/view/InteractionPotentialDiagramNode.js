@@ -55,7 +55,6 @@ define( function( require ) {
   var zoomButtonsHeight = 72;
 
   /**
-   *
    * @param {number} sigma - Initial value of sigma, a.k.a. the atom diameter
    * @param {number} epsilon - Initial value of epsilon, a.k.a. the interaction strength
    * @param {boolean} wide - true if the widescreen version of the graph is needed, false if not.
