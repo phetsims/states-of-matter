@@ -94,7 +94,6 @@ define( function( require ) {
         }
 
         // Record the zero crossing point since the sigma arrow will need to use it to set its size and position.
-        console.log( 'yPos = ' + yPos );
         if ( previousYPos < this.interactionDiagram.graphHeight / 2 && yPos > this.interactionDiagram.graphHeight / 2 ) {
           this.interactionDiagram.zeroCrossingPoint.setXY( i, this.interactionDiagram.graphHeight / 2 );
         }
