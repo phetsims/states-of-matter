@@ -85,8 +85,12 @@ define( function( require ) {
       // position the various arrows and labels.
       this.interactionDiagram.graphMin.setXY( 0, 0 );
       this.interactionDiagram.zeroCrossingPoint.setXY( 0, 0 );
+      var sigmaHandleYPos = ( this.interactionDiagram.getGraphHeight() / 2 ) -
+                            2 * SIGMA_HANDLE_OFFSET_PROPORTION * this.interactionDiagram.heightOfGraph;
+      var sigmaHandleXPos = 0;
       var horizontalIndexMultiplier = MAX_INTER_ATOM_DISTANCE / this.interactionDiagram.graphWidth;
       var previousPotential = Number.POSITIVE_INFINITY;
+      var previousYPos = Number.NEGATIVE_INFINITY;
       for ( var i = 1; i < this.interactionDiagram.graphWidth; i++ ) {
         var potential = this.interactionDiagram.calculateLennardJonesPotential( i * horizontalIndexMultiplier );
         var yPos = ( ( this.interactionDiagram.graphHeight / 2 ) - ( potential * this.interactionDiagram.verticalScalingFactor ) );
@@ -99,11 +103,17 @@ define( function( require ) {
           this.interactionDiagram.graphMin.setXY( i, yPos );
         }
 
+        // Record the point where the sigma resize handle should be positioned.
+        if ( yPos > sigmaHandleYPos && previousYPos < sigmaHandleYPos ) {
+          sigmaHandleXPos = i;
+        }
+
         // Record the zero crossing point since the sigma arrow will need to use it to set its size and position.
         if ( previousPotential > 0 && potential < 0 ) {
           this.interactionDiagram.zeroCrossingPoint.setXY( i, this.interactionDiagram.graphHeight / 2 );
         }
         previousPotential = potential;
+        previousYPos = yPos;
       }
 
       // Position the epsilon arrow, which is a vertical double-headed arrow between the bottom of the well and the x axis.
@@ -182,12 +192,8 @@ define( function( require ) {
         }
       }
       if ( this.interactionDiagram.sigmaResizeHandle !== undefined ) {
-        var zeroCrossingPoint = this.interactionDiagram.getZeroCrossingPoint();
-        var arrowNodeXOffset = 5;
-        this.interactionDiagram.sigmaResizeHandle.setTranslation(
-          zeroCrossingPoint.x - arrowNodeXOffset,
-          ( this.interactionDiagram.getGraphHeight() / 2 ) - 2 * SIGMA_HANDLE_OFFSET_PROPORTION * this.interactionDiagram.heightOfGraph
-        );
+        this.interactionDiagram.sigmaResizeHandle.centerX = sigmaHandleXPos;
+        this.interactionDiagram.sigmaResizeHandle.centerY = sigmaHandleYPos;
         this.interactionDiagram.sigmaResizeHandle.setVisible( this.interactionDiagram.interactionEnabled );
       }
 
