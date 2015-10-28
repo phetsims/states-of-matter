@@ -80,9 +80,12 @@ define( function( require ) {
       this.interactionDiagram.graphMin.setXY( 0, 0 );
       this.interactionDiagram.zeroCrossingPoint.setXY( 0, 0 );
       var horizontalIndexMultiplier = MAX_INTER_ATOM_DISTANCE / this.interactionDiagram.graphWidth;
+      var previousYPos = Number.NEGATIVE_INFINITY;
       for ( var i = 1; i < this.interactionDiagram.graphWidth; i++ ) {
         var potential = this.interactionDiagram.calculateLennardJonesPotential( i * horizontalIndexMultiplier );
         var yPos = ( ( this.interactionDiagram.graphHeight / 2 ) - ( potential * this.interactionDiagram.verticalScalingFactor ) );
+
+        // Record the data that will be used in the paintCanvas method to render the curve.
         this.curveYPositions[ i ] = yPos;
 
         // Record the position of the min Y value since the epsilon arrow needs to be positioned near this point.
@@ -91,20 +94,11 @@ define( function( require ) {
         }
 
         // Record the zero crossing point since the sigma arrow will need to use it to set its size and position.
-        if ( ( yPos > 0 ) && ( yPos < this.interactionDiagram.graphHeight ) ) {
-          if ( ( potential > 0 ) || ( this.interactionDiagram.zeroCrossingPoint.x === 0 ) ) {
-            this.interactionDiagram.zeroCrossingPoint.setXY( i, this.interactionDiagram.graphHeight / 2 );
-          }
+        console.log( 'yPos = ' + yPos );
+        if ( previousYPos < this.interactionDiagram.graphHeight / 2 && yPos > this.interactionDiagram.graphHeight / 2 ) {
+          this.interactionDiagram.zeroCrossingPoint.setXY( i, this.interactionDiagram.graphHeight / 2 );
         }
-        else {
-          // Move to a good location from which to start graphing.
-          if ( yPos > this.interactionDiagram.graphHeight ) {
-            if ( (potential > 0) || ( this.interactionDiagram.zeroCrossingPoint.x === 0) ) {
-              // zero crossing point.
-              this.interactionDiagram.zeroCrossingPoint.setXY( i, this.interactionDiagram.graphHeight / 2 );
-            }
-          }
-        }
+        previousYPos = yPos;
       }
 
       // Position the epsilon arrow, which is a vertical double-headed arrow between the bottom of the well and the x axis.
