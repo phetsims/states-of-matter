@@ -207,19 +207,16 @@ define( function( require ) {
   return inherit( Node, InteractionPotentialDiagramNode, {
 
     /**
-     * Set the parameters that define the shape of the Lennard-Jones
-     * potential curve.
-     *@public
+     * Set the parameters that define the shape of the Lennard-Jones potential curve.
      * @param{number} sigma -  atom diameter
-     * @param {number }epsilon - interaction strength
+     * @param {number} epsilon - interaction strength
+     * @public
      */
     setLjPotentialParameters: function( sigma, epsilon ) {
 
       // Update the Lennard-Jones force calculator.
       this.ljPotentialCalculator.setEpsilon( epsilon );
       this.ljPotentialCalculator.setSigma( sigma );
-      // Redraw the graph to reflect the new parameters.
-      this.drawPotentialCurve();
     },
 
     /**
