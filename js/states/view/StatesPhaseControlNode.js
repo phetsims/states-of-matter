@@ -85,7 +85,7 @@ define( function( require ) {
    */
   function StatesPhaseControlNode( model, options ) {
 
-    this.options = _.extend( {
+    options = _.extend( {
       xMargin: 5,
       yMargin: 8,
       fill: '#C8C8C8',
@@ -155,7 +155,7 @@ define( function( require ) {
       align: 'center'
     } );
     this.addChild( buttons );
-    this.mutate( this.options );
+    this.mutate( options );
   }
 
   return inherit( Node, StatesPhaseControlNode );
