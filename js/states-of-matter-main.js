@@ -18,7 +18,7 @@ define( function( require ) {
   var Property = require( 'AXON/Property' );
 
   // strings
-  var simTitle = require( 'string!STATES_OF_MATTER/states-of-matter.title' );
+  var statesOfMatterTitleString = require( 'string!STATES_OF_MATTER/states-of-matter.title' );
   var interactionString = require( 'string!STATES_OF_MATTER/interaction' );
 
   var projectorModeProperty = new Property( false );
@@ -36,7 +36,7 @@ define( function( require ) {
   };
 
   SimLauncher.launch( function() {
-    var sim = new Sim( simTitle, [
+    var sim = new Sim( statesOfMatterTitleString, [
       new StatesScreen( projectorModeProperty ),
       new PhaseChangesScreen( projectorModeProperty, true ),
       new AtomicInteractionsScreen( projectorModeProperty, false, interactionString )

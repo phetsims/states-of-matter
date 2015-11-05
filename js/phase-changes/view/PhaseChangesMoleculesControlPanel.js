@@ -30,10 +30,10 @@ define( function( require ) {
   var strongString = require( 'string!STATES_OF_MATTER/strong' );
   var argonString = require( 'string!STATES_OF_MATTER/argon' );
   var waterString = require( 'string!STATES_OF_MATTER/water' );
-  var oxygenString = require( 'string!STATES_OF_MATTER/diatomicOxygen' );
+  var diatomicOxygenString = require( 'string!STATES_OF_MATTER/diatomicOxygen' );
   var adjustableAttractionString = require( 'string!STATES_OF_MATTER/adjustableAttraction' );
-  var titleString = require( 'string!STATES_OF_MATTER/AtomsAndMolecules' );
-  var interactionStrengthTitleString = require( 'string!STATES_OF_MATTER/interactionStrengthWithSymbol' );
+  var atomsAndMoleculesString = require( 'string!STATES_OF_MATTER/AtomsAndMolecules' );
+  var interactionStrengthWithSymbolString = require( 'string!STATES_OF_MATTER/interactionStrengthWithSymbol' );
 
   // constants
   var inset = 10;
@@ -100,7 +100,7 @@ define( function( require ) {
 
     // add interaction strength slider and title
     var interactionStrengthNode = new Node();
-    var interactionTitle = new Text( interactionStrengthTitleString, textOptions );
+    var interactionTitle = new Text( interactionStrengthWithSymbolString, textOptions );
     if ( interactionTitle.width > MAX_WIDTH ) {
       interactionTitle.scale( MAX_WIDTH / interactionTitle.width );
     }
@@ -142,7 +142,7 @@ define( function( require ) {
     if ( waterText.width > MAX_WIDTH ) {
       waterText.scale( MAX_WIDTH / waterText.width );
     }
-    var oxygenText = new Text( oxygenString, textOptions );
+    var oxygenText = new Text( diatomicOxygenString, textOptions );
     if ( oxygenText.width > MAX_WIDTH ) {
       oxygenText.scale( MAX_WIDTH / oxygenText.width );
     }
@@ -150,7 +150,7 @@ define( function( require ) {
     if ( adjustableAttractionText.width > MAX_WIDTH ) {
       adjustableAttractionText.scale( MAX_WIDTH / adjustableAttractionText.width );
     }
-    var title = new Text( titleString, {
+    var title = new Text( atomsAndMoleculesString, {
       font: new PhetFont( 14 ),
       fill: '#FFFFFF'
     } );

@@ -29,11 +29,11 @@ define( function( require ) {
   var Bounds2 = require( 'DOT/Bounds2' );
 
   // strings
-  var interactionDiagramTitle = require( 'string!STATES_OF_MATTER/interactionPotential' );
+  var interactionPotentialString = require( 'string!STATES_OF_MATTER/interactionPotential' );
 
   // constants
 
-// Size of handles as function of node width.
+  // Size of handles as function of node width.
   var RESIZE_HANDLE_SIZE_PROPORTION = 0.18;
 
   // Position of handle as function of node width.
@@ -140,7 +140,7 @@ define( function( require ) {
     accordionContent.addChild( this.ljPotentialGraph );
 
     var accordionContentHBox = new HBox( { children: [ accordionContent ] } );
-    var titleNode = new Text( interactionDiagramTitle, { fill: '#FFFFFF', font: new PhetFont( { size: 13 } ) } );
+    var titleNode = new Text( interactionPotentialString, { fill: '#FFFFFF', font: new PhetFont( { size: 13 } ) } );
     if ( titleNode.width > this.horizontalAxis.width ) {
       titleNode.scale( this.horizontalAxis.width / titleNode.width );
     }

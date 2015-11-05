@@ -27,7 +27,7 @@ define( function( require ) {
   // strings
   var pressureString = require( 'string!STATES_OF_MATTER/pressure' );
   var pressureOverloadString = require( 'string!STATES_OF_MATTER/pressureOverload' );
-  var pressureUnitsInAtm = require( 'string!STATES_OF_MATTER/pressureUnitsInAtm' );
+  var pressureUnitsInAtmString = require( 'string!STATES_OF_MATTER/pressureUnitsInAtm' );
 
   // Length of non-elbowed connector wrt overall diameter.
   var CONNECTOR_LENGTH_PROPORTION = 1;
@@ -87,7 +87,7 @@ define( function( require ) {
     multipleParticleModel.pressure = multipleParticleModel.getPressureInAtmospheres();
     multipleParticleModel.pressureProperty.link( function() {
       if ( (multipleParticleModel.getPressureInAtmospheres()) < MAX_PRESSURE ) {
-        dialGaugeNode.textualReadout.setText( Util.toFixed( multipleParticleModel.getPressureInAtmospheres(), 2 ) + ' ' + pressureUnitsInAtm );
+        dialGaugeNode.textualReadout.setText( Util.toFixed( multipleParticleModel.getPressureInAtmospheres(), 2 ) + ' ' + pressureUnitsInAtmString );
         dialGaugeNode.textualReadout.fill = 'black';
       }
       else {

@@ -25,8 +25,8 @@ define( function( require ) {
   var neonString = require( 'string!STATES_OF_MATTER/neon' );
   var argonString = require( 'string!STATES_OF_MATTER/argon' );
   var waterString = require( 'string!STATES_OF_MATTER/water' );
-  var oxygenString = require( 'string!STATES_OF_MATTER/diatomicOxygen' );
-  var titleString = require( 'string!STATES_OF_MATTER/AtomsAndMolecules' );
+  var diatomicOxygenString = require( 'string!STATES_OF_MATTER/diatomicOxygen' );
+  var atomsAndMoleculesString = require( 'string!STATES_OF_MATTER/AtomsAndMolecules' );
 
   // constants
   var MAX_WIDTH = 118;
@@ -85,11 +85,11 @@ define( function( require ) {
     if ( waterText.width > MAX_WIDTH ) {
       waterText.scale( MAX_WIDTH / waterText.width );
     }
-    var oxygenText = new Text( oxygenString, textOptions );
+    var oxygenText = new Text( diatomicOxygenString, textOptions );
     if ( oxygenText.width > MAX_WIDTH ) {
       oxygenText.scale( MAX_WIDTH / oxygenText.width );
     }
-    var title = new Text( titleString, {
+    var title = new Text( atomsAndMoleculesString, {
       font: new PhetFont( 14 ),
       fill: '#FFFFFF'
     } );
