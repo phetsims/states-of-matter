@@ -1,4 +1,4 @@
-// Copyright 2002-2015, University of Colorado Boulder
+// Copyright 2015, University of Colorado Boulder
 
 /**
  * View for the hand node which looks like a human hand with thumb and pointing finger expanded and the other three

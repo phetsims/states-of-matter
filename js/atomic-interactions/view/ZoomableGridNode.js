@@ -1,4 +1,4 @@
-// Copyright 2002-2015, University of Colorado Boulder
+// Copyright 2015, University of Colorado Boulder
 
 /**
  * Scenery node that shows the grid lines.  Highly leveraged from energy-skate-park's GridNode implementation.
