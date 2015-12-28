@@ -246,7 +246,7 @@ define( function( require ) {
         content.addChild( interactionStrengthNode );
       }
       else {
-        if ( content.isChild( interactionStrengthNode ) ) {
+        if ( content.hasChild( interactionStrengthNode ) ) {
           content.removeChild( interactionStrengthNode );
         }
       }

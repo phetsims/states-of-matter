@@ -228,7 +228,7 @@ define( function( require ) {
       }
       // enable/disable phase diagram on molecule type change
       if ( moleculeId === StatesOfMatterConstants.USER_DEFINED_MOLECULE ) {
-        if ( phaseChangesScreenView.isChild( phaseChangesScreenView.phaseDiagram ) ) {
+        if ( phaseChangesScreenView.hasChild( phaseChangesScreenView.phaseDiagram ) ) {
           phaseChangesScreenView.removeChild( phaseChangesScreenView.phaseDiagram );
         }
         multipleParticleModel.interactionStrengthProperty.value = StatesOfMatterConstants.MAX_EPSILON;
@@ -237,7 +237,7 @@ define( function( require ) {
         }
       }
       else {
-        if ( !phaseChangesScreenView.isChild( phaseChangesScreenView.phaseDiagram ) ) {
+        if ( !phaseChangesScreenView.hasChild( phaseChangesScreenView.phaseDiagram ) ) {
           phaseChangesScreenView.addChild( phaseChangesScreenView.phaseDiagram );
           phaseChangesScreenView.phaseDiagram.right = phaseChangesScreenView.layoutBounds.right - LAY_BOUNDS_RIGHT_OFFSET;
           if ( isInteractionDiagramEnabled ) {

@@ -328,7 +328,7 @@ define( function( require ) {
      */
     handleFixedParticleRemoved: function() {
       // Get rid of the node for this guy.
-      if ( this.fixedParticleLayer.isChild( this.fixedParticleNode ) ) {
+      if ( this.fixedParticleLayer.hasChild( this.fixedParticleNode ) ) {
 
         // Remove the particle node.
         this.fixedParticleLayer.removeChild( this.fixedParticleNode );

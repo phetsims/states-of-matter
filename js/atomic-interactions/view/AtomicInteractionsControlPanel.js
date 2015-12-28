@@ -423,10 +423,10 @@ define( function( require ) {
         }
         else {
           //if  atom and interaction slider
-          if ( content.isChild( atomDiameter ) ) {
+          if ( content.hasChild( atomDiameter ) ) {
             content.removeChild( atomDiameter );
           }
-          if ( content.isChild( interactionStrength ) ) {
+          if ( content.hasChild( interactionStrength ) ) {
             content.removeChild( interactionStrength );
           }
         }
