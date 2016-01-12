@@ -196,14 +196,14 @@ define( function( require ) {
       titleNode.align = atomicInteractionsControlPanel.width / 2;
 
       //touch Areas
-      var touchExpansionXFactor = 8;
-      var touchExpansionYFactor = 4;
-      neonNeonRadio.touchArea = neonNeonRadio.localBounds.dilatedXY( touchExpansionXFactor, touchExpansionYFactor );
-      argonArgonRadio.touchArea = argonArgonRadio.localBounds.dilatedXY( touchExpansionXFactor, touchExpansionYFactor );
-      oxygenOxygenRadio.touchArea = oxygenOxygenRadio.localBounds.dilatedXY( touchExpansionXFactor, touchExpansionYFactor );
-      neonArgonRadio.touchArea = neonArgonRadio.localBounds.dilatedXY( touchExpansionXFactor, touchExpansionYFactor );
-      neonOxygenRadio.touchArea = neonOxygenRadio.localBounds.dilatedXY( touchExpansionXFactor, touchExpansionYFactor );
-      argonOxygenRadio.touchArea = argonOxygenRadio.localBounds.dilatedXY( touchExpansionXFactor, touchExpansionYFactor );
+      var xDilation = 8;
+      var yDilation = 4;
+      neonNeonRadio.touchArea = neonNeonRadio.localBounds.dilatedXY( xDilation, yDilation );
+      argonArgonRadio.touchArea = argonArgonRadio.localBounds.dilatedXY( xDilation, yDilation );
+      oxygenOxygenRadio.touchArea = oxygenOxygenRadio.localBounds.dilatedXY( xDilation, yDilation );
+      neonArgonRadio.touchArea = neonArgonRadio.localBounds.dilatedXY( xDilation, yDilation );
+      neonOxygenRadio.touchArea = neonOxygenRadio.localBounds.dilatedXY( xDilation, yDilation );
+      argonOxygenRadio.touchArea = argonOxygenRadio.localBounds.dilatedXY( xDilation, yDilation );
       adjustableAttractionRadio.touchArea = new Bounds2( adjustableAttractionRadio.localBounds.minX - 8, adjustableAttractionRadio.localBounds.minY - 3,
         adjustableAttractionRadio.localBounds.minX + maxRadioButtonWidth + 4, adjustableAttractionRadio.localBounds.maxY + 4 );
     }
