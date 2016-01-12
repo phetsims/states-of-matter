@@ -217,7 +217,7 @@ define( function( require ) {
       selectedStroke: 'white',
       deselectedLineWidth: 0,
       deselectedContentOpacity: 1,
-      yTouchExpansion: 0
+      touchAreaYDilation: 0
     } );
 
     multipleParticleModel.interactionStrengthProperty.link( function( value ) {
