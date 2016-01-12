@@ -244,8 +244,8 @@ define( function( require ) {
       buttonYMargin: 4,
       buttonXMargin: 5,
       buttonLength: 12,
-      buttonTouchAreaDilatedX: 15,
-      buttonTouchAreaDilatedY: 5
+      buttonTouchAreaXDilation: 15,
+      buttonTouchAreaYDilation: 5
     } );
     this.addChild( accordionBox );
 
