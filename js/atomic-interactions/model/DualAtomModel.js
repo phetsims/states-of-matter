@@ -530,6 +530,7 @@ define( function( require ) {
         var distance = this.shadowMovableAtom.getPositionReference().distance( Vector2.ZERO );
 
         if ( distance < ( this.fixedAtom.getRadius() + this.movableAtom.getRadius() ) / 8 ) {
+
           // The atoms are too close together, and calculating the force will cause unusable levels of speed later, so
           // we limit it.
           distance = ( this.fixedAtom.getRadius() + this.movableAtom.getRadius() ) / 8;

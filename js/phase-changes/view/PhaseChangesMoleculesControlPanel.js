@@ -178,6 +178,7 @@ define( function( require ) {
     } );
     var maxWidth = widestItemSpec.label.width + ((widestItemSpec.icon) ? widestItemSpec.icon.width : 0);
     maxWidth = Math.max( maxWidth, interactionStrengthNode.width );
+
     // pad inserts a spacing node (HStrut) so that the text, space and image together occupy a certain fixed width.
     var createItem = function( itemSpec ) {
       if ( itemSpec.icon ) {

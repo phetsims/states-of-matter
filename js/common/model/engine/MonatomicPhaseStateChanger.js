@@ -193,9 +193,8 @@ define( function( require ) {
           temperatureSqrt * this.random.nextGaussian() );
       }
 
-      // Redistribute the particles randomly around the container, but make
-      // sure that they are not too close together or they end up with a
-      // disproportionate amount of kinetic energy.
+      // Redistribute the particles randomly around the container, but make sure that they are not too close together or
+      // they end up with a disproportionate amount of kinetic energy.
       var newPosX;
       var newPosY;
       var rangeX = this.multipleParticleModel.normalizedContainerWidth - ( 2 * this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE );

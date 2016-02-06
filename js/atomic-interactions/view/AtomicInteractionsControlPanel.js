@@ -233,6 +233,7 @@ define( function( require ) {
       } );
       maxWidth = widestItemSpec.label.width + ((widestItemSpec.icon) ? widestItemSpec.icon.width : 0);
       maxWidth = Math.max( maxWidth, sliderTrackWidth );
+
       // pad inserts a spacing node (HStrut) so that the text, space and image together occupy a certain fixed width.
       createItem = function( itemSpec ) {
         if ( itemSpec.icon ) {
