@@ -16,7 +16,7 @@ define( function( require ) {
   var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
   var InteractiveInteractionPotentialDiagram = require( 'STATES_OF_MATTER/atomic-interactions/view/InteractiveInteractionPotentialDiagram' );
   var PlayPauseButton = require( 'SCENERY_PHET/buttons/PlayPauseButton' );
-  var StepButton = require( 'SCENERY_PHET/buttons/StepButton' );
+  var StepForwardButton = require( 'SCENERY_PHET/buttons/StepForwardButton' );
   var AquaRadioButton = require( 'SUN/AquaRadioButton' );
   var VBox = require( 'SCENERY/nodes/VBox' );
   var Bounds2 = require( 'DOT/Bounds2' );
@@ -114,7 +114,7 @@ define( function( require ) {
     this.addChild( resetAllButton );
 
     // add play/pause and step buttons
-    var stepButton = new StepButton(
+    var stepButton = new StepForwardButton(
       function() {
         dualAtomModel.stepInternal( 0.016 );
       },

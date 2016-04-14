@@ -14,7 +14,7 @@ define( function( require ) {
   var ScreenView = require( 'JOIST/ScreenView' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var PlayPauseButton = require( 'SCENERY_PHET/buttons/PlayPauseButton' );
-  var StepButton = require( 'SCENERY_PHET/buttons/StepButton' );
+  var StepForwardButton = require( 'SCENERY_PHET/buttons/StepForwardButton' );
   var CompositeThermometerNode = require( 'STATES_OF_MATTER/common/view/CompositeThermometerNode' );
   var HeaterCoolerNode = require( 'SCENERY_PHET/HeaterCoolerNode' );
   var PhaseChangesMoleculesControlPanel = require( 'STATES_OF_MATTER/phase-changes/view/PhaseChangesMoleculesControlPanel' );
@@ -156,7 +156,7 @@ define( function( require ) {
     } );
 
     // add play pause button and step button
-    var stepButton = new StepButton(
+    var stepButton = new StepForwardButton(
       function() {
         multipleParticleModel.stepInternal( 0.016 );
       },
