@@ -15,6 +15,7 @@ define( function( require ) {
   var Text = require( 'SCENERY/nodes/Text' );
   var CheckBox = require( 'SUN/CheckBox' );
   var OptionsDialog = require( 'JOIST/OptionsDialog' );
+  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   // strings
   var projectorModeString = require( 'string!STATES_OF_MATTER/projectorMode' );
@@ -36,6 +37,8 @@ define( function( require ) {
       align: 'left'
     } ) );
   }
+
+  statesOfMatter.register( 'GlobalOptionsNode', GlobalOptionsNode );
 
   return inherit( VBox, GlobalOptionsNode );
 } );

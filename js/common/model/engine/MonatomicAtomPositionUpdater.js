@@ -10,8 +10,10 @@
 define( function( require ) {
   'use strict';
 
+  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+
   // static object (no constructor)
-  return {
+  var MonatomicAtomPositionUpdater = {
     /**
      * @param {MoleculeForceAndMotionDataSet} moleculeDataSet
      * @public
@@ -31,4 +33,9 @@ define( function( require ) {
       }
     }
   };
+
+  statesOfMatter.register( 'MonatomicAtomPositionUpdater', MonatomicAtomPositionUpdater );
+
+  return MonatomicAtomPositionUpdater;
+
 } );

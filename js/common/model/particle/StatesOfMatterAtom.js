@@ -12,6 +12,7 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var Vector2 = require( 'DOT/Vector2' );
   var Property = require( 'AXON/Property' );
+  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   /**
    *
@@ -30,6 +31,8 @@ define( function( require ) {
     this.mass = mass;
     this.radius = radius;
   }
+
+  statesOfMatter.register( 'StatesOfMatterAtom', StatesOfMatterAtom );
 
   return inherit( Object, StatesOfMatterAtom, {
 

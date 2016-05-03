@@ -12,6 +12,7 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var Node = require( 'SCENERY/nodes/Node' );
   var Image = require( 'SCENERY/nodes/Image' );
+  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   // images
   var pushPinImg = require( 'image!STATES_OF_MATTER/push-pin.png' );
@@ -26,6 +27,8 @@ define( function( require ) {
     var imageNode = new Image( pushPinImg );
     this.addChild( imageNode, { scale: 0.3 } ); // scale empirically determined
   }
+
+  statesOfMatter.register( 'PushpinNode', PushpinNode );
 
   return inherit( Node, PushpinNode );
 } );

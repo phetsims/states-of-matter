@@ -12,6 +12,7 @@ define( function( require ) {
 
   // modules
   var inherit = require( 'PHET_CORE/inherit' );
+  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var Vector2 = require( 'DOT/Vector2' );
 
   // constants
@@ -25,6 +26,8 @@ define( function( require ) {
     this.multipleParticleModel = multipleParticleModel;
     this.moleculeLocation = new Vector2();
   }
+
+  statesOfMatter.register( 'AbstractPhaseStateChanger', AbstractPhaseStateChanger );
 
   return inherit( Object, AbstractPhaseStateChanger, {
 

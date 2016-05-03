@@ -22,6 +22,7 @@ define( function( require ) {
   var PhetColorScheme = require( 'SCENERY_PHET/PhetColorScheme' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
+  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var Util = require( 'DOT/Util' );
 
   // strings
@@ -103,6 +104,8 @@ define( function( require ) {
     this.addChild( dialComponentsNode );
 
   }
+
+  statesOfMatter.register( 'DialGaugeNode', DialGaugeNode );
 
   return inherit( Node, DialGaugeNode, {
 

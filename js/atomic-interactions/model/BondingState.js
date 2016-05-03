@@ -6,6 +6,8 @@
 define( function( require ) {
   'use strict';
 
+  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+
   var BondingState = {
     UNBONDED: 'UNBONDED',
     BONDING: 'BONDING',
@@ -14,6 +16,8 @@ define( function( require ) {
 
   // verify that enum is immutable, without the runtime penalty in production code
   if ( assert ) { Object.freeze( BondingState ); }
+
+  statesOfMatter.register( 'BondingState', BondingState );
 
   return BondingState;
 } );

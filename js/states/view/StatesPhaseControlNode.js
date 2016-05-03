@@ -19,6 +19,7 @@ define( function( require ) {
   var PhaseStateEnum = require( 'STATES_OF_MATTER/common/PhaseStateEnum' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Property = require( 'AXON/Property' );
+  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var Text = require( 'SCENERY/nodes/Text' );
   var VBox = require( 'SCENERY/nodes/VBox' );
 
@@ -157,6 +158,8 @@ define( function( require ) {
     this.addChild( buttons );
     this.mutate( options );
   }
+
+  statesOfMatter.register( 'StatesPhaseControlNode', StatesPhaseControlNode );
 
   return inherit( Node, StatesPhaseControlNode );
 } );

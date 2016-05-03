@@ -51,6 +51,7 @@ define( function( require ) {
   var IsokineticThermostat = require( 'STATES_OF_MATTER/common/model/engine/kinetic/IsokineticThermostat' );
   var AndersenThermostat = require( 'STATES_OF_MATTER/common/model/engine/kinetic/AndersenThermostat' );
   var PhaseStateEnum = require( 'STATES_OF_MATTER/common/PhaseStateEnum' );
+  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   // constants that control various aspects of the model behavior.
   var DEFAULT_MOLECULE = StatesOfMatterConstants.NEON;
@@ -175,6 +176,8 @@ define( function( require ) {
       multipleParticleModel.setMoleculeType( moleculeId );
     } );
   }
+
+  statesOfMatter.register( 'MultipleParticleModel', MultipleParticleModel );
 
   return inherit( PropertySet, MultipleParticleModel, {
 

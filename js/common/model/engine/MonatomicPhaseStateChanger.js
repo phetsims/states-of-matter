@@ -15,6 +15,7 @@ define( function( require ) {
   var MonatomicAtomPositionUpdater = require( 'STATES_OF_MATTER/common/model/engine/MonatomicAtomPositionUpdater' );
   var PhaseStateEnum = require( 'STATES_OF_MATTER/common/PhaseStateEnum' );
   var Random = require( 'DOT/Random' );
+  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
 
   // constants
@@ -29,6 +30,8 @@ define( function( require ) {
     this.positionUpdater = MonatomicAtomPositionUpdater;
     this.random = new Random();
   }
+
+  statesOfMatter.register( 'MonatomicPhaseStateChanger', MonatomicPhaseStateChanger );
 
   return inherit( AbstractPhaseStateChanger, MonatomicPhaseStateChanger, {
 

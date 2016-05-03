@@ -13,6 +13,7 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
   var AtomType = require( 'STATES_OF_MATTER/common/model/AtomType' );
+  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var StatesOfMatterAtom = require( 'STATES_OF_MATTER/common/model/particle/StatesOfMatterAtom' );
 
   // constants
@@ -28,6 +29,8 @@ define( function( require ) {
   function ConfigurableStatesOfMatterAtom( x, y ) {
     StatesOfMatterAtom.call( this, x, y, DEFAULT_RADIUS, MASS, StatesOfMatterConstants.ADJUSTABLE_ATTRACTION_COLOR );
   }
+
+  statesOfMatter.register( 'ConfigurableStatesOfMatterAtom', ConfigurableStatesOfMatterAtom );
 
   return inherit( StatesOfMatterAtom, ConfigurableStatesOfMatterAtom, {
 

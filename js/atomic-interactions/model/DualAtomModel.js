@@ -17,6 +17,7 @@ define( function( require ) {
   var LjPotentialCalculator = require( 'STATES_OF_MATTER/common/model/LjPotentialCalculator' );
   var InteractionStrengthTable = require( 'STATES_OF_MATTER/common/model/InteractionStrengthTable' );
   var SigmaTable = require( 'STATES_OF_MATTER/common/model/SigmaTable' );
+  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
   var AtomType = require( 'STATES_OF_MATTER/common/model/AtomType' );
   var AtomFactory = require( 'STATES_OF_MATTER/common/model/AtomFactory' );
@@ -62,6 +63,7 @@ define( function( require ) {
     this.reset();
   }
 
+  statesOfMatter.register( 'DualAtomModel', DualAtomModel );
   return inherit( PropertySet, DualAtomModel, {
 
       /**

@@ -19,6 +19,7 @@ define( function( require ) {
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var PositionMarker = require( 'STATES_OF_MATTER/atomic-interactions/view/PositionMarker' );
   var Shape = require( 'KITE/Shape' );
+  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
   var Text = require( 'SCENERY/nodes/Text' );
   var Vector2 = require( 'DOT/Vector2' );
@@ -203,6 +204,8 @@ define( function( require ) {
       this.gridNode.zoomOutButton.top = this.gridNode.zoomInButton.bottom + 5;
     }
   }
+
+  statesOfMatter.register( 'InteractionPotentialDiagramNode', InteractionPotentialDiagramNode );
 
   return inherit( Node, InteractionPotentialDiagramNode, {
 

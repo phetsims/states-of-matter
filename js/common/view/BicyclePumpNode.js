@@ -19,6 +19,7 @@ define( function( require ) {
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var Shape = require( 'KITE/Shape' );
   var SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
+  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   // The follow constants define the size and positions of the various
   // components of the pump as proportions of the overall width and height
@@ -326,6 +327,8 @@ define( function( require ) {
 
     this.mutate( options );
   }
+
+  statesOfMatter.register( 'BicyclePumpNode', BicyclePumpNode );
 
   return inherit( Node, BicyclePumpNode );
 } );

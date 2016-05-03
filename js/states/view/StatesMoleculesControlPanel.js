@@ -19,6 +19,7 @@ define( function( require ) {
   var Node = require( 'SCENERY/nodes/Node' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var RadioButtonGroup = require( 'SUN/buttons/RadioButtonGroup' );
+  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
 
   // strings
@@ -165,6 +166,8 @@ define( function( require ) {
 
     this.mutate( options );
   }
+
+  statesOfMatter.register( 'StatesMoleculesControlPanel', StatesMoleculesControlPanel );
 
   return inherit( Node, StatesMoleculesControlPanel );
 } );

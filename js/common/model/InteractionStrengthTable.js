@@ -17,11 +17,12 @@ define( function( require ) {
 
   // modules
   var AtomType = require( 'STATES_OF_MATTER/common/model/AtomType' );
+  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
   var ConfigurableStatesOfMatterAtom = require( 'STATES_OF_MATTER/common/model/particle/ConfigurableStatesOfMatterAtom' );
 
   // static object (no constructor)
-  return ( {
+  var InteractionStrengthTable = {
 
     /**
      * Get the interaction potential between two atoms.  Units are such that
@@ -85,5 +86,9 @@ define( function( require ) {
         }
       }
     }
-  } );
+  };
+
+  statesOfMatter.register( 'InteractionStrengthTable', InteractionStrengthTable );
+
+  return InteractionStrengthTable;
 } );

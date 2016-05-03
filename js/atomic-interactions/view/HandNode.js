@@ -15,6 +15,7 @@ define( function( require ) {
   var Path = require( 'SCENERY/nodes/Path' );
   var Shape = require( 'KITE/Shape' );
   var SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
+  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   /***
    *
@@ -102,6 +103,8 @@ define( function( require ) {
         modelViewTransform.modelToViewY( position.y ) );
     } );
   }
+
+  statesOfMatter.register( 'HandNode', HandNode );
 
   return inherit( Node, HandNode, {
 

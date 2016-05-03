@@ -14,6 +14,7 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var Node = require( 'SCENERY/nodes/Node' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
+  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   // images
   var gasIconImage = require( 'mipmap!STATES_OF_MATTER/gas-icon.png,level=5' );
@@ -47,6 +48,8 @@ define( function( require ) {
 
     this.addChild( iconsBox );
   }
+
+  statesOfMatter.register( 'StatesIcon', StatesIcon );
 
   return inherit( Node, StatesIcon );
 } );

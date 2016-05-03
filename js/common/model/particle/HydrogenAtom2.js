@@ -17,6 +17,7 @@ define( function( require ) {
   var AtomType = require( 'STATES_OF_MATTER/common/model/AtomType' );
   var Element = require( 'NITROGLYCERIN/Element' );
   var inherit = require( 'PHET_CORE/inherit' );
+  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var StatesOfMatterAtom = require( 'STATES_OF_MATTER/common/model/particle/StatesOfMatterAtom' );
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
 
@@ -32,6 +33,8 @@ define( function( require ) {
   function HydrogenAtom2( xPos, yPos ) {
     StatesOfMatterAtom.call( this, xPos, yPos, RADIUS, MASS, StatesOfMatterConstants.HYDROGEN_COLOR );
   }
+
+  statesOfMatter.register( 'HydrogenAtom2', HydrogenAtom2 );
 
   return inherit( StatesOfMatterAtom, HydrogenAtom2, {
 

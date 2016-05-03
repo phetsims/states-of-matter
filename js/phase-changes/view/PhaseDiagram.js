@@ -21,6 +21,7 @@ define( function( require ) {
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Node = require( 'SCENERY/nodes/Node' );
   var ArrowNode = require( 'SCENERY_PHET/ArrowNode' );
+  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   // strings
   var solidString = require( 'string!STATES_OF_MATTER/solid' );
@@ -256,6 +257,8 @@ define( function( require ) {
     this.setStateMarkerPos( 0, 0 );
     this.mutate( options );
   }
+
+  statesOfMatter.register( 'PhaseDiagram', PhaseDiagram );
 
   return inherit( Node, PhaseDiagram, {
 

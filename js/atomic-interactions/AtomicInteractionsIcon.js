@@ -15,6 +15,7 @@ define( function( require ) {
     var Node = require( 'SCENERY/nodes/Node' );
     var RadialGradient = require( 'SCENERY/util/RadialGradient' );
     var Rectangle = require( 'SCENERY/nodes/Rectangle' );
+    var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
     var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
 
     // constants
@@ -56,6 +57,8 @@ define( function( require ) {
       atomsNode.centerY = backgroundRect.height / 2;
       this.addChild( atomsNode );
     }
+
+    statesOfMatter.register( 'AtomicInteractionsIcon', AtomicInteractionsIcon );
 
     return inherit( Node, AtomicInteractionsIcon );
   }

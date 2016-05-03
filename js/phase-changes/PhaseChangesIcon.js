@@ -14,6 +14,7 @@ define( function( require ) {
     var inherit = require( 'PHET_CORE/inherit' );
     var Node = require( 'SCENERY/nodes/Node' );
     var Rectangle = require( 'SCENERY/nodes/Rectangle' );
+    var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
     var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
 
     // constants
@@ -101,6 +102,8 @@ define( function( require ) {
       gasCloudNode.centerY = size.height * 0.5;
       this.addChild( gasCloudNode );
     }
+
+    statesOfMatter.register( 'PhaseChangesIcon', PhaseChangesIcon );
 
     return inherit( Node, PhaseChangesIcon );
   }

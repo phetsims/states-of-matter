@@ -15,6 +15,7 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var Vector2 = require( 'DOT/Vector2' );
   var AbstractVerletAlgorithm = require( 'STATES_OF_MATTER/common/model/engine/AbstractVerletAlgorithm' );
+  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var WaterAtomPositionUpdater = require( 'STATES_OF_MATTER/common/model/engine/WaterAtomPositionUpdater' );
 
   // parameters used for "hollywooding" of the water crystal
@@ -36,6 +37,8 @@ define( function( require ) {
     // reusable vector, used in order to reduce allocations
     this.force = new Vector2();
   }
+
+  statesOfMatter.register( 'WaterVerletAlgorithm', WaterVerletAlgorithm );
 
   return inherit( AbstractVerletAlgorithm, WaterVerletAlgorithm, {
 

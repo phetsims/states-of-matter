@@ -23,6 +23,7 @@ define( function( require ) {
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var RadioButtonGroup = require( 'SUN/buttons/RadioButtonGroup' );
   var Dimension2 = require( 'DOT/Dimension2' );
+  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   // strings
   var neonString = require( 'string!STATES_OF_MATTER/neon' );
@@ -266,6 +267,8 @@ define( function( require ) {
     this.addChild( new Node( { children: [ titleBackground, titleText.label ] } ) );
     this.mutate( options );
   }
+
+  statesOfMatter.register( 'PhaseChangesMoleculesControlPanel', PhaseChangesMoleculesControlPanel );
 
   return inherit( Node, PhaseChangesMoleculesControlPanel );
 } );

@@ -3,6 +3,8 @@
 define( function( require ) {
   'use strict';
 
+  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+
   var PhaseStateEnum = {
     SOLID: 'SOLID',
     LIQUID: 'LIQUID',
@@ -12,6 +14,8 @@ define( function( require ) {
 
   // verify that enum is immutable, without the runtime penalty in production code
   if ( assert ) { Object.freeze( PhaseStateEnum ); }
+
+  statesOfMatter.register( 'PhaseStateEnum', PhaseStateEnum );
 
   return PhaseStateEnum;
 } );

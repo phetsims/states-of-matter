@@ -16,6 +16,7 @@ define( function( require ) {
   var Shape = require( 'KITE/Shape' );
   var ZoomButton = require( 'SCENERY_PHET/buttons/ZoomButton' );
   var RectangularButtonView = require( 'SUN/buttons/RectangularButtonView' );
+  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   // constants
   var MAX_LINES_HORIZONTAL = 13;
@@ -109,6 +110,8 @@ define( function( require ) {
     }
     this.horizontalLinesNode.setShape( horizontalLineShape );
   }
+
+  statesOfMatter.register( 'ZoomableGridNode', ZoomableGridNode );
 
   return inherit( Node, ZoomableGridNode, {
 

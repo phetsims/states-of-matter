@@ -13,6 +13,7 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var ParticleForceNode = require( 'STATES_OF_MATTER/atomic-interactions/view/ParticleForceNode' );
   var SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
+  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   /**
    * Default constructor
@@ -90,6 +91,8 @@ define( function( require ) {
       handNode.setVisible( dualAtomModel.isHandNodeVisible );
     } );
   }
+
+  statesOfMatter.register( 'GrabbableParticleNode', GrabbableParticleNode );
 
   return inherit( ParticleForceNode, GrabbableParticleNode, {
 

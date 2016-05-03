@@ -16,6 +16,7 @@ define( function( require ) {
   var Vector2 = require( 'DOT/Vector2' );
   var AbstractVerletAlgorithm = require( 'STATES_OF_MATTER/common/model/engine/AbstractVerletAlgorithm' );
   var DiatomicAtomPositionUpdater = require( 'STATES_OF_MATTER/common/model/engine/DiatomicAtomPositionUpdater' );
+  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   /**
    * @param {MultipleParticleModel} multipleParticleModel - Model of a set of particles
@@ -29,6 +30,8 @@ define( function( require ) {
     // Reusable force vector, created here to reduce allocations.
     this.force = new Vector2();
   }
+
+  statesOfMatter.register( 'DiatomicVerletAlgorithm', DiatomicVerletAlgorithm );
 
   return inherit( AbstractVerletAlgorithm, DiatomicVerletAlgorithm, {
 

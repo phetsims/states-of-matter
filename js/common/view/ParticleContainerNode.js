@@ -13,6 +13,7 @@ define( function( require ) {
   var Node = require( 'SCENERY/nodes/Node' );
   var Shape = require( 'KITE/Shape' );
   var Path = require( 'SCENERY/nodes/Path' );
+  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
   var DialGaugeNode = require( 'STATES_OF_MATTER/common/view/DialGaugeNode' );
   var PointingHandNode = require( 'STATES_OF_MATTER/common/view/PointingHandNode' );
@@ -270,6 +271,8 @@ define( function( require ) {
     this.addChild( postParticleLayer );
     this.mutate( options );
   }
+
+  statesOfMatter.register( 'ParticleContainerNode', ParticleContainerNode );
 
   return inherit( Node, ParticleContainerNode, {
 

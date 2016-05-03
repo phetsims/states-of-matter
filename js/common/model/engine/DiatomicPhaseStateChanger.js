@@ -16,6 +16,7 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var PhaseStateEnum = require( 'STATES_OF_MATTER/common/PhaseStateEnum' );
   var Random = require( 'DOT/Random' );
+  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
 
   // constants
@@ -40,6 +41,8 @@ define( function( require ) {
     this.multipleParticleModel = multipleParticleModel;
     this.rand = new Random();
   }
+
+  statesOfMatter.register( 'DiatomicPhaseStateChanger', DiatomicPhaseStateChanger );
 
   return inherit( AbstractPhaseStateChanger, DiatomicPhaseStateChanger, {
 

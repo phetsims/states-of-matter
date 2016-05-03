@@ -15,6 +15,7 @@ define( function( require ) {
   var extend = require( 'PHET_CORE/extend' );
   var PropertySet = require( 'AXON/PropertySet' );
   var Color = require( 'SCENERY/util/Color' );
+  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   var colors = {
     background: {
@@ -98,6 +99,8 @@ define( function( require ) {
       StatesOfMatterColors[ data.name ] = new Color( data.value );
     }
   } );
+
+  statesOfMatter.register( 'StatesOfMatterColors', StatesOfMatterColors );
 
   return StatesOfMatterColors;
 } );

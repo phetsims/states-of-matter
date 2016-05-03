@@ -15,6 +15,7 @@ define( function( require ) {
   var StatesScreenView = require( 'STATES_OF_MATTER/states/view/StatesScreenView' );
   var MultipleParticleModel = require( 'STATES_OF_MATTER/common/model/MultipleParticleModel' );
   var StatesIcon = require( 'STATES_OF_MATTER/states/StatesIcon' );
+  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var StatesOfMatterColors = require( 'STATES_OF_MATTER/common/view/StatesOfMatterColors' );
 
   // strings
@@ -44,6 +45,8 @@ define( function( require ) {
     } );
     StatesOfMatterColors.linkAttribute( 'background', screen, 'backgroundColor' );
   }
+
+  statesOfMatter.register( 'StatesScreen', StatesScreen );
 
   return inherit( Screen, StatesScreen );
 } );

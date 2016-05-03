@@ -18,6 +18,7 @@ define( function( require ) {
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var ThermometerNode = require( 'SCENERY_PHET/ThermometerNode' );
   var Text = require( 'SCENERY/nodes/Text' );
+  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
   var Util = require( 'DOT/Util' );
 
@@ -89,6 +90,8 @@ define( function( require ) {
     this.addChild( temperatureComboBox );
     this.mutate( options );
   }
+
+  statesOfMatter.register( 'CompositeThermometerNode', CompositeThermometerNode );
 
   return inherit( Node, CompositeThermometerNode, {
 

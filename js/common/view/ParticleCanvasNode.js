@@ -12,6 +12,7 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var CanvasNode = require( 'SCENERY/nodes/CanvasNode' );
   var HydrogenAtom = require( 'STATES_OF_MATTER/common/model/particle/HydrogenAtom' );
+  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   /**
    * A particle layer rendered on canvas
@@ -34,6 +35,8 @@ define( function( require ) {
     } );
     this.mutate( options );
   }
+
+  statesOfMatter.register( 'ParticleCanvasNode', ParticleCanvasNode );
 
   return inherit( CanvasNode, ParticleCanvasNode, {
 

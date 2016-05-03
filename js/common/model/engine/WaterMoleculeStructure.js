@@ -12,6 +12,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
 
   var moleculeStructureX = [];
@@ -40,10 +41,15 @@ define( function( require ) {
                           0.25 * ( Math.pow( moleculeStructureX[ 1 ], 2 ) + Math.pow( moleculeStructureY[ 1 ], 2 ) ) +
                           0.25 * ( Math.pow( moleculeStructureX[ 2 ], 2 ) + Math.pow( moleculeStructureY[ 2 ], 2 ) );
 
-  return {
+  var WaterMoleculeStructure =  {
     moleculeStructureX: moleculeStructureX,
     moleculeStructureY: moleculeStructureY,
     rotationalInertia: rotationalInertia
   };
+
+  statesOfMatter.register( 'WaterMoleculeStructure', WaterMoleculeStructure );
+
+  return WaterMoleculeStructure;
+
 } );
 

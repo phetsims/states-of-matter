@@ -15,6 +15,7 @@ define( function( require ) {
   var MultipleParticleModel = require( 'STATES_OF_MATTER/common/model/MultipleParticleModel' );
   var PhaseChangesIcon = require( 'STATES_OF_MATTER/phase-changes/PhaseChangesIcon' );
   var PhaseChangesScreenView = require( 'STATES_OF_MATTER/phase-changes/view/PhaseChangesScreenView' );
+  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var StatesOfMatterColors = require( 'STATES_OF_MATTER/common/view/StatesOfMatterColors' );
 
   // strings
@@ -42,6 +43,8 @@ define( function( require ) {
     } );
     StatesOfMatterColors.linkAttribute( 'background', screen, 'backgroundColor' );
   }
+
+  statesOfMatter.register( 'PhaseChangesScreen', PhaseChangesScreen );
 
   return inherit( Screen, PhaseChangesScreen );
 } );

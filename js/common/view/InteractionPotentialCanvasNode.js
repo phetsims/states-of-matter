@@ -14,6 +14,7 @@ define( function( require ) {
   var ArrowShape = require( 'SCENERY_PHET/ArrowShape' );
   var CanvasNode = require( 'SCENERY/nodes/CanvasNode' );
   var inherit = require( 'PHET_CORE/inherit' );
+  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   // constants
   var MAX_INTER_ATOM_DISTANCE = 1700; // in picometers
@@ -41,6 +42,8 @@ define( function( require ) {
     // index into the array.
     this.curveYPositions = new Array( Math.round( interactionDiagram.graphWidth ) );  // @private
   }
+
+  statesOfMatter.register( 'InteractionPotentialCanvasNode', InteractionPotentialCanvasNode );
 
   return inherit( CanvasNode, InteractionPotentialCanvasNode, {
 

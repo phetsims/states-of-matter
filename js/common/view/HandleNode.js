@@ -14,6 +14,7 @@ define( function( require ) {
   var Path = require( 'SCENERY/nodes/Path' );
   var Shape = require( 'KITE/Shape' );
   var LinearGradient = require( 'SCENERY/util/LinearGradient' );
+  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   /**
    * @constructor
@@ -109,6 +110,8 @@ define( function( require ) {
     leftShape.setScaleMagnitude( handleScale, 0.16 );
     rightShape.setScaleMagnitude( handleScale, 0.16 );
   }
+
+  statesOfMatter.register( 'HandleNode', HandleNode );
 
   return inherit( Node, HandleNode );
 

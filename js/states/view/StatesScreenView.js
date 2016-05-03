@@ -24,6 +24,7 @@ define( function( require ) {
   var Vector2 = require( 'DOT/Vector2' );
   var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
   var StatesPhaseControlNode = require( 'STATES_OF_MATTER/states/view/StatesPhaseControlNode' );
+  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var Bounds2 = require( 'DOT/Bounds2' );
   var ParticleCanvasNode = require( 'STATES_OF_MATTER/common/view/ParticleCanvasNode' );
 
@@ -158,6 +159,8 @@ define( function( require ) {
       compositeThermometerNode.updatePositionAndOrientation();
     } );
   }
+
+  statesOfMatter.register( 'StatesScreenView', StatesScreenView );
 
   return inherit( ScreenView, StatesScreenView, {
     step: function() {

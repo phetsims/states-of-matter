@@ -14,6 +14,7 @@ define( function( require ) {
 
   // modules
   var inherit = require( 'PHET_CORE/inherit' );
+  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
 
   /**
@@ -31,6 +32,8 @@ define( function( require ) {
     this.epsilon = epsilon; // Interaction strength, epsilon/k-boltzmann is in Kelvin.
     this.epsilonForCalcs = this.epsilon * StatesOfMatterConstants.K_BOLTZMANN;  // Epsilon multiplied by k-boltzmann.
   }
+
+  statesOfMatter.register( 'LjPotentialCalculator', LjPotentialCalculator );
 
   return inherit( Object, LjPotentialCalculator, {
 

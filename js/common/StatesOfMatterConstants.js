@@ -13,6 +13,7 @@ define( function( require ) {
   // modules
   var Bounds2 = require( 'DOT/Bounds2' );
   var Element = require( 'NITROGLYCERIN/Element' );
+  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   // constants (these are vars because other constants refer to them)
   var PARTICLE_CONTAINER_WIDTH = 10000;
@@ -28,7 +29,7 @@ define( function( require ) {
   var WATER_TRIPLE_POINT_IN_KELVIN = 273;
   var WATER_CRITICAL_POINT_IN_KELVIN = 647;
 
-  return {
+  var StatesOfMatterConstants  = {
 
     SCREEN_VIEW_OPTIONS: { layoutBounds: new Bounds2( 0, 0, 834, 504 ) },
 
@@ -112,4 +113,9 @@ define( function( require ) {
     GAS_TEMPERATURE: 1.0,
     INITIAL_TEMPERATURE: SOLID_TEMPERATURE
   };
+
+  statesOfMatter.register( 'StatesOfMatterConstants', StatesOfMatterConstants );
+
+  return StatesOfMatterConstants;
+
 } );

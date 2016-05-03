@@ -14,10 +14,11 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
 
   // static object (no constructor)
-  return {
+  var DiatomicAtomPositionUpdater =  {
 
     /**
      * @public
@@ -52,4 +53,9 @@ define( function( require ) {
       }
     }
   };
+
+  statesOfMatter.register( 'DiatomicAtomPositionUpdater', DiatomicAtomPositionUpdater );
+
+  return DiatomicAtomPositionUpdater;
+
 } );

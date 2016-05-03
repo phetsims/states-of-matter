@@ -16,6 +16,7 @@ define( function( require ) {
   var Vector2 = require( 'DOT/Vector2' );
   var AbstractVerletAlgorithm = require( 'STATES_OF_MATTER/common/model/engine/AbstractVerletAlgorithm' );
   var MonatomicAtomPositionUpdater = require( 'STATES_OF_MATTER/common/model/engine/MonatomicAtomPositionUpdater' );
+  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   /**
    * @param {MultipleParticleModel} multipleParticleModel of the simulation
@@ -30,6 +31,8 @@ define( function( require ) {
     this.force = new Vector2();
     this.velocityIncrement = new Vector2();
   }
+
+  statesOfMatter.register( 'MonatomicVerletAlgorithm', MonatomicVerletAlgorithm );
 
   return inherit( AbstractVerletAlgorithm, MonatomicVerletAlgorithm, {
 

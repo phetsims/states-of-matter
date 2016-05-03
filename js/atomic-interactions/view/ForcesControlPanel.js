@@ -21,6 +21,7 @@ define( function( require ) {
   var HBox = require( 'SCENERY/nodes/HBox' );
   var HStrut = require( 'SCENERY/nodes/HStrut' );
   var BracketNode = require( 'SCENERY_PHET/BracketNode' );
+  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var VStrut = require( 'SCENERY/nodes/VStrut' );
 
   //strings
@@ -209,6 +210,8 @@ define( function( require ) {
 
     this.mutate( options );
   }
+
+  statesOfMatter.register( 'ForcesControlPanel', ForcesControlPanel );
 
   return inherit( Node, ForcesControlPanel );
 } );

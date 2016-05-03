@@ -22,6 +22,7 @@ define( function( require ) {
   var RadioButtonGroup = require( 'SUN/buttons/RadioButtonGroup' );
   var HSlider = require( 'SUN/HSlider' );
   var Dimension2 = require( 'DOT/Dimension2' );
+  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
   var AtomType = require( 'STATES_OF_MATTER/common/model/AtomType' );
   var AquaRadioButton = require( 'SUN/AquaRadioButton' );
@@ -441,6 +442,8 @@ define( function( require ) {
     }
     this.mutate( options );
   }
+
+  statesOfMatter.register( 'AtomicInteractionsControlPanel', AtomicInteractionsControlPanel );
 
   return inherit( Node, AtomicInteractionsControlPanel );
 } );

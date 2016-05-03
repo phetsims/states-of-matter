@@ -16,6 +16,7 @@ define( function( require ) {
   var Node = require( 'SCENERY/nodes/Node' );
   var ArrowNode = require( 'SCENERY_PHET/ArrowNode' );
   var Image = require( 'SCENERY/nodes/Image' );
+  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   //images
   var pointingHandImage = require( 'image!STATES_OF_MATTER/pointing-hand.png' );
@@ -116,6 +117,8 @@ define( function( require ) {
     } );
     this.touchArea = this.localBounds.dilatedXY( 10, 10 );
   }
+
+  statesOfMatter.register( 'PointingHandNode', PointingHandNode );
 
   return inherit( Node, PointingHandNode, {
 

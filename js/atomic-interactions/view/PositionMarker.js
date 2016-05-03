@@ -19,6 +19,7 @@ define( function( require ) {
   var ShadedSphereNode = require( 'SCENERY_PHET/ShadedSphereNode' );
   var RadialGradient = require( 'SCENERY/util/RadialGradient' );
   var Shape = require( 'KITE/Shape' );
+  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   /**
    * @param {number} radius radius of the sphere
@@ -56,6 +57,8 @@ define( function( require ) {
     // expand pointer areas
     this.mouseArea = this.touchArea = Shape.circle( 0, 0, 1.5 * radius );
   }
+
+  statesOfMatter.register( 'PositionMarker', PositionMarker );
 
   return inherit( Node, PositionMarker, {
     /**

@@ -30,6 +30,7 @@ define( function( require ) {
   var ParticleCanvasNode = require( 'STATES_OF_MATTER/common/view/ParticleCanvasNode' );
   var TextPushButton = require( 'SUN/buttons/TextPushButton' );
   var ObservableArray = require( 'AXON/ObservableArray' );
+  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   //strings
   var returnLidString = require( 'string!STATES_OF_MATTER/returnLid' );
@@ -262,6 +263,8 @@ define( function( require ) {
       phaseChangesScreenView.updatePhaseDiagram();
     } );
   }
+
+  statesOfMatter.register( 'PhaseChangesScreenView', PhaseChangesScreenView );
 
   return inherit( ScreenView, PhaseChangesScreenView, {
 

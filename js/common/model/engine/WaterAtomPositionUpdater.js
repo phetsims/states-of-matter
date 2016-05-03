@@ -11,6 +11,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var WaterMoleculeStructure = require( 'STATES_OF_MATTER/common/model/engine/WaterMoleculeStructure' );
 
   // constants
@@ -18,7 +19,7 @@ define( function( require ) {
   var STRUCTURE_Y = WaterMoleculeStructure.moleculeStructureY;
 
   // static object (no constructor)
-  return {
+  var WaterAtomPositionUpdater = {
     /**
      * @public
      * @param {MoleculeForceAndMotionDataSet} moleculeDataSet
@@ -54,4 +55,9 @@ define( function( require ) {
       }
     }
   };
+
+  statesOfMatter.register( 'WaterAtomPositionUpdater', WaterAtomPositionUpdater );
+
+  return WaterAtomPositionUpdater;
+
 } );

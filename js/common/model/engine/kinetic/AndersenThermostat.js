@@ -15,6 +15,7 @@ define( function( require ) {
   // modules
   var inherit = require( 'PHET_CORE/inherit' );
   var Random = require( 'DOT/Random' );
+  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
 
   /**
@@ -40,6 +41,8 @@ define( function( require ) {
 
     this.random = new Random();
   }
+
+  statesOfMatter.register( 'AndersenThermostat', AndersenThermostat );
 
   return inherit( Object, AndersenThermostat, {
     /**

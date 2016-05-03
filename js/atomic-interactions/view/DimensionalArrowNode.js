@@ -12,6 +12,7 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var Path = require( 'SCENERY/nodes/Path' );
   var ArrowShape = require( 'SCENERY_PHET/ArrowShape' );
+  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var Vector2 = require( 'DOT/Vector2' );
 
   /*
@@ -45,6 +46,8 @@ define( function( require ) {
     Path.call( this, new ArrowShape( tailX, tailY, tipX, tipY, options ), options );
     this.options = options;
   }
+
+  statesOfMatter.register( 'DimensionalArrowNode', DimensionalArrowNode );
 
   return inherit( Path, DimensionalArrowNode, {
 

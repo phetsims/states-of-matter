@@ -13,6 +13,7 @@ define( function( require ) {
 
   // modules
   var inherit = require( 'PHET_CORE/inherit' );
+  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
 
   /**
@@ -37,6 +38,8 @@ define( function( require ) {
     this.moleculeVelocities = moleculeDataSet.moleculeVelocities;
     this.moleculeRotationRates = moleculeDataSet.moleculeRotationRates;
   }
+
+  statesOfMatter.register( 'IsokineticThermostat', IsokineticThermostat );
 
   return inherit( Object, IsokineticThermostat, {
     /**

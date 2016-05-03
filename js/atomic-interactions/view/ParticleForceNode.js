@@ -13,6 +13,7 @@ define( function( require ) {
   var ParticleNode = require( 'STATES_OF_MATTER/atomic-interactions/view/ParticleNode' );
   var Color = require( 'SCENERY/util/Color' );
   var DimensionalArrowNode = require( 'STATES_OF_MATTER/atomic-interactions/view/DimensionalArrowNode' );
+  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   // The following constants control some of the aspects of the appearance of
   // the force arrows.  The values were empirically chosen to look good in
@@ -77,6 +78,8 @@ define( function( require ) {
         modelViewTransform.modelToViewY( position.y ) );
     } );
   }
+
+  statesOfMatter.register( 'ParticleForceNode', ParticleForceNode );
 
   return inherit( ParticleNode, ParticleForceNode, {
 

@@ -27,6 +27,7 @@ define( function( require ) {
   var HBox = require( 'SCENERY/nodes/HBox' );
   var InteractionPotentialCanvasNode = require( 'STATES_OF_MATTER/common/view/InteractionPotentialCanvasNode' );
   var Bounds2 = require( 'DOT/Bounds2' );
+  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   // strings
   var interactionPotentialString = require( 'string!STATES_OF_MATTER/interactionPotential' );
@@ -188,6 +189,8 @@ define( function( require ) {
 
     this.mutate( options );
   }
+
+  statesOfMatter.register( 'EpsilonControlInteractionPotentialDiagram', EpsilonControlInteractionPotentialDiagram );
 
   return inherit( InteractionPotentialDiagramNode, EpsilonControlInteractionPotentialDiagram, {
 

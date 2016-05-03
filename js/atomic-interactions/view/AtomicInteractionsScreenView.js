@@ -30,6 +30,7 @@ define( function( require ) {
   var GrabbableParticleNode = require( 'STATES_OF_MATTER/atomic-interactions/view/GrabbableParticleNode' );
   var PushpinNode = require( 'STATES_OF_MATTER/atomic-interactions/view/PushpinNode' );
   var HandNode = require( 'STATES_OF_MATTER/atomic-interactions/view/HandNode' );
+  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var StatesOfMatterColors = require( 'STATES_OF_MATTER/common/view/StatesOfMatterColors' );
   var AtomPair = require( 'STATES_OF_MATTER/atomic-interactions/model/AtomPair' );
 
@@ -256,6 +257,8 @@ define( function( require ) {
 
     atomicInteractionsScreenView.handNode.setVisible( true );
   }
+
+  statesOfMatter.register( 'AtomicInteractionsScreenView', AtomicInteractionsScreenView );
 
   return inherit( ScreenView, AtomicInteractionsScreenView, {
 

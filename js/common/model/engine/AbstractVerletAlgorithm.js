@@ -14,6 +14,7 @@ define( function( require ) {
   // modules
   var inherit = require( 'PHET_CORE/inherit' );
   var PropertySet = require( 'AXON/PropertySet' );
+  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   // constants that control various aspects of the Verlet algorithm.
   var TIME_STEP = 0.010;  // Time per simulation clock tick, in seconds.
@@ -38,6 +39,8 @@ define( function( require ) {
       pressure: 0 // atm units
     } );
   }
+
+  statesOfMatter.register( 'AbstractVerletAlgorithm', AbstractVerletAlgorithm );
 
   return inherit( PropertySet, AbstractVerletAlgorithm, {
 

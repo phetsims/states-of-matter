@@ -16,6 +16,7 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var PhaseStateEnum = require( 'STATES_OF_MATTER/common/PhaseStateEnum' );
   var Random = require( 'DOT/Random' );
+  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
   var WaterAtomPositionUpdater = require( 'STATES_OF_MATTER/common/model/engine/WaterAtomPositionUpdater' );
 
@@ -41,6 +42,8 @@ define( function( require ) {
     this.positionUpdater = WaterAtomPositionUpdater; // @private
     AbstractPhaseStateChanger.call( this, multipleParticleModel );
   }
+
+  statesOfMatter.register( 'WaterPhaseStateChanger', WaterPhaseStateChanger );
 
   return inherit( AbstractPhaseStateChanger, WaterPhaseStateChanger, {
 

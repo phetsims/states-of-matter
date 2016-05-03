@@ -14,6 +14,7 @@ define( function( require ) {
   var AtomicInteractionsScreenView = require( 'STATES_OF_MATTER/atomic-interactions/view/AtomicInteractionsScreenView' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Screen = require( 'JOIST/Screen' );
+  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var StatesOfMatterColors = require( 'STATES_OF_MATTER/common/view/StatesOfMatterColors' );
 
   /**
@@ -45,6 +46,8 @@ define( function( require ) {
     } );
     StatesOfMatterColors.linkAttribute( 'background', screen, 'backgroundColor' );
   }
+
+  statesOfMatter.register( 'AtomicInteractionsScreen', AtomicInteractionsScreen );
 
   return inherit( Screen, AtomicInteractionsScreen );
 } );

@@ -4,8 +4,10 @@
  * AtomPair enum
  * @author Chandrashekar Bemagoni  (Actual Concepts)
  */
-define( function() {
+define( function( require ) {
   'use strict';
+
+  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   var AtomPair = {
     NEON_NEON: 'NEON_NEON',
@@ -19,6 +21,8 @@ define( function() {
 
   // verify that enum is immutable, without the runtime penalty in production code
   if ( assert ) { Object.freeze( AtomPair ); }
+
+  statesOfMatter.register( 'AtomPair', AtomPair );
 
   return AtomPair;
 } );
