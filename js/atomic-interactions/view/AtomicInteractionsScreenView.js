@@ -42,6 +42,7 @@ define( function( require ) {
 
   // Constant used to control size of push pin, empirically determined.
   var PUSH_PIN_WIDTH = 20;
+  var textMaxWidth = 80;
 
   /**
    *
@@ -92,6 +93,7 @@ define( function( require ) {
     this.returnAtomButton = new TextPushButton( returnAtomString, {
       font: new PhetFont( 17 ),
       baseColor: '#61BEE3',
+      maxWidth: textMaxWidth,
       listener: function() {
         dualAtomModel.resetMovableAtomPos();
       },
@@ -161,9 +163,9 @@ define( function( require ) {
     } );
 
     // add sim speed controls
-    var slowText = new Text( slowMotionString, { fill: 'white', font: new PhetFont( 14 ) } );
+    var slowText = new Text( slowMotionString, { fill: 'white', font: new PhetFont( 14 ), maxWidth: textMaxWidth } );
     var slowMotionRadioBox = new AquaRadioButton( dualAtomModel.speedProperty, 'slow', slowText, { radius: 10 } );
-    var normalText = new Text( normalString, { fill: 'white', font: new PhetFont( 14 ) } );
+    var normalText = new Text( normalString, { fill: 'white', font: new PhetFont( 14 ), maxWidth: textMaxWidth } );
     var normalMotionRadioBox = new AquaRadioButton( dualAtomModel.speedProperty, 'normal', normalText, { radius: 10 } );
     StatesOfMatterColors.linkAttribute( 'controlPanelText', slowText, 'fill' );
     StatesOfMatterColors.linkAttribute( 'controlPanelText', normalText, 'fill' );

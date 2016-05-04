@@ -51,6 +51,7 @@ define( function( require ) {
   var AXIS_LABEL_FONT;
   var GREEK_LETTER_FONT_SIZE = 18;
   var GREEK_LETTER_FONT = new PhetFont( GREEK_LETTER_FONT_SIZE );
+  var GREEK_LETTER_MAX_WIDTH = 60;
 
   // zoom buttons height
   var zoomButtonsHeight = 72;
@@ -119,10 +120,10 @@ define( function( require ) {
     } );
     this.ljPotentialGraph.addChild( this.epsilonArrow );
 
-    this.epsilonLabel = new Text( epsilonString, { font: GREEK_LETTER_FONT, fill: 'white' } );
+    this.epsilonLabel = new Text( epsilonString, { font: GREEK_LETTER_FONT, fill: 'white', maxWidth: GREEK_LETTER_MAX_WIDTH } );
     this.ljPotentialGraph.addChild( this.epsilonLabel );
 
-    this.sigmaLabel = new Text( sigmaString, { font: GREEK_LETTER_FONT, fill: 'white' } );
+    this.sigmaLabel = new Text( sigmaString, { font: GREEK_LETTER_FONT, fill: 'white', maxWidth: GREEK_LETTER_MAX_WIDTH } );
     this.ljPotentialGraph.addChild( this.sigmaLabel );
     this.sigmaArrow = new ArrowNode( 0, 0, 0, 0, {
       headHeight: 8,
