@@ -54,7 +54,7 @@ define( function( require ) {
       // the appearance of the molecules.
       for ( i = 0; i < this.particles.length; i++ ) {
         particle = this.particles.get( i );
-        if ( particle instanceof HydrogenAtom ) {
+        if ( particle instanceof HydrogenAtom && !particle.layerFlag ) {
           context.fillStyle = particle.color;
           context.strokeStyle = this.projectorMode ? '#000000' : particle.color;
           context.lineWidth = 0.4;
@@ -70,7 +70,7 @@ define( function( require ) {
       // paint the regular particles
       for ( i = 0; i < this.particles.length; i++ ) {
         particle = this.particles.get( i );
-        if ( !( particle instanceof HydrogenAtom ) ) {
+        if ( !( particle instanceof HydrogenAtom && !particle.layerFlag ) ) {
           context.fillStyle = particle.color;
           context.strokeStyle = this.projectorMode ? '#000000' : particle.color;
           context.lineWidth = 0.4;

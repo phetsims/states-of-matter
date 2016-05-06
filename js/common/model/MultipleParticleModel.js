@@ -35,7 +35,6 @@ define( function( require ) {
   var OxygenAtom = require( 'STATES_OF_MATTER/common/model/particle/OxygenAtom' );
   var HydrogenAtom = require( 'STATES_OF_MATTER/common/model/particle/HydrogenAtom' );
   var ConfigurableStatesOfMatterAtom = require( 'STATES_OF_MATTER/common/model/particle/ConfigurableStatesOfMatterAtom' );
-  var HydrogenAtom2 = require( 'STATES_OF_MATTER/common/model/particle/HydrogenAtom2' );
   var AtomType = require( 'STATES_OF_MATTER/common/model/AtomType' );
   var InteractionStrengthTable = require( 'STATES_OF_MATTER/common/model/InteractionStrengthTable' );
   var MoleculeForceAndMotionDataSet = require( 'STATES_OF_MATTER/common/model/MoleculeForceAndMotionDataSet' );
@@ -492,8 +491,8 @@ define( function( require ) {
 
           // Add atoms to model set.
           this.particles.add( new OxygenAtom( 0, 0 ) );
-          this.particles.add( new HydrogenAtom( 0, 0 ) );
-          this.particles.add( new HydrogenAtom( 0, 0 ) );
+          this.particles.add( new HydrogenAtom( 0, 0, false ) );
+          this.particles.add( new HydrogenAtom( 0, 0, false ) );
         }
 
         if ( this.particles.length === 1 ) {
@@ -842,12 +841,12 @@ define( function( require ) {
 
         // Add atoms to model set.
         this.particles.add( new OxygenAtom( 0, 0 ) );
-        this.particles.add( new HydrogenAtom( 0, 0 ) );
+        this.particles.add( new HydrogenAtom( 0, 0, false ) );
 
         // For the sake of making water actually crystallize, we have a
         // proportion of the hydrogen atoms be of a different type.  There
         // is more on this in the algorithm implementation for water.
-        var atom = ( i % 2 === 0 ) ? new HydrogenAtom( 0, 0 ) : new HydrogenAtom2( 0, 0 );
+        var atom = ( i % 2 === 0 ) ? new HydrogenAtom( 0, 0, false ) : new HydrogenAtom( 0, 0, true );
         this.particles.add( atom );
       }
       // Initialize the particle positions according the to requested phase.
