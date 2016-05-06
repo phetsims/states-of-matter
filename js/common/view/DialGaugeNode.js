@@ -60,7 +60,11 @@ define( function( require ) {
     this.textualReadoutBoxShape = new Rectangle( 0, 0, 80, 15, 2, 2, { fill: 'white', stroke: 'black' } );
     this.textualReadoutBoxShape.centerX = gaugeNode.centerX;
     this.textualReadoutBoxShape.top = gaugeNode.bottom - 15;
-    this.textualReadout = new Text( '', { font: new PhetFont( 12 ), fill: 'black' } );
+    this.textualReadout = new Text( '', {
+      font: new PhetFont( 12 ),
+      fill: 'black',
+      maxWidth: this.textualReadoutBoxShape.width * 0.9
+    } );
     this.textualReadout.center = this.textualReadoutBoxShape.center;
 
     this.connector = new Path( null, {

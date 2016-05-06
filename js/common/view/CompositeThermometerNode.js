@@ -62,8 +62,8 @@ define( function( require ) {
     this.addChild( thermometer );
 
     // add temperature combo box
-    var temperatureKelvinText = new Text( '', { font: new PhetFont( 10 ) } );
-    var temperatureCelsiusText = new Text( '', { font: new PhetFont( 10 ) } );
+    var temperatureKelvinText = new Text( '', { font: new PhetFont( 10 ), maxWidth: 30 } );
+    var temperatureCelsiusText = new Text( '', { font: new PhetFont( 10 ), maxWidth: 30 } );
     multipleParticleModel.temperatureSetPointProperty.link( function() {
       var tempInKelvin = multipleParticleModel.getTemperatureInKelvin();
       var tempInKelvinRounded = Math.round( multipleParticleModel.getTemperatureInKelvin() );

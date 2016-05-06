@@ -191,6 +191,7 @@ define( function( require ) {
     this.returnLidButton = new TextPushButton( returnLidString, {
       font: new PhetFont( 14 ),
       baseColor: 'yellow',
+      maxWidth: 100,
       listener: function() {
         multipleParticleModel.returnLid();
         particleContainerNode.reset();
