@@ -2,15 +2,6 @@
   "states-of-matter.title": {
     "value": "States of Matter"
   },
-  "low": {
-    "value": "low"
-  },
-  "heat": {
-    "value": "Heat"
-  },
-  "cool": {
-    "value": "Cool"
-  },
   "pressureOverload": {
     "value": "OVERLOADED"
   },
@@ -62,14 +53,8 @@
   "diatomicOxygen": {
     "value": "Oxygen"
   },
-  "solidLiquidGas": {
-    "value": "Solid -Liquid-Gas"
-  },
   "phaseChanges": {
     "value": "Phase Changes"
-  },
-  "earth": {
-    "value": "Earth"
   },
   "interaction": {
     "value": "Interaction"
@@ -103,9 +88,6 @@
   },
   "interactionStrengthWithSymbol": {
     "value": "Interaction Strength (ε)"
-  },
-  "atomDiameterWithSymbol": {
-    "value": " Atom Diameter (σ)"
   },
   "sigma": {
     "value": "σ"
