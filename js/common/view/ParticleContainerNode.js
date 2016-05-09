@@ -265,9 +265,9 @@ define( function( require ) {
       this.pressureMeter.setTranslation( this.containerLid.x - pressureMeterXOffset,
         this.containerLid.y - PRESSURE_METER_ELBOW_OFFSET );
     }
-    multipleParticleModel.particleContainerHeightProperty.link( function() {
-      particleContainerNode.handleContainerSizeChanged();
-    } );
+    //multipleParticleModel.particleContainerHeightProperty.link( function() {
+    //  particleContainerNode.handleContainerSizeChanged();
+    //} );
     this.addChild( postParticleLayer );
     this.mutate( options );
   }

@@ -96,13 +96,13 @@ define( function( require ) {
     this.modelTemperatureHistory = new ObservableArray();
 
     // add particle container node
-    var particleContainerNode = new ParticleContainerNode( multipleParticleModel, modelViewTransform, true, true, {
+    this.particleContainerNode = new ParticleContainerNode( multipleParticleModel, modelViewTransform, true, true, {
       centerX: heaterCoolerNode.centerX - PARTICLE_CONTAINER_X_OFFSET,
       bottom: heaterCoolerNode.top - INSET
     } );
 
     // add particle container back node  before  particle Canvas layer
-    this.addChild( particleContainerNode.openNode );
+    this.addChild( this.particleContainerNode.openNode );
 
     // add particle canvas layer for particle rendering
     this.particlesLayer = new ParticleCanvasNode( multipleParticleModel.particles, modelViewTransform, projectorModeProperty, {
@@ -112,22 +112,22 @@ define( function( require ) {
         PARTICLE_CANVAS_LAYER_BOUND_LIMIT, PARTICLE_CANVAS_LAYER_BOUND_LIMIT )
     } );
     this.addChild( this.particlesLayer );
-    this.addChild( particleContainerNode );
+    this.addChild( this.particleContainerNode );
 
     // adjust the container back node position
     var containerOpenNodeXOffset = 50.4;
-    var containerOpenNodeYOffset = particleContainerNode.fingerNode.fingerImageNode.height - 10;
-    particleContainerNode.openNode.centerX = particleContainerNode.centerX + containerOpenNodeXOffset;
-    particleContainerNode.openNode.centerY = particleContainerNode.top + containerOpenNodeYOffset;
+    var containerOpenNodeYOffset = this.particleContainerNode.fingerNode.fingerImageNode.height - 10;
+    this.particleContainerNode.openNode.centerX = this.particleContainerNode.centerX + containerOpenNodeXOffset;
+    this.particleContainerNode.openNode.centerY = this.particleContainerNode.top + containerOpenNodeYOffset;
     this.addChild( heaterCoolerNode );
 
     // add compositeThermometer node
-    var compositeThermometerNode = new CompositeThermometerNode( multipleParticleModel, modelViewTransform, {
+    this.compositeThermometerNode = new CompositeThermometerNode( multipleParticleModel, modelViewTransform, {
       font: new PhetFont( 20 ),
       fill: 'white',
       right: heaterCoolerNode.left + 3 * INSET
     } );
-    this.addChild( compositeThermometerNode );
+    this.addChild( this.compositeThermometerNode );
 
     // add phase diagram - in SOM basic version by default phase diagram should be closed.
     multipleParticleModel.expandedProperty.value = isInteractionDiagramEnabled;
@@ -146,8 +146,8 @@ define( function( require ) {
       listener: function() {
         phaseChangesScreenView.modelTemperatureHistory.clear();
         multipleParticleModel.reset();
-        compositeThermometerNode.setRotation( 0 );
-        particleContainerNode.reset();
+        phaseChangesScreenView.compositeThermometerNode.setRotation( 0 );
+        phaseChangesScreenView.particleContainerNode.reset();
         //Reset  phase diagram state in SOM basic version
         multipleParticleModel.expandedProperty.value = isInteractionDiagramEnabled;
       },
@@ -184,7 +184,7 @@ define( function( require ) {
     // add bicycle pump node
     this.addChild( new BicyclePumpNode( 200, 250, multipleParticleModel, {
       bottom: heaterCoolerNode.bottom,
-      right: particleContainerNode.left + BICYCLE_PUMP_NODE_X_OFFSET
+      right: phaseChangesScreenView.particleContainerNode.left + BICYCLE_PUMP_NODE_X_OFFSET
     } ) );
 
     // add return lid button
@@ -194,12 +194,12 @@ define( function( require ) {
       maxWidth: 100,
       listener: function() {
         multipleParticleModel.returnLid();
-        particleContainerNode.reset();
+        phaseChangesScreenView.particleContainerNode.reset();
       },
       visible: false,
       xMargin: 10,
-      right: particleContainerNode.left - 2 * LAY_BOUNDS_RIGHT_OFFSET,
-      top: particleContainerNode.centerY + RETURN_LID_BUTTON_Y_OFFSET
+      right: phaseChangesScreenView.particleContainerNode.left - 2 * LAY_BOUNDS_RIGHT_OFFSET,
+      top: phaseChangesScreenView.particleContainerNode.centerY + RETURN_LID_BUTTON_Y_OFFSET
     } );
     this.addChild( this.returnLidButton );
     multipleParticleModel.isExplodedProperty.linkAttribute( this.returnLidButton, 'visible' );
@@ -252,11 +252,13 @@ define( function( require ) {
         }
       }
       if ( multipleParticleModel.getContainerExploded() ) {
-        particleContainerNode.reset();
+        phaseChangesScreenView.particleContainerNode.reset();
       }
     } );
+    this.particleContainerHeightPropertyChanged = false;
     multipleParticleModel.particleContainerHeightProperty.link( function() {
-      compositeThermometerNode.updatePositionAndOrientation();
+      //compositeThermometerNode.updatePositionAndOrientation();
+      phaseChangesScreenView.particleContainerHeightPropertyChanged = true;
     } );
 
     multipleParticleModel.temperatureSetPointProperty.link( function() {
@@ -271,6 +273,13 @@ define( function( require ) {
 
     step: function() {
       this.particlesLayer.step();
+      if ( this.particleContainerHeightPropertyChanged ){
+        this.compositeThermometerNode.updatePositionAndOrientation();
+        this.particleContainerNode.handleContainerSizeChanged();
+        this.particleContainerNode.fingerNode.handleContainerSizeChanged();
+        this.particleContainerNode.fingerNode.updateArrowVisibility();
+        this.particleContainerHeightPropertyChanged = false;
+      }
     },
 
     /**

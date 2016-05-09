@@ -111,10 +111,10 @@ define( function( require ) {
     // Add the finger node as a child.
     this.addChild( this.fingerImageNode );
     this.addChild( this.hintNode );
-    multipleParticleModel.particleContainerHeightProperty.link( function() {
-      pointingHandNode.handleContainerSizeChanged();
-      pointingHandNode.updateArrowVisibility();
-    } );
+    //multipleParticleModel.particleContainerHeightProperty.link( function() {
+    //  pointingHandNode.handleContainerSizeChanged();
+    //  pointingHandNode.updateArrowVisibility();
+    //} );
     this.touchArea = this.localBounds.dilatedXY( 10, 10 );
   }
 
