@@ -13,7 +13,6 @@ define( function( require ) {
   var Color = require( 'SCENERY/util/Color' );
   var ConfigurableStatesOfMatterAtom = require( 'STATES_OF_MATTER/common/model/particle/ConfigurableStatesOfMatterAtom' );
   var HydrogenAtom = require( 'STATES_OF_MATTER/common/model/particle/HydrogenAtom' );
-  var HydrogenAtom2 = require( 'STATES_OF_MATTER/common/model/particle/HydrogenAtom2' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Node = require( 'SCENERY/nodes/Node' );
   var NeonAtom = require( 'STATES_OF_MATTER/common/model/particle/NeonAtom' );
@@ -170,9 +169,6 @@ define( function( require ) {
         baseColor = new Color( StatesOfMatterConstants.OXYGEN_COLOR );
       }
       else if ( atom instanceof HydrogenAtom ) {
-        baseColor = new Color( StatesOfMatterConstants.HYDROGEN_COLOR );
-      }
-      else if ( atom instanceof HydrogenAtom2 ) {
         baseColor = new Color( StatesOfMatterConstants.HYDROGEN_COLOR );
       }
       else if ( atom instanceof ConfigurableStatesOfMatterAtom ) {
