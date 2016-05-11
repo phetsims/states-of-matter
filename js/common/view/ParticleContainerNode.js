@@ -41,7 +41,6 @@ define( function( require ) {
     this.modelViewTransform = modelViewTransform;
     this.containmentAreaWidth = StatesOfMatterConstants.CONTAINER_BOUNDS.width;
     this.containmentAreaHeight = StatesOfMatterConstants.CONTAINER_BOUNDS.height;
-    var particleContainerNode = this;
     Node.call( this );
     var preParticleLayer = new Node();
     var postParticleLayer = new Node( { opacity: 0.9 } );
@@ -265,9 +264,6 @@ define( function( require ) {
       this.pressureMeter.setTranslation( this.containerLid.x - pressureMeterXOffset,
         this.containerLid.y - PRESSURE_METER_ELBOW_OFFSET );
     }
-    //multipleParticleModel.particleContainerHeightProperty.link( function() {
-    //  particleContainerNode.handleContainerSizeChanged();
-    //} );
     this.addChild( postParticleLayer );
     this.mutate( options );
   }
