@@ -17,7 +17,7 @@ define( function( require ) {
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   // constants that control various aspects of the Verlet algorithm.
-  var TIME_STEP = 0.010;  // Time per simulation clock tick, in seconds.
+  var TIME_STEP = 0.020;  // Time per simulation clock tick, in seconds.
   var PRESSURE_CALC_WEIGHTING = 0.999;
   var WALL_DISTANCE_THRESHOLD = 1.122462048309373017;
   var SAFE_INTER_MOLECULE_DISTANCE = 2.0;

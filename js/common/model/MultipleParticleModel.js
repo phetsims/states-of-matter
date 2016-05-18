@@ -73,8 +73,8 @@ define( function( require ) {
   var ADAPTIVE_THERMOSTAT = 3;
 
   // Parameters to control rates of change of the container size.
-  var MAX_PER_TICK_CONTAINER_SHRINKAGE = 25;
-  var MAX_PER_TICK_CONTAINER_EXPANSION = 100;
+  var MAX_PER_TICK_CONTAINER_SHRINKAGE = 50;
+  var MAX_PER_TICK_CONTAINER_EXPANSION = 200;
 
   // Countdown value used when recalculating temperature when the container size is changing.
   var CONTAINER_SIZE_CHANGE_RESET_COUNT = 25;
@@ -644,8 +644,9 @@ define( function( require ) {
       // Execute the Verlet algorithm.  The algorithm may be run several times for each time step.
       for ( var i = 0; i < VERLET_CALCULATIONS_PER_CLOCK_TICK; i++ ) {
         this.moleculeForceAndMotionCalculator.updateForcesAndMotion();
-        this.runThermostat();
+
       }
+      this.runThermostat();
 
       // Sync up the positions of the normalized particles (the molecule data
       // set) with the particles being monitored by the view (the model data set).
