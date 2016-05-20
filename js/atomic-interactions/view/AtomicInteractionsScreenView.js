@@ -201,13 +201,12 @@ define( function( require ) {
     this.pushPinNode = new PushpinNode();
     this.pushPinNode.scale( PUSH_PIN_WIDTH / this.pushPinNode.width );
 
-    // Create the nodes that will act as layers for the fixed and movable
-    // particles.  This is done so that the fixed particle can always
-    // appear to be on top.
-    this.movableParticleLayer = new Node();
-    this.addChild( this.movableParticleLayer );
+    // Create the nodes that will act as layers for the fixed and movable particles. This is done so that the
+    // movable particle can always appear to be on top.
     this.fixedParticleLayer = new Node();
     this.addChild( this.fixedParticleLayer );
+    this.movableParticleLayer = new Node();
+    this.addChild( this.movableParticleLayer );
 
     // Add the control panels to the screen after the atoms so that the atoms
     // with go behind them.
@@ -265,6 +264,7 @@ define( function( require ) {
      */
     step: function() {
       this.handlePositionChanged();
+      this.movableParticleNode.step();
     },
 
     /**

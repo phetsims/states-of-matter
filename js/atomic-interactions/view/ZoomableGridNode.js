@@ -56,7 +56,7 @@ define( function( require ) {
 
     this.zoomOutButton = new ZoomButton( {
       listener: function() {
-        atomsView.horizontalLineCount += 2;
+        atomsView.horizontalLineCount += ZOOM_INCREMENT;
         gridNode.setHorizontalLines( offsetX, offsetY, width, height, atomsView.horizontalLineCount );
         atomsView.verticalScalingFactor /= 3.33;
         atomsView.drawPotentialCurve();

@@ -335,15 +335,6 @@ define( function( require ) {
       },
 
       /**
-       * @private
-       * @param {StatesOfMatterAtom} movableAtom
-       */
-      clone: function( movableAtom ) {
-        this.shadowMovableAtom.setPosition( movableAtom.getX(), movableAtom.getY() );
-        this.shadowMovableAtom.velocity = movableAtom.getVelocity();
-        this.shadowMovableAtom.accel = movableAtom.getAccel();
-      },
-      /**
        * @public
        * @override
        */
@@ -379,7 +370,7 @@ define( function( require ) {
        */
       step: function( dt ) {
         // prevent sudden dt bursts when the user comes back to the tab after a while
-        dt = ( dt > 0.04 ) ? 0.04 : dt;
+        dt = Math.min( 0.016, dt );
 
         if ( this.isPlaying ) {
           var adjustedDT = this.speed === 'normal' ? dt : dt * 0.33;
@@ -401,11 +392,6 @@ define( function( require ) {
        * @param { Number } dt --- time in seconds
        */
       handleClockTicked: function( dt ) {
-
-        // atom type doesn't really matter for the shadowMovableAtom. Position, acceleration, velocity matter though
-        this.shadowMovableAtom = this.atomFactory.createAtom( DEFAULT_ATOM_TYPE );
-        this.clone( this.movableAtom );
-
         this.updateTimeStep( dt );
 
         // Update the forces and motion of the atoms.
@@ -419,9 +405,6 @@ define( function( require ) {
             this.updateAtomMotion();
           }
         }
-
-        // Update the atom that is visible to the view.
-        this.syncMovableAtomWithDummy();
 
         // Handle inter-atom bonding.
         if ( this.movableAtom.getType() === AtomType.OXYGEN && this.fixedAtom.getType() === AtomType.OXYGEN ) {
@@ -491,12 +474,6 @@ define( function( require ) {
       positionChanged: function() {
         if ( this.motionPaused ) {
           // The user must be moving the atom from the view. Update the forces correspondingly.
-          try {
-            this.clone( this.movableAtom );
-          }
-          catch( e ) {
-            console.log( e );
-          }
           this.updateForces();
         }
       },
@@ -519,17 +496,9 @@ define( function( require ) {
       /**
        * @private
        */
-      syncMovableAtomWithDummy: function() {
-        this.movableAtom.setAx( this.shadowMovableAtom.getAx() );
-        this.movableAtom.setVx( this.shadowMovableAtom.getVx() );
-        this.movableAtom.setPosition( this.shadowMovableAtom.getX(), this.shadowMovableAtom.getY() );
-      },
-      /**
-       * @private
-       */
       updateForces: function() {
 
-        var distance = this.shadowMovableAtom.getPositionReference().distance( Vector2.ZERO );
+        var distance = this.movableAtom.getPositionReference().distance( Vector2.ZERO );
 
         if ( distance < ( this.fixedAtom.getRadius() + this.movableAtom.getRadius() ) / 8 ) {
 
@@ -549,18 +518,18 @@ define( function( require ) {
        */
       updateAtomMotion: function() {
 
-        var mass = this.shadowMovableAtom.getMass() * 1.6605402E-27;  // Convert mass to kilograms.
+        var mass = this.movableAtom.getMass() * 1.6605402E-27;  // Convert mass to kilograms.
         var acceleration = ( this.repulsiveForce - this.attractiveForce ) / mass;
 
         // Update the acceleration for the movable atom.  We do this regardless of whether movement is paused so that
         // the force vectors can be shown appropriately if the user moves the atoms.
-        this.shadowMovableAtom.setAx( acceleration );
+        this.movableAtom.setAx( acceleration );
 
         if ( !this.motionPaused ) {
           // Update the position and velocity of the atom.
-          this.shadowMovableAtom.setVx( this.shadowMovableAtom.getVx() + ( acceleration * this.timeStep ) );
-          var xPos = this.shadowMovableAtom.getX() + ( this.shadowMovableAtom.getVx() * this.timeStep );
-          this.shadowMovableAtom.setPosition( xPos, 0 );
+          this.movableAtom.setVx( this.movableAtom.getVx() + ( acceleration * this.timeStep ) );
+          var xPos = this.movableAtom.getX() + ( this.movableAtom.getVx() * this.timeStep );
+          this.movableAtom.setPosition( xPos, 0 );
         }
       },
 
@@ -589,7 +558,8 @@ define( function( require ) {
             // Move some distance from the original position based on the energy contained at the time of bonding.  The
             // multiplication factor in the equation below is empirically determined to look good on the screen.
             var xPos = ( Math.random() * 2 - 1 ) * this.potentialWhenAtomReleased * 5e19 * vibrationScaleFactor;
-            var yPos = ( Math.random() * 2 - 1 ) * this.potentialWhenAtomReleased * 5e19 * vibrationScaleFactor;
+            //var yPos = ( Math.random() * 2 - 1 ) * this.potentialWhenAtomReleased * 5e19 * vibrationScaleFactor;
+            var yPos = this.fixedAtom.positionProperty.value.y;
             this.fixedAtom.setPosition( xPos, yPos );
           }
 

@@ -34,6 +34,8 @@ define( function( require ) {
     this.minX = minX;
     this.maxX = maxX;
     var grabbableParticleNode = this;
+    this.handNode = handNode;
+    this.dualAtomModel = dualAtomModel;
 
     // This node will need to be pickable so the user can grab it.
     this.setPickable( true );
@@ -84,17 +86,25 @@ define( function( require ) {
       }
     } ) );
 
+    this.positionChanged = false;
     particle.positionProperty.link( function() {
-      if ( !dualAtomModel.isPlaying ) {
-        dualAtomModel.positionChanged();
-      }
-      handNode.setVisible( dualAtomModel.isHandNodeVisible );
+      grabbableParticleNode.positionChanged = true;
     } );
   }
 
   statesOfMatter.register( 'GrabbableParticleNode', GrabbableParticleNode );
 
   return inherit( ParticleForceNode, GrabbableParticleNode, {
+
+    step: function(){
+      if( this.positionChanged ){
+        if ( !this.dualAtomModel.isPlaying ) {
+          this.dualAtomModel.positionChanged();
+        }
+        this.handNode.setVisible( this.dualAtomModel.isHandNodeVisible );
+        this.positionChanged = false;
+      }
+    },
 
     /**
      * @public
