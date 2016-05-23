@@ -15,36 +15,27 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var Screen = require( 'JOIST/Screen' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  var StatesOfMatterColors = require( 'STATES_OF_MATTER/common/view/StatesOfMatterColors' );
+  var StatesOfMatterColorProfile = require( 'STATES_OF_MATTER/common/view/StatesOfMatterColorProfile' );
 
   /**
-   *
-   * @param {Property<boolean>} projectorModeProperty - true to use the projector color scheme, false to use
-   * regular color scheme
    * @param {boolean} enableHeterogeneousMolecules
    * @param {string} simTitle
    * @constructor
    */
-  function AtomicInteractionsScreen( projectorModeProperty, enableHeterogeneousMolecules, simTitle ) {
+  function AtomicInteractionsScreen( enableHeterogeneousMolecules, simTitle ) {
 
     //If this is a single-screen sim, then no icon is necessary.  If there are multiple screens, then the icon must be
     // provided here.
     var screen = this;
     Screen.call( this, simTitle, new AtomicInteractionsIcon( Screen.HOME_SCREEN_ICON_SIZE),
       function() { return new DualAtomModel(); },
-      function( model ) { return new AtomicInteractionsScreenView( model, enableHeterogeneousMolecules, projectorModeProperty ); },
-      { backgroundColor: StatesOfMatterColors.background.toCSS() }
+      function( model ) { return new AtomicInteractionsScreenView( model, enableHeterogeneousMolecules ); },
+      { backgroundColor: StatesOfMatterColorProfile.background.toCSS() }
     );
 
-    projectorModeProperty.link( function( projectorMode ) {
-      if ( projectorMode ) {
-        StatesOfMatterColors.applyProfile( 'projector' );
-      }
-      else {
-        StatesOfMatterColors.applyProfile( 'default' );
-      }
+    StatesOfMatterColorProfile.backgroundProperty.link( function( color ){
+      screen.backgroundColor = color;
     } );
-    StatesOfMatterColors.linkAttribute( 'background', screen, 'backgroundColor' );
   }
 
   statesOfMatter.register( 'AtomicInteractionsScreen', AtomicInteractionsScreen );

@@ -21,6 +21,7 @@ define( function( require ) {
   var Shape = require( 'KITE/Shape' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
+  var StatesOfMatterColorProfile = require( 'STATES_OF_MATTER/common/view/StatesOfMatterColorProfile' );
   var Text = require( 'SCENERY/nodes/Text' );
   var Vector2 = require( 'DOT/Vector2' );
 
@@ -115,22 +116,31 @@ define( function( require ) {
       headWidth: 20,
       tailWidth: 9,
       doubleHead: false,
-      fill: 'white',
+      fill: StatesOfMatterColorProfile.ljGraphColorsModeProperty,
+      stroke: StatesOfMatterColorProfile.ljGraphColorsModeProperty,
       lineWidth: 0.5
     } );
     this.ljPotentialGraph.addChild( this.epsilonArrow );
 
-    this.epsilonLabel = new Text( epsilonString, { font: GREEK_LETTER_FONT, fill: 'white', maxWidth: GREEK_LETTER_MAX_WIDTH } );
+    this.epsilonLabel = new Text( epsilonString, {
+      font: GREEK_LETTER_FONT,
+      fill: StatesOfMatterColorProfile.ljGraphColorsModeProperty,
+      maxWidth: GREEK_LETTER_MAX_WIDTH
+    } );
     this.ljPotentialGraph.addChild( this.epsilonLabel );
 
-    this.sigmaLabel = new Text( sigmaString, { font: GREEK_LETTER_FONT, fill: 'white', maxWidth: GREEK_LETTER_MAX_WIDTH } );
+    this.sigmaLabel = new Text( sigmaString, {
+      font: GREEK_LETTER_FONT,
+      fill: StatesOfMatterColorProfile.ljGraphColorsModeProperty,
+      maxWidth: GREEK_LETTER_MAX_WIDTH
+    } );
     this.ljPotentialGraph.addChild( this.sigmaLabel );
     this.sigmaArrow = new ArrowNode( 0, 0, 0, 0, {
       headHeight: 8,
       headWidth: 8,
       tailWidth: 3,
       doubleHead: true,
-      fill: 'white',
+      fill: StatesOfMatterColorProfile.ljGraphColorsModeProperty,
       lineWidth: 0.5
     } );
     this.ljPotentialGraph.addChild( this.sigmaArrow );
@@ -146,8 +156,8 @@ define( function( require ) {
 
     // Create and add the horizontal axis line for the graph.
     this.horizontalAxis = new ArrowNode( 0, 0, this.graphWidth + AXES_ARROW_HEAD_HEIGHT, 0, {
-      stroke: 'white',
-      fill: 'white',
+      stroke: StatesOfMatterColorProfile.ljGraphColorsModeProperty,
+      fill: StatesOfMatterColorProfile.ljGraphColorsModeProperty,
       headHeight: 8,
       headWidth: 8,
       tailWidth: 2
@@ -156,7 +166,7 @@ define( function( require ) {
     this.horizontalAxis.setTranslation( this.graphXOrigin, this.graphYOrigin );
 
     this.horizontalAxisLabel = new Text( distanceBetweenAtomsString, {
-      fill: 'white',
+      fill: StatesOfMatterColorProfile.ljGraphColorsModeProperty,
       font: AXIS_LABEL_FONT
     } );
     if ( this.horizontalAxisLabel.width > this.horizontalAxis.width ) {
@@ -167,15 +177,18 @@ define( function( require ) {
 
     // Create and add the vertical axis line for the graph.
     this.verticalAxis = new ArrowNode( 0, 0, 0, -this.graphHeight - AXES_ARROW_HEAD_HEIGHT, {
-      stroke: 'white',
-      fill: 'white',
+      stroke: StatesOfMatterColorProfile.ljGraphColorsModeProperty,
+      fill: StatesOfMatterColorProfile.ljGraphColorsModeProperty,
       headHeight: 8,
       headWidth: 8,
       tailWidth: 2
     } );
     this.verticalAxis.setTranslation( this.graphXOrigin, this.graphYOrigin );
 
-    this.verticalAxisLabel = new Text( potentialEnergyString, { fill: 'white', font: AXIS_LABEL_FONT } );
+    this.verticalAxisLabel = new Text( potentialEnergyString, {
+      fill: StatesOfMatterColorProfile.ljGraphColorsModeProperty,
+      font: AXIS_LABEL_FONT
+    } );
 
     // restricted vertical  axis label
     var verticalAxisHeight = wide ? this.verticalAxis.height - zoomButtonsHeight : this.verticalAxis.height;

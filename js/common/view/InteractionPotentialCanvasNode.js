@@ -27,16 +27,13 @@ define( function( require ) {
   /**
    * @param {InteractionPotentialDiagramNode} interactionDiagram
    * @param {boolean} isLjGraphWider  - true for wider graph else narrow graph
-   * @param {Property<boolean>} projectorModeProperty - true to use the projector color scheme, false to use regular
-   * color scheme
    * @param {Object} [options] that can be passed on to the underlying node
    * @constructor
    */
-  function InteractionPotentialCanvasNode( interactionDiagram, isLjGraphWider, projectorModeProperty, options ) {
+  function InteractionPotentialCanvasNode( interactionDiagram, isLjGraphWider, options ) {
     CanvasNode.call( this, options );
     this.interactionDiagram = interactionDiagram; // @private
     this.isLjGraphWider = isLjGraphWider; // @private
-    this.projectorModeProperty = projectorModeProperty; // @private
 
     // For efficiency, pre-allocate the array that represents the Y positions of the curve.  The X positions are the
     // index into the array.
@@ -77,12 +74,13 @@ define( function( require ) {
           }
         }
       }
-      context.strokeStyle = this.projectorModeProperty.value && this.isLjGraphWider ? 'red' : 'yellow';
+      context.strokeStyle = this.strokeColor;
       context.lineWidth = 2;
       context.stroke();
     },
 
-    update: function() {
+    update: function( color ) {
+      this.strokeColor = color.toCSS();
 
       // Calculate the points that comprise the curve and record several key values along the way the will be used to
       // position the various arrows and labels.

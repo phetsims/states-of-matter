@@ -31,7 +31,7 @@ define( function( require ) {
   var PushpinNode = require( 'STATES_OF_MATTER/atomic-interactions/view/PushpinNode' );
   var HandNode = require( 'STATES_OF_MATTER/atomic-interactions/view/HandNode' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  var StatesOfMatterColors = require( 'STATES_OF_MATTER/common/view/StatesOfMatterColors' );
+  var StatesOfMatterColorProfile = require( 'STATES_OF_MATTER/common/view/StatesOfMatterColorProfile' );
 
   // strings
   var normalString = require( 'string!STATES_OF_MATTER/normal' );
@@ -47,11 +47,9 @@ define( function( require ) {
    *
    * @param {DualAtomModel} dualAtomModel of the simulation
    * @param {boolean} enableHeterogeneousAtoms - true to use a enable heterogeneous molecules, false otherwise.
-   * @param {Property<boolean>} projectorModeProperty - true to use the projector color scheme, false to use
-   * regular color scheme
    * @constructor
    */
-  function AtomicInteractionsScreenView( dualAtomModel, enableHeterogeneousAtoms, projectorModeProperty ) {
+  function AtomicInteractionsScreenView( dualAtomModel, enableHeterogeneousAtoms ) {
 
     ScreenView.call( this, { layoutBounds: new Bounds2( 0, 0, 834, 504 ) } );
 
@@ -81,8 +79,12 @@ define( function( require ) {
     } );
 
     // add interactive potential diagram
-    this.interactiveInteractionPotentialDiagram = new InteractiveInteractionPotentialDiagram( projectorModeProperty,
-      dualAtomModel.getSigma(), dualAtomModel.getEpsilon(), true, dualAtomModel, {
+    this.interactiveInteractionPotentialDiagram = new InteractiveInteractionPotentialDiagram(
+      dualAtomModel.getSigma(),
+      dualAtomModel.getEpsilon(),
+      true,
+      dualAtomModel,
+      {
         left: this.layoutBounds.minX + 7 * inset,
         top: atomicInteractionsControlPanel.top + 6
       } );
@@ -131,7 +133,10 @@ define( function( require ) {
     this.addChild( stepButton );
 
     // add force control
-    var forceControlNode = new ForcesControlPanel( dualAtomModel.forcesProperty, dualAtomModel.forceControlPanelExpandProperty, {
+    var forceControlNode = new ForcesControlPanel(
+      dualAtomModel.forcesProperty,
+      dualAtomModel.forceControlPanelExpandProperty,
+      {
       tickTextColor: tickTextColor,
       textColor: textColor,
       backgroundColor: backgroundColor,
@@ -162,12 +167,18 @@ define( function( require ) {
     } );
 
     // add sim speed controls
-    var slowText = new Text( slowMotionString, { fill: 'white', font: new PhetFont( 14 ), maxWidth: textMaxWidth } );
+    var slowText = new Text( slowMotionString, {
+      fill: StatesOfMatterColorProfile.controlPanelTextProperty,
+      font: new PhetFont( 14 ),
+      maxWidth: textMaxWidth
+    } );
     var slowMotionRadioBox = new AquaRadioButton( dualAtomModel.speedProperty, 'slow', slowText, { radius: 10 } );
-    var normalText = new Text( normalString, { fill: 'white', font: new PhetFont( 14 ), maxWidth: textMaxWidth } );
+    var normalText = new Text( normalString, {
+      fill: StatesOfMatterColorProfile.controlPanelTextProperty,
+      font: new PhetFont( 14 ),
+      maxWidth: textMaxWidth
+    } );
     var normalMotionRadioBox = new AquaRadioButton( dualAtomModel.speedProperty, 'normal', normalText, { radius: 10 } );
-    StatesOfMatterColors.linkAttribute( 'controlPanelText', slowText, 'fill' );
-    StatesOfMatterColors.linkAttribute( 'controlPanelText', normalText, 'fill' );
 
     var speedControlMaxWidth = ( slowMotionRadioBox.width > normalMotionRadioBox.width ) ? slowMotionRadioBox.width : normalMotionRadioBox.width;
 

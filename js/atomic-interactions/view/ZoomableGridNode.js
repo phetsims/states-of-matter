@@ -17,6 +17,7 @@ define( function( require ) {
   var ZoomButton = require( 'SCENERY_PHET/buttons/ZoomButton' );
   var RectangularButtonView = require( 'SUN/buttons/RectangularButtonView' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  var StatesOfMatterColorProfile = require( 'STATES_OF_MATTER/common/view/StatesOfMatterColorProfile' );
 
   // constants
   var MAX_LINES_HORIZONTAL = 13;
@@ -36,8 +37,16 @@ define( function( require ) {
     Node.call( this );
     var gridNode = this;
     atomsView.horizontalLineCount = MIN_LINES_HORIZONTAL;
-    this.horizontalLinesNode = new Path( null, { stroke: 'white', lineWidth: 0.8, opacity: 0.6 } );
-    this.verticalLinesNode = new Path( null, { stroke: 'white', lineWidth: 0.8, opacity: 0.6 } );
+    this.horizontalLinesNode = new Path( null, {
+      stroke: StatesOfMatterColorProfile.ljGraphColorsModeProperty,
+      lineWidth: 0.8,
+      opacity: 0.6
+    } );
+    this.verticalLinesNode = new Path( null, {
+      stroke: StatesOfMatterColorProfile.ljGraphColorsModeProperty,
+      lineWidth: 0.8,
+      opacity: 0.6
+    } );
     this.zoomInButton = new ZoomButton( {
       listener: function() {
         atomsView.horizontalLineCount -= ZOOM_INCREMENT;

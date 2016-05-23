@@ -21,7 +21,7 @@ define( function( require ) {
   var ArrowNode = require( 'SCENERY_PHET/ArrowNode' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  var StatesOfMatterColors = require( 'STATES_OF_MATTER/common/view/StatesOfMatterColors' );
+  var StatesOfMatterColorProfile = require( 'STATES_OF_MATTER/common/view/StatesOfMatterColorProfile' );
   var Shape = require( 'KITE/Shape' );
   var InteractionPotentialCanvasNode = require( 'STATES_OF_MATTER/common/view/InteractionPotentialCanvasNode' );
   var Bounds2 = require( 'DOT/Bounds2' );
@@ -34,9 +34,6 @@ define( function( require ) {
   var EPSILON_LINE_COLOR = RESIZE_HANDLE_NORMAL_COLOR;
 
   /**
-   *
-   * @param {Property<boolean>} projectorModeProperty - true to use the projector color scheme, false to use
-   * regular color scheme
    * @param {number} sigma - Initial value of sigma, a.k.a. the atom diameter
    * @param {number} epsilon - Initial value of epsilon, a.k.a. the interaction strength
    * @param {boolean} wide - true if the wide screen version of the graph is needed, false if not.
@@ -45,7 +42,7 @@ define( function( require ) {
    * @constructor
    */
 
-  function InteractiveInteractionPotentialDiagram( projectorModeProperty, sigma, epsilon, wide, dualAtomModel, options ) {
+  function InteractiveInteractionPotentialDiagram( sigma, epsilon, wide, dualAtomModel, options ) {
 
     InteractionPotentialDiagramNode.call( this, sigma, epsilon, wide );
     this.dualAtomModel = dualAtomModel;
@@ -215,12 +212,14 @@ define( function( require ) {
       }
     );
 
-    this.interactionPotentialCanvasNode = new InteractionPotentialCanvasNode( this, true, projectorModeProperty, {
-      canvasBounds: new Bounds2( 0, 0, 500, this.graphHeight + 10 )
-    } );
+    this.interactionPotentialCanvasNode = new InteractionPotentialCanvasNode( this,
+      true,
+      {
+        canvasBounds: new Bounds2( 0, 0, 500, this.graphHeight + 10 )
+      } );
     this.addChild( this.interactionPotentialCanvasNode );
-    projectorModeProperty.link( function() {
-      interactiveInteractionPotentialDiagram.interactionPotentialCanvasNode.update();
+    StatesOfMatterColorProfile.ljGraphLineColorProperty.link( function( color ) {
+      interactiveInteractionPotentialDiagram.interactionPotentialCanvasNode.update( color );
     } );
     // Update interactivity state.
     this.updateInteractivityState();
@@ -235,20 +234,6 @@ define( function( require ) {
     this.addChild( this.ljPotentialGraph );
     this.addChild( this.horizontalAxis );
 
-    // applying color scheme to lj graph elements
-    StatesOfMatterColors.linkAttribute( 'ljGraphColorsMode', this.verticalAxis, 'fill' );
-    StatesOfMatterColors.linkAttribute( 'ljGraphColorsMode', this.horizontalAxis, 'fill' );
-    StatesOfMatterColors.linkAttribute( 'ljGraphColorsMode', this.verticalAxis, 'stroke' );
-    StatesOfMatterColors.linkAttribute( 'ljGraphColorsMode', this.horizontalAxis, 'stroke' );
-    StatesOfMatterColors.linkAttribute( 'ljGraphColorsMode', this.epsilonArrow, 'fill' );
-    StatesOfMatterColors.linkAttribute( 'ljGraphColorsMode', this.sigmaArrow, 'fill' );
-    StatesOfMatterColors.linkAttribute( 'ljGraphColorsMode', this.epsilonLabel, 'fill' );
-    StatesOfMatterColors.linkAttribute( 'ljGraphColorsMode', this.sigmaLabel, 'fill' );
-    StatesOfMatterColors.linkAttribute( 'ljGraphColorsMode', this.epsilonArrow, 'stroke' );
-    StatesOfMatterColors.linkAttribute( 'ljGraphColorsMode', this.gridNode.verticalLinesNode, 'stroke' );
-    StatesOfMatterColors.linkAttribute( 'ljGraphColorsMode', this.horizontalAxisLabel, 'fill' );
-    StatesOfMatterColors.linkAttribute( 'ljGraphColorsMode', this.verticalAxisLabel, 'fill' );
-    StatesOfMatterColors.linkAttribute( 'ljGraphColorsMode', this.gridNode.horizontalLinesNode, 'stroke' );
     this.mutate( options );
   }
 
@@ -268,7 +253,7 @@ define( function( require ) {
 
       //  draw potential curve
       if ( this.interactionPotentialCanvasNode !== undefined ) {
-        this.interactionPotentialCanvasNode.update();
+        this.interactionPotentialCanvasNode.update( StatesOfMatterColorProfile.ljGraphLineColorProperty.value );
       }
     },
 
