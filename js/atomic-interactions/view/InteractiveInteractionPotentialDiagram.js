@@ -234,6 +234,21 @@ define( function( require ) {
     this.addChild( this.ljPotentialGraph );
     this.addChild( this.horizontalAxis );
 
+    // applying color scheme to lj graph elements
+    this.verticalAxis.fill = StatesOfMatterColorProfile.ljGraphColorsModeProperty;
+    this.horizontalAxis.fill = StatesOfMatterColorProfile.ljGraphColorsModeProperty;
+    this.verticalAxis.stroke = StatesOfMatterColorProfile.ljGraphColorsModeProperty;
+    this.horizontalAxis.stroke = StatesOfMatterColorProfile.ljGraphColorsModeProperty;
+    this.epsilonArrow.fill = StatesOfMatterColorProfile.ljGraphColorsModeProperty;
+    this.sigmaArrow.fill = StatesOfMatterColorProfile.ljGraphColorsModeProperty;
+    this.epsilonLabel.fill = StatesOfMatterColorProfile.ljGraphColorsModeProperty;
+    this.sigmaLabel.fill = StatesOfMatterColorProfile.ljGraphColorsModeProperty;
+    this.epsilonArrow.stroke = StatesOfMatterColorProfile.ljGraphColorsModeProperty;
+    this.gridNode.verticalLinesNode.stroke = StatesOfMatterColorProfile.ljGraphColorsModeProperty;
+    this.horizontalAxisLabel.fill = StatesOfMatterColorProfile.ljGraphColorsModeProperty;
+    this.verticalAxisLabel.fill = StatesOfMatterColorProfile.ljGraphColorsModeProperty;
+    this.gridNode.horizontalLinesNode.stroke = StatesOfMatterColorProfile.ljGraphColorsModeProperty;
+
     this.mutate( options );
   }
 

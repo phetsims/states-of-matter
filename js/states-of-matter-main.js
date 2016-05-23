@@ -37,9 +37,9 @@ define( function( require ) {
 
   SimLauncher.launch( function() {
     var sim = new Sim( statesOfMatterTitleString, [
-      new StatesScreen( projectorModeProperty ),
-      new PhaseChangesScreen( projectorModeProperty, true ),
-      new AtomicInteractionsScreen( projectorModeProperty, false, interactionString )
+      new StatesScreen( ),
+      new PhaseChangesScreen( true ),
+      new AtomicInteractionsScreen( false, interactionString )
       ], simOptions );
     sim.start();
   } );

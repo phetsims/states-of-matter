@@ -68,10 +68,9 @@ define( function( require ) {
   /**
    * @param {MultipleParticleModel} multipleParticleModel - model of the simulation
    * @param {boolean} isInteractionDiagramEnabled
-   * @param {Property<boolean>} projectorModeProperty - true to use the projector color scheme, false to use regular color scheme
    * @constructor
    */
-  function PhaseChangesScreenView( multipleParticleModel, isInteractionDiagramEnabled, projectorModeProperty ) {
+  function PhaseChangesScreenView( multipleParticleModel, isInteractionDiagramEnabled ) {
     var phaseChangesScreenView = this;
 
     ScreenView.call( this, StatesOfMatterConstants.SCREEN_VIEW_OPTIONS );
@@ -105,7 +104,7 @@ define( function( require ) {
     this.addChild( this.particleContainerNode.openNode );
 
     // add particle canvas layer for particle rendering
-    this.particlesLayer = new ParticleCanvasNode( multipleParticleModel.particles, modelViewTransform, projectorModeProperty, {
+    this.particlesLayer = new ParticleCanvasNode( multipleParticleModel.particles, modelViewTransform, {
       centerX: heaterCoolerNode.centerX - PARTICLE_LAYER_X_OFFSET,
       bottom:  heaterCoolerNode.top + PARTICLE_LAYER_Y_OFFSET,
       canvasBounds: new Bounds2( -PARTICLE_CANVAS_LAYER_BOUND_LIMIT, -PARTICLE_CANVAS_LAYER_BOUND_LIMIT,
@@ -208,7 +207,7 @@ define( function( require ) {
     if ( isInteractionDiagramEnabled ) {
       var epsilonControlInteractionPotentialDiagram = new EpsilonControlInteractionPotentialDiagram(
         StatesOfMatterConstants.MAX_SIGMA, StatesOfMatterConstants.MIN_EPSILON, false,
-        multipleParticleModel, projectorModeProperty, {
+        multipleParticleModel, {
           right: this.layoutBounds.right - LAY_BOUNDS_RIGHT_OFFSET,
           top: phaseChangesMoleculesControlPanel.bottom
         } );

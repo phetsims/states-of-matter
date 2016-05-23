@@ -44,10 +44,9 @@ define( function( require ) {
   /**
    *
    * @param {MultipleParticleModel} multipleParticleModel - model of the simulation
-   * @param {Property<boolean>} projectorModeProperty - true for projector color scheme (white back ground), false for regular black back ground
    * @constructor
    */
-  function StatesScreenView( multipleParticleModel, projectorModeProperty ) {
+  function StatesScreenView( multipleParticleModel ) {
 
     ScreenView.call( this, StatesOfMatterConstants.SCREEN_VIEW_OPTIONS );
     var mvtScale = StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / StatesOfMatterConstants.CONTAINER_BOUNDS.width;
@@ -77,12 +76,15 @@ define( function( require ) {
     this.addChild( particleContainerNode.openNode );
 
     // add particle Canvas layer
-    this.particlesLayer = new ParticleCanvasNode( multipleParticleModel.particles, modelViewTransform, projectorModeProperty, {
-      centerX: heaterCoolerNode.centerX - particlesLayerXOffset,
-      bottom:  heaterCoolerNode.top + particlesLayerYOffset,
-      canvasBounds: new Bounds2( -particleCanvasLayerBoundLimit, -particleCanvasLayerBoundLimit,
-        particleCanvasLayerBoundLimit, particleCanvasLayerBoundLimit )
-    } );
+    this.particlesLayer = new ParticleCanvasNode(
+      multipleParticleModel.particles,
+      modelViewTransform,
+      {
+        centerX: heaterCoolerNode.centerX - particlesLayerXOffset,
+        bottom:  heaterCoolerNode.top + particlesLayerYOffset,
+        canvasBounds: new Bounds2( -particleCanvasLayerBoundLimit, -particleCanvasLayerBoundLimit,
+          particleCanvasLayerBoundLimit, particleCanvasLayerBoundLimit )
+      } );
     this.addChild( this.particlesLayer );
     this.addChild( particleContainerNode );
 

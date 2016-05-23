@@ -50,11 +50,10 @@ define( function( require ) {
    * @param {number} epsilon - interaction strength
    * @param {boolean} wide - true if the wide screen version of the graph is needed, false if not.
    * @param {MultipleParticleModel} multipleParticleModel - model of the simulation
-   * @param {Property<boolean>} projectorModeProperty - true to use the projector color scheme, false to use regular color scheme
    * @param {Object} [options] that can be passed on to the underlying node
    * @constructor
    */
-  function EpsilonControlInteractionPotentialDiagram( sigma, epsilon, wide, multipleParticleModel, projectorModeProperty, options ) {
+  function EpsilonControlInteractionPotentialDiagram( sigma, epsilon, wide, multipleParticleModel, options ) {
 
     var epsilonControlInteractionPotentialDiagram = this;
     InteractionPotentialDiagramNode.call( this, sigma, epsilon, wide, true );
@@ -127,11 +126,8 @@ define( function( require ) {
       }
     } ) );
 
-    this.interactionPotentialCanvasNode = new InteractionPotentialCanvasNode( this, false, projectorModeProperty, {
+    this.interactionPotentialCanvasNode = new InteractionPotentialCanvasNode( this, false, {
       canvasBounds: new Bounds2( 0, 0, 125, this.graphHeight )
-    } );
-    projectorModeProperty.link( function() {
-      epsilonControlInteractionPotentialDiagram.interactionPotentialCanvasNode.update();
     } );
     accordionContent.addChild( this.horizontalAxisLabel );
     accordionContent.addChild( this.horizontalAxis );
@@ -206,7 +202,7 @@ define( function( require ) {
 
       //  draw potential curve
       if ( this.interactionPotentialCanvasNode !== undefined ) {
-        this.interactionPotentialCanvasNode.update();
+        this.interactionPotentialCanvasNode.update( new Color('yellow') );
       }
     },
 

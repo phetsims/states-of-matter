@@ -38,12 +38,12 @@ define( function( require ) {
     var gridNode = this;
     atomsView.horizontalLineCount = MIN_LINES_HORIZONTAL;
     this.horizontalLinesNode = new Path( null, {
-      stroke: StatesOfMatterColorProfile.ljGraphColorsModeProperty,
+      stroke: 'white',
       lineWidth: 0.8,
       opacity: 0.6
     } );
     this.verticalLinesNode = new Path( null, {
-      stroke: StatesOfMatterColorProfile.ljGraphColorsModeProperty,
+      stroke: 'white',
       lineWidth: 0.8,
       opacity: 0.6
     } );

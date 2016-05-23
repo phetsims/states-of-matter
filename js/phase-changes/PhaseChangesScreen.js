@@ -16,32 +16,25 @@ define( function( require ) {
   var PhaseChangesIcon = require( 'STATES_OF_MATTER/phase-changes/PhaseChangesIcon' );
   var PhaseChangesScreenView = require( 'STATES_OF_MATTER/phase-changes/view/PhaseChangesScreenView' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  var StatesOfMatterColors = require( 'STATES_OF_MATTER/common/view/StatesOfMatterColors' );
+  var StatesOfMatterColorProfile = require( 'STATES_OF_MATTER/common/view/StatesOfMatterColorProfile' );
 
   // strings
   var phaseChangesString = require( 'string!STATES_OF_MATTER/phaseChanges' );
 
   /**
-   * @param {Property<boolean>} projectorModeProperty - true for projector color scheme (white back ground), false for regular black back ground
    * @param {boolean} isInteractionDiagramEnabled
    * @constructor
    */
-  function PhaseChangesScreen( projectorModeProperty, isInteractionDiagramEnabled ) {
+  function PhaseChangesScreen( isInteractionDiagramEnabled ) {
     Screen.call( this, phaseChangesString, new PhaseChangesIcon( Screen.HOME_SCREEN_ICON_SIZE ),
       function() { return new MultipleParticleModel(); },
-      function( model ) { return new PhaseChangesScreenView( model, isInteractionDiagramEnabled, projectorModeProperty ); },
-      { backgroundColor: 'black' }
+      function( model ) { return new PhaseChangesScreenView( model, isInteractionDiagramEnabled ); },
+      { backgroundColor: StatesOfMatterColorProfile.background.toCSS() }
     );
     var screen = this;
-    projectorModeProperty.link( function( projectorMode ) {
-      if ( projectorMode ) {
-        StatesOfMatterColors.applyProfile( 'projector' );
-      }
-      else {
-        StatesOfMatterColors.applyProfile( 'default' );
-      }
+    StatesOfMatterColorProfile.backgroundProperty.link( function( color ){
+      screen.backgroundColor = color;
     } );
-    StatesOfMatterColors.linkAttribute( 'background', screen, 'backgroundColor' );
   }
 
   statesOfMatter.register( 'PhaseChangesScreen', PhaseChangesScreen );

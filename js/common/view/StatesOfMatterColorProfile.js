@@ -20,12 +20,13 @@ define( function( require ) {
   // constants
   var BLACK = new Color( 0, 0, 0 );
   var GRAY = new Color( 230, 230, 230 );
+  var WHITE = new Color( 255, 255, 255 );
 
   function Profile() {
     ColorProfile.call( this, {
       background: {
         default: BLACK,
-        projector: new Color( 255, 255, 255 )
+        projector: WHITE
       },
       controlPanelText: {
         default: GRAY,
@@ -33,6 +34,10 @@ define( function( require ) {
       },
       ljGraphColorsMode: {
         default: GRAY,
+        projector: BLACK
+      },
+      particleColor: {
+        default: WHITE,
         projector: BLACK
       },
       ljGraphLineColor:{
