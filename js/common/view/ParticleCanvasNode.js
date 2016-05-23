@@ -13,7 +13,6 @@ define( function( require ) {
   var CanvasNode = require( 'SCENERY/nodes/CanvasNode' );
   var HydrogenAtom = require( 'STATES_OF_MATTER/common/model/particle/HydrogenAtom' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  var Color = require( 'SCENERY/util/Color' );
   var StatesOfMatterColorProfile = require( 'STATES_OF_MATTER/common/view/StatesOfMatterColorProfile' );
 
   /**
@@ -58,7 +57,7 @@ define( function( require ) {
         if ( particle instanceof HydrogenAtom && !particle.layerFlag ) {
           context.fillStyle = particle.color;
           // if the stroke color is white then use particle color
-          context.strokeStyle = this.strokeColor.toCSS() === "rgb(255,255,255)" ?
+          context.strokeStyle = this.strokeColor.toCSS() === 'rgb(255,255,255)' ?
                                 particle.color : this.strokeColor.toCSS();
           context.lineWidth = 0.4;
           context.beginPath();
@@ -75,7 +74,7 @@ define( function( require ) {
         particle = this.particles.get( i );
         if ( !( particle instanceof HydrogenAtom && !particle.layerFlag ) ) {
           context.fillStyle = particle.color;
-          context.strokeStyle = this.strokeColor.toCSS() === "rgb(255,255,255)" ?
+          context.strokeStyle = this.strokeColor.toCSS() === 'rgb(255,255,255)' ?
                                 particle.color : this.strokeColor.toCSS();
           context.lineWidth = 0.4;
           context.beginPath();

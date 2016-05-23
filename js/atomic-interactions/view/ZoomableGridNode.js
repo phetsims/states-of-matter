@@ -17,7 +17,6 @@ define( function( require ) {
   var ZoomButton = require( 'SCENERY_PHET/buttons/ZoomButton' );
   var RectangularButtonView = require( 'SUN/buttons/RectangularButtonView' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  var StatesOfMatterColorProfile = require( 'STATES_OF_MATTER/common/view/StatesOfMatterColorProfile' );
 
   // constants
   var MAX_LINES_HORIZONTAL = 13;
