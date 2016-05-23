@@ -32,7 +32,6 @@ define( function( require ) {
   var HandNode = require( 'STATES_OF_MATTER/atomic-interactions/view/HandNode' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var StatesOfMatterColors = require( 'STATES_OF_MATTER/common/view/StatesOfMatterColors' );
-  var AtomPair = require( 'STATES_OF_MATTER/atomic-interactions/model/AtomPair' );
 
   // strings
   var normalString = require( 'string!STATES_OF_MATTER/normal' );
