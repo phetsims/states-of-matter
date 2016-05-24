@@ -79,7 +79,7 @@ define( function( require ) {
       // from looking too organized.  The number of steps was empirically
       // determined.
       for ( var i = 0; i < postChangeModelSteps; i++ ) {
-        this.multipleParticleModel.stepInternal();
+        this.multipleParticleModel.stepInternal( 0.016 );
       }
     },
 

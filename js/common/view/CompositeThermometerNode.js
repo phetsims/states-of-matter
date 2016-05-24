@@ -45,10 +45,11 @@ define( function( require ) {
     Node.call( this );
     this.multipleParticleModel = multipleParticleModel;
     this.modelViewTransform = modelViewTransform;
+    var self = this;
 
     // add thermometer
-    var temperatureInKelvinProperty = new Property( multipleParticleModel.getTemperatureInKelvin() );
-    var thermometer = new ThermometerNode( 0, MAX_TEMPERATURE_TO_CLAMP_RED_MERCURY, temperatureInKelvinProperty, {
+    this.temperatureInKelvinProperty = new Property( multipleParticleModel.getTemperatureInKelvin() );
+    var thermometer = new ThermometerNode( 0, MAX_TEMPERATURE_TO_CLAMP_RED_MERCURY, this.temperatureInKelvinProperty, {
       outlineStroke: 'black',
       backgroundFill: 'white',
       tickSpacing: 8,
@@ -62,21 +63,19 @@ define( function( require ) {
     this.addChild( thermometer );
 
     // add temperature combo box
-    var temperatureKelvinText = new Text( '', { font: new PhetFont( 10 ), maxWidth: 30 } );
-    var temperatureCelsiusText = new Text( '', { font: new PhetFont( 10 ), maxWidth: 30 } );
+    this.temperatureKelvinText = new Text( '', { font: new PhetFont( 10 ), maxWidth: 30 } );
+    this.temperatureCelsiusText = new Text( '', { font: new PhetFont( 10 ), maxWidth: 30 } );
+    this.temperatureSetPointChanged = false;
+
     multipleParticleModel.temperatureSetPointProperty.link( function() {
-      var tempInKelvin = multipleParticleModel.getTemperatureInKelvin();
-      var tempInKelvinRounded = Math.round( multipleParticleModel.getTemperatureInKelvin() );
-      temperatureKelvinText.setText( tempInKelvinRounded + ' ' + kelvinUnitsString );
-      temperatureCelsiusText.setText( Util.roundSymmetric( tempInKelvin - 273.15 ) + ' ' + celsiusUnitsString );
-      temperatureInKelvinProperty.value = tempInKelvinRounded > MAX_TEMPERATURE_TO_CLAMP_RED_MERCURY ?
-                                          MAX_TEMPERATURE_TO_CLAMP_RED_MERCURY : tempInKelvinRounded;
+      self.temperatureSetPointChanged = true;
     } );
 
+    this.step();
     var temperatureProperty = new Property( 0 );
     var temperatureComboBox = new ComboBox( [
-      ComboBox.createItem( temperatureKelvinText, 0 ),
-      ComboBox.createItem( temperatureCelsiusText, 1 )
+      ComboBox.createItem( this.temperatureKelvinText, 0 ),
+      ComboBox.createItem( this.temperatureCelsiusText, 1 )
     ], temperatureProperty, this, {
       buttonXMargin: 5,
       buttonYMargin: 2,
@@ -95,6 +94,18 @@ define( function( require ) {
 
   return inherit( Node, CompositeThermometerNode, {
 
+    step: function(){
+      if( this.temperatureSetPointChanged ){
+        var tempInKelvin = this.multipleParticleModel.getTemperatureInKelvin();
+        var tempInKelvinRounded = Util.roundSymmetric( tempInKelvin );
+        this.temperatureKelvinText.setText( tempInKelvinRounded + ' ' + kelvinUnitsString );
+        this.temperatureCelsiusText.setText( Util.roundSymmetric( tempInKelvin - 273.15 ) + ' ' + celsiusUnitsString );
+        this.temperatureInKelvinProperty.value = tempInKelvinRounded > MAX_TEMPERATURE_TO_CLAMP_RED_MERCURY ?
+                                            MAX_TEMPERATURE_TO_CLAMP_RED_MERCURY : tempInKelvinRounded;
+        this.temperatureSetPointChanged = false;
+      }
+    },
+
     /**
      * @public
      * Updates the thermometers position and rotation.
@@ -106,10 +117,9 @@ define( function( require ) {
         if ( this.getRotation() !== 0 ) {
           this.setRotation( 0 );
         }
-        this.setTranslation( this.x,
-          -this.modelViewTransform.modelToViewDeltaY(
-            StatesOfMatterConstants.CONTAINER_BOUNDS.width - containerHeight
-          ) + this.height - inset );
+        this.x = this.x;
+        this.y = -this.modelViewTransform.modelToViewDeltaY(
+          StatesOfMatterConstants.CONTAINER_BOUNDS.width - containerHeight ) + this.height - inset
       }
       else {
         var rotationAmount = -(Math.PI / 100 + ( Math.random() * Math.PI / 50 ));
@@ -124,7 +134,7 @@ define( function( require ) {
         else {
           newPosY = currentPosY;
         }
-        this.setY( newPosY );
+        this.y = newPosY;
         this.rotate( rotationAmount );
       }
     }

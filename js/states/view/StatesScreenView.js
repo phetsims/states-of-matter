@@ -48,6 +48,7 @@ define( function( require ) {
    */
   function StatesScreenView( multipleParticleModel ) {
 
+    var self = this;
     ScreenView.call( this, StatesOfMatterConstants.SCREEN_VIEW_OPTIONS );
     var mvtScale = StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / StatesOfMatterConstants.CONTAINER_BOUNDS.width;
 
@@ -66,14 +67,14 @@ define( function( require ) {
     } );
 
     // add particle container
-    var particleContainerNode = new ParticleContainerNode( multipleParticleModel, modelViewTransform, false, false,
+    this.particleContainerNode = new ParticleContainerNode( multipleParticleModel, modelViewTransform, false, false,
       {
         centerX: heaterCoolerNode.centerX - heaterCoolerXOffset,
         bottom: heaterCoolerNode.top - inset
       } );
 
     // add particle container back before  particle Canvas layer
-    this.addChild( particleContainerNode.openNode );
+    this.addChild( this.particleContainerNode.openNode );
 
     // add particle Canvas layer
     this.particlesLayer = new ParticleCanvasNode(
@@ -86,21 +87,21 @@ define( function( require ) {
           particleCanvasLayerBoundLimit, particleCanvasLayerBoundLimit )
       } );
     this.addChild( this.particlesLayer );
-    this.addChild( particleContainerNode );
+    this.addChild( this.particleContainerNode );
 
     // adjust the container back node position
-    particleContainerNode.openNode.centerX = particleContainerNode.centerX;
-    particleContainerNode.openNode.centerY = particleContainerNode.top + 25;
+    this.particleContainerNode.openNode.centerX = this.particleContainerNode.centerX;
+    this.particleContainerNode.openNode.centerY = this.particleContainerNode.top + 25;
     this.addChild( heaterCoolerNode );
 
     // add compositeThermometer Node
-    var compositeThermometerNode = new CompositeThermometerNode( multipleParticleModel, modelViewTransform, {
+    this.compositeThermometerNode = new CompositeThermometerNode( multipleParticleModel, modelViewTransform, {
       font: new PhetFont( 20 ),
       fill: 'white',
-      right: particleContainerNode.left + compositeThermometerNodeLeftOffset,
-      centerY: particleContainerNode.top + compositeThermometerNodeYOffset
+      right: this.particleContainerNode.left + compositeThermometerNodeLeftOffset,
+      centerY: this.particleContainerNode.top + compositeThermometerNodeYOffset
     } );
-    this.addChild( compositeThermometerNode );
+    this.addChild( this.compositeThermometerNode );
 
     // add Molecule ControlPanel
     var solidLiquidGasMoleculesControlPanel = new StatesMoleculesControlPanel( multipleParticleModel.moleculeTypeProperty, {
@@ -121,7 +122,7 @@ define( function( require ) {
       {
         listener: function() {
           multipleParticleModel.reset();
-          particleContainerNode.reset();
+          self.particleContainerNode.reset();
         },
         bottom: this.layoutBounds.bottom - layoutBoundsYOffset / 2,
         right: this.layoutBounds.right - layoutBoundsRightOffset,
@@ -157,8 +158,11 @@ define( function( require ) {
     } );
     this.addChild( playPauseButton );
     this.addChild( resetAllButton );
+
+    this.particleContainerHeightPropertyChanged = false;
     multipleParticleModel.particleContainerHeightProperty.link( function() {
-      compositeThermometerNode.updatePositionAndOrientation();
+      self.particleContainerHeightPropertyChanged = true;
+      //compositeThermometerNode.updatePositionAndOrientation();
     } );
   }
 
@@ -166,7 +170,13 @@ define( function( require ) {
 
   return inherit( ScreenView, StatesScreenView, {
     step: function() {
+      this.compositeThermometerNode.step();
       this.particlesLayer.step();
+      if ( this.particleContainerHeightPropertyChanged ){
+        this.compositeThermometerNode.updatePositionAndOrientation();
+        this.particleContainerNode.handleContainerSizeChanged();
+        this.particleContainerHeightPropertyChanged = false;
+      }
     }
   } );
 } );

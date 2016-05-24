@@ -77,7 +77,7 @@ define( function( require ) {
       // from looking too organized.  The number of steps was empirically
       // determined.
       for ( var i = 0; i < 100; i++ ) {
-        this.multiPleParticleModel.stepInternal();
+        this.multiPleParticleModel.stepInternal( 0.016 );
       }
     },
 

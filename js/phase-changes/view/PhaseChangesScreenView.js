@@ -272,6 +272,8 @@ define( function( require ) {
 
     step: function() {
       this.particlesLayer.step();
+      this.compositeThermometerNode.step();
+      this.particleContainerNode.pressureMeter.step();
       if ( this.particleContainerHeightPropertyChanged ){
         this.compositeThermometerNode.updatePositionAndOrientation();
         this.particleContainerNode.handleContainerSizeChanged();

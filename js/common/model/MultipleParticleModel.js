@@ -63,7 +63,7 @@ define( function( require ) {
   var MIN_INJECTED_MOLECULE_VELOCITY = 0.5;
   var MAX_INJECTED_MOLECULE_VELOCITY = 2.0;
   var MAX_INJECTED_MOLECULE_ANGLE = Math.PI * 0.8;
-  var VERLET_CALCULATIONS_PER_CLOCK_TICK = 8;
+  var VERLET_CALCULATIONS_PER_CLOCK_TICK = 4;
   var INJECTION_POINT_HORIZ_PROPORTION = 0.05;
   var INJECTION_POINT_VERT_PROPORTION = 0.25;
 
@@ -597,7 +597,8 @@ define( function( require ) {
      * Step the model.  There is no time step used, as a fixed internal time step is assumed.
      * TODO: use dt instead of fixed timestep
      */
-    stepInternal: function() {
+    stepInternal: function( simTickTime ) {
+
       if ( !this.isExploded ) {
         // Adjust the particle container height if needed.
         if ( this.targetContainerHeight !== this.particleContainerHeight ) {
@@ -633,8 +634,9 @@ define( function( require ) {
       else {
         // The lid is blowing off the container, so increase the container
         // size until the lid should be well off the screen.
-        if ( this.particleContainerHeight < StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT * 10 ) {
-          this.particleContainerHeight += MAX_PER_TICK_CONTAINER_EXPANSION;
+        //alert(simTickTime);
+        if ( this.particleContainerHeight < StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT * 2 ) {
+          this.particleContainerHeight += MAX_PER_TICK_CONTAINER_EXPANSION * 2;
         }
       }
 
@@ -642,8 +644,12 @@ define( function( require ) {
       var pressureBeforeAlgorithm = this.getModelPressure();
 
       // Execute the Verlet algorithm.  The algorithm may be run several times for each time step.
+
       for ( var i = 0; i < VERLET_CALCULATIONS_PER_CLOCK_TICK; i++ ) {
-        this.moleculeForceAndMotionCalculator.updateForcesAndMotion();
+        if( this.isExploded ){
+          simTickTime = simTickTime * 0.9;
+        }
+        this.moleculeForceAndMotionCalculator.updateForcesAndMotion( simTickTime );
 
       }
       this.runThermostat();
@@ -680,9 +686,12 @@ define( function( require ) {
       }
     },
 
-    step: function() {
+    step: function( dt ) {
+      // If the step is large, it probably means that the screen was hidden for a while, so just ignore it.
+      var timeStep = Math.min( 0.04, dt );
+
       if ( this.isPlaying ) {
-        this.stepInternal();
+        this.stepInternal( timeStep );
       }
     },
 

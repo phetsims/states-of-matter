@@ -64,7 +64,7 @@ define( function( require ) {
      * Verlet algorithm is contained.
      * @public
      */
-    updateForcesAndMotion: function() {
+    updateForcesAndMotion: function( timeStep ) {
 
       // Obtain references to the model data and parameters so that we can
       // perform fast manipulations.
@@ -87,6 +87,8 @@ define( function( require ) {
       var normalizedContainerWidth = this.multipleParticleModel.getNormalizedContainerWidth();
       var pressureZoneWallForce = 0;
       var temperatureSetPoint = this.multipleParticleModel.getTemperatureSetPoint();
+      var timeStepSqrHalf = timeStep * timeStep * 0.5;
+      var timeStepHalf = timeStep / 2;
 
       // Verify that this is being used on an appropriate data set.
       assert && assert( moleculeDataSet.getAtomsPerMolecule() === 3 );
@@ -132,13 +134,13 @@ define( function( require ) {
 
       // Update center of mass positions and angles for the molecules.
       for ( var i = 0; i < numberOfMolecules; i++ ) {
-        var xPos = moleculeCenterOfMassPositions[ i ].x + ( this.TIME_STEP * moleculeVelocities[ i ].x ) +
-                   ( this.TIME_STEP_SQR_HALF * moleculeForces[ i ].x * massInverse);
-        var yPos = moleculeCenterOfMassPositions[ i ].y + ( this.TIME_STEP * moleculeVelocities[ i ].y ) +
-                   ( this.TIME_STEP_SQR_HALF * moleculeForces[ i ].y * massInverse );
+        var xPos = moleculeCenterOfMassPositions[ i ].x + ( timeStep * moleculeVelocities[ i ].x ) +
+                   ( timeStepSqrHalf * moleculeForces[ i ].x * massInverse);
+        var yPos = moleculeCenterOfMassPositions[ i ].y + ( timeStep * moleculeVelocities[ i ].y ) +
+                   ( timeStepSqrHalf * moleculeForces[ i ].y * massInverse );
         moleculeCenterOfMassPositions[ i ].setXY( xPos, yPos );
-        moleculeRotationAngles[ i ] += ( this.TIME_STEP * moleculeRotationRates[ i ] ) +
-                                       ( this.TIME_STEP_SQR_HALF * moleculeTorques[ i ] * inertiaInverse );
+        moleculeRotationAngles[ i ] += ( timeStep * moleculeRotationRates[ i ] ) +
+                                       ( timeStepSqrHalf * moleculeTorques[ i ] * inertiaInverse );
       }
       this.positionUpdater.updateAtomPositions( moleculeDataSet );
 
@@ -292,12 +294,12 @@ define( function( require ) {
       var centersOfMassKineticEnergy = 0;
       var rotationalKineticEnergy = 0;
       for ( i = 0; i < numberOfMolecules; i++ ) {
-        var xVel = moleculeVelocities[ i ].x + this.TIME_STEP_HALF *
+        var xVel = moleculeVelocities[ i ].x + timeStepHalf *
                                                (moleculeForces[ i ].x + nextMoleculeForces[ i ].x) * massInverse;
-        var yVel = moleculeVelocities[ i ].y + this.TIME_STEP_HALF * (moleculeForces[ i ].y +
+        var yVel = moleculeVelocities[ i ].y + timeStepHalf * (moleculeForces[ i ].y +
                                                                       nextMoleculeForces[ i ].y) * massInverse;
         moleculeVelocities[ i ].setXY( xVel, yVel );
-        moleculeRotationRates[ i ] += this.TIME_STEP_HALF * (moleculeTorques[ i ] + nextMoleculeTorques[ i ]) *
+        moleculeRotationRates[ i ] += timeStepHalf * (moleculeTorques[ i ] + nextMoleculeTorques[ i ]) *
                                       inertiaInverse;
         centersOfMassKineticEnergy += 0.5 * moleculeDataSet.getMoleculeMass() *
                                       (Math.pow( moleculeVelocities[ i ].x, 2 ) + Math.pow( moleculeVelocities[ i ].y, 2 ));

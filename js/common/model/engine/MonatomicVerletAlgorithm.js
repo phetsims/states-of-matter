@@ -74,7 +74,8 @@ define( function( require ) {
      * Verlet algorithm is contained.
      * @public
      */
-    updateForcesAndMotion: function() {
+    updateForcesAndMotion: function( timeStep ) {
+
 
       var kineticEnergy = 0;
       var potentialEnergy = 0;
@@ -87,15 +88,18 @@ define( function( require ) {
       var moleculeForces = moleculeDataSet.moleculeForces;
       var nextMoleculeForces = moleculeDataSet.nextMoleculeForces;
 
+      var timeStepSqrHalf = timeStep * timeStep * 0.5;
+      var timeStepHalf = timeStep / 2;
+
       var i;
 
       // Update the positions of all particles based on their current
       // velocities and the forces acting on them.
       for ( i = 0; i < numberOfAtoms; i++ ) {
-        var xPos = moleculeCenterOfMassPositions[ i ].x + ( this.TIME_STEP * moleculeVelocities[ i ].x ) +
-                   ( this.TIME_STEP_SQR_HALF * moleculeForces[ i ].x );
-        var yPos = moleculeCenterOfMassPositions[ i ].y + ( this.TIME_STEP * moleculeVelocities[ i ].y ) +
-                   ( this.TIME_STEP_SQR_HALF * moleculeForces[ i ].y );
+        var xPos = moleculeCenterOfMassPositions[ i ].x + ( timeStep * moleculeVelocities[ i ].x ) +
+                   ( timeStepSqrHalf * moleculeForces[ i ].x );
+        var yPos = moleculeCenterOfMassPositions[ i ].y + ( timeStep * moleculeVelocities[ i ].y ) +
+                   ( timeStepSqrHalf * moleculeForces[ i ].y );
         moleculeCenterOfMassPositions[ i ].setXY( xPos, yPos );
       }
 
@@ -174,8 +178,8 @@ define( function( require ) {
       // Calculate the new velocities based on the old ones and the forces
       // that are acting on the particle.
       for ( i = 0; i < numberOfAtoms; i++ ) {
-        this.velocityIncrement.setX( this.TIME_STEP_HALF * ( moleculeForces[ i ].x + nextMoleculeForces[ i ].x ) );
-        this.velocityIncrement.setY( this.TIME_STEP_HALF * ( moleculeForces[ i ].y + nextMoleculeForces[ i ].y ) );
+        this.velocityIncrement.setX( timeStepHalf * ( moleculeForces[ i ].x + nextMoleculeForces[ i ].x ) );
+        this.velocityIncrement.setY( timeStepHalf * ( moleculeForces[ i ].y + nextMoleculeForces[ i ].y ) );
         moleculeVelocities[ i ].add( this.velocityIncrement );
         kineticEnergy += ( ( moleculeVelocities[ i ].x * moleculeVelocities[ i ].x ) +
                            ( moleculeVelocities[ i ].y * moleculeVelocities[ i ].y ) ) / 2;

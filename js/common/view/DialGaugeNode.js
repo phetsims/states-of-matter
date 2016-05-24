@@ -45,6 +45,7 @@ define( function( require ) {
 
     var dialGaugeNode = this;
     Node.call( this );
+    this.multipleParticleModel = multipleParticleModel;
 
     this.elbowEnabled = false;
     this.elbowHeight = 0;
@@ -90,8 +91,10 @@ define( function( require ) {
 
     // Set the initial value.
     multipleParticleModel.pressure = multipleParticleModel.getPressureInAtmospheres();
+    this.pressureChanged = false;
     multipleParticleModel.pressureProperty.link( function() {
-      if ( (multipleParticleModel.getPressureInAtmospheres()) < MAX_PRESSURE ) {
+      dialGaugeNode.pressureChanged = true;
+      /*if ( (multipleParticleModel.getPressureInAtmospheres()) < MAX_PRESSURE ) {
         dialGaugeNode.textualReadout.setText( Util.toFixed( multipleParticleModel.getPressureInAtmospheres(), 2 ) + ' ' + pressureUnitsInAtmString );
         dialGaugeNode.textualReadout.fill = 'black';
       }
@@ -100,6 +103,7 @@ define( function( require ) {
         dialGaugeNode.textualReadout.fill = PhetColorScheme.RED_COLORBLIND;
       }
       dialGaugeNode.textualReadout.center = dialGaugeNode.textualReadoutBoxShape.center;
+    */
     } );
 
     this.updateConnector();
@@ -112,6 +116,21 @@ define( function( require ) {
   statesOfMatter.register( 'DialGaugeNode', DialGaugeNode );
 
   return inherit( Node, DialGaugeNode, {
+
+    step: function(){
+      if ( this.pressureChanged ) {
+        if ( this.multipleParticleModel.getPressureInAtmospheres() < MAX_PRESSURE ) {
+          this.textualReadout.setText( Util.toFixed( this.multipleParticleModel.getPressureInAtmospheres(), 2 ) + ' ' + pressureUnitsInAtmString );
+          this.textualReadout.fill = 'black';
+        }
+        else {
+          this.textualReadout.setText( pressureOverloadString );
+          this.textualReadout.fill = PhetColorScheme.RED_COLORBLIND;
+        }
+        this.textualReadout.center = this.textualReadoutBoxShape.center;
+        this.pressureChanged = false;
+      }
+    },
 
     /**
      * This turns on/off the "elbow" portion of the connector, which allows

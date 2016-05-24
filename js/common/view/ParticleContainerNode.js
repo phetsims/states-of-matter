@@ -39,6 +39,7 @@ define( function( require ) {
 
     this.multipleParticleModel = multipleParticleModel;
     this.modelViewTransform = modelViewTransform;
+    this.pressureGaugeEnabled = pressureGaugeEnabled;
     this.containmentAreaWidth = StatesOfMatterConstants.CONTAINER_BOUNDS.width;
     this.containmentAreaHeight = StatesOfMatterConstants.CONTAINER_BOUNDS.height;
     Node.call( this );
@@ -295,7 +296,9 @@ define( function( require ) {
           if ( this.pressureMeter.getRotation() !== 0 ) {
             this.pressureMeter.setRotation( 0 );
           }
-          this.pressureMeter.setTranslation( this.pressureMeter.x, PRESSURE_GAUGE_Y_OFFSET );
+          //this.pressureMeter.setTranslation( this.pressureMeter.x, PRESSURE_GAUGE_Y_OFFSET );
+          this.pressureMeter.x = this.pressureMeter.x;
+          this.pressureMeter.y = PRESSURE_GAUGE_Y_OFFSET;
           this.pressureMeter.setElbowHeight( PRESSURE_METER_ELBOW_OFFSET +
                                              Math.abs( this.modelViewTransform.modelToViewDeltaY( StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT -
                                                                                                   containerHeight ) ) );
@@ -303,8 +306,8 @@ define( function( require ) {
         else {
           // The container is exploding, so spin and move the gauge.
           this.pressureMeter.rotate( -Math.PI / 20 );
-          this.pressureMeter.setTranslation( this.pressureMeter.x, this.y +
-                                                                   this.modelViewTransform.modelToViewDeltaY( containerHeight ) );
+          this.pressureMeter.x = this.pressureMeter.x;
+          this.pressureMeter.y = this.y + this.modelViewTransform.modelToViewDeltaY( containerHeight );
         }
       }
     },
@@ -325,10 +328,8 @@ define( function( require ) {
         if ( this.containerLid.getRotation() !== 0 ) {
           this.containerLid.setRotation( 0 );
         }
-        this.containerLid.setTranslation(
-          (this.modelViewTransform.modelToViewDeltaX( this.containmentAreaWidth ) - this.containerLid.width) / 2,
-          -this.modelViewTransform.modelToViewDeltaY( this.containmentAreaHeight - containerHeight )
-        );
+        this.containerLid.x = (this.modelViewTransform.modelToViewDeltaX( this.containmentAreaWidth ) - this.containerLid.width) / 2
+        this.containerLid.y = -this.modelViewTransform.modelToViewDeltaY( this.containmentAreaHeight - containerHeight );
       }
       else {
         // Rotate the lid to create the visual appearance of it being
@@ -337,9 +338,8 @@ define( function( require ) {
         var centerPosY = -this.modelViewTransform.modelToViewDeltaY( this.containmentAreaHeight - containerHeight ) -
                          ( this.containerLid.height / 2 ) + LID_POSITION_TWEAK_FACTOR;
         var currentPosY = this.containerLid.y;
-        this.containerLid.setCenterX(
-          this.modelViewTransform.modelToViewDeltaX( this.containmentAreaWidth / 2 )
-        );
+
+        this.containerLid.centerX = this.modelViewTransform.modelToViewDeltaX( this.containmentAreaWidth / 2 );
         var newPosY;
         if ( currentPosY > centerPosY ) {
           newPosY = centerPosY;
@@ -347,10 +347,14 @@ define( function( require ) {
         else {
           newPosY = currentPosY;
         }
-        this.containerLid.setY( newPosY );
+
+        //this.containerLid.setY( newPosY );
+        this.containerLid.y = newPosY;
         this.containerLid.rotate( rotationAmount );
       }
-      this.updatePressureGauge();
+      if ( this.pressureGaugeEnabled ) {
+        this.updatePressureGauge();
+      }
     }
   } );
 } );
