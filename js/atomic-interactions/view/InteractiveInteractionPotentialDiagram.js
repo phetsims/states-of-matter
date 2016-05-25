@@ -177,17 +177,18 @@ define( function( require ) {
         }
         dualAtomModel.isHandNodeVisible = false;
 
-
+        var atom = dualAtomModel.getMovableAtomRef();
         endDragX = interactiveInteractionPotentialDiagram.positionMarker.globalToParentPoint( event.pointer.point ).x;
         var xDifference = endDragX - startDragX;
-        startDragX = endDragX;
 
-        // Move the particle based on the amount of mouse movement.
-        var atom = dualAtomModel.getMovableAtomRef();
         var scaleFactor = interactiveInteractionPotentialDiagram.MAX_INTER_ATOM_DISTANCE /
                           ( interactiveInteractionPotentialDiagram.getGraphWidth());
-        var newPosX = Math.max( atom.getX() + ( xDifference * scaleFactor ), atom.getRadius() * 1.8 );
-        atom.setPosition( newPosX, atom.getY() );
+        if( atom.getX() + ( xDifference * scaleFactor ) > atom.getRadius() * 1.8  ) {
+          startDragX = endDragX;
+          // Move the particle based on the amount of mouse movement.
+          var newPosX = Math.max( atom.getX() + ( xDifference * scaleFactor ), atom.getRadius() * 1.8 );
+          atom.setPosition( newPosX, atom.getY() );
+        }
       },
 
       end: function() {
