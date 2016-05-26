@@ -328,7 +328,8 @@ define( function( require ) {
         if ( this.containerLid.getRotation() !== 0 ) {
           this.containerLid.setRotation( 0 );
         }
-        this.containerLid.x = (this.modelViewTransform.modelToViewDeltaX( this.containmentAreaWidth ) - this.containerLid.width) / 2
+        this.containerLid.x = ( this.modelViewTransform.modelToViewDeltaX( this.containmentAreaWidth ) -
+                              this.containerLid.width ) / 2;
         this.containerLid.y = -this.modelViewTransform.modelToViewDeltaY( this.containmentAreaHeight - containerHeight );
       }
       else {

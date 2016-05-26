@@ -119,7 +119,7 @@ define( function( require ) {
         }
         this.x = this.x;
         this.y = -this.modelViewTransform.modelToViewDeltaY(
-          StatesOfMatterConstants.CONTAINER_BOUNDS.width - containerHeight ) + this.height - inset
+          StatesOfMatterConstants.CONTAINER_BOUNDS.width - containerHeight ) + this.height - inset;
       }
       else {
         var rotationAmount = -(Math.PI / 100 + ( Math.random() * Math.PI / 50 ));
