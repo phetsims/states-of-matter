@@ -112,7 +112,7 @@ define( function( require ) {
   // allowable range, but the simulation did not work so well, so the range
   // below was arrived at empirically and seems to work reasonably well.
   var MIN_ADJUSTABLE_EPSILON = StatesOfMatterConstants.MIN_ADJUSTABLE_EPSILON;
-  var MAX_ADJUSTABLE_EPSILON = StatesOfMatterConstants.EPSILON_FOR_WATER;
+  var MAX_ADJUSTABLE_EPSILON = StatesOfMatterConstants.EPSILON_FOR_WATER * 1.7;
 
   /**
    * @constructor

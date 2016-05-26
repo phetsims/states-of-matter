@@ -108,7 +108,7 @@ define( function( require ) {
     interactionStrengthNode.addChild( interactionTitle );
     var interactionStrengthSlider = new HSlider(
       multipleParticleModel.interactionStrengthProperty, {
-        min: StatesOfMatterConstants.MIN_ADJUSTABLE_EPSILON, max: StatesOfMatterConstants.EPSILON_FOR_WATER
+        min: StatesOfMatterConstants.MIN_ADJUSTABLE_EPSILON, max: multipleParticleModel.MAX_ADJUSTABLE_EPSILON
       }, {
         trackFill: 'white',
         thumbSize: new Dimension2( 14, 25 ),
@@ -128,7 +128,7 @@ define( function( require ) {
 
       } );
     interactionStrengthNode.addChild( interactionStrengthSlider );
-    interactionStrengthSlider.addMajorTick( StatesOfMatterConstants.EPSILON_FOR_WATER, strongTitle );
+    interactionStrengthSlider.addMajorTick( multipleParticleModel.MAX_ADJUSTABLE_EPSILON, strongTitle );
     interactionStrengthSlider.addMajorTick( StatesOfMatterConstants.MIN_ADJUSTABLE_EPSILON, weakTitle );
 
     var neonText = new Text( neonString, textOptions );
