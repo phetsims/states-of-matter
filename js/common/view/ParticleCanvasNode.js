@@ -31,7 +31,7 @@ define( function( require ) {
 
     var particleCanvasNode = this;
     StatesOfMatterColorProfile.particleColorProperty.link( function( color ) {
-      particleCanvasNode.strokeColor = color;
+      particleCanvasNode.strokeColor = color.toCSS();
     } );
     this.mutate( options );
   }
@@ -57,15 +57,17 @@ define( function( require ) {
         if ( particle instanceof HydrogenAtom && !particle.layerFlag ) {
           context.fillStyle = particle.color;
           // if the stroke color is white then use particle color
-          context.strokeStyle = this.strokeColor.toCSS() === 'rgb(255,255,255)' ?
-                                particle.color : this.strokeColor.toCSS();
+          context.strokeStyle = this.strokeColor === 'rgb(255,255,255)' ?
+                                particle.color : this.strokeColor;
           context.lineWidth = 0.4;
           context.beginPath();
           context.arc( this.modelViewTransform.modelToViewX( particle.positionProperty.get().x ),
             this.modelViewTransform.modelToViewY( particle.positionProperty.get().y ),
             this.modelViewTransform.modelToViewDeltaX( particle.radius ), 0, 2 * Math.PI, true );
           context.fill();
-          context.stroke();
+          if ( !( this.strokeColor === 'rgb(255,255,255)' )  ){
+            context.stroke();
+          }
         }
       }
 
@@ -74,15 +76,18 @@ define( function( require ) {
         particle = this.particles.get( i );
         if ( !( particle instanceof HydrogenAtom && !particle.layerFlag ) ) {
           context.fillStyle = particle.color;
-          context.strokeStyle = this.strokeColor.toCSS() === 'rgb(255,255,255)' ?
-                                particle.color : this.strokeColor.toCSS();
+          context.strokeStyle = this.strokeColor === 'rgb(255,255,255)' ?
+                                particle.color : this.strokeColor;
           context.lineWidth = 0.4;
           context.beginPath();
           context.arc( this.modelViewTransform.modelToViewX( particle.positionProperty.get().x ),
             this.modelViewTransform.modelToViewY( particle.positionProperty.get().y ),
             this.modelViewTransform.modelToViewDeltaX( particle.radius ), 0, 2 * Math.PI, true );
           context.fill();
-          context.stroke();
+          if ( !( this.strokeColor === 'rgb(255,255,255)' )  ){
+            context.stroke();
+          }
+
         }
       }
     },
