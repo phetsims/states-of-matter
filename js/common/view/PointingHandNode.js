@@ -74,6 +74,7 @@ define( function( require ) {
 
     this.fingerImageNode.addInputListener( new SimpleDragHandler(
       {
+        allowTouchSnag: true,
         start: function( event ) {
           startY = pointingHandNode.globalToParentPoint( event.pointer.point ).y;
           pointingHandNode.beingDragged = true;
@@ -148,24 +149,15 @@ define( function( require ) {
     handleContainerSizeChanged: function() {
       var containerHeight = this.multipleParticleModel.getParticleContainerHeight();
       if ( !this.multipleParticleModel.getContainerExploded() ) {
-        this.x = this.x;
         this.y = Math.abs( this.modelViewTransform.modelToViewDeltaY( StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT -
                  containerHeight ) ) - this.height + 20;
-        //this.setTranslation( this.x,
-        //  Math.abs( this.modelViewTransform.modelToViewDeltaY( StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT -
-        //                                                       containerHeight ) ) - this.height + 20 );
       }
       else {
 
         // If the container is exploding that hand is retracted more
         // quickly.
-        this.x = this.x;
         this.y = -this.modelViewTransform.modelToViewDeltaY( StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT -
                  ( containerHeight * 2 ) ) - this.height;
-        //this.setTranslation( this.x,
-        //  -this.modelViewTransform.modelToViewDeltaY( StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT -
-        //                                              ( containerHeight * 2 ) ) -
-        //  this.height );
       }
     },
 
