@@ -59,7 +59,7 @@ define( function( require ) {
           break;
         case PhaseStateEnum.LIQUID:
           this.setPhaseLiquid();
-          postChangeModelSteps = 200;
+          postChangeModelSteps = 20;
           break;
         case PhaseStateEnum.GAS:
           this.setPhaseGas();

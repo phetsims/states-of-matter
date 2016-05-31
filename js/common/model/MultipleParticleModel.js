@@ -63,7 +63,7 @@ define( function( require ) {
   var MIN_INJECTED_MOLECULE_VELOCITY = 0.5;
   var MAX_INJECTED_MOLECULE_VELOCITY = 2.0;
   var MAX_INJECTED_MOLECULE_ANGLE = Math.PI * 0.8;
-  var VERLET_CALCULATIONS_PER_CLOCK_TICK = 4;
+  var VERLET_CALCULATIONS_PER_CLOCK_TICK = 5;
   var INJECTION_POINT_HORIZ_PROPORTION = 0.05;
   var INJECTION_POINT_VERT_PROPORTION = 0.25;
 
@@ -635,7 +635,7 @@ define( function( require ) {
         // The lid is blowing off the container, so increase the container
         // size until the lid should be well off the screen.
         //alert(simTickTime);
-        if ( this.particleContainerHeight < StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT * 2 ) {
+        if ( this.particleContainerHeight < StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT * 3 ) {
           this.particleContainerHeight += MAX_PER_TICK_CONTAINER_EXPANSION * 2;
         }
       }
@@ -688,7 +688,7 @@ define( function( require ) {
 
     step: function( dt ) {
       // If the step is large, it probably means that the screen was hidden for a while, so just ignore it.
-      var timeStep = Math.min( 0.04, dt );
+      var timeStep = Math.min( 0.02, dt );
 
       if ( this.isPlaying ) {
         this.stepInternal( timeStep );
