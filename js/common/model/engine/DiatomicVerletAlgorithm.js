@@ -17,6 +17,8 @@ define( function( require ) {
   var AbstractVerletAlgorithm = require( 'STATES_OF_MATTER/common/model/engine/AbstractVerletAlgorithm' );
   var DiatomicAtomPositionUpdater = require( 'STATES_OF_MATTER/common/model/engine/DiatomicAtomPositionUpdater' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
+  var Util = require( 'DOT/Util' );
 
   /**
    * @param {MultipleParticleModel} multipleParticleModel - Model of a set of particles
@@ -87,9 +89,15 @@ define( function( require ) {
         var xPos = moleculeCenterOfMassPositions[ i ].x +
                    ( timeStep * moleculeVelocities[ i ].x ) +
                    ( timeStepSqrHalf * moleculeForces[ i ].x * massInverse);
-        var yPos = moleculeCenterOfMassPositions[ i ].y +
+        var yPos = Math.max( moleculeCenterOfMassPositions[ i ].y +
                    ( timeStep * moleculeVelocities[ i ].y) +
-                   ( timeStepSqrHalf * moleculeForces[ i ].y * massInverse);
+                   ( timeStepSqrHalf * moleculeForces[ i ].y * massInverse),
+          StatesOfMatterConstants.CONTAINER_BOTTOM_WALL );
+        if ( yPos <= StatesOfMatterConstants.CONTAINER_TOP_WALL ){
+          // contain the particles inside the container in particles left and right wall
+          xPos = Util.clamp( xPos, StatesOfMatterConstants.CONTAINER_LEFT_WALL + 0.5,
+            StatesOfMatterConstants.CONTAINER_RIGHT_WALL );
+        }
         moleculeCenterOfMassPositions[ i ].setXY( xPos, yPos );
         moleculeRotationAngles[ i ] += ( timeStep * moleculeRotationRates[ i ]) +
                                        ( timeStepSqrHalf * moleculeTorques[ i ] * inertiaInverse);

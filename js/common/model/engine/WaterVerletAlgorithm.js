@@ -16,6 +16,8 @@ define( function( require ) {
   var Vector2 = require( 'DOT/Vector2' );
   var AbstractVerletAlgorithm = require( 'STATES_OF_MATTER/common/model/engine/AbstractVerletAlgorithm' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
+  var Util = require( 'DOT/Util' );
   var WaterAtomPositionUpdater = require( 'STATES_OF_MATTER/common/model/engine/WaterAtomPositionUpdater' );
 
   // parameters used for "hollywooding" of the water crystal
@@ -136,8 +138,15 @@ define( function( require ) {
       for ( var i = 0; i < numberOfMolecules; i++ ) {
         var xPos = moleculeCenterOfMassPositions[ i ].x + ( timeStep * moleculeVelocities[ i ].x ) +
                    ( timeStepSqrHalf * moleculeForces[ i ].x * massInverse);
-        var yPos = moleculeCenterOfMassPositions[ i ].y + ( timeStep * moleculeVelocities[ i ].y ) +
-                   ( timeStepSqrHalf * moleculeForces[ i ].y * massInverse );
+        var yPos = Math.max( moleculeCenterOfMassPositions[ i ].y + ( timeStep * moleculeVelocities[ i ].y ) +
+                   ( timeStepSqrHalf * moleculeForces[ i ].y * massInverse ),
+          StatesOfMatterConstants.CONTAINER_BOTTOM_WALL );
+        if ( yPos <= StatesOfMatterConstants.CONTAINER_TOP_WALL - 10 ){
+          // contain the particles inside the container in particles left and right wall
+          xPos = Util.clamp( xPos, StatesOfMatterConstants.CONTAINER_LEFT_WALL,
+            StatesOfMatterConstants.CONTAINER_RIGHT_WALL - 10 );
+        }
+
         moleculeCenterOfMassPositions[ i ].setXY( xPos, yPos );
         moleculeRotationAngles[ i ] += ( timeStep * moleculeRotationRates[ i ] ) +
                                        ( timeStepSqrHalf * moleculeTorques[ i ] * inertiaInverse );

@@ -56,6 +56,12 @@ define( function( require ) {
     VIEW_CONTAINER_WIDTH: 280,
     VIEW_CONTAINER_HEIGHT: 285,
 
+    // Left and Right Container Wall Empirically determined in Model space
+    CONTAINER_LEFT_WALL: 0.5,
+    CONTAINER_RIGHT_WALL: 31.5,
+    CONTAINER_BOTTOM_WALL: 0,
+    CONTAINER_TOP_WALL: 32.5,
+
     // Maximum temperature, in degrees Kelvin, that the Thermometer will display.
     MAX_DISPLAYED_TEMPERATURE: 1000,
 

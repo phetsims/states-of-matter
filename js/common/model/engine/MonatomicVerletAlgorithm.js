@@ -17,6 +17,8 @@ define( function( require ) {
   var AbstractVerletAlgorithm = require( 'STATES_OF_MATTER/common/model/engine/AbstractVerletAlgorithm' );
   var MonatomicAtomPositionUpdater = require( 'STATES_OF_MATTER/common/model/engine/MonatomicAtomPositionUpdater' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
+  var Util = require( 'DOT/Util' );
 
   /**
    * @param {MultipleParticleModel} multipleParticleModel of the simulation
@@ -93,13 +95,27 @@ define( function( require ) {
 
       var i;
 
-      // Update the positions of all particles based on their current
-      // velocities and the forces acting on them.
+      var offset = 0;
+      if ( this.multipleParticleModel.currentMolecule === StatesOfMatterConstants.ARGON ){
+        offset = 6;
+      }
+
+      if ( this.multipleParticleModel.currentMolecule === StatesOfMatterConstants.USER_DEFINED_MOLECULE ){
+        offset = 4;
+      }
+      // Update the positions of all particles based on their current velocities and the forces acting on them.
       for ( i = 0; i < numberOfAtoms; i++ ) {
+        var yPos = Math.max( moleculeCenterOfMassPositions[ i ].y + ( timeStep * moleculeVelocities[ i ].y ) +
+                             ( timeStepSqrHalf * moleculeForces[ i ].y ), StatesOfMatterConstants.CONTAINER_BOTTOM_WALL );
         var xPos = moleculeCenterOfMassPositions[ i ].x + ( timeStep * moleculeVelocities[ i ].x ) +
                    ( timeStepSqrHalf * moleculeForces[ i ].x );
-        var yPos = moleculeCenterOfMassPositions[ i ].y + ( timeStep * moleculeVelocities[ i ].y ) +
-                   ( timeStepSqrHalf * moleculeForces[ i ].y );
+        //console.log( xPos )
+        if ( yPos <= StatesOfMatterConstants.CONTAINER_TOP_WALL - offset ){
+          // contain the particles inside the container in particles left and right wall
+          xPos = Util.clamp( xPos, StatesOfMatterConstants.CONTAINER_LEFT_WALL,
+            StatesOfMatterConstants.CONTAINER_RIGHT_WALL - offset );
+        }
+
         moleculeCenterOfMassPositions[ i ].setXY( xPos, yPos );
       }
 
