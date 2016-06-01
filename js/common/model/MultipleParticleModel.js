@@ -73,8 +73,8 @@ define( function( require ) {
   var ADAPTIVE_THERMOSTAT = 3;
 
   // Parameters to control rates of change of the container size.
-  var MAX_PER_TICK_CONTAINER_SHRINKAGE = 50;
-  var MAX_PER_TICK_CONTAINER_EXPANSION = 200;
+  var MAX_PER_TICK_CONTAINER_CHANGE = 3000;
+  var MAX_PER_TICK_CONTAINER_EXPANSION_EXPLODED = 400;
 
   // Countdown value used when recalculating temperature when the container size is changing.
   var CONTAINER_SIZE_CHANGE_RESET_COUNT = 25;
@@ -594,10 +594,9 @@ define( function( require ) {
 
     /**
      * @public
-     * Step the model.  There is no time step used, as a fixed internal time step is assumed.
-     * TODO: use dt instead of fixed timestep
+     * Step the model.
      */
-    stepInternal: function( simTickTime ) {
+    stepInternal: function( dt ) {
 
       if ( !this.isExploded ) {
         // Adjust the particle container height if needed.
@@ -608,7 +607,7 @@ define( function( require ) {
             // The container is growing.
             if ( this.particleContainerHeight + heightChange <=
                  StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT ) {
-              this.particleContainerHeight += Math.min( heightChange, MAX_PER_TICK_CONTAINER_EXPANSION );
+              this.particleContainerHeight += Math.min( heightChange, MAX_PER_TICK_CONTAINER_CHANGE * dt );
             }
             else {
               this.particleContainerHeight = StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT;
@@ -617,7 +616,7 @@ define( function( require ) {
           else {
             // The container is shrinking.
             if ( this.particleContainerHeight - heightChange >= this.minAllowableContainerHeight ) {
-              this.particleContainerHeight += Math.max( heightChange, -MAX_PER_TICK_CONTAINER_SHRINKAGE );
+              this.particleContainerHeight += Math.max( heightChange, - MAX_PER_TICK_CONTAINER_CHANGE * dt ) ;
             }
             else {
               this.particleContainerHeight = this.minAllowableContainerHeight;
@@ -632,24 +631,25 @@ define( function( require ) {
         }
       }
       else {
-        // The lid is blowing off the container, so increase the container
-        // size until the lid should be well off the screen.
-        //alert(simTickTime);
+        // The lid is blowing off the container, so increase the container size until the lid should be well off
+        // the screen.
         if ( this.particleContainerHeight < StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT * 3 ) {
-          this.particleContainerHeight += MAX_PER_TICK_CONTAINER_EXPANSION * 2;
+          this.particleContainerHeight += MAX_PER_TICK_CONTAINER_EXPANSION_EXPLODED;
         }
       }
 
       // Record the pressure to see if it changes.
       var pressureBeforeAlgorithm = this.getModelPressure();
 
-      // Execute the Verlet algorithm.  The algorithm may be run several times for each time step.
+      var normDt = Math.min( 0.02, dt ); // normalize the dt as model cannot handle lonf dt's
 
+      // Execute the Verlet algorithm.  The algorithm may be run several times for each time step.
       for ( var i = 0; i < VERLET_CALCULATIONS_PER_CLOCK_TICK; i++ ) {
+        // is the container is exploded reduce the speed of particles
         if( this.isExploded ){
-          simTickTime = simTickTime * 0.9;
+          normDt = Math.max( 0.016, normDt * 0.9 );
         }
-        this.moleculeForceAndMotionCalculator.updateForcesAndMotion( simTickTime );
+        this.moleculeForceAndMotionCalculator.updateForcesAndMotion( normDt );
 
       }
       this.runThermostat();
@@ -687,11 +687,8 @@ define( function( require ) {
     },
 
     step: function( dt ) {
-      // If the step is large, it probably means that the screen was hidden for a while, so just ignore it.
-      var timeStep = Math.min( 0.02, dt );
-
       if ( this.isPlaying ) {
-        this.stepInternal( timeStep );
+        this.stepInternal( dt );
       }
     },
 
