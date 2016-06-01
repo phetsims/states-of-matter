@@ -65,9 +65,7 @@ define( function( require ) {
             this.modelViewTransform.modelToViewY( particle.positionProperty.get().y ),
             this.modelViewTransform.modelToViewDeltaX( particle.radius ), 0, 2 * Math.PI, true );
           context.fill();
-          if ( !( this.strokeColor === 'rgb(255,255,255)' )  ){
-            context.stroke();
-          }
+          context.stroke();
         }
       }
 
@@ -84,10 +82,7 @@ define( function( require ) {
             this.modelViewTransform.modelToViewY( particle.positionProperty.get().y ),
             this.modelViewTransform.modelToViewDeltaX( particle.radius ), 0, 2 * Math.PI, true );
           context.fill();
-          if ( !( this.strokeColor === 'rgb(255,255,255)' )  ){
-            context.stroke();
-          }
-
+          context.stroke();
         }
       }
     },
