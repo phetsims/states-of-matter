@@ -296,8 +296,6 @@ define( function( require ) {
           if ( this.pressureMeter.getRotation() !== 0 ) {
             this.pressureMeter.setRotation( 0 );
           }
-          //this.pressureMeter.setTranslation( this.pressureMeter.x, PRESSURE_GAUGE_Y_OFFSET );
-          this.pressureMeter.x = this.pressureMeter.x;
           this.pressureMeter.y = PRESSURE_GAUGE_Y_OFFSET;
           this.pressureMeter.setElbowHeight( PRESSURE_METER_ELBOW_OFFSET +
                                              Math.abs( this.modelViewTransform.modelToViewDeltaY( StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT -
@@ -306,7 +304,6 @@ define( function( require ) {
         else {
           // The container is exploding, so spin and move the gauge.
           this.pressureMeter.rotate( -Math.PI / 20 );
-          this.pressureMeter.x = this.pressureMeter.x;
           this.pressureMeter.y = this.y + this.modelViewTransform.modelToViewDeltaY( containerHeight );
         }
       }
@@ -328,8 +325,7 @@ define( function( require ) {
         if ( this.containerLid.getRotation() !== 0 ) {
           this.containerLid.setRotation( 0 );
         }
-        this.containerLid.x = ( this.modelViewTransform.modelToViewDeltaX( this.containmentAreaWidth ) -
-                              this.containerLid.width ) / 2;
+        this.containerLid.x = ( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - this.containerLid.width ) / 2;
         this.containerLid.y = -this.modelViewTransform.modelToViewDeltaY( this.containmentAreaHeight - containerHeight );
       }
       else {

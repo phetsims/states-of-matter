@@ -117,7 +117,6 @@ define( function( require ) {
         if ( this.getRotation() !== 0 ) {
           this.setRotation( 0 );
         }
-        this.x = this.x;
         this.y = -this.modelViewTransform.modelToViewDeltaY(
           StatesOfMatterConstants.CONTAINER_BOUNDS.width - containerHeight ) + this.height - inset;
       }
