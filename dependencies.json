@@ -1,5 +1,5 @@
 {
-  "comment": "# states-of-matter 1.0.0-dev.6 Wed Jun 01 2016 16:43:25 GMT-0600 (Mountain Daylight Time)",
+  "comment": "# states-of-matter 1.0.0-dev.6 Thu Jun 02 2016 09:57:48 GMT-0600 (Mountain Daylight Time)",
   "assert": {
     "sha": "7d27130a4d27da15aa7f8a21bbfb9245288c1b44",
     "branch": "master"
@@ -53,7 +53,7 @@
     "branch": "master"
   },
   "states-of-matter": {
-    "sha": "64eda85a69eab55bf1ed8c3191f1d4a222eb2fae",
+    "sha": "83399aac5ccc060397e73d79c301efa511da522f",
     "branch": "master"
   },
   "sun": {
