@@ -105,19 +105,15 @@ define( function( require ) {
       }
       // Update the positions of all particles based on their current velocities and the forces acting on them.
       for ( i = 0; i < numberOfAtoms; i++ ) {
-        var yPos = Math.max( moleculeCenterOfMassPositions[ i ].y + ( timeStep * moleculeVelocities[ i ].y ) +
-                             ( timeStepSqrHalf * moleculeForces[ i ].y ), StatesOfMatterConstants.CONTAINER_BOTTOM_WALL );
+        var yPos = moleculeCenterOfMassPositions[ i ].y + ( timeStep * moleculeVelocities[ i ].y ) +
+                             ( timeStepSqrHalf * moleculeForces[ i ].y );
         var xPos = moleculeCenterOfMassPositions[ i ].x + ( timeStep * moleculeVelocities[ i ].x ) +
                    ( timeStepSqrHalf * moleculeForces[ i ].x );
-        //console.log( xPos )
-        if ( yPos <= StatesOfMatterConstants.CONTAINER_TOP_WALL - offset ){
-          // contain the particles inside the container in particles left and right wall
-          xPos = Util.clamp( xPos, StatesOfMatterConstants.CONTAINER_LEFT_WALL,
-            StatesOfMatterConstants.CONTAINER_RIGHT_WALL - offset );
-        }
-
         moleculeCenterOfMassPositions[ i ].setXY( xPos, yPos );
       }
+
+      // Synchronize the molecule and atom positions.
+      this.positionUpdater.updateAtomPositions( moleculeDataSet, timeStep, offset );
 
       // Calculate the forces exerted on the particles by the container walls and by gravity.
       var pressureZoneWallForce = 0;
@@ -204,8 +200,7 @@ define( function( require ) {
       // Record the calculated temperature.
       this.temperature = kineticEnergy / numberOfAtoms;
 
-      // Synchronize the molecule and atom positions.
-      this.positionUpdater.updateAtomPositions( moleculeDataSet );
+
 
       // Replace the new forces with the old ones.
       for ( i = 0; i < numberOfAtoms; i++ ) {

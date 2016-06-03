@@ -12,6 +12,8 @@ define( function( require ) {
 
   // modules
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
+  var Util = require( 'DOT/Util' );
   var WaterMoleculeStructure = require( 'STATES_OF_MATTER/common/model/engine/WaterMoleculeStructure' );
 
   // constants
@@ -23,9 +25,9 @@ define( function( require ) {
     /**
      * @public
      * @param {MoleculeForceAndMotionDataSet} moleculeDataSet
+     * @param {Number} timeStep
      */
-    updateAtomPositions: function( moleculeDataSet ) {
-
+    updateAtomPositions: function( moleculeDataSet, timeStep ) {
       // Make sure this is not being used on an inappropriate data set.
       assert && assert( moleculeDataSet.getAtomsPerMolecule() === 3 );
 
@@ -48,8 +50,16 @@ define( function( require ) {
         for ( var j = 0; j < 3; j++ ) {
           var xOffset = ( cosineTheta * STRUCTURE_X[ j ] ) - ( sineTheta * STRUCTURE_Y[ j ] );
           var yOffset = ( sineTheta * STRUCTURE_X[ j ] ) + ( cosineTheta * STRUCTURE_Y[ j ] );
-          xPos = moleculeCenterOfMassPositions[ i ].x + xOffset;
-          yPos = moleculeCenterOfMassPositions[ i ].y + yOffset;
+          if ( timeStep >= 0.018 ) {
+            xPos = Util.clamp( moleculeCenterOfMassPositions[ i ].x, StatesOfMatterConstants.CONTAINER_LEFT_WALL,
+                StatesOfMatterConstants.CONTAINER_RIGHT_WALL - 10 ) + xOffset;
+            yPos = Math.max( moleculeCenterOfMassPositions[ i ].y, StatesOfMatterConstants.CONTAINER_BOTTOM_WALL ) + yOffset;
+          }
+          else{
+            xPos = moleculeCenterOfMassPositions[ i ].x + xOffset;
+            yPos = moleculeCenterOfMassPositions[ i ].y + yOffset;
+          }
+
           atomPositions[ i * 3 + j ].setXY( xPos, yPos );
         }
       }

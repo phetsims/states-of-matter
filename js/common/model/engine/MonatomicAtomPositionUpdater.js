@@ -11,14 +11,18 @@ define( function( require ) {
   'use strict';
 
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
+  var Util = require( 'DOT/Util' );
 
   // static object (no constructor)
   var MonatomicAtomPositionUpdater = {
     /**
      * @param {MoleculeForceAndMotionDataSet} moleculeDataSet
+     * @param {Number} timeStep
+     * @param {Number} offset
      * @public
      */
-    updateAtomPositions: function( moleculeDataSet ) {
+    updateAtomPositions: function( moleculeDataSet, timeStep, offset ) {
 
       // Make sure this is not being used on an inappropriate data set.
       assert && assert( moleculeDataSet.atomsPerMolecule === 1 );
@@ -29,7 +33,15 @@ define( function( require ) {
 
       // Position the atoms to match the position of the molecules.
       for ( var i = 0; i < moleculeDataSet.getNumberOfMolecules(); i++ ) {
-        atomPositions[ i ] = moleculeCenterOfMassPositions[ i ];
+        if ( timeStep >= 0.018 ){
+          // contain the particles inside the container in particles left and right wall
+          atomPositions[ i ].x = Util.clamp( moleculeCenterOfMassPositions[ i ].x, StatesOfMatterConstants.CONTAINER_LEFT_WALL,
+            StatesOfMatterConstants.CONTAINER_RIGHT_WALL - offset );
+          atomPositions[ i ].y = Math.max( moleculeCenterOfMassPositions[ i ].y, StatesOfMatterConstants.CONTAINER_BOTTOM_WALL )
+        }
+        else {
+          atomPositions[ i ] = moleculeCenterOfMassPositions[ i ];
+        }
       }
     }
   };

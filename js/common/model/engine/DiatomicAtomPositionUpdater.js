@@ -16,6 +16,7 @@ define( function( require ) {
   // modules
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
+  var Util = require( 'DOT/Util' );
 
   // static object (no constructor)
   var DiatomicAtomPositionUpdater =  {
@@ -23,8 +24,9 @@ define( function( require ) {
     /**
      * @public
      * @param {MoleculeForceAndMotionDataSet} moleculeDataSet
+     * @param {Number} timeStep
      */
-    updateAtomPositions: function( moleculeDataSet ) {
+    updateAtomPositions: function( moleculeDataSet, timeStep ) {
 
       // Make sure this is not being used on an inappropriate data set.
       assert && assert( moleculeDataSet.atomsPerMolecule === 2 );
@@ -40,16 +42,32 @@ define( function( require ) {
       for ( var i = 0; i < moleculeDataSet.getNumberOfMolecules(); i++ ) {
         cosineTheta = Math.cos( moleculeRotationAngles[ i ] );
         sineTheta = Math.sin( moleculeRotationAngles[ i ] );
-        xPos = moleculeCenterOfMassPositions[ i ].x +
-               cosineTheta * (StatesOfMatterConstants.DIATOMIC_PARTICLE_DISTANCE / 2);
-        yPos = moleculeCenterOfMassPositions[ i ].y +
-               sineTheta * (StatesOfMatterConstants.DIATOMIC_PARTICLE_DISTANCE / 2);
-        atomPositions[ i * 2 ].setXY( xPos, yPos );
-        xPos = moleculeCenterOfMassPositions[ i ].x -
-               cosineTheta * (StatesOfMatterConstants.DIATOMIC_PARTICLE_DISTANCE / 2);
-        yPos = moleculeCenterOfMassPositions[ i ].y -
-               sineTheta * (StatesOfMatterConstants.DIATOMIC_PARTICLE_DISTANCE / 2);
-        atomPositions[ i * 2 + 1 ].setXY( xPos, yPos );
+        if ( timeStep >= 0.018 ) {
+          xPos = Util.clamp( moleculeCenterOfMassPositions[ i ].x, StatesOfMatterConstants.CONTAINER_LEFT_WALL + 0.5,
+              StatesOfMatterConstants.CONTAINER_RIGHT_WALL ) +
+                 cosineTheta * (StatesOfMatterConstants.DIATOMIC_PARTICLE_DISTANCE / 2);
+          yPos = Math.max( moleculeCenterOfMassPositions[ i ].y, StatesOfMatterConstants.CONTAINER_BOTTOM_WALL ) +
+                 sineTheta * (StatesOfMatterConstants.DIATOMIC_PARTICLE_DISTANCE / 2);
+          atomPositions[ i * 2 ].setXY( xPos, yPos );
+          xPos = Util.clamp( moleculeCenterOfMassPositions[ i ].x, StatesOfMatterConstants.CONTAINER_LEFT_WALL + 0.5,
+                 StatesOfMatterConstants.CONTAINER_RIGHT_WALL ) -
+                 cosineTheta * (StatesOfMatterConstants.DIATOMIC_PARTICLE_DISTANCE / 2);
+          yPos = Math.max( moleculeCenterOfMassPositions[ i ].y, StatesOfMatterConstants.CONTAINER_BOTTOM_WALL ) -
+                 sineTheta * (StatesOfMatterConstants.DIATOMIC_PARTICLE_DISTANCE / 2);
+          atomPositions[ i * 2 + 1 ].setXY( xPos, yPos );
+        }
+        else{
+          xPos = moleculeCenterOfMassPositions[ i ].x +
+                 cosineTheta * (StatesOfMatterConstants.DIATOMIC_PARTICLE_DISTANCE / 2);
+          yPos = moleculeCenterOfMassPositions[ i ].y +
+                 sineTheta * (StatesOfMatterConstants.DIATOMIC_PARTICLE_DISTANCE / 2);
+          atomPositions[ i * 2 ].setXY( xPos, yPos );
+          xPos = moleculeCenterOfMassPositions[ i ].x -
+                 cosineTheta * (StatesOfMatterConstants.DIATOMIC_PARTICLE_DISTANCE / 2);
+          yPos = moleculeCenterOfMassPositions[ i ].y -
+                 sineTheta * (StatesOfMatterConstants.DIATOMIC_PARTICLE_DISTANCE / 2);
+          atomPositions[ i * 2 + 1 ].setXY( xPos, yPos );
+        }
       }
     }
   };

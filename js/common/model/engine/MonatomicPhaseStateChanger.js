@@ -57,8 +57,17 @@ define( function( require ) {
       // Assume that we've done our job correctly and that all the atoms are in safe positions.
       this.multipleParticleModel.moleculeDataSet.numberOfSafeMolecules = moleculeDataSet.getNumberOfMolecules();
 
+      var offset = 0;
+      if ( this.multipleParticleModel.currentMolecule === StatesOfMatterConstants.ARGON ){
+        offset = 6;
+      }
+
+      if ( this.multipleParticleModel.currentMolecule === StatesOfMatterConstants.USER_DEFINED_MOLECULE ){
+        offset = 4;
+      }
+
       // Sync up the atom positions with the molecule positions.
-      this.positionUpdater.updateAtomPositions( moleculeDataSet );
+      this.positionUpdater.updateAtomPositions( moleculeDataSet, 0.016, offset );
 
       // Step the model a number of times in order to prevent the particles
       // from looking too organized.  The number of steps was empirically determined.

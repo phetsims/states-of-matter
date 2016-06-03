@@ -89,20 +89,14 @@ define( function( require ) {
         var xPos = moleculeCenterOfMassPositions[ i ].x +
                    ( timeStep * moleculeVelocities[ i ].x ) +
                    ( timeStepSqrHalf * moleculeForces[ i ].x * massInverse);
-        var yPos = Math.max( moleculeCenterOfMassPositions[ i ].y +
+        var yPos = moleculeCenterOfMassPositions[ i ].y +
                    ( timeStep * moleculeVelocities[ i ].y) +
-                   ( timeStepSqrHalf * moleculeForces[ i ].y * massInverse),
-          StatesOfMatterConstants.CONTAINER_BOTTOM_WALL );
-        if ( yPos <= StatesOfMatterConstants.CONTAINER_TOP_WALL ){
-          // contain the particles inside the container in particles left and right wall
-          xPos = Util.clamp( xPos, StatesOfMatterConstants.CONTAINER_LEFT_WALL + 0.5,
-            StatesOfMatterConstants.CONTAINER_RIGHT_WALL );
-        }
+                   ( timeStepSqrHalf * moleculeForces[ i ].y * massInverse);
         moleculeCenterOfMassPositions[ i ].setXY( xPos, yPos );
         moleculeRotationAngles[ i ] += ( timeStep * moleculeRotationRates[ i ]) +
                                        ( timeStepSqrHalf * moleculeTorques[ i ] * inertiaInverse);
       }
-      this.positionUpdater.updateAtomPositions( moleculeDataSet );
+      this.positionUpdater.updateAtomPositions( moleculeDataSet, timeStep );
 
       // Calculate the force from the walls.  This force is assumed to act
       // on the center of mass, so there is no torque.

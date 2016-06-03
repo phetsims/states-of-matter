@@ -74,7 +74,7 @@ define( function( require ) {
 
   // Parameters to control rates of change of the container size.
   var MAX_PER_TICK_CONTAINER_CHANGE = 3000;
-  var MAX_PER_TICK_CONTAINER_EXPANSION_EXPLODED = 400;
+  var MAX_PER_TICK_CONTAINER_EXPANSION_EXPLODED = 600;
 
   // Countdown value used when recalculating temperature when the container size is changing.
   var CONTAINER_SIZE_CHANGE_RESET_COUNT = 25;
@@ -647,7 +647,7 @@ define( function( require ) {
       for ( var i = 0; i < VERLET_CALCULATIONS_PER_CLOCK_TICK; i++ ) {
         // is the container is exploded reduce the speed of particles
         if( this.isExploded ){
-          normDt = Math.max( 0.016, normDt * 0.9 );
+          normDt = Math.max( 0.016, normDt );
         }
         this.moleculeForceAndMotionCalculator.updateForcesAndMotion( normDt );
 
