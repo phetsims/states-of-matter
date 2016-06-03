@@ -156,7 +156,7 @@ define( function( require ) {
         temperatureSetPoint: INITIAL_TEMPERATURE, // notifyTemperatureChanged
         pressure: 0, // notifyPressureChanged
         moleculeType: StatesOfMatterConstants.NEON, // notifyMoleculeTypeChanged,
-        interactionStrength: 0, // notifyInteractionStrengthChanged
+        interactionStrength: MAX_ADJUSTABLE_EPSILON, // notifyInteractionStrengthChanged
         isPlaying: true,
         speed: 'normal',
         heatingCoolingAmount: 0

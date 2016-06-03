@@ -232,7 +232,6 @@ define( function( require ) {
         if ( phaseChangesScreenView.hasChild( phaseChangesScreenView.phaseDiagram ) ) {
           phaseChangesScreenView.removeChild( phaseChangesScreenView.phaseDiagram );
         }
-        multipleParticleModel.interactionStrengthProperty.value = StatesOfMatterConstants.MAX_EPSILON;
         if ( isInteractionDiagramEnabled ) {
           epsilonControlInteractionPotentialDiagram.top = phaseChangesMoleculesControlPanel.bottom + INSET * 0.3;
         }
