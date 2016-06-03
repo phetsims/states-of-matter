@@ -50,10 +50,6 @@ define( function( require ) {
     this.elbowEnabled = false;
     this.elbowHeight = 0;
 
-    // restricted pressure string length to 10 characters
-    pressureString = pressureString.substr( 0, 10 );
-    pressureOverloadString = pressureOverloadString.substr( 0, 10 );
-
     var gaugeNode = new GaugeNode( multipleParticleModel.pressureProperty, pressureString,
       { min: 0, max: MAX_PRESSURE }, { scale: 0.5, radius: 80, backgroundLineWidth: 3 } );
 
@@ -94,16 +90,6 @@ define( function( require ) {
     this.pressureChanged = false;
     multipleParticleModel.pressureProperty.link( function() {
       dialGaugeNode.pressureChanged = true;
-      /*if ( (multipleParticleModel.getPressureInAtmospheres()) < MAX_PRESSURE ) {
-        dialGaugeNode.textualReadout.setText( Util.toFixed( multipleParticleModel.getPressureInAtmospheres(), 2 ) + ' ' + pressureUnitsInAtmString );
-        dialGaugeNode.textualReadout.fill = 'black';
-      }
-      else {
-        dialGaugeNode.textualReadout.setText( pressureOverloadString );
-        dialGaugeNode.textualReadout.fill = PhetColorScheme.RED_COLORBLIND;
-      }
-      dialGaugeNode.textualReadout.center = dialGaugeNode.textualReadoutBoxShape.center;
-    */
     } );
 
     this.updateConnector();
@@ -158,8 +144,8 @@ define( function( require ) {
      * @public
      */
     updateConnector: function() {
-      var width = (CONNECTOR_WIDTH_PROPORTION * 30);
-      var length = (CONNECTOR_LENGTH_PROPORTION * 60);
+      var width = ( CONNECTOR_WIDTH_PROPORTION * 30 );
+      var length = ( CONNECTOR_LENGTH_PROPORTION * 60 );
       this.connectorPath = new Shape();
       if ( !this.elbowEnabled ) {
         var connectorShape = Shape.rect( 0, 0, length, width );
