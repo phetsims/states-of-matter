@@ -75,11 +75,11 @@ define( function( require ) {
     } );
 
     this.step();
-    var temperatureProperty = new Property( 0 );
+    this.temperatureProperty = new Property( 0 );
     var temperatureComboBox = new ComboBox( [
       ComboBox.createItem( this.temperatureKelvinText, 0 ),
       ComboBox.createItem( this.temperatureCelsiusText, 1 )
-    ], temperatureProperty, this, {
+    ], this.temperatureProperty, this, {
       buttonXMargin: 5,
       buttonYMargin: 2,
       buttonCornerRadius: 5,
@@ -115,6 +115,10 @@ define( function( require ) {
   statesOfMatter.register( 'CompositeThermometerNode', CompositeThermometerNode );
 
   return inherit( Panel, CompositeThermometerNode, {
+
+    reset: function(){
+      this.temperatureProperty.reset();
+    },
 
     step: function(){
       if( this.temperatureSetPointChanged ){

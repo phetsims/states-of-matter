@@ -121,6 +121,7 @@ define( function( require ) {
         listener: function() {
           multipleParticleModel.reset();
           self.particleContainerNode.reset();
+          self.compositeThermometerNode.reset();
         },
         bottom: this.layoutBounds.bottom - layoutBoundsYOffset / 2,
         right: this.layoutBounds.right - layoutBoundsRightOffset,

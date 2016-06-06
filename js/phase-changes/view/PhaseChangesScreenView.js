@@ -147,6 +147,7 @@ define( function( require ) {
         multipleParticleModel.reset();
         phaseChangesScreenView.compositeThermometerNode.setRotation( 0 );
         phaseChangesScreenView.particleContainerNode.reset();
+        phaseChangesScreenView.compositeThermometerNode.reset();
         //Reset  phase diagram state in SOM basic version
         multipleParticleModel.expandedProperty.value = isInteractionDiagramEnabled;
       },
