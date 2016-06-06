@@ -128,6 +128,7 @@ define( function( require ) {
     } );
     this.addChild( this.compositeThermometerNode );
 
+
     // add phase diagram - in SOM basic version by default phase diagram should be closed.
     multipleParticleModel.expandedProperty.value = isInteractionDiagramEnabled;
     this.phaseDiagram = new PhaseDiagram( multipleParticleModel.expandedProperty );
@@ -264,6 +265,10 @@ define( function( require ) {
       phaseChangesScreenView.modelTemperatureHistory.clear();
       phaseChangesScreenView.updatePhaseDiagram();
     } );
+
+    // center the heater cooler node with respect to particle container node
+    heaterCoolerNode.centerX = heaterCoolerNode.centerX - 10; // empirically determined
+
   }
 
   statesOfMatter.register( 'PhaseChangesScreenView', PhaseChangesScreenView );

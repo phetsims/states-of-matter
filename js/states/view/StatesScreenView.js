@@ -163,6 +163,10 @@ define( function( require ) {
       self.particleContainerHeightPropertyChanged = true;
       //compositeThermometerNode.updatePositionAndOrientation();
     } );
+
+    // center the heater cooler node with respect to particle container node
+    heaterCoolerNode.centerX = heaterCoolerNode.centerX - heaterCoolerXOffset;
+
   }
 
   statesOfMatter.register( 'StatesScreenView', StatesScreenView );
