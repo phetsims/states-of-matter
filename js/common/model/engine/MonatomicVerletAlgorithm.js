@@ -18,7 +18,6 @@ define( function( require ) {
   var MonatomicAtomPositionUpdater = require( 'STATES_OF_MATTER/common/model/engine/MonatomicAtomPositionUpdater' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
-  var Util = require( 'DOT/Util' );
 
   /**
    * @param {MultipleParticleModel} multipleParticleModel of the simulation

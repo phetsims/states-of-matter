@@ -37,7 +37,7 @@ define( function( require ) {
           // contain the particles inside the container in particles left and right wall
           atomPositions[ i ].x = Util.clamp( moleculeCenterOfMassPositions[ i ].x, StatesOfMatterConstants.CONTAINER_LEFT_WALL,
             StatesOfMatterConstants.CONTAINER_RIGHT_WALL - offset );
-          atomPositions[ i ].y = Math.max( moleculeCenterOfMassPositions[ i ].y, StatesOfMatterConstants.CONTAINER_BOTTOM_WALL )
+          atomPositions[ i ].y = Math.max( moleculeCenterOfMassPositions[ i ].y, StatesOfMatterConstants.CONTAINER_BOTTOM_WALL );
         }
         else {
           atomPositions[ i ] = moleculeCenterOfMassPositions[ i ];
