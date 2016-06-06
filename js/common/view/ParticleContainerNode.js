@@ -45,7 +45,7 @@ define( function( require ) {
     Node.call( this );
     var preParticleLayer = new Node();
     var postParticleLayer = new Node( { opacity: 0.9 } );
-    this.containerLid = new Node( { opacity: 0.9 } );
+    this.containerLid = new Node( { opacity: 0.9, layerSplit: true } );
     this.addChild( preParticleLayer );
     var openEllipseRadiusX = 25;
     var ellipseCenterY = 2;

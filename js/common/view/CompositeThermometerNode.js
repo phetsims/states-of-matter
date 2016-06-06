@@ -16,18 +16,20 @@ define( function( require ) {
   var Property = require( 'AXON/Property' );
   var ComboBox = require( 'SUN/ComboBox' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
+  var Panel = require( 'SUN/Panel' );
   var ThermometerNode = require( 'SCENERY_PHET/ThermometerNode' );
   var Text = require( 'SCENERY/nodes/Text' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
   var Util = require( 'DOT/Util' );
+  var VBox = require( 'SCENERY/nodes/VBox' );
 
   // strings
   var kelvinUnitsString = require( 'string!STATES_OF_MATTER/kelvinUnits' );
   var celsiusUnitsString = require( 'string!STATES_OF_MATTER/celsiusUnits' );
 
   // constants
-  var inset = 10;
+  var inset = 147; // empirically determined for positioning the thermometer on the lid
   var LID_POSITION_TWEAK_FACTOR = 65; // Empirically determined value for aligning lid and container body.
 
   // clamping the red mercury display at 1000
@@ -43,6 +45,7 @@ define( function( require ) {
   function CompositeThermometerNode( multipleParticleModel, modelViewTransform, options ) {
 
     Node.call( this );
+
     this.multipleParticleModel = multipleParticleModel;
     this.modelViewTransform = modelViewTransform;
     var self = this;
@@ -60,7 +63,7 @@ define( function( require ) {
       tubeWidth: 13,
       tubeHeight: 65
     } );
-    this.addChild( thermometer );
+    //this.addChild( thermometer );
 
     // add temperature combo box
     this.temperatureKelvinText = new Text( '', { font: new PhetFont( 10 ), maxWidth: 30 } );
@@ -82,17 +85,36 @@ define( function( require ) {
       buttonCornerRadius: 5,
       itemXMargin: 2,
       itemYMargin: 2,
-      buttonLineWidth: 0.4,
-      bottom: thermometer.top - 10,
-      centerX: thermometer.centerX
+      buttonLineWidth: 0.4
+      //bottom: thermometer.top - 10,
+      //centerX: thermometer.centerX
     } );
-    this.addChild( temperatureComboBox );
+    //this.addChild( temperatureComboBox );
+    var contentNode = new VBox( {
+      spacing: 10,
+      children: [
+        temperatureComboBox,
+        thermometer
+      ]
+    } );
+
+    var panel = new Panel( contentNode, {
+      xMargin: 0,
+      yMargin: 0,
+      fill: null,
+      stroke: null,
+      lineWidth: 0,
+      resize: false
+    } );
+
+    this.addChild( panel );
+
     this.mutate( options );
   }
 
   statesOfMatter.register( 'CompositeThermometerNode', CompositeThermometerNode );
 
-  return inherit( Node, CompositeThermometerNode, {
+  return inherit( Panel, CompositeThermometerNode, {
 
     step: function(){
       if( this.temperatureSetPointChanged ){
@@ -117,8 +139,8 @@ define( function( require ) {
         if ( this.getRotation() !== 0 ) {
           this.setRotation( 0 );
         }
-        this.y = -this.modelViewTransform.modelToViewDeltaY(
-          StatesOfMatterConstants.CONTAINER_BOUNDS.width - containerHeight ) + this.height - inset;
+        this.bottom = -this.modelViewTransform.modelToViewDeltaY(
+          StatesOfMatterConstants.CONTAINER_BOUNDS.width - containerHeight ) + inset;
       }
       else {
         var rotationAmount = -(Math.PI / 100 + ( Math.random() * Math.PI / 50 ));

@@ -33,8 +33,7 @@ define( function( require ) {
   var heaterCoolerXOffset = 10;
   var stepButtonXOffset = 50;
   var stepButtonYOffset = 20;
-  var compositeThermometerNodeLeftOffset = 100;
-  var compositeThermometerNodeYOffset = 50;
+  var compositeThermometerNodeLeftOffset = 90;
   var layoutBoundsRightOffset = 15;
   var layoutBoundsYOffset = 10;
   var particlesLayerXOffset = 148;
@@ -98,8 +97,7 @@ define( function( require ) {
     this.compositeThermometerNode = new CompositeThermometerNode( multipleParticleModel, modelViewTransform, {
       font: new PhetFont( 20 ),
       fill: 'white',
-      right: this.particleContainerNode.left + compositeThermometerNodeLeftOffset,
-      centerY: this.particleContainerNode.top + compositeThermometerNodeYOffset
+      right: this.particleContainerNode.left + compositeThermometerNodeLeftOffset
     } );
     this.addChild( this.compositeThermometerNode );
 

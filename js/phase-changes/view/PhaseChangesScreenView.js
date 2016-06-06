@@ -124,7 +124,7 @@ define( function( require ) {
     this.compositeThermometerNode = new CompositeThermometerNode( multipleParticleModel, modelViewTransform, {
       font: new PhetFont( 20 ),
       fill: 'white',
-      right: heaterCoolerNode.left + 3 * INSET
+      right: heaterCoolerNode.left + 2 * INSET
     } );
     this.addChild( this.compositeThermometerNode );
 
