@@ -51,7 +51,7 @@ define( function( require ) {
   var AXIS_LABEL_FONT;
   var GREEK_LETTER_FONT_SIZE = 18;
   var GREEK_LETTER_FONT = new PhetFont( GREEK_LETTER_FONT_SIZE );
-  var GREEK_LETTER_MAX_WIDTH = 60;
+  var GREEK_LETTER_MAX_WIDTH;
 
   // zoom buttons height
   var zoomButtonsHeight = 72;
@@ -77,12 +77,14 @@ define( function( require ) {
       this.heightOfGraph = this.widthOfGraph * 0.6;
       GREEK_LETTER_FONT = new PhetFont( 22 );
       AXIS_LABEL_FONT = new PhetFont( 16 );
+      GREEK_LETTER_MAX_WIDTH = 60;
     }
     else {
       this.widthOfGraph = NARROW_VERSION_WIDTH;
       this.heightOfGraph = this.widthOfGraph * 0.8;
       AXIS_LABEL_FONT = new PhetFont( AXIS_LABEL_FONT_SIZE );
       GREEK_LETTER_FONT = new PhetFont( GREEK_LETTER_FONT_SIZE );
+      GREEK_LETTER_MAX_WIDTH = 20;
     }
     this.graphXOrigin = 0.05 * this.widthOfGraph;
     this.graphYOrigin = 0.85 * this.heightOfGraph;
