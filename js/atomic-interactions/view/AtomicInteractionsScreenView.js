@@ -63,7 +63,7 @@ define( function( require ) {
 
     // model-view transform
     this.modelViewTransform = ModelViewTransform2.createSinglePointScaleMapping( new Vector2( 0, 0 ),
-      new Vector2( 110, 370 ), 0.25 );
+      new Vector2( 110, 360 ), 0.25 );
 
     var tickTextColor = enableHeterogeneousAtoms ? 'black' : 'white';
     var showTitleWhenExpand = !enableHeterogeneousAtoms; // force control panel title
@@ -112,7 +112,7 @@ define( function( require ) {
         atomicInteractionsScreenView.interactiveInteractionPotentialDiagram.reset();
       },
       right:  this.layoutBounds.maxX - inset,
-      bottom: this.layoutBounds.maxY - 2 * inset,
+      bottom: this.returnAtomButton.bottom,
       scale: 0.75
     } );
     this.addChild( resetAllButton );
@@ -128,7 +128,7 @@ define( function( require ) {
         stroke: 'black',
         fill: '#005566',
         centerX: this.layoutBounds.centerX + 100,
-        bottom:  this.layoutBounds.bottom - 2 * inset
+        bottom:  this.returnAtomButton.bottom
       } );
     this.addChild( stepButton );
 
@@ -182,7 +182,7 @@ define( function( require ) {
 
     var speedControlMaxWidth = ( slowMotionRadioBox.width > normalMotionRadioBox.width ) ? slowMotionRadioBox.width : normalMotionRadioBox.width;
 
-    var radioButtonSpacing = 5;
+    var radioButtonSpacing = 4;
     var touchAreaYDilation = radioButtonSpacing / 2;
     slowMotionRadioBox.touchArea = new Bounds2(
       slowMotionRadioBox.localBounds.minX,
