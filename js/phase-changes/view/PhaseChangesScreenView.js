@@ -205,6 +205,11 @@ define( function( require ) {
     this.addChild( this.returnLidButton );
     multipleParticleModel.isExplodedProperty.linkAttribute( this.returnLidButton, 'visible' );
 
+    multipleParticleModel.isExplodedProperty.link( function(){
+      phaseChangesScreenView.modelTemperatureHistory.clear();
+      phaseChangesScreenView.updatePhaseDiagram();
+    });
+
     // add interaction potential diagram
     if ( isInteractionDiagramEnabled ) {
       var epsilonControlInteractionPotentialDiagram = new EpsilonControlInteractionPotentialDiagram(
