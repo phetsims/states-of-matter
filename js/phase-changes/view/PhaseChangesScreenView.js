@@ -243,8 +243,10 @@ define( function( require ) {
           phaseChangesScreenView.addChild( phaseChangesScreenView.phaseDiagram );
           phaseChangesScreenView.phaseDiagram.right = phaseChangesScreenView.layoutBounds.right - LAY_BOUNDS_RIGHT_OFFSET;
           if ( isInteractionDiagramEnabled ) {
-            epsilonControlInteractionPotentialDiagram.top = phaseChangesMoleculesControlPanel.bottom + INSET * 0.3;
-            phaseChangesScreenView.phaseDiagram.top = epsilonControlInteractionPotentialDiagram.bottom + INSET * 0.3;
+            phaseChangesScreenView.phaseDiagram.bottom = resetAllButton.top - INSET * 0.2;
+            epsilonControlInteractionPotentialDiagram.bottom = phaseChangesScreenView.phaseDiagram.top - INSET * 0.2;
+            phaseChangesMoleculesControlPanel.bottom = epsilonControlInteractionPotentialDiagram.top - INSET * 0.2
+
           }
           else {
             phaseChangesScreenView.phaseDiagram.top = phaseChangesMoleculesControlPanel.bottom + INSET * 0.3;

@@ -78,7 +78,7 @@ define( function( require ) {
 
     options = _.extend( {
       xMargin: 5,
-      yMargin: 8,
+      yMargin: 5,
       fill: '#C8C8C8  ',
       stroke: 'gray',
       lineWidth: 1,
