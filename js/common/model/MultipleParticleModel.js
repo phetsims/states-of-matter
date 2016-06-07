@@ -499,7 +499,7 @@ define( function( require ) {
           // Adding the first particle is considered a temperature
           // change, because (in this sim anyway), no particles means a
           // temperature of zero.
-          // notifyTemperatureChanged();
+          this.temperatureSetPointProperty.notifyObserversStatic();
         }
 
         this.syncParticlePositions();
