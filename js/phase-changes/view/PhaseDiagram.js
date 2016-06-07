@@ -64,8 +64,8 @@ define( function( require ) {
   // constants that control the appearance of the phase diagram for the
   // various substances.  Note that all points are controlled as proportions
   // of the overall graph size and not as absolute values.
-  var POINT_MARKER_DIAMETER = 4;
-  var CURRENT_STATE_MARKER_DIAMETER = 4;
+  var POINT_MARKER_DIAMETER = 2.5;
+  var CURRENT_STATE_MARKER_DIAMETER = 3.5;
   var DEFAULT_TOP_OF_SOLID_LIQUID_LINE = new Vector2( X_USABLE_RANGE * 0.40 + X_ORIGIN_OFFSET,
     Y_ORIGIN_OFFSET - Y_USABLE_RANGE );
   var TOP_OF_SOLID_LIQUID_LINE_FOR_WATER = new Vector2( X_USABLE_RANGE * 0.30 + X_ORIGIN_OFFSET,
@@ -268,8 +268,8 @@ define( function( require ) {
     drawPhaseDiagram: function() {
 
       // Place the triple point marker.
-      this.triplePoint.setTranslation( DEFAULT_TRIPLE_POINT.x - POINT_MARKER_DIAMETER / 2,
-        DEFAULT_TRIPLE_POINT.y - POINT_MARKER_DIAMETER / 2 );
+      this.triplePoint.setTranslation( DEFAULT_TRIPLE_POINT.x,
+        DEFAULT_TRIPLE_POINT.y );
 
       // Add the curve that separates the solid and gaseous regions.
       var solidGasCurve = new Shape().moveTo( X_ORIGIN_OFFSET, Y_ORIGIN_OFFSET )
@@ -294,8 +294,8 @@ define( function( require ) {
       this.solidAreaBackground.setShape( solidBackground );
 
       // Place the critical point marker.
-      this.criticalPoint.setTranslation( DEFAULT_CRITICAL_POINT.x - POINT_MARKER_DIAMETER / 2,
-        DEFAULT_CRITICAL_POINT.y - POINT_MARKER_DIAMETER / 2 );
+      this.criticalPoint.setTranslation( DEFAULT_CRITICAL_POINT.x,
+        DEFAULT_CRITICAL_POINT.y);
 
       // Add the curve that separates liquid and gas.
       var controlCurveXPos = DEFAULT_TRIPLE_POINT.x + ((DEFAULT_CRITICAL_POINT.x - DEFAULT_TRIPLE_POINT.x) / 2);
