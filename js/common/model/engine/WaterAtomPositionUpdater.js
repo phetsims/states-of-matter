@@ -35,6 +35,7 @@ define( function( require ) {
       var atomPositions = moleculeDataSet.getAtomPositions();
       var moleculeCenterOfMassPositions = moleculeDataSet.getMoleculeCenterOfMassPositions();
       var moleculeRotationAngles = moleculeDataSet.getMoleculeRotationAngles();
+      var insideContainers = moleculeDataSet.insideContainers;
 
       // other vars
       var xPos;
@@ -45,12 +46,19 @@ define( function( require ) {
       // Loop through all molecules and position the individual atoms based on
       // center of gravity position, molecule structure, and rotational angle.
       for ( var i = 0; i < moleculeDataSet.getNumberOfMolecules(); i++ ) {
+        insideContainers[ i ] = this.checkInContainer( moleculeCenterOfMassPositions[ i ],
+          StatesOfMatterConstants.CONTAINER_LEFT_WALL,
+          StatesOfMatterConstants.CONTAINER_RIGHT_WALL - 10,
+          StatesOfMatterConstants.CONTAINER_TOP_WALL - 10,
+          StatesOfMatterConstants.CONTAINER_BOTTOM_WALL,
+          insideContainers[ i ]
+        );
         cosineTheta = Math.cos( moleculeRotationAngles[ i ] );
         sineTheta = Math.sin( moleculeRotationAngles[ i ] );
         for ( var j = 0; j < 3; j++ ) {
           var xOffset = ( cosineTheta * STRUCTURE_X[ j ] ) - ( sineTheta * STRUCTURE_Y[ j ] );
           var yOffset = ( sineTheta * STRUCTURE_X[ j ] ) + ( cosineTheta * STRUCTURE_Y[ j ] );
-          if ( timeStep >= 0.018 ) {
+          if ( insideContainers[ i ] ) {
             xPos = Util.clamp( moleculeCenterOfMassPositions[ i ].x, StatesOfMatterConstants.CONTAINER_LEFT_WALL,
                 StatesOfMatterConstants.CONTAINER_RIGHT_WALL - 10 ) + xOffset;
             yPos = Math.max( moleculeCenterOfMassPositions[ i ].y, StatesOfMatterConstants.CONTAINER_BOTTOM_WALL ) + yOffset;
@@ -61,6 +69,21 @@ define( function( require ) {
           }
 
           atomPositions[ i * 3 + j ].setXY( xPos, yPos );
+        }
+      }
+    },
+
+    checkInContainer: function( position, leftWall, rightWall, topWall, bottomWall, currentStatus ){
+      if ( currentStatus && position.y >= topWall + 2 ){
+        return false;
+      }
+      else{
+        if ( !currentStatus && position.x >= leftWall && position.x <= rightWall &&
+             position.y <= topWall && position. y >= bottomWall ){
+          return true;
+        }
+        else{
+          return currentStatus;
         }
       }
     }

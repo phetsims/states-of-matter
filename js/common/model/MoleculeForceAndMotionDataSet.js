@@ -40,6 +40,7 @@ define( function( require ) {
     this.moleculeVelocities = [];
     this.moleculeForces = [];
     this.nextMoleculeForces = [];
+    this.insideContainers = [];
 
     // Note that some of the following are not used in the monatomic case, but need to be here for compatibility.
     this.moleculeRotationAngles = [];
@@ -267,9 +268,10 @@ define( function( require ) {
      * @param {Vector2} moleculeCenterOfMassPosition
      * @param {Vector2} moleculeVelocity
      * @param {number} moleculeRotationRate
+     * @param {boolean} insideContainer
      * @return {boolean} true if able to add, false if not.
      */
-    addMolecule: function( atomPositions, moleculeCenterOfMassPosition, moleculeVelocity, moleculeRotationRate ) {
+    addMolecule: function( atomPositions, moleculeCenterOfMassPosition, moleculeVelocity, moleculeRotationRate, insideContainer ) {
 
       if ( this.getNumberOfRemainingSlots() === 0 ) {
         return false;
@@ -283,6 +285,7 @@ define( function( require ) {
       this.moleculeCenterOfMassPositions[ numberOfMolecules ] = moleculeCenterOfMassPosition;
       this.moleculeVelocities[ numberOfMolecules ] = moleculeVelocity;
       this.moleculeRotationRates[ numberOfMolecules ] = moleculeRotationRate;
+      this.insideContainers[ numberOfMolecules ] = insideContainer;
 
       // Allocate memory for the information that is not specified.
       this.moleculeForces[ numberOfMolecules ] = new Vector2();

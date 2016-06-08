@@ -451,7 +451,7 @@ define( function( require ) {
 
         // Add the newly created molecule to the data set.
         this.moleculeDataSet.addMolecule( atomPositions, moleculeCenterOfMassPosition, moleculeVelocity,
-          moleculeRotationRate );
+          moleculeRotationRate, true );
 
         // Position the atoms that comprise the molecules.
         this.atomPositionUpdater.updateAtomPositions( this.moleculeDataSet );
@@ -647,7 +647,7 @@ define( function( require ) {
       for ( var i = 0; i < VERLET_CALCULATIONS_PER_CLOCK_TICK; i++ ) {
         // is the container is exploded reduce the speed of particles
         if( this.isExploded ){
-          normDt = Math.max( 0.016, normDt );
+          normDt = normDt * 0.9;
         }
         this.moleculeForceAndMotionCalculator.updateForcesAndMotion( normDt );
 
@@ -789,7 +789,7 @@ define( function( require ) {
         var moleculeVelocity = new Vector2();
 
         // Add the atom to the data set.
-        this.moleculeDataSet.addMolecule( atomPositions, moleculeCenterOfMassPosition, moleculeVelocity, 0 );
+        this.moleculeDataSet.addMolecule( atomPositions, moleculeCenterOfMassPosition, moleculeVelocity, 0, true );
 
         // Add atoms to model set.
         this.particles.push( new OxygenAtom( 0, 0 ) );
@@ -844,7 +844,7 @@ define( function( require ) {
         var moleculeVelocity = new Vector2();
 
         // Add the atom to the data set.
-        this.moleculeDataSet.addMolecule( atomPositions, moleculeCenterOfMassPosition, moleculeVelocity, 0 );
+        this.moleculeDataSet.addMolecule( atomPositions, moleculeCenterOfMassPosition, moleculeVelocity, 0, true );
 
         // Add atoms to model set.
         this.particles.add( new OxygenAtom( 0, 0 ) );
@@ -995,7 +995,7 @@ define( function( require ) {
         var moleculeCenterOfMassPosition = new Vector2();
         var moleculeVelocity = new Vector2();
         // Add the atom to the data set.
-        this.moleculeDataSet.addMolecule( atomPositions, moleculeCenterOfMassPosition, moleculeVelocity, 0 );
+        this.moleculeDataSet.addMolecule( atomPositions, moleculeCenterOfMassPosition, moleculeVelocity, 0, true );
 
         // Add particle to model set.
         var atom;

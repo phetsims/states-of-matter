@@ -35,14 +35,22 @@ define( function( require ) {
       var atomPositions = moleculeDataSet.atomPositions;
       var moleculeCenterOfMassPositions = moleculeDataSet.moleculeCenterOfMassPositions;
       var moleculeRotationAngles = moleculeDataSet.moleculeRotationAngles;
+      var insideContainers = moleculeDataSet.insideContainers;
       var xPos;
       var yPos;
       var cosineTheta;
       var sineTheta;
       for ( var i = 0; i < moleculeDataSet.getNumberOfMolecules(); i++ ) {
+        insideContainers[ i ] = this.checkInContainer( moleculeCenterOfMassPositions[ i ],
+          StatesOfMatterConstants.CONTAINER_LEFT_WALL + 0.5,
+          StatesOfMatterConstants.CONTAINER_RIGHT_WALL,
+          StatesOfMatterConstants.CONTAINER_TOP_WALL,
+          StatesOfMatterConstants.CONTAINER_BOTTOM_WALL,
+          insideContainers[ i ]
+        );
         cosineTheta = Math.cos( moleculeRotationAngles[ i ] );
         sineTheta = Math.sin( moleculeRotationAngles[ i ] );
-        if ( timeStep >= 0.018 ) {
+        if ( insideContainers[ i ] ) {
           xPos = Util.clamp( moleculeCenterOfMassPositions[ i ].x, StatesOfMatterConstants.CONTAINER_LEFT_WALL + 0.5,
               StatesOfMatterConstants.CONTAINER_RIGHT_WALL ) +
                  cosineTheta * (StatesOfMatterConstants.DIATOMIC_PARTICLE_DISTANCE / 2);
@@ -67,6 +75,21 @@ define( function( require ) {
           yPos = moleculeCenterOfMassPositions[ i ].y -
                  sineTheta * (StatesOfMatterConstants.DIATOMIC_PARTICLE_DISTANCE / 2);
           atomPositions[ i * 2 + 1 ].setXY( xPos, yPos );
+        }
+      }
+    },
+
+    checkInContainer: function( position, leftWall, rightWall, topWall, bottomWall, currentStatus ){
+      if ( currentStatus && position.y >= topWall + 2 ){
+        return false;
+      }
+      else{
+        if ( !currentStatus && position.x > leftWall && position.x < rightWall &&
+             position.y <= topWall && position. y >= bottomWall ){
+          return true;
+        }
+        else{
+          return currentStatus;
         }
       }
     }
