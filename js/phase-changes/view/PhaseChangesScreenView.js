@@ -128,20 +128,6 @@ define( function( require ) {
     } );
     this.addChild( this.compositeThermometerNode );
 
-
-    // add phase diagram - in SOM basic version by default phase diagram should be closed.
-    multipleParticleModel.expandedProperty.value = isInteractionDiagramEnabled;
-    this.phaseDiagram = new PhaseDiagram( multipleParticleModel.expandedProperty );
-
-    // add phase change control panel
-    var phaseChangesMoleculesControlPanel = new PhaseChangesMoleculesControlPanel( multipleParticleModel, isInteractionDiagramEnabled, {
-      right: this.layoutBounds.right - LAY_BOUNDS_RIGHT_OFFSET,
-      top: this.layoutBounds.top + LAY_BOUNDS_Y_OFFSET / 2,
-      maxWidth: this.phaseDiagram.width,
-      minWidth: this.phaseDiagram.width
-    } );
-    this.addChild( phaseChangesMoleculesControlPanel );
-
     // add reset all button
     var resetAllButton = new ResetAllButton( {
       listener: function() {
@@ -206,21 +192,35 @@ define( function( require ) {
     this.addChild( this.returnLidButton );
     multipleParticleModel.isExplodedProperty.linkAttribute( this.returnLidButton, 'visible' );
 
-    multipleParticleModel.isExplodedProperty.link( function(){
-      phaseChangesScreenView.modelTemperatureHistory.clear();
-      phaseChangesScreenView.updatePhaseDiagram();
-    });
-
     // add interaction potential diagram
     if ( isInteractionDiagramEnabled ) {
       var epsilonControlInteractionPotentialDiagram = new EpsilonControlInteractionPotentialDiagram(
         StatesOfMatterConstants.MAX_SIGMA, StatesOfMatterConstants.MIN_EPSILON, false,
         multipleParticleModel, {
-          right: this.layoutBounds.right - LAY_BOUNDS_RIGHT_OFFSET,
-          top: phaseChangesMoleculesControlPanel.bottom
+          right: this.layoutBounds.right - LAY_BOUNDS_RIGHT_OFFSET
         } );
       this.addChild( epsilonControlInteractionPotentialDiagram );
     }
+
+    // add phase diagram - in SOM basic version by default phase diagram should be closed.
+    var minWidth = isInteractionDiagramEnabled ? epsilonControlInteractionPotentialDiagram.width : 169;
+    multipleParticleModel.expandedProperty.value = isInteractionDiagramEnabled;
+    this.phaseDiagram = new PhaseDiagram( multipleParticleModel.expandedProperty, minWidth );
+
+    // add phase change control panel
+    var phaseChangesMoleculesControlPanel = new PhaseChangesMoleculesControlPanel( multipleParticleModel, isInteractionDiagramEnabled, {
+      right: this.layoutBounds.right - LAY_BOUNDS_RIGHT_OFFSET,
+      top: this.layoutBounds.top + LAY_BOUNDS_Y_OFFSET / 2,
+      maxWidth: this.phaseDiagram.width,
+      minWidth: this.phaseDiagram.width
+    } );
+    this.addChild( phaseChangesMoleculesControlPanel );
+
+    multipleParticleModel.isExplodedProperty.link( function(){
+      phaseChangesScreenView.modelTemperatureHistory.clear();
+      phaseChangesScreenView.updatePhaseDiagram();
+    });
+
     multipleParticleModel.moleculeTypeProperty.link( function( moleculeId ) {
       phaseChangesScreenView.modelTemperatureHistory.clear();
       phaseChangesScreenView.updatePhaseDiagram();

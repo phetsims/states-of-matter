@@ -83,10 +83,11 @@ define( function( require ) {
 
   /**
    * @param {Property<boolean>} expandedProperty - is to expand the phase diagram
+   * @param {Number} minWidth
    * @param {Object} [options] that can be passed on to the underlying node
    * @constructor
    */
-  function PhaseDiagram( expandedProperty, options ) {
+  function PhaseDiagram( expandedProperty, minWidth, options ) {
 
     Node.call( this );
     var accordionContent = new Node();
@@ -229,7 +230,7 @@ define( function( require ) {
     if ( titleNode.width > horizontalAxis.width ) {
       titleNode.scale( horizontalAxis.width / titleNode.width );
     }
-    var accordionBox = new AccordionBox( accordionContent, {
+    this.accordionBox = new AccordionBox( accordionContent, {
       titleNode: titleNode,
       fill: 'black',
       stroke: 'white',
@@ -241,14 +242,14 @@ define( function( require ) {
       contentYSpacing: -15,
       contentYMargin: 5,
       contentXMargin: 5,
-      minWidth: 169,
+      minWidth: minWidth,
       buttonYMargin: 4,
       buttonXMargin: 5,
       buttonLength: 12,
       buttonTouchAreaXDilation: 15,
       buttonTouchAreaYDilation: 5
     } );
-    this.addChild( accordionBox );
+    this.addChild( this.accordionBox );
 
     // Draw the initial phase diagram.
     this.drawPhaseDiagram();

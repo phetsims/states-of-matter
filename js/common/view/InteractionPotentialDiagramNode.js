@@ -167,10 +167,16 @@ define( function( require ) {
 
     this.horizontalAxisLabel = new Text( distanceBetweenAtomsString, {
       fill: 'white',
-      font: AXIS_LABEL_FONT
+      font: AXIS_LABEL_FONT - 1
     } );
     if ( this.horizontalAxisLabel.width > this.horizontalAxis.width ) {
-      this.horizontalAxisLabel.scale( this.horizontalAxis.width / this.horizontalAxisLabel.width );
+      if ( wide ){
+        this.horizontalAxisLabel.scale( this.horizontalAxis.width / this.horizontalAxisLabel.width );
+      }
+      else{
+        this.horizontalAxisLabel.scale( ( this.horizontalAxis.width + 40 ) / this.horizontalAxisLabel.width );
+      }
+
     }
 
     this.setMolecular( false );
