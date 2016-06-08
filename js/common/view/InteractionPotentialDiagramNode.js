@@ -84,7 +84,7 @@ define( function( require ) {
       this.heightOfGraph = this.widthOfGraph * 0.8;
       AXIS_LABEL_FONT = new PhetFont( AXIS_LABEL_FONT_SIZE );
       GREEK_LETTER_FONT = new PhetFont( GREEK_LETTER_FONT_SIZE );
-      GREEK_LETTER_MAX_WIDTH = 20;
+      GREEK_LETTER_MAX_WIDTH = 17;
     }
     this.graphXOrigin = 0.05 * this.widthOfGraph;
     this.graphYOrigin = 0.85 * this.heightOfGraph;

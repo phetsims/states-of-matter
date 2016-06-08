@@ -39,7 +39,7 @@ define( function( require ) {
   // constants
   var inset = 10;
   var MAX_WIDTH = 120;
-  var TickTextWidth = 20;
+  var TICK_TEXT_MAX_WIDTH = 40;
   var NORMAL_TEXT_FONT_SIZE = 12;
 
   // icon for the adjustable attraction button
@@ -87,24 +87,21 @@ define( function( require ) {
     }, options );
 
     Node.call( this );
-    var textOptions = { font: new PhetFont( NORMAL_TEXT_FONT_SIZE ), fill: '#FFFFFF' };
+    var textOptions = { font: new PhetFont( NORMAL_TEXT_FONT_SIZE ), fill: '#FFFFFF', maxWidth: MAX_WIDTH };
+    var tickTextOptions = { font: new PhetFont( NORMAL_TEXT_FONT_SIZE ), fill: '#FFFFFF', maxWidth: TICK_TEXT_MAX_WIDTH };
 
-    var weakTitle = new Text( weakString, textOptions );
-    if ( weakTitle.width > TickTextWidth ) {
-      weakTitle.scale( TickTextWidth / weakTitle.width );
-    }
+    var weakTitle = new Text( weakString, tickTextOptions );
 
-    var strongTitle = new Text( strongString, textOptions );
-    if ( strongTitle.width > TickTextWidth ) {
-      strongTitle.scale( TickTextWidth / strongTitle.width );
-    }
+    var strongTitle = new Text( strongString, tickTextOptions );
 
     // add interaction strength slider and title
     var interactionStrengthNode = new Node();
-    var interactionTitle = new Text( interactionStrengthWithSymbolString, textOptions );
-    if ( interactionTitle.width > MAX_WIDTH ) {
-      interactionTitle.scale( MAX_WIDTH / interactionTitle.width );
-    }
+    var interactionTitle = new Text( interactionStrengthWithSymbolString, {
+      font: new PhetFont( NORMAL_TEXT_FONT_SIZE ),
+      fill: '#FFFFFF',
+      maxWidth: 140
+    } );
+
     interactionStrengthNode.addChild( interactionTitle );
     var interactionStrengthSlider = new HSlider(
       multipleParticleModel.interactionStrengthProperty, {
@@ -132,32 +129,15 @@ define( function( require ) {
     interactionStrengthSlider.addMajorTick( StatesOfMatterConstants.MIN_ADJUSTABLE_EPSILON, weakTitle );
 
     var neonText = new Text( neonString, textOptions );
-    if ( neonText.width > MAX_WIDTH ) {
-      neonText.scale( MAX_WIDTH / neonText.width );
-    }
     var argonText = new Text( argonString, textOptions );
-    if ( argonText.width > MAX_WIDTH ) {
-      argonText.scale( MAX_WIDTH / argonText.width );
-    }
     var waterText = new Text( waterString, textOptions );
-    if ( waterText.width > MAX_WIDTH ) {
-      waterText.scale( MAX_WIDTH / waterText.width );
-    }
     var oxygenText = new Text( diatomicOxygenString, textOptions );
-    if ( oxygenText.width > MAX_WIDTH ) {
-      oxygenText.scale( MAX_WIDTH / oxygenText.width );
-    }
     var adjustableAttractionText = new Text( adjustableAttractionString, textOptions );
-    if ( adjustableAttractionText.width > MAX_WIDTH ) {
-      adjustableAttractionText.scale( MAX_WIDTH / adjustableAttractionText.width );
-    }
     var title = new Text( atomsAndMoleculesString, {
       font: new PhetFont( 14 ),
-      fill: '#FFFFFF'
+      fill: '#FFFFFF',
+      maxWidth: MAX_WIDTH
     } );
-    if ( title.width > MAX_WIDTH ) {
-      title.scale( MAX_WIDTH / title.width );
-    }
 
     // itemSpec describes the pieces that make up an item in the control panel,
     // conforms to the contract: { label: {Node}, icon: {Node} (optional) }

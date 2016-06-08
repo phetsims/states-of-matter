@@ -51,7 +51,7 @@ define( function( require ) {
 
 //  Constants
 
-  var SLIDER_TICK_TEXT_MAX_WIDTH = 26;
+  var SLIDER_TICK_TEXT_MAX_WIDTH = 35;
   var NORMAL_TEXT_FONT_SIZE = 12;
   var TITLE_TEXT_WIDTH = 130;
 
