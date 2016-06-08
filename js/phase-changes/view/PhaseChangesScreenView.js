@@ -250,7 +250,7 @@ define( function( require ) {
           if ( isInteractionDiagramEnabled ) {
             phaseChangesScreenView.phaseDiagram.bottom = resetAllButton.top - INSET * 0.2;
             epsilonControlInteractionPotentialDiagram.bottom = phaseChangesScreenView.phaseDiagram.top - INSET * 0.2;
-            phaseChangesMoleculesControlPanel.bottom = epsilonControlInteractionPotentialDiagram.top - INSET * 0.2
+            phaseChangesMoleculesControlPanel.bottom = epsilonControlInteractionPotentialDiagram.top - INSET * 0.2;
 
           }
           else {
