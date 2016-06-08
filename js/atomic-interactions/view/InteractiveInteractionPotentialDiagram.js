@@ -232,8 +232,8 @@ define( function( require ) {
     this.addChild( this.verticalAxisLabel );
 
     this.addChild( this.verticalAxis );
-    this.addChild( this.ljPotentialGraph );
     this.addChild( this.horizontalAxis );
+    this.addChild( this.ljPotentialGraph );
 
     // applying color scheme to lj graph elements
     this.verticalAxis.fill = StatesOfMatterColorProfile.ljGraphColorsModeProperty;
