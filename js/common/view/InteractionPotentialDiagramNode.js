@@ -167,14 +167,14 @@ define( function( require ) {
 
     this.horizontalAxisLabel = new Text( distanceBetweenAtomsString, {
       fill: 'white',
-      font: AXIS_LABEL_FONT - 1
+      font: wide? AXIS_LABEL_FONT : AXIS_LABEL_FONT - 1
     } );
     if ( this.horizontalAxisLabel.width > this.horizontalAxis.width ) {
       if ( wide ){
-        this.horizontalAxisLabel.scale( this.horizontalAxis.width / this.horizontalAxisLabel.width );
+        this.horizontalAxisLabel.maxWidth = this.horizontalAxis.width;
       }
       else{
-        this.horizontalAxisLabel.scale( ( this.horizontalAxis.width + 40 ) / this.horizontalAxisLabel.width );
+        this.horizontalAxisLabel.maxWidth = this.horizontalAxis.width + 50;
       }
 
     }
