@@ -145,19 +145,14 @@ define( function( require ) {
     } );
 
     // add play pause button and step button
-    var stepButton = new StepForwardButton(
-      function() {
-        multipleParticleModel.stepInternal( 0.016 );
-      },
-      multipleParticleModel.isPlayingProperty,
-      {
-        radius: 12,
-        stroke: 'black',
-        fill: '#005566',
-        right: heaterCoolerNode.left - STEP_BUTTON_X_OFFSET,
-        bottom: heaterCoolerNode.bottom - STEP_BUTTON_Y_OFFSET
-      }
-    );
+    var stepButton = new StepForwardButton( multipleParticleModel.isPlayingProperty, {
+      listener: function() { multipleParticleModel.stepInternal( 0.016 ); },
+      radius: 12,
+      stroke: 'black',
+      fill: '#005566',
+      right: heaterCoolerNode.left - STEP_BUTTON_X_OFFSET,
+      bottom: heaterCoolerNode.bottom - STEP_BUTTON_Y_OFFSET
+    } );
     this.addChild( stepButton );
 
     var playPauseButton = new PlayPauseButton( multipleParticleModel.isPlayingProperty, {

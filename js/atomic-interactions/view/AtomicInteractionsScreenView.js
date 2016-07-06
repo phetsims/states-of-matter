@@ -118,18 +118,14 @@ define( function( require ) {
     this.addChild( resetAllButton );
 
     // add play/pause and step buttons
-    var stepButton = new StepForwardButton(
-      function() {
-        dualAtomModel.stepInternal( 0.016 );
-      },
-      dualAtomModel.isPlayingProperty,
-      {
-        radius: 12,
-        stroke: 'black',
-        fill: '#005566',
-        centerX: this.layoutBounds.centerX + 100,
-        bottom:  this.returnAtomButton.bottom
-      } );
+    var stepButton = new StepForwardButton( dualAtomModel.isPlayingProperty, {
+      listener: function() { dualAtomModel.stepInternal( 0.016 ); },
+      radius: 12,
+      stroke: 'black',
+      fill: '#005566',
+      centerX: this.layoutBounds.centerX + 100,
+      bottom: this.returnAtomButton.bottom
+    } );
     this.addChild( stepButton );
 
     // add force control
