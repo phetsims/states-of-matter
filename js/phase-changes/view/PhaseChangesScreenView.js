@@ -145,7 +145,8 @@ define( function( require ) {
     } );
 
     // add play pause button and step button
-    var stepButton = new StepForwardButton( multipleParticleModel.isPlayingProperty, {
+    var stepButton = new StepForwardButton( {
+      playingProperty: multipleParticleModel.isPlayingProperty,
       listener: function() { multipleParticleModel.stepInternal( 0.016 ); },
       radius: 12,
       stroke: 'black',

@@ -129,15 +129,15 @@ define( function( require ) {
       } );
 
     // add play pause button and step button
-    var stepButton = new StepForwardButton( multipleParticleModel.isPlayingProperty, {
-        listener: function() { multipleParticleModel.stepInternal( 0.016 ); },
+    var stepButton = new StepForwardButton( {
+      playingProperty: multipleParticleModel.isPlayingProperty,
+      listener: function() { multipleParticleModel.stepInternal( 0.016 ); },
       radius: 12,
-        stroke: 'black',
-        fill: '#005566',
-        right: heaterCoolerNode.left - stepButtonXOffset,
-        bottom: heaterCoolerNode.bottom - stepButtonYOffset
-      }
-    );
+      stroke: 'black',
+      fill: '#005566',
+      right: heaterCoolerNode.left - stepButtonXOffset,
+      bottom: heaterCoolerNode.bottom - stepButtonYOffset
+    } );
 
     this.addChild( stepButton );
     multipleParticleModel.moleculeTypeProperty.link( function() {

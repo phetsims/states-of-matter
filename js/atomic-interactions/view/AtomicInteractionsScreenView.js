@@ -118,7 +118,8 @@ define( function( require ) {
     this.addChild( resetAllButton );
 
     // add play/pause and step buttons
-    var stepButton = new StepForwardButton( dualAtomModel.isPlayingProperty, {
+    var stepButton = new StepForwardButton( {
+      playingProperty: dualAtomModel.isPlayingProperty,
       listener: function() { dualAtomModel.stepInternal( 0.016 ); },
       radius: 12,
       stroke: 'black',
