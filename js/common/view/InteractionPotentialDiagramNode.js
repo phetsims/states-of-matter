@@ -246,7 +246,6 @@ define( function( require ) {
      * @public
      */
     reset: function() {
-      // reset   the lj graph
       this.verticalScalingFactor = (this.graphHeight / 2.2) /
                                    (StatesOfMatterConstants.MAX_EPSILON * StatesOfMatterConstants.K_BOLTZMANN);
       this.horizontalLineCount = 5;
@@ -255,51 +254,50 @@ define( function( require ) {
     },
 
     /**
-     * @public
      * @returns {number}
+     * @public
      */
     getGraphHeight: function() {
       return this.graphHeight;
     },
 
     /**
-     * @public
      * @returns {number}
+     * @public
      */
     getGraphWidth: function() {
       return this.graphWidth;
     },
 
     /**
-     * @public
      * @returns {Vector2}
+     * @public
      */
     getZeroCrossingPoint: function() {
       return this.zeroCrossingPoint;
     },
 
     /**
-     * @public
      * @returns {Vector2}
+     * @public
      */
     getGraphMin: function() {
       return this.graphMin;
     },
 
     /**
-     * @public
      * @param {boolean} enabled - indicate to whether enable the position marker or not.
+     * @public
      */
     setMarkerEnabled: function( enabled ) {
       this.positionMarkerEnabled = enabled;
     },
 
     /**
-     * Set the position of the position marker.  Note that is is only possible
-     * to set the x axis position, which is distance.  The y axis position is
-     * always on the LJ potential curve.
-     * @public
+     * Set the position of the position marker.  Note that is is only possible to set the x axis position, which is
+     * distance.  The y axis position is always on the LJ potential curve.
      * @param {number}distance - distance from the center of the interacting molecules.
+     * @public
      */
     setMarkerPosition: function( distance ) {
       this.markerDistance = distance;
@@ -334,20 +332,20 @@ define( function( require ) {
 
     /**
      * Calculate the Lennard-Jones potential for the given distance.
-     * @public
      * @param {number} radius
      * @return {number}
+     * @public
      */
     calculateLennardJonesPotential: function( radius ) {
       return (  this.ljPotentialCalculator.calculateLjPotential( radius ));
     },
 
     /**
-     *
-     * Draw the curve that reflects the Lennard-Jones potential based upon the
-     * current values for sigma and epsilon.
+     * Draw the curve that reflects the Lennard-Jones potential based upon the current values for sigma and epsilon.
      */
     drawPotentialCurve: function() {
+      // must be overridden in descendant types, so assert if called here
+      assert && assert( false, 'this function must be overridden in descendant classes' );
     },
 
     MAX_INTER_ATOM_DISTANCE: MAX_INTER_ATOM_DISTANCE
