@@ -37,8 +37,8 @@ define( function( require ) {
   // constants that control the appearance of the diagram.
   var NARROW_VERSION_WIDTH = 135;
   var WIDE_VERSION_WIDTH = 450;
-  var AXIS_LINE_WIDTH = 1;
-  var AXES_ARROW_HEAD_HEIGHT = 8 * AXIS_LINE_WIDTH;
+  var AXIS_LINE_WIDTH = 2;
+  var AXES_ARROW_HEAD_HEIGHT = 4 * AXIS_LINE_WIDTH;
 
   // Size of pos marker wrt overall width.
   var POSITION_MARKER_DIAMETER_PROPORTION = 0.03;
@@ -160,10 +160,10 @@ define( function( require ) {
       fill: 'white',
       headHeight: 8,
       headWidth: 8,
-      tailWidth: 2
+      tailWidth: 2,
+      x: this.graphXOrigin,
+      y: this.graphYOrigin
     } );
-
-    this.horizontalAxis.setTranslation( this.graphXOrigin, this.graphYOrigin );
 
     this.horizontalAxisLabel = new Text( distanceBetweenAtomsString, {
       fill: 'white',
@@ -183,13 +183,13 @@ define( function( require ) {
 
     // Create and add the vertical axis line for the graph.
     this.verticalAxis = new ArrowNode( 0, 0, 0, -this.graphHeight - AXES_ARROW_HEAD_HEIGHT, {
-      stroke: 'white',
       fill: 'white',
       headHeight: 8,
       headWidth: 8,
-      tailWidth: 2
+      tailWidth: AXIS_LINE_WIDTH,
+      x: this.graphXOrigin,
+      y: this.graphYOrigin
     } );
-    this.verticalAxis.setTranslation( this.graphXOrigin, this.graphYOrigin );
 
     this.verticalAxisLabel = new Text( potentialEnergyString, {
       fill: 'white',

@@ -118,16 +118,33 @@ define( function( require ) {
       return text;
     };
 
-    // Allows user to select from a fixed list of heterogeneous and
-    // homogeneous combinations of atoms.
+    // allows user to select from a fixed list of heterogeneous and homogeneous combinations of atoms
     if ( enableHeterogeneousAtoms ) {
 
-      neonAndNeon = [ createText( neonString, NORMAL_TEXT__MAX_WIDTH / 2, NORMAL_TEXT_FONT_SIZE ), createText( neonString, NORMAL_TEXT__MAX_WIDTH / 2, NORMAL_TEXT_FONT_SIZE ) ];
-      argonAndArgon = [ createText( argonString, NORMAL_TEXT__MAX_WIDTH / 2, NORMAL_TEXT_FONT_SIZE ), createText( argonString, NORMAL_TEXT__MAX_WIDTH / 2, NORMAL_TEXT_FONT_SIZE ) ];
-      oxygenAndOxygen = [ createText( oxygenString, NORMAL_TEXT__MAX_WIDTH / 2, NORMAL_TEXT_FONT_SIZE ), createText( oxygenString, NORMAL_TEXT__MAX_WIDTH / 2, NORMAL_TEXT_FONT_SIZE ) ];
-      neonAndArgon = [ createText( neonString, NORMAL_TEXT__MAX_WIDTH / 2, NORMAL_TEXT_FONT_SIZE ), createText( argonString, NORMAL_TEXT__MAX_WIDTH / 2, NORMAL_TEXT_FONT_SIZE ) ];
-      neonAndOxygen = [ createText( neonString, NORMAL_TEXT__MAX_WIDTH / 2, NORMAL_TEXT_FONT_SIZE ), createText( oxygenString, NORMAL_TEXT__MAX_WIDTH / 2, NORMAL_TEXT_FONT_SIZE ) ];
-      argonAndOxygen = [ createText( argonString, NORMAL_TEXT__MAX_WIDTH / 2, NORMAL_TEXT_FONT_SIZE ), createText( oxygenString, NORMAL_TEXT__MAX_WIDTH / 2, NORMAL_TEXT_FONT_SIZE ) ];
+      neonAndNeon = [
+        createText( neonString, NORMAL_TEXT__MAX_WIDTH / 2, NORMAL_TEXT_FONT_SIZE ),
+        createText( neonString, NORMAL_TEXT__MAX_WIDTH / 2, NORMAL_TEXT_FONT_SIZE )
+      ];
+      argonAndArgon = [
+        createText( argonString, NORMAL_TEXT__MAX_WIDTH / 2, NORMAL_TEXT_FONT_SIZE ),
+        createText( argonString, NORMAL_TEXT__MAX_WIDTH / 2, NORMAL_TEXT_FONT_SIZE )
+      ];
+      oxygenAndOxygen = [
+        createText( oxygenString, NORMAL_TEXT__MAX_WIDTH / 2, NORMAL_TEXT_FONT_SIZE ),
+        createText( oxygenString, NORMAL_TEXT__MAX_WIDTH / 2, NORMAL_TEXT_FONT_SIZE )
+      ];
+      neonAndArgon = [
+        createText( neonString, NORMAL_TEXT__MAX_WIDTH / 2, NORMAL_TEXT_FONT_SIZE ),
+        createText( argonString, NORMAL_TEXT__MAX_WIDTH / 2, NORMAL_TEXT_FONT_SIZE )
+      ];
+      neonAndOxygen = [
+        createText( neonString, NORMAL_TEXT__MAX_WIDTH / 2, NORMAL_TEXT_FONT_SIZE ),
+        createText( oxygenString, NORMAL_TEXT__MAX_WIDTH / 2, NORMAL_TEXT_FONT_SIZE )
+      ];
+      argonAndOxygen = [
+        createText( argonString, NORMAL_TEXT__MAX_WIDTH / 2, NORMAL_TEXT_FONT_SIZE ),
+        createText( oxygenString, NORMAL_TEXT__MAX_WIDTH / 2, NORMAL_TEXT_FONT_SIZE )
+      ];
       var customAttraction = createText( customAttractionString, NORMAL_TEXT__MAX_WIDTH, NORMAL_TEXT_FONT_SIZE );
       var pushpinImage = new Image( pushPinImg, { scale: 0.15 } );
       var maxWidthOfTitleText = 40;

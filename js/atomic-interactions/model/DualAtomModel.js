@@ -23,13 +23,13 @@ define( function( require ) {
   var AtomFactory = require( 'STATES_OF_MATTER/common/model/AtomFactory' );
   var AtomPair = require( 'STATES_OF_MATTER/atomic-interactions/model/AtomPair' );
 
-  var DEFAULT_ATOM_TYPE = AtomType.NEON;
-  var CALCULATIONS_PER_TICK = 8;
-  var THRESHOLD_VELOCITY = 100;  // Used to distinguish small oscillations from real movement.
-
-  var VIBRATION_COUNTER_RESET_VALUE = 72;
+  // constants
   var BONDED_OSCILLATION_PROPORTION = 0.06; // Proportion of atom radius.
+  var CALCULATIONS_PER_TICK = 8;
+  var DEFAULT_ATOM_TYPE = AtomType.NEON;
   var MAX_APPROXIMATION_ITERATIONS = 100;
+  var THRESHOLD_VELOCITY = 100;  // Used to distinguish small oscillations from real movement.
+  var VIBRATION_COUNTER_RESET_VALUE = 72;
 
   /**
    * This is the model for two atoms interacting with a Lennard-Jones interaction potential.

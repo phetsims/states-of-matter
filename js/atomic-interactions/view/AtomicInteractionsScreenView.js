@@ -28,7 +28,7 @@ define( function( require ) {
   var TextPushButton = require( 'SUN/buttons/TextPushButton' );
   var ParticleForceNode = require( 'STATES_OF_MATTER/atomic-interactions/view/ParticleForceNode' );
   var GrabbableParticleNode = require( 'STATES_OF_MATTER/atomic-interactions/view/GrabbableParticleNode' );
-  var PushpinNode = require( 'STATES_OF_MATTER/atomic-interactions/view/PushpinNode' );
+  var PushPinNode = require( 'STATES_OF_MATTER/atomic-interactions/view/PushPinNode' );
   var HandNode = require( 'STATES_OF_MATTER/atomic-interactions/view/HandNode' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var StatesOfMatterColorProfile = require( 'STATES_OF_MATTER/common/view/StatesOfMatterColorProfile' );
@@ -59,12 +59,13 @@ define( function( require ) {
     this.showAttractiveForces = false;
     this.showRepulsiveForces = false;
     this.showTotalForces = false;
-    var atomicInteractionsScreenView = this;
 
-    // model-view transform
+    // set up the model-view transform
     this.modelViewTransform = ModelViewTransform2.createSinglePointScaleMapping( new Vector2( 0, 0 ),
       new Vector2( 110, 360 ), 0.25 );
 
+    // initialize local variables
+    var atomicInteractionsScreenView = this;
     var tickTextColor = enableHeterogeneousAtoms ? 'black' : 'white';
     var showTitleWhenExpand = !enableHeterogeneousAtoms; // force control panel title
     var textColor = enableHeterogeneousAtoms ? 'black' : 'white';
@@ -87,10 +88,11 @@ define( function( require ) {
       {
         left: this.layoutBounds.minX + 7 * inset,
         top: atomicInteractionsControlPanel.top + 6
-      } );
+      }
+    );
     this.addChild( this.interactiveInteractionPotentialDiagram );
 
-    // Add the button for returning the atom to the screen.
+    // add the button for returning the atom to the screen
     this.returnAtomButton = new TextPushButton( returnAtomString, {
       font: new PhetFont( 17 ),
       baseColor: '#61BEE3',
@@ -103,7 +105,7 @@ define( function( require ) {
     } );
     this.addChild( this.returnAtomButton );
 
-    // Create and add the Reset All Button in the bottom right.
+    // create and add the Reset All Button in the bottom right
     var resetAllButton = new ResetAllButton( {
       listener: function() {
         dualAtomModel.reset();
@@ -202,11 +204,15 @@ define( function( require ) {
     } );
     this.addChild( speedControl.mutate( { right: playPauseButton.left - 2 * inset, bottom: playPauseButton.bottom } ) );
 
-    // Create the push pin node that will be used to convey the idea that
-    // the fixed atom is pinned to the canvas.  It will be added to the
-    // canvas when the particles appear.
-    this.pushPinNode = new PushpinNode();
+    // Create the push pin node that will be used to convey the idea that the fixed atom is pinned to the canvas.  It
+    // will be added to the scene graph when the particles appear.
+    this.pushPinNode = new PushPinNode();
     this.pushPinNode.scale( PUSH_PIN_WIDTH / this.pushPinNode.width );
+
+    // update the push pin position if the adjustable atom diamter changes
+    dualAtomModel.atomDiameterProperty.link( function( atomDiameter ){
+      atomicInteractionsScreenView.updatePushPinPosition();
+    } );
 
     // Create the nodes that will act as layers for the fixed and movable particles. This is done so that the
     // movable particle can always appear to be on top.
@@ -321,16 +327,14 @@ define( function( require ) {
       this.fixedParticleNode.setShowTotalForces( this.showTotalForces );
       this.fixedParticleLayer.addChild( this.fixedParticleNode );
 
-
       this.updatePositionMarkerOnDiagram();
+      this.updatePushPinPosition();
 
-      // Add the push pin last so that it is on top of the fixed atom.
-      // Note that the particulars of how this is positioned will need to
-      // change if a different image is used.
+      // Add the push pin last so that it is on top of the fixed atom. Note that the particulars of how this is
+      // positioned may need to change if a different image is used.
       this.addChild( this.pushPinNode );
-      this.pushPinNode.setTranslation( this.modelViewTransform.modelToViewX( -this.fixedParticle.getRadius() * 1.05 ),
-        this.modelViewTransform.modelToViewY( -this.fixedParticle.getRadius() * 1.42 ) );
     },
+
     /**
      * @public
      */
@@ -464,10 +468,10 @@ define( function( require ) {
     },
 
     /**
-     * @private
      * Update the position marker on the Lennard-Jones potential diagram.
      * This will indicate the amount of potential being experienced between
      * the two atoms in the model.
+     * @private
      */
     updatePositionMarkerOnDiagram: function() {
 
@@ -487,10 +491,18 @@ define( function( require ) {
       }
     },
 
+    updatePushPinPosition: function(){
+      var mvt = this.modelViewTransform;
+      var pinnedAtomPosition = this.dualAtomModel.fixedAtom.positionProperty.value;
+      var pinnedAtomRadius = this.dualAtomModel.fixedAtom.radius;
+      this.pushPinNode.right = mvt.modelToViewX( pinnedAtomPosition.x - pinnedAtomRadius * 0.3 );
+      this.pushPinNode.bottom = mvt.modelToViewY( pinnedAtomPosition.y - pinnedAtomRadius * 0.3 );
+    },
+
     /**
-     * @public
      * Update the minimum X value allowed for the movable atom.  This prevents
      * too much overlap between the atoms.
+     * @public
      */
     updateMinimumXForMovableAtom: function() {
       if ( this.movableParticle !== null && this.fixedParticle !== null ) {
