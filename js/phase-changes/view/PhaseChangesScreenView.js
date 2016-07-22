@@ -279,6 +279,7 @@ define( function( require ) {
 
   return inherit( ScreenView, PhaseChangesScreenView, {
 
+    // @public
     step: function() {
       this.particlesLayer.step();
       this.compositeThermometerNode.step();
@@ -293,9 +294,9 @@ define( function( require ) {
     },
 
     /**
+     * Update the position of the marker on the phase diagram based on the temperature and pressure values within the
+     * model.
      * @private
-     * Update the position of the marker on the phase diagram based on the
-     * temperature and pressure values within the model.
      */
     updatePhaseDiagram: function() {
 
@@ -311,15 +312,14 @@ define( function( require ) {
         var mappedPressure = this.mapModelTempAndPressureToPhaseDiagramPressure( modelPressure,
           movingAverageTemperature );
         this.phaseDiagram.setStateMarkerPos( mappedTemperature, mappedPressure );
-
       }
     },
 
     /**
-     * Update and returns the moving average taking into account the new temperature value
-     * @private
+     * Update and returns the moving average taking into account the new temperature value.
      * @param {number} newTemperatureValue
      * @returns {number}
+     * @private
      */
     updateMovingAverageTemperature: function( newTemperatureValue ) {
       if ( this.modelTemperatureHistory.length === MAX_NUM_HISTORY_SAMPLES ) {

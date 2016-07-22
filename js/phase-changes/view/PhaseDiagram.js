@@ -38,8 +38,8 @@ define( function( require ) {
   var HEIGHT = (WIDTH * 0.75);
 
   // constants that control the look of the axes.
-  var AXES_LINE_WIDTH = 1;
-  var AXES_ARROW_HEAD_HEIGHT = 8 * AXES_LINE_WIDTH;
+  var AXES_LINE_WIDTH = 2;
+  var AXES_ARROW_HEAD_HEIGHT = 4 * AXES_LINE_WIDTH;
   var HORIZ_AXIS_SIZE_PROPORTION = 0.85;
   var VERT_AXIS_SIZE_PROPORTION = 0.85;
   var STATES_MAX_WIDTH = 35;
@@ -91,6 +91,8 @@ define( function( require ) {
 
     Node.call( this );
     var accordionContent = new Node();
+
+    // add the base node for the chart, which is cl
 
     // Variable that defines the normalized position of the current phase
     // state marker.
@@ -180,26 +182,32 @@ define( function( require ) {
       this.criticalPointLabel.setScaleMagnitude( SMALLER_INNER_TEXT_WIDTH / this.criticalPointLabel.width );
     }
 
-    var horizontalAxis = new ArrowNode( X_ORIGIN_OFFSET, Y_ORIGIN_OFFSET,
-      X_ORIGIN_OFFSET + (HORIZ_AXIS_SIZE_PROPORTION * WIDTH), Y_ORIGIN_OFFSET,
+    var horizontalAxis = new ArrowNode(
+      X_ORIGIN_OFFSET,
+      Y_ORIGIN_OFFSET,
+      X_ORIGIN_OFFSET + (HORIZ_AXIS_SIZE_PROPORTION * WIDTH),
+      Y_ORIGIN_OFFSET,
       {
         fill: 'white',
         stroke: 'white',
         headHeight: 8,
         headWidth: 8,
-        tailWidth: 2
+        tailWidth: AXES_LINE_WIDTH
       }
     );
     accordionContent.addChild( horizontalAxis );
 
-    var verticalAxis = new ArrowNode( X_ORIGIN_OFFSET, Y_ORIGIN_OFFSET,
-      X_ORIGIN_OFFSET, Y_ORIGIN_OFFSET - Y_USABLE_RANGE - AXES_ARROW_HEAD_HEIGHT,
+    var verticalAxis = new ArrowNode(
+      X_ORIGIN_OFFSET,
+      Y_ORIGIN_OFFSET,
+      X_ORIGIN_OFFSET,
+      Y_ORIGIN_OFFSET - Y_USABLE_RANGE - AXES_ARROW_HEAD_HEIGHT,
       {
         fill: 'white',
         stroke: 'white',
         headHeight: 8,
         headWidth: 8,
-        tailWidth: 2
+        tailWidth: AXES_LINE_WIDTH
       }
     );
     accordionContent.addChild( verticalAxis );
@@ -220,10 +228,20 @@ define( function( require ) {
     verticalAxisLabel.setRotation( 3 * Math.PI / 2 );
     accordionContent.addChild( verticalAxisLabel );
 
+    // Create the layer where the marker will go and set a clip area so that the marker can't go off the graph
+    var markerLayer = new Node();
+    accordionContent.addChild( markerLayer );
+    markerLayer.clipArea = new Shape.rectangle(
+      X_ORIGIN_OFFSET - AXES_LINE_WIDTH / 2,
+      HEIGHT - Y_ORIGIN_OFFSET - AXES_LINE_WIDTH / 2,
+      X_ORIGIN_OFFSET + X_USABLE_RANGE,
+      Y_ORIGIN_OFFSET + Y_USABLE_RANGE
+    );
+
     // Create and add the marker that shows the current phase state.
     this.currentStateMarker = new Path( new Shape()
       .ellipse( 0, 0, CURRENT_STATE_MARKER_DIAMETER, CURRENT_STATE_MARKER_DIAMETER ), { fill: 'red' } );
-    accordionContent.addChild( this.currentStateMarker );
+    markerLayer.addChild( this.currentStateMarker );
 
     var titleNode = new Text( phaseDiagramString, { fill: '#FFFFFF', font: new PhetFont( { size: 13 } ) } );
 
@@ -269,8 +287,7 @@ define( function( require ) {
     drawPhaseDiagram: function() {
 
       // Place the triple point marker.
-      this.triplePoint.setTranslation( DEFAULT_TRIPLE_POINT.x,
-        DEFAULT_TRIPLE_POINT.y );
+      this.triplePoint.setTranslation( DEFAULT_TRIPLE_POINT.x, DEFAULT_TRIPLE_POINT.y );
 
       // Add the curve that separates the solid and gaseous regions.
       var solidGasCurve = new Shape().moveTo( X_ORIGIN_OFFSET, Y_ORIGIN_OFFSET )
@@ -370,7 +387,8 @@ define( function( require ) {
       if ( markerYPos < Y_ORIGIN_OFFSET - Y_USABLE_RANGE ) {
         markerYPos = Y_ORIGIN_OFFSET - Y_USABLE_RANGE;
       }
-      this.currentStateMarker.setTranslation( markerXPos, markerYPos + this.currentStateMarker.height / 3 );
+      this.currentStateMarker.centerX = markerXPos;
+      this.currentStateMarker.centerY = markerYPos;
     },
 
     /**
