@@ -1,7 +1,7 @@
 // Copyright 2015, University of Colorado Boulder
 
 /**
- * PushpinNode represents the pushpin used to "pin" an atom in one location.
+ * PushPinNode represents the pushpin used to "pin" an atom in one location.
  *
  * @author Siddhartha Chinthapally (Actual Concepts)
  */
@@ -20,7 +20,7 @@ define( function( require ) {
   /**
    * @constructor
    */
-  function PushpinNode() {
+  function PushPinNode() {
     Node.call( this );
     this.setPickable( false );
 
@@ -28,7 +28,7 @@ define( function( require ) {
     this.addChild( imageNode, { scale: 0.3 } ); // scale empirically determined
   }
 
-  statesOfMatter.register( 'PushpinNode', PushpinNode );
+  statesOfMatter.register( 'PushPinNode', PushPinNode );
 
-  return inherit( Node, PushpinNode );
+  return inherit( Node, PushPinNode );
 } );

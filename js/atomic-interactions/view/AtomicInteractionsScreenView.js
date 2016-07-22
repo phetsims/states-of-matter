@@ -495,8 +495,8 @@ define( function( require ) {
       var mvt = this.modelViewTransform;
       var pinnedAtomPosition = this.dualAtomModel.fixedAtom.positionProperty.value;
       var pinnedAtomRadius = this.dualAtomModel.fixedAtom.radius;
-      this.pushPinNode.right = mvt.modelToViewX( pinnedAtomPosition.x - pinnedAtomRadius * 0.3 );
-      this.pushPinNode.bottom = mvt.modelToViewY( pinnedAtomPosition.y - pinnedAtomRadius * 0.3 );
+      this.pushPinNode.right = mvt.modelToViewX( pinnedAtomPosition.x - pinnedAtomRadius * 0.5 );
+      this.pushPinNode.bottom = mvt.modelToViewY( pinnedAtomPosition.y - pinnedAtomRadius * 0.5 );
     },
 
     /**
