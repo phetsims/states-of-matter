@@ -35,6 +35,7 @@ define( function( require ) {
 
   //constants
   var TEXT_LABEL_MAX_WIDTH = 130; // max width of text label  in the panel
+  var RADIO_BUTTON_RADIUS = 6;
 
   /**
    * @param {Property<string>} forcesProperty that determines which forces to display
@@ -60,13 +61,13 @@ define( function( require ) {
 
     Node.call( this );
     var accordionContent = new Node();
-    var arrowEndX = 25;
+    var arrowEndX = 20;
     var arrowStartX = 0;
     var arrowY = 0;
     var arrowNodeOptions = {
-      headHeight: 12,
-      headWidth: 20,
-      tailWidth: 8
+      headHeight: 10,
+      headWidth: 14,
+      tailWidth: 6
     };
 
     var totalForceArrow = new ArrowNode( arrowEndX, arrowY, arrowStartX, arrowY, _.extend( {
@@ -97,21 +98,21 @@ define( function( require ) {
     };
 
     var attractiveText = {
-      label: createText( attractiveString, TEXT_LABEL_MAX_WIDTH * 0.6, 11 ),
+      label: createText( attractiveString, TEXT_LABEL_MAX_WIDTH * 0.6, 12 ),
       icon: attractiveArrow
     };
 
     var vanderwaalsText = {
-      label: createText( vanderwaalsString, TEXT_LABEL_MAX_WIDTH * 0.7, 10 )
+      label: createText( vanderwaalsString, TEXT_LABEL_MAX_WIDTH * 0.7, 11 )
     };
 
     var repulsiveText = {
-      label: createText( repulsiveString, TEXT_LABEL_MAX_WIDTH * 0.6, 11 ),
+      label: createText( repulsiveString, TEXT_LABEL_MAX_WIDTH * 0.6, 12 ),
       icon: repulsiveArrow
     };
 
     var electronOverlapText = {
-      label: createText( electronOverlapString, TEXT_LABEL_MAX_WIDTH * 0.7, 10 )
+      label: createText( electronOverlapString, TEXT_LABEL_MAX_WIDTH * 0.7, 11 )
     };
 
     // compute the maximum item width
@@ -133,6 +134,7 @@ define( function( require ) {
     };
 
     var componentForceText = new VBox( {
+      spacing: 2,
       children: [
         createItem( attractiveText ),
         createItem( vanderwaalsText ),
@@ -156,11 +158,12 @@ define( function( require ) {
       ]
     } );
 
+    var bracketToTextSpacing = 2;
     var componentForce = new HBox( {
-      spacing: 2,
+      spacing: bracketToTextSpacing,
       children: [ bracket, componentForceText ]
     } );
-    var totalForceStrutWidth = maxWidth - totalForceText.label.width - totalForceText.icon.width + bracket.width;
+    var totalForceStrutWidth = maxWidth - totalForceText.label.width - totalForceText.icon.width + bracket.width + bracketToTextSpacing;
     var totalForceItem = new HBox( {
       children: [ totalForceText.label,
         new HStrut( totalForceStrutWidth ),
@@ -170,15 +173,27 @@ define( function( require ) {
     var totalForce = new HBox( { spacing: 2, children: [ totalForceItem ] } );
     var hideForce = new HBox( { spacing: 2, children: [ createItem( hideForcesText ) ] } );
 
-    var hideForcesRadio = new AquaRadioButton( forcesProperty, 'hideForces', hideForce, { radius: 8 } );
-    var totalForceRadio = new AquaRadioButton( forcesProperty, 'totalForce', totalForce, { radius: 8 } );
-    var componentForceRadio = new AquaRadioButton( forcesProperty, 'componentForce', componentForce, { radius: 8 } );
+    var hideForcesRadio = new AquaRadioButton( forcesProperty, 'hideForces', hideForce, {
+      radius: RADIO_BUTTON_RADIUS
+    } );
+    var totalForceRadio = new AquaRadioButton( forcesProperty, 'totalForce', totalForce, {
+      radius: RADIO_BUTTON_RADIUS
+    } );
+    var componentForceRadio = new AquaRadioButton( forcesProperty, 'componentForce', componentForce, {
+      radius: RADIO_BUTTON_RADIUS
+    } );
 
     var radioButtonGroup = new VBox( {
       children: [ hideForcesRadio, totalForceRadio, componentForceRadio ],
       align: 'left',
       spacing: 3
     } );
+
+    // expand the touch areas of the radio buttons so that they are easier to work with on touch-based devices
+    var xDilation = 8;
+    var yDilation = 1;
+    hideForcesRadio.touchArea = totalForce.localBounds.dilatedXY( xDilation, yDilation );
+    totalForceRadio.touchArea = totalForce.localBounds.dilatedXY( xDilation, yDilation );
 
     // The panel width in the Atomic Interaction sim and on the Interaction screen in SOM is different.
     var panelMinWidth = options.showTitleWhenExpand ? 183 : 190;

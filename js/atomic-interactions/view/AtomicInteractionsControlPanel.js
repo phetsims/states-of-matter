@@ -49,20 +49,20 @@ define( function( require ) {
   var weakString = require( 'string!STATES_OF_MATTER/weak' );
   var strongString = require( 'string!STATES_OF_MATTER/strong' );
 
-//  Constants
-
-  var SLIDER_TICK_TEXT_MAX_WIDTH = 35;
+  // constants
   var NORMAL_TEXT_FONT_SIZE = 12;
+  var RADIO_BUTTON_RADIUS = 6;
+  var SLIDER_TICK_TEXT_MAX_WIDTH = 35;
   var TITLE_TEXT_WIDTH = 130;
 
-  // Icon for the adjustable attraction  button
+  // icon for the adjustable attraction button
   var ADJUSTABLE_ATTRACTION_ICON = new Circle( 6, { fill: StatesOfMatterConstants.ADJUSTABLE_ATTRACTION_COLOR } );
-  // Icon for the neon  button
+
+  // icon for the neon button
   var NEON_ICON = new Circle( 5, { fill: StatesOfMatterConstants.NEON_COLOR } );
 
-  // Icon for the argon  button
+  // icon for the argon button
   var ARGON_ICON = new Circle( 6, { fill: StatesOfMatterConstants.ARGON_COLOR } );
-
 
   /**
    * @param {DualAtomModel} dualAtomModel - model of the simulation
@@ -153,27 +153,26 @@ define( function( require ) {
             itemSpec[ 1 ], new HStrut( strutWidth2 ) ]
         } );
       };
-      var particleRadius = 8;
       var neonNeonRadio = new AquaRadioButton( dualAtomModel.atomPairProperty, AtomPair.NEON_NEON,
-        createItem( neonAndNeon ), { radius: particleRadius } );
+        createItem( neonAndNeon ), { radius: RADIO_BUTTON_RADIUS } );
       var argonArgonRadio = new AquaRadioButton( dualAtomModel.atomPairProperty, AtomPair.ARGON_ARGON,
-        createItem( argonAndArgon ), { radius: particleRadius } );
+        createItem( argonAndArgon ), { radius: RADIO_BUTTON_RADIUS } );
       var oxygenOxygenRadio = new AquaRadioButton( dualAtomModel.atomPairProperty, AtomPair.OXYGEN_OXYGEN,
-        createItem( oxygenAndOxygen ), { radius: particleRadius } );
+        createItem( oxygenAndOxygen ), { radius: RADIO_BUTTON_RADIUS } );
       var neonArgonRadio = new AquaRadioButton( dualAtomModel.atomPairProperty, AtomPair.NEON_ARGON,
-        createItem( neonAndArgon ), { radius: particleRadius } );
+        createItem( neonAndArgon ), { radius: RADIO_BUTTON_RADIUS } );
       var neonOxygenRadio = new AquaRadioButton( dualAtomModel.atomPairProperty, AtomPair.NEON_OXYGEN,
-        createItem( neonAndOxygen ), { radius: particleRadius } );
+        createItem( neonAndOxygen ), { radius: RADIO_BUTTON_RADIUS } );
       var argonOxygenRadio = new AquaRadioButton( dualAtomModel.atomPairProperty, AtomPair.ARGON_OXYGEN,
-        createItem( argonAndOxygen ), { radius: particleRadius } );
+        createItem( argonAndOxygen ), { radius: RADIO_BUTTON_RADIUS } );
       var adjustableAttractionRadio = new AquaRadioButton( dualAtomModel.atomPairProperty, AtomPair.ADJUSTABLE,
-        new HBox( { children: [ customAttraction ] } ), { radius: particleRadius } );
+        new HBox( { children: [ customAttraction ] } ), { radius: RADIO_BUTTON_RADIUS } );
       var createTitle = function( itemSpec ) {
-        var strutWidth1 = particleRadius;
+        var strutWidth1 = RADIO_BUTTON_RADIUS;
         var strutWidth2 = ( maxWidth / 2 - itemSpec[ 0 ].width );
         var strutWidth3 = ( maxWidth / 2 - itemSpec[ 1 ].width );
         return new HBox( {
-          children: [ new HStrut( strutWidth1 ), itemSpec[ 0 ], new HStrut( strutWidth2 + 9 + particleRadius ),
+          children: [ new HStrut( strutWidth1 ), itemSpec[ 0 ], new HStrut( strutWidth2 + 9 + RADIO_BUTTON_RADIUS ),
             itemSpec[ 1 ], new HStrut( strutWidth3 + 10 ) ]
         } );
       };
@@ -196,17 +195,16 @@ define( function( require ) {
           } ).width + 5;
       titleNode.align = atomicInteractionsControlPanel.width / 2;
 
-      //touch Areas
+      // dilate the touch areas to make the buttons easier to work with on touch-based devices
       var xDilation = 8;
-      var yDilation = 4;
+      var yDilation = 5;
       neonNeonRadio.touchArea = neonNeonRadio.localBounds.dilatedXY( xDilation, yDilation );
       argonArgonRadio.touchArea = argonArgonRadio.localBounds.dilatedXY( xDilation, yDilation );
       oxygenOxygenRadio.touchArea = oxygenOxygenRadio.localBounds.dilatedXY( xDilation, yDilation );
       neonArgonRadio.touchArea = neonArgonRadio.localBounds.dilatedXY( xDilation, yDilation );
       neonOxygenRadio.touchArea = neonOxygenRadio.localBounds.dilatedXY( xDilation, yDilation );
       argonOxygenRadio.touchArea = argonOxygenRadio.localBounds.dilatedXY( xDilation, yDilation );
-      adjustableAttractionRadio.touchArea = new Bounds2( adjustableAttractionRadio.localBounds.minX - 8, adjustableAttractionRadio.localBounds.minY - 3,
-        adjustableAttractionRadio.localBounds.minX + maxRadioButtonWidth + 4, adjustableAttractionRadio.localBounds.maxY + 4 );
+      adjustableAttractionRadio.touchArea = argonOxygenRadio.localBounds.dilatedXY( xDilation, yDilation );
     }
     else {
 
