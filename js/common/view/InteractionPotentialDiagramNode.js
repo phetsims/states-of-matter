@@ -317,23 +317,19 @@ define( function( require ) {
     },
 
     /**
-     * Set whether the graph is showing the potential between individual atoms
-     * or multi-atom molecules.
+     * Set whether the graph is showing the potential between individual atoms or multi-atom molecules.
+     * @param {boolean} molecular - true if graph is portraying molecules, false for individual atoms.
      * @public
-     * @param {boolean} molecular - true if graph is portraying molecules, false for
-     *                  individual atoms.
      */
     setMolecular: function( molecular ) {
-
       if ( molecular ) {
         this.horizontalAxisLabel.setText( distanceBetweenMoleculesString );
       }
       else {
         this.horizontalAxisLabel.setText( distanceBetweenAtomsString );
       }
-      this.horizontalAxisLabel.setTranslation(
-        this.graphXOrigin + (  this.graphWidth / 2) - (  this.horizontalAxisLabel.width / 2),
-        this.graphYOrigin + (  this.horizontalAxisLabel.height ) );
+      this.horizontalAxisLabel.centerX = this.graphXOrigin + ( this.graphWidth / 2 );
+      this.horizontalAxisLabel.top = this.graphYOrigin;
     },
 
     /**

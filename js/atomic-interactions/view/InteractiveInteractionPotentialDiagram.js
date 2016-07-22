@@ -278,6 +278,15 @@ define( function( require ) {
      */
     updateInteractivityState: function() {
       this.interactionEnabled = ( this.dualAtomModel.getFixedAtomType() === AtomType.ADJUSTABLE );
+    },
+
+    /**
+     * @override
+     */
+    setMolecular: function( molecular ){
+      InteractionPotentialDiagramNode.prototype.setMolecular.call( this );
+      // move the horizontal label down a little bit, otherwise adjustment arrow can overlap it
+      this.horizontalAxisLabel.top += 8; // amount empirically determined
     }
   } );
 } );

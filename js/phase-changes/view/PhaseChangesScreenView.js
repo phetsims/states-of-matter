@@ -335,9 +335,9 @@ define( function( require ) {
 
     /**
      * Map the model temperature to phase diagram temperature based on the phase chart shape.
-     * @private
      * @param {number} modelTemperature
      * @returns {number}
+     * @private
      */
     mapModelTemperatureToPhaseDiagramTemperature: function( modelTemperature ) {
 
@@ -352,14 +352,13 @@ define( function( require ) {
       return Math.min( mappedTemperature, 1 );
     },
 
-
     /**
-     * Map the model temperature and pressure to a normalized pressure value
-     * suitable for use in setting the marker position on the phase chart.
-     * @private
+     * Map the model temperature and pressure to a normalized pressure value suitable for use in setting the marker
+     * position on the phase chart.
      * @param {number} modelPressure
      * @param {number} modelTemperature
      * @returns {number}
+     * @private
      */
     mapModelTempAndPressureToPhaseDiagramPressure: function( modelPressure, modelTemperature ) {
       // This method is a total tweak fest.  All values and equations are
@@ -376,6 +375,5 @@ define( function( require ) {
       }
       return Math.min( mappedPressure, 1 );
     }
-
   } );
 } );
