@@ -83,7 +83,7 @@ define( function( require ) {
 
   // Values used for converting from model temperature to the temperature for a given particle.
   var TRIPLE_POINT_INTERNAL_MODEL_TEMPERATURE = 0.26;   // Empirically determined.
-  var CRITICAL_POINT_MONATOMIC_MODEL_TEMPERATURE = 0.8;  // Empirically determined.
+  var CRITICAL_POINT_INTERNAL_MODEL_TEMPERATURE = 0.8;  // Empirically determined.
   var NEON_TRIPLE_POINT_IN_KELVIN = 23;   // Tweaked a little from actual value for better temperature mapping.
   var NEON_CRITICAL_POINT_IN_KELVIN = 44;
   var ARGON_TRIPLE_POINT_IN_KELVIN = 75;  // Tweaked a little from actual value for better temperature mapping.
@@ -257,14 +257,14 @@ define( function( require ) {
           temperatureInKelvin = 0.5;
         }
       }
-      else if ( this.temperatureSetPoint < CRITICAL_POINT_MONATOMIC_MODEL_TEMPERATURE ) {
+      else if ( this.temperatureSetPoint < CRITICAL_POINT_INTERNAL_MODEL_TEMPERATURE ) {
         var slope = ( criticalPoint - triplePoint ) /
-                    ( CRITICAL_POINT_MONATOMIC_MODEL_TEMPERATURE - TRIPLE_POINT_INTERNAL_MODEL_TEMPERATURE );
+                    ( CRITICAL_POINT_INTERNAL_MODEL_TEMPERATURE - TRIPLE_POINT_INTERNAL_MODEL_TEMPERATURE );
         var offset = triplePoint - ( slope * TRIPLE_POINT_INTERNAL_MODEL_TEMPERATURE );
         temperatureInKelvin = this.temperatureSetPoint * slope + offset;
       }
       else {
-        temperatureInKelvin = this.temperatureSetPoint * criticalPoint / CRITICAL_POINT_MONATOMIC_MODEL_TEMPERATURE;
+        temperatureInKelvin = this.temperatureSetPoint * criticalPoint / CRITICAL_POINT_INTERNAL_MODEL_TEMPERATURE;
       }
       return temperatureInKelvin;
     },
@@ -529,6 +529,14 @@ define( function( require ) {
            ( this.normalizedContainerHeight > injectionPointY * 1.05 ) &&
            ( !this.isExploded ) ) {
 
+        // If the container is empty, its temperature will be be reported as zero Kelvin, so injecting particles will
+        // cause there to be a defined temperature.  Set that temperature to a reasonable value.
+        if ( this.particles.length === 0 ){
+          this.temperatureSetPoint = CRITICAL_POINT_INTERNAL_MODEL_TEMPERATURE;
+          this.isoKineticThermostat.targetTemperature = this.temperatureSetPoint;
+          this.andersenThermostat.targetTemperature = this.temperatureSetPoint;
+        }
+
         var angle = ( Math.random() - 0.5 ) * MAX_INJECTED_MOLECULE_ANGLE;
         var velocity = MIN_INJECTED_MOLECULE_VELOCITY + ( Math.random() *
                                                           ( MAX_INJECTED_MOLECULE_VELOCITY -
@@ -589,12 +597,6 @@ define( function( require ) {
           this.particles.add( new OxygenAtom( 0, 0 ) );
           this.particles.add( new HydrogenAtom( 0, 0, false ) );
           this.particles.add( new HydrogenAtom( 0, 0, false ) );
-        }
-
-        if ( this.particles.length === 1 ) {
-          // Adding the first particle is considered a temperature change, because (in this sim anyway), no particles
-          // means a temperature of zero.
-          this.temperatureSetPointProperty.notifyObserversStatic();
         }
 
         // If the particles are at absolute zero and additional particles are added, this bumps up the temperature,
