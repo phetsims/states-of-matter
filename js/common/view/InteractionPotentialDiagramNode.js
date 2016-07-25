@@ -56,6 +56,19 @@ define( function( require ) {
   // zoom buttons height
   var zoomButtonsHeight = 72;
 
+  // helper function for limiting labels to a single character
+  function getFirstNonEmbeddingCharacter( str ){
+    var char = null;
+    for ( var i = 0; i < str.length; i++ ){
+      // skip any characters related to directional control of the string, such as right-to-left embedding
+      if ( str.charCodeAt( i ) < 0x202A || str.charCodeAt( i ) > 0x202E ){
+        char = str.charAt( i );
+        break;
+      }
+    }
+    return char;
+  }
+
   /**
    * @param {number} sigma - Initial value of sigma, a.k.a. the atom diameter
    * @param {number} epsilon - Initial value of epsilon, a.k.a. the interaction strength
@@ -122,14 +135,15 @@ define( function( require ) {
     } );
     this.ljPotentialGraph.addChild( this.epsilonArrow );
 
-    this.epsilonLabel = new Text( epsilonString, {
+    this.epsilonLabel = new Text( getFirstNonEmbeddingCharacter( epsilonString ), {
       font: GREEK_LETTER_FONT,
       fill: 'white',
-      maxWidth: GREEK_LETTER_MAX_WIDTH
+      maxWidth: GREEK_LETTER_MAX_WIDTH,
+      boundsMethod: 'accurate' // TODO: this seems necessary for good graph layout, but is it costly for performance?
     } );
     this.ljPotentialGraph.addChild( this.epsilonLabel );
 
-    this.sigmaLabel = new Text( sigmaString, {
+    this.sigmaLabel = new Text( getFirstNonEmbeddingCharacter( sigmaString ), {
       font: GREEK_LETTER_FONT,
       fill: 'white',
       maxWidth: GREEK_LETTER_MAX_WIDTH
@@ -209,7 +223,7 @@ define( function( require ) {
     // Initializing here to reduce allocations
     this.epsilonArrowStartPt = new Vector2( 0, 0 );
 
-    // Draw the curve upon the graph.
+    // Draw the initial curve upon the graph.
     this.drawPotentialCurve();
     var epsilonLabelYOffset = wide ? 60 : 24;
     this.epsilonLabel.setTranslation( this.graphMin.x + this.epsilonLabel.width,

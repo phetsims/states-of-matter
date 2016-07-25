@@ -143,10 +143,8 @@ define( function( require ) {
       }
 
       // Position the epsilon label.
-      this.interactionDiagram.epsilonLabel.setTranslation(
-        this.interactionDiagram.graphMin.x + this.interactionDiagram.epsilonLabel.width,
-        this.interactionDiagram.epsilonLabel.y
-      );
+      this.interactionDiagram.epsilonLabel.left = this.interactionDiagram.graphMin.x - 2;
+      this.interactionDiagram.epsilonLabel.bottom = this.interactionDiagram.graphHeight / 2 - 2;
 
       // Position the arrow that depicts sigma, which is a horizontal double-headed arrow between the y axis and the
       // first point at which the potential crosses the x axis.
