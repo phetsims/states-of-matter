@@ -361,17 +361,16 @@ define( function( require ) {
      * @private
      */
     mapModelTempAndPressureToPhaseDiagramPressure: function( modelPressure, modelTemperature ) {
-      // This method is a total tweak fest.  All values and equations are
-      // made to map to the phase diagram, and are NOT based on any real-
-      // world equations that define phases of matter.
+      // This method is a total tweak fest.  All values and equations are made to map to the phase diagram, and are NOT
+      // based on any real-world equations that define phases of matter.
       var cutOverTemperature = TRIPLE_POINT_TEMPERATURE_ON_DIAGRAM - 0.025;
       var mappedTemperature = this.mapModelTemperatureToPhaseDiagramTemperature( modelTemperature );
       var mappedPressure;
-      if ( mappedTemperature < cutOverTemperature ) {
-        mappedPressure = Math.pow( mappedTemperature, 1.5 );
+      if ( mappedTemperature <= cutOverTemperature ) {
+        mappedPressure = Math.pow( mappedTemperature, 1.775 );
       }
       else {
-        mappedPressure = Math.pow( mappedTemperature - cutOverTemperature, 1.8 ) + 0.2;
+        mappedPressure = Math.pow( mappedTemperature - cutOverTemperature, 1.8 ) + 0.17;
       }
       return Math.min( mappedPressure, 1 );
     }

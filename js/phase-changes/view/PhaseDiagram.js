@@ -378,9 +378,9 @@ define( function( require ) {
                        normalizedPressure );
       }
       this.currentStateMarkerPos.setXY( normalizedTemperature, normalizedPressure );
-      var markerXPos = normalizedTemperature * X_USABLE_RANGE + X_ORIGIN_OFFSET - (CURRENT_STATE_MARKER_DIAMETER / 2);
-      var markerYPos = -normalizedPressure * Y_USABLE_RANGE + Y_ORIGIN_OFFSET - (CURRENT_STATE_MARKER_DIAMETER / 2);
-      // marker from being partially off of the diagram.
+      var markerXPos = normalizedTemperature * X_USABLE_RANGE + X_ORIGIN_OFFSET - ( CURRENT_STATE_MARKER_DIAMETER / 2 );
+      var markerYPos = -normalizedPressure * Y_USABLE_RANGE + Y_ORIGIN_OFFSET - ( CURRENT_STATE_MARKER_DIAMETER / 2 );
+      // prevent marker from going off graph on right side
       if ( markerXPos + CURRENT_STATE_MARKER_DIAMETER > (X_USABLE_RANGE + X_ORIGIN_OFFSET) ) {
         markerXPos = X_USABLE_RANGE + X_ORIGIN_OFFSET - CURRENT_STATE_MARKER_DIAMETER;
       }
