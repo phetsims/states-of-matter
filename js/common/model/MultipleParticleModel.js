@@ -2,19 +2,14 @@
 
 
 /**
- * This is the main class for the model portion of the "States of Matter"
- * simulation.  It maintains a set of data that represents a normalized model
- * in which all atoms are assumed to have a diameter of 1, since this allows
- * for very quick calculations, and also a set of data for particles that have
- * the actual diameter of the particles being simulated (e.g. Argon).
- * Throughout the comments and in the variable naming, I've tried to use the
- * terminology of "normalized data set" (or sometimes simply "normalized
- * set") for the former and "model data set" for the latter.  When the
- * simulation is running, the normalized data set is updated first, since that
- * is where the hardcore calculations are performed, and then the model data
- * set is synchronized with the normalized data.  It is the model data set that
- * is monitored by the view components that actually display the molecule
- * positions to the user.
+ * This is the main class for the model portion of the "States of Matter" simulation.  It maintains a set of data that
+ * represents a normalized model in which all atoms are assumed to have a diameter of 1, since this allows for very
+ * quick calculations, and also a set of data for particles that have the actual diameter of the particles being
+ * simulated (e.g. Argon). Throughout the comments and in the variable naming, I've tried to use the terminology of
+ * "normalized data set" (or sometimes simply "normalized set") for the former and "model data set" for the latter.
+ * When the simulation is running, the normalized data set is updated first, since that is where the hardcore
+ * calculations are performed, and then the model data set is synchronized with the normalized data.  It is the model
+ * data set that is monitored by the view components that actually display the molecule positions to the user.
  *
  * @author John Blanco
  * @author Aaron Davis
@@ -24,35 +19,35 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var inherit = require( 'PHET_CORE/inherit' );
-  var PropertySet = require( 'AXON/PropertySet' );
-  var ObservableArray = require( 'AXON/ObservableArray' );
-  var Vector2 = require( 'DOT/Vector2' );
-  var Util = require( 'DOT/Util' );
-  var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
-  var NeonAtom = require( 'STATES_OF_MATTER/common/model/particle/NeonAtom' );
+  var AndersenThermostat = require( 'STATES_OF_MATTER/common/model/engine/kinetic/AndersenThermostat' );
   var ArgonAtom = require( 'STATES_OF_MATTER/common/model/particle/ArgonAtom' );
-  var OxygenAtom = require( 'STATES_OF_MATTER/common/model/particle/OxygenAtom' );
-  var HydrogenAtom = require( 'STATES_OF_MATTER/common/model/particle/HydrogenAtom' );
-  var ConfigurableStatesOfMatterAtom = require( 'STATES_OF_MATTER/common/model/particle/ConfigurableStatesOfMatterAtom' );
   var AtomType = require( 'STATES_OF_MATTER/common/model/AtomType' );
-  var InteractionStrengthTable = require( 'STATES_OF_MATTER/common/model/InteractionStrengthTable' );
-  var MoleculeForceAndMotionDataSet = require( 'STATES_OF_MATTER/common/model/MoleculeForceAndMotionDataSet' );
-  var MonatomicVerletAlgorithm = require( 'STATES_OF_MATTER/common/model/engine/MonatomicVerletAlgorithm' );
-  var MonatomicPhaseStateChanger = require( 'STATES_OF_MATTER/common/model/engine/MonatomicPhaseStateChanger' );
-  var MonatomicAtomPositionUpdater = require( 'STATES_OF_MATTER/common/model/engine/MonatomicAtomPositionUpdater' );
-  var DiatomicVerletAlgorithm = require( 'STATES_OF_MATTER/common/model/engine/DiatomicVerletAlgorithm' );
-  var DiatomicPhaseStateChanger = require( 'STATES_OF_MATTER/common/model/engine/DiatomicPhaseStateChanger' );
+  var ConfigurableStatesOfMatterAtom = require( 'STATES_OF_MATTER/common/model/particle/ConfigurableStatesOfMatterAtom' );
   var DiatomicAtomPositionUpdater = require( 'STATES_OF_MATTER/common/model/engine/DiatomicAtomPositionUpdater' );
+  var DiatomicPhaseStateChanger = require( 'STATES_OF_MATTER/common/model/engine/DiatomicPhaseStateChanger' );
+  var DiatomicVerletAlgorithm = require( 'STATES_OF_MATTER/common/model/engine/DiatomicVerletAlgorithm' );
+  var HydrogenAtom = require( 'STATES_OF_MATTER/common/model/particle/HydrogenAtom' );
+  var inherit = require( 'PHET_CORE/inherit' );
+  var InteractionStrengthTable = require( 'STATES_OF_MATTER/common/model/InteractionStrengthTable' );
+  var IsokineticThermostat = require( 'STATES_OF_MATTER/common/model/engine/kinetic/IsokineticThermostat' );
+  var MoleculeForceAndMotionDataSet = require( 'STATES_OF_MATTER/common/model/MoleculeForceAndMotionDataSet' );
+  var MonatomicAtomPositionUpdater = require( 'STATES_OF_MATTER/common/model/engine/MonatomicAtomPositionUpdater' );
+  var MonatomicPhaseStateChanger = require( 'STATES_OF_MATTER/common/model/engine/MonatomicPhaseStateChanger' );
+  var MonatomicVerletAlgorithm = require( 'STATES_OF_MATTER/common/model/engine/MonatomicVerletAlgorithm' );
+  var NeonAtom = require( 'STATES_OF_MATTER/common/model/particle/NeonAtom' );
+  var ObservableArray = require( 'AXON/ObservableArray' );
+  var OxygenAtom = require( 'STATES_OF_MATTER/common/model/particle/OxygenAtom' );
+  var PhaseStateEnum = require( 'STATES_OF_MATTER/common/PhaseStateEnum' );
+  var PropertySet = require( 'AXON/PropertySet' );
+  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
+  var Util = require( 'DOT/Util' );
+  var Vector2 = require( 'DOT/Vector2' );
   var WaterVerletAlgorithm = require( 'STATES_OF_MATTER/common/model/engine/WaterVerletAlgorithm' );
   var WaterPhaseStateChanger = require( 'STATES_OF_MATTER/common/model/engine/WaterPhaseStateChanger' );
   var WaterAtomPositionUpdater = require( 'STATES_OF_MATTER/common/model/engine/WaterAtomPositionUpdater' );
-  var IsokineticThermostat = require( 'STATES_OF_MATTER/common/model/engine/kinetic/IsokineticThermostat' );
-  var AndersenThermostat = require( 'STATES_OF_MATTER/common/model/engine/kinetic/AndersenThermostat' );
-  var PhaseStateEnum = require( 'STATES_OF_MATTER/common/PhaseStateEnum' );
-  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
-  // constants that control various aspects of the model behavior.
+  // constants
   var DEFAULT_MOLECULE = StatesOfMatterConstants.NEON;
   var INITIAL_TEMPERATURE = StatesOfMatterConstants.SOLID_TEMPERATURE;
   var MAX_TEMPERATURE = 50.0;
@@ -67,24 +62,22 @@ define( function( require ) {
   var INJECTION_POINT_HORIZ_PROPORTION = 0.05;
   var INJECTION_POINT_VERT_PROPORTION = 0.25;
 
-  // Possible thermostat settings.
+  // possible thermostat settings
   var ISOKINETIC_THERMOSTAT = 1;
   var ANDERSEN_THERMOSTAT = 2;
   var ADAPTIVE_THERMOSTAT = 3;
 
-  // Parameters to control rates of change of the container size.
+  // parameters to control rates of change of the container size
   var MAX_PER_TICK_CONTAINER_CHANGE = 3000;
   var MAX_PER_TICK_CONTAINER_EXPANSION_EXPLODED = 600;
 
-  // Countdown value used when recalculating temperature when the container size is changing.
+  // countdown value used when recalculating temperature when the container size is changing
   var CONTAINER_SIZE_CHANGE_RESET_COUNT = 25;
 
-  // Range for deciding if the temperature is near the current set point.
-  // The units are internal model units.
+  // Range for deciding if the temperature is near the current set point. The units are internal model units.
   var TEMPERATURE_CLOSENESS_RANGE = 0.15;
 
-  // Constant for deciding if a particle should be considered near to the
-  // edges of the container.
+  // Constant for deciding if a particle should be considered near to the edges of the container.
   var PARTICLE_EDGE_PROXIMITY_RANGE = 2.5;
 
   // Values used for converting from model temperature to the temperature for a given particle.
@@ -99,18 +92,15 @@ define( function( require ) {
   var WATER_TRIPLE_POINT_IN_KELVIN = 273;
   var WATER_CRITICAL_POINT_IN_KELVIN = 647;
 
-  // The following values are used for temperature conversion for the
-  // adjustable molecule.  These are somewhat arbitrary, since in the real
-  // world the values would change if epsilon were changed.  They have been
-  // chosen to be similar to argon, because the default epsilon value is
-  // half of the allowable range, and this value ends up being similar to
-  // argon.
+  // The following values are used for temperature conversion for the adjustable molecule.  These are somewhat
+  // arbitrary, since in the real world the values would change if epsilon were changed.  They have been chosen to be
+  // similar to argon, because the default epsilon value is half of the allowable range, and this value ends up being
+  // similar to argon.
   var ADJUSTABLE_ATOM_TRIPLE_POINT_IN_KELVIN = 75;
   var ADJUSTABLE_ATOM_CRITICAL_POINT_IN_KELVIN = 140;
 
-  // Min a max values for adjustable epsilon.  Originally there was a wider
-  // allowable range, but the simulation did not work so well, so the range
-  // below was arrived at empirically and seems to work reasonably well.
+  // Min a max values for adjustable epsilon.  Originally there was a wider allowable range, but the simulation did not
+  // work so well, so the range below was arrived at empirically and seems to work reasonably well.
   var MIN_ADJUSTABLE_EPSILON = StatesOfMatterConstants.MIN_ADJUSTABLE_EPSILON;
   var MAX_ADJUSTABLE_EPSILON = StatesOfMatterConstants.EPSILON_FOR_WATER * 1.7;
 
@@ -121,8 +111,7 @@ define( function( require ) {
 
     var multipleParticleModel = this;
 
-    // Strategy patterns that are applied to the data set in order to create
-    // the overall behavior of the simulation.
+    // Strategy patterns that are applied to the data set in order to create the overall behavior of the simulation.
     this.atomPositionUpdater = null;
     this.moleculeForceAndMotionCalculator = null;
     this.phaseStateChanger = null;
@@ -165,9 +154,8 @@ define( function( require ) {
 
     this.normalizedContainerHeight = this.particleContainerHeight / this.particleDiameter;
 
-    // Do just enough initialization to allow the view and control
-    // portions of the simulation to be properly created.  The rest of the
-    // initialization will occur when the model is reset.
+    // Do just enough initialization to allow the view and control portions of the simulation to be properly created.
+    // The rest of the initialization will occur when the model is reset.
     this.initializeModelParameters();
     this.setMoleculeType( DEFAULT_MOLECULE );
 
@@ -181,8 +169,8 @@ define( function( require ) {
   return inherit( PropertySet, MultipleParticleModel, {
 
     /**
-     * @public
      * @param {number} newTemperature
+     * @public
      */
     setTemperature: function( newTemperature ) {
 
@@ -207,8 +195,8 @@ define( function( require ) {
 
     /**
      * Get the current temperature in degrees Kelvin.
-     * @public
      * @returns {number}
+     * @public
      */
     getTemperatureInKelvin: function() {
       return this.convertInternalTemperatureToKelvin();
@@ -217,8 +205,8 @@ define( function( require ) {
     /**
      * Get the pressure value which is being calculated by the model and is
      * not adjusted to represent any "real" units (such as atmospheres).
-     * @public
      * @return {number}
+     * @public
      */
     getModelPressure: function() {
       return this.moleculeForceAndMotionCalculator.pressure;
@@ -226,8 +214,8 @@ define( function( require ) {
 
     /**
      * Set the molecule type to be simulated.
-     * @private
      * @param {number} moleculeID
+     * @private
      */
     setMoleculeType: function( moleculeID ) {
 
@@ -284,13 +272,11 @@ define( function( require ) {
           throw new Error( 'Invalid current molecule' ); // Should never happen, so it should be debugged if it does.
       }
 
-      // Reset the container size. This must be done after the diameter is
-      // initialized because the normalized size is dependent upon the
-      // particle diameter.
+      // Reset the container size. This must be done after the diameter is initialized because the normalized size is
+      // dependent upon the particle diameter.
       this.resetContainerSize();
 
-      // Initiate a reset in order to get the particles into predetermined
-      // locations and energy levels.
+      // Initiate a reset in order to get the particles into predetermined locations and energy levels.
       this.initializeParticles( phase );
     },
 
@@ -302,12 +288,10 @@ define( function( require ) {
     },
 
     /**
-     * Sets the target height of the container.  The target height is set
-     * rather than the actual height because the model limits the rate at
-     * which the height can changed.  The model will gradually move towards
-     * the target height.
-     * @public
+     * Sets the target height of the container.  The target height is set rather than the actual height because the
+     * model limits the rate at which the height can changed.  The model will gradually move towards the target height.
      * @param {number} desiredContainerHeight
+     * @public
      */
     setTargetParticleContainerHeight: function( desiredContainerHeight ) {
       this.targetContainerHeight = Util.clamp( desiredContainerHeight, this.minAllowableContainerHeight,
@@ -316,8 +300,8 @@ define( function( require ) {
 
     /**
      * Get the sigma value, which is one of the two parameters that describes the Lennard-Jones potential.
-     * @public
      * @returns {number}
+     * @public
      */
     getSigma: function() {
       var sigma;
@@ -350,8 +334,8 @@ define( function( require ) {
 
     /**
      * Get the epsilon value, which is one of the two parameters that describes the Lennard-Jones potential.
-     * @public
      * @returns {number}
+     * @public
      */
     getEpsilon: function() {
       var epsilon;
@@ -383,8 +367,8 @@ define( function( require ) {
     },
 
     /**
-     * @public
      * @override
+     * @public
      */
     reset: function() {
       this.initializeModelParameters();
@@ -407,9 +391,9 @@ define( function( require ) {
 
     /**
      * Sets the amount of heating or cooling that the system is undergoing.
+     * @param {number} normalizedHeatingCoolingAmount Normalized amount of heating or cooling that the system is
+     * undergoing, ranging from -1 to +1.
      * @public
-     * @param {number} normalizedHeatingCoolingAmount Normalized amount of heating or cooling
-     *                 that the system is undergoing, ranging from -1 to +1.
      */
     setHeatingCoolingAmount: function( normalizedHeatingCoolingAmount ) {
       assert && assert( ( normalizedHeatingCoolingAmount <= 1.0 ) && ( normalizedHeatingCoolingAmount >= -1.0 ) );
@@ -417,9 +401,9 @@ define( function( require ) {
     },
 
     /**
+     * Inject a new molecule of the current type into the model. This uses the current temperature to assign an initial
+     * velocity.
      * @public
-     * Inject a new molecule of the current type into the model. This uses
-     * the current temperature to assign an initial velocity.
      */
     injectMolecule: function() {
 
@@ -522,9 +506,8 @@ define( function( require ) {
     },
 
     /**
+     * Calculate the minimum allowable container height based on the current number of particles.
      * @private
-     * Calculate the minimum allowable container height based on the current
-     * number of particles.
      */
     calculateMinAllowableContainerHeight: function() {
       this.minAllowableContainerHeight = ( this.moleculeDataSet.getNumberOfMolecules() /
@@ -532,10 +515,10 @@ define( function( require ) {
     },
 
     /**
-     * Initialize the particles by calling the appropriate initialization
-     * routine, which will set their positions, velocities, etc.
-     * @public
+     * Initialize the particles by calling the appropriate initialization routine, which will set their positions,
+     * velocities, etc.
      * @param {number} phase - phase of atoms
+     * @public
      */
     initializeParticles: function( phase ) {
 
@@ -580,9 +563,9 @@ define( function( require ) {
     },
 
     /**
+     * Reset both the normalized and non-normalized sizes of the container. Note that the particle diameter must be
+     * valid before this will work properly.
      * @private
-     * Reset both the normalized and non-normalized sizes of the container.
-     * Note that the particle diameter must be valid before this will work properly.
      */
     resetContainerSize: function() {
       // Set the initial size of the container.
@@ -593,8 +576,8 @@ define( function( require ) {
     },
 
     /**
-     * @public
      * Step the model.
+     * @public
      */
     stepInternal: function( dt ) {
 
@@ -693,8 +676,7 @@ define( function( require ) {
     },
 
     /**
-     * Run the appropriate thermostat based on the settings and the state of
-     * the simulation.
+     * Run the appropriate thermostat based on the settings and the state of the simulation.
      */
     runThermostat: function() {
 
@@ -744,21 +726,19 @@ define( function( require ) {
     },
 
     /**
-     * Initialize the various model components to handle a simulation in which
-     * all the molecules are single atoms.
-     * @private
+     * Initialize the various model components to handle a simulation in which all the molecules are single atoms.
      * @param {number} moleculeID
      * @param {number} phase
+     * @private
      */
     initializeDiatomic: function( moleculeID, phase ) {
 
       // Verify that a valid molecule ID was provided.
       assert && assert( (moleculeID === StatesOfMatterConstants.DIATOMIC_OXYGEN) );
 
-      // Determine the number of atoms/molecules to create.  This will be a cube
-      // (really a square, since it's 2D, but you get the idea) that takes
-      // up a fixed amount of the bottom of the container, so the number of
-      // molecules that can fit depends on the size of the individual atom.
+      // Determine the number of atoms/molecules to create.  This will be a cube (really a square, since it's 2D, but
+      // you get the idea) that takes up a fixed amount of the bottom of the container, so the number of molecules that
+      // can fit depends on the size of the individual atom.
       var numberOfAtoms = Math.pow( Math.round( StatesOfMatterConstants.CONTAINER_BOUNDS.width /
                                                 ((OxygenAtom.RADIUS * 2.1) * 3) ), 2 );
       if ( numberOfAtoms % 2 !== 0 ) {
@@ -801,8 +781,8 @@ define( function( require ) {
     },
 
     /**
-     * Initialize the various model components to handle a simulation in which
-     * each molecule consists of three atoms, e.g. water.
+     * Initialize the various model components to handle a simulation in which each molecule consists of three atoms,
+     * e.g. water.
      * @private
      * @param {number} moleculeID
      * @param {number} phase
@@ -812,10 +792,9 @@ define( function( require ) {
       // Only water is supported so far.
       assert && assert( (moleculeID === StatesOfMatterConstants.WATER) );
 
-      // Determine the number of atoms/molecules to create.  This will be a cube
-      // (really a square, since it's 2D, but you get the idea) that takes
-      // up a fixed amount of the bottom of the container, so the number of
-      // molecules that can fit depends on the size of the individual atom.
+      // Determine the number of atoms/molecules to create.  This will be a cube (really a square, since it's 2D, but
+      // you get the idea) that takes up a fixed amount of the bottom of the container, so the number of molecules that
+      // can fit depends on the size of the individual atom.
       var waterMoleculeDiameter = OxygenAtom.RADIUS * 2.1;
       var moleculesAcrossBottom = Math.round( StatesOfMatterConstants.CONTAINER_BOUNDS.width /
                                               (waterMoleculeDiameter * 1.2) );
@@ -861,64 +840,64 @@ define( function( require ) {
     },
 
     /***
-     * @public
      * @returns {number}
+     * @public
      */
     getNormalizedContainerWidth: function() {
       return this.normalizedContainerWidth;
     },
 
     /**
-     * @public
      * @returns {MoleculeForceAndMotionDataSet}
+     * @public
      */
     getMoleculeDataSetRef: function() {
       return this.moleculeDataSet;
     },
 
     /**
-     * @public
      * @returns {Array}
+     * @public
      */
     getMoleculeCenterOfMassPositions: function() {
       return this.moleculeCenterOfMassPositions;
     },
 
     /**
-     * @public
      * @returns {number}
+     * @public
      */
     getNormalizedContainerHeight: function() {
       return this.normalizedContainerHeight;
     },
 
     /**
-     * @public
      * @returns {number}
+     * @public
      */
     getTemperatureSetPoint: function() {
       return this.temperatureSetPoint;
     },
 
     /**
-     * @public
      * @returns {number}
+     * @public
      */
     getGravitationalAcceleration: function() {
       return this.gravitationalAcceleration;
     },
 
     /**
-     * @public
      * @returns {number}
+     * @public
      */
     getMoleculeType: function() {
       return this.currentMolecule;
     },
 
     /**
-     * @public
      * @param {number} epsilon
+     * @public
      */
     setEpsilon: function( epsilon ) {
       if ( this.currentMolecule === StatesOfMatterConstants.USER_DEFINED_MOLECULE ) {
@@ -938,11 +917,10 @@ define( function( require ) {
     },
 
     /**
-     * Initialize the various model components to handle a simulation in which
-     * all the molecules are single atoms.
-     * @private
+     * Initialize the various model components to handle a simulation in which all the molecules are single atoms.
      * @param {number} moleculeID
      * @param {number} phase
+     * @private
      */
     initializeMonatomic: function( moleculeID, phase ) {
 
@@ -951,10 +929,9 @@ define( function( require ) {
                         moleculeID === StatesOfMatterConstants.NEON ||
                         moleculeID === StatesOfMatterConstants.ARGON );
 
-      // Determine the number of atoms/molecules to create.  This will be a cube
-      // (really a square, since it's 2D, but you get the idea) that takes
-      // up a fixed amount of the bottom of the container, so the number of
-      // molecules that can fit depends on the size of the individual.
+      // Determine the number of atoms/molecules to create.  This will be a cube (really a square, since it's 2D, but
+      // you get the idea) that takes up a fixed amount of the bottom of the container, so the number of molecules that
+      // can fit depends on the size of the individual.
       var particleDiameter;
       if ( moleculeID === StatesOfMatterConstants.NEON ) {
         particleDiameter = NeonAtom.RADIUS * 2;
@@ -1019,9 +996,8 @@ define( function( require ) {
     },
 
     /**
+     * Set the positions of the non-normalized particles based on the positions of the normalized ones.
      * @private
-     * Set the positions of the non-normalized particles based on the positions
-     * of the normalized ones.
      */
     syncParticlePositions: function() {
       assert && assert( this.moleculeDataSet.numberOfAtoms === this.particles.length,
@@ -1035,10 +1011,9 @@ define( function( require ) {
     },
 
     /**
-     * Take the internal temperature value and convert it to Kelvin.  This
-     * is dependent on the type of molecule selected.  The values and ranges
-     * used in this method were derived from information provided by Paul
-     * Beale.
+     * Take the internal temperature value and convert it to Kelvin.  This is dependent on the type of molecule
+     * selected.  The values and ranges used in this method were derived from information provided by Paul Beale, dept
+     * of Physics, University of Colorado Boulder.
      */
     convertInternalTemperatureToKelvin: function() {
 
@@ -1108,12 +1083,10 @@ define( function( require ) {
     },
 
     /**
-     * @public
-     * Take the internal pressure value and convert it to atmospheres.  This
-     * is dependent on the type of molecule selected.  The values and ranges
-     * used in this method were derived from information provided by Paul
-     * Beale.
+     * Take the internal pressure value and convert it to atmospheres.  This is dependent on the type of molecule
+     * selected.  The values and ranges used in this method were derived from information provided by Paul Beale.
      * @returns {number}
+     * @public
      */
     getPressureInAtmospheres: function() {
 
@@ -1152,11 +1125,10 @@ define( function( require ) {
     },
 
     /**
-     * Determine whether there are particles close to the top of the
-     * container.  This can be important for determining whether movement
-     * of the top is causing temperature changes.
-     * @public
+     * Determine whether there are particles close to the top of the container.  This can be important for determining
+     * whether movement of the top is causing temperature changes.
      * @return {boolean} true if particles are close, false if not
+     * @public
      */
     particlesNearTop: function() {
       var moleculesPositions = this.moleculeDataSet.moleculeCenterOfMassPositions;
@@ -1175,8 +1147,8 @@ define( function( require ) {
 
     /**
      * Return a phase value based on the current temperature.
-     * @private
      * @return{number}
+     * @private
      */
     mapTemperatureToPhase: function() {
       var phase;
@@ -1198,42 +1170,39 @@ define( function( require ) {
     },
 
     /**
-     * Convert a value for epsilon that is in the real range of values into a
-     * scaled value that is suitable for use with the motion and force
-     * calculators.
-     * @private
+     * Convert a value for epsilon that is in the real range of values into a scaled value that is suitable for use with
+     * the motion and force calculators.
      * @param {number} epsilon
+     * @private
      */
     convertEpsilonToScaledEpsilon: function( epsilon ) {
-      // The following conversion of the target value for epsilon
-      // to a scaled value for the motion calculator object was
-      // determined empirically such that the resulting behavior
-      // roughly matched that of the existing monatomic molecules.
+      // The following conversion of the target value for epsilon to a scaled value for the motion calculator object was
+      // determined empirically such that the resulting behavior roughly matched that of the existing monatomic
+      // molecules.
       return epsilon / ( StatesOfMatterConstants.MAX_EPSILON / 2 );
     },
 
     /**
-     * @private
      * @param {number} scaledEpsilon
      * @returns {number}
+     * @private
      */
     convertScaledEpsilonToEpsilon: function( scaledEpsilon ) {
       return scaledEpsilon * StatesOfMatterConstants.MAX_EPSILON / 2;
     },
 
     /**
-     * @public
      * @returns {boolean}
+     * @public
      */
     getContainerExploded: function() {
       return this.isExploded;
     },
 
     /**
-     * This method is used for an external entity to notify the model that it
-     * should explode.
-     *  @private
+     * This method is used for an external entity to notify the model that it should explode.
      * @param {boolean} isExploded
+     * @private
      */
     setContainerExploded: function( isExploded ) {
       if ( this.isExploded !== isExploded ) {
@@ -1246,9 +1215,9 @@ define( function( require ) {
     },
 
     /**
+     * Return the lid to the container.  It only makes sense to call this after the container has exploded, otherwise it
+     * has no effect.
      * @public
-     * Return the lid to the container.  It only makes sense to call this after
-     * the container has exploded, otherwise it has no effect.
      */
     returnLid: function() {
       if ( !this.isExploded ) {
@@ -1256,8 +1225,7 @@ define( function( require ) {
         return;
       }
 
-      // Remove any particles that are outside of the container.  We work
-      // with the normalized particles for this.
+      // Remove any particles that are outside of the container.  We work with the normalized particles for this.
       var particlesOutsideOfContainerCount = 0;
       var firstOutsideMoleculeIndex;
       do {
@@ -1277,10 +1245,9 @@ define( function( require ) {
         }
       } while ( firstOutsideMoleculeIndex !== this.moleculeDataSet.getNumberOfMolecules() );
 
-      // Remove enough of the non-normalized particles so that we have the
-      // same number as the normalized.  They don't have to be the same
-      // particles since the normalized and non-normalized particles are
-      // explicitly synced up elsewhere.
+      // Remove enough of the non-normalized particles so that we have the same number as the normalized.  They don't
+      // have to be the same particles since the normalized and non-normalized particles are explicitly synced up
+      // elsewhere.
       this.copyOfParticles.clear();
       for ( var k = 0; k < this.particles.length; k++ ) {
         this.copyOfParticles.push( this.particles.get( k ) );
@@ -1293,18 +1260,17 @@ define( function( require ) {
       // Set the container to be unexploded.
       this.setContainerExploded( false );
 
-      // Set the phase to be gas, since otherwise the extremely high
-      // kinetic energy of the particles causes an unreasonably high
-      // temperature for the particles that remain in the container. Doing
-      // this generally cools them down into a more manageable state.
+      // Set the phase to be gas, since otherwise the extremely high kinetic energy of the particles causes an
+      // unreasonably high temperature for the particles that remain in the container. Doing this generally cools them
+      // down into a more manageable state.
       if ( particlesOutsideOfContainerCount > 0 ) {
         this.phaseStateChanger.setPhase( PhaseStateEnum.GAS );
       }
     },
 
     /**
-     * @public
      * @returns {number}
+     * @public
      */
     getParticleContainerHeight: function() {
       return this.particleContainerHeight;
