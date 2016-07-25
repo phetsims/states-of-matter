@@ -30,6 +30,7 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var InteractionStrengthTable = require( 'STATES_OF_MATTER/common/model/InteractionStrengthTable' );
   var IsokineticThermostat = require( 'STATES_OF_MATTER/common/model/engine/kinetic/IsokineticThermostat' );
+  var LinearFunction = require( 'DOT/LinearFunction' );
   var MoleculeForceAndMotionDataSet = require( 'STATES_OF_MATTER/common/model/MoleculeForceAndMotionDataSet' );
   var MonatomicAtomPositionUpdater = require( 'STATES_OF_MATTER/common/model/engine/MonatomicAtomPositionUpdater' );
   var MonatomicPhaseStateChanger = require( 'STATES_OF_MATTER/common/model/engine/MonatomicPhaseStateChanger' );
@@ -81,7 +82,7 @@ define( function( require ) {
   var PARTICLE_EDGE_PROXIMITY_RANGE = 2.5;
 
   // Values used for converting from model temperature to the temperature for a given particle.
-  var TRIPLE_POINT_MONATOMIC_MODEL_TEMPERATURE = 0.26;   // Empirically determined.
+  var TRIPLE_POINT_INTERNAL_MODEL_TEMPERATURE = 0.26;   // Empirically determined.
   var CRITICAL_POINT_MONATOMIC_MODEL_TEMPERATURE = 0.8;  // Empirically determined.
   var NEON_TRIPLE_POINT_IN_KELVIN = 23;   // Tweaked a little from actual value for better temperature mapping.
   var NEON_CRITICAL_POINT_IN_KELVIN = 44;
@@ -123,16 +124,17 @@ define( function( require ) {
     this.particles = new ObservableArray();
     this.copyOfParticles = new ObservableArray();
 
-    // Data set containing the atom and molecule position, motion, and force information.
+    // @private, data set containing the atom and molecule position, motion, and force information
     this.moleculeDataSet = null;
 
+    // @private, various internal model variables
     this.particleDiameter = 1;
     this.normalizedContainerWidth = StatesOfMatterConstants.PARTICLE_CONTAINER_WIDTH / this.particleDiameter;
     this.gravitationalAcceleration = null;
     this.tempAdjustTickCounter = null;
     this.currentMolecule = null;
     this.thermostatType = ADAPTIVE_THERMOSTAT;
-    this.heightChangeCounter = DEFAULT_MOLECULE;
+    this.heightChangeCounter = 0;
     this.minModelTemperature = null;
 
     // everything that had a listener in the java version becomes a property
@@ -194,12 +196,77 @@ define( function( require ) {
     },
 
     /**
-     * Get the current temperature in degrees Kelvin.
+     * Get the current temperature in degrees Kelvin.  The calculations done are dependent on the type of molecule
+     * selected.  The values and ranges used in this method were derived from information provided by Paul Beale, dept
+     * of Physics, University of Colorado Boulder.
      * @returns {number}
      * @public
      */
     getTemperatureInKelvin: function() {
-      return this.convertInternalTemperatureToKelvin();
+
+      if ( this.particles.length === 0 ) {
+        // Temperature is reported as 0 if there are no particles.
+        return 0;
+      }
+
+      var temperatureInKelvin;
+      var triplePoint = 0;
+      var criticalPoint = 0;
+
+      switch( this.currentMolecule ) {
+
+        case StatesOfMatterConstants.NEON:
+          triplePoint = NEON_TRIPLE_POINT_IN_KELVIN;
+          criticalPoint = NEON_CRITICAL_POINT_IN_KELVIN;
+          break;
+
+        case StatesOfMatterConstants.ARGON:
+          triplePoint = ARGON_TRIPLE_POINT_IN_KELVIN;
+          criticalPoint = ARGON_CRITICAL_POINT_IN_KELVIN;
+          break;
+
+        case StatesOfMatterConstants.USER_DEFINED_MOLECULE:
+          triplePoint = ADJUSTABLE_ATOM_TRIPLE_POINT_IN_KELVIN;
+          criticalPoint = ADJUSTABLE_ATOM_CRITICAL_POINT_IN_KELVIN;
+          break;
+
+        case StatesOfMatterConstants.WATER:
+          triplePoint = WATER_TRIPLE_POINT_IN_KELVIN;
+          criticalPoint = WATER_CRITICAL_POINT_IN_KELVIN;
+          break;
+
+        case StatesOfMatterConstants.DIATOMIC_OXYGEN:
+          triplePoint = O2_TRIPLE_POINT_IN_KELVIN;
+          criticalPoint = O2_CRITICAL_POINT_IN_KELVIN;
+          break;
+
+        default:
+          break;
+      }
+
+      if ( this.temperatureSetPoint <= this.minModelTemperature ) {
+        // We treat anything below the minimum temperature as absolute zero.
+        temperatureInKelvin = 0;
+      }
+      else if ( this.temperatureSetPoint < TRIPLE_POINT_INTERNAL_MODEL_TEMPERATURE ) {
+        temperatureInKelvin = this.temperatureSetPoint * triplePoint / TRIPLE_POINT_INTERNAL_MODEL_TEMPERATURE;
+
+        if ( temperatureInKelvin < 0.5 ) {
+          // Don't return zero - or anything that would round to it - as
+          // a value until we actually reach the minimum internal temperature.
+          temperatureInKelvin = 0.5;
+        }
+      }
+      else if ( this.temperatureSetPoint < CRITICAL_POINT_MONATOMIC_MODEL_TEMPERATURE ) {
+        var slope = ( criticalPoint - triplePoint ) /
+                    ( CRITICAL_POINT_MONATOMIC_MODEL_TEMPERATURE - TRIPLE_POINT_INTERNAL_MODEL_TEMPERATURE );
+        var offset = triplePoint - ( slope * TRIPLE_POINT_INTERNAL_MODEL_TEMPERATURE );
+        temperatureInKelvin = this.temperatureSetPoint * slope + offset;
+      }
+      else {
+        temperatureInKelvin = this.temperatureSetPoint * criticalPoint / CRITICAL_POINT_MONATOMIC_MODEL_TEMPERATURE;
+      }
+      return temperatureInKelvin;
     },
 
     /**
@@ -244,15 +311,15 @@ define( function( require ) {
       switch( this.currentMolecule ) {
         case StatesOfMatterConstants.DIATOMIC_OXYGEN:
           this.particleDiameter = OxygenAtom.RADIUS * 2;
-          this.minModelTemperature = 0.5 * TRIPLE_POINT_MONATOMIC_MODEL_TEMPERATURE / O2_TRIPLE_POINT_IN_KELVIN;
+          this.minModelTemperature = 0.5 * TRIPLE_POINT_INTERNAL_MODEL_TEMPERATURE / O2_TRIPLE_POINT_IN_KELVIN;
           break;
         case StatesOfMatterConstants.NEON:
           this.particleDiameter = NeonAtom.RADIUS * 2;
-          this.minModelTemperature = 0.5 * TRIPLE_POINT_MONATOMIC_MODEL_TEMPERATURE / NEON_TRIPLE_POINT_IN_KELVIN;
+          this.minModelTemperature = 0.5 * TRIPLE_POINT_INTERNAL_MODEL_TEMPERATURE / NEON_TRIPLE_POINT_IN_KELVIN;
           break;
         case StatesOfMatterConstants.ARGON:
           this.particleDiameter = ArgonAtom.RADIUS * 2;
-          this.minModelTemperature = 0.5 * TRIPLE_POINT_MONATOMIC_MODEL_TEMPERATURE / ARGON_TRIPLE_POINT_IN_KELVIN;
+          this.minModelTemperature = 0.5 * TRIPLE_POINT_INTERNAL_MODEL_TEMPERATURE / ARGON_TRIPLE_POINT_IN_KELVIN;
           break;
         case StatesOfMatterConstants.WATER:
 
@@ -261,11 +328,11 @@ define( function( require ) {
           // users can see the crystal structure better, and so that the
           // solid form will look larger (since water expands when frozen).
           this.particleDiameter = OxygenAtom.RADIUS * 2.9;
-          this.minModelTemperature = 0.5 * TRIPLE_POINT_MONATOMIC_MODEL_TEMPERATURE / WATER_TRIPLE_POINT_IN_KELVIN;
+          this.minModelTemperature = 0.5 * TRIPLE_POINT_INTERNAL_MODEL_TEMPERATURE / WATER_TRIPLE_POINT_IN_KELVIN;
           break;
         case StatesOfMatterConstants.USER_DEFINED_MOLECULE:
           this.particleDiameter = ConfigurableStatesOfMatterAtom.DEFAULT_RADIUS * 2;
-          this.minModelTemperature = 0.5 * TRIPLE_POINT_MONATOMIC_MODEL_TEMPERATURE /
+          this.minModelTemperature = 0.5 * TRIPLE_POINT_INTERNAL_MODEL_TEMPERATURE /
                                      ADJUSTABLE_ATOM_TRIPLE_POINT_IN_KELVIN;
           break;
         default:
@@ -367,6 +434,51 @@ define( function( require ) {
     },
 
     /**
+     * get the internal model temperature that corresponds to one degree Kelvin
+     * @param {number} temperatureInKelvin
+     */
+    getTwoDegreesKelvinInInternalTemperature: function(){
+
+      var triplePointInKelvin;
+
+      switch( this.currentMolecule ) {
+
+        case StatesOfMatterConstants.NEON:
+          triplePointInKelvin = NEON_TRIPLE_POINT_IN_KELVIN;
+          break;
+
+        case StatesOfMatterConstants.ARGON:
+          triplePointInKelvin = ARGON_TRIPLE_POINT_IN_KELVIN;
+          break;
+
+        case StatesOfMatterConstants.USER_DEFINED_MOLECULE:
+          triplePointInKelvin = ADJUSTABLE_ATOM_TRIPLE_POINT_IN_KELVIN;
+          break;
+
+        case StatesOfMatterConstants.WATER:
+          triplePointInKelvin = WATER_TRIPLE_POINT_IN_KELVIN;
+          break;
+
+        case StatesOfMatterConstants.DIATOMIC_OXYGEN:
+          triplePointInKelvin = O2_TRIPLE_POINT_IN_KELVIN;
+          break;
+
+        default:
+          break;
+      }
+
+      var mapKelvinToInternal = new LinearFunction(
+        0,
+        triplePointInKelvin,
+        this.minModelTemperature,
+        TRIPLE_POINT_INTERNAL_MODEL_TEMPERATURE
+      );
+
+      return mapKelvinToInternal( 2 );
+
+    },
+
+    /**
      * @override
      * @public
      */
@@ -391,7 +503,7 @@ define( function( require ) {
 
     /**
      * Sets the amount of heating or cooling that the system is undergoing.
-     * @param {number} normalizedHeatingCoolingAmount Normalized amount of heating or cooling that the system is
+     * @param {number} normalizedHeatingCoolingAmount - Normalized amount of heating or cooling that the system is
      * undergoing, ranging from -1 to +1.
      * @public
      */
@@ -412,7 +524,7 @@ define( function( require ) {
       var injectionPointY = StatesOfMatterConstants.CONTAINER_BOUNDS.height / this.particleDiameter *
                             INJECTION_POINT_VERT_PROPORTION;
 
-      // Make sure that it is okay to inject a new molecule.
+      // Only inject if okay to do so.
       if ( ( this.moleculeDataSet.getNumberOfRemainingSlots() > 1 ) &&
            ( this.normalizedContainerHeight > injectionPointY * 1.05 ) &&
            ( !this.isExploded ) ) {
@@ -480,10 +592,19 @@ define( function( require ) {
         }
 
         if ( this.particles.length === 1 ) {
-          // Adding the first particle is considered a temperature
-          // change, because (in this sim anyway), no particles means a
-          // temperature of zero.
+          // Adding the first particle is considered a temperature change, because (in this sim anyway), no particles
+          // means a temperature of zero.
           this.temperatureSetPointProperty.notifyObserversStatic();
+        }
+
+        // If the particles are at absolute zero and additional particles are added, this bumps up the temperature,
+        // since if there is any motion absolute zero is not correct.  This is handled as a special case rather than
+        // treating the addition of particles more generally, see https://github.com/phetsims/states-of-matter/issues/129
+        // for more detail.
+        if ( this.getTemperatureInKelvin() === 0 ){
+          this.temperatureSetPoint = this.getTwoDegreesKelvinInInternalTemperature();
+          this.isoKineticThermostat.targetTemperature = this.temperatureSetPoint;
+          this.andersenThermostat.targetTemperature = this.temperatureSetPoint;
         }
 
         this.syncParticlePositions();
@@ -582,6 +703,7 @@ define( function( require ) {
     stepInternal: function( dt ) {
 
       if ( !this.isExploded ) {
+
         // Adjust the particle container height if needed.
         if ( this.targetContainerHeight !== this.particleContainerHeight ) {
           this.heightChangeCounter = CONTAINER_SIZE_CHANGE_RESET_COUNT;
@@ -624,9 +746,10 @@ define( function( require ) {
       // Record the pressure to see if it changes.
       var pressureBeforeAlgorithm = this.getModelPressure();
 
-      var normDt = Math.min( 0.02, dt ); // normalize the dt as model cannot handle lonf dt's
+      var normDt = Math.min( 0.02, dt ); // normalize the dt as model cannot handle long dt's
 
-      // Execute the Verlet algorithm.  The algorithm may be run several times for each time step.
+      // Execute the Verlet algorithm in order to determine the new particle positions.  The algorithm may be run
+      // several times for each time step.
       for ( var i = 0; i < VERLET_CALCULATIONS_PER_CLOCK_TICK; i++ ) {
         // is the container is exploded reduce the speed of particles
         if( this.isExploded ){
@@ -637,11 +760,11 @@ define( function( require ) {
       }
       this.runThermostat();
 
-      // Sync up the positions of the normalized particles (the molecule data
-      // set) with the particles being monitored by the view (the model data set).
+      // Sync up the positions of the normalized particles (the molecule data set) with the particles being monitored by
+      // the view (the model data set).
       this.syncParticlePositions();
 
-      // If the pressure changed
+      // If the pressure changed, update it.
       if ( this.getModelPressure() !== pressureBeforeAlgorithm ) {
         this.updatePressure();
       }
@@ -656,9 +779,9 @@ define( function( require ) {
         }
         else if ( ( newTemperature <= StatesOfMatterConstants.SOLID_TEMPERATURE * 0.9 ) &&
                   ( this.heatingCoolingAmount < 0 ) ) {
-          // The temperature goes down more slowly as we begin to
-          // approach absolute zero.
-          newTemperature = this.temperatureSetPoint * 0.95;  // Multiplier determined empirically.
+
+          // The temperature goes down more slowly as we begin to approach absolute zero.
+          newTemperature = this.temperatureSetPoint * 0.95;  // multiplier determined empirically
         }
         else if ( newTemperature <= this.minModelTemperature ) {
           newTemperature = this.minModelTemperature;
@@ -681,8 +804,7 @@ define( function( require ) {
     runThermostat: function() {
 
       if ( this.isExploded ) {
-        // Don't bother to run any thermostat if the lid is blown off -
-        // just let those little particles run free!
+        // Don't bother to run any thermostat if the lid is blown off - just let those little particles run free!
         return;
       }
 
@@ -697,27 +819,24 @@ define( function( require ) {
 
       if ( this.heightChangeCounter !== 0 && this.particlesNearTop() ) {
 
-        // The height of the container is currently changing and there
-        // are particles close enough to the top that they may be
-        // interacting with it.  Since this can end up adding or removing
-        // kinetic energy (i.e. heat) from the system, no thermostat is
-        // run in this case.  Instead, the temperature is determined by
-        // looking at the kinetic energy of the molecules and that value
-        // is used to set the system temperature set point.
+        // Either the height of the container is currently changing and there are particles close enough to the top that
+        // they may be interacting with it, or new particles have been recently added.  Since either of these situations
+        // can end up changing the kinetic energy of the particles in the system, no thermostat is run.  Instead, the
+        // temperature is determined by looking at the kinetic energy of the molecules and that value is used to set the
+        // system temperature set point.
         this.setTemperature( this.moleculeDataSet.calculateTemperatureFromKineticEnergy() );
       }
       else if ( ( this.thermostatType === ISOKINETIC_THERMOSTAT ) ||
-                ( this.thermostatType === ADAPTIVE_THERMOSTAT && ( temperatureIsChanging || this.temperatureSetPoint >
-                                                                                            StatesOfMatterConstants.LIQUID_TEMPERATURE ) ) ) {
+                ( this.thermostatType === ADAPTIVE_THERMOSTAT &&
+                  ( temperatureIsChanging ||
+                    this.temperatureSetPoint > StatesOfMatterConstants.LIQUID_TEMPERATURE ) ) ) {
         // Use the isokinetic thermostat.
         this.isoKineticThermostat.adjustTemperature();
       }
       else if ( ( this.thermostatType === ANDERSEN_THERMOSTAT ) ||
                 ( this.thermostatType === ADAPTIVE_THERMOSTAT && !temperatureIsChanging ) ) {
-        // The temperature isn't changing and it is below a certain
-        // threshold, so use the Andersen thermostat.  This is done for
-        // purely visual reasons - it looks better than the isokinetic in
-        // these circumstances.
+        // The temperature isn't changing and it is below a certain threshold, so use the Andersen thermostat.  This is
+        // done for purely visual reasons - it looks better than the isokinetic in these circumstances.
         this.andersenThermostat.adjustTemperature();
       }
 
@@ -1008,78 +1127,6 @@ define( function( require ) {
       this.particles.forEach( function( particle, index ) {
         particle.setPosition( atomPositions[ index ].x * positionMultiplier, atomPositions[ index ].y * positionMultiplier );
       } );
-    },
-
-    /**
-     * Take the internal temperature value and convert it to Kelvin.  This is dependent on the type of molecule
-     * selected.  The values and ranges used in this method were derived from information provided by Paul Beale, dept
-     * of Physics, University of Colorado Boulder.
-     */
-    convertInternalTemperatureToKelvin: function() {
-
-      if ( this.particles.length === 0 ) {
-        // Temperature is reported as 0 if there are no particles.
-        return 0;
-      }
-
-      var temperatureInKelvin;
-      var triplePoint = 0;
-      var criticalPoint = 0;
-
-      switch( this.currentMolecule ) {
-
-        case StatesOfMatterConstants.NEON:
-          triplePoint = NEON_TRIPLE_POINT_IN_KELVIN;
-          criticalPoint = NEON_CRITICAL_POINT_IN_KELVIN;
-          break;
-
-        case StatesOfMatterConstants.ARGON:
-          triplePoint = ARGON_TRIPLE_POINT_IN_KELVIN;
-          criticalPoint = ARGON_CRITICAL_POINT_IN_KELVIN;
-          break;
-
-        case StatesOfMatterConstants.USER_DEFINED_MOLECULE:
-          triplePoint = ADJUSTABLE_ATOM_TRIPLE_POINT_IN_KELVIN;
-          criticalPoint = ADJUSTABLE_ATOM_CRITICAL_POINT_IN_KELVIN;
-          break;
-
-        case StatesOfMatterConstants.WATER:
-          triplePoint = WATER_TRIPLE_POINT_IN_KELVIN;
-          criticalPoint = WATER_CRITICAL_POINT_IN_KELVIN;
-          break;
-
-        case StatesOfMatterConstants.DIATOMIC_OXYGEN:
-          triplePoint = O2_TRIPLE_POINT_IN_KELVIN;
-          criticalPoint = O2_CRITICAL_POINT_IN_KELVIN;
-          break;
-
-        default:
-          break;
-      }
-
-      if ( this.temperatureSetPoint <= this.minModelTemperature ) {
-        // We treat anything below the minimum temperature as absolute zero.
-        temperatureInKelvin = 0;
-      }
-      else if ( this.temperatureSetPoint < TRIPLE_POINT_MONATOMIC_MODEL_TEMPERATURE ) {
-        temperatureInKelvin = this.temperatureSetPoint * triplePoint / TRIPLE_POINT_MONATOMIC_MODEL_TEMPERATURE;
-
-        if ( temperatureInKelvin < 0.5 ) {
-          // Don't return zero - or anything that would round to it - as
-          // a value until we actually reach the minimum internal temperature.
-          temperatureInKelvin = 0.5;
-        }
-      }
-      else if ( this.temperatureSetPoint < CRITICAL_POINT_MONATOMIC_MODEL_TEMPERATURE ) {
-        var slope = ( criticalPoint - triplePoint ) /
-                    ( CRITICAL_POINT_MONATOMIC_MODEL_TEMPERATURE - TRIPLE_POINT_MONATOMIC_MODEL_TEMPERATURE );
-        var offset = triplePoint - ( slope * TRIPLE_POINT_MONATOMIC_MODEL_TEMPERATURE );
-        temperatureInKelvin = this.temperatureSetPoint * slope + offset;
-      }
-      else {
-        temperatureInKelvin = this.temperatureSetPoint * criticalPoint / CRITICAL_POINT_MONATOMIC_MODEL_TEMPERATURE;
-      }
-      return temperatureInKelvin;
     },
 
     /**

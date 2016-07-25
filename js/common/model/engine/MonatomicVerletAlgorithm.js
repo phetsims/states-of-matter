@@ -1,9 +1,8 @@
 // Copyright 2014-2015, University of Colorado Boulder
 
 /**
- * Implementation of the Verlet algorithm for simulating molecular interaction
- * based on the Lennard-Jones potential - monatomic (i.e. one atom per
- * molecule) version.
+ * Implementation of the Verlet algorithm for simulating molecular interaction based on the Lennard-Jones potential -
+ * monatomic (i.e. one atom per molecule) version.
  *
  * @author John Blanco
  * @author Aaron Davis
@@ -26,7 +25,7 @@ define( function( require ) {
   function MonatomicVerletAlgorithm( multipleParticleModel ) {
     AbstractVerletAlgorithm.call( this, multipleParticleModel );
     this.positionUpdater = MonatomicAtomPositionUpdater;
-    this.epsilon = 1; // Controls the strength of particle interaction.
+    this.epsilon = 1; // controls the strength of particle interaction
 
     // reusable vectors for reducing allocations
     this.force = new Vector2();
@@ -70,13 +69,11 @@ define( function( require ) {
     },
 
     /**
-     * Update the motion of the particles and the forces that are acting upon
-     * them.  This is the heart of this class, and it is here that the actual
-     * Verlet algorithm is contained.
+     * Update the motion of the particles and the forces that are acting upon them.  This is the heart of this class,
+     * and it is here that the actual Verlet algorithm is contained.
      * @public
      */
     updateForcesAndMotion: function( timeStep ) {
-
 
       var kineticEnergy = 0;
       var potentialEnergy = 0;
@@ -94,6 +91,7 @@ define( function( require ) {
 
       var i;
 
+      // TODO: Document what the offset is all about
       var offset = 0;
       if ( this.multipleParticleModel.currentMolecule === StatesOfMatterConstants.ARGON ){
         offset = 6;
@@ -102,6 +100,7 @@ define( function( require ) {
       if ( this.multipleParticleModel.currentMolecule === StatesOfMatterConstants.USER_DEFINED_MOLECULE ){
         offset = 4;
       }
+
       // Update the positions of all particles based on their current velocities and the forces acting on them.
       for ( i = 0; i < numberOfAtoms; i++ ) {
         var yPos = moleculeCenterOfMassPositions[ i ].y + ( timeStep * moleculeVelocities[ i ].y ) +
@@ -149,8 +148,8 @@ define( function( require ) {
       }
 
       var numberOfSafeAtoms = moleculeDataSet.numberOfSafeMolecules;
-      // Calculate the forces created through interactions with other
-      // particles.
+
+      // Calculate the forces created through interactions with other particles.
       for ( i = 0; i < numberOfSafeAtoms; i++ ) {
         for ( var j = i + 1; j < numberOfSafeAtoms; j++ ) {
 
@@ -159,10 +158,8 @@ define( function( require ) {
           var distanceSqrd = ( dx * dx ) + ( dy * dy );
 
           if ( distanceSqrd === 0 ) {
-            // Handle the special case where the particles are right
-            // on top of each other by assigning an arbitrary spacing.
-            // In general, this only happens when injecting new
-            // particles.
+            // Handle the special case where the particles are right on top of each other by assigning an arbitrary
+            // spacing. In general, this only happens when injecting new particles.
             dx = 1;
             dy = 1;
             distanceSqrd = 2;
@@ -186,8 +183,7 @@ define( function( require ) {
         }
       }
 
-      // Calculate the new velocities based on the old ones and the forces
-      // that are acting on the particle.
+      // Calculate the new velocities based on the old ones and the forces that are acting on the particle.
       for ( i = 0; i < numberOfAtoms; i++ ) {
         this.velocityIncrement.setX( timeStepHalf * ( moleculeForces[ i ].x + nextMoleculeForces[ i ].x ) );
         this.velocityIncrement.setY( timeStepHalf * ( moleculeForces[ i ].y + nextMoleculeForces[ i ].y ) );
@@ -196,10 +192,8 @@ define( function( require ) {
                            ( moleculeVelocities[ i ].y * moleculeVelocities[ i ].y ) ) / 2;
       }
 
-      // Record the calculated temperature.
+      // Update the temperature.
       this.temperature = kineticEnergy / numberOfAtoms;
-
-
 
       // Replace the new forces with the old ones.
       for ( i = 0; i < numberOfAtoms; i++ ) {
