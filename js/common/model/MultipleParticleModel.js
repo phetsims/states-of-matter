@@ -1270,7 +1270,8 @@ define( function( require ) {
      */
     returnLid: function() {
 
-      assert && assert( !this.isExploded, 'attempt to return lid when container hadn\'t exploded' );
+      // state checking
+      assert && assert( this.isExploded, 'attempt to return lid when container hadn\'t exploded' );
       if ( !this.isExploded ) {
         // ignore request if container hasn't exploded
         return;
