@@ -1269,8 +1269,10 @@ define( function( require ) {
      * @public
      */
     returnLid: function() {
+
+      assert && assert( !this.isExploded, 'attempt to return lid when container hadn\'t exploded' );
       if ( !this.isExploded ) {
-        console.log( ' - Warning: Ignoring attempt to return lid when container hadn\'t exploded.' );
+        // ignore request if container hasn't exploded
         return;
       }
 

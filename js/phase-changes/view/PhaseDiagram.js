@@ -61,25 +61,38 @@ define( function( require ) {
   var SMALLER_INNER_FONT_SIZE = 10;
   var SMALLER_INNER_FONT = new PhetFont( SMALLER_INNER_FONT_SIZE );
 
-  // constants that control the appearance of the phase diagram for the
-  // various substances.  Note that all points are controlled as proportions
-  // of the overall graph size and not as absolute values.
+  // constants that control the appearance of the phase diagram for the various substances.  Note that all points are
+  // controlled as proportions of the overall graph size and not as absolute values.
   var POINT_MARKER_DIAMETER = 2.5;
   var CURRENT_STATE_MARKER_DIAMETER = 3.5;
-  var DEFAULT_TOP_OF_SOLID_LIQUID_LINE = new Vector2( X_USABLE_RANGE * 0.40 + X_ORIGIN_OFFSET,
-    Y_ORIGIN_OFFSET - Y_USABLE_RANGE );
-  var TOP_OF_SOLID_LIQUID_LINE_FOR_WATER = new Vector2( X_USABLE_RANGE * 0.30 + X_ORIGIN_OFFSET,
-    Y_ORIGIN_OFFSET - Y_USABLE_RANGE );
-  var DEFAULT_TRIPLE_POINT = new Vector2( X_ORIGIN_OFFSET + (X_USABLE_RANGE * 0.35),
-    Y_ORIGIN_OFFSET - (Y_USABLE_RANGE * 0.2) );
-  var DEFAULT_CRITICAL_POINT = new Vector2( X_ORIGIN_OFFSET + (X_USABLE_RANGE * 0.8),
-    Y_ORIGIN_OFFSET - (Y_USABLE_RANGE * 0.45) );
-  var DEFAULT_SOLID_LABEL_LOCATION = new Vector2( X_ORIGIN_OFFSET + (X_USABLE_RANGE * 0.2),
-    Y_ORIGIN_OFFSET - (Y_USABLE_RANGE * 0.7) );
-  var DEFAULT_LIQUID_LABEL_LOCATION = new Vector2( X_ORIGIN_OFFSET + (X_USABLE_RANGE * 0.6),
-    Y_ORIGIN_OFFSET - (Y_USABLE_RANGE * 0.7) );
-  var DEFAULT_GAS_LABEL_LOCATION = new Vector2( X_ORIGIN_OFFSET + (X_USABLE_RANGE * 0.6),
-    Y_ORIGIN_OFFSET - (Y_USABLE_RANGE * 0.1) );
+  var DEFAULT_TOP_OF_SOLID_LIQUID_LINE = new Vector2(
+    X_USABLE_RANGE * 0.40 + X_ORIGIN_OFFSET,
+    Y_ORIGIN_OFFSET - Y_USABLE_RANGE
+  );
+  var TOP_OF_SOLID_LIQUID_LINE_FOR_WATER = new Vector2(
+    X_USABLE_RANGE * 0.30 + X_ORIGIN_OFFSET,
+    Y_ORIGIN_OFFSET - Y_USABLE_RANGE
+  );
+  var DEFAULT_TRIPLE_POINT = new Vector2(
+    X_ORIGIN_OFFSET + ( X_USABLE_RANGE * 0.35 ),
+    Y_ORIGIN_OFFSET - ( Y_USABLE_RANGE * 0.2 )
+  );
+  var DEFAULT_CRITICAL_POINT = new Vector2(
+    X_ORIGIN_OFFSET + ( X_USABLE_RANGE * 0.8 ),
+    Y_ORIGIN_OFFSET - ( Y_USABLE_RANGE * 0.45 )
+  );
+  var DEFAULT_SOLID_LABEL_LOCATION = new Vector2(
+    X_ORIGIN_OFFSET + ( X_USABLE_RANGE * 0.2 ),
+    Y_ORIGIN_OFFSET - ( Y_USABLE_RANGE * 0.7 )
+  );
+  var DEFAULT_LIQUID_LABEL_LOCATION = new Vector2(
+    X_ORIGIN_OFFSET + ( X_USABLE_RANGE * 0.6 ),
+    Y_ORIGIN_OFFSET - ( Y_USABLE_RANGE * 0.7 )
+  );
+  var DEFAULT_GAS_LABEL_LOCATION = new Vector2(
+    X_ORIGIN_OFFSET + ( X_USABLE_RANGE * 0.6 ),
+    Y_ORIGIN_OFFSET - ( Y_USABLE_RANGE * 0.1 )
+  );
 
   /**
    * @param {Property<boolean>} expandedProperty - is to expand the phase diagram
@@ -93,10 +106,6 @@ define( function( require ) {
     var accordionContent = new Node();
 
     // add the base node for the chart, which is cl
-
-    // Variable that defines the normalized position of the current phase
-    // state marker.
-    this.currentStateMarkerPos = new Vector2();
 
     // phase diagram - the order in which these are added is important
     this.topOfSolidLiquidLine = new Vector2( DEFAULT_TOP_OF_SOLID_LIQUID_LINE.x, DEFAULT_TOP_OF_SOLID_LIQUID_LINE.y );
@@ -228,20 +237,10 @@ define( function( require ) {
     verticalAxisLabel.setRotation( 3 * Math.PI / 2 );
     accordionContent.addChild( verticalAxisLabel );
 
-    // Create the layer where the marker will go and set a clip area so that the marker can't go off the graph
-    var markerLayer = new Node();
-    accordionContent.addChild( markerLayer );
-    markerLayer.clipArea = new Shape.rectangle(
-      X_ORIGIN_OFFSET - AXES_LINE_WIDTH / 2,
-      HEIGHT - Y_ORIGIN_OFFSET - AXES_LINE_WIDTH / 2,
-      X_ORIGIN_OFFSET + X_USABLE_RANGE,
-      Y_ORIGIN_OFFSET + Y_USABLE_RANGE
-    );
-
     // Create and add the marker that shows the current phase state.
     this.currentStateMarker = new Path( new Shape()
       .ellipse( 0, 0, CURRENT_STATE_MARKER_DIAMETER, CURRENT_STATE_MARKER_DIAMETER ), { fill: 'red' } );
-    markerLayer.addChild( this.currentStateMarker );
+    accordionContent.addChild( this.currentStateMarker );
 
     var titleNode = new Text( phaseDiagramString, { fill: '#FFFFFF', font: new PhetFont( { size: 13 } ) } );
 
@@ -292,7 +291,7 @@ define( function( require ) {
       // Add the curve that separates the solid and gaseous regions.
       var solidGasCurve = new Shape().moveTo( X_ORIGIN_OFFSET, Y_ORIGIN_OFFSET )
         .quadraticCurveTo( X_ORIGIN_OFFSET + (X_USABLE_RANGE * 0.2), Y_ORIGIN_OFFSET - (Y_USABLE_RANGE * 0.02),
-        DEFAULT_TRIPLE_POINT.x, DEFAULT_TRIPLE_POINT.y );
+          DEFAULT_TRIPLE_POINT.x, DEFAULT_TRIPLE_POINT.y );
       this.solidGasLine.setShape( solidGasCurve );
 
       // Add the line that separates solid and liquid.
@@ -304,7 +303,7 @@ define( function( require ) {
       // Update the shape of the background for the area that represents the solid phase.
       var solidBackground = new Shape().moveTo( X_ORIGIN_OFFSET, Y_ORIGIN_OFFSET )
         .quadraticCurveTo( X_ORIGIN_OFFSET + (X_USABLE_RANGE * 0.2), Y_ORIGIN_OFFSET - (Y_USABLE_RANGE * 0.02),
-        DEFAULT_TRIPLE_POINT.x, DEFAULT_TRIPLE_POINT.y )
+          DEFAULT_TRIPLE_POINT.x, DEFAULT_TRIPLE_POINT.y )
         .lineTo( this.topOfSolidLiquidLine.x, this.topOfSolidLiquidLine.y )
         .lineTo( X_ORIGIN_OFFSET, (Y_ORIGIN_OFFSET - Y_USABLE_RANGE) )
         .lineTo( X_ORIGIN_OFFSET, Y_ORIGIN_OFFSET )
@@ -313,20 +312,20 @@ define( function( require ) {
 
       // Place the critical point marker.
       this.criticalPoint.setTranslation( DEFAULT_CRITICAL_POINT.x,
-        DEFAULT_CRITICAL_POINT.y);
+        DEFAULT_CRITICAL_POINT.y );
 
       // Add the curve that separates liquid and gas.
       var controlCurveXPos = DEFAULT_TRIPLE_POINT.x + ((DEFAULT_CRITICAL_POINT.x - DEFAULT_TRIPLE_POINT.x) / 2);
       var controlCurveYPos = DEFAULT_TRIPLE_POINT.y;
       var liquidGasCurve = new Shape().moveTo( DEFAULT_TRIPLE_POINT.x - 1, DEFAULT_TRIPLE_POINT.y )
         .quadraticCurveTo( controlCurveXPos, controlCurveYPos,
-        DEFAULT_CRITICAL_POINT.x, DEFAULT_CRITICAL_POINT.y );
+          DEFAULT_CRITICAL_POINT.x, DEFAULT_CRITICAL_POINT.y );
       this.liquidGasLine.setShape( liquidGasCurve );
 
       // liquid phase.  (It is expected that the solid shape overlays this one. )
       var liquidBackground = new Shape().moveTo( DEFAULT_TRIPLE_POINT.x - 1, DEFAULT_TRIPLE_POINT.y )
         .quadraticCurveTo( controlCurveXPos, controlCurveYPos,
-        DEFAULT_CRITICAL_POINT.x, DEFAULT_CRITICAL_POINT.y )
+          DEFAULT_CRITICAL_POINT.x, DEFAULT_CRITICAL_POINT.y )
         .lineTo( (X_ORIGIN_OFFSET + X_USABLE_RANGE), (Y_ORIGIN_OFFSET - Y_USABLE_RANGE) )
         .lineTo( (this.topOfSolidLiquidLine.x), (Y_ORIGIN_OFFSET - Y_USABLE_RANGE) )
         .lineTo( (DEFAULT_TRIPLE_POINT.x), (DEFAULT_TRIPLE_POINT.y) ).close();
@@ -371,22 +370,20 @@ define( function( require ) {
      * @param normalizedPressure    - Pressure (Y position) value between 0 and 1 (inclusive).
      */
     setStateMarkerPos: function( normalizedTemperature, normalizedPressure ) {
-      if ( (normalizedTemperature < 0) || (normalizedTemperature > 1.0) || (normalizedPressure < 0) ||
-           (normalizedPressure > 1.0) ) {
-        // Parameter out of range - throw exception.
-        console.error( 'Value out of range, temperature = ' + normalizedTemperature + ', pressure = ' +
-                       normalizedPressure );
-      }
-      this.currentStateMarkerPos.setXY( normalizedTemperature, normalizedPressure );
-      var markerXPos = normalizedTemperature * X_USABLE_RANGE + X_ORIGIN_OFFSET - ( CURRENT_STATE_MARKER_DIAMETER / 2 );
-      var markerYPos = -normalizedPressure * Y_USABLE_RANGE + Y_ORIGIN_OFFSET - ( CURRENT_STATE_MARKER_DIAMETER / 2 );
+
+      // parameter checking
+      assert && assert( normalizedTemperature >= 0 && normalizedTemperature <= 1, 'temperature value out of range' );
+      assert && assert( normalizedPressure >= 0 && normalizedPressure <= 1, 'pressure value out of range' );
+
+      // map the normalized temperature and pressure values to x and y positions on the graph
+      var markerXPos = normalizedTemperature * X_USABLE_RANGE + X_ORIGIN_OFFSET;
+      var markerYPos = -normalizedPressure * Y_USABLE_RANGE + Y_ORIGIN_OFFSET;
+
       // prevent marker from going off graph on right side
-      if ( markerXPos + CURRENT_STATE_MARKER_DIAMETER > (X_USABLE_RANGE + X_ORIGIN_OFFSET) ) {
-        markerXPos = X_USABLE_RANGE + X_ORIGIN_OFFSET - CURRENT_STATE_MARKER_DIAMETER;
-      }
-      if ( markerYPos < Y_ORIGIN_OFFSET - Y_USABLE_RANGE ) {
-        markerYPos = Y_ORIGIN_OFFSET - Y_USABLE_RANGE;
-      }
+      markerXPos = Math.min( markerXPos, X_USABLE_RANGE + X_ORIGIN_OFFSET - CURRENT_STATE_MARKER_DIAMETER );
+      markerYPos = Math.max( markerYPos, Y_ORIGIN_OFFSET - Y_USABLE_RANGE - CURRENT_STATE_MARKER_DIAMETER );
+
+      // set the position of the marker node
       this.currentStateMarker.centerX = markerXPos;
       this.currentStateMarker.centerY = markerYPos;
     },

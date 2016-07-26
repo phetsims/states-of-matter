@@ -367,10 +367,10 @@ define( function( require ) {
       var mappedTemperature = this.mapModelTemperatureToPhaseDiagramTemperature( modelTemperature );
       var mappedPressure;
       if ( mappedTemperature <= cutOverTemperature ) {
-        mappedPressure = Math.pow( mappedTemperature, 1.775 );
+        mappedPressure = Math.pow( mappedTemperature, 1.6 );
       }
       else {
-        mappedPressure = Math.pow( mappedTemperature - cutOverTemperature, 1.8 ) + 0.17;
+        mappedPressure = Math.pow( mappedTemperature - cutOverTemperature, 1.75 ) + 0.192;
       }
       return Math.min( mappedPressure, 1 );
     }
