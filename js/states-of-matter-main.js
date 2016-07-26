@@ -25,10 +25,10 @@ define( function( require ) {
 
   var simOptions = {
     credits: {
-      leadDesign: 'Paul Beale, Sarah McKagan, Emily Moore, Noah Podolefsky, Amy Rouinfar',
-      softwareDevelopment: 'John Blanco',
-      team: 'Wendy Adams, Jack Barbera, Kelly Lancaster, Kathy Perkins',
-      qualityAssurance: 'Steele Dalton',
+      leadDesign: 'Paul Beale, Yuen-ying Carpenter, Sarah McKagan, Emily Moore,\nNoah Podolefsky, Amy Rouinfar',
+      softwareDevelopment: 'John Blanco, Aadish Gupta',
+      team: 'Wendy Adams, Jack Barbera, Kelly Lancaster, Arial Paul, Kathy Perkins',
+      qualityAssurance: 'Steele Dalton, Amanda Davis, Oliver Orejola, Benjamin Roberts,\nBryan Yoelin',
       thanks: 'Thanks to Actual Concepts for working with the PhET development team\nto convert this simulation to HTML5.'
     },
     optionsNode: new GlobalOptionsNode( projectorModeProperty ),
