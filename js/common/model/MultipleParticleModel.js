@@ -666,8 +666,8 @@ define( function( require ) {
           console.error( 'ERROR: Unrecognized particle type, using default.' );
           break;
       }
-      // This is needed in case we were switching from another molecule
-      // that was under pressure.
+
+      // This is needed in case we were switching from another molecule that was under pressure.
       this.updatePressure();
       this.calculateMinAllowableContainerHeight();
     },
@@ -1132,45 +1132,16 @@ define( function( require ) {
     },
 
     /**
-     * Take the internal pressure value and convert it to atmospheres.  This is dependent on the type of molecule
-     * selected.  The values and ranges used in this method were derived from information provided by Paul Beale.
+     * Take the internal pressure value and convert it to atmospheres.  In the original Java version of this sim the
+     * conversion multiplier was dependent upon the type of molecule in order to be somewhat realistic.  However, this
+     * was problematic, since it would cause the container to explode at different pressure readings.  A single
+     * multiplier is now used, which is perhaps less realistic, but works better in practice.  Please see
+     * https://github.com/phetsims/states-of-matter/issues/124 for more information.
      * @returns {number}
      * @public
      */
     getPressureInAtmospheres: function() {
-
-      var pressureInAtmospheres;
-
-      switch( this.currentMolecule ) {
-
-        case StatesOfMatterConstants.NEON:
-          pressureInAtmospheres = 200 * this.getModelPressure();
-          break;
-
-        case StatesOfMatterConstants.ARGON:
-          pressureInAtmospheres = 125 * this.getModelPressure();
-          break;
-
-        case StatesOfMatterConstants.WATER:
-          pressureInAtmospheres = 200 * this.getModelPressure();
-          break;
-
-        case StatesOfMatterConstants.DIATOMIC_OXYGEN:
-          pressureInAtmospheres = 125 * this.getModelPressure();
-          break;
-
-        case StatesOfMatterConstants.USER_DEFINED_MOLECULE:
-          // TODO: Not sure what to do here, need to figure it out.
-          // Using the value for Argon at the moment.
-          pressureInAtmospheres = 125 * this.getModelPressure();
-          break;
-
-        default:
-          pressureInAtmospheres = 0;
-          break;
-      }
-      //this.updatePressure();
-      return pressureInAtmospheres;
+      return 200 * this.getModelPressure(); // multiplier empirically determined
     },
 
     /**
@@ -1256,7 +1227,6 @@ define( function( require ) {
     setContainerExploded: function( isExploded ) {
       if ( this.isExploded !== isExploded ) {
         this.isExploded = isExploded;
-        //notifyContainerExplodedStateChanged(m_isExploded);
         if ( !this.isExploded ) {
           this.resetContainerSize();
         }

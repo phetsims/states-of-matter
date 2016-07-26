@@ -110,9 +110,9 @@ define( function( require ) {
         // Close enough to the bottom wall to feel the force.
         if ( yPos < minDistance ) {
           if ( ( yPos < 0 ) && ( !this.multipleParticleModel.isExploded ) ) {
-            // The particles are energetic enough to end up outside
-            // the container, so consider it to be exploded (if it isn't already).
-            this.multipleParticleModel.isExploded = true;
+            // The particles are energetic enough to end up outside the container, so consider it to be exploded (if it
+            // isn't already).
+            this.multipleParticleModel.setContainerExploded( true );
           }
           yPos = minDistance;
         }
@@ -255,9 +255,9 @@ define( function( require ) {
                         PRESSURE_CALC_WEIGHTING * this.pressure;
 
         if ( ( this.pressure > EXPLOSION_PRESSURE ) && !this.multipleParticleModel.isExploded ) {
-          // The pressure has reached the point where the container should
-          // explode, so blow 'er up.
-          this.multipleParticleModel.isExploded = true;
+          // The pressure has reached the point where the container should explode, so blow 'er up.
+          console.log( 'this.pressure = ' + this.pressure );
+          this.multipleParticleModel.setContainerExploded( true );
         }
       }
     },
