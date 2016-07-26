@@ -103,8 +103,8 @@ define( function( require ) {
     var argonAndOxygen;
     var adjustableAttraction;
     var radioButtonGroup;
-    var maxWidth;
-    var createItem;
+    var maxLabelWidth;
+    var createLabelNode;
     var titleText;
     var titleNode;
     var sliderTrackWidth = 135; // empirically determined
@@ -153,44 +153,49 @@ define( function( require ) {
         spacing: 5
       } );
       titleText = [ pinnedNodeText, createText( movingString, maxWidthOfTitleText, 10 ) ];
-      maxWidth = Math.max(
+      maxLabelWidth = Math.max(
         neonAndArgon[ 0 ].width + neonAndArgon[ 1 ].width,
         argonAndArgon[ 0 ].width + argonAndArgon[ 1 ].width,
         oxygenAndOxygen[ 0 ].width + oxygenAndOxygen[ 1 ].width,
         neonAndNeon[ 0 ].width + neonAndNeon[ 1 ].width,
         neonAndOxygen[ 0 ].width + neonAndOxygen[ 1 ].width );
-      maxWidth = 2 * Math.max( titleText[ 0 ].width, titleText[ 1 ].width, maxWidth / 2, sliderTrackWidth / 2 );
+      maxLabelWidth = 2 * Math.max( titleText[ 0 ].width, titleText[ 1 ].width, maxLabelWidth / 2, sliderTrackWidth / 2 );
 
-      // pad inserts a spacing node (HStrut) so that the rows occupy a certain fixed width.
-      createItem = function( itemSpec ) {
-        var strutWidth1 = ( maxWidth / 2 - itemSpec[ 0 ].width );
-        var strutWidth2 = ( maxWidth / 2 - itemSpec[ 1 ].width );
+      // function to create a label node from
+      createLabelNode = function( atomNameTextNodes ) {
+        var strutWidth1 = ( maxLabelWidth / 2 - atomNameTextNodes[ 0 ].width );
+        var strutWidth2 = ( maxLabelWidth / 2 - atomNameTextNodes[ 1 ].width );
         return new HBox( {
-          children: [ itemSpec[ 0 ], new HStrut( strutWidth1 ),
-            itemSpec[ 1 ], new HStrut( strutWidth2 ) ]
+          children: [ atomNameTextNodes[ 0 ], new HStrut( strutWidth1 ), atomNameTextNodes[ 1 ], new HStrut( strutWidth2 ) ]
         } );
       };
+
       var neonNeonRadio = new AquaRadioButton( dualAtomModel.atomPairProperty, AtomPair.NEON_NEON,
-        createItem( neonAndNeon ), { radius: RADIO_BUTTON_RADIUS } );
+        createLabelNode( neonAndNeon ), { radius: RADIO_BUTTON_RADIUS } );
       var argonArgonRadio = new AquaRadioButton( dualAtomModel.atomPairProperty, AtomPair.ARGON_ARGON,
-        createItem( argonAndArgon ), { radius: RADIO_BUTTON_RADIUS } );
+        createLabelNode( argonAndArgon ), { radius: RADIO_BUTTON_RADIUS } );
       var oxygenOxygenRadio = new AquaRadioButton( dualAtomModel.atomPairProperty, AtomPair.OXYGEN_OXYGEN,
-        createItem( oxygenAndOxygen ), { radius: RADIO_BUTTON_RADIUS } );
+        createLabelNode( oxygenAndOxygen ), { radius: RADIO_BUTTON_RADIUS } );
       var neonArgonRadio = new AquaRadioButton( dualAtomModel.atomPairProperty, AtomPair.NEON_ARGON,
-        createItem( neonAndArgon ), { radius: RADIO_BUTTON_RADIUS } );
+        createLabelNode( neonAndArgon ), { radius: RADIO_BUTTON_RADIUS } );
       var neonOxygenRadio = new AquaRadioButton( dualAtomModel.atomPairProperty, AtomPair.NEON_OXYGEN,
-        createItem( neonAndOxygen ), { radius: RADIO_BUTTON_RADIUS } );
+        createLabelNode( neonAndOxygen ), { radius: RADIO_BUTTON_RADIUS } );
       var argonOxygenRadio = new AquaRadioButton( dualAtomModel.atomPairProperty, AtomPair.ARGON_OXYGEN,
-        createItem( argonAndOxygen ), { radius: RADIO_BUTTON_RADIUS } );
+        createLabelNode( argonAndOxygen ), { radius: RADIO_BUTTON_RADIUS } );
       var adjustableAttractionRadio = new AquaRadioButton( dualAtomModel.atomPairProperty, AtomPair.ADJUSTABLE,
         new HBox( { children: [ customAttraction ] } ), { radius: RADIO_BUTTON_RADIUS } );
-      var createTitle = function( itemSpec ) {
+      var createTitle = function( labelNodePair ) {
         var strutWidth1 = RADIO_BUTTON_RADIUS;
-        var strutWidth2 = ( maxWidth / 2 - itemSpec[ 0 ].width );
-        var strutWidth3 = ( maxWidth / 2 - itemSpec[ 1 ].width );
+        var strutWidth2 = ( maxLabelWidth / 2 - labelNodePair[ 0 ].width );
+        var strutWidth3 = ( maxLabelWidth / 2 - labelNodePair[ 1 ].width );
         return new HBox( {
-          children: [ new HStrut( strutWidth1 ), itemSpec[ 0 ], new HStrut( strutWidth2 + 9 + RADIO_BUTTON_RADIUS ),
-            itemSpec[ 1 ], new HStrut( strutWidth3 + 10 ) ]
+          children: [
+            new HStrut( strutWidth1 ),
+            labelNodePair[ 0 ],
+            new HStrut( strutWidth2 + 9 + RADIO_BUTTON_RADIUS ),
+            labelNodePair[ 1 ],
+            new HStrut( strutWidth3 + 10 )
+          ]
         } );
       };
       titleNode = createTitle( titleText );
@@ -225,14 +230,13 @@ define( function( require ) {
     }
     else {
 
-      // allows the user to choose
-      // the type of molecule when both are the same.
+      // allows the user to choose the type of molecule when both are the same.
       var title = new Text( atomsString, { font: new PhetFont( 14 ), fill: '#FFFFFF' } );
       if ( title.width > TITLE_TEXT_WIDTH ) {
         title.scale( TITLE_TEXT_WIDTH / title.width );
       }
-      // itemSpec describes the pieces that make up an item in the control panel,
-      // conforms to the contract: { label: {Node}, icon: {Node} (optional) }
+      // Set up objects that describe the pieces that make up a selector item in the control panel, conforms to the
+      // contract: { label: {Node}, icon: {Node} }
       var neon = { label: createText( neonString, NORMAL_TEXT__MAX_WIDTH ), icon: NEON_ICON };
       var argon = { label: createText( argonString, NORMAL_TEXT__MAX_WIDTH ), icon: ARGON_ICON };
       adjustableAttraction = {
@@ -244,27 +248,27 @@ define( function( require ) {
       };
 
       // compute the maximum item width
-      var widestItemSpec = _.max( [ neon, argon, adjustableAttraction, titleText ], function( item ) {
-        return item.label.width + ((item.icon) ? item.icon.width : 0);
+      var widestLabelAndIconSpec = _.max( [ neon, argon, adjustableAttraction, titleText ], function( item ) {
+        return item.label.width + ( ( item.icon ) ? item.icon.width : 0 );
       } );
-      maxWidth = widestItemSpec.label.width + ((widestItemSpec.icon) ? widestItemSpec.icon.width : 0);
-      maxWidth = Math.max( maxWidth, sliderTrackWidth );
+      maxLabelWidth = widestLabelAndIconSpec.label.width + ( ( widestLabelAndIconSpec.icon ) ? widestLabelAndIconSpec.icon.width : 0 );
+      maxLabelWidth = Math.max( maxLabelWidth, sliderTrackWidth );
 
       // pad inserts a spacing node (HStrut) so that the text, space and image together occupy a certain fixed width.
-      createItem = function( itemSpec ) {
-        if ( itemSpec.icon ) {
-          var strutWidth = maxWidth - itemSpec.label.width - itemSpec.icon.width + 17;
-          return new HBox( { children: [ itemSpec.label, new HStrut( strutWidth ), itemSpec.icon ] } );
+      createLabelNode = function( atomSelectorLabelSpec ) {
+        if ( atomSelectorLabelSpec.icon ) {
+          var strutWidth = maxLabelWidth - atomSelectorLabelSpec.label.width - atomSelectorLabelSpec.icon.width + 17;
+          return new HBox( { children: [ atomSelectorLabelSpec.label, new HStrut( strutWidth ), atomSelectorLabelSpec.icon ] } );
         }
         else {
-          return new HBox( { children: [ itemSpec.label ] } );
+          return new HBox( { children: [ atomSelectorLabelSpec.label ] } );
         }
       };
 
       var radioButtonContent = [
-        { value: AtomPair.NEON_NEON, node: createItem( neon ) },
-        { value: AtomPair.ARGON_ARGON, node: createItem( argon ) },
-        { value: AtomPair.ADJUSTABLE, node: createItem( adjustableAttraction ) }
+        { value: AtomPair.NEON_NEON, node: createLabelNode( neon ) },
+        { value: AtomPair.ARGON_ARGON, node: createLabelNode( argon ) },
+        { value: AtomPair.ADJUSTABLE, node: createLabelNode( adjustableAttraction ) }
       ];
       radioButtonGroup = new RadioButtonGroup( dualAtomModel.atomPairProperty, radioButtonContent, {
         orientation: 'vertical',

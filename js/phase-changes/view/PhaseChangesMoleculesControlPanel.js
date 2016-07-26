@@ -139,8 +139,8 @@ define( function( require ) {
       maxWidth: MAX_WIDTH
     } );
 
-    // itemSpec describes the pieces that make up an item in the control panel,
-    // conforms to the contract: { label: {Node}, icon: {Node} (optional) }
+    // create objest that describe the pieces that make up a selector item in the control panel, conforms to the
+    // contract: { label: {Node}, icon: {Node} (optional) }
     var neon = { label: neonText, icon: NEON_ICON };
     var argon = { label: argonText, icon: ARGON_ICON };
     var water = { label: waterText, icon: WATER_ICON };
@@ -154,38 +154,38 @@ define( function( require ) {
     };
 
     // compute the maximum item width
-    var widestItemSpec = _.max( [ neon, argon, water, oxygen, adjustableAttraction, titleText ], function( item ) {
+    var widestLabelAndIconSpec = _.max( [ neon, argon, water, oxygen, adjustableAttraction, titleText ], function( item ) {
       return item.label.width + ((item.icon) ? item.icon.width : 0);
     } );
-    var maxWidth = widestItemSpec.label.width + ((widestItemSpec.icon) ? widestItemSpec.icon.width : 0);
+    var maxWidth = widestLabelAndIconSpec.label.width + ((widestLabelAndIconSpec.icon) ? widestLabelAndIconSpec.icon.width : 0);
     maxWidth = Math.max( maxWidth, interactionStrengthNode.width );
 
     // pad inserts a spacing node (HStrut) so that the text, space and image together occupy a certain fixed width.
-    var createItem = function( itemSpec ) {
-      if ( itemSpec.icon ) {
-        var strutWidth = maxWidth - itemSpec.label.width - itemSpec.icon.width + 12;
-        return new HBox( { children: [ itemSpec.label, new HStrut( strutWidth ), itemSpec.icon ] } );
+    var createLabelAndIconNode = function( labelAndIconSpec ) {
+      if ( labelAndIconSpec.icon ) {
+        var strutWidth = maxWidth - labelAndIconSpec.label.width - labelAndIconSpec.icon.width + 12;
+        return new HBox( { children: [ labelAndIconSpec.label, new HStrut( strutWidth ), labelAndIconSpec.icon ] } );
       }
       else {
-        return new HBox( { children: [ itemSpec.label ] } );
+        return new HBox( { children: [ labelAndIconSpec.label ] } );
       }
     };
     var radioButtonContent;
     if ( !isBasicVersion ) {
       radioButtonContent = [
-        { value: StatesOfMatterConstants.NEON, node: createItem( neon ) },
-        { value: StatesOfMatterConstants.ARGON, node: createItem( argon ) },
-        { value: StatesOfMatterConstants.DIATOMIC_OXYGEN, node: createItem( oxygen ) },
-        { value: StatesOfMatterConstants.WATER, node: createItem( water ) }
+        { value: StatesOfMatterConstants.NEON, node: createLabelAndIconNode( neon ) },
+        { value: StatesOfMatterConstants.ARGON, node: createLabelAndIconNode( argon ) },
+        { value: StatesOfMatterConstants.DIATOMIC_OXYGEN, node: createLabelAndIconNode( oxygen ) },
+        { value: StatesOfMatterConstants.WATER, node: createLabelAndIconNode( water ) }
       ];
     }
     else {
       radioButtonContent = [
-        { value: StatesOfMatterConstants.NEON, node: createItem( neon ) },
-        { value: StatesOfMatterConstants.ARGON, node: createItem( argon ) },
-        { value: StatesOfMatterConstants.DIATOMIC_OXYGEN, node: createItem( oxygen ) },
-        { value: StatesOfMatterConstants.WATER, node: createItem( water ) },
-        { value: StatesOfMatterConstants.USER_DEFINED_MOLECULE, node: createItem( adjustableAttraction ) }
+        { value: StatesOfMatterConstants.NEON, node: createLabelAndIconNode( neon ) },
+        { value: StatesOfMatterConstants.ARGON, node: createLabelAndIconNode( argon ) },
+        { value: StatesOfMatterConstants.DIATOMIC_OXYGEN, node: createLabelAndIconNode( oxygen ) },
+        { value: StatesOfMatterConstants.WATER, node: createLabelAndIconNode( water ) },
+        { value: StatesOfMatterConstants.USER_DEFINED_MOLECULE, node: createLabelAndIconNode( adjustableAttraction ) }
       ];
     }
 

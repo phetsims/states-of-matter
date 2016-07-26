@@ -123,23 +123,23 @@ define( function( require ) {
     var maxWidth = widestItem.label.width + ( ( widestItem.icon ) ? widestItem.icon.width : 0);
 
     // inserts a spacing node (HStrut) so that the text, space and image together occupy a certain fixed width
-    var createItem = function( itemSpec ) {
-      if ( itemSpec.icon ) {
-        var strutWidth = maxWidth - itemSpec.label.width - itemSpec.icon.width;
-        return new HBox( { children: [ itemSpec.label, new HStrut( strutWidth ), itemSpec.icon ] } );
+    var createConsistentlySpacedLabel = function( labelSpec ) {
+      if ( labelSpec.icon ) {
+        var strutWidth = maxWidth - labelSpec.label.width - labelSpec.icon.width;
+        return new HBox( { children: [ labelSpec.label, new HStrut( strutWidth ), labelSpec.icon ] } );
       }
       else {
-        return new HBox( { children: [ itemSpec.label ] } );
+        return new HBox( { children: [ labelSpec.label ] } );
       }
     };
 
     var componentForceText = new VBox( {
       spacing: 2,
       children: [
-        createItem( attractiveText ),
-        createItem( vanderwaalsText ),
-        createItem( repulsiveText ),
-        createItem( electronOverlapText ) ],
+        createConsistentlySpacedLabel( attractiveText ),
+        createConsistentlySpacedLabel( vanderwaalsText ),
+        createConsistentlySpacedLabel( repulsiveText ),
+        createConsistentlySpacedLabel( electronOverlapText ) ],
       align: 'left'
     } );
 
@@ -171,7 +171,7 @@ define( function( require ) {
     } );
 
     var totalForce = new HBox( { spacing: 2, children: [ totalForceItem ] } );
-    var hideForce = new HBox( { spacing: 2, children: [ createItem( hideForcesText ) ] } );
+    var hideForce = new HBox( { spacing: 2, children: [ createConsistentlySpacedLabel( hideForcesText ) ] } );
 
     var hideForcesRadio = new AquaRadioButton( forcesProperty, 'hideForces', hideForce, {
       radius: RADIO_BUTTON_RADIUS
