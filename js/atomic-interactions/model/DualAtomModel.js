@@ -25,11 +25,14 @@ define( function( require ) {
 
   // constants
   var BONDED_OSCILLATION_PROPORTION = 0.06; // Proportion of atom radius.
-  var CALCULATIONS_PER_TICK = 8;
   var DEFAULT_ATOM_TYPE = AtomType.NEON;
   var MAX_APPROXIMATION_ITERATIONS = 100;
   var THRESHOLD_VELOCITY = 100;  // Used to distinguish small oscillations from real movement.
   var VIBRATION_COUNTER_RESET_VALUE = 72;
+
+  // The maximum time step was empirically determined to be as large as possible while still making sure that energy
+  // is conserved in all interaction cases.  See https://github.com/phetsims/states-of-matter/issues/53 for more info.
+  var MAX_TIME_STEP = 0.005;
 
   /**
    * This is the model for two atoms interacting with a Lennard-Jones interaction potential.
@@ -45,8 +48,11 @@ define( function( require ) {
     this.potentialWhenAtomReleased = 0; // Used to set magnitude of vibration.
     this.atomFactory = AtomFactory;
     this.isHandNodeVisible = true; // indicate moving hand node visible or not
-    this.ljPotentialCalculator = new LjPotentialCalculator( StatesOfMatterConstants.MIN_SIGMA,
-      StatesOfMatterConstants.MIN_EPSILON ); // Initial values arbitrary, will be set during reset.
+    this.ljPotentialCalculator = new LjPotentialCalculator(
+      StatesOfMatterConstants.MIN_SIGMA,
+      StatesOfMatterConstants.MIN_EPSILON
+    );
+    this.residualTime = 0; // accumulates dt values not yet applied to model
     PropertySet.call( this, {
         interactionStrength: 100, // Epsilon/k-Boltzmann is in Kelvin.
         motionPaused: false,
@@ -64,66 +70,68 @@ define( function( require ) {
   }
 
   statesOfMatter.register( 'DualAtomModel', DualAtomModel );
+
   return inherit( PropertySet, DualAtomModel, {
 
       /**
-       * @public
        * @returns {StatesOfMatterAtom/null}
+       * @public
        */
       getFixedAtomRef: function() {
         return this.fixedAtom;
       },
 
       /**
-       *  @public
        * @returns {StatesOfMatterAtom/null}
+       * @public
        */
       getMovableAtomRef: function() {
         return this.movableAtom;
       },
 
       /**
-       * @public
        * @returns {number}
+       * @public
        */
       getAttractiveForce: function() {
         return this.attractiveForce;
       },
+
       /**
-       * @public
        * @returns {number}
+       * @public
        */
       getRepulsiveForce: function() {
         return this.repulsiveForce;
       },
 
       /**
-       * @public
        * @returns {string}
+       * @public
        */
       getFixedAtomType: function() {
         return this.fixedAtom.getType();
       },
 
       /**
-       * @public
        * @returns {string}
+       * @public
        */
       getMovableAtomType: function() {
         return this.movableAtom.getType();
       },
 
       /***
-       * @public
        * @returns {boolean}
+       * @public
        */
       getMotionPaused: function() {
         return this.motionPaused;
       },
 
       /**
-       * @public
        * @param {string} atomType -  indicates type of molecule
+       * @public
        */
       setFixedAtomType: function( atomType ) {
 
@@ -162,8 +170,8 @@ define( function( require ) {
       },
 
       /**
-       * @public
        * @param {string} atomType - indicates type of molecule
+       * @public
        */
       setMovableAtomType: function( atomType ) {
 
@@ -202,8 +210,8 @@ define( function( require ) {
       },
 
       /**
-       * @public
        * @param {string} atomType - indicates type of molecule
+       * @public
        */
       ensureValidAtomType: function( atomType ) {
         // Verify that this is a supported value.
@@ -215,8 +223,8 @@ define( function( require ) {
       },
 
       /**
-       * @public
        * @param {string} atomType - indicates type of molecule
+       * @public
        */
       setBothAtomTypes: function( atomType ) {
 
@@ -233,8 +241,8 @@ define( function( require ) {
        * Set the sigma value, a.k.a. the Atomic Diameter Parameter, for the adjustable atom.  This is one of the two
        * parameters that are used for calculating the Lennard-Jones potential. If an attempt is made to set this value
        * when the adjustable atom is not selected, it is ignored.
-       * @public
        * @param {number}sigma - distance parameter
+       * @public
        */
       setAdjustableAtomSigma: function( sigma ) {
         if ( ( this.fixedAtom.getType() === AtomType.ADJUSTABLE ) &&
@@ -257,8 +265,8 @@ define( function( require ) {
       /**
        * Get the value of the sigma parameter that is being used for the motion calculations.  If the atoms are the
        * same, it will be the diameter of one atom.  If they are not, it will be a function of the diameters.
-       * @public
        * @return {number}
+       * @public
        */
       getSigma: function() {
         return this.ljPotentialCalculator.getSigma();
@@ -267,8 +275,8 @@ define( function( require ) {
       /**
        * Set the epsilon value, a.k.a. the Interaction Strength Parameter, which is one of the two parameters that
        * describes the Lennard-Jones potential.
-       * @public
        * @param {number}epsilon - interaction strength parameter
+       * @public
        */
       setEpsilon: function( epsilon ) {
 
@@ -289,24 +297,24 @@ define( function( require ) {
       /**
        * Get the epsilon value, a.k.a. the Interaction Strength Parameter, which is one of the two parameters that
        * describes the Lennard-Jones potential.
-       * @public
        * @returns {number}
+       * @public
        */
       getEpsilon: function() {
         return this.ljPotentialCalculator.getEpsilon();
       },
 
       /**
-       * @public
        * @returns {number}
+       * @public
        */
       getBondingState: function() {
         return this.bondingState;
       },
 
       /**
-       * @public
        * @param {boolean} paused -  is to set particle motion
+       * @public
        */
       setMotionPaused: function( paused ) {
         this.motionPaused = paused;
@@ -335,8 +343,8 @@ define( function( require ) {
       },
 
       /**
-       * @public
        * @override
+       * @public
        */
       reset: function() {
         PropertySet.prototype.reset.call( this );
@@ -366,43 +374,64 @@ define( function( require ) {
 
       /**
        * Called by the animation loop.
-       * @param {number} dt -- time in seconds
+       * @param {number} simulationTimeStep -- time in seconds
+       * @public
        */
-      step: function( dt ) {
-        // prevent sudden dt bursts when the user comes back to the tab after a while
-        dt = Math.min( 0.016, dt );
+      step: function( simulationTimeStep ) {
+
+        // If simulationTimeStep is excessively large, ignore it - it probably means the user returned to the tab after
+        // the tab or the browser was hidden for a while.
+        if ( simulationTimeStep > 1.0 ){
+          return;
+        }
 
         if ( this.isPlaying ) {
-          var adjustedDT = this.speed === 'normal' ? dt : dt * 0.33;
-          this.stepInternal( adjustedDT );
+
+          // Using real world time for this results in the atoms moving a little slowly, so the time step is adjusted
+          // here.  The multipliers were empirically determined.
+          var adjustedTimeStep;
+          if ( this.speed === 'normal' ){
+            adjustedTimeStep = simulationTimeStep * 1.5;
+          }
+          else{
+            adjustedTimeStep = simulationTimeStep * 0.5;
+          }
+
+          this.stepInternal( adjustedTimeStep );
         }
       },
 
       /**
-       *
-       * @public
        * @param {number} dt -- time in seconds
+       * @private
        */
       stepInternal: function( dt ) {
-        this.handleClockTicked( dt );
-      },
 
-      /**
-       * @private
-       * @param { Number } dt --- time in seconds
-       */
-      handleClockTicked: function( dt ) {
-        this.updateTimeStep( dt );
+        var numInternalModelIterations = 1;
+        var modelTimeStep = dt;
+
+        // if the time step is bigger than the max allowed, set up multiple iterations of the model
+        if ( dt > MAX_TIME_STEP ){
+          numInternalModelIterations = dt / MAX_TIME_STEP;
+          this.residualTime += dt - ( numInternalModelIterations * MAX_TIME_STEP );
+          modelTimeStep = MAX_TIME_STEP;
+        }
+
+        // if residual time has accumulated enough, add an iteration
+        if ( this.residualTime > modelTimeStep ){
+          numInternalModelIterations++;
+          this.residualTime -= modelTimeStep;
+        }
 
         // Update the forces and motion of the atoms.
-        for ( var i = 0; i < CALCULATIONS_PER_TICK; i++ ) {
+        for ( var i = 0; i < numInternalModelIterations; i++ ) {
 
           // Execute the force calculation.
           this.updateForces();
 
           // Update the motion information (unless the atoms are bonded).
           if ( this.bondingState !== BondingState.BONDED ) {
-            this.updateAtomMotion();
+            this.updateAtomMotion( modelTimeStep );
           }
         }
 
@@ -479,21 +508,6 @@ define( function( require ) {
       },
 
       /**
-       *
-       * @private
-       * @param {number} dt -- time in seconds
-       */
-      updateTimeStep: function( dt ) {
-        if ( this.atomPair === AtomPair.OXYGEN_OXYGEN ) {
-          this.timeStep = dt / CALCULATIONS_PER_TICK;
-        }
-        else {
-          this.timeStep = dt / 3.2;
-        }
-
-      },
-
-      /**
        * @private
        */
       updateForces: function() {
@@ -516,7 +530,7 @@ define( function( require ) {
        * Update the position, velocity, and acceleration of the dummy movable atom.
        * @private
        */
-      updateAtomMotion: function() {
+      updateAtomMotion: function( dt ) {
 
         var mass = this.movableAtom.getMass() * 1.6605402E-27;  // Convert mass to kilograms.
         var acceleration = ( this.repulsiveForce - this.attractiveForce ) / mass;
@@ -527,8 +541,8 @@ define( function( require ) {
 
         if ( !this.motionPaused ) {
           // Update the position and velocity of the atom.
-          this.movableAtom.setVx( this.movableAtom.getVx() + ( acceleration * this.timeStep ) );
-          var xPos = this.movableAtom.getX() + ( this.movableAtom.getVx() * this.timeStep );
+          this.movableAtom.setVx( this.movableAtom.getVx() + ( acceleration * dt ) );
+          var xPos = this.movableAtom.getX() + ( this.movableAtom.getVx() * dt );
           this.movableAtom.setPosition( xPos, 0 );
         }
       },
@@ -575,11 +589,10 @@ define( function( require ) {
        * This is a highly specialized function that is used for figuring out the inter-atom distance at which the value
        * of the potential on the left side of the of the min of the LJ potential curve is equal to that at the given
        * distance to the right of the min of the LJ potential curve.
-       *
-       * @private
        * @param {number} distance - inter-atom distance, must be greater than the point at which the potential is at the
        * minimum value.
        * @return{number}
+       * @private
        */
       approximateEquivalentPotentialDistance: function( distance ) {
 
@@ -605,8 +618,8 @@ define( function( require ) {
       },
 
       /**
-       *  @private
        * @returns {boolean}
+       * @private
        */
       isFixedAtomVibrating: function() {
         return this.vibrationCounter > 0;

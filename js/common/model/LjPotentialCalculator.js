@@ -100,25 +100,23 @@ define( function( require ) {
      * @return {number} - Force in newtons.
      */
     calculateAttractiveLjForce: function( distance ) {
-      return (24 * this.epsilonForCalcs * Math.pow( this.sigma, 6 ) / Math.pow( distance, 7 ));
+      return ( 24 * this.epsilonForCalcs * Math.pow( this.sigma, 6 ) / Math.pow( distance, 7 ) );
     },
 
     /**
-     * Calculate the distance at which the force is 0 because the attractive
-     * and repulsive forces are balanced.  Note that this is where the
-     * potential energy is at a minimum.
+     * Calculate the distance at which the force is 0 because the attractive and repulsive forces are balanced.  Note
+     * that this is where the potential energy is at a minimum.
      * @public
      * @return {number} - Distance where force is 0 (or very close) in picometers.
      */
     calculateMinimumForceDistance: function() {
-      // for 0.
-      return this.sigma * 1.122462;
+      // this is the solution for the min potential
+      return this.sigma * Math.pow( 2, 1 / 6 );
     },
 
     /**
-     * Calculate the potential energy of a particle at the given distance.
-     * This calculation is performed by calculating the potential at the
-     * given point and subtracting the potential at the minimum point.
+     * Calculate the potential energy of a particle at the given distance. This calculation is performed by calculating
+     * the potential at the given point and subtracting the potential at the minimum point.
      * @public
      * @param {number} distance
      * @returns {number}

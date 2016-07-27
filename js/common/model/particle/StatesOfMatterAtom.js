@@ -19,7 +19,7 @@ define( function( require ) {
    * @param {number} x  - x position in picometers
    * @param {number} y  - y position in picometers
    * @param {number} radius - radius  of the atom in picometers
-   * @param {number} mass - mass  of the atom in atomic mass units.
+   * @param {number} mass - mass of the atom in atomic mass units.
    * @param {Color} color  - color of the atom
    * @constructor
    */
