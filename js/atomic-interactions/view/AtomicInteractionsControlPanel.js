@@ -27,7 +27,6 @@ define( function( require ) {
   var AtomType = require( 'STATES_OF_MATTER/common/model/AtomType' );
   var AquaRadioButton = require( 'SUN/AquaRadioButton' );
   var Image = require( 'SCENERY/nodes/Image' );
-  var Bounds2 = require( 'DOT/Bounds2' );
   var AtomPair = require( 'STATES_OF_MATTER/atomic-interactions/model/AtomPair' );
 
   // images
@@ -210,11 +209,6 @@ define( function( require ) {
         align: 'left',
         spacing: 5
       } );
-      var maxRadioButtonWidth = _.max( [ neonNeonRadio, argonArgonRadio, oxygenOxygenRadio, neonArgonRadio,
-            neonOxygenRadio, argonOxygenRadio, adjustableAttractionRadio ],
-          function( item ) {
-            return item.width;
-          } ).width + 5;
       titleNode.align = atomicInteractionsControlPanel.width / 2;
 
       // dilate the touch areas to make the buttons easier to work with on touch-based devices
