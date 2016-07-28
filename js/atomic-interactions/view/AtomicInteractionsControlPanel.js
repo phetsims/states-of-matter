@@ -156,7 +156,10 @@ define( function( require ) {
         ],
         spacing: 5
       } );
-      titleText = [ pinnedNodeText, new Text( movingString, { font: new PhetFont( 10 ), maxWidth: maxWidthOfTitleText } )  ];
+      titleText = [ pinnedNodeText, new Text( movingString, {
+        font: new PhetFont( 10 ),
+        maxWidth: maxWidthOfTitleText
+      } ) ];
       maxLabelWidth = Math.max(
         neonAndArgon[ 0 ].width + neonAndArgon[ 1 ].width,
         argonAndArgon[ 0 ].width + argonAndArgon[ 1 ].width,
@@ -303,22 +306,30 @@ define( function( require ) {
       maxWidth: SLIDER_TITTLE_MAX_WIDTH
     } );
 
-    var atomDiameterSlider = new HSlider( dualAtomModel.atomDiameterProperty,
+    var sliderOptions = {
+      trackSize: new Dimension2( sliderTrackWidth, 5 ),
+      trackFill: 'white',
+      thumbSize: new Dimension2( 14, 25 ),
+      thumbFillEnabled: '#A670DB',
+      thumbFillHighlighted: '#D966FF',
+      thumbCenterLineStroke: 'black',
+      majorTickLength: 15,
+      majorTickStroke: options.tickTextColor,
+      trackStroke: options.tickTextColor,
+      startDrag: function() {
+        dualAtomModel.setMotionPaused( true );
+      },
+      endDrag: function() {
+        dualAtomModel.setMotionPaused( false );
+      }
+    };
+
+    var atomDiameterSlider = new HSlider(
+      dualAtomModel.atomDiameterProperty,
       { min: StatesOfMatterConstants.MIN_SIGMA, max: StatesOfMatterConstants.MAX_SIGMA },
-      {
-        trackSize: new Dimension2( sliderTrackWidth, 5 ),
-        trackFill: 'white',
-        thumbSize: new Dimension2( 14, 25 ),
-        majorTickLength: 15,
-        majorTickStroke: options.tickTextColor,
-        trackStroke: options.tickTextColor,
-        startDrag: function() {
-          dualAtomModel.setMotionPaused( true );
-        },
-        endDrag: function() {
-          dualAtomModel.setMotionPaused( false );
-        }
-      } );
+      sliderOptions
+    );
+
     var tickTextOptions = { fill: options.tickTextColor, maxWidth: SLIDER_TICK_TEXT_MAX_WIDTH };
     var smallText = new Text( smallString, tickTextOptions );
     var largeText = new Text( largeString, tickTextOptions );
@@ -333,6 +344,7 @@ define( function( require ) {
     }
 
     var atomDiameter = new Node( { children: [ atomDiameterTitle, atomDiameterSlider ] } );
+
     // add interaction strength slider
     var interactionStrengthTitle = new Text( interactionStrengthString, {
       font: NORMAL_TEXT_FONT,
@@ -343,20 +355,7 @@ define( function( require ) {
     var interactionStrengthSlider = new HSlider(
       dualAtomModel.interactionStrengthProperty,
       { min: StatesOfMatterConstants.MIN_EPSILON, max: StatesOfMatterConstants.MAX_EPSILON },
-      {
-        trackSize: new Dimension2( sliderTrackWidth, 5 ),
-        trackFill: 'white',
-        thumbSize: new Dimension2( 14, 25 ),
-        majorTickLength: 15,
-        majorTickStroke: options.tickTextColor,
-        trackStroke: options.tickTextColor,
-        startDrag: function() {
-          dualAtomModel.setMotionPaused( true );
-        },
-        endDrag: function() {
-          dualAtomModel.setMotionPaused( false );
-        }
-      }
+      sliderOptions
     );
     var weakText = new Text( weakString, tickTextOptions );
     var strongText = new Text( strongString, tickTextOptions );
@@ -441,6 +440,7 @@ define( function( require ) {
         }
       } );
     this.addChild( radioButtonPanel );
+
     // add the tittle node after radio button panel added in SOM full version.
     // here around the panel we are drawing a rectangle and on top rectangle added title node
     if ( !enableHeterogeneousAtoms ) {
