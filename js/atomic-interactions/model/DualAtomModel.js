@@ -28,7 +28,8 @@ define( function( require ) {
   var DEFAULT_ATOM_TYPE = AtomType.NEON;
   var MAX_APPROXIMATION_ITERATIONS = 100;
   var THRESHOLD_VELOCITY = 100;  // Used to distinguish small oscillations from real movement.
-  var VIBRATION_COUNTER_RESET_VALUE = 72;
+  var FIXED_ATOM_VIBRATION_TIME = 2; // seconds
+  var FIXED_ATOM_JUMP_PERIOD = 0.032; // seconds
 
   // The maximum time step was empirically determined to be as large as possible while still making sure that energy
   // is conserved in all interaction cases.  See https://github.com/phetsims/states-of-matter/issues/53 for more info.
@@ -44,7 +45,8 @@ define( function( require ) {
     this.movableAtom = null;
     this.settingBothAtomTypes = false;  // Flag used to prevent getting in disallowed state.
     this.bondingState = BondingState.UNBONDED; // Tracks whether the atoms have formed a chemical bond.
-    this.vibrationCounter = 0; // Used to vibrate fixed atom during bonding.
+    this.fixedAtomVibrationCountdown = 0; // Used to vibrate fixed atom during bonding.
+    this.timeSinceListFixedAtomJump = Number.POSITIVE_INFINITY; // Used to vibrate fixed atom during bonding
     this.potentialWhenAtomReleased = 0; // Used to set magnitude of vibration.
     this.atomFactory = AtomFactory;
     this.isHandNodeVisible = true; // indicate moving hand node visible or not
@@ -337,7 +339,7 @@ define( function( require ) {
     releaseBond: function() {
       if ( this.bondingState === BondingState.BONDING ) {
         // A bond is in the process of forming, so reset everything that is involved in the bonding process.
-        this.vibrationCounter = 0;
+        this.fixedAtomVibrationCountdown = 0;
       }
       this.bondingState = BondingState.UNBONDED;
     },
@@ -417,7 +419,7 @@ define( function( require ) {
         modelTimeStep = MAX_TIME_STEP;
       }
 
-      // if residual time has accumulated enough, add an iteration
+      // If residual time has accumulated enough, add an iteration.
       if ( this.residualTime > modelTimeStep ) {
         numInternalModelIterations++;
         this.residualTime -= modelTimeStep;
@@ -434,9 +436,11 @@ define( function( require ) {
           this.updateAtomMotion( modelTimeStep );
         }
 
-        // Updatae the bonding state (only affects some combincations of atoms).
+        // Update the bonding state (only affects some combinations of atoms).
         this.updateBondingState();
       }
+
+      this.stepFixedAtomVibration( dt );
     },
 
     /**
@@ -527,7 +531,6 @@ define( function( require ) {
               this.bondedOscillationLeftDistance = this.approximateEquivalentPotentialDistance(
                 this.bondedOscillationRightDistance );
               this.bondingState = BondingState.BONDED;
-              this.stepFixedAtomVibration();
             }
             break;
 
@@ -545,9 +548,6 @@ define( function( require ) {
               this.movableAtom.setPosition( this.bondedOscillationRightDistance, 0 );
             }
 
-            if ( this.isFixedAtomVibrating() ) {
-              this.stepFixedAtomVibration();
-            }
             break;
 
           default:
@@ -561,34 +561,48 @@ define( function( require ) {
      * @private
      */
     startFixedAtomVibration: function() {
-      this.vibrationCounter = VIBRATION_COUNTER_RESET_VALUE;
+      this.fixedAtomVibrationCountdown = FIXED_ATOM_VIBRATION_TIME;
+      this.timeSinceLastFixedAtomJump = Number.POSITIVE_INFINITY;
     },
 
     /**
      * @private
      */
-    stepFixedAtomVibration: function() {
-      if ( this.vibrationCounter > 0 ) {
-        var vibrationScaleFactor = 1;
-        if ( this.vibrationCounter < VIBRATION_COUNTER_RESET_VALUE / 4 ) {
-          // In the last part of the vibration, starting to wind it down.
-          vibrationScaleFactor = this.vibrationCounter / ( VIBRATION_COUNTER_RESET_VALUE / 4 );
+    stepFixedAtomVibration: function( dt ) {
+      if ( ( this.bondingState === BondingState.BONDING || this.bondingState === BondingState.BONDED ) &&
+           this.fixedAtomVibrationCountdown > 0 ) {
+
+        if ( this.timeSinceLastFixedAtomJump > FIXED_ATOM_JUMP_PERIOD ){
+          this.timeSinceLastFixedAtomJump = 0;
+          var vibrationScaleFactor = 1;
+
+          if ( this.fixedAtomVibrationCountdown < FIXED_ATOM_VIBRATION_TIME / 4 ) {
+            // In the last part of the vibration, starting to wind it down.
+            vibrationScaleFactor = this.fixedAtomVibrationCountdown / ( FIXED_ATOM_VIBRATION_TIME / 4 );
+          }
+
+          if ( this.fixedAtom.getX() !== 0 ) {
+            // Go back to the original position every other time.
+            this.fixedAtom.setPosition( 0, 0 );
+          }
+          else {
+            // Calculate the max motion amount based on the amount of potential in the bond.  The multiplier was
+            // empirically determined.
+            var maxMovement = Math.min( this.potentialWhenAtomReleased * 5e19, this.fixedAtom.radius / 2 ) *
+                              vibrationScaleFactor;
+
+            // Move some distance from the original position.
+            var xPos = ( Math.random() * 2 - 1 ) * maxMovement;
+            var yPos = ( Math.random() * 2 - 1 ) * maxMovement;
+            this.fixedAtom.setPosition( xPos, yPos );
+          }
         }
-        if ( this.fixedAtom.getX() !== 0 ) {
-          // Go back to the original position every other time.
-          this.fixedAtom.setPosition( 0, 0 );
-        }
-        else {
-          // Move some distance from the original position based on the energy contained at the time of bonding.  The
-          // multiplication factor in the equation below is empirically determined to look good on the screen.
-          var xPos = ( Math.random() * 2 - 1 ) * this.potentialWhenAtomReleased * 5e19 * vibrationScaleFactor;
-          //var yPos = ( Math.random() * 2 - 1 ) * this.potentialWhenAtomReleased * 5e19 * vibrationScaleFactor;
-          var yPos = this.fixedAtom.positionProperty.value.y;
-          this.fixedAtom.setPosition( xPos, yPos );
+        else{
+          this.timeSinceLastFixedAtomJump += dt;
         }
 
-        // Decrement the vibration counter.
-        this.vibrationCounter--;
+        // Decrement the vibration countdown value.
+        this.fixedAtomVibrationCountdown -= dt;
       }
       else if ( this.fixedAtom.getX() !== 0 || this.fixedAtom.getY() !== 0 ) {
         this.fixedAtom.setPosition( 0, 0 );
@@ -625,15 +639,6 @@ define( function( require ) {
       }
 
       return equivalentPotentialDistance;
-    },
-
-    /**
-     * @returns {boolean}
-     * @private
-     */
-    isFixedAtomVibrating: function() {
-      return this.vibrationCounter > 0;
     }
-
   } );
 } );
