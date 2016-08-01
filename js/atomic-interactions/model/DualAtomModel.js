@@ -29,7 +29,8 @@ define( function( require ) {
   var MAX_APPROXIMATION_ITERATIONS = 100;
   var THRESHOLD_VELOCITY = 100;  // Used to distinguish small oscillations from real movement.
   var FIXED_ATOM_VIBRATION_TIME = 2; // seconds
-  var FIXED_ATOM_JUMP_PERIOD = 0.032; // seconds
+  var FIXED_ATOM_JUMP_PERIOD = 2 * ( 1 / 60 ); // in seconds, intended to work well with 60 Hz frame rate
+  var MOVABLE_ATOM_OSCILLATION_PERIOD = 4 * ( 1 / 60 ); // in seconds, intended to work well with 60 Hz frame rate
 
   // The maximum time step was empirically determined to be as large as possible while still making sure that energy
   // is conserved in all interaction cases.  See https://github.com/phetsims/states-of-matter/issues/53 for more info.
@@ -46,7 +47,7 @@ define( function( require ) {
     this.settingBothAtomTypes = false;  // Flag used to prevent getting in disallowed state.
     this.bondingState = BondingState.UNBONDED; // Tracks whether the atoms have formed a chemical bond.
     this.fixedAtomVibrationCountdown = 0; // Used to vibrate fixed atom during bonding.
-    this.timeSinceListFixedAtomJump = Number.POSITIVE_INFINITY; // Used to vibrate fixed atom during bonding
+    this.movableAtomVibrationCountdown = 0; // Used to vibrate movable atom during bonding and when bonded.
     this.potentialWhenAtomReleased = 0; // Used to set magnitude of vibration.
     this.atomFactory = AtomFactory;
     this.isHandNodeVisible = true; // indicate moving hand node visible or not
@@ -437,10 +438,10 @@ define( function( require ) {
         }
 
         // Update the bonding state (only affects some combinations of atoms).
-        this.updateBondingState();
+        this.updateBondingState( dt );
       }
 
-      this.stepFixedAtomVibration( dt );
+      this.stepAtomVibration( dt );
     },
 
     /**
@@ -502,7 +503,7 @@ define( function( require ) {
       }
     },
 
-    updateBondingState: function() {
+    updateBondingState: function( dt ) {
       if ( this.movableAtom.getType() === AtomType.OXYGEN && this.fixedAtom.getType() === AtomType.OXYGEN ) {
         switch( this.bondingState ) {
 
@@ -531,23 +532,12 @@ define( function( require ) {
               this.bondedOscillationLeftDistance = this.approximateEquivalentPotentialDistance(
                 this.bondedOscillationRightDistance );
               this.bondingState = BondingState.BONDED;
+              this.movableAtomVibrationCountdown = 0;
             }
             break;
 
           case BondingState.BONDED:
-
-            // Override the atom motion calculations and cause the atom to oscillate a fixed distance from the bottom
-            // of the well. This is necessary because otherwise we tend to have an aliasing problem where it appears
-            // that the atom oscillates for a while, then damps out, then starts up again.
-            this.movableAtom.setAx( 0 );
-            this.movableAtom.setVx( 0 );
-            if ( this.movableAtom.getX() > this.minPotentialDistance ) {
-              this.movableAtom.setPosition( this.bondedOscillationLeftDistance, 0 );
-            }
-            else {
-              this.movableAtom.setPosition( this.bondedOscillationRightDistance, 0 );
-            }
-
+            // Nothing done here, bonding state ends when user grabs atom or performs a reset.
             break;
 
           default:
@@ -566,9 +556,32 @@ define( function( require ) {
     },
 
     /**
+     * Make the atoms appear to vibrate if they are in the correct state.
      * @private
      */
-    stepFixedAtomVibration: function( dt ) {
+    stepAtomVibration: function( dt ) {
+
+      // handle movable atom vibration
+      if ( this.bondingState === BondingState.BONDED ){
+
+        // Override the atom motion calculations and cause the atom to oscillate a fixed distance from the bottom
+        // of the well. This is necessary because otherwise we tend to have an aliasing problem where it appears
+        // that the atom oscillates for a while, then damps out, then starts up again.
+        this.movableAtom.setAx( 0 );
+        this.movableAtom.setVx( 0 );
+        this.movableAtomVibrationCountdown -= dt;
+        if ( this.movableAtomVibrationCountdown <= 0 ) {
+          if ( this.movableAtom.getX() > this.minPotentialDistance ) {
+            this.movableAtom.setPosition( this.bondedOscillationLeftDistance, 0 );
+          }
+          else {
+            this.movableAtom.setPosition( this.bondedOscillationRightDistance, 0 );
+          }
+          this.movableAtomVibrationCountdown = MOVABLE_ATOM_OSCILLATION_PERIOD;
+        }
+      }
+
+      // handle the fixed atom vibration
       if ( ( this.bondingState === BondingState.BONDING || this.bondingState === BondingState.BONDED ) &&
            this.fixedAtomVibrationCountdown > 0 ) {
 
