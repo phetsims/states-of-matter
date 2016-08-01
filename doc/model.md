@@ -10,3 +10,7 @@ phases of matter. The small number of particles shown and the simplicity of the 
 map accurately the exact phase to the correct regions of the phase diagram. However, we felt there would be some
 benefit to students being exposed to a simplified phase diagram. In the sim, the diagram marker remains on the
 coexistence line between liquid/gas or solid/gas (and is extrapolated into the critical region).
++ In atomic interactions, when an oxygen atom bonds with another, the energy has to go somewhere.  In the real world, it
+generally goes into the motion of the O2 molecule, but since we can't do that here and keep the O2 on the screen, we
+convey the additional energy as vibration of the leftmost molecule.  The energy can be thought of as going into friction
+with the pin, if that helps.
