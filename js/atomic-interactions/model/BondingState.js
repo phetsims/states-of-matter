@@ -11,7 +11,8 @@ define( function( require ) {
   var BondingState = {
     UNBONDED: 'UNBONDED',
     BONDING: 'BONDING',
-    BONDED: 'BONDED'
+    BONDED: 'BONDED',
+    ALLOWING_ESCAPE: 'ALLOWING_ESCAPE'
   };
 
   // verify that enum is immutable, without the runtime penalty in production code

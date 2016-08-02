@@ -27,10 +27,12 @@ define( function( require ) {
   var BONDED_OSCILLATION_PROPORTION = 0.06; // Proportion of atom radius.
   var DEFAULT_ATOM_TYPE = AtomType.NEON;
   var MAX_APPROXIMATION_ITERATIONS = 100;
-  var THRESHOLD_VELOCITY = 100;  // Used to distinguish small oscillations from real movement.
+  var BONDING_THRESHOLD_VELOCITY = 100;  // Used to distinguish small oscillations from real movement, empirically determined.
   var FIXED_ATOM_VIBRATION_TIME = 2; // seconds
   var FIXED_ATOM_JUMP_PERIOD = 2 * ( 1 / 60 ); // in seconds, intended to work well with 60 Hz frame rate
   var MOVABLE_ATOM_OSCILLATION_PERIOD = 4 * ( 1 / 60 ); // in seconds, intended to work well with 60 Hz frame rate
+  var MAX_ATOM_VELOCITY = 10000; // used to limit velocity so that atom doesn't move so quickly that it can't be seen
+  var ESCAPE_POTENTIAL_THRESHOLD = 5E-18; // empirically determined
 
   // The maximum time step was empirically determined to be as large as possible while still making sure that energy
   // is conserved in all interaction cases.  See https://github.com/phetsims/states-of-matter/issues/53 for more info.
@@ -40,7 +42,7 @@ define( function( require ) {
    * This is the model for two atoms interacting with a Lennard-Jones interaction potential.
    * @constructor
    */
-  function DualAtomModel() {
+  function DualAtomModel(){
 
     var self = this;
 
@@ -71,6 +73,7 @@ define( function( require ) {
       StatesOfMatterConstants.MIN_EPSILON
     );
     this.residualTime = 0; // accumulates dt values not yet applied to model
+    this.justReleased = false;
 
     // update the atom pair when the atom pair property is set
     this.atomPairProperty.link( function( atomPair ) {
@@ -376,6 +379,9 @@ define( function( require ) {
         this.potentialWhenAtomReleased =
           this.ljPotentialCalculator.calculatePotentialEnergy( this.movableAtom.getPositionReference().distance(
             this.fixedAtom.getPositionReference() ) );
+
+        // set a flag that indicates that this was just released, which will be used by the bonding update method
+        this.justReleased = true;
       }
     },
 
@@ -540,7 +546,7 @@ define( function( require ) {
 
         // If the velocity gets too large, the atom can get away before the bond can be tested, and it will appear to
         // vanish from the screen, so we limit it here to an empirically determined max value.
-        newVelocity = Math.min( newVelocity, 5000 );
+        newVelocity = Math.min( newVelocity, MAX_ATOM_VELOCITY );
 
         // Update the position and velocity of the atom.
         this.movableAtom.setVx( newVelocity );
@@ -549,19 +555,25 @@ define( function( require ) {
       }
     },
 
-    updateBondingState: function( dt ) {
+    updateBondingState: function() {
       if ( this.movableAtom.getType() === AtomType.OXYGEN && this.fixedAtom.getType() === AtomType.OXYGEN ) {
         switch( this.bondingState ) {
 
           case BondingState.UNBONDED:
-            if ( ( this.movableAtom.getVx() > THRESHOLD_VELOCITY ) &&
+            if ( ( this.movableAtom.getVx() > BONDING_THRESHOLD_VELOCITY ) &&
                  ( this.movableAtom.getPositionReference().distance( this.fixedAtom.getPositionReference() ) <
                    this.fixedAtom.getRadius() * 2.5 ) ) {
 
-              // The atoms are close together and the movable one is starting to move away, which is the point at
-              // which we consider the bond to start forming.
-              this.bondingState = BondingState.BONDING;
-              this.startFixedAtomVibration();
+              if ( this.justReleased && this.potentialWhenAtomReleased > ESCAPE_POTENTIAL_THRESHOLD ){
+                // the user just released the movable atom in an area of relatively high potential, so let it escape
+                this.bondingState = BondingState.ALLOWING_ESCAPE;
+              }
+              else{
+                // The atoms are close together and the movable one is starting to move away, and the potential does
+                // not exceed the escape threshold, so we consider this to be the start of bond formation.
+                this.bondingState = BondingState.BONDING;
+                this.startFixedAtomVibration();
+              }
             }
             break;
 
@@ -583,7 +595,11 @@ define( function( require ) {
             break;
 
           case BondingState.BONDED:
-            // Nothing done here, bonding state ends when user grabs atom or performs a reset.
+            // Nothing done here, bonded state ends when user grabs atom or performs a reset.
+            break;
+
+          case BondingState.ALLOWING_ESCAPE:
+            // Nothing done here, this state ends when user grabs atom or performs a reset.
             break;
 
           default:
@@ -591,6 +607,9 @@ define( function( require ) {
             break;
         }
       }
+
+      // clear the flag that indicates whether the atom was just released by the user
+      this.justReleased = false;
     },
 
     /**
