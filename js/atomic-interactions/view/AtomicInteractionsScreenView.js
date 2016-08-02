@@ -67,13 +67,12 @@ define( function( require ) {
     // initialize local variables
     var atomicInteractionsScreenView = this;
     var tickTextColor = enableHeterogeneousAtoms ? 'black' : 'white';
-    var showTitleWhenExpand = !enableHeterogeneousAtoms; // force control panel title
     var textColor = enableHeterogeneousAtoms ? 'black' : 'white';
     var backgroundColor = enableHeterogeneousAtoms ? '#D1D2FF' : 'black';
     var forceControlPanelButtonAlign = enableHeterogeneousAtoms ? 'right' : 'left';
     var atomicInteractionsControlPanel = new AtomicInteractionsControlPanel( dualAtomModel, enableHeterogeneousAtoms, {
       right: this.layoutBounds.maxX - inset,
-      top:   this.layoutBounds.minY + inset,
+      top: this.layoutBounds.minY + inset,
       tickTextColor: tickTextColor,
       textColor: textColor,
       backgroundColor: backgroundColor
@@ -100,7 +99,7 @@ define( function( require ) {
       listener: function() {
         dualAtomModel.resetMovableAtomPos();
       },
-      left:   this.layoutBounds.minX + 6 * inset,
+      left: this.layoutBounds.minX + 6 * inset,
       bottom: this.layoutBounds.bottom - 2 * inset
     } );
     this.addChild( this.returnAtomButton );
@@ -113,7 +112,7 @@ define( function( require ) {
         atomicInteractionsScreenView.handNode.setVisible( true );
         atomicInteractionsScreenView.interactiveInteractionPotentialDiagram.reset();
       },
-      right:  this.layoutBounds.maxX - inset,
+      right: this.layoutBounds.maxX - inset,
       bottom: this.returnAtomButton.bottom,
       scale: 0.75
     } );
@@ -136,19 +135,17 @@ define( function( require ) {
       dualAtomModel.forcesProperty,
       dualAtomModel.forceControlPanelExpandProperty,
       {
-      tickTextColor: tickTextColor,
-      textColor: textColor,
-      backgroundColor: backgroundColor,
-      buttonAlign: forceControlPanelButtonAlign,
-      showTitleWhenExpand: showTitleWhenExpand,
-      panelMinWidth: atomicInteractionsControlPanel.width
-    } );
-    var atomicInteractionsControlPanelRightOffset = 20;
-    if ( enableHeterogeneousAtoms ) {
-      resetAllButton.right = this.layoutBounds.maxX - inset;
-      atomicInteractionsControlPanel.right = resetAllButton.left - atomicInteractionsControlPanelRightOffset;
-      forcesControlPanel.right = atomicInteractionsControlPanel.right;
-    }
+        tickTextColor: tickTextColor,
+        textColor: textColor,
+        backgroundColor: backgroundColor,
+        buttonAlign: forceControlPanelButtonAlign,
+        showTitleWhenExpanded: !enableHeterogeneousAtoms,
+        panelMinWidth: atomicInteractionsControlPanel.width
+      }
+    );
+
+    atomicInteractionsControlPanel.right = resetAllButton.right;
+    forcesControlPanel.centerX = atomicInteractionsControlPanel.centerX;
 
     // add play pause
     var playPauseButton = new PlayPauseButton( dualAtomModel.isPlayingProperty, {
@@ -210,7 +207,7 @@ define( function( require ) {
     this.pushPinNode.scale( PUSH_PIN_WIDTH / this.pushPinNode.width );
 
     // update the push pin position if the adjustable atom diamter changes
-    dualAtomModel.atomDiameterProperty.link( function( atomDiameter ){
+    dualAtomModel.atomDiameterProperty.link( function( atomDiameter ) {
       atomicInteractionsScreenView.updatePushPinPosition();
     } );
 
@@ -490,7 +487,7 @@ define( function( require ) {
       }
     },
 
-    updatePushPinPosition: function(){
+    updatePushPinPosition: function() {
       var mvt = this.modelViewTransform;
       var pinnedAtomPosition = this.dualAtomModel.fixedAtom.positionProperty.value;
       var pinnedAtomRadius = this.dualAtomModel.fixedAtom.radius;

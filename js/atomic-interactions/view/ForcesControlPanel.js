@@ -34,7 +34,7 @@ define( function( require ) {
   var electronOverlapString = require( 'string!STATES_OF_MATTER/electronOverlap' );
 
   //constants
-  var TEXT_LABEL_MAX_WIDTH = 130; // max width of text label  in the panel
+  var TEXT_LABEL_MAX_WIDTH = 130; // max width of text label in the panel
   var RADIO_BUTTON_RADIUS = 6;
 
   /**
@@ -54,7 +54,7 @@ define( function( require ) {
       textColor: 'black',
       buttonAlign: 'left',
       lineWidth: 1,
-      showTitleWhenExpand: true,
+      showTitleWhenExpanded: true,
       panelMinWidth: 168,
       backgroundColor: '#D1D2FF'
     }, options );
@@ -196,12 +196,12 @@ define( function( require ) {
     totalForceRadio.touchArea = totalForce.localBounds.dilatedXY( xDilation, yDilation );
 
     // The panel width in the Atomic Interaction sim and on the Interaction screen in SOM is different.
-    var panelMinWidth = options.showTitleWhenExpand ? 183 : 190;
+    var panelMinWidth = Math.max( options.panelMinWidth, options.showTitleWhenExpanded ? 183 : 190 );
     radioButtonGroup.setTranslation( 10, 0 );
     accordionContent.addChild( radioButtonGroup );
 
     // show white stroke around the force panel within SOM full version  else  show black stroke
-    var panelStroke = options.showTitleWhenExpand ? 'white' : 'black';
+    var panelStroke = options.showTitleWhenExpanded ? 'white' : 'black';
     var accordionBox = new AccordionBox( accordionContent, {
       titleNode: createText( forcesString, TEXT_LABEL_MAX_WIDTH / 2, 14 ),
       fill: options.backgroundColor,
@@ -219,7 +219,7 @@ define( function( require ) {
       buttonXMargin: 10,
       buttonTouchAreaXDilation: 15,
       buttonTouchAreaYDilation: 6,
-      showTitleWhenExpanded: options.showTitleWhenExpand
+      showTitleWhenExpanded: options.showTitleWhenExpanded
     } );
     this.addChild( accordionBox );
 

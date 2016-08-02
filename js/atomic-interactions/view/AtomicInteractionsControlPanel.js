@@ -24,7 +24,6 @@ define( function( require ) {
   var Dimension2 = require( 'DOT/Dimension2' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
-  var AtomType = require( 'STATES_OF_MATTER/common/model/AtomType' );
   var AquaRadioButton = require( 'SUN/AquaRadioButton' );
   var Image = require( 'SCENERY/nodes/Image' );
   var AtomPair = require( 'STATES_OF_MATTER/atomic-interactions/model/AtomPair' );
@@ -81,7 +80,8 @@ define( function( require ) {
       textColor: enableHeterogeneousAtoms ? 'black' : 'white',
       lineWidth: 1,
       backgroundColor: '#D1D2FF',
-      cornerRadius: 5 // radius of the rounded corners on the background
+      cornerRadius: 5, // radius of the rounded corners on the background
+      minWidth: 0
     }, options );
 
     Node.call( this );
@@ -106,7 +106,7 @@ define( function( require ) {
     var createLabelNode;
     var titleText;
     var titleNode;
-    var sliderTrackWidth = 135; // empirically determined
+    var sliderTrackWidth = 140; // empirically determined
 
     // common options for radio button labels
     var labelTextOptions = {
