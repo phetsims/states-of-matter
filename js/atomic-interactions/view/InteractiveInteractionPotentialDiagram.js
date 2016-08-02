@@ -14,6 +14,7 @@ define( function( require ) {
   var Color = require( 'SCENERY/util/Color' );
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
   var AtomType = require( 'STATES_OF_MATTER/common/model/AtomType' );
+  var AtomPair = require( 'STATES_OF_MATTER/atomic-interactions/model/AtomPair' );
   var InteractionPotentialDiagramNode = require( 'STATES_OF_MATTER/common/view/InteractionPotentialDiagramNode' );
   var SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
   var FillHighlightListener = require( 'SCENERY_PHET/input/FillHighlightListener' );
@@ -202,7 +203,7 @@ define( function( require ) {
       function( moleculeType, interactionStrength, atomDiameter ) {
 
         if ( moleculeType === AtomType.ADJUSTABLE ) {
-          dualAtomModel.setBothAtomTypes( AtomType.ADJUSTABLE );
+          dualAtomModel.atomPair = AtomPair.ADJUSTABLE;
           dualAtomModel.setEpsilon( interactionStrength );
           dualAtomModel.setAdjustableAtomSigma( atomDiameter );
         }

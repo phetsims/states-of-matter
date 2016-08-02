@@ -132,7 +132,7 @@ define( function( require ) {
     this.addChild( stepButton );
 
     // add force control
-    var forceControlNode = new ForcesControlPanel(
+    var forcesControlPanel = new ForcesControlPanel(
       dualAtomModel.forcesProperty,
       dualAtomModel.forceControlPanelExpandProperty,
       {
@@ -147,7 +147,7 @@ define( function( require ) {
     if ( enableHeterogeneousAtoms ) {
       resetAllButton.right = this.layoutBounds.maxX - inset;
       atomicInteractionsControlPanel.right = resetAllButton.left - atomicInteractionsControlPanelRightOffset;
-      forceControlNode.right = atomicInteractionsControlPanel.right;
+      forcesControlPanel.right = atomicInteractionsControlPanel.right;
     }
 
     // add play pause
@@ -221,17 +221,16 @@ define( function( require ) {
     this.movableParticleLayer = new Node();
     this.addChild( this.movableParticleLayer );
 
-    // Add the control panels to the screen after the atoms so that the atoms
-    // with go behind them.
+    // Add the control panels to the screen after the atoms so that the atoms with go behind them.
     this.addChild( atomicInteractionsControlPanel );
-    this.addChild( forceControlNode );
+    this.addChild( forcesControlPanel );
 
     // set up the default particles
     this.handleFixedParticleAdded( dualAtomModel.fixedAtom );
     this.handleMovableParticleAdded( dualAtomModel.movableAtom );
     dualAtomModel.atomPairProperty.link( function( atomPair ) {
-      forceControlNode.top = atomicInteractionsControlPanel.bottom + inset / 2;
-      forceControlNode.right = atomicInteractionsControlPanel.right;
+      forcesControlPanel.top = atomicInteractionsControlPanel.bottom + inset / 2;
+      forcesControlPanel.right = atomicInteractionsControlPanel.right;
       atomicInteractionsScreenView.handleFixedParticleRemoved( dualAtomModel.fixedAtom );
       atomicInteractionsScreenView.handleFixedParticleAdded( dualAtomModel.fixedAtom );
       atomicInteractionsScreenView.handleMovableParticleRemoved( dualAtomModel.movableAtom );

@@ -147,7 +147,7 @@ define( function( require ) {
         maxWidth: NORMAL_TEXT_MAX_WIDTH
       } );
       var pushpinImage = new Image( pushPinImg, { scale: 0.15 } );
-      var maxWidthOfTitleText = 40;
+      var maxWidthOfTitleText = 40; // empirically determined
       var pinnedNodeText = new HBox( {
         children: [
           pushpinImage,
@@ -378,71 +378,31 @@ define( function( require ) {
     } );
 
     // sliders and title adjustments
-    atomDiameterTitle.left = content.left;
     atomDiameterSlider.top = atomDiameterTitle.bottom + verticalSpaceOffset;
     atomDiameterSlider.centerX = radioButtonPanel.centerX;
-    interactionStrengthTitle.left = content.left;
     interactionStrengthTitle.top = atomDiameterSlider.bottom + verticalSpaceOffset;
     interactionStrengthSlider.top = interactionStrengthTitle.bottom + verticalSpaceOffset;
     interactionStrengthSlider.centerX = radioButtonPanel.centerX;
-
-    // Update the text when the value or units changes.
-    dualAtomModel.atomPairProperty.link(
-      function( moleculeType ) {
-        switch( moleculeType ) {
-          case AtomPair.NEON_NEON:
-            dualAtomModel.setBothAtomTypes( AtomType.NEON );
-            break;
-
-          case AtomPair.ARGON_ARGON:
-            dualAtomModel.setBothAtomTypes( AtomType.ARGON );
-            break;
-
-          case AtomPair.OXYGEN_OXYGEN:
-            dualAtomModel.setBothAtomTypes( AtomType.OXYGEN );
-            break;
-
-          case AtomPair.NEON_ARGON:
-            dualAtomModel.settingBothAtomTypes = true;
-            dualAtomModel.setFixedAtomType( AtomType.NEON );
-            dualAtomModel.setMovableAtomType( AtomType.ARGON );
-            dualAtomModel.settingBothAtomTypes = false;
-            break;
-
-          case AtomPair.NEON_OXYGEN:
-            dualAtomModel.settingBothAtomTypes = true;
-            dualAtomModel.setFixedAtomType( AtomType.NEON );
-            dualAtomModel.setMovableAtomType( AtomType.OXYGEN );
-            dualAtomModel.settingBothAtomTypes = false;
-            break;
-
-          case AtomPair.ARGON_OXYGEN:
-            dualAtomModel.settingBothAtomTypes = true;
-            dualAtomModel.setFixedAtomType( AtomType.ARGON );
-            dualAtomModel.setMovableAtomType( AtomType.OXYGEN );
-            dualAtomModel.settingBothAtomTypes = false;
-            break;
-        } //end of switch
-
-        if ( moleculeType === AtomPair.ADJUSTABLE ) {
-          // add atom diameter slider and interaction
-          content.addChild( atomDiameter );
-          content.addChild( interactionStrength );
-        }
-        else {
-          //if  atom and interaction slider
-          if ( content.hasChild( atomDiameter ) ) {
-            content.removeChild( atomDiameter );
-          }
-          if ( content.hasChild( interactionStrength ) ) {
-            content.removeChild( interactionStrength );
-          }
-        }
-      } );
     this.addChild( radioButtonPanel );
 
-    // add the tittle node after radio button panel added in SOM full version.
-    // here around the panel we are drawing a rectangle and on top rectangle added title node
+    // hide or show the controls for handling the adjustable atom based on the atom pair setting
+    dualAtomModel.atomPairProperty.link( function( atomPair ) {
+      if ( atomPair === AtomPair.ADJUSTABLE ) {
+        content.addChild( atomDiameter );
+        content.addChild( interactionStrength );
+      }
+      else {
+        if ( content.hasChild( atomDiameter ) ) {
+          content.removeChild( atomDiameter );
+        }
+        if ( content.hasChild( interactionStrength ) ) {
+          content.removeChild( interactionStrength );
+        }
+      }
+    } );
+
+    // Add the tittle node after radio button panel added in SOM full version.  Here around the panel we are drawing a
+    // rectangle and on top rectangle added title node.
     if ( !enableHeterogeneousAtoms ) {
       this.addChild( titleNode );
       titleNode.centerX = radioButtonGroup.centerX + 5;

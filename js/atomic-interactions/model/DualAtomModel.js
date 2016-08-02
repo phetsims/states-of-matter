@@ -42,6 +42,21 @@ define( function( require ) {
    */
   function DualAtomModel() {
 
+    var self = this;
+
+    // TODO: viz annotations
+    PropertySet.call( this, {
+        interactionStrength: 100, // Epsilon/k-Boltzmann is in Kelvin.
+        motionPaused: false,
+        atomPair: AtomPair.NEON_NEON, // @public, read-write
+        isPlaying: true,
+        speed: 'normal', // @public, read-write
+        atomDiameter: 300,
+        forces: 'hideForces',
+        forceControlPanelExpand: false
+      }
+    );
+
     this.fixedAtom = null;
     this.movableAtom = null;
     this.settingBothAtomTypes = false;  // Flag used to prevent getting in disallowed state.
@@ -56,17 +71,48 @@ define( function( require ) {
       StatesOfMatterConstants.MIN_EPSILON
     );
     this.residualTime = 0; // accumulates dt values not yet applied to model
-    PropertySet.call( this, {
-        interactionStrength: 100, // Epsilon/k-Boltzmann is in Kelvin.
-        motionPaused: false,
-        atomPair: AtomPair.NEON_NEON,
-        isPlaying: true,
-        speed: 'normal',
-        atomDiameter: 300,
-        forces: 'hideForces',
-        forceControlPanelExpand: false
-      }
-    );
+
+    // update the atom pair when the atom pair property is set
+    this.atomPairProperty.link( function( atomPair ) {
+      switch( atomPair ) {
+        case AtomPair.NEON_NEON:
+          self.setBothAtomTypes( AtomType.NEON );
+          break;
+
+        case AtomPair.ARGON_ARGON:
+          self.setBothAtomTypes( AtomType.ARGON );
+          break;
+
+        case AtomPair.OXYGEN_OXYGEN:
+          self.setBothAtomTypes( AtomType.OXYGEN );
+          break;
+
+        case AtomPair.NEON_ARGON:
+          self.settingBothAtomTypes = true;
+          self.setFixedAtomType( AtomType.NEON );
+          self.setMovableAtomType( AtomType.ARGON );
+          self.settingBothAtomTypes = false;
+          break;
+
+        case AtomPair.NEON_OXYGEN:
+          self.settingBothAtomTypes = true;
+          self.setFixedAtomType( AtomType.NEON );
+          self.setMovableAtomType( AtomType.OXYGEN );
+          self.settingBothAtomTypes = false;
+          break;
+
+        case AtomPair.ARGON_OXYGEN:
+          self.settingBothAtomTypes = true;
+          self.setFixedAtomType( AtomType.ARGON );
+          self.setMovableAtomType( AtomType.OXYGEN );
+          self.settingBothAtomTypes = false;
+          break;
+
+        case AtomPair.ADJUSTABLE:
+          self.setBothAtomTypes( AtomType.ADJUSTABLE );
+          break;
+      } //end of switch
+    } );
 
     // Put the model into its initial state.
     this.reset();
@@ -134,7 +180,7 @@ define( function( require ) {
 
     /**
      * @param {string} atomType -  indicates type of molecule
-     * @public
+     * @private
      */
     setFixedAtomType: function( atomType ) {
 
@@ -174,7 +220,7 @@ define( function( require ) {
 
     /**
      * @param {string} atomType - indicates type of molecule
-     * @public
+     * @private
      */
     setMovableAtomType: function( atomType ) {
 
@@ -226,8 +272,8 @@ define( function( require ) {
     },
 
     /**
-     * @param {string} atomType - indicates type of molecule
-     * @public
+     * @param {string} atomType
+     * @private
      */
     setBothAtomTypes: function( atomType ) {
 
@@ -562,7 +608,7 @@ define( function( require ) {
     stepAtomVibration: function( dt ) {
 
       // handle movable atom vibration
-      if ( this.bondingState === BondingState.BONDED ){
+      if ( this.bondingState === BondingState.BONDED ) {
 
         // Override the atom motion calculations and cause the atom to oscillate a fixed distance from the bottom
         // of the well. This is necessary because otherwise we tend to have an aliasing problem where it appears
@@ -585,7 +631,7 @@ define( function( require ) {
       if ( ( this.bondingState === BondingState.BONDING || this.bondingState === BondingState.BONDED ) &&
            this.fixedAtomVibrationCountdown > 0 ) {
 
-        if ( this.timeSinceLastFixedAtomJump > FIXED_ATOM_JUMP_PERIOD ){
+        if ( this.timeSinceLastFixedAtomJump > FIXED_ATOM_JUMP_PERIOD ) {
           this.timeSinceLastFixedAtomJump = 0;
           var vibrationScaleFactor = 1;
 
@@ -610,7 +656,7 @@ define( function( require ) {
             this.fixedAtom.setPosition( xPos, yPos );
           }
         }
-        else{
+        else {
           this.timeSinceLastFixedAtomJump += dt;
         }
 
