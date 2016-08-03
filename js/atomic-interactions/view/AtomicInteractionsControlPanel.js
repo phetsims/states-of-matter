@@ -52,6 +52,7 @@ define( function( require ) {
   var RADIO_BUTTON_RADIUS = 6;
   var SLIDER_TICK_TEXT_MAX_WIDTH = 35;
   var TITLE_TEXT_WIDTH = 130;
+  var PANEL_X_MARGIN = 10;
 
   // icon for the adjustable attraction button
   var ADJUSTABLE_ATTRACTION_ICON = new Circle( 6, { fill: StatesOfMatterConstants.ADJUSTABLE_ATTRACTION_COLOR } );
@@ -106,7 +107,7 @@ define( function( require ) {
     var createLabelNode;
     var titleText;
     var titleNode;
-    var sliderTrackWidth = 135; // empirically determined
+    var sliderTrackWidth = 140; // empirically determined
 
     // common options for radio button labels
     var labelTextOptions = {
@@ -369,20 +370,28 @@ define( function( require ) {
     } );
     var verticalSpaceOffset = 7;
 
+    // sliders and title adjustments
+    atomDiameterSlider.top = atomDiameterTitle.bottom + verticalSpaceOffset;
+    atomDiameterSlider.centerX = radioButtonGroup.centerX;
+    interactionStrengthTitle.top = atomDiameterSlider.bottom + verticalSpaceOffset;
+    interactionStrengthSlider.top = interactionStrengthTitle.bottom + verticalSpaceOffset;
+    interactionStrengthSlider.centerX = radioButtonGroup.centerX;
+
+    // calculate the minimum width of the slider so that it can be set and doesn't change
+    var panelMinWidth = Math.max(
+        radioButtonGroup.width,
+        atomDiameterSlider.width,
+        interactionStrengthSlider.width
+      ) + 2 * PANEL_X_MARGIN;
+
     var radioButtonPanel = new Panel( content, {
       stroke: panelStroke,
       cornerRadius: 6,
-      xMargin: 10,
       lineWidth: options.lineWidth,
-      fill: options.backgroundColor
+      fill: options.backgroundColor,
+      xMargin: PANEL_X_MARGIN,
+      minWidth: panelMinWidth
     } );
-
-    // sliders and title adjustments
-    atomDiameterSlider.top = atomDiameterTitle.bottom + verticalSpaceOffset;
-    atomDiameterSlider.centerX = radioButtonPanel.centerX;
-    interactionStrengthTitle.top = atomDiameterSlider.bottom + verticalSpaceOffset;
-    interactionStrengthSlider.top = interactionStrengthTitle.bottom + verticalSpaceOffset;
-    interactionStrengthSlider.centerX = radioButtonPanel.centerX;
     this.addChild( radioButtonPanel );
 
     // hide or show the controls for handling the adjustable atom based on the atom pair setting
