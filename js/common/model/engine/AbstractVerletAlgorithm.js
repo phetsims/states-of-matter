@@ -1,9 +1,8 @@
 // Copyright 2014-2015, University of Colorado Boulder
 
 /**
- * This is an abstract base class for classes that implement the Verlet
- * algorithm for simulating molecular interactions based on the Lennard-
- * Jones potential.
+ * This is an abstract base class for classes that implement the Verlet algorithm for simulating molecular interactions
+ * based on the Lennard-Jones potential.
  *
  * @author John Blanco
  * @author Aaron Davis
@@ -44,10 +43,9 @@ define( function( require ) {
   return inherit( PropertySet, AbstractVerletAlgorithm, {
 
     /**
-     * Calculate the force exerted on a particle at the provided position by
-     * the walls of the container.  The upper left corner of the container is
-     * assumed to be at (0,0), so only the width and height are provided as
-     * parameters.  The force is returned in the provided vector.
+     * Calculate the force exerted on a particle at the provided position by the walls of the container.  The upper left
+     * corner of the container is assumed to be at (0,0), so only the width and height are provided as parameters.  The
+     * force is returned in the provided vector.
      *
      * @param {Vector2} position       - Current position of the particle.
      * @param {number} containerWidth  - Width of the container where particles are held.
@@ -135,13 +133,13 @@ define( function( require ) {
     },
 
     /**
-     * @protected
      * Update the safety status of any molecules that may have previously been
      * designated as unsafe.  An "unsafe" molecule is one that was injected
      * into the container and was found to be so close to one or more of the
      * other molecules that if its interaction forces were calculated, it
      * would be given a ridiculously large amount of kinetic energy that could
      * end up launching it out of the container.
+     * @protected
      */
     updateMoleculeSafety: function() {
 

@@ -106,7 +106,7 @@ define( function( require ) {
     var createLabelNode;
     var titleText;
     var titleNode;
-    var sliderTrackWidth = 140; // empirically determined
+    var sliderTrackWidth = 135; // empirically determined
 
     // common options for radio button labels
     var labelTextOptions = {
