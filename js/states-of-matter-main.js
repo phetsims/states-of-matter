@@ -22,6 +22,7 @@ define( function( require ) {
   var statesOfMatterTitleString = require( 'string!STATES_OF_MATTER/states-of-matter.title' );
   var interactionString = require( 'string!STATES_OF_MATTER/interaction' );
 
+  // property that controls projector mode, initial value can be set via a query parameter
   var projectorModeProperty = new Property( StatesOfMatterQueryParameters.PROJECTOR_MODE );
 
   var simOptions = {
