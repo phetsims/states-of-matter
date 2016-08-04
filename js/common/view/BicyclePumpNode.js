@@ -1,9 +1,8 @@
 // Copyright 2014-2015, University of Colorado Boulder
 
 /**
- * This class represents creates a graphical display that is meant to look
- * like a bicycle pump.  It allows the user to interact with it to move the
- * handle up and down.
+ * This class represents creates a graphical display that is meant to look like a bicycle pump.  It allows the user to
+ * interact with it to move the handle up and down.
  *
  * @author John Blanco
  * @author Siddhartha Chinthapally (Actual Concepts)
@@ -21,9 +20,8 @@ define( function( require ) {
   var SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
-  // The follow constants define the size and positions of the various
-  // components of the pump as proportions of the overall width and height
-  // of the node.
+  // The follow constants define the size and positions of the various components of the pump as proportions of the
+  // overall width and height of the node.
   var PUMP_BASE_WIDTH_PROPORTION = 0.35;
   var PUMP_BASE_HEIGHT_PROPORTION = 0.075;
   var PUMP_BODY_HEIGHT_PROPORTION = 0.7;
@@ -38,6 +36,11 @@ define( function( require ) {
   var HOSE_CONNECTOR_VERT_POS_PROPORTION = 0.8;
   var HOSE_ATTACH_VERT_POS_PROPORTION = 0.11;
   var PUMPING_REQUIRED_TO_INJECT_PROPORTION = PUMP_SHAFT_HEIGHT_PROPORTION / 6;
+  var SHAFT_OPENING_TILT_FACTOR = 0.33;
+
+  // color constants
+  var SHAFT_OPENING_FILL = '#AA8888';
+  var SHAFT_OPENING_STROKE = '#886666';
 
   /**
    * @param {number} width  - width of the BicyclePump
@@ -54,8 +57,8 @@ define( function( require ) {
     var pumpingRequiredToInject = height * PUMPING_REQUIRED_TO_INJECT_PROPORTION;
     var currentPumpingAmount = 0;
 
-    // Add the base of the pump.  Many of the multipliers and point positions were arrived at empirically in the
-    // process of trying to make the base look good.
+    // Add the base of the pump.  Many of the multipliers and point positions were arrived at empirically in the process
+    // of trying to make the base look good.
     var pumpBaseWidth = width * PUMP_BASE_WIDTH_PROPORTION;
     var pumpBaseHeight = height * PUMP_BASE_HEIGHT_PROPORTION;
 
@@ -182,41 +185,41 @@ define( function( require ) {
 
     var maxHandleOffset = -PUMP_SHAFT_HEIGHT_PROPORTION * height / 2;
 
-    // Set ourself up to listen for and handle mouse dragging events on
-    // the handle.
+    // Set ourself up to listen for and handle mouse dragging events on the handle.
     var dragStartY;
     var dragEndY;
     var pumpHandleStartY;
     var pumpHandleEndY;
-    pumpHandleNode.addInputListener( new SimpleDragHandler(
-      {
-        start: function( event ) {
-          dragStartY = pumpHandleNode.globalToParentPoint( event.pointer.point ).y;
-          pumpHandleStartY = pumpHandleNode.y;
-        },
-        drag: function( event ) {
-          dragEndY = pumpHandleNode.globalToParentPoint( event.pointer.point ).y;
-          var yDiff = dragEndY - dragStartY;
-          if ( (  pumpHandleStartY + yDiff >= maxHandleOffset ) &&
-               (  pumpHandleStartY + yDiff <=
-                  (height - ( height * PUMP_HANDLE_INIT_VERT_POS_PROPORTION ) - pumpHandleHeight - pumpBaseHeight) ) ) {
-            pumpHandleNode.setTranslation( (pumpBaseWidth - pumpHandleNode.width) / 2, pumpHandleStartY + yDiff );
-            pumpShaft.top = pumpHandleNode.bottom;
-            if ( dragEndY > pumpHandleEndY ) {
+    pumpHandleNode.addInputListener( new SimpleDragHandler( {
 
-              // This motion is in the pumping direction, so accumulate it.
-              currentPumpingAmount += (dragEndY - pumpHandleEndY);
-              if ( currentPumpingAmount >= pumpingRequiredToInject ) {
+      start: function( event ) {
+        dragStartY = pumpHandleNode.globalToParentPoint( event.pointer.point ).y;
+        pumpHandleStartY = pumpHandleNode.y;
+      },
 
-                // Enough pumping has been done to inject a new particle.
-                multipleParticleModel.injectMolecule();
-                currentPumpingAmount = 0;
-              }
+      drag: function( event ) {
+        dragEndY = pumpHandleNode.globalToParentPoint( event.pointer.point ).y;
+        var yDiff = dragEndY - dragStartY;
+        if ( (  pumpHandleStartY + yDiff >= maxHandleOffset ) &&
+             (  pumpHandleStartY + yDiff <=
+                (height - ( height * PUMP_HANDLE_INIT_VERT_POS_PROPORTION ) - pumpHandleHeight - pumpBaseHeight) ) ) {
+          pumpHandleNode.setTranslation( (pumpBaseWidth - pumpHandleNode.width) / 2, pumpHandleStartY + yDiff );
+          pumpShaft.top = pumpHandleNode.bottom;
+          if ( dragEndY > pumpHandleEndY ) {
+
+            // This motion is in the pumping direction, so accumulate it.
+            currentPumpingAmount += (dragEndY - pumpHandleEndY);
+            if ( currentPumpingAmount >= pumpingRequiredToInject ) {
+
+              // Enough pumping has been done to inject a new particle.
+              multipleParticleModel.injectMolecule();
+              currentPumpingAmount = 0;
             }
           }
-          pumpHandleEndY = dragEndY;
         }
-      } ) );
+        pumpHandleEndY = dragEndY;
+      }
+    } ) );
 
     // Add the shaft for the pump.
     var pumpShaftWidth = width * PUMP_SHAFT_WIDTH_PROPORTION;
@@ -230,13 +233,11 @@ define( function( require ) {
     } );
     pumpShaft.setTranslation( (pumpBaseWidth - pumpShaftWidth) / 2,
       height - ( height * PUMP_HANDLE_INIT_VERT_POS_PROPORTION ) - pumpBaseHeight );
-    this.addChild( pumpShaft );
-    this.addChild( pumpHandleNode );
 
     // Add the body of the pump
     var pumpBodyWidth = width * PUMP_BODY_WIDTH_PROPORTION;
     var pumpBodyHeight = height * PUMP_BODY_HEIGHT_PROPORTION;
-    var pumpBody = new Rectangle( 0, 0, pumpBodyWidth, pumpBodyHeight, 3, 3, {
+    var pumpBody = new Rectangle( 0, 0, pumpBodyWidth, pumpBodyHeight, 0, 0, {
       fill: new LinearGradient( 0, 0, pumpBodyWidth, 0 )
         .addColorStop( 0, '#DA0000' )
         .addColorStop( 0.4, '#D50000' )
@@ -244,13 +245,43 @@ define( function( require ) {
     } );
     pumpBody.setTranslation( (pumpBaseWidth - pumpBodyWidth) / 2, height - pumpBodyHeight - pumpBaseHeight );
 
-    // add pump body shape opening
-    var pumpBodyOpening = new Path(
-      Shape.ellipse( 0, 0, pumpBodyWidth / 2, pumpBodyWidth / 3 - 2, 0, 2 * Math.PI, true ),
-      { fill: 'white' }
-    );
-    pumpBodyOpening.setTranslation( (pumpBaseWidth - pumpBodyWidth) / 2 + pumpBodyOpening.width / 2,
-      height - pumpBodyHeight - pumpBaseHeight );
+    // add the back portion of the opening at the top of the pump body
+    var pumpOpeningBackShape = new Shape()
+      .moveTo( 0, 0 )
+      .cubicCurveTo(
+        0,
+        -pumpBodyWidth * SHAFT_OPENING_TILT_FACTOR,
+        pumpBodyWidth,
+        -pumpBodyWidth * SHAFT_OPENING_TILT_FACTOR,
+        pumpBodyWidth,
+        0
+      );
+
+    var pumpOpeningBack = new Path( pumpOpeningBackShape, {
+      fill: SHAFT_OPENING_FILL,
+      stroke: SHAFT_OPENING_STROKE,
+      centerX: pumpBody.centerX,
+      y: height - pumpBodyHeight - pumpBaseHeight
+    } );
+
+    // add the front portion of the opening at the top of the pump body
+    var pumpOpeningFrontShape = new Shape()
+      .moveTo( 0, 0 )
+      .cubicCurveTo(
+        0,
+        pumpBodyWidth * SHAFT_OPENING_TILT_FACTOR,
+        pumpBodyWidth,
+        pumpBodyWidth * SHAFT_OPENING_TILT_FACTOR,
+        pumpBodyWidth,
+        0
+      );
+
+    var pumpOpeningFront = new Path( pumpOpeningFrontShape, {
+      fill: SHAFT_OPENING_FILL,
+      stroke: SHAFT_OPENING_STROKE,
+      centerX: pumpBody.centerX,
+      y: height - pumpBodyHeight - pumpBaseHeight
+    } );
 
     // Add the hose.
     var hoseToPumpAttachPtX = (pumpBaseWidth + pumpBodyWidth) / 2;
@@ -260,8 +291,8 @@ define( function( require ) {
     var hosePath = new Path( new Shape()
       .moveTo( hoseToPumpAttachPtX, hoseToPumpAttachPtY )
       .cubicCurveTo( width, height - ( height * HOSE_ATTACH_VERT_POS_PROPORTION ),
-      0, height - ( height * HOSE_CONNECTOR_VERT_POS_PROPORTION ),
-      hoseExternalAttachPtX, hoseExternalAttachPtY ), {
+        0, height - ( height * HOSE_CONNECTOR_VERT_POS_PROPORTION ),
+        hoseExternalAttachPtX, hoseExternalAttachPtY ), {
       lineWidth: 4, stroke: '#B3B3B3'
     } );
     this.addChild( hosePath );
@@ -295,10 +326,6 @@ define( function( require ) {
       centerX: pumpBaseWidth / 2,
       centerY: height - pumpBaseHeight - pipeConnectorHeight + 4
     } );
-    this.addChild( pipeConnectorOpening );
-    this.addChild( pumpBody );
-    this.addChild( pumpBodyOpening );
-    this.addChild( pipeConnectorPath );
 
     // Add the hose connector.
     var hoseConnectorWidth = width * HOSE_CONNECTOR_WIDTH_PROPORTION;
@@ -313,17 +340,26 @@ define( function( require ) {
     } );
     hoseConnector.setTranslation( width - hoseConnectorWidth,
       height - ( height * HOSE_CONNECTOR_VERT_POS_PROPORTION ) - hoseConnectorHeight / 2 );
-    this.addChild( hoseConnector );
     var hoseBottomConnector = new Rectangle( 0, 0, hoseConnectorWidth, hoseConnectorHeight, 2, 2, {
       fill: new LinearGradient( 0, 0, 0, hoseConnectorHeight )
-          .addColorStop( 0, '#828282' )
-          .addColorStop( 0.3, '#A2A3A4' )
-          .addColorStop( 0.35, '#C6C8CA' )
-          .addColorStop( 0.4, '#BFC1C3' )
-          .addColorStop( 1, '#808080' )
+        .addColorStop( 0, '#828282' )
+        .addColorStop( 0.3, '#A2A3A4' )
+        .addColorStop( 0.35, '#C6C8CA' )
+        .addColorStop( 0.4, '#BFC1C3' )
+        .addColorStop( 1, '#808080' )
     } );
-    this.addChild( hoseBottomConnector );
     hoseBottomConnector.setTranslation( hoseToPumpAttachPtX + 1, hoseToPumpAttachPtY - hoseBottomConnector.height / 2 );
+
+    // add the pieces with the correct layering
+    this.addChild( pumpOpeningBack );
+    this.addChild( pumpShaft );
+    this.addChild( pumpHandleNode );
+    this.addChild( pipeConnectorOpening );
+    this.addChild( pumpBody );
+    this.addChild( pumpOpeningFront );
+    this.addChild( pipeConnectorPath );
+    this.addChild( hoseConnector );
+    this.addChild( hoseBottomConnector );
 
     this.mutate( options );
   }
