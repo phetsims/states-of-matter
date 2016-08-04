@@ -9,19 +9,20 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var StatesScreen = require( 'STATES_OF_MATTER/states/StatesScreen' );
-  var PhaseChangesScreen = require( 'STATES_OF_MATTER/phase-changes/PhaseChangesScreen' );
   var AtomicInteractionsScreen = require( 'STATES_OF_MATTER/atomic-interactions/AtomicInteractionsScreen' );
+  var GlobalOptionsNode = require( 'STATES_OF_MATTER/common/view/GlobalOptionsNode' );
+  var PhaseChangesScreen = require( 'STATES_OF_MATTER/phase-changes/PhaseChangesScreen' );
+  var Property = require( 'AXON/Property' );
   var Sim = require( 'JOIST/Sim' );
   var SimLauncher = require( 'JOIST/SimLauncher' );
-  var GlobalOptionsNode = require( 'STATES_OF_MATTER/common/view/GlobalOptionsNode' );
-  var Property = require( 'AXON/Property' );
+  var StatesOfMatterQueryParameters = require( 'STATES_OF_MATTER/common/StatesOfMatterQueryParameters' );
+  var StatesScreen = require( 'STATES_OF_MATTER/states/StatesScreen' );
 
   // strings
   var statesOfMatterTitleString = require( 'string!STATES_OF_MATTER/states-of-matter.title' );
   var interactionString = require( 'string!STATES_OF_MATTER/interaction' );
 
-  var projectorModeProperty = new Property( true );
+  var projectorModeProperty = new Property( StatesOfMatterQueryParameters.PROJECTOR_MODE );
 
   var simOptions = {
     credits: {
