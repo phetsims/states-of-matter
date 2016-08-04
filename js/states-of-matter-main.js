@@ -21,7 +21,7 @@ define( function( require ) {
   var statesOfMatterTitleString = require( 'string!STATES_OF_MATTER/states-of-matter.title' );
   var interactionString = require( 'string!STATES_OF_MATTER/interaction' );
 
-  var projectorModeProperty = new Property( false );
+  var projectorModeProperty = new Property( true );
 
   var simOptions = {
     credits: {
