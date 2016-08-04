@@ -39,8 +39,8 @@ define( function( require ) {
   var SHAFT_OPENING_TILT_FACTOR = 0.33;
 
   // color constants
-  var SHAFT_OPENING_FILL = '#AA8888';
-  var SHAFT_OPENING_STROKE = '#886666';
+  var SHAFT_OPENING_FILL = '#997777';
+  var SHAFT_OPENING_STROKE = '#775555';
 
   /**
    * @param {number} width  - width of the BicyclePump
@@ -228,7 +228,7 @@ define( function( require ) {
       fill: new LinearGradient( 0, 0, pumpShaftHeight, 0 )
         .addColorStop( 0, '#CBCBCB' )
         .addColorStop( 0.2, '#CACACA' ),
-      stroke: '#CFCFCF',
+      stroke: '#888888',
       pickable: false
     } );
     pumpShaft.setTranslation( (pumpBaseWidth - pumpShaftWidth) / 2,
