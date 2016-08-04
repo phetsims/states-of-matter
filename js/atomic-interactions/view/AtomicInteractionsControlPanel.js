@@ -147,7 +147,8 @@ define( function( require ) {
         fill: options.textColor,
         maxWidth: NORMAL_TEXT_MAX_WIDTH
       } );
-      var pushpinImage = new Image( pushPinImg, { scale: 0.15 } );
+      var pushpinImage = new Image( pushPinImg );
+      pushpinImage.scale( 15 / pushpinImage.height );
       var maxWidthOfTitleText = 40; // empirically determined
       var pinnedNodeText = new HBox( {
         children: [
