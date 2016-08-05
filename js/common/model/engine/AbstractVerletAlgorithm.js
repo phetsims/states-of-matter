@@ -17,7 +17,7 @@ define( function( require ) {
 
   // constants that control various aspects of the Verlet algorithm.
   var PRESSURE_CALC_WEIGHTING = 0.999;
-  var WALL_DISTANCE_THRESHOLD = 1.122462048309373017;
+  var WALL_DISTANCE_THRESHOLD = 1.122462048309373017; // honestly, I have no idea where this value came from
   var SAFE_INTER_MOLECULE_DISTANCE = 2.0;
 
   // Pressure at which explosion of the container will occur.  This is currently set so that container blows roughly
@@ -71,9 +71,8 @@ define( function( require ) {
           // Close enough to the left wall to feel the force.
           if ( xPos < minDistance ) {
             if ( ( xPos < 0 ) && ( this.multipleParticleModel.isExploded ) ) {
-              // The particle is outside the container after the
-              // container has exploded, so don't let the walls
-              // exert any force.
+              // The particle is outside the container after the container has exploded, so don't let the walls exert
+              // any force.
               xPos = Number.POSITIVE_INFINITY;
             }
             else {
@@ -89,9 +88,8 @@ define( function( require ) {
           distance = containerWidth - xPos;
           if ( distance < minDistance ) {
             if ( ( distance < 0 ) && ( this.multipleParticleModel.isExploded ) ) {
-              // The particle is outside the container after the
-              // container has exploded, so don't let the walls
-              // exert any force.
+              // The particle is outside the container after the container has exploded, so don't let the walls exert
+              // any force.
               xPos = Number.POSITIVE_INFINITY;
             }
             else {
@@ -133,12 +131,10 @@ define( function( require ) {
     },
 
     /**
-     * Update the safety status of any molecules that may have previously been
-     * designated as unsafe.  An "unsafe" molecule is one that was injected
-     * into the container and was found to be so close to one or more of the
-     * other molecules that if its interaction forces were calculated, it
-     * would be given a ridiculously large amount of kinetic energy that could
-     * end up launching it out of the container.
+     * Update the safety status of any molecules that may have previously been designated as unsafe.  An "unsafe"
+     * molecule is one that was injected into the container and was found to be so close to one or more of the other
+     * molecules that if its interaction forces were calculated, it would be given a ridiculously large amount of
+     * kinetic energy that could end up launching it out of the container.
      * @protected
      */
     updateMoleculeSafety: function() {
@@ -164,8 +160,7 @@ define( function( require ) {
 
         var moleculeIsUnsafe = false;
 
-        // Find out if this molecule is still too close to all the "safe"
-        // molecules to become safe itself.
+        // Find out if this molecule is still too close to all the "safe" molecules to become safe itself.
         for ( var j = 0; j < numberOfSafeMolecules; j++ ) {
           if ( moleculeCenterOfMassPositions[ i ].distance( moleculeCenterOfMassPositions[ j ] ) <
                SAFE_INTER_MOLECULE_DISTANCE ) {
@@ -175,15 +170,12 @@ define( function( require ) {
         }
 
         if ( !moleculeIsUnsafe ) {
-          // The molecule just tested was safe, so adjust the arrays
-          // accordingly.
+          // The molecule just tested was safe, so adjust the arrays accordingly.
           if ( i !== numberOfSafeMolecules ) {
-            // There is at least one unsafe atom/molecule in front of
-            // this one in the arrays, so some swapping must be done
-            // before the number of safe atoms can be incremented.
+            // There is at least one unsafe atom/molecule in front of this one in the arrays, so some swapping must be
+            // done before the number of safe atoms can be incremented.
 
-            // Swap the atoms that comprise the safe molecules with the
-            // first unsafe one.
+            // Swap the atoms that comprise the safe molecules with the first unsafe one.
             var tempAtomPosition;
             for ( j = 0; j < atomsPerMolecule; j++ ) {
               tempAtomPosition = atomPositions[ ( numberOfSafeMolecules * atomsPerMolecule ) + j ];
@@ -223,23 +215,23 @@ define( function( require ) {
     },
 
     setScaledEpsilon: function() {
-      // In the base class this just issues a warning and has no effect.
-      console.log( 'Warning: Setting epsilon is not implemented for this class, request ignored.' );
+      // This should be implemented in descendant classes.
+      assert && assert( false, 'Setting epsilon is not implemented for this class' );
     },
 
     /**
-     * @public
      * @returns {number}
+     * @public
      */
     getScaledEpsilon: function() {
-      // In the base class this just issues a warning and returns 0.
-      console.log( 'Warning: Getting scaled epsilon is not implemented for this class, returning zero.' );
+      // This should be implemented in descendant classes.
+      assert && assert( false, 'Getting scaled epsilon is not implemented for this class' );
       return 0;
     },
 
     /**
-     *  @public
      * @param {number} pressureZoneWallForce
+     * @public
      */
     updatePressure: function( pressureZoneWallForce ) {
       if ( this.multipleParticleModel.isExploded ) {
@@ -249,12 +241,13 @@ define( function( require ) {
       else {
         this.pressure = ( 1 - PRESSURE_CALC_WEIGHTING ) *
                         ( pressureZoneWallForce /
-                          ( this.multipleParticleModel.normalizedContainerWidth + this.multipleParticleModel.normalizedContainerHeight ) ) +
-                        PRESSURE_CALC_WEIGHTING * this.pressure;
+                          ( this.multipleParticleModel.normalizedContainerWidth +
+                            this.multipleParticleModel.normalizedContainerHeight
+                          )
+                        ) + PRESSURE_CALC_WEIGHTING * this.pressure;
 
         if ( ( this.pressure > EXPLOSION_PRESSURE ) && !this.multipleParticleModel.isExploded ) {
           // The pressure has reached the point where the container should explode, so blow 'er up.
-          console.log( 'this.pressure = ' + this.pressure );
           this.multipleParticleModel.setContainerExploded( true );
         }
       }
@@ -263,15 +256,13 @@ define( function( require ) {
     // static final
     PARTICLE_INTERACTION_DISTANCE_THRESH_SQRD: 6.25,
 
-    // Parameters that control the increasing of gravity as the temperature
-    // approaches zero.  This is done to counteract the tendency of the
-    // thermostat to slow falling molecules noticeably at low temps.  This is
-    // a "hollywooding" thing.
+    // Parameters that control the increasing of gravity as the temperature approaches zero.  This is done to counteract
+    // the tendency of the thermostat to slow falling molecules noticeably at low temps.  This is a "hollywooding" thing.
     TEMPERATURE_BELOW_WHICH_GRAVITY_INCREASES: 0.10,
     LOW_TEMPERATURE_GRAVITY_INCREASE_RATE: 50,
 
-    // Constant used to limit how close the atoms are allowed to get to one
-    // another so that we don't end up getting crazy big forces.
+    // Constant used to limit how close the atoms are allowed to get to one another so that we don't end up getting
+    // crazy big forces.
     MIN_DISTANCE_SQUARED: 0.7225
   } );
 } );
