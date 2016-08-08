@@ -15,7 +15,6 @@ define( function( require ) {
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   /**
-   *
    * @param {number} x  - x position in picometers
    * @param {number} y  - y position in picometers
    * @param {number} radius - radius  of the atom in picometers
