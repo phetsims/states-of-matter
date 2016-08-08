@@ -597,8 +597,8 @@ define( function( require ) {
 
           // Add atoms to model set.
           this.particles.add( new OxygenAtom( 0, 0 ) );
-          this.particles.add( new HydrogenAtom( 0, 0, false ) );
-          this.particles.add( new HydrogenAtom( 0, 0, false ) );
+          this.particles.add( new HydrogenAtom( 0, 0, true ) );
+          this.particles.add( new HydrogenAtom( 0, 0, Math.random() > 0.5 ) );
         }
 
         // If the particles are at absolute zero and additional particles are added, this bumps up the temperature,
@@ -1017,13 +1017,11 @@ define( function( require ) {
 
         // Add atoms to model set.
         this.particles.add( new OxygenAtom( 0, 0 ) );
-        this.particles.add( new HydrogenAtom( 0, 0, false ) );
+        this.particles.add( new HydrogenAtom( 0, 0, true ) );
 
-        // For the sake of making water actually crystallize, we have a
-        // proportion of the hydrogen atoms be of a different type.  There
-        // is more on this in the algorithm implementation for water.
-        var atom = ( i % 2 === 0 ) ? new HydrogenAtom( 0, 0, false ) : new HydrogenAtom( 0, 0, true );
-        this.particles.add( atom );
+        // In order to look more varied, some of the hydrogen atoms are set up to render behing the oxygen atom and
+        // some to render in front of it.
+        this.particles.add( new HydrogenAtom( 0, 0, ( i % 2 === 0 ) ) );
       }
       // Initialize the particle positions according the to requested phase.
       this.setPhase( phase );

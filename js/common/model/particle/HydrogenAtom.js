@@ -24,12 +24,12 @@ define( function( require ) {
   /**
    * @param {number} x - atom x position in picometers
    * @param {number} y - atom y position in picometers
-   * @param {boolean} layerFlag - flag which says whether it has to be in the front or at the back of oxygen. It replaces the Hydrogen2 File
+   * @param {boolean} renderBelowOxygen - flag which says whether it has to be in the front or at the back of oxygen
    * @constructor
    */
-  function HydrogenAtom( x, y, layerFlag ) {
+  function HydrogenAtom( x, y, renderBelowOxygen ) {
     StatesOfMatterAtom.call( this, x, y, RADIUS, MASS, StatesOfMatterConstants.HYDROGEN_COLOR );
-    this.layerFlag = layerFlag;
+    this.renderBelowOxygen = renderBelowOxygen;
   }
 
   statesOfMatter.register( 'HydrogenAtom', HydrogenAtom );

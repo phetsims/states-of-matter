@@ -14,6 +14,10 @@ define( function( require ) {
   var HydrogenAtom = require( 'STATES_OF_MATTER/common/model/particle/HydrogenAtom' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var StatesOfMatterColorProfile = require( 'STATES_OF_MATTER/common/view/StatesOfMatterColorProfile' );
+  var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
+
+  // constants
+  var TWO_PI_RADIANS = Math.PI * 2;
 
   /**
    * A particle layer rendered on canvas
@@ -24,14 +28,14 @@ define( function( require ) {
    */
   function ParticleCanvasNode( particles, modelViewTransform, options ) {
 
+    var self = this;
     this.particles = particles;
     this.modelViewTransform = modelViewTransform;
     CanvasNode.call( this, options );
     this.invalidatePaint();
 
-    var particleCanvasNode = this;
-    StatesOfMatterColorProfile.particleColorProperty.link( function( color ) {
-      particleCanvasNode.strokeColor = color.toCSS();
+    StatesOfMatterColorProfile.particleStrokeProperty.link( function( color ) {
+      self.strokeColor = color.toCSS();
     } );
     this.mutate( options );
   }
@@ -47,40 +51,53 @@ define( function( require ) {
     paintCanvas: function( context ) {
       var particle;
       var i;
+      var xPos;
+      var yPos;
+      var isParticleStrokeWhite = this.strokeColor === 'rgb(255,255,255)';
 
-      // Paint the regular hydrogen atoms first.  This is done so that when
-      // water is rendered, some of the hydrogen ends up in the back and some
-      // (the Hydrogen2) ends up in front so that there is some variation in
-      // the appearance of the molecules.
+      // the same line width is used for all rendering, so set it once here
+      context.lineWidth = 0.4;
+
+      // Paint the atoms with a flag indicating that they should be in back first first.  This is done so that when
+      // water is rendered, some of the hydrogen ends up in the back and some ends up in front so that there is
+      // variation in the appearance of the molecules.  OPTIMIZATION NOTE: At the time of this writing, it is only
+      // hydrogen atoms that will ever have this flag set, so several context values are set prior to the loop rather
+      // than inside of it.
+      context.fillStyle = StatesOfMatterConstants.HYDROGEN_COLOR;
+      context.strokeStyle = isParticleStrokeWhite ? StatesOfMatterConstants.HYDROGEN_COLOR : this.strokeColor;
+      var transformedHydrogenRadius = this.modelViewTransform.modelToViewDeltaX( HydrogenAtom.RADIUS );
+      context.beginPath();
+      var fillAndStrokeNeeded = false;
       for ( i = 0; i < this.particles.length; i++ ) {
         particle = this.particles.get( i );
-        if ( particle instanceof HydrogenAtom && !particle.layerFlag ) {
-          context.fillStyle = particle.color;
-          // if the stroke color is white then use particle color
-          context.strokeStyle = this.strokeColor === 'rgb(255,255,255)' ?
-                                particle.color : this.strokeColor;
-          context.lineWidth = 0.4;
-          context.beginPath();
-          context.arc( this.modelViewTransform.modelToViewX( particle.positionProperty.get().x ),
-            this.modelViewTransform.modelToViewY( particle.positionProperty.get().y ),
-            this.modelViewTransform.modelToViewDeltaX( particle.radius ), 0, 2 * Math.PI, true );
-          context.fill();
-          context.stroke();
+        if ( particle.renderBelowOxygen ) {
+          xPos = this.modelViewTransform.modelToViewX( particle.positionProperty.get().x );
+          yPos = this.modelViewTransform.modelToViewY( particle.positionProperty.get().y );
+          context.moveTo( xPos, yPos );
+          context.arc( xPos, yPos, transformedHydrogenRadius, 0, TWO_PI_RADIANS, true );
+          fillAndStrokeNeeded = true;
         }
       }
+      if ( fillAndStrokeNeeded ){
+        context.fill();
+        context.stroke();
+      }
 
-      // paint the regular particles
+      // paint the non-flagged particles
       for ( i = 0; i < this.particles.length; i++ ) {
         particle = this.particles.get( i );
-        if ( !( particle instanceof HydrogenAtom && !particle.layerFlag ) ) {
+        if ( !particle.renderBelowOxygen ) {
           context.fillStyle = particle.color;
-          context.strokeStyle = this.strokeColor === 'rgb(255,255,255)' ?
-                                particle.color : this.strokeColor;
-          context.lineWidth = 0.4;
+          context.strokeStyle = isParticleStrokeWhite ? particle.color : this.strokeColor;
           context.beginPath();
-          context.arc( this.modelViewTransform.modelToViewX( particle.positionProperty.get().x ),
+          context.arc(
+            this.modelViewTransform.modelToViewX( particle.positionProperty.get().x ),
             this.modelViewTransform.modelToViewY( particle.positionProperty.get().y ),
-            this.modelViewTransform.modelToViewDeltaX( particle.radius ), 0, 2 * Math.PI, true );
+            this.modelViewTransform.modelToViewDeltaX( particle.radius ),
+            0,
+            TWO_PI_RADIANS,
+            true
+          );
           context.fill();
           context.stroke();
         }

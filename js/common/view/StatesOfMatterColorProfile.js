@@ -36,7 +36,7 @@ define( function( require ) {
         default: GRAY,
         projector: BLACK
       },
-      particleColor: {
+      particleStroke: {
         default: WHITE,
         projector: BLACK
       },
