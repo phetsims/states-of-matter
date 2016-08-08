@@ -65,7 +65,7 @@ define( function( require ) {
     updateForcesAndMotion: function( timeStep ) {
 
       // Obtain references to the model data and parameters so that we can perform fast manipulations.
-      var moleculeDataSet = this.multipleParticleModel.getMoleculeDataSetRef();
+      var moleculeDataSet = this.multipleParticleModel.getMoleculeDataSetRef(); // TODO: Could this be done in constructor?
       var numberOfMolecules = moleculeDataSet.getNumberOfMolecules();
       var moleculeCenterOfMassPositions = moleculeDataSet.getMoleculeCenterOfMassPositions();
       var atomPositions = moleculeDataSet.getAtomPositions();
@@ -77,7 +77,8 @@ define( function( require ) {
       var moleculeTorques = moleculeDataSet.getMoleculeTorques();
       var nextMoleculeTorques = moleculeDataSet.getNextMoleculeTorques();
 
-      // Initialize other values that will be needed for the calculation.
+      // Initialize other values that will be needed for the calculations.
+      // TODO: Could these next two be done in constructor?
       var massInverse = 1 / moleculeDataSet.getMoleculeMass();
       var inertiaInverse = 1 / moleculeDataSet.getMoleculeRotationalInertia();
       var normalizedContainerHeight = this.multipleParticleModel.getNormalizedContainerHeight();
@@ -287,10 +288,10 @@ define( function( require ) {
         moleculeRotationRates[ i ] += timeStepHalf * ( moleculeTorques[ i ] + nextMoleculeTorques[ i ] ) *
                                       inertiaInverse;
         centersOfMassKineticEnergy += 0.5 * moleculeDataSet.getMoleculeMass() *
-                                      (Math.pow( moleculeVelocities[ i ].x, 2 ) +
-                                       Math.pow( moleculeVelocities[ i ].y, 2 ) );
+                                      moleculeVelocities[ i ].x * moleculeVelocities[ i ].x +
+                                      moleculeVelocities[ i ].y * moleculeVelocities[ i ].y;
         rotationalKineticEnergy += 0.5 * moleculeDataSet.getMoleculeRotationalInertia() *
-                                   Math.pow( moleculeRotationRates[ i ], 2 );
+                                   moleculeRotationRates[ i ] * moleculeRotationRates[ i ];
 
         // Move the newly calculated forces and torques into the current spots.
         moleculeForces[ i ].setXY( nextMoleculeForces[ i ].x, nextMoleculeForces[ i ].y );

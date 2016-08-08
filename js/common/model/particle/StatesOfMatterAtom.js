@@ -43,6 +43,7 @@ define( function( require ) {
      * @constructor
      */
     setPosition: function( x, y ) {
+      // do the following instead of allocating a new vector for better performance
       this.positionProperty.value.setXY( x, y );
       this.positionProperty._notifyObservers();
     },
