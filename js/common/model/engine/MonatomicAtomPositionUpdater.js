@@ -18,11 +18,11 @@ define( function( require ) {
   var MonatomicAtomPositionUpdater = {
     /**
      * @param {MoleculeForceAndMotionDataSet} moleculeDataSet
-     * @param {Number} timeStep
      * @param {Number} offset
      * @public
      */
-    updateAtomPositions: function( moleculeDataSet, timeStep, offset ) {
+    updateAtomPositions: function( moleculeDataSet, offset ) {
+
       // Make sure this is not being used on an inappropriate data set.
       assert && assert( moleculeDataSet.atomsPerMolecule === 1 );
 

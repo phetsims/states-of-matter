@@ -24,9 +24,8 @@ define( function( require ) {
     /**
      * @public
      * @param {MoleculeForceAndMotionDataSet} moleculeDataSet
-     * @param {Number} timeStep
      */
-    updateAtomPositions: function( moleculeDataSet, timeStep ) {
+    updateAtomPositions: function( moleculeDataSet ) {
 
       // Make sure this is not being used on an inappropriate data set.
       assert && assert( moleculeDataSet.atomsPerMolecule === 2 );

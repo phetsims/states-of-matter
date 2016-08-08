@@ -111,7 +111,7 @@ define( function( require ) {
       }
 
       // Synchronize the molecule and atom positions.
-      this.positionUpdater.updateAtomPositions( moleculeDataSet, timeStep, offset );
+      this.positionUpdater.updateAtomPositions( moleculeDataSet, offset );
 
       // Calculate the forces exerted on the particles by the container walls and by gravity.
       var pressureZoneWallForce = 0;

@@ -1,8 +1,8 @@
 // Copyright 2014-2015, University of Colorado Boulder
 
 /**
- * This class updates the positions of atoms in a water molecule based on the
- * position and rotation information for the molecule.
+ * This class updates the positions of atoms in a water molecule based on the position and rotation information for the
+ * molecule.
  *
  * @author John Blanco
  * @author Siddhartha Chinthapally (Actual Concepts)
@@ -22,12 +22,14 @@ define( function( require ) {
 
   // static object (no constructor)
   var WaterAtomPositionUpdater = {
+
     /**
      * @public
      * @param {MoleculeForceAndMotionDataSet} moleculeDataSet
      * @param {Number} timeStep
      */
-    updateAtomPositions: function( moleculeDataSet, timeStep ) {
+    updateAtomPositions: function( moleculeDataSet ) {
+
       // Make sure this is not being used on an inappropriate data set.
       assert && assert( moleculeDataSet.getAtomsPerMolecule() === 3 );
 
@@ -43,8 +45,8 @@ define( function( require ) {
       var cosineTheta;
       var sineTheta;
 
-      // Loop through all molecules and position the individual atoms based on
-      // center of gravity position, molecule structure, and rotational angle.
+      // Loop through all molecules and position the individual atoms based on center of gravity position, molecule
+      // structure, and rotational angle.
       for ( var i = 0; i < moleculeDataSet.getNumberOfMolecules(); i++ ) {
         insideContainers[ i ] = this.checkInContainer( moleculeCenterOfMassPositions[ i ],
           StatesOfMatterConstants.CONTAINER_LEFT_WALL,
@@ -92,5 +94,4 @@ define( function( require ) {
   statesOfMatter.register( 'WaterAtomPositionUpdater', WaterAtomPositionUpdater );
 
   return WaterAtomPositionUpdater;
-
 } );

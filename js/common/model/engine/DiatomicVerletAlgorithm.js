@@ -94,7 +94,7 @@ define( function( require ) {
         moleculeRotationAngles[ i ] += ( timeStep * moleculeRotationRates[ i ]) +
                                        ( timeStepSqrHalf * moleculeTorques[ i ] * inertiaInverse);
       }
-      this.positionUpdater.updateAtomPositions( moleculeDataSet, timeStep );
+      this.positionUpdater.updateAtomPositions( moleculeDataSet );
 
       // Calculate the force from the walls.  This force is assumed to act
       // on the center of mass, so there is no torque.

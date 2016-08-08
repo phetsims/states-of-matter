@@ -73,11 +73,10 @@ define( function( require ) {
       this.multipleParticleModel.moleculeDataSet.numberOfSafeMolecules = moleculeDataSet.getNumberOfMolecules();
 
       // Sync up the atom positions with the molecule positions.
-      this.positionUpdater.updateAtomPositions( moleculeDataSet, 0.016 );
+      this.positionUpdater.updateAtomPositions( moleculeDataSet );
 
-      // Step the model a number of times in order to prevent the particles
-      // from looking too organized.  The number of steps was empirically
-      // determined.
+      // Step the model a number of times in order to prevent the particles from looking too organized.  The number of
+      // steps was empirically determined.
       for ( var i = 0; i < postChangeModelSteps; i++ ) {
         this.multipleParticleModel.stepInternal( 0.016 );
       }
