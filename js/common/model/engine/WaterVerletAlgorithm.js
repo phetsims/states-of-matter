@@ -1,9 +1,8 @@
 // Copyright 2014-2015, University of Colorado Boulder
 
 /**
- * Implementation of the Verlet algorithm for simulating molecular interaction
- * based on the Lennard-Jones potential.  This version is used specifically
- * for simulating water, i.e. H2O.
+ * Implementation of the Verlet algorithm for simulating molecular interaction based on the Lennard-Jones potential.
+ * This version is used specifically for simulating water, i.e. H2O.
  *
  * @author John Blanco
  * @author Siddhartha Chinthapally (Actual Concepts)
@@ -59,15 +58,13 @@ define( function( require ) {
     },
 
     /**
-     * Update the motion of the particles and the forces that are acting upon
-     * them.  This is the heart of this class, and it is here that the actual
-     * Verlet algorithm is contained.
+     * Update the motion of the particles and the forces that are acting upon them.  This is the heart of this class,
+     * and it is here that the actual Verlet algorithm is contained.
      * @public
      */
     updateForcesAndMotion: function( timeStep ) {
 
-      // Obtain references to the model data and parameters so that we can
-      // perform fast manipulations.
+      // Obtain references to the model data and parameters so that we can perform fast manipulations.
       var moleculeDataSet = this.multipleParticleModel.getMoleculeDataSetRef();
       var numberOfMolecules = moleculeDataSet.getNumberOfMolecules();
       var moleculeCenterOfMassPositions = moleculeDataSet.getMoleculeCenterOfMassPositions();
@@ -93,17 +90,13 @@ define( function( require ) {
       // Verify that this is being used on an appropriate data set.
       assert && assert( moleculeDataSet.getAtomsPerMolecule() === 3 );
 
-      // Set up the values for the charges that will be used when
-      // calculating the coloumb interactions.
+      // Set up the values for the charges that will be used when calculating the coloumb interactions.
       var q0;
       var temperatureFactor;
 
-      // A scaling factor is added here for the repulsive
-      // portion of the Lennard-Jones force.  The idea is that
-      // the force goes up at lower temperatures in order to
-      // make the ice appear more spacious.  This is not real
-      // physics, it is "hollywooding" in order to get the
-      // crystalline behavior we need for ice.
+      // A scaling factor is added here for the repulsive portion of the Lennard-Jones force.  The idea is that the
+      // force goes up at lower temperatures in order to make the ice appear more spacious.  This is not real physics,
+      // it is "hollywooding" in order to get the crystalline behavior we need for ice.
       var repulsiveForceScalingFactor;
       var r2inv;
       var r6inv;
@@ -111,19 +104,16 @@ define( function( require ) {
 
       if ( temperatureSetPoint < WATER_FULLY_FROZEN_TEMPERATURE ) {
 
-        // Use stronger electrostatic forces in order to create more of
-        // a crystal structure.
+        // Use stronger electrostatic forces in order to create more of a crystal structure.
         q0 = WATER_FULLY_FROZEN_ELECTROSTATIC_FORCE;
       }
       else if ( temperatureSetPoint > WATER_FULLY_MELTED_TEMPERATURE ) {
 
-        // Use weaker electrostatic forces in order to create more of an
-        // appearance of liquid.
+        // Use weaker electrostatic forces in order to create more of an appearance of liquid.
         q0 = WATER_FULLY_MELTED_ELECTROSTATIC_FORCE;
       }
       else {
-        // We are somewhere in between the temperature for being fully
-        // melted or frozen, so scale accordingly.
+        // We are somewhere in between the temperature for being fully melted or frozen, so scale accordingly.
         temperatureFactor = ( temperatureSetPoint - WATER_FULLY_FROZEN_TEMPERATURE ) /
                             ( WATER_FULLY_MELTED_TEMPERATURE - WATER_FULLY_FROZEN_TEMPERATURE );
         q0 = WATER_FULLY_FROZEN_ELECTROSTATIC_FORCE -
@@ -135,7 +125,7 @@ define( function( require ) {
       // Update center of mass positions and angles for the molecules.
       for ( var i = 0; i < numberOfMolecules; i++ ) {
         var xPos = moleculeCenterOfMassPositions[ i ].x + ( timeStep * moleculeVelocities[ i ].x ) +
-                   ( timeStepSqrHalf * moleculeForces[ i ].x * massInverse);
+                   ( timeStepSqrHalf * moleculeForces[ i ].x * massInverse );
         var yPos = moleculeCenterOfMassPositions[ i ].y + ( timeStep * moleculeVelocities[ i ].y ) +
                    ( timeStepSqrHalf * moleculeForces[ i ].y * massInverse );
         moleculeCenterOfMassPositions[ i ].setXY( xPos, yPos );
@@ -144,8 +134,7 @@ define( function( require ) {
       }
       this.positionUpdater.updateAtomPositions( moleculeDataSet, timeStep );
 
-      // Calculate the force from the walls.  This force is assumed to act
-      // on the center of mass, so there is no torque.
+      // Calculate the force from the walls.  This force is assumed to act on the center of mass, so there is no torque.
       for ( i = 0; i < numberOfMolecules; i++ ) {
 
         // Clear the previous calculation's particle forces and torques.
@@ -153,18 +142,20 @@ define( function( require ) {
         nextMoleculeTorques[ i ] = 0;
 
         // Get the force values caused by the container walls.
-        this.calculateWallForce( moleculeCenterOfMassPositions[ i ], normalizedContainerWidth, normalizedContainerHeight,
-          nextMoleculeForces[ i ] );
+        this.calculateWallForce(
+          moleculeCenterOfMassPositions[ i ],
+          normalizedContainerWidth,
+          normalizedContainerHeight,
+          nextMoleculeForces[ i ]
+        );
 
-        // Accumulate this force value as part of the pressure being
-        // exerted on the walls of the container
+        // Accumulate this force value as part of the pressure being exerted on the walls of the container.
         if ( nextMoleculeForces[ i ].y < 0 ) {
           pressureZoneWallForce += -nextMoleculeForces[ i ].y;
         }
         else if ( moleculeCenterOfMassPositions[ i ].y > this.multipleParticleModel.getNormalizedContainerHeight() / 2 ) {
 
-          // If the particle bounced on one of the walls above the midpoint, add
-          // in that value to the pressure.
+          // If the particle bounced on one of the walls above the midpoint, add in that value to the pressure.
           pressureZoneWallForce += Math.abs( nextMoleculeForces[ i ].x );
         }
 
@@ -172,12 +163,12 @@ define( function( require ) {
         var gravitationalAcceleration = this.multipleParticleModel.getGravitationalAcceleration();
         if ( this.multipleParticleModel.getTemperatureSetPoint() < this.TEMPERATURE_BELOW_WHICH_GRAVITY_INCREASES ) {
 
-          // Below a certain temperature, gravity is increased to counteract some odd-looking behavior
-          // caused by the thermostat.
+          // Below a certain temperature, gravity is increased to counteract some odd-looking behavior caused by the
+          // thermostat.
           gravitationalAcceleration = gravitationalAcceleration *
-                                      ((this.TEMPERATURE_BELOW_WHICH_GRAVITY_INCREASES -
-                                        this.multipleParticleModel.getTemperatureSetPoint()) *
-                                       this.LOW_TEMPERATURE_GRAVITY_INCREASE_RATE + 1);
+                                      ( ( this.TEMPERATURE_BELOW_WHICH_GRAVITY_INCREASES -
+                                          this.multipleParticleModel.getTemperatureSetPoint() ) *
+                                        this.LOW_TEMPERATURE_GRAVITY_INCREASE_RATE + 1 );
         }
         nextMoleculeForces[ i ].setY( nextMoleculeForces[ i ].y - gravitationalAcceleration );
       }
@@ -185,8 +176,8 @@ define( function( require ) {
       // Update the pressure calculation.
       this.updatePressure( pressureZoneWallForce );
 
-      // If there are any atoms that are currently designated as "unsafe",
-      // check them to see if they can be moved into the "safe" category.
+      // If there are any atoms that are currently designated as "unsafe", check them to see if they can be moved into
+      // the "safe" category.
       if ( moleculeDataSet.getNumberOfSafeMolecules() < numberOfMolecules ) {
         this.updateMoleculeSafety();
       }
@@ -194,8 +185,8 @@ define( function( require ) {
       // Calculate the force and torque due to inter-particle interactions.
       for ( i = 0; i < moleculeDataSet.getNumberOfSafeMolecules(); i++ ) {
 
-        // Select which charges to use for this molecule.  This is part of
-        // the "hollywooding" to make the solid form appear more crystalline.
+        // Select which charges to use for this molecule.  This is part of the "hollywooding" to make the solid form
+        // appear more crystalline.
         var chargesA;
         if ( i % 2 === 0 ) {
           chargesA = normalCharges;
@@ -228,6 +219,7 @@ define( function( require ) {
             r6inv = r2inv * r2inv * r2inv;
 
             if ( temperatureSetPoint > WATER_FULLY_MELTED_TEMPERATURE ) {
+
               // No scaling of the repulsive force.
               repulsiveForceScalingFactor = 1;
             }
@@ -238,33 +230,29 @@ define( function( require ) {
             }
             else {
 
-              // We are somewhere between fully frozen and fully
-              // liquified, so adjust the scaling factor accordingly.
-              temperatureFactor = (temperatureSetPoint - WATER_FULLY_FROZEN_TEMPERATURE) /
-                                  (WATER_FULLY_MELTED_TEMPERATURE - WATER_FULLY_FROZEN_TEMPERATURE);
+              // We are somewhere between fully frozen and fully liquified, so adjust the scaling factor accordingly.
+              temperatureFactor = ( temperatureSetPoint - WATER_FULLY_FROZEN_TEMPERATURE) /
+                                  ( WATER_FULLY_MELTED_TEMPERATURE - WATER_FULLY_FROZEN_TEMPERATURE );
               repulsiveForceScalingFactor = MAX_REPULSIVE_SCALING_FACTOR_FOR_WATER -
-                                            (temperatureFactor * (MAX_REPULSIVE_SCALING_FACTOR_FOR_WATER - 1));
+                                            ( temperatureFactor * (MAX_REPULSIVE_SCALING_FACTOR_FOR_WATER - 1 ) );
             }
-            forceScalar = 48 * r2inv * r6inv * ((r6inv * repulsiveForceScalingFactor) - 0.5);
+            forceScalar = 48 * r2inv * r6inv * ( ( r6inv * repulsiveForceScalingFactor) - 0.5 );
             this.force.setX( dx * forceScalar );
             this.force.setY( dy * forceScalar );
             nextMoleculeForces[ i ].add( this.force );
             nextMoleculeForces[ j ].subtract( this.force );
-            this.potentialEnergy += 4 * r6inv * (r6inv - 1) + 0.016316891136;
+            this.potentialEnergy += 4 * r6inv * ( r6inv - 1 ) + 0.016316891136;
           }
           if ( distanceSquared < this.PARTICLE_INTERACTION_DISTANCE_THRESH_SQRD ) {
 
-            // Calculate coulomb-like interactions between atoms on
-            // individual water molecules.
+            // Calculate coulomb-like interactions between atoms on individual water molecules.
             for ( var ii = 0; ii < 3; ii++ ) {
               for ( var jj = 0; jj < 3; jj++ ) {
-                if ( ((3 * i + ii + 1) % 6 === 0) || ((3 * j + jj + 1) % 6 === 0) ) {
+                if ( ( ( 3 * i + ii + 1 ) % 6 === 0 ) || ( ( 3 * j + jj + 1 ) % 6 === 0 ) ) {
 
-                  // This is a hydrogen atom that is not going to be included
-                  // in the calculation in order to try to create a more
-                  // crystalline solid.  This is part of the "hollywooding"
-                  // that we do to create a better looking water crystal at
-                  // low temperatures.
+                  // This is a hydrogen atom that is not going to be included in the calculation in order to try to
+                  // create a more crystalline solid.  This is part of the "hollywooding" that we do to create a better
+                  // looking water crystal at low temperatures.
                   continue;
                 }
                 dx = atomPositions[ 3 * i + ii ].x - atomPositions[ 3 * j + jj ].x;
@@ -289,20 +277,18 @@ define( function( require ) {
         }
       }
 
-      // Update the velocities and rotation rates and calculate kinetic
-      // energy
+      // Update the velocities and rotation rates and calculate kinetic energy.
       var centersOfMassKineticEnergy = 0;
       var rotationalKineticEnergy = 0;
       for ( i = 0; i < numberOfMolecules; i++ ) {
-        var xVel = moleculeVelocities[ i ].x + timeStepHalf *
-                                               (moleculeForces[ i ].x + nextMoleculeForces[ i ].x) * massInverse;
-        var yVel = moleculeVelocities[ i ].y + timeStepHalf * (moleculeForces[ i ].y +
-                                                                      nextMoleculeForces[ i ].y) * massInverse;
+        var xVel = moleculeVelocities[ i ].x + timeStepHalf * ( moleculeForces[ i ].x + nextMoleculeForces[ i ].x ) * massInverse;
+        var yVel = moleculeVelocities[ i ].y + timeStepHalf * ( moleculeForces[ i ].y + nextMoleculeForces[ i ].y ) * massInverse;
         moleculeVelocities[ i ].setXY( xVel, yVel );
-        moleculeRotationRates[ i ] += timeStepHalf * (moleculeTorques[ i ] + nextMoleculeTorques[ i ]) *
+        moleculeRotationRates[ i ] += timeStepHalf * ( moleculeTorques[ i ] + nextMoleculeTorques[ i ] ) *
                                       inertiaInverse;
         centersOfMassKineticEnergy += 0.5 * moleculeDataSet.getMoleculeMass() *
-                                      (Math.pow( moleculeVelocities[ i ].x, 2 ) + Math.pow( moleculeVelocities[ i ].y, 2 ));
+                                      (Math.pow( moleculeVelocities[ i ].x, 2 ) +
+                                       Math.pow( moleculeVelocities[ i ].y, 2 ) );
         rotationalKineticEnergy += 0.5 * moleculeDataSet.getMoleculeRotationalInertia() *
                                    Math.pow( moleculeRotationRates[ i ], 2 );
 
