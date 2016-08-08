@@ -53,13 +53,14 @@ define( function( require ) {
   var INITIAL_TEMPERATURE = StatesOfMatterConstants.SOLID_TEMPERATURE;
   var MAX_TEMPERATURE = 50.0;
   var MIN_TEMPERATURE = 0.0001;
+  var MAX_PARTICLE_MOTION_TIME_STEP = ( 1 / 60 ) * 1.5; // empirically determined, intended to work well with a 60 fps frame rate
+  var PARTICLE_SPEED_UP_FACTOR = 4; // empirically determined to make the particles move at a speed that looks reasonable
   var INITIAL_GRAVITATIONAL_ACCEL = 0.045;
   var MAX_TEMPERATURE_CHANGE_PER_ADJUSTMENT = 0.025;
   var TICKS_PER_TEMP_ADJUSTMENT = 10;
   var MIN_INJECTED_MOLECULE_VELOCITY = 0.5;
   var MAX_INJECTED_MOLECULE_VELOCITY = 2.0;
   var MAX_INJECTED_MOLECULE_ANGLE = Math.PI * 0.8;
-  var VERLET_CALCULATIONS_PER_CLOCK_TICK = 5;
   var INJECTION_POINT_HORIZ_PROPORTION = 0.05;
   var INJECTION_POINT_VERT_PROPORTION = 0.25;
 
@@ -136,6 +137,7 @@ define( function( require ) {
     this.thermostatType = ADAPTIVE_THERMOSTAT;
     this.heightChangeCounter = 0;
     this.minModelTemperature = null;
+    this.residualTime = 0;
 
     // everything that had a listener in the java version becomes a property
     PropertySet.call( this, {
@@ -700,7 +702,7 @@ define( function( require ) {
 
     /**
      * Step the model.
-     * @public
+     * @private
      */
     stepInternal: function( dt ) {
 
@@ -712,8 +714,7 @@ define( function( require ) {
           var heightChange = this.targetContainerHeight - this.particleContainerHeight;
           if ( heightChange > 0 ) {
             // The container is growing.
-            if ( this.particleContainerHeight + heightChange <=
-                 StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT ) {
+            if ( this.particleContainerHeight + heightChange <= StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT ) {
               this.particleContainerHeight += Math.min( heightChange, MAX_PER_TICK_CONTAINER_CHANGE * dt );
             }
             else {
@@ -738,8 +739,7 @@ define( function( require ) {
         }
       }
       else {
-        // The lid is blowing off the container, so increase the container size until the lid should be well off
-        // the screen.
+        // The lid is blowing off the container, so increase the container size until the lid should be well off the screen.
         if ( this.particleContainerHeight < StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT * 3 ) {
           this.particleContainerHeight += MAX_PER_TICK_CONTAINER_EXPANSION_EXPLODED;
         }
@@ -748,17 +748,42 @@ define( function( require ) {
       // Record the pressure to see if it changes.
       var pressureBeforeAlgorithm = this.getModelPressure();
 
-      var normDt = Math.min( 0.02, dt ); // normalize the dt as model cannot handle long dt's
+      // Calculate the amount of time to advance the particle engine.  This is based purely on aesthetics - we looked at
+      // the particle motion and tweaked the multiplier until we felt that it looked good.
+      var particleMotionAdvancementTime = dt * PARTICLE_SPEED_UP_FACTOR;
 
-      // Execute the Verlet algorithm in order to determine the new particle positions.  The algorithm may be run
-      // several times for each time step.
-      for ( var i = 0; i < VERLET_CALCULATIONS_PER_CLOCK_TICK; i++ ) {
-        // is the container is exploded reduce the speed of particles
+      // This next line of code was added specifically for making the animation reasonably smooth on iPads.  It limits
+      // the maximum particle advancement time so an empirically determined value that the iPads could handle, and
+      // essentially causes the particles to slow down, but the animation still remains smooth, which was decided to be
+      // the best tradeoff.
+      particleMotionAdvancementTime = Math.min( particleMotionAdvancementTime, 0.1 );
+
+      // Determine the number of model steps and the size of the time step
+      var particleMotionTimeStep;
+      var numParticleEngineSteps = 1;
+      if ( particleMotionAdvancementTime > MAX_PARTICLE_MOTION_TIME_STEP ){
+        particleMotionTimeStep = MAX_PARTICLE_MOTION_TIME_STEP;
+        numParticleEngineSteps = Math.floor( particleMotionAdvancementTime / MAX_PARTICLE_MOTION_TIME_STEP );
+        this.residualTime = particleMotionAdvancementTime - ( numParticleEngineSteps * particleMotionTimeStep );
+      }
+      else{
+        particleMotionTimeStep = particleMotionAdvancementTime;
+      }
+
+      if ( this.residualTime > particleMotionTimeStep ){
+        numParticleEngineSteps++;
+        this.residualTime -= particleMotionTimeStep;
+      }
+
+      // Execute the Verlet algorithm, a.k.a. the "particle engine", in order to determine the new particle positions.
+      for ( var i = 0; i < numParticleEngineSteps; i++ ) {
+
+        // if the container is exploded reduce the speed of particles
+        // TODO: Is this really needed?  If so, comment should explain why.
         if( this.isExploded ){
-          normDt = normDt * 0.9;
+          particleMotionTimeStep = particleMotionTimeStep * 0.9;
         }
-        this.moleculeForceAndMotionCalculator.updateForcesAndMotion( normDt );
-
+        this.moleculeForceAndMotionCalculator.updateForcesAndMotion( particleMotionTimeStep );
       }
       this.runThermostat();
 
@@ -794,7 +819,51 @@ define( function( require ) {
       }
     },
 
+    /**
+     * main step function
+     * @param {number} dt
+     * @public
+     */
     step: function( dt ) {
+
+      if ( window.phet.chipper.getQueryParameters().hasOwnProperty( 'somProfiler' ) ){
+        if ( this.dialogShownLastTime ){
+          this.accumulatedDt = 0;
+          this.largestDt = 0;
+          this.smallestDt = Number.POSITIVE_INFINITY;
+          this.dialogShownLastTime = false;
+          this.numDts = 0;
+          return;
+        }
+        if ( !this.largestDt || this.largestDt < dt ){
+          this.largestDt = dt;
+        }
+        if ( !this.smallestDt || this.smallestDt > dt ){
+          this.smallestDt = dt;
+        }
+        if ( !this.accumulatedDt ){
+          this.accumulatedDt = 0;
+        }
+        this.accumulatedDt += dt;
+        if ( !this.numDts ){
+          this.numDts = 0;
+        }
+        this.numDts++;
+        if ( this.accumulatedDt > 10 ){
+          alert( 'largest dt = ' + this.largestDt + '\n' +
+                 'smalles dt = ' + this.smallestDt + '\n' +
+                 'average dt = ' + ( this.accumulatedDt / this.numDts ) + '\n'
+          );
+          this.dialogShownLastTime = true;
+        }
+      }
+
+      // If the time step is excessively large, ignore it - it probably means that the user was on another tab or that
+      // the browser was hidden, and they just came back to the sim.
+      if ( dt > 0.5 ){
+        return;
+      }
+
       if ( this.isPlaying ) {
         this.stepInternal( dt );
       }
@@ -1126,9 +1195,13 @@ define( function( require ) {
       var positionMultiplier = this.particleDiameter;
       var atomPositions = this.moleculeDataSet.atomPositions;
 
-      this.particles.forEach( function( particle, index ) {
-        particle.setPosition( atomPositions[ index ].x * positionMultiplier, atomPositions[ index ].y * positionMultiplier );
-      } );
+      // use a C-style loop for optimal performance
+      for ( var i = 0; i < this.particles.length; i++ ){
+        this.particles.get( i ).setPosition(
+          atomPositions[ i ].x * positionMultiplier,
+          atomPositions[ i ].y * positionMultiplier
+        );
+      }
     },
 
     /**
