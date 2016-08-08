@@ -30,13 +30,12 @@ define( function( require ) {
   var pressureOverloadString = require( 'string!STATES_OF_MATTER/pressureOverload' );
   var pressureUnitsInAtmString = require( 'string!STATES_OF_MATTER/pressureUnitsInAtm' );
 
-  // Length of non-elbowed connector wrt overall diameter.
-  var CONNECTOR_LENGTH_PROPORTION = 1;
-
-  // Width of connector wrt overall diameter.
-  var CONNECTOR_WIDTH_PROPORTION = 0.2;
-
+  // constants
+  var CONNECTOR_LENGTH_PROPORTION = 1; // Length of non-elbowed connector wrt overall diameter.
+  var CONNECTOR_WIDTH_PROPORTION = 0.2; // Width of connector wrt overall diameter.
   var MAX_PRESSURE = 200; // in atm units
+  var TIME_BETWEEN_UPDATES = 0.5; // in seconds
+
   /**
    * @param {MultipleParticleModel} multipleParticleModel - model  of the simulation
    * @constructor
@@ -49,6 +48,7 @@ define( function( require ) {
 
     this.elbowEnabled = false;
     this.elbowHeight = 0;
+    this.timeSinceLastUpdate = Number.POSITIVE_INFINITY;
 
     var gaugeNode = new GaugeNode( multipleParticleModel.pressureProperty, pressureString,
       { min: 0, max: MAX_PRESSURE }, { scale: 0.5, radius: 80, backgroundLineWidth: 3 } );
@@ -103,18 +103,26 @@ define( function( require ) {
 
   return inherit( Node, DialGaugeNode, {
 
-    step: function(){
-      if ( this.pressureChanged ) {
-        if ( this.multipleParticleModel.getPressureInAtmospheres() < MAX_PRESSURE ) {
-          this.textualReadout.setText( Util.toFixed( this.multipleParticleModel.getPressureInAtmospheres(), 2 ) + ' ' + pressureUnitsInAtmString );
-          this.textualReadout.fill = 'black';
+    step: function( dt ){
+
+      this.timeSinceLastUpdate += dt;
+
+      if ( this.timeSinceLastUpdate > TIME_BETWEEN_UPDATES ) {
+
+        if ( this.pressureChanged ) {
+          if ( this.multipleParticleModel.getPressureInAtmospheres() < MAX_PRESSURE ) {
+            this.textualReadout.setText( Util.toFixed( this.multipleParticleModel.getPressureInAtmospheres(), 2 ) + ' ' + pressureUnitsInAtmString );
+            this.textualReadout.fill = 'black';
+          }
+          else {
+            this.textualReadout.setText( pressureOverloadString );
+            this.textualReadout.fill = PhetColorScheme.RED_COLORBLIND;
+          }
+          this.textualReadout.center = this.textualReadoutBoxShape.center;
+          this.pressureChanged = false;
         }
-        else {
-          this.textualReadout.setText( pressureOverloadString );
-          this.textualReadout.fill = PhetColorScheme.RED_COLORBLIND;
-        }
-        this.textualReadout.center = this.textualReadoutBoxShape.center;
-        this.pressureChanged = false;
+
+        this.timeSinceLastUpdate = 0;
       }
     },
 

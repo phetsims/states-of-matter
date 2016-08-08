@@ -280,10 +280,10 @@ define( function( require ) {
   return inherit( ScreenView, PhaseChangesScreenView, {
 
     // @public
-    step: function() {
+    step: function( dt ) {
       this.particlesLayer.step();
       this.compositeThermometerNode.step();
-      this.particleContainerNode.pressureMeter.step();
+      this.particleContainerNode.pressureMeter.step( dt );
       if ( this.particleContainerHeightPropertyChanged ){
         this.compositeThermometerNode.updatePositionAndOrientation();
         this.particleContainerNode.handleContainerSizeChanged();
