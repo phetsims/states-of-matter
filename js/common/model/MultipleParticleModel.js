@@ -756,7 +756,7 @@ define( function( require ) {
       // the maximum particle advancement time so an empirically determined value that the iPads could handle, and
       // essentially causes the particles to slow down, but the animation still remains smooth, which was decided to be
       // the best tradeoff.
-      particleMotionAdvancementTime = Math.min( particleMotionAdvancementTime, 0.1 );
+      //particleMotionAdvancementTime = Math.min( particleMotionAdvancementTime, 0.1 );
 
       // Determine the number of model steps and the size of the time step
       var particleMotionTimeStep;
