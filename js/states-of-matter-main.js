@@ -29,7 +29,7 @@ define( function( require ) {
     credits: {
       leadDesign: 'Paul Beale, Yuen-ying Carpenter, Sarah McKagan, Emily Moore,\nNoah Podolefsky, Amy Rouinfar',
       softwareDevelopment: 'John Blanco, Aadish Gupta',
-      team: 'Wendy Adams, Jack Barbera, Kelly Lancaster, Ariel Paul, Kathy Perkins',
+      team: 'Wendy Adams, Jack Barbera, Amy Hanson, Kelly Lancaster, Ariel Paul, Kathy Perkins',
       qualityAssurance: 'Steele Dalton, Amanda Davis, Oliver Orejola, Benjamin Roberts,\nBryan Yoelin',
       thanks: 'Thanks to Actual Concepts for working with the PhET development team\nto convert this simulation to HTML5.'
     },
