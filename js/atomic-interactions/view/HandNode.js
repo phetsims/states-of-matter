@@ -5,25 +5,30 @@
  * fingers folded.
  *
  * @author Siddhartha Chinthapally (Actual Concepts)
+ * @author John Blanco
  */
 define( function( require ) {
   'use strict';
 
   // modules
   var inherit = require( 'PHET_CORE/inherit' );
+  var Image = require( 'SCENERY/nodes/Image' );
   var Node = require( 'SCENERY/nodes/Node' );
-  var Path = require( 'SCENERY/nodes/Path' );
-  var Shape = require( 'KITE/Shape' );
   var SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
+  // images
+  var handImage = require( 'image!STATES_OF_MATTER/hand.png' );
+
+  // constants
+  var WIDTH = 80; // empirically determined to look good
+
   /***
-   *
    * @param {DualAtomModel} dualAtomModel - model of the atomic interactions screen
    * @param {StatesOfMatterAtom} particle - model of the atom that is draggable
    * @param {ModelViewTransform2} modelViewTransform to convert between model and view co-ordinates
-   * @param {number} minX - grabbable particle min x position // view
-   * @param {number} maxX - grabbable particle max x position // view
+   * @param {number} minX - grabbable particle min x position
+   * @param {number} maxX - grabbable particle max x position
    * @constructor
    */
   function HandNode( dualAtomModel, particle, modelViewTransform, minX, maxX ) {
@@ -32,28 +37,7 @@ define( function( require ) {
     var handNode = this;
     this.minX = minX;
     this.maxX = maxX;
-    var handShape = new Path( new Shape()
-      .moveTo( 11, 67 )
-      .quadraticCurveTo( 0, 58, 12, 54 ) //thumb round
-      .quadraticCurveTo( 26, 57, 42, 63 ) //thumb right
-      .quadraticCurveTo( 24, 36, 9, 14 ) //index left
-      .quadraticCurveTo( 1, 7, 12, 3 ) //index left round
-      .quadraticCurveTo( 20, 0, 24, 6 ) //index right round
-      .quadraticCurveTo( 29, 13, 38, 23 ) //index right
-      .quadraticCurveTo( 50, 14, 62, 22 ) //middle round
-      .quadraticCurveTo( 74, 14, 84, 23 ) //ring round
-      .quadraticCurveTo( 98, 15, 104, 24 ) //baby round
-      .quadraticCurveTo( 116, 38, 128, 58 ) //hand right
-      .quadraticCurveTo( 140, 75, 125, 87 ) //hand right round
-      .quadraticCurveTo( 100, 105, 76, 97 ) //hand left round
-      .quadraticCurveTo( 50, 84, 13, 68 ) //hand left
-      .close(), {
-      lineWidth: 1,
-      stroke: 'black',
-      fill: 'white',
-      scale: 0.7
-    } );
-    this.addChild( handShape );
+    this.addChild( new Image( handImage, { minWidth: WIDTH, maxWidth: WIDTH } ) );
     var startDragX;
     var endDragX;
 
