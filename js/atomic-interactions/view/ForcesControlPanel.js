@@ -33,9 +33,10 @@ define( function( require ) {
   var vanderwaalsString = require( 'string!STATES_OF_MATTER/vanderwaals' );
   var electronOverlapString = require( 'string!STATES_OF_MATTER/electronOverlap' );
 
-  //constants
+  // constants
   var TEXT_LABEL_MAX_WIDTH = 130; // max width of text label in the panel
   var RADIO_BUTTON_RADIUS = 6;
+  var ICON_PADDING = 25; // empirically determined to put the icons in a good position on the panel
 
   /**
    * @param {Property<string>} forcesProperty that determines which forces to display
@@ -118,9 +119,9 @@ define( function( require ) {
     // compute the maximum item width
     var widestItem = _.max( [ hideForcesText, totalForceText, attractiveText, vanderwaalsText, repulsiveText,
       electronOverlapText ], function( item ) {
-      return item.label.width + ( ( item.icon ) ? item.icon.width : 0 );
+      return item.label.width + ( ( item.icon ) ? item.icon.width + ICON_PADDING : 0 );
     } );
-    var maxWidth = widestItem.label.width + ( ( widestItem.icon ) ? widestItem.icon.width : 0);
+    var maxWidth = widestItem.label.width + ( ( widestItem.icon ) ? widestItem.icon.width + ICON_PADDING : 0 );
 
     // inserts a spacing node (HStrut) so that the text, space and image together occupy a certain fixed width
     var createConsistentlySpacedLabel = function( labelSpec ) {
