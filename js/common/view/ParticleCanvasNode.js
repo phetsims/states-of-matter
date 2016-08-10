@@ -32,6 +32,11 @@ define( function( require ) {
     this.particles = particles;
     this.modelViewTransform = modelViewTransform;
     CanvasNode.call( this, options );
+
+    // pre-calculate a couple of values so that they don't need to be recalculated on each paint
+    this.hydrogenViewRadius = this.modelViewTransform.modelToViewDeltaX( HydrogenAtom.RADIUS );
+
+    // initiate the first paint
     this.invalidatePaint();
 
     StatesOfMatterColorProfile.particleStrokeProperty.link( function( color ) {
@@ -65,7 +70,6 @@ define( function( require ) {
       // than inside of it.
       context.fillStyle = StatesOfMatterConstants.HYDROGEN_COLOR;
       context.strokeStyle = isParticleStrokeWhite ? StatesOfMatterConstants.HYDROGEN_COLOR : this.strokeColor;
-      var transformedHydrogenRadius = this.modelViewTransform.modelToViewDeltaX( HydrogenAtom.RADIUS );
       context.beginPath();
       var fillAndStrokeNeeded = false;
       for ( i = 0; i < this.particles.length; i++ ) {
@@ -74,7 +78,7 @@ define( function( require ) {
           xPos = this.modelViewTransform.modelToViewX( particle.positionProperty.get().x );
           yPos = this.modelViewTransform.modelToViewY( particle.positionProperty.get().y );
           context.moveTo( xPos, yPos );
-          context.arc( xPos, yPos, transformedHydrogenRadius, 0, TWO_PI_RADIANS, true );
+          context.arc( xPos, yPos, this.hydrogenViewRadius, 0, TWO_PI_RADIANS, true );
           fillAndStrokeNeeded = true;
         }
       }
