@@ -9,9 +9,13 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var ArgonAtom = require( 'STATES_OF_MATTER/common/model/particle/ArgonAtom' );
   var AtomType = require( 'STATES_OF_MATTER/common/model/AtomType' );
-  var inherit = require( 'PHET_CORE/inherit' );
   var CanvasNode = require( 'SCENERY/nodes/CanvasNode' );
+  var HydrogenAtom = require( 'STATES_OF_MATTER/common/model/particle/HydrogenAtom' );
+  var inherit = require( 'PHET_CORE/inherit' );
+  var NeonAtom = require( 'STATES_OF_MATTER/common/model/particle/NeonAtom' );
+  var OxygenAtom = require( 'STATES_OF_MATTER/common/model/particle/OxygenAtom' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var StatesOfMatterColorProfile = require( 'STATES_OF_MATTER/common/view/StatesOfMatterColorProfile' );
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
@@ -25,6 +29,13 @@ define( function( require ) {
   PARTICLE_COLOR_TABLE[ AtomType.NEON ] = StatesOfMatterConstants.NEON_COLOR;
   PARTICLE_COLOR_TABLE[ AtomType.OXYGEN ] = StatesOfMatterConstants.OXYGEN_COLOR;
   PARTICLE_COLOR_TABLE[ AtomType.HYDROGEN ] = StatesOfMatterConstants.HYDROGEN_COLOR;
+
+  // set up the association between atom types and their radii in the model
+  var PARTICLE_RADIUS_TABLE = {};
+  PARTICLE_RADIUS_TABLE[ AtomType.ARGON ] = ArgonAtom.RADIUS;
+  PARTICLE_RADIUS_TABLE[ AtomType.NEON ] = NeonAtom.RADIUS;
+  PARTICLE_RADIUS_TABLE[ AtomType.OXYGEN ] = OxygenAtom.RADIUS;
+  PARTICLE_RADIUS_TABLE[ AtomType.HYDROGEN ] = HydrogenAtom.RADIUS;
 
   /**
    * @param {ObservableArray<Particle>} particles that need to be rendered on the canvas
@@ -46,6 +57,9 @@ define( function( require ) {
 
     // create a map of particle types to position in the particle image canvas, will be populated below
     this.mapAtomTypeToImageXPosition = {};
+
+    // create a table of particle view radii so they don't have to keep being recalculated, populated below
+    this.particleRadii = {};
 
     // Draw the particles on the canvas, top row is without black stroke, the bottom row is with black stroke (for
     // projector mode).
@@ -89,6 +103,9 @@ define( function( require ) {
       // populate the map for this atom type
       self.mapAtomTypeToImageXPosition[ atomType ] = index * PARTICLE_IMAGE_CANVAS_LENGTH;
 
+      // set the radius for this atom type
+      self.particleRadii[ atomType ] = modelViewTransform.modelToViewDeltaX( PARTICLE_RADIUS_TABLE[ atomType ] );
+
       index++;
     }
 
@@ -122,7 +139,7 @@ define( function( require ) {
       for ( i = 0; i < this.particles.length; i++ ) {
         particle = this.particles.get( i );
         if ( particle.renderBelowOxygen ){
-          particleViewRadius = this.modelViewTransform.modelToViewDeltaX( particle.radius );
+          particleViewRadius = this.particleRadii[ particle.getType() ];
           context.drawImage(
             this.particleImageCanvas,
             this.mapAtomTypeToImageXPosition[ particle.getType() ],
@@ -141,7 +158,7 @@ define( function( require ) {
       for ( i = 0; i < this.particles.length; i++ ) {
         particle = this.particles.get( i );
         if ( !particle.renderBelowOxygen ) {
-          particleViewRadius = this.modelViewTransform.modelToViewDeltaX( particle.radius );
+          particleViewRadius = this.particleRadii[ particle.getType() ];
           context.drawImage(
             this.particleImageCanvas,
             this.mapAtomTypeToImageXPosition[ particle.getType() ],
