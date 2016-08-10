@@ -75,8 +75,8 @@ define( function( require ) {
       for ( i = 0; i < this.particles.length; i++ ) {
         particle = this.particles.get( i );
         if ( particle.renderBelowOxygen ) {
-          xPos = this.modelViewTransform.modelToViewX( particle.positionProperty.get().x );
-          yPos = this.modelViewTransform.modelToViewY( particle.positionProperty.get().y );
+          xPos = this.modelViewTransform.modelToViewX( particle.positionProperty.value.x );
+          yPos = this.modelViewTransform.modelToViewY( particle.positionProperty.value.y );
           context.moveTo( xPos, yPos );
           context.arc( xPos, yPos, this.hydrogenViewRadius, 0, TWO_PI_RADIANS, true );
           fillAndStrokeNeeded = true;
@@ -95,8 +95,8 @@ define( function( require ) {
           context.strokeStyle = isParticleStrokeWhite ? particle.color : this.strokeColor;
           context.beginPath();
           context.arc(
-            this.modelViewTransform.modelToViewX( particle.positionProperty.get().x ),
-            this.modelViewTransform.modelToViewY( particle.positionProperty.get().y ),
+            this.modelViewTransform.modelToViewX( particle.positionProperty.value.x ),
+            this.modelViewTransform.modelToViewY( particle.positionProperty.value.y ),
             this.modelViewTransform.modelToViewDeltaX( particle.radius ),
             0,
             TWO_PI_RADIANS,
