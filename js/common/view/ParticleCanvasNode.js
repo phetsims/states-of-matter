@@ -4,6 +4,7 @@
  * A particle layer rendered on canvas.  This exists for performance reasons.
  *
  * @author Siddhartha Chinthapally (Actual Concepts)
+ * @author John Blanco
  */
 define( function( require ) {
   'use strict';

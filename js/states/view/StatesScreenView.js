@@ -26,7 +26,7 @@ define( function( require ) {
   var StatesPhaseControlNode = require( 'STATES_OF_MATTER/states/view/StatesPhaseControlNode' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var Bounds2 = require( 'DOT/Bounds2' );
-  var ParticleCanvasNode = require( 'STATES_OF_MATTER/common/view/ParticleCanvasNode' );
+  var ParticleImageCanvasNode = require( 'STATES_OF_MATTER/common/view/ParticleImageCanvasNode' );
 
   // constants
   var inset = 10;
@@ -76,7 +76,7 @@ define( function( require ) {
     this.addChild( this.particleContainerNode.openNode );
 
     // add particle Canvas layer
-    this.particlesLayer = new ParticleCanvasNode(
+    this.particlesLayer = new ParticleImageCanvasNode(
       multipleParticleModel.particles,
       modelViewTransform,
       {
