@@ -114,20 +114,46 @@ define( function( require ) {
       var i;
       var particleViewRadius;
 
+      // Paint the atoms with a flag indicating that they should be in back first first.  This is done so that when
+      // water is rendered, some of the hydrogen ends up in the back and some ends up in front so that there is
+      // variation in the appearance of the molecules.  OPTIMIZATION NOTE: At the time of this writing, it is only
+      // hydrogen atoms that will ever have this flag set, so several context values are set prior to the loop rather
+      // than inside of it.
       for ( i = 0; i < this.particles.length; i++ ) {
         particle = this.particles.get( i );
-        particleViewRadius = this.modelViewTransform.modelToViewDeltaX( particle.radius );
-        context.drawImage(
-          this.particleImageCanvas,
-          this.mapAtomTypeToImageXPosition[ particle.getType() ],
-          this.useStrokedParticles ? PARTICLE_IMAGE_CANVAS_LENGTH : 0,
-          PARTICLE_IMAGE_CANVAS_LENGTH,
-          PARTICLE_IMAGE_CANVAS_LENGTH,
-          this.modelViewTransform.modelToViewX( particle.positionProperty.value.x ) - particleViewRadius,
-          this.modelViewTransform.modelToViewY( particle.positionProperty.value.y ) - particleViewRadius,
-          particleViewRadius * 2,
-          particleViewRadius * 2
-        );
+        if ( particle.renderBelowOxygen ){
+          particleViewRadius = this.modelViewTransform.modelToViewDeltaX( particle.radius );
+          context.drawImage(
+            this.particleImageCanvas,
+            this.mapAtomTypeToImageXPosition[ particle.getType() ],
+            this.useStrokedParticles ? PARTICLE_IMAGE_CANVAS_LENGTH : 0,
+            PARTICLE_IMAGE_CANVAS_LENGTH,
+            PARTICLE_IMAGE_CANVAS_LENGTH,
+            this.modelViewTransform.modelToViewX( particle.positionProperty.value.x ) - particleViewRadius,
+            this.modelViewTransform.modelToViewY( particle.positionProperty.value.y ) - particleViewRadius,
+            particleViewRadius * 2,
+            particleViewRadius * 2
+          );
+        }
+      }
+
+      // paint the non-flagged particles
+      for ( i = 0; i < this.particles.length; i++ ) {
+        particle = this.particles.get( i );
+        if ( !particle.renderBelowOxygen ) {
+          particleViewRadius = this.modelViewTransform.modelToViewDeltaX( particle.radius );
+          context.drawImage(
+            this.particleImageCanvas,
+            this.mapAtomTypeToImageXPosition[ particle.getType() ],
+            this.useStrokedParticles ? PARTICLE_IMAGE_CANVAS_LENGTH : 0,
+            PARTICLE_IMAGE_CANVAS_LENGTH,
+            PARTICLE_IMAGE_CANVAS_LENGTH,
+            this.modelViewTransform.modelToViewX( particle.positionProperty.value.x ) - particleViewRadius,
+            this.modelViewTransform.modelToViewY( particle.positionProperty.value.y ) - particleViewRadius,
+            particleViewRadius * 2,
+            particleViewRadius * 2
+          );
+        }
       }
     },
 
