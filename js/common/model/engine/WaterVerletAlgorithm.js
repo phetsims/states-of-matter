@@ -33,27 +33,11 @@ define( function( require ) {
     this.positionUpdater = WaterAtomPositionUpdater;
     AbstractVerletAlgorithm.call( this, multipleParticleModel );
 
-    // Set up references to all data that is expected to remain constant, done for optimal performance.  Most of these
-    // are arrays that contain information about the positions, forces, and so forth for each atom or molecule.  This
-    // makes an assumption that these references will not change during the life of this object, so this isn't ideal in
-    // terms of coupling, but it improves performance.
-    this.moleculeDataSet = multipleParticleModel.getMoleculeDataSetRef();
-    this.moleculeCenterOfMassPositions = this.moleculeDataSet.getMoleculeCenterOfMassPositions();
-    this.atomPositions = this.moleculeDataSet.getAtomPositions();
-    this.moleculeVelocities = this.moleculeDataSet.getMoleculeVelocities();
-    this.moleculeForces = this.moleculeDataSet.getMoleculeForces();
-    this.nextMoleculeForces = this.moleculeDataSet.getNextMoleculeForces();
-    this.moleculeRotationAngles = this.moleculeDataSet.getMoleculeRotationAngles();
-    this.moleculeRotationRates = this.moleculeDataSet.getMoleculeRotationRates();
-    this.moleculeTorques = this.moleculeDataSet.getMoleculeTorques();
-    this.nextMoleculeTorques = this.moleculeDataSet.getNextMoleculeTorques();
+    // precompute a couple of values to save time later
+    this.massInverse = 1 / multipleParticleModel.moleculeDataSet.getMoleculeMass();
+    this.inertiaInverse = 1 / multipleParticleModel.moleculeDataSet.getMoleculeRotationalInertia();
 
-    // Initialize other values that will be needed for the force and motion calculations.
-    this.massInverse = 1 / this.moleculeDataSet.getMoleculeMass();
-    this.inertiaInverse = 1 / this.moleculeDataSet.getMoleculeRotationalInertia();
-    this.normalizedContainerWidth = multipleParticleModel.getNormalizedContainerWidth();
-
-    // reusable vector, used in order to minimize allocations
+    // reusable vector, used in order to reduce allocations
     this.force = new Vector2();
   }
 
@@ -85,32 +69,28 @@ define( function( require ) {
     updateForcesAndMotion: function( timeStep ) {
 
       // Obtain references to the model data and parameters so that we can perform fast manipulations.
-      //var moleculeDataSet = this.multipleParticleModel.getMoleculeDataSetRef(); // TODO: Could this be done in constructor?
-      var numberOfMolecules = this.moleculeDataSet.getNumberOfMolecules();
-      //var moleculeCenterOfMassPositions = moleculeDataSet.getMoleculeCenterOfMassPositions();
-      //var atomPositions = moleculeDataSet.getAtomPositions();
-      //var moleculeVelocities = moleculeDataSet.getMoleculeVelocities();
-      //var moleculeForces = moleculeDataSet.getMoleculeForces();
-      //var nextMoleculeForces = moleculeDataSet.getNextMoleculeForces();
-      //var moleculeRotationAngles = moleculeDataSet.getMoleculeRotationAngles();
-      //var moleculeRotationRates = moleculeDataSet.getMoleculeRotationRates();
-      //var moleculeTorques = moleculeDataSet.getMoleculeTorques();
-      //var nextMoleculeTorques = moleculeDataSet.getNextMoleculeTorques();
+      var moleculeDataSet = this.multipleParticleModel.getMoleculeDataSetRef(); // TODO: Could this be done in constructor?
+      var numberOfMolecules = moleculeDataSet.getNumberOfMolecules();
+      var moleculeCenterOfMassPositions = moleculeDataSet.getMoleculeCenterOfMassPositions();
+      var atomPositions = moleculeDataSet.getAtomPositions();
+      var moleculeVelocities = moleculeDataSet.getMoleculeVelocities();
+      var moleculeForces = moleculeDataSet.getMoleculeForces();
+      var nextMoleculeForces = moleculeDataSet.getNextMoleculeForces();
+      var moleculeRotationAngles = moleculeDataSet.getMoleculeRotationAngles();
+      var moleculeRotationRates = moleculeDataSet.getMoleculeRotationRates();
+      var moleculeTorques = moleculeDataSet.getMoleculeTorques();
+      var nextMoleculeTorques = moleculeDataSet.getNextMoleculeTorques();
 
       // Initialize other values that will be needed for the calculations.
-      // TODO: Could these next two be done in constructor?
-      //var massInverse = 1 / moleculeDataSet.getMoleculeMass();
-      //var inertiaInverse = 1 / moleculeDataSet.getMoleculeRotationalInertia();
-      // Get the values that can vary from the model for use in calculations below.
       var normalizedContainerHeight = this.multipleParticleModel.getNormalizedContainerHeight();
-      //var normalizedContainerWidth = this.multipleParticleModel.getNormalizedContainerWidth();
+      var normalizedContainerWidth = this.multipleParticleModel.getNormalizedContainerWidth();
       var pressureZoneWallForce = 0;
       var temperatureSetPoint = this.multipleParticleModel.getTemperatureSetPoint();
       var timeStepSqrHalf = timeStep * timeStep * 0.5;
       var timeStepHalf = timeStep / 2;
 
       // Verify that this is being used on an appropriate data set.
-      assert && assert( this.moleculeDataSet.getAtomsPerMolecule() === 3 );
+      assert && assert( moleculeDataSet.getAtomsPerMolecule() === 3 );
 
       // Set up the values for the charges that will be used when calculating the coloumb interactions.
       var q0;
@@ -146,39 +126,39 @@ define( function( require ) {
 
       // Update center of mass positions and angles for the molecules.
       for ( var i = 0; i < numberOfMolecules; i++ ) {
-        var xPos = this.moleculeCenterOfMassPositions[ i ].x + ( timeStep * this.moleculeVelocities[ i ].x ) +
-                   ( timeStepSqrHalf * this.moleculeForces[ i ].x * this.massInverse );
-        var yPos = this.moleculeCenterOfMassPositions[ i ].y + ( timeStep * this.moleculeVelocities[ i ].y ) +
-                   ( timeStepSqrHalf * this.moleculeForces[ i ].y * this.massInverse );
-        this.moleculeCenterOfMassPositions[ i ].setXY( xPos, yPos );
-        this.moleculeRotationAngles[ i ] += ( timeStep * this.moleculeRotationRates[ i ] ) +
-                                            ( timeStepSqrHalf * this.moleculeTorques[ i ] * this.inertiaInverse );
+        var xPos = moleculeCenterOfMassPositions[ i ].x + ( timeStep * moleculeVelocities[ i ].x ) +
+                   ( timeStepSqrHalf * moleculeForces[ i ].x * this.massInverse );
+        var yPos = moleculeCenterOfMassPositions[ i ].y + ( timeStep * moleculeVelocities[ i ].y ) +
+                   ( timeStepSqrHalf * moleculeForces[ i ].y * this.massInverse );
+        moleculeCenterOfMassPositions[ i ].setXY( xPos, yPos );
+        moleculeRotationAngles[ i ] += ( timeStep * moleculeRotationRates[ i ] ) +
+                                       ( timeStepSqrHalf * moleculeTorques[ i ] * this.inertiaInverse );
       }
-      this.positionUpdater.updateAtomPositions( this.moleculeDataSet );
+      this.positionUpdater.updateAtomPositions( moleculeDataSet );
 
       // Calculate the force from the walls.  This force is assumed to act on the center of mass, so there is no torque.
       for ( i = 0; i < numberOfMolecules; i++ ) {
 
         // Clear the previous calculation's particle forces and torques.
-        this.nextMoleculeForces[ i ].setXY( 0, 0 );
-        this.nextMoleculeTorques[ i ] = 0;
+        nextMoleculeForces[ i ].setXY( 0, 0 );
+        nextMoleculeTorques[ i ] = 0;
 
         // Get the force values caused by the container walls.
         this.calculateWallForce(
-          this.moleculeCenterOfMassPositions[ i ],
-          this.normalizedContainerWidth,
+          moleculeCenterOfMassPositions[ i ],
+          normalizedContainerWidth,
           normalizedContainerHeight,
-          this.nextMoleculeForces[ i ]
+          nextMoleculeForces[ i ]
         );
 
         // Accumulate this force value as part of the pressure being exerted on the walls of the container.
-        if ( this.nextMoleculeForces[ i ].y < 0 ) {
-          pressureZoneWallForce += -this.nextMoleculeForces[ i ].y;
+        if ( nextMoleculeForces[ i ].y < 0 ) {
+          pressureZoneWallForce += -nextMoleculeForces[ i ].y;
         }
-        else if ( this.moleculeCenterOfMassPositions[ i ].y > this.multipleParticleModel.getNormalizedContainerHeight() / 2 ) {
+        else if ( moleculeCenterOfMassPositions[ i ].y > this.multipleParticleModel.getNormalizedContainerHeight() / 2 ) {
 
           // If the particle bounced on one of the walls above the midpoint, add in that value to the pressure.
-          pressureZoneWallForce += Math.abs( this.nextMoleculeForces[ i ].x );
+          pressureZoneWallForce += Math.abs( nextMoleculeForces[ i ].x );
         }
 
         // Add in the effect of gravity.
@@ -192,7 +172,7 @@ define( function( require ) {
                                           this.multipleParticleModel.getTemperatureSetPoint() ) *
                                         this.LOW_TEMPERATURE_GRAVITY_INCREASE_RATE + 1 );
         }
-        this.nextMoleculeForces[ i ].setY( this.nextMoleculeForces[ i ].y - gravitationalAcceleration );
+        nextMoleculeForces[ i ].setY( nextMoleculeForces[ i ].y - gravitationalAcceleration );
       }
 
       // Update the pressure calculation.
@@ -205,7 +185,8 @@ define( function( require ) {
       }
 
       // Calculate the force and torque due to inter-particle interactions.
-      for ( i = 0; i < this.moleculeDataSet.getNumberOfSafeMolecules(); i++ ) {
+      var numberOfSafeMolecules = this.moleculeDataSet.getNumberOfSafeMolecules();
+      for ( i = 0; i < numberOfSafeMolecules; i++ ) {
 
         // Select which charges to use for this molecule.  This is part of the "hollywooding" to make the solid form
         // appear more crystalline.
@@ -216,7 +197,7 @@ define( function( require ) {
         else {
           chargesA = alteredCharges;
         }
-        for ( var j = i + 1; j < this.moleculeDataSet.getNumberOfSafeMolecules(); j++ ) {
+        for ( var j = i + 1; j < numberOfSafeMolecules; j++ ) {
 
           // Select charges for this molecule.
           var chargesB;
@@ -228,8 +209,8 @@ define( function( require ) {
           }
 
           // Calculate Lennard-Jones potential between mass centers.
-          var dx = this.moleculeCenterOfMassPositions[ i ].x - this.moleculeCenterOfMassPositions[ j ].x;
-          var dy = this.moleculeCenterOfMassPositions[ i ].y - this.moleculeCenterOfMassPositions[ j ].y;
+          var dx = moleculeCenterOfMassPositions[ i ].x - moleculeCenterOfMassPositions[ j ].x;
+          var dy = moleculeCenterOfMassPositions[ i ].y - moleculeCenterOfMassPositions[ j ].y;
           var distanceSquared = dx * dx + dy * dy;
           if ( distanceSquared < this.PARTICLE_INTERACTION_DISTANCE_THRESH_SQRD ) {
 
@@ -261,8 +242,8 @@ define( function( require ) {
             forceScalar = 48 * r2inv * r6inv * ( ( r6inv * repulsiveForceScalingFactor) - 0.5 );
             this.force.setX( dx * forceScalar );
             this.force.setY( dy * forceScalar );
-            this.nextMoleculeForces[ i ].add( this.force );
-            this.nextMoleculeForces[ j ].subtract( this.force );
+            nextMoleculeForces[ i ].add( this.force );
+            nextMoleculeForces[ j ].subtract( this.force );
             this.potentialEnergy += 4 * r6inv * ( r6inv - 1 ) + 0.016316891136;
           }
           if ( distanceSquared < this.PARTICLE_INTERACTION_DISTANCE_THRESH_SQRD ) {
@@ -277,8 +258,8 @@ define( function( require ) {
                   // looking water crystal at low temperatures.
                   continue;
                 }
-                dx = this.atomPositions[ 3 * i + ii ].x - this.atomPositions[ 3 * j + jj ].x;
-                dy = this.atomPositions[ 3 * i + ii ].y - this.atomPositions[ 3 * j + jj ].y;
+                dx = atomPositions[ 3 * i + ii ].x - atomPositions[ 3 * j + jj ].x;
+                dy = atomPositions[ 3 * i + ii ].y - atomPositions[ 3 * j + jj ].y;
                 distanceSquared = (dx * dx + dy * dy);
                 if ( distanceSquared < this.MIN_DISTANCE_SQUARED ) {
                   distanceSquared = this.MIN_DISTANCE_SQUARED;
@@ -287,13 +268,12 @@ define( function( require ) {
                 forceScalar = chargesA[ ii ] * chargesB[ jj ] * r2inv * r2inv;
                 this.force.setX( dx * forceScalar );
                 this.force.setY( dy * forceScalar );
-                this.nextMoleculeForces[ i ].add( this.force );
-                this.nextMoleculeForces[ j ].subtract( this.force );
-                var atomPosition = this.atomPositions[ 3 * i + ii ];
-                this.nextMoleculeTorques[ i ] += ( atomPosition.x - this.moleculeCenterOfMassPositions[ i ].x ) * this.force.y -
-                                                 ( atomPosition.y - this.moleculeCenterOfMassPositions[ i ].y ) * this.force.x;
-                this.nextMoleculeTorques[ j ] -= ( atomPosition.x - this.moleculeCenterOfMassPositions[ j ].x ) * this.force.y -
-                                                 ( atomPosition.y - this.moleculeCenterOfMassPositions[ j ].y ) * this.force.x;
+                nextMoleculeForces[ i ].add( this.force );
+                nextMoleculeForces[ j ].subtract( this.force );
+                nextMoleculeTorques[ i ] += (atomPositions[ 3 * i + ii ].x - moleculeCenterOfMassPositions[ i ].x) * this.force.y -
+                                            (atomPositions[ 3 * i + ii ].y - moleculeCenterOfMassPositions[ i ].y) * this.force.x;
+                nextMoleculeTorques[ j ] -= (atomPositions[ 3 * j + jj ].x - moleculeCenterOfMassPositions[ j ].x) * this.force.y -
+                                            (atomPositions[ 3 * j + jj ].y - moleculeCenterOfMassPositions[ j ].y) * this.force.x;
               }
             }
           }
@@ -304,29 +284,20 @@ define( function( require ) {
       var centersOfMassKineticEnergy = 0;
       var rotationalKineticEnergy = 0;
       for ( i = 0; i < numberOfMolecules; i++ ) {
-
-        // vars needed for calculation
-        var moleculeVelocity = this.moleculeVelocities[ i ];
-        var moleculeForce = this.moleculeForces[ i ];
-        var nextMoleculeForce = this.nextMoleculeForces[ i ];
-        var moleculeRotationRate = this.moleculeRotationRates[ i ];
-        var moleculeTorque = this.moleculeTorques[ i ];
-        var nextMoleculeTorque = this.nextMoleculeTorques[ i ];
-
-        // calculation
-        var xVel = moleculeVelocity.x + timeStepHalf * ( moleculeForce.x + nextMoleculeForce.x ) * this.massInverse;
-        var yVel = moleculeVelocity.y + timeStepHalf * ( moleculeForce.y + nextMoleculeForce.y ) * this.massInverse;
-        moleculeVelocity.setXY( xVel, yVel );
-        moleculeRotationRate += timeStepHalf * ( moleculeTorque + nextMoleculeTorque ) * this.inertiaInverse;
-        centersOfMassKineticEnergy += 0.5 * this.moleculeDataSet.getMoleculeMass() *
-                                      moleculeVelocity.x * moleculeVelocity.x +
-                                      moleculeVelocity.y * moleculeVelocity.y;
-        rotationalKineticEnergy += 0.5 * this.moleculeDataSet.getMoleculeRotationalInertia() *
-                                   moleculeRotationRate * moleculeRotationRate;
+        var xVel = moleculeVelocities[ i ].x + timeStepHalf * ( moleculeForces[ i ].x + nextMoleculeForces[ i ].x ) * this.massInverse;
+        var yVel = moleculeVelocities[ i ].y + timeStepHalf * ( moleculeForces[ i ].y + nextMoleculeForces[ i ].y ) * this.massInverse;
+        moleculeVelocities[ i ].setXY( xVel, yVel );
+        moleculeRotationRates[ i ] += timeStepHalf * ( moleculeTorques[ i ] + nextMoleculeTorques[ i ] ) *
+                                      this.inertiaInverse;
+        centersOfMassKineticEnergy += 0.5 * moleculeDataSet.getMoleculeMass() *
+                                      moleculeVelocities[ i ].x * moleculeVelocities[ i ].x +
+                                      moleculeVelocities[ i ].y * moleculeVelocities[ i ].y;
+        rotationalKineticEnergy += 0.5 * moleculeDataSet.getMoleculeRotationalInertia() *
+                                   moleculeRotationRates[ i ] * moleculeRotationRates[ i ];
 
         // Move the newly calculated forces and torques into the current spots.
-        moleculeForce.setXY( nextMoleculeForce.x, nextMoleculeForce.y );
-        this.moleculeTorques[ i ] = nextMoleculeTorque;
+        moleculeForces[ i ].setXY( nextMoleculeForces[ i ].x, nextMoleculeForces[ i ].y );
+        moleculeTorques[ i ] = nextMoleculeTorques[ i ];
       }
 
       // Record the calculated temperature.
@@ -334,4 +305,3 @@ define( function( require ) {
     }
   } );
 } );
-
