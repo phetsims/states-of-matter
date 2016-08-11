@@ -249,7 +249,7 @@ define( function( require ) {
         moleculeRotationAngles[ i ] = Math.random() * Math.PI * 2;
 
         // Assign each molecule an initial rotation rate.
-        moleculeRotationRates[ i ] = Math.random() * temperatureSqrt * Math.PI * 2;
+        moleculeRotationRates[ i ] = ( Math.random() * 2 - 1 ) * temperatureSqrt * Math.PI * 2;
       }
 
       // Redistribute the molecules randomly around the container, but make sure that they are not too close together or
