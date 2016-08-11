@@ -180,12 +180,12 @@ define( function( require ) {
 
       // If there are any atoms that are currently designated as "unsafe", check them to see if they can be moved into
       // the "safe" category.
-      if ( this.moleculeDataSet.getNumberOfSafeMolecules() < numberOfMolecules ) {
+      if ( moleculeDataSet.getNumberOfSafeMolecules() < numberOfMolecules ) {
         this.updateMoleculeSafety();
       }
 
       // Calculate the force and torque due to inter-particle interactions.
-      var numberOfSafeMolecules = this.moleculeDataSet.getNumberOfSafeMolecules();
+      var numberOfSafeMolecules = moleculeDataSet.getNumberOfSafeMolecules();
       for ( i = 0; i < numberOfSafeMolecules; i++ ) {
 
         // Select which charges to use for this molecule.  This is part of the "hollywooding" to make the solid form
