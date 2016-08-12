@@ -9,18 +9,19 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var inherit = require( 'PHET_CORE/inherit' );
+  var Circle = require( 'SCENERY/nodes/Circle' );
   var HBox = require( 'SCENERY/nodes/HBox' );
   var HStrut = require( 'SCENERY/nodes/HStrut' );
-  var Panel = require( 'SUN/Panel' );
-  var Text = require( 'SCENERY/nodes/Text' );
-  var PhetFont = require( 'SCENERY_PHET/PhetFont' );
-  var Circle = require( 'SCENERY/nodes/Circle' );
+  var inherit = require( 'PHET_CORE/inherit' );
   var Node = require( 'SCENERY/nodes/Node' );
-  var Rectangle = require( 'SCENERY/nodes/Rectangle' );
+  var Panel = require( 'SUN/Panel' );
+  var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var RadioButtonGroup = require( 'SUN/buttons/RadioButtonGroup' );
+  var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  var StatesOfMatterColorProfile = require( 'STATES_OF_MATTER/common/view/StatesOfMatterColorProfile' );
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
+  var Text = require( 'SCENERY/nodes/Text' );
 
   // strings
   var neonString = require( 'string!STATES_OF_MATTER/neon' );
@@ -51,7 +52,7 @@ define( function( require ) {
   var WATER_ICON = new Node( { children: [ dot3, dot1, dot2 ] } );
 
   // icon for the oxygen button
-  var oxygen1 = new Circle( 5, { fill: StatesOfMatterConstants.OXYGEN_COLOR } );
+  var oxygen1 = new Circle( 5, { fill: StatesOfMatterConstants.OXYGEN_COLOR, } );
   var oxygen2 = new Circle( 5, { fill: StatesOfMatterConstants.OXYGEN_COLOR, left: oxygen1.right - 4 } );
   var OXYGEN_ICON = new Node( { children: [ oxygen1, oxygen2 ] } );
 
@@ -65,8 +66,8 @@ define( function( require ) {
     options = _.extend( {
       xMargin: 5,
       yMargin: 8,
-      fill: '#C8C8C8  ',
-      stroke: 'gray',
+      fill: StatesOfMatterColorProfile.controlPanelBackgroundProperty,
+      stroke: StatesOfMatterColorProfile.controlPanelStrokeProperty,
       lineWidth: 1,
       cornerRadius: 5 // radius of the rounded corners on the background
     }, options );
@@ -92,7 +93,7 @@ define( function( require ) {
     }
     var title = new Text( atomsAndMoleculesString, {
       font: new PhetFont( 14 ),
-      fill: '#FFFFFF'
+      fill: StatesOfMatterColorProfile.controlPanelTextProperty
     } );
     if ( title.width > MAX_WIDTH ) {
       title.scale( MAX_WIDTH / title.width );
@@ -136,7 +137,7 @@ define( function( require ) {
     var radioButtonGroup = new RadioButtonGroup( moleculeTypeProperty, radioButtonContent, {
       orientation: 'vertical',
       cornerRadius: 5,
-      baseColor: 'black',
+      baseColor: StatesOfMatterColorProfile.controlPanelBackground,
       disabledBaseColor: 'black',
       selectedLineWidth: 1,
       selectedStroke: 'white',
@@ -144,18 +145,22 @@ define( function( require ) {
       deselectedContentOpacity: 1
     } );
 
+    StatesOfMatterColorProfile.controlPanelBackgroundProperty.link( function( color ){
+      radioButtonGroup.baseColor = color;
+    } );
+
     var radioButtonPanel = new Panel( radioButtonGroup, {
       yMargin: 10,
-      stroke: 'white',
+      stroke: options.stroke,
       align: 'center',
       lineWidth: options.lineWidth,
-      fill: 'black',
+      fill: options.fill,
       minWidth: 166
     } );
     this.addChild( radioButtonPanel );
 
     var titleBackground = new Rectangle( 0, 0, titleText.label.width + 5, titleText.label.height, {
-      fill: 'black'
+      fill: options.fill
     } );
     titleBackground.centerX = radioButtonPanel.centerX;
     titleBackground.centerY = radioButtonPanel.top;

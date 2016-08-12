@@ -28,6 +28,14 @@ define( function( require ) {
         default: BLACK,
         projector: WHITE
       },
+      controlPanelBackground: {
+        default: 'black',
+        projector: 'white'
+      },
+      controlPanelStroke: {
+        default: 'white',
+        projector: 'black'
+      },
       controlPanelText: {
         default: GRAY,
         projector: BLACK
