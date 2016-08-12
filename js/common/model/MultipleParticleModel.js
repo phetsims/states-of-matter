@@ -35,6 +35,7 @@ define( function( require ) {
   var MonatomicAtomPositionUpdater = require( 'STATES_OF_MATTER/common/model/engine/MonatomicAtomPositionUpdater' );
   var MonatomicPhaseStateChanger = require( 'STATES_OF_MATTER/common/model/engine/MonatomicPhaseStateChanger' );
   var MonatomicVerletAlgorithm = require( 'STATES_OF_MATTER/common/model/engine/MonatomicVerletAlgorithm' );
+  var MovingAverage = require( 'STATES_OF_MATTER/common/model/MovingAverage' );
   var NeonAtom = require( 'STATES_OF_MATTER/common/model/particle/NeonAtom' );
   var ObservableArray = require( 'AXON/ObservableArray' );
   var OxygenAtom = require( 'STATES_OF_MATTER/common/model/particle/OxygenAtom' );
@@ -48,13 +49,11 @@ define( function( require ) {
   var WaterPhaseStateChanger = require( 'STATES_OF_MATTER/common/model/engine/WaterPhaseStateChanger' );
   var WaterAtomPositionUpdater = require( 'STATES_OF_MATTER/common/model/engine/WaterAtomPositionUpdater' );
 
-  // constants
+  // constants (general)
   var DEFAULT_MOLECULE = StatesOfMatterConstants.NEON;
   var INITIAL_TEMPERATURE = StatesOfMatterConstants.SOLID_TEMPERATURE;
   var MAX_TEMPERATURE = 50.0;
   var MIN_TEMPERATURE = 0.0001;
-  var MAX_PARTICLE_MOTION_TIME_STEP = ( 1 / 60 ) * 1.5; // empirically determined, intended to work well with a 60 fps frame rate
-  var PARTICLE_SPEED_UP_FACTOR = 4; // empirically determined to make the particles move at a speed that looks reasonable
   var INITIAL_GRAVITATIONAL_ACCEL = 0.045;
   var MAX_TEMPERATURE_CHANGE_PER_ADJUSTMENT = 0.025;
   var TICKS_PER_TEMP_ADJUSTMENT = 10;
@@ -63,6 +62,19 @@ define( function( require ) {
   var MAX_INJECTED_MOLECULE_ANGLE = Math.PI * 0.8;
   var INJECTION_POINT_HORIZ_PROPORTION = 0.05;
   var INJECTION_POINT_VERT_PROPORTION = 0.25;
+
+  // constants related to how time steps are handled
+  var NOMINAL_FRAME_RATE = 60; // in frames per second
+  var NOMINAL_TIME_STEP = 1 / NOMINAL_FRAME_RATE;
+  var MIN_ADEQUATE_FRAME_RATE = 25; // in frames per second
+  var PARTICLE_SPEED_UP_FACTOR = 4; // empirically determined to make the particles move at a speed that looks reasonable
+  var MAX_PARTICLE_MOTION_TIME_STEP = 0.025; // max time step that model can handle, empirically determined
+  var TIME_STEP_MOVING_AVERAGE_LENGTH = 60; // number of samples in the moving average of time steps
+  var CONTROL_LOOP_UPDATE_PERIOD = 0.5; // seconds
+
+  // parameters for PID controller loop that adjust time step, adjusted using Ziegler-Nichols method
+  var K_P = 7.2;
+  var K_I = 1.7;
 
   // possible thermostat settings
   var ISOKINETIC_THERMOSTAT = 1;
@@ -138,6 +150,13 @@ define( function( require ) {
     this.heightChangeCounter = 0;
     this.minModelTemperature = null;
     this.residualTime = 0;
+    this.timeStepMovingAverage = new MovingAverage(
+      TIME_STEP_MOVING_AVERAGE_LENGTH,
+      { initialValue: NOMINAL_TIME_STEP }
+    );
+    this.timeSinceLastControlLoopUpdate = 0;
+    this.integral = 0;
+    this.timeAdvanceLimitAdjustment = 0;
 
     // everything that had a listener in the java version becomes a property
     PropertySet.call( this, {
@@ -152,7 +171,10 @@ define( function( require ) {
         interactionStrength: MAX_ADJUSTABLE_EPSILON, // notifyInteractionStrengthChanged
         isPlaying: true,
         speed: 'normal',
-        heatingCoolingAmount: 0
+        heatingCoolingAmount: 0,
+        keepingUp: true, // tracks whether targeted min frame rate is being maintained
+        averageDt: this.timeStepMovingAverage.average,
+        maxModelAdvanceTimePerStep: Number.POSITIVE_INFINITY
       }
     );
 
@@ -439,7 +461,7 @@ define( function( require ) {
      * get the internal model temperature that corresponds to one degree Kelvin
      * @param {number} temperatureInKelvin
      */
-    getTwoDegreesKelvinInInternalTemperature: function(){
+    getTwoDegreesKelvinInInternalTemperature: function() {
 
       var triplePointInKelvin;
 
@@ -533,7 +555,7 @@ define( function( require ) {
 
         // If the container is empty, its temperature will be be reported as zero Kelvin, so injecting particles will
         // cause there to be a defined temperature.  Set that temperature to a reasonable value.
-        if ( this.particles.length === 0 ){
+        if ( this.particles.length === 0 ) {
           this.temperatureSetPoint = CRITICAL_POINT_INTERNAL_MODEL_TEMPERATURE;
           this.isoKineticThermostat.targetTemperature = this.temperatureSetPoint;
           this.andersenThermostat.targetTemperature = this.temperatureSetPoint;
@@ -605,7 +627,7 @@ define( function( require ) {
         // since if there is any motion absolute zero is not correct.  This is handled as a special case rather than
         // treating the addition of particles more generally, see https://github.com/phetsims/states-of-matter/issues/129
         // for more detail.
-        if ( this.getTemperatureInKelvin() === 0 ){
+        if ( this.getTemperatureInKelvin() === 0 ) {
           this.temperatureSetPoint = this.getTwoDegreesKelvinInInternalTemperature();
           this.isoKineticThermostat.targetTemperature = this.temperatureSetPoint;
           this.andersenThermostat.targetTemperature = this.temperatureSetPoint;
@@ -672,6 +694,11 @@ define( function( require ) {
       // This is needed in case we were switching from another molecule that was under pressure.
       this.updatePressure();
       this.calculateMinAllowableContainerHeight();
+
+      // reset the time adjustment algorithm parameters
+      this.integral = 0;
+      this.timeAdvanceLimitAdjustment = 0;
+      this.timeSinceLastControlLoopUpdate = 0;
     },
 
     /**
@@ -706,6 +733,30 @@ define( function( require ) {
      */
     stepInternal: function( dt ) {
 
+      // Determine whether the device on which this sim is running is "keeping up", meaning that it is maintaining an
+      // adequate frame rate.  TODO: More doc about what this does if and when it works
+      this.timeStepMovingAverage.addValue( dt );
+      this.averageDt = this.timeStepMovingAverage.average;
+      this.timeSinceLastControlLoopUpdate += dt;
+      if ( this.timeSinceLastControlLoopUpdate >= CONTROL_LOOP_UPDATE_PERIOD ){
+        var errorTerm = ( 1 / MIN_ADEQUATE_FRAME_RATE ) - this.averageDt;
+        this.integral = this.integral + errorTerm * dt;
+        this.timeAdvanceLimitAdjustment = errorTerm * K_P + K_I * this.integral;
+        this.timeSinceLastControlLoopUpdate = 0;
+        this.keepingUp = errorTerm >= 0;
+      }
+
+      // Because we are aiming for a minimum frame rate, we only turn down the particle rate, we never turn it up.
+      if ( this.timeAdvanceLimitAdjustment < 0 ){
+        this.maxModelAdvanceTimePerStep = Math.max(
+          ( 1 / MIN_ADEQUATE_FRAME_RATE ) * PARTICLE_SPEED_UP_FACTOR + this.timeAdvanceLimitAdjustment, // TODO: make front term a constant if kept
+          MAX_PARTICLE_MOTION_TIME_STEP
+        );
+      }
+      else{
+        this.maxModelAdvanceTimePerStep = Number.POSITIVE_INFINITY;
+      }
+
       if ( !this.isExploded ) {
 
         // Adjust the particle container height if needed.
@@ -724,7 +775,7 @@ define( function( require ) {
           else {
             // The container is shrinking.
             if ( this.particleContainerHeight - heightChange >= this.minAllowableContainerHeight ) {
-              this.particleContainerHeight += Math.max( heightChange, - MAX_PER_TICK_CONTAINER_CHANGE * dt ) ;
+              this.particleContainerHeight += Math.max( heightChange, -MAX_PER_TICK_CONTAINER_CHANGE * dt );
             }
             else {
               this.particleContainerHeight = this.minAllowableContainerHeight;
@@ -739,6 +790,7 @@ define( function( require ) {
         }
       }
       else {
+
         // The lid is blowing off the container, so increase the container size until the lid should be well off the screen.
         if ( this.particleContainerHeight < StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT * 3 ) {
           this.particleContainerHeight += MAX_PER_TICK_CONTAINER_EXPANSION_EXPLODED;
@@ -750,27 +802,21 @@ define( function( require ) {
 
       // Calculate the amount of time to advance the particle engine.  This is based purely on aesthetics - we looked at
       // the particle motion and tweaked the multiplier until we felt that it looked good.
-      var particleMotionAdvancementTime = dt * PARTICLE_SPEED_UP_FACTOR;
-
-      // This next line of code was added specifically for making the animation reasonably smooth on iPads.  It limits
-      // the maximum particle advancement time so an empirically determined value that the iPads could handle, and
-      // essentially causes the particles to slow down, but the animation still remains smooth, which was decided to be
-      // the best tradeoff.
-      //particleMotionAdvancementTime = Math.min( particleMotionAdvancementTime, 0.1 );
+      var particleMotionAdvancementTime = Math.min( dt * PARTICLE_SPEED_UP_FACTOR, this.maxModelAdvanceTimePerStep );
 
       // Determine the number of model steps and the size of the time step
       var particleMotionTimeStep;
       var numParticleEngineSteps = 1;
-      if ( particleMotionAdvancementTime > MAX_PARTICLE_MOTION_TIME_STEP ){
+      if ( particleMotionAdvancementTime > MAX_PARTICLE_MOTION_TIME_STEP ) {
         particleMotionTimeStep = MAX_PARTICLE_MOTION_TIME_STEP;
         numParticleEngineSteps = Math.floor( particleMotionAdvancementTime / MAX_PARTICLE_MOTION_TIME_STEP );
         this.residualTime = particleMotionAdvancementTime - ( numParticleEngineSteps * particleMotionTimeStep );
       }
-      else{
+      else {
         particleMotionTimeStep = particleMotionAdvancementTime;
       }
 
-      if ( this.residualTime > particleMotionTimeStep ){
+      if ( this.residualTime > particleMotionTimeStep ) {
         numParticleEngineSteps++;
         this.residualTime -= particleMotionTimeStep;
       }
@@ -780,7 +826,7 @@ define( function( require ) {
 
         // if the container is exploded reduce the speed of particles
         // TODO: Is this really needed?  If so, comment should explain why.
-        if( this.isExploded ){
+        if ( this.isExploded ) {
           particleMotionTimeStep = particleMotionTimeStep * 0.9;
         }
         this.moleculeForceAndMotionCalculator.updateForcesAndMotion( particleMotionTimeStep );
@@ -826,8 +872,8 @@ define( function( require ) {
      */
     step: function( dt ) {
 
-      if ( window.phet.chipper.getQueryParameters().hasOwnProperty( 'somProfiler' ) ){
-        if ( this.dialogShownLastTime ){
+      if ( window.phet.chipper.getQueryParameters().hasOwnProperty( 'somProfiler' ) ) {
+        if ( this.dialogShownLastTime ) {
           this.accumulatedDt = 0;
           this.largestDt = 0;
           this.smallestDt = Number.POSITIVE_INFINITY;
@@ -835,21 +881,21 @@ define( function( require ) {
           this.numDts = 0;
           return;
         }
-        if ( !this.largestDt || this.largestDt < dt ){
+        if ( !this.largestDt || this.largestDt < dt ) {
           this.largestDt = dt;
         }
-        if ( !this.smallestDt || this.smallestDt > dt ){
+        if ( !this.smallestDt || this.smallestDt > dt ) {
           this.smallestDt = dt;
         }
-        if ( !this.accumulatedDt ){
+        if ( !this.accumulatedDt ) {
           this.accumulatedDt = 0;
         }
         this.accumulatedDt += dt;
-        if ( !this.numDts ){
+        if ( !this.numDts ) {
           this.numDts = 0;
         }
         this.numDts++;
-        if ( this.accumulatedDt > 10 ){
+        if ( this.accumulatedDt > 10 ) {
           alert( 'largest dt = ' + this.largestDt + '\n' +
                  'smalles dt = ' + this.smallestDt + '\n' +
                  'average dt = ' + ( this.accumulatedDt / this.numDts ) + '\n'
@@ -860,7 +906,7 @@ define( function( require ) {
 
       // If the time step is excessively large, ignore it - it probably means that the user was on another tab or that
       // the browser was hidden, and they just came back to the sim.
-      if ( dt > 0.5 ){
+      if ( dt > 0.5 ) {
         return;
       }
 
@@ -973,9 +1019,9 @@ define( function( require ) {
     /**
      * Initialize the various model components to handle a simulation in which each molecule consists of three atoms,
      * e.g. water.
-     * @private
      * @param {number} moleculeID
      * @param {number} phase
+     * @private
      */
     initializeTriatomic: function( moleculeID, phase ) {
 
@@ -1194,7 +1240,7 @@ define( function( require ) {
       var atomPositions = this.moleculeDataSet.atomPositions;
 
       // use a C-style loop for optimal performance
-      for ( var i = 0; i < this.particles.length; i++ ){
+      for ( var i = 0; i < this.particles.length; i++ ) {
         this.particles.get( i ).setPosition(
           atomPositions[ i ].x * positionMultiplier,
           atomPositions[ i ].y * positionMultiplier

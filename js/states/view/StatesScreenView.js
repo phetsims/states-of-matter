@@ -10,23 +10,25 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var Bounds2 = require( 'DOT/Bounds2' );
+  var CompositeThermometerNode = require( 'STATES_OF_MATTER/common/view/CompositeThermometerNode' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var ScreenView = require( 'JOIST/ScreenView' );
+  var HeaterCoolerNode = require( 'SCENERY_PHET/HeaterCoolerNode' );
+  var ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
+  var ParticleContainerNode = require( 'STATES_OF_MATTER/common/view/ParticleContainerNode' );
+  var ParticleImageCanvasNode = require( 'STATES_OF_MATTER/common/view/ParticleImageCanvasNode' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var PlayPauseButton = require( 'SCENERY_PHET/buttons/PlayPauseButton' );
-  var StepForwardButton = require( 'SCENERY_PHET/buttons/StepForwardButton' );
-  var HeaterCoolerNode = require( 'SCENERY_PHET/HeaterCoolerNode' );
-  var CompositeThermometerNode = require( 'STATES_OF_MATTER/common/view/CompositeThermometerNode' );
-  var StatesMoleculesControlPanel = require( 'STATES_OF_MATTER/states/view/StatesMoleculesControlPanel' );
-  var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
-  var ParticleContainerNode = require( 'STATES_OF_MATTER/common/view/ParticleContainerNode' );
-  var ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
-  var Vector2 = require( 'DOT/Vector2' );
   var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
-  var StatesPhaseControlNode = require( 'STATES_OF_MATTER/states/view/StatesPhaseControlNode' );
+  var ScreenView = require( 'JOIST/ScreenView' );
+  var StatesMoleculesControlPanel = require( 'STATES_OF_MATTER/states/view/StatesMoleculesControlPanel' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  var Bounds2 = require( 'DOT/Bounds2' );
-  var ParticleImageCanvasNode = require( 'STATES_OF_MATTER/common/view/ParticleImageCanvasNode' );
+  var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
+  var StatesOfMatterQueryParameters = require( 'STATES_OF_MATTER/common/StatesOfMatterQueryParameters' );
+  var StatesPhaseControlNode = require( 'STATES_OF_MATTER/states/view/StatesPhaseControlNode' );
+  var StepForwardButton = require( 'SCENERY_PHET/buttons/StepForwardButton' );
+  var Text = require( 'SCENERY/nodes/Text' );
+  var Vector2 = require( 'DOT/Vector2' );
 
   // constants
   var inset = 10;
@@ -163,6 +165,39 @@ define( function( require ) {
     // center the heater cooler node with respect to particle container node
     heaterCoolerNode.centerX = heaterCoolerNode.centerX - heaterCoolerXOffset;
 
+    // if the appropriate query param is set, show some information used in debugging time step adjustments
+    if ( StatesOfMatterQueryParameters.DEBUG_TIME_STEP ){
+      var keepingUpReadout = new Text( '', {
+        font: new PhetFont( 20 ),
+        fill: 'red',
+        top: 40,
+        left: 20
+      } );
+      this.addChild( keepingUpReadout );
+      multipleParticleModel.keepingUpProperty.link( function( keepingUp ){
+        keepingUpReadout.text = keepingUp.toString();
+      } );
+      var averageDtReadout = new Text( '', {
+        font: new PhetFont( 20 ),
+        fill: 'red',
+        top: keepingUpReadout.bottom + 5,
+        left: keepingUpReadout.left
+      } );
+      this.addChild( averageDtReadout );
+      multipleParticleModel.averageDtProperty.link( function( averageDt ){
+        averageDtReadout.text = averageDt.toFixed( 3 );
+      } );
+      var maxAdvanceTimePerStep = new Text( '', {
+        font: new PhetFont( 20 ),
+        fill: 'red',
+        top: averageDtReadout.bottom + 5,
+        left: averageDtReadout.left
+      } );
+      this.addChild( maxAdvanceTimePerStep );
+      multipleParticleModel.maxModelAdvanceTimePerStepProperty.link( function( maxAdvance ){
+        maxAdvanceTimePerStep.text = maxAdvance.toFixed( 3 );
+      } );
+    }
   }
 
   statesOfMatter.register( 'StatesScreenView', StatesScreenView );
