@@ -52,7 +52,7 @@ define( function( require ) {
   var WATER_ICON = new Node( { children: [ dot3, dot1, dot2 ] } );
 
   // icon for the oxygen button
-  var oxygen1 = new Circle( 5, { fill: StatesOfMatterConstants.OXYGEN_COLOR, } );
+  var oxygen1 = new Circle( 5, { fill: StatesOfMatterConstants.OXYGEN_COLOR } );
   var oxygen2 = new Circle( 5, { fill: StatesOfMatterConstants.OXYGEN_COLOR, left: oxygen1.right - 4 } );
   var OXYGEN_ICON = new Node( { children: [ oxygen1, oxygen2 ] } );
 
@@ -93,11 +93,9 @@ define( function( require ) {
     }
     var title = new Text( atomsAndMoleculesString, {
       font: new PhetFont( 14 ),
-      fill: StatesOfMatterColorProfile.controlPanelTextProperty
+      fill: StatesOfMatterColorProfile.controlPanelTextProperty,
+      maxWidth: MAX_WIDTH
     } );
-    if ( title.width > MAX_WIDTH ) {
-      title.scale( MAX_WIDTH / title.width );
-    }
 
     // create objects that describe the pieces that make up an item in the control panel, conforms to the contract:
     // { label: {Node}, icon: {Node} }
@@ -137,7 +135,7 @@ define( function( require ) {
     var radioButtonGroup = new RadioButtonGroup( moleculeTypeProperty, radioButtonContent, {
       orientation: 'vertical',
       cornerRadius: 5,
-      baseColor: StatesOfMatterColorProfile.controlPanelBackground,
+      baseColor: 'black',
       disabledBaseColor: 'black',
       selectedLineWidth: 1,
       selectedStroke: 'white',

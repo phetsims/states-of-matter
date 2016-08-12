@@ -11,7 +11,6 @@ define( function( require ) {
 
   // modules
   var ArrowNode = require( 'SCENERY_PHET/ArrowNode' );
-  var ZoomableGridNode = require( 'STATES_OF_MATTER/atomic-interactions/view/ZoomableGridNode' );
   var inherit = require( 'PHET_CORE/inherit' );
   var LjPotentialCalculator = require( 'STATES_OF_MATTER/common/model/LjPotentialCalculator' );
   var Node = require( 'SCENERY/nodes/Node' );
@@ -20,9 +19,11 @@ define( function( require ) {
   var PositionMarker = require( 'STATES_OF_MATTER/atomic-interactions/view/PositionMarker' );
   var Shape = require( 'KITE/Shape' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  var StatesOfMatterColorProfile = require( 'STATES_OF_MATTER/common/view/StatesOfMatterColorProfile' );
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
   var Text = require( 'SCENERY/nodes/Text' );
   var Vector2 = require( 'DOT/Vector2' );
+  var ZoomableGridNode = require( 'STATES_OF_MATTER/atomic-interactions/view/ZoomableGridNode' );
 
   // strings
   var distanceBetweenAtomsString = require( 'string!STATES_OF_MATTER/distanceBetweenAtoms' );
@@ -89,13 +90,16 @@ define( function( require ) {
       this.widthOfGraph = WIDE_VERSION_WIDTH;
       this.heightOfGraph = this.widthOfGraph * 0.6;
       GREEK_LETTER_FONT = new PhetFont( 22 );
-      AXIS_LABEL_FONT = new PhetFont( 16 );
+      AXIS_LABEL_FONT = new PhetFont( { size: 16, fill: StatesOfMatterColorProfile.controlPanelTextProperty } );
       GREEK_LETTER_MAX_WIDTH = 60;
     }
     else {
       this.widthOfGraph = NARROW_VERSION_WIDTH;
       this.heightOfGraph = this.widthOfGraph * 0.8;
-      AXIS_LABEL_FONT = new PhetFont( AXIS_LABEL_FONT_SIZE );
+      AXIS_LABEL_FONT = new PhetFont( {
+        size: AXIS_LABEL_FONT_SIZE,
+        fill: StatesOfMatterColorProfile.controlPanelTextProperty
+      } );
       GREEK_LETTER_FONT = new PhetFont( GREEK_LETTER_FONT_SIZE );
       GREEK_LETTER_MAX_WIDTH = 17;
     }
@@ -137,7 +141,7 @@ define( function( require ) {
 
     this.epsilonLabel = new Text( getFirstNonEmbeddingCharacter( epsilonString ), {
       font: GREEK_LETTER_FONT,
-      fill: 'white',
+      fill: StatesOfMatterColorProfile.controlPanelTextProperty,
       maxWidth: GREEK_LETTER_MAX_WIDTH,
       boundsMethod: 'accurate' // TODO: this seems necessary for good graph layout, but is it costly for performance?
     } );
@@ -145,7 +149,7 @@ define( function( require ) {
 
     this.sigmaLabel = new Text( getFirstNonEmbeddingCharacter( sigmaString ), {
       font: GREEK_LETTER_FONT,
-      fill: 'white',
+      fill: StatesOfMatterColorProfile.controlPanelTextProperty,
       maxWidth: GREEK_LETTER_MAX_WIDTH
     } );
     this.ljPotentialGraph.addChild( this.sigmaLabel );
@@ -170,8 +174,8 @@ define( function( require ) {
 
     // Create and add the horizontal axis line for the graph.
     this.horizontalAxis = new ArrowNode( 0, 0, this.graphWidth + AXES_ARROW_HEAD_HEIGHT, 0, {
-      stroke: 'white',
-      fill: 'white',
+      fill: StatesOfMatterColorProfile.controlPanelTextProperty,
+      stroke: StatesOfMatterColorProfile.controlPanelTextProperty,
       headHeight: 8,
       headWidth: 8,
       tailWidth: 2,
@@ -180,7 +184,7 @@ define( function( require ) {
     } );
 
     this.horizontalAxisLabel = new Text( distanceBetweenAtomsString, {
-      fill: 'white',
+      fill: StatesOfMatterColorProfile.controlPanelTextProperty,
       font: wide? AXIS_LABEL_FONT : AXIS_LABEL_FONT - 1
     } );
     if ( this.horizontalAxisLabel.width > this.horizontalAxis.width ) {
@@ -190,14 +194,14 @@ define( function( require ) {
       else{
         this.horizontalAxisLabel.maxWidth = this.horizontalAxis.width + 50;
       }
-
     }
 
     this.setMolecular( false );
 
     // Create and add the vertical axis line for the graph.
     this.verticalAxis = new ArrowNode( 0, 0, 0, -this.graphHeight - AXES_ARROW_HEAD_HEIGHT, {
-      fill: 'white',
+      fill: StatesOfMatterColorProfile.controlPanelTextProperty,
+      stroke: StatesOfMatterColorProfile.controlPanelTextProperty,
       headHeight: 8,
       headWidth: 8,
       tailWidth: AXIS_LINE_WIDTH,
@@ -206,7 +210,7 @@ define( function( require ) {
     } );
 
     this.verticalAxisLabel = new Text( potentialEnergyString, {
-      fill: 'white',
+      fill: StatesOfMatterColorProfile.controlPanelTextProperty,
       font: AXIS_LABEL_FONT
     } );
 

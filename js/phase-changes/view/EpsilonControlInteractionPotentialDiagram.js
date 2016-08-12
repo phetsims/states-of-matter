@@ -1,8 +1,8 @@
 // Copyright 2014-2015, University of Colorado Boulder
 
 /**
- * This class extends the Interaction Potential diagram to allow the user to
- * adjust the interaction strength parameter (i.e. epsilon).
+ * This class extends the Interaction Potential diagram to allow the user to adjust the interaction strength parameter
+ * (i.e. epsilon).
  *
  * @author John Blanco
  * @author Siddhartha Chinthapally (Actual Concepts)
@@ -11,28 +11,27 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var inherit = require( 'PHET_CORE/inherit' );
   var AccordionBox = require( 'SUN/AccordionBox' );
-  var Color = require( 'SCENERY/util/Color' );
-  var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
-  var FillHighlightListener = require( 'SCENERY_PHET/input/FillHighlightListener' );
-  var SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
-  var Text = require( 'SCENERY/nodes/Text' );
-  var Property = require( 'AXON/Property' );
-  var PhetFont = require( 'SCENERY_PHET/PhetFont' );
-  var Node = require( 'SCENERY/nodes/Node' );
-  var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var ArrowNode = require( 'SCENERY_PHET/ArrowNode' );
-  var InteractionPotentialDiagramNode = require( 'STATES_OF_MATTER/common/view/InteractionPotentialDiagramNode' );
-  var HBox = require( 'SCENERY/nodes/HBox' );
-  var InteractionPotentialCanvasNode = require( 'STATES_OF_MATTER/common/view/InteractionPotentialCanvasNode' );
   var Bounds2 = require( 'DOT/Bounds2' );
+  var Color = require( 'SCENERY/util/Color' );
+  var FillHighlightListener = require( 'SCENERY_PHET/input/FillHighlightListener' );
+  var HBox = require( 'SCENERY/nodes/HBox' );
+  var inherit = require( 'PHET_CORE/inherit' );
+  var InteractionPotentialCanvasNode = require( 'STATES_OF_MATTER/common/view/InteractionPotentialCanvasNode' );
+  var InteractionPotentialDiagramNode = require( 'STATES_OF_MATTER/common/view/InteractionPotentialDiagramNode' );
+  var Node = require( 'SCENERY/nodes/Node' );
+  var PhetFont = require( 'SCENERY_PHET/PhetFont' );
+  var Property = require( 'AXON/Property' );
+  var Rectangle = require( 'SCENERY/nodes/Rectangle' );
+  var SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  var StatesOfMatterColorProfile = require( 'STATES_OF_MATTER/common/view/StatesOfMatterColorProfile' );
+  var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
+  var Text = require( 'SCENERY/nodes/Text' );
 
   // strings
   var interactionPotentialString = require( 'string!STATES_OF_MATTER/interactionPotential' );
-
-  // constants
 
   // Size of handles as function of node width.
   var RESIZE_HANDLE_SIZE_PROPORTION = 0.18;
@@ -40,12 +39,13 @@ define( function( require ) {
   // Position of handle as function of node width.
   var EPSILON_HANDLE_OFFSET_PROPORTION = 0.08;
 
+  // other constants
   var RESIZE_HANDLE_NORMAL_COLOR = '#32FE00';
   var RESIZE_HANDLE_HIGHLIGHTED_COLOR = new Color( 153, 255, 0 );
   var EPSILON_LINE_COLOR = RESIZE_HANDLE_NORMAL_COLOR;
+  var POTENTIAL_LINE_COLOR = new Color( 'red' );
 
   /**
-   *
    * @param {number} sigma - atom diameter
    * @param {number} epsilon - interaction strength
    * @param {boolean} wide - true if the wide screen version of the graph is needed, false if not.
@@ -144,14 +144,17 @@ define( function( require ) {
     accordionContent.addChild( this.ljPotentialGraph );
 
     var accordionContentHBox = new HBox( { children: [ accordionContent ] } );
-    var titleNode = new Text( interactionPotentialString, { fill: '#FFFFFF', font: new PhetFont( { size: 13 } ) } );
+    var titleNode = new Text( interactionPotentialString, {
+      fill: StatesOfMatterColorProfile.controlPanelTextProperty,
+      font: new PhetFont( { size: 13 } )
+    } );
     if ( titleNode.width > this.horizontalAxis.width ) {
       titleNode.scale( this.horizontalAxis.width / titleNode.width );
     }
     var accordionBox = new AccordionBox( accordionContentHBox, {
       titleNode: titleNode,
-      fill: 'black',
-      stroke: 'white',
+      fill: StatesOfMatterColorProfile.controlPanelBackgroundProperty,
+      stroke: StatesOfMatterColorProfile.controlPanelStrokeProperty,
       expandedProperty: multipleParticleModel.interactionExpandedProperty,
       contentAlign: 'center',
       titleAlignX: 'center',
@@ -209,7 +212,7 @@ define( function( require ) {
 
       //  draw potential curve
       if ( this.interactionPotentialCanvasNode !== undefined ) {
-        this.interactionPotentialCanvasNode.update( new Color('yellow') );
+        this.interactionPotentialCanvasNode.update( POTENTIAL_LINE_COLOR );
       }
     },
 

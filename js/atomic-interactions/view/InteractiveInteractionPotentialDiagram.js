@@ -33,6 +33,7 @@ define( function( require ) {
   var RESIZE_HANDLE_NORMAL_COLOR = '#32FE00';
   var RESIZE_HANDLE_HIGHLIGHTED_COLOR = new Color( 153, 255, 0 );
   var EPSILON_LINE_COLOR = RESIZE_HANDLE_NORMAL_COLOR;
+  var POTENTIAL_LINE_COLOR = new Color( 'red' );
 
   /**
    * @param {number} sigma - Initial value of sigma, a.k.a. the atom diameter
@@ -220,9 +221,7 @@ define( function( require ) {
         canvasBounds: new Bounds2( 0, 0, 500, this.graphHeight + 10 )
       } );
     this.addChild( this.interactionPotentialCanvasNode );
-    StatesOfMatterColorProfile.ljGraphLineColorProperty.link( function( color ) {
-      interactiveInteractionPotentialDiagram.interactionPotentialCanvasNode.update( color );
-    } );
+
     // Update interactivity state.
     this.updateInteractivityState();
 
@@ -270,7 +269,7 @@ define( function( require ) {
 
       //  draw potential curve
       if ( this.interactionPotentialCanvasNode !== undefined ) {
-        this.interactionPotentialCanvasNode.update( StatesOfMatterColorProfile.ljGraphLineColorProperty.value );
+        this.interactionPotentialCanvasNode.update( POTENTIAL_LINE_COLOR );
       }
     },
 

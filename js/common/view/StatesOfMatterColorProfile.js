@@ -48,10 +48,6 @@ define( function( require ) {
         default: WHITE,
         projector: BLACK
       },
-      ljGraphLineColor:{
-        default: new Color( 'red' ),
-        projector: new Color( 'yellow' )
-      },
       removePairGroup: {
         default: new Color( '#d00' )
       }

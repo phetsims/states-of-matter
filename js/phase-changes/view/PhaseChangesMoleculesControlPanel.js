@@ -9,21 +9,22 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var inherit = require( 'PHET_CORE/inherit' );
-  var HBox = require( 'SCENERY/nodes/HBox' );
-  var VBox = require( 'SCENERY/nodes/VBox' );
-  var HStrut = require( 'SCENERY/nodes/HStrut' );
-  var Panel = require( 'SUN/Panel' );
-  var Text = require( 'SCENERY/nodes/Text' );
-  var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Circle = require( 'SCENERY/nodes/Circle' );
-  var Node = require( 'SCENERY/nodes/Node' );
-  var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
+  var Dimension2 = require( 'DOT/Dimension2' );
+  var HBox = require( 'SCENERY/nodes/HBox' );
   var HSlider = require( 'SUN/HSlider' );
+  var HStrut = require( 'SCENERY/nodes/HStrut' );
+  var inherit = require( 'PHET_CORE/inherit' );
+  var Node = require( 'SCENERY/nodes/Node' );
+  var Panel = require( 'SUN/Panel' );
+  var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var RadioButtonGroup = require( 'SUN/buttons/RadioButtonGroup' );
-  var Dimension2 = require( 'DOT/Dimension2' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  var StatesOfMatterColorProfile = require( 'STATES_OF_MATTER/common/view/StatesOfMatterColorProfile' );
+  var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
+  var Text = require( 'SCENERY/nodes/Text' );
+  var VBox = require( 'SCENERY/nodes/VBox' );
 
   // strings
   var neonString = require( 'string!STATES_OF_MATTER/neon' );
@@ -79,8 +80,8 @@ define( function( require ) {
     options = _.extend( {
       xMargin: 5,
       yMargin: 5,
-      fill: '#C8C8C8  ',
-      stroke: 'gray',
+      fill: StatesOfMatterColorProfile.controlPanelBackgroundProperty,
+      stroke: StatesOfMatterColorProfile.controlPanelStrokeProperty,
       lineWidth: 1,
       cornerRadius: 5, // radius of the rounded corners on the background
       minWidth: 0
@@ -88,7 +89,11 @@ define( function( require ) {
 
     Node.call( this );
     var textOptions = { font: new PhetFont( NORMAL_TEXT_FONT_SIZE ), fill: '#FFFFFF', maxWidth: MAX_WIDTH };
-    var tickTextOptions = { font: new PhetFont( NORMAL_TEXT_FONT_SIZE ), fill: '#FFFFFF', maxWidth: TICK_TEXT_MAX_WIDTH };
+    var tickTextOptions = {
+      font: new PhetFont( NORMAL_TEXT_FONT_SIZE ),
+      fill: StatesOfMatterColorProfile.controlPanelTextProperty,
+      maxWidth: TICK_TEXT_MAX_WIDTH
+    };
 
     var weakTitle = new Text( weakString, tickTextOptions );
 
@@ -98,7 +103,7 @@ define( function( require ) {
     var interactionStrengthNode = new Node();
     var interactionTitle = new Text( interactionStrengthWithSymbolString, {
       font: new PhetFont( NORMAL_TEXT_FONT_SIZE ),
-      fill: '#FFFFFF',
+      fill: StatesOfMatterColorProfile.controlPanelTextProperty,
       maxWidth: 140
     } );
 
@@ -112,13 +117,13 @@ define( function( require ) {
         majorTickLength: 15,
         minorTickLength: 12,
         trackSize: new Dimension2( 110, 4 ),
-        trackStroke: 'white',
+        trackStroke: StatesOfMatterColorProfile.controlPanelTextProperty,
         trackLineWidth: 1,
         thumbLineWidth: 1,
         tickLabelSpacing: 6,
-        majorTickStroke: 'white',
+        majorTickStroke: StatesOfMatterColorProfile.controlPanelTextProperty,
         majorTickLineWidth: 1,
-        minorTickStroke: 'white',
+        minorTickStroke: StatesOfMatterColorProfile.controlPanelTextProperty,
         minorTickLineWidth: 1,
 
         cursor: 'pointer'
@@ -135,7 +140,7 @@ define( function( require ) {
     var adjustableAttractionText = new Text( adjustableAttractionString, textOptions );
     var title = new Text( atomsAndMoleculesString, {
       font: new PhetFont( 14 ),
-      fill: '#FFFFFF',
+      fill: StatesOfMatterColorProfile.controlPanelTextProperty,
       maxWidth: MAX_WIDTH
     } );
 
@@ -210,10 +215,11 @@ define( function( require ) {
     var content = new VBox( { spacing: 4, children: [ radioButtonGroup ] } );
     var radioButtonPanel = new Panel( content, {
       yMargin: 10,
-      stroke: 'white',
+      stroke: options.stroke,
       align: 'center',
-      fill: 'black',
-      minWidth: options.minWidth
+      fill: options.fill,
+      minWidth: options.minWidth,
+      lineWidth: options.lineWidth
     } );
     interactionTitle.bottom = interactionStrengthSlider.top - 5;
     interactionTitle.centerX = interactionStrengthSlider.centerX;
@@ -233,10 +239,9 @@ define( function( require ) {
         }
       }
     } );
-    var titleBackground = new Rectangle( 0, 0,
-      titleText.label.width + 5, titleText.label.height, {
-        fill: 'black'
-      } );
+    var titleBackground = new Rectangle( 0, 0, titleText.label.width + 5, titleText.label.height, {
+      fill: StatesOfMatterColorProfile.controlPanelBackgroundProperty
+    } );
     titleBackground.centerX = radioButtonPanel.centerX;
     titleBackground.centerY = radioButtonPanel.top;
     titleText.label.centerX = titleBackground.centerX;
