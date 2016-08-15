@@ -76,11 +76,9 @@ define( function( require ) {
     options = _.extend( {
       xMargin: 5,
       yMargin: 8,
-      fill: enableHeterogeneousAtoms ? '#D1D2FF' :
-            StatesOfMatterColorProfile.controlPanelBackgroundProperty,
-      stroke: enableHeterogeneousAtoms ? 'black' :
-              StatesOfMatterColorProfile.controlPanelStrokeProperty,
-      panelTextFill: StatesOfMatterColorProfile.controlPanelTextProperty,
+      fill: 'black',
+      stroke: 'white',
+      panelTextFill: 'white',
       tickTextColor: StatesOfMatterColorProfile.controlPanelTextProperty,
       buttonTextFill: enableHeterogeneousAtoms ? 'black' : 'white',
       lineWidth: 1,

@@ -10,18 +10,19 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var inherit = require( 'PHET_CORE/inherit' );
-  var Node = require( 'SCENERY/nodes/Node' );
-  var AquaRadioButton = require( 'SUN/AquaRadioButton' );
-  var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var AccordionBox = require( 'SUN/AccordionBox' );
-  var Text = require( 'SCENERY/nodes/Text' );
+  var AquaRadioButton = require( 'SUN/AquaRadioButton' );
   var ArrowNode = require( 'SCENERY_PHET/ArrowNode' );
-  var VBox = require( 'SCENERY/nodes/VBox' );
+  var BracketNode = require( 'SCENERY_PHET/BracketNode' );
   var HBox = require( 'SCENERY/nodes/HBox' );
   var HStrut = require( 'SCENERY/nodes/HStrut' );
-  var BracketNode = require( 'SCENERY_PHET/BracketNode' );
+  var inherit = require( 'PHET_CORE/inherit' );
+  var Node = require( 'SCENERY/nodes/Node' );
+  var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  var StatesOfMatterColorProfile = require( 'STATES_OF_MATTER/common/view/StatesOfMatterColorProfile' );
+  var Text = require( 'SCENERY/nodes/Text' );
+  var VBox = require( 'SCENERY/nodes/VBox' );
   var VStrut = require( 'SCENERY/nodes/VStrut' );
 
   //strings
@@ -40,7 +41,7 @@ define( function( require ) {
 
   /**
    * @param {Property<string>} forcesProperty that determines which forces to display
-   * @param {Property<boolean>} forceControlPanelExpandProperty -true to use force panel expand,false if not
+   * @param {Property<boolean>} forceControlPanelExpandProperty -true to use force panel expand, false if not
    * @param {Object} [options] for various panel display properties
    * @constructor
    */
@@ -49,15 +50,14 @@ define( function( require ) {
     options = _.extend( {
       xMargin: 5,
       yMargin: 8,
-      fill: '#D1D2FF',
-      stroke: 'gray',
+      fill: 'black',
+      stroke: 'white',
       tickTextColor: 'black',
-      textColor: 'black',
+      textFill: 'black',
       buttonAlign: 'left',
       lineWidth: 1,
       showTitleWhenExpanded: true,
-      panelMinWidth: 168,
-      backgroundColor: '#D1D2FF'
+      panelMinWidth: 168
     }, options );
 
     Node.call( this );
@@ -84,7 +84,7 @@ define( function( require ) {
     }, arrowNodeOptions ) );
 
     var createText = function( string, width, fontSize ) {
-      var text = new Text( string, { font: new PhetFont( fontSize ), fill: options.textColor } );
+      var text = new Text( string, { font: new PhetFont( fontSize ), fill: options.textFill } );
       if ( text.width > width ) {
         text.scale( width / text.width );
       }
@@ -153,7 +153,7 @@ define( function( require ) {
           orientation: 'left',
           bracketLength: componentForceText.height,
           bracketLineWidth: 2,
-          bracketStroke: options.textColor,
+          bracketStroke: options.textFill,
           bracketTipLocation: 0.475
         } )
       ]
@@ -202,11 +202,10 @@ define( function( require ) {
     accordionContent.addChild( radioButtonGroup );
 
     // show white stroke around the force panel within SOM full version  else  show black stroke
-    var panelStroke = options.showTitleWhenExpanded ? 'white' : 'black';
     var accordionBox = new AccordionBox( accordionContent, {
       titleNode: createText( forcesString, TEXT_LABEL_MAX_WIDTH / 2, 14 ),
-      fill: options.backgroundColor,
-      stroke: panelStroke,
+      fill: options.fill,
+      stroke: options.stroke,
       expandedProperty: forceControlPanelExpandProperty,
       contentAlign: 'left',
       titleAlignX: 'left',

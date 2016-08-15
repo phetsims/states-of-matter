@@ -9,27 +9,27 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var inherit = require( 'PHET_CORE/inherit' );
-  var ScreenView = require( 'JOIST/ScreenView' );
-  var ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
-  var Vector2 = require( 'DOT/Vector2' );
-  var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
-  var InteractiveInteractionPotentialDiagram = require( 'STATES_OF_MATTER/atomic-interactions/view/InteractiveInteractionPotentialDiagram' );
-  var PlayPauseButton = require( 'SCENERY_PHET/buttons/PlayPauseButton' );
-  var StepForwardButton = require( 'SCENERY_PHET/buttons/StepForwardButton' );
   var AquaRadioButton = require( 'SUN/AquaRadioButton' );
-  var VBox = require( 'SCENERY/nodes/VBox' );
-  var Bounds2 = require( 'DOT/Bounds2' );
-  var PhetFont = require( 'SCENERY_PHET/PhetFont' );
-  var Text = require( 'SCENERY/nodes/Text' );
-  var Node = require( 'SCENERY/nodes/Node' );
-  var ForcesControlPanel = require( 'STATES_OF_MATTER/atomic-interactions/view/ForcesControlPanel' );
   var AtomicInteractionsControlPanel = require( 'STATES_OF_MATTER/atomic-interactions/view/AtomicInteractionsControlPanel' );
-  var TextPushButton = require( 'SUN/buttons/TextPushButton' );
-  var ParticleForceNode = require( 'STATES_OF_MATTER/atomic-interactions/view/ParticleForceNode' );
+  var Bounds2 = require( 'DOT/Bounds2' );
+  var ForcesControlPanel = require( 'STATES_OF_MATTER/atomic-interactions/view/ForcesControlPanel' );
   var GrabbableParticleNode = require( 'STATES_OF_MATTER/atomic-interactions/view/GrabbableParticleNode' );
-  var PushPinNode = require( 'STATES_OF_MATTER/atomic-interactions/view/PushPinNode' );
   var HandNode = require( 'STATES_OF_MATTER/atomic-interactions/view/HandNode' );
+  var inherit = require( 'PHET_CORE/inherit' );
+  var InteractiveInteractionPotentialDiagram = require( 'STATES_OF_MATTER/atomic-interactions/view/InteractiveInteractionPotentialDiagram' );
+  var ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
+  var Node = require( 'SCENERY/nodes/Node' );
+  var ParticleForceNode = require( 'STATES_OF_MATTER/atomic-interactions/view/ParticleForceNode' );
+  var PhetFont = require( 'SCENERY_PHET/PhetFont' );
+  var PlayPauseButton = require( 'SCENERY_PHET/buttons/PlayPauseButton' );
+  var PushPinNode = require( 'STATES_OF_MATTER/atomic-interactions/view/PushPinNode' );
+  var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
+  var ScreenView = require( 'JOIST/ScreenView' );
+  var StepForwardButton = require( 'SCENERY_PHET/buttons/StepForwardButton' );
+  var Text = require( 'SCENERY/nodes/Text' );
+  var TextPushButton = require( 'SUN/buttons/TextPushButton' );
+  var VBox = require( 'SCENERY/nodes/VBox' );
+  var Vector2 = require( 'DOT/Vector2' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var StatesOfMatterColorProfile = require( 'STATES_OF_MATTER/common/view/StatesOfMatterColorProfile' );
 
@@ -68,14 +68,18 @@ define( function( require ) {
     var atomicInteractionsScreenView = this;
     var tickTextColor = enableHeterogeneousAtoms ? 'black' : 'white';
     var textColor = enableHeterogeneousAtoms ? 'black' : 'white';
-    var backgroundColor = enableHeterogeneousAtoms ? '#D1D2FF' : 'black';
+    var panelFill = enableHeterogeneousAtoms ? '#D1D2FF' : StatesOfMatterColorProfile.controlPanelBackgroundProperty;
+    var panelStroke = enableHeterogeneousAtoms ? '#D1D2FF' : StatesOfMatterColorProfile.controlPanelStrokeProperty;
+    var panelTextFill = enableHeterogeneousAtoms ? 'black' : StatesOfMatterColorProfile.controlPanelTextProperty;
     var forceControlPanelButtonAlign = enableHeterogeneousAtoms ? 'right' : 'left';
     var atomicInteractionsControlPanel = new AtomicInteractionsControlPanel( dualAtomModel, enableHeterogeneousAtoms, {
       right: this.layoutBounds.maxX - inset,
       top: this.layoutBounds.minY + inset,
       tickTextColor: tickTextColor,
       textColor: textColor,
-      backgroundColor: backgroundColor
+      fill: panelFill,
+      stroke: panelStroke,
+      panelTextFill: panelTextFill
     } );
 
     // add interactive potential diagram
@@ -137,7 +141,9 @@ define( function( require ) {
       {
         tickTextColor: tickTextColor,
         textColor: textColor,
-        backgroundColor: backgroundColor,
+        fill: panelFill,
+        stroke: panelStroke,
+        textFill: panelTextFill,
         buttonAlign: forceControlPanelButtonAlign,
         showTitleWhenExpanded: !enableHeterogeneousAtoms,
         panelMinWidth: atomicInteractionsControlPanel.width
