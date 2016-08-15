@@ -9,24 +9,25 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var inherit = require( 'PHET_CORE/inherit' );
-  var VBox = require( 'SCENERY/nodes/VBox' );
-  var HBox = require( 'SCENERY/nodes/HBox' );
-  var HStrut = require( 'SCENERY/nodes/HStrut' );
-  var Panel = require( 'SUN/Panel' );
-  var Text = require( 'SCENERY/nodes/Text' );
-  var PhetFont = require( 'SCENERY_PHET/PhetFont' );
-  var Circle = require( 'SCENERY/nodes/Circle' );
-  var Node = require( 'SCENERY/nodes/Node' );
-  var Rectangle = require( 'SCENERY/nodes/Rectangle' );
-  var RadioButtonGroup = require( 'SUN/buttons/RadioButtonGroup' );
-  var HSlider = require( 'SUN/HSlider' );
-  var Dimension2 = require( 'DOT/Dimension2' );
-  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
   var AquaRadioButton = require( 'SUN/AquaRadioButton' );
-  var Image = require( 'SCENERY/nodes/Image' );
   var AtomPair = require( 'STATES_OF_MATTER/atomic-interactions/model/AtomPair' );
+  var Circle = require( 'SCENERY/nodes/Circle' );
+  var Dimension2 = require( 'DOT/Dimension2' );
+  var HBox = require( 'SCENERY/nodes/HBox' );
+  var HSlider = require( 'SUN/HSlider' );
+  var HStrut = require( 'SCENERY/nodes/HStrut' );
+  var Image = require( 'SCENERY/nodes/Image' );
+  var inherit = require( 'PHET_CORE/inherit' );
+  var Node = require( 'SCENERY/nodes/Node' );
+  var Panel = require( 'SUN/Panel' );
+  var PhetFont = require( 'SCENERY_PHET/PhetFont' );
+  var RadioButtonGroup = require( 'SUN/buttons/RadioButtonGroup' );
+  var Rectangle = require( 'SCENERY/nodes/Rectangle' );
+  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  var StatesOfMatterColorProfile = require( 'STATES_OF_MATTER/common/view/StatesOfMatterColorProfile' );
+  var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
+  var Text = require( 'SCENERY/nodes/Text' );
+  var VBox = require( 'SCENERY/nodes/VBox' );
 
   // images
   var pushPinImg = require( 'image!STATES_OF_MATTER/push-pin.png' );
@@ -75,12 +76,14 @@ define( function( require ) {
     options = _.extend( {
       xMargin: 5,
       yMargin: 8,
-      fill: '#D1D2FF',
-      stroke: 'gray',
-      tickTextColor: 'black',
-      textColor: enableHeterogeneousAtoms ? 'black' : 'white',
+      fill: enableHeterogeneousAtoms ? '#D1D2FF' :
+            StatesOfMatterColorProfile.controlPanelBackgroundProperty,
+      stroke: enableHeterogeneousAtoms ? 'black' :
+              StatesOfMatterColorProfile.controlPanelStrokeProperty,
+      panelTextFill: StatesOfMatterColorProfile.controlPanelTextProperty,
+      tickTextColor: StatesOfMatterColorProfile.controlPanelTextProperty,
+      buttonTextFill: enableHeterogeneousAtoms ? 'black' : 'white',
       lineWidth: 1,
-      backgroundColor: '#D1D2FF',
       cornerRadius: 5, // radius of the rounded corners on the background
       minWidth: 0
     }, options );
@@ -94,7 +97,6 @@ define( function( require ) {
 
     // white text within SOM full version, black text in Atomic Interactions
     // white stroke around the atoms & molecules panel within SOM full version, black stroke in Atomic Interactions
-    var panelStroke = enableHeterogeneousAtoms ? 'black' : 'white';
     var neonAndNeon;
     var argonAndArgon;
     var oxygenAndOxygen;
@@ -112,7 +114,7 @@ define( function( require ) {
     // common options for radio button labels
     var labelTextOptions = {
       font: NORMAL_TEXT_FONT,
-      fill: options.textColor,
+      fill: options.buttonTextFill,
       maxWidth: NORMAL_TEXT_MAX_WIDTH / 2
     };
 
@@ -144,7 +146,7 @@ define( function( require ) {
       ];
       var customAttraction = new Text( customAttractionString, {
         font: NORMAL_TEXT_FONT,
-        fill: options.textColor,
+        fill: options.buttonTextFill,
         maxWidth: NORMAL_TEXT_MAX_WIDTH
       } );
       var pushpinImage = new Image( pushPinImg );
@@ -237,7 +239,7 @@ define( function( require ) {
       // allows the user to choose the type of molecule when both are the same.
       var title = new Text( atomsString, {
         font: new PhetFont( 14 ),
-        fill: '#FFFFFF',
+        fill: StatesOfMatterColorProfile.controlPanelTextProperty,
         maxWidth: TITLE_TEXT_WIDTH
       } );
 
@@ -248,7 +250,7 @@ define( function( require ) {
       adjustableAttraction = {
         label: new Text( adjustableAttractionString, {
           font: NORMAL_TEXT_FONT,
-          fill: options.textColor,
+          fill: options.buttonTextFill,
           maxWidth: NORMAL_TEXT_MAX_WIDTH
         } ),
         icon: ADJUSTABLE_ATTRACTION_ICON
@@ -293,7 +295,7 @@ define( function( require ) {
 
       var titleBackground = new Rectangle( 0, 0,
         titleText.label.width + 5, titleText.label.height, {
-          fill: 'black',
+          fill: options.fill,
           centerX: titleText.label.centerX,
           centerY: titleText.label.centerY
         } );
@@ -304,20 +306,20 @@ define( function( require ) {
     // add atom diameter slider
     var atomDiameterTitle = new Text( atomDiameterString, {
       font: NORMAL_TEXT_FONT,
-      fill: options.textColor,
+      fill: options.panelTextFill,
       maxWidth: SLIDER_TITTLE_MAX_WIDTH
     } );
 
     var sliderOptions = {
       trackSize: new Dimension2( sliderTrackWidth, 5 ),
-      trackFill: 'white',
+      trackFill: StatesOfMatterColorProfile.controlPanelTextProperty,
       thumbSize: new Dimension2( 14, 25 ),
       thumbFillEnabled: '#A670DB',
       thumbFillHighlighted: '#D966FF',
       thumbCenterLineStroke: 'black',
       majorTickLength: 15,
-      majorTickStroke: options.tickTextColor,
-      trackStroke: options.tickTextColor,
+      majorTickStroke: StatesOfMatterColorProfile.controlPanelTextProperty,
+      trackStroke: StatesOfMatterColorProfile.controlPanelTextProperty,
       startDrag: function() {
         dualAtomModel.setMotionPaused( true );
       },
@@ -332,7 +334,7 @@ define( function( require ) {
       sliderOptions
     );
 
-    var tickTextOptions = { fill: options.tickTextColor, maxWidth: SLIDER_TICK_TEXT_MAX_WIDTH };
+    var tickTextOptions = { fill: options.panelTextFill, maxWidth: SLIDER_TICK_TEXT_MAX_WIDTH };
     var smallText = new Text( smallString, tickTextOptions );
     var largeText = new Text( largeString, tickTextOptions );
 
@@ -350,7 +352,7 @@ define( function( require ) {
     // add interaction strength slider
     var interactionStrengthTitle = new Text( interactionStrengthString, {
       font: NORMAL_TEXT_FONT,
-      fill: options.textColor,
+      fill: options.panelTextFill,
       top: atomDiameterSlider.bottom + 5,
       maxWidth: SLIDER_TITTLE_MAX_WIDTH
     } );
@@ -386,10 +388,10 @@ define( function( require ) {
       ) + 2 * PANEL_X_MARGIN;
 
     var radioButtonPanel = new Panel( content, {
-      stroke: panelStroke,
+      stroke: options.stroke,
       cornerRadius: 6,
       lineWidth: options.lineWidth,
-      fill: options.backgroundColor,
+      fill: options.fill,
       xMargin: PANEL_X_MARGIN,
       minWidth: panelMinWidth
     } );

@@ -198,8 +198,8 @@ define( function( require ) {
       X_ORIGIN_OFFSET + (HORIZ_AXIS_SIZE_PROPORTION * WIDTH),
       Y_ORIGIN_OFFSET,
       {
-        fill: StatesOfMatterColorProfile.controlPanelText,
-        stroke: StatesOfMatterColorProfile.controlPanelText,
+        fill: StatesOfMatterColorProfile.controlPanelTextProperty,
+        stroke: StatesOfMatterColorProfile.controlPanelTextProperty,
         headHeight: 8,
         headWidth: 8,
         tailWidth: AXES_LINE_WIDTH
@@ -213,8 +213,8 @@ define( function( require ) {
       X_ORIGIN_OFFSET,
       Y_ORIGIN_OFFSET - Y_USABLE_RANGE - AXES_ARROW_HEAD_HEIGHT,
       {
-        fill: StatesOfMatterColorProfile.controlPanelText,
-        stroke: StatesOfMatterColorProfile.controlPanelText,
+        fill: StatesOfMatterColorProfile.controlPanelTextProperty,
+        stroke: StatesOfMatterColorProfile.controlPanelTextProperty,
         headHeight: 8,
         headWidth: 8,
         tailWidth: AXES_LINE_WIDTH
@@ -225,7 +225,7 @@ define( function( require ) {
     // Create and add the labels for the axes.
     var horizontalAxisLabel = new Text( temperatureString, {
       font: AXIS_LABEL_FONT,
-      fill: StatesOfMatterColorProfile.controlPanelText
+      fill: StatesOfMatterColorProfile.controlPanelTextProperty
     } );
     if ( horizontalAxisLabel.width > horizontalAxis.width ) {
       horizontalAxisLabel.scale( horizontalAxis.width / horizontalAxisLabel.width );
@@ -235,7 +235,7 @@ define( function( require ) {
 
     var verticalAxisLabel = new Text( pressureString, {
       font: AXIS_LABEL_FONT,
-      fill: StatesOfMatterColorProfile.controlPanelText
+      fill: StatesOfMatterColorProfile.controlPanelTextProperty
     } );
     if ( verticalAxisLabel.width > verticalAxis.height ) {
       verticalAxisLabel.scale( verticalAxis.height / verticalAxisLabel.width );
@@ -250,7 +250,7 @@ define( function( require ) {
     accordionContent.addChild( this.currentStateMarker );
 
     var titleNode = new Text( phaseDiagramString, {
-      fill: StatesOfMatterColorProfile.controlPanelText,
+      fill: StatesOfMatterColorProfile.controlPanelTextProperty,
       font: new PhetFont( { size: 13 } )
     } );
 
@@ -259,8 +259,8 @@ define( function( require ) {
     }
     this.accordionBox = new AccordionBox( accordionContent, {
       titleNode: titleNode,
-      fill: StatesOfMatterColorProfile.controlPanelBackground,
-      stroke: StatesOfMatterColorProfile.controlPanelStroke,
+      fill: StatesOfMatterColorProfile.controlPanelBackgroundProperty,
+      stroke: StatesOfMatterColorProfile.controlPanelStrokeProperty,
       expandedProperty: expandedProperty,
       contentAlign: 'center',
       titleAlignX: 'center',
