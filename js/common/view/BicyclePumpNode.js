@@ -126,7 +126,7 @@ define( function( require ) {
     }
     pumpHandleNodeShape.close();
     var pumpHandleNode = new Path( pumpHandleNodeShape, {
-      lineWidth: 1,
+      lineWidth: 2,
       stroke: 'black',
       fill: new LinearGradient( 0, 0, 262, 0 )
         .addColorStop( 0, '#727374' )//1

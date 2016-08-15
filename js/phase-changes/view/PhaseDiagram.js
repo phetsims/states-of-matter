@@ -11,17 +11,18 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var inherit = require( 'PHET_CORE/inherit' );
   var AccordionBox = require( 'SUN/AccordionBox' );
-  var Vector2 = require( 'DOT/Vector2' );
-  var Shape = require( 'KITE/Shape' );
-  var Path = require( 'SCENERY/nodes/Path' );
-  var Text = require( 'SCENERY/nodes/Text' );
-  var MultiLineText = require( 'SCENERY_PHET/MultiLineText' );
-  var PhetFont = require( 'SCENERY_PHET/PhetFont' );
-  var Node = require( 'SCENERY/nodes/Node' );
   var ArrowNode = require( 'SCENERY_PHET/ArrowNode' );
+  var inherit = require( 'PHET_CORE/inherit' );
+  var MultiLineText = require( 'SCENERY_PHET/MultiLineText' );
+  var Node = require( 'SCENERY/nodes/Node' );
+  var PhetFont = require( 'SCENERY_PHET/PhetFont' );
+  var Path = require( 'SCENERY/nodes/Path' );
+  var Shape = require( 'KITE/Shape' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  var StatesOfMatterColorProfile = require( 'STATES_OF_MATTER/common/view/StatesOfMatterColorProfile' );
+  var Text = require( 'SCENERY/nodes/Text' );
+  var Vector2 = require( 'DOT/Vector2' );
 
   // strings
   var solidString = require( 'string!STATES_OF_MATTER/solid' );
@@ -197,8 +198,8 @@ define( function( require ) {
       X_ORIGIN_OFFSET + (HORIZ_AXIS_SIZE_PROPORTION * WIDTH),
       Y_ORIGIN_OFFSET,
       {
-        fill: 'white',
-        stroke: 'white',
+        fill: StatesOfMatterColorProfile.controlPanelText,
+        stroke: StatesOfMatterColorProfile.controlPanelText,
         headHeight: 8,
         headWidth: 8,
         tailWidth: AXES_LINE_WIDTH
@@ -212,8 +213,8 @@ define( function( require ) {
       X_ORIGIN_OFFSET,
       Y_ORIGIN_OFFSET - Y_USABLE_RANGE - AXES_ARROW_HEAD_HEIGHT,
       {
-        fill: 'white',
-        stroke: 'white',
+        fill: StatesOfMatterColorProfile.controlPanelText,
+        stroke: StatesOfMatterColorProfile.controlPanelText,
         headHeight: 8,
         headWidth: 8,
         tailWidth: AXES_LINE_WIDTH
@@ -222,14 +223,20 @@ define( function( require ) {
     accordionContent.addChild( verticalAxis );
 
     // Create and add the labels for the axes.
-    var horizontalAxisLabel = new Text( temperatureString, { font: AXIS_LABEL_FONT, fill: 'white' } );
+    var horizontalAxisLabel = new Text( temperatureString, {
+      font: AXIS_LABEL_FONT,
+      fill: StatesOfMatterColorProfile.controlPanelText
+    } );
     if ( horizontalAxisLabel.width > horizontalAxis.width ) {
       horizontalAxisLabel.scale( horizontalAxis.width / horizontalAxisLabel.width );
     }
     horizontalAxisLabel.setTranslation( horizontalAxis.centerX - horizontalAxisLabel.width / 2, Y_ORIGIN_OFFSET + horizontalAxisLabel.height * 1.2 );
     accordionContent.addChild( horizontalAxisLabel );
 
-    var verticalAxisLabel = new Text( pressureString, { font: AXIS_LABEL_FONT, fill: 'white' } );
+    var verticalAxisLabel = new Text( pressureString, {
+      font: AXIS_LABEL_FONT,
+      fill: StatesOfMatterColorProfile.controlPanelText
+    } );
     if ( verticalAxisLabel.width > verticalAxis.height ) {
       verticalAxisLabel.scale( verticalAxis.height / verticalAxisLabel.width );
     }
@@ -242,15 +249,18 @@ define( function( require ) {
       .ellipse( 0, 0, CURRENT_STATE_MARKER_DIAMETER, CURRENT_STATE_MARKER_DIAMETER ), { fill: 'red' } );
     accordionContent.addChild( this.currentStateMarker );
 
-    var titleNode = new Text( phaseDiagramString, { fill: '#FFFFFF', font: new PhetFont( { size: 13 } ) } );
+    var titleNode = new Text( phaseDiagramString, {
+      fill: StatesOfMatterColorProfile.controlPanelText,
+      font: new PhetFont( { size: 13 } )
+    } );
 
     if ( titleNode.width > horizontalAxis.width ) {
       titleNode.scale( horizontalAxis.width / titleNode.width );
     }
     this.accordionBox = new AccordionBox( accordionContent, {
       titleNode: titleNode,
-      fill: 'black',
-      stroke: 'white',
+      fill: StatesOfMatterColorProfile.controlPanelBackground,
+      stroke: StatesOfMatterColorProfile.controlPanelStroke,
       expandedProperty: expandedProperty,
       contentAlign: 'center',
       titleAlignX: 'center',
