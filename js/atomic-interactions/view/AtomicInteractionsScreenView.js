@@ -66,8 +66,8 @@ define( function( require ) {
 
     // initialize local variables
     var atomicInteractionsScreenView = this;
-    var tickTextColor = enableHeterogeneousAtoms ? 'black' : 'white';
-    var textColor = enableHeterogeneousAtoms ? 'black' : 'white';
+    var tickTextColor = enableHeterogeneousAtoms ? 'black' : StatesOfMatterColorProfile.controlPanelTextProperty;
+    var textColor = enableHeterogeneousAtoms ? 'black' : StatesOfMatterColorProfile.controlPanelTextProperty;
     var panelFill = enableHeterogeneousAtoms ? '#D1D2FF' : StatesOfMatterColorProfile.controlPanelBackgroundProperty;
     var panelStroke = enableHeterogeneousAtoms ? '#D1D2FF' : StatesOfMatterColorProfile.controlPanelStrokeProperty;
     var panelTextFill = enableHeterogeneousAtoms ? 'black' : StatesOfMatterColorProfile.controlPanelTextProperty;

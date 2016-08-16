@@ -24,7 +24,6 @@ define( function( require ) {
   var RadioButtonGroup = require( 'SUN/buttons/RadioButtonGroup' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  var StatesOfMatterColorProfile = require( 'STATES_OF_MATTER/common/view/StatesOfMatterColorProfile' );
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
   var Text = require( 'SCENERY/nodes/Text' );
   var VBox = require( 'SCENERY/nodes/VBox' );
@@ -79,7 +78,7 @@ define( function( require ) {
       fill: 'black',
       stroke: 'white',
       panelTextFill: 'white',
-      tickTextColor: StatesOfMatterColorProfile.controlPanelTextProperty,
+      tickTextColor: 'black',
       buttonTextFill: enableHeterogeneousAtoms ? 'black' : 'white',
       lineWidth: 1,
       cornerRadius: 5, // radius of the rounded corners on the background
@@ -237,7 +236,7 @@ define( function( require ) {
       // allows the user to choose the type of molecule when both are the same.
       var title = new Text( atomsString, {
         font: new PhetFont( 14 ),
-        fill: StatesOfMatterColorProfile.controlPanelTextProperty,
+        fill: options.panelTextFill,
         maxWidth: TITLE_TEXT_WIDTH
       } );
 
@@ -291,12 +290,11 @@ define( function( require ) {
         deselectedContentOpacity: 1
       } );
 
-      var titleBackground = new Rectangle( 0, 0,
-        titleText.label.width + 5, titleText.label.height, {
-          fill: options.fill,
-          centerX: titleText.label.centerX,
-          centerY: titleText.label.centerY
-        } );
+      var titleBackground = new Rectangle( 0, 0, titleText.label.width + 5, titleText.label.height, {
+        fill: options.fill,
+        centerX: titleText.label.centerX,
+        centerY: titleText.label.centerY
+      } );
 
       titleNode = new Node( { children: [ titleBackground, titleText.label ] } );
     }
@@ -310,14 +308,14 @@ define( function( require ) {
 
     var sliderOptions = {
       trackSize: new Dimension2( sliderTrackWidth, 5 ),
-      trackFill: StatesOfMatterColorProfile.controlPanelTextProperty,
+      trackFill: 'white',
       thumbSize: new Dimension2( 14, 25 ),
       thumbFillEnabled: '#A670DB',
       thumbFillHighlighted: '#D966FF',
       thumbCenterLineStroke: 'black',
       majorTickLength: 15,
-      majorTickStroke: StatesOfMatterColorProfile.controlPanelTextProperty,
-      trackStroke: StatesOfMatterColorProfile.controlPanelTextProperty,
+      majorTickStroke: options.panelTextFill,
+      trackStroke: options.panelTextFill,
       startDrag: function() {
         dualAtomModel.setMotionPaused( true );
       },
