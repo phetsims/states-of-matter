@@ -1,9 +1,8 @@
 // Copyright 2014-2015, University of Colorado Boulder
 
 /**
- * This class defines  Node that has a liquid thermometer and a numerical
- * readout that can display the temperature in degrees Kelvin or degrees
- * Celsius.
+ * This class defines  Node that has a liquid thermometer and a numerical readout that can display the temperature in
+ * degrees Kelvin or degrees Celsius.
  *
  * @author Siddhartha Chinthapally (Actual Concepts)
  */
@@ -36,7 +35,6 @@ define( function( require ) {
   var MAX_TEMPERATURE_TO_CLAMP_RED_MERCURY = 1000;
 
   /**
-   *
    * @param {MultipleParticleModel} multipleParticleModel - model of the simulation
    * @param {ModelViewTransform2} modelViewTransform The model view transform for transforming particle position.
    * @param {Object} [options] that can be passed on to the underlying node
@@ -147,7 +145,7 @@ define( function( require ) {
           StatesOfMatterConstants.CONTAINER_BOUNDS.width - containerHeight ) + inset;
       }
       else {
-        var rotationAmount = -(Math.PI / 100 + ( Math.random() * Math.PI / 50 ));
+        var rotationAmount = -( Math.PI / 100 + ( Math.random() * Math.PI / 50 ) );
         var centerPosY = -this.modelViewTransform.modelToViewDeltaY(
             StatesOfMatterConstants.CONTAINER_BOUNDS.height - containerHeight ) +
                          LID_POSITION_TWEAK_FACTOR;

@@ -223,7 +223,6 @@ define( function( require ) {
         .addColorStop( 0.5, '#9E9E9E' )
         .addColorStop( 0.5, '#A2A2A2' )
         .addColorStop( 0.9, '#A3A3A3' )
-
     } );
     postParticleLayer.addChild( bottomShape );
 
@@ -274,6 +273,14 @@ define( function( require ) {
   return inherit( Node, ParticleContainerNode, {
 
     /**
+     * step
+     * @param dt
+     */
+    step: function( dt ){
+      this.pressureMeter.step( dt );
+    },
+
+    /**
      * @public
      */
     reset: function() {
@@ -315,11 +322,9 @@ define( function( require ) {
      */
     handleContainerSizeChanged: function() {
 
-      // IMPORTANT NOTE: This routine assumes that only the height of the
-      // container can change, since this was true when this routine was
-      // created and it isn't worth the effort to make it more general.  If
-      // this assumption is ever invalidated, this routine will need to be
-      // changed.
+      // IMPORTANT NOTE: This method assumes that only the height of the container can change, since this was true when
+      // this method was created and it isn't worth the effort to make it more general.  If this assumption is ever
+      // invalidated, this routine will need to be changed.
       var containerHeight = this.multipleParticleModel.getParticleContainerHeight();
       if ( !this.multipleParticleModel.getContainerExploded() ) {
         if ( this.containerLid.getRotation() !== 0 ) {
@@ -329,9 +334,8 @@ define( function( require ) {
         this.containerLid.y = -this.modelViewTransform.modelToViewDeltaY( this.containmentAreaHeight - containerHeight );
       }
       else {
-        // Rotate the lid to create the visual appearance of it being
-        // blown off the top of the container.
-        var rotationAmount = -(Math.PI / 100 + ( Math.random() * Math.PI / 50 ));
+        // Rotate the lid to create the visual appearance of it being blown off the top of the container.
+        var rotationAmount = -( Math.PI / 100 + ( Math.random() * Math.PI / 50 ) );
         var centerPosY = -this.modelViewTransform.modelToViewDeltaY( this.containmentAreaHeight - containerHeight ) -
                          ( this.containerLid.height / 2 ) + LID_POSITION_TWEAK_FACTOR;
         var currentPosY = this.containerLid.y;
@@ -345,7 +349,6 @@ define( function( require ) {
           newPosY = currentPosY;
         }
 
-        //this.containerLid.setY( newPosY );
         this.containerLid.y = newPosY;
         this.containerLid.rotate( rotationAmount );
       }

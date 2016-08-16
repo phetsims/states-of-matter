@@ -72,33 +72,35 @@ define( function( require ) {
     var startY;
     var endY;
 
-    this.fingerImageNode.addInputListener( new SimpleDragHandler(
-      {
-        allowTouchSnag: true,
-        start: function( event ) {
-          startY = pointingHandNode.globalToParentPoint( event.pointer.point ).y;
-          pointingHandNode.beingDragged = true;
-          pointingHandNode.containerSizeAtDragStart = multipleParticleModel.getParticleContainerHeight();
-          pointingHandNode.updateHintVisibility();
+    // add a listener to handle drag events
+    this.fingerImageNode.addInputListener( new SimpleDragHandler( {
+      allowTouchSnag: true,
+      start: function( event ) {
+        startY = pointingHandNode.globalToParentPoint( event.pointer.point ).y;
+        pointingHandNode.beingDragged = true;
+        pointingHandNode.containerSizeAtDragStart = multipleParticleModel.getParticleContainerHeight();
+        pointingHandNode.updateHintVisibility();
 
-        },
-        drag: function( event ) {
-          endY = pointingHandNode.globalToParentPoint( event.pointer.point ).y;
+      },
+      drag: function( event ) {
+        endY = pointingHandNode.globalToParentPoint( event.pointer.point ).y;
 
-          // Resize the container based on the amount that the node has moved.
-          multipleParticleModel.setTargetParticleContainerHeight(
-            pointingHandNode.containerSizeAtDragStart + modelViewTransform.viewToModelDeltaY( endY - startY ) );
-          pointingHandNode.updateHintVisibility();
-        },
-        end: function() {
+        // Resize the container based on the amount that the node has moved.
+        multipleParticleModel.setTargetParticleContainerHeight(
+          pointingHandNode.containerSizeAtDragStart + modelViewTransform.viewToModelDeltaY( endY - startY ) );
+        pointingHandNode.updateHintVisibility();
+      },
+      end: function() {
 
-          // Set the target size to the current size, which will stop any change
-          // in size that is currently underway.
-          multipleParticleModel.setTargetParticleContainerHeight( multipleParticleModel.getParticleContainerHeight() );
-          pointingHandNode.beingDragged = false;
-          pointingHandNode.updateHintVisibility();
-        }
-      } ) );
+        // Set the target size to the current size, which will stop any change
+        // in size that is currently underway.
+        multipleParticleModel.setTargetParticleContainerHeight( multipleParticleModel.getParticleContainerHeight() );
+        pointingHandNode.beingDragged = false;
+        pointingHandNode.updateHintVisibility();
+      }
+    } ) );
+
+    // add the listener that will show and hide the hint
     this.fingerImageNode.addInputListener( {
       enter: function() {
         pointingHandNode.mouseOver = true;
@@ -109,13 +111,10 @@ define( function( require ) {
         pointingHandNode.updateHintVisibility();
       }
     } );
+
     // Add the finger node as a child.
     this.addChild( this.fingerImageNode );
     this.addChild( this.hintNode );
-    //multipleParticleModel.particleContainerHeightProperty.link( function() {
-    //  pointingHandNode.handleContainerSizeChanged();
-    //  pointingHandNode.updateArrowVisibility();
-    //} );
     this.touchArea = this.localBounds.dilatedXY( 10, 10 );
   }
 
@@ -154,8 +153,7 @@ define( function( require ) {
       }
       else {
 
-        // If the container is exploding that hand is retracted more
-        // quickly.
+        // If the container is exploding that hand is retracted more quickly.
         this.y = -this.modelViewTransform.modelToViewDeltaY( StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT -
                  ( containerHeight * 2 ) ) - this.height;
       }
