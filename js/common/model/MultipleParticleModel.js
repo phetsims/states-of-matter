@@ -40,6 +40,7 @@ define( function( require ) {
   var ObservableArray = require( 'AXON/ObservableArray' );
   var OxygenAtom = require( 'STATES_OF_MATTER/common/model/particle/OxygenAtom' );
   var PhaseStateEnum = require( 'STATES_OF_MATTER/common/PhaseStateEnum' );
+  var platform = require( 'PHET_CORE/platform' );
   var PropertySet = require( 'AXON/PropertySet' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
@@ -56,7 +57,6 @@ define( function( require ) {
   var MIN_TEMPERATURE = 0.0001;
   var INITIAL_GRAVITATIONAL_ACCEL = 0.045;
   var MAX_TEMPERATURE_CHANGE_PER_ADJUSTMENT = 0.025;
-  var TICKS_PER_TEMP_ADJUSTMENT = 10;
   var MIN_INJECTED_MOLECULE_VELOCITY = 0.5;
   var MAX_INJECTED_MOLECULE_VELOCITY = 2.0;
   var MAX_INJECTED_MOLECULE_ANGLE = Math.PI * 0.8;
@@ -69,12 +69,9 @@ define( function( require ) {
   var MIN_ADEQUATE_FRAME_RATE = 25; // in frames per second
   var PARTICLE_SPEED_UP_FACTOR = 4; // empirically determined to make the particles move at a speed that looks reasonable
   var MAX_PARTICLE_MOTION_TIME_STEP = 0.025; // max time step that model can handle, empirically determined
-  var TIME_STEP_MOVING_AVERAGE_LENGTH = 60; // number of samples in the moving average of time steps
-  var CONTROL_LOOP_UPDATE_PERIOD = 0.5; // seconds
-
-  // parameters for PID controller loop that adjust time step, adjusted using Ziegler-Nichols method
-  var K_P = 7.2;
-  var K_I = 1.7;
+  var MAX_MODEL_ADVANCE_TIME_PER_STEP = Number.POSITIVE_INFINITY;
+  var TIME_STEP_MOVING_AVERAGE_LENGTH = 20; // number of samples in the moving average of time steps
+  var TEMPERATURE_UPDATE_INTERVAL = 10 * NOMINAL_TIME_STEP;
 
   // possible thermostat settings
   var ISOKINETIC_THERMOSTAT = 1;
@@ -144,7 +141,7 @@ define( function( require ) {
     this.particleDiameter = 1;
     this.normalizedContainerWidth = StatesOfMatterConstants.PARTICLE_CONTAINER_WIDTH / this.particleDiameter;
     this.gravitationalAcceleration = null;
-    this.tempAdjustTickCounter = null;
+    this.timeSinceLastTemperatureAdjust = Number.POSITIVE_INFINITY;
     this.currentMolecule = null;
     this.thermostatType = ADAPTIVE_THERMOSTAT;
     this.heightChangeCounter = 0;
@@ -174,7 +171,7 @@ define( function( require ) {
         heatingCoolingAmount: 0,
         keepingUp: true, // tracks whether targeted min frame rate is being maintained
         averageDt: this.timeStepMovingAverage.average,
-        maxModelAdvanceTimePerStep: Number.POSITIVE_INFINITY
+        maxParticleMoveTimePerStep: MAX_MODEL_ADVANCE_TIME_PER_STEP
       }
     );
 
@@ -369,6 +366,13 @@ define( function( require ) {
 
       // Initiate a reset in order to get the particles into predetermined locations and energy levels.
       this.initializeParticles( phase );
+
+      // Reset any time step limits that had kicked in for the previous molecule type.
+      this.maxParticleMoveTimePerStepProperty.reset();
+
+      // Start over on averaging the incoming time steps.
+      this.timeStepMovingAverage.reset();
+      this.keepingUp = true;
     },
 
     /**
@@ -509,6 +513,7 @@ define( function( require ) {
     reset: function() {
       this.initializeModelParameters();
       this.setMoleculeType( DEFAULT_MOLECULE );
+      this.timeStepMovingAverage.reset();
       PropertySet.prototype.reset.call( this );
       this.trigger( 'reset' );
     },
@@ -709,7 +714,7 @@ define( function( require ) {
       // Initialize the system parameters
       this.gravitationalAcceleration = INITIAL_GRAVITATIONAL_ACCEL;
       this.heatingCoolingAmount = 0;
-      this.tempAdjustTickCounter = 0;
+      this.timeSinceLastTemperatureAdjust = Number.POSITIVE_INFINITY;
       this.temperatureSetPoint = INITIAL_TEMPERATURE;
       this.isExploded = false;
     },
@@ -733,28 +738,20 @@ define( function( require ) {
      */
     stepInternal: function( dt ) {
 
-      // Determine whether the device on which this sim is running is "keeping up", meaning that it is maintaining an
-      // adequate frame rate.  TODO: More doc about what this does if and when it works
       this.timeStepMovingAverage.addValue( dt );
       this.averageDt = this.timeStepMovingAverage.average;
-      this.timeSinceLastControlLoopUpdate += dt;
-      if ( this.timeSinceLastControlLoopUpdate >= CONTROL_LOOP_UPDATE_PERIOD ){
-        var errorTerm = ( 1 / MIN_ADEQUATE_FRAME_RATE ) - this.averageDt;
-        this.integral = this.integral + errorTerm * dt;
-        this.timeAdvanceLimitAdjustment = errorTerm * K_P + K_I * this.integral;
-        this.timeSinceLastControlLoopUpdate = 0;
-        this.keepingUp = errorTerm >= 0;
-      }
 
-      // Because we are aiming for a minimum frame rate, we only turn down the particle rate, we never turn it up.
-      if ( this.timeAdvanceLimitAdjustment < 0 ){
-        this.maxModelAdvanceTimePerStep = Math.max(
-          ( 1 / MIN_ADEQUATE_FRAME_RATE ) * PARTICLE_SPEED_UP_FACTOR + this.timeAdvanceLimitAdjustment, // TODO: make front term a constant if kept
-          MAX_PARTICLE_MOTION_TIME_STEP
-        );
-      }
-      else{
-        this.maxModelAdvanceTimePerStep = Number.POSITIVE_INFINITY;
+      // Platform specific code for adjusting performance on iPads, see https://github.com/phetsims/states-of-matter/issues/71.
+      if ( platform.mobileSafari &&
+           this.averageDt < 1 / MIN_ADEQUATE_FRAME_RATE &&
+           this.currentMolecule === StatesOfMatterConstants.WATER ) {
+
+        // Limit the maximum model advancement time to something that is more likely to run at a decent speed on the
+        // devices that aren't able to keep up.  The value was empirically determined by testing on multiple devices.
+        this.maxParticleMoveTimePerStep = MAX_PARTICLE_MOTION_TIME_STEP * 4;
+
+        // update the flag (for debug purposes)
+        this.keepingUp = false;
       }
 
       if ( !this.isExploded ) {
@@ -802,7 +799,7 @@ define( function( require ) {
 
       // Calculate the amount of time to advance the particle engine.  This is based purely on aesthetics - we looked at
       // the particle motion and tweaked the multiplier until we felt that it looked good.
-      var particleMotionAdvancementTime = Math.min( dt * PARTICLE_SPEED_UP_FACTOR, this.maxModelAdvanceTimePerStep );
+      var particleMotionAdvancementTime = Math.min( dt * PARTICLE_SPEED_UP_FACTOR, this.maxParticleMoveTimePerStep );
 
       // Determine the number of model steps and the size of the time step
       var particleMotionTimeStep;
@@ -843,9 +840,9 @@ define( function( require ) {
       }
 
       // Adjust the temperature if needed.
-      this.tempAdjustTickCounter++;
-      if ( ( this.tempAdjustTickCounter > TICKS_PER_TEMP_ADJUSTMENT ) && this.heatingCoolingAmount !== 0 ) {
-        this.tempAdjustTickCounter = 0;
+      this.timeSinceLastTemperatureAdjust += dt;
+      if ( ( this.timeSinceLastTemperatureAdjust > TEMPERATURE_UPDATE_INTERVAL ) && this.heatingCoolingAmount !== 0 ) {
+        this.timeSinceLastTemperatureAdjust = 0;
         var newTemperature = this.temperatureSetPoint + this.heatingCoolingAmount;
         if ( newTemperature >= MAX_TEMPERATURE ) {
           newTemperature = MAX_TEMPERATURE;

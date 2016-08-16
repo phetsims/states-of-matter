@@ -19,25 +19,44 @@ define( function( require ) {
       initialValue: 0
     }, options );
 
-    this.currentIndex = 0;
+    this.initialValue = options.initialValue;
     this.size = size;
-    this.array = [];
-    for( var i = 0; i < size; i++ ){
-      this.array.push( options.initialValue );
-    }
-    this.total = options.initialValue * size;
-    this.average = this.total / size;
+    this.array = new Array( size );
+    this.reset();
   }
 
   statesOfMatter.register( 'MovingAverage', MovingAverage );
 
   return inherit( Object, MovingAverage, {
+
     addValue: function( newValue ){
       var replacedValue = this.array[ this.currentIndex ];
       this.array[ this.currentIndex ] = newValue;
       this.currentIndex = ( this.currentIndex + 1 ) % this.size;
-      this.total = this.total - replacedValue + newValue;
+      this.total = ( this.total - replacedValue ) + newValue;
       this.average = this.total / this.size;
+      if ( this.average < 0 ){
+        alert( 'this.total = ' + this.total );
+        var alertString = 'values = ';
+        for( var i = 0; i < this.size; i++ ){
+          alertString += this.array[ i ].toFixed( 4 ) + ',';
+        }
+        alert( alertString );
+        var actualTotal = 0;
+        for( i = 0; i < this.size; i++ ){
+          actualTotal += this.array[ i ];
+        }
+        alert( 'actual total = ' + actualTotal );
+      }
+    },
+
+    reset: function(){
+      for( var i = 0; i < this.size; i++ ){
+        this.array[ i ] = this.initialValue;
+      }
+      this.total = this.initialValue * this.size;
+      this.average = this.total / this.size;
+      this.currentIndex = 0;
     }
   } );
 } );

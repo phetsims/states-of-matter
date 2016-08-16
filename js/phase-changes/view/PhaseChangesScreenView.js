@@ -10,29 +10,31 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var inherit = require( 'PHET_CORE/inherit' );
-  var ScreenView = require( 'JOIST/ScreenView' );
-  var PhetFont = require( 'SCENERY_PHET/PhetFont' );
-  var PlayPauseButton = require( 'SCENERY_PHET/buttons/PlayPauseButton' );
-  var StepForwardButton = require( 'SCENERY_PHET/buttons/StepForwardButton' );
+  var BicyclePumpNode = require( 'STATES_OF_MATTER/common/view/BicyclePumpNode' );
+  var Bounds2 = require( 'DOT/Bounds2' );
   var CompositeThermometerNode = require( 'STATES_OF_MATTER/common/view/CompositeThermometerNode' );
   var HeaterCoolerNode = require( 'SCENERY_PHET/HeaterCoolerNode' );
-  var PhaseChangesMoleculesControlPanel = require( 'STATES_OF_MATTER/phase-changes/view/PhaseChangesMoleculesControlPanel' );
-  var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
-  var ParticleContainerNode = require( 'STATES_OF_MATTER/common/view/ParticleContainerNode' );
-  var ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
-  var Vector2 = require( 'DOT/Vector2' );
-  var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
-  var Bounds2 = require( 'DOT/Bounds2' );
-  var BicyclePumpNode = require( 'STATES_OF_MATTER/common/view/BicyclePumpNode' );
-  var PhaseDiagram = require( 'STATES_OF_MATTER/phase-changes/view/PhaseDiagram' );
   var EpsilonControlInteractionPotentialDiagram = require( 'STATES_OF_MATTER/phase-changes/view/EpsilonControlInteractionPotentialDiagram' );
-  var ParticleCanvasNode = require( 'STATES_OF_MATTER/common/view/ParticleCanvasNode' );
-  var TextPushButton = require( 'SUN/buttons/TextPushButton' );
+  var inherit = require( 'PHET_CORE/inherit' );
+  var ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
   var ObservableArray = require( 'AXON/ObservableArray' );
+  var ParticleCanvasNode = require( 'STATES_OF_MATTER/common/view/ParticleCanvasNode' );
+  var ParticleContainerNode = require( 'STATES_OF_MATTER/common/view/ParticleContainerNode' );
+  var PhaseChangesMoleculesControlPanel = require( 'STATES_OF_MATTER/phase-changes/view/PhaseChangesMoleculesControlPanel' );
+  var PhaseDiagram = require( 'STATES_OF_MATTER/phase-changes/view/PhaseDiagram' );
+  var PhetFont = require( 'SCENERY_PHET/PhetFont' );
+  var PlayPauseButton = require( 'SCENERY_PHET/buttons/PlayPauseButton' );
+  var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
+  var StatesOfMatterQueryParameters = require( 'STATES_OF_MATTER/common/StatesOfMatterQueryParameters' );
+  var ScreenView = require( 'JOIST/ScreenView' );
+  var StepForwardButton = require( 'SCENERY_PHET/buttons/StepForwardButton' );
+  var Text = require( 'SCENERY/nodes/Text' );
+  var TextPushButton = require( 'SUN/buttons/TextPushButton' );
+  var Vector2 = require( 'DOT/Vector2' );
 
-  //strings
+  // strings
   var returnLidString = require( 'string!STATES_OF_MATTER/returnLid' );
 
   // constants
@@ -273,6 +275,41 @@ define( function( require ) {
     // center the heater cooler node with respect to particle container node
     heaterCoolerNode.centerX = heaterCoolerNode.centerX - 10; // empirically determined
 
+
+    // if the appropriate query param is set, show some information used in debugging time step adjustments
+    // TODO: Consider removing this once performance issues are worked out.
+    if ( StatesOfMatterQueryParameters.DEBUG_TIME_STEP ){
+      var keepingUpReadout = new Text( '', {
+        font: new PhetFont( 20 ),
+        fill: 'red',
+        top: 40,
+        left: 20
+      } );
+      this.addChild( keepingUpReadout );
+      multipleParticleModel.keepingUpProperty.link( function( keepingUp ){
+        keepingUpReadout.text = keepingUp.toString();
+      } );
+      var averageDtReadout = new Text( '', {
+        font: new PhetFont( 20 ),
+        fill: 'red',
+        top: keepingUpReadout.bottom + 5,
+        left: keepingUpReadout.left
+      } );
+      this.addChild( averageDtReadout );
+      multipleParticleModel.averageDtProperty.link( function( averageDt ){
+        averageDtReadout.text = averageDt.toFixed( 3 );
+      } );
+      var maxAdvanceTimePerStep = new Text( '', {
+        font: new PhetFont( 20 ),
+        fill: 'red',
+        top: averageDtReadout.bottom + 5,
+        left: averageDtReadout.left
+      } );
+      this.addChild( maxAdvanceTimePerStep );
+      multipleParticleModel.maxParticleMoveTimePerStepProperty.link( function( maxAdvance ){
+        maxAdvanceTimePerStep.text = maxAdvance.toFixed( 3 );
+      } );
+    }
   }
 
   statesOfMatter.register( 'PhaseChangesScreenView', PhaseChangesScreenView );

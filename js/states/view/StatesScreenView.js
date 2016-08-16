@@ -166,6 +166,7 @@ define( function( require ) {
     heaterCoolerNode.centerX = heaterCoolerNode.centerX - heaterCoolerXOffset;
 
     // if the appropriate query param is set, show some information used in debugging time step adjustments
+    // TODO: Consider removing this once performance issues are worked out.
     if ( StatesOfMatterQueryParameters.DEBUG_TIME_STEP ){
       var keepingUpReadout = new Text( '', {
         font: new PhetFont( 20 ),
@@ -194,7 +195,7 @@ define( function( require ) {
         left: averageDtReadout.left
       } );
       this.addChild( maxAdvanceTimePerStep );
-      multipleParticleModel.maxModelAdvanceTimePerStepProperty.link( function( maxAdvance ){
+      multipleParticleModel.maxParticleMoveTimePerStepProperty.link( function( maxAdvance ){
         maxAdvanceTimePerStep.text = maxAdvance.toFixed( 3 );
       } );
     }
