@@ -134,7 +134,7 @@ define( function( require ) {
       headWidth: 20,
       tailWidth: 9,
       doubleHead: false,
-      fill: 'white',
+      fill: StatesOfMatterColorProfile.controlPanelTextProperty,
       lineWidth: 0.5
     } );
     this.ljPotentialGraph.addChild( this.epsilonArrow );
@@ -158,7 +158,7 @@ define( function( require ) {
       headWidth: 8,
       tailWidth: 3,
       doubleHead: true,
-      fill: 'white',
+      fill: StatesOfMatterColorProfile.controlPanelTextProperty,
       lineWidth: 0.5
     } );
     this.ljPotentialGraph.addChild( this.sigmaArrow );
