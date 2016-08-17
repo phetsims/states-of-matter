@@ -151,9 +151,6 @@ define( function( require ) {
       TIME_STEP_MOVING_AVERAGE_LENGTH,
       { initialValue: NOMINAL_TIME_STEP }
     );
-    this.timeSinceLastControlLoopUpdate = 0;
-    this.integral = 0;
-    this.timeAdvanceLimitAdjustment = 0;
 
     // everything that had a listener in the java version becomes a property
     PropertySet.call( this, {
@@ -344,10 +341,9 @@ define( function( require ) {
           break;
         case StatesOfMatterConstants.WATER:
 
-          // Use a radius value that is artificially large, because the
-          // educators have requested that water look "spaced out" so that
-          // users can see the crystal structure better, and so that the
-          // solid form will look larger (since water expands when frozen).
+          // Use a radius value that is artificially large, because the educators have requested that water look
+          // "spaced out" so that users can see the crystal structure better, and so that the solid form will look
+          // larger (since water expands when frozen).
           this.particleDiameter = OxygenAtom.RADIUS * 2.9;
           this.minModelTemperature = 0.5 * TRIPLE_POINT_INTERNAL_MODEL_TEMPERATURE / WATER_TRIPLE_POINT_IN_KELVIN;
           break;
@@ -699,11 +695,6 @@ define( function( require ) {
       // This is needed in case we were switching from another molecule that was under pressure.
       this.updatePressure();
       this.calculateMinAllowableContainerHeight();
-
-      // reset the time adjustment algorithm parameters
-      this.integral = 0;
-      this.timeAdvanceLimitAdjustment = 0;
-      this.timeSinceLastControlLoopUpdate = 0;
     },
 
     /**

@@ -11,11 +11,11 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var inherit = require( 'PHET_CORE/inherit' );
-  var Vector2 = require( 'DOT/Vector2' );
   var AbstractVerletAlgorithm = require( 'STATES_OF_MATTER/common/model/engine/AbstractVerletAlgorithm' );
+  var inherit = require( 'PHET_CORE/inherit' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var WaterAtomPositionUpdater = require( 'STATES_OF_MATTER/common/model/engine/WaterAtomPositionUpdater' );
+  var Vector2 = require( 'DOT/Vector2' );
 
   // parameters used for "hollywooding" of the water crystal
   var WATER_FULLY_MELTED_TEMPERATURE = 0.3;
@@ -39,6 +39,10 @@ define( function( require ) {
 
     // reusable vector, used in order to reduce allocations
     this.force = new Vector2();
+
+    // pre-allocate arrays so that they don't have to be reallocated with each force and position update
+    this.normalCharges = new Array( 3 );
+    this.alteredCharges = new Array( 3 );
   }
 
   statesOfMatter.register( 'WaterVerletAlgorithm', WaterVerletAlgorithm );
@@ -69,7 +73,7 @@ define( function( require ) {
     updateForcesAndMotion: function( timeStep ) {
 
       // Obtain references to the model data and parameters so that we can perform fast manipulations.
-      var moleculeDataSet = this.multipleParticleModel.getMoleculeDataSetRef(); // TODO: Could this be done in constructor?
+      var moleculeDataSet = this.multipleParticleModel.getMoleculeDataSetRef();
       var numberOfMolecules = moleculeDataSet.getNumberOfMolecules();
       var moleculeCenterOfMassPositions = moleculeDataSet.getMoleculeCenterOfMassPositions();
       var atomPositions = moleculeDataSet.getAtomPositions();
@@ -121,8 +125,12 @@ define( function( require ) {
         q0 = WATER_FULLY_FROZEN_ELECTROSTATIC_FORCE -
              ( temperatureFactor * ( WATER_FULLY_FROZEN_ELECTROSTATIC_FORCE - WATER_FULLY_MELTED_ELECTROSTATIC_FORCE ) );
       }
-      var normalCharges = [ -2 * q0, q0, q0 ];
-      var alteredCharges = [ -2 * q0, 1.67 * q0, 0.33 * q0 ];
+      this.normalCharges[ 0 ] = -2 * q0;
+      this.normalCharges[ 1 ] = q0;
+      this.normalCharges[ 2 ] = q0;
+      this.alteredCharges[ 0 ] = -2 * q0;
+      this.alteredCharges[ 1 ] = 1.67 * q0;
+      this.alteredCharges[ 2 ] = 0.33 * q0;
 
       // Update center of mass positions and angles for the molecules.
       for ( var i = 0; i < numberOfMolecules; i++ ) {
@@ -184,6 +192,27 @@ define( function( require ) {
         this.updateMoleculeSafety();
       }
 
+      // Set the value of the scaling factor used to adjust how the water behaves as temperature changes, part of the
+      // "hollywooding" that we do to make water freeze and thaw the way we want it to.
+      if ( temperatureSetPoint > WATER_FULLY_MELTED_TEMPERATURE ) {
+
+        // No scaling of the repulsive force.
+        repulsiveForceScalingFactor = 1;
+      }
+      else if ( temperatureSetPoint < WATER_FULLY_FROZEN_TEMPERATURE ) {
+
+        // Scale by the max to force space in the crystal.
+        repulsiveForceScalingFactor = MAX_REPULSIVE_SCALING_FACTOR_FOR_WATER;
+      }
+      else {
+
+        // We are somewhere between fully frozen and fully liquified, so adjust the scaling factor accordingly.
+        temperatureFactor = ( temperatureSetPoint - WATER_FULLY_FROZEN_TEMPERATURE) /
+                            ( WATER_FULLY_MELTED_TEMPERATURE - WATER_FULLY_FROZEN_TEMPERATURE );
+        repulsiveForceScalingFactor = MAX_REPULSIVE_SCALING_FACTOR_FOR_WATER -
+                                      ( temperatureFactor * (MAX_REPULSIVE_SCALING_FACTOR_FOR_WATER - 1 ) );
+      }
+
       // Calculate the force and torque due to inter-particle interactions.
       var numberOfSafeMolecules = moleculeDataSet.getNumberOfSafeMolecules();
       for ( i = 0; i < numberOfSafeMolecules; i++ ) {
@@ -192,20 +221,20 @@ define( function( require ) {
         // appear more crystalline.
         var chargesA;
         if ( i % 2 === 0 ) {
-          chargesA = normalCharges;
+          chargesA = this.normalCharges;
         }
         else {
-          chargesA = alteredCharges;
+          chargesA = this.alteredCharges;
         }
         for ( var j = i + 1; j < numberOfSafeMolecules; j++ ) {
 
-          // Select charges for this molecule.
+          // Select charges for the other molecule.
           var chargesB;
           if ( j % 2 === 0 ) {
-            chargesB = normalCharges;
+            chargesB = this.normalCharges;
           }
           else {
-            chargesB = alteredCharges;
+            chargesB = this.alteredCharges;
           }
 
           // Calculate Lennard-Jones potential between mass centers.
@@ -215,65 +244,42 @@ define( function( require ) {
           if ( distanceSquared < this.PARTICLE_INTERACTION_DISTANCE_THRESH_SQRD ) {
 
             // Calculate the Lennard-Jones interaction forces.
-            if ( distanceSquared < this.MIN_DISTANCE_SQUARED ) {
-              distanceSquared = this.MIN_DISTANCE_SQUARED;
-            }
+            distanceSquared = Math.max( distanceSquared, this.MIN_DISTANCE_SQUARED );
             r2inv = 1 / distanceSquared;
             r6inv = r2inv * r2inv * r2inv;
 
-            if ( temperatureSetPoint > WATER_FULLY_MELTED_TEMPERATURE ) {
-
-              // No scaling of the repulsive force.
-              repulsiveForceScalingFactor = 1;
-            }
-            else if ( temperatureSetPoint < WATER_FULLY_FROZEN_TEMPERATURE ) {
-
-              // Scale by the max to force space in the crystal.
-              repulsiveForceScalingFactor = MAX_REPULSIVE_SCALING_FACTOR_FOR_WATER;
-            }
-            else {
-
-              // We are somewhere between fully frozen and fully liquified, so adjust the scaling factor accordingly.
-              temperatureFactor = ( temperatureSetPoint - WATER_FULLY_FROZEN_TEMPERATURE) /
-                                  ( WATER_FULLY_MELTED_TEMPERATURE - WATER_FULLY_FROZEN_TEMPERATURE );
-              repulsiveForceScalingFactor = MAX_REPULSIVE_SCALING_FACTOR_FOR_WATER -
-                                            ( temperatureFactor * (MAX_REPULSIVE_SCALING_FACTOR_FOR_WATER - 1 ) );
-            }
-            forceScalar = 48 * r2inv * r6inv * ( ( r6inv * repulsiveForceScalingFactor) - 0.5 );
-            this.force.setX( dx * forceScalar );
-            this.force.setY( dy * forceScalar );
+            forceScalar = 48 * r2inv * r6inv * ( ( r6inv * repulsiveForceScalingFactor ) - 0.5 );
+            this.force.setXY( dx * forceScalar, dy * forceScalar );
             nextMoleculeForces[ i ].add( this.force );
             nextMoleculeForces[ j ].subtract( this.force );
             this.potentialEnergy += 4 * r6inv * ( r6inv - 1 ) + 0.016316891136;
-          }
-          if ( distanceSquared < this.PARTICLE_INTERACTION_DISTANCE_THRESH_SQRD ) {
 
             // Calculate coulomb-like interactions between atoms on individual water molecules.
             for ( var ii = 0; ii < 3; ii++ ) {
               for ( var jj = 0; jj < 3; jj++ ) {
-                if ( ( ( 3 * i + ii + 1 ) % 6 === 0 ) || ( ( 3 * j + jj + 1 ) % 6 === 0 ) ) {
+                var atomIndex1 = 3 * i + ii;
+                var atomIndex2 = 3 * j + jj;
+                if ( ( ( atomIndex1 + 1 ) % 6 === 0 ) || ( ( atomIndex2 + 1 ) % 6 === 0 ) ) {
 
                   // This is a hydrogen atom that is not going to be included in the calculation in order to try to
                   // create a more crystalline solid.  This is part of the "hollywooding" that we do to create a better
                   // looking water crystal at low temperatures.
                   continue;
                 }
-                dx = atomPositions[ 3 * i + ii ].x - atomPositions[ 3 * j + jj ].x;
-                dy = atomPositions[ 3 * i + ii ].y - atomPositions[ 3 * j + jj ].y;
-                distanceSquared = (dx * dx + dy * dy);
-                if ( distanceSquared < this.MIN_DISTANCE_SQUARED ) {
-                  distanceSquared = this.MIN_DISTANCE_SQUARED;
-                }
+
+                dx = atomPositions[ atomIndex1 ].x - atomPositions[ atomIndex2 ].x;
+                dy = atomPositions[ atomIndex1 ].y - atomPositions[ atomIndex2 ].y;
+                distanceSquared = ( dx * dx + dy * dy );
+                distanceSquared = Math.max( distanceSquared, this.MIN_DISTANCE_SQUARED );
                 r2inv = 1 / distanceSquared;
                 forceScalar = chargesA[ ii ] * chargesB[ jj ] * r2inv * r2inv;
-                this.force.setX( dx * forceScalar );
-                this.force.setY( dy * forceScalar );
+                this.force.setXY( dx * forceScalar, dy * forceScalar );
                 nextMoleculeForces[ i ].add( this.force );
                 nextMoleculeForces[ j ].subtract( this.force );
-                nextMoleculeTorques[ i ] += (atomPositions[ 3 * i + ii ].x - moleculeCenterOfMassPositions[ i ].x) * this.force.y -
-                                            (atomPositions[ 3 * i + ii ].y - moleculeCenterOfMassPositions[ i ].y) * this.force.x;
-                nextMoleculeTorques[ j ] -= (atomPositions[ 3 * j + jj ].x - moleculeCenterOfMassPositions[ j ].x) * this.force.y -
-                                            (atomPositions[ 3 * j + jj ].y - moleculeCenterOfMassPositions[ j ].y) * this.force.x;
+                nextMoleculeTorques[ i ] += ( atomPositions[ atomIndex1 ].x - moleculeCenterOfMassPositions[ i ].x ) * this.force.y -
+                                            ( atomPositions[ atomIndex1 ].y - moleculeCenterOfMassPositions[ i ].y ) * this.force.x;
+                nextMoleculeTorques[ j ] -= ( atomPositions[ atomIndex2 ].x - moleculeCenterOfMassPositions[ j ].x ) * this.force.y -
+                                            ( atomPositions[ atomIndex2 ].y - moleculeCenterOfMassPositions[ j ].y ) * this.force.x;
               }
             }
           }

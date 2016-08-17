@@ -1,8 +1,8 @@
 // Copyright 2014-2015, University of Colorado Boulder
 
 /**
- * This class represents the bundle of data that represents the position,
- * motion, and forces acting upon a set of molecules.
+ * This class represents the bundle of data that represents the position, motion, and forces acting upon a set of
+ * molecules.
  *
  * @author John Blanco
  * @author Aaron Davis
@@ -19,9 +19,8 @@ define( function( require ) {
   var WaterMoleculeStructure = require( 'STATES_OF_MATTER/common/model/engine/WaterMoleculeStructure' );
 
   /**
-   * This creates the data set with the capacity to hold the
-   * maximum number of atoms/molecules, but does not create the individual
-   * data for them.  That must be done explicitly through other calls.
+   * This creates the data set with the capacity to hold the maximum number of atoms/molecules, but does not create the
+   * individual data for them.  That must be done explicitly through other calls.
    * @param {number} atomsPerMolecule
    * @constructor
    */
@@ -33,20 +32,23 @@ define( function( require ) {
 
     // Attributes that apply to all elements of the data set.
     this.atomsPerMolecule = atomsPerMolecule;
+    
+    // convenience variable
+    var maxNumMolecules = Math.floor( StatesOfMatterConstants.MAX_NUM_ATOMS / atomsPerMolecule );
 
     // Attributes of the individual molecules and the atoms that comprise them.
-    this.atomPositions = [];
-    this.moleculeCenterOfMassPositions = [];
-    this.moleculeVelocities = [];
-    this.moleculeForces = [];
-    this.nextMoleculeForces = [];
+    this.atomPositions = new Array( StatesOfMatterConstants.MAX_NUM_ATOMS );
+    this.moleculeCenterOfMassPositions = new Array( maxNumMolecules );
+    this.moleculeVelocities = new Array( maxNumMolecules );
+    this.moleculeForces = new Array( maxNumMolecules );
+    this.nextMoleculeForces = new Array( maxNumMolecules );
     this.insideContainers = [];
 
     // Note that some of the following are not used in the monatomic case, but need to be here for compatibility.
-    this.moleculeRotationAngles = [];
-    this.moleculeRotationRates = [];
-    this.moleculeTorques = [];
-    this.nextMoleculeTorques = [];
+    this.moleculeRotationAngles = new Array( maxNumMolecules );
+    this.moleculeRotationRates = new Array( maxNumMolecules );
+    this.moleculeTorques = new Array( maxNumMolecules );
+    this.nextMoleculeTorques = new Array( maxNumMolecules );
     for ( var i = 0; i < StatesOfMatterConstants.MAX_NUM_ATOMS / this.atomsPerMolecule; i++ ) {
       this.moleculeRotationAngles [ i ] = 0;
       this.moleculeRotationRates[ i ] = 0;
@@ -63,12 +65,9 @@ define( function( require ) {
       this.moleculeRotationalInertia = Math.pow( StatesOfMatterConstants.DIATOMIC_PARTICLE_DISTANCE, 2 ) / 2;
     }
     else if ( atomsPerMolecule === 3 ) {
-      // NOTE: These settings only work for water, since that is the
-      // only supported triatomic molecule at the time of this writing
-      // (Nov 2008).  If other 3-atom molecules are added, this will
-      // need to be changed.
+      // NOTE: These settings only work for water, since that is the only supported triatomic molecule at the time of
+      // this writing (Nov 2008).  If other 3-atom molecules are added, this will need to be changed.
       this.moleculeMass = 1.5; // Two molecules, assumed to be the same.
-
       this.moleculeRotationalInertia = WaterMoleculeStructure.rotationalInertia;
     }
   }
@@ -78,24 +77,24 @@ define( function( require ) {
   return inherit( Object, MoleculeForceAndMotionDataSet, {
 
     /**
-     * @public
      * @returns {number}
+     * @public
      */
     getNumberOfMolecules: function() {
       return this.numberOfAtoms / this.atomsPerMolecule;
     },
 
     /**
-     * @public
      * @returns {number}
+     * @public
      */
     getMoleculeRotationalInertia: function() {
       return this.moleculeRotationalInertia;
     },
 
     /**
-     * @public
      * @returns {number}
+     * @public
      */
     getMoleculeMass: function() {
       return this.moleculeMass;
@@ -103,8 +102,8 @@ define( function( require ) {
 
     /**
      * Returns a value indicating how many more molecules can be added.
-     * @public
      * @returns {number}
+     * @public
      */
     getNumberOfRemainingSlots: function() {
       return ( ( StatesOfMatterConstants.MAX_NUM_ATOMS / this.atomsPerMolecule ) -
@@ -112,122 +111,121 @@ define( function( require ) {
     },
 
     /**
-     * @public
      * @returns {number}
+     * @public
      */
     getAtomsPerMolecule: function() {
       return this.atomsPerMolecule;
     },
 
     /**
-     * @public
      * @returns {Array}
+     * @public
      */
     getAtomPositions: function() {
       return this.atomPositions;
     },
 
     /**
-     * @public
      * @returns {number|}
+     * @public
      */
     getNumberOfAtoms: function() {
       return this.numberOfAtoms;
     },
 
     /**
-     * @public
      * @returns {number}
+     * @public
      */
     getNumberOfSafeMolecules: function() {
       return this.numberOfSafeMolecules;
     },
 
     /**
-     * @public
      * @returns {Array}
+     * @public
      */
     getMoleculeCenterOfMassPositions: function() {
       return this.moleculeCenterOfMassPositions;
     },
 
     /**
-     * @public
      * @returns {Array}
+     * @public
      */
     getMoleculeVelocities: function() {
       return this.moleculeVelocities;
     },
 
     /**
-     * @public
      * @returns {Array}
+     * @public
      */
     getMoleculeForces: function() {
       return this.moleculeForces;
     },
 
     /**
-     * @public
      * @returns {Array}
+     * @public
      */
     getNextMoleculeForces: function() {
       return this.nextMoleculeForces;
     },
 
     /**
-     * @public
      * @returns {Array}
+     * @public
      */
     getMoleculeRotationAngles: function() {
       return this.moleculeRotationAngles;
     },
 
     /**
-     * @public
      * @param {[]}rotationAngles
+     * @public
      */
     setMoleculeRotationAngles: function( rotationAngles ) {
       this.moleculeRotationAngles = rotationAngles;
     },
 
     /**
-     * @public
      * @returns {Array}
+     * @public
      */
     getMoleculeRotationRates: function() {
       return this.moleculeRotationRates;
     },
 
     /**
-     * @public
      * @returns {Array}
+     * @public
      */
     getMoleculeTorques: function() {
       return this.moleculeTorques;
     },
 
     /**
-     * @public
      * @returns {Array}
+     * @public
      */
     getNextMoleculeTorques: function() {
       return this.nextMoleculeTorques;
     },
 
     /**
-     * @public
      * @param {number} numSafeMolecules
+     * @public
      */
     setNumberOfSafeMolecules: function( numSafeMolecules ) {
       this.numberOfSafeMolecules = numSafeMolecules;
     },
 
     /**
-     * Calculate the temperature of the system based on the total kinetic
-     * energy of the molecules.
-     * @public
+     * Calculate the temperature of the system based on the total kinetic energy of the molecules.
      * @return {number} temperature in model units (as opposed to Kelvin, Celsius, or whatever)
+     * @public
      */
     calculateTemperatureFromKineticEnergy: function() {
       var translationalKineticEnergy = 0;
@@ -258,18 +256,16 @@ define( function( require ) {
     },
 
     /**
-     * Add a new molecule to the model.  The molecule must have been created
-     * and initialized before being added.  It is considered to be "unsafe",
-     * meaning that it can't interact with other molecules, until an external
-     * entity (generally the motion-and-force calculator) changes that
-     * designation.
-     * @public
+     * Add a new molecule to the model.  The molecule must have been created and initialized before being added.  It is
+     * considered to be "unsafe", meaning that it can't interact with other molecules, until an external entity
+     * (generally the motion-and-force calculator) changes that designation.
      * @param {Array<Vector2>} atomPositions
      * @param {Vector2} moleculeCenterOfMassPosition
      * @param {Vector2} moleculeVelocity
      * @param {number} moleculeRotationRate
      * @param {boolean} insideContainer
      * @return {boolean} true if able to add, false if not.
+     * @public
      */
     addMolecule: function( atomPositions, moleculeCenterOfMassPosition, moleculeVelocity, moleculeRotationRate, insideContainer ) {
 
@@ -291,8 +287,8 @@ define( function( require ) {
       this.moleculeForces[ numberOfMolecules ] = new Vector2();
       this.nextMoleculeForces[ numberOfMolecules ] = new Vector2();
 
-      // Increment the number of atoms.  Note that we DON'T increment the number of safe atoms - that must
-      // be done by some outside entity.
+      // Increment the number of atoms.  Note that we DON'T increment the number of safe atoms - that must be done by
+      // some outside entity.
       this.numberOfAtoms += this.atomsPerMolecule;
 
       assert && assert( !isNaN( this.moleculeCenterOfMassPositions[ numberOfMolecules ].x ) );
@@ -301,15 +297,13 @@ define( function( require ) {
     },
 
     /**
-     * Remove the molecule at the designated index.  This also removes all
-     * atoms and forces associated with the molecule and shifts the various
-     * arrays to compensate.
+     * Remove the molecule at the designated index.  This also removes all atoms and forces associated with the molecule
+     * and shifts the various arrays to compensate.
      * <p/>
-     * This is fairly compute intensive, and should be used sparingly.  This
-     * was originally created to support the feature where the lid is returned
-     * and any molecules outside of the container disappear.
-     *
+     * This is fairly compute intensive, and should be used sparingly.  This was originally created to support the
+     * feature where the lid is returned and any molecules outside of the container disappear.
      * @param {number} moleculeIndex
+     * @public
      */
     removeMolecule: function( moleculeIndex ) {
       // assert moleculeIndex < this.numberOfAtoms / this.atomsPerMolecule;
