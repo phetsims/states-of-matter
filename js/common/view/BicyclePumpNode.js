@@ -183,41 +183,35 @@ define( function( require ) {
       height - ( height * PUMP_HANDLE_INIT_VERT_POS_PROPORTION ) - pumpHandleHeight - pumpBaseHeight
     );
 
-    var maxHandleOffset = -PUMP_SHAFT_HEIGHT_PROPORTION * height / 2;
+    var maxHandleYOffset = -PUMP_SHAFT_HEIGHT_PROPORTION * height / 2;
+    var minHandleYOffset = pumpHandleNode.centerY;
 
     // Set ourself up to listen for and handle mouse dragging events on the handle.
-    var dragStartY;
-    var dragEndY;
-    var pumpHandleStartY;
-    var pumpHandleEndY;
     pumpHandleNode.addInputListener( new SimpleDragHandler( {
 
-      start: function( event ) {
-        dragStartY = pumpHandleNode.globalToParentPoint( event.pointer.point ).y;
-        pumpHandleStartY = pumpHandleNode.y;
-      },
-
       drag: function( event ) {
-        dragEndY = pumpHandleNode.globalToParentPoint( event.pointer.point ).y;
-        var yDiff = dragEndY - dragStartY;
-        if ( (  pumpHandleStartY + yDiff >= maxHandleOffset ) &&
-             (  pumpHandleStartY + yDiff <=
-                (height - ( height * PUMP_HANDLE_INIT_VERT_POS_PROPORTION ) - pumpHandleHeight - pumpBaseHeight) ) ) {
-          pumpHandleNode.setTranslation( (pumpBaseWidth - pumpHandleNode.width) / 2, pumpHandleStartY + yDiff );
-          pumpShaft.top = pumpHandleNode.bottom;
-          if ( dragEndY > pumpHandleEndY ) {
 
-            // This motion is in the pumping direction, so accumulate it.
-            currentPumpingAmount += (dragEndY - pumpHandleEndY);
-            if ( currentPumpingAmount >= pumpingRequiredToInject ) {
+        // update the handle and shaft position
+        var handleStartYPos = pumpHandleNode.centerY;
+        var dragPositionY = pumpHandleNode.globalToParentPoint( event.pointer.point ).y;
+        dragPositionY = Math.max( dragPositionY, maxHandleYOffset );
+        dragPositionY = Math.min( dragPositionY, minHandleYOffset );
+        pumpHandleNode.centerY = dragPositionY;
+        pumpShaft.top = pumpHandleNode.bottom;
 
-              // Enough pumping has been done to inject a new particle.
-              multipleParticleModel.injectMolecule();
-              currentPumpingAmount = 0;
-            }
+        // accumulate pumping
+        var travel = handleStartYPos - pumpHandleNode.centerY;
+        if ( travel < 0 ) {
+
+          // This motion is in the pumping direction, so accumulate it.
+          currentPumpingAmount += Math.abs( travel );
+          if ( currentPumpingAmount >= pumpingRequiredToInject ) {
+
+            // Enough pumping has been done to inject a new particle.
+            multipleParticleModel.injectMolecule();
+            currentPumpingAmount = 0;
           }
         }
-        pumpHandleEndY = dragEndY;
       }
     } ) );
 
