@@ -216,15 +216,15 @@ define( function( require ) {
     /**
      * Get the current temperature in degrees Kelvin.  The calculations done are dependent on the type of molecule
      * selected.  The values and ranges used in this method were derived from information provided by Paul Beale, dept
-     * of Physics, University of Colorado Boulder.
-     * @returns {number}
+     * of Physics, University of Colorado Boulder.  If no particles are in the container, this returns null.
+     * @returns {number|null}
      * @public
      */
     getTemperatureInKelvin: function() {
 
       if ( this.particles.length === 0 ) {
         // Temperature is reported as 0 if there are no particles.
-        return 0;
+        return null;
       }
 
       var temperatureInKelvin;
@@ -628,7 +628,7 @@ define( function( require ) {
         // since if there is any motion absolute zero is not correct.  This is handled as a special case rather than
         // treating the addition of particles more generally, see https://github.com/phetsims/states-of-matter/issues/129
         // for more detail.
-        if ( this.getTemperatureInKelvin() === 0 ) {
+        if ( this.getTemperatureInKelvin() === 0 || this.getTemperatureInKelvin() === null ) {
           this.temperatureSetPoint = this.getTwoDegreesKelvinInInternalTemperature();
           this.isoKineticThermostat.targetTemperature = this.temperatureSetPoint;
           this.andersenThermostat.targetTemperature = this.temperatureSetPoint;

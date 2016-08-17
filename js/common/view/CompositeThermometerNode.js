@@ -121,11 +121,18 @@ define( function( require ) {
     step: function(){
       if( this.temperatureSetPointChanged ){
         var tempInKelvin = this.multipleParticleModel.getTemperatureInKelvin();
-        var tempInKelvinRounded = Util.roundSymmetric( tempInKelvin );
-        this.temperatureKelvinText.setText( tempInKelvinRounded + ' ' + kelvinUnitsString );
-        this.temperatureCelsiusText.setText( Util.roundSymmetric( tempInKelvin - 273.15 ) + ' ' + celsiusUnitsString );
-        this.temperatureInKelvinProperty.value = tempInKelvinRounded > MAX_TEMPERATURE_TO_CLAMP_RED_MERCURY ?
-                                            MAX_TEMPERATURE_TO_CLAMP_RED_MERCURY : tempInKelvinRounded;
+        if ( tempInKelvin !== null ){
+          var tempInKelvinRounded = Util.roundSymmetric( tempInKelvin );
+          this.temperatureKelvinText.setText( tempInKelvinRounded + ' ' + kelvinUnitsString );
+          this.temperatureCelsiusText.setText( Util.roundSymmetric( tempInKelvin - 273.15 ) + ' ' + celsiusUnitsString );
+          this.temperatureInKelvinProperty.value = tempInKelvinRounded > MAX_TEMPERATURE_TO_CLAMP_RED_MERCURY ?
+                                                   MAX_TEMPERATURE_TO_CLAMP_RED_MERCURY : tempInKelvinRounded;
+        }
+        else{
+          this.temperatureKelvinText.setText( '--' );
+          this.temperatureCelsiusText.setText( '--' );
+          this.temperatureInKelvinProperty.value = 0;
+        }
         this.temperatureSetPointChanged = false;
       }
     },
