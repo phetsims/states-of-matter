@@ -669,8 +669,9 @@ define( function( require ) {
             var maxMovement = Math.min( this.potentialWhenAtomReleased * 5e19, this.fixedAtom.radius / 2 ) *
                               vibrationScaleFactor;
 
-            // Move some distance from the original position.
-            var xPos = ( Math.random() * 2 - 1 ) * maxMovement;
+            // Move some distance from the original position, but only move away from the movable atom so that we don't
+            // end up creating high repulsive forces.
+            var xPos = -Math.random() * maxMovement;
             var yPos = ( Math.random() * 2 - 1 ) * maxMovement;
             this.fixedAtom.setPosition( xPos, yPos );
           }
