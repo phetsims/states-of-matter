@@ -10,6 +10,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var BondingState = require( 'STATES_OF_MATTER/atomic-interactions/model/BondingState' );
   var inherit = require( 'PHET_CORE/inherit' );
   var ParticleForceNode = require( 'STATES_OF_MATTER/atomic-interactions/view/ParticleForceNode' );
   var SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
@@ -58,11 +59,12 @@ define( function( require ) {
       },
 
       drag: function( event ) {
-        // Only allow the user to move unbonded atoms.
-        if ( dualAtomModel.getBondingState() !== dualAtomModel.BONDING_STATE_UNBONDED ) {
+
+        if ( dualAtomModel.getBondingState() !== BondingState.UNBONDED ) {
           // Need to release the bond before we can move the atom.
           dualAtomModel.releaseBond();
         }
+
         endDragX = grabbableParticleNode.globalToParentPoint( event.pointer.point ).x;
         var d = endDragX - startDragX;
         // Make sure we don't exceed the positional limits.
