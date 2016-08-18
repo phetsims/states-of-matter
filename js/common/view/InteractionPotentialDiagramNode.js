@@ -33,7 +33,7 @@ define( function( require ) {
   var epsilonString = require( 'string!STATES_OF_MATTER/epsilon' );
 
   // Constant that controls the range of data that is graphed.
-  var MAX_INTER_ATOM_DISTANCE = 1700; // in picometers
+  var GRAPH_X_RANGE = 1700; // in picometers
 
   // constants that control the appearance of the diagram.
   var NARROW_VERSION_WIDTH = 135;
@@ -319,7 +319,7 @@ define( function( require ) {
      */
     setMarkerPosition: function( distance ) {
       this.markerDistance = distance;
-      var xPos = this.markerDistance * (  this.graphWidth / MAX_INTER_ATOM_DISTANCE);
+      var xPos = this.markerDistance * ( this.graphWidth / GRAPH_X_RANGE );
       var potential = this.calculateLennardJonesPotential( this.markerDistance );
       var yPos = ((  this.graphHeight / 2) - (potential * this.verticalScalingFactor));
       if ( this.positionMarkerEnabled && (xPos > 0) && (xPos < this.graphWidth) &&
@@ -366,6 +366,6 @@ define( function( require ) {
       assert && assert( false, 'this function must be overridden in descendant classes' );
     },
 
-    MAX_INTER_ATOM_DISTANCE: MAX_INTER_ATOM_DISTANCE
+    GRAPH_X_RANGE: GRAPH_X_RANGE
   } );
 } );

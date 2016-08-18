@@ -10,22 +10,23 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var inherit = require( 'PHET_CORE/inherit' );
-  var Color = require( 'SCENERY/util/Color' );
-  var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
-  var AtomType = require( 'STATES_OF_MATTER/common/model/AtomType' );
-  var AtomPair = require( 'STATES_OF_MATTER/atomic-interactions/model/AtomPair' );
-  var InteractionPotentialDiagramNode = require( 'STATES_OF_MATTER/common/view/InteractionPotentialDiagramNode' );
-  var SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
-  var FillHighlightListener = require( 'SCENERY_PHET/input/FillHighlightListener' );
-  var Property = require( 'AXON/Property' );
   var ArrowNode = require( 'SCENERY_PHET/ArrowNode' );
+  var AtomPair = require( 'STATES_OF_MATTER/atomic-interactions/model/AtomPair' );
+  var AtomType = require( 'STATES_OF_MATTER/common/model/AtomType' );
+  var BondingState = require( 'STATES_OF_MATTER/atomic-interactions/model/BondingState' );
+  var Bounds2 = require( 'DOT/Bounds2' );
+  var Color = require( 'SCENERY/util/Color' );
+  var FillHighlightListener = require( 'SCENERY_PHET/input/FillHighlightListener' );
+  var inherit = require( 'PHET_CORE/inherit' );
+  var InteractionPotentialCanvasNode = require( 'STATES_OF_MATTER/common/view/InteractionPotentialCanvasNode' );
+  var InteractionPotentialDiagramNode = require( 'STATES_OF_MATTER/common/view/InteractionPotentialDiagramNode' );
+  var Property = require( 'AXON/Property' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
+  var Shape = require( 'KITE/Shape' );
+  var SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var StatesOfMatterColorProfile = require( 'STATES_OF_MATTER/common/view/StatesOfMatterColorProfile' );
-  var Shape = require( 'KITE/Shape' );
-  var InteractionPotentialCanvasNode = require( 'STATES_OF_MATTER/common/view/InteractionPotentialCanvasNode' );
-  var Bounds2 = require( 'DOT/Bounds2' );
+  var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
 
   //constants
   var RESIZE_HANDLE_SIZE_PROPORTION = 0.05;  // Size of handles as function of node width.
@@ -48,7 +49,7 @@ define( function( require ) {
 
     InteractionPotentialDiagramNode.call( this, sigma, epsilon, wide );
     this.dualAtomModel = dualAtomModel;
-    var interactiveInteractionPotentialDiagram = this;
+    var self = this;
 
     this.interactionEnabled = false;
 
@@ -69,15 +70,15 @@ define( function( require ) {
 
       start: function( event ) {
         dualAtomModel.setMotionPaused( true );
-        startDragY = interactiveInteractionPotentialDiagram.epsilonLine.globalToParentPoint( event.pointer.point ).y;
+        startDragY = self.epsilonLine.globalToParentPoint( event.pointer.point ).y;
       },
 
       drag: function( event ) {
-        endDragY = interactiveInteractionPotentialDiagram.epsilonLine.globalToParentPoint( event.pointer.point ).y;
+        endDragY = self.epsilonLine.globalToParentPoint( event.pointer.point ).y;
         var d = endDragY - startDragY;
         startDragY = endDragY;
         var scaleFactor = StatesOfMatterConstants.MAX_EPSILON /
-                          ( interactiveInteractionPotentialDiagram.getGraphHeight() / 2);
+                          ( self.getGraphHeight() / 2);
         dualAtomModel.interactionStrengthProperty.value = dualAtomModel.getEpsilon() + ( d * scaleFactor);
       },
 
@@ -109,15 +110,15 @@ define( function( require ) {
 
       start: function( event ) {
         dualAtomModel.setMotionPaused( true );
-        startDragY = interactiveInteractionPotentialDiagram.epsilonResizeHandle.globalToParentPoint( event.pointer.point ).y;
+        startDragY = self.epsilonResizeHandle.globalToParentPoint( event.pointer.point ).y;
       },
 
       drag: function( event ) {
-        endDragY = interactiveInteractionPotentialDiagram.epsilonResizeHandle.globalToParentPoint( event.pointer.point ).y;
+        endDragY = self.epsilonResizeHandle.globalToParentPoint( event.pointer.point ).y;
         var d = endDragY - startDragY;
         startDragY = endDragY;
         var scaleFactor = StatesOfMatterConstants.MAX_EPSILON /
-                          ( interactiveInteractionPotentialDiagram.getGraphHeight() / 2);
+                          ( self.getGraphHeight() / 2);
         dualAtomModel.interactionStrengthProperty.value = dualAtomModel.getEpsilon() + ( d * scaleFactor);
       },
 
@@ -139,16 +140,15 @@ define( function( require ) {
 
       start: function( event ) {
         dualAtomModel.setMotionPaused( true );
-        startDragX = interactiveInteractionPotentialDiagram.sigmaResizeHandle.globalToParentPoint( event.pointer.point ).x;
+        startDragX = self.sigmaResizeHandle.globalToParentPoint( event.pointer.point ).x;
       },
 
       drag: function( event ) {
-        endDragX = interactiveInteractionPotentialDiagram.sigmaResizeHandle.globalToParentPoint( event.pointer.point ).x;
+        endDragX = self.sigmaResizeHandle.globalToParentPoint( event.pointer.point ).x;
         var d = endDragX - startDragX;
         startDragX = endDragX;
-        var scaleFactor = interactiveInteractionPotentialDiagram.MAX_INTER_ATOM_DISTANCE /
-                          ( interactiveInteractionPotentialDiagram.getGraphWidth());
-        var atomDiameter = dualAtomModel.getSigma() + ( d * scaleFactor);
+        var scaleFactor = self.GRAPH_X_RANGE / ( self.getGraphWidth() );
+        var atomDiameter = dualAtomModel.getSigma() + ( d * scaleFactor );
         dualAtomModel.atomDiameterProperty.value = atomDiameter > StatesOfMatterConstants.MIN_SIGMA ?
                                                    (atomDiameter < StatesOfMatterConstants.MAX_SIGMA ? atomDiameter :
                                                     StatesOfMatterConstants.MAX_SIGMA) : StatesOfMatterConstants.MIN_SIGMA;
@@ -168,25 +168,28 @@ define( function( require ) {
       start: function( event ) {
         // Stop the particle from moving in the model.
         dualAtomModel.setMotionPaused( true );
-        startDragX = interactiveInteractionPotentialDiagram.positionMarker.globalToParentPoint( event.pointer.point ).x;
+        startDragX = self.positionMarker.globalToParentPoint( event.pointer.point ).x;
       },
 
       drag: function( event ) {
-        // Only allow the user to move unbonded atoms.
-        if ( dualAtomModel.getBondingState() !== dualAtomModel.BONDING_STATE_UNBONDED ) {
+
+        // If the atoms are bonded, release them.
+         if ( dualAtomModel.getBondingState() !== BondingState.UNBONDED ) {
           // Need to release the bond before we can move the atom.
           dualAtomModel.releaseBond();
         }
+
+        // Make sure the hand node is now hidden, since the user has figured out what to drag.
         dualAtomModel.isHandNodeVisible = false;
 
         var atom = dualAtomModel.getMovableAtomRef();
-        endDragX = interactiveInteractionPotentialDiagram.positionMarker.globalToParentPoint( event.pointer.point ).x;
+        endDragX = self.positionMarker.globalToParentPoint( event.pointer.point ).x;
         var xDifference = endDragX - startDragX;
 
-        var scaleFactor = interactiveInteractionPotentialDiagram.MAX_INTER_ATOM_DISTANCE /
-                          ( interactiveInteractionPotentialDiagram.getGraphWidth());
-        if( atom.getX() + ( xDifference * scaleFactor ) > atom.getRadius() * 1.8  ) {
+        var scaleFactor = self.GRAPH_X_RANGE / ( self.getGraphWidth() );
+        if( atom.getX() + ( xDifference * scaleFactor ) > atom.getRadius() * 1.8 ) {
           startDragX = endDragX;
+
           // Move the particle based on the amount of mouse movement.
           var newPosX = Math.max( atom.getX() + ( xDifference * scaleFactor ), atom.getRadius() * 1.8 );
           atom.setPosition( newPosX, atom.getY() );
@@ -208,10 +211,10 @@ define( function( require ) {
           dualAtomModel.setEpsilon( interactionStrength );
           dualAtomModel.setAdjustableAtomSigma( atomDiameter );
         }
-        interactiveInteractionPotentialDiagram.positionMarker.changeColor( dualAtomModel.movableAtom.color );
-        interactiveInteractionPotentialDiagram.setLjPotentialParameters( dualAtomModel.getSigma(), dualAtomModel.getEpsilon() );
-        interactiveInteractionPotentialDiagram.updateInteractivityState();
-        interactiveInteractionPotentialDiagram.drawPotentialCurve();
+        self.positionMarker.changeColor( dualAtomModel.movableAtom.color );
+        self.setLjPotentialParameters( dualAtomModel.getSigma(), dualAtomModel.getEpsilon() );
+        self.updateInteractivityState();
+        self.drawPotentialCurve();
       }
     );
 

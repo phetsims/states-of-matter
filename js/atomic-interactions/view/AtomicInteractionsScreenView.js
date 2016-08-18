@@ -370,10 +370,23 @@ define( function( require ) {
       // Add the atom node for this guy.
 
       this.movableParticle = particle;
-      this.handNode = new HandNode( this.dualAtomModel, this.dualAtomModel.movableAtom, this.modelViewTransform, 0,
-        1.0 / 0.0 );
-      this.movableParticleNode = new GrabbableParticleNode( this.handNode, this.dualAtomModel, particle,
-        this.modelViewTransform, true, true, 0, 1.0 / 0.0 );
+      this.handNode = new HandNode(
+        this.dualAtomModel,
+        this.dualAtomModel.movableAtom,
+        this.modelViewTransform,
+        0,
+        1.0 / 0.0
+      );
+      this.movableParticleNode = new GrabbableParticleNode(
+        this.handNode,
+        this.dualAtomModel,
+        particle,
+        this.modelViewTransform,
+        true,
+        true,
+        0,
+        1.0 / 0.0
+      );
       this.movableParticleNode.setShowAttractiveForces( this.showAttractiveForces );
       this.movableParticleNode.setShowRepulsiveForces( this.showRepulsiveForces );
       this.movableParticleNode.setShowTotalForces( this.showTotalForces );
