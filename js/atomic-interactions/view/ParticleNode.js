@@ -1,7 +1,7 @@
 // Copyright 2015, University of Colorado Boulder
 
 /**
- * View for Atom .
+ * View for Atom
  * @author Aaron Davis
  * @author Chandrashekar Bemagoni (Actual Concepts)
  */
@@ -50,9 +50,8 @@ define( function( require ) {
     // Calculate the diameter of the circle.
     var circleDiameter = particle.radius * 2 * MVT_SCALE;
     if ( this.overlapEnabled ) {
-      // Overlap is enabled, so make the shape slightly larger than
-      // the radius of the circle so that overlap will occur during
-      // inter-particle collisions.
+      // Overlap is enabled, so make the shape slightly larger than the radius of the circle so that overlap will occur
+      // during inter-particle collisions.
       circleDiameter = circleDiameter * OVERLAP_ENLARGEMENT_FACTOR;
     }
 
@@ -71,16 +70,16 @@ define( function( require ) {
   return inherit( Node, ParticleNode, {
 
     /**
-     * @public
      * @returns {boolean}
+     * @public
      */
     getGradientEnabled: function() {
       return this.useGradient;
     },
 
     /**
-     * @public
      * @param {boolean} gradientEnabled
+     * @public
      */
     setGradientEnabled: function( gradientEnabled ) {
       if ( this.useGradient !== gradientEnabled ) {
@@ -106,8 +105,8 @@ define( function( require ) {
     },
 
     /**
-     * @public
      * If the radius of the particle changes, we need to redraw ourself to correspond.
+     * @public
      */
     handleParticleRadiusChanged: function() {
 
@@ -117,8 +116,7 @@ define( function( require ) {
       }
       var circleDiameter = this.particle.getRadius() * 2 * MVT_SCALE;
       if ( this.overlapEnabled ) {
-        // Make node larger than particle so that overlap appears to
-        // happen when the particles collide.
+        // Make node larger than particle so that overlap appears to happen when the particles collide.
         circleDiameter = circleDiameter * OVERLAP_ENLARGEMENT_FACTOR;
       }
       this.circle.setShape( new Shape().circle( 0, 0, circleDiameter / 2 ) );
@@ -126,19 +124,23 @@ define( function( require ) {
 
     /**
      * Select the color and create the solid or gradient paint for this particle.
-     *
      * @return paint to use for this particle
+     * @private
      */
     choosePaint: function( atom ) {
 
       var baseColor = this.chooseColor( atom );
       var darkenedBaseColor = baseColor.colorUtilsDarker( 0.8 );
-      var transparentDarkenedBasedColor = new Color( darkenedBaseColor.getRed(), darkenedBaseColor.getGreen(),
-        darkenedBaseColor.getBlue(), 0.8 );
+      var transparentDarkenedBasedColor = new Color(
+        darkenedBaseColor.getRed(),
+        darkenedBaseColor.getGreen(),
+        darkenedBaseColor.getBlue(),
+        0.5
+      );
 
       if ( this.useGradient ) {
-        var radius = (this.overlapEnabled ? (atom.getRadius() * OVERLAP_ENLARGEMENT_FACTOR) : atom.getRadius()) *
-                     MVT_SCALE;
+        var radius = ( this.overlapEnabled ? ( atom.getRadius() * OVERLAP_ENLARGEMENT_FACTOR ) :
+                      atom.getRadius()) * MVT_SCALE;
 
         return ( new RadialGradient( 0, 0, 0, 0, 0, radius )
           .addColorStop( 0, baseColor )
@@ -152,9 +154,9 @@ define( function( require ) {
 
     /**
      * Choose the base color for the node based on the type of atom.
-     *
      * @param atom
      * @return
+     * @private
      */
     chooseColor: function( atom ) {
       var baseColor;
