@@ -6,3 +6,9 @@ This was ported from a Java simulation, so some elements of the code look quite 
 number of getter/setter methods that would probably be done using direct access if this had originally been a
 JavaScript sim.  There are also a lot of places where inheritance is used that probably wouldn't be done in this way
 in a started-from-scratch JavaScript sim.
+
+The code was ported by Actual Concepts initially, then PhET took it over.  Due to this, there is some variation in the
+coding style and adherence to coding standards.
+
+Visibility annotations are not complete - this was something that was started during development, and we didn't go
+update all portions of the code.
