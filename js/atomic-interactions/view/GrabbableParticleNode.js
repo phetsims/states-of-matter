@@ -1,10 +1,11 @@
 // Copyright 2015, University of Colorado Boulder
 
 /**
- * This extension of the ParticleNode class allows users to grab the node and
- * move it, thus changing the position within the underlying model.
+ * This extension of the ParticleNode class allows users to grab the node and move it, thus changing the position
+ * within the underlying model.
  *
  * @author Siddhartha Chinthapally (Actual Concepts)
+ * @author John Blanco
  */
 define( function( require ) {
   'use strict';
@@ -17,7 +18,6 @@ define( function( require ) {
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   /**
-   * Default constructor
    * @param {HandNode} handNode - view for the hand node
    * @param {DualAtomModel} dualAtomModel - model of the simulation
    * @param {StatesOfMatterAtom} particle
@@ -34,7 +34,7 @@ define( function( require ) {
 
     this.minX = minX;
     this.maxX = maxX;
-    var grabbableParticleNode = this;
+    var self = this;
     this.handNode = handNode;
     this.dualAtomModel = dualAtomModel;
 
@@ -51,11 +51,11 @@ define( function( require ) {
     this.addInputListener( new SimpleDragHandler( {
 
       start: function( event ) {
-        // Stop the model from moving the particle at the same time the user
-        // is moving it.
+
+        // Stop the model from moving the particle at the same time the user is moving it.
         dualAtomModel.setMotionPaused( true );
-        initialStartX = grabbableParticleNode.x;
-        startDragX = grabbableParticleNode.globalToParentPoint( event.pointer.point ).x;
+        initialStartX = self.x;
+        startDragX = self.globalToParentPoint( event.pointer.point ).x;
       },
 
       drag: function( event ) {
@@ -65,19 +65,18 @@ define( function( require ) {
           dualAtomModel.releaseBond();
         }
 
-        endDragX = grabbableParticleNode.globalToParentPoint( event.pointer.point ).x;
+        endDragX = self.globalToParentPoint( event.pointer.point ).x;
         var d = endDragX - startDragX;
         // Make sure we don't exceed the positional limits.
         var newPosX = initialStartX + d;
-        if ( newPosX > grabbableParticleNode.maxX ) {
-          newPosX = grabbableParticleNode.maxX;
+        if ( newPosX > self.maxX ) {
+          newPosX = self.maxX;
         }
-        else if ( newPosX < grabbableParticleNode.minX ) {
-          newPosX = grabbableParticleNode.minX;
+        else if ( newPosX < self.minX ) {
+          newPosX = self.minX;
         }
         // Move the particle based on the amount of mouse movement.
-        grabbableParticleNode.particle.setPosition( modelViewTransform.viewToModelX( newPosX ),
-          particle.positionProperty.value.y );
+        self.particle.setPosition( modelViewTransform.viewToModelX( newPosX ), particle.positionProperty.value.y );
       },
 
       end: function() {
@@ -90,7 +89,7 @@ define( function( require ) {
 
     this.positionChanged = false;
     particle.positionProperty.link( function() {
-      grabbableParticleNode.positionChanged = true;
+      self.positionChanged = true;
     } );
   }
 

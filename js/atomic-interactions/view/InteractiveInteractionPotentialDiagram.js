@@ -52,6 +52,7 @@ define( function( require ) {
     var self = this;
 
     this.interactionEnabled = false;
+    this.minXForAtom = Number.NEGATIVE_INFINITY;
 
     // Add the line that will indicate the value of epsilon.
     var epsilonLineLength = EPSILON_HANDLE_OFFSET_PROPORTION * this.widthOfGraph * 1.2;
@@ -77,8 +78,7 @@ define( function( require ) {
         endDragY = self.epsilonLine.globalToParentPoint( event.pointer.point ).y;
         var d = endDragY - startDragY;
         startDragY = endDragY;
-        var scaleFactor = StatesOfMatterConstants.MAX_EPSILON /
-                          ( self.getGraphHeight() / 2);
+        var scaleFactor = StatesOfMatterConstants.MAX_EPSILON / ( self.getGraphHeight() / 2 );
         dualAtomModel.interactionStrengthProperty.value = dualAtomModel.getEpsilon() + ( d * scaleFactor);
       },
 
@@ -117,8 +117,7 @@ define( function( require ) {
         endDragY = self.epsilonResizeHandle.globalToParentPoint( event.pointer.point ).y;
         var d = endDragY - startDragY;
         startDragY = endDragY;
-        var scaleFactor = StatesOfMatterConstants.MAX_EPSILON /
-                          ( self.getGraphHeight() / 2);
+        var scaleFactor = StatesOfMatterConstants.MAX_EPSILON / ( self.getGraphHeight() / 2 );
         dualAtomModel.interactionStrengthProperty.value = dualAtomModel.getEpsilon() + ( d * scaleFactor);
       },
 
@@ -165,43 +164,39 @@ define( function( require ) {
     this.positionMarker.touchArea = Shape.circle( 0, 0, 13 );
     this.positionMarker.addInputListener( new SimpleDragHandler( {
 
-      start: function( event ) {
-        // Stop the particle from moving in the model.
-        dualAtomModel.setMotionPaused( true );
-        startDragX = self.positionMarker.globalToParentPoint( event.pointer.point ).x;
-      },
+        start: function( event ) {
+          // Stop the particle from moving in the model.
+          dualAtomModel.setMotionPaused( true );
+          startDragX = self.positionMarker.globalToParentPoint( event.pointer.point ).x;
+        },
 
-      drag: function( event ) {
+        drag: function( event ) {
 
-        // If the atoms are bonded, release them.
-         if ( dualAtomModel.getBondingState() !== BondingState.UNBONDED ) {
-          // Need to release the bond before we can move the atom.
-          dualAtomModel.releaseBond();
-        }
+          // If the atoms are bonded, release them.
+          if ( dualAtomModel.getBondingState() !== BondingState.UNBONDED ) {
+            dualAtomModel.releaseBond();
+          }
 
-        // Make sure the hand node is now hidden, since the user has figured out what to drag.
-        dualAtomModel.isHandNodeVisible = false;
+          // Make sure the hand node is now hidden, since the user has figured out what to drag.
+          dualAtomModel.isHandNodeVisible = false;
 
-        var atom = dualAtomModel.getMovableAtomRef();
-        endDragX = self.positionMarker.globalToParentPoint( event.pointer.point ).x;
-        var xDifference = endDragX - startDragX;
-
-        var scaleFactor = self.GRAPH_X_RANGE / ( self.getGraphWidth() );
-        if( atom.getX() + ( xDifference * scaleFactor ) > atom.getRadius() * 1.8 ) {
-          startDragX = endDragX;
-
-          // Move the particle based on the amount of mouse movement.
-          var newPosX = Math.max( atom.getX() + ( xDifference * scaleFactor ), atom.getRadius() * 1.8 );
+          // Move the movable atom based on this drag event.
+          var atom = dualAtomModel.getMovableAtomRef();
+          endDragX = self.positionMarker.globalToParentPoint( event.pointer.point ).x;
+          var xDifference = endDragX - startDragX;
+          var scaleFactor = self.GRAPH_X_RANGE / ( self.getGraphWidth() );
+          var newPosX = Math.max( atom.getX() + ( xDifference * scaleFactor ), self.minXForAtom );
           atom.setPosition( newPosX, atom.getY() );
-        }
-      },
+          startDragX = endDragX;
+        },
 
-      end: function() {
-        // Let the model move the particle again.  Note that this happens
-        // even if the motion was paused by some other means.
-        dualAtomModel.setMotionPaused( false );
+        end: function() {
+          // Let the model move the particle again.  Note that this happens
+          // even if the motion was paused by some other means.
+          dualAtomModel.setMotionPaused( false );
+        }
       }
-    } ) );
+    ) );
 
     Property.multilink( [ dualAtomModel.atomPairProperty, dualAtomModel.interactionStrengthProperty, dualAtomModel.atomDiameterProperty ],
       function( moleculeType, interactionStrength, atomDiameter ) {
@@ -261,10 +256,8 @@ define( function( require ) {
   return inherit( InteractionPotentialDiagramNode, InteractiveInteractionPotentialDiagram, {
 
     /**
-     *
-     * This is an override of the method in the base class that draws the
-     * curve on the graph, and this override draws the controls that allow
-     * the user to interact with the graph.
+     * This is an override of the method in the base class that draws the curve on the graph, and this override draws
+     * the controls that allow the user to interact with the graph.
      * @override
      * @protected
      */
@@ -277,6 +270,16 @@ define( function( require ) {
     },
 
     /**
+     * Set the lowest allowed X position to which the movable atom can be set.
+     * @param {number} minXForAtom
+     * @public
+     */
+    setMinXForAtom: function( minXForAtom ){
+      this.minXForAtom = minXForAtom;
+      console.log( 'minXForAtom = ' + minXForAtom );
+    },
+
+    /**
      * @private
      */
     updateInteractivityState: function() {
@@ -286,10 +289,11 @@ define( function( require ) {
     /**
      * @override
      */
-    setMolecular: function( molecular ){
+    setMolecular: function( molecular ) {
       InteractionPotentialDiagramNode.prototype.setMolecular.call( this );
       // move the horizontal label down a little bit, otherwise adjustment arrow can overlap it
       this.horizontalAxisLabel.top += 8; // amount empirically determined
     }
   } );
-} );
+} )
+;

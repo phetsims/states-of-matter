@@ -520,14 +520,19 @@ define( function( require ) {
     },
 
     /**
-     * Update the minimum X value allowed for the movable atom.  This prevents
-     * too much overlap between the atoms.
+     * Update the minimum X value allowed for the movable atom.  This prevents too much overlap between the atoms.
      * @public
      */
     updateMinimumXForMovableAtom: function() {
       if ( this.movableParticle !== null && this.fixedParticle !== null ) {
-        this.movableParticleNode.setMinX( this.modelViewTransform.modelToViewX( this.dualAtomModel.getSigma() * 0.9 ) );
-        this.handNode.setMinX( this.modelViewTransform.modelToViewX( this.dualAtomModel.getSigma() * 0.9 ) );
+
+        // Use a minimum X value that is just a bit less than the sigma value, since the repulsive potential goes up
+        // rapidly with smaller values.
+        var minXInModel = this.dualAtomModel.getSigma() * 0.9;
+        this.interactiveInteractionPotentialDiagram.setMinXForAtom( minXInModel );
+        var minXInView = this.modelViewTransform.modelToViewX( minXInModel );
+        this.movableParticleNode.setMinX( minXInView );
+        this.handNode.setMinX( minXInView );
       }
     },
     /**
