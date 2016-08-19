@@ -276,7 +276,6 @@ define( function( require ) {
      */
     setMinXForAtom: function( minXForAtom ){
       this.minXForAtom = minXForAtom;
-      console.log( 'minXForAtom = ' + minXForAtom );
     },
 
     /**
