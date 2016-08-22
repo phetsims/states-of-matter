@@ -130,12 +130,12 @@ define( function( require ) {
     choosePaint: function( atom ) {
 
       var baseColor = this.chooseColor( atom );
-      var darkenedBaseColor = baseColor.colorUtilsDarker( 0.8 );
+      var darkenedBaseColor = baseColor.colorUtilsDarker( 0.5 );
       var transparentDarkenedBasedColor = new Color(
         darkenedBaseColor.getRed(),
         darkenedBaseColor.getGreen(),
         darkenedBaseColor.getBlue(),
-        0.5
+        0.3
       );
 
       if ( this.useGradient ) {
@@ -144,7 +144,7 @@ define( function( require ) {
 
         return ( new RadialGradient( 0, 0, 0, 0, 0, radius )
           .addColorStop( 0, baseColor )
-          .addColorStop( 1, transparentDarkenedBasedColor )
+          .addColorStop( 0.95, transparentDarkenedBasedColor )
         );
       }
       else {
