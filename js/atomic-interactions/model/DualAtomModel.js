@@ -445,11 +445,18 @@ define( function( require ) {
         // Using real world time for this results in the atoms moving a little slowly, so the time step is adjusted
         // here.  The multipliers were empirically determined.
         var adjustedTimeStep;
-        if ( this.speed === 'normal' ) {
-          adjustedTimeStep = simulationTimeStep * 1.5;
-        }
-        else {
-          adjustedTimeStep = simulationTimeStep * 0.5;
+        switch ( this.speed ){
+          case 'fast':
+            adjustedTimeStep = simulationTimeStep * 25;
+            break;
+          case 'normal':
+            adjustedTimeStep = simulationTimeStep * 2;
+            break;
+          case 'slow':
+            adjustedTimeStep = simulationTimeStep * 0.5;
+            break;
+          default:
+            assert( false, 'invalid setting for model speed' );
         }
 
         this.stepInternal( adjustedTimeStep );

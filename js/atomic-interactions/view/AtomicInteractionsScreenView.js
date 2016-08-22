@@ -37,10 +37,10 @@ define( function( require ) {
   var normalString = require( 'string!STATES_OF_MATTER/normal' );
   var slowMotionString = require( 'string!STATES_OF_MATTER/slowMotion' );
   var returnAtomString = require( 'string!STATES_OF_MATTER/returnAtom' );
-  var inset = 10;
 
   // Constant used to control size of push pin, empirically determined.
   var PUSH_PIN_WIDTH = 20;
+  var INSET = 10;
   var textMaxWidth = 80;
 
   /**
@@ -61,8 +61,11 @@ define( function( require ) {
     this.showTotalForces = false;
 
     // set up the model-view transform
-    this.modelViewTransform = ModelViewTransform2.createSinglePointScaleMapping( new Vector2( 0, 0 ),
-      new Vector2( 110, 360 ), 0.25 );
+    this.modelViewTransform = ModelViewTransform2.createSinglePointScaleMapping(
+      new Vector2( 0, 0 ),
+      new Vector2( 110, 350 ),
+      0.25
+    );
 
     // initialize local variables
     var atomicInteractionsScreenView = this;
@@ -73,8 +76,8 @@ define( function( require ) {
     var panelTextFill = enableHeterogeneousAtoms ? 'black' : StatesOfMatterColorProfile.controlPanelTextProperty;
     var forceControlPanelButtonAlign = enableHeterogeneousAtoms ? 'right' : 'left';
     var atomicInteractionsControlPanel = new AtomicInteractionsControlPanel( dualAtomModel, enableHeterogeneousAtoms, {
-      right: this.layoutBounds.maxX - inset,
-      top: this.layoutBounds.minY + inset,
+      right: this.layoutBounds.maxX - INSET,
+      top: this.layoutBounds.minY + INSET,
       tickTextColor: tickTextColor,
       textColor: textColor,
       fill: panelFill,
@@ -89,8 +92,8 @@ define( function( require ) {
       true,
       dualAtomModel,
       {
-        left: this.layoutBounds.minX + 7 * inset,
-        top: atomicInteractionsControlPanel.top + 6
+        left: this.layoutBounds.minX + 7 * INSET,
+        top: atomicInteractionsControlPanel.top
       }
     );
     this.addChild( this.interactiveInteractionPotentialDiagram );
@@ -103,8 +106,8 @@ define( function( require ) {
       listener: function() {
         dualAtomModel.resetMovableAtomPos();
       },
-      left: this.layoutBounds.minX + 6 * inset,
-      bottom: this.layoutBounds.bottom - 2 * inset
+      left: this.layoutBounds.minX + 6 * INSET,
+      bottom: this.layoutBounds.bottom - 2 * INSET
     } );
     this.addChild( this.returnAtomButton );
 
@@ -116,7 +119,7 @@ define( function( require ) {
         atomicInteractionsScreenView.handNode.setVisible( true );
         atomicInteractionsScreenView.interactiveInteractionPotentialDiagram.reset();
       },
-      right: this.layoutBounds.maxX - inset,
+      right: this.layoutBounds.maxX - INSET,
       bottom: this.returnAtomButton.bottom,
       scale: 0.75
     } );
@@ -130,7 +133,7 @@ define( function( require ) {
       stroke: 'black',
       fill: '#005566',
       centerX: this.layoutBounds.centerX + 100,
-      bottom: this.returnAtomButton.bottom
+      bottom: this.layoutBounds.bottom - 25 // empirically determined
     } );
     this.addChild( stepButton );
 
@@ -164,7 +167,7 @@ define( function( require ) {
       stroke: 'black',
       fill: '#005566',
       y: stepButton.centerY,
-      right: stepButton.left - 2 * inset
+      right: stepButton.left - 2 * INSET
     } );
     this.addChild( playPauseButton );
 
@@ -174,18 +177,18 @@ define( function( require ) {
     } );
 
     // add sim speed controls
-    var slowText = new Text( slowMotionString, {
+    var speedSelectionButtonOptions = {
       fill: StatesOfMatterColorProfile.controlPanelTextProperty,
       font: new PhetFont( 14 ),
       maxWidth: textMaxWidth
-    } );
-    var slowMotionRadioBox = new AquaRadioButton( dualAtomModel.speedProperty, 'slow', slowText, { radius: 10 } );
-    var normalText = new Text( normalString, {
-      fill: StatesOfMatterColorProfile.controlPanelTextProperty,
-      font: new PhetFont( 14 ),
-      maxWidth: textMaxWidth
-    } );
-    var normalMotionRadioBox = new AquaRadioButton( dualAtomModel.speedProperty, 'normal', normalText, { radius: 10 } );
+    };
+    var speedSelectionButtonRadius = 8;
+    var slowText = new Text( slowMotionString, speedSelectionButtonOptions );
+    var slowMotionRadioBox = new AquaRadioButton( dualAtomModel.speedProperty, 'slow', slowText, { radius: 8 } );
+    var normalText = new Text( normalString, speedSelectionButtonOptions );
+    var normalMotionRadioBox = new AquaRadioButton( dualAtomModel.speedProperty, 'normal', normalText, { radius: 8 } );
+    var fastForwardText = new Text( 'Fast Forward', speedSelectionButtonOptions );
+    var fastForwardRadioBox = new AquaRadioButton( dualAtomModel.speedProperty, 'fast', fastForwardText, { radius: 8 } );
 
     var speedControlMaxWidth = ( slowMotionRadioBox.width > normalMotionRadioBox.width ) ? slowMotionRadioBox.width : normalMotionRadioBox.width;
 
@@ -208,9 +211,14 @@ define( function( require ) {
     var speedControl = new VBox( {
       align: 'left',
       spacing: radioButtonSpacing,
-      children: [ slowMotionRadioBox, normalMotionRadioBox ]
+      children: [ slowMotionRadioBox, normalMotionRadioBox, fastForwardRadioBox ],
+      right: playPauseButton.left - 2 * INSET,
+      centerY: playPauseButton.centerY
+      //right: 0,
+      //centerY: 0
     } );
-    this.addChild( speedControl.mutate( { right: playPauseButton.left - 2 * inset, bottom: playPauseButton.bottom } ) );
+    //this.addChild( speedControl.mutate( { right: playPauseButton.left - 2 * inset, bottom: playPauseButton.bottom } ) );
+    this.addChild( speedControl );
 
     // Create the push pin node that will be used to convey the idea that the fixed atom is pinned to the canvas.  It
     // will be added to the scene graph when the particles appear.
@@ -237,7 +245,7 @@ define( function( require ) {
     this.handleFixedParticleAdded( dualAtomModel.fixedAtom );
     this.handleMovableParticleAdded( dualAtomModel.movableAtom );
     dualAtomModel.atomPairProperty.link( function( atomPair ) {
-      forcesControlPanel.top = atomicInteractionsControlPanel.bottom + inset / 2;
+      forcesControlPanel.top = atomicInteractionsControlPanel.bottom + INSET / 2;
       forcesControlPanel.right = atomicInteractionsControlPanel.right;
       atomicInteractionsScreenView.handleFixedParticleRemoved( dualAtomModel.fixedAtom );
       atomicInteractionsScreenView.handleFixedParticleAdded( dualAtomModel.fixedAtom );
