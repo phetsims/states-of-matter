@@ -2,7 +2,8 @@
 
 /**
  * Implementation of the Verlet algorithm for simulating molecular interaction based on the Lennard-Jones potential.
- * This version is used specifically for simulating water, i.e. H2O.
+ * This version is used specifically for simulating water, i.e. H2O, and also includes calculations for the charge
+ * distributions present in this molecule.
  *
  * @author John Blanco
  * @author Siddhartha Chinthapally (Actual Concepts)
