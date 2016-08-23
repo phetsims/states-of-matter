@@ -184,11 +184,17 @@ define( function( require ) {
     };
     var speedSelectionButtonRadius = 8;
     var slowText = new Text( slowMotionString, speedSelectionButtonOptions );
-    var slowMotionRadioBox = new AquaRadioButton( dualAtomModel.speedProperty, 'slow', slowText, { radius: 8 } );
+    var slowMotionRadioBox = new AquaRadioButton( dualAtomModel.speedProperty, 'slow', slowText, {
+      radius: speedSelectionButtonRadius
+    } );
     var normalText = new Text( normalString, speedSelectionButtonOptions );
-    var normalMotionRadioBox = new AquaRadioButton( dualAtomModel.speedProperty, 'normal', normalText, { radius: 8 } );
+    var normalMotionRadioBox = new AquaRadioButton( dualAtomModel.speedProperty, 'normal', normalText, {
+      radius: speedSelectionButtonRadius
+    } );
     var fastForwardText = new Text( 'Fast Forward', speedSelectionButtonOptions );
-    var fastForwardRadioBox = new AquaRadioButton( dualAtomModel.speedProperty, 'fast', fastForwardText, { radius: 8 } );
+    var fastForwardRadioBox = new AquaRadioButton( dualAtomModel.speedProperty, 'fast', fastForwardText, {
+      radius: speedSelectionButtonRadius
+    } );
 
     var speedControlMaxWidth = ( slowMotionRadioBox.width > normalMotionRadioBox.width ) ? slowMotionRadioBox.width : normalMotionRadioBox.width;
 
