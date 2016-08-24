@@ -1,9 +1,8 @@
 // Copyright 2014-2015, University of Colorado Boulder
 
 /**
- * Implementation of the Verlet algorithm for simulating molecular interaction
- * based on the Lennard-Jones potential.  This is the diatomic (i.e. two atoms
- * per molecule) version.
+ * Implementation of the Verlet algorithm for simulating molecular interaction based on the Lennard-Jones potential.
+ * This is the diatomic (i.e. two atoms per molecule) version.
  *
  * @author John Blanco
  * @author Siddhartha Chinthapally (Actual Concepts)
@@ -52,15 +51,13 @@ define( function( require ) {
     },
 
     /**
-     * Update the motion of the particles and the forces that are acting upon
-     * them.  This is the heart of this class, and it is here that the actual
-     * Verlet algorithm is contained.
+     * Update the motion of the particles and the forces that are acting upon them.  This is the heart of this class,
+     * and it is here that the actual Verlet algorithm is contained.
      * @public
      */
     updateForcesAndMotion: function( timeStep ) {
 
-      // Obtain references to the model data and parameters so that we can
-      // perform fast manipulations.
+      // Obtain references to the model data and parameters so that we can perform fast manipulations.
       var moleculeDataSet = this.multipleParticleModel.moleculeDataSet;
       var moleculeCenterOfMassPositions = moleculeDataSet.getMoleculeCenterOfMassPositions();
       var moleculeVelocities = moleculeDataSet.getMoleculeVelocities();
@@ -72,6 +69,7 @@ define( function( require ) {
       var moleculeRotationRates = moleculeDataSet.getMoleculeRotationRates();
       var moleculeTorques = moleculeDataSet.getMoleculeTorques();
       var nextMoleculeTorques = moleculeDataSet.getNextMoleculeTorques();
+      var insideContainer = moleculeDataSet.insideContainer;
 
       // Initialize other values that will be needed for the calculation.
       var massInverse = 1 / moleculeDataSet.getMoleculeMass();
@@ -82,22 +80,52 @@ define( function( require ) {
 
       // Update center of mass positions and angles for the molecules.
       for ( var i = 0; i < numberOfMolecules; i++ ) {
+
+        // calculate new position based on time and velocity
         var xPos = moleculeCenterOfMassPositions[ i ].x +
                    ( timeStep * moleculeVelocities[ i ].x ) +
                    ( timeStepSqrHalf * moleculeForces[ i ].x * massInverse);
         var yPos = moleculeCenterOfMassPositions[ i ].y +
                    ( timeStep * moleculeVelocities[ i ].y) +
                    ( timeStepSqrHalf * moleculeForces[ i ].y * massInverse);
+
+        // update this particle's inside/outside status and, if necessary, clamp its position
+        if ( insideContainer[ i ] && !this.isNormalizedPositionInContainer( xPos, yPos ) ){
+
+          // if this particle just blew out the top, that's fine - just update its status
+          if ( moleculeCenterOfMassPositions[ i ].y <= this.multipleParticleModel.normalizedTotalContainerHeight &&
+               yPos > this.multipleParticleModel.normalizedTotalContainerHeight ){
+            insideContainer[ i ] = false;
+          }
+          else{
+
+            // This particle must have blown out the side due to an extreme velocity - reposition it inside the
+            // container as though it bounced off the side and reverse its velocity.
+            if ( xPos > this.multipleParticleModel.normalizedContainerWidth ){
+              xPos = this.multipleParticleModel.normalizedContainerWidth;
+              moleculeVelocities[ i ].x = -moleculeVelocities[ i ].x;
+            }
+            else if ( xPos < 0 ){
+              xPos = 0;
+              moleculeVelocities[ i ].x = -moleculeVelocities[ i ].x;
+            }
+
+            if ( yPos < 0 ){
+              yPos = 0;
+              moleculeVelocities[ i ].y = -moleculeVelocities[ i ].y;
+            }
+          }
+        }
+
+        // set new position and rate of rotation
         moleculeCenterOfMassPositions[ i ].setXY( xPos, yPos );
         moleculeRotationAngles[ i ] += ( timeStep * moleculeRotationRates[ i ]) +
                                        ( timeStepSqrHalf * moleculeTorques[ i ] * inertiaInverse);
       }
       this.positionUpdater.updateAtomPositions( moleculeDataSet );
 
-      // Calculate the force from the walls.  This force is assumed to act
-      // on the center of mass, so there is no torque.
-      // Calculate the forces exerted on the particles by the container
-      // walls and by gravity.
+      // Calculate the force from the walls.  This force is assumed to act on the center of mass, so there is no torque.
+      // Calculate the forces exerted on the particles by the container walls and by gravity.
       for ( i = 0; i < numberOfMolecules; i++ ) {
 
         // Clear the previous calculation's particle forces and torques.
@@ -107,15 +135,13 @@ define( function( require ) {
         // Get the force values caused by the container walls.
         this.calculateWallForce( moleculeCenterOfMassPositions[ i ], nextMoleculeForces[ i ] );
 
-        // Accumulate this force value as part of the pressure being
-        // exerted on the walls of the container.
+        // Accumulate this force value as part of the pressure being exerted on the walls of the container.
         if ( nextMoleculeForces[ i ].y < 0 ) {
           pressureZoneWallForce += -nextMoleculeForces[ i ].y;
         }
         else if ( moleculeCenterOfMassPositions[ i ].y > this.multipleParticleModel.normalizedContainerHeight / 2 ) {
 
-          // If the particle bounced on one of the walls above the midpoint, add
-          // in that value to the press
+          // If the particle bounced on one of the walls above the midpoint, add in that value to the press
           pressureZoneWallForce += Math.abs( nextMoleculeForces[ i ].x );
         }
 
@@ -123,8 +149,8 @@ define( function( require ) {
         var gravitationalAcceleration = this.multipleParticleModel.gravitationalAcceleration;
         if ( this.multipleParticleModel.temperatureSetPoint < this.TEMPERATURE_BELOW_WHICH_GRAVITY_INCREASES ) {
 
-          // Below a certain temperature, gravity is increased to counteract some odd-looking behavior
-          // caused by the thermostat.
+          // Below a certain temperature, gravity is increased to counteract some odd-looking behavior caused by the
+          // thermostat.
           gravitationalAcceleration = gravitationalAcceleration *
                                       ((this.TEMPERATURE_BELOW_WHICH_GRAVITY_INCREASES -
                                         this.multipleParticleModel.temperatureSetPoint) *
@@ -136,8 +162,8 @@ define( function( require ) {
       // Update the pressure calculation.
       this.updatePressure( pressureZoneWallForce );
 
-      // If there are any atoms that are currently designated as "unsafe",
-      // check them to see if they can be moved into the "safe" category.
+      // If there are any atoms that are currently designated as "unsafe", check them to see if they can be moved into
+      // the "safe" category.
       if ( moleculeDataSet.numberOfSafeMolecules < numberOfMolecules ) {
         this.updateMoleculeSafety();
       }
@@ -147,8 +173,7 @@ define( function( require ) {
           for ( var ii = 0; ii < 2; ii++ ) {
             for ( var jj = 0; jj < 2; jj++ ) {
 
-              // Calculate the distance between the potentially
-              // interacting atoms.
+              // Calculate the distance between the potentially interacting atoms.
               var dx = atomPositions[ 2 * i + ii ].x - atomPositions[ 2 * j + jj ].x;
               var dy = atomPositions[ 2 * i + ii ].y - atomPositions[ 2 * j + jj ].y;
               var distanceSquared = dx * dx + dy * dy;
@@ -176,8 +201,7 @@ define( function( require ) {
         }
       }
 
-      // Update center of mass velocities and angles and calculate kinetic
-      // energy.
+      // Update center of mass velocities and angles and calculate kinetic energy.
       var centersOfMassKineticEnergy = 0;
       var rotationalKineticEnergy = 0;
       for ( i = 0; i < numberOfMolecules; i++ ) {
@@ -192,10 +216,12 @@ define( function( require ) {
                                       (Math.pow( moleculeVelocities[ i ].x, 2 ) + Math.pow( moleculeVelocities[ i ].y, 2 ));
         rotationalKineticEnergy += 0.5 * moleculeDataSet.moleculeRotationalInertia *
                                    Math.pow( moleculeRotationRates[ i ], 2 );
+
         // Move the newly calculated forces and torques into the current spots.
         moleculeForces[ i ].setXY( nextMoleculeForces[ i ].x, nextMoleculeForces[ i ].y );
         moleculeTorques[ i ] = nextMoleculeTorques[ i ];
       }
+
       // Record the calculated temperature.
       this.temperature = (centersOfMassKineticEnergy + rotationalKineticEnergy) / numberOfMolecules / 1.5;
     }

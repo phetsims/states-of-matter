@@ -23,6 +23,7 @@ define( function( require ) {
   // constants
   var LID_POSITION_TWEAK_FACTOR = 65; // Empirically determined value for aligning lid and container body.
   var PRESSURE_METER_ELBOW_OFFSET = 30;
+  var X_MARGIN = 5; // size in x direction beyond nominal container width
 
   // constants the control the positioning of non-container portions of this node.
   var PRESSURE_GAUGE_Y_OFFSET = -PRESSURE_METER_ELBOW_OFFSET;
@@ -43,6 +44,7 @@ define( function( require ) {
     this.containmentAreaWidth = StatesOfMatterConstants.CONTAINER_BOUNDS.width;
     this.containmentAreaHeight = StatesOfMatterConstants.CONTAINER_BOUNDS.height;
     Node.call( this );
+    this.containerWidthWithMargin = StatesOfMatterConstants.VIEW_CONTAINER_WIDTH + 2 * X_MARGIN;
     var preParticleLayer = new Node();
     var postParticleLayer = new Node( { opacity: 0.9 } );
     this.containerLid = new Node( { opacity: 0.9, layerSplit: true } );
@@ -50,18 +52,18 @@ define( function( require ) {
     var openEllipseRadiusX = 25;
     var ellipseCenterY = 2;
     var openEllipse = new Path( new Shape()
-      .ellipticalArc( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / 2, ellipseCenterY,
-      openEllipseRadiusX, StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / 2, Math.PI / 2, 0, 2 * Math.PI,
-      false ).close(), {
+      .ellipticalArc( this.containerWidthWithMargin / 2, ellipseCenterY,
+        openEllipseRadiusX, this.containerWidthWithMargin / 2, Math.PI / 2, 0, 2 * Math.PI,
+        false ).close(), {
       lineWidth: 1,
       fill: '#7E7E7E'
     } );
     var openInnerEllipseRadiusY = 125;
     var openInnerEllipseRadiusX = 20;
     var openInnerEllipse = new Path( new Shape()
-      .ellipticalArc( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / 2, ellipseCenterY,
-      openInnerEllipseRadiusX, openInnerEllipseRadiusY, Math.PI / 2, 0, 2 * Math.PI,
-      false ).close(), {
+      .ellipticalArc( this.containerWidthWithMargin / 2, ellipseCenterY,
+        openInnerEllipseRadiusX, openInnerEllipseRadiusY, Math.PI / 2, 0, 2 * Math.PI,
+        false ).close(), {
       lineWidth: 1,
       stroke: '#B3B3B3',
       fill: '#B3B3B3',
@@ -71,14 +73,23 @@ define( function( require ) {
 
     // container back node
     this.openNode = new Path( new Shape()
-      .ellipticalArc( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / 2, ellipseCenterY,
-      openEllipseRadiusX, StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / 2, Math.PI / 2, 0, 2 * Math.PI,
-      false ).close(), {
-      lineWidth: 1,
-      stroke: '#606262',
-      centerX: openEllipse.centerX,
-      centerY: openEllipse.centerY
-    } );
+      .ellipticalArc(
+        this.containerWidthWithMargin / 2,
+        ellipseCenterY,
+        openEllipseRadiusX,
+        this.containerWidthWithMargin / 2,
+        Math.PI / 2,
+        0,
+        2 * Math.PI,
+        false
+      ).close(),
+      {
+        lineWidth: 1,
+        stroke: '#606262',
+        centerX: openEllipse.centerX,
+        centerY: openEllipse.centerY
+      }
+    );
     var containerLeftShapeWidth = 25;
     var distanceFromTopInnerTop = 5;
 
@@ -86,38 +97,38 @@ define( function( require ) {
     var outerShape = new Path( new Shape()
       .moveTo( 0, distanceFromTopInnerTop )
       .quadraticCurveTo( containerLeftShapeWidth, 18, 50, 21 ) //outer-top-curve -1
-      .quadraticCurveTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / 2, 30,
-      StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / 2 + containerLeftShapeWidth, 26 ) //outer-top-curve -2
-      .quadraticCurveTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - containerLeftShapeWidth, 23,
-      StatesOfMatterConstants.VIEW_CONTAINER_WIDTH, distanceFromTopInnerTop )//outer-top-curve -3
+      .quadraticCurveTo( this.containerWidthWithMargin / 2, 30,
+        this.containerWidthWithMargin / 2 + containerLeftShapeWidth, 26 ) //outer-top-curve -2
+      .quadraticCurveTo( this.containerWidthWithMargin - containerLeftShapeWidth, 23,
+        this.containerWidthWithMargin, distanceFromTopInnerTop )//outer-top-curve -3
 
       // line from outer top right to outer bottom right
-      .lineTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT )
+      .lineTo( this.containerWidthWithMargin, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT )
 
-      .quadraticCurveTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 2,
-      StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT + 5,
-      StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 10,
-      StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT + 8 ) //outer-bottom-curve -1
+      .quadraticCurveTo( this.containerWidthWithMargin - 2,
+        StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT + 5,
+        this.containerWidthWithMargin - 10,
+        StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT + 8 ) //outer-bottom-curve -1
 
-      .quadraticCurveTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / 2,
-      StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT + 35,
-      20, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT + 10 ) //outer-bottom-curve -2
+      .quadraticCurveTo( this.containerWidthWithMargin / 2,
+        StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT + 35,
+        20, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT + 10 ) //outer-bottom-curve -2
       .quadraticCurveTo( 2, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT + 5, 0,
-      StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT )//outer-bottom-curve -3
+        StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT )//outer-bottom-curve -3
 
       // line from  outer-bottom left to inner-bottom left
       .lineTo( containerLeftShapeWidth, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT - 10 )
 
-      .quadraticCurveTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / 2,
-      StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT + containerLeftShapeWidth,
-      StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 25,
-      StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT - 10 )// inner-bottom -curve(left t0 right )
+      .quadraticCurveTo( this.containerWidthWithMargin / 2,
+        StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT + containerLeftShapeWidth,
+        this.containerWidthWithMargin - 25,
+        StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT - 10 )// inner-bottom -curve(left t0 right )
 
       // line from inner-bottom right to inner top-right
-      .lineTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - containerLeftShapeWidth, 30 )
+      .lineTo( this.containerWidthWithMargin - containerLeftShapeWidth, 30 )
 
-      .quadraticCurveTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / 2, 60,
-      containerLeftShapeWidth, 30 ) // curve from inner-top right to inner-top left
+      .quadraticCurveTo( this.containerWidthWithMargin / 2, 60,
+        containerLeftShapeWidth, 30 ) // curve from inner-top right to inner-top left
 
       // line from inner-top left to inner-bottom left
       .lineTo( containerLeftShapeWidth, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT - 10 )
@@ -125,7 +136,7 @@ define( function( require ) {
       .close(), {
       lineWidth: 0,
       stroke: 'white',
-      fill: new LinearGradient( 0, 0, StatesOfMatterConstants.VIEW_CONTAINER_WIDTH, 0 )
+      fill: new LinearGradient( 0, 0, this.containerWidthWithMargin, 0 )
         .addColorStop( 0, '#6D6D6D' )
         .addColorStop( 0.1, '#8B8B8B' )
         .addColorStop( 0.2, '#AEAFAF' )
@@ -162,11 +173,11 @@ define( function( require ) {
 
     // add container inner right
     var rightShape = new Path( new Shape()
-      .moveTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 26, 30 )
-      .lineTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 35, 45 )
-      .lineTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 35, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT - 10 )
-      .lineTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 24, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT )
-      .lineTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 24, 30 )
+      .moveTo( this.containerWidthWithMargin - 26, 30 )
+      .lineTo( this.containerWidthWithMargin - 35, 45 )
+      .lineTo( this.containerWidthWithMargin - 35, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT - 10 )
+      .lineTo( this.containerWidthWithMargin - 24, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT )
+      .lineTo( this.containerWidthWithMargin - 24, 30 )
       .close(), {
       lineWidth: 0,
       stroke: 'white',
@@ -183,14 +194,14 @@ define( function( require ) {
     // add container inner top
     var topShape = new Path( new Shape()
       .moveTo( containerLeftShapeWidth, 30 )
-      .quadraticCurveTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / 2, 45,
-      StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - containerLeftShapeWidth, 30 )
-      .lineTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 35, 45 )
-      .quadraticCurveTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / 2, 55, 35, 45 )
+      .quadraticCurveTo( this.containerWidthWithMargin / 2, 45,
+        this.containerWidthWithMargin - containerLeftShapeWidth, 30 )
+      .lineTo( this.containerWidthWithMargin - 35, 45 )
+      .quadraticCurveTo( this.containerWidthWithMargin / 2, 55, 35, 45 )
       .close(), {
       lineWidth: 0,
       stroke: 'white',
-      fill: new LinearGradient( 0, 0, StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - containerLeftShapeWidth - 30, 0 )
+      fill: new LinearGradient( 0, 0, this.containerWidthWithMargin - containerLeftShapeWidth - 30, 0 )
         .addColorStop( 0, '#2E2E2E' )
         .addColorStop( 0.2, '#323232' )
         .addColorStop( 0.3, '# 363636' )
@@ -204,18 +215,18 @@ define( function( require ) {
     // add container inner bottom
     var bottomShape = new Path( new Shape()
       .moveTo( containerLeftShapeWidth, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT )
-      .quadraticCurveTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / 2,
-      StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT + containerLeftShapeWidth + 1,
-      StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - containerLeftShapeWidth,
-      StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT )
-      .lineTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 35, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT - 10 )
-      .quadraticCurveTo( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / 2,
-      StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT + 10,
-      35, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT - 10 )
+      .quadraticCurveTo( this.containerWidthWithMargin / 2,
+        StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT + containerLeftShapeWidth + 1,
+        this.containerWidthWithMargin - containerLeftShapeWidth,
+        StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT )
+      .lineTo( this.containerWidthWithMargin - 35, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT - 10 )
+      .quadraticCurveTo( this.containerWidthWithMargin / 2,
+        StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT + 10,
+        35, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT - 10 )
       .close(), {
       lineWidth: 0,
       stroke: 'white',
-      fill: new LinearGradient( 0, 0, StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - 45, 0 )
+      fill: new LinearGradient( 0, 0, this.containerWidthWithMargin - 45, 0 )
         .addColorStop( 0, '#5D5D5D' )
         .addColorStop( 0.2, '#717171' )
         .addColorStop( 0.3, '#7C7C7C' )
@@ -276,7 +287,7 @@ define( function( require ) {
      * step
      * @param dt
      */
-    step: function( dt ){
+    step: function( dt ) {
       this.pressureMeter.step( dt );
     },
 
@@ -330,7 +341,7 @@ define( function( require ) {
         if ( this.containerLid.getRotation() !== 0 ) {
           this.containerLid.setRotation( 0 );
         }
-        this.containerLid.x = ( StatesOfMatterConstants.VIEW_CONTAINER_WIDTH - this.containerLid.width ) / 2;
+        this.containerLid.x = ( this.containerWidthWithMargin - this.containerLid.width ) / 2;
         this.containerLid.y = -this.modelViewTransform.modelToViewDeltaY( this.containmentAreaHeight - containerHeight );
       }
       else {

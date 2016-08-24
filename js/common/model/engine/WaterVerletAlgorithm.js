@@ -85,6 +85,7 @@ define( function( require ) {
       var moleculeRotationRates = moleculeDataSet.getMoleculeRotationRates();
       var moleculeTorques = moleculeDataSet.getMoleculeTorques();
       var nextMoleculeTorques = moleculeDataSet.getNextMoleculeTorques();
+      var insideContainer = moleculeDataSet.insideContainer;
 
       // Initialize other values that will be needed for the calculations.
       var pressureZoneWallForce = 0;
@@ -133,10 +134,42 @@ define( function( require ) {
 
       // Update center of mass positions and angles for the molecules.
       for ( var i = 0; i < numberOfMolecules; i++ ) {
+
+        // calculate new position based on velocity and time
         var xPos = moleculeCenterOfMassPositions[ i ].x + ( timeStep * moleculeVelocities[ i ].x ) +
                    ( timeStepSqrHalf * moleculeForces[ i ].x * this.massInverse );
         var yPos = moleculeCenterOfMassPositions[ i ].y + ( timeStep * moleculeVelocities[ i ].y ) +
                    ( timeStepSqrHalf * moleculeForces[ i ].y * this.massInverse );
+
+        // update this particle's inside/outside status and, if necessary, clamp its position
+        if ( insideContainer[ i ] && !this.isNormalizedPositionInContainer( xPos, yPos ) ){
+
+          // if this particle just blew out the top, that's fine - just update its status
+          if ( moleculeCenterOfMassPositions[ i ].y <= this.multipleParticleModel.normalizedTotalContainerHeight &&
+               yPos > this.multipleParticleModel.normalizedTotalContainerHeight ){
+            insideContainer[ i ] = false;
+          }
+          else{
+
+            // This particle must have blown out the side due to an extreme velocity - reposition it inside the
+            // container as though it bounced off the side and reverse its velocity.
+            if ( xPos > this.multipleParticleModel.normalizedContainerWidth ){
+              xPos = this.multipleParticleModel.normalizedContainerWidth;
+              moleculeVelocities[ i ].x = -moleculeVelocities[ i ].x;
+            }
+            else if ( xPos < 0 ){
+              xPos = 0;
+              moleculeVelocities[ i ].x = -moleculeVelocities[ i ].x;
+            }
+
+            if ( yPos < 0 ){
+              yPos = 0;
+              moleculeVelocities[ i ].y = -moleculeVelocities[ i ].y;
+            }
+          }
+        }
+
+        // set new position and rate of rotation
         moleculeCenterOfMassPositions[ i ].setXY( xPos, yPos );
         moleculeRotationAngles[ i ] += ( timeStep * moleculeRotationRates[ i ] ) +
                                        ( timeStepSqrHalf * moleculeTorques[ i ] * this.inertiaInverse );

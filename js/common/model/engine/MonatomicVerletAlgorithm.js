@@ -85,33 +85,54 @@ define( function( require ) {
       var moleculeVelocities = moleculeDataSet.moleculeVelocities;
       var moleculeForces = moleculeDataSet.moleculeForces;
       var nextMoleculeForces = moleculeDataSet.nextMoleculeForces;
-
+      var insideContainer = moleculeDataSet.insideContainer;
       var timeStepSqrHalf = timeStep * timeStep * 0.5;
       var timeStepHalf = timeStep / 2;
-
       var i;
-
-      // TODO: Document what the offset is all about
-      var offset = 0;
-      if ( this.multipleParticleModel.currentMolecule === StatesOfMatterConstants.ARGON ){
-        offset = 6;
-      }
-
-      if ( this.multipleParticleModel.currentMolecule === StatesOfMatterConstants.USER_DEFINED_MOLECULE ){
-        offset = 4;
-      }
 
       // Update the positions of all particles based on their current velocities and the forces acting on them.
       for ( i = 0; i < numberOfAtoms; i++ ) {
+
+        // calculate new position based on velocity and time
         var yPos = moleculeCenterOfMassPositions[ i ].y + ( timeStep * moleculeVelocities[ i ].y ) +
                              ( timeStepSqrHalf * moleculeForces[ i ].y );
         var xPos = moleculeCenterOfMassPositions[ i ].x + ( timeStep * moleculeVelocities[ i ].x ) +
                    ( timeStepSqrHalf * moleculeForces[ i ].x );
+
+        // update this particle's inside/outside status and, if necessary, clamp its position
+        if ( insideContainer[ i ] && !this.isNormalizedPositionInContainer( xPos, yPos ) ){
+
+          // if this particle just blew out the top, that's fine - just update its status
+          if ( moleculeCenterOfMassPositions[ i ].y <= this.multipleParticleModel.normalizedTotalContainerHeight &&
+               yPos > this.multipleParticleModel.normalizedTotalContainerHeight ){
+            insideContainer[ i ] = false;
+          }
+          else{
+
+            // This particle must have blown out the side due to an extreme velocity - reposition it inside the
+            // container as though it bounced off the side and reverse its velocity.
+            if ( xPos > this.multipleParticleModel.normalizedContainerWidth ){
+              xPos = this.multipleParticleModel.normalizedContainerWidth;
+              moleculeVelocities[ i ].x = -moleculeVelocities[ i ].x;
+            }
+            else if ( xPos < 0 ){
+              xPos = 0;
+              moleculeVelocities[ i ].x = -moleculeVelocities[ i ].x;
+            }
+
+            if ( yPos < 0 ){
+              yPos = 0;
+              moleculeVelocities[ i ].y = -moleculeVelocities[ i ].y;
+            }
+          }
+        }
+
+        // set the new position
         moleculeCenterOfMassPositions[ i ].setXY( xPos, yPos );
       }
 
       // Synchronize the molecule and atom positions.
-      this.positionUpdater.updateAtomPositions( moleculeDataSet, offset );
+      this.positionUpdater.updateAtomPositions( moleculeDataSet );
 
       // Calculate the forces exerted on the particles by the container walls and by gravity.
       var pressureZoneWallForce = 0;

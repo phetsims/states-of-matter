@@ -57,7 +57,7 @@ define( function( require ) {
 
   // constants used in the layout process
   var PARTICLE_CANVAS_LAYER_BOUND_LIMIT = 1000;
-  var PARTICLE_LAYER_X_OFFSET = 148;
+  var PARTICLE_LAYER_X_OFFSET = 151;
   var PARTICLE_LAYER_Y_OFFSET = 680;
   var PARTICLE_CONTAINER_X_OFFSET = 60;
   var LAY_BOUNDS_RIGHT_OFFSET = 15;
@@ -79,8 +79,11 @@ define( function( require ) {
     var mvtScale = StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / StatesOfMatterConstants.CONTAINER_BOUNDS.width;
 
     // model-view transform
-    var modelViewTransform = ModelViewTransform2.createSinglePointScaleInvertedYMapping( new Vector2( 0, 0 ),
-      new Vector2( 0, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT ), mvtScale );
+    var modelViewTransform = ModelViewTransform2.createSinglePointScaleInvertedYMapping(
+      new Vector2( 0, 0 ),
+      new Vector2( 0, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT ),
+      mvtScale
+    );
 
     // add heater/cooler node
     var heaterCoolerNode = new HeaterCoolerNode( {
@@ -91,7 +94,6 @@ define( function( require ) {
     heaterCoolerNode.heatCoolLevelProperty.link( function( heat ) {
       multipleParticleModel.setHeatingCoolingAmount( heat );
     } );
-
 
     this.multipleParticleModel = multipleParticleModel;
     this.modelTemperatureHistory = new ObservableArray();

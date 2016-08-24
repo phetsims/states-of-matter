@@ -42,7 +42,7 @@ define( function( require ) {
     this.moleculeVelocities = new Array( maxNumMolecules );
     this.moleculeForces = new Array( maxNumMolecules );
     this.nextMoleculeForces = new Array( maxNumMolecules );
-    this.insideContainers = [];
+    this.insideContainer = [];
 
     // Note that some of the following are not used in the monatomic case, but need to be here for compatibility.
     this.moleculeRotationAngles = new Array( maxNumMolecules );
@@ -281,7 +281,7 @@ define( function( require ) {
       this.moleculeCenterOfMassPositions[ numberOfMolecules ] = moleculeCenterOfMassPosition;
       this.moleculeVelocities[ numberOfMolecules ] = moleculeVelocity;
       this.moleculeRotationRates[ numberOfMolecules ] = moleculeRotationRate;
-      this.insideContainers[ numberOfMolecules ] = insideContainer;
+      this.insideContainer[ numberOfMolecules ] = insideContainer;
 
       // Allocate memory for the information that is not specified.
       this.moleculeForces[ numberOfMolecules ] = new Vector2();

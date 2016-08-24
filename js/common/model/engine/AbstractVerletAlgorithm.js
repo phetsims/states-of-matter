@@ -69,6 +69,15 @@ define( function( require ) {
     },
 
     /**
+     * @returns {boolean}
+     * @param {Vector2} position
+     */
+    isNormalizedPositionInContainer: function( xPos, yPos ){
+      return xPos >= 0 && xPos <= this.multipleParticleModel.normalizedContainerWidth &&
+             yPos >= 0 && yPos <= this.multipleParticleModel.normalizedTotalContainerHeight;
+    },
+
+    /**
      * Calculate the force exerted on a particle at the provided position by the walls of the container.  The upper left
      * corner of the container is assumed to be at (0,0), so only the width and height are provided as parameters.  The
      * force is returned in the provided vector.
@@ -86,6 +95,11 @@ define( function( require ) {
       resultantForce.setXY( 0, 0 );
       var containerWidth = this.multipleParticleModel.normalizedContainerWidth;
       var containerHeight = this.multipleParticleModel.normalizedContainerHeight;
+      this.topLeftOfContainer.setXY( 0, this.multipleParticleModel.normalizedTotalContainerHeight );
+      this.topRightOfContainer.setXY(
+        this.multipleParticleModel.normalizedContainerWidth,
+        this.multipleParticleModel.normalizedTotalContainerHeight
+      );
       var xPos = position.x;
       var yPos = position.y;
       var minDistance = WALL_DISTANCE_THRESHOLD * 0.8; // multiplier empirically determined
