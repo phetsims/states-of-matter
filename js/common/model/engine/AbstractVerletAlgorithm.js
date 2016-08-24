@@ -14,6 +14,7 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var PropertySet = require( 'AXON/PropertySet' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  var Vector2 = require( 'DOT/Vector2' );
 
   // constants that control various aspects of the Verlet algorithm.
   var PRESSURE_CALC_WEIGHTING = 0.999;
@@ -36,11 +37,36 @@ define( function( require ) {
     PropertySet.call( this, {
       pressure: 0 // atm units
     } );
+
+    // reusable vectors, used for efficiency
+    this.topLeftOfContainer = new Vector2();
+    this.topRightOfContainer = new Vector2();
+    this.cornerForceVector = new Vector2();
   }
 
   statesOfMatter.register( 'AbstractVerletAlgorithm', AbstractVerletAlgorithm );
 
   return inherit( PropertySet, AbstractVerletAlgorithm, {
+
+    /**
+     * calculate the force due to the Lennard-Jones potential, uses the derivative of the standard formula
+     * @param {number} distance
+     * @returns {number}
+     * @private
+     */
+    calculateForceFromLJPotential: function( distance ) {
+      return ( 48 / ( Math.pow( distance, 13 ) ) ) - ( 24 / ( Math.pow( distance, 7 ) ) );
+    },
+
+    /**
+     * calculate the Lennard-Jones potential for a given distance
+     * @param {number} distance
+     * @returns {number}
+     * @private
+     */
+    calculateLJPotential: function( distance ) {
+      return 4 / ( Math.pow( distance, 12 ) ) - 4 / ( Math.pow( distance, 6 ) ) + 1;
+    },
 
     /**
      * Calculate the force exerted on a particle at the provided position by the walls of the container.  The upper left
@@ -59,35 +85,47 @@ define( function( require ) {
       assert && assert( position && position.isVector2 );
       assert && assert( resultantForce && resultantForce.isVector2 );
 
+      resultantForce.setXY( 0, 0 );
       var xPos = position.x;
       var yPos = position.y;
-
-      var minDistance = WALL_DISTANCE_THRESHOLD * 0.8;
+      var minDistance = WALL_DISTANCE_THRESHOLD * 0.8; // multiplier empirically determined
       var distance;
+      this.topLeftOfContainer.setXY( 0, this.multipleParticleModel.normalizedTotalContainerHeight );
+      this.topRightOfContainer.setXY(
+        this.multipleParticleModel.normalizedContainerWidth,
+        this.multipleParticleModel.normalizedTotalContainerHeight
+      );
 
-      if ( yPos < this.multipleParticleModel.normalizedContainerWidth ) {
+      if ( yPos < this.multipleParticleModel.normalizedTotalContainerHeight ) {
+
         // Calculate the force in the X direction.
         if ( xPos < WALL_DISTANCE_THRESHOLD ) {
+
           // Close enough to the left wall to feel the force.
           if ( xPos < minDistance ) {
             if ( ( xPos < 0 ) && ( this.multipleParticleModel.isExploded ) ) {
+
               // The particle is outside the container after the container has exploded, so don't let the walls exert
               // any force.
               xPos = Number.POSITIVE_INFINITY;
             }
             else {
+
               // Limit the distance, and thus the force, if we are really close.
               xPos = minDistance;
             }
           }
-          resultantForce.setX( ( 48 / ( Math.pow( xPos, 13 ) ) ) - ( 24 / ( Math.pow( xPos, 7 ) ) ) );
-          this.potentialEnergy += 4 / ( Math.pow( xPos, 12 ) ) - 4 / ( Math.pow( xPos, 6 ) ) + 1;
+
+          resultantForce.setX( this.calculateForceFromLJPotential( xPos ) );
+          this.potentialEnergy += this.calculateLJPotential( xPos );
         }
         else if ( containerWidth - xPos < WALL_DISTANCE_THRESHOLD ) {
+
           // Close enough to the right wall to feel the force.
           distance = containerWidth - xPos;
           if ( distance < minDistance ) {
             if ( ( distance < 0 ) && ( this.multipleParticleModel.isExploded ) ) {
+
               // The particle is outside the container after the container has exploded, so don't let the walls exert
               // any force.
               xPos = Number.POSITIVE_INFINITY;
@@ -96,16 +134,39 @@ define( function( require ) {
               distance = minDistance;
             }
           }
-          resultantForce.setX( -( 48 / ( Math.pow( distance, 13 ) ) ) + ( 24 / ( Math.pow( distance, 7 ) ) ) );
-          this.potentialEnergy += 4 / ( Math.pow( distance, 12 ) ) - 4 / ( Math.pow( distance, 6 ) ) + 1;
+
+          resultantForce.setX( -this.calculateForceFromLJPotential( distance ) );
+          this.potentialEnergy += this.calculateLJPotential( distance );
+        }
+      }
+      else if ( yPos <= this.multipleParticleModel.normalizedTotalContainerHeight + WALL_DISTANCE_THRESHOLD ) {
+
+        // This particle is just above the top of the (exploded) container.  If it is near one of the edges, we need to
+        // apply the repulsive forces in a graduated way so that we don't get sudden motion when a particle reaches an
+        // edge.
+        var distanceToCorner = this.topLeftOfContainer.distance( position );
+        if ( distanceToCorner < WALL_DISTANCE_THRESHOLD ) {
+          this.cornerForceVector.setXY( position.x - this.topLeftOfContainer.x, position.y - this.topLeftOfContainer.y );
+          this.cornerForceVector.setMagnitude( this.calculateForceFromLJPotential( distanceToCorner ) );
+          resultantForce.set( this.cornerForceVector );
+        }
+        else {
+          distanceToCorner = this.topRightOfContainer.distance( position );
+          if ( distanceToCorner < WALL_DISTANCE_THRESHOLD ) {
+            this.cornerForceVector.setXY( position.x - this.topRightOfContainer.x, position.y - this.topRightOfContainer.y );
+            this.cornerForceVector.setMagnitude( this.calculateForceFromLJPotential( distanceToCorner ) );
+            resultantForce.set( this.cornerForceVector );
+          }
         }
       }
 
       // Calculate the force in the Y direction.
       if ( yPos < WALL_DISTANCE_THRESHOLD ) {
+
         // Close enough to the bottom wall to feel the force.
         if ( yPos < minDistance ) {
           if ( ( yPos < 0 ) && ( !this.multipleParticleModel.isExploded ) ) {
+
             // The particles are energetic enough to end up outside the container, so consider it to be exploded (if it
             // isn't already).
             this.multipleParticleModel.setContainerExploded( true );
@@ -113,20 +174,21 @@ define( function( require ) {
           yPos = minDistance;
         }
         if ( !this.multipleParticleModel.isExploded || ( ( xPos > 0 ) && ( xPos < containerWidth ) ) ) {
-          // Only calculate the force if the particle is inside the
-          // container.
-          resultantForce.setY( 48 / ( Math.pow( yPos, 13 ) ) - ( 24 / ( Math.pow( yPos, 7 ) ) ) );
-          this.potentialEnergy += 4 / ( Math.pow( yPos, 12 ) ) - 4 / ( Math.pow( yPos, 6 ) ) + 1;
+
+          // Only calculate the force if the particle is inside the container.
+          resultantForce.setY( this.calculateForceFromLJPotential( yPos ) );
+          this.potentialEnergy += this.calculateLJPotential( yPos );
         }
       }
       else if ( ( containerHeight - yPos < WALL_DISTANCE_THRESHOLD ) && !this.multipleParticleModel.isExploded ) {
+
         // Close enough to the top to feel the force.
         distance = containerHeight - yPos;
         if ( distance < minDistance ) {
           distance = minDistance;
         }
-        resultantForce.setY( -48 / ( Math.pow( distance, 13 ) ) + ( 24 / ( Math.pow( distance, 7 ) ) ) );
-        this.potentialEnergy += 4 / ( Math.pow( distance, 12 ) ) - 4 / ( Math.pow( distance, 6 ) ) + 1;
+        resultantForce.setY( -this.calculateForceFromLJPotential( distance ) );
+        this.potentialEnergy += this.calculateLJPotential( distance );
       }
     },
 
@@ -180,7 +242,7 @@ define( function( require ) {
             for ( j = 0; j < atomsPerMolecule; j++ ) {
               tempAtomPosition = atomPositions[ ( numberOfSafeMolecules * atomsPerMolecule ) + j ];
               atomPositions[ ( numberOfSafeMolecules * atomsPerMolecule ) + j ] =
-              atomPositions[ ( atomsPerMolecule * i ) + j ];
+                atomPositions[ ( atomsPerMolecule * i ) + j ];
               atomPositions[ ( atomsPerMolecule * i ) + j ] = tempAtomPosition;
             }
 
@@ -212,12 +274,14 @@ define( function( require ) {
           moleculeDataSet.setNumberOfSafeMolecules( numberOfSafeMolecules );
         }
       }
-    },
+    }
+    ,
 
     setScaledEpsilon: function() {
       // This should be implemented in descendant classes.
       assert && assert( false, 'Setting epsilon is not implemented for this class' );
-    },
+    }
+    ,
 
     /**
      * @returns {number}
@@ -227,7 +291,8 @@ define( function( require ) {
       // This should be implemented in descendant classes.
       assert && assert( false, 'Getting scaled epsilon is not implemented for this class' );
       return 0;
-    },
+    }
+    ,
 
     /**
      * @param {number} pressureZoneWallForce
@@ -251,7 +316,8 @@ define( function( require ) {
           this.multipleParticleModel.setContainerExploded( true );
         }
       }
-    },
+    }
+    ,
 
     // static final
     PARTICLE_INTERACTION_DISTANCE_THRESH_SQRD: 6.25,

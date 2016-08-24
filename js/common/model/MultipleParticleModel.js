@@ -172,7 +172,11 @@ define( function( require ) {
       }
     );
 
+    // @public, normalized version of the container height, changes as the lid position changes
     this.normalizedContainerHeight = this.particleContainerHeight / this.particleDiameter;
+
+    // @public, normalized version of the total container height regardless of the lid position
+    this.normalizedTotalContainerHeight = this.particleContainerHeight / this.particleDiameter;
 
     // Do just enough initialization to allow the view and control portions of the simulation to be properly created.
     // The rest of the initialization will occur when the model is reset.
@@ -721,6 +725,7 @@ define( function( require ) {
       this.targetContainerHeight = StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT;
       this.normalizedContainerWidth = StatesOfMatterConstants.PARTICLE_CONTAINER_WIDTH / this.particleDiameter;
       this.normalizedContainerHeight = this.particleContainerHeight / this.particleDiameter;
+      this.normalizedTotalContainerHeight = this.particleContainerHeight / this.particleDiameter;
     },
 
     /**
