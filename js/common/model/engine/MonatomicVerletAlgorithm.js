@@ -16,7 +16,6 @@ define( function( require ) {
   var AbstractVerletAlgorithm = require( 'STATES_OF_MATTER/common/model/engine/AbstractVerletAlgorithm' );
   var MonatomicAtomPositionUpdater = require( 'STATES_OF_MATTER/common/model/engine/MonatomicAtomPositionUpdater' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
 
   /**
    * @param {MultipleParticleModel} multipleParticleModel of the simulation
