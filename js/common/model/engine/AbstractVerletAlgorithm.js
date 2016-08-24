@@ -74,18 +74,18 @@ define( function( require ) {
      * force is returned in the provided vector.
      *
      * @param {Vector2} position       - Current position of the particle.
-     * @param {number} containerWidth  - Width of the container where particles are held.
-     * @param {number} containerHeight - Height of the container where particles are held.
      * @param {Vector2} resultantForce - Vector in which the resulting force is returned.
      * @public
      */
-    calculateWallForce: function( position, containerWidth, containerHeight, resultantForce ) {
+    calculateWallForce: function( position, resultantForce ) {
 
       // parameter checking
       assert && assert( position && position.isVector2 );
       assert && assert( resultantForce && resultantForce.isVector2 );
 
       resultantForce.setXY( 0, 0 );
+      var containerWidth = this.multipleParticleModel.normalizedContainerWidth;
+      var containerHeight = this.multipleParticleModel.normalizedContainerHeight;
       var xPos = position.x;
       var yPos = position.y;
       var minDistance = WALL_DISTANCE_THRESHOLD * 0.8; // multiplier empirically determined

@@ -87,8 +87,6 @@ define( function( require ) {
       var nextMoleculeTorques = moleculeDataSet.getNextMoleculeTorques();
 
       // Initialize other values that will be needed for the calculations.
-      var normalizedContainerHeight = this.multipleParticleModel.getNormalizedContainerHeight();
-      var normalizedContainerWidth = this.multipleParticleModel.getNormalizedContainerWidth();
       var pressureZoneWallForce = 0;
       var temperatureSetPoint = this.multipleParticleModel.getTemperatureSetPoint();
       var timeStepSqrHalf = timeStep * timeStep * 0.5;
@@ -153,12 +151,7 @@ define( function( require ) {
         nextMoleculeTorques[ i ] = 0;
 
         // Get the force values caused by the container walls.
-        this.calculateWallForce(
-          moleculeCenterOfMassPositions[ i ],
-          normalizedContainerWidth,
-          normalizedContainerHeight,
-          nextMoleculeForces[ i ]
-        );
+        this.calculateWallForce( moleculeCenterOfMassPositions[ i ], nextMoleculeForces[ i ] );
 
         // Accumulate this force value as part of the pressure being exerted on the walls of the container.
         if ( nextMoleculeForces[ i ].y < 0 ) {

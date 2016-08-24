@@ -121,8 +121,7 @@ define( function( require ) {
         nextMoleculeForces[ i ].setXY( 0, 0 );
 
         // Get the force values caused by the container walls.
-        this.calculateWallForce( moleculeCenterOfMassPositions[ i ], this.multipleParticleModel.normalizedContainerWidth,
-          this.multipleParticleModel.normalizedContainerHeight, nextMoleculeForces[ i ] );
+        this.calculateWallForce( moleculeCenterOfMassPositions[ i ], nextMoleculeForces[ i ] );
 
         // Accumulate this force value as part of the pressure being
         // exerted on the walls of the container.

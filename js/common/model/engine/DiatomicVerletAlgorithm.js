@@ -76,8 +76,6 @@ define( function( require ) {
       // Initialize other values that will be needed for the calculation.
       var massInverse = 1 / moleculeDataSet.getMoleculeMass();
       var inertiaInverse = 1 / moleculeDataSet.getMoleculeRotationalInertia();
-      var normalizedContainerHeight = this.multipleParticleModel.getNormalizedContainerHeight();
-      var normalizedContainerWidth = this.multipleParticleModel.getNormalizedContainerWidth();
       var pressureZoneWallForce = 0;
       var timeStepSqrHalf = timeStep * timeStep * 0.5;
       var timeStepHalf = timeStep / 2;
@@ -107,12 +105,7 @@ define( function( require ) {
         nextMoleculeTorques[ i ] = 0;
 
         // Get the force values caused by the container walls.
-        this.calculateWallForce(
-          moleculeCenterOfMassPositions[ i ],
-          normalizedContainerWidth,
-          normalizedContainerHeight,
-          nextMoleculeForces[ i ]
-        );
+        this.calculateWallForce( moleculeCenterOfMassPositions[ i ], nextMoleculeForces[ i ] );
 
         // Accumulate this force value as part of the pressure being
         // exerted on the walls of the container.
