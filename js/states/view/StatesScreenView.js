@@ -31,16 +31,16 @@ define( function( require ) {
   var Vector2 = require( 'DOT/Vector2' );
 
   // constants
-  var inset = 10;
-  var heaterCoolerXOffset = 10;
-  var stepButtonXOffset = 50;
-  var stepButtonYOffset = 20;
-  var compositeThermometerNodeLeftOffset = 90;
-  var layoutBoundsRightOffset = 15;
-  var layoutBoundsYOffset = 10;
-  var particlesLayerXOffset = 148;
-  var particlesLayerYOffset = 680;
-  var particleCanvasLayerBoundLimit = 1000;
+  var INSET = 10;
+  var HEATER_COOLER_X_OFFSET = 10;
+  var STEP_BUTTON_X_OFFSET = 50;
+  var STEP_BUTTON_Y_OFFSET = 20;
+  var COMPOSITE_THERMOMETER_NODE_LEFT_OFFSET = 90;
+  var LAYOUT_BOUNDS_RIGHT_OFFSET = 15;
+  var LAYOUT_BOUNDS_Y_OFFSET = 10;
+  var PARTICLES_LAYER_X_OFFSET = 148;
+  var PARTICLES_LAYER_Y_OFFSET = 680;
+  var PARTICLE_CANVAS_LAYER_BOUND_LIMIT = 1000;
 
   /**
    *
@@ -61,7 +61,7 @@ define( function( require ) {
     var heaterCoolerNode = new HeaterCoolerNode( {
       scale: 0.8,
       centerX: this.layoutBounds.centerX,
-      bottom: this.layoutBounds.bottom - inset
+      bottom: this.layoutBounds.bottom - INSET
     } );
     heaterCoolerNode.heatCoolLevelProperty.link( function( heat ) {
       multipleParticleModel.setHeatingCoolingAmount( heat );
@@ -70,8 +70,8 @@ define( function( require ) {
     // add particle container
     this.particleContainerNode = new ParticleContainerNode( multipleParticleModel, modelViewTransform, false, false,
       {
-        centerX: heaterCoolerNode.centerX - heaterCoolerXOffset,
-        bottom: heaterCoolerNode.top - inset
+        centerX: heaterCoolerNode.centerX - HEATER_COOLER_X_OFFSET,
+        bottom: heaterCoolerNode.top - INSET
       } );
 
     // add particle container back before  particle Canvas layer
@@ -82,10 +82,10 @@ define( function( require ) {
       multipleParticleModel.particles,
       modelViewTransform,
       {
-        centerX: heaterCoolerNode.centerX - particlesLayerXOffset,
-        bottom:  heaterCoolerNode.top + particlesLayerYOffset,
-        canvasBounds: new Bounds2( -particleCanvasLayerBoundLimit, -particleCanvasLayerBoundLimit,
-          particleCanvasLayerBoundLimit, particleCanvasLayerBoundLimit )
+        centerX: heaterCoolerNode.centerX - PARTICLES_LAYER_X_OFFSET,
+        bottom:  heaterCoolerNode.top + PARTICLES_LAYER_Y_OFFSET,
+        canvasBounds: new Bounds2( -PARTICLE_CANVAS_LAYER_BOUND_LIMIT, -PARTICLE_CANVAS_LAYER_BOUND_LIMIT,
+          PARTICLE_CANVAS_LAYER_BOUND_LIMIT, PARTICLE_CANVAS_LAYER_BOUND_LIMIT )
       } );
     this.addChild( this.particlesLayer );
     this.addChild( this.particleContainerNode );
@@ -99,21 +99,21 @@ define( function( require ) {
     this.compositeThermometerNode = new CompositeThermometerNode( multipleParticleModel, modelViewTransform, {
       font: new PhetFont( 20 ),
       fill: 'white',
-      right: this.particleContainerNode.left + compositeThermometerNodeLeftOffset
+      right: this.particleContainerNode.left + COMPOSITE_THERMOMETER_NODE_LEFT_OFFSET
     } );
     this.addChild( this.compositeThermometerNode );
 
     // add Molecule ControlPanel
     var solidLiquidGasMoleculesControlPanel = new StatesMoleculesControlPanel( multipleParticleModel.moleculeTypeProperty, {
-      right: this.layoutBounds.right - layoutBoundsRightOffset,
-      top: this.layoutBounds.top + layoutBoundsYOffset
+      right: this.layoutBounds.right - LAYOUT_BOUNDS_RIGHT_OFFSET,
+      top: this.layoutBounds.top + LAYOUT_BOUNDS_Y_OFFSET
     } );
     this.addChild( solidLiquidGasMoleculesControlPanel );
 
     // add phases control node
     var solidLiquidGasPhaseControlNode = new StatesPhaseControlNode( multipleParticleModel, {
       right: solidLiquidGasMoleculesControlPanel.right,
-      top: solidLiquidGasMoleculesControlPanel.bottom + layoutBoundsYOffset
+      top: solidLiquidGasMoleculesControlPanel.bottom + LAYOUT_BOUNDS_Y_OFFSET
     } );
     this.addChild( solidLiquidGasPhaseControlNode );
 
@@ -125,9 +125,9 @@ define( function( require ) {
           self.particleContainerNode.reset();
           self.compositeThermometerNode.reset();
         },
-        bottom: this.layoutBounds.bottom - layoutBoundsYOffset / 2,
-        right: this.layoutBounds.right - layoutBoundsRightOffset,
-        radius: 18
+        bottom: this.layoutBounds.bottom - 5,
+        right: this.layoutBounds.right - LAYOUT_BOUNDS_RIGHT_OFFSET,
+        radius: StatesOfMatterConstants.RESET_ALL_BUTTON_RADIUS
       } );
 
     // add play pause button and step button
@@ -137,8 +137,8 @@ define( function( require ) {
       radius: 12,
       stroke: 'black',
       fill: '#005566',
-      right: heaterCoolerNode.left - stepButtonXOffset,
-      bottom: heaterCoolerNode.bottom - stepButtonYOffset
+      right: heaterCoolerNode.left - STEP_BUTTON_X_OFFSET,
+      bottom: heaterCoolerNode.bottom - STEP_BUTTON_Y_OFFSET
     } );
 
     this.addChild( stepButton );
@@ -151,7 +151,7 @@ define( function( require ) {
       stroke: 'black',
       fill: '#005566',
       y: stepButton.centerY,
-      right: stepButton.left - inset
+      right: stepButton.left - INSET
     } );
     this.addChild( playPauseButton );
     this.addChild( resetAllButton );
@@ -163,7 +163,7 @@ define( function( require ) {
     } );
 
     // center the heater cooler node with respect to particle container node
-    heaterCoolerNode.centerX = heaterCoolerNode.centerX - heaterCoolerXOffset;
+    heaterCoolerNode.centerX = heaterCoolerNode.centerX - HEATER_COOLER_X_OFFSET;
 
     // if the appropriate query param is set, show some information used in debugging time step adjustments
     // TODO: Consider removing this once performance issues are worked out.

@@ -60,8 +60,8 @@ define( function( require ) {
   var PARTICLE_LAYER_X_OFFSET = 151;
   var PARTICLE_LAYER_Y_OFFSET = 680;
   var PARTICLE_CONTAINER_X_OFFSET = 60;
-  var LAY_BOUNDS_RIGHT_OFFSET = 15;
-  var LAY_BOUNDS_Y_OFFSET = 10;
+  var X_INSET = 15;
+  var Y_INSET = 5;
   var STEP_BUTTON_X_OFFSET = 50;
   var STEP_BUTTON_Y_OFFSET = 20;
   var BICYCLE_PUMP_NODE_X_OFFSET = 100;
@@ -143,9 +143,9 @@ define( function( require ) {
         //Reset  phase diagram state in SOM basic version
         multipleParticleModel.expandedProperty.value = isInteractionDiagramEnabled;
       },
-      bottom: this.layoutBounds.bottom - LAY_BOUNDS_Y_OFFSET / 2,
-      right: this.layoutBounds.right - LAY_BOUNDS_RIGHT_OFFSET,
-      radius: 18
+      bottom: this.layoutBounds.bottom - Y_INSET,
+      right: this.layoutBounds.right - X_INSET,
+      radius: StatesOfMatterConstants.RESET_ALL_BUTTON_RADIUS
     } );
 
     // add play pause button and step button
@@ -186,7 +186,7 @@ define( function( require ) {
       },
       visible: false,
       xMargin: 10,
-      right: phaseChangesScreenView.particleContainerNode.left - 2 * LAY_BOUNDS_RIGHT_OFFSET,
+      right: phaseChangesScreenView.particleContainerNode.left - 2 * X_INSET,
       top: phaseChangesScreenView.particleContainerNode.centerY + RETURN_LID_BUTTON_Y_OFFSET
     } );
     this.addChild( this.returnLidButton );
@@ -197,7 +197,7 @@ define( function( require ) {
       var epsilonControlInteractionPotentialDiagram = new EpsilonControlInteractionPotentialDiagram(
         StatesOfMatterConstants.MAX_SIGMA, StatesOfMatterConstants.MIN_EPSILON, false,
         multipleParticleModel, {
-          right: this.layoutBounds.right - LAY_BOUNDS_RIGHT_OFFSET
+          right: this.layoutBounds.right - X_INSET
         } );
       this.addChild( epsilonControlInteractionPotentialDiagram );
     }
@@ -209,8 +209,8 @@ define( function( require ) {
 
     // add phase change control panel
     var phaseChangesMoleculesControlPanel = new PhaseChangesMoleculesControlPanel( multipleParticleModel, isInteractionDiagramEnabled, {
-      right: this.layoutBounds.right - LAY_BOUNDS_RIGHT_OFFSET,
-      top: this.layoutBounds.top + LAY_BOUNDS_Y_OFFSET / 2,
+      right: this.layoutBounds.right - X_INSET,
+      top: this.layoutBounds.top + Y_INSET,
       maxWidth: this.phaseDiagram.width,
       minWidth: this.phaseDiagram.width
     } );
@@ -247,7 +247,7 @@ define( function( require ) {
       else {
         if ( !phaseChangesScreenView.hasChild( phaseChangesScreenView.phaseDiagram ) ) {
           phaseChangesScreenView.addChild( phaseChangesScreenView.phaseDiagram );
-          phaseChangesScreenView.phaseDiagram.right = phaseChangesScreenView.layoutBounds.right - LAY_BOUNDS_RIGHT_OFFSET;
+          phaseChangesScreenView.phaseDiagram.right = phaseChangesScreenView.layoutBounds.right - X_INSET;
           if ( isInteractionDiagramEnabled ) {
             phaseChangesScreenView.phaseDiagram.bottom = resetAllButton.top - INSET * 0.2;
             epsilonControlInteractionPotentialDiagram.bottom = phaseChangesScreenView.phaseDiagram.top - INSET * 0.2;

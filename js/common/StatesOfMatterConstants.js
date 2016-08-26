@@ -107,9 +107,7 @@ define( function( require ) {
     // adjustable attraction min epsilon
     MIN_ADJUSTABLE_EPSILON: (1.5 * NEON_ATOM_EPSILON),
 
-    //----------------------------------------------------------------------------
-    // Physical Constants
-    //----------------------------------------------------------------------------
+    // physical constants
     K_BOLTZMANN: 1.38E-23, // Boltzmann's constant.
 
     // constants moved from MultipleParticleModel
@@ -117,7 +115,10 @@ define( function( require ) {
     SLUSH_TEMPERATURE: 0.33,
     LIQUID_TEMPERATURE: 0.34,
     GAS_TEMPERATURE: 1.0,
-    INITIAL_TEMPERATURE: SOLID_TEMPERATURE
+    INITIAL_TEMPERATURE: SOLID_TEMPERATURE,
+
+    // misc
+    RESET_ALL_BUTTON_RADIUS: 18
   };
 
   statesOfMatter.register( 'StatesOfMatterConstants', StatesOfMatterConstants );

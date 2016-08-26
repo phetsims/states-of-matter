@@ -32,6 +32,7 @@ define( function( require ) {
   var Vector2 = require( 'DOT/Vector2' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var StatesOfMatterColorProfile = require( 'STATES_OF_MATTER/common/view/StatesOfMatterColorProfile' );
+  var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
 
   // strings
   var normalString = require( 'string!STATES_OF_MATTER/normal' );
@@ -40,8 +41,8 @@ define( function( require ) {
 
   // Constant used to control size of push pin, empirically determined.
   var PUSH_PIN_WIDTH = 20;
-  var INSET = 10;
-  var textMaxWidth = 80;
+  var INSET = 15;
+  var MAX_TEXT_WIDTH = 80;
 
   /**
    *
@@ -102,7 +103,7 @@ define( function( require ) {
     this.returnAtomButton = new TextPushButton( returnAtomString, {
       font: new PhetFont( 17 ),
       baseColor: '#61BEE3',
-      maxWidth: textMaxWidth,
+      maxWidth: MAX_TEXT_WIDTH,
       listener: function() {
         dualAtomModel.resetMovableAtomPos();
       },
@@ -120,8 +121,8 @@ define( function( require ) {
         atomicInteractionsScreenView.interactiveInteractionPotentialDiagram.reset();
       },
       right: this.layoutBounds.maxX - INSET,
-      bottom: this.returnAtomButton.bottom,
-      scale: 0.75
+      bottom: this.layoutBounds.maxY - 5,
+      radius: StatesOfMatterConstants.RESET_ALL_BUTTON_RADIUS
     } );
     this.addChild( resetAllButton );
 
@@ -180,7 +181,7 @@ define( function( require ) {
     var speedSelectionButtonOptions = {
       fill: StatesOfMatterColorProfile.controlPanelTextProperty,
       font: new PhetFont( 14 ),
-      maxWidth: textMaxWidth
+      maxWidth: MAX_TEXT_WIDTH
     };
     var speedSelectionButtonRadius = 8;
     var slowText = new Text( slowMotionString, speedSelectionButtonOptions );
