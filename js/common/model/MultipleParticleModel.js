@@ -77,11 +77,12 @@ define( function( require ) {
   var ADAPTIVE_THERMOSTAT = 3;
 
   // parameters to control rates of change of the container size
-  var MAX_PER_TICK_CONTAINER_CHANGE = 3000;
+  var MAX_CONTAINER_SHRINK_RATE = 1500; // in model units per second
+  var MAX_CONTAINER_EXPAND_RATE = 4000; // in model units per second
   var MAX_PER_TICK_CONTAINER_EXPANSION_EXPLODED = 600;
 
   // countdown value used when recalculating temperature when the container size is changing
-  var CONTAINER_SIZE_CHANGE_RESET_COUNT = 25;
+  var CONTAINER_SIZE_CHANGE_COUNTDOWN_RESET = 0.5; // in seconds, empirically determined
 
   // Range for deciding if the temperature is near the current set point. The units are internal model units.
   var TEMPERATURE_CLOSENESS_RANGE = 0.15;
@@ -758,12 +759,12 @@ define( function( require ) {
 
         // Adjust the particle container height if needed.
         if ( this.targetContainerHeight !== this.particleContainerHeight ) {
-          this.heightChangeCounter = CONTAINER_SIZE_CHANGE_RESET_COUNT;
+          this.heightChangeCountdownTime = CONTAINER_SIZE_CHANGE_COUNTDOWN_RESET;
           var heightChange = this.targetContainerHeight - this.particleContainerHeight;
           if ( heightChange > 0 ) {
             // The container is growing.
             if ( this.particleContainerHeight + heightChange <= StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT ) {
-              this.particleContainerHeight += Math.min( heightChange, MAX_PER_TICK_CONTAINER_CHANGE * dt );
+              this.particleContainerHeight += Math.min( heightChange, MAX_CONTAINER_EXPAND_RATE * dt );
             }
             else {
               this.particleContainerHeight = StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT;
@@ -772,7 +773,7 @@ define( function( require ) {
           else {
             // The container is shrinking.
             if ( this.particleContainerHeight - heightChange >= this.minAllowableContainerHeight ) {
-              this.particleContainerHeight += Math.max( heightChange, -MAX_PER_TICK_CONTAINER_CHANGE * dt );
+              this.particleContainerHeight += Math.max( heightChange, -MAX_CONTAINER_SHRINK_RATE * dt );
             }
             else {
               this.particleContainerHeight = this.minAllowableContainerHeight;
@@ -781,8 +782,8 @@ define( function( require ) {
           this.normalizedContainerHeight = this.particleContainerHeight / this.particleDiameter;
         }
         else {
-          if ( this.heightChangeCounter > 0 ) {
-            this.heightChangeCounter--;
+          if ( this.heightChangeCountdownTime > 0 ) {
+            this.heightChangeCountdownTime = Math.max( this.heightChangeCountdownTime - dt, 0 );
           }
         }
       }
@@ -931,7 +932,7 @@ define( function( require ) {
         temperatureIsChanging = true;
       }
 
-      if ( this.heightChangeCounter !== 0 && this.particlesNearTop() ) {
+      if ( this.heightChangeCountdownTime !== 0 && this.particlesNearTop() ) {
 
         // Either the height of the container is currently changing and there are particles close enough to the top that
         // they may be interacting with it, or new particles have been recently added.  Since either of these situations
