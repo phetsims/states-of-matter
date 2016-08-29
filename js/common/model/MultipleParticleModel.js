@@ -66,10 +66,8 @@ define( function( require ) {
   // constants related to how time steps are handled
   var NOMINAL_FRAME_RATE = 60; // in frames per second
   var NOMINAL_TIME_STEP = 1 / NOMINAL_FRAME_RATE;
-  var MIN_ADEQUATE_FRAME_RATE = 25; // in frames per second
   var PARTICLE_SPEED_UP_FACTOR = 4; // empirically determined to make the particles move at a speed that looks reasonable
   var MAX_PARTICLE_MOTION_TIME_STEP = 0.025; // max time step that model can handle, empirically determined
-  var MAX_MODEL_ADVANCE_TIME_PER_STEP = Number.POSITIVE_INFINITY;
   var TIME_STEP_MOVING_AVERAGE_LENGTH = 20; // number of samples in the moving average of time steps
   var TEMPERATURE_UPDATE_INTERVAL = 10 * NOMINAL_TIME_STEP;
 
@@ -168,7 +166,7 @@ define( function( require ) {
         heatingCoolingAmount: 0,
         keepingUp: true, // tracks whether targeted min frame rate is being maintained
         averageDt: this.timeStepMovingAverage.average,
-        maxParticleMoveTimePerStep: MAX_MODEL_ADVANCE_TIME_PER_STEP
+        maxParticleMoveTimePerStep: Number.POSITIVE_INFINITY
       }
     );
 
@@ -739,15 +737,21 @@ define( function( require ) {
 
       // Platform specific code for adjusting performance on iPads, see https://github.com/phetsims/states-of-matter/issues/71.
       if ( platform.mobileSafari &&
-           this.averageDt < 1 / MIN_ADEQUATE_FRAME_RATE &&
            this.currentMolecule === StatesOfMatterConstants.WATER ) {
 
-        // Limit the maximum model advancement time to something that is more likely to run at a decent speed on the
-        // devices that aren't able to keep up.  The value was empirically determined by testing on multiple devices.
-        this.maxParticleMoveTimePerStep = MAX_PARTICLE_MOTION_TIME_STEP * 4;
+        if ( this.averageDt < 1 / 35 ){
 
-        // update the flag (for debug purposes)
-        this.keepingUp = false;
+          // Life is good - this device is able to display water at a reasonable frame rate.
+          this.keepingUp = true;
+          this.maxParticleMoveTimePerStep = Number.POSITIVE_INFINITY;
+        }
+        else{
+
+          // This device is not able to keep up, so limit the maximum model advancement time to something that is more
+          // likely to run at a decent speed.  The value was empirically determined by testing on multiple devices.
+          this.keepingUp = false;
+          this.maxParticleMoveTimePerStep = MAX_PARTICLE_MOTION_TIME_STEP * 4;
+        }
       }
 
       if ( !this.isExploded ) {
