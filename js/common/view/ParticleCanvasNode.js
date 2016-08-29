@@ -3,6 +3,13 @@
 /**
  * A particle layer rendered on canvas.  This exists for performance reasons.
  *
+ * !!!!!!!!!!!!! NOTE !!!!!!!!!!!!!!!!!!!
+ * This was replaced in August 2016 with ParticleImageCanvasNode because using images instead for drawing shapes using
+ * context.arc, context.fill, and so forth, improved the performance significantly on devices like iPad 2s.  See
+ * https://github.com/phetsims/states-of-matter/issues/71 for details.  I am keeping this file around, however, in
+ * case we ever run into issues where the images are not clear enough, and we decide that we'd rather draw them.
+ * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ *
  * @author Siddhartha Chinthapally (Actual Concepts)
  * @author John Blanco
  */

@@ -18,7 +18,7 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
   var ObservableArray = require( 'AXON/ObservableArray' );
-  var ParticleCanvasNode = require( 'STATES_OF_MATTER/common/view/ParticleCanvasNode' );
+  var ParticleImageCanvasNode = require( 'STATES_OF_MATTER/common/view/ParticleImageCanvasNode' );
   var ParticleContainerNode = require( 'STATES_OF_MATTER/common/view/ParticleContainerNode' );
   var PhaseChangesMoleculesControlPanel = require( 'STATES_OF_MATTER/phase-changes/view/PhaseChangesMoleculesControlPanel' );
   var PhaseDiagram = require( 'STATES_OF_MATTER/phase-changes/view/PhaseDiagram' );
@@ -108,7 +108,7 @@ define( function( require ) {
     this.addChild( this.particleContainerNode.openNode );
 
     // add particle canvas layer for particle rendering
-    this.particlesLayer = new ParticleCanvasNode( multipleParticleModel.particles, modelViewTransform, {
+    this.particlesLayer = new ParticleImageCanvasNode( multipleParticleModel.particles, modelViewTransform, {
       centerX: heaterCoolerNode.centerX - PARTICLE_LAYER_X_OFFSET,
       bottom:  heaterCoolerNode.top + PARTICLE_LAYER_Y_OFFSET,
       canvasBounds: new Bounds2( -PARTICLE_CANVAS_LAYER_BOUND_LIMIT, -PARTICLE_CANVAS_LAYER_BOUND_LIMIT,
