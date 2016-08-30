@@ -120,6 +120,8 @@ define( function( require ) {
         trackStroke: StatesOfMatterColorProfile.controlPanelTextProperty,
         trackLineWidth: 1,
         thumbLineWidth: 1,
+        thumbTouchAreaXDilation: 8,
+        thumbTouchAreaYDilation: 8,
         tickLabelSpacing: 6,
         majorTickStroke: StatesOfMatterColorProfile.controlPanelTextProperty,
         majorTickLineWidth: 1,

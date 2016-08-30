@@ -313,6 +313,8 @@ define( function( require ) {
       thumbFillEnabled: '#A670DB',
       thumbFillHighlighted: '#D966FF',
       thumbCenterLineStroke: 'black',
+      thumbTouchAreaXDilation: 8,
+      thumbTouchAreaYDilation: 8,
       majorTickLength: 15,
       majorTickStroke: options.panelTextFill,
       trackStroke: options.panelTextFill,
