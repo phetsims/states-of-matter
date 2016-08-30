@@ -1,8 +1,8 @@
 // Copyright 2015, University of Colorado Boulder
 
 /**
- * This class extends the Interaction Potential diagram to allow the user to
- * change the curve through direct interaction with it.
+ * This class extends the Interaction Potential diagram to allow the user to change the curve through direct interaction
+ * with it.
  *
  * @author John Blanco
  */

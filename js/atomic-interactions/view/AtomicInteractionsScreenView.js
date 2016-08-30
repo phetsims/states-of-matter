@@ -64,7 +64,7 @@ define( function( require ) {
     // set up the model-view transform
     this.modelViewTransform = ModelViewTransform2.createSinglePointScaleMapping(
       new Vector2( 0, 0 ),
-      new Vector2( 110, 350 ),
+      new Vector2( 110, 360 ),
       0.25
     );
 
@@ -94,7 +94,7 @@ define( function( require ) {
       dualAtomModel,
       {
         left: this.layoutBounds.minX + 7 * INSET,
-        top: atomicInteractionsControlPanel.top
+        top: atomicInteractionsControlPanel.top + 5 // additional offset empirically determined to look good
       }
     );
     this.addChild( this.interactiveInteractionPotentialDiagram );
@@ -134,7 +134,7 @@ define( function( require ) {
       stroke: 'black',
       fill: '#005566',
       centerX: this.layoutBounds.centerX + 100,
-      bottom: this.layoutBounds.bottom - 25 // empirically determined
+      bottom: this.layoutBounds.bottom - 20 // empirically determined
     } );
     this.addChild( stepButton );
 
@@ -192,10 +192,6 @@ define( function( require ) {
     var normalMotionRadioBox = new AquaRadioButton( dualAtomModel.speedProperty, 'normal', normalText, {
       radius: speedSelectionButtonRadius
     } );
-    var fastForwardText = new Text( 'Fast Forward', speedSelectionButtonOptions );
-    var fastForwardRadioBox = new AquaRadioButton( dualAtomModel.speedProperty, 'fast', fastForwardText, {
-      radius: speedSelectionButtonRadius
-    } );
 
     var speedControlMaxWidth = ( slowMotionRadioBox.width > normalMotionRadioBox.width ) ? slowMotionRadioBox.width : normalMotionRadioBox.width;
 
@@ -218,11 +214,9 @@ define( function( require ) {
     var speedControl = new VBox( {
       align: 'left',
       spacing: radioButtonSpacing,
-      children: [ slowMotionRadioBox, normalMotionRadioBox, fastForwardRadioBox ],
+      children: [ slowMotionRadioBox, normalMotionRadioBox ],
       right: playPauseButton.left - 2 * INSET,
       centerY: playPauseButton.centerY
-      //right: 0,
-      //centerY: 0
     } );
     //this.addChild( speedControl.mutate( { right: playPauseButton.left - 2 * inset, bottom: playPauseButton.bottom } ) );
     this.addChild( speedControl );

@@ -446,9 +446,6 @@ define( function( require ) {
         // here.  The multipliers were empirically determined.
         var adjustedTimeStep;
         switch ( this.speed ){
-          case 'fast':
-            adjustedTimeStep = simulationTimeStep * 25;
-            break;
           case 'normal':
             adjustedTimeStep = simulationTimeStep * 2;
             break;
