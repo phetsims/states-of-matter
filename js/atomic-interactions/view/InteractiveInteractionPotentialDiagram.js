@@ -238,7 +238,7 @@ define( function( require ) {
     this.horizontalAxis.stroke = StatesOfMatterColorProfile.ljGraphColorsModeProperty;
     this.epsilonArrow.fill = StatesOfMatterColorProfile.ljGraphColorsModeProperty;
     this.epsilonArrow.fill = StatesOfMatterColorProfile.ljGraphColorsModeProperty;
-    this.sigmaArrow.fill = 'red';
+    this.sigmaArrow.fill = StatesOfMatterColorProfile.ljGraphColorsModeProperty;
     this.epsilonLabel.fill = StatesOfMatterColorProfile.ljGraphColorsModeProperty;
     this.sigmaLabel.fill = StatesOfMatterColorProfile.ljGraphColorsModeProperty;
     this.epsilonArrow.stroke = StatesOfMatterColorProfile.ljGraphColorsModeProperty;
