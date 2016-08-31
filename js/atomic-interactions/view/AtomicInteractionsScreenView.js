@@ -149,13 +149,8 @@ define( function( require ) {
       }
     );
 
-    if ( enableHeterogeneousAtoms ) {
-      // the control panels will overlap the reset all button if fully opened, so they must be a bit to the left
-      atomicInteractionsControlPanel.right = resetAllButton.left - 20; // offset empirically determined
-    }
-    else {
-      atomicInteractionsControlPanel.right = resetAllButton.right;
-    }
+    // the control panels will overlap the reset all button if fully opened, so they must be a bit to the left
+    atomicInteractionsControlPanel.right = resetAllButton.left - 20; // offset empirically determined
 
     // add play pause
     var playPauseButton = new PlayPauseButton( dualAtomModel.isPlayingProperty, {
