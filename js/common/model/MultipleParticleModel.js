@@ -143,7 +143,7 @@ define( function( require ) {
     this.timeSinceLastTemperatureAdjust = Number.POSITIVE_INFINITY;
     this.currentMolecule = null;
     this.thermostatType = ADAPTIVE_THERMOSTAT;
-    this.heightChangeCounter = 0;
+    this.heightChangeCountdownTime = 0;
     this.minModelTemperature = null;
     this.residualTime = 0;
     this.timeStepMovingAverage = new MovingAverage(
@@ -264,7 +264,6 @@ define( function( require ) {
         default:
           break;
       }
-
       if ( this.temperatureSetPoint <= this.minModelTemperature ) {
         // We treat anything below the minimum temperature as absolute zero.
         temperatureInKelvin = 0;
@@ -861,6 +860,7 @@ define( function( require ) {
         this.isoKineticThermostat.targetTemperature = this.temperatureSetPoint;
         this.andersenThermostat.targetTemperature = this.temperatureSetPoint;
       }
+
     },
 
     /**
@@ -939,6 +939,7 @@ define( function( require ) {
         // can end up changing the kinetic energy of the particles in the system, no thermostat is run.  Instead, the
         // temperature is determined by looking at the kinetic energy of the molecules and that value is used to set the
         // system temperature set point.
+        debugger;
         this.setTemperature( this.moleculeDataSet.calculateTemperatureFromKineticEnergy() );
       }
       else if ( ( this.thermostatType === ISOKINETIC_THERMOSTAT ) ||
