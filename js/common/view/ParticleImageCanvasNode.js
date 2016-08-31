@@ -12,6 +12,7 @@ define( function( require ) {
   var ArgonAtom = require( 'STATES_OF_MATTER/common/model/particle/ArgonAtom' );
   var AtomType = require( 'STATES_OF_MATTER/common/model/AtomType' );
   var CanvasNode = require( 'SCENERY/nodes/CanvasNode' );
+  var ConfigurableStatesOfMatterAtom = require( 'STATES_OF_MATTER/common/model/particle/ConfigurableStatesOfMatterAtom' );
   var HydrogenAtom = require( 'STATES_OF_MATTER/common/model/particle/HydrogenAtom' );
   var inherit = require( 'PHET_CORE/inherit' );
   var NeonAtom = require( 'STATES_OF_MATTER/common/model/particle/NeonAtom' );
@@ -29,6 +30,7 @@ define( function( require ) {
   PARTICLE_COLOR_TABLE[ AtomType.NEON ] = StatesOfMatterConstants.NEON_COLOR;
   PARTICLE_COLOR_TABLE[ AtomType.OXYGEN ] = StatesOfMatterConstants.OXYGEN_COLOR;
   PARTICLE_COLOR_TABLE[ AtomType.HYDROGEN ] = StatesOfMatterConstants.HYDROGEN_COLOR;
+  PARTICLE_COLOR_TABLE[ AtomType.ADJUSTABLE ] = StatesOfMatterConstants.ADJUSTABLE_ATTRACTION_COLOR;
 
   // set up the association between atom types and their radii in the model
   var PARTICLE_RADIUS_TABLE = {};
@@ -36,6 +38,7 @@ define( function( require ) {
   PARTICLE_RADIUS_TABLE[ AtomType.NEON ] = NeonAtom.RADIUS;
   PARTICLE_RADIUS_TABLE[ AtomType.OXYGEN ] = OxygenAtom.RADIUS;
   PARTICLE_RADIUS_TABLE[ AtomType.HYDROGEN ] = HydrogenAtom.RADIUS;
+  PARTICLE_RADIUS_TABLE[ AtomType.ADJUSTABLE ] = ConfigurableStatesOfMatterAtom.DEFAULT_RADIUS;
 
   /**
    * @param {ObservableArray<Particle>} particles that need to be rendered on the canvas
