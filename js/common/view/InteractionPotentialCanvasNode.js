@@ -19,7 +19,6 @@ define( function( require ) {
   // constants
   var AXIS_LINE_WIDTH = 1;
   var AXES_ARROW_HEAD_HEIGHT = 8 * AXIS_LINE_WIDTH;
-  var EPSILON_HANDLE_OFFSET_PROPORTION = 0.08; // Position of handle as function of node width.
   var SIGMA_HANDLE_OFFSET_PROPORTION = 0.08;  // Position of handle as function of node width.
   var EPSILON_LINE_WIDTH = 1;
 
@@ -167,7 +166,6 @@ define( function( require ) {
       if ( this.interactionDiagram.epsilonResizeHandle !== undefined ) {
         var graphMin = this.interactionDiagram.getGraphMin();
         if ( this.isLjGraphWider ) {
-          var epsilonResizeOffset = 5;
           this.interactionDiagram.epsilonResizeHandle.setVisible( this.interactionDiagram.interactionEnabled );
           this.interactionDiagram.epsilonLine.setTranslation( graphMin.x, graphMin.y + EPSILON_LINE_WIDTH );
           this.interactionDiagram.epsilonLine.setVisible( this.interactionDiagram.interactionEnabled );
