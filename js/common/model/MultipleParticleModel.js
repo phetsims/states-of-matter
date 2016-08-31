@@ -62,6 +62,7 @@ define( function( require ) {
   var MAX_INJECTED_MOLECULE_ANGLE = Math.PI * 0.8;
   var INJECTION_POINT_HORIZ_PROPORTION = 0.05;
   var INJECTION_POINT_VERT_PROPORTION = 0.25;
+  var MIN_ALLOWABLE_CONTAINER_HEIGHT = 1500; // empirically determined, almost all the way to the bottom
 
   // constants related to how time steps are handled
   var NOMINAL_FRAME_RATE = 60; // in frames per second
@@ -128,7 +129,6 @@ define( function( require ) {
     this.andersenThermostat = null;
 
     // Attributes of the container and simulation as a whole.
-    this.minAllowableContainerHeight = null;
     this.particles = new ObservableArray();
     this.copyOfParticles = new ObservableArray();
 
@@ -386,8 +386,11 @@ define( function( require ) {
      * @public
      */
     setTargetParticleContainerHeight: function( desiredContainerHeight ) {
-      this.targetContainerHeight = Util.clamp( desiredContainerHeight, this.minAllowableContainerHeight,
-        StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT );
+      this.targetContainerHeight = Util.clamp(
+        desiredContainerHeight,
+        MIN_ALLOWABLE_CONTAINER_HEIGHT,
+        StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT
+      );
     },
 
     /**
@@ -637,9 +640,6 @@ define( function( require ) {
 
         this.syncParticlePositions();
       }
-
-      // Recalculate the minimum allowable container size, since it depends on the number of particles.
-      this.calculateMinAllowableContainerHeight();
     },
 
     /**
@@ -652,15 +652,6 @@ define( function( require ) {
 
       // Get rid of the normalized particles.
       this.moleculeDataSet = null;
-    },
-
-    /**
-     * Calculate the minimum allowable container height based on the current number of particles.
-     * @private
-     */
-    calculateMinAllowableContainerHeight: function() {
-      this.minAllowableContainerHeight = ( this.moleculeDataSet.getNumberOfMolecules() /
-                                           this.normalizedContainerWidth ) * this.particleDiameter;
     },
 
     /**
@@ -695,7 +686,6 @@ define( function( require ) {
 
       // This is needed in case we were switching from another molecule that was under pressure.
       this.updatePressure();
-      this.calculateMinAllowableContainerHeight();
     },
 
     /**
@@ -769,11 +759,11 @@ define( function( require ) {
           }
           else {
             // The container is shrinking.
-            if ( this.particleContainerHeight - heightChange >= this.minAllowableContainerHeight ) {
+            if ( this.particleContainerHeight - heightChange >= MIN_ALLOWABLE_CONTAINER_HEIGHT ) {
               this.particleContainerHeight += Math.max( heightChange, -MAX_CONTAINER_SHRINK_RATE * dt );
             }
             else {
-              this.particleContainerHeight = this.minAllowableContainerHeight;
+              this.particleContainerHeight = MIN_ALLOWABLE_CONTAINER_HEIGHT;
             }
           }
           this.normalizedContainerHeight = this.particleContainerHeight / this.particleDiameter;

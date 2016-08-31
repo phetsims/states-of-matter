@@ -87,13 +87,13 @@ define( function( require ) {
 
         // Resize the container based on the amount that the node has moved.
         multipleParticleModel.setTargetParticleContainerHeight(
-          pointingHandNode.containerSizeAtDragStart + modelViewTransform.viewToModelDeltaY( endY - startY ) );
+          pointingHandNode.containerSizeAtDragStart + modelViewTransform.viewToModelDeltaY( endY - startY )
+        );
         pointingHandNode.updateHintVisibility();
       },
       end: function() {
 
-        // Set the target size to the current size, which will stop any change
-        // in size that is currently underway.
+        // Set the target size to the current size, which will stop any change in size that is currently underway.
         multipleParticleModel.setTargetParticleContainerHeight( multipleParticleModel.getParticleContainerHeight() );
         pointingHandNode.beingDragged = false;
         pointingHandNode.updateHintVisibility();
