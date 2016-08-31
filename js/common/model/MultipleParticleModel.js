@@ -56,7 +56,7 @@ define( function( require ) {
   var MAX_TEMPERATURE = 50.0;
   var MIN_TEMPERATURE = 0.0001;
   var INITIAL_GRAVITATIONAL_ACCEL = 0.045;
-  var MAX_TEMPERATURE_CHANGE_PER_ADJUSTMENT = 0.025;
+  var TEMPERATURE_CHANGE_RATE_FACTOR = 0.07; // empirically determined to make temperate change at a good rate
   var MIN_INJECTED_MOLECULE_VELOCITY = 0.5;
   var MAX_INJECTED_MOLECULE_VELOCITY = 2.0;
   var MAX_INJECTED_MOLECULE_ANGLE = Math.PI * 0.8;
@@ -69,7 +69,6 @@ define( function( require ) {
   var PARTICLE_SPEED_UP_FACTOR = 4; // empirically determined to make the particles move at a speed that looks reasonable
   var MAX_PARTICLE_MOTION_TIME_STEP = 0.025; // max time step that model can handle, empirically determined
   var TIME_STEP_MOVING_AVERAGE_LENGTH = 20; // number of samples in the moving average of time steps
-  var TEMPERATURE_UPDATE_INTERVAL = 10 * NOMINAL_TIME_STEP;
 
   // possible thermostat settings
   var ISOKINETIC_THERMOSTAT = 1;
@@ -140,7 +139,6 @@ define( function( require ) {
     this.particleDiameter = 1;
     this.normalizedContainerWidth = StatesOfMatterConstants.PARTICLE_CONTAINER_WIDTH / this.particleDiameter;
     this.gravitationalAcceleration = null;
-    this.timeSinceLastTemperatureAdjust = Number.POSITIVE_INFINITY;
     this.currentMolecule = null;
     this.thermostatType = ADAPTIVE_THERMOSTAT;
     this.heightChangeCountdownTime = 0;
@@ -264,6 +262,7 @@ define( function( require ) {
         default:
           break;
       }
+
       if ( this.temperatureSetPoint <= this.minModelTemperature ) {
         // We treat anything below the minimum temperature as absolute zero.
         temperatureInKelvin = 0;
@@ -536,7 +535,7 @@ define( function( require ) {
      */
     setHeatingCoolingAmount: function( normalizedHeatingCoolingAmount ) {
       assert && assert( ( normalizedHeatingCoolingAmount <= 1.0 ) && ( normalizedHeatingCoolingAmount >= -1.0 ) );
-      this.heatingCoolingAmount = normalizedHeatingCoolingAmount * MAX_TEMPERATURE_CHANGE_PER_ADJUSTMENT;
+      this.heatingCoolingAmount = normalizedHeatingCoolingAmount;
     },
 
     /**
@@ -707,7 +706,6 @@ define( function( require ) {
       // Initialize the system parameters
       this.gravitationalAcceleration = INITIAL_GRAVITATIONAL_ACCEL;
       this.heatingCoolingAmount = 0;
-      this.timeSinceLastTemperatureAdjust = Number.POSITIVE_INFINITY;
       this.temperatureSetPoint = INITIAL_TEMPERATURE;
       this.isExploded = false;
     },
@@ -739,13 +737,13 @@ define( function( require ) {
       if ( platform.mobileSafari &&
            this.currentMolecule === StatesOfMatterConstants.WATER ) {
 
-        if ( this.averageDt < 1 / 35 ){
+        if ( this.averageDt < 1 / 35 ) {
 
           // Life is good - this device is able to display water at a reasonable frame rate.
           this.keepingUp = true;
           this.maxParticleMoveTimePerStep = Number.POSITIVE_INFINITY;
         }
-        else{
+        else {
 
           // This device is not able to keep up, so limit the maximum model advancement time to something that is more
           // likely to run at a decent speed.  The value was empirically determined by testing on multiple devices.
@@ -840,15 +838,10 @@ define( function( require ) {
       }
 
       // Adjust the temperature if needed.
-      this.timeSinceLastTemperatureAdjust += dt;
-      if ( ( this.timeSinceLastTemperatureAdjust > TEMPERATURE_UPDATE_INTERVAL ) && this.heatingCoolingAmount !== 0 ) {
-        this.timeSinceLastTemperatureAdjust = 0;
-        var newTemperature = this.temperatureSetPoint + this.heatingCoolingAmount;
-        if ( newTemperature >= MAX_TEMPERATURE ) {
-          newTemperature = MAX_TEMPERATURE;
-        }
-        else if ( ( newTemperature <= StatesOfMatterConstants.SOLID_TEMPERATURE * 0.9 ) &&
-                  ( this.heatingCoolingAmount < 0 ) ) {
+      if ( this.heatingCoolingAmount !== 0 ) {
+        var temperatureChange = this.heatingCoolingAmount * TEMPERATURE_CHANGE_RATE_FACTOR * dt;
+        var newTemperature = Math.min( this.temperatureSetPoint + temperatureChange, MAX_TEMPERATURE );
+        if ( newTemperature <= StatesOfMatterConstants.SOLID_TEMPERATURE * 0.9 && this.heatingCoolingAmount < 0 ) {
 
           // The temperature goes down more slowly as we begin to approach absolute zero.
           newTemperature = this.temperatureSetPoint * 0.95;  // multiplier determined empirically
@@ -860,7 +853,6 @@ define( function( require ) {
         this.isoKineticThermostat.targetTemperature = this.temperatureSetPoint;
         this.andersenThermostat.targetTemperature = this.temperatureSetPoint;
       }
-
     },
 
     /**
@@ -939,7 +931,6 @@ define( function( require ) {
         // can end up changing the kinetic energy of the particles in the system, no thermostat is run.  Instead, the
         // temperature is determined by looking at the kinetic energy of the molecules and that value is used to set the
         // system temperature set point.
-        debugger;
         this.setTemperature( this.moleculeDataSet.calculateTemperatureFromKineticEnergy() );
       }
       else if ( ( this.thermostatType === ISOKINETIC_THERMOSTAT ) ||
