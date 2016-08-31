@@ -33,11 +33,11 @@ define( function( require ) {
   var epsilonString = require( 'string!STATES_OF_MATTER/epsilon' );
 
   // Constant that controls the range of data that is graphed.
-  var GRAPH_X_RANGE = 1700; // in picometers
+  var GRAPH_X_RANGE = 1300; // in picometers
 
   // constants that control the appearance of the diagram.
   var NARROW_VERSION_WIDTH = 135;
-  var WIDE_VERSION_WIDTH = 450;
+  var WIDE_VERSION_WIDTH = 350;
   var AXIS_LINE_WIDTH = 2;
   var AXES_ARROW_HEAD_HEIGHT = 4 * AXIS_LINE_WIDTH;
 
@@ -57,19 +57,6 @@ define( function( require ) {
   // zoom buttons height
   var zoomButtonsHeight = 72;
 
-  // helper function for limiting labels to a single character
-  function getFirstNonEmbeddingCharacter( str ){
-    var char = null;
-    for ( var i = 0; i < str.length; i++ ){
-      // skip any characters related to directional control of the string, such as right-to-left embedding
-      if ( str.charCodeAt( i ) < 0x202A || str.charCodeAt( i ) > 0x202E ){
-        char = str.charAt( i );
-        break;
-      }
-    }
-    return char;
-  }
-
   /**
    * @param {number} sigma - Initial value of sigma, a.k.a. the atom diameter
    * @param {number} epsilon - Initial value of epsilon, a.k.a. the interaction strength
@@ -88,7 +75,7 @@ define( function( require ) {
     // Set up for the normal or wide version of the graph.
     if ( wide ) {
       this.widthOfGraph = WIDE_VERSION_WIDTH;
-      this.heightOfGraph = this.widthOfGraph * 0.6;
+      this.heightOfGraph = this.widthOfGraph * 0.75;
       GREEK_LETTER_FONT = new PhetFont( 22 );
       AXIS_LABEL_FONT = new PhetFont( { size: 16, fill: StatesOfMatterColorProfile.controlPanelTextProperty } );
       GREEK_LETTER_MAX_WIDTH = 60;
@@ -116,12 +103,9 @@ define( function( require ) {
     // This is done to fix the point flickering at the bottom most point.
     // see https://github.com/phetsims/states-of-matter/issues/63 and
     // https://github.com/phetsims/states-of-matter/issues/25
-    this.verticalScalingFactor = (this.graphHeight / 2.2) /
-                                 (StatesOfMatterConstants.MAX_EPSILON * StatesOfMatterConstants.K_BOLTZMANN);
+    this.verticalScalingFactor = ( this.graphHeight / 2.2 ) /
+                                 ( StatesOfMatterConstants.MAX_EPSILON * StatesOfMatterConstants.K_BOLTZMANN );
     this.horizontalLineCount = 5;
-
-    // Create and add the portion that depicts the Lennard-Jones potential curve.
-    this.ljPotentialGraph.setTranslation( this.graphXOrigin, this.graphYOrigin - this.graphHeight );
 
     // Create and add the center axis line for the graph.
     var centerAxis = new Path( Shape.lineSegment( 0, 0, this.graphWidth, 0 ), { lineWidth: 0.8, stroke: '#A7A7A7' } );
@@ -139,7 +123,7 @@ define( function( require ) {
     } );
     this.ljPotentialGraph.addChild( this.epsilonArrow );
 
-    this.epsilonLabel = new Text( getFirstNonEmbeddingCharacter( epsilonString ), {
+    this.epsilonLabel = new Text( epsilonString, {
       font: GREEK_LETTER_FONT,
       fill: StatesOfMatterColorProfile.controlPanelTextProperty,
       maxWidth: GREEK_LETTER_MAX_WIDTH,
@@ -147,7 +131,7 @@ define( function( require ) {
     } );
     this.ljPotentialGraph.addChild( this.epsilonLabel );
 
-    this.sigmaLabel = new Text( getFirstNonEmbeddingCharacter( sigmaString ), {
+    this.sigmaLabel = new Text( sigmaString, {
       font: GREEK_LETTER_FONT,
       fill: StatesOfMatterColorProfile.controlPanelTextProperty,
       maxWidth: GREEK_LETTER_MAX_WIDTH
@@ -163,14 +147,19 @@ define( function( require ) {
     } );
     this.ljPotentialGraph.addChild( this.sigmaArrow );
 
+    // Add the layer where the
+    this.epsilonLineLayer = new Node();
+    this.ljPotentialGraph.addChild( this.epsilonLineLayer );
+
     // Add the position marker.
     var markerDiameter = POSITION_MARKER_DIAMETER_PROPORTION * this.graphWidth;
     this.positionMarker = new PositionMarker( markerDiameter / 2, 'rgb( 117, 217, 255 )' );
     this.positionMarker.setVisible( this.positionMarkerEnabled );
-
-    this.epsilonLineLayer = new Node();
-    this.ljPotentialGraph.addChild( this.epsilonLineLayer );
     this.ljPotentialGraph.addChild( this.positionMarker );
+
+    // now that the graph portion is built, position it correctly
+    this.ljPotentialGraph.x = this.graphXOrigin;
+    this.ljPotentialGraph.y = this.graphYOrigin - this.graphHeight;
 
     // Create and add the horizontal axis line for the graph.
     this.horizontalAxis = new ArrowNode( 0, 0, this.graphWidth + AXES_ARROW_HEAD_HEIGHT, 0, {
@@ -185,14 +174,14 @@ define( function( require ) {
 
     this.horizontalAxisLabel = new Text( distanceBetweenAtomsString, {
       fill: StatesOfMatterColorProfile.controlPanelTextProperty,
-      font: wide? AXIS_LABEL_FONT : AXIS_LABEL_FONT - 1
+      font: wide ? AXIS_LABEL_FONT : AXIS_LABEL_FONT - 1
     } );
     if ( this.horizontalAxisLabel.width > this.horizontalAxis.width ) {
-      if ( wide ){
+      if ( wide ) {
         this.horizontalAxisLabel.maxWidth = this.horizontalAxis.width;
       }
-      else{
-        this.horizontalAxisLabel.maxWidth = this.horizontalAxis.width + 50;
+      else {
+        this.horizontalAxisLabel.maxWidth = this.horizontalAxis.width + 30;
       }
     }
 
@@ -321,9 +310,8 @@ define( function( require ) {
       this.markerDistance = distance;
       var xPos = this.markerDistance * ( this.graphWidth / GRAPH_X_RANGE );
       var potential = this.calculateLennardJonesPotential( this.markerDistance );
-      var yPos = ((  this.graphHeight / 2) - (potential * this.verticalScalingFactor));
-      if ( this.positionMarkerEnabled && (xPos > 0) && (xPos < this.graphWidth) &&
-           (yPos > 0) && (yPos < this.graphHeight) ) {
+      var yPos = ( ( this.graphHeight / 2 ) - ( potential * this.verticalScalingFactor ) );
+      if ( this.positionMarkerEnabled && xPos > 0 && xPos < this.graphWidth && yPos > 0 && yPos < this.graphHeight ) {
         this.positionMarker.setVisible( true );
         this.positionMarker.setTranslation( xPos, yPos );
       }

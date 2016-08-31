@@ -37,17 +37,15 @@ define( function( require ) {
   var POTENTIAL_LINE_COLOR = new Color( 'red' );
 
   /**
-   * @param {number} sigma - Initial value of sigma, a.k.a. the atom diameter
-   * @param {number} epsilon - Initial value of epsilon, a.k.a. the interaction strength
-   * @param {boolean} wide - true if the wide screen version of the graph is needed, false if not.
    * @param {DualAtomModel} dualAtomModel - model of the simulation
+   * @param {boolean} wide - true if the wide screen version of the graph is needed, false if not
    * @param {Object} [options] that can be passed on to the underlying node
    * @constructor
    */
 
-  function InteractiveInteractionPotentialDiagram( sigma, epsilon, wide, dualAtomModel, options ) {
+  function InteractiveInteractionPotentialDiagram( dualAtomModel, wide, options ) {
 
-    InteractionPotentialDiagramNode.call( this, sigma, epsilon, wide );
+    InteractionPotentialDiagramNode.call( this, dualAtomModel.getSigma(), dualAtomModel.getEpsilon(), wide );
     this.dualAtomModel = dualAtomModel;
     var self = this;
 
@@ -79,7 +77,7 @@ define( function( require ) {
         var d = endDragY - startDragY;
         startDragY = endDragY;
         var scaleFactor = StatesOfMatterConstants.MAX_EPSILON / ( self.getGraphHeight() / 2 );
-        dualAtomModel.interactionStrengthProperty.value = dualAtomModel.getEpsilon() + ( d * scaleFactor);
+        dualAtomModel.interactionStrengthProperty.value = dualAtomModel.getEpsilon() + ( d * scaleFactor );
       },
 
       end: function() {
@@ -213,11 +211,9 @@ define( function( require ) {
       }
     );
 
-    this.interactionPotentialCanvasNode = new InteractionPotentialCanvasNode( this,
-      true,
-      {
-        canvasBounds: new Bounds2( 0, 0, 500, this.graphHeight + 10 )
-      } );
+    this.interactionPotentialCanvasNode = new InteractionPotentialCanvasNode( this, true, {
+      canvasBounds: new Bounds2( 0, 0, 500, this.graphHeight + 10 )
+    } );
     this.addChild( this.interactionPotentialCanvasNode );
 
     // Update interactivity state.
@@ -274,7 +270,7 @@ define( function( require ) {
      * @param {number} minXForAtom
      * @public
      */
-    setMinXForAtom: function( minXForAtom ){
+    setMinXForAtom: function( minXForAtom ) {
       this.minXForAtom = minXForAtom;
     },
 

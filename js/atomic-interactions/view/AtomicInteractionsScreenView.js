@@ -64,7 +64,7 @@ define( function( require ) {
     // set up the model-view transform
     this.modelViewTransform = ModelViewTransform2.createSinglePointScaleMapping(
       new Vector2( 0, 0 ),
-      new Vector2( 110, 360 ),
+      new Vector2( 145, 360 ),
       0.25
     );
 
@@ -87,16 +87,11 @@ define( function( require ) {
     } );
 
     // add interactive potential diagram
-    this.interactiveInteractionPotentialDiagram = new InteractiveInteractionPotentialDiagram(
-      dualAtomModel.getSigma(),
-      dualAtomModel.getEpsilon(),
-      true,
-      dualAtomModel,
-      {
-        left: this.layoutBounds.minX + 7 * INSET,
-        top: atomicInteractionsControlPanel.top + 5 // additional offset empirically determined to look good
-      }
-    );
+    this.interactiveInteractionPotentialDiagram = new InteractiveInteractionPotentialDiagram( dualAtomModel, true, {
+      left: this.modelViewTransform.modelToViewX( 0 ) - 43, // empirically determined such left edge of graph is at
+                                                            // center of fixed atom
+      top: atomicInteractionsControlPanel.top + 5 // additional offset empirically determined to look good
+    } );
     this.addChild( this.interactiveInteractionPotentialDiagram );
 
     // add the button for returning the atom to the screen
@@ -158,7 +153,7 @@ define( function( require ) {
       // the control panels will overlap the reset all button if fully opened, so they must be a bit to the left
       atomicInteractionsControlPanel.right = resetAllButton.left - 20; // offset empirically determined
     }
-    else{
+    else {
       atomicInteractionsControlPanel.right = resetAllButton.right;
     }
 
@@ -476,7 +471,7 @@ define( function( require ) {
 
 
       var scale = Math.min( window.innerWidth / this.layoutBounds.width, window.innerHeight / this.layoutBounds.height );
-      var atomWindowPosition = scale * (this.modelViewTransform.modelToViewX(
+      var atomWindowPosition = scale * ( this.modelViewTransform.modelToViewX(
           this.dualAtomModel.getMovableAtomRef().getX() ) );
       // account for the view centering
       if ( scale === window.innerHeight / this.layoutBounds.height ) {

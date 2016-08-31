@@ -17,7 +17,6 @@ define( function( require ) {
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   // constants
-  var MAX_INTER_ATOM_DISTANCE = 1700; // in picometers
   var AXIS_LINE_WIDTH = 1;
   var AXES_ARROW_HEAD_HEIGHT = 8 * AXIS_LINE_WIDTH;
   var EPSILON_HANDLE_OFFSET_PROPORTION = 0.08; // Position of handle as function of node width.
@@ -89,7 +88,7 @@ define( function( require ) {
       var sigmaHandleYPos = ( this.interactionDiagram.getGraphHeight() / 2 ) -
                             2 * SIGMA_HANDLE_OFFSET_PROPORTION * this.interactionDiagram.heightOfGraph;
       var sigmaHandleXPos = 0;
-      var horizontalIndexMultiplier = MAX_INTER_ATOM_DISTANCE / this.interactionDiagram.graphWidth;
+      var horizontalIndexMultiplier = this.interactionDiagram.GRAPH_X_RANGE / this.interactionDiagram.graphWidth;
       var previousPotential = Number.POSITIVE_INFINITY;
       var previousYPos = Number.NEGATIVE_INFINITY;
       for ( var i = 1; i < this.interactionDiagram.graphWidth; i++ ) {
