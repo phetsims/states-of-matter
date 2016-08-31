@@ -96,7 +96,7 @@ define( function( require ) {
     } );
 
     this.multipleParticleModel = multipleParticleModel;
-    this.modelTemperatureHistory = new ObservableArray();
+    this.modelTemperatureHistory = new ObservableArray( { allowDuplicates: true } );
 
     // add particle container node
     this.particleContainerNode = new ParticleContainerNode( multipleParticleModel, modelViewTransform, true, true, {
@@ -151,7 +151,7 @@ define( function( require ) {
     // add play pause button and step button
     var stepButton = new StepForwardButton( {
       playingProperty: multipleParticleModel.isPlayingProperty,
-      listener: function() { multipleParticleModel.stepInternal( 0.016 ); },
+      listener: function() { multipleParticleModel.stepInternal( 1 / 60 ); },
       radius: 12,
       stroke: 'black',
       fill: '#005566',
@@ -265,18 +265,21 @@ define( function( require ) {
     } );
     this.particleContainerHeightPropertyChanged = false;
     multipleParticleModel.particleContainerHeightProperty.link( function() {
-      //compositeThermometerNode.updatePositionAndOrientation();
       phaseChangesScreenView.particleContainerHeightPropertyChanged = true;
+      phaseChangesScreenView.updatePhaseDiagram();
     } );
 
     multipleParticleModel.temperatureSetPointProperty.link( function() {
       phaseChangesScreenView.modelTemperatureHistory.clear();
+      phaseChangesScreenView.updatePhaseDiagram();      phaseChangesScreenView.updatePhaseDiagram();
+    } );
+
+    multipleParticleModel.particles.lengthProperty.link( function(){
       phaseChangesScreenView.updatePhaseDiagram();
     } );
 
     // center the heater cooler node with respect to particle container node
     heaterCoolerNode.centerX = heaterCoolerNode.centerX - 10; // empirically determined
-
 
     // if the appropriate query param is set, show some information used in debugging time step adjustments
     // TODO: Consider removing this once performance issues are worked out.
@@ -340,7 +343,7 @@ define( function( require ) {
     updatePhaseDiagram: function() {
 
       // If the container has exploded, don't bother showing the dot.
-      if ( this.multipleParticleModel.getContainerExploded() ) {
+      if ( this.multipleParticleModel.getContainerExploded() || this.multipleParticleModel.particles.length === 0 ) {
         this.phaseDiagram.setStateMarkerVisible( false );
       }
       else {
@@ -348,8 +351,7 @@ define( function( require ) {
         var movingAverageTemperature = this.updateMovingAverageTemperature( this.multipleParticleModel.getTemperatureSetPoint() );
         var modelPressure = this.multipleParticleModel.getModelPressure();
         var mappedTemperature = this.mapModelTemperatureToPhaseDiagramTemperature( movingAverageTemperature );
-        var mappedPressure = this.mapModelTempAndPressureToPhaseDiagramPressure( modelPressure,
-          movingAverageTemperature );
+        var mappedPressure = this.mapModelTempAndPressureToPhaseDiagramPressure( modelPressure, movingAverageTemperature );
         this.phaseDiagram.setStateMarkerPos( mappedTemperature, mappedPressure );
       }
     },
