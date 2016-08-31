@@ -168,13 +168,11 @@ define( function( require ) {
         var graphMin = this.interactionDiagram.getGraphMin();
         if ( this.isLjGraphWider ) {
           var epsilonResizeOffset = 5;
-          this.interactionDiagram.epsilonResizeHandle.setTranslation(
-            graphMin.x + epsilonResizeOffset + ( this.interactionDiagram.widthOfGraph / 2 * EPSILON_HANDLE_OFFSET_PROPORTION ),
-            graphMin.y - epsilonResizeOffset
-          );
           this.interactionDiagram.epsilonResizeHandle.setVisible( this.interactionDiagram.interactionEnabled );
           this.interactionDiagram.epsilonLine.setTranslation( graphMin.x, graphMin.y + EPSILON_LINE_WIDTH );
           this.interactionDiagram.epsilonLine.setVisible( this.interactionDiagram.interactionEnabled );
+          this.interactionDiagram.epsilonResizeHandle.centerX = this.interactionDiagram.epsilonLine.right;
+          this.interactionDiagram.epsilonResizeHandle.centerY = this.interactionDiagram.epsilonLine.centerY;
         }
         else {
           // TODO: the following code had to be changed to use !!, but I (jblanco) think it probably shouldn't be being

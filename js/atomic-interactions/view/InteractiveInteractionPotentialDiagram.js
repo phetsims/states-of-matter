@@ -100,8 +100,10 @@ define( function( require ) {
     // Add the arrow nodes that will allow the user to control the parameters of the LJ potential.
     this.epsilonResizeHandle = new ArrowNode( 0, -RESIZE_HANDLE_SIZE_PROPORTION * this.widthOfGraph / 2, 0,
       RESIZE_HANDLE_SIZE_PROPORTION * this.widthOfGraph, arrowNodeOptions );
-    this.epsilonResizeHandle.addInputListener( new FillHighlightListener( RESIZE_HANDLE_NORMAL_COLOR,
-      RESIZE_HANDLE_HIGHLIGHTED_COLOR ) );
+    this.epsilonResizeHandle.addInputListener( new FillHighlightListener(
+      RESIZE_HANDLE_NORMAL_COLOR,
+      RESIZE_HANDLE_HIGHLIGHTED_COLOR
+    ) );
     this.ljPotentialGraph.addChild( this.epsilonResizeHandle );
     this.epsilonResizeHandle.touchArea = this.epsilonResizeHandle.localBounds.dilatedXY( 3, 10 );
     this.epsilonResizeHandle.addInputListener( new SimpleDragHandler( {
@@ -116,7 +118,7 @@ define( function( require ) {
         var d = endDragY - startDragY;
         startDragY = endDragY;
         var scaleFactor = StatesOfMatterConstants.MAX_EPSILON / ( self.getGraphHeight() / 2 );
-        dualAtomModel.interactionStrengthProperty.value = dualAtomModel.getEpsilon() + ( d * scaleFactor);
+        dualAtomModel.interactionStrengthProperty.value = dualAtomModel.getEpsilon() + ( d * scaleFactor );
       },
 
       end: function() {
@@ -235,7 +237,8 @@ define( function( require ) {
     this.verticalAxis.stroke = StatesOfMatterColorProfile.ljGraphColorsModeProperty;
     this.horizontalAxis.stroke = StatesOfMatterColorProfile.ljGraphColorsModeProperty;
     this.epsilonArrow.fill = StatesOfMatterColorProfile.ljGraphColorsModeProperty;
-    this.sigmaArrow.fill = StatesOfMatterColorProfile.ljGraphColorsModeProperty;
+    this.epsilonArrow.fill = StatesOfMatterColorProfile.ljGraphColorsModeProperty;
+    this.sigmaArrow.fill = 'red';
     this.epsilonLabel.fill = StatesOfMatterColorProfile.ljGraphColorsModeProperty;
     this.sigmaLabel.fill = StatesOfMatterColorProfile.ljGraphColorsModeProperty;
     this.epsilonArrow.stroke = StatesOfMatterColorProfile.ljGraphColorsModeProperty;
