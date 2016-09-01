@@ -59,7 +59,7 @@ define( function( require ) {
     } );
 
     // Load and scale the image.  Scale was empirically determined.
-    this.fingerImageNode = new Image( pointingHandImage, { scale: 0.5, cursor: 'ns-resize', pickable: true } );
+    this.fingerImageNode = new Image( pointingHandImage, { scale: 0.45, cursor: 'ns-resize', pickable: true } );
 
     this.hintNode = new Node( {
       children: [ this.upArrowNode, this.downArrow ],
