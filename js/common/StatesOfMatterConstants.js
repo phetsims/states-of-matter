@@ -118,7 +118,7 @@ define( function( require ) {
     INITIAL_TEMPERATURE: SOLID_TEMPERATURE,
 
     // misc
-    RESET_ALL_BUTTON_RADIUS: 18,
+    RESET_ALL_BUTTON_RADIUS: 17,
     PANEL_CORNER_RADIUS: 6
   };
 

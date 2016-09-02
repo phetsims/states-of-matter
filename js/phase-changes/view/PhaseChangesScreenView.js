@@ -40,6 +40,7 @@ define( function( require ) {
   // constants
   var INSET = 10;
   var PANEL_WIDTH = 170; // empirically determined to be wide enough for all contents using English strings with some margin
+  var INTER_PANEL_SPACING = 8;
 
   // constants used when mapping the model pressure and temperature to the phase diagram.
   var TRIPLE_POINT_TEMPERATURE_IN_MODEL = StatesOfMatterConstants.TRIPLE_POINT_MONATOMIC_MODEL_TEMPERATURE;
@@ -61,7 +62,6 @@ define( function( require ) {
   var PARTICLE_LAYER_Y_OFFSET = 680;
   var PARTICLE_CONTAINER_X_OFFSET = 60;
   var X_INSET = 15;
-  var Y_INSET = 5;
   var STEP_BUTTON_X_OFFSET = 50;
   var STEP_BUTTON_Y_OFFSET = 20;
   var BICYCLE_PUMP_NODE_X_OFFSET = 100;
@@ -110,7 +110,7 @@ define( function( require ) {
     // add particle canvas layer for particle rendering
     this.particlesLayer = new ParticleImageCanvasNode( multipleParticleModel.particles, modelViewTransform, {
       centerX: heaterCoolerNode.centerX - PARTICLE_LAYER_X_OFFSET,
-      bottom:  heaterCoolerNode.top + PARTICLE_LAYER_Y_OFFSET,
+      bottom: heaterCoolerNode.top + PARTICLE_LAYER_Y_OFFSET,
       canvasBounds: new Bounds2( -PARTICLE_CANVAS_LAYER_BOUND_LIMIT, -PARTICLE_CANVAS_LAYER_BOUND_LIMIT,
         PARTICLE_CANVAS_LAYER_BOUND_LIMIT, PARTICLE_CANVAS_LAYER_BOUND_LIMIT )
     } );
@@ -143,7 +143,7 @@ define( function( require ) {
         //Reset  phase diagram state in SOM basic version
         multipleParticleModel.expandedProperty.value = isInteractionDiagramEnabled;
       },
-      bottom: this.layoutBounds.bottom - Y_INSET,
+      bottom: this.layoutBounds.bottom - 5,
       right: this.layoutBounds.right - X_INSET,
       radius: StatesOfMatterConstants.RESET_ALL_BUTTON_RADIUS
     } );
@@ -208,26 +208,33 @@ define( function( require ) {
       this.addChild( epsilonControlInteractionPotentialDiagram );
     }
 
+    // add the atom/molecule selection control panel
+    var phaseChangesMoleculesControlPanel = new PhaseChangesMoleculesControlPanel(
+      multipleParticleModel,
+      isInteractionDiagramEnabled,
+      {
+        right: this.layoutBounds.right - X_INSET,
+        top: 5,
+        maxWidth: PANEL_WIDTH,
+        minWidth: PANEL_WIDTH
+      }
+    );
+    this.addChild( phaseChangesMoleculesControlPanel );
+
     // add phase diagram - in SOM basic version by default phase diagram should be closed.
     multipleParticleModel.expandedProperty.value = isInteractionDiagramEnabled;
     this.phaseDiagram = new PhaseDiagram( multipleParticleModel.expandedProperty, {
       minWidth: PANEL_WIDTH,
-      maxWidth: PANEL_WIDTH
-    } );
-
-    // add phase change control panel
-    var phaseChangesMoleculesControlPanel = new PhaseChangesMoleculesControlPanel( multipleParticleModel, isInteractionDiagramEnabled, {
-      right: this.layoutBounds.right - X_INSET,
-      top: this.layoutBounds.top + Y_INSET,
       maxWidth: PANEL_WIDTH,
-      minWidth: PANEL_WIDTH
+      right: phaseChangesMoleculesControlPanel.right,
+      top: phaseChangesMoleculesControlPanel.top + INTER_PANEL_SPACING
     } );
-    this.addChild( phaseChangesMoleculesControlPanel );
+    this.addChild( this.phaseDiagram );
 
-    multipleParticleModel.isExplodedProperty.link( function(){
+    multipleParticleModel.isExplodedProperty.link( function() {
       phaseChangesScreenView.modelTemperatureHistory.clear();
       phaseChangesScreenView.updatePhaseDiagram();
-    });
+    } );
 
     multipleParticleModel.moleculeTypeProperty.link( function( moleculeId ) {
       phaseChangesScreenView.modelTemperatureHistory.clear();
@@ -243,28 +250,22 @@ define( function( require ) {
           epsilonControlInteractionPotentialDiagram.setMolecular( false );
         }
       }
-      // enable/disable phase diagram on molecule type change
+
+      // don't show the phase diagram for adjustable attraction, since we need the space for other things
       if ( moleculeId === StatesOfMatterConstants.USER_DEFINED_MOLECULE ) {
-        if ( phaseChangesScreenView.hasChild( phaseChangesScreenView.phaseDiagram ) ) {
-          phaseChangesScreenView.removeChild( phaseChangesScreenView.phaseDiagram );
-        }
+        phaseChangesScreenView.phaseDiagram.visible = false;
         if ( isInteractionDiagramEnabled ) {
-          epsilonControlInteractionPotentialDiagram.top = phaseChangesMoleculesControlPanel.bottom + INSET * 0.3;
+          epsilonControlInteractionPotentialDiagram.top = phaseChangesMoleculesControlPanel.bottom + INTER_PANEL_SPACING;
         }
       }
       else {
-        if ( !phaseChangesScreenView.hasChild( phaseChangesScreenView.phaseDiagram ) ) {
-          phaseChangesScreenView.addChild( phaseChangesScreenView.phaseDiagram );
-          phaseChangesScreenView.phaseDiagram.right = phaseChangesScreenView.layoutBounds.right - X_INSET;
-          if ( isInteractionDiagramEnabled ) {
-            phaseChangesScreenView.phaseDiagram.bottom = resetAllButton.top - INSET * 0.2;
-            epsilonControlInteractionPotentialDiagram.bottom = phaseChangesScreenView.phaseDiagram.top - INSET * 0.2;
-            phaseChangesMoleculesControlPanel.bottom = epsilonControlInteractionPotentialDiagram.top - INSET * 0.2;
-
-          }
-          else {
-            phaseChangesScreenView.phaseDiagram.top = phaseChangesMoleculesControlPanel.bottom + INSET * 0.3;
-          }
+        phaseChangesScreenView.phaseDiagram.visible = true;
+        if ( isInteractionDiagramEnabled ) {
+          epsilonControlInteractionPotentialDiagram.top = phaseChangesMoleculesControlPanel.bottom + INTER_PANEL_SPACING;
+          phaseChangesScreenView.phaseDiagram.top = epsilonControlInteractionPotentialDiagram.bottom + INTER_PANEL_SPACING;
+        }
+        else {
+          phaseChangesScreenView.phaseDiagram.top = phaseChangesMoleculesControlPanel.bottom + INTER_PANEL_SPACING;
         }
       }
       if ( multipleParticleModel.getContainerExploded() ) {
@@ -279,10 +280,11 @@ define( function( require ) {
 
     multipleParticleModel.temperatureSetPointProperty.link( function() {
       phaseChangesScreenView.modelTemperatureHistory.clear();
-      phaseChangesScreenView.updatePhaseDiagram();      phaseChangesScreenView.updatePhaseDiagram();
+      phaseChangesScreenView.updatePhaseDiagram();
+      phaseChangesScreenView.updatePhaseDiagram();
     } );
 
-    multipleParticleModel.particles.lengthProperty.link( function(){
+    multipleParticleModel.particles.lengthProperty.link( function() {
       phaseChangesScreenView.updatePhaseDiagram();
     } );
 
@@ -291,7 +293,7 @@ define( function( require ) {
 
     // if the appropriate query param is set, show some information used in debugging time step adjustments
     // TODO: Consider removing this once performance issues are worked out.
-    if ( StatesOfMatterQueryParameters.DEBUG_TIME_STEP ){
+    if ( StatesOfMatterQueryParameters.DEBUG_TIME_STEP ) {
       var keepingUpReadout = new Text( '', {
         font: new PhetFont( 20 ),
         fill: 'red',
@@ -299,7 +301,7 @@ define( function( require ) {
         left: 20
       } );
       this.addChild( keepingUpReadout );
-      multipleParticleModel.keepingUpProperty.link( function( keepingUp ){
+      multipleParticleModel.keepingUpProperty.link( function( keepingUp ) {
         keepingUpReadout.text = keepingUp.toString();
       } );
       var averageDtReadout = new Text( '', {
@@ -309,7 +311,7 @@ define( function( require ) {
         left: keepingUpReadout.left
       } );
       this.addChild( averageDtReadout );
-      multipleParticleModel.averageDtProperty.link( function( averageDt ){
+      multipleParticleModel.averageDtProperty.link( function( averageDt ) {
         averageDtReadout.text = averageDt.toFixed( 3 );
       } );
       var maxAdvanceTimePerStep = new Text( '', {
@@ -319,7 +321,7 @@ define( function( require ) {
         left: averageDtReadout.left
       } );
       this.addChild( maxAdvanceTimePerStep );
-      multipleParticleModel.maxParticleMoveTimePerStepProperty.link( function( maxAdvance ){
+      multipleParticleModel.maxParticleMoveTimePerStepProperty.link( function( maxAdvance ) {
         maxAdvanceTimePerStep.text = maxAdvance.toFixed( 3 );
       } );
     }
@@ -334,7 +336,7 @@ define( function( require ) {
       this.particlesLayer.step();
       this.compositeThermometerNode.step();
       this.particleContainerNode.pressureMeter.step( dt );
-      if ( this.particleContainerHeightPropertyChanged ){
+      if ( this.particleContainerHeightPropertyChanged ) {
         this.compositeThermometerNode.updatePositionAndOrientation();
         this.particleContainerNode.handleContainerSizeChanged();
         this.particleContainerNode.fingerNode.handleContainerSizeChanged();
