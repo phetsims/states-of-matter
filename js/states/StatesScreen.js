@@ -32,9 +32,9 @@ define( function( require ) {
       function( model ) { return new StatesScreenView( model ); },
       { backgroundColor: StatesOfMatterColorProfile.background.toCSS() }
     );
-    var screen = this;
+    var self = this;
     StatesOfMatterColorProfile.backgroundProperty.link( function( color ){
-      screen.backgroundColor = color;
+      self.backgroundColor = color;
     } );
   }
 

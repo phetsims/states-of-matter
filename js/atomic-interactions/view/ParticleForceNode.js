@@ -44,7 +44,7 @@ define( function( require ) {
 
     this.attractiveForce = 0;
     this.repulsiveForce = 0;
-    var particleForceNode = this;
+    var self = this;
     var commonForceArrowNodeOptions = {
       headHeight: FORCE_ARROW_HEAD_LENGTH,
       headWidth: FORCE_ARROW_HEAD_WIDTH,
@@ -74,7 +74,7 @@ define( function( require ) {
     this.totalForceVectorNode.setVisible( false );
 
     particle.positionProperty.link( function( position ) {
-      particleForceNode.setTranslation( modelViewTransform.modelToViewX( position.x ),
+      self.setTranslation( modelViewTransform.modelToViewX( position.x ),
         modelViewTransform.modelToViewY( position.y ) );
     } );
   }

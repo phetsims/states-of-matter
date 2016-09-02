@@ -31,9 +31,9 @@ define( function( require ) {
       function( model ) { return new PhaseChangesScreenView( model, isInteractionDiagramEnabled ); },
       { backgroundColor: StatesOfMatterColorProfile.background.toCSS() }
     );
-    var screen = this;
+    var self = this;
     StatesOfMatterColorProfile.backgroundProperty.link( function( color ){
-      screen.backgroundColor = color;
+      self.backgroundColor = color;
     } );
   }
 

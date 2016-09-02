@@ -34,7 +34,7 @@ define( function( require ) {
   function HandNode( dualAtomModel, particle, modelViewTransform, minX, maxX ) {
 
     Node.call( this, { cursor: 'pointer' } );
-    var handNode = this;
+    var self = this;
     this.minX = minX;
     this.maxX = maxX;
     this.addChild( new Image( handImage, { minWidth: WIDTH, maxWidth: WIDTH } ) );
@@ -47,7 +47,7 @@ define( function( require ) {
 
         // Stop the model from moving the particle at the same time the user is moving it.
         dualAtomModel.setMotionPaused( true );
-        startDragX = handNode.globalToParentPoint( event.pointer.point ).x;
+        startDragX = self.globalToParentPoint( event.pointer.point ).x;
       },
 
       drag: function( event ) {
@@ -58,15 +58,15 @@ define( function( require ) {
           // Need to release the bond before we can move the atom.
           dualAtomModel.releaseBond();
         }
-        endDragX = handNode.globalToParentPoint( event.pointer.point ).x;
+        endDragX = self.globalToParentPoint( event.pointer.point ).x;
         var d = endDragX - startDragX;
         startDragX = endDragX;        // Make sure we don't exceed the positional limits.
         var newPosX = modelViewTransform.modelToViewX( particle.getX() ) + d;
-        if ( newPosX > handNode.maxX ) {
-          newPosX = handNode.maxX;
+        if ( newPosX > self.maxX ) {
+          newPosX = self.maxX;
         }
-        else if ( newPosX < handNode.minX ) {
-          newPosX = handNode.minX;
+        else if ( newPosX < self.minX ) {
+          newPosX = self.minX;
         }
         // Move the particle based on the amount of mouse movement.
         particle.setPosition( modelViewTransform.viewToModelX( newPosX ), particle.getY() );
@@ -78,12 +78,12 @@ define( function( require ) {
         // means.
         dualAtomModel.setMotionPaused( false );
         dualAtomModel.isHandNodeVisible = false;
-        handNode.setVisible( false );
+        self.setVisible( false );
       }
     } ) );
 
     dualAtomModel.movableAtom.positionProperty.link( function( position ) {
-      handNode.setTranslation( modelViewTransform.modelToViewX( position.x ),
+      self.setTranslation( modelViewTransform.modelToViewX( position.x ),
         modelViewTransform.modelToViewY( position.y ) );
     } );
   }

@@ -26,7 +26,7 @@ define( function( require ) {
 
     //If this is a single-screen sim, then no icon is necessary.  If there are multiple screens, then the icon must be
     // provided here.
-    var screen = this;
+    var self = this;
     Screen.call( this, simTitle, new AtomicInteractionsIcon( Screen.HOME_SCREEN_ICON_SIZE),
       function() { return new DualAtomModel(); },
       function( model ) { return new AtomicInteractionsScreenView( model, enableHeterogeneousMolecules ); },
@@ -34,7 +34,7 @@ define( function( require ) {
     );
 
     StatesOfMatterColorProfile.backgroundProperty.link( function( color ){
-      screen.backgroundColor = color;
+      self.backgroundColor = color;
     } );
   }
 

@@ -69,7 +69,7 @@ define( function( require ) {
     );
 
     // initialize local variables
-    var atomicInteractionsScreenView = this;
+    var self = this;
     var tickTextColor = enableHeterogeneousAtoms ? 'black' : StatesOfMatterColorProfile.controlPanelTextProperty;
     var textColor = enableHeterogeneousAtoms ? 'black' : StatesOfMatterColorProfile.controlPanelTextProperty;
     var panelFill = enableHeterogeneousAtoms ? '#D1D2FF' : StatesOfMatterColorProfile.controlPanelBackgroundProperty;
@@ -113,8 +113,8 @@ define( function( require ) {
       listener: function() {
         dualAtomModel.reset();
         dualAtomModel.isHandNodeVisible = true;
-        atomicInteractionsScreenView.handNode.setVisible( true );
-        atomicInteractionsScreenView.interactiveInteractionPotentialDiagram.reset();
+        self.handNode.setVisible( true );
+        self.interactiveInteractionPotentialDiagram.reset();
       },
       right: this.layoutBounds.maxX - INSET,
       bottom: this.layoutBounds.maxY - 5,
@@ -223,7 +223,7 @@ define( function( require ) {
 
     // update the push pin position if the adjustable atom diamter changes
     dualAtomModel.atomDiameterProperty.link( function( atomDiameter ) {
-      atomicInteractionsScreenView.updatePushPinPosition();
+      self.updatePushPinPosition();
     } );
 
     // Create the nodes that will act as layers for the fixed and movable particles. This is done so that the
@@ -243,40 +243,40 @@ define( function( require ) {
     dualAtomModel.atomPairProperty.link( function( atomPair ) {
       forcesControlPanel.top = atomicInteractionsControlPanel.bottom + INSET / 2;
       forcesControlPanel.right = atomicInteractionsControlPanel.right;
-      atomicInteractionsScreenView.handleFixedParticleRemoved( dualAtomModel.fixedAtom );
-      atomicInteractionsScreenView.handleFixedParticleAdded( dualAtomModel.fixedAtom );
-      atomicInteractionsScreenView.handleMovableParticleRemoved( dualAtomModel.movableAtom );
-      atomicInteractionsScreenView.handleMovableParticleAdded( dualAtomModel.movableAtom );
-      atomicInteractionsScreenView.handNode.setVisible( dualAtomModel.isHandNodeVisible );
+      self.handleFixedParticleRemoved( dualAtomModel.fixedAtom );
+      self.handleFixedParticleAdded( dualAtomModel.fixedAtom );
+      self.handleMovableParticleRemoved( dualAtomModel.movableAtom );
+      self.handleMovableParticleAdded( dualAtomModel.movableAtom );
+      self.handNode.setVisible( dualAtomModel.isHandNodeVisible );
     } );
     dualAtomModel.forcesProperty.link( function( forces ) {
       switch( forces ) {
         case 'hideForces':
-          atomicInteractionsScreenView.setShowAttractiveForces( false );
-          atomicInteractionsScreenView.setShowRepulsiveForces( false );
-          atomicInteractionsScreenView.setShowTotalForces( false );
+          self.setShowAttractiveForces( false );
+          self.setShowRepulsiveForces( false );
+          self.setShowTotalForces( false );
           break;
         case 'totalForce':
-          atomicInteractionsScreenView.setShowAttractiveForces( false );
-          atomicInteractionsScreenView.setShowRepulsiveForces( false );
-          atomicInteractionsScreenView.setShowTotalForces( true );
+          self.setShowAttractiveForces( false );
+          self.setShowRepulsiveForces( false );
+          self.setShowTotalForces( true );
           break;
         case 'componentForce':
-          atomicInteractionsScreenView.setShowAttractiveForces( true );
-          atomicInteractionsScreenView.setShowRepulsiveForces( true );
-          atomicInteractionsScreenView.setShowTotalForces( false );
+          self.setShowAttractiveForces( true );
+          self.setShowRepulsiveForces( true );
+          self.setShowTotalForces( false );
       }
     } );
 
     dualAtomModel.atomDiameterProperty.link( function() {
-      atomicInteractionsScreenView.fixedParticleNode.handleParticleRadiusChanged();
-      atomicInteractionsScreenView.movableParticleNode.handleParticleRadiusChanged();
-      atomicInteractionsScreenView.handleParticleRadiusChanged();
-      atomicInteractionsScreenView.updateMinimumXForMovableAtom();
+      self.fixedParticleNode.handleParticleRadiusChanged();
+      self.movableParticleNode.handleParticleRadiusChanged();
+      self.handleParticleRadiusChanged();
+      self.updateMinimumXForMovableAtom();
     } );
 
 
-    atomicInteractionsScreenView.handNode.setVisible( true );
+    self.handNode.setVisible( true );
   }
 
   statesOfMatter.register( 'AtomicInteractionsScreenView', AtomicInteractionsScreenView );

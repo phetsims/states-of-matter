@@ -42,7 +42,7 @@ define( function( require ) {
    */
   function DialGaugeNode( multipleParticleModel ) {
 
-    var dialGaugeNode = this;
+    var self = this;
     Node.call( this );
     this.multipleParticleModel = multipleParticleModel;
 
@@ -89,7 +89,7 @@ define( function( require ) {
     multipleParticleModel.pressure = multipleParticleModel.getPressureInAtmospheres();
     this.pressureChanged = false;
     multipleParticleModel.pressureProperty.link( function() {
-      dialGaugeNode.pressureChanged = true;
+      self.pressureChanged = true;
     } );
 
     this.updateConnector();

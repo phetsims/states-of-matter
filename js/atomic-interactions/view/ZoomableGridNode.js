@@ -34,7 +34,7 @@ define( function( require ) {
   function ZoomableGridNode( atomsView, offsetX, offsetY, width, height ) {
 
     Node.call( this );
-    var gridNode = this;
+    var self = this;
     atomsView.horizontalLineCount = MIN_LINES_HORIZONTAL;
     this.horizontalLinesNode = new Path( null, {
       stroke: 'white',
@@ -49,7 +49,7 @@ define( function( require ) {
     this.zoomInButton = new ZoomButton( {
       listener: function() {
         atomsView.horizontalLineCount -= ZOOM_INCREMENT;
-        gridNode.setHorizontalLines( offsetX, offsetY, width, height, atomsView.horizontalLineCount );
+        self.setHorizontalLines( offsetX, offsetY, width, height, atomsView.horizontalLineCount );
         atomsView.verticalScalingFactor *= 3.33;
         atomsView.drawPotentialCurve();
       },
@@ -65,7 +65,7 @@ define( function( require ) {
     this.zoomOutButton = new ZoomButton( {
       listener: function() {
         atomsView.horizontalLineCount += ZOOM_INCREMENT;
-        gridNode.setHorizontalLines( offsetX, offsetY, width, height, atomsView.horizontalLineCount );
+        self.setHorizontalLines( offsetX, offsetY, width, height, atomsView.horizontalLineCount );
         atomsView.verticalScalingFactor /= 3.33;
         atomsView.drawPotentialCurve();
       },

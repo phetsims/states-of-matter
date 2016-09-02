@@ -29,7 +29,7 @@ define( function( require ) {
    */
   function PointingHandNode( multipleParticleModel, modelViewTransform ) {
 
-    var pointingHandNode = this;
+    var self = this;
     Node.call( this );
     this.multipleParticleModel = multipleParticleModel;
     this.modelViewTransform = modelViewTransform;
@@ -76,39 +76,39 @@ define( function( require ) {
     this.fingerImageNode.addInputListener( new SimpleDragHandler( {
       allowTouchSnag: true,
       start: function( event ) {
-        startY = pointingHandNode.globalToParentPoint( event.pointer.point ).y;
-        pointingHandNode.beingDragged = true;
-        pointingHandNode.containerSizeAtDragStart = multipleParticleModel.getParticleContainerHeight();
-        pointingHandNode.updateHintVisibility();
+        startY = self.globalToParentPoint( event.pointer.point ).y;
+        self.beingDragged = true;
+        self.containerSizeAtDragStart = multipleParticleModel.getParticleContainerHeight();
+        self.updateHintVisibility();
 
       },
       drag: function( event ) {
-        endY = pointingHandNode.globalToParentPoint( event.pointer.point ).y;
+        endY = self.globalToParentPoint( event.pointer.point ).y;
 
         // Resize the container based on the amount that the node has moved.
         multipleParticleModel.setTargetParticleContainerHeight(
-          pointingHandNode.containerSizeAtDragStart + modelViewTransform.viewToModelDeltaY( endY - startY )
+          self.containerSizeAtDragStart + modelViewTransform.viewToModelDeltaY( endY - startY )
         );
-        pointingHandNode.updateHintVisibility();
+        self.updateHintVisibility();
       },
       end: function() {
 
         // Set the target size to the current size, which will stop any change in size that is currently underway.
         multipleParticleModel.setTargetParticleContainerHeight( multipleParticleModel.getParticleContainerHeight() );
-        pointingHandNode.beingDragged = false;
-        pointingHandNode.updateHintVisibility();
+        self.beingDragged = false;
+        self.updateHintVisibility();
       }
     } ) );
 
     // add the listener that will show and hide the hint
     this.fingerImageNode.addInputListener( {
       enter: function() {
-        pointingHandNode.mouseOver = true;
-        pointingHandNode.updateHintVisibility();
+        self.mouseOver = true;
+        self.updateHintVisibility();
       },
       exit: function() {
-        pointingHandNode.mouseOver = false;
-        pointingHandNode.updateHintVisibility();
+        self.mouseOver = false;
+        self.updateHintVisibility();
       }
     } );
 

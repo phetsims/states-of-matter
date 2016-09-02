@@ -28,7 +28,7 @@ define( function( require ) {
    * @constructor
    */
   function PositionMarker( radius, color, options ) {
-    var positionMarker = this;
+    var self = this;
     var mainColor = Color.toColor( color );
     options = _.extend( {
       mainColor: mainColor,
@@ -48,9 +48,9 @@ define( function( require ) {
 
     // halo visibility
     this.sphereNode.addInputListener( new ButtonListener( {
-        up: function() { positionMarker.haloNode.visible = false; },
-        down: function() { positionMarker.haloNode.visible = true; },
-        over: function() { positionMarker.haloNode.visible = true; }
+        up: function() { self.haloNode.visible = false; },
+        down: function() { self.haloNode.visible = true; },
+        over: function() { self.haloNode.visible = true; }
       } )
     );
 

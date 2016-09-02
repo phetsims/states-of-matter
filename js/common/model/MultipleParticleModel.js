@@ -119,7 +119,7 @@ define( function( require ) {
    */
   function MultipleParticleModel() {
 
-    var multipleParticleModel = this;
+    var self = this;
 
     // Strategy patterns that are applied to the data set in order to create the overall behavior of the simulation.
     this.atomPositionUpdater = null;
@@ -181,7 +181,7 @@ define( function( require ) {
     this.setMoleculeType( DEFAULT_MOLECULE );
 
     this.moleculeTypeProperty.link( function( moleculeId ) {
-      multipleParticleModel.setMoleculeType( moleculeId );
+      self.setMoleculeType( moleculeId );
     } );
   }
 

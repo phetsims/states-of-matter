@@ -71,7 +71,7 @@ define( function( require ) {
    */
   function AtomicInteractionsControlPanel( dualAtomModel, enableHeterogeneousAtoms, options ) {
 
-    var atomicInteractionsControlPanel = this;
+    var self = this;
     options = _.extend( {
       xMargin: 5,
       yMargin: 8,
@@ -218,7 +218,7 @@ define( function( require ) {
         align: 'left',
         spacing: 5
       } );
-      titleNode.align = atomicInteractionsControlPanel.width / 2;
+      titleNode.align = self.width / 2;
 
       // dilate the touch areas to make the buttons easier to work with on touch-based devices
       var xDilation = 8;

@@ -73,7 +73,7 @@ define( function( require ) {
    * @constructor
    */
   function PhaseChangesScreenView( multipleParticleModel, isInteractionDiagramEnabled ) {
-    var phaseChangesScreenView = this;
+    var self = this;
 
     ScreenView.call( this, StatesOfMatterConstants.SCREEN_VIEW_OPTIONS );
     var mvtScale = StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / StatesOfMatterConstants.CONTAINER_BOUNDS.width;
@@ -135,11 +135,11 @@ define( function( require ) {
     // add reset all button
     var resetAllButton = new ResetAllButton( {
       listener: function() {
-        phaseChangesScreenView.modelTemperatureHistory.clear();
+        self.modelTemperatureHistory.clear();
         multipleParticleModel.reset();
-        phaseChangesScreenView.compositeThermometerNode.setRotation( 0 );
-        phaseChangesScreenView.particleContainerNode.reset();
-        phaseChangesScreenView.compositeThermometerNode.reset();
+        self.compositeThermometerNode.setRotation( 0 );
+        self.particleContainerNode.reset();
+        self.compositeThermometerNode.reset();
         //Reset  phase diagram state in SOM basic version
         multipleParticleModel.expandedProperty.value = isInteractionDiagramEnabled;
       },
@@ -175,7 +175,7 @@ define( function( require ) {
     // add bicycle pump node
     this.addChild( new BicyclePumpNode( 200, 250, multipleParticleModel, {
       bottom: heaterCoolerNode.bottom,
-      right: phaseChangesScreenView.particleContainerNode.left + BICYCLE_PUMP_NODE_X_OFFSET
+      right: self.particleContainerNode.left + BICYCLE_PUMP_NODE_X_OFFSET
     } ) );
 
     // add return lid button
@@ -185,12 +185,12 @@ define( function( require ) {
       maxWidth: 100,
       listener: function() {
         multipleParticleModel.returnLid();
-        phaseChangesScreenView.particleContainerNode.reset();
+        self.particleContainerNode.reset();
       },
       visible: false,
       xMargin: 10,
-      right: phaseChangesScreenView.particleContainerNode.left - 2 * X_INSET,
-      top: phaseChangesScreenView.particleContainerNode.centerY + RETURN_LID_BUTTON_Y_OFFSET
+      right: self.particleContainerNode.left - 2 * X_INSET,
+      top: self.particleContainerNode.centerY + RETURN_LID_BUTTON_Y_OFFSET
     } );
     this.addChild( this.returnLidButton );
     multipleParticleModel.isExplodedProperty.linkAttribute( this.returnLidButton, 'visible' );
@@ -235,14 +235,14 @@ define( function( require ) {
     this.addChild( this.phaseDiagram );
 
     multipleParticleModel.isExplodedProperty.link( function() {
-      phaseChangesScreenView.modelTemperatureHistory.clear();
-      phaseChangesScreenView.updatePhaseDiagram();
+      self.modelTemperatureHistory.clear();
+      self.updatePhaseDiagram();
     } );
 
     multipleParticleModel.moleculeTypeProperty.link( function( moleculeId ) {
-      phaseChangesScreenView.modelTemperatureHistory.clear();
-      phaseChangesScreenView.updatePhaseDiagram();
-      phaseChangesScreenView.phaseDiagram.setDepictingWater( moleculeId === StatesOfMatterConstants.WATER );
+      self.modelTemperatureHistory.clear();
+      self.updatePhaseDiagram();
+      self.phaseDiagram.setDepictingWater( moleculeId === StatesOfMatterConstants.WATER );
       if ( isInteractionDiagramEnabled ) {
         if ( moleculeId === StatesOfMatterConstants.USER_DEFINED_MOLECULE ||
              moleculeId === StatesOfMatterConstants.DIATOMIC_OXYGEN ||
@@ -256,39 +256,39 @@ define( function( require ) {
 
       // don't show the phase diagram for adjustable attraction, since we need the space for other things
       if ( moleculeId === StatesOfMatterConstants.USER_DEFINED_MOLECULE ) {
-        phaseChangesScreenView.phaseDiagram.visible = false;
+        self.phaseDiagram.visible = false;
         if ( isInteractionDiagramEnabled ) {
           epsilonControlInteractionPotentialDiagram.top = phaseChangesMoleculesControlPanel.bottom + INTER_PANEL_SPACING;
         }
       }
       else {
-        phaseChangesScreenView.phaseDiagram.visible = true;
+        self.phaseDiagram.visible = true;
         if ( isInteractionDiagramEnabled ) {
           epsilonControlInteractionPotentialDiagram.top = phaseChangesMoleculesControlPanel.bottom + INTER_PANEL_SPACING;
-          phaseChangesScreenView.phaseDiagram.top = epsilonControlInteractionPotentialDiagram.bottom + INTER_PANEL_SPACING;
+          self.phaseDiagram.top = epsilonControlInteractionPotentialDiagram.bottom + INTER_PANEL_SPACING;
         }
         else {
-          phaseChangesScreenView.phaseDiagram.top = phaseChangesMoleculesControlPanel.bottom + INTER_PANEL_SPACING;
+          self.phaseDiagram.top = phaseChangesMoleculesControlPanel.bottom + INTER_PANEL_SPACING;
         }
       }
       if ( multipleParticleModel.getContainerExploded() ) {
-        phaseChangesScreenView.particleContainerNode.reset();
+        self.particleContainerNode.reset();
       }
     } );
     this.particleContainerHeightPropertyChanged = false;
     multipleParticleModel.particleContainerHeightProperty.link( function() {
-      phaseChangesScreenView.particleContainerHeightPropertyChanged = true;
-      phaseChangesScreenView.updatePhaseDiagram();
+      self.particleContainerHeightPropertyChanged = true;
+      self.updatePhaseDiagram();
     } );
 
     multipleParticleModel.temperatureSetPointProperty.link( function() {
-      phaseChangesScreenView.modelTemperatureHistory.clear();
-      phaseChangesScreenView.updatePhaseDiagram();
-      phaseChangesScreenView.updatePhaseDiagram();
+      self.modelTemperatureHistory.clear();
+      self.updatePhaseDiagram();
+      self.updatePhaseDiagram();
     } );
 
     multipleParticleModel.particles.lengthProperty.link( function() {
-      phaseChangesScreenView.updatePhaseDiagram();
+      self.updatePhaseDiagram();
     } );
 
     // center the heater cooler node with respect to particle container node
