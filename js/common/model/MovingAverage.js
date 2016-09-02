@@ -35,19 +35,6 @@ define( function( require ) {
       this.currentIndex = ( this.currentIndex + 1 ) % this.size;
       this.total = ( this.total - replacedValue ) + newValue;
       this.average = this.total / this.size;
-      if ( this.average < 0 ){
-        alert( 'this.total = ' + this.total );
-        var alertString = 'values = ';
-        for( var i = 0; i < this.size; i++ ){
-          alertString += this.array[ i ].toFixed( 4 ) + ',';
-        }
-        alert( alertString );
-        var actualTotal = 0;
-        for( i = 0; i < this.size; i++ ){
-          actualTotal += this.array[ i ];
-        }
-        alert( 'actual total = ' + actualTotal );
-      }
     },
 
     reset: function(){
