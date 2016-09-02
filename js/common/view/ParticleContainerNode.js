@@ -91,16 +91,14 @@ define( function( require ) {
       }
     );
     var containerLeftShapeWidth = 25;
-    var distanceFromTopInnerTop = 5;
+    var distanceFromTopInnerTop = 0;
 
     // add container outer shape
     var outerShape = new Path( new Shape()
       .moveTo( 0, distanceFromTopInnerTop )
-      .quadraticCurveTo( containerLeftShapeWidth, 18, 50, 21 ) //outer-top-curve -1
-      .quadraticCurveTo( this.containerWidthWithMargin / 2, 30,
-        this.containerWidthWithMargin / 2 + containerLeftShapeWidth, 26 ) //outer-top-curve -2
-      .quadraticCurveTo( this.containerWidthWithMargin - containerLeftShapeWidth, 23,
-        this.containerWidthWithMargin, distanceFromTopInnerTop )//outer-top-curve -3
+
+      // top curve, y-component of control points made to match up with lower edge of the lid
+      .cubicCurveTo( 0, 35, this.containerWidthWithMargin, 35, this.containerWidthWithMargin, distanceFromTopInnerTop )
 
       // line from outer top right to outer bottom right
       .lineTo( this.containerWidthWithMargin, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT )
