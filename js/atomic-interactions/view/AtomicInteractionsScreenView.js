@@ -118,7 +118,8 @@ define( function( require ) {
       },
       right: this.layoutBounds.maxX - INSET,
       bottom: this.layoutBounds.maxY - 5,
-      radius: StatesOfMatterConstants.RESET_ALL_BUTTON_RADIUS
+      radius: StatesOfMatterConstants.RESET_ALL_BUTTON_RADIUS,
+      touchAreaDilation: 4
     } );
     this.addChild( resetAllButton );
 
@@ -130,7 +131,8 @@ define( function( require ) {
       stroke: 'black',
       fill: '#005566',
       centerX: this.layoutBounds.centerX + 100,
-      bottom: this.layoutBounds.bottom - 20 // empirically determined
+      bottom: this.layoutBounds.bottom - 20, // empirically determined
+      touchAreaDilation: 4
     } );
     this.addChild( stepButton );
 
@@ -160,7 +162,8 @@ define( function( require ) {
       stroke: 'black',
       fill: '#005566',
       y: stepButton.centerY,
-      right: stepButton.left - 2 * INSET
+      right: stepButton.left - 2 * INSET,
+      touchAreaDilation: 4
     } );
     this.addChild( playPauseButton );
 

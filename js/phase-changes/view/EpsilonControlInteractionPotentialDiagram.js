@@ -170,7 +170,7 @@ define( function( require ) {
       buttonXMargin: 6,
       buttonLength: 12,
       buttonTouchAreaXDilation: 15,
-      buttonTouchAreaYDilation: 6
+      buttonTouchAreaYDilation: 10
     } );
     this.addChild( accordionBox );
 

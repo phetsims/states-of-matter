@@ -273,7 +273,7 @@ define( function( require ) {
       buttonXMargin: 5,
       buttonLength: 12,
       buttonTouchAreaXDilation: 15,
-      buttonTouchAreaYDilation: 5
+      buttonTouchAreaYDilation: 10
     } );
     this.addChild( this.accordionBox );
 

@@ -127,7 +127,8 @@ define( function( require ) {
         },
         right: this.layoutBounds.right - LAYOUT_BOUNDS_RIGHT_OFFSET,
         bottom: this.layoutBounds.bottom - 5,
-        radius: StatesOfMatterConstants.RESET_ALL_BUTTON_RADIUS
+        radius: StatesOfMatterConstants.RESET_ALL_BUTTON_RADIUS,
+        touchAreaDilation: 4
       } );
 
     // add play pause button and step button
@@ -138,7 +139,8 @@ define( function( require ) {
       stroke: 'black',
       fill: '#005566',
       right: heaterCoolerNode.left - STEP_BUTTON_X_OFFSET,
-      bottom: heaterCoolerNode.bottom - STEP_BUTTON_Y_OFFSET
+      bottom: heaterCoolerNode.bottom - STEP_BUTTON_Y_OFFSET,
+      touchAreaDilation: 4
     } );
 
     this.addChild( stepButton );
@@ -151,7 +153,8 @@ define( function( require ) {
       stroke: 'black',
       fill: '#005566',
       y: stepButton.centerY,
-      right: stepButton.left - INSET
+      right: stepButton.left - INSET,
+      touchAreaDilation: 4
     } );
     this.addChild( playPauseButton );
     this.addChild( resetAllButton );
