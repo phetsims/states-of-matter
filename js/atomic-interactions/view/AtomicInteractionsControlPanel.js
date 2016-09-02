@@ -81,7 +81,7 @@ define( function( require ) {
       tickTextColor: 'black',
       buttonTextFill: enableHeterogeneousAtoms ? 'black' : 'white',
       lineWidth: 1,
-      cornerRadius: 5, // radius of the rounded corners on the background
+      cornerRadius: StatesOfMatterConstants.PANEL_CORNER_RADIUS,
       minWidth: 0
     }, options );
 
@@ -378,20 +378,14 @@ define( function( require ) {
     interactionStrengthSlider.top = interactionStrengthTitle.bottom + verticalSpaceOffset;
     interactionStrengthSlider.centerX = radioButtonGroup.centerX;
 
-    // calculate the minimum width of the slider so that it can be set and doesn't change
-    var panelMinWidth = Math.max(
-        radioButtonGroup.width,
-        atomDiameterSlider.width,
-        interactionStrengthSlider.width
-      ) + 2 * PANEL_X_MARGIN;
-
     var radioButtonPanel = new Panel( content, {
       stroke: options.stroke,
-      cornerRadius: 6,
+      cornerRadius: options.cornerRadius,
       lineWidth: options.lineWidth,
       fill: options.fill,
       xMargin: PANEL_X_MARGIN,
-      minWidth: panelMinWidth
+      minWidth: options.minWidth,
+      align: 'center'
     } );
     this.addChild( radioButtonPanel );
 

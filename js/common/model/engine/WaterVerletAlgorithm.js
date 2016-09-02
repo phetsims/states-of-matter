@@ -322,6 +322,10 @@ define( function( require ) {
         moleculeVelocities[ i ].setXY( xVel, yVel );
         moleculeRotationRates[ i ] += timeStepHalf * ( moleculeTorques[ i ] + nextMoleculeTorques[ i ] ) *
                                       this.inertiaInverse;
+        if ( !this.maxRotationRate || this.maxRotationRate < moleculeRotationRates[ i ] ){
+          this.maxRotationRate = moleculeRotationRates[ i ];
+          console.log( 'this.maxRotationRate = ' + this.maxRotationRate );
+        }
         centersOfMassKineticEnergy += 0.5 * moleculeDataSet.getMoleculeMass() *
                                       moleculeVelocities[ i ].x * moleculeVelocities[ i ].x +
                                       moleculeVelocities[ i ].y * moleculeVelocities[ i ].y;

@@ -20,6 +20,7 @@ define( function( require ) {
   var Node = require( 'SCENERY/nodes/Node' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
   var Text = require( 'SCENERY/nodes/Text' );
   var VBox = require( 'SCENERY/nodes/VBox' );
   var VStrut = require( 'SCENERY/nodes/VStrut' );
@@ -56,7 +57,8 @@ define( function( require ) {
       buttonAlign: 'left',
       lineWidth: 1,
       showTitleWhenExpanded: true,
-      panelMinWidth: 168
+      minWidth: 0,
+      maxWidth: Number.POSITIVE_INFINITY
     }, options );
 
     Node.call( this );
@@ -186,8 +188,10 @@ define( function( require ) {
     var radioButtonGroup = new VBox( {
       children: [ hideForcesRadio, totalForceRadio, componentForceRadio ],
       align: 'left',
-      spacing: 3
+      spacing: 3,
+      left: 8 // indented a bit
     } );
+    accordionContent.addChild( radioButtonGroup );
 
     // expand the touch areas of the radio buttons so that they are easier to work with on touch-based devices
     var xDilation = 8;
@@ -195,22 +199,19 @@ define( function( require ) {
     hideForcesRadio.touchArea = totalForce.localBounds.dilatedXY( xDilation, yDilation );
     totalForceRadio.touchArea = totalForce.localBounds.dilatedXY( xDilation, yDilation );
 
-    // The panel width in the Atomic Interaction sim and on the Interaction screen in SOM is different.
-    var panelMinWidth = Math.max( options.panelMinWidth, options.showTitleWhenExpanded ? 183 : 190 );
-    radioButtonGroup.setTranslation( 10, 0 );
-    accordionContent.addChild( radioButtonGroup );
-
     // show white stroke around the force panel within SOM full version  else  show black stroke
     var accordionBox = new AccordionBox( accordionContent, {
       titleNode: createText( forcesString, TEXT_LABEL_MAX_WIDTH / 2, 14 ),
       fill: options.fill,
       stroke: options.stroke,
+      lineWidth: options.lineWidth,
       expandedProperty: forceControlPanelExpandProperty,
       contentAlign: 'left',
       titleAlignX: 'left',
       buttonAlign: options.buttonAlign,
-      cornerRadius: 6,
-      minWidth: panelMinWidth,
+      cornerRadius: StatesOfMatterConstants.PANEL_CORNER_RADIUS,
+      minWidth: options.minWidth,
+      maxWidth: options.maxWidth,
       contentYSpacing: 1,
       contentXSpacing: 3,
       contentXMargin: 10,

@@ -83,7 +83,8 @@ define( function( require ) {
       textColor: textColor,
       fill: panelFill,
       stroke: panelStroke,
-      panelTextFill: panelTextFill
+      panelTextFill: panelTextFill,
+      //minWidth: 400
     } );
 
     // add interactive potential diagram
@@ -145,7 +146,8 @@ define( function( require ) {
         textFill: panelTextFill,
         buttonAlign: forceControlPanelButtonAlign,
         showTitleWhenExpanded: !enableHeterogeneousAtoms,
-        panelMinWidth: atomicInteractionsControlPanel.width
+        minWidth: atomicInteractionsControlPanel.width,
+        maxWidth: atomicInteractionsControlPanel.width
       }
     );
 

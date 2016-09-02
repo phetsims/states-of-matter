@@ -69,7 +69,7 @@ define( function( require ) {
       fill: StatesOfMatterColorProfile.controlPanelBackgroundProperty,
       stroke: StatesOfMatterColorProfile.controlPanelStrokeProperty,
       lineWidth: 1,
-      cornerRadius: 5 // radius of the rounded corners on the background
+      cornerRadius: StatesOfMatterConstants.PANEL_CORNER_RADIUS
     }, options );
 
     Node.call( this );
@@ -152,6 +152,7 @@ define( function( require ) {
       stroke: options.stroke,
       align: 'center',
       lineWidth: options.lineWidth,
+      cornerRadius: options.cornerRadius,
       fill: options.fill,
       minWidth: 166
     } );

@@ -21,6 +21,7 @@ define( function( require ) {
   var Shape = require( 'KITE/Shape' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var StatesOfMatterColorProfile = require( 'STATES_OF_MATTER/common/view/StatesOfMatterColorProfile' );
+  var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
   var Text = require( 'SCENERY/nodes/Text' );
   var Vector2 = require( 'DOT/Vector2' );
 
@@ -97,16 +98,13 @@ define( function( require ) {
 
   /**
    * @param {Property<boolean>} expandedProperty - is to expand the phase diagram
-   * @param {Number} minWidth
    * @param {Object} [options] that can be passed on to the underlying node
    * @constructor
    */
-  function PhaseDiagram( expandedProperty, minWidth, options ) {
+  function PhaseDiagram( expandedProperty, options ) {
 
     Node.call( this );
     var accordionContent = new Node();
-
-    // add the base node for the chart, which is cl
 
     // phase diagram - the order in which these are added is important
     this.topOfSolidLiquidLine = new Vector2( DEFAULT_TOP_OF_SOLID_LIQUID_LINE.x, DEFAULT_TOP_OF_SOLID_LIQUID_LINE.y );
@@ -265,11 +263,12 @@ define( function( require ) {
       contentAlign: 'center',
       titleAlignX: 'center',
       buttonAlign: 'left',
-      cornerRadius: 4,
+      cornerRadius: StatesOfMatterConstants.PANEL_CORNER_RADIUS,
       contentYSpacing: -15,
       contentYMargin: 5,
       contentXMargin: 5,
-      minWidth: minWidth,
+      minWidth: options.minWidth,
+      maxWidth: options.maxWidth,
       buttonYMargin: 4,
       buttonXMargin: 5,
       buttonLength: 12,

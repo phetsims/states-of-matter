@@ -39,6 +39,7 @@ define( function( require ) {
 
   // constants
   var INSET = 10;
+  var PANEL_WIDTH = 170; // empirically determined to be wide enough for all contents using English strings with some margin
 
   // constants used when mapping the model pressure and temperature to the phase diagram.
   var TRIPLE_POINT_TEMPERATURE_IN_MODEL = StatesOfMatterConstants.TRIPLE_POINT_MONATOMIC_MODEL_TEMPERATURE;
@@ -51,8 +52,7 @@ define( function( require ) {
   var OFFSET_IN_2ND_REGION = TRIPLE_POINT_TEMPERATURE_ON_DIAGRAM -
                              ( SLOPE_IN_2ND_REGION * TRIPLE_POINT_TEMPERATURE_IN_MODEL );
 
-  // Used for calculating moving averages needed to mellow out the graph
-  // behavior.  Value empirically determined.
+  // Used for calculating moving averages needed to mellow out the graph behavior.  Value empirically determined.
   var MAX_NUM_HISTORY_SAMPLES = 100;
 
   // constants used in the layout process
@@ -195,24 +195,32 @@ define( function( require ) {
     // add interaction potential diagram
     if ( isInteractionDiagramEnabled ) {
       var epsilonControlInteractionPotentialDiagram = new EpsilonControlInteractionPotentialDiagram(
-        StatesOfMatterConstants.MAX_SIGMA, StatesOfMatterConstants.MIN_EPSILON, false,
-        multipleParticleModel, {
+        StatesOfMatterConstants.MAX_SIGMA,
+        StatesOfMatterConstants.MIN_EPSILON,
+        false,
+        multipleParticleModel,
+        {
+          maxWidth: PANEL_WIDTH,
+          minWidth: PANEL_WIDTH,
           right: this.layoutBounds.right - X_INSET
-        } );
+        }
+      );
       this.addChild( epsilonControlInteractionPotentialDiagram );
     }
 
     // add phase diagram - in SOM basic version by default phase diagram should be closed.
-    var minWidth = isInteractionDiagramEnabled ? epsilonControlInteractionPotentialDiagram.width : 169;
     multipleParticleModel.expandedProperty.value = isInteractionDiagramEnabled;
-    this.phaseDiagram = new PhaseDiagram( multipleParticleModel.expandedProperty, minWidth );
+    this.phaseDiagram = new PhaseDiagram( multipleParticleModel.expandedProperty, {
+      minWidth: PANEL_WIDTH,
+      maxWidth: PANEL_WIDTH
+    } );
 
     // add phase change control panel
     var phaseChangesMoleculesControlPanel = new PhaseChangesMoleculesControlPanel( multipleParticleModel, isInteractionDiagramEnabled, {
       right: this.layoutBounds.right - X_INSET,
       top: this.layoutBounds.top + Y_INSET,
-      maxWidth: this.phaseDiagram.width,
-      minWidth: this.phaseDiagram.width
+      maxWidth: PANEL_WIDTH,
+      minWidth: PANEL_WIDTH
     } );
     this.addChild( phaseChangesMoleculesControlPanel );
 
