@@ -18,12 +18,13 @@ define( function( require ) {
   var WaterAtomPositionUpdater = require( 'STATES_OF_MATTER/common/model/engine/WaterAtomPositionUpdater' );
   var Vector2 = require( 'DOT/Vector2' );
 
-  // parameters used for "hollywooding" of the water crystal
+  // constants, mostly parameters used for "hollywooding" of the water crystal
   var WATER_FULLY_MELTED_TEMPERATURE = 0.3;
   var WATER_FULLY_MELTED_ELECTROSTATIC_FORCE = 1.0;
   var WATER_FULLY_FROZEN_TEMPERATURE = 0.22;
   var WATER_FULLY_FROZEN_ELECTROSTATIC_FORCE = 4.0;
   var MAX_REPULSIVE_SCALING_FACTOR_FOR_WATER = 3.0;
+  var MAX_ROTATION_RATE = 16; // revolutions per second, empirically determined, see usage below
 
   /**
    * @param {MultipleParticleModel}  multipleParticleModel of the simulation
@@ -320,12 +321,20 @@ define( function( require ) {
         var xVel = moleculeVelocities[ i ].x + timeStepHalf * ( moleculeForces[ i ].x + nextMoleculeForces[ i ].x ) * this.massInverse;
         var yVel = moleculeVelocities[ i ].y + timeStepHalf * ( moleculeForces[ i ].y + nextMoleculeForces[ i ].y ) * this.massInverse;
         moleculeVelocities[ i ].setXY( xVel, yVel );
-        moleculeRotationRates[ i ] += timeStepHalf * ( moleculeTorques[ i ] + nextMoleculeTorques[ i ] ) *
-                                      this.inertiaInverse;
-        if ( !this.maxRotationRate || this.maxRotationRate < moleculeRotationRates[ i ] ){
-          this.maxRotationRate = moleculeRotationRates[ i ];
-          console.log( 'this.maxRotationRate = ' + this.maxRotationRate );
+        var rotationRate = moleculeRotationRates[ i ] +
+                           timeStepHalf * ( moleculeTorques[ i ] + nextMoleculeTorques[ i ] ) * this.inertiaInverse;
+
+        // If needed, clamp the rotation rate to an empirically determined max to prevent runaway rotation, see
+        // https://github.com/phetsims/states-of-matter/issues/152
+        if ( rotationRate > MAX_ROTATION_RATE ){
+          rotationRate = MAX_ROTATION_RATE;
         }
+        else if ( rotationRate < -MAX_ROTATION_RATE ){
+          rotationRate = -MAX_ROTATION_RATE;
+        }
+        moleculeRotationRates[ i ] = rotationRate;
+
+        // calculate the kinetic energy
         centersOfMassKineticEnergy += 0.5 * moleculeDataSet.getMoleculeMass() *
                                       moleculeVelocities[ i ].x * moleculeVelocities[ i ].x +
                                       moleculeVelocities[ i ].y * moleculeVelocities[ i ].y;
