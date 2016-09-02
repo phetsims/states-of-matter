@@ -143,8 +143,8 @@ define( function( require ) {
         //Reset  phase diagram state in SOM basic version
         multipleParticleModel.expandedProperty.value = isInteractionDiagramEnabled;
       },
-      bottom: this.layoutBounds.bottom - 5,
       right: this.layoutBounds.right - X_INSET,
+      bottom: this.layoutBounds.bottom - 5,
       radius: StatesOfMatterConstants.RESET_ALL_BUTTON_RADIUS
     } );
 

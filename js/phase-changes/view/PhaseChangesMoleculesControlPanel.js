@@ -216,7 +216,7 @@ define( function( require ) {
     } );
     var content = new VBox( { spacing: 4, children: [ radioButtonGroup ] } );
     var radioButtonPanel = new Panel( content, {
-      yMargin: 10,
+      yMargin: 8,
       stroke: options.stroke,
       align: 'center',
       fill: options.fill,

@@ -125,8 +125,8 @@ define( function( require ) {
           self.particleContainerNode.reset();
           self.compositeThermometerNode.reset();
         },
-        bottom: this.layoutBounds.bottom - 5,
         right: this.layoutBounds.right - LAYOUT_BOUNDS_RIGHT_OFFSET,
+        bottom: this.layoutBounds.bottom - 5,
         radius: StatesOfMatterConstants.RESET_ALL_BUTTON_RADIUS
       } );
 
