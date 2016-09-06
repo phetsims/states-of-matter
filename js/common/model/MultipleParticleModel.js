@@ -807,7 +807,7 @@ define( function( require ) {
       }
 
       // Execute the Verlet algorithm, a.k.a. the "particle engine", in order to determine the new particle positions.
-      for ( var i = 0; i < numParticleEngineSteps; i++ ) {
+      for ( var i = 0; i < numParticleEngineSteps && this.temperatureSetPoint > this.minModelTemperature; i++ ) {
 
         // if the container is exploded reduce the speed of particles
         // TODO: Is this really needed?  If so, comment should explain why.
@@ -830,15 +830,22 @@ define( function( require ) {
       // Adjust the temperature if needed.
       if ( this.heatingCoolingAmount !== 0 ) {
         var temperatureChange = this.heatingCoolingAmount * TEMPERATURE_CHANGE_RATE_FACTOR * dt;
-        var newTemperature = Math.min( this.temperatureSetPoint + temperatureChange, MAX_TEMPERATURE );
-        if ( newTemperature <= StatesOfMatterConstants.SOLID_TEMPERATURE * 0.9 && this.heatingCoolingAmount < 0 ) {
+        var newTemperature;
+        if ( this.temperatureSetPoint < StatesOfMatterConstants.SOLID_TEMPERATURE * 0.75 && this.heatingCoolingAmount < 0 ){
 
-          // The temperature goes down more slowly as we begin to approach absolute zero.
-          newTemperature = this.temperatureSetPoint * 0.95;  // multiplier determined empirically
+          // The temperature adjusts more slowly as we begin to approach absolute zero, multiplier empirically determined.
+          newTemperature = this.temperatureSetPoint + this.heatingCoolingAmount * TEMPERATURE_CHANGE_RATE_FACTOR * dt * 0.1;
         }
-        else if ( newTemperature <= this.minModelTemperature ) {
+        else{
+          newTemperature = Math.min( this.temperatureSetPoint + temperatureChange, MAX_TEMPERATURE );
+        }
+
+        // limit bottom end of termperature range
+        if ( newTemperature <= this.minModelTemperature ) {
           newTemperature = this.minModelTemperature;
         }
+
+        // record the new set point
         this.temperatureSetPoint = newTemperature;
         this.isoKineticThermostat.targetTemperature = this.temperatureSetPoint;
         this.andersenThermostat.targetTemperature = this.temperatureSetPoint;
