@@ -79,7 +79,7 @@ define( function( require ) {
   // parameters to control rates of change of the container size
   var MAX_CONTAINER_SHRINK_RATE = 1500; // in model units per second
   var MAX_CONTAINER_EXPAND_RATE = 4000; // in model units per second
-  var MAX_POST_EXPLOSION_CONTAINER_EXPANSION_RATE = 9000; // in model units per second
+  var POST_EXPLOSION_CONTAINER_EXPANSION_RATE = 9000; // in model units per second
 
   // countdown value used when recalculating temperature when the container size is changing
   var CONTAINER_SIZE_CHANGE_COUNTDOWN_RESET = 0.5; // in seconds, empirically determined
@@ -778,7 +778,7 @@ define( function( require ) {
 
         // The lid is blowing off the container, so increase the container size until the lid should be well off the screen.
         if ( this.particleContainerHeight < StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT * 3 ) {
-          this.particleContainerHeight += dt * MAX_POST_EXPLOSION_CONTAINER_EXPANSION_RATE;
+          this.particleContainerHeight += POST_EXPLOSION_CONTAINER_EXPANSION_RATE * dt;
         }
       }
 
@@ -1169,8 +1169,8 @@ define( function( require ) {
         particleDiameter = NeonAtom.RADIUS * 2;
       }
 
-      // Initialize the number of atoms assuming that the solid form, when
-      // made into a square, will consume about 1/3 the width of the container.
+      // Initialize the number of atoms assuming that the solid form, when made into a square, will consume about 1/3
+      // the width of the container.
       var numberOfAtoms = Math.pow( Math.round( StatesOfMatterConstants.CONTAINER_BOUNDS.width /
                                                 ( ( particleDiameter * 1.05 ) * 3 ) ), 2 );
 

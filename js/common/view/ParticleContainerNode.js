@@ -270,8 +270,10 @@ define( function( require ) {
       this.pressureMeter.setElbowEnabled( true );
       this.middleContainerLayer.addChild( this.pressureMeter );
       var pressureMeterXOffset = 60;
-      this.pressureMeter.setTranslation( this.containerLid.x - pressureMeterXOffset,
-        this.containerLid.y - PRESSURE_METER_ELBOW_OFFSET );
+      this.pressureMeter.setTranslation(
+        this.containerLid.x - pressureMeterXOffset,
+        this.containerLid.y - PRESSURE_METER_ELBOW_OFFSET
+      );
     }
     this.addChild( postParticleLayer );
     this.mutate( options );
@@ -334,7 +336,8 @@ define( function( require ) {
       // IMPORTANT NOTE: This method assumes that only the height of the container can change, since this was true when
       // this method was created and it isn't worth the effort to make it more general.  If this assumption is ever
       // invalidated, this routine will need to be changed.
-      var containerHeight = this.multipleParticleModel.getParticleContainerHeight();
+
+      var containerHeight = this.multipleParticleModel.getParticleContainerHeight(); // convenience variable
       if ( !this.multipleParticleModel.getContainerExploded() ) {
         if ( this.containerLid.getRotation() !== 0 ) {
           this.containerLid.setRotation( 0 );
@@ -343,23 +346,14 @@ define( function( require ) {
         this.containerLid.y = -this.modelViewTransform.modelToViewDeltaY( this.containmentAreaHeight - containerHeight );
       }
       else {
-        // Rotate the lid to create the visual appearance of it being blown off the top of the container.
-        var rotationAmount = -( Math.PI / 100 + ( Math.random() * Math.PI / 50 ) );
-        var centerPosY = -this.modelViewTransform.modelToViewDeltaY( this.containmentAreaHeight - containerHeight ) -
-                         ( this.containerLid.height / 2 ) + LID_POSITION_TWEAK_FACTOR;
-        var currentPosY = this.containerLid.y;
 
+        // the container has exploded, so rotate the lid as it goes up so that it looks like it have been blown off
+        var newCenterY = -this.modelViewTransform.modelToViewDeltaY( this.containmentAreaHeight - containerHeight );
+        var deltaY = newCenterY - this.centerY;
+        var rotationAmount = deltaY * Math.PI * 0.00013;
         this.containerLid.centerX = this.modelViewTransform.modelToViewDeltaX( this.containmentAreaWidth / 2 );
-        var newPosY;
-        if ( currentPosY > centerPosY ) {
-          newPosY = centerPosY;
-        }
-        else {
-          newPosY = currentPosY;
-        }
-
-        this.containerLid.y = newPosY;
-        this.containerLid.rotate( rotationAmount );
+        this.containerLid.centerY = newCenterY;
+        this.containerLid.rotateAround( this.containerLid.center, rotationAmount );
       }
       if ( this.pressureGaugeEnabled ) {
         this.updatePressureGauge();
