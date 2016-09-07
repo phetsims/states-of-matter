@@ -742,6 +742,9 @@ define( function( require ) {
         }
       }
 
+      // for performance reasons it is best to check this only once per step
+      this.particlesNearTopThisStep = this.particlesNearTop();
+
       if ( !this.isExploded ) {
 
         // Adjust the particle container height if needed.
@@ -806,25 +809,30 @@ define( function( require ) {
         this.residualTime -= particleMotionTimeStep;
       }
 
-      // Execute the Verlet algorithm, a.k.a. the "particle engine", in order to determine the new particle positions.
-      for ( var i = 0; i < numParticleEngineSteps && this.temperatureSetPoint > this.minModelTemperature; i++ ) {
+      // Only run the particle motion algorithm when the temperature is above absolute zero.  This prevents any motion
+      // from occurring what at absolute zero.
+      if ( this.temperatureSetPoint > this.minModelTemperature || this.particlesNearTopThisStep ){
 
-        // if the container is exploded reduce the speed of particles
-        // TODO: Is this really needed?  If so, comment should explain why.
-        if ( this.isExploded ) {
-          particleMotionTimeStep = particleMotionTimeStep * 0.9;
+        // Execute the Verlet algorithm, a.k.a. the "particle engine", in order to determine the new particle positions.
+        for ( var i = 0; i < numParticleEngineSteps; i++ ) {
+
+          // if the container is exploded reduce the speed of particles
+          // TODO: Is this really needed?  If so, comment should explain why.
+          if ( this.isExploded ) {
+            particleMotionTimeStep = particleMotionTimeStep * 0.9;
+          }
+          this.moleculeForceAndMotionCalculator.updateForcesAndMotion( particleMotionTimeStep );
         }
-        this.moleculeForceAndMotionCalculator.updateForcesAndMotion( particleMotionTimeStep );
-      }
-      this.runThermostat();
+        this.runThermostat();
 
-      // Sync up the positions of the normalized particles (the molecule data set) with the particles being monitored by
-      // the view (the model data set).
-      this.syncParticlePositions();
+        // Sync up the positions of the normalized particles (the molecule data set) with the particles being monitored by
+        // the view (the model data set).
+        this.syncParticlePositions();
 
-      // If the pressure changed, update it.
-      if ( this.getModelPressure() !== pressureBeforeAlgorithm ) {
-        this.updatePressure();
+        // If the pressure changed, update it.
+        if ( this.getModelPressure() !== pressureBeforeAlgorithm ) {
+          this.updatePressure();
+        }
       }
 
       // Adjust the temperature if needed.
@@ -921,7 +929,7 @@ define( function( require ) {
         temperatureIsChanging = true;
       }
 
-      if ( this.heightChangeCountdownTime !== 0 && this.particlesNearTop() ) {
+      if ( this.heightChangeCountdownTime !== 0 && this.particlesNearTopThisStep ) {
 
         // Either the height of the container is currently changing and there are particles close enough to the top that
         // they may be interacting with it, or new particles have been recently added.  Since either of these situations
