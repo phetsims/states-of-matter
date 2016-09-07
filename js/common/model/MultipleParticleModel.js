@@ -829,10 +829,11 @@ define( function( require ) {
         // the view (the model data set).
         this.syncParticlePositions();
 
-        // If the pressure changed, update it.
-        if ( this.getModelPressure() !== pressureBeforeAlgorithm ) {
-          this.updatePressure();
-        }
+      }
+
+      // If the pressure changed, update it.
+      if ( this.getModelPressure() !== pressureBeforeAlgorithm ) {
+        this.updatePressure();
       }
 
       // Adjust the temperature if needed.
