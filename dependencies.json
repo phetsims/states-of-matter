@@ -1,11 +1,11 @@
 {
-  "comment": "# states-of-matter 1.0.0-dev.10 Wed Aug 24 2016 15:42:52 GMT-0600 (Mountain Daylight Time)",
+  "comment": "# states-of-matter 1.0.0-dev.11 Thu Sep 08 2016 14:30:17 GMT-0600 (Mountain Daylight Time)",
   "assert": {
     "sha": "7d27130a4d27da15aa7f8a21bbfb9245288c1b44",
     "branch": "master"
   },
   "axon": {
-    "sha": "1fd9183228d023c668b50d2230f13c03b6963a96",
+    "sha": "b4404f00ef0bc210d9a5eaef3ef6e62153def751",
     "branch": "master"
   },
   "brand": {
@@ -13,19 +13,19 @@
     "branch": "master"
   },
   "chipper": {
-    "sha": "89c4a1038a90e3efc84872d4608d10442fb44831",
+    "sha": "9ca7cd71c11d17f423c6cdff0af024a90084d78c",
     "branch": "master"
   },
   "dot": {
-    "sha": "6e8a26f2976e70a018b205206d20049b35972cc3",
+    "sha": "23b13772fe60b19cd4d3b8e75ac177ff5dcec594",
     "branch": "master"
   },
   "joist": {
-    "sha": "ab5582ab6c8d87abb8bcdf947ef8144eb96ea7b6",
+    "sha": "c0442ba8d2ba1732aec95d4d475257318f1d3a89",
     "branch": "master"
   },
   "kite": {
-    "sha": "88f0c3a051a24f71a6465641badeccab1246820a",
+    "sha": "3b656b9a455ced42b9af90a15a25446b248490ab",
     "branch": "master"
   },
   "nitroglycerin": {
@@ -41,27 +41,27 @@
     "branch": "master"
   },
   "scenery": {
-    "sha": "0ab22ac3398ee77a64b502c451c7b0bea3ddf83d",
+    "sha": "cee9ad579b557b1b008ecdc8b492c2c34792ab87",
     "branch": "master"
   },
   "scenery-phet": {
-    "sha": "1650643cc70bd098ca10896188a6b7d5c731349b",
+    "sha": "9754557b6b7818ffbbef7aa507c8e262e6a311d0",
     "branch": "master"
   },
   "sherpa": {
-    "sha": "5ddfccd4d439c8ceeb4739de4c790d2e75cb7ef7",
+    "sha": "bcc28cd6e710446f4be153ad006e9a02eb412e8c",
     "branch": "master"
   },
   "states-of-matter": {
-    "sha": "8ce7fdc3dfa83144f6799a3de15e34d2db9fea83",
+    "sha": "734d56b39eed013086ea1f0e1c42cf0b9640f200",
     "branch": "master"
   },
   "sun": {
-    "sha": "061f2ea9ad6f26fd063ff9afedca9f77e5064747",
+    "sha": "9b59b7a0365e6ce2a063c995a8747620b8969306",
     "branch": "master"
   },
   "tandem": {
-    "sha": "43ebdfb3f57308563c7735b83ec9b4122eebf0a8",
+    "sha": "4a8edbc97f8b0900831da9ca1b83b7f312ce0cd4",
     "branch": "master"
   }
 }
