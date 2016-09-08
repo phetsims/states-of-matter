@@ -11,6 +11,7 @@ define( function( require ) {
     // modules
     var ArrowNode = require( 'SCENERY_PHET/ArrowNode' );
     var Circle = require( 'SCENERY/nodes/Circle' );
+    var Image = require( 'SCENERY/nodes/Image' );
     var inherit = require( 'PHET_CORE/inherit' );
     var Node = require( 'SCENERY/nodes/Node' );
     var Rectangle = require( 'SCENERY/nodes/Rectangle' );
@@ -38,12 +39,15 @@ define( function( require ) {
 
       var particleRadius = size.width * 0.02;
 
+      // create a node that will contain all particles and the arrow so that it can be turned into an image at the end
+      var particlesAndArrowNode = new Node();
+
       // particles on left side in solid form
       var cubeStartX = size.width * 0.15;
       var cubeStartY = size.height * 0.35;
       _.times( CUBE_HEIGHT, function( row ) {
         _.times( CUBE_WIDTH, function( column ) {
-          self.addChild( new Circle( particleRadius, {
+          particlesAndArrowNode.addChild( new Circle( particleRadius, {
             fill: PARTICLE_COLOR,
             centerX: cubeStartX + column * particleRadius * 2.1 + ( row % 2 === 0 ? particleRadius * 1.05 : 0 ),
             centerY: cubeStartY + row * particleRadius * 2.1
@@ -61,18 +65,20 @@ define( function( require ) {
           centerY: backgroundRect.height * 0.45
         }
       );
-      this.addChild( arrow );
+      particlesAndArrowNode.addChild( arrow );
 
       // particles on right side in gaseous form
       var gasCloudNode = new Node();
       var gasCloudRadius = size.height * 0.3;
-      function createGasParticle( angle, radius ){
+
+      function createGasParticle( angle, radius ) {
         return new Circle( particleRadius, {
           fill: PARTICLE_COLOR,
           centerX: radius * Math.cos( angle ),
           centerY: radius * Math.sin( angle )
         } );
       }
+
       // for the sake of getting this done quickly, the particles have simply been hand positioned
       gasCloudNode.addChild( createGasParticle( 0, 0 ) );
       gasCloudNode.addChild( createGasParticle( Math.PI * 0.08, gasCloudRadius * 0.8 ) );
@@ -100,7 +106,16 @@ define( function( require ) {
       gasCloudNode.addChild( createGasParticle( Math.PI * 1.94, gasCloudRadius * 0.7 ) );
       gasCloudNode.centerX = size.width * 0.75;
       gasCloudNode.centerY = size.height * 0.5;
-      this.addChild( gasCloudNode );
+      particlesAndArrowNode.addChild( gasCloudNode );
+
+      // for faster rendering, turn the collection of particles and the arrow into an image node
+      particlesAndArrowNode.toImage(
+        function( image ) { self.addChild( new Image( image ) ); },
+        0,
+        0,
+        size.width,
+        size.height
+      );
     }
 
     statesOfMatter.register( 'PhaseChangesIcon', PhaseChangesIcon );
