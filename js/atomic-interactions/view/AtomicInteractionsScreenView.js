@@ -83,8 +83,7 @@ define( function( require ) {
       textColor: textColor,
       fill: panelFill,
       stroke: panelStroke,
-      panelTextFill: panelTextFill,
-      //minWidth: 400
+      panelTextFill: panelTextFill
     } );
 
     // add interactive potential diagram

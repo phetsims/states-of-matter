@@ -21,7 +21,6 @@ define( function( require ) {
   var HandleNode = require( 'STATES_OF_MATTER/common/view/HandleNode' );
 
   // constants
-  var LID_POSITION_TWEAK_FACTOR = 65; // Empirically determined value for aligning lid and container body.
   var PRESSURE_METER_ELBOW_OFFSET = 30;
   var X_MARGIN = 5; // size in x direction beyond nominal container width
 
