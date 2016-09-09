@@ -26,13 +26,21 @@ define( function( require ) {
    * @constructor
    */
   function PhaseChangesScreen( isInteractionDiagramEnabled ) {
-    Screen.call( this, phaseChangesString, new PhaseChangesIcon( Screen.HOME_SCREEN_ICON_SIZE ),
+
+    var options = {
+      name: phaseChangesString,
+      backgroundColor: StatesOfMatterColorProfile.background.toCSS(),
+      homeScreenIcon: new PhaseChangesIcon( Screen.HOME_SCREEN_ICON_SIZE )
+    };
+
+    Screen.call( this,
       function() { return new MultipleParticleModel(); },
       function( model ) { return new PhaseChangesScreenView( model, isInteractionDiagramEnabled ); },
-      { backgroundColor: StatesOfMatterColorProfile.background.toCSS() }
+      options
     );
+
     var self = this;
-    StatesOfMatterColorProfile.backgroundProperty.link( function( color ){
+    StatesOfMatterColorProfile.backgroundProperty.link( function( color ) {
       self.backgroundColor = color;
     } );
   }

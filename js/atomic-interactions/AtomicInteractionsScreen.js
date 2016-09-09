@@ -19,20 +19,24 @@ define( function( require ) {
 
   /**
    * @param {boolean} enableHeterogeneousMolecules
-   * @param {string} simTitle
+   * @param {string} screenTitle
    * @constructor
    */
-  function AtomicInteractionsScreen( enableHeterogeneousMolecules, simTitle ) {
+  function AtomicInteractionsScreen( enableHeterogeneousMolecules, screenTitle ) {
 
-    //If this is a single-screen sim, then no icon is necessary.  If there are multiple screens, then the icon must be
-    // provided here.
-    var self = this;
-    Screen.call( this, simTitle, new AtomicInteractionsIcon( Screen.HOME_SCREEN_ICON_SIZE),
+    var options = {
+      name: screenTitle,
+      backgroundColor: StatesOfMatterColorProfile.background.toCSS(),
+      homeScreenIcon: new AtomicInteractionsIcon( Screen.HOME_SCREEN_ICON_SIZE )
+    };
+
+    Screen.call( this,
       function() { return new DualAtomModel(); },
       function( model ) { return new AtomicInteractionsScreenView( model, enableHeterogeneousMolecules ); },
-      { backgroundColor: StatesOfMatterColorProfile.background.toCSS() }
+      options
     );
 
+    var self = this;
     StatesOfMatterColorProfile.backgroundProperty.link( function( color ){
       self.backgroundColor = color;
     } );

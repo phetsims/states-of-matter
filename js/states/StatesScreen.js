@@ -24,16 +24,21 @@ define( function( require ) {
   /**
    * @constructor
    */
-  function StatesScreen( ) {
+  function StatesScreen() {
+
+    var options = {
+      name: statesString,
+      backgroundColor: StatesOfMatterColorProfile.background.toCSS(),
+      homeScreenIcon: new StatesIcon( Screen.HOME_SCREEN_ICON_SIZE )
+    };
+
     Screen.call( this,
-      statesString,
-      new StatesIcon( Screen.HOME_SCREEN_ICON_SIZE ),
       function() { return new MultipleParticleModel(); },
       function( model ) { return new StatesScreenView( model ); },
-      { backgroundColor: StatesOfMatterColorProfile.background.toCSS() }
+      options
     );
     var self = this;
-    StatesOfMatterColorProfile.backgroundProperty.link( function( color ){
+    StatesOfMatterColorProfile.backgroundProperty.link( function( color ) {
       self.backgroundColor = color;
     } );
   }
