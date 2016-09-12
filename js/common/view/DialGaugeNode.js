@@ -36,6 +36,9 @@ define( function( require ) {
   var MAX_PRESSURE = 200; // in atm units
   var TIME_BETWEEN_UPDATES = 0.5; // in seconds
 
+  var ELBOW_WIDTH = ( CONNECTOR_WIDTH_PROPORTION * 30 );
+  var ELBOW_LENGTH = ( CONNECTOR_LENGTH_PROPORTION * 60 );
+
   /**
    * @param {MultipleParticleModel} multipleParticleModel - model  of the simulation
    * @constructor
@@ -46,7 +49,6 @@ define( function( require ) {
     Node.call( this );
     this.multipleParticleModel = multipleParticleModel;
 
-    this.elbowEnabled = false;
     this.elbowHeight = 0;
     this.timeSinceLastUpdate = Number.POSITIVE_INFINITY;
 
@@ -64,14 +66,24 @@ define( function( require ) {
     } );
     this.textualReadout.center = this.textualReadoutBoxShape.center;
 
-    this.connector = new Path( null, {
-      lineWidth: 10,
-      stroke: new LinearGradient( 0, 0, 60, 60 )
-        .addColorStop( 0, '#D8D7D8' )
-        .addColorStop( 0.4, '#E1E2E3' )
-        .addColorStop( 0.8, '#D5D7D8' )
-        .addColorStop( 0.9, '#E2E3E4' )
+    // To accurately reproduce the previous version (which consisted of a path stroked with lineWidth 10), we need to
+    // include the stroke width effects (where it had a default lineCap of butt). We have a part that doesn't change
+    // shape (the connector) which includes the left part and the curve, and then an overlapping dynamic rectangle
+    // (the connectorExtension) whos height is adjusted to be the elbowHeight. This reduces the overhead significantly.
+    var halfStroke = 5;
+    this.connector = new Path( new Shape().moveTo( 0, -halfStroke )
+                               .lineTo( ELBOW_LENGTH + ELBOW_WIDTH / 2, -halfStroke )
+                               .quadraticCurveTo( ELBOW_LENGTH + ELBOW_WIDTH + halfStroke, -halfStroke, ELBOW_LENGTH + ELBOW_WIDTH + halfStroke, ELBOW_WIDTH / 2 )
+                               .lineTo( ELBOW_LENGTH - halfStroke, ELBOW_WIDTH + halfStroke )
+                               .lineTo( 0, ELBOW_WIDTH + halfStroke )
+                               .close(), {
+      fill: '#ddd'
     } );
+    this.connectorExtension = new Rectangle( ELBOW_LENGTH - halfStroke, ELBOW_WIDTH / 2, ELBOW_WIDTH + 2 * halfStroke, 0, {
+      fill: '#ddd'
+    } );
+    this.connector.addChild( this.connectorExtension );
+
     this.roundedRectangle = new Rectangle( 0, 0, 30, 25, 2, 2, {
       fill: new LinearGradient( 0, 0, 0, 25 )
         .addColorStop( 0, '#5F6973' )
@@ -91,6 +103,10 @@ define( function( require ) {
     multipleParticleModel.pressureProperty.link( function() {
       self.pressureChanged = true;
     } );
+
+    // TODO: was buggy before, where we had to update the connector once with the elbow disabled to position things properly.
+    this.connector.setTranslation( this.roundedRectangle.centerX + this.roundedRectangle.width / 2,
+                                   this.roundedRectangle.centerY - CONNECTOR_WIDTH_PROPORTION * 30 / 2 );
 
     this.updateConnector();
 
@@ -127,17 +143,6 @@ define( function( require ) {
     },
 
     /**
-     * This turns on/off the "elbow" portion of the connector, which allows
-     * the pressure gauge to connect to something above or below it.
-     * @public
-     * @param {boolean} elbowEnabled
-     */
-    setElbowEnabled: function( elbowEnabled ) {
-      this.elbowEnabled = elbowEnabled;
-      this.updateConnector();
-    },
-
-    /**
      * @public
      * Set the height of the elbow.  Height is specified with respect to the
      * vertical center of the node.
@@ -152,51 +157,7 @@ define( function( require ) {
      * @public
      */
     updateConnector: function() {
-      var width = ( CONNECTOR_WIDTH_PROPORTION * 30 );
-      var length = ( CONNECTOR_LENGTH_PROPORTION * 60 );
-      this.connectorPath = new Shape();
-      if ( !this.elbowEnabled ) {
-        var connectorShape = Shape.rect( 0, 0, length, width );
-        this.connector.setShape( connectorShape );
-        this.connector.setTranslation(
-          this.roundedRectangle.centerX + this.roundedRectangle.width / 2,
-          this.roundedRectangle.centerY - width / 2
-        );
-      }
-      else {
-        this.connectorPath.moveTo( 0, 0 );
-        if ( Math.abs( this.elbowHeight ) < width / 2 ) {
-          // width.
-          this.connectorPath.lineTo( length + width, 0 );
-          this.connectorPath.lineTo( (length + width), width );
-          this.connectorPath.lineTo( 0, width );
-          this.connectorPath.close();
-          this.connector.setShape( this.connectorPath );
-        }
-        else if ( this.elbowHeight < 0 ) {
-          // Connector is pointing upwards.
-          this.connectorPath.lineTo( length, 0 );
-          this.connectorPath.lineTo( length, (this.elbowHeight + width / 2) );
-          this.connectorPath.lineTo( (length + width), (this.elbowHeight + width / 2) );
-          this.connectorPath.lineTo( (length + width), width / 2 );
-          this.connectorPath.quadraticCurveTo( length + width, width, (length + (width / 2)), width );
-          this.connectorPath.lineTo( 0, width );
-          this.connectorPath.close();
-          this.connector.setShape( this.connectorPath );
-        }
-        else {
-
-          // Connector is pointing downwards.
-          this.connectorPath.lineTo( (length + (width / 2)), 0 );
-          this.connectorPath.quadraticCurveTo( length + width, 0, (length + width), width / 2 );
-          this.connectorPath.lineTo( (length + width), (this.elbowHeight + width / 2) );
-          this.connectorPath.lineTo( length, (this.elbowHeight + width / 2) );
-          this.connectorPath.lineTo( length, width );
-          this.connectorPath.lineTo( 0, width );
-          this.connectorPath.close();
-          this.connector.setShape( this.connectorPath );
-        }
-      }
+      this.connectorExtension.rectHeight = this.elbowHeight;
     }
   } );
 } );

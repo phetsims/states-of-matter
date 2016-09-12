@@ -266,7 +266,7 @@ define( function( require ) {
 
       // Add the pressure meter.
       this.pressureMeter = new DialGaugeNode( multipleParticleModel );
-      this.pressureMeter.setElbowEnabled( true );
+      this.pressureMeter.updateConnector();
       this.middleContainerLayer.addChild( this.pressureMeter );
       var pressureMeterXOffset = 60;
       this.pressureMeter.setTranslation(
