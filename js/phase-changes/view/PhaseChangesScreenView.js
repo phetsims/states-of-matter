@@ -104,9 +104,6 @@ define( function( require ) {
       bottom: heaterCoolerNode.top - INSET
     } );
 
-    // add particle container back node  before  particle Canvas layer
-    this.addChild( this.particleContainerNode.openNode );
-
     // add particle canvas layer for particle rendering
     this.particlesLayer = new ParticleImageCanvasNode( multipleParticleModel.particles, modelViewTransform, {
       centerX: heaterCoolerNode.centerX - PARTICLE_LAYER_X_OFFSET,
@@ -118,10 +115,6 @@ define( function( require ) {
     this.addChild( this.particleContainerNode );
 
     // adjust the container back node position
-    var containerOpenNodeXOffset = 50.4;
-    var containerOpenNodeYOffset = this.particleContainerNode.fingerNode.fingerImageNode.height - 10;
-    this.particleContainerNode.openNode.centerX = this.particleContainerNode.centerX + containerOpenNodeXOffset;
-    this.particleContainerNode.openNode.centerY = this.particleContainerNode.top + containerOpenNodeYOffset;
     this.addChild( heaterCoolerNode );
 
     // add compositeThermometer node
