@@ -40,7 +40,6 @@ define( function( require ) {
   var ObservableArray = require( 'AXON/ObservableArray' );
   var OxygenAtom = require( 'STATES_OF_MATTER/common/model/particle/OxygenAtom' );
   var PhaseStateEnum = require( 'STATES_OF_MATTER/common/PhaseStateEnum' );
-  var platform = require( 'PHET_CORE/platform' );
   var PropertySet = require( 'AXON/PropertySet' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
