@@ -40,7 +40,6 @@ define( function( require ) {
   var ObservableArray = require( 'AXON/ObservableArray' );
   var OxygenAtom = require( 'STATES_OF_MATTER/common/model/particle/OxygenAtom' );
   var PhaseStateEnum = require( 'STATES_OF_MATTER/common/PhaseStateEnum' );
-  var platform = require( 'PHET_CORE/platform' );
   var PropertySet = require( 'AXON/PropertySet' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
@@ -722,25 +721,6 @@ define( function( require ) {
 
       this.timeStepMovingAverage.addValue( dt );
       this.averageDt = this.timeStepMovingAverage.average;
-
-      // Platform specific code for adjusting performance on iPads, see https://github.com/phetsims/states-of-matter/issues/71.
-      if ( platform.mobileSafari &&
-           this.currentMolecule === StatesOfMatterConstants.WATER ) {
-
-        if ( this.averageDt < 1 / 35 ) {
-
-          // Life is good - this device is able to display water at a reasonable frame rate.
-          this.keepingUp = true;
-          this.maxParticleMoveTimePerStep = Number.POSITIVE_INFINITY;
-        }
-        else {
-
-          // This device is not able to keep up, so limit the maximum model advancement time to something that is more
-          // likely to run at a decent speed.  The value was empirically determined by testing on multiple devices.
-          this.keepingUp = false;
-          this.maxParticleMoveTimePerStep = MAX_PARTICLE_MOTION_TIME_STEP * 4;
-        }
-      }
 
       // for performance reasons it is best to check this only once per step
       this.particlesNearTopThisStep = this.particlesNearTop();
