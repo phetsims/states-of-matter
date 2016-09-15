@@ -260,7 +260,7 @@ define( function( require ) {
           break;
 
         default:
-          break;
+          throw( new Error( 'unsupported molecule type' ) ); // should never happen, debug if it does
       }
 
       if ( this.temperatureSetPoint <= this.minModelTemperature ) {
@@ -289,8 +289,8 @@ define( function( require ) {
     },
 
     /**
-     * Get the pressure value which is being calculated by the model and is
-     * not adjusted to represent any "real" units (such as atmospheres).
+     * Get the pressure value which is being calculated by the model and is not adjusted to represent any "real" units
+     * (such as atmospheres).
      * @return {number}
      * @public
      */
@@ -305,18 +305,17 @@ define( function( require ) {
      */
     setMoleculeType: function( moleculeID ) {
 
-      // Verify that this is a supported value.
-      if ( ( moleculeID !== StatesOfMatterConstants.DIATOMIC_OXYGEN ) &&
-           ( moleculeID !== StatesOfMatterConstants.NEON ) &&
-           ( moleculeID !== StatesOfMatterConstants.ARGON ) &&
-           ( moleculeID !== StatesOfMatterConstants.WATER ) &&
-           ( moleculeID !== StatesOfMatterConstants.USER_DEFINED_MOLECULE ) ) {
+      assert && assert(
+        moleculeID === StatesOfMatterConstants.DIATOMIC_OXYGEN ||
+        moleculeID === StatesOfMatterConstants.NEON ||
+        moleculeID === StatesOfMatterConstants.ARGON ||
+        moleculeID === StatesOfMatterConstants.WATER ||
+        moleculeID === StatesOfMatterConstants.USER_DEFINED_MOLECULE,
+        'unsupported molecule type'
+      );
 
-        throw new Error( 'ERROR: Unsupported molecule type.' );
-      }
-
-      // Retain the current phase so that we can set the particles back to
-      // this phase once they have been created and initialized.
+      // Retain the current phase so that we can set the particles back to this phase once they have been created and
+      // initialized.
       var phase = this.mapTemperatureToPhase();
 
       // Remove existing particles and reset the global model parameters.
@@ -354,7 +353,7 @@ define( function( require ) {
                                      ADJUSTABLE_ATOM_TRIPLE_POINT_IN_KELVIN;
           break;
         default:
-          throw new Error( 'Invalid current molecule' ); // Should never happen, so it should be debugged if it does.
+          throw( new Error( 'unsupported molecule type' ) ); // should never happen, debug if it does
       }
 
       // Reset the container size. This must be done after the diameter is initialized because the normalized size is
@@ -420,8 +419,7 @@ define( function( require ) {
           sigma = ConfigurableStatesOfMatterAtom.DEFAULT_RADIUS * 2;
           break;
         default:
-          console.error( 'Error: Unrecognized molecule type when setting sigma value.' );
-          sigma = 0;
+          throw( new Error( 'unsupported molecule type' ) ); // should never happen, debug if it does
       }
 
       return sigma;
@@ -454,8 +452,7 @@ define( function( require ) {
           epsilon = this.convertScaledEpsilonToEpsilon( this.moleculeForceAndMotionCalculator.getScaledEpsilon() );
           break;
         default:
-          console.log( 'Error: Unrecognized molecule type when getting epsilon value.' );
-          epsilon = 0;
+          throw( new Error( 'unsupported molecule type' ) ); // should never happen, debug if it does
       }
 
       return epsilon;
@@ -492,7 +489,7 @@ define( function( require ) {
           break;
 
         default:
-          break;
+          throw( new Error( 'unsupported molecule type' ) ); // should never happen, debug if it does
       }
 
       var mapKelvinToInternal = new LinearFunction(
@@ -680,8 +677,7 @@ define( function( require ) {
           this.initializeTriatomic( this.currentMolecule, phase );
           break;
         default:
-          console.error( 'ERROR: Unrecognized particle type, using default.' );
-          break;
+          throw( new Error( 'unsupported molecule type' ) ); // should never happen, debug if it does
       }
 
       // This is needed in case we were switching from another molecule that was under pressure.
@@ -723,24 +719,26 @@ define( function( require ) {
       this.timeStepMovingAverage.addValue( dt );
       this.averageDt = this.timeStepMovingAverage.average;
 
-      // Platform specific code for adjusting performance on iPads, see https://github.com/phetsims/states-of-matter/issues/71.
-      if ( platform.mobileSafari &&
-           this.currentMolecule === StatesOfMatterConstants.WATER ) {
+      /*
+       // Platform specific code for adjusting performance on iPads, see https://github.com/phetsims/states-of-matter/issues/71.
+       if ( platform.mobileSafari &&
+       this.currentMolecule === StatesOfMatterConstants.WATER ) {
 
-        if ( this.averageDt < 1 / 35 ) {
+       if ( this.averageDt < 1 / 35 ) {
 
-          // Life is good - this device is able to display water at a reasonable frame rate.
-          this.keepingUp = true;
-          this.maxParticleMoveTimePerStep = Number.POSITIVE_INFINITY;
-        }
-        else {
+       // Life is good - this device is able to display water at a reasonable frame rate.
+       this.keepingUp = true;
+       this.maxParticleMoveTimePerStep = Number.POSITIVE_INFINITY;
+       }
+       else {
 
-          // This device is not able to keep up, so limit the maximum model advancement time to something that is more
-          // likely to run at a decent speed.  The value was empirically determined by testing on multiple devices.
-          this.keepingUp = false;
-          this.maxParticleMoveTimePerStep = MAX_PARTICLE_MOTION_TIME_STEP * 4;
-        }
-      }
+       // This device is not able to keep up, so limit the maximum model advancement time to something that is more
+       // likely to run at a decent speed.  The value was empirically determined by testing on multiple devices.
+       this.keepingUp = false;
+       this.maxParticleMoveTimePerStep = MAX_PARTICLE_MOTION_TIME_STEP * 4;
+       }
+       }
+       */
 
       // for performance reasons it is best to check this only once per step
       this.particlesNearTopThisStep = this.particlesNearTop();
@@ -811,7 +809,7 @@ define( function( require ) {
 
       // Only run the particle motion algorithm when the temperature is above absolute zero.  This prevents any motion
       // from occurring what at absolute zero.
-      if ( this.temperatureSetPoint > this.minModelTemperature || this.particlesNearTopThisStep ){
+      if ( this.temperatureSetPoint > this.minModelTemperature || this.particlesNearTopThisStep ) {
 
         // Execute the Verlet algorithm, a.k.a. the "particle engine", in order to determine the new particle positions.
         for ( var i = 0; i < numParticleEngineSteps; i++ ) {
@@ -823,13 +821,14 @@ define( function( require ) {
           }
           this.moleculeForceAndMotionCalculator.updateForcesAndMotion( particleMotionTimeStep );
         }
-        this.runThermostat();
 
         // Sync up the positions of the normalized particles (the molecule data set) with the particles being monitored by
         // the view (the model data set).
         this.syncParticlePositions();
-
       }
+
+      // run the thermostat to keep particle energies from getting out of hand
+      this.runThermostat();
 
       // If the pressure changed, update it.
       if ( this.getModelPressure() !== pressureBeforeAlgorithm ) {
@@ -840,12 +839,12 @@ define( function( require ) {
       if ( this.heatingCoolingAmount !== 0 ) {
         var temperatureChange = this.heatingCoolingAmount * TEMPERATURE_CHANGE_RATE_FACTOR * dt;
         var newTemperature;
-        if ( this.temperatureSetPoint < StatesOfMatterConstants.SOLID_TEMPERATURE * 0.75 && this.heatingCoolingAmount < 0 ){
+        if ( this.temperatureSetPoint < StatesOfMatterConstants.SOLID_TEMPERATURE * 0.75 && this.heatingCoolingAmount < 0 ) {
 
           // The temperature adjusts more slowly as we begin to approach absolute zero, multiplier empirically determined.
           newTemperature = this.temperatureSetPoint + this.heatingCoolingAmount * TEMPERATURE_CHANGE_RATE_FACTOR * dt * 0.1;
         }
-        else{
+        else {
           newTemperature = Math.min( this.temperatureSetPoint + temperatureChange, MAX_TEMPERATURE );
         }
 

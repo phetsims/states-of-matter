@@ -40,6 +40,7 @@ define( function( require ) {
           atom = new OxygenAtom( 0, 0 );
           break;
         default:
+          assert && assert( false, 'invalid atom type' );
           atom = null;
           break;
       }
