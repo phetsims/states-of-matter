@@ -114,6 +114,9 @@ define( function( require ) {
         case AtomPair.ADJUSTABLE:
           self.setBothAtomTypes( AtomType.ADJUSTABLE );
           break;
+
+        default:
+          throw new Error( 'invalid atomPair: ' + atomPair );
       } //end of switch
     } );
 

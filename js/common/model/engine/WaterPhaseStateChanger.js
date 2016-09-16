@@ -63,6 +63,8 @@ define( function( require ) {
         case PhaseStateEnum.GAS:
           this.setPhaseGas();
           break;
+        default:
+          throw new Error( 'invalid phaseID: ' + phaseID );
       }
       var moleculeDataSet = this.multiPleParticleModel.getMoleculeDataSetRef();
 

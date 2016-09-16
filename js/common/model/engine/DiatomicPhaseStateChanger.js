@@ -65,6 +65,8 @@ define( function( require ) {
           this.setPhaseGas();
           postChangeModelSteps = 0;
           break;
+        default:
+          throw new Error( 'invalid phaseState: ' + phaseState );
       }
 
       var moleculeDataSet = this.multipleParticleModel.moleculeDataSet;

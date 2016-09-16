@@ -264,6 +264,9 @@ define( function( require ) {
           self.setShowAttractiveForces( true );
           self.setShowRepulsiveForces( true );
           self.setShowTotalForces( false );
+          break;
+        default:
+          throw new Error( 'invalid forces: ' + forces );
       }
     } );
 
