@@ -19,9 +19,15 @@ define( function( require ) {
       initialValue: 0
     }, options );
 
-    this.initialValue = options.initialValue;
+    // @public
     this.size = size;
+    this.average;
+
+    // @private
+    this.initialValue = options.initialValue;
     this.array = new Array( size );
+
+    // set up initial values
     this.reset();
   }
 
