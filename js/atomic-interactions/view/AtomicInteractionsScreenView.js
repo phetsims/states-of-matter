@@ -11,6 +11,7 @@ define( function( require ) {
   // modules
   var AquaRadioButton = require( 'SUN/AquaRadioButton' );
   var AtomicInteractionsControlPanel = require( 'STATES_OF_MATTER/atomic-interactions/view/AtomicInteractionsControlPanel' );
+  var AtomType = require( 'STATES_OF_MATTER/common/model/AtomType' );
   var Bounds2 = require( 'DOT/Bounds2' );
   var ForcesControlPanel = require( 'STATES_OF_MATTER/atomic-interactions/view/ForcesControlPanel' );
   var GrabbableParticleNode = require( 'STATES_OF_MATTER/atomic-interactions/view/GrabbableParticleNode' );
@@ -284,6 +285,7 @@ define( function( require ) {
 
     /**
      * Called by the animation loop.
+     * @public
      */
     step: function() {
       this.handlePositionChanged();
@@ -292,8 +294,8 @@ define( function( require ) {
 
     /**
      * Turn on/off the displaying of the force arrows that represent the attractive force.
-     * @public
      * @param {boolean} showForces
+     * @public
      */
     setShowAttractiveForces: function( showForces ) {
       this.movableParticleNode.setShowAttractiveForces( showForces );
@@ -303,8 +305,8 @@ define( function( require ) {
 
     /**
      * Turn on/off the displaying of the force arrows that represent the repulsive force.
-     * @public
      * @param {boolean} showForces
+     * @public
      */
     setShowRepulsiveForces: function( showForces ) {
       this.movableParticleNode.setShowRepulsiveForces( showForces );
@@ -313,10 +315,9 @@ define( function( require ) {
     },
 
     /**
-     * Turn on/off the displaying of the force arrows that represent the
-     * total force, i.e. attractive plus repulsive.
-     * @public
+     * Turn on/off the displaying of the force arrows that represent the total force, i.e. attractive plus repulsive.
      * @param {boolean} showForces
+     * @public
      */
     setShowTotalForces: function( showForces ) {
       this.movableParticleNode.setShowTotalForces( showForces );
@@ -325,8 +326,8 @@ define( function( require ) {
     },
 
     /**
-     * @public
      * @param {StatesOfMatterAtom} particle
+     * @public
      */
     handleFixedParticleAdded: function( particle ) {
 
@@ -343,6 +344,9 @@ define( function( require ) {
       // Add the push pin last so that it is on top of the fixed atom. Note that the particulars of how this is
       // positioned may need to change if a different image is used.
       this.addChild( this.pushPinNode );
+
+      // make sure the gradient is initially enabled for this particle
+      this.fixedParticleNode.setGradientEnabled( true );
     },
 
     /**
@@ -364,14 +368,14 @@ define( function( require ) {
       this.updatePositionMarkerOnDiagram();
       this.fixedParticleNode = null;
     },
+
     /**
-     * @public
      * @param particle
+     * @public
      */
     handleMovableParticleAdded: function( particle ) {
 
       // Add the atom node for this guy.
-
       this.movableParticle = particle;
       this.handNode = new HandNode(
         this.dualAtomModel,
@@ -403,7 +407,11 @@ define( function( require ) {
 
       // Update the position marker to represent the new particle's position.
       this.updatePositionMarkerOnDiagram();
+
+      // make sure the gradient is initially enabled for this particle
+      this.movableParticleNode.setGradientEnabled( true );
     },
+
     /**
      * @private
      */
@@ -427,28 +435,27 @@ define( function( require ) {
     },
 
     /**
+     * Handle a notification of a change in the radius of a particle. IMPORTANT NOTE: This is part of a workaround for
+     * a problem with rendering the spherical nodes.  To make a long story short, there were problems with resizing the
+     * nodes if they were being drawn with a gradient, so this (and other) code was added to effectively turn off the
+     * gradient while the particle was being resized and turn it back on when the particle started moving again.
      * @public
-     * Handle a notification of a change in the radius of a particle.
-     * IMPORTANT NOTE: This is part of a workaround for a problem with
-     * rendering the spherical nodes.  To make a long story short, there were
-     * problems with resizing the nodes if they were being drawn with a
-     * gradient, so this (and other) code was added to effectively turn off
-     * the gradient while the particle was being resized and turn it back
-     * on when it started moving again.
      */
     handleParticleRadiusChanged: function() {
 
-      // The particles are being resized, so disable the gradients if they
-      // are being used and if motion is paused.
+      // The particles are being resized, so disable the gradients for now - they will be reenabled when motion resumes.
       if ( this.dualAtomModel.getMotionPaused() ) {
-        if ( this.fixedParticleNode.getGradientEnabled() ) {
+        if ( this.fixedParticleNode.getGradientEnabled() &&
+             this.dualAtomModel.fixedAtom.getType() === AtomType.ADJUSTABLE ) {
           this.fixedParticleNode.setGradientEnabled( false );
         }
-        if ( this.movableParticleNode.getGradientEnabled() ) {
+        if ( this.movableParticleNode.getGradientEnabled() &&
+             this.dualAtomModel.movableAtom.getType() === AtomType.ADJUSTABLE ) {
           this.movableParticleNode.setGradientEnabled( false );
         }
       }
     },
+
     /**
      * @private
      */
@@ -491,9 +498,8 @@ define( function( require ) {
     },
 
     /**
-     * Update the position marker on the Lennard-Jones potential diagram.
-     * This will indicate the amount of potential being experienced between
-     * the two atoms in the model.
+     * Update the position marker on the Lennard-Jones potential diagram. This will indicate the amount of potential
+     * being experienced between the two atoms in the model.
      * @private
      */
     updatePositionMarkerOnDiagram: function() {
@@ -538,6 +544,7 @@ define( function( require ) {
         this.handNode.setMinX( minXInView );
       }
     },
+
     /**
      * @private
      */
