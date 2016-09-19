@@ -29,7 +29,7 @@ define( function( require ) {
     var options = {
       name: statesString,
       backgroundColor: StatesOfMatterColorProfile.background.toCSS(),
-      homeScreenIcon: new StatesIcon( Screen.HOME_SCREEN_ICON_SIZE )
+      homeScreenIcon: new StatesIcon( Screen.MINIMUM_HOME_SCREEN_ICON_SIZE )
     };
 
     Screen.call( this,
