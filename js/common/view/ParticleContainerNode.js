@@ -70,6 +70,27 @@ define( function( require ) {
       centerY: openEllipse.centerY
     } );
 
+    // add the opening at the top of the container
+    var openingNode = new Path( new Shape()
+      .ellipticalArc(
+        this.containerWidthWithMargin / 2,
+        ellipseCenterY,
+        openEllipseRadiusX,
+        this.containerWidthWithMargin / 2,
+        Math.PI / 2,
+        0,
+        2 * Math.PI,
+        false
+      ).close(),
+      {
+        lineWidth: 1,
+        stroke: '#606262',
+        centerX: openEllipse.centerX,
+        centerY: openEllipse.centerY
+      }
+    );
+    this.addChild( openingNode );
+
     var containerLeftShapeWidth = 25;
     var distanceFromTopInnerTop = 0;
 
@@ -226,20 +247,22 @@ define( function( require ) {
       // Add the finger for pressing down on the top of the container.
       this.fingerNode = new PointingHandNode( multipleParticleModel, modelViewTransform );
 
-      // responsible for positioning itself later based on user interaction.
+      // responsible for positioning itself later based on user interaction
       this.addChild( this.fingerNode );
       this.fingerNode.bottom = this.containerLid.top;
-      this.fingerNode.setTranslation( this.fingerNode.x + openEllipse.width / 2.4,
+      this.fingerNode.setTranslation(
+        this.fingerNode.x + openEllipse.width / 3,
         Math.abs( this.modelViewTransform.modelToViewDeltaY(
           StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT -
           this.multipleParticleModel.getParticleContainerHeight() ) ) +
-        this.containerLid.y - this.fingerNode.height + 20 );
+        this.containerLid.y - this.fingerNode.height + 15
+      );
 
       // Add the handle to the lid.
       this.containerLid.addChild( openInnerEllipse );
       var handleNode = new HandleNode();
       handleNode.centerX = openInnerEllipse.centerX;
-      handleNode.centerY = openInnerEllipse.centerY;
+      handleNode.bottom = openInnerEllipse.centerY + 5; // position tweaked a bit to look better
       this.containerLid.addChild( handleNode );
     }
 

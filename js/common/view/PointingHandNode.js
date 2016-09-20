@@ -18,8 +18,11 @@ define( function( require ) {
   var Image = require( 'SCENERY/nodes/Image' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
-  //images
-  var pointingHandImage = require( 'image!STATES_OF_MATTER/pointing-hand.png' );
+  // images
+  var pointingHandImage = require( 'mipmap!STATES_OF_MATTER/pointing-hand.png' );
+
+  // constants
+  var WIDTH = 150; // in screen coords
 
   /**
    *
@@ -59,7 +62,11 @@ define( function( require ) {
     } );
 
     // Load and scale the image.  Scale was empirically determined.
-    this.fingerImageNode = new Image( pointingHandImage, { scale: 0.45, cursor: 'ns-resize', pickable: true } );
+    this.fingerImageNode = new Image( pointingHandImage, {
+      cursor: 'ns-resize',
+      pickable: true
+    } );
+    this.fingerImageNode.scale( WIDTH / this.fingerImageNode.width );
 
     this.hintNode = new Node( {
       children: [ this.upArrowNode, this.downArrow ],
@@ -149,7 +156,7 @@ define( function( require ) {
       var containerHeight = this.multipleParticleModel.getParticleContainerHeight();
       if ( !this.multipleParticleModel.getContainerExploded() ) {
         this.y = Math.abs( this.modelViewTransform.modelToViewDeltaY( StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT -
-                 containerHeight ) ) - this.height + 20;
+                 containerHeight ) ) - this.height + 15;
       }
       else {
 
