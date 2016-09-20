@@ -28,7 +28,6 @@ define( function( require ) {
 
     // reusable vectors for reducing allocations
     this.force = new Vector2();
-    this.velocityIncrement = new Vector2();
   }
 
   statesOfMatter.register( 'MonatomicVerletAlgorithm', MonatomicVerletAlgorithm );
@@ -88,21 +87,27 @@ define( function( require ) {
       var timeStepSqrHalf = timeStep * timeStep * 0.5;
       var timeStepHalf = timeStep / 2;
       var i;
+      var moleculeCenterOfMassPosition;
+      var moleculeVelocity;
 
       // Update the positions of all particles based on their current velocities and the forces acting on them.
       for ( i = 0; i < numberOfAtoms; i++ ) {
 
+        moleculeVelocity = moleculeVelocities[ i ];
+        moleculeCenterOfMassPosition = moleculeCenterOfMassPositions[ i ];
+        var moleculeForce = moleculeForces[ i ];
+
         // calculate new position based on velocity and time
-        var yPos = moleculeCenterOfMassPositions[ i ].y + ( timeStep * moleculeVelocities[ i ].y ) +
-                             ( timeStepSqrHalf * moleculeForces[ i ].y );
-        var xPos = moleculeCenterOfMassPositions[ i ].x + ( timeStep * moleculeVelocities[ i ].x ) +
-                   ( timeStepSqrHalf * moleculeForces[ i ].x );
+        var yPos = moleculeCenterOfMassPosition.y + ( timeStep * moleculeVelocity.y ) +
+                             ( timeStepSqrHalf * moleculeForce.y );
+        var xPos = moleculeCenterOfMassPosition.x + ( timeStep * moleculeVelocity.x ) +
+                   ( timeStepSqrHalf * moleculeForce.x );
 
         // update this particle's inside/outside status and, if necessary, clamp its position
         if ( insideContainer[ i ] && !this.isNormalizedPositionInContainer( xPos, yPos ) ){
 
           // if this particle just blew out the top, that's fine - just update its status
-          if ( moleculeCenterOfMassPositions[ i ].y <= this.multipleParticleModel.normalizedTotalContainerHeight &&
+          if ( moleculeCenterOfMassPosition.y <= this.multipleParticleModel.normalizedTotalContainerHeight &&
                yPos > this.multipleParticleModel.normalizedTotalContainerHeight ){
             insideContainer[ i ] = false;
           }
@@ -112,22 +117,22 @@ define( function( require ) {
             // container as though it bounced off the side and reverse its velocity.
             if ( xPos > this.multipleParticleModel.normalizedContainerWidth ){
               xPos = this.multipleParticleModel.normalizedContainerWidth;
-              moleculeVelocities[ i ].x = -moleculeVelocities[ i ].x;
+              moleculeVelocity.x = -moleculeVelocity.x;
             }
             else if ( xPos < 0 ){
               xPos = 0;
-              moleculeVelocities[ i ].x = -moleculeVelocities[ i ].x;
+              moleculeVelocity.x = -moleculeVelocity.x;
             }
 
             if ( yPos < 0 ){
               yPos = 0;
-              moleculeVelocities[ i ].y = -moleculeVelocities[ i ].y;
+              moleculeVelocity.y = -moleculeVelocity.y;
             }
           }
         }
 
         // set the new position
-        moleculeCenterOfMassPositions[ i ].setXY( xPos, yPos );
+        moleculeCenterOfMassPosition.setXY( xPos, yPos );
       }
 
       // Synchronize the molecule and atom positions.
@@ -138,7 +143,7 @@ define( function( require ) {
       for ( i = 0; i < numberOfAtoms; i++ ) {
 
         var nextMoleculeForce = nextMoleculeForces[ i ];
-        var moleculeCenterOfMassPosition = moleculeCenterOfMassPositions[ i ];
+        moleculeCenterOfMassPosition = moleculeCenterOfMassPositions[ i ];
 
         // Get the force values caused by the container walls.
         this.calculateWallForce( moleculeCenterOfMassPosition, nextMoleculeForce );
@@ -204,17 +209,19 @@ define( function( require ) {
 
       // Calculate the new velocities based on the old ones and the forces that are acting on the particle.
       for ( i = 0; i < numberOfAtoms; i++ ) {
-        this.velocityIncrement.setX( timeStepHalf * ( moleculeForces[ i ].x + nextMoleculeForces[ i ].x ) );
-        this.velocityIncrement.setY( timeStepHalf * ( moleculeForces[ i ].y + nextMoleculeForces[ i ].y ) );
-        moleculeVelocities[ i ].add( this.velocityIncrement );
-        kineticEnergy += ( ( moleculeVelocities[ i ].x * moleculeVelocities[ i ].x ) +
-                           ( moleculeVelocities[ i ].y * moleculeVelocities[ i ].y ) ) / 2;
+        moleculeVelocity = moleculeVelocities[ i ];
+        moleculeVelocity.addXY(
+          timeStepHalf * ( moleculeForces[ i ].x + nextMoleculeForces[ i ].x ),
+          timeStepHalf * ( moleculeForces[ i ].y + nextMoleculeForces[ i ].y )
+        );
+        kineticEnergy += ( ( moleculeVelocity.x * moleculeVelocity.x ) +
+                           ( moleculeVelocity.y * moleculeVelocity.y ) ) / 2;
       }
 
       // Update the temperature.
       this.temperature = kineticEnergy / numberOfAtoms;
 
-      // Replace the new forces with the old ones.
+      // Replace the previous forces with the new ones.
       for ( i = 0; i < numberOfAtoms; i++ ) {
         moleculeForces[ i ].setXY( nextMoleculeForces[ i ].x, nextMoleculeForces[ i ].y );
       }
