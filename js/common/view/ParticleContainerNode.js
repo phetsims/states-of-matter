@@ -70,25 +70,6 @@ define( function( require ) {
       centerY: openEllipse.centerY
     } );
 
-    // container back node
-    this.openNode = new Path( new Shape()
-      .ellipticalArc(
-        this.containerWidthWithMargin / 2,
-        ellipseCenterY,
-        openEllipseRadiusX,
-        this.containerWidthWithMargin / 2,
-        Math.PI / 2,
-        0,
-        2 * Math.PI,
-        false
-      ).close(),
-      {
-        lineWidth: 1,
-        stroke: '#606262',
-        centerX: openEllipse.centerX,
-        centerY: openEllipse.centerY
-      }
-    );
     var containerLeftShapeWidth = 25;
     var distanceFromTopInnerTop = 0;
 
@@ -266,7 +247,7 @@ define( function( require ) {
 
       // Add the pressure meter.
       this.pressureMeter = new DialGaugeNode( multipleParticleModel );
-      this.pressureMeter.setElbowEnabled( true );
+      this.pressureMeter.updateConnector();
       this.middleContainerLayer.addChild( this.pressureMeter );
       var pressureMeterXOffset = 60;
       this.pressureMeter.setTranslation(
