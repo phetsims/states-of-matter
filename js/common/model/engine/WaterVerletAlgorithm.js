@@ -7,6 +7,7 @@
  *
  * @author John Blanco
  * @author Siddhartha Chinthapally (Actual Concepts)
+ * @author Jonathan Olson
  */
 define( function( require ) {
   'use strict';
@@ -171,12 +172,32 @@ define( function( require ) {
                                       ( temperatureFactor * (MAX_REPULSIVE_SCALING_FACTOR_FOR_WATER - 1 ) );
       }
 
-      this.calculateInterParticleInteractions( moleculeDataSet, moleculeCenterOfMassPositions, repulsiveForceScalingFactor, nextMoleculeForces, nextMoleculeTorques, atomPositions );
+      this.calculateInterParticleInteractions(
+        moleculeDataSet,
+        moleculeCenterOfMassPositions,
+        repulsiveForceScalingFactor,
+        nextMoleculeForces,
+        nextMoleculeTorques,
+        atomPositions
+      );
 
-      this.updateVelocityRotationAndEnergy( moleculeDataSet, numberOfMolecules, moleculeVelocities, timeStep, moleculeForces, nextMoleculeForces, moleculeRotationRates, moleculeTorques, nextMoleculeTorques );
+      this.updateVelocityRotationAndEnergy(
+        moleculeDataSet,
+        numberOfMolecules,
+        moleculeVelocities,
+        timeStep,
+        moleculeForces,
+        nextMoleculeForces,
+        moleculeRotationRates,
+        moleculeTorques,
+        nextMoleculeTorques
+      );
     },
 
-    updateMassPositionsAndAngles: function( moleculeDataSet, numberOfMolecules, moleculeCenterOfMassPositions, timeStep, moleculeVelocities, insideContainer, moleculeRotationAngles, moleculeRotationRates, moleculeTorques, moleculeForces ) {
+    updateMassPositionsAndAngles: function( moleculeDataSet, numberOfMolecules, moleculeCenterOfMassPositions, timeStep,
+                                            moleculeVelocities, insideContainer, moleculeRotationAngles,
+                                            moleculeRotationRates, moleculeTorques, moleculeForces ) {
+
       var timeStepSqrHalf = timeStep * timeStep * 0.5;
 
       // Update center of mass positions and angles for the molecules.
@@ -189,26 +210,26 @@ define( function( require ) {
                    ( timeStepSqrHalf * moleculeForces[ i ].y * this.massInverse );
 
         // update this particle's inside/outside status and, if necessary, clamp its position
-        if ( insideContainer[ i ] && !this.isNormalizedPositionInContainer( xPos, yPos ) ){
+        if ( insideContainer[ i ] && !this.isNormalizedPositionInContainer( xPos, yPos ) ) {
 
           // if this particle just blew out the top, that's fine - just update its status
           if ( moleculeCenterOfMassPositions[ i ].y <= this.multipleParticleModel.normalizedTotalContainerHeight &&
-               yPos > this.multipleParticleModel.normalizedTotalContainerHeight ){
+               yPos > this.multipleParticleModel.normalizedTotalContainerHeight ) {
             insideContainer[ i ] = false;
           }
           else {
             // This particle must have blown out the side due to an extreme velocity - reposition it inside the
             // container as though it bounced off the side and reverse its velocity.
-            if ( xPos > this.multipleParticleModel.normalizedContainerWidth ){
+            if ( xPos > this.multipleParticleModel.normalizedContainerWidth ) {
               xPos = this.multipleParticleModel.normalizedContainerWidth;
               moleculeVelocities[ i ].x = -moleculeVelocities[ i ].x;
             }
-            else if ( xPos < 0 ){
+            else if ( xPos < 0 ) {
               xPos = 0;
               moleculeVelocities[ i ].x = -moleculeVelocities[ i ].x;
             }
 
-            if ( yPos < 0 ){
+            if ( yPos < 0 ) {
               yPos = 0;
               moleculeVelocities[ i ].y = -moleculeVelocities[ i ].y;
             }
@@ -264,7 +285,10 @@ define( function( require ) {
       this.updatePressure( pressureZoneWallForce, timeStep );
     },
 
-    calculateInterParticleInteractions: function( moleculeDataSet, moleculeCenterOfMassPositions, repulsiveForceScalingFactor, nextMoleculeForces, nextMoleculeTorques, atomPositions ) {
+    calculateInterParticleInteractions: function( moleculeDataSet, moleculeCenterOfMassPositions,
+                                                  repulsiveForceScalingFactor, nextMoleculeForces, nextMoleculeTorques,
+                                                  atomPositions ) {
+
       // Calculate the force and torque due to inter-particle interactions.
       var numberOfSafeMolecules = moleculeDataSet.getNumberOfSafeMolecules();
       for ( var i = 0; i < numberOfSafeMolecules; i++ ) {
@@ -362,7 +386,9 @@ define( function( require ) {
       }
     },
 
-    updateVelocityRotationAndEnergy: function( moleculeDataSet, numberOfMolecules, moleculeVelocities, timeStep, moleculeForces, nextMoleculeForces, moleculeRotationRates, moleculeTorques, nextMoleculeTorques ) {
+    updateVelocityRotationAndEnergy: function( moleculeDataSet, numberOfMolecules, moleculeVelocities, timeStep,
+                                               moleculeForces, nextMoleculeForces, moleculeRotationRates,
+                                               moleculeTorques, nextMoleculeTorques ) {
       var timeStepHalf = timeStep / 2;
 
       // Update the velocities and rotation rates and calculate kinetic energy.
@@ -377,10 +403,10 @@ define( function( require ) {
 
         // If needed, clamp the rotation rate to an empirically determined max to prevent runaway rotation, see
         // https://github.com/phetsims/states-of-matter/issues/152
-        if ( rotationRate > MAX_ROTATION_RATE ){
+        if ( rotationRate > MAX_ROTATION_RATE ) {
           rotationRate = MAX_ROTATION_RATE;
         }
-        else if ( rotationRate < -MAX_ROTATION_RATE ){
+        else if ( rotationRate < -MAX_ROTATION_RATE ) {
           rotationRate = -MAX_ROTATION_RATE;
         }
         moleculeRotationRates[ i ] = rotationRate;
