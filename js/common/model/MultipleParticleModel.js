@@ -806,25 +806,20 @@ define( function( require ) {
         this.residualTime -= particleMotionTimeStep;
       }
 
-      // Only run the particle motion algorithm when the temperature is above absolute zero.  This prevents any motion
-      // from occurring what at absolute zero.
-      if ( this.temperatureSetPoint > this.minModelTemperature || this.particlesNearTopThisStep ) {
+      // Execute the Verlet algorithm, a.k.a. the "particle engine", in order to determine the new particle positions.
+      for ( var i = 0; i < numParticleEngineSteps; i++ ) {
 
-        // Execute the Verlet algorithm, a.k.a. the "particle engine", in order to determine the new particle positions.
-        for ( var i = 0; i < numParticleEngineSteps; i++ ) {
-
-          // if the container is exploded reduce the speed of particles
-          // TODO: Is this really needed?  If so, comment should explain why.
-          if ( this.isExploded ) {
-            particleMotionTimeStep = particleMotionTimeStep * 0.9;
-          }
-          this.moleculeForceAndMotionCalculator.updateForcesAndMotion( particleMotionTimeStep );
+        // if the container is exploded reduce the speed of particles
+        // TODO: Is this really needed?  If so, comment should explain why.
+        if ( this.isExploded ) {
+          particleMotionTimeStep = particleMotionTimeStep * 0.9;
         }
-
-        // Sync up the positions of the normalized particles (the molecule data set) with the particles being monitored by
-        // the view (the model data set).
-        this.syncParticlePositions();
+        this.moleculeForceAndMotionCalculator.updateForcesAndMotion( particleMotionTimeStep );
       }
+
+      // Sync up the positions of the normalized particles (the molecule data set) with the particles being monitored by
+      // the view (the model data set).
+      this.syncParticlePositions();
 
       // run the thermostat to keep particle energies from getting out of hand
       this.runThermostat();
