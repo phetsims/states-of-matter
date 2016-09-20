@@ -137,28 +137,28 @@ define( function( require ) {
       var pressureZoneWallForce = 0;
       for ( i = 0; i < numberOfAtoms; i++ ) {
 
-        // Clear the previous calculation's particle forces.
-        nextMoleculeForces[ i ].setXY( 0, 0 );
+        var nextMoleculeForce = nextMoleculeForces[ i ];
+        var moleculeCenterOfMassPosition = moleculeCenterOfMassPositions[ i ];
 
         // Get the force values caused by the container walls.
-        this.calculateWallForce( moleculeCenterOfMassPositions[ i ], nextMoleculeForces[ i ] );
+        this.calculateWallForce( moleculeCenterOfMassPosition, nextMoleculeForce );
 
         // Accumulate this force value as part of the pressure being
         // exerted on the walls of the container.
-        if ( nextMoleculeForces[ i ].y < 0 ) {
-          pressureZoneWallForce += -nextMoleculeForces[ i ].y;
+        if ( nextMoleculeForce.y < 0 ) {
+          pressureZoneWallForce += -nextMoleculeForce.y;
         }
-        else if ( moleculeCenterOfMassPositions[ i ].y > this.multipleParticleModel.normalizedContainerHeight / 2 ) {
+        else if ( moleculeCenterOfMassPosition.y > this.multipleParticleModel.normalizedContainerHeight / 2 ) {
           // If the particle bounced on one of the walls above the midpoint, add
           // in that value to the pressure.
-          pressureZoneWallForce += Math.abs( nextMoleculeForces[ i ].x );
+          pressureZoneWallForce += Math.abs( nextMoleculeForce.x );
         }
 
-        nextMoleculeForces[ i ].setY( nextMoleculeForces[ i ].y - this.multipleParticleModel.gravitationalAcceleration );
+        nextMoleculeForces[ i ].setY( nextMoleculeForce.y - this.multipleParticleModel.gravitationalAcceleration );
       }
 
       // Update the pressure calculation.
-      this.updatePressure( pressureZoneWallForce );
+      this.updatePressure( pressureZoneWallForce, timeStep );
 
       // If there are any atoms that are currently designated as "unsafe",
       // check them to see if they can be moved into the "safe" category.

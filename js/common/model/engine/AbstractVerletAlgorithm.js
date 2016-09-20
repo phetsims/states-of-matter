@@ -17,8 +17,8 @@ define( function( require ) {
   var Vector2 = require( 'DOT/Vector2' );
 
   // constants that control various aspects of the Verlet algorithm.
-  var PRESSURE_CALC_WEIGHTING = 0.999;
-  var WALL_DISTANCE_THRESHOLD = 1.122462048309373017; // honestly, I have no idea where this value came from
+  var PRESSURE_CALC_TIME_WINDOW = 12; // in seconds, empirically determined to be responsive but not jumpy
+  var WALL_DISTANCE_THRESHOLD = 1.122462048309373017; // distance at which repulsive LJ potential kicks in
   var SAFE_INTER_MOLECULE_DISTANCE = 2.0;
 
   // Pressure at which explosion of the container will occur.  This is currently set so that container blows roughly
@@ -72,7 +72,7 @@ define( function( require ) {
      * @returns {boolean}
      * @param {Vector2} position
      */
-    isNormalizedPositionInContainer: function( xPos, yPos ){
+    isNormalizedPositionInContainer: function( xPos, yPos ) {
       return xPos >= 0 && xPos <= this.multipleParticleModel.normalizedContainerWidth &&
              yPos >= 0 && yPos <= this.multipleParticleModel.normalizedTotalContainerHeight;
     },
@@ -310,28 +310,26 @@ define( function( require ) {
 
     /**
      * @param {number} pressureZoneWallForce
+     * @param {number} dt
      * @public
      */
-    updatePressure: function( pressureZoneWallForce ) {
+    updatePressure: function( pressureZoneWallForce, dt ) {
       if ( this.multipleParticleModel.isExploded ) {
         // If the container has exploded, there is essentially no pressure.
         this.pressure = 0;
       }
       else {
-        this.pressure = ( 1 - PRESSURE_CALC_WEIGHTING ) *
-                        ( pressureZoneWallForce /
-                          ( this.multipleParticleModel.normalizedContainerWidth +
-                            this.multipleParticleModel.normalizedContainerHeight
-                          )
-                        ) + PRESSURE_CALC_WEIGHTING * this.pressure;
+        this.pressure = ( dt / PRESSURE_CALC_TIME_WINDOW ) *
+                        ( pressureZoneWallForce / ( this.multipleParticleModel.normalizedContainerWidth +
+                                                    this.multipleParticleModel.normalizedContainerHeight ) ) +
+                        ( PRESSURE_CALC_TIME_WINDOW - dt ) / PRESSURE_CALC_TIME_WINDOW * this.pressure;
 
         if ( ( this.pressure > EXPLOSION_PRESSURE ) && !this.multipleParticleModel.isExploded ) {
           // The pressure has reached the point where the container should explode, so blow 'er up.
           this.multipleParticleModel.setContainerExploded( true );
         }
       }
-    }
-    ,
+    },
 
     // static final
     PARTICLE_INTERACTION_DISTANCE_THRESH_SQRD: 6.25,

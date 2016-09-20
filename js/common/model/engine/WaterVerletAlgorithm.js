@@ -212,7 +212,7 @@ define( function( require ) {
       }
 
       // Update the pressure calculation.
-      this.updatePressure( pressureZoneWallForce );
+      this.updatePressure( pressureZoneWallForce, timeStep );
 
       // If there are any atoms that are currently designated as "unsafe", check them to see if they can be moved into
       // the "safe" category.
