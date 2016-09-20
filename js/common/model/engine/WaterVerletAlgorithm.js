@@ -122,9 +122,27 @@ define( function( require ) {
       this.alteredCharges[ 1 ] = 1.67 * q0;
       this.alteredCharges[ 2 ] = 0.33 * q0;
 
-      this.updateMassPositionsAndAngles( moleculeDataSet, numberOfMolecules, moleculeCenterOfMassPositions, timeStep, moleculeVelocities, moleculeDataSet.insideContainer, moleculeRotationAngles, moleculeRotationRates, moleculeTorques, moleculeForces );
+      this.updateMassPositionsAndAngles(
+        moleculeDataSet,
+        numberOfMolecules,
+        moleculeCenterOfMassPositions,
+        timeStep,
+        moleculeVelocities,
+        moleculeDataSet.insideContainer,
+        moleculeRotationAngles,
+        moleculeRotationRates,
+        moleculeTorques,
+        moleculeForces
+      );
 
-      this.updateForceAndPressure( numberOfMolecules, nextMoleculeForces, nextMoleculeTorques, moleculeCenterOfMassPositions, temperatureSetPoint );
+      this.updateForceAndPressure(
+        numberOfMolecules,
+        nextMoleculeForces,
+        nextMoleculeTorques,
+        moleculeCenterOfMassPositions,
+        temperatureSetPoint,
+        timeStep
+      );
 
       // If there are any atoms that are currently designated as "unsafe", check them to see if they can be moved into
       // the "safe" category.
@@ -205,7 +223,8 @@ define( function( require ) {
       this.positionUpdater.updateAtomPositions( moleculeDataSet );
     },
 
-    updateForceAndPressure: function( numberOfMolecules, nextMoleculeForces, nextMoleculeTorques, moleculeCenterOfMassPositions, temperatureSetPoint ) {
+    updateForceAndPressure: function( numberOfMolecules, nextMoleculeForces, nextMoleculeTorques,
+                                      moleculeCenterOfMassPositions, temperatureSetPoint, timeStep ) {
       var pressureZoneWallForce = 0;
 
       // Calculate the force from the walls.  This force is assumed to act on the center of mass, so there is no torque.
@@ -242,7 +261,7 @@ define( function( require ) {
       }
 
       // Update the pressure calculation.
-      this.updatePressure( pressureZoneWallForce );
+      this.updatePressure( pressureZoneWallForce, timeStep );
     },
 
     calculateInterParticleInteractions: function( moleculeDataSet, moleculeCenterOfMassPositions, repulsiveForceScalingFactor, nextMoleculeForces, nextMoleculeTorques, atomPositions ) {
