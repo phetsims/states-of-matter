@@ -31,19 +31,17 @@ define( function( require ) {
   /**
    * @param {Particle} particle  - The particle in the model that this node will represent in the view.
    * @param {ModelViewTransform2} modelViewTransform to convert between model and view co-ordinates
-   * @param {boolean} useGradient - true to use a gradient when displaying the node, false if not.
    * The gradient is computationally intensive to create, so use only when needed.
    * @param {boolean} enableOverlap - true if the node should be larger than the actual particle, thus allowing particles
    * @constructor
    */
-  function ParticleNode( particle, modelViewTransform, useGradient, enableOverlap ) {
+  function ParticleNode( particle, modelViewTransform, enableOverlap ) {
     assert && assert( particle && modelViewTransform );
 
     Node.call( this );
 
     this.particle = particle;
     this.modelViewTransform = modelViewTransform;
-    this.useGradient = useGradient;
     this.overlapEnabled = enableOverlap;
     this.position = new Vector2();
 
@@ -56,7 +54,7 @@ define( function( require ) {
     }
 
     // Create the node that will represent this particle.
-    this.circle = new Path( new Shape().circle( 0, 0, circleDiameter / 2 ), { fill: this.choosePaint( particle ) } );
+    this.circle = new Path( new Shape().circle( 0, 0, circleDiameter / 2 ), { fill: this.createFill( particle ) } );
     this.addChild( this.circle );
 
     // Set ourself to be initially non-pickable so that we don't get mouse events.
@@ -68,31 +66,6 @@ define( function( require ) {
   statesOfMatter.register( 'ParticleNode', ParticleNode );
 
   return inherit( Node, ParticleNode, {
-
-    /**
-     * @returns {boolean}
-     * @public
-     */
-    getGradientEnabled: function() {
-      return this.useGradient;
-    },
-
-    /**
-     * @param {boolean} gradientEnabled
-     * @public
-     */
-    setGradientEnabled: function( gradientEnabled ) {
-      if ( this.useGradient !== gradientEnabled ) {
-        this.useGradient = gradientEnabled;
-
-        if ( this.useGradient ) {
-          this.circle.fill = this.choosePaint( this.particle );
-        }
-        else {
-          this.circle.fill = this.chooseColor( this.particle );
-        }
-      }
-    },
 
     /**
      * @public
@@ -110,10 +83,9 @@ define( function( require ) {
      */
     handleParticleRadiusChanged: function() {
 
-      if ( this.useGradient ) {
-        // If the size changes, the gradient must also change to match.
-        this.circle.fill = this.choosePaint( this.particle );
-      }
+      // If the size changes, the gradient must also change to match.
+      this.circle.fill = this.createFill( this.particle );
+
       var circleDiameter = this.particle.getRadius() * 2 * MVT_SCALE;
       if ( this.overlapEnabled ) {
         // Make node larger than particle so that overlap appears to happen when the particles collide.
@@ -123,11 +95,11 @@ define( function( require ) {
     },
 
     /**
-     * Select the color and create the solid or gradient paint for this particle.
+     * Select the color and create the gradient fill for this particle.
      * @return paint to use for this particle
      * @private
      */
-    choosePaint: function( atom ) {
+    createFill: function( atom ) {
 
       var baseColor = this.chooseColor( atom );
       var darkenedBaseColor = baseColor.colorUtilsDarker( 0.5 );
@@ -138,18 +110,13 @@ define( function( require ) {
         0.3
       );
 
-      if ( this.useGradient ) {
-        var radius = ( this.overlapEnabled ? ( atom.getRadius() * OVERLAP_ENLARGEMENT_FACTOR ) :
-                      atom.getRadius()) * MVT_SCALE;
+      var radius = ( this.overlapEnabled ? ( atom.getRadius() * OVERLAP_ENLARGEMENT_FACTOR ) :
+                     atom.getRadius()) * MVT_SCALE;
 
-        return ( new RadialGradient( 0, 0, 0, 0, 0, radius )
+      return ( new RadialGradient( 0, 0, 0, 0, 0, radius )
           .addColorStop( 0, baseColor )
           .addColorStop( 0.95, transparentDarkenedBasedColor )
-        );
-      }
-      else {
-        return baseColor;
-      }
+      );
     },
 
     /**
@@ -183,4 +150,5 @@ define( function( require ) {
       return baseColor;
     }
   } );
-} );
+} )
+;
