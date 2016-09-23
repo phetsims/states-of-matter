@@ -11,7 +11,6 @@ define( function( require ) {
   // modules
   var AquaRadioButton = require( 'SUN/AquaRadioButton' );
   var AtomicInteractionsControlPanel = require( 'STATES_OF_MATTER/atomic-interactions/view/AtomicInteractionsControlPanel' );
-  var AtomType = require( 'STATES_OF_MATTER/common/model/AtomType' );
   var Bounds2 = require( 'DOT/Bounds2' );
   var ForcesControlPanel = require( 'STATES_OF_MATTER/atomic-interactions/view/ForcesControlPanel' );
   var GrabbableParticleNode = require( 'STATES_OF_MATTER/atomic-interactions/view/GrabbableParticleNode' );
