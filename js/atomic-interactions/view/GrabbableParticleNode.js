@@ -22,15 +22,14 @@ define( function( require ) {
    * @param {DualAtomModel} dualAtomModel - model of the simulation
    * @param {StatesOfMatterAtom} particle
    * @param {ModelViewTransform2} modelViewTransform to convert between model and view co-ordinates
-   * @param {boolean} useGradient - true to use a gradient when displaying the node, false if not.
    * @param {boolean} enableOverlap - true if the node should be larger than the actual particle, thus allowing particles
    * @param {number} minX - grabbable particle  min x position
    * @param {number} maxX - grabbable particle  max x position
    * @constructor
    */
-  function GrabbableParticleNode( handNode, dualAtomModel, particle, modelViewTransform, useGradient, enableOverlap, minX, maxX ) {
+  function GrabbableParticleNode( handNode, dualAtomModel, particle, modelViewTransform,  enableOverlap, minX, maxX ) {
 
-    ParticleForceNode.call( this, particle, modelViewTransform, useGradient, enableOverlap );
+    ParticleForceNode.call( this, particle, modelViewTransform, enableOverlap );
 
     this.minX = minX;
     this.maxX = maxX;
