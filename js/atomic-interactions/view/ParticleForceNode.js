@@ -33,14 +33,13 @@ define( function( require ) {
   /**
    * @param {Particle} particle - The particle in the model that this node will represent in the view.
    * @param {ModelViewTransform2} modelViewTransform to convert between model and view co-ordinates
-   * @param {boolean} useGradient - true to use a gradient when displaying the node, false if not.
    * The gradient is computationally intensive to create, so use only when needed.
    * @param {boolean} enableOverlap - true if the node should be larger than the actual particle, thus allowing particles
    * @constructor
    */
-  function ParticleForceNode( particle, modelViewTransform, useGradient, enableOverlap ) {
+  function ParticleForceNode( particle, modelViewTransform, enableOverlap ) {
 
-    ParticleNode.call( this, particle, modelViewTransform, useGradient, enableOverlap );
+    ParticleNode.call( this, particle, modelViewTransform, enableOverlap );
 
     this.attractiveForce = 0;
     this.repulsiveForce = 0;

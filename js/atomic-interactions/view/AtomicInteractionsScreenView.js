@@ -11,7 +11,6 @@ define( function( require ) {
   // modules
   var AquaRadioButton = require( 'SUN/AquaRadioButton' );
   var AtomicInteractionsControlPanel = require( 'STATES_OF_MATTER/atomic-interactions/view/AtomicInteractionsControlPanel' );
-  var AtomType = require( 'STATES_OF_MATTER/common/model/AtomType' );
   var Bounds2 = require( 'DOT/Bounds2' );
   var ForcesControlPanel = require( 'STATES_OF_MATTER/atomic-interactions/view/ForcesControlPanel' );
   var GrabbableParticleNode = require( 'STATES_OF_MATTER/atomic-interactions/view/GrabbableParticleNode' );
@@ -274,10 +273,8 @@ define( function( require ) {
     dualAtomModel.atomDiameterProperty.link( function() {
       self.fixedParticleNode.handleParticleRadiusChanged();
       self.movableParticleNode.handleParticleRadiusChanged();
-      self.handleParticleRadiusChanged();
       self.updateMinimumXForMovableAtom();
     } );
-
 
     self.handNode.setVisible( true );
   }
@@ -335,7 +332,7 @@ define( function( require ) {
     handleFixedParticleAdded: function( particle ) {
 
       this.fixedParticle = particle;
-      this.fixedParticleNode = new ParticleForceNode( particle, this.modelViewTransform, true, true );
+      this.fixedParticleNode = new ParticleForceNode( particle, this.modelViewTransform, true );
       this.fixedParticleNode.setShowAttractiveForces( this.showAttractiveForces );
       this.fixedParticleNode.setShowRepulsiveForces( this.showRepulsiveForces );
       this.fixedParticleNode.setShowTotalForces( this.showTotalForces );
@@ -347,9 +344,6 @@ define( function( require ) {
       // Add the push pin last so that it is on top of the fixed atom. Note that the particulars of how this is
       // positioned may need to change if a different image is used.
       this.addChild( this.pushPinNode );
-
-      // make sure the gradient is initially enabled for this particle
-      this.fixedParticleNode.setGradientEnabled( true );
     },
 
     /**
@@ -393,7 +387,6 @@ define( function( require ) {
         particle,
         this.modelViewTransform,
         true,
-        true,
         0,
         1.0 / 0.0
       );
@@ -410,9 +403,6 @@ define( function( require ) {
 
       // Update the position marker to represent the new particle's position.
       this.updatePositionMarkerOnDiagram();
-
-      // make sure the gradient is initially enabled for this particle
-      this.movableParticleNode.setGradientEnabled( true );
     },
 
     /**
@@ -438,46 +428,12 @@ define( function( require ) {
     },
 
     /**
-     * Handle a notification of a change in the radius of a particle. IMPORTANT NOTE: This is part of a workaround for
-     * a problem with rendering the spherical nodes.  To make a long story short, there were problems with resizing the
-     * nodes if they were being drawn with a gradient, so this (and other) code was added to effectively turn off the
-     * gradient while the particle was being resized and turn it back on when the particle started moving again.
-     * @public
-     */
-    handleParticleRadiusChanged: function() {
-
-      // The particles are being resized, so disable the gradients for now - they will be reenabled when motion resumes.
-      if ( this.dualAtomModel.getMotionPaused() ) {
-        if ( this.fixedParticleNode.getGradientEnabled() &&
-             this.dualAtomModel.fixedAtom.getType() === AtomType.ADJUSTABLE ) {
-          this.fixedParticleNode.setGradientEnabled( false );
-        }
-        if ( this.movableParticleNode.getGradientEnabled() &&
-             this.dualAtomModel.movableAtom.getType() === AtomType.ADJUSTABLE ) {
-          this.movableParticleNode.setGradientEnabled( false );
-        }
-      }
-    },
-
-    /**
      * @private
      */
     handlePositionChanged: function() {
-      if ( !this.dualAtomModel.getMotionPaused() ) {
-        if ( !this.fixedParticleNode.getGradientEnabled() ) {
-          // The movable particle is moving, so turn the gradient back on.
-          this.fixedParticleNode.setGradientEnabled( true );
-        }
-
-        if ( !this.movableParticleNode.getGradientEnabled() ) {
-          // The movable particle is moving, so turn the gradient back on.
-          this.movableParticleNode.setGradientEnabled( true );
-        }
-      }
 
       this.updatePositionMarkerOnDiagram();
       this.updateForceVectors();
-
 
       var scale = Math.min( window.innerWidth / this.layoutBounds.width, window.innerHeight / this.layoutBounds.height );
       var atomWindowPosition = scale * ( this.modelViewTransform.modelToViewX(
