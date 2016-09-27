@@ -123,7 +123,7 @@ define( function( require ) {
       this.alteredCharges[ 1 ] = 1.67 * q0;
       this.alteredCharges[ 2 ] = 0.33 * q0;
 
-      this.updateMassPositionsAndAngles(
+      this.updatePositionsAndAngles(
         moleculeDataSet,
         numberOfMolecules,
         moleculeCenterOfMassPositions,
@@ -194,7 +194,7 @@ define( function( require ) {
       );
     },
 
-    updateMassPositionsAndAngles: function( moleculeDataSet, numberOfMolecules, moleculeCenterOfMassPositions, timeStep,
+    updatePositionsAndAngles: function( moleculeDataSet, numberOfMolecules, moleculeCenterOfMassPositions, timeStep,
                                             moleculeVelocities, insideContainer, moleculeRotationAngles,
                                             moleculeRotationRates, moleculeTorques, moleculeForces ) {
 

@@ -67,64 +67,48 @@ define( function( require ) {
     },
 
     /**
-     * Update the motion of the particles and the forces that are acting upon them.  This is the heart of this class,
-     * and it is here that the actual Verlet algorithm is contained.
-     * @public
+     * Update the position of the atoms based upon their current velocities and the forces acting on them.
+     * @private
      */
-    updateForcesAndMotion: function( timeStep ) {
+    updateAtomPositions: function( numberOfAtoms, atomCenterOfMassPositions, atomVelocities, atomForces,
+                                   insideContainer, timeStep ) {
 
-      var kineticEnergy = 0;
-      var potentialEnergy = 0;
-
-      // Obtain references to the model data and parameters so that we can perform fast manipulations.
-      var moleculeDataSet = this.multipleParticleModel.moleculeDataSet;
-      var numberOfAtoms = moleculeDataSet.numberOfAtoms;
-      var moleculeCenterOfMassPositions = moleculeDataSet.moleculeCenterOfMassPositions;
-      var moleculeVelocities = moleculeDataSet.moleculeVelocities;
-      var moleculeForces = moleculeDataSet.moleculeForces;
-      var nextMoleculeForces = moleculeDataSet.nextMoleculeForces;
-      var insideContainer = moleculeDataSet.insideContainer;
       var timeStepSqrHalf = timeStep * timeStep * 0.5;
-      var timeStepHalf = timeStep / 2;
-      var i;
-      var moleculeCenterOfMassPosition;
-      var moleculeVelocity;
 
-      // Update the positions of all particles based on their current velocities and the forces acting on them.
-      for ( i = 0; i < numberOfAtoms; i++ ) {
+      for ( var i = 0; i < numberOfAtoms; i++ ) {
 
-        moleculeVelocity = moleculeVelocities[ i ];
-        moleculeCenterOfMassPosition = moleculeCenterOfMassPositions[ i ];
-        var moleculeForce = moleculeForces[ i ];
+        var moleculeVelocity = atomVelocities[ i ];
+        var moleculeCenterOfMassPosition = atomCenterOfMassPositions[ i ];
+        var moleculeForce = atomForces[ i ];
 
         // calculate new position based on velocity and time
         var yPos = moleculeCenterOfMassPosition.y + ( timeStep * moleculeVelocity.y ) +
-                             ( timeStepSqrHalf * moleculeForce.y );
+                   ( timeStepSqrHalf * moleculeForce.y );
         var xPos = moleculeCenterOfMassPosition.x + ( timeStep * moleculeVelocity.x ) +
                    ( timeStepSqrHalf * moleculeForce.x );
 
         // update this particle's inside/outside status and, if necessary, clamp its position
-        if ( insideContainer[ i ] && !this.isNormalizedPositionInContainer( xPos, yPos ) ){
+        if ( insideContainer[ i ] && !this.isNormalizedPositionInContainer( xPos, yPos ) ) {
 
           // if this particle just blew out the top, that's fine - just update its status
           if ( moleculeCenterOfMassPosition.y <= this.multipleParticleModel.normalizedTotalContainerHeight &&
-               yPos > this.multipleParticleModel.normalizedTotalContainerHeight ){
+               yPos > this.multipleParticleModel.normalizedTotalContainerHeight ) {
             insideContainer[ i ] = false;
           }
-          else{
+          else {
 
             // This particle must have blown out the side due to an extreme velocity - reposition it inside the
             // container as though it bounced off the side and reverse its velocity.
-            if ( xPos > this.multipleParticleModel.normalizedContainerWidth ){
+            if ( xPos > this.multipleParticleModel.normalizedContainerWidth ) {
               xPos = this.multipleParticleModel.normalizedContainerWidth;
               moleculeVelocity.x = -moleculeVelocity.x;
             }
-            else if ( xPos < 0 ){
+            else if ( xPos < 0 ) {
               xPos = 0;
               moleculeVelocity.x = -moleculeVelocity.x;
             }
 
-            if ( yPos < 0 ){
+            if ( yPos < 0 ) {
               yPos = 0;
               moleculeVelocity.y = -moleculeVelocity.y;
             }
@@ -134,51 +118,45 @@ define( function( require ) {
         // set the new position
         moleculeCenterOfMassPosition.setXY( xPos, yPos );
       }
+    },
 
-      // Synchronize the molecule and atom positions.
-      this.positionUpdater.updateAtomPositions( moleculeDataSet );
-
-      // Calculate the forces exerted on the particles by the container walls and by gravity.
+    /**
+     * Update the forces acting on the particles from the container walls and gravity.
+     * @private
+     */
+    updateContainerAndGravitationalForces: function( numberOfAtoms, atomCenterOfMassPositions, nextAtomForces, timeStep ) {
       var pressureZoneWallForce = 0;
-      for ( i = 0; i < numberOfAtoms; i++ ) {
+      for ( var i = 0; i < numberOfAtoms; i++ ) {
 
-        var nextMoleculeForce = nextMoleculeForces[ i ];
-        moleculeCenterOfMassPosition = moleculeCenterOfMassPositions[ i ];
+        var nextAtomForce = nextAtomForces[ i ];
+        var atomCenterOfMassPosition = atomCenterOfMassPositions[ i ];
 
         // Get the force values caused by the container walls.
-        this.calculateWallForce( moleculeCenterOfMassPosition, nextMoleculeForce );
+        this.calculateWallForce( atomCenterOfMassPosition, nextAtomForce );
 
-        // Accumulate this force value as part of the pressure being
-        // exerted on the walls of the container.
-        if ( nextMoleculeForce.y < 0 ) {
-          pressureZoneWallForce += -nextMoleculeForce.y;
+        // Accumulate this force value as part of the pressure being exerted on the walls of the container.
+        if ( nextAtomForce.y < 0 ) {
+          pressureZoneWallForce += -nextAtomForce.y;
         }
-        else if ( moleculeCenterOfMassPosition.y > this.multipleParticleModel.normalizedContainerHeight / 2 ) {
-          // If the particle bounced on one of the walls above the midpoint, add
-          // in that value to the pressure.
-          pressureZoneWallForce += Math.abs( nextMoleculeForce.x );
+        else if ( atomCenterOfMassPosition.y > this.multipleParticleModel.normalizedContainerHeight / 2 ) {
+          // If the particle bounced on one of the walls above the midpoint, add in that value to the pressure.
+          pressureZoneWallForce += Math.abs( nextAtomForce.x );
         }
 
-        nextMoleculeForces[ i ].setY( nextMoleculeForce.y - this.multipleParticleModel.gravitationalAcceleration );
+        nextAtomForces[ i ].setY( nextAtomForce.y - this.multipleParticleModel.gravitationalAcceleration );
+
       }
-
-      // Update the pressure calculation.
       this.updatePressure( pressureZoneWallForce, timeStep );
+    },
 
-      // If there are any atoms that are currently designated as "unsafe",
-      // check them to see if they can be moved into the "safe" category.
-      if ( moleculeDataSet.numberOfSafeMolecules < numberOfAtoms ) {
-        this.updateMoleculeSafety();
-      }
-
-      var numberOfSafeAtoms = moleculeDataSet.numberOfSafeMolecules;
-
-      // Calculate the forces created through interactions with other particles.
-      for ( i = 0; i < numberOfSafeAtoms; i++ ) {
+    updateInterAtomForces: function( numberOfSafeAtoms, atomCenterOfMassPositions, nextAtomForces ) {
+      for ( var i = 0; i < numberOfSafeAtoms; i++ ) {
+        var atomCenterOfMassPositionsIX = atomCenterOfMassPositions[ i ].x;
+        var atomCenterOfMassPositionsIY = atomCenterOfMassPositions[ i ].y;
         for ( var j = i + 1; j < numberOfSafeAtoms; j++ ) {
 
-          var dx = moleculeCenterOfMassPositions[ i ].x - moleculeCenterOfMassPositions[ j ].x;
-          var dy = moleculeCenterOfMassPositions[ i ].y - moleculeCenterOfMassPositions[ j ].y;
+          var dx = atomCenterOfMassPositionsIX - atomCenterOfMassPositions[ j ].x;
+          var dy = atomCenterOfMassPositionsIY - atomCenterOfMassPositions[ j ].y;
           var distanceSqrd = ( dx * dx ) + ( dy * dy );
 
           if ( distanceSqrd === 0 ) {
@@ -198,14 +176,65 @@ define( function( require ) {
             var r2inv = 1 / distanceSqrd;
             var r6inv = r2inv * r2inv * r2inv;
             var forceScalar = 48 * r2inv * r6inv * ( r6inv - 0.5 ) * this.epsilon;
-            this.force.setX( dx * forceScalar );
-            this.force.setY( dy * forceScalar );
-            nextMoleculeForces[ i ].add( this.force );
-            nextMoleculeForces[ j ].subtract( this.force );
-            potentialEnergy += 4 * r6inv * ( r6inv - 1 ) + 0.016316891136;
+            var forceX = dx * forceScalar;
+            var forceY = dy * forceScalar;
+            nextAtomForces[ i ].addXY( forceX, forceY );
+            nextAtomForces[ j ].subtractXY( forceX, forceY );
           }
         }
       }
+    },
+
+    /**
+     * Update the motion of the particles and the forces that are acting upon them.  This is the heart of this class,
+     * and it is here that the actual Verlet algorithm is contained.
+     * @public
+     */
+    updateForcesAndMotion: function( timeStep ) {
+
+      var kineticEnergy = 0;
+
+      // Obtain references to the model data and parameters so that we can perform fast manipulations.
+      var moleculeDataSet = this.multipleParticleModel.moleculeDataSet;
+      var numberOfAtoms = moleculeDataSet.numberOfAtoms;
+      var moleculeCenterOfMassPositions = moleculeDataSet.moleculeCenterOfMassPositions;
+      var moleculeVelocities = moleculeDataSet.moleculeVelocities;
+      var moleculeForces = moleculeDataSet.moleculeForces;
+      var nextMoleculeForces = moleculeDataSet.nextMoleculeForces;
+      var insideContainer = moleculeDataSet.insideContainer;
+      var timeStepHalf = timeStep / 2;
+      var i;
+      var moleculeVelocity;
+
+      this.updateAtomPositions(
+        numberOfAtoms,
+        moleculeCenterOfMassPositions,
+        moleculeVelocities,
+        moleculeForces,
+        insideContainer,
+        timeStep
+      );
+
+      // Synchronize the atom positions.
+      this.positionUpdater.updateAtomPositions( moleculeDataSet );
+
+      this.updateContainerAndGravitationalForces(
+        numberOfAtoms,
+        moleculeCenterOfMassPositions,
+        nextMoleculeForces,
+        timeStep
+      );
+
+      // If there are any atoms that are currently designated as "unsafe", check them to see if they can be moved into
+      // the "safe" category.
+      if ( moleculeDataSet.numberOfSafeMolecules < numberOfAtoms ) {
+        this.updateMoleculeSafety();
+      }
+
+      var numberOfSafeAtoms = moleculeDataSet.numberOfSafeMolecules;
+
+      // Calculate the forces created through interactions with other particles.
+      this.updateInterAtomForces( numberOfSafeAtoms, moleculeCenterOfMassPositions, nextMoleculeForces );
 
       // Calculate the new velocities based on the old ones and the forces that are acting on the particle.
       for ( i = 0; i < numberOfAtoms; i++ ) {

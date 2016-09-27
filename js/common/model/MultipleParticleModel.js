@@ -746,6 +746,7 @@ define( function( require ) {
 
         // Adjust the particle container height if needed.
         if ( this.targetContainerHeight !== this.particleContainerHeight ) {
+          phet.timeTest = true;
           this.heightChangeCountdownTime = CONTAINER_SIZE_CHANGE_COUNTDOWN_RESET;
           var heightChange = this.targetContainerHeight - this.particleContainerHeight;
           if ( heightChange > 0 ) {
