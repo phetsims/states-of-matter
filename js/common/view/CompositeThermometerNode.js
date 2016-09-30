@@ -61,7 +61,6 @@ define( function( require ) {
       tubeWidth: 13,
       tubeHeight: 65
     } );
-    //this.addChild( thermometer );
 
     // add temperature combo box
     this.temperatureKelvinText = new Text( '', { font: new PhetFont( 10 ), maxWidth: 30 } );
@@ -84,10 +83,8 @@ define( function( require ) {
       itemXMargin: 2,
       itemYMargin: 2,
       buttonLineWidth: 0.4
-      //bottom: thermometer.top - 10,
-      //centerX: thermometer.centerX
     } );
-    //this.addChild( temperatureComboBox );
+
     var contentNode = new VBox( {
       spacing: 10,
       children: [
