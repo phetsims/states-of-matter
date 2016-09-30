@@ -42,7 +42,7 @@ define( function( require ) {
     this.pressureGaugeEnabled = pressureGaugeEnabled;
     this.containmentAreaWidth = StatesOfMatterConstants.CONTAINER_BOUNDS.width;
     this.containmentAreaHeight = StatesOfMatterConstants.CONTAINER_BOUNDS.height;
-    Node.call( this );
+    Node.call( this, { preventFit: true } );
     this.containerWidthWithMargin = StatesOfMatterConstants.VIEW_CONTAINER_WIDTH + 2 * X_MARGIN;
     var preParticleLayer = new Node();
     var postParticleLayer = new Node( { opacity: 0.9 } );
