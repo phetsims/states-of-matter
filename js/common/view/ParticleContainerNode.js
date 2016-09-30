@@ -341,12 +341,13 @@ define( function( require ) {
       // invalidated, this routine will need to be changed.
 
       var containerHeight = this.multipleParticleModel.getParticleContainerHeight(); // convenience variable
+      var containerLid = this.containerLid; // optimization
       if ( !this.multipleParticleModel.getContainerExploded() ) {
-        if ( this.containerLid.getRotation() !== 0 ) {
-          this.containerLid.setRotation( 0 );
+        if ( containerLid.getRotation() !== 0 ) {
+          containerLid.setRotation( 0 );
         }
-        this.containerLid.x = ( this.containerWidthWithMargin - this.containerLid.width ) / 2;
-        this.containerLid.y = -this.modelViewTransform.modelToViewDeltaY( this.containmentAreaHeight - containerHeight );
+        containerLid.x = ( this.containerWidthWithMargin - containerLid.width ) / 2;
+        containerLid.y = -this.modelViewTransform.modelToViewDeltaY( this.containmentAreaHeight - containerHeight );
       }
       else {
 
@@ -354,9 +355,9 @@ define( function( require ) {
         var newCenterY = -this.modelViewTransform.modelToViewDeltaY( this.containmentAreaHeight - containerHeight );
         var deltaY = newCenterY - this.centerY;
         var rotationAmount = deltaY * Math.PI * 0.00013;
-        this.containerLid.centerX = this.modelViewTransform.modelToViewDeltaX( this.containmentAreaWidth / 2 );
-        this.containerLid.centerY = newCenterY;
-        this.containerLid.rotateAround( this.containerLid.center, rotationAmount );
+        containerLid.centerX = this.modelViewTransform.modelToViewDeltaX( this.containmentAreaWidth / 2 );
+        containerLid.centerY = newCenterY;
+        containerLid.rotateAround( containerLid.center, rotationAmount );
       }
       if ( this.pressureGaugeEnabled ) {
         this.updatePressureGauge();
