@@ -37,13 +37,13 @@ define( function( require ) {
    */
   function ParticleContainerNode( multipleParticleModel, modelViewTransform, volumeControlEnabled, pressureGaugeEnabled, options ) {
 
+    Node.call( this, { preventFit: true } );
     this.multipleParticleModel = multipleParticleModel;
     this.modelViewTransform = modelViewTransform;
     this.pressureGaugeEnabled = pressureGaugeEnabled;
-    this.containmentAreaWidth = StatesOfMatterConstants.CONTAINER_BOUNDS.width;
     this.containmentAreaHeight = StatesOfMatterConstants.CONTAINER_BOUNDS.height;
-    Node.call( this, { preventFit: true } );
     this.containerWidthWithMargin = StatesOfMatterConstants.VIEW_CONTAINER_WIDTH + 2 * X_MARGIN;
+    this.containerViewCenterX = this.containerWidthWithMargin / 2;
     var preParticleLayer = new Node();
     var postParticleLayer = new Node( { opacity: 0.9 } );
     this.containerLid = new Node( { opacity: 0.9 } );
@@ -318,9 +318,11 @@ define( function( require ) {
             this.pressureMeter.setRotation( 0 );
           }
           this.pressureMeter.y = PRESSURE_GAUGE_Y_OFFSET;
-          this.pressureMeter.setElbowHeight( PRESSURE_METER_ELBOW_OFFSET +
-                                             Math.abs( this.modelViewTransform.modelToViewDeltaY( StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT -
-                                                                                                  containerHeight ) ) );
+          this.pressureMeter.setElbowHeight(
+            PRESSURE_METER_ELBOW_OFFSET + Math.abs( this.modelViewTransform.modelToViewDeltaY(
+              StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT - containerHeight
+            ) )
+          );
         }
         else {
           // The container is exploding, so spin and move the gauge.
@@ -342,21 +344,21 @@ define( function( require ) {
 
       var containerHeight = this.multipleParticleModel.getParticleContainerHeight(); // convenience variable
       var containerLid = this.containerLid; // optimization
+      var yPos = -this.modelViewTransform.modelToViewDeltaY( this.containmentAreaHeight - containerHeight );
+
       if ( !this.multipleParticleModel.getContainerExploded() ) {
         if ( containerLid.getRotation() !== 0 ) {
           containerLid.setRotation( 0 );
         }
-        containerLid.x = ( this.containerWidthWithMargin - containerLid.width ) / 2;
-        containerLid.y = -this.modelViewTransform.modelToViewDeltaY( this.containmentAreaHeight - containerHeight );
+        containerLid.setTranslation( 0, yPos );
       }
       else {
 
         // the container has exploded, so rotate the lid as it goes up so that it looks like it have been blown off
-        var newCenterY = -this.modelViewTransform.modelToViewDeltaY( this.containmentAreaHeight - containerHeight );
-        var deltaY = newCenterY - this.centerY;
+        var deltaY = yPos - this.centerY;
         var rotationAmount = deltaY * Math.PI * 0.00013;
-        containerLid.centerX = this.modelViewTransform.modelToViewDeltaX( this.containmentAreaWidth / 2 );
-        containerLid.centerY = newCenterY;
+        containerLid.centerX = this.containerViewCenterX;
+        containerLid.centerY = yPos;
         containerLid.rotateAround( containerLid.center, rotationAmount );
       }
       if ( this.pressureGaugeEnabled ) {
