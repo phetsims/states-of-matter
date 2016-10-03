@@ -339,8 +339,9 @@ define( function( require ) {
     TEMPERATURE_BELOW_WHICH_GRAVITY_INCREASES: 0.10,
     LOW_TEMPERATURE_GRAVITY_INCREASE_RATE: 50,
 
-    // Constant used to limit how close the atoms are allowed to get to one another so that we don't end up getting
-    // crazy big forces.
-    MIN_DISTANCE_SQUARED: 0.7225
+    // Constant used to limit the proximity of atoms when calculating the interaction potential.  This helps to prevent
+    // getting huge potential value numbers and thus high particle velocities.  It is in model units and is empirically
+    // determined such that the particles appear to interact well but don't go crazy when the container is compressed.
+    MIN_DISTANCE_SQUARED: 0.95
   } );
 } );

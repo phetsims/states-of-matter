@@ -66,8 +66,7 @@ define( function( require ) {
      * Update the position of the atoms based upon their current velocities and the forces acting on them.
      * @private
      */
-    updateAtomPositions: function( numberOfAtoms, atomCenterOfMassPositions, atomVelocities, atomForces,
-                                   insideContainer, timeStep ) {
+    updateAtomPositions: function( numberOfAtoms, atomCenterOfMassPositions, atomVelocities, atomForces, timeStep ) {
 
       var timeStepSqrHalf = timeStep * timeStep * 0.5;
       var accumulatedPressure = 0;
@@ -117,23 +116,17 @@ define( function( require ) {
             yPos = minY;
             atomVelocity.y = -atomVelocityY;
           }
-          else if ( yPos >= maxY ) {
-            if ( !this.multipleParticleModel.getContainerExploded() ) {
-              // This particle bounced off the top, so use the lid's velocity in calculation of the new velocity
-              // TODO: Do what it says in the comment just above.
-              yPos = maxY;
-              if ( atomVelocityY > 0 ) {
-                // TODO: The lid velocity seems to be in different units or something from the atom velocities, so
-                // TODO: I have a derating factor in here.  I'll either need to explain it or figure out the source
-                // TODO: of the apparent descrepency.
-                atomVelocity.y = -atomVelocityY + this.multipleParticleModel.normalizedLidVelocityY * 0.02;
-              }
-              accumulatedPressure += atomVelocityY;
+          else if ( yPos >= maxY && !this.multipleParticleModel.getContainerExploded() ) {
+            // This particle bounced off the top, so use the lid's velocity in calculation of the new velocity
+            // TODO: Do what it says in the comment just above.
+            yPos = maxY;
+            if ( atomVelocityY > 0 ) {
+              // TODO: The lid velocity seems to be in different units or something from the atom velocities, so
+              // TODO: I have a derating factor in here.  I'll either need to explain it or figure out the source
+              // TODO: of the apparent descrepency.
+              atomVelocity.y = -atomVelocityY + this.multipleParticleModel.normalizedLidVelocityY * 0.02;
             }
-            else {
-              // This particle has flown out the top of the container, so update its state to reflect this.
-              insideContainer[ i ] = false;
-            }
+            accumulatedPressure += atomVelocityY;
           }
         }
 
@@ -171,8 +164,8 @@ define( function( require ) {
             }
 
             if ( distanceSqrd < this.PARTICLE_INTERACTION_DISTANCE_THRESH_SQRD ) {
-              // This pair of particles is close enough to one another
-              // that we need to calculate their interaction forces.
+              // This pair of particles is close enough to one another that we need to calculate their interaction
+              // forces.
               if ( distanceSqrd < this.MIN_DISTANCE_SQUARED ) {
                 distanceSqrd = this.MIN_DISTANCE_SQUARED;
               }
@@ -205,7 +198,6 @@ define( function( require ) {
       var moleculeVelocities = moleculeDataSet.moleculeVelocities;
       var moleculeForces = moleculeDataSet.moleculeForces;
       var nextMoleculeForces = moleculeDataSet.nextMoleculeForces;
-      var insideContainer = moleculeDataSet.insideContainer;
       var timeStepHalf = timeStep / 2;
       var i;
       var moleculeVelocity;
@@ -215,7 +207,6 @@ define( function( require ) {
         moleculeCenterOfMassPositions,
         moleculeVelocities,
         moleculeForces,
-        insideContainer,
         timeStep
       );
 
