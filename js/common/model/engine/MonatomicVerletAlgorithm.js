@@ -25,9 +25,6 @@ define( function( require ) {
     AbstractVerletAlgorithm.call( this, multipleParticleModel );
     this.positionUpdater = MonatomicAtomPositionUpdater;
     this.epsilon = 1; // controls the strength of particle interaction
-
-    // reusable vectors for reducing allocations
-    this.force = new Vector2();
   }
 
   statesOfMatter.register( 'MonatomicVerletAlgorithm', MonatomicVerletAlgorithm );
@@ -77,110 +74,95 @@ define( function( require ) {
 
       for ( var i = 0; i < numberOfAtoms; i++ ) {
 
-        var moleculeVelocity = atomVelocities[ i ];
-        var moleculeCenterOfMassPosition = atomCenterOfMassPositions[ i ];
-        var moleculeForce = atomForces[ i ];
+        var atomVelocity = atomVelocities[ i ];
+        var atomVelocityX = atomVelocity.x; // optimization
+        var atomVelocityY = atomVelocity.y; // optimization
+        var atomCenterOfMassPosition = atomCenterOfMassPositions[ i ];
+        var atomForce = atomForces[ i ];
 
         // calculate new position based on velocity and time
-        var yPos = moleculeCenterOfMassPosition.y + ( timeStep * moleculeVelocity.y ) +
-                   ( timeStepSqrHalf * moleculeForce.y );
-        var xPos = moleculeCenterOfMassPosition.x + ( timeStep * moleculeVelocity.x ) +
-                   ( timeStepSqrHalf * moleculeForce.x );
+        var xPos = atomCenterOfMassPosition.x + ( timeStep * atomVelocityX ) +
+                   ( timeStepSqrHalf * atomForce.x );
+        var yPos = atomCenterOfMassPosition.y + ( timeStep * atomVelocityY ) +
+                   ( timeStepSqrHalf * atomForce.y );
 
-        // update this particle's inside/outside status and, if necessary, clamp its position
-        if ( insideContainer[ i ] && !this.isNormalizedPositionInContainer( xPos, yPos ) ) {
+        // handle any bouncing off of the walls of the container
+        if ( insideContainer[ i ] ) {
 
-          // if this particle just blew out the top, that's fine - just update its status
-          if ( moleculeCenterOfMassPosition.y <= this.multipleParticleModel.normalizedTotalContainerHeight &&
-               yPos > this.multipleParticleModel.normalizedTotalContainerHeight ) {
-            insideContainer[ i ] = false;
+          // handle bounce off the walls
+          if ( xPos <= 0 && atomVelocityX < 0 ){
+            xPos = 0;
+            atomVelocity.x = -atomVelocityX;
           }
-          else {
+          else if ( xPos >= this.multipleParticleModel.normalizedContainerWidth &&atomVelocityX > 0 ){
+            xPos = this.multipleParticleModel.normalizedContainerWidth;
+            atomVelocity.x = -atomVelocityX;
+          }
 
-            // This particle must have blown out the side due to an extreme velocity - reposition it inside the
-            // container as though it bounced off the side and reverse its velocity.
-            if ( xPos > this.multipleParticleModel.normalizedContainerWidth ) {
-              xPos = this.multipleParticleModel.normalizedContainerWidth;
-              moleculeVelocity.x = -moleculeVelocity.x;
+          // handle bounce off the bottom and top
+          if ( yPos <= 0 && atomVelocityY <= 0 ){
+            yPos = 0;
+            atomVelocity.y = -atomVelocityY;
+          }
+          else if ( yPos >= this.multipleParticleModel.normalizedContainerHeight ){
+            if ( !this.multipleParticleModel.getContainerExploded() ){
+              // This particle bounced off the top, so use the lid's velocity in calculation of the new velocity
+              // TODO: Do what it says in the comment just above.
+              yPos = this.multipleParticleModel.normalizedContainerHeight;
+              if ( atomVelocityY > 0 ){
+                atomVelocity.y = -atomVelocityY;
+              }
             }
-            else if ( xPos < 0 ) {
-              xPos = 0;
-              moleculeVelocity.x = -moleculeVelocity.x;
-            }
-
-            if ( yPos < 0 ) {
-              yPos = 0;
-              moleculeVelocity.y = -moleculeVelocity.y;
+            else{
+              // This particle has flown out the top of the container, so update its state to reflect this.
+              insideContainer[ i ] = false;
             }
           }
         }
 
         // set the new position
-        moleculeCenterOfMassPosition.setXY( xPos, yPos );
+        atomCenterOfMassPosition.setXY( xPos, yPos );
       }
     },
 
-    /**
-     * Update the forces acting on the particles from the container walls and gravity.
-     * @private
-     */
-    updateContainerAndGravitationalForces: function( numberOfAtoms, atomCenterOfMassPositions, nextAtomForces, timeStep ) {
-      var pressureZoneWallForce = 0;
+    updateInterAtomForces: function( numberOfAtoms, numberOfSafeAtoms, atomCenterOfMassPositions, nextAtomForces ) {
+
       for ( var i = 0; i < numberOfAtoms; i++ ) {
 
-        var nextAtomForce = nextAtomForces[ i ];
-        var atomCenterOfMassPosition = atomCenterOfMassPositions[ i ];
+        // update the forces for the 'safe' atoms
+        if ( i < numberOfSafeAtoms ){
+          var atomCenterOfMassPositionsIX = atomCenterOfMassPositions[ i ].x;
+          var atomCenterOfMassPositionsIY = atomCenterOfMassPositions[ i ].y;
+          var nextAtomForcesI = nextAtomForces[ i ];
 
-        // Get the force values caused by the container walls.
-        this.calculateWallForce( atomCenterOfMassPosition, nextAtomForce );
+          for ( var j = i + 1; j < numberOfSafeAtoms; j++ ) {
 
-        // Accumulate this force value as part of the pressure being exerted on the walls of the container.
-        if ( nextAtomForce.y < 0 ) {
-          pressureZoneWallForce += -nextAtomForce.y;
-        }
-        else if ( atomCenterOfMassPosition.y > this.multipleParticleModel.normalizedContainerHeight / 2 ) {
-          // If the particle bounced on one of the walls above the midpoint, add in that value to the pressure.
-          pressureZoneWallForce += Math.abs( nextAtomForce.x );
-        }
+            var dx = atomCenterOfMassPositionsIX - atomCenterOfMassPositions[ j ].x;
+            var dy = atomCenterOfMassPositionsIY - atomCenterOfMassPositions[ j ].y;
+            var distanceSqrd = ( dx * dx ) + ( dy * dy );
 
-        nextAtomForces[ i ].setY( nextAtomForce.y - this.multipleParticleModel.gravitationalAcceleration );
-
-      }
-      this.updatePressure( pressureZoneWallForce, timeStep );
-    },
-
-    updateInterAtomForces: function( numberOfSafeAtoms, atomCenterOfMassPositions, nextAtomForces ) {
-      for ( var i = 0; i < numberOfSafeAtoms; i++ ) {
-        var atomCenterOfMassPositionsIX = atomCenterOfMassPositions[ i ].x;
-        var atomCenterOfMassPositionsIY = atomCenterOfMassPositions[ i ].y;
-
-        for ( var j = i + 1; j < numberOfSafeAtoms; j++ ) {
-
-          var dx = atomCenterOfMassPositionsIX - atomCenterOfMassPositions[ j ].x;
-          var dy = atomCenterOfMassPositionsIY - atomCenterOfMassPositions[ j ].y;
-          var distanceSqrd = ( dx * dx ) + ( dy * dy );
-
-          if ( distanceSqrd === 0 ) {
-            // Handle the special case where the particles are right on top of each other by assigning an arbitrary
-            // spacing. In general, this only happens when injecting new particles.
-            dx = 1;
-            dy = 1;
-            distanceSqrd = 2;
-          }
-
-          if ( distanceSqrd < this.PARTICLE_INTERACTION_DISTANCE_THRESH_SQRD ) {
-            // This pair of particles is close enough to one another
-            // that we need to calculate their interaction forces.
-            if ( distanceSqrd < this.MIN_DISTANCE_SQUARED ) {
-              distanceSqrd = this.MIN_DISTANCE_SQUARED;
+            if ( distanceSqrd === 0 ) {
+              // Handle the special case where the particles are right on top of each other by assigning an arbitrary
+              // spacing. In general, this only happens when injecting new particles.
+              dx = 1;
+              dy = 1;
+              distanceSqrd = 2;
             }
-            var r2inv = 1 / distanceSqrd;
-            var r6inv = r2inv * r2inv * r2inv;
-            var forceScalar = 48 * r2inv * r6inv * ( r6inv - 0.5 ) * this.epsilon;
-            var forceX = dx * forceScalar;
-            var forceY = dy * forceScalar;
-            nextAtomForces[ i ].addXY( forceX, forceY );
-            nextAtomForces[ j ].subtractXY( forceX, forceY );
+
+            if ( distanceSqrd < this.PARTICLE_INTERACTION_DISTANCE_THRESH_SQRD ) {
+              // This pair of particles is close enough to one another
+              // that we need to calculate their interaction forces.
+              if ( distanceSqrd < this.MIN_DISTANCE_SQUARED ) {
+                distanceSqrd = this.MIN_DISTANCE_SQUARED;
+              }
+              var r2inv = 1 / distanceSqrd;
+              var r6inv = r2inv * r2inv * r2inv;
+              var forceScalar = 48 * r2inv * r6inv * ( r6inv - 0.5 ) * this.epsilon;
+              var forceX = dx * forceScalar;
+              var forceY = dy * forceScalar;
+              nextAtomForcesI.addXY( forceX, forceY );
+              nextAtomForces[ j ].subtractXY( forceX, forceY );
+            }
           }
         }
       }
@@ -219,23 +201,21 @@ define( function( require ) {
       // Synchronize the atom positions.
       this.positionUpdater.updateAtomPositions( moleculeDataSet );
 
-      this.updateContainerAndGravitationalForces(
-        numberOfAtoms,
-        moleculeCenterOfMassPositions,
-        nextMoleculeForces,
-        timeStep
-      );
+      // Initialize the forces acting on the atoms.
+      var accelerationDueToGravity = -this.multipleParticleModel.gravitationalAcceleration;
+      for ( i = 0; i < numberOfAtoms; i++ ) {
+        nextMoleculeForces[ i ].setXY( 0, accelerationDueToGravity );
+      }
 
       // If there are any atoms that are currently designated as "unsafe", check them to see if they can be moved into
       // the "safe" category.
       if ( moleculeDataSet.numberOfSafeMolecules < numberOfAtoms ) {
         this.updateMoleculeSafety();
       }
-
       var numberOfSafeAtoms = moleculeDataSet.numberOfSafeMolecules;
 
       // Calculate the forces created through interactions with other particles.
-      this.updateInterAtomForces( numberOfSafeAtoms, moleculeCenterOfMassPositions, nextMoleculeForces );
+      this.updateInterAtomForces( numberOfAtoms, numberOfSafeAtoms, moleculeCenterOfMassPositions, nextMoleculeForces );
 
       // Calculate the new velocities based on the old ones and the forces that are acting on the particle.
       for ( i = 0; i < numberOfAtoms; i++ ) {

@@ -840,6 +840,7 @@ define( function( require ) {
      */
     step: function( dt ) {
 
+      // TODO: Consider removing this at some point if things are working well.
       if ( window.phet.chipper.getQueryParameters().hasOwnProperty( 'somProfiler' ) ) {
         if ( this.dialogShownLastTime ) {
           this.accumulatedDt = 0;
@@ -865,7 +866,7 @@ define( function( require ) {
         this.numDts++;
         if ( this.accumulatedDt > 10 ) {
           alert( 'largest dt = ' + this.largestDt + '\n' +
-                 'smalles dt = ' + this.smallestDt + '\n' +
+                 'smallest dt = ' + this.smallestDt + '\n' +
                  'average dt = ' + ( this.accumulatedDt / this.numDts ) + '\n'
           );
           this.dialogShownLastTime = true;
