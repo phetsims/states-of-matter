@@ -153,6 +153,7 @@ define( function( require ) {
       for ( var i = 0; i < numberOfSafeAtoms; i++ ) {
         var atomCenterOfMassPositionsIX = atomCenterOfMassPositions[ i ].x;
         var atomCenterOfMassPositionsIY = atomCenterOfMassPositions[ i ].y;
+
         for ( var j = i + 1; j < numberOfSafeAtoms; j++ ) {
 
           var dx = atomCenterOfMassPositionsIX - atomCenterOfMassPositions[ j ].x;
@@ -239,21 +240,20 @@ define( function( require ) {
       // Calculate the new velocities based on the old ones and the forces that are acting on the particle.
       for ( i = 0; i < numberOfAtoms; i++ ) {
         moleculeVelocity = moleculeVelocities[ i ];
+        var moleculeForce = moleculeForces[ i ];
         moleculeVelocity.addXY(
-          timeStepHalf * ( moleculeForces[ i ].x + nextMoleculeForces[ i ].x ),
-          timeStepHalf * ( moleculeForces[ i ].y + nextMoleculeForces[ i ].y )
+          timeStepHalf * ( moleculeForce.x + nextMoleculeForces[ i ].x ),
+          timeStepHalf * ( moleculeForce.y + nextMoleculeForces[ i ].y )
         );
         kineticEnergy += ( ( moleculeVelocity.x * moleculeVelocity.x ) +
                            ( moleculeVelocity.y * moleculeVelocity.y ) ) / 2;
+
+        // update to the new force value for the next model step
+        moleculeForce.setXY( nextMoleculeForces[ i ].x, nextMoleculeForces[ i ].y );
       }
 
       // Update the temperature.
       this.temperature = kineticEnergy / numberOfAtoms;
-
-      // Replace the previous forces with the new ones.
-      for ( i = 0; i < numberOfAtoms; i++ ) {
-        moleculeForces[ i ].setXY( nextMoleculeForces[ i ].x, nextMoleculeForces[ i ].y );
-      }
     }
   } );
 } );
