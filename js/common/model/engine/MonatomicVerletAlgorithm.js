@@ -12,7 +12,6 @@ define( function( require ) {
 
   // modules
   var inherit = require( 'PHET_CORE/inherit' );
-  var Vector2 = require( 'DOT/Vector2' );
   var AbstractVerletAlgorithm = require( 'STATES_OF_MATTER/common/model/engine/AbstractVerletAlgorithm' );
   var MonatomicAtomPositionUpdater = require( 'STATES_OF_MATTER/common/model/engine/MonatomicAtomPositionUpdater' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
@@ -71,12 +70,14 @@ define( function( require ) {
                                    insideContainer, timeStep ) {
 
       var timeStepSqrHalf = timeStep * timeStep * 0.5;
+      var accumulatedPressure = 0;
 
       // Figure out the min and max positions assuming single particles and a normalized radius of 1.
       var minX = 1;
       var minY = 1;
       var maxX = this.multipleParticleModel.normalizedContainerWidth - 1;
       var maxY = this.multipleParticleModel.normalizedContainerHeight - 1;
+      var middleHeight = this.multipleParticleModel.normalizedContainerHeight / 2;
 
       for ( var i = 0; i < numberOfAtoms; i++ ) {
 
@@ -93,33 +94,43 @@ define( function( require ) {
                    ( timeStepSqrHalf * atomForce.y );
 
         // handle any bouncing off of the walls of the container
-        if ( insideContainer[ i ] ) {
+        if ( this.isNormalizedPositionInContainer( xPos, yPos ) ) {
 
           // handle bounce off the walls
-          if ( xPos <= minX && atomVelocityX < 0 ){
+          if ( xPos <= minX && atomVelocityX < 0 ) {
             xPos = minX;
             atomVelocity.x = -atomVelocityX;
+            if ( xPos > middleHeight ) {
+              accumulatedPressure += -atomVelocityX;
+            }
           }
-          else if ( xPos >= maxX && atomVelocityX > 0 ){
+          else if ( xPos >= maxX && atomVelocityX > 0 ) {
             xPos = maxX;
             atomVelocity.x = -atomVelocityX;
+            if ( xPos > middleHeight ) {
+              accumulatedPressure += atomVelocityX;
+            }
           }
 
           // handle bounce off the bottom and top
-          if ( yPos <= minY && atomVelocityY <= 0 ){
+          if ( yPos <= minY && atomVelocityY <= 0 ) {
             yPos = minY;
             atomVelocity.y = -atomVelocityY;
           }
-          else if ( yPos >= maxY ){
-            if ( !this.multipleParticleModel.getContainerExploded() ){
+          else if ( yPos >= maxY ) {
+            if ( !this.multipleParticleModel.getContainerExploded() ) {
               // This particle bounced off the top, so use the lid's velocity in calculation of the new velocity
               // TODO: Do what it says in the comment just above.
               yPos = maxY;
-              if ( atomVelocityY > 0 ){
-                atomVelocity.y = -atomVelocityY;
+              if ( atomVelocityY > 0 ) {
+                // TODO: The lid velocity seems to be in different units or something from the atom velocities, so
+                // TODO: I have a derating factor in here.  I'll either need to explain it or figure out the source
+                // TODO: of the apparent descrepency.
+                atomVelocity.y = -atomVelocityY + this.multipleParticleModel.normalizedLidVelocityY * 0.02;
               }
+              accumulatedPressure += atomVelocityY;
             }
-            else{
+            else {
               // This particle has flown out the top of the container, so update its state to reflect this.
               insideContainer[ i ] = false;
             }
@@ -129,14 +140,18 @@ define( function( require ) {
         // set the new position
         atomCenterOfMassPosition.setXY( xPos, yPos );
       }
+
+      // update the pressure
+      this.updatePressure( accumulatedPressure * 40, timeStep ); // TODO: Move multiplier to base case when all subclasses are working with new approach
     },
 
+    // @private
     updateInterAtomForces: function( numberOfAtoms, numberOfSafeAtoms, atomCenterOfMassPositions, nextAtomForces ) {
 
       for ( var i = 0; i < numberOfAtoms; i++ ) {
 
         // update the forces for the 'safe' atoms
-        if ( i < numberOfSafeAtoms ){
+        if ( i < numberOfSafeAtoms ) {
           var atomCenterOfMassPositionsIX = atomCenterOfMassPositions[ i ].x;
           var atomCenterOfMassPositionsIY = atomCenterOfMassPositions[ i ].y;
           var nextAtomForcesI = nextAtomForces[ i ];

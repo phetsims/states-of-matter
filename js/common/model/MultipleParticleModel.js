@@ -174,6 +174,9 @@ define( function( require ) {
     // @public, normalized version of the total container height regardless of the lid position
     this.normalizedTotalContainerHeight = this.particleContainerHeight / this.particleDiameter;
 
+    // @public, normalized velocity at which lid is moving in y direction
+    this.normalizedLidVelocityY = 0;
+
     // Do just enough initialization to allow the view and control portions of the simulation to be properly created.
     // The rest of the initialization will occur when the model is reset.
     this.initializeModelParameters();
@@ -746,11 +749,14 @@ define( function( require ) {
             }
           }
           this.normalizedContainerHeight = this.particleContainerHeight / this.particleDiameter;
+          this.normalizedLidVelocityY = ( heightChange / this.particleDiameter ) / dt;
+
         }
         else {
           if ( this.heightChangeCountdownTime > 0 ) {
             this.heightChangeCountdownTime = Math.max( this.heightChangeCountdownTime - dt, 0 );
           }
+          this.normalizedLidVelocityY = 0;
         }
       }
       else {
