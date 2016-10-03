@@ -72,6 +72,12 @@ define( function( require ) {
 
       var timeStepSqrHalf = timeStep * timeStep * 0.5;
 
+      // Figure out the min and max positions assuming single particles and a normalized radius of 1.
+      var minX = 1;
+      var minY = 1;
+      var maxX = this.multipleParticleModel.normalizedContainerWidth - 1;
+      var maxY = this.multipleParticleModel.normalizedContainerHeight - 1;
+
       for ( var i = 0; i < numberOfAtoms; i++ ) {
 
         var atomVelocity = atomVelocities[ i ];
@@ -90,25 +96,25 @@ define( function( require ) {
         if ( insideContainer[ i ] ) {
 
           // handle bounce off the walls
-          if ( xPos <= 0 && atomVelocityX < 0 ){
-            xPos = 0;
+          if ( xPos <= minX && atomVelocityX < 0 ){
+            xPos = minX;
             atomVelocity.x = -atomVelocityX;
           }
-          else if ( xPos >= this.multipleParticleModel.normalizedContainerWidth &&atomVelocityX > 0 ){
-            xPos = this.multipleParticleModel.normalizedContainerWidth;
+          else if ( xPos >= maxX && atomVelocityX > 0 ){
+            xPos = maxX;
             atomVelocity.x = -atomVelocityX;
           }
 
           // handle bounce off the bottom and top
-          if ( yPos <= 0 && atomVelocityY <= 0 ){
-            yPos = 0;
+          if ( yPos <= minY && atomVelocityY <= 0 ){
+            yPos = minY;
             atomVelocity.y = -atomVelocityY;
           }
-          else if ( yPos >= this.multipleParticleModel.normalizedContainerHeight ){
+          else if ( yPos >= maxY ){
             if ( !this.multipleParticleModel.getContainerExploded() ){
               // This particle bounced off the top, so use the lid's velocity in calculation of the new velocity
               // TODO: Do what it says in the comment just above.
-              yPos = this.multipleParticleModel.normalizedContainerHeight;
+              yPos = maxY;
               if ( atomVelocityY > 0 ){
                 atomVelocity.y = -atomVelocityY;
               }
