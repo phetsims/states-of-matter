@@ -1,8 +1,7 @@
 // Copyright 2014-2015, University of Colorado Boulder
 
 /**
- * This class updates the positions of atoms in a monatomic data set, i.e.
- * where each molecule is just a single atom.
+ * This object updates the positions of atoms in a monatomic data set, i.e. where each molecule is just a single atom.
  *
  * @author John Blanco
  * @author Aaron Davis
@@ -14,6 +13,7 @@ define( function( require ) {
 
   // static object (no constructor)
   var MonatomicAtomPositionUpdater = {
+
     /**
      * @param {MoleculeForceAndMotionDataSet} moleculeDataSet
      * @public

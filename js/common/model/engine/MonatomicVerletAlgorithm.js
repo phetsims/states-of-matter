@@ -64,7 +64,7 @@ define( function( require ) {
 
     /**
      * Update the position of the atoms based upon their current velocities and the forces acting on them, and handle
-     * any interactions with the wall (e.g. bouncing).
+     * any interactions with the wall, such as bouncing.
      * @private
      */
     updateAtomPositions: function( numberOfAtoms, atomCenterOfMassPositions, atomVelocities, atomForces, timeStep ) {
@@ -119,12 +119,11 @@ define( function( require ) {
           }
           else if ( yPos >= maxY && !this.multipleParticleModel.getContainerExploded() ) {
             // This particle bounced off the top, so use the lid's velocity in calculation of the new velocity
-            // TODO: Do what it says in the comment just above.
             yPos = maxY;
             if ( atomVelocityY > 0 ) {
               // TODO: The lid velocity seems to be in different units or something from the atom velocities, so
               // TODO: I have a derating factor in here.  I'll either need to explain it or figure out the source
-              // TODO: of the apparent descrepency.
+              // TODO: of the apparent discrepancy.
               atomVelocity.y = -atomVelocityY + this.multipleParticleModel.normalizedLidVelocityY * 0.02;
             }
             accumulatedPressure += atomVelocityY;
@@ -205,18 +204,13 @@ define( function( require ) {
       var atomVelocity;
       var i;
 
-      this.updateAtomPositions(
-        numberOfAtoms,
-        atomPositions,
-        atomVelocities,
-        atomForces,
-        timeStep
-      );
+      // Update the atom positions based on velocities, current forces, and interactions with the wall.
+      this.updateAtomPositions( numberOfAtoms, atomPositions, atomVelocities, atomForces, timeStep );
 
       // Synchronize the atom positions.
       this.positionUpdater.updateAtomPositions( moleculeDataSet );
 
-      // Initialize the forces acting on the atoms.
+      // Set initial values for the forces that are acting on each atom, will be further updated below.
       var accelerationDueToGravity = -this.multipleParticleModel.gravitationalAcceleration;
       for ( i = 0; i < numberOfAtoms; i++ ) {
         nextAtomForces[ i ].setXY( 0, accelerationDueToGravity );
