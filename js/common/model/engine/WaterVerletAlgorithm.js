@@ -266,7 +266,7 @@ define( function( require ) {
               // TODO: of the apparent discrepancy.
               moleculeVelocity.y = -moleculeVelocityY + this.multipleParticleModel.normalizedLidVelocityY * 0.02;
             }
-            accumulatedPressure += moleculeVelocityY;
+            accumulatedPressure += Math.abs( moleculeVelocityY );
           }
         }
 
@@ -280,7 +280,7 @@ define( function( require ) {
       this.positionUpdater.updateAtomPositions( moleculeDataSet );
 
       // update the pressure
-      this.updatePressure( accumulatedPressure * 40, timeStep ); // TODO: Move multiplier to base case when all subclasses are working with new approach
+      this.updatePressure( accumulatedPressure * 65, timeStep ); // TODO: Move multiplier to base case when all subclasses are working with new approach
     },
 
     // @private
