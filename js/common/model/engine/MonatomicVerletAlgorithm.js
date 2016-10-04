@@ -63,7 +63,8 @@ define( function( require ) {
     },
 
     /**
-     * Update the position of the atoms based upon their current velocities and the forces acting on them.
+     * Update the position of the atoms based upon their current velocities and the forces acting on them, and handle
+     * any interactions with the wall (e.g. bouncing).
      * @private
      */
     updateAtomPositions: function( numberOfAtoms, atomCenterOfMassPositions, atomVelocities, atomForces, timeStep ) {
@@ -194,19 +195,21 @@ define( function( require ) {
       // Obtain references to the model data and parameters so that we can perform fast manipulations.
       var moleculeDataSet = this.multipleParticleModel.moleculeDataSet;
       var numberOfAtoms = moleculeDataSet.numberOfAtoms;
-      var moleculeCenterOfMassPositions = moleculeDataSet.moleculeCenterOfMassPositions;
-      var moleculeVelocities = moleculeDataSet.moleculeVelocities;
-      var moleculeForces = moleculeDataSet.moleculeForces;
-      var nextMoleculeForces = moleculeDataSet.nextMoleculeForces;
+      var atomPositions = moleculeDataSet.moleculeCenterOfMassPositions;
+      var atomVelocities = moleculeDataSet.moleculeVelocities;
+      var atomForces = moleculeDataSet.moleculeForces;
+      var nextAtomForces = moleculeDataSet.nextMoleculeForces;
+
+      // values used in the calculation
       var timeStepHalf = timeStep / 2;
+      var atomVelocity;
       var i;
-      var moleculeVelocity;
 
       this.updateAtomPositions(
         numberOfAtoms,
-        moleculeCenterOfMassPositions,
-        moleculeVelocities,
-        moleculeForces,
+        atomPositions,
+        atomVelocities,
+        atomForces,
         timeStep
       );
 
@@ -216,7 +219,7 @@ define( function( require ) {
       // Initialize the forces acting on the atoms.
       var accelerationDueToGravity = -this.multipleParticleModel.gravitationalAcceleration;
       for ( i = 0; i < numberOfAtoms; i++ ) {
-        nextMoleculeForces[ i ].setXY( 0, accelerationDueToGravity );
+        nextAtomForces[ i ].setXY( 0, accelerationDueToGravity );
       }
 
       // If there are any atoms that are currently designated as "unsafe", check them to see if they can be moved into
@@ -227,21 +230,21 @@ define( function( require ) {
       var numberOfSafeAtoms = moleculeDataSet.numberOfSafeMolecules;
 
       // Calculate the forces created through interactions with other particles.
-      this.updateInterAtomForces( numberOfAtoms, numberOfSafeAtoms, moleculeCenterOfMassPositions, nextMoleculeForces );
+      this.updateInterAtomForces( numberOfAtoms, numberOfSafeAtoms, atomPositions, nextAtomForces );
 
       // Calculate the new velocities based on the old ones and the forces that are acting on the particle.
       for ( i = 0; i < numberOfAtoms; i++ ) {
-        moleculeVelocity = moleculeVelocities[ i ];
-        var moleculeForce = moleculeForces[ i ];
-        moleculeVelocity.addXY(
-          timeStepHalf * ( moleculeForce.x + nextMoleculeForces[ i ].x ),
-          timeStepHalf * ( moleculeForce.y + nextMoleculeForces[ i ].y )
+        atomVelocity = atomVelocities[ i ];
+        var moleculeForce = atomForces[ i ];
+        atomVelocity.addXY(
+          timeStepHalf * ( moleculeForce.x + nextAtomForces[ i ].x ),
+          timeStepHalf * ( moleculeForce.y + nextAtomForces[ i ].y )
         );
-        kineticEnergy += ( ( moleculeVelocity.x * moleculeVelocity.x ) +
-                           ( moleculeVelocity.y * moleculeVelocity.y ) ) / 2;
+        kineticEnergy += ( ( atomVelocity.x * atomVelocity.x ) +
+                           ( atomVelocity.y * atomVelocity.y ) ) / 2;
 
         // update to the new force value for the next model step
-        moleculeForce.setXY( nextMoleculeForces[ i ].x, nextMoleculeForces[ i ].y );
+        moleculeForce.setXY( nextAtomForces[ i ].x, nextAtomForces[ i ].y );
       }
 
       // Update the temperature.
