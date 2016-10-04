@@ -25,9 +25,6 @@ define( function( require ) {
 
     this.positionUpdater = DiatomicAtomPositionUpdater;
     AbstractVerletAlgorithm.call( this, multipleParticleModel );
-
-    // Reusable force vector, created here to reduce allocations.
-    this.force = new Vector2();
   }
 
   statesOfMatter.register( 'DiatomicVerletAlgorithm', DiatomicVerletAlgorithm );
@@ -48,15 +45,6 @@ define( function( require ) {
      */
     getTemperature: function() {
       return this.temperature;
-    },
-
-
-    getMoleculeMaxXExtent: function( xPos, rotationalAngle ){
-      return xPos + Math.abs( Math.cos( rotationalAngle ) ) * 1 + 1;
-    },
-
-    getMoleculeMinXExtent: function( xPos, rotationalAngle ){
-      return xPos - ( Math.abs( Math.cos( rotationalAngle ) ) * 1 + 1 );
     },
 
     /**
@@ -84,7 +72,7 @@ define( function( require ) {
       // Since the normalized particle diameter is 1.0, and this is a diatomic particle joined at the center, use a
       // 'compromise' value of 1.5 as the offset from the edges where these molecules should bounce.
       var minX = 1.5;
-      var minY = 1.5;
+      var minY = 1; // this one needs to be 1.0 so that the initial solid block doesn't have to fall down to the edge
       var maxX = this.multipleParticleModel.normalizedContainerWidth - 1.5;
       var maxY = this.multipleParticleModel.normalizedContainerHeight - 1.5;
 
@@ -152,58 +140,34 @@ define( function( require ) {
     },
 
     /**
-     * Update the motion of the particles and the forces that are acting upon them.  This is the heart of this class,
-     * and it is here that the actual Verlet algorithm is contained.
-     * @public
+     * Update the forces acting on each molecule due to the other molecules in the data set.
+     * @param moleculeDataSet
+     * @private
      */
-    updateForcesAndMotion: function( timeStep ) {
+    updateInterMoleculeForces: function( moleculeDataSet ){
 
-      // Obtain references to the model data and parameters so that we can perform fast manipulations.
-      var moleculeDataSet = this.multipleParticleModel.moleculeDataSet;
       var moleculeCenterOfMassPositions = moleculeDataSet.getMoleculeCenterOfMassPositions();
-      var moleculeVelocities = moleculeDataSet.getMoleculeVelocities();
-      var moleculeForces = moleculeDataSet.getMoleculeForces();
       var nextMoleculeForces = moleculeDataSet.getNextMoleculeForces();
-      var numberOfMolecules = moleculeDataSet.getNumberOfMolecules();
       var atomPositions = moleculeDataSet.getAtomPositions();
-      var moleculeRotationRates = moleculeDataSet.getMoleculeRotationRates();
-      var moleculeTorques = moleculeDataSet.getMoleculeTorques();
       var nextMoleculeTorques = moleculeDataSet.getNextMoleculeTorques();
+      var numberOfSafeMolecules = moleculeDataSet.numberOfSafeMolecules;
 
-      // Initialize other values that will be needed for the calculation.
-      var massInverse = 1 / moleculeDataSet.getMoleculeMass();
-      var inertiaInverse = 1 / moleculeDataSet.getMoleculeRotationalInertia();
-      var timeStepHalf = timeStep / 2;
-      var i;
-
-      // Update center of mass positions and angles for the molecules.
-      this.updateMoleculePositions( moleculeDataSet, timeStep );
-
-      // Now that the molecule position information has been updated, update the positions of the individual atoms.
-      this.positionUpdater.updateAtomPositions( moleculeDataSet );
-
-      // Set initial values for the forces that are acting on each atom, will be further updated below.
-      var accelerationDueToGravity = -this.multipleParticleModel.gravitationalAcceleration;
-      for ( i = 0; i < numberOfMolecules; i++ ) {
-        nextMoleculeForces[ i ].setXY( 0, accelerationDueToGravity );
-        nextMoleculeTorques[ i ] = 0;
-      }
-
-      // If there are any molecules that are currently designated as "unsafe", check them to see if they can be moved
-      // into the "safe" category.
-      if ( moleculeDataSet.numberOfSafeMolecules < numberOfMolecules ) {
-        this.updateMoleculeSafety();
-      }
-
-      // Calculate the force and torque due to inter-particle interactions.
-      for ( i = 0; i < moleculeDataSet.numberOfSafeMolecules; i++ ) {
-        for ( var j = i + 1; j < moleculeDataSet.numberOfSafeMolecules; j++ ) {
+      for ( var i = 0; i < numberOfSafeMolecules; i++ ) {
+        var moleculeCenterOfMassIX = moleculeCenterOfMassPositions[ i ].x;
+        var moleculeCenterOfMassIY = moleculeCenterOfMassPositions[ i ].y;
+        for ( var j = i + 1; j < numberOfSafeMolecules; j++ ) {
+          var moleculeCenterOfMassJX = moleculeCenterOfMassPositions[ j ].x;
+          var moleculeCenterOfMassJY = moleculeCenterOfMassPositions[ j ].y;
           for ( var ii = 0; ii < 2; ii++ ) {
+            var atom1PosX = atomPositions[ 2 * i + ii ].x;
+            var atom1PosY = atomPositions[ 2 * i + ii ].y;
             for ( var jj = 0; jj < 2; jj++ ) {
+              var atom2PosX = atomPositions[ 2 * j + jj ].x;
+              var atom2PosY = atomPositions[ 2 * j + jj ].y;
 
               // Calculate the distance between the potentially interacting atoms.
-              var dx = atomPositions[ 2 * i + ii ].x - atomPositions[ 2 * j + jj ].x;
-              var dy = atomPositions[ 2 * i + ii ].y - atomPositions[ 2 * j + jj ].y;
+              var dx = atom1PosX - atom2PosX;
+              var dy = atom1PosY - atom2PosY;
               var distanceSquared = dx * dx + dy * dy;
               if ( distanceSquared < this.PARTICLE_INTERACTION_DISTANCE_THRESH_SQRD ) {
                 if ( distanceSquared < this.MIN_DISTANCE_SQUARED ) {
@@ -215,33 +179,56 @@ define( function( require ) {
                 var forceScalar = 48 * r2inv * r6inv * (r6inv - 0.5);
                 var fx = dx * forceScalar;
                 var fy = dy * forceScalar;
-                this.force.setXY( fx, fy );
-                nextMoleculeForces[ i ].add( this.force );
-                nextMoleculeForces[ j ].subtract( this.force );
-                nextMoleculeTorques[ i ] += (atomPositions[ 2 * i + ii ].x - moleculeCenterOfMassPositions[ i ].x) * fy -
-                                            (atomPositions[ 2 * i + ii ].y - moleculeCenterOfMassPositions[ i ].y) * fx;
-                nextMoleculeTorques[ j ] -= (atomPositions[ 2 * j + jj ].x - moleculeCenterOfMassPositions[ j ].x) * fy -
-                                            (atomPositions[ 2 * j + jj ].y - moleculeCenterOfMassPositions[ j ].y) * fx;
-                this.potentialEnergy += 4 * r6inv * (r6inv - 1) + 0.016316891136;
+                nextMoleculeForces[ i ].addXY( fx, fy );
+                nextMoleculeForces[ j ].subtractXY( fx, fy );
+                nextMoleculeTorques[ i ] += ( atom1PosX - moleculeCenterOfMassIX ) * fy -
+                                            ( atom1PosY - moleculeCenterOfMassIY ) * fx;
+                nextMoleculeTorques[ j ] -= ( atom2PosX - moleculeCenterOfMassJX ) * fy -
+                                            ( atom2PosY - moleculeCenterOfMassJY ) * fx;
+                this.potentialEnergy += 4 * r6inv * ( r6inv - 1 ) + 0.016316891136;
               }
             }
           }
         }
       }
+    },
 
-      // Update center of mass velocities and angles and calculate kinetic energy.
+    /**
+     * Update the linear and rotational velocities for the molecules, calculate the total energy, and record the
+     * temperature value for the system.
+     * @param moleculeDataSet
+     * @param timeStep
+     * @private
+     */
+    updateVelocitiesAndTemperature: function( moleculeDataSet, timeStep ){
+
+      // Obtain references to the model data and parameters so that we can perform fast manipulations.
+      var moleculeVelocities = moleculeDataSet.getMoleculeVelocities();
+      var moleculeForces = moleculeDataSet.getMoleculeForces();
+      var nextMoleculeForces = moleculeDataSet.getNextMoleculeForces();
+      var numberOfMolecules = moleculeDataSet.getNumberOfMolecules();
+      var moleculeRotationRates = moleculeDataSet.getMoleculeRotationRates();
+      var moleculeTorques = moleculeDataSet.getMoleculeTorques();
+      var nextMoleculeTorques = moleculeDataSet.getNextMoleculeTorques();
+
+      // Initialize other values that will be needed for the calculation.
+      var massInverse = 1 / moleculeDataSet.getMoleculeMass();
+      var inertiaInverse = 1 / moleculeDataSet.getMoleculeRotationalInertia();
+      var timeStepHalf = timeStep / 2;
+
       var centersOfMassKineticEnergy = 0;
       var rotationalKineticEnergy = 0;
-      for ( i = 0; i < numberOfMolecules; i++ ) {
+      for ( var i = 0; i < numberOfMolecules; i++ ) {
         var xVel = moleculeVelocities[ i ].x +
-                   timeStepHalf * (moleculeForces[ i ].x + nextMoleculeForces[ i ].x) * massInverse;
+                   timeStepHalf * ( moleculeForces[ i ].x + nextMoleculeForces[ i ].x ) * massInverse;
         var yVel = moleculeVelocities[ i ].y +
-                   timeStepHalf * (moleculeForces[ i ].y + nextMoleculeForces[ i ].y) * massInverse;
+                   timeStepHalf * ( moleculeForces[ i ].y + nextMoleculeForces[ i ].y ) * massInverse;
         moleculeVelocities[ i ].setXY( xVel, yVel );
-        moleculeRotationRates[ i ] += timeStepHalf * (moleculeTorques[ i ] + nextMoleculeTorques[ i ]) *
+        moleculeRotationRates[ i ] += timeStepHalf * ( moleculeTorques[ i ] + nextMoleculeTorques[ i ] ) *
                                       inertiaInverse;
         centersOfMassKineticEnergy += 0.5 * moleculeDataSet.moleculeMass *
-                                      (Math.pow( moleculeVelocities[ i ].x, 2 ) + Math.pow( moleculeVelocities[ i ].y, 2 ));
+                                      ( Math.pow( moleculeVelocities[ i ].x, 2 ) +
+                                        Math.pow( moleculeVelocities[ i ].y, 2 ) );
         rotationalKineticEnergy += 0.5 * moleculeDataSet.moleculeRotationalInertia *
                                    Math.pow( moleculeRotationRates[ i ], 2 );
 
@@ -251,7 +238,45 @@ define( function( require ) {
       }
 
       // Record the calculated temperature.
-      this.temperature = (centersOfMassKineticEnergy + rotationalKineticEnergy) / numberOfMolecules / 1.5;
+      this.temperature = ( centersOfMassKineticEnergy + rotationalKineticEnergy ) / numberOfMolecules / 1.5;
+    },
+
+    /**
+     * Update the motion of the particles and the forces that are acting upon them.  This is the heart of this class,
+     * and it is here that the actual Verlet algorithm is contained.
+     * @public
+     */
+    updateForcesAndMotion: function( timeStep ) {
+
+      var moleculeDataSet = this.multipleParticleModel.moleculeDataSet;
+      var nextMoleculeForces = moleculeDataSet.getNextMoleculeForces();
+      var numberOfMolecules = moleculeDataSet.getNumberOfMolecules();
+      var nextMoleculeTorques = moleculeDataSet.getNextMoleculeTorques();
+
+      // Update center of mass positions and angles for the molecules.
+      this.updateMoleculePositions( moleculeDataSet, timeStep );
+
+      // Now that the molecule position information has been updated, update the positions of the individual atoms.
+      this.positionUpdater.updateAtomPositions( moleculeDataSet );
+
+      // If there are any molecules that are currently designated as "unsafe", check them to see if they can be moved
+      // into the "safe" category.
+      if ( moleculeDataSet.numberOfSafeMolecules < numberOfMolecules ) {
+        this.updateMoleculeSafety();
+      }
+
+      // Set initial values for the forces that are acting on each atom, will be further updated below.
+      var accelerationDueToGravity = -this.multipleParticleModel.gravitationalAcceleration;
+      for ( var i = 0; i < numberOfMolecules; i++ ) {
+        nextMoleculeForces[ i ].setXY( 0, accelerationDueToGravity );
+        nextMoleculeTorques[ i ] = 0;
+      }
+
+      // Update the forces due to molecules interacting with one another.
+      this.updateInterMoleculeForces( moleculeDataSet, timeStep );
+
+      // Update velocity and angles
+      this.updateVelocitiesAndTemperature( moleculeDataSet, timeStep );
     }
   } );
 } );
