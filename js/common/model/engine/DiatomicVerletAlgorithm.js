@@ -35,19 +35,120 @@ define( function( require ) {
   return inherit( AbstractVerletAlgorithm, DiatomicVerletAlgorithm, {
 
     /**
-     * @public
      * @returns {number}
+     * @public
      */
     getPressure: function() {
       return this.pressure;
     },
 
     /**
-     * @public
      * @returns {number}
+     * @public
      */
     getTemperature: function() {
       return this.temperature;
+    },
+
+
+    getMoleculeMaxXExtent: function( xPos, rotationalAngle ){
+      return xPos + Math.abs( Math.cos( rotationalAngle ) ) * 1 + 1;
+    },
+
+    getMoleculeMinXExtent: function( xPos, rotationalAngle ){
+      return xPos - ( Math.abs( Math.cos( rotationalAngle ) ) * 1 + 1 );
+    },
+
+    /**
+     * Update the center of mass positions and rotational angles for the molecules based upon their current velocities
+     * and rotation rates and the forces acting upon them, and handle any interactions with the wall, such as bouncing.
+     * @param moleculeDataSet
+     * @param timeStep
+     * @private
+     */
+    updateMoleculePositions: function( moleculeDataSet, timeStep ) {
+
+      var moleculeCenterOfMassPositions = moleculeDataSet.getMoleculeCenterOfMassPositions();
+      var moleculeVelocities = moleculeDataSet.getMoleculeVelocities();
+      var moleculeForces = moleculeDataSet.getMoleculeForces();
+      var numberOfMolecules = moleculeDataSet.getNumberOfMolecules();
+      var moleculeRotationAngles = moleculeDataSet.getMoleculeRotationAngles();
+      var moleculeRotationRates = moleculeDataSet.getMoleculeRotationRates();
+      var moleculeTorques = moleculeDataSet.getMoleculeTorques();
+      var massInverse = 1 / moleculeDataSet.getMoleculeMass();
+      var inertiaInverse = 1 / moleculeDataSet.getMoleculeRotationalInertia();
+      var timeStepSqrHalf = timeStep * timeStep * 0.5;
+      var middleHeight = this.multipleParticleModel.normalizedContainerHeight / 2;
+      var accumulatedPressure = 0;
+
+      // Since the normalized particle diameter is 1.0, and this is a diatomic particle joined at the center, use a
+      // 'compromise' value of 1.5 as the offset from the edges where these molecules should bounce.
+      var minX = 1.5;
+      var minY = 1.5;
+      var maxX = this.multipleParticleModel.normalizedContainerWidth - 1.5;
+      var maxY = this.multipleParticleModel.normalizedContainerHeight - 1.5;
+
+      for ( var i = 0; i < numberOfMolecules; i++ ) {
+
+        var moleculeVelocity = moleculeVelocities[ i ];
+        var moleculeVelocityX = moleculeVelocity.x; // optimization
+        var moleculeVelocityY = moleculeVelocity.y; // optimization
+        var moleculeCenterOfMassPosition = moleculeCenterOfMassPositions[ i ];
+
+        // calculate new position based on time and velocity
+        var xPos = moleculeCenterOfMassPosition.x +
+                   ( timeStep * moleculeVelocityX ) +
+                   ( timeStepSqrHalf * moleculeForces[ i ].x * massInverse);
+        var yPos = moleculeCenterOfMassPosition.y +
+                   ( timeStep * moleculeVelocityY ) +
+                   ( timeStepSqrHalf * moleculeForces[ i ].y * massInverse);
+
+        // handle any bouncing off of the walls of the container
+        if ( this.isNormalizedPositionInContainer( xPos, yPos ) ) {
+
+          // handle bounce off the walls
+          if ( xPos <= minX && moleculeVelocityX < 0 ) {
+            xPos = minX;
+            moleculeVelocity.x = -moleculeVelocityX;
+            if ( xPos > middleHeight ) {
+              accumulatedPressure += -moleculeVelocityX;
+            }
+          }
+          else if ( xPos >= maxX && moleculeVelocityX > 0 ) {
+            xPos = maxX;
+            moleculeVelocity.x = -moleculeVelocityX;
+            if ( xPos > middleHeight ) {
+              accumulatedPressure += moleculeVelocityX;
+            }
+          }
+
+          // handle bounce off the bottom and top
+          if ( yPos <= minY && moleculeVelocityY <= 0 ) {
+            yPos = minY;
+            moleculeVelocity.y = -moleculeVelocityY;
+          }
+          else if ( yPos >= maxY && !this.multipleParticleModel.getContainerExploded() ) {
+
+            // This particle bounced off the top, so use the lid's velocity in calculation of the new velocity
+            yPos = maxY;
+            if ( moleculeVelocityY > 0 ) {
+              // TODO: The lid velocity seems to be in different units or something from the atom velocities, so
+              // TODO: I have a derating factor in here.  I'll either need to explain it or figure out the source
+              // TODO: of the apparent discrepancy.
+              moleculeVelocity.y = -moleculeVelocityY + this.multipleParticleModel.normalizedLidVelocityY * 0.02;
+            }
+            accumulatedPressure += moleculeVelocityY;
+          }
+        }
+
+        // set new position and rate of rotation
+        moleculeCenterOfMassPositions[ i ].setXY( xPos, yPos );
+        moleculeRotationAngles[ i ] += ( timeStep * moleculeRotationRates[ i ]) +
+                                       ( timeStepSqrHalf * moleculeTorques[ i ] * inertiaInverse);
+      }
+
+      // update the pressure
+      this.updatePressure( accumulatedPressure * 40, timeStep ); // TODO: Move multiplier to base case when all subclasses are working with new approach
     },
 
     /**
@@ -65,108 +166,35 @@ define( function( require ) {
       var nextMoleculeForces = moleculeDataSet.getNextMoleculeForces();
       var numberOfMolecules = moleculeDataSet.getNumberOfMolecules();
       var atomPositions = moleculeDataSet.getAtomPositions();
-      var moleculeRotationAngles = moleculeDataSet.getMoleculeRotationAngles();
       var moleculeRotationRates = moleculeDataSet.getMoleculeRotationRates();
       var moleculeTorques = moleculeDataSet.getMoleculeTorques();
       var nextMoleculeTorques = moleculeDataSet.getNextMoleculeTorques();
-      var insideContainer = moleculeDataSet.insideContainer;
 
       // Initialize other values that will be needed for the calculation.
       var massInverse = 1 / moleculeDataSet.getMoleculeMass();
       var inertiaInverse = 1 / moleculeDataSet.getMoleculeRotationalInertia();
-      var pressureZoneWallForce = 0;
-      var timeStepSqrHalf = timeStep * timeStep * 0.5;
       var timeStepHalf = timeStep / 2;
+      var i;
 
       // Update center of mass positions and angles for the molecules.
-      for ( var i = 0; i < numberOfMolecules; i++ ) {
+      this.updateMoleculePositions( moleculeDataSet, timeStep );
 
-        // calculate new position based on time and velocity
-        var xPos = moleculeCenterOfMassPositions[ i ].x +
-                   ( timeStep * moleculeVelocities[ i ].x ) +
-                   ( timeStepSqrHalf * moleculeForces[ i ].x * massInverse);
-        var yPos = moleculeCenterOfMassPositions[ i ].y +
-                   ( timeStep * moleculeVelocities[ i ].y) +
-                   ( timeStepSqrHalf * moleculeForces[ i ].y * massInverse);
-
-        // update this particle's inside/outside status and, if necessary, clamp its position
-        if ( insideContainer[ i ] && !this.isNormalizedPositionInContainer( xPos, yPos ) ){
-
-          // if this particle just blew out the top, that's fine - just update its status
-          if ( moleculeCenterOfMassPositions[ i ].y <= this.multipleParticleModel.normalizedTotalContainerHeight &&
-               yPos > this.multipleParticleModel.normalizedTotalContainerHeight ){
-            insideContainer[ i ] = false;
-          }
-          else{
-
-            // This particle must have blown out the side due to an extreme velocity - reposition it inside the
-            // container as though it bounced off the side and reverse its velocity.
-            if ( xPos > this.multipleParticleModel.normalizedContainerWidth ){
-              xPos = this.multipleParticleModel.normalizedContainerWidth;
-              moleculeVelocities[ i ].x = -moleculeVelocities[ i ].x;
-            }
-            else if ( xPos < 0 ){
-              xPos = 0;
-              moleculeVelocities[ i ].x = -moleculeVelocities[ i ].x;
-            }
-
-            if ( yPos < 0 ){
-              yPos = 0;
-              moleculeVelocities[ i ].y = -moleculeVelocities[ i ].y;
-            }
-          }
-        }
-
-        // set new position and rate of rotation
-        moleculeCenterOfMassPositions[ i ].setXY( xPos, yPos );
-        moleculeRotationAngles[ i ] += ( timeStep * moleculeRotationRates[ i ]) +
-                                       ( timeStepSqrHalf * moleculeTorques[ i ] * inertiaInverse);
-      }
+      // Now that the molecule position information has been updated, update the positions of the individual atoms.
       this.positionUpdater.updateAtomPositions( moleculeDataSet );
 
-      // Calculate the force from the walls.  This force is assumed to act on the center of mass, so there is no torque.
-      // Calculate the forces exerted on the particles by the container walls and by gravity.
+      // Set initial values for the forces that are acting on each atom, will be further updated below.
+      var accelerationDueToGravity = -this.multipleParticleModel.gravitationalAcceleration;
       for ( i = 0; i < numberOfMolecules; i++ ) {
-
-        // Clear the previous calculation's particle forces and torques.
-        nextMoleculeForces[ i ].setXY( 0, 0 );
+        nextMoleculeForces[ i ].setXY( 0, accelerationDueToGravity );
         nextMoleculeTorques[ i ] = 0;
-
-        // Get the force values caused by the container walls.
-        this.calculateWallForce( moleculeCenterOfMassPositions[ i ], nextMoleculeForces[ i ] );
-
-        // Accumulate this force value as part of the pressure being exerted on the walls of the container.
-        if ( nextMoleculeForces[ i ].y < 0 ) {
-          pressureZoneWallForce += -nextMoleculeForces[ i ].y;
-        }
-        else if ( moleculeCenterOfMassPositions[ i ].y > this.multipleParticleModel.normalizedContainerHeight / 2 ) {
-
-          // If the particle bounced on one of the walls above the midpoint, add in that value to the press
-          pressureZoneWallForce += Math.abs( nextMoleculeForces[ i ].x );
-        }
-
-        // Add in the effect of gravity.
-        var gravitationalAcceleration = this.multipleParticleModel.gravitationalAcceleration;
-        if ( this.multipleParticleModel.temperatureSetPoint < this.TEMPERATURE_BELOW_WHICH_GRAVITY_INCREASES ) {
-
-          // Below a certain temperature, gravity is increased to counteract some odd-looking behavior caused by the
-          // thermostat.
-          gravitationalAcceleration = gravitationalAcceleration *
-                                      ((this.TEMPERATURE_BELOW_WHICH_GRAVITY_INCREASES -
-                                        this.multipleParticleModel.temperatureSetPoint) *
-                                       this.LOW_TEMPERATURE_GRAVITY_INCREASE_RATE + 1);
-        }
-        nextMoleculeForces[ i ].setY( nextMoleculeForces[ i ].y - gravitationalAcceleration );
       }
 
-      // Update the pressure calculation.
-      this.updatePressure( pressureZoneWallForce, timeStep );
-
-      // If there are any atoms that are currently designated as "unsafe", check them to see if they can be moved into
-      // the "safe" category.
+      // If there are any molecules that are currently designated as "unsafe", check them to see if they can be moved
+      // into the "safe" category.
       if ( moleculeDataSet.numberOfSafeMolecules < numberOfMolecules ) {
         this.updateMoleculeSafety();
       }
+
       // Calculate the force and torque due to inter-particle interactions.
       for ( i = 0; i < moleculeDataSet.numberOfSafeMolecules; i++ ) {
         for ( var j = i + 1; j < moleculeDataSet.numberOfSafeMolecules; j++ ) {
