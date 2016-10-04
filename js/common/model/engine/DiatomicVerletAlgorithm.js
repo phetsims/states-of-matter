@@ -135,6 +135,9 @@ define( function( require ) {
                                        ( timeStepSqrHalf * moleculeTorques[ i ] * inertiaInverse);
       }
 
+      // Now that the molecule position information has been updated, update the positions of the individual atoms.
+      this.positionUpdater.updateAtomPositions( moleculeDataSet );
+
       // update the pressure
       this.updatePressure( accumulatedPressure * 40, timeStep ); // TODO: Move multiplier to base case when all subclasses are working with new approach
     },
@@ -255,9 +258,6 @@ define( function( require ) {
 
       // Update center of mass positions and angles for the molecules.
       this.updateMoleculePositions( moleculeDataSet, timeStep );
-
-      // Now that the molecule position information has been updated, update the positions of the individual atoms.
-      this.positionUpdater.updateAtomPositions( moleculeDataSet );
 
       // If there are any molecules that are currently designated as "unsafe", check them to see if they can be moved
       // into the "safe" category.

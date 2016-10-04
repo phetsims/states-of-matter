@@ -129,26 +129,35 @@ define( function( require ) {
         moleculeCenterOfMassPositions,
         timeStep,
         moleculeVelocities,
-        moleculeDataSet.insideContainer,
         moleculeRotationAngles,
         moleculeRotationRates,
         moleculeTorques,
         moleculeForces
       );
 
-      this.updateForceAndPressure(
-        numberOfMolecules,
-        nextMoleculeForces,
-        nextMoleculeTorques,
-        moleculeCenterOfMassPositions,
-        temperatureSetPoint,
-        timeStep
-      );
-
       // If there are any atoms that are currently designated as "unsafe", check them to see if they can be moved into
       // the "safe" category.
       if ( moleculeDataSet.getNumberOfSafeMolecules() < numberOfMolecules ) {
         this.updateMoleculeSafety();
+      }
+
+      // Set initial values for the forces that are acting on each atom, will be further updated below.
+      var gravitationalAcceleration = this.multipleParticleModel.getGravitationalAcceleration();
+      for ( var i = 0; i < numberOfMolecules; i++ ) {
+        // Clear the previous calculation's particle forces and torques.
+        nextMoleculeForces[ i ].setXY( 0, 0 );
+        nextMoleculeTorques[ i ] = 0;
+
+        // Add in the effect of gravity.
+        if ( temperatureSetPoint < this.TEMPERATURE_BELOW_WHICH_GRAVITY_INCREASES ) {
+
+          // Below a certain temperature, gravity is increased to counteract some odd-looking behavior caused by the
+          // thermostat.
+          gravitationalAcceleration = gravitationalAcceleration *
+                                      ( ( this.TEMPERATURE_BELOW_WHICH_GRAVITY_INCREASES - temperatureSetPoint ) *
+                                        this.LOW_TEMPERATURE_GRAVITY_INCREASE_RATE + 1 );
+        }
+        nextMoleculeForces[ i ].setY( nextMoleculeForces[ i ].y - gravitationalAcceleration );
       }
 
       // Set the value of the scaling factor used to adjust how the water behaves as temperature changes, part of the
@@ -194,97 +203,87 @@ define( function( require ) {
       );
     },
 
+    // @private
     updatePositionsAndAngles: function( moleculeDataSet, numberOfMolecules, moleculeCenterOfMassPositions, timeStep,
-                                            moleculeVelocities, insideContainer, moleculeRotationAngles,
-                                            moleculeRotationRates, moleculeTorques, moleculeForces ) {
+                                        moleculeVelocities, moleculeRotationAngles, moleculeRotationRates,
+                                        moleculeTorques, moleculeForces ) {
 
       var timeStepSqrHalf = timeStep * timeStep * 0.5;
+      var middleHeight = this.multipleParticleModel.normalizedContainerHeight / 2;
+      var accumulatedPressure = 0;
+
+      // Set the distances at which water molecules should bounce.
+      var minX = 1.2;
+      var minY = 1.0; // this one needs to be 1.0 so that the initial solid block doesn't have to fall down to the edge
+      var maxX = this.multipleParticleModel.normalizedContainerWidth - 1.2;
+      var maxY = this.multipleParticleModel.normalizedContainerHeight - 1.2;
 
       // Update center of mass positions and angles for the molecules.
       for ( var i = 0; i < numberOfMolecules; i++ ) {
 
+        var moleculeVelocity = moleculeVelocities[ i ];
+        var moleculeVelocityX = moleculeVelocity.x; // optimization
+        var moleculeVelocityY = moleculeVelocity.y; // optimization
+        var moleculeCenterOfMassPosition = moleculeCenterOfMassPositions[ i ];
+
         // calculate new position based on velocity and time
-        var xPos = moleculeCenterOfMassPositions[ i ].x + ( timeStep * moleculeVelocities[ i ].x ) +
+        var xPos = moleculeCenterOfMassPosition.x + ( timeStep * moleculeVelocities[ i ].x ) +
                    ( timeStepSqrHalf * moleculeForces[ i ].x * this.massInverse );
-        var yPos = moleculeCenterOfMassPositions[ i ].y + ( timeStep * moleculeVelocities[ i ].y ) +
+        var yPos = moleculeCenterOfMassPosition.y + ( timeStep * moleculeVelocities[ i ].y ) +
                    ( timeStepSqrHalf * moleculeForces[ i ].y * this.massInverse );
 
-        // update this particle's inside/outside status and, if necessary, clamp its position
-        if ( insideContainer[ i ] && !this.isNormalizedPositionInContainer( xPos, yPos ) ) {
+        // handle any bouncing off of the walls of the container
+        if ( this.isNormalizedPositionInContainer( xPos, yPos ) ) {
 
-          // if this particle just blew out the top, that's fine - just update its status
-          if ( moleculeCenterOfMassPositions[ i ].y <= this.multipleParticleModel.normalizedTotalContainerHeight &&
-               yPos > this.multipleParticleModel.normalizedTotalContainerHeight ) {
-            insideContainer[ i ] = false;
+          // handle bounce off the walls
+          if ( xPos <= minX && moleculeVelocityX < 0 ) {
+            xPos = minX;
+            moleculeVelocity.x = -moleculeVelocityX;
+            if ( xPos > middleHeight ) {
+              accumulatedPressure += -moleculeVelocityX;
+            }
           }
-          else {
-            // This particle must have blown out the side due to an extreme velocity - reposition it inside the
-            // container as though it bounced off the side and reverse its velocity.
-            if ( xPos > this.multipleParticleModel.normalizedContainerWidth ) {
-              xPos = this.multipleParticleModel.normalizedContainerWidth;
-              moleculeVelocities[ i ].x = -moleculeVelocities[ i ].x;
+          else if ( xPos >= maxX && moleculeVelocityX > 0 ) {
+            xPos = maxX;
+            moleculeVelocity.x = -moleculeVelocityX;
+            if ( xPos > middleHeight ) {
+              accumulatedPressure += moleculeVelocityX;
             }
-            else if ( xPos < 0 ) {
-              xPos = 0;
-              moleculeVelocities[ i ].x = -moleculeVelocities[ i ].x;
-            }
+          }
 
-            if ( yPos < 0 ) {
-              yPos = 0;
-              moleculeVelocities[ i ].y = -moleculeVelocities[ i ].y;
+          // handle bounce off the bottom and top
+          if ( yPos <= minY && moleculeVelocityY <= 0 ) {
+            yPos = minY;
+            moleculeVelocity.y = -moleculeVelocityY;
+          }
+          else if ( yPos >= maxY && !this.multipleParticleModel.getContainerExploded() ) {
+
+            // This particle bounced off the top, so use the lid's velocity in calculation of the new velocity
+            yPos = maxY;
+            if ( moleculeVelocityY > 0 ) {
+              // TODO: The lid velocity seems to be in different units or something from the atom velocities, so
+              // TODO: I have a derating factor in here.  I'll either need to explain it or figure out the source
+              // TODO: of the apparent discrepancy.
+              moleculeVelocity.y = -moleculeVelocityY + this.multipleParticleModel.normalizedLidVelocityY * 0.02;
             }
+            accumulatedPressure += moleculeVelocityY;
           }
         }
 
         // set new position and rate of rotation
-        moleculeCenterOfMassPositions[ i ].setXY( xPos, yPos );
+        moleculeCenterOfMassPosition.setXY( xPos, yPos );
         moleculeRotationAngles[ i ] += ( timeStep * moleculeRotationRates[ i ] ) +
                                        ( timeStepSqrHalf * moleculeTorques[ i ] * this.inertiaInverse );
       }
+
+      // Now that the molecules positions and rotational angles are updated, update the individual atom positions.
       this.positionUpdater.updateAtomPositions( moleculeDataSet );
+
+      // update the pressure
+      this.updatePressure( accumulatedPressure * 40, timeStep ); // TODO: Move multiplier to base case when all subclasses are working with new approach
     },
 
-    updateForceAndPressure: function( numberOfMolecules, nextMoleculeForces, nextMoleculeTorques,
-                                      moleculeCenterOfMassPositions, temperatureSetPoint, timeStep ) {
-      var pressureZoneWallForce = 0;
-
-      // Calculate the force from the walls.  This force is assumed to act on the center of mass, so there is no torque.
-      for ( var i = 0; i < numberOfMolecules; i++ ) {
-
-        // Clear the previous calculation's particle forces and torques.
-        nextMoleculeForces[ i ].setXY( 0, 0 );
-        nextMoleculeTorques[ i ] = 0;
-
-        // Get the force values caused by the container walls.
-        this.calculateWallForce( moleculeCenterOfMassPositions[ i ], nextMoleculeForces[ i ] );
-
-        // Accumulate this force value as part of the pressure being exerted on the walls of the container.
-        if ( nextMoleculeForces[ i ].y < 0 ) {
-          pressureZoneWallForce += -nextMoleculeForces[ i ].y;
-        }
-        else if ( moleculeCenterOfMassPositions[ i ].y > this.multipleParticleModel.getNormalizedContainerHeight() / 2 ) {
-
-          // If the particle bounced on one of the walls above the midpoint, add in that value to the pressure.
-          pressureZoneWallForce += Math.abs( nextMoleculeForces[ i ].x );
-        }
-
-        // Add in the effect of gravity.
-        var gravitationalAcceleration = this.multipleParticleModel.getGravitationalAcceleration();
-        if ( temperatureSetPoint < this.TEMPERATURE_BELOW_WHICH_GRAVITY_INCREASES ) {
-
-          // Below a certain temperature, gravity is increased to counteract some odd-looking behavior caused by the
-          // thermostat.
-          gravitationalAcceleration = gravitationalAcceleration *
-                                      ( ( this.TEMPERATURE_BELOW_WHICH_GRAVITY_INCREASES - temperatureSetPoint ) *
-                                        this.LOW_TEMPERATURE_GRAVITY_INCREASE_RATE + 1 );
-        }
-        nextMoleculeForces[ i ].setY( nextMoleculeForces[ i ].y - gravitationalAcceleration );
-      }
-
-      // Update the pressure calculation.
-      this.updatePressure( pressureZoneWallForce, timeStep );
-    },
-
+    // @private
     calculateInterParticleInteractions: function( moleculeDataSet, moleculeCenterOfMassPositions,
                                                   repulsiveForceScalingFactor, nextMoleculeForces, nextMoleculeTorques,
                                                   atomPositions ) {
@@ -386,6 +385,7 @@ define( function( require ) {
       }
     },
 
+    // @private
     updateVelocityRotationAndEnergy: function( moleculeDataSet, numberOfMolecules, moleculeVelocities, timeStep,
                                                moleculeForces, nextMoleculeForces, moleculeRotationRates,
                                                moleculeTorques, nextMoleculeTorques ) {

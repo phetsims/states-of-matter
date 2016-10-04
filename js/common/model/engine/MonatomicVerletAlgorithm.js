@@ -67,8 +67,13 @@ define( function( require ) {
      * any interactions with the wall, such as bouncing.
      * @private
      */
-    updateAtomPositions: function( numberOfAtoms, atomCenterOfMassPositions, atomVelocities, atomForces, timeStep ) {
+    updateAtomPositions: function( moleculeDataSet, timeStep ) {
 
+      //numberOfAtoms, atomCenterOfMassPositions, atomVelocities, atomForces
+      var numberOfAtoms = moleculeDataSet.numberOfAtoms;
+      var atomVelocities = moleculeDataSet.moleculeVelocities;
+      var atomForces = moleculeDataSet.moleculeForces;
+      var atomCenterOfMassPositions = moleculeDataSet.moleculeCenterOfMassPositions;
       var timeStepSqrHalf = timeStep * timeStep * 0.5;
       var accumulatedPressure = 0;
 
@@ -133,6 +138,9 @@ define( function( require ) {
         // set the new position
         atomCenterOfMassPosition.setXY( xPos, yPos );
       }
+
+      // Now that the positions are updated in the molecule data set, update the actual atom positions.
+      this.positionUpdater.updateAtomPositions( moleculeDataSet );
 
       // update the pressure
       this.updatePressure( accumulatedPressure * 40, timeStep ); // TODO: Move multiplier to base case when all subclasses are working with new approach
@@ -205,10 +213,7 @@ define( function( require ) {
       var i;
 
       // Update the atom positions based on velocities, current forces, and interactions with the wall.
-      this.updateAtomPositions( numberOfAtoms, atomPositions, atomVelocities, atomForces, timeStep );
-
-      // Synchronize the atom positions.
-      this.positionUpdater.updateAtomPositions( moleculeDataSet );
+      this.updateAtomPositions( moleculeDataSet, timeStep );
 
       // Set initial values for the forces that are acting on each atom, will be further updated below.
       var accelerationDueToGravity = -this.multipleParticleModel.gravitationalAcceleration;
