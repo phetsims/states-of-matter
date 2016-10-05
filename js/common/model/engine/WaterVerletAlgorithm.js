@@ -25,6 +25,7 @@ define( function( require ) {
   var WATER_FULLY_FROZEN_ELECTROSTATIC_FORCE = 4.0;
   var MAX_REPULSIVE_SCALING_FACTOR_FOR_WATER = 3.0;
   var MAX_ROTATION_RATE = 16; // revolutions per second, empirically determined, see usage below
+  var TEMPERATURE_BELOW_WHICH_GRAVITY_INCREASES = 0.10;
 
   /**
    * @param {MultipleParticleModel}  multipleParticleModel of the simulation
@@ -149,13 +150,12 @@ define( function( require ) {
         nextMoleculeTorques[ i ] = 0;
 
         // Add in the effect of gravity.
-        if ( temperatureSetPoint < this.TEMPERATURE_BELOW_WHICH_GRAVITY_INCREASES ) {
+        if ( temperatureSetPoint < TEMPERATURE_BELOW_WHICH_GRAVITY_INCREASES ) {
 
           // Below a certain temperature, gravity is increased to counteract some odd-looking behavior caused by the
-          // thermostat.
+          // thermostat.  The multiplier was empirically determined.
           gravitationalAcceleration = gravitationalAcceleration *
-                                      ( ( this.TEMPERATURE_BELOW_WHICH_GRAVITY_INCREASES - temperatureSetPoint ) *
-                                        this.LOW_TEMPERATURE_GRAVITY_INCREASE_RATE + 1 );
+                                      ( 1 + ( TEMPERATURE_BELOW_WHICH_GRAVITY_INCREASES - temperatureSetPoint ) * 0.32 );
         }
         nextMoleculeForces[ i ].setY( nextMoleculeForces[ i ].y - gravitationalAcceleration );
       }

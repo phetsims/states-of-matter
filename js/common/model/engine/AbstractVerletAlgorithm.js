@@ -194,11 +194,6 @@ define( function( require ) {
     // static final
     PARTICLE_INTERACTION_DISTANCE_THRESH_SQRD: 6.25,
 
-    // Parameters that control the increasing of gravity as the temperature approaches zero.  This is done to counteract
-    // the tendency of the thermostat to slow falling molecules noticeably at low temps.  This is a "hollywooding" thing.
-    TEMPERATURE_BELOW_WHICH_GRAVITY_INCREASES: 0.10,
-    LOW_TEMPERATURE_GRAVITY_INCREASE_RATE: 50,
-
     // Constant used to limit the proximity of atoms when calculating the interaction potential.  This helps to prevent
     // getting huge potential value numbers and thus high particle velocities.  It is in model units and is empirically
     // determined such that the particles appear to interact well but don't go crazy when the container is compressed.
