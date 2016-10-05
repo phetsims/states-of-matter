@@ -59,16 +59,6 @@ define( function( require ) {
     },
 
     /**
-     * calculate the Lennard-Jones potential for a given distance
-     * @param {number} distance
-     * @returns {number}
-     * @private
-     */
-    calculateLJPotential: function( distance ) {
-      return 4 / ( Math.pow( distance, 12 ) ) - 4 / ( Math.pow( distance, 6 ) ) + 1;
-    },
-
-    /**
      * @returns {boolean}
      * @param {Vector2} position
      */
