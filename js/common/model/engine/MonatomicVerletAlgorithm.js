@@ -69,7 +69,6 @@ define( function( require ) {
      */
     updateAtomPositions: function( moleculeDataSet, timeStep ) {
 
-      //numberOfAtoms, atomCenterOfMassPositions, atomVelocities, atomForces
       var numberOfAtoms = moleculeDataSet.numberOfAtoms;
       var atomVelocities = moleculeDataSet.moleculeVelocities;
       var atomForces = moleculeDataSet.moleculeForces;
@@ -123,13 +122,17 @@ define( function( require ) {
             atomVelocity.y = -atomVelocityY;
           }
           else if ( yPos >= maxY && !this.multipleParticleModel.getContainerExploded() ) {
-            // This particle bounced off the top, so use the lid's velocity in calculation of the new velocity
             yPos = maxY;
+            var lidVelocity = this.multipleParticleModel.normalizedLidVelocityY;
             if ( atomVelocityY > 0 ) {
-              // TODO: The lid velocity seems to be in different units or something from the atom velocities, so
-              // TODO: I have a derating factor in here.  I'll either need to explain it or figure out the source
-              // TODO: of the apparent discrepancy.
-              atomVelocity.y = -atomVelocityY + this.multipleParticleModel.normalizedLidVelocityY * 0.02;
+
+              // Add the lid's downward velocity to the particle's velocity, but not quite all of it.  The multiplier
+              // was empirically determined to look reasonable without causing the pressure to go up too quickly when
+              // compressing the container.
+              atomVelocity.y = -atomVelocityY + lidVelocity * 0.5; // don't add full veloct
+            }
+            else if( atomVelocityY < lidVelocity ){
+              atomVelocity.y = lidVelocity;
             }
             accumulatedPressure += Math.abs( atomVelocityY );
           }
