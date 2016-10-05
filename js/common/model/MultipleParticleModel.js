@@ -743,7 +743,8 @@ define( function( require ) {
           else {
             // The container is shrinking.
             if ( this.particleContainerHeight - heightChange >= MIN_ALLOWABLE_CONTAINER_HEIGHT ) {
-              this.particleContainerHeight += Math.max( heightChange, -MAX_CONTAINER_SHRINK_RATE * dt );
+              heightChange = Math.max( heightChange, -MAX_CONTAINER_SHRINK_RATE * dt );
+              this.particleContainerHeight += heightChange;
             }
             else {
               this.particleContainerHeight = MIN_ALLOWABLE_CONTAINER_HEIGHT;
@@ -751,7 +752,6 @@ define( function( require ) {
           }
           this.normalizedContainerHeight = this.particleContainerHeight / this.particleDiameter;
           this.normalizedLidVelocityY = ( heightChange / this.particleDiameter ) / dt;
-
         }
         else {
           if ( this.heightChangeCountdownTime > 0 ) {
@@ -828,7 +828,7 @@ define( function( require ) {
           newTemperature = Math.min( this.temperatureSetPoint + temperatureChange, MAX_TEMPERATURE );
         }
 
-        // limit bottom end of termperature range
+        // limit bottom end of temperature range
         if ( newTemperature <= this.minModelTemperature ) {
           newTemperature = this.minModelTemperature;
         }
@@ -905,18 +905,16 @@ define( function( require ) {
       var temperatureIsChanging = false;
 
       if ( ( this.heatingCoolingAmount !== 0 ) ||
-           ( this.temperatureSetPoint + TEMPERATURE_CLOSENESS_RANGE < calculatedTemperature ) ||
-           ( this.temperatureSetPoint - TEMPERATURE_CLOSENESS_RANGE > calculatedTemperature ) ) {
+           ( Math.abs( calculatedTemperature - this.temperatureSetPoint) > TEMPERATURE_CLOSENESS_RANGE ) ){
         temperatureIsChanging = true;
       }
 
       if ( this.heightChangeCountdownTime !== 0 && this.particlesNearTopThisStep ) {
 
-        // Either the height of the container is currently changing and there are particles close enough to the top that
-        // they may be interacting with it, or new particles have been recently added.  Since either of these situations
-        // can end up changing the kinetic energy of the particles in the system, no thermostat is run.  Instead, the
-        // temperature is determined by looking at the kinetic energy of the molecules and that value is used to set the
-        // system temperature set point.
+        // The height of the container is currently changing and there are particles close enough to the lid that they
+        // may be interacting with it.  Since interaction with the lid can change the kinetic energy of the particles in
+        // the system, no thermostat is run.  Instead, the temperature is determined by looking at the kinetic energy
+        // of the molecules and that value is used to set the system temperature set point.
         this.setTemperature( this.moleculeDataSet.calculateTemperatureFromKineticEnergy() );
       }
       else if ( ( this.thermostatType === ISOKINETIC_THERMOSTAT ) ||
