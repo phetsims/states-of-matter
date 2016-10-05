@@ -18,7 +18,6 @@ define( function( require ) {
 
   // constants that control various aspects of the Verlet algorithm.
   var PRESSURE_CALC_TIME_WINDOW = 12; // in seconds, empirically determined to be responsive but not jumpy
-  var WALL_DISTANCE_THRESHOLD = 1.122462048309373017; // distance at which repulsive LJ potential kicks in
   var SAFE_INTER_MOLECULE_DISTANCE = 2.0;
 
   // Pressure at which explosion of the container will occur.  This is currently set so that container blows roughly
