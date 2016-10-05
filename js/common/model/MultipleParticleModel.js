@@ -553,9 +553,10 @@ define( function( require ) {
                             INJECTION_POINT_VERT_PROPORTION;
 
       // Only inject if okay to do so.
-      if ( ( this.moleculeDataSet.getNumberOfRemainingSlots() > 1 ) &&
-           ( this.normalizedContainerHeight > injectionPointY * 1.05 ) &&
-           ( !this.isExploded ) ) {
+      if ( this.isPlaying &&
+           this.moleculeDataSet.getNumberOfRemainingSlots() > 1 &&
+           this.normalizedContainerHeight > injectionPointY * 1.05 &&
+           !this.isExploded ) {
 
         // If the container is empty, its temperature will be be reported as zero Kelvin, so injecting particles will
         // cause there to be a defined temperature.  Set that temperature to a reasonable value.
