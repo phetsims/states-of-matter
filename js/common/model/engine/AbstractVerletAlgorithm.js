@@ -14,7 +14,6 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var PropertySet = require( 'AXON/PropertySet' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  var Vector2 = require( 'DOT/Vector2' );
 
   // constants that control various aspects of the Verlet algorithm.
   var PRESSURE_CALC_TIME_WINDOW = 12; // in seconds, empirically determined to be responsive but not jumpy
@@ -36,26 +35,11 @@ define( function( require ) {
     PropertySet.call( this, {
       pressure: 0 // atm units
     } );
-
-    // reusable vectors, used for efficiency
-    this.topLeftOfContainer = new Vector2();
-    this.topRightOfContainer = new Vector2();
-    this.cornerForceVector = new Vector2();
   }
 
   statesOfMatter.register( 'AbstractVerletAlgorithm', AbstractVerletAlgorithm );
 
   return inherit( PropertySet, AbstractVerletAlgorithm, {
-
-    /**
-     * calculate the force due to the Lennard-Jones potential, uses the derivative of the standard formula
-     * @param {number} distance
-     * @returns {number}
-     * @private
-     */
-    calculateForceFromLJPotential: function( distance ) {
-      return ( 48 / ( Math.pow( distance, 13 ) ) ) - ( 24 / ( Math.pow( distance, 7 ) ) );
-    },
 
     /**
      * @returns {boolean}
@@ -165,8 +149,7 @@ define( function( require ) {
       // This should be implemented in descendant classes.
       assert && assert( false, 'Getting scaled epsilon is not implemented for this class' );
       return 0;
-    }
-    ,
+    },
 
     /**
      * @param {number} pressureZoneWallForce
