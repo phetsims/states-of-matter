@@ -224,7 +224,7 @@ define( function( require ) {
 
     /**
      * Calculate the temperature of the system based on the total kinetic energy of the molecules.
-     * @return {number} temperature in model units (as opposed to Kelvin, Celsius, or whatever)
+     * @return {number} temperature in model units (as opposed to Kelvin, Celsius, or Fahrenheit)
      * @public
      */
     calculateTemperatureFromKineticEnergy: function() {
