@@ -13,5 +13,11 @@ coding style and adherence to coding standards.
 So that the code could be written in a general way, there are a lot of places where the term 'molecule' is used where
 the associated element could be either a multi-atom molecule or a single atom.
 
+There is a construct that contains the data for all of the molecules being simulated at a given moment.  It is arranged
+as a set of arrays with all of the data for all of the molecules, as opposed to an array of molecule objects, each of
+which has its own data.  This was done this way in the Java version because the performance was significantly better.
+We retained this approach for the JavaScript version.  It's possible that the performance would have been as good for
+and array of objects.
+
 Visibility annotations are not complete - this was something that was started during development, and we didn't go
 update all portions of the code.
