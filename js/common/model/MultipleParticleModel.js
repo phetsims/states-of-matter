@@ -909,13 +909,15 @@ define( function( require ) {
         temperatureIsChanging = true;
       }
 
-      if ( this.heightChangeCountdownTime !== 0 && this.particlesNearTopThisStep ) {
-
-        // The height of the container is currently changing and there are particles close enough to the lid that they
-        // may be interacting with it.  Since interaction with the lid can change the kinetic energy of the particles in
-        // the system, no thermostat is run.  Instead, the temperature is determined by looking at the kinetic energy
-        // of the molecules and that value is used to set the system temperature set point.
+      if ( this.moleculeForceAndMotionCalculator.lidChangedParticleVelocity ){
+        // The velocity of one or more particles was changed through interaction with the lid.  Since this can change
+        // the kinetic energy of the particles in the system, no thermostat is run.  Instead, the temperature is
+        // determined by looking at the kinetic energy of the molecules and that value is used to set the system
+        // temperature set point.
         this.setTemperature( this.moleculeDataSet.calculateTemperatureFromKineticEnergy() );
+
+        // Clear the flag for the next time through.
+        this.moleculeForceAndMotionCalculator.lidChangedParticleVelocity = false;
       }
       else if ( ( this.thermostatType === ISOKINETIC_THERMOSTAT ) ||
                 ( this.thermostatType === ADAPTIVE_THERMOSTAT &&

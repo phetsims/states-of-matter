@@ -43,6 +43,10 @@ define( function( require ) {
     // @protected
     this.potentialEnergy = 0;
     this.temperature = 0;
+    
+    // Flag that indicates whether the lid affected the velocity of one or more particles, set during execution of the
+    // Verlet algorithm, must be cleared by the client.
+    this.lidChangedParticleVelocity = false;
   }
 
   statesOfMatter.register( 'AbstractVerletAlgorithm', AbstractVerletAlgorithm );
@@ -88,7 +92,7 @@ define( function( require ) {
       var minY = this.bottomBounceInset;
       var maxX = this.multipleParticleModel.normalizedContainerWidth - this.sideBounceInset;
       var maxY = this.multipleParticleModel.normalizedContainerHeight - this.topBounceInset;
-
+      
       for ( var i = 0; i < numberOfMolecules; i++ ) {
 
         var moleculeVelocity = moleculeVelocities[ i ];
@@ -147,9 +151,14 @@ define( function( require ) {
                 // was empirically determined to look reasonable without causing the pressure to go up too quickly when
                 // compressing the container.
                 moleculeVelocity.y = -( moleculeVelocityY + lidVelocity * 0.5 );
+                
+                if ( Math.abs( lidVelocity ) > 0 ){
+                  this.lidChangedParticleVelocity = true;
+                }
               }
               else if ( moleculeVelocityY < lidVelocity ) {
                 moleculeVelocity.y = lidVelocity;
+                this.lidChangedParticleVelocity = true;
               }
               accumulatedPressure += Math.abs( moleculeVelocityY );
             }
