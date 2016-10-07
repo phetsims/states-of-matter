@@ -910,11 +910,12 @@ define( function( require ) {
       }
 
       if ( this.moleculeForceAndMotionCalculator.lidChangedParticleVelocity ){
+
         // The velocity of one or more particles was changed through interaction with the lid.  Since this can change
         // the kinetic energy of the particles in the system, no thermostat is run.  Instead, the temperature is
-        // determined by looking at the kinetic energy of the molecules and that value is used to set the system
+        // determined by looking at the kinetic energy of the molecules and that value is used to determine the system
         // temperature set point.
-        this.setTemperature( this.moleculeDataSet.calculateTemperatureFromKineticEnergy() );
+        this.setTemperature( calculatedTemperature );
 
         // Clear the flag for the next time through.
         this.moleculeForceAndMotionCalculator.lidChangedParticleVelocity = false;

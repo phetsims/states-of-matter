@@ -224,39 +224,6 @@ define( function( require ) {
     },
 
     /**
-     * Calculate the temperature of the system based on the total kinetic energy of the molecules.
-     * @return {number} temperature in model units (as opposed to Kelvin, Celsius, or Fahrenheit)
-     * @public
-     */
-    calculateTemperatureFromKineticEnergy: function() {
-      var translationalKineticEnergy = 0;
-      var rotationalKineticEnergy = 0;
-      var numberOfMolecules = this.numberOfAtoms / this.atomsPerMolecule;
-      var kineticEnergyPerMolecule;
-      var i;
-
-      if ( this.atomsPerMolecule === 1 ) {
-        for ( i = 0; i < this.numberOfAtoms; i++ ) {
-          translationalKineticEnergy += ( ( this.moleculeVelocities[ i ].x * this.moleculeVelocities[ i ].x ) +
-                                          ( this.moleculeVelocities[ i ].y * this.moleculeVelocities[ i ].y ) ) / 2;
-        }
-        kineticEnergyPerMolecule = translationalKineticEnergy / this.numberOfAtoms;
-      }
-      else {
-        for ( i = 0; i < this.numberOfAtoms / this.atomsPerMolecule; i++ ) {
-          translationalKineticEnergy += 0.5 * this.moleculeMass *
-                                        ( Math.pow( this.moleculeVelocities[ i ].x, 2 ) +
-                                          Math.pow( this.moleculeVelocities[ i ].y, 2 ) );
-          rotationalKineticEnergy += 0.5 * this.moleculeRotationalInertia *
-                                     Math.pow( this.moleculeRotationRates[ i ], 2 );
-        }
-        kineticEnergyPerMolecule = ( translationalKineticEnergy + rotationalKineticEnergy ) / numberOfMolecules / 1.5;
-      }
-
-      return kineticEnergyPerMolecule;
-    },
-
-    /**
      * Add a new molecule to the model.  The molecule must have been created and initialized before being added.  It is
      * considered to be "unsafe", meaning that it can't interact with other molecules, until an external entity
      * (generally the motion-and-force calculator) changes that designation.
