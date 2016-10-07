@@ -127,6 +127,7 @@ define( function( require ) {
         var moleculeCenterOfMassPosition1 = moleculeCenterOfMassPositions[ i ];
         var m1x = moleculeCenterOfMassPosition1.x;
         var m1y = moleculeCenterOfMassPosition1.y;
+        var nextMoleculeForceI = nextMoleculeForces[ i ];
 
         // Select which charges to use for this molecule.  This is part of the "hollywooding" to make the solid form
         // appear more crystalline.
@@ -142,6 +143,7 @@ define( function( require ) {
           var moleculeCenterOfMassPosition2 = moleculeCenterOfMassPositions[ j ];
           var m2x = moleculeCenterOfMassPosition2.x;
           var m2y = moleculeCenterOfMassPosition2.y;
+          var nextMoleculeForceJ = nextMoleculeForces[ j ];
 
           // Calculate Lennard-Jones potential between mass centers.
           var dx = m1x - m2x;
@@ -165,8 +167,8 @@ define( function( require ) {
             var forceScalar = 48 * r2inv * r6inv * ( ( r6inv * repulsiveForceScalingFactor ) - 0.5 );
             var forceX = dx * forceScalar;
             var forceY = dy * forceScalar;
-            nextMoleculeForces[ i ].addXY( forceX, forceY );
-            nextMoleculeForces[ j ].subtractXY( forceX, forceY );
+            nextMoleculeForceI.addXY( forceX, forceY );
+            nextMoleculeForceJ.subtractXY( forceX, forceY );
             this.potentialEnergy += 4 * r6inv * ( r6inv - 1 ) + 0.016316891136;
 
             // Calculate coulomb-like interactions between atoms on individual water molecules.
@@ -207,8 +209,8 @@ define( function( require ) {
                 forceScalar = chargeAii * chargesB[ jj ] * r2inv * r2inv;
                 forceX = dx * forceScalar;
                 forceY = dy * forceScalar;
-                nextMoleculeForces[ i ].addXY( forceX, forceY );
-                nextMoleculeForces[ j ].subtractXY( forceX, forceY );
+                nextMoleculeForceI.addXY( forceX, forceY );
+                nextMoleculeForceJ.subtractXY( forceX, forceY );
                 nextMoleculeTorques[ i ] += ( a1x - m1x ) * forceY - ( a1y - m1y ) * forceX;
                 nextMoleculeTorques[ j ] -= ( a2x - m2x ) * forceY - ( a2y - m2y ) * forceX;
               }
