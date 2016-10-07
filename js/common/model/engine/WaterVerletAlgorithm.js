@@ -50,22 +50,6 @@ define( function( require ) {
   return inherit( AbstractVerletAlgorithm, WaterVerletAlgorithm, {
 
     /**
-     * @public
-     * @returns {number}
-     */
-    getPressure: function() {
-      return this.pressure;
-    },
-
-    /**
-     * @public
-     * @returns {number}
-     */
-    getTemperature: function() {
-      return this.temperature;
-    },
-
-    /**
      * Update the motion of the particles and the forces that are acting upon them.  This is the heart of this class,
      * and it is here that the actual Verlet algorithm is contained.
      * @public
@@ -80,7 +64,6 @@ define( function( require ) {
       var moleculeVelocities = moleculeDataSet.getMoleculeVelocities();
       var moleculeForces = moleculeDataSet.getMoleculeForces();
       var nextMoleculeForces = moleculeDataSet.getNextMoleculeForces();
-      var moleculeRotationAngles = moleculeDataSet.getMoleculeRotationAngles();
       var moleculeRotationRates = moleculeDataSet.getMoleculeRotationRates();
       var moleculeTorques = moleculeDataSet.getMoleculeTorques();
       var nextMoleculeTorques = moleculeDataSet.getNextMoleculeTorques();
@@ -124,17 +107,7 @@ define( function( require ) {
       this.alteredCharges[ 1 ] = 1.67 * q0;
       this.alteredCharges[ 2 ] = 0.33 * q0;
 
-      this.updatePositionsAndAngles(
-        moleculeDataSet,
-        numberOfMolecules,
-        moleculeCenterOfMassPositions,
-        timeStep,
-        moleculeVelocities,
-        moleculeRotationAngles,
-        moleculeRotationRates,
-        moleculeTorques,
-        moleculeForces
-      );
+      this.updateMoleculePositions( moleculeDataSet, timeStep );
 
       // If there are any atoms that are currently designated as "unsafe", check them to see if they can be moved into
       // the "safe" category.
@@ -201,86 +174,6 @@ define( function( require ) {
         moleculeTorques,
         nextMoleculeTorques
       );
-    },
-
-    // @private
-    updatePositionsAndAngles: function( moleculeDataSet, numberOfMolecules, moleculeCenterOfMassPositions, timeStep,
-                                        moleculeVelocities, moleculeRotationAngles, moleculeRotationRates,
-                                        moleculeTorques, moleculeForces ) {
-
-      var timeStepSqrHalf = timeStep * timeStep * 0.5;
-      var middleHeight = this.multipleParticleModel.normalizedContainerHeight / 2;
-      var accumulatedPressure = 0;
-
-      // Set the distances at which water molecules should bounce.
-      var minX = 1.2;
-      var minY = 1.0; // this one needs to be 1.0 so that the initial solid block doesn't have to fall down to the edge
-      var maxX = this.multipleParticleModel.normalizedContainerWidth - 1.2;
-      var maxY = this.multipleParticleModel.normalizedContainerHeight - 1.2;
-
-      // Update center of mass positions and angles for the molecules.
-      for ( var i = 0; i < numberOfMolecules; i++ ) {
-
-        var moleculeVelocity = moleculeVelocities[ i ];
-        var moleculeVelocityX = moleculeVelocity.x; // optimization
-        var moleculeVelocityY = moleculeVelocity.y; // optimization
-        var moleculeCenterOfMassPosition = moleculeCenterOfMassPositions[ i ];
-
-        // calculate new position based on velocity and time
-        var xPos = moleculeCenterOfMassPosition.x + ( timeStep * moleculeVelocities[ i ].x ) +
-                   ( timeStepSqrHalf * moleculeForces[ i ].x * this.massInverse );
-        var yPos = moleculeCenterOfMassPosition.y + ( timeStep * moleculeVelocities[ i ].y ) +
-                   ( timeStepSqrHalf * moleculeForces[ i ].y * this.massInverse );
-
-        // handle any bouncing off of the walls of the container
-        if ( this.isNormalizedPositionInContainer( xPos, yPos ) ) {
-
-          // handle bounce off the walls
-          if ( xPos <= minX && moleculeVelocityX < 0 ) {
-            xPos = minX;
-            moleculeVelocity.x = -moleculeVelocityX;
-            if ( xPos > middleHeight ) {
-              accumulatedPressure += -moleculeVelocityX;
-            }
-          }
-          else if ( xPos >= maxX && moleculeVelocityX > 0 ) {
-            xPos = maxX;
-            moleculeVelocity.x = -moleculeVelocityX;
-            if ( xPos > middleHeight ) {
-              accumulatedPressure += moleculeVelocityX;
-            }
-          }
-
-          // handle bounce off the bottom and top
-          if ( yPos <= minY && moleculeVelocityY <= 0 ) {
-            yPos = minY;
-            moleculeVelocity.y = -moleculeVelocityY;
-          }
-          else if ( yPos >= maxY && !this.multipleParticleModel.getContainerExploded() ) {
-
-            // This particle bounced off the top, so use the lid's velocity in calculation of the new velocity
-            yPos = maxY;
-            if ( moleculeVelocityY > 0 ) {
-              // TODO: The lid velocity seems to be in different units or something from the atom velocities, so
-              // TODO: I have a derating factor in here.  I'll either need to explain it or figure out the source
-              // TODO: of the apparent discrepancy.
-              moleculeVelocity.y = -moleculeVelocityY + this.multipleParticleModel.normalizedLidVelocityY * 0.02;
-            }
-            accumulatedPressure += Math.abs( moleculeVelocityY );
-          }
-        }
-
-        // set new position and rate of rotation
-        moleculeCenterOfMassPosition.setXY( xPos, yPos );
-        moleculeRotationAngles[ i ] += ( timeStep * moleculeRotationRates[ i ] ) +
-                                       ( timeStepSqrHalf * moleculeTorques[ i ] * this.inertiaInverse );
-      }
-
-      // Now that the molecules positions and rotational angles are updated, update the individual atom positions.
-      this.positionUpdater.updateAtomPositions( moleculeDataSet );
-
-      // update the pressure
-      this.updatePressure( accumulatedPressure * 65, timeStep ); // TODO: Move multiplier to base case when all subclasses are working with new approach
     },
 
     // @private

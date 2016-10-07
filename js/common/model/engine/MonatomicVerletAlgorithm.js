@@ -42,111 +42,8 @@ define( function( require ) {
      * @returns {number}
      * @public
      */
-    getPressure: function() {
-      return this.pressure;
-    },
-
-    /**
-     * @returns {number}
-     * @public
-     */
-    getTemperature: function() {
-      return this.temperature;
-    },
-
-    /**
-     * @returns {number}
-     * @public
-     */
     getScaledEpsilon: function() {
       return this.epsilon;
-    },
-
-    /**
-     * Update the position of the atoms based upon their current velocities and the forces acting on them, and handle
-     * any interactions with the wall, such as bouncing.
-     * @private
-     */
-    updateAtomPositions: function( moleculeDataSet, timeStep ) {
-
-      var numberOfAtoms = moleculeDataSet.numberOfAtoms;
-      var atomVelocities = moleculeDataSet.moleculeVelocities;
-      var atomForces = moleculeDataSet.moleculeForces;
-      var atomCenterOfMassPositions = moleculeDataSet.moleculeCenterOfMassPositions;
-      var timeStepSqrHalf = timeStep * timeStep * 0.5;
-      var accumulatedPressure = 0;
-
-      // Figure out the min and max positions assuming single particles and a normalized radius of 1.
-      var minX = 1;
-      var minY = 1;
-      var maxX = this.multipleParticleModel.normalizedContainerWidth - 1;
-      var maxY = this.multipleParticleModel.normalizedContainerHeight - 1;
-      var middleHeight = this.multipleParticleModel.normalizedContainerHeight / 2;
-
-      for ( var i = 0; i < numberOfAtoms; i++ ) {
-
-        var atomVelocity = atomVelocities[ i ];
-        var atomVelocityX = atomVelocity.x; // optimization
-        var atomVelocityY = atomVelocity.y; // optimization
-        var atomCenterOfMassPosition = atomCenterOfMassPositions[ i ];
-        var atomForce = atomForces[ i ];
-
-        // calculate new position based on velocity and time
-        var xPos = atomCenterOfMassPosition.x + ( timeStep * atomVelocityX ) +
-                   ( timeStepSqrHalf * atomForce.x );
-        var yPos = atomCenterOfMassPosition.y + ( timeStep * atomVelocityY ) +
-                   ( timeStepSqrHalf * atomForce.y );
-
-        // handle any bouncing off of the walls of the container
-        if ( this.isNormalizedPositionInContainer( xPos, yPos ) ) {
-
-          // handle bounce off the walls
-          if ( xPos <= minX && atomVelocityX < 0 ) {
-            xPos = minX;
-            atomVelocity.x = -atomVelocityX;
-            if ( xPos > middleHeight ) {
-              accumulatedPressure += -atomVelocityX;
-            }
-          }
-          else if ( xPos >= maxX && atomVelocityX > 0 ) {
-            xPos = maxX;
-            atomVelocity.x = -atomVelocityX;
-            if ( xPos > middleHeight ) {
-              accumulatedPressure += atomVelocityX;
-            }
-          }
-
-          // handle bounce off the bottom and top
-          if ( yPos <= minY && atomVelocityY <= 0 ) {
-            yPos = minY;
-            atomVelocity.y = -atomVelocityY;
-          }
-          else if ( yPos >= maxY && !this.multipleParticleModel.getContainerExploded() ) {
-            yPos = maxY;
-            var lidVelocity = this.multipleParticleModel.normalizedLidVelocityY;
-            if ( atomVelocityY > 0 ) {
-
-              // Add the lid's downward velocity to the particle's velocity, but not quite all of it.  The multiplier
-              // was empirically determined to look reasonable without causing the pressure to go up too quickly when
-              // compressing the container.
-              atomVelocity.y = -atomVelocityY + lidVelocity * 0.5; // don't add full veloct
-            }
-            else if( atomVelocityY < lidVelocity ){
-              atomVelocity.y = lidVelocity;
-            }
-            accumulatedPressure += Math.abs( atomVelocityY );
-          }
-        }
-
-        // set the new position
-        atomCenterOfMassPosition.setXY( xPos, yPos );
-      }
-
-      // Now that the positions are updated in the molecule data set, update the actual atom positions.
-      this.positionUpdater.updateAtomPositions( moleculeDataSet );
-
-      // update the pressure
-      this.updatePressure( accumulatedPressure * 65, timeStep ); // TODO: Move multiplier to base case when all subclasses are working with new approach
     },
 
     // @private
@@ -216,7 +113,7 @@ define( function( require ) {
       var i;
 
       // Update the atom positions based on velocities, current forces, and interactions with the wall.
-      this.updateAtomPositions( moleculeDataSet, timeStep );
+      this.updateMoleculePositions( moleculeDataSet, timeStep );
 
       // Set initial values for the forces that are acting on each atom, will be further updated below.
       var accelerationDueToGravity = -this.multipleParticleModel.gravitationalAcceleration;

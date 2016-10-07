@@ -751,7 +751,7 @@ define( function( require ) {
             }
           }
           this.normalizedContainerHeight = this.particleContainerHeight / this.particleDiameter;
-          this.normalizedLidVelocityY = ( heightChange / this.particleDiameter ) / dt;
+          this.normalizedLidVelocityY = ( -heightChange / this.particleDiameter ) / dt;
         }
         else {
           if ( this.heightChangeCountdownTime > 0 ) {

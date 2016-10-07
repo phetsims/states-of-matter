@@ -2,7 +2,8 @@
 
 /**
  * This class represents the bundle of data that represents the position, motion, and forces acting upon a set of
- * molecules.
+ * molecules.  The data is organized this way rather than as a set of objects (one object per molecule) for performance
+ * reasons.
  *
  * @author John Blanco
  * @author Aaron Davis
@@ -42,7 +43,7 @@ define( function( require ) {
     this.moleculeVelocities = new Array( maxNumMolecules );
     this.moleculeForces = new Array( maxNumMolecules );
     this.nextMoleculeForces = new Array( maxNumMolecules );
-    this.insideContainer = [];
+    this.insideContainer = new Array( maxNumMolecules );
 
     // Note that some of the following are not used in the monatomic case, but need to be here for compatibility.
     this.moleculeRotationAngles = new Array( maxNumMolecules );
