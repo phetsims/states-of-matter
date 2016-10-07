@@ -30,12 +30,23 @@ define( function( require ) {
 
   return inherit( AbstractVerletAlgorithm, DiatomicVerletAlgorithm, {
 
+    // @override
+    initializeForces: function( moleculeDataSet ){
+      var accelerationDueToGravity = this.multipleParticleModel.gravitationalAcceleration;
+      var nextMoleculeForces = moleculeDataSet.nextMoleculeForces;
+      var nextMoleculeTorques = moleculeDataSet.nextMoleculeTorques;
+      for ( var i = 0; i < moleculeDataSet.getNumberOfMolecules(); i++ ) {
+        nextMoleculeForces[ i ].setXY( 0, accelerationDueToGravity );
+        nextMoleculeTorques[ i ] = 0;
+      }
+    },
+
     /**
      * Update the forces acting on each molecule due to the other molecules in the data set.
      * @param moleculeDataSet
      * @private
      */
-    updateInterMoleculeForces: function( moleculeDataSet ){
+    updateInteractionForces: function( moleculeDataSet ){
 
       var moleculeCenterOfMassPositions = moleculeDataSet.getMoleculeCenterOfMassPositions();
       var nextMoleculeForces = moleculeDataSet.getNextMoleculeForces();
@@ -91,7 +102,7 @@ define( function( require ) {
      * @param timeStep
      * @private
      */
-    updateVelocitiesAndTemperature: function( moleculeDataSet, timeStep ){
+    updateVelocitiesAndRotationRates: function( moleculeDataSet, timeStep ){
 
       // Obtain references to the model data and parameters so that we can perform fast manipulations.
       var moleculeVelocities = moleculeDataSet.getMoleculeVelocities();
@@ -130,41 +141,6 @@ define( function( require ) {
 
       // Record the calculated temperature.
       this.temperature = ( centersOfMassKineticEnergy + rotationalKineticEnergy ) / numberOfMolecules / 1.5;
-    },
-
-    /**
-     * Update the motion of the particles and the forces that are acting upon them.  This is the heart of this class,
-     * and it is here that the actual Verlet algorithm is contained.
-     * @public
-     */
-    updateForcesAndMotion: function( timeStep ) {
-
-      var moleculeDataSet = this.multipleParticleModel.moleculeDataSet;
-      var nextMoleculeForces = moleculeDataSet.getNextMoleculeForces();
-      var numberOfMolecules = moleculeDataSet.getNumberOfMolecules();
-      var nextMoleculeTorques = moleculeDataSet.getNextMoleculeTorques();
-
-      // Update center of mass positions and angles for the molecules.
-      this.updateMoleculePositions( moleculeDataSet, timeStep );
-
-      // If there are any molecules that are currently designated as "unsafe", check them to see if they can be moved
-      // into the "safe" category.
-      if ( moleculeDataSet.numberOfSafeMolecules < numberOfMolecules ) {
-        this.updateMoleculeSafety();
-      }
-
-      // Set initial values for the forces that are acting on each atom, will be further updated below.
-      var accelerationDueToGravity = -this.multipleParticleModel.gravitationalAcceleration;
-      for ( var i = 0; i < numberOfMolecules; i++ ) {
-        nextMoleculeForces[ i ].setXY( 0, accelerationDueToGravity );
-        nextMoleculeTorques[ i ] = 0;
-      }
-
-      // Update the forces due to molecules interacting with one another.
-      this.updateInterMoleculeForces( moleculeDataSet, timeStep );
-
-      // Update velocity and angles
-      this.updateVelocitiesAndTemperature( moleculeDataSet, timeStep );
     }
   } );
 } );

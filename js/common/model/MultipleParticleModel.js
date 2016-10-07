@@ -54,7 +54,7 @@ define( function( require ) {
   var INITIAL_TEMPERATURE = StatesOfMatterConstants.SOLID_TEMPERATURE;
   var MAX_TEMPERATURE = 50.0;
   var MIN_TEMPERATURE = 0.0001;
-  var INITIAL_GRAVITATIONAL_ACCEL = 0.045;
+  var INITIAL_GRAVITATIONAL_ACCEL = -0.045;
   var TEMPERATURE_CHANGE_RATE_FACTOR = 0.07; // empirically determined to make temperate change at a good rate
   var MIN_INJECTED_MOLECULE_VELOCITY = 0.5;
   var MAX_INJECTED_MOLECULE_VELOCITY = 2.0;

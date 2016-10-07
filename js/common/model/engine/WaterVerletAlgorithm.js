@@ -49,26 +49,32 @@ define( function( require ) {
 
   return inherit( AbstractVerletAlgorithm, WaterVerletAlgorithm, {
 
-    /**
-     * Update the motion of the particles and the forces that are acting upon them.  This is the heart of this class,
-     * and it is here that the actual Verlet algorithm is contained.
-     * @public
-     */
-    updateForcesAndMotion: function( timeStep ) {
+    // @override
+    initializeForces: function( moleculeDataSet ){
+      var temperatureSetPoint = this.multipleParticleModel.getTemperatureSetPoint();
+      var accelerationDueToGravity = this.multipleParticleModel.getGravitationalAcceleration();
+      if ( temperatureSetPoint < TEMPERATURE_BELOW_WHICH_GRAVITY_INCREASES ) {
 
-      // Obtain references to the model data and parameters so that we can perform fast manipulations.
-      var moleculeDataSet = this.multipleParticleModel.getMoleculeDataSetRef();
-      var numberOfMolecules = moleculeDataSet.getNumberOfMolecules();
-      var moleculeCenterOfMassPositions = moleculeDataSet.getMoleculeCenterOfMassPositions();
-      var atomPositions = moleculeDataSet.getAtomPositions();
-      var moleculeVelocities = moleculeDataSet.getMoleculeVelocities();
-      var moleculeForces = moleculeDataSet.getMoleculeForces();
-      var nextMoleculeForces = moleculeDataSet.getNextMoleculeForces();
-      var moleculeRotationRates = moleculeDataSet.getMoleculeRotationRates();
-      var moleculeTorques = moleculeDataSet.getMoleculeTorques();
-      var nextMoleculeTorques = moleculeDataSet.getNextMoleculeTorques();
+        // Below a certain temperature, gravity is increased to counteract some odd-looking behavior caused by the
+        // thermostat.  The multiplier was empirically determined.
+        accelerationDueToGravity = accelerationDueToGravity *
+                                    ( 1 + ( TEMPERATURE_BELOW_WHICH_GRAVITY_INCREASES - temperatureSetPoint ) * 0.32 );
+      }
+      var nextMoleculeForces = moleculeDataSet.nextMoleculeForces;
+      var nextMoleculeTorques = moleculeDataSet.nextMoleculeTorques;
+      for ( var i = 0; i < moleculeDataSet.getNumberOfMolecules(); i++ ) {
+        nextMoleculeForces[ i ].setXY( 0, accelerationDueToGravity );
+        nextMoleculeTorques[ i ] = 0;
+      }
+    },
 
-      // Initialize other values that will be needed for the calculations.
+    // @override
+    updateInteractionForces: function( moleculeDataSet ) {
+
+      var moleculeCenterOfMassPositions = moleculeDataSet.moleculeCenterOfMassPositions;
+      var atomPositions = moleculeDataSet.atomPositions;
+      var nextMoleculeForces = moleculeDataSet.nextMoleculeForces;
+      var nextMoleculeTorques = moleculeDataSet.nextMoleculeTorques;
       var temperatureSetPoint = this.multipleParticleModel.getTemperatureSetPoint();
 
       // Verify that this is being used on an appropriate data set.
@@ -87,11 +93,17 @@ define( function( require ) {
 
         // Use stronger electrostatic forces in order to create more of a crystal structure.
         q0 = WATER_FULLY_FROZEN_ELECTROSTATIC_FORCE;
+
+        // Scale by the max to force space in the crystal.
+        repulsiveForceScalingFactor = MAX_REPULSIVE_SCALING_FACTOR_FOR_WATER;
       }
       else if ( temperatureSetPoint > WATER_FULLY_MELTED_TEMPERATURE ) {
 
         // Use weaker electrostatic forces in order to create more of an appearance of liquid.
         q0 = WATER_FULLY_MELTED_ELECTROSTATIC_FORCE;
+
+        // No scaling of the repulsive force.
+        repulsiveForceScalingFactor = 1;
       }
       else {
         // We are somewhere in between the temperature for being fully melted or frozen, so scale accordingly.
@@ -99,6 +111,8 @@ define( function( require ) {
                             ( WATER_FULLY_MELTED_TEMPERATURE - WATER_FULLY_FROZEN_TEMPERATURE );
         q0 = WATER_FULLY_FROZEN_ELECTROSTATIC_FORCE -
              ( temperatureFactor * ( WATER_FULLY_FROZEN_ELECTROSTATIC_FORCE - WATER_FULLY_MELTED_ELECTROSTATIC_FORCE ) );
+        repulsiveForceScalingFactor = MAX_REPULSIVE_SCALING_FACTOR_FOR_WATER -
+                                      ( temperatureFactor * (MAX_REPULSIVE_SCALING_FACTOR_FOR_WATER - 1 ) );
       }
       this.normalCharges[ 0 ] = -2 * q0;
       this.normalCharges[ 1 ] = q0;
@@ -106,80 +120,6 @@ define( function( require ) {
       this.alteredCharges[ 0 ] = -2 * q0;
       this.alteredCharges[ 1 ] = 1.67 * q0;
       this.alteredCharges[ 2 ] = 0.33 * q0;
-
-      this.updateMoleculePositions( moleculeDataSet, timeStep );
-
-      // If there are any atoms that are currently designated as "unsafe", check them to see if they can be moved into
-      // the "safe" category.
-      if ( moleculeDataSet.getNumberOfSafeMolecules() < numberOfMolecules ) {
-        this.updateMoleculeSafety();
-      }
-
-      // Set initial values for the forces that are acting on each atom, will be further updated below.
-      var gravitationalAcceleration = this.multipleParticleModel.getGravitationalAcceleration();
-      for ( var i = 0; i < numberOfMolecules; i++ ) {
-        // Clear the previous calculation's particle forces and torques.
-        nextMoleculeForces[ i ].setXY( 0, 0 );
-        nextMoleculeTorques[ i ] = 0;
-
-        // Add in the effect of gravity.
-        if ( temperatureSetPoint < TEMPERATURE_BELOW_WHICH_GRAVITY_INCREASES ) {
-
-          // Below a certain temperature, gravity is increased to counteract some odd-looking behavior caused by the
-          // thermostat.  The multiplier was empirically determined.
-          gravitationalAcceleration = gravitationalAcceleration *
-                                      ( 1 + ( TEMPERATURE_BELOW_WHICH_GRAVITY_INCREASES - temperatureSetPoint ) * 0.32 );
-        }
-        nextMoleculeForces[ i ].setY( nextMoleculeForces[ i ].y - gravitationalAcceleration );
-      }
-
-      // Set the value of the scaling factor used to adjust how the water behaves as temperature changes, part of the
-      // "hollywooding" that we do to make water freeze and thaw the way we want it to.
-      if ( temperatureSetPoint > WATER_FULLY_MELTED_TEMPERATURE ) {
-
-        // No scaling of the repulsive force.
-        repulsiveForceScalingFactor = 1;
-      }
-      else if ( temperatureSetPoint < WATER_FULLY_FROZEN_TEMPERATURE ) {
-
-        // Scale by the max to force space in the crystal.
-        repulsiveForceScalingFactor = MAX_REPULSIVE_SCALING_FACTOR_FOR_WATER;
-      }
-      else {
-
-        // We are somewhere between fully frozen and fully liquified, so adjust the scaling factor accordingly.
-        temperatureFactor = ( temperatureSetPoint - WATER_FULLY_FROZEN_TEMPERATURE) /
-                            ( WATER_FULLY_MELTED_TEMPERATURE - WATER_FULLY_FROZEN_TEMPERATURE );
-        repulsiveForceScalingFactor = MAX_REPULSIVE_SCALING_FACTOR_FOR_WATER -
-                                      ( temperatureFactor * (MAX_REPULSIVE_SCALING_FACTOR_FOR_WATER - 1 ) );
-      }
-
-      this.calculateInterParticleInteractions(
-        moleculeDataSet,
-        moleculeCenterOfMassPositions,
-        repulsiveForceScalingFactor,
-        nextMoleculeForces,
-        nextMoleculeTorques,
-        atomPositions
-      );
-
-      this.updateVelocityRotationAndEnergy(
-        moleculeDataSet,
-        numberOfMolecules,
-        moleculeVelocities,
-        timeStep,
-        moleculeForces,
-        nextMoleculeForces,
-        moleculeRotationRates,
-        moleculeTorques,
-        nextMoleculeTorques
-      );
-    },
-
-    // @private
-    calculateInterParticleInteractions: function( moleculeDataSet, moleculeCenterOfMassPositions,
-                                                  repulsiveForceScalingFactor, nextMoleculeForces, nextMoleculeTorques,
-                                                  atomPositions ) {
 
       // Calculate the force and torque due to inter-particle interactions.
       var numberOfSafeMolecules = moleculeDataSet.getNumberOfSafeMolecules();
@@ -278,10 +218,17 @@ define( function( require ) {
       }
     },
 
-    // @private
-    updateVelocityRotationAndEnergy: function( moleculeDataSet, numberOfMolecules, moleculeVelocities, timeStep,
-                                               moleculeForces, nextMoleculeForces, moleculeRotationRates,
-                                               moleculeTorques, nextMoleculeTorques ) {
+    // @override
+    updateVelocitiesAndRotationRates: function( moleculeDataSet, timeStep ) {
+
+      var numberOfMolecules = moleculeDataSet.getNumberOfMolecules();
+      var moleculeVelocities = moleculeDataSet.moleculeVelocities;
+      var moleculeForces = moleculeDataSet.moleculeForces;
+      var nextMoleculeForces = moleculeDataSet.nextMoleculeForces;
+      var moleculeRotationRates = moleculeDataSet.moleculeRotationRates;
+      var moleculeTorques = moleculeDataSet.moleculeTorques;
+      var nextMoleculeTorques = moleculeDataSet.nextMoleculeTorques;
+
       var timeStepHalf = timeStep / 2;
 
       // Update the velocities and rotation rates and calculate kinetic energy.

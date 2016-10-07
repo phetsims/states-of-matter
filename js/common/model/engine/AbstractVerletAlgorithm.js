@@ -34,7 +34,7 @@ define( function( require ) {
     } );
 
     this.multipleParticleModel = multipleParticleModel; // @protected, read only
-    
+
     // @protected, read-write, used to set where particles bounce
     this.sideBounceInset = 1;
     this.bottomBounceInset = 1;
@@ -140,7 +140,7 @@ define( function( require ) {
               // compressing the container.
               moleculeVelocity.y = -( moleculeVelocityY + lidVelocity * 0.5 );
             }
-            else if( moleculeVelocityY < lidVelocity ){
+            else if ( moleculeVelocityY < lidVelocity ) {
               moleculeVelocity.y = lidVelocity;
             }
             accumulatedPressure += Math.abs( moleculeVelocityY );
@@ -170,9 +170,8 @@ define( function( require ) {
      * kinetic energy that could end up launching it out of the container.
      * @protected
      */
-    updateMoleculeSafety: function() {
+    updateMoleculeSafety: function( moleculeDataSet ) {
 
-      var moleculeDataSet = this.multipleParticleModel.moleculeDataSet;
       var numberOfSafeMolecules = moleculeDataSet.getNumberOfSafeMolecules();
       var numberOfMolecules = moleculeDataSet.getNumberOfMolecules();
 
@@ -245,6 +244,47 @@ define( function( require ) {
           moleculeDataSet.setNumberOfSafeMolecules( numberOfSafeMolecules );
         }
       }
+    },
+
+    /**
+     * Update the motion of the particles and the forces that are acting upon them.  This is the heart of this class,
+     * and it is here that the actual Verlet algorithm is contained.
+     * @public
+     */
+    updateForcesAndMotion: function( timeStep ) {
+
+      // Obtain references to the model data and parameters so that we can perform fast manipulations.
+      var moleculeDataSet = this.multipleParticleModel.moleculeDataSet;
+
+      // Update the atom positions based on velocities, current forces, and interactions with the wall.
+      this.updateMoleculePositions( moleculeDataSet, timeStep );
+
+      // Update the "safety status" of the molecules, which determines if they are okay to interact with others.
+      this.updateMoleculeSafety( moleculeDataSet );
+
+      // Set initial values for the forces that are acting on each atom or molecule, will be further updated below.
+      this.initializeForces( moleculeDataSet );
+
+      // Calculate the forces created through interactions with other atoms/molecules.
+      this.updateInteractionForces( moleculeDataSet );
+
+      // Update the velocities and rotation rates based on the forces acting on the atoms/molecules.
+      this.updateVelocitiesAndRotationRates( moleculeDataSet, timeStep );
+    },
+
+    // @protected
+    initializeForces: function( moleculeDataSet ) {
+      assert && assert( false, 'abstract method, must be overridden in descendant classes' );
+    },
+
+    // @protected
+    updateInteractionForces: function( moleculeDataSet ) {
+      assert && assert( false, 'abstract method, must be overridden in descendant classes' );
+    },
+
+    // @protected
+    updateVelocitiesAndRotationRates: function( moleculeDataSet ) {
+      assert && assert( false, 'abstract method, must be overridden in descendant classes' );
     },
 
     setScaledEpsilon: function() {
