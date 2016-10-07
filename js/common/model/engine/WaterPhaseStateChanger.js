@@ -95,10 +95,11 @@ define( function( require ) {
       // Get references to the various elements of the data set.
       var moleculeDataSet = this.multiPleParticleModel.getMoleculeDataSetRef();
       var numberOfMolecules = moleculeDataSet.getNumberOfMolecules();
-      var moleculeCenterOfMassPositions = moleculeDataSet.getMoleculeCenterOfMassPositions();
-      var moleculeVelocities = moleculeDataSet.getMoleculeVelocities();
-      var moleculeRotationAngles = moleculeDataSet.getMoleculeRotationAngles();
-      var moleculeRotationRates = moleculeDataSet.getMoleculeRotationRates();
+      var moleculeCenterOfMassPositions = moleculeDataSet.moleculeCenterOfMassPositions;
+      var moleculeVelocities = moleculeDataSet.moleculeVelocities;
+      var moleculeRotationAngles = moleculeDataSet.moleculeRotationAngles;
+      var moleculeRotationRates = moleculeDataSet.moleculeRotationRates;
+      var moleculesInsideContainer = this.multipleParticleModel.moleculeDataSet.insideContainer;
 
       // Create and initialize other variables needed to do the job
       var temperatureSqrt = Math.sqrt( this.multiPleParticleModel.getTemperatureSetPoint() );
@@ -135,8 +136,10 @@ define( function( require ) {
             xPos += MIN_INITIAL_DIAMETER_DISTANCE / 2;
           }
           yPos = startingPosY + (i * MIN_INITIAL_DIAMETER_DISTANCE * 0.866);
-          moleculeCenterOfMassPositions[ (i * moleculesPerLayer) + j ].setXY( xPos, yPos );
-          moleculeRotationAngles[ (i * moleculesPerLayer) + j ] = Math.random() * 2 * Math.PI;
+          var atomIndex = ( i * moleculesPerLayer ) + j;
+          moleculeCenterOfMassPositions[ atomIndex ].setXY( xPos, yPos );
+          moleculeRotationAngles[ atomIndex ] = Math.random() * 2 * Math.PI;
+          moleculesInsideContainer[ atomIndex ] = true;
           moleculesPlaced++;
         }
       }
@@ -153,10 +156,11 @@ define( function( require ) {
 
       // Get references to the various elements of the data set.
       var moleculeDataSet = this.multiPleParticleModel.getMoleculeDataSetRef();
-      var moleculeCenterOfMassPositions = moleculeDataSet.getMoleculeCenterOfMassPositions();
-      var moleculeVelocities = moleculeDataSet.getMoleculeVelocities();
-      var moleculeRotationAngles = moleculeDataSet.getMoleculeRotationAngles();
-      var moleculeRotationRates = moleculeDataSet.getMoleculeRotationRates();
+      var moleculeCenterOfMassPositions = moleculeDataSet.moleculeCenterOfMassPositions;
+      var moleculeVelocities = moleculeDataSet.moleculeVelocities;
+      var moleculeRotationAngles = moleculeDataSet.moleculeRotationAngles;
+      var moleculeRotationRates = moleculeDataSet.moleculeRotationRates;
+      var moleculesInsideContainer = this.multipleParticleModel.moleculeDataSet.insideContainer;
 
       // Create and initialize other variables needed to do the job.
       var temperatureSqrt = Math.sqrt( this.multiPleParticleModel.getTemperatureSetPoint() );
@@ -170,8 +174,10 @@ define( function( require ) {
 
         // Assign each molecule an initial rotation rate.
         moleculeRotationRates[ i ] = Math.random() * temperatureSqrt * Math.PI * 2;
-      }
 
+        // Mark each molecule as in the container.
+        moleculesInsideContainer[ i ] = true;
+      }
 
       // Assign each molecule to a position.
       var moleculesPlaced = 0;
@@ -201,10 +207,8 @@ define( function( require ) {
             particlesOnCurrentLayer = 0;
           }
 
-          // Check if the position is too close to the wall.  Note
-          // that we don't check inter-particle distances here - we rely
-          // on the placement algorithm to make sure that this is not a
-          // problem.
+          // Check if the position is too close to the wall.  Note that we don't check inter-particle distances here -
+          // we rely on the placement algorithm to make sure that this is not a problem.
           if ( (xPos > this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE) &&
                (xPos < this.multiPleParticleModel.getNormalizedContainerWidth() - this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE) &&
                (yPos > this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE) &&
@@ -235,6 +239,7 @@ define( function( require ) {
       var moleculeVelocities = moleculeDataSet.getMoleculeVelocities();
       var moleculeRotationAngles = moleculeDataSet.getMoleculeRotationAngles();
       var moleculeRotationRates = moleculeDataSet.getMoleculeRotationRates();
+      var moleculesInsideContainer = this.multipleParticleModel.moleculeDataSet.insideContainer;
 
       // Create and initialize other variables needed to do the job.
       var temperatureSqrt = Math.sqrt( this.multiPleParticleModel.getTemperatureSetPoint() );
@@ -252,6 +257,9 @@ define( function( require ) {
 
         // Assign each molecule an initial rotation rate.
         moleculeRotationRates[ i ] = ( Math.random() * 2 - 1 ) * temperatureSqrt * Math.PI * 2;
+
+        // Mark each molecule as in the container.
+        moleculesInsideContainer[ i ] = true;
       }
 
       // Redistribute the molecules randomly around the container, but make sure that they are not too close together or

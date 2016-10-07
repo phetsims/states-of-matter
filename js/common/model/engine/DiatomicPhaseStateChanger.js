@@ -99,6 +99,7 @@ define( function( require ) {
       var moleculeCenterOfMassPositions = moleculeDataSet.moleculeCenterOfMassPositions;
       var moleculeVelocities = moleculeDataSet.moleculeVelocities;
       var moleculeRotationAngles = moleculeDataSet.moleculeRotationAngles;
+      var moleculesInsideContainer = this.multipleParticleModel.moleculeDataSet.insideContainer;
 
       // Create and initialize other variables needed to do the job.
       var temperatureSqrt = Math.sqrt( this.multipleParticleModel.temperatureSetPoint );
@@ -118,22 +119,26 @@ define( function( require ) {
       var yPos;
       for ( var i = 0; i < numberOfMolecules; i++ ) {      // One iteration per layer.
 
-        for ( var j = 0; (j < moleculesPerLayer ) && ( moleculesPlaced < numberOfMolecules ); j++ ) {
-          xPos = startingPosX + (j * MIN_INITIAL_DIAMETER_DISTANCE);
+        for ( var j = 0; ( j < moleculesPerLayer ) && ( moleculesPlaced < numberOfMolecules ); j++ ) {
+          xPos = startingPosX + ( j * MIN_INITIAL_DIAMETER_DISTANCE );
           if ( i % 2 !== 0 ) {
 
             // Every other row is shifted a bit to create hexagonal pattern.
             xPos += ( 1 + this.DISTANCE_BETWEEN_PARTICLES_IN_CRYSTAL ) / 2;
           }
           yPos = startingPosY + ( i * MIN_INITIAL_DIAMETER_DISTANCE * 0.5 );
-          moleculeCenterOfMassPositions[ (i * moleculesPerLayer) + j ].setXY( xPos, yPos );
-          moleculeRotationAngles[ ( i * moleculesPerLayer) + j ] = 0;
+          var moleculeIndex = ( i * moleculesPerLayer) + j
+          moleculeCenterOfMassPositions[ moleculeIndex ].setXY( xPos, yPos );
+          moleculeRotationAngles[ moleculeIndex ] = 0;
           moleculesPlaced++;
 
           // Assign each molecule an initial velocity.
           var xVel = temperatureSqrt * this.rand.nextGaussian();
           var yVel = temperatureSqrt * this.rand.nextGaussian();
-          moleculeVelocities[ ( i * moleculesPerLayer) + j ].setXY( xVel, yVel );
+          moleculeVelocities[ moleculeIndex ].setXY( xVel, yVel );
+
+          // Mark the molecule as being in the container.
+          moleculesInsideContainer[ i ] = true;
         }
       }
     },
@@ -153,6 +158,7 @@ define( function( require ) {
       var moleculeVelocities = moleculeDataSet.getMoleculeVelocities();
       var moleculeRotationAngles = moleculeDataSet.getMoleculeRotationAngles();
       var moleculeRotationRates = moleculeDataSet.getMoleculeRotationRates();
+      var moleculesInsideContainer = this.multipleParticleModel.moleculeDataSet.insideContainer;
 
       // Create and initialize other variables needed to do the job.
       var temperatureSqrt = Math.sqrt( this.multipleParticleModel.getTemperatureSetPoint() );
@@ -166,6 +172,9 @@ define( function( require ) {
 
         // Assign each molecule an initial rotation rate.
         moleculeRotationRates[ i ] = Math.random() * temperatureSqrt * Math.PI * 2;
+
+        // Mark the molecule as inside the container.
+        moleculesInsideContainer[ i ] = true;
       }
       // Assign each molecule to a position.
       var moleculesPlaced = 0;
@@ -226,6 +235,7 @@ define( function( require ) {
       var moleculeVelocities = moleculeDataSet.getMoleculeVelocities();
       var moleculeRotationAngles = moleculeDataSet.getMoleculeRotationAngles();
       var moleculeRotationRates = moleculeDataSet.getMoleculeRotationRates();
+      var moleculesInsideContainer = this.multipleParticleModel.moleculeDataSet.insideContainer;
 
       // Create and initialize other variables needed to do the job.
       var temperatureSqrt = Math.sqrt( this.multipleParticleModel.getTemperatureSetPoint() );
@@ -243,6 +253,9 @@ define( function( require ) {
 
         // Assign each molecule an initial rotation rate.
         moleculeRotationRates[ i ] = Math.random() * temperatureSqrt * Math.PI * 2;
+
+        // Mark each molecule as being in the container.
+        moleculesInsideContainer[ i ] = true;
       }
 
       // Redistribute the molecules randomly around the container, but make sure that they are not too close together or

@@ -104,8 +104,14 @@ define( function( require ) {
                    ( timeStep * moleculeVelocityY ) +
                    ( timeStepSqrHalf * moleculeForces[ i ].y * massInverse);
 
+        if ( !moleculeDataSet.insideContainer[ i ] && this.isNormalizedPositionInContainer( xPos, yPos ) ){
+
+          // The particle had left the container, but is now back inside, so update the status
+          moleculeDataSet.insideContainer[ i ] = true;
+        }
+
         // handle any bouncing off of the walls of the container
-        if ( this.isNormalizedPositionInContainer( xPos, yPos ) ) {
+        if ( moleculeDataSet.insideContainer[ i ] ) {
 
           // handle bounce off the walls
           if ( xPos <= minX && moleculeVelocityX < 0 ) {
@@ -128,22 +134,29 @@ define( function( require ) {
             yPos = minY;
             moleculeVelocity.y = -moleculeVelocityY;
           }
-          else if ( yPos >= maxY && !this.multipleParticleModel.getContainerExploded() ) {
+          else if ( yPos >= maxY  ) {
 
-            // This particle bounced off the top, so use the lid's velocity in calculation of the new velocity
-            yPos = maxY;
-            var lidVelocity = this.multipleParticleModel.normalizedLidVelocityY;
-            if ( moleculeVelocityY > 0 ) {
+            if ( !this.multipleParticleModel.getContainerExploded() ) {
 
-              // Add the lid's downward velocity to the particle's velocity, but not quite all of it.  The multiplier
-              // was empirically determined to look reasonable without causing the pressure to go up too quickly when
-              // compressing the container.
-              moleculeVelocity.y = -( moleculeVelocityY + lidVelocity * 0.5 );
+              // This particle bounced off the top, so use the lid's velocity in calculation of the new velocity
+              yPos = maxY;
+              var lidVelocity = this.multipleParticleModel.normalizedLidVelocityY;
+              if ( moleculeVelocityY > 0 ) {
+
+                // Add the lid's downward velocity to the particle's velocity, but not quite all of it.  The multiplier
+                // was empirically determined to look reasonable without causing the pressure to go up too quickly when
+                // compressing the container.
+                moleculeVelocity.y = -( moleculeVelocityY + lidVelocity * 0.5 );
+              }
+              else if ( moleculeVelocityY < lidVelocity ) {
+                moleculeVelocity.y = lidVelocity;
+              }
+              accumulatedPressure += Math.abs( moleculeVelocityY );
             }
-            else if ( moleculeVelocityY < lidVelocity ) {
-              moleculeVelocity.y = lidVelocity;
+            else{
+              // This particle has left the container.
+              moleculeDataSet.insideContainer[ i ] = false;
             }
-            accumulatedPressure += Math.abs( moleculeVelocityY );
           }
         }
 

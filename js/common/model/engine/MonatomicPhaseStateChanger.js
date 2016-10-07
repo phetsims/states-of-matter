@@ -91,6 +91,7 @@ define( function( require ) {
       var numberOfAtoms = this.multipleParticleModel.moleculeDataSet.numberOfAtoms;
       var moleculeCenterOfMassPositions = this.multipleParticleModel.moleculeDataSet.moleculeCenterOfMassPositions;
       var moleculeVelocities = this.multipleParticleModel.moleculeDataSet.moleculeVelocities;
+      var moleculesInsideContainer = this.multipleParticleModel.moleculeDataSet.insideContainer;
       var temperatureSqrt = Math.sqrt( this.multipleParticleModel.temperatureSetPoint );
       var atomsPerLayer = Math.round( Math.sqrt( numberOfAtoms ) );
 
@@ -111,14 +112,18 @@ define( function( require ) {
             // Every other row is shifted a bit to create hexagonal pattern.
             xPos += MIN_INITIAL_INTER_PARTICLE_DISTANCE / 2;
           }
+          var atomIndex = ( i * atomsPerLayer ) + j;
           yPos = startingPosY + i * MIN_INITIAL_INTER_PARTICLE_DISTANCE * 0.866;
-          moleculeCenterOfMassPositions[ ( i * atomsPerLayer ) + j ].setXY( xPos, yPos );
+          moleculeCenterOfMassPositions[ atomIndex ].setXY( xPos, yPos );
 
           particlesPlaced++;
 
           // Assign each particle an initial velocity.
-          moleculeVelocities[ ( i * atomsPerLayer ) + j ].x = temperatureSqrt * this.random.nextGaussian();
-          moleculeVelocities[ ( i * atomsPerLayer ) + j ].y = temperatureSqrt * this.random.nextGaussian();
+          moleculeVelocities[ atomIndex ].x = temperatureSqrt * this.random.nextGaussian();
+          moleculeVelocities[ atomIndex ].y = temperatureSqrt * this.random.nextGaussian();
+
+          // Mark particle as inside the container.
+          moleculesInsideContainer[ atomIndex ] = true;
         }
       }
     },
@@ -136,6 +141,8 @@ define( function( require ) {
       var numberOfAtoms = this.multipleParticleModel.moleculeDataSet.numberOfAtoms;
       var moleculeCenterOfMassPositions = this.multipleParticleModel.moleculeDataSet.moleculeCenterOfMassPositions;
       var moleculeVelocities = this.multipleParticleModel.moleculeDataSet.moleculeVelocities;
+      var moleculesInsideContainer = this.multipleParticleModel.moleculeDataSet.insideContainer;
+
       for ( var i = 0; i < numberOfAtoms; i++ ) {
 
         // Assign each particle an initial velocity.
@@ -178,7 +185,9 @@ define( function( require ) {
                ( xPos < this.multipleParticleModel.normalizedContainerHeight - this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE ) ) {
 
             // This is an acceptable position.
-            moleculeCenterOfMassPositions[ atomsPlaced++ ].setXY( xPos, yPos );
+            moleculeCenterOfMassPositions[ atomsPlaced ].setXY( xPos, yPos );
+            moleculesInsideContainer[ atomsPlaced ] = true;
+            atomsPlaced++;
             break;
           }
         }
@@ -197,6 +206,7 @@ define( function( require ) {
       var numberOfAtoms = this.multipleParticleModel.moleculeDataSet.numberOfAtoms;
       var moleculeCenterOfMassPositions = this.multipleParticleModel.moleculeDataSet.moleculeCenterOfMassPositions;
       var moleculeVelocities = this.multipleParticleModel.moleculeDataSet.moleculeVelocities;
+      var moleculesInsideContainer = this.multipleParticleModel.moleculeDataSet.insideContainer;
 
       for ( var i = 0; i < numberOfAtoms; i++ ) {
         // Temporarily position the particles at (0,0).
@@ -237,6 +247,7 @@ define( function( require ) {
             moleculeCenterOfMassPositions[ i ].setXY( newPosX, newPosY );
           }
         }
+        moleculesInsideContainer[ i ] = true;
       }
     }
   } );
