@@ -22,8 +22,8 @@ define( function( require ) {
   var WATER_FULLY_MELTED_TEMPERATURE = 0.3;
   var WATER_FULLY_MELTED_ELECTROSTATIC_FORCE = 1.0;
   var WATER_FULLY_FROZEN_TEMPERATURE = 0.22;
-  var WATER_FULLY_FROZEN_ELECTROSTATIC_FORCE = 4.0;
-  var MAX_REPULSIVE_SCALING_FACTOR_FOR_WATER = 3.0;
+  var WATER_FULLY_FROZEN_ELECTROSTATIC_FORCE = 4.25;
+  var MAX_REPULSIVE_SCALING_FACTOR_FOR_WATER = 5.25;
   var MAX_ROTATION_RATE = 16; // revolutions per second, empirically determined, see usage below
   var TEMPERATURE_BELOW_WHICH_GRAVITY_INCREASES = 0.10;
 
@@ -148,7 +148,7 @@ define( function( require ) {
           // Calculate Lennard-Jones potential between mass centers.
           var dx = m1x - m2x;
           var dy = m1y - m2y;
-          var distanceSquared = dx * dx + dy * dy;
+          var distanceSquared = Math.max( dx * dx + dy * dy, this.MIN_DISTANCE_SQUARED );
           if ( distanceSquared < this.PARTICLE_INTERACTION_DISTANCE_THRESH_SQRD ) {
             // Select charges for the other molecule.
             var chargesB;
@@ -160,7 +160,6 @@ define( function( require ) {
             }
 
             // Calculate the Lennard-Jones interaction forces.
-            distanceSquared = Math.max( distanceSquared, this.MIN_DISTANCE_SQUARED );
             var r2inv = 1 / distanceSquared;
             var r6inv = r2inv * r2inv * r2inv;
 
@@ -203,8 +202,7 @@ define( function( require ) {
 
                 dx = atomPosition1.x - atomPosition2.x;
                 dy = atomPosition1.y - atomPosition2.y;
-                distanceSquared = ( dx * dx + dy * dy );
-                distanceSquared = Math.max( distanceSquared, this.MIN_DISTANCE_SQUARED );
+                distanceSquared = Math.max( dx * dx + dy * dy, this.MIN_DISTANCE_SQUARED );
                 r2inv = 1 / distanceSquared;
                 forceScalar = chargeAii * chargesB[ jj ] * r2inv * r2inv;
                 forceX = dx * forceScalar;

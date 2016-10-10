@@ -350,9 +350,12 @@ define( function( require ) {
     // static final
     PARTICLE_INTERACTION_DISTANCE_THRESH_SQRD: 6.25,
 
-    // Constant used to limit the proximity of atoms when calculating the interaction potential.  This helps to prevent
-    // getting huge potential value numbers and thus high particle velocities.  It is in model units and is empirically
-    // determined such that the particles appear to interact well but don't go crazy when the container is compressed.
-    MIN_DISTANCE_SQUARED: 0.95
+    // Constant used to limit the proximity of atoms when calculating the interaction potential.  This does NOT actually
+    // limit how close they can get to one another, just the value used in the LJ calculation.  Having such a limit
+    // helps to prevent getting huge potential value numbers and thus unmanageably high particle velocities.  It is in
+    // model units and is empirically determined such that the particles appear to interact well but don't go crazy when
+    // the container is compressed.  Take care when modifying it - such modifications can have somewhat unexpected side
+    // effects, such as changing how water crystalizes when it freezes.
+    MIN_DISTANCE_SQUARED: 0.90
   } );
 } );

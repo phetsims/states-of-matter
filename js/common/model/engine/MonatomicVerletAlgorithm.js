@@ -15,6 +15,7 @@ define( function( require ) {
   var AbstractVerletAlgorithm = require( 'STATES_OF_MATTER/common/model/engine/AbstractVerletAlgorithm' );
   var MonatomicAtomPositionUpdater = require( 'STATES_OF_MATTER/common/model/engine/MonatomicAtomPositionUpdater' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  var Vector2 = require( 'DOT/Vector2' );
 
   /**
    * @param {MultipleParticleModel} multipleParticleModel of the simulation
@@ -24,6 +25,7 @@ define( function( require ) {
     AbstractVerletAlgorithm.call( this, multipleParticleModel );
     this.positionUpdater = MonatomicAtomPositionUpdater;
     this.epsilon = 1; // controls the strength of particle interaction
+    this.velocityVector = new Vector2(); // reusable vector to save allocations
   }
 
   statesOfMatter.register( 'MonatomicVerletAlgorithm', MonatomicVerletAlgorithm );
@@ -72,7 +74,7 @@ define( function( require ) {
 
           var dx = atomCenterOfMassPositionsIX - atomCenterOfMassPositions[ j ].x;
           var dy = atomCenterOfMassPositionsIY - atomCenterOfMassPositions[ j ].y;
-          var distanceSqrd = ( dx * dx ) + ( dy * dy );
+          var distanceSqrd = Math.max( dx * dx + dy * dy, this.MIN_DISTANCE_SQUARED );
 
           if ( distanceSqrd === 0 ) {
             // Handle the special case where the particles are right on top of each other by assigning an arbitrary
@@ -83,11 +85,7 @@ define( function( require ) {
           }
 
           if ( distanceSqrd < this.PARTICLE_INTERACTION_DISTANCE_THRESH_SQRD ) {
-            // This pair of particles is close enough to one another that we need to calculate their interaction
-            // forces.
-            if ( distanceSqrd < this.MIN_DISTANCE_SQUARED ) {
-              distanceSqrd = this.MIN_DISTANCE_SQUARED;
-            }
+            // This pair of particles is close enough to one another that we need to calculate their interaction forces.
             var r2inv = 1 / distanceSqrd;
             var r6inv = r2inv * r2inv * r2inv;
             var forceScalar = 48 * r2inv * r6inv * ( r6inv - 0.5 ) * this.epsilon;
@@ -109,14 +107,20 @@ define( function( require ) {
       var nextAtomForces = moleculeDataSet.nextMoleculeForces;
       var timeStepHalf = timeStep / 2;
       var kineticEnergy = 0;
+      var velocityVector = this.velocityVector;
 
       for ( var i = 0; i < numberOfAtoms; i++ ) {
         atomVelocity = atomVelocities[ i ];
         var moleculeForce = atomForces[ i ];
-        atomVelocity.addXY(
-          timeStepHalf * ( moleculeForce.x + nextAtomForces[ i ].x ),
-          timeStepHalf * ( moleculeForce.y + nextAtomForces[ i ].y )
+        velocityVector = velocityVector.setXY(
+          atomVelocity.x + timeStepHalf * ( moleculeForce.x + nextAtomForces[ i ].x ),
+          atomVelocity.y + timeStepHalf * ( moleculeForce.y + nextAtomForces[ i ].y )
         );
+        if ( velocityVector.magnitude() > 10 ){
+          velocityVector.setMagnitude( 10 );
+        }
+
+        atomVelocity.set( velocityVector );
         kineticEnergy += ( ( atomVelocity.x * atomVelocity.x ) +
                            ( atomVelocity.y * atomVelocity.y ) ) / 2;
 
