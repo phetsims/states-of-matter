@@ -127,7 +127,7 @@ define( function( require ) {
             xPos += ( 1 + this.DISTANCE_BETWEEN_PARTICLES_IN_CRYSTAL ) / 2;
           }
           yPos = startingPosY + ( i * MIN_INITIAL_DIAMETER_DISTANCE * 0.5 );
-          var moleculeIndex = ( i * moleculesPerLayer) + j
+          var moleculeIndex = ( i * moleculesPerLayer ) + j;
           moleculeCenterOfMassPositions[ moleculeIndex ].setXY( xPos, yPos );
           moleculeRotationAngles[ moleculeIndex ] = 0;
           moleculesPlaced++;
