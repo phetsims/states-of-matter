@@ -63,12 +63,13 @@ define( function( require ) {
     }
     else if ( atomsPerMolecule === 2 ) {
       this.moleculeMass = 2; // Two molecules, assumed to be the same.
-      this.moleculeRotationalInertia = Math.pow( StatesOfMatterConstants.DIATOMIC_PARTICLE_DISTANCE, 2 ) / 2;
+      this.moleculeRotationalInertia = this.moleculeMass *
+                                       Math.pow( StatesOfMatterConstants.DIATOMIC_PARTICLE_DISTANCE, 2 ) / 2;
     }
     else if ( atomsPerMolecule === 3 ) {
       // NOTE: These settings only work for water, since that is the only supported triatomic molecule at the time of
       // this writing (Nov 2008).  If other 3-atom molecules are added, this will need to be changed.
-      this.moleculeMass = 1.5; // Two molecules, assumed to be the same.
+      this.moleculeMass = 1.5; // Three molecules, one relatively heavy and two light
       this.moleculeRotationalInertia = WaterMoleculeStructure.rotationalInertia;
     }
   }

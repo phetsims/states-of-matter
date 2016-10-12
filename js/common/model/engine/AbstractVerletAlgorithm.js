@@ -145,20 +145,22 @@ define( function( require ) {
               // This particle bounced off the top, so use the lid's velocity in calculation of the new velocity
               yPos = maxY;
               var lidVelocity = this.multipleParticleModel.normalizedLidVelocityY;
+
+              // if the lid velocity is non-zero, set a flag that indicates that the lid changed a particle's velocity
+              if ( lidVelocity !== 0 ){
+                this.lidChangedParticleVelocity = true;
+              }
+
+              // bounce the particle
               if ( moleculeVelocityY > 0 ) {
 
                 // Add the lid's downward velocity to the particle's velocity, but not quite all of it.  The multiplier
                 // was empirically determined to look reasonable without causing the pressure to go up too quickly when
                 // compressing the container.
                 moleculeVelocity.y = -( moleculeVelocityY + lidVelocity * 0.5 );
-                
-                if ( Math.abs( lidVelocity ) > 0 ){
-                  this.lidChangedParticleVelocity = true;
-                }
               }
               else if ( moleculeVelocityY < lidVelocity ) {
                 moleculeVelocity.y = lidVelocity;
-                this.lidChangedParticleVelocity = true;
               }
               accumulatedPressure += Math.abs( moleculeVelocityY );
             }

@@ -118,7 +118,7 @@ define( function( require ) {
       var inertiaInverse = 1 / moleculeDataSet.getMoleculeRotationalInertia();
       var timeStepHalf = timeStep / 2;
 
-      var centersOfMassKineticEnergy = 0;
+      var linearKineticEnergy = 0;
       var rotationalKineticEnergy = 0;
       for ( var i = 0; i < numberOfMolecules; i++ ) {
         var xVel = moleculeVelocities[ i ].x +
@@ -128,9 +128,7 @@ define( function( require ) {
         moleculeVelocities[ i ].setXY( xVel, yVel );
         moleculeRotationRates[ i ] += timeStepHalf * ( moleculeTorques[ i ] + nextMoleculeTorques[ i ] ) *
                                       inertiaInverse;
-        centersOfMassKineticEnergy += 0.5 * moleculeDataSet.moleculeMass *
-                                      ( Math.pow( moleculeVelocities[ i ].x, 2 ) +
-                                        Math.pow( moleculeVelocities[ i ].y, 2 ) );
+        linearKineticEnergy += 0.5 * moleculeDataSet.moleculeMass * moleculeVelocities[ i ].magnitudeSquared();
         rotationalKineticEnergy += 0.5 * moleculeDataSet.moleculeRotationalInertia *
                                    Math.pow( moleculeRotationRates[ i ], 2 );
 
@@ -140,7 +138,7 @@ define( function( require ) {
       }
 
       // Record the calculated temperature.
-      this.temperature = ( centersOfMassKineticEnergy + rotationalKineticEnergy ) / numberOfMolecules / 1.5;
+      this.temperature = ( linearKineticEnergy + rotationalKineticEnergy ) / numberOfMolecules / 1.5;
     }
   } );
 } );
