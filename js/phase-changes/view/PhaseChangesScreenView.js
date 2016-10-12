@@ -191,7 +191,8 @@ define( function( require ) {
       visible: false,
       xMargin: 10,
       right: self.particleContainerNode.left - 2 * X_INSET,
-      top: self.particleContainerNode.centerY + RETURN_LID_BUTTON_Y_OFFSET
+      // TODO: Make this align with top of particle container when #162 is worked out
+      top: 100
     } );
     this.addChild( this.returnLidButton );
     multipleParticleModel.isExplodedProperty.linkAttribute( this.returnLidButton, 'visible' );
