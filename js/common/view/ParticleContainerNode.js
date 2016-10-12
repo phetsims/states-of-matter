@@ -70,8 +70,8 @@ define( function( require ) {
       centerY: openEllipse.centerY
     } );
 
-    // add the opening at the top of the container
-    var openingNode = new Path( new Shape()
+    // define the opening at the top of the container, should be added to scene graph separately for correct layering
+    this.openingNode = new Path( new Shape()
       .ellipticalArc(
         this.containerWidthWithMargin / 2,
         ellipseCenterY,
@@ -89,7 +89,6 @@ define( function( require ) {
         centerY: openEllipse.centerY
       }
     );
-    this.addChild( openingNode );
 
     var containerLeftShapeWidth = 25;
     var distanceFromTopInnerTop = 0;

@@ -98,11 +98,17 @@ define( function( require ) {
     this.multipleParticleModel = multipleParticleModel;
     this.modelTemperatureHistory = new ObservableArray( { allowDuplicates: true } );
 
-    // add particle container node
+    // create the particle container, portions of which are added separately to the scene graph
     this.particleContainerNode = new ParticleContainerNode( multipleParticleModel, modelViewTransform, true, true, {
       centerX: heaterCoolerNode.centerX - PARTICLE_CONTAINER_X_OFFSET,
       bottom: heaterCoolerNode.top - INSET
     } );
+
+    // add the opening at the top of the particle container, done at this point for correctly layering
+    // TODO: This are tweaked to work out, should be fixed, see https://github.com/phetsims/states-of-matter/issues/162
+    this.particleContainerNode.openingNode.centerX = heaterCoolerNode.centerX - 9;
+    this.particleContainerNode.openingNode.centerY = 93;
+    this.addChild( this.particleContainerNode.openingNode );
 
     // add particle canvas layer for particle rendering
     this.particlesLayer = new ParticleImageCanvasNode( multipleParticleModel.particles, modelViewTransform, {
@@ -112,6 +118,8 @@ define( function( require ) {
         PARTICLE_CANVAS_LAYER_BOUND_LIMIT, PARTICLE_CANVAS_LAYER_BOUND_LIMIT )
     } );
     this.addChild( this.particlesLayer );
+
+    // add the main portion of the particle container
     this.addChild( this.particleContainerNode );
 
     // adjust the container back node position
