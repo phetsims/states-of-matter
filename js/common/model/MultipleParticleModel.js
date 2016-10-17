@@ -56,9 +56,8 @@ define( function( require ) {
   var MIN_TEMPERATURE = 0.0001;
   var INITIAL_GRAVITATIONAL_ACCEL = -0.045;
   var TEMPERATURE_CHANGE_RATE_FACTOR = 0.07; // empirically determined to make temperate change at a good rate
-  var MIN_INJECTED_MOLECULE_VELOCITY = 0.5;
-  var MAX_INJECTED_MOLECULE_VELOCITY = 2.0;
-  var MAX_INJECTED_MOLECULE_ANGLE = Math.PI * 0.8;
+  var INJECTED_MOLECULE_VELOCITY = 2.0; // in normalized model units per second, empirically determined to look reasonable
+  var INJECTED_MOLECULE_ANGLE_SPREAD = Math.PI * 0.25; // in radians, empirically determined to look reasonable
   var INJECTION_POINT_HORIZ_PROPORTION = 0.05;
   var INJECTION_POINT_VERT_PROPORTION = 0.25;
   var MIN_ALLOWABLE_CONTAINER_HEIGHT = 1500; // empirically determined, almost all the way to the bottom
@@ -86,9 +85,6 @@ define( function( require ) {
   // Range for deciding if the temperature is near the current set point. The units are internal model units.
   var TEMPERATURE_CLOSENESS_RANGE = 0.15;
 
-  // Constant for deciding if a particle should be considered near to the edges of the container.
-  var PARTICLE_EDGE_PROXIMITY_RANGE = 2.5;
-
   // Values used for converting from model temperature to the temperature for a given particle.
   var TRIPLE_POINT_INTERNAL_MODEL_TEMPERATURE = 0.26;   // Empirically determined.
   var CRITICAL_POINT_INTERNAL_MODEL_TEMPERATURE = 0.8;  // Empirically determined.
@@ -112,6 +108,11 @@ define( function( require ) {
   // work so well, so the range below was arrived at empirically and seems to work reasonably well.
   var MIN_ADJUSTABLE_EPSILON = StatesOfMatterConstants.MIN_ADJUSTABLE_EPSILON;
   var MAX_ADJUSTABLE_EPSILON = StatesOfMatterConstants.EPSILON_FOR_WATER * 1.7;
+
+  // Time value used to prevent molecule injections from being too close together so that they don't overlap after
+  // injection and cause high initial velocities.
+  var MOLECULE_INJECTION_HOLDOFF_TIME = 0.25; // seconds, empirically determined
+  var MAX_MOLECULES_QUEUED_FOR_INJECTION = 3;
 
   /**
    * @constructor
@@ -147,6 +148,8 @@ define( function( require ) {
       TIME_STEP_MOVING_AVERAGE_LENGTH,
       { initialValue: NOMINAL_TIME_STEP }
     );
+    this.numMoleculesAwaitingInjection = 0;
+    this.moleculeInjectionHoldoffTimer = 0;
 
     // everything that had a listener in the java version becomes a property
     PropertySet.call( this, {
@@ -541,105 +544,120 @@ define( function( require ) {
     },
 
     /**
-     * Inject a new molecule of the current type into the model. This uses the current temperature to assign an initial
-     * velocity.
+     * Inject a new molecule of the current type.  This method actually queues it for intejction, actualy injection
+     * occurs during model steps.
      * @public
      */
-    injectMolecule: function() {
+    injectMolecule: function(){
+      this.numMoleculesAwaitingInjection = Math.min(
+        this.numMoleculesAwaitingInjection + 1,
+        MAX_MOLECULES_QUEUED_FOR_INJECTION
+      );
+    },
 
+    /**
+     * Inject a new molecule of the current type into the model. This uses the current temperature to assign an initial
+     * velocity.
+     * @private
+     */
+    injectMoleculeInternal: function() {
+
+      if ( !this.isPlaying ||
+           this.moleculeDataSet.getNumberOfRemainingSlots() === 0 ||
+           this.normalizedContainerHeight < injectionPointY * 1.05 ||
+           this.isExploded ) {
+
+        // The model state does not support particle injection, so ignore the request.
+        return;
+      }
+
+      // TODO: Why is this recalculated each time?  Should be calculated when a new particle type is set.
       var injectionPointX = StatesOfMatterConstants.CONTAINER_BOUNDS.width / this.particleDiameter *
                             INJECTION_POINT_HORIZ_PROPORTION;
       var injectionPointY = StatesOfMatterConstants.CONTAINER_BOUNDS.height / this.particleDiameter *
                             INJECTION_POINT_VERT_PROPORTION;
 
-      // Only inject if okay to do so.
-      if ( this.isPlaying &&
-           this.moleculeDataSet.getNumberOfRemainingSlots() > 1 &&
-           this.normalizedContainerHeight > injectionPointY * 1.05 &&
-           !this.isExploded ) {
 
-        // If the container is empty, its temperature will be be reported as zero Kelvin, so injecting particles will
-        // cause there to be a defined temperature.  Set that temperature to a reasonable value.
-        if ( this.particles.length === 0 ) {
-          this.temperatureSetPoint = CRITICAL_POINT_INTERNAL_MODEL_TEMPERATURE;
-          this.isoKineticThermostat.targetTemperature = this.temperatureSetPoint;
-          this.andersenThermostat.targetTemperature = this.temperatureSetPoint;
-        }
-
-        var angle = ( Math.random() - 0.5 ) * MAX_INJECTED_MOLECULE_ANGLE;
-        var velocity = MIN_INJECTED_MOLECULE_VELOCITY + ( Math.random() *
-                                                          ( MAX_INJECTED_MOLECULE_VELOCITY -
-                                                            MIN_INJECTED_MOLECULE_VELOCITY ) );
-        var xVel = Math.cos( angle ) * velocity;
-        var yVel = Math.sin( angle ) * velocity;
-        var atomsPerMolecule = this.moleculeDataSet.atomsPerMolecule;
-        var moleculeCenterOfMassPosition = new Vector2( injectionPointX, injectionPointY );
-        var moleculeVelocity = new Vector2( xVel, yVel );
-        var moleculeRotationRate = ( Math.random() - 0.5 ) * ( Math.PI / 2 );
-        var atomPositions = [];
-        var atomPositionInVector = new Vector2();
-        for ( var i = 0; i < atomsPerMolecule; i++ ) {
-          atomPositions[ i ] = atomPositionInVector;
-        }
-
-        // Add the newly created molecule to the data set.
-        this.moleculeDataSet.addMolecule( atomPositions, moleculeCenterOfMassPosition, moleculeVelocity,
-          moleculeRotationRate, true );
-
-        // Position the atoms that comprise the molecules.
-        this.atomPositionUpdater.updateAtomPositions( this.moleculeDataSet );
-
-        if ( atomsPerMolecule === 1 ) {
-
-          // Add particle to model set.
-          var particle;
-          switch( this.currentMolecule ) {
-            case StatesOfMatterConstants.ARGON:
-              particle = new ArgonAtom( 0, 0 );
-              break;
-            case StatesOfMatterConstants.NEON:
-              particle = new NeonAtom( 0, 0 );
-              break;
-            case StatesOfMatterConstants.USER_DEFINED_MOLECULE:
-              particle = new ConfigurableStatesOfMatterAtom( 0, 0 );
-              break;
-            default:
-              // Use the default.
-              particle = new NeonAtom( 0, 0 );
-              break;
-          }
-          this.particles.add( particle );
-        }
-        else if ( atomsPerMolecule === 2 ) {
-
-          assert && assert( this.currentMolecule === StatesOfMatterConstants.DIATOMIC_OXYGEN );
-
-          // Add particles to model set.
-          this.particles.add( new OxygenAtom( 0, 0 ) );
-          this.particles.add( new OxygenAtom( 0, 0 ) );
-        }
-        else if ( atomsPerMolecule === 3 ) {
-
-          assert && assert( this.currentMolecule === StatesOfMatterConstants.WATER );
-
-          // Add atoms to model set.
-          this.particles.add( new OxygenAtom( 0, 0 ) );
-          this.particles.add( new HydrogenAtom( 0, 0, true ) );
-          this.particles.add( new HydrogenAtom( 0, 0, Math.random() > 0.5 ) );
-        }
-
-        // If the particles are at absolute zero and additional particles are added, this bumps up the temperature,
-        // since if there is any motion absolute zero is not correct.  This is handled as a special case rather than
-        // treating the addition of particles more generally, see https://github.com/phetsims/states-of-matter/issues/129
-        // for more detail.
-        if ( this.getTemperatureInKelvin() === 0 || this.getTemperatureInKelvin() === null ) {
-          this.temperatureSetPoint = this.getTwoDegreesKelvinInInternalTemperature();
-          this.isoKineticThermostat.targetTemperature = this.temperatureSetPoint;
-          this.andersenThermostat.targetTemperature = this.temperatureSetPoint;
-        }
-
-        this.syncParticlePositions();
+      // If the container is empty, its temperature will be be reported as zero Kelvin, so injecting particles will
+      // cause there to be a defined temperature.  Set that temperature to a reasonable value.
+      if ( this.particles.length === 0 ) {
+        this.temperatureSetPoint = CRITICAL_POINT_INTERNAL_MODEL_TEMPERATURE;
+        this.isoKineticThermostat.targetTemperature = this.temperatureSetPoint;
+        this.andersenThermostat.targetTemperature = this.temperatureSetPoint;
       }
+
+      // Introduce a little bit of randomness into the injection angle.
+      var angle = ( Math.random() - 0.5 ) * INJECTED_MOLECULE_ANGLE_SPREAD;
+
+      var xVel = Math.cos( angle ) * INJECTED_MOLECULE_VELOCITY;
+      var yVel = Math.sin( angle ) * INJECTED_MOLECULE_VELOCITY;
+      var atomsPerMolecule = this.moleculeDataSet.atomsPerMolecule;
+      var moleculeCenterOfMassPosition = new Vector2( injectionPointX, injectionPointY );
+      var moleculeVelocity = new Vector2( xVel, yVel );
+      var moleculeRotationRate = ( Math.random() - 0.5 ) * ( Math.PI / 2 );
+      var atomPositions = [];
+      var atomPositionInVector = new Vector2();
+      for ( var i = 0; i < atomsPerMolecule; i++ ) {
+        atomPositions[ i ] = atomPositionInVector;
+      }
+
+      // Add the newly created molecule to the data set.
+      this.moleculeDataSet.addMolecule( atomPositions, moleculeCenterOfMassPosition, moleculeVelocity,
+        moleculeRotationRate, true );
+
+      // Position the atoms that comprise the molecules.
+      this.atomPositionUpdater.updateAtomPositions( this.moleculeDataSet );
+
+      if ( atomsPerMolecule === 1 ) {
+
+        // Add particle to model set.
+        var particle;
+        switch( this.currentMolecule ) {
+          case StatesOfMatterConstants.ARGON:
+            particle = new ArgonAtom( 0, 0 );
+            break;
+          case StatesOfMatterConstants.NEON:
+            particle = new NeonAtom( 0, 0 );
+            break;
+          case StatesOfMatterConstants.USER_DEFINED_MOLECULE:
+            particle = new ConfigurableStatesOfMatterAtom( 0, 0 );
+            break;
+          default:
+            // Use the default.
+            particle = new NeonAtom( 0, 0 );
+            break;
+        }
+        this.particles.add( particle );
+      }
+      else if ( atomsPerMolecule === 2 ) {
+
+        assert && assert( this.currentMolecule === StatesOfMatterConstants.DIATOMIC_OXYGEN );
+
+        // Add particles to model set.
+        this.particles.add( new OxygenAtom( 0, 0 ) );
+        this.particles.add( new OxygenAtom( 0, 0 ) );
+      }
+      else if ( atomsPerMolecule === 3 ) {
+
+        assert && assert( this.currentMolecule === StatesOfMatterConstants.WATER );
+
+        // Add atoms to model set.
+        this.particles.add( new OxygenAtom( 0, 0 ) );
+        this.particles.add( new HydrogenAtom( 0, 0, true ) );
+        this.particles.add( new HydrogenAtom( 0, 0, Math.random() > 0.5 ) );
+      }
+
+      // If the particles are at absolute zero and additional particles are added, this bumps up the temperature,
+      // since if there is any motion absolute zero is not correct.  This is handled as a special case rather than
+      // treating the addition of particles more generally, see https://github.com/phetsims/states-of-matter/issues/129
+      // for more detail.
+      if ( this.getTemperatureInKelvin() === 0 || this.getTemperatureInKelvin() === null ) {
+        this.temperatureSetPoint = this.getTwoDegreesKelvinInInternalTemperature();
+        this.isoKineticThermostat.targetTemperature = this.temperatureSetPoint;
+        this.andersenThermostat.targetTemperature = this.temperatureSetPoint;
+      }
+
+      this.syncParticlePositions();
     },
 
     /**
@@ -721,9 +739,6 @@ define( function( require ) {
 
       this.timeStepMovingAverage.addValue( dt );
       this.averageDt = this.timeStepMovingAverage.average;
-
-      // for performance reasons it is best to check this only once per step
-      this.particlesNearTopThisStep = this.particlesNearTop();
 
       if ( !this.isExploded ) {
 
@@ -838,6 +853,16 @@ define( function( require ) {
         this.isoKineticThermostat.targetTemperature = this.temperatureSetPoint;
         this.andersenThermostat.targetTemperature = this.temperatureSetPoint;
       }
+
+      // Inject new particles if some are ready and waiting.
+      if ( this.numMoleculesAwaitingInjection > 0 && this.moleculeInjectionHoldoffTimer === 0 ){
+        this.injectMoleculeInternal();
+        this.numMoleculesAwaitingInjection--;
+        this.moleculeInjectionHoldoffTimer = MOLECULE_INJECTION_HOLDOFF_TIME;
+      }
+      else if ( this.moleculeInjectionHoldoffTimer > 0 ){
+        this.moleculeInjectionHoldoffTimer = Math.max( this.moleculeInjectionHoldoffTimer - dt, 0 );
+      }
     },
 
     /**
@@ -905,11 +930,11 @@ define( function( require ) {
       var temperatureIsChanging = false;
 
       if ( ( this.heatingCoolingAmount !== 0 ) ||
-           ( Math.abs( calculatedTemperature - this.temperatureSetPoint) > TEMPERATURE_CLOSENESS_RANGE ) ){
+           ( Math.abs( calculatedTemperature - this.temperatureSetPoint ) > TEMPERATURE_CLOSENESS_RANGE ) ) {
         temperatureIsChanging = true;
       }
 
-      if ( this.moleculeForceAndMotionCalculator.lidChangedParticleVelocity ){
+      if ( this.moleculeForceAndMotionCalculator.lidChangedParticleVelocity ) {
 
         // The velocity of one or more particles was changed through interaction with the lid.  Since this can change
         // the kinetic energy of the particles in the system, no thermostat is run.  Instead, the temperature is
@@ -1236,27 +1261,6 @@ define( function( require ) {
      */
     getPressureInAtmospheres: function() {
       return 200 * this.getModelPressure(); // multiplier empirically determined
-    },
-
-    /**
-     * Determine whether there are particles close to the top of the container.  This can be important for determining
-     * whether movement of the top is causing temperature changes.
-     * @return {boolean} true if particles are close, false if not
-     * @public
-     */
-    particlesNearTop: function() {
-      var moleculesPositions = this.moleculeDataSet.moleculeCenterOfMassPositions;
-      var threshold = this.normalizedContainerHeight - PARTICLE_EDGE_PROXIMITY_RANGE;
-      var particlesNearTop = false;
-
-      for ( var i = 0; i < this.moleculeDataSet.getNumberOfMolecules(); i++ ) {
-        if ( moleculesPositions[ i ].y > threshold ) {
-          particlesNearTop = true;
-          break;
-        }
-      }
-
-      return particlesNearTop;
     },
 
     /**

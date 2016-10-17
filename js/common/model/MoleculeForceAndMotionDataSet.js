@@ -238,6 +238,8 @@ define( function( require ) {
      */
     addMolecule: function( atomPositions, moleculeCenterOfMassPosition, moleculeVelocity, moleculeRotationRate, insideContainer ) {
 
+      // error checking
+      assert && assert( this.getNumberOfRemainingSlots() > 0, 'no space left in molecule data set' );
       if ( this.getNumberOfRemainingSlots() === 0 ) {
         return false;
       }
@@ -259,6 +261,10 @@ define( function( require ) {
       // Increment the number of atoms.  Note that we DON'T increment the number of safe atoms - that must be done by
       // some outside entity.
       this.numberOfAtoms += this.atomsPerMolecule;
+
+      // TODO - TEMP - for testing of different particle injection strategies, see https://github.com/phetsims/states-of-matter/issues/161
+      this.numberOfSafeMolecules++;
+      // end of TODO - TEMP
 
       assert && assert( !isNaN( this.moleculeCenterOfMassPositions[ numberOfMolecules ].x ) );
 

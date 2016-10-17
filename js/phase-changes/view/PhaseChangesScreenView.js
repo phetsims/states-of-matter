@@ -65,7 +65,6 @@ define( function( require ) {
   var STEP_BUTTON_X_OFFSET = 50;
   var STEP_BUTTON_Y_OFFSET = 20;
   var BICYCLE_PUMP_NODE_X_OFFSET = 100;
-  var RETURN_LID_BUTTON_Y_OFFSET = 100;
 
   /**
    * @param {MultipleParticleModel} multipleParticleModel - model of the simulation
@@ -76,6 +75,8 @@ define( function( require ) {
     var self = this;
 
     ScreenView.call( this, StatesOfMatterConstants.SCREEN_VIEW_OPTIONS );
+    this.multipleParticleModel = multipleParticleModel;
+    this.modelTemperatureHistory = new ObservableArray( { allowDuplicates: true } );
     var mvtScale = StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / StatesOfMatterConstants.CONTAINER_BOUNDS.width;
 
     // model-view transform
