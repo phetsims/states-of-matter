@@ -252,9 +252,7 @@ define( function( require ) {
         moleculeRotationRates[ i ] = rotationRate;
 
         // calculate the kinetic energy
-        centersOfMassKineticEnergy += 0.5 * moleculeDataSet.getMoleculeMass() *
-                                      moleculeVelocities[ i ].x * moleculeVelocities[ i ].x +
-                                      moleculeVelocities[ i ].y * moleculeVelocities[ i ].y;
+        centersOfMassKineticEnergy += 0.5 * moleculeDataSet.getMoleculeMass() * moleculeVelocities[ i ].magnitudeSquared();
         rotationalKineticEnergy += 0.5 * moleculeDataSet.getMoleculeRotationalInertia() *
                                    moleculeRotationRates[ i ] * moleculeRotationRates[ i ];
 
@@ -264,7 +262,7 @@ define( function( require ) {
       }
 
       // Record the calculated temperature.
-      this.temperature = (centersOfMassKineticEnergy + rotationalKineticEnergy) / numberOfMolecules / 1.5;
+      this.temperature = ( centersOfMassKineticEnergy + rotationalKineticEnergy ) / numberOfMolecules / 1.5;
     }
   } );
 } );

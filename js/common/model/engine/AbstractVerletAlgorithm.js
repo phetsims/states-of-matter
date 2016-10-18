@@ -133,11 +133,12 @@ define( function( require ) {
             }
           }
 
-          // handle bounce off the bottom and top
+          // handle bounce off the bottom
           if ( yPos <= minY && moleculeVelocityY <= 0 ) {
             yPos = minY;
             moleculeVelocity.y = -moleculeVelocityY;
           }
+          // handle bounce off the top
           else if ( yPos >= maxY  ) {
 
             if ( !this.multipleParticleModel.getContainerExploded() ) {
@@ -155,7 +156,7 @@ define( function( require ) {
                 // Bounce the particle off of the lid and factor in the lid velocity.  Not quite all of the lid
                 // velocity is used, and the multiplier was empirically determined to look reasonable without causing
                 // the pressure to go up too quickly when compressing the container.
-                moleculeVelocity.y = -moleculeVelocityY + lidVelocity * 0.25;
+                moleculeVelocity.y = -moleculeVelocityY + lidVelocity * 0.3;
                 accumulatedPressure += Math.abs( moleculeVelocityY );
               }
               else if ( moleculeVelocityY < lidVelocity ) {
