@@ -142,7 +142,6 @@ define( function( require ) {
 
             if ( !this.multipleParticleModel.getContainerExploded() ) {
 
-              // This particle bounced off the top, so use the lid's velocity in calculation of the new velocity
               yPos = maxY;
               var lidVelocity = this.multipleParticleModel.normalizedLidVelocityY;
 
@@ -151,18 +150,17 @@ define( function( require ) {
                 this.lidChangedParticleVelocity = true;
               }
 
-              // bounce the particle
               if ( moleculeVelocityY > 0 ) {
 
-                // Add the lid's downward velocity to the particle's velocity, but not quite all of it.  The multiplier
-                // was empirically determined to look reasonable without causing the pressure to go up too quickly when
-                // compressing the container.
-                moleculeVelocity.y = -( moleculeVelocityY + lidVelocity * 0.5 );
+                // Bounce the particle off of the lid and factor in the lid velocity.  Not quite all of the lid
+                // velocity is used, and the multiplier was empirically determined to look reasonable without causing
+                // the pressure to go up too quickly when compressing the container.
+                moleculeVelocity.y = -moleculeVelocityY + lidVelocity * 0.25;
+                accumulatedPressure += Math.abs( moleculeVelocityY );
               }
               else if ( moleculeVelocityY < lidVelocity ) {
                 moleculeVelocity.y = lidVelocity;
               }
-              accumulatedPressure += Math.abs( moleculeVelocityY );
             }
             else{
               // This particle has left the container.
@@ -343,6 +341,7 @@ define( function( require ) {
                         ( PRESSURE_CALC_TIME_WINDOW - dt ) / PRESSURE_CALC_TIME_WINDOW * this.pressure;
 
         if ( ( this.pressure > EXPLOSION_PRESSURE ) && !this.multipleParticleModel.isExploded ) {
+
           // The pressure has reached the point where the container should explode, so blow 'er up.
           this.multipleParticleModel.setContainerExploded( true );
         }

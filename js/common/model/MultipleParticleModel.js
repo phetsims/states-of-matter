@@ -121,6 +121,31 @@ define( function( require ) {
 
     var self = this;
 
+    this.timeStepMovingAverage = new MovingAverage(
+      TIME_STEP_MOVING_AVERAGE_LENGTH,
+      { initialValue: NOMINAL_TIME_STEP }
+    );
+
+    // everything that had a listener in the java version becomes a property
+    PropertySet.call( this, {
+        particleContainerHeight: StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT,
+        targetContainerHeight: StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT,
+        isExploded: false, // notifyContainerExplodedStateChanged
+        expanded: true,// phase diagram
+        interactionExpanded: true,// interaction diagram
+        temperatureSetPoint: INITIAL_TEMPERATURE, // notifyTemperatureChanged
+        pressure: 0, // notifyPressureChanged
+        moleculeType: StatesOfMatterConstants.NEON, // notifyMoleculeTypeChanged,
+        interactionStrength: MAX_ADJUSTABLE_EPSILON, // notifyInteractionStrengthChanged
+        isPlaying: true,
+        speed: 'normal',
+        heatingCoolingAmount: 0,
+        keepingUp: true, // tracks whether targeted min frame rate is being maintained
+        averageDt: this.timeStepMovingAverage.average,
+        maxParticleMoveTimePerStep: Number.POSITIVE_INFINITY
+      }
+    );
+
     // Strategy patterns that are applied to the data set in order to create the overall behavior of the simulation.
     this.atomPositionUpdater = null;
     this.moleculeForceAndMotionCalculator = null;
@@ -144,32 +169,10 @@ define( function( require ) {
     this.heightChangeCountdownTime = 0;
     this.minModelTemperature = null;
     this.residualTime = 0;
-    this.timeStepMovingAverage = new MovingAverage(
-      TIME_STEP_MOVING_AVERAGE_LENGTH,
-      { initialValue: NOMINAL_TIME_STEP }
-    );
     this.numMoleculesAwaitingInjection = 0;
     this.moleculeInjectionHoldoffTimer = 0;
-
-    // everything that had a listener in the java version becomes a property
-    PropertySet.call( this, {
-        particleContainerHeight: StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT,
-        targetContainerHeight: StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT,
-        isExploded: false, // notifyContainerExplodedStateChanged
-        expanded: true,// phase diagram
-        interactionExpanded: true,// interaction diagram
-        temperatureSetPoint: INITIAL_TEMPERATURE, // notifyTemperatureChanged
-        pressure: 0, // notifyPressureChanged
-        moleculeType: StatesOfMatterConstants.NEON, // notifyMoleculeTypeChanged,
-        interactionStrength: MAX_ADJUSTABLE_EPSILON, // notifyInteractionStrengthChanged
-        isPlaying: true,
-        speed: 'normal',
-        heatingCoolingAmount: 0,
-        keepingUp: true, // tracks whether targeted min frame rate is being maintained
-        averageDt: this.timeStepMovingAverage.average,
-        maxParticleMoveTimePerStep: Number.POSITIVE_INFINITY
-      }
-    );
+    this.injectionPointX = 0;
+    this.injectionPointY = 0;
 
     // @public, normalized version of the container height, changes as the lid position changes
     this.normalizedContainerHeight = this.particleContainerHeight / this.particleDiameter;
@@ -365,6 +368,12 @@ define( function( require ) {
       // dependent upon the particle diameter.
       this.resetContainerSize();
 
+      // Adjust the injection point based on the new particle diameter.
+      this.injectionPointX = StatesOfMatterConstants.CONTAINER_BOUNDS.width / this.particleDiameter *
+                             INJECTION_POINT_HORIZ_PROPORTION;
+      this.injectionPointY = StatesOfMatterConstants.CONTAINER_BOUNDS.height / this.particleDiameter *
+                             INJECTION_POINT_VERT_PROPORTION;
+
       // Initiate a reset in order to get the particles into predetermined locations and energy levels.
       this.initializeParticles( phase );
 
@@ -548,7 +557,9 @@ define( function( require ) {
      * occurs during model steps.
      * @public
      */
-    injectMolecule: function(){
+    injectMolecule: function() {
+
+      // only allow particle injection if the model is in a state that supports is
       this.numMoleculesAwaitingInjection = Math.min(
         this.numMoleculesAwaitingInjection + 1,
         MAX_MOLECULES_QUEUED_FOR_INJECTION
@@ -562,21 +573,15 @@ define( function( require ) {
      */
     injectMoleculeInternal: function() {
 
+      // Check if conditions are right for injection of molecules and, if not, don't do it.
       if ( !this.isPlaying ||
-           this.moleculeDataSet.getNumberOfRemainingSlots() === 0 ||
-           this.normalizedContainerHeight < injectionPointY * 1.05 ||
+           this.moleculeDataSet.getNumberOfRemainingSlots() <= 0 ||
+           this.normalizedContainerHeight < this.injectionPointY * 1.05 ||
            this.isExploded ) {
 
-        // The model state does not support particle injection, so ignore the request.
+        this.numMoleculesAwaitingInjection = 0;
         return;
       }
-
-      // TODO: Why is this recalculated each time?  Should be calculated when a new particle type is set.
-      var injectionPointX = StatesOfMatterConstants.CONTAINER_BOUNDS.width / this.particleDiameter *
-                            INJECTION_POINT_HORIZ_PROPORTION;
-      var injectionPointY = StatesOfMatterConstants.CONTAINER_BOUNDS.height / this.particleDiameter *
-                            INJECTION_POINT_VERT_PROPORTION;
-
 
       // If the container is empty, its temperature will be be reported as zero Kelvin, so injecting particles will
       // cause there to be a defined temperature.  Set that temperature to a reasonable value.
@@ -588,22 +593,27 @@ define( function( require ) {
 
       // Introduce a little bit of randomness into the injection angle.
       var angle = ( Math.random() - 0.5 ) * INJECTED_MOLECULE_ANGLE_SPREAD;
-
       var xVel = Math.cos( angle ) * INJECTED_MOLECULE_VELOCITY;
       var yVel = Math.sin( angle ) * INJECTED_MOLECULE_VELOCITY;
+
       var atomsPerMolecule = this.moleculeDataSet.atomsPerMolecule;
-      var moleculeCenterOfMassPosition = new Vector2( injectionPointX, injectionPointY );
+      var moleculeCenterOfMassPosition = new Vector2( this.injectionPointX, this.injectionPointY );
       var moleculeVelocity = new Vector2( xVel, yVel );
       var moleculeRotationRate = ( Math.random() - 0.5 ) * ( Math.PI / 2 );
       var atomPositions = [];
-      var atomPositionInVector = new Vector2();
       for ( var i = 0; i < atomsPerMolecule; i++ ) {
-        atomPositions[ i ] = atomPositionInVector;
+        atomPositions[ i ] = Vector2.ZERO;
       }
 
       // Add the newly created molecule to the data set.
       this.moleculeDataSet.addMolecule( atomPositions, moleculeCenterOfMassPosition, moleculeVelocity,
         moleculeRotationRate, true );
+
+      if ( atomsPerMolecule > 1 ) {
+        // randomize the rotational angle of multi-atom molecules
+        this.moleculeDataSet.moleculeRotationAngles[ this.moleculeDataSet.getNumberOfMolecules() - 1 ] =
+          Math.random() * 2 * Math.PI;
+      }
 
       // Position the atoms that comprise the molecules.
       this.atomPositionUpdater.updateAtomPositions( this.moleculeDataSet );
@@ -747,9 +757,10 @@ define( function( require ) {
           this.heightChangeCountdownTime = CONTAINER_SIZE_CHANGE_COUNTDOWN_RESET;
           var heightChange = this.targetContainerHeight - this.particleContainerHeight;
           if ( heightChange > 0 ) {
+            heightChange = Math.min( heightChange, MAX_CONTAINER_EXPAND_RATE * dt );
             // The container is growing.
             if ( this.particleContainerHeight + heightChange <= StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT ) {
-              this.particleContainerHeight += Math.min( heightChange, MAX_CONTAINER_EXPAND_RATE * dt );
+              this.particleContainerHeight += heightChange;
             }
             else {
               this.particleContainerHeight = StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT;
@@ -757,8 +768,8 @@ define( function( require ) {
           }
           else {
             // The container is shrinking.
+            heightChange = Math.max( heightChange, -MAX_CONTAINER_SHRINK_RATE * dt );
             if ( this.particleContainerHeight - heightChange >= MIN_ALLOWABLE_CONTAINER_HEIGHT ) {
-              heightChange = Math.max( heightChange, -MAX_CONTAINER_SHRINK_RATE * dt );
               this.particleContainerHeight += heightChange;
             }
             else {
@@ -766,7 +777,7 @@ define( function( require ) {
             }
           }
           this.normalizedContainerHeight = this.particleContainerHeight / this.particleDiameter;
-          this.normalizedLidVelocityY = ( -heightChange / this.particleDiameter ) / dt;
+          this.normalizedLidVelocityY = ( heightChange / this.particleDiameter ) / dt;
         }
         else {
           if ( this.heightChangeCountdownTime > 0 ) {
@@ -855,12 +866,12 @@ define( function( require ) {
       }
 
       // Inject new particles if some are ready and waiting.
-      if ( this.numMoleculesAwaitingInjection > 0 && this.moleculeInjectionHoldoffTimer === 0 ){
+      if ( this.numMoleculesAwaitingInjection > 0 && this.moleculeInjectionHoldoffTimer === 0 ) {
         this.injectMoleculeInternal();
         this.numMoleculesAwaitingInjection--;
         this.moleculeInjectionHoldoffTimer = MOLECULE_INJECTION_HOLDOFF_TIME;
       }
-      else if ( this.moleculeInjectionHoldoffTimer > 0 ){
+      else if ( this.moleculeInjectionHoldoffTimer > 0 ) {
         this.moleculeInjectionHoldoffTimer = Math.max( this.moleculeInjectionHoldoffTimer - dt, 0 );
       }
     },
