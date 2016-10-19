@@ -58,7 +58,7 @@ define( function( require ) {
   var TEMPERATURE_CHANGE_RATE_FACTOR = 0.07; // empirically determined to make temperate change at a good rate
   var INJECTED_MOLECULE_VELOCITY = 2.0; // in normalized model units per second, empirically determined to look reasonable
   var INJECTED_MOLECULE_ANGLE_SPREAD = Math.PI * 0.25; // in radians, empirically determined to look reasonable
-  var INJECTION_POINT_HORIZ_PROPORTION = 0.05;
+  var INJECTION_POINT_HORIZ_PROPORTION = 0.00;
   var INJECTION_POINT_VERT_PROPORTION = 0.25;
   var MIN_ALLOWABLE_CONTAINER_HEIGHT = 1500; // empirically determined, almost all the way to the bottom
 

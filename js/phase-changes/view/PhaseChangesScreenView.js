@@ -64,7 +64,7 @@ define( function( require ) {
   var X_INSET = 15;
   var STEP_BUTTON_X_OFFSET = 50;
   var STEP_BUTTON_Y_OFFSET = 20;
-  var BICYCLE_PUMP_NODE_X_OFFSET = 100;
+  var BICYCLE_PUMP_NODE_X_OFFSET = 105;
 
   /**
    * @param {MultipleParticleModel} multipleParticleModel - model of the simulation
