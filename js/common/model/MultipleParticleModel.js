@@ -75,8 +75,8 @@ define( function( require ) {
   var ADAPTIVE_THERMOSTAT = 3;
 
   // parameters to control rates of change of the container size
-  var MAX_CONTAINER_SHRINK_RATE = 1500; // in model units per second
-  var MAX_CONTAINER_EXPAND_RATE = 4000; // in model units per second
+  var MAX_CONTAINER_SHRINK_RATE = 1250; // in model units per second
+  var MAX_CONTAINER_EXPAND_RATE = 1500; // in model units per second
   var POST_EXPLOSION_CONTAINER_EXPANSION_RATE = 9000; // in model units per second
 
   // countdown value used when recalculating temperature when the container size is changing
