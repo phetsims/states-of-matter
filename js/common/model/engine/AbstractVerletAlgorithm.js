@@ -159,7 +159,7 @@ define( function( require ) {
                 moleculeVelocity.y = -moleculeVelocityY + lidVelocity * 0.3;
                 accumulatedPressure += Math.abs( moleculeVelocityY );
               }
-              else if ( moleculeVelocityY < lidVelocity ) {
+              else if ( Math.abs( moleculeVelocityY ) < Math.abs( lidVelocity ) ) {
                 moleculeVelocity.y = lidVelocity;
               }
             }
