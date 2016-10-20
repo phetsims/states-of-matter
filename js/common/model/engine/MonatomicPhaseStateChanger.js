@@ -227,8 +227,8 @@ define( function( require ) {
         for ( var j = 0; j < this.MAX_PLACEMENT_ATTEMPTS; j++ ) {
 
           // Pick a random position.
-          newPosX = this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE + ( Math.random() * rangeX );
-          newPosY = this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE + ( Math.random() * rangeY );
+          newPosX = this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE + ( phet.joist.random.nextDouble() * rangeX );
+          newPosY = this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE + ( phet.joist.random.nextDouble() * rangeY );
           var positionAvailable = true;
           // See if this position is available.
           for ( var k = 0; k < i; k++ ) {

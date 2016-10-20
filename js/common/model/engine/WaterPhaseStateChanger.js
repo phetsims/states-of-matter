@@ -112,7 +112,7 @@ define( function( require ) {
         moleculeVelocities[ i ].setXY( temperatureSqrt * this.rand.nextGaussian(), temperatureSqrt * this.rand.nextGaussian() );
 
         // Assign each molecule an initial rotation rate.
-        moleculeRotationRates[ i ] = Math.random() * temperatureSqrt * Math.PI * 2;
+        moleculeRotationRates[ i ] = phet.joist.random.nextDouble() * temperatureSqrt * Math.PI * 2;
       }
 
       // Establish the starting position, which will be the lower left corner
@@ -138,7 +138,7 @@ define( function( require ) {
           yPos = startingPosY + (i * MIN_INITIAL_DIAMETER_DISTANCE * 0.866);
           var atomIndex = ( i * moleculesPerLayer ) + j;
           moleculeCenterOfMassPositions[ atomIndex ].setXY( xPos, yPos );
-          moleculeRotationAngles[ atomIndex ] = Math.random() * 2 * Math.PI;
+          moleculeRotationAngles[ atomIndex ] = phet.joist.random.nextDouble() * 2 * Math.PI;
           moleculesInsideContainer[ atomIndex ] = true;
           moleculesPlaced++;
         }
@@ -173,7 +173,7 @@ define( function( require ) {
         moleculeVelocities[ i ].setXY( temperatureSqrt * this.rand.nextGaussian(), temperatureSqrt * this.rand.nextGaussian() );
 
         // Assign each molecule an initial rotation rate.
-        moleculeRotationRates[ i ] = Math.random() * temperatureSqrt * Math.PI * 2;
+        moleculeRotationRates[ i ] = phet.joist.random.nextDouble() * temperatureSqrt * Math.PI * 2;
 
         // Mark each molecule as in the container.
         moleculesInsideContainer[ i ] = true;
@@ -253,10 +253,10 @@ define( function( require ) {
         moleculeVelocities[ i ].setXY( temperatureSqrt * this.rand.nextGaussian(), temperatureSqrt * this.rand.nextGaussian() );
 
         // Assign each molecule an initial rotational position.
-        moleculeRotationAngles[ i ] = Math.random() * Math.PI * 2;
+        moleculeRotationAngles[ i ] = phet.joist.random.nextDouble() * Math.PI * 2;
 
         // Assign each molecule an initial rotation rate.
-        moleculeRotationRates[ i ] = ( Math.random() * 2 - 1 ) * temperatureSqrt * Math.PI * 2;
+        moleculeRotationRates[ i ] = ( phet.joist.random.nextDouble() * 2 - 1 ) * temperatureSqrt * Math.PI * 2;
 
         // Mark each molecule as in the container.
         moleculesInsideContainer[ i ] = true;
@@ -272,8 +272,8 @@ define( function( require ) {
         for ( var j = 0; j < this.MAX_PLACEMENT_ATTEMPTS; j++ ) {
 
           // Pick a random position.
-          newPosX = this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE + (  Math.random() * rangeX);
-          newPosY = this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE + (  Math.random() * rangeY);
+          newPosX = this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE + (  phet.joist.random.nextDouble() * rangeX);
+          newPosY = this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE + (  phet.joist.random.nextDouble() * rangeY);
           var positionAvailable = true;
 
           // See if this position is available.

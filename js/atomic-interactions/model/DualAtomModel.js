@@ -678,8 +678,8 @@ define( function( require ) {
 
             // Move some distance from the original position, but only move away from the movable atom so that we don't
             // end up creating high repulsive forces.
-            var xPos = -Math.random() * maxMovement;
-            var yPos = ( Math.random() * 2 - 1 ) * maxMovement;
+            var xPos = -phet.joist.random.nextDouble() * maxMovement;
+            var yPos = ( phet.joist.random.nextDouble() * 2 - 1 ) * maxMovement;
             this.fixedAtom.setPosition( xPos, yPos );
           }
         }

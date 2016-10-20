@@ -149,7 +149,7 @@ define( function( require ) {
           StatesOfMatterConstants.CONTAINER_BOUNDS.width - containerHeight ) + inset;
       }
       else {
-        var rotationAmount = -( Math.PI / 100 + ( Math.random() * Math.PI / 50 ) );
+        var rotationAmount = -( Math.PI / 100 + ( phet.joist.random.nextDouble() * Math.PI / 50 ) );
         var centerPosY = -this.modelViewTransform.modelToViewDeltaY(
             StatesOfMatterConstants.CONTAINER_BOUNDS.height - containerHeight ) +
                          LID_POSITION_TWEAK_FACTOR;

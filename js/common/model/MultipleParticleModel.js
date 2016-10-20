@@ -593,14 +593,14 @@ define( function( require ) {
       }
 
       // Introduce a little bit of randomness into the injection angle.
-      var angle = ( Math.random() - 0.5 ) * INJECTED_MOLECULE_ANGLE_SPREAD;
+      var angle = ( phet.joist.random.nextDouble() - 0.5 ) * INJECTED_MOLECULE_ANGLE_SPREAD;
       var xVel = Math.cos( angle ) * INJECTED_MOLECULE_VELOCITY;
       var yVel = Math.sin( angle ) * INJECTED_MOLECULE_VELOCITY;
 
       var atomsPerMolecule = this.moleculeDataSet.atomsPerMolecule;
       var moleculeCenterOfMassPosition = new Vector2( this.injectionPointX, this.injectionPointY );
       var moleculeVelocity = new Vector2( xVel, yVel );
-      var moleculeRotationRate = ( Math.random() - 0.5 ) * ( Math.PI / 2 );
+      var moleculeRotationRate = ( phet.joist.random.nextDouble() - 0.5 ) * ( Math.PI / 2 );
       var atomPositions = [];
       for ( var i = 0; i < atomsPerMolecule; i++ ) {
         atomPositions[ i ] = Vector2.ZERO;
@@ -613,7 +613,7 @@ define( function( require ) {
       if ( atomsPerMolecule > 1 ) {
         // randomize the rotational angle of multi-atom molecules
         this.moleculeDataSet.moleculeRotationAngles[ this.moleculeDataSet.getNumberOfMolecules() - 1 ] =
-          Math.random() * 2 * Math.PI;
+          phet.joist.random.nextDouble() * 2 * Math.PI;
       }
 
       // Position the atoms that comprise the molecules.
@@ -655,7 +655,7 @@ define( function( require ) {
         // Add atoms to model set.
         this.particles.add( new OxygenAtom( 0, 0 ) );
         this.particles.add( new HydrogenAtom( 0, 0, true ) );
-        this.particles.add( new HydrogenAtom( 0, 0, Math.random() > 0.5 ) );
+        this.particles.add( new HydrogenAtom( 0, 0, phet.joist.random.nextDouble() > 0.5 ) );
       }
 
       // If the particles are at absolute zero and additional particles are added, this bumps up the temperature,
