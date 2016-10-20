@@ -173,6 +173,7 @@ define( function( require ) {
     this.moleculeInjectionHoldoffTimer = 0;
     this.injectionPointX = 0;
     this.injectionPointY = 0;
+    this.heightChangeThisStep = 0;
 
     // @public, normalized version of the container height, changes as the lid position changes
     this.normalizedContainerHeight = this.particleContainerHeight / this.particleDiameter;
@@ -755,31 +756,32 @@ define( function( require ) {
         // Adjust the particle container height if needed.
         if ( this.targetContainerHeight !== this.particleContainerHeight ) {
           this.heightChangeCountdownTime = CONTAINER_SIZE_CHANGE_COUNTDOWN_RESET;
-          var heightChange = this.targetContainerHeight - this.particleContainerHeight;
-          if ( heightChange > 0 ) {
-            heightChange = Math.min( heightChange, MAX_CONTAINER_EXPAND_RATE * dt );
-            // The container is growing.
-            if ( this.particleContainerHeight + heightChange <= StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT ) {
-              this.particleContainerHeight += heightChange;
-            }
-            else {
-              this.particleContainerHeight = StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT;
-            }
+          this.heightChangeThisStep = this.targetContainerHeight - this.particleContainerHeight;
+          if ( this.heightChangeThisStep > 0 ) {
+
+            // the container is expanding, limit the change to the max allowed rate
+            this.heightChangeThisStep = Math.min( this.heightChangeThisStep, MAX_CONTAINER_EXPAND_RATE * dt );
+
+            this.particleContainerHeight = Math.min(
+              this.particleContainerHeight + this.heightChangeThisStep,
+              StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT
+            );
           }
           else {
-            // The container is shrinking.
-            heightChange = Math.max( heightChange, -MAX_CONTAINER_SHRINK_RATE * dt );
-            if ( this.particleContainerHeight - heightChange >= MIN_ALLOWABLE_CONTAINER_HEIGHT ) {
-              this.particleContainerHeight += heightChange;
-            }
-            else {
-              this.particleContainerHeight = MIN_ALLOWABLE_CONTAINER_HEIGHT;
-            }
+
+            // the container is shrinking, limit the change to the max allowed rate
+            this.heightChangeThisStep = Math.max( this.heightChangeThisStep, -MAX_CONTAINER_SHRINK_RATE * dt );
+
+            this.particleContainerHeight = Math.max(
+              this.particleContainerHeight + this.heightChangeThisStep,
+              MIN_ALLOWABLE_CONTAINER_HEIGHT
+            );
           }
           this.normalizedContainerHeight = this.particleContainerHeight / this.particleDiameter;
-          this.normalizedLidVelocityY = ( heightChange / this.particleDiameter ) / dt;
+          this.normalizedLidVelocityY = ( this.heightChangeThisStep / this.particleDiameter ) / dt;
         }
         else {
+          this.heightChangeThisStep = 0;
           if ( this.heightChangeCountdownTime > 0 ) {
             this.heightChangeCountdownTime = Math.max( this.heightChangeCountdownTime - dt, 0 );
           }
@@ -950,8 +952,14 @@ define( function( require ) {
         // The velocity of one or more particles was changed through interaction with the lid.  Since this can change
         // the kinetic energy of the particles in the system, no thermostat is run.  Instead, the temperature is
         // determined by looking at the kinetic energy of the molecules and that value is used to determine the system
-        // temperature set point.
-        this.setTemperature( calculatedTemperature );
+        // temperature set point.  However, sometimes the calculation can return some unexpected results, probably due
+        // to some of the energy being tied up in potential rather than kinetic energy, so there are some constraints
+        // here.  See https://github.com/phetsims/states-of-matter/issues/169 for more information.
+        if ( this.heightChangeThisStep === 0 ||
+             this.heightChangeThisStep > 0 && calculatedTemperature < this.temperatureSetPoint ||
+             this.heightChangeThisStep < 0 && calculatedTemperature > this.temperatureSetPoint ) {
+          this.setTemperature( calculatedTemperature );
+        }
 
         // Clear the flag for the next time through.
         this.moleculeForceAndMotionCalculator.lidChangedParticleVelocity = false;
