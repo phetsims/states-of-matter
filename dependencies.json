@@ -1,11 +1,11 @@
 {
-  "comment": "# states-of-matter 1.0.0-dev.12 Mon Oct 17 2016 16:17:41 GMT-0600 (Mountain Daylight Time)",
+  "comment": "# states-of-matter 1.0.0-dev.13 Mon Oct 24 2016 11:29:59 GMT-0600 (Mountain Daylight Time)",
   "assert": {
     "sha": "845be6b591cb746b0b05b7023208aef2e49a8855",
     "branch": "master"
   },
   "axon": {
-    "sha": "bfa6a631f500f00e753e462429cd6ec1767b58d7",
+    "sha": "bd3a64f41c8ad53c79dbefe3ec2e63865ee380d9",
     "branch": "master"
   },
   "brand": {
@@ -13,7 +13,7 @@
     "branch": "master"
   },
   "chipper": {
-    "sha": "1c93e1e43330525e4f7e92ac5bf3c6f1bcd85f19",
+    "sha": "c1b633ff2dff89c224a722fbfd8aaa5b661ce4d0",
     "branch": "master"
   },
   "dot": {
@@ -21,7 +21,7 @@
     "branch": "master"
   },
   "joist": {
-    "sha": "d769c74010722f7d9a67145fadf1b41ff107682b",
+    "sha": "e7361bf396bc686155f6a02b792cf1db05de9efd",
     "branch": "master"
   },
   "kite": {
@@ -41,7 +41,7 @@
     "branch": "master"
   },
   "query-string-machine": {
-    "sha": "a8317d253b6515db58e115f3e9f426f47a33bb86",
+    "sha": "438cfac1d9a37981ae6d9166a657b44915e1f018",
     "branch": "master"
   },
   "scenery": {
@@ -49,7 +49,7 @@
     "branch": "master"
   },
   "scenery-phet": {
-    "sha": "d6792d8b56bdfd8f709305b2f0635304da53bde0",
+    "sha": "7aa025e85da8ea204d593084b60a79fcfebff4cf",
     "branch": "master"
   },
   "sherpa": {
@@ -57,11 +57,11 @@
     "branch": "master"
   },
   "states-of-matter": {
-    "sha": "32e1f9a96d764bd32be1963ab498a5f26756191b",
+    "sha": "e5047633466eaedd6e6f55c27bb71498339dd0c5",
     "branch": "master"
   },
   "sun": {
-    "sha": "977bf75d48b240443ffd3f6daf000bd6160ea060",
+    "sha": "ad23b8e2b85b446cbdcba3b53b457d0632096736",
     "branch": "master"
   },
   "tandem": {
