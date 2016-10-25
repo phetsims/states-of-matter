@@ -37,7 +37,7 @@ define( function( require ) {
   var STATES_BUTTON_WIDTH = 160;
   var ICON_HEIGHT = 25; // in screen coordinates, empirically determined
   var SELECTED_BUTTON_COLOR = '#a5a7ff';
-  var DESELECTED_BUTTON_COLOR = '#ffe098';
+  var DESELECTED_BUTTON_COLOR = '#F8D980';
 
   // function that puts icon and label together with some struts into an HBox for using as content node on button
   function createButtonContent( iconImage, string ) {

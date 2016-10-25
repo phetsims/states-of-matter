@@ -56,20 +56,20 @@ define( function( require ) {
       { min: 0, max: MAX_PRESSURE }, { scale: 0.5, radius: 80, backgroundLineWidth: 3 } );
 
     // Add the textual readout display.
-    this.textualReadoutBoxShape = new Rectangle( 0, 0, 80, 15, 2, 2, { fill: 'white', stroke: 'black' } );
-    this.textualReadoutBoxShape.centerX = gaugeNode.centerX;
-    this.textualReadoutBoxShape.top = gaugeNode.bottom - 15;
+    this.textualReadoutBackground = new Rectangle( 0, 0, 80, 15, 2, 2, { fill: 'white', stroke: 'black' } );
+    this.textualReadoutBackground.centerX = gaugeNode.centerX;
+    this.textualReadoutBackground.top = gaugeNode.bottom - 15;
     this.textualReadout = new Text( '', {
       font: new PhetFont( 12 ),
       fill: 'black',
-      maxWidth: this.textualReadoutBoxShape.width * 0.9
+      maxWidth: this.textualReadoutBackground.width * 0.9
     } );
-    this.textualReadout.center = this.textualReadoutBoxShape.center;
+    this.textualReadout.center = this.textualReadoutBackground.center;
 
     // To accurately reproduce the previous version (which consisted of a path stroked with lineWidth 10), we need to
     // include the stroke width effects (where it had a default lineCap of butt). We have a part that doesn't change
     // shape (the connector) which includes the left part and the curve, and then an overlapping dynamic rectangle
-    // (the connectorExtension) whos height is adjusted to be the elbowHeight. This reduces the overhead significantly.
+    // (the connectorExtension) whose height is adjusted to be the elbowHeight. This reduces the overhead significantly.
     var halfStroke = 5;
     this.connector = new Path( new Shape().moveTo( 0, -halfStroke )
                                .lineTo( ELBOW_LENGTH + ELBOW_WIDTH / 2, -halfStroke )
@@ -94,7 +94,7 @@ define( function( require ) {
     this.roundedRectangle.left = gaugeNode.right - 10;
     var dialComponentsNode = new Node( {
       children: [ this.connector, this.roundedRectangle, gaugeNode,
-        this.textualReadoutBoxShape, this.textualReadout ]
+        this.textualReadoutBackground, this.textualReadout ]
     } );
 
     // Set the initial value.
@@ -134,7 +134,7 @@ define( function( require ) {
             this.textualReadout.setText( pressureOverloadString );
             this.textualReadout.fill = PhetColorScheme.RED_COLORBLIND;
           }
-          this.textualReadout.center = this.textualReadoutBoxShape.center;
+          this.textualReadout.center = this.textualReadoutBackground.center;
           this.pressureChanged = false;
         }
 
@@ -143,10 +143,10 @@ define( function( require ) {
     },
 
     /**
-     * @public
      * Set the height of the elbow.  Height is specified with respect to the
      * vertical center of the node.
      * @param {number} height
+     * @public
      */
     setElbowHeight: function( height ) {
       this.elbowHeight = height;

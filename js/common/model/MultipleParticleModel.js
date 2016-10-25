@@ -50,6 +50,8 @@ define( function( require ) {
   var WaterAtomPositionUpdater = require( 'STATES_OF_MATTER/common/model/engine/WaterAtomPositionUpdater' );
 
   // constants (general)
+  var PARTICLE_CONTAINER_WIDTH = StatesOfMatterConstants.PARTICLE_CONTAINER_WIDTH;
+  var PARTICLE_CONTAINER_INITIAL_HEIGHT = StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT;
   var DEFAULT_MOLECULE = StatesOfMatterConstants.NEON;
   var INITIAL_TEMPERATURE = StatesOfMatterConstants.SOLID_TEMPERATURE;
   var MAX_TEMPERATURE = 50.0;
@@ -735,9 +737,9 @@ define( function( require ) {
      */
     resetContainerSize: function() {
       // Set the initial size of the container.
-      this.particleContainerHeight = StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT;
-      this.targetContainerHeight = StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT;
-      this.normalizedContainerWidth = StatesOfMatterConstants.PARTICLE_CONTAINER_WIDTH / this.particleDiameter;
+      this.particleContainerHeight = PARTICLE_CONTAINER_INITIAL_HEIGHT;
+      this.targetContainerHeight = PARTICLE_CONTAINER_INITIAL_HEIGHT;
+      this.normalizedContainerWidth = PARTICLE_CONTAINER_WIDTH / this.particleDiameter;
       this.normalizedContainerHeight = this.particleContainerHeight / this.particleDiameter;
       this.normalizedTotalContainerHeight = this.particleContainerHeight / this.particleDiameter;
     },
@@ -1415,6 +1417,20 @@ define( function( require ) {
       return this.particleContainerHeight;
     },
 
-    MAX_ADJUSTABLE_EPSILON: MAX_ADJUSTABLE_EPSILON
+    getInitialParticleContainerHeight: function() {
+      return PARTICLE_CONTAINER_INITIAL_HEIGHT;
+    },
+
+    getParticleContainerWidth: function() {
+      return PARTICLE_CONTAINER_WIDTH;
+    }
+
+  }, {
+
+    // static constants
+    MAX_ADJUSTABLE_EPSILON: MAX_ADJUSTABLE_EPSILON,
+    PARTICLE_CONTAINER_WIDTH: PARTICLE_CONTAINER_WIDTH,
+    PARTICLE_CONTAINER_INITIAL_HEIGHT: PARTICLE_CONTAINER_INITIAL_HEIGHT,
+    PARTICLE_CONTAINER_MIN_HEIGHT: MIN_ALLOWABLE_CONTAINER_HEIGHT
   } );
 } );

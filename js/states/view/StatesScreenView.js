@@ -32,15 +32,11 @@ define( function( require ) {
 
   // constants
   var INSET = 10;
-  var HEATER_COOLER_X_OFFSET = 10;
   var STEP_BUTTON_X_OFFSET = 50;
   var STEP_BUTTON_Y_OFFSET = 20;
   var COMPOSITE_THERMOMETER_NODE_LEFT_OFFSET = 90;
   var LAYOUT_BOUNDS_RIGHT_OFFSET = 15;
   var LAYOUT_BOUNDS_Y_OFFSET = 10;
-  var PARTICLES_LAYER_X_OFFSET = 148;
-  var PARTICLES_LAYER_Y_OFFSET = 680;
-  var PARTICLE_CANVAS_LAYER_BOUND_LIMIT = 1000;
 
   /**
    *
@@ -53,39 +49,45 @@ define( function( require ) {
     ScreenView.call( this, StatesOfMatterConstants.SCREEN_VIEW_OPTIONS );
     var mvtScale = StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / StatesOfMatterConstants.CONTAINER_BOUNDS.width;
 
-    // model-view transform
-    var modelViewTransform = ModelViewTransform2.createSinglePointScaleInvertedYMapping( new Vector2( 0, 0 ),
-      new Vector2( 0, StatesOfMatterConstants.VIEW_CONTAINER_HEIGHT ), mvtScale );
+    // Create the model-view transform. The multipliers for the 2nd parameter can be used to adjust where the point
+    // (0, 0) in the model, which is the lower left corner of the particle container.  The multipliers can be
+    // adjusted to change where the container is located within the view.  The final parameter is the scale, and can be
+    // changed to make the view more zoomed in or out.
+    var modelViewTransform = ModelViewTransform2.createSinglePointScaleInvertedYMapping(
+      new Vector2( 0, 0 ),
+      new Vector2( this.layoutBounds.width * 0.325, this.layoutBounds.height * 0.75 ),
+      mvtScale
+    );
 
-    // add heater/cooler Node
+    // figure out where in the view the particles will be when the container is not exploded
+    var nominalParticleAreaViewBounds = new Bounds2(
+      modelViewTransform.modelToViewX( 0 ),
+      modelViewTransform.modelToViewY( 0 ) + modelViewTransform.modelToViewDeltaY( multipleParticleModel.getInitialParticleContainerHeight() ),
+      modelViewTransform.modelToViewX( 0 ) + modelViewTransform.modelToViewDeltaX( multipleParticleModel.getParticleContainerWidth() ),
+      modelViewTransform.modelToViewY( 0 )
+    );
+
+    // add particle container
+    this.particleContainerNode = new ParticleContainerNode( multipleParticleModel, modelViewTransform, false, false );
+
+    // add particle Canvas layer
+    this.particlesLayer = new ParticleImageCanvasNode( multipleParticleModel.particles, modelViewTransform, {
+      canvasBounds: this.layoutBounds.dilated( 500, 500 ) // dilation amount empirically determined
+    } );
+    this.addChild( this.particlesLayer );
+    this.addChild( this.particleContainerNode );
+
+    // add heater/cooler node
     var heaterCoolerNode = new HeaterCoolerNode( {
       scale: 0.8,
-      centerX: this.layoutBounds.centerX,
-      bottom: this.layoutBounds.bottom - INSET
+      centerX: nominalParticleAreaViewBounds.centerX,
+      top: nominalParticleAreaViewBounds.bottom + 30 // distance from bottom of particle area empirically determined
     } );
+
+    // hook up the heater/cooler node to the model
     heaterCoolerNode.heatCoolLevelProperty.link( function( heat ) {
       multipleParticleModel.setHeatingCoolingAmount( heat );
     } );
-
-    // add particle container
-    this.particleContainerNode = new ParticleContainerNode( multipleParticleModel, modelViewTransform, false, false,
-      {
-        centerX: heaterCoolerNode.centerX - HEATER_COOLER_X_OFFSET,
-        bottom: heaterCoolerNode.top - INSET
-      } );
-
-    // add particle Canvas layer
-    this.particlesLayer = new ParticleImageCanvasNode(
-      multipleParticleModel.particles,
-      modelViewTransform,
-      {
-        centerX: heaterCoolerNode.centerX - PARTICLES_LAYER_X_OFFSET,
-        bottom:  heaterCoolerNode.top + PARTICLES_LAYER_Y_OFFSET,
-        canvasBounds: new Bounds2( -PARTICLE_CANVAS_LAYER_BOUND_LIMIT, -PARTICLE_CANVAS_LAYER_BOUND_LIMIT,
-          PARTICLE_CANVAS_LAYER_BOUND_LIMIT, PARTICLE_CANVAS_LAYER_BOUND_LIMIT )
-      } );
-    this.addChild( this.particlesLayer );
-    this.addChild( this.particleContainerNode );
 
     this.addChild( heaterCoolerNode );
 
@@ -159,12 +161,9 @@ define( function( require ) {
       //compositeThermometerNode.updatePositionAndOrientation();
     } );
 
-    // center the heater cooler node with respect to particle container node
-    heaterCoolerNode.centerX = heaterCoolerNode.centerX - HEATER_COOLER_X_OFFSET;
-
     // if the appropriate query param is set, show some information used in debugging time step adjustments
     // TODO: Consider removing this once performance issues are worked out.
-    if ( StatesOfMatterQueryParameters.DEBUG_TIME_STEP ){
+    if ( StatesOfMatterQueryParameters.DEBUG_TIME_STEP ) {
       var keepingUpReadout = new Text( '', {
         font: new PhetFont( 20 ),
         fill: 'red',
@@ -172,7 +171,7 @@ define( function( require ) {
         left: 20
       } );
       this.addChild( keepingUpReadout );
-      multipleParticleModel.keepingUpProperty.link( function( keepingUp ){
+      multipleParticleModel.keepingUpProperty.link( function( keepingUp ) {
         keepingUpReadout.text = keepingUp.toString();
       } );
       var averageDtReadout = new Text( '', {
@@ -182,7 +181,7 @@ define( function( require ) {
         left: keepingUpReadout.left
       } );
       this.addChild( averageDtReadout );
-      multipleParticleModel.averageDtProperty.link( function( averageDt ){
+      multipleParticleModel.averageDtProperty.link( function( averageDt ) {
         averageDtReadout.text = averageDt.toFixed( 3 );
       } );
       var maxAdvanceTimePerStep = new Text( '', {
@@ -192,7 +191,7 @@ define( function( require ) {
         left: averageDtReadout.left
       } );
       this.addChild( maxAdvanceTimePerStep );
-      multipleParticleModel.maxParticleMoveTimePerStepProperty.link( function( maxAdvance ){
+      multipleParticleModel.maxParticleMoveTimePerStepProperty.link( function( maxAdvance ) {
         maxAdvanceTimePerStep.text = maxAdvance.toFixed( 3 );
       } );
     }
@@ -204,7 +203,7 @@ define( function( require ) {
     step: function() {
       this.compositeThermometerNode.step();
       this.particlesLayer.step();
-      if ( this.particleContainerHeightPropertyChanged ){
+      if ( this.particleContainerHeightPropertyChanged ) {
         this.compositeThermometerNode.updatePositionAndOrientation();
         this.particleContainerNode.handleContainerSizeChanged();
         this.particleContainerHeightPropertyChanged = false;

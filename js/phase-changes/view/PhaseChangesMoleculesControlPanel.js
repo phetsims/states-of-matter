@@ -15,6 +15,7 @@ define( function( require ) {
   var HSlider = require( 'SUN/HSlider' );
   var HStrut = require( 'SCENERY/nodes/HStrut' );
   var inherit = require( 'PHET_CORE/inherit' );
+  var MultipleParticleModel = require( 'STATES_OF_MATTER/common/model/MultipleParticleModel' );
   var Node = require( 'SCENERY/nodes/Node' );
   var Panel = require( 'SUN/Panel' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
@@ -110,7 +111,7 @@ define( function( require ) {
     interactionStrengthNode.addChild( interactionTitle );
     var interactionStrengthSlider = new HSlider(
       multipleParticleModel.interactionStrengthProperty, {
-        min: StatesOfMatterConstants.MIN_ADJUSTABLE_EPSILON, max: multipleParticleModel.MAX_ADJUSTABLE_EPSILON
+        min: StatesOfMatterConstants.MIN_ADJUSTABLE_EPSILON, max: MultipleParticleModel.MAX_ADJUSTABLE_EPSILON
       }, {
         trackFill: 'white',
         thumbSize: new Dimension2( 14, 25 ),
@@ -132,7 +133,7 @@ define( function( require ) {
 
       } );
     interactionStrengthNode.addChild( interactionStrengthSlider );
-    interactionStrengthSlider.addMajorTick( multipleParticleModel.MAX_ADJUSTABLE_EPSILON, strongTitle );
+    interactionStrengthSlider.addMajorTick( MultipleParticleModel.MAX_ADJUSTABLE_EPSILON, strongTitle );
     interactionStrengthSlider.addMajorTick( StatesOfMatterConstants.MIN_ADJUSTABLE_EPSILON, weakTitle );
 
     var neonText = new Text( neonString, textOptions );

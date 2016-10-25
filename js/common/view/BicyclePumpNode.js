@@ -33,7 +33,7 @@ define( function( require ) {
   var PIPE_CONNECTOR_HEIGHT_PROPORTION = 0.09;
   var HOSE_CONNECTOR_HEIGHT_PROPORTION = 0.04;
   var HOSE_CONNECTOR_WIDTH_PROPORTION = 0.05;
-  var HOSE_CONNECTOR_VERT_POS_PROPORTION = 0.77; // empirically determined to line up with injection point in model
+  var HOSE_CONNECTOR_VERT_POS_PROPORTION = 0.675; // empirically determined to line up with injection point in model
   var HOSE_ATTACH_VERT_POS_PROPORTION = 0.11;
   var PUMPING_REQUIRED_TO_INJECT_PROPORTION = PUMP_SHAFT_HEIGHT_PROPORTION / 6;
   var SHAFT_OPENING_TILT_FACTOR = 0.33;

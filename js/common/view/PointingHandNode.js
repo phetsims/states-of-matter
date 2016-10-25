@@ -10,12 +10,12 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var inherit = require( 'PHET_CORE/inherit' );
-  var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
-  var SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
-  var Node = require( 'SCENERY/nodes/Node' );
   var ArrowNode = require( 'SCENERY_PHET/ArrowNode' );
   var Image = require( 'SCENERY/nodes/Image' );
+  var inherit = require( 'PHET_CORE/inherit' );
+  var MultipleParticleModel = require( 'STATES_OF_MATTER/common/model/MultipleParticleModel' );
+  var Node = require( 'SCENERY/nodes/Node' );
+  var SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   // images
@@ -30,7 +30,7 @@ define( function( require ) {
    * @param {ModelViewTransform2} modelViewTransform to convert between model and view co-ordinate frames
    * @constructor
    */
-  function PointingHandNode( multipleParticleModel, modelViewTransform ) {
+  function PointingHandNode( multipleParticleModel, modelViewTransform, options ) {
 
     var self = this;
     Node.call( this );
@@ -51,7 +51,7 @@ define( function( require ) {
     } );
 
     // Add the down arrow.
-    this.downArrow = new ArrowNode( 0, 0, 0, 25, {
+    this.downArrowNode = new ArrowNode( 0, 0, 0, 25, {
       headHeight: 10,
       headWidth: 10,
       tailWidth: 6,
@@ -62,17 +62,17 @@ define( function( require ) {
     } );
 
     // Load and scale the image.  Scale was empirically determined.
-    this.fingerImageNode = new Image( pointingHandImage, {
+    this.pointingHandImageNode = new Image( pointingHandImage, {
       cursor: 'ns-resize',
       pickable: true
     } );
-    this.fingerImageNode.scale( WIDTH / this.fingerImageNode.width );
+    this.pointingHandImageNode.scale( WIDTH / this.pointingHandImageNode.width );
 
     this.hintNode = new Node( {
-      children: [ this.upArrowNode, this.downArrow ],
+      children: [ this.upArrowNode, this.downArrowNode ],
       visible: false,
-      top: this.fingerImageNode.bottom - 50,
-      left: this.fingerImageNode.right
+      top: this.pointingHandImageNode.bottom - 50,
+      left: this.pointingHandImageNode.right
     } );
 
     // Set ourself up to listen for and handle mouse dragging events.
@@ -80,7 +80,7 @@ define( function( require ) {
     var endY;
 
     // add a listener to handle drag events
-    this.fingerImageNode.addInputListener( new SimpleDragHandler( {
+    this.pointingHandImageNode.addInputListener( new SimpleDragHandler( {
       allowTouchSnag: true,
       start: function( event ) {
         startY = self.globalToParentPoint( event.pointer.point ).y;
@@ -108,7 +108,7 @@ define( function( require ) {
     } ) );
 
     // add the listener that will show and hide the hint
-    this.fingerImageNode.addInputListener( {
+    this.pointingHandImageNode.addInputListener( {
       enter: function() {
         self.mouseOver = true;
         self.updateHintVisibility();
@@ -119,10 +119,32 @@ define( function( require ) {
       }
     } );
 
-    // Add the finger node as a child.
-    this.addChild( this.fingerImageNode );
+    // Add the image node as a child.
+    this.addChild( this.pointingHandImageNode );
     this.addChild( this.hintNode );
     this.touchArea = this.localBounds.dilatedXY( 10, 10 );
+
+    // Add a listener to update the individual arrow visibility.
+    multipleParticleModel.particleContainerHeightProperty.link( function( particleContainerHeight ) {
+      if ( particleContainerHeight === MultipleParticleModel.PARTICLE_CONTAINER_INITIAL_HEIGHT ) {
+
+        // At the height limit, so only show the down arrow.
+        self.upArrowNode.setVisible( false );
+        self.downArrowNode.setVisible( true );
+      }
+      else if ( particleContainerHeight === MultipleParticleModel.PARTICLE_CONTAINER_MIN_HEIGHT ) {
+
+        // Particle container all the way down, so show only the up arrow.
+        self.upArrowNode.setVisible( true );
+        self.downArrowNode.setVisible( false );
+      }
+      else {
+        self.upArrowNode.setVisible( true );
+        self.downArrowNode.setVisible( true );
+      }
+    } );
+
+    this.mutate( options );
   }
 
   statesOfMatter.register( 'PointingHandNode', PointingHandNode );
@@ -130,40 +152,12 @@ define( function( require ) {
   return inherit( Node, PointingHandNode, {
 
     /**
+     * Set the position of this node such that the tip of the finger is at the provided Y location.
+     * @param {number} fingerYPos
      * @public
      */
-    updateArrowVisibility: function() {
-
-      if ( this.multipleParticleModel.getParticleContainerHeight() === StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT ) {
-
-        // At the height limit, so only show the down arrow.
-        this.upArrowNode.setVisible( false );
-      }
-      else if ( this.multipleParticleModel.getParticleContainerHeight() === 0 ) {
-
-        // Particle container all the way down, so show only the up arrow.
-        this.upArrowNode.setVisible( false );
-      }
-      else {
-        this.upArrowNode.setVisible( true );
-      }
-    },
-
-    /**
-     * @public
-     */
-    handleContainerSizeChanged: function() {
-      var containerHeight = this.multipleParticleModel.getParticleContainerHeight();
-      if ( !this.multipleParticleModel.getContainerExploded() ) {
-        this.y = Math.abs( this.modelViewTransform.modelToViewDeltaY( StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT -
-                 containerHeight ) ) - this.height + 15;
-      }
-      else {
-
-        // If the container is exploding that hand is retracted more quickly.
-        this.y = -this.modelViewTransform.modelToViewDeltaY( StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT -
-                 ( containerHeight * 2 ) ) - this.height;
-      }
+    setFingertipYPosition: function( fingertipYPos ) {
+      this.bottom = fingertipYPos + ( this.hintNode.bottom - this.pointingHandImageNode.bottom );
     },
 
     /**
