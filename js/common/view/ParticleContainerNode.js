@@ -25,8 +25,11 @@ define( function( require ) {
 
   // constants
   var PRESSURE_METER_ELBOW_OFFSET = 30;
-  var X_MARGIN = 5; // size in x direction beyond nominal container width
-  var PERSPECTIVE_TILT_FACTOR = 0.2; // can be varied to get more or less tilt, but only works in a fairly narrow range
+  var CONTAINER_X_MARGIN = 5; // additional size in x direction beyond nominal container width
+  var PERSPECTIVE_TILT_FACTOR = 0.15; // can be varied to get more or less tilt, but only works in a fairly narrow range
+  var CONTAINER_CUTOUT_X_MARGIN = 25;
+  var CONTAINER_CUTOUT_Y_MARGIN = 15;
+  var BEVEL_WIDTH = 12;
 
   /**
    * @param {MultipleParticleModel} multipleParticleModel - model of the simulation
@@ -39,8 +42,7 @@ define( function( require ) {
 
     Node.call( this, { preventFit: true } );
 
-    // TODO: Add viz annotations
-    // TODO: Can some of these be local variables?
+    // @private
     this.multipleParticleModel = multipleParticleModel;
     this.modelViewTransform = modelViewTransform;
     this.pressureGaugeEnabled = pressureGaugeEnabled;
@@ -53,7 +55,7 @@ define( function( require ) {
       modelViewTransform.modelToViewY( 0 )
     );
 
-    // layers upon which various other nodes will be placed in order to achieve the desired layering
+    // add nodes for the various layers
     var preParticleLayer = new Node();
     var postParticleLayer = new Node( { opacity: 0.9 } );
     this.addChild( preParticleLayer );
@@ -61,7 +63,7 @@ define( function( require ) {
     // set up variables used to create and position the various parts of the container
     this.containerWidthWithMargin = modelViewTransform.modelToViewDeltaX(
         multipleParticleModel.getParticleContainerWidth()
-      ) + 2 * X_MARGIN;
+      ) + 2 * CONTAINER_X_MARGIN;
     this.containerViewCenterX = this.particleAreaViewBounds.centerX;
 
     this.containerLid = new Node( { opacity: 0.9 } );
@@ -81,21 +83,7 @@ define( function( require ) {
     );
 
     // create the node that will act as the elliptical background for the lid
-    var lidBackground = new Path( topEllipseShape, {
-        fill: '#7E7E7E',
-        centerX: this.particleAreaViewBounds.centerX
-      }
-    );
-
-    // create the inner ellipse for the lid
-    var lidInnerEllipseShape = topEllipseShape.transformed( Matrix3.scale( 0.8 ) ); // scale empirically determined
-    var lidInnerEllipse = new Path( lidInnerEllipseShape, {
-      lineWidth: 1,
-      stroke: '#AAAAAA',
-      fill: '#B3B3B3',
-      centerX: lidBackground.centerX,
-      centerY: lidBackground.centerY
-    } );
+    var lidBackground = new Path( topEllipseShape, { fill: '#7E7E7E', centerX: this.particleAreaViewBounds.centerX } );
 
     // define the opening at the top of the container, should be added to scene graph separately for correct layering
     // TODO: Consider making this a separate node in a separate file
@@ -112,18 +100,15 @@ define( function( require ) {
       return topEllipseRadiusY * Math.sqrt( 1 - Math.pow( x, 2 ) / ( Math.pow( topEllipseRadiusX, 2 ) ) );
     }
 
-    // TODO: These should probably be constants
-    var containerCutoutLeftRightMargin = 25;
-    var containerCutoutTopBottomMargin = 20;
-
-    var outerShapeTiltFactor = topEllipseRadiusY * 1.29; // empirically determined multiplier that makes curve match lid
-    var cutoutShapeTiltFactor = outerShapeTiltFactor * 0.5; // empirically determined multiplier that looks good
-    var cutoutHeight = this.particleAreaViewBounds.getHeight() - 2 * containerCutoutTopBottomMargin;
-    var cutoutTopY = getEllipseLowerEdgeYPos( containerCutoutLeftRightMargin ) + containerCutoutTopBottomMargin;
+    // define a bunch of variable that will be used in the process of drawing the main container
+    var outerShapeTiltFactor = topEllipseRadiusY * 1.28; // empirically determined multiplier that makes curve match lid
+    var cutoutShapeTiltFactor = outerShapeTiltFactor * 0.55; // empirically determined multiplier that looks good
+    var cutoutHeight = this.particleAreaViewBounds.getHeight() - 2 * CONTAINER_CUTOUT_Y_MARGIN;
+    var cutoutTopY = getEllipseLowerEdgeYPos( CONTAINER_CUTOUT_X_MARGIN ) + CONTAINER_CUTOUT_Y_MARGIN;
     var cutoutBottomY = cutoutTopY + cutoutHeight;
-    var cutoutWidth = this.containerWidthWithMargin - 2 * containerCutoutLeftRightMargin;
+    var cutoutWidth = this.containerWidthWithMargin - 2 * CONTAINER_CUTOUT_X_MARGIN;
 
-    // add the main container
+    // create and add the main container node, excluding the bevel
     var mainContainer = new Path( new Shape()
       .moveTo( 0, 0 )
 
@@ -154,27 +139,27 @@ define( function( require ) {
       .lineTo( 0, 0 )
 
       // start drawing the cutout, must be drawn in opposite direction from outer shape to make the hole appear
-      .moveTo( containerCutoutLeftRightMargin, cutoutTopY )
+      .moveTo( CONTAINER_CUTOUT_X_MARGIN, cutoutTopY )
 
       // left inner line
-      .lineTo( containerCutoutLeftRightMargin, cutoutBottomY )
+      .lineTo( CONTAINER_CUTOUT_X_MARGIN, cutoutBottomY )
 
       // inner bottom curve
       .quadraticCurveTo(
         this.containerWidthWithMargin / 2,
         cutoutBottomY + cutoutShapeTiltFactor,
-        this.containerWidthWithMargin - containerCutoutLeftRightMargin,
+        this.containerWidthWithMargin - CONTAINER_CUTOUT_X_MARGIN,
         cutoutBottomY
       )
 
       // line from inner bottom right to inner top right
-      .lineTo( this.containerWidthWithMargin - containerCutoutLeftRightMargin, cutoutTopY )
+      .lineTo( this.containerWidthWithMargin - CONTAINER_CUTOUT_X_MARGIN, cutoutTopY )
 
       // top inner curve
       .quadraticCurveTo(
         this.containerWidthWithMargin / 2,
-        getEllipseLowerEdgeYPos( this.containerWidthWithMargin / 2 ) + containerCutoutTopBottomMargin + cutoutShapeTiltFactor,
-        containerCutoutLeftRightMargin,
+        getEllipseLowerEdgeYPos( this.containerWidthWithMargin / 2 ) + CONTAINER_CUTOUT_Y_MARGIN + cutoutShapeTiltFactor,
+        CONTAINER_CUTOUT_X_MARGIN,
         cutoutTopY
       )
 
@@ -196,14 +181,13 @@ define( function( require ) {
     postParticleLayer.addChild( mainContainer );
 
     var bevel = new Node();
-    var bevelWidth = 12; // TODO: if things work out, make this a constant
 
     var leftBevelEdge = new Path(
       new Shape()
         .moveTo( 0, 0 )
         .lineTo( 0, cutoutHeight )
-        .lineTo( bevelWidth, cutoutHeight - bevelWidth )
-        .lineTo( bevelWidth, bevelWidth )
+        .lineTo( BEVEL_WIDTH, cutoutHeight - BEVEL_WIDTH )
+        .lineTo( BEVEL_WIDTH, BEVEL_WIDTH )
         .lineTo( 0, 0 )
         .close(),
       {
@@ -221,14 +205,14 @@ define( function( require ) {
 
     var rightBevelEdge = new Path(
       new Shape()
-        .moveTo( 0, bevelWidth )
-        .lineTo( 0, cutoutHeight - bevelWidth )
-        .lineTo( bevelWidth, cutoutHeight )
-        .lineTo( bevelWidth, 0 )
-        .lineTo( 0, bevelWidth )
+        .moveTo( 0, BEVEL_WIDTH )
+        .lineTo( 0, cutoutHeight - BEVEL_WIDTH )
+        .lineTo( BEVEL_WIDTH, cutoutHeight )
+        .lineTo( BEVEL_WIDTH, 0 )
+        .lineTo( 0, BEVEL_WIDTH )
         .close(),
       {
-        left: cutoutWidth - bevelWidth,
+        left: cutoutWidth - BEVEL_WIDTH,
         fill: new LinearGradient( 0, 0, 0, cutoutHeight )
           .addColorStop( 0, '#8A8A8A' )
           .addColorStop( 0.2, '#747474' )
@@ -244,8 +228,8 @@ define( function( require ) {
       new Shape()
         .moveTo( 0, 0 )
         .quadraticCurveTo( cutoutWidth / 2, cutoutShapeTiltFactor, cutoutWidth, 0 )
-        .lineTo( cutoutWidth - bevelWidth, bevelWidth )
-        .quadraticCurveTo( cutoutWidth / 2, cutoutShapeTiltFactor + bevelWidth, bevelWidth, bevelWidth )
+        .lineTo( cutoutWidth - BEVEL_WIDTH, BEVEL_WIDTH )
+        .quadraticCurveTo( cutoutWidth / 2, cutoutShapeTiltFactor + BEVEL_WIDTH, BEVEL_WIDTH, BEVEL_WIDTH )
         .lineTo( 0, 0 )
         .close(),
       {
@@ -265,14 +249,14 @@ define( function( require ) {
 
     var bottomBevelEdge = new Path(
       new Shape()
-        .moveTo( bevelWidth, 0 )
-        .quadraticCurveTo( cutoutWidth / 2, cutoutShapeTiltFactor, cutoutWidth - bevelWidth, 0 )
-        .lineTo( cutoutWidth, bevelWidth )
-        .quadraticCurveTo( cutoutWidth / 2, cutoutShapeTiltFactor + bevelWidth, 0, bevelWidth )
-        .lineTo( bevelWidth, 0 )
+        .moveTo( BEVEL_WIDTH, 0 )
+        .quadraticCurveTo( cutoutWidth / 2, cutoutShapeTiltFactor, cutoutWidth - BEVEL_WIDTH, 0 )
+        .lineTo( cutoutWidth, BEVEL_WIDTH )
+        .quadraticCurveTo( cutoutWidth / 2, cutoutShapeTiltFactor + BEVEL_WIDTH, 0, BEVEL_WIDTH )
+        .lineTo( BEVEL_WIDTH, 0 )
         .close(),
       {
-        top: cutoutHeight - bevelWidth,
+        top: cutoutHeight - BEVEL_WIDTH,
         fill: new LinearGradient( 0, 0, cutoutWidth, 0 )
           .addColorStop( 0, '#5D5D5D' )
           .addColorStop( 0.2, '#717171' )
@@ -305,10 +289,18 @@ define( function( require ) {
       this.addChild( this.pointingHandNode );
 
       // Add the handle to the lid.
-      this.containerLid.addChild( lidInnerEllipse );
+      var handleAreaEllipseShape = topEllipseShape.transformed( Matrix3.scale( 0.8 ) ); // scale empirically determined
+      var handleAreaEllipse = new Path( handleAreaEllipseShape, {
+        lineWidth: 1,
+        stroke: '#AAAAAA',
+        fill: '#B3B3B3',
+        centerX: this.particleAreaViewBounds.centerX,
+        centerY: 0
+      } );
+      this.containerLid.addChild( handleAreaEllipse );
       var handleNode = new HandleNode();
-      handleNode.centerX = lidInnerEllipse.centerX;
-      handleNode.bottom = lidInnerEllipse.centerY + 5; // position tweaked a bit to look better
+      handleNode.centerX = handleAreaEllipse.centerX;
+      handleNode.bottom = handleAreaEllipse.centerY + 5; // position tweaked a bit to look better
       this.containerLid.addChild( handleNode );
     }
 
@@ -391,7 +383,7 @@ define( function( require ) {
 
         // the container has exploded, so rotate the lid as it goes up so that it looks like it have been blown off
         var deltaY = lidYPosition - this.centerY;
-        var rotationAmount = deltaY * Math.PI * 0.00013;
+        var rotationAmount = deltaY * Math.PI * 0.00013; // multiplier empirically determined
         containerLid.centerX = this.containerViewCenterX;
         containerLid.centerY = lidYPosition;
         containerLid.rotateAround( containerLid.center, rotationAmount );
