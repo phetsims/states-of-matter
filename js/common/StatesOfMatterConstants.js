@@ -20,14 +20,6 @@ define( function( require ) {
   var PARTICLE_CONTAINER_INITIAL_HEIGHT = PARTICLE_CONTAINER_WIDTH * 1.00;
   var SOLID_TEMPERATURE = 0.15;
   var NEON_ATOM_EPSILON = 32.8; // epsilon/k-Boltzmann is in Kelvin.
-  var NEON_TRIPLE_POINT_IN_KELVIN = 23;   // Tweaked a little from actual value for better temperature mapping.
-  var NEON_CRITICAL_POINT_IN_KELVIN = 44;
-  var ARGON_TRIPLE_POINT_IN_KELVIN = 75;  // Tweaked a little from actual value for better temperature mapping.
-  var ARGON_CRITICAL_POINT_IN_KELVIN = 151;
-  var O2_TRIPLE_POINT_IN_KELVIN = 54;
-  var O2_CRITICAL_POINT_IN_KELVIN = 155;
-  var WATER_TRIPLE_POINT_IN_KELVIN = 273;
-  var WATER_CRITICAL_POINT_IN_KELVIN = 647;
 
   var StatesOfMatterConstants  = {
 
@@ -35,14 +27,14 @@ define( function( require ) {
 
     TRIPLE_POINT_MONATOMIC_MODEL_TEMPERATURE: 0.26,    // Empirically determined.
     CRITICAL_POINT_MONATOMIC_MODEL_TEMPERATURE: 0.8,  // Empirically determined.
-    NEON_TRIPLE_POINT_IN_KELVIN: NEON_TRIPLE_POINT_IN_KELVIN,  // Tweaked a little from actual value for better temperature mapping.
-    NEON_CRITICAL_POINT_IN_KELVIN: NEON_CRITICAL_POINT_IN_KELVIN,
-    ARGON_TRIPLE_POINT_IN_KELVIN: ARGON_TRIPLE_POINT_IN_KELVIN, // Tweaked a little from actual value for better temperature mapping.
-    ARGON_CRITICAL_POINT_IN_KELVIN: ARGON_CRITICAL_POINT_IN_KELVIN,
-    O2_TRIPLE_POINT_IN_KELVIN: O2_TRIPLE_POINT_IN_KELVIN,
-    O2_CRITICAL_POINT_IN_KELVIN: O2_CRITICAL_POINT_IN_KELVIN,
-    WATER_TRIPLE_POINT_IN_KELVIN: WATER_TRIPLE_POINT_IN_KELVIN,
-    WATER_CRITICAL_POINT_IN_KELVIN: WATER_CRITICAL_POINT_IN_KELVIN,
+    NEON_TRIPLE_POINT_IN_KELVIN: 23,  // Tweaked a little from actual value for better temperature mapping.
+    NEON_CRITICAL_POINT_IN_KELVIN: 44,
+    ARGON_TRIPLE_POINT_IN_KELVIN: 75, // Tweaked a little from actual value for better temperature mapping.
+    ARGON_CRITICAL_POINT_IN_KELVIN: 151,
+    O2_TRIPLE_POINT_IN_KELVIN: 54,
+    O2_CRITICAL_POINT_IN_KELVIN: 155,
+    WATER_TRIPLE_POINT_IN_KELVIN: 273,
+    WATER_CRITICAL_POINT_IN_KELVIN: 647,
 
     // Maximum number of atoms that can be simulated.
     MAX_NUM_ATOMS: 500,
@@ -52,18 +44,8 @@ define( function( require ) {
     PARTICLE_CONTAINER_INITIAL_HEIGHT: PARTICLE_CONTAINER_INITIAL_HEIGHT,
     CONTAINER_BOUNDS: new Bounds2( 0, 0, PARTICLE_CONTAINER_WIDTH, PARTICLE_CONTAINER_INITIAL_HEIGHT ),
 
-    // Dimensions of container in view coordinates
+    // size of container in view
     VIEW_CONTAINER_WIDTH: 280,
-    VIEW_CONTAINER_HEIGHT: 285,
-
-    // Left and Right Container Wall Empirically determined in Model space
-    CONTAINER_LEFT_WALL: 0.5,
-    CONTAINER_RIGHT_WALL: 31.5,
-    CONTAINER_BOTTOM_WALL: 0,
-    CONTAINER_TOP_WALL: 32.5,
-
-    // Maximum temperature, in degrees Kelvin, that the Thermometer will display.
-    MAX_DISPLAYED_TEMPERATURE: 1000,
 
     // Identifiers for the various supported molecules.
     NEON: 1,
@@ -87,7 +69,7 @@ define( function( require ) {
     MAX_EPSILON: 450,    // Epsilon/k-Boltzmann is in Kelvin.
     MIN_EPSILON: 20,     // Epsilon/k-Boltzmann is in Kelvin.
 
-    // constants used to describe the the spatial relationship between
+    // constants used to describe the spatial relationship between the atoms that comprise a water molecule
     THETA_HOH: ( 120 * Math.PI / 180 ),  // This is not quite the real value for a water
 
     // molecule, but it is close and worked better in
@@ -98,14 +80,14 @@ define( function( require ) {
     DIATOMIC_PARTICLE_DISTANCE: 0.9,  // In particle diameters.
 
     // atoms and molecules colors
-    OXYGEN_COLOR: Element.O.color.toCSS(), // TODO: handled uniquely until Element is fixed, see https://github.com/phetsims/nitroglycerin/issues/8
+    OXYGEN_COLOR: Element.O.color.toCSS(),
     NEON_COLOR: Element.Ne.color,
     ARGON_COLOR: Element.Ar.color,
     HYDROGEN_COLOR: Element.H.color,
     ADJUSTABLE_ATTRACTION_COLOR: '#CC66CC',
 
     // adjustable attraction min epsilon
-    MIN_ADJUSTABLE_EPSILON: (1.5 * NEON_ATOM_EPSILON),
+    MIN_ADJUSTABLE_EPSILON: ( 1.5 * NEON_ATOM_EPSILON ),
 
     // physical constants
     K_BOLTZMANN: 1.38E-23, // Boltzmann's constant.
