@@ -66,7 +66,6 @@ define( function( require ) {
       ) + 2 * CONTAINER_X_MARGIN;
     this.containerViewCenterX = this.particleAreaViewBounds.centerX;
 
-    this.containerLid = new Node( { opacity: 0.9 } );
     var topEllipseRadiusX = this.containerWidthWithMargin / 2;
     var topEllipseRadiusY = topEllipseRadiusX * PERSPECTIVE_TILT_FACTOR;
 
@@ -81,9 +80,6 @@ define( function( require ) {
       2 * Math.PI,
       false
     );
-
-    // create the node that will act as the elliptical background for the lid
-    var lidBackground = new Path( topEllipseShape, { fill: '#7E7E7E', centerX: this.particleAreaViewBounds.centerX } );
 
     // define the opening at the top of the container, should be added to scene graph separately for correct layering
     // TODO: Consider making this a separate node in a separate file
@@ -274,7 +270,11 @@ define( function( require ) {
     bevel.top = this.particleAreaViewBounds.minY + cutoutTopY;
     postParticleLayer.addChild( bevel );
 
-    this.containerLid.addChild( lidBackground );
+    // create the node that will act as the elliptical background for the lid, other nodes may be added later
+    this.containerLid = new Path( topEllipseShape, {
+      fill: 'rgba( 126, 126, 126, 0.9 )',
+      centerX: this.particleAreaViewBounds.centerX
+    } );
     preParticleLayer.addChild( this.containerLid );
 
     this.middleContainerLayer = new Node();
@@ -292,14 +292,14 @@ define( function( require ) {
       var handleAreaEllipseShape = topEllipseShape.transformed( Matrix3.scale( 0.8 ) ); // scale empirically determined
       var handleAreaEllipse = new Path( handleAreaEllipseShape, {
         lineWidth: 1,
-        stroke: '#AAAAAA',
-        fill: '#B3B3B3',
-        centerX: this.particleAreaViewBounds.centerX,
+        stroke: '#888888',
+        fill: 'rgba( 200, 200, 200, 0.5 )',
+        centerX: this.containerLid.width / 2,
         centerY: 0
       } );
       this.containerLid.addChild( handleAreaEllipse );
       var handleNode = new HandleNode();
-      handleNode.centerX = handleAreaEllipse.centerX;
+      handleNode.centerX = this.containerLid.width / 2;
       handleNode.bottom = handleAreaEllipse.centerY + 5; // position tweaked a bit to look better
       this.containerLid.addChild( handleNode );
     }
@@ -377,7 +377,7 @@ define( function( require ) {
         if ( containerLid.getRotation() !== 0 ) {
           containerLid.setRotation( 0 );
         }
-        containerLid.setTranslation( 0, lidYPosition );
+        containerLid.setTranslation( this.containerViewCenterX - containerLid.width / 2, lidYPosition );
       }
       else {
 
