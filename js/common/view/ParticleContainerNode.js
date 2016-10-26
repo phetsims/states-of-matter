@@ -29,8 +29,8 @@ define( function( require ) {
   var CONTAINER_X_MARGIN = 5; // additional size in x direction beyond nominal container width
   var PERSPECTIVE_TILT_FACTOR = 0.15; // can be varied to get more or less tilt, but only works in a fairly narrow range
   var CONTAINER_CUTOUT_X_MARGIN = 25;
-  var CONTAINER_CUTOUT_Y_MARGIN = 15;
-  var BEVEL_WIDTH = 12;
+  var CONTAINER_CUTOUT_Y_MARGIN = 20;
+  var BEVEL_WIDTH = 9;
 
   /**
    * @param {MultipleParticleModel} multipleParticleModel - model of the simulation
@@ -185,7 +185,7 @@ define( function( require ) {
       // left inner line
       .lineTo( CONTAINER_CUTOUT_X_MARGIN, cutoutBottomY )
 
-      // inner bottom curve
+      // bottom inner curve
       .quadraticCurveTo(
         this.containerWidthWithMargin / 2,
         cutoutBottomY + cutoutShapeTiltFactor,
@@ -199,7 +199,7 @@ define( function( require ) {
       // top inner curve
       .quadraticCurveTo(
         this.containerWidthWithMargin / 2,
-        getEllipseLowerEdgeYPos( this.containerWidthWithMargin / 2 ) + CONTAINER_CUTOUT_Y_MARGIN + cutoutShapeTiltFactor,
+        cutoutTopY + cutoutShapeTiltFactor,
         CONTAINER_CUTOUT_X_MARGIN,
         cutoutTopY
       )
@@ -280,10 +280,9 @@ define( function( require ) {
         fill: new LinearGradient( 0, 0, cutoutWidth, 0 )
           .addColorStop( 0, '#2E2E2E' )
           .addColorStop( 0.2, '#323232' )
-          .addColorStop( 0.3, '# 363636' )
+          .addColorStop( 0.3, '#363636' )
           .addColorStop( 0.4, '#3E3E3E' )
           .addColorStop( 0.5, '#4B4B4B' )
-          .addColorStop( 0.5, '# 515151' )
           .addColorStop( 0.9, '#525252' )
       }
     );
