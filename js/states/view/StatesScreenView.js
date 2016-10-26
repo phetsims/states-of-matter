@@ -69,12 +69,6 @@ define( function( require ) {
 
     // add particle container
     this.particleContainerNode = new ParticleContainerNode( multipleParticleModel, modelViewTransform, false, false );
-
-    // add particle Canvas layer
-    this.particlesLayer = new ParticleImageCanvasNode( multipleParticleModel.particles, modelViewTransform, {
-      canvasBounds: this.layoutBounds.dilated( 500, 500 ) // dilation amount empirically determined
-    } );
-    this.addChild( this.particlesLayer );
     this.addChild( this.particleContainerNode );
 
     // add heater/cooler node
@@ -99,7 +93,7 @@ define( function( require ) {
     } );
     this.addChild( this.compositeThermometerNode );
 
-    // add Molecule ControlPanel
+    // add molecule control panel
     var solidLiquidGasMoleculesControlPanel = new StatesMoleculesControlPanel( multipleParticleModel.moleculeTypeProperty, {
       right: this.layoutBounds.right - LAYOUT_BOUNDS_RIGHT_OFFSET,
       top: this.layoutBounds.top + LAYOUT_BOUNDS_Y_OFFSET
@@ -202,7 +196,7 @@ define( function( require ) {
   return inherit( ScreenView, StatesScreenView, {
     step: function() {
       this.compositeThermometerNode.step();
-      this.particlesLayer.step();
+      this.particleContainerNode.step();
       if ( this.particleContainerHeightPropertyChanged ) {
         this.compositeThermometerNode.updatePositionAndOrientation();
         this.particleContainerNode.handleContainerSizeChanged();

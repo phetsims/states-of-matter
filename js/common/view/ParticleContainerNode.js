@@ -17,6 +17,7 @@ define( function( require ) {
   var LinearGradient = require( 'SCENERY/util/LinearGradient' );
   var Matrix3 = require( 'DOT/Matrix3' );
   var Node = require( 'SCENERY/nodes/Node' );
+  var ParticleImageCanvasNode = require( 'STATES_OF_MATTER/common/view/ParticleImageCanvasNode' );
   var Path = require( 'SCENERY/nodes/Path' );
   var PointingHandNode = require( 'STATES_OF_MATTER/common/view/PointingHandNode' );
   var Shape = require( 'KITE/Shape' );
@@ -57,8 +58,13 @@ define( function( require ) {
 
     // add nodes for the various layers
     var preParticleLayer = new Node();
-    var postParticleLayer = new Node( { opacity: 0.9 } );
     this.addChild( preParticleLayer );
+    this.particlesLayer = new ParticleImageCanvasNode( multipleParticleModel.particles, modelViewTransform, {
+      canvasBounds: StatesOfMatterConstants.SCREEN_VIEW_OPTIONS.layoutBounds.dilated( 500, 500 ) // dilation amount empirically determined
+    } );
+    this.addChild( this.particlesLayer );
+    var postParticleLayer = new Node();
+    this.addChild( postParticleLayer );
 
     // set up variables used to create and position the various parts of the container
     this.containerWidthWithMargin = modelViewTransform.modelToViewDeltaX(
@@ -81,14 +87,53 @@ define( function( require ) {
       false
     );
 
-    // define the opening at the top of the container, should be added to scene graph separately for correct layering
-    // TODO: Consider making this a separate node in a separate file
-    this.openingNode = new Path( topEllipseShape, {
+    // add the elliptical opening at the top of the container, must be behind particles in z-order
+    preParticleLayer.addChild( new Path( topEllipseShape, {
       lineWidth: 1,
-      stroke: '#606262',
+      stroke: '#444444',
       centerX: this.particleAreaViewBounds.centerX,
       centerY: this.particleAreaViewBounds.minY
+    } ) );
+
+    // create and add the node that will act as the elliptical background for the lid, other nodes may be added later
+    this.containerLid = new Path( topEllipseShape, {
+      fill: 'rgba( 126, 126, 126, 0.8 )',
+      centerX: this.particleAreaViewBounds.centerX
     } );
+    postParticleLayer.addChild( this.containerLid );
+
+    if ( volumeControlEnabled ) {
+
+      // Add the pointing hand, the finger of which can push down on the top of the container.
+      this.pointingHandNode = new PointingHandNode( multipleParticleModel, modelViewTransform, {
+        centerX: this.particleAreaViewBounds.centerX + 30 // offset empirically determined
+      } );
+      postParticleLayer.addChild( this.pointingHandNode );
+
+      // Add the handle to the lid.
+      var handleAreaEllipseShape = topEllipseShape.transformed( Matrix3.scale( 0.8 ) ); // scale empirically determined
+      var handleAreaEllipse = new Path( handleAreaEllipseShape, {
+        lineWidth: 1,
+        stroke: '#888888',
+        fill: 'rgba( 200, 200, 200, 0.5 )',
+        centerX: this.containerLid.width / 2,
+        centerY: 0
+      } );
+      this.containerLid.addChild( handleAreaEllipse );
+      var handleNode = new HandleNode();
+      handleNode.centerX = this.containerLid.width / 2;
+      handleNode.bottom = handleAreaEllipse.centerY + 5; // position tweaked a bit to look better
+      this.containerLid.addChild( handleNode );
+    }
+
+    if ( pressureGaugeEnabled ) {
+
+      // Add the pressure meter.
+      this.pressureMeter = new DialGaugeNode( multipleParticleModel );
+      this.pressureMeter.updateConnector();
+      this.pressureMeter.right = this.particleAreaViewBounds.minX + this.particleAreaViewBounds.width * 0.25;
+      postParticleLayer.addChild( this.pressureMeter );
+    }
 
     // define a function to evaluate the bottom edge of the ellipse at the top, used for relative positioning
     function getEllipseLowerEdgeYPos( distanceFromLeftEdge ) {
@@ -170,13 +215,14 @@ define( function( require ) {
           .addColorStop( 0.75, '#8E8E8E' )
           .addColorStop( 0.8, '#737373' )
           .addColorStop( 0.9, '#646565' ),
+        opacity: 0.9,
         centerX: this.particleAreaViewBounds.centerX,
         top: this.particleAreaViewBounds.minY
       }
     );
     postParticleLayer.addChild( mainContainer );
 
-    var bevel = new Node();
+    var bevel = new Node( { opacity: 0.9 } );
 
     var leftBevelEdge = new Path(
       new Shape()
@@ -269,50 +315,6 @@ define( function( require ) {
     bevel.centerX = this.particleAreaViewBounds.centerX;
     bevel.top = this.particleAreaViewBounds.minY + cutoutTopY;
     postParticleLayer.addChild( bevel );
-
-    // create the node that will act as the elliptical background for the lid, other nodes may be added later
-    this.containerLid = new Path( topEllipseShape, {
-      fill: 'rgba( 126, 126, 126, 0.9 )',
-      centerX: this.particleAreaViewBounds.centerX
-    } );
-    preParticleLayer.addChild( this.containerLid );
-
-    this.middleContainerLayer = new Node();
-    this.addChild( this.middleContainerLayer );
-
-    if ( volumeControlEnabled ) {
-
-      // Add the pointing hand, the finger of which can push down on the top of the container.
-      this.pointingHandNode = new PointingHandNode( multipleParticleModel, modelViewTransform, {
-        centerX: this.particleAreaViewBounds.centerX + 30 // offset empirically determined
-      } );
-      this.addChild( this.pointingHandNode );
-
-      // Add the handle to the lid.
-      var handleAreaEllipseShape = topEllipseShape.transformed( Matrix3.scale( 0.8 ) ); // scale empirically determined
-      var handleAreaEllipse = new Path( handleAreaEllipseShape, {
-        lineWidth: 1,
-        stroke: '#888888',
-        fill: 'rgba( 200, 200, 200, 0.5 )',
-        centerX: this.containerLid.width / 2,
-        centerY: 0
-      } );
-      this.containerLid.addChild( handleAreaEllipse );
-      var handleNode = new HandleNode();
-      handleNode.centerX = this.containerLid.width / 2;
-      handleNode.bottom = handleAreaEllipse.centerY + 5; // position tweaked a bit to look better
-      this.containerLid.addChild( handleNode );
-    }
-
-    if ( pressureGaugeEnabled ) {
-
-      // Add the pressure meter.
-      this.pressureMeter = new DialGaugeNode( multipleParticleModel );
-      this.pressureMeter.updateConnector();
-      this.pressureMeter.right = this.particleAreaViewBounds.minX + this.particleAreaViewBounds.width * 0.25;
-      this.middleContainerLayer.addChild( this.pressureMeter );
-    }
-    this.addChild( postParticleLayer );
   }
 
   statesOfMatter.register( 'ParticleContainerNode', ParticleContainerNode );
@@ -324,7 +326,8 @@ define( function( require ) {
      * @param dt
      */
     step: function( dt ) {
-      this.pressureMeter.step( dt );
+      this.particlesLayer.step( dt );
+      this.pressureMeter && this.pressureMeter.step( dt );
     },
 
     /**

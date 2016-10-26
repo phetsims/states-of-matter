@@ -20,7 +20,6 @@ define( function( require ) {
   var ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
   var MultipleParticleModel = require( 'STATES_OF_MATTER/common/model/MultipleParticleModel' );
   var ObservableArray = require( 'AXON/ObservableArray' );
-  var ParticleImageCanvasNode = require( 'STATES_OF_MATTER/common/view/ParticleImageCanvasNode' );
   var ParticleContainerNode = require( 'STATES_OF_MATTER/common/view/ParticleContainerNode' );
   var PhaseChangesMoleculesControlPanel = require( 'STATES_OF_MATTER/phase-changes/view/PhaseChangesMoleculesControlPanel' );
   var PhaseDiagram = require( 'STATES_OF_MATTER/phase-changes/view/PhaseDiagram' );
@@ -100,16 +99,7 @@ define( function( require ) {
     // create the particle container - it takes care of positioning itself
     this.particleContainerNode = new ParticleContainerNode( multipleParticleModel, modelViewTransform, true, true );
 
-    // add the opening at the top of the particle container, done at this point for correct layering
-    this.addChild( this.particleContainerNode.openingNode );
-
-    // add particle canvas layer for particle rendering
-    this.particlesLayer = new ParticleImageCanvasNode( multipleParticleModel.particles, modelViewTransform, {
-      canvasBounds: this.layoutBounds.dilated( 500, 500 ) // dilation amount empirically determined
-    } );
-    this.addChild( this.particlesLayer );
-
-    // add the main portion of the particle container
+    // add the particle container
     this.addChild( this.particleContainerNode );
 
     // add heater/cooler node
@@ -335,9 +325,8 @@ define( function( require ) {
 
     // @public
     step: function( dt ) {
-      this.particlesLayer.step();
       this.compositeThermometerNode.step();
-      this.particleContainerNode.pressureMeter.step( dt );
+      this.particleContainerNode.step( dt );
       if ( this.particleContainerHeightPropertyChanged ) {
         console.log( 'update occurred during step' );
         this.compositeThermometerNode.updatePositionAndOrientation();

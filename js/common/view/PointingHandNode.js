@@ -71,8 +71,8 @@ define( function( require ) {
     this.hintNode = new Node( {
       children: [ this.upArrowNode, this.downArrowNode ],
       visible: false,
-      top: this.pointingHandImageNode.bottom - 50,
-      left: this.pointingHandImageNode.right
+      top: this.pointingHandImageNode.bottom - 50, // adjusted a bit for better look
+      left: this.pointingHandImageNode.right - 20 // adjusted a bit for better look
     } );
 
     // Set ourself up to listen for and handle mouse dragging events.
