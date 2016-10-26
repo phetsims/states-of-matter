@@ -323,7 +323,6 @@ define( function( require ) {
 
     // @public
     step: function( dt ) {
-      this.compositeThermometerNode.step();
       this.particleContainerNode.step( dt );
       if ( this.particleContainerHeightPropertyChanged ) {
         this.compositeThermometerNode.updatePositionAndOrientation();

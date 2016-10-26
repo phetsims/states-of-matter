@@ -137,15 +137,9 @@ define( function( require ) {
     } );
     this.addChild( playPauseButton );
 
-    // TODO: What the heck is this?
-    multipleParticleModel.moleculeTypeProperty.link( function() {
-      multipleParticleModel.temperatureSetPointProperty._notifyObservers();
-    } );
-
     this.particleContainerHeightPropertyChanged = false;
     multipleParticleModel.particleContainerHeightProperty.link( function() {
       self.particleContainerHeightPropertyChanged = true;
-      //compositeThermometerNode.updatePositionAndOrientation();
     } );
 
     // if the appropriate query param is set, show some information used in debugging time step adjustments
@@ -188,7 +182,6 @@ define( function( require ) {
 
   return inherit( ScreenView, StatesScreenView, {
     step: function() {
-      this.compositeThermometerNode.step();
       this.particleContainerNode.step();
       if ( this.particleContainerHeightPropertyChanged ) {
         this.compositeThermometerNode.updatePositionAndOrientation();

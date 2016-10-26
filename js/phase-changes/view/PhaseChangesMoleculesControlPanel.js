@@ -231,7 +231,6 @@ define( function( require ) {
     interactionStrengthNode.top = radioButtonGroup.bottom + inset;
 
     multipleParticleModel.moleculeTypeProperty.link( function( value ) {
-      multipleParticleModel.temperatureSetPointProperty._notifyObservers();
 
       // adjust the control panel border when adjustable attraction selected or deselect
       if ( value === StatesOfMatterConstants.USER_DEFINED_MOLECULE ) {
