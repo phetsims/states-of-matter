@@ -75,9 +75,8 @@ define( function( require ) {
     this.modelTemperatureHistory = new ObservableArray( { allowDuplicates: true } );
 
     // Create the model-view transform. The multipliers for the 2nd parameter can be used to adjust where the point
-    // (0, 0) in the model, which is the lower left corner of the particle container.  The multipliers can be
-    // adjusted to change where the container is located within the view.  The final parameter is the scale, and can be
-    // changed to make the view more zoomed in or out.
+    // (0, 0) in the model, which is the lower left corner of the particle container, appears in the view.The final
+    // parameter is the scale, and can be changed to make the view more zoomed in or out.
     var modelViewTransform = ModelViewTransform2.createSinglePointScaleInvertedYMapping(
       new Vector2( 0, 0 ),
       new Vector2( this.layoutBounds.width * 0.325, this.layoutBounds.height * 0.75 ),
