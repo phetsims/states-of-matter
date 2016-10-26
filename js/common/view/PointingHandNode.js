@@ -5,6 +5,7 @@
  * used to push down on things.
  *
  * @author Siddhartha Chinthapally (Actual Concepts)
+ * @author John Blanco
  */
 define( function( require ) {
   'use strict';

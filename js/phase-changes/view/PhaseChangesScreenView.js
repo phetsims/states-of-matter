@@ -1,7 +1,7 @@
 // Copyright 2014-2015, University of Colorado Boulder
 
 /**
- * View for the phase changes screen
+ * view for the Phase Changes screen
  *
  * @author Aaron Davis
  * @author Siddhartha Chinthapally (Actual Concepts)
@@ -39,7 +39,6 @@ define( function( require ) {
   var returnLidString = require( 'string!STATES_OF_MATTER/returnLid' );
 
   // constants
-  var INSET = 10;
   var PANEL_WIDTH = 170; // empirically determined to be wide enough for all contents using English strings with some margin
   var INTER_PANEL_SPACING = 8;
 
@@ -58,9 +57,8 @@ define( function( require ) {
   var MAX_NUM_HISTORY_SAMPLES = 100;
 
   // constants used in the layout process
-  var X_INSET = 15;
+  var CONTROL_PANEL_X_INSET = 15;
   var STEP_BUTTON_X_OFFSET = 50;
-  var STEP_BUTTON_Y_OFFSET = 20;
 
   /**
    * @param {MultipleParticleModel} multipleParticleModel - model of the simulation
@@ -108,12 +106,12 @@ define( function( require ) {
     } );
     this.addChild( heaterCoolerNode );
 
-    // hook the heater cooler node up to the model
+    // hook the heater/cooler node up to the model
     heaterCoolerNode.heatCoolLevelProperty.link( function( heat ) {
       multipleParticleModel.setHeatingCoolingAmount( heat );
     } );
 
-    // add compositeThermometer node
+    // add the thermometer node
     this.compositeThermometerNode = new CompositeThermometerNode( multipleParticleModel, modelViewTransform, {
       font: new PhetFont( 20 ),
       fill: 'white',
@@ -132,11 +130,12 @@ define( function( require ) {
         //Reset  phase diagram state in SOM basic version
         multipleParticleModel.expandedProperty.value = isInteractionDiagramEnabled;
       },
-      right: this.layoutBounds.right - X_INSET,
+      right: this.layoutBounds.right - CONTROL_PANEL_X_INSET,
       bottom: this.layoutBounds.bottom - 5,
       radius: StatesOfMatterConstants.RESET_ALL_BUTTON_RADIUS,
       touchAreaDilation: 4
     } );
+    this.addChild( resetAllButton );
 
     // add play pause button and step button
     var stepButton = new StepForwardButton( {
@@ -146,7 +145,7 @@ define( function( require ) {
       stroke: 'black',
       fill: '#005566',
       right: heaterCoolerNode.left - STEP_BUTTON_X_OFFSET,
-      bottom: heaterCoolerNode.bottom - STEP_BUTTON_Y_OFFSET,
+      centerY: heaterCoolerNode.centerY,
       touchAreaDilation: 4
     } );
     this.addChild( stepButton );
@@ -155,11 +154,10 @@ define( function( require ) {
       radius: 18, stroke: 'black',
       fill: '#005566',
       y: stepButton.centerY,
-      right: stepButton.left - INSET,
+      right: stepButton.left - 10,
       touchAreaDilation: 4
     } );
     this.addChild( playPauseButton );
-    this.addChild( resetAllButton );
 
     // add bicycle pump node
     this.addChild( new BicyclePumpNode( 200, 250, multipleParticleModel, {
@@ -178,9 +176,8 @@ define( function( require ) {
       },
       visible: false,
       xMargin: 10,
-      right: self.particleContainerNode.left - 2 * X_INSET,
-      // TODO: Make this align with top of particle container when #162 is worked out
-      top: 100
+      centerX: nominalParticleAreaViewBounds.minX - 150,
+      centerY: nominalParticleAreaViewBounds.minY
     } );
     this.addChild( this.returnLidButton );
     multipleParticleModel.isExplodedProperty.linkAttribute( this.returnLidButton, 'visible' );
@@ -195,7 +192,7 @@ define( function( require ) {
         {
           maxWidth: PANEL_WIDTH,
           minWidth: PANEL_WIDTH,
-          right: this.layoutBounds.right - X_INSET
+          right: this.layoutBounds.right - CONTROL_PANEL_X_INSET
         }
       );
       this.addChild( epsilonControlInteractionPotentialDiagram );
@@ -206,7 +203,7 @@ define( function( require ) {
       multipleParticleModel,
       isInteractionDiagramEnabled,
       {
-        right: this.layoutBounds.right - X_INSET,
+        right: this.layoutBounds.right - CONTROL_PANEL_X_INSET,
         top: 5,
         maxWidth: PANEL_WIDTH,
         minWidth: PANEL_WIDTH
@@ -229,6 +226,7 @@ define( function( require ) {
       self.updatePhaseDiagram();
     } );
 
+    // Hook up a function that updates several view attributes when the molecule type changes.
     multipleParticleModel.moleculeTypeProperty.link( function( moleculeId ) {
       self.modelTemperatureHistory.clear();
       self.updatePhaseDiagram();
@@ -266,6 +264,7 @@ define( function( require ) {
       }
     } );
 
+    // TODO: Can I get rid of this flag?
     this.particleContainerHeightPropertyChanged = false;
     multipleParticleModel.particleContainerHeightProperty.link( function( containerHeight ) {
       self.particleContainerHeightPropertyChanged = true;
@@ -398,6 +397,7 @@ define( function( require ) {
      * @private
      */
     mapModelTempAndPressureToPhaseDiagramPressure: function( modelPressure, modelTemperature ) {
+
       // This method is a total tweak fest.  All values and equations are made to map to the phase diagram, and are NOT
       // based on any real-world equations that define phases of matter.
       var cutOverTemperature = TRIPLE_POINT_TEMPERATURE_ON_DIAGRAM - 0.025;
