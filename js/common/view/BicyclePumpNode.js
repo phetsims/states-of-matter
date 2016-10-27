@@ -15,10 +15,13 @@ define( function( require ) {
   var LinearGradient = require( 'SCENERY/util/LinearGradient' );
   var Node = require( 'SCENERY/nodes/Node' );
   var Path = require( 'SCENERY/nodes/Path' );
+  var Property = require( 'AXON/Property' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var Shape = require( 'KITE/Shape' );
   var SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
+  var VerticalAmountIndicatorNode = require( 'STATES_OF_MATTER/common/view/VerticalAmountIndicatorNode' );
 
   // The follow constants define the size and positions of the various components of the pump as proportions of the
   // overall width and height of the node.
@@ -52,6 +55,7 @@ define( function( require ) {
   function BicyclePumpNode( width, height, multipleParticleModel, options ) {
 
     Node.call( this );
+    this.multipleParticleModel = multipleParticleModel;
 
     var pumpShaft;
     var pumpingRequiredToInject = height * PUMPING_REQUIRED_TO_INJECT_PROPORTION;
@@ -344,12 +348,27 @@ define( function( require ) {
     } );
     hoseBottomConnector.setTranslation( hoseToPumpAttachPtX + 1, hoseToPumpAttachPtY - hoseBottomConnector.height / 2 );
 
+    // define a property that tracks the remaining capacity
+    this.remainingCapacityProportionProperty = new Property( 1 );
+    this.remainingCapacityProportionProperty.link( function( remainingCapacityProportionProperty ) {
+      console.log( 'remainingCapacityProportionProperty = ' + remainingCapacityProportionProperty );
+    } );
+
+    // create the node that will be used to indicate the remaining capacity
+    var remainingCapacityIndicator = new VerticalAmountIndicatorNode(
+      pumpBodyWidth * 0.5,
+      pumpBodyHeight * 0.8,
+      this.remainingCapacityProportionProperty,
+      { centerX: pumpShaft.centerX, centerY: ( pumpBody.top + pipeConnectorPath.top ) / 2 }
+    );
+
     // add the pieces with the correct layering
     this.addChild( pumpOpeningBack );
     this.addChild( pumpShaft );
     this.addChild( pumpHandleNode );
     this.addChild( pipeConnectorOpening );
     this.addChild( pumpBody );
+    this.addChild( remainingCapacityIndicator );
     this.addChild( pumpOpeningFront );
     this.addChild( pipeConnectorPath );
     this.addChild( hoseConnector );
@@ -360,5 +379,15 @@ define( function( require ) {
 
   statesOfMatter.register( 'BicyclePumpNode', BicyclePumpNode );
 
-  return inherit( Node, BicyclePumpNode );
+  return inherit( Node, BicyclePumpNode, {
+    step: function() {
+
+      // update the remaining capacity proportion
+      var remainingSlots = this.multipleParticleModel.moleculeDataSet.getNumberOfRemainingSlots();
+      var atomsPerMolecule = this.multipleParticleModel.moleculeDataSet.getAtomsPerMolecule();
+      this.remainingCapacityProportionProperty.set(
+        ( remainingSlots * atomsPerMolecule ) / StatesOfMatterConstants.MAX_NUM_ATOMS
+      );
+    }
+  } );
 } );

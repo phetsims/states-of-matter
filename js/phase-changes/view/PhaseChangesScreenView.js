@@ -160,10 +160,11 @@ define( function( require ) {
     this.addChild( playPauseButton );
 
     // add bicycle pump node
-    this.addChild( new BicyclePumpNode( 200, 250, multipleParticleModel, {
+    this.pumpNode = new BicyclePumpNode( 200, 250, multipleParticleModel, {
       right: nominalParticleAreaViewBounds.left,
       bottom: nominalParticleAreaViewBounds.bottom + 100 // empirically determined to line up with injection point
-    } ) );
+    } );
+    this.addChild( this.pumpNode );
 
     // add return lid button
     this.returnLidButton = new TextPushButton( returnLidString, {
@@ -323,6 +324,7 @@ define( function( require ) {
     // @public
     step: function( dt ) {
       this.particleContainerNode.step( dt );
+      this.pumpNode.step( dt );
       if ( this.particleContainerHeightPropertyChanged ) {
         this.compositeThermometerNode.updatePositionAndOrientation();
         this.particleContainerNode.handleContainerSizeChanged();

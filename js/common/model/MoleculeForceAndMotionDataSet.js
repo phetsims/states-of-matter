@@ -33,7 +33,7 @@ define( function( require ) {
 
     // Attributes that apply to all elements of the data set.
     this.atomsPerMolecule = atomsPerMolecule;
-    
+
     // convenience variable
     var maxNumMolecules = Math.floor( StatesOfMatterConstants.MAX_NUM_ATOMS / atomsPerMolecule );
 
@@ -108,7 +108,7 @@ define( function( require ) {
      * @public
      */
     getNumberOfRemainingSlots: function() {
-      return ( ( StatesOfMatterConstants.MAX_NUM_ATOMS / this.atomsPerMolecule ) -
+      return ( Math.floor( StatesOfMatterConstants.MAX_NUM_ATOMS / this.atomsPerMolecule ) -
                ( this.numberOfAtoms / this.atomsPerMolecule ) );
     },
 

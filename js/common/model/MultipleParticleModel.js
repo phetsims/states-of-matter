@@ -609,8 +609,13 @@ define( function( require ) {
       }
 
       // Add the newly created molecule to the data set.
-      this.moleculeDataSet.addMolecule( atomPositions, moleculeCenterOfMassPosition, moleculeVelocity,
-        moleculeRotationRate, true );
+      this.moleculeDataSet.addMolecule(
+        atomPositions,
+        moleculeCenterOfMassPosition,
+        moleculeVelocity,
+        moleculeRotationRate,
+        true
+      );
 
       if ( atomsPerMolecule > 1 ) {
         // randomize the rotational angle of multi-atom molecules
@@ -723,7 +728,7 @@ define( function( require ) {
      */
     initializeModelParameters: function() {
 
-      // Initialize the system parameters
+      // Initialize the system parameters.
       this.gravitationalAcceleration = INITIAL_GRAVITATIONAL_ACCEL;
       this.heatingCoolingAmount = 0;
       this.temperatureSetPoint = INITIAL_TEMPERATURE;
