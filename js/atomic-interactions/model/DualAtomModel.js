@@ -42,7 +42,7 @@ define( function( require ) {
    * This is the model for two atoms interacting with a Lennard-Jones interaction potential.
    * @constructor
    */
-  function DualAtomModel(){
+  function DualAtomModel() {
 
     var self = this;
 
@@ -191,12 +191,14 @@ define( function( require ) {
     setFixedAtomType: function( atomType ) {
 
       if ( this.fixedAtom === null || this.fixedAtom.getType() !== atomType ) {
-        if ( !this.settingBothAtomTypes &&
-             ( ( atomType === AtomType.ADJUSTABLE && this.movableAtom.getType() !== AtomType.ADJUSTABLE ) ||
-               ( atomType !== AtomType.ADJUSTABLE && this.movableAtom.getType() === AtomType.ADJUSTABLE ) ) ) {
-          console.log( ' - Error: Cannot set just one atom to be adjustable, ignoring request.' );
-          return;
-        }
+
+        // make sure that a legal configuration is being set
+        assert && assert( this.settingBothAtomTypes ||
+                          ( ( atomType === AtomType.ADJUSTABLE && this.movableAtom.getType() === AtomType.ADJUSTABLE ) ||
+                          ( atomType !== AtomType.ADJUSTABLE && this.movableAtom.getType() !== AtomType.ADJUSTABLE ) ),
+          'Error: Cannot set just one atom to be adjustable'
+        );
+
         this.ensureValidAtomType( atomType );
         this.bondingState = BondingState.UNBONDED;
 
@@ -232,12 +234,11 @@ define( function( require ) {
 
       if ( this.movableAtom === null || this.movableAtom.getType() !== atomType ) {
 
-        if ( !this.settingBothAtomTypes &&
-             ( ( atomType === AtomType.ADJUSTABLE && this.movableAtom.getType() !== AtomType.ADJUSTABLE ) ||
-               ( atomType !== AtomType.ADJUSTABLE && this.movableAtom.getType() === AtomType.ADJUSTABLE ) ) ) {
-          console.log( ' - Error: Cannot set just one atom to be adjustable, ignoring request.' );
-          return;
-        }
+        assert && assert( this.settingBothAtomTypes ||
+                          ( ( atomType === AtomType.ADJUSTABLE && this.fixedAtom.getType() === AtomType.ADJUSTABLE ) ||
+                          ( atomType !== AtomType.ADJUSTABLE && this.fixedAtom.getType() !== AtomType.ADJUSTABLE ) ),
+          'Error: Cannot set just one atom to be adjustable'
+        );
 
         this.ensureValidAtomType( atomType );
         this.bondingState = BondingState.UNBONDED;
@@ -448,7 +449,7 @@ define( function( require ) {
         // Using real world time for this results in the atoms moving a little slowly, so the time step is adjusted
         // here.  The multipliers were empirically determined.
         var adjustedTimeStep;
-        switch ( this.speed ){
+        switch( this.speed ) {
           case 'normal':
             adjustedTimeStep = simulationTimeStep * 2;
             break;
@@ -571,11 +572,11 @@ define( function( require ) {
                  ( this.movableAtom.getPositionReference().distance( this.fixedAtom.getPositionReference() ) <
                    this.fixedAtom.getRadius() * 2.5 ) ) {
 
-              if ( this.justReleased && this.potentialWhenAtomReleased > ESCAPE_POTENTIAL_THRESHOLD ){
+              if ( this.justReleased && this.potentialWhenAtomReleased > ESCAPE_POTENTIAL_THRESHOLD ) {
                 // the user just released the movable atom in an area of relatively high potential, so let it escape
                 this.bondingState = BondingState.ALLOWING_ESCAPE;
               }
-              else{
+              else {
                 // The atoms are close together and the movable one is starting to move away, and the potential does
                 // not exceed the escape threshold, so we consider this to be the start of bond formation.
                 this.bondingState = BondingState.BONDING;
@@ -706,10 +707,10 @@ define( function( require ) {
      */
     approximateEquivalentPotentialDistance: function( distance ) {
 
-      if ( distance < this.ljPotentialCalculator.calculateMinimumForceDistance() ) {
-        console.log( '- Error: Distance value out of range.' );
-        return 0;
-      }
+      assert && assert(
+        distance >= this.ljPotentialCalculator.calculateMinimumForceDistance(),
+        'Error: Distance value out of range.'
+      );
 
       // Iterate by a fixed amount until a reasonable value is found.
       var totalSpanDistance = distance - this.ljPotentialCalculator.getSigma();

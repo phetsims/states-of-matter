@@ -1173,8 +1173,7 @@ define( function( require ) {
 
       }
       else {
-        // used, so print and error message and ignore the request.
-        console.error( 'Error: Epsilon cannot be set when non-configurable molecule is in use.' );
+        assert && assert( false, 'Error: Epsilon cannot be set when non-configurable molecule is in use.' );
       }
     },
 

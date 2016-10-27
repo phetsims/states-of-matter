@@ -24,9 +24,7 @@ define( function( require ) {
    */
   function LjPotentialCalculator( sigma, epsilon ) {
 
-    if ( sigma === 0 ) {
-      console.log( 'Illegal value for the sigma parameter: ' + sigma );
-    }
+    assert && assert( sigma > 0, 'sigma must be greater than 0' );
 
     this.sigma = sigma;  // Molecular diameter in picometers.
     this.epsilon = epsilon; // Interaction strength, epsilon/k-boltzmann is in Kelvin.

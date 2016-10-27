@@ -54,8 +54,7 @@ define( function( require ) {
           return ConfigurableStatesOfMatterAtom.DEFAULT_INTERACTION_POTENTIAL;
         }
         else {
-          console.error( 'Error: Interaction potential not available for requested atom: ' + atomType1 );
-          assert && assert( false );
+          assert && assert( false, 'Interaction potential not available for requested atom: ' + atomType1 );
           return StatesOfMatterConstants.MAX_EPSILON / 2;  // In the real world, default to an arbitrary value.
         }
       }
@@ -80,8 +79,7 @@ define( function( require ) {
           return ( StatesOfMatterConstants.MAX_EPSILON - StatesOfMatterConstants.MIN_EPSILON ) / 2;
         }
         else {
-          console.error( 'Warning: No data for this combination of molecules, using default.' );
-          console.error( '         atomType1 = ' + atomType1 + ', atomType2 = ' + atomType2 );
+          assert && assert( false, 'Error: No data for this combination of molecules' );
           return ( StatesOfMatterConstants.MAX_EPSILON - StatesOfMatterConstants.MIN_EPSILON ) / 2;
         }
       }

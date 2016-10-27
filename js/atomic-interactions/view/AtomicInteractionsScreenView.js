@@ -360,7 +360,7 @@ define( function( require ) {
         this.removeChild( this.pushPinNode );
       }
       else {
-        console.error( 'Error: Problem encountered removing node from canvas.' );
+        assert( false, 'Problem encountered removing node from canvas.' );
       }
       this.updatePositionMarkerOnDiagram();
       this.fixedParticleNode = null;
@@ -415,7 +415,7 @@ define( function( require ) {
         this.movableParticleLayer.removeChild( this.movableParticleNode );
       }
       else {
-        console.error( 'Error: Problem encountered removing node from canvas.' );
+        assert( false, 'Problem encountered removing node from canvas.' );
       }
 
       this.updatePositionMarkerOnDiagram();
