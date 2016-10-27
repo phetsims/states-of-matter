@@ -11,16 +11,14 @@ define( function( require ) {
   // modules
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
-  var getQueryParameter = phet.chipper.getQueryParameter;
-
-  var StatesOfMatterQueryParameters = {
+  var StatesOfMatterQueryParameters = QueryStringMachine.getAll( {
 
     // fill the shape placement boards on the 'Explore' screen during startup, useful for testing
-    PROJECTOR_MODE: !!getQueryParameter( 'projectorMode' ),
+    projectorMode: { type: 'flag' },
 
     // show some debug information on the first screen related to timing in the multi-particle model
-    DEBUG_TIME_STEP:  !!getQueryParameter( 'debugTimeStep' )
-  };
+    debugTimeStep: { type: 'flag' }
+  } );
 
   statesOfMatter.register( 'StatesOfMatterQueryParameters', StatesOfMatterQueryParameters );
 

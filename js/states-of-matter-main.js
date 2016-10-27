@@ -23,7 +23,7 @@ define( function( require ) {
   var interactionString = require( 'string!STATES_OF_MATTER/interaction' );
 
   // property that controls projector mode, initial value can be set via a query parameter
-  var projectorModeProperty = new Property( StatesOfMatterQueryParameters.PROJECTOR_MODE );
+  var projectorModeProperty = new Property( StatesOfMatterQueryParameters.projectorMode );
 
   var simOptions = {
     credits: {

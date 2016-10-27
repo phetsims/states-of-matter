@@ -283,7 +283,7 @@ define( function( require ) {
 
     // if the appropriate query param is set, show some information used in debugging time step adjustments
     // TODO: Consider removing this once performance issues are worked out.
-    if ( StatesOfMatterQueryParameters.DEBUG_TIME_STEP ) {
+    if ( StatesOfMatterQueryParameters.debugTimeStep ) {
       var keepingUpReadout = new Text( '', {
         font: new PhetFont( 20 ),
         fill: 'red',
