@@ -21,7 +21,7 @@ define( function( require ) {
   var SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
-  var VerticalAmountIndicatorNode = require( 'STATES_OF_MATTER/common/view/VerticalAmountIndicatorNode' );
+  var SegmentedBarGraphNode = require( 'STATES_OF_MATTER/common/view/SegmentedBarGraphNode' );
 
   // The follow constants define the size and positions of the various components of the pump as proportions of the
   // overall width and height of the node.
@@ -350,16 +350,19 @@ define( function( require ) {
 
     // define a property that tracks the remaining capacity
     this.remainingCapacityProportionProperty = new Property( 1 );
-    this.remainingCapacityProportionProperty.link( function( remainingCapacityProportionProperty ) {
-      console.log( 'remainingCapacityProportionProperty = ' + remainingCapacityProportionProperty );
-    } );
 
     // create the node that will be used to indicate the remaining capacity
-    var remainingCapacityIndicator = new VerticalAmountIndicatorNode(
-      pumpBodyWidth * 0.5,
-      pumpBodyHeight * 0.8,
+    var remainingCapacityIndicator = new SegmentedBarGraphNode(
+      pumpBodyWidth * 0.6,
+      pumpBodyHeight * 0.7,
       this.remainingCapacityProportionProperty,
-      { centerX: pumpShaft.centerX, centerY: ( pumpBody.top + pipeConnectorPath.top ) / 2 }
+      {
+        centerX: pumpShaft.centerX,
+        centerY: ( pumpBody.top + pipeConnectorPath.top ) / 2,
+        numSegments: 32,
+        backgroundColor: '#443333',
+        fullyLitIndicatorColor: '#169400'
+      }
     );
 
     // add the pieces with the correct layering
