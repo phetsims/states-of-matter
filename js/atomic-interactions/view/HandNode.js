@@ -18,7 +18,7 @@ define( function( require ) {
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   // images
-  var handImage = require( 'image!STATES_OF_MATTER/hand.png' );
+  var handImage = require( 'image!SCENERY_PHET/hand.png' );
 
   // constants
   var WIDTH = 80; // empirically determined to look good
