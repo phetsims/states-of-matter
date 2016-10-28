@@ -43,11 +43,6 @@ define( function( require ) {
 
     Node.call( this, { preventFit: true } );
 
-    // @private
-    this.multipleParticleModel = multipleParticleModel;
-    this.modelViewTransform = modelViewTransform;
-    this.pressureGaugeEnabled = pressureGaugeEnabled;
-
     // @private, view bounds for the particle area, everything is basically constructed and positioned based on this
     this.particleAreaViewBounds = new Bounds2(
       modelViewTransform.modelToViewX( 0 ),
@@ -55,6 +50,12 @@ define( function( require ) {
       modelViewTransform.modelToViewX( 0 ) + modelViewTransform.modelToViewDeltaX( multipleParticleModel.getParticleContainerWidth() ),
       modelViewTransform.modelToViewY( 0 )
     );
+
+    // @private
+    this.multipleParticleModel = multipleParticleModel;
+    this.modelViewTransform = modelViewTransform;
+    this.pressureGaugeEnabled = pressureGaugeEnabled;
+    this.previousContainerViewSize = this.particleAreaViewBounds.height;
 
     // add nodes for the various layers
     var preParticleLayer = new Node();
@@ -343,8 +344,9 @@ define( function( require ) {
      * @private
      */
     updatePressureGauge: function() {
-      if ( this.pressureMeter ) {
+
         var containerHeight = this.multipleParticleModel.getParticleContainerHeight();
+      if ( this.pressureMeter ) {
         if ( !this.multipleParticleModel.getContainerExploded() ) {
           if ( this.pressureMeter.getRotation() !== 0 ) {
             this.pressureMeter.setRotation( 0 );
@@ -357,10 +359,11 @@ define( function( require ) {
           );
         }
         else {
-          // The container is exploding, so spin and move the gauge.
-          this.pressureMeter.rotate( -Math.PI / 20 );
-          this.pressureMeter.y = this.particleAreaViewBounds.maxY +
-                                 this.modelViewTransform.modelToViewDeltaY( containerHeight );
+
+          // The container is exploding, so move the gauge up and spin it.
+          var deltaHeight = this.modelViewTransform.modelToViewDeltaY( containerHeight ) - this.previousContainerViewSize;
+          this.pressureMeter.rotate( deltaHeight * 0.01 * Math.PI );
+          this.pressureMeter.centerY = this.pressureMeter.centerY + deltaHeight;
         }
       }
     },
@@ -396,6 +399,10 @@ define( function( require ) {
 
       // update the pressure gauge
       this.pressureGaugeEnabled && this.updatePressureGauge();
+
+      // track the previous size so that deltas can be calculated on the next update
+      this.previousContainerViewSize = this.modelViewTransform.modelToViewDeltaY( containerHeight );
     }
+
   } );
 } );
