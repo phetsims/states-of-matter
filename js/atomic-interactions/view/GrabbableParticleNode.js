@@ -98,7 +98,7 @@ define( function( require ) {
 
     step: function(){
       if( this.positionChanged ){
-        if ( !this.dualAtomModel.isPlaying ) {
+        if ( !this.dualAtomModel.isPlayingProperty.get() ) {
           this.dualAtomModel.positionChanged();
         }
         this.handNode.setVisible( this.dualAtomModel.isHandNodeVisible );

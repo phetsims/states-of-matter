@@ -202,7 +202,7 @@ define( function( require ) {
       function( moleculeType, interactionStrength, atomDiameter ) {
 
         if ( moleculeType === AtomType.ADJUSTABLE ) {
-          dualAtomModel.atomPair = AtomPair.ADJUSTABLE;
+          dualAtomModel.atomPairProperty.set( AtomPair.ADJUSTABLE );
           dualAtomModel.setEpsilon( interactionStrength );
           dualAtomModel.setAdjustableAtomSigma( atomDiameter );
         }

@@ -137,8 +137,8 @@ define( function( require ) {
 
     // add force control
     var forcesControlPanel = new ForcesControlPanel(
-      dualAtomModel.forcesProperty,
-      dualAtomModel.forceControlPanelExpandProperty,
+      dualAtomModel.forcesDisplayModeProperty,
+      dualAtomModel.forcesControlPanelExpandedProperty,
       {
         tickTextColor: tickTextColor,
         textColor: textColor,
@@ -248,7 +248,7 @@ define( function( require ) {
       self.handleMovableParticleAdded( dualAtomModel.movableAtom );
       self.handNode.setVisible( dualAtomModel.isHandNodeVisible );
     } );
-    dualAtomModel.forcesProperty.link( function( forces ) {
+    dualAtomModel.forcesDisplayModeProperty.link( function( forces ) {
       switch( forces ) {
         case 'hideForces':
           self.setShowAttractiveForces( false );

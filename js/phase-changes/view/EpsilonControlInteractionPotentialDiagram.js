@@ -121,7 +121,7 @@ define( function( require ) {
         startDragY = endDragY;
         var scaleFactor = StatesOfMatterConstants.MAX_EPSILON /
                           ( self.getGraphHeight() / 2);
-        multipleParticleModel.interactionStrength = multipleParticleModel.getEpsilon() + ( d * scaleFactor );
+        multipleParticleModel.interactionStrengthProperty.set( multipleParticleModel.getEpsilon() + ( d * scaleFactor ) );
         self.drawPotentialCurve();
       }
     } ) );

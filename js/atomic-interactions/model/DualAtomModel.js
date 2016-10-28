@@ -12,7 +12,7 @@ define( function( require ) {
   // modules
   var BondingState = require( 'STATES_OF_MATTER/atomic-interactions/model/BondingState' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var PropertySet = require( 'AXON/PropertySet' );
+  var Property = require( 'AXON/Property' );
   var Vector2 = require( 'DOT/Vector2' );
   var LjPotentialCalculator = require( 'STATES_OF_MATTER/common/model/LjPotentialCalculator' );
   var InteractionStrengthTable = require( 'STATES_OF_MATTER/common/model/InteractionStrengthTable' );
@@ -39,26 +39,31 @@ define( function( require ) {
   var MAX_TIME_STEP = 0.005;
 
   /**
-   * This is the model for two atoms interacting with a Lennard-Jones interaction potential.
    * @constructor
    */
   function DualAtomModel() {
 
     var self = this;
 
-    // TODO: viz annotations
-    PropertySet.call( this, {
-        interactionStrength: 100, // Epsilon/k-Boltzmann is in Kelvin.
-        motionPaused: false,
-        atomPair: AtomPair.NEON_NEON, // @public, read-write
-        isPlaying: true,
-        speed: 'normal', // @public, read-write
-        atomDiameter: 300,
-        forces: 'hideForces',
-        forceControlPanelExpand: false
-      }
-    );
+    //-----------------------------------------------------------------------------------------------------------------
+    // observable model properties
+    //-----------------------------------------------------------------------------------------------------------------
 
+    // @public
+    this.interactionStrengthProperty = new Property( 100 ); // Epsilon/k-Boltzmann is in Kelvin.
+    this.motionPausedProperty = new Property( false );
+    this.atomPairProperty = new Property( AtomPair.NEON_NEON );
+    this.isPlayingProperty = new Property( true );
+    this.speedProperty = new Property( 'normal' );
+    this.atomDiameterProperty = new Property( 300 );
+    this.forcesDisplayModeProperty = new Property( 'hideForces' );
+    this.forcesControlPanelExpandedProperty = new Property( false );
+
+    //-----------------------------------------------------------------------------------------------------------------
+    // other model attributes
+    //-----------------------------------------------------------------------------------------------------------------
+
+    // TODO: viz annotations
     this.fixedAtom = null;
     this.movableAtom = null;
     this.settingBothAtomTypes = false;  // Flag used to prevent getting in disallowed state.
@@ -74,6 +79,10 @@ define( function( require ) {
     );
     this.residualTime = 0; // accumulates dt values not yet applied to model
     this.justReleased = false;
+
+    //-----------------------------------------------------------------------------------------------------------------
+    // other initialization
+    //-----------------------------------------------------------------------------------------------------------------
 
     // update the atom pair when the atom pair property is set
     this.atomPairProperty.link( function( atomPair ) {
@@ -126,7 +135,7 @@ define( function( require ) {
 
   statesOfMatter.register( 'DualAtomModel', DualAtomModel );
 
-  return inherit( PropertySet, DualAtomModel, {
+  return inherit( Object, DualAtomModel, {
 
     /**
      * @returns {StatesOfMatterAtom/null}
@@ -373,7 +382,7 @@ define( function( require ) {
      * @public
      */
     setMotionPaused: function( paused ) {
-      this.motionPaused = paused;
+      this.motionPausedProperty.set( paused );
       this.movableAtom.setVx( 0 );
       if ( !paused ) {
         // The atom is being released by the user.  Record the amount of energy that the atom has at this point in
@@ -406,7 +415,18 @@ define( function( require ) {
      * @public
      */
     reset: function() {
-      PropertySet.prototype.reset.call( this );
+
+      // reset the observable properties
+      this.interactionStrengthProperty.reset();
+      this.motionPausedProperty.reset();
+      this.atomPairProperty.reset();
+      this.isPlayingProperty.reset();
+      this.speedProperty.reset();
+      this.atomDiameterProperty.reset();
+      this.forcesDisplayModeProperty.reset();
+      this.forcesControlPanelExpandedProperty.reset();
+
+      // set the default atom types
       if ( this.fixedAtom === null || this.fixedAtom.getType() !== DEFAULT_ATOM_TYPE ||
            this.movableAtom === null || this.movableAtom.getType() !== DEFAULT_ATOM_TYPE ) {
         this.setBothAtomTypes( DEFAULT_ATOM_TYPE );
@@ -414,8 +434,9 @@ define( function( require ) {
       else {
         this.resetMovableAtomPos();
       }
-      // Make sure we are not paused.
-      this.motionPaused = false;
+
+      // make sure we are not paused
+      this.motionPausedProperty.set( false );
     },
 
     /**
@@ -444,12 +465,12 @@ define( function( require ) {
         return;
       }
 
-      if ( this.isPlaying ) {
+      if ( this.isPlayingProperty.get() ) {
 
         // Using real world time for this results in the atoms moving a little slowly, so the time step is adjusted
         // here.  The multipliers were empirically determined.
         var adjustedTimeStep;
-        switch( this.speed ) {
+        switch( this.speedProperty.get() ) {
           case 'normal':
             adjustedTimeStep = simulationTimeStep * 2;
             break;
@@ -509,7 +530,7 @@ define( function( require ) {
      * @public
      */
     positionChanged: function() {
-      if ( this.motionPaused ) {
+      if ( this.motionPausedProperty.get() ) {
         // The user must be moving the atom from the view. Update the forces correspondingly.
         this.updateForces();
       }
@@ -547,7 +568,7 @@ define( function( require ) {
       // the force vectors can be shown appropriately if the user moves the atoms.
       this.movableAtom.setAx( acceleration );
 
-      if ( !this.motionPaused ) {
+      if ( !this.motionPausedProperty.get() ) {
 
         // Calculate tne new velocity.
         var newVelocity = this.movableAtom.getVx() + ( acceleration * dt );
