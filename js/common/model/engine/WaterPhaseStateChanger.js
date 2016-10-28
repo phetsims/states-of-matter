@@ -292,8 +292,7 @@ define( function( require ) {
           }
           else if ( j === this.MAX_PLACEMENT_ATTEMPTS - 1 ) {
 
-            // This is the last attempt, so do a linear search for a
-            // usable spot
+            // This is the last attempt, so do a linear search for a usable spot
             var openPoint = this.findOpenMoleculeLocation();
             if ( openPoint !== null ) {
               moleculeCenterOfMassPositions[ i ].setXY( openPoint );

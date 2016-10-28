@@ -16,7 +16,7 @@ define( function( require ) {
   var Vector2 = require( 'DOT/Vector2' );
 
   // constants
-  var MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE = 2.5;
+  var MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE = 1.5;
 
   /**
    * @param { MultipleParticleModel } multipleParticleModel of the simulation
@@ -46,7 +46,7 @@ define( function( require ) {
       var moleculeDataSet = this.multipleParticleModel.moleculeDataSet;
       var moleculeCenterOfMassPositions = moleculeDataSet.moleculeCenterOfMassPositions;
 
-      minInitialInterParticleDistance = ( moleculeDataSet.atomsPerMolecule === 1 ) ? 1.2 : 1.5;
+      minInitialInterParticleDistance = 1.2;
       var rangeX = this.multipleParticleModel.normalizedContainerWidth - ( 2 * MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE );
       var rangeY = this.multipleParticleModel.normalizedContainerHeight - ( 2 * MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE );
       for ( var i = 0; i < rangeX / minInitialInterParticleDistance; i++ ) {
@@ -69,8 +69,15 @@ define( function( require ) {
           }
         }
       }
+
+      // if this can't find a spot, it may need its parameters adjusted
       assert && assert( false, 'Error: No open positions available for molecule.' );
-      return null;
+
+      // in the non-debug case, just pick a random location and go with it
+      posX = MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE + phet.joist.random.nextDouble() * rangeX;
+      posY = MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE + phet.joist.random.nextDouble() * rangeY;
+      this.moleculeLocation.setXY( posX, posY );
+      return this.moleculeLocation;
     },
 
     MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE: MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE,

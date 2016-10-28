@@ -395,7 +395,7 @@ define( function( require ) {
       this.injectionPointY = StatesOfMatterConstants.CONTAINER_BOUNDS.height / this.particleDiameter *
                              INJECTION_POINT_VERT_PROPORTION;
 
-      // Initiate a reset in order to get the particles into predetermined locations and energy levels.
+      // Add the particles and set their initial positions.
       this.initializeParticles( phase );
 
       // Reset any time step limits that had kicked in for the previous molecule type.
