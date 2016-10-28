@@ -28,7 +28,7 @@ define( function( require ) {
   var PUMP_BASE_WIDTH_PROPORTION = 0.35;
   var PUMP_BASE_HEIGHT_PROPORTION = 0.075;
   var PUMP_BODY_HEIGHT_PROPORTION = 0.7;
-  var PUMP_BODY_WIDTH_PROPORTION = 0.06;
+  var PUMP_BODY_WIDTH_PROPORTION = 0.07;
   var PUMP_SHAFT_WIDTH_PROPORTION = PUMP_BODY_WIDTH_PROPORTION * 0.25;
   var PUMP_SHAFT_HEIGHT_PROPORTION = PUMP_BODY_HEIGHT_PROPORTION;
   var PUMP_HANDLE_HEIGHT_PROPORTION = 0.05;
@@ -359,9 +359,10 @@ define( function( require ) {
       {
         centerX: pumpShaft.centerX,
         centerY: ( pumpBody.top + pipeConnectorPath.top ) / 2,
-        numSegments: 32,
+        numSegments: 36,
         backgroundColor: '#443333',
-        fullyLitIndicatorColor: '#169400'
+        fullyLitIndicatorColor: '#999999',
+        indicatorHeightProportion: 0.7
       }
     );
 
