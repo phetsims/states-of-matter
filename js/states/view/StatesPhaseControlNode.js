@@ -147,7 +147,7 @@ define( function( require ) {
     } );
 
     // if the model gets reset, set the local phase state value to be undefined until the user selects a phase
-    model.on( 'reset', function() { stateProperty.value = PhaseStateEnum.UNKNOWN; } );
+    model.resetEmitter.addListener( function() { stateProperty.value = PhaseStateEnum.UNKNOWN; } );
 
     // put the buttons together in a single VBox
     var buttons = new VBox( {

@@ -331,7 +331,7 @@ define( function( require ) {
      * @public
      */
     updatePressure: function( pressureZoneWallForce, dt ) {
-      if ( this.multipleParticleModel.isExploded ) {
+      if ( this.multipleParticleModel.isExplodedProperty.get() ) {
         // If the container has exploded, there is essentially no pressure.
         this.pressure = 0;
       }
@@ -341,7 +341,7 @@ define( function( require ) {
                                                     this.multipleParticleModel.normalizedContainerHeight ) ) +
                         ( PRESSURE_CALC_TIME_WINDOW - dt ) / PRESSURE_CALC_TIME_WINDOW * this.pressure;
 
-        if ( ( this.pressure > EXPLOSION_PRESSURE ) && !this.multipleParticleModel.isExploded ) {
+        if ( ( this.pressure > EXPLOSION_PRESSURE ) && !this.multipleParticleModel.isExplodedProperty.get() ) {
 
           // The pressure has reached the point where the container should explode, so blow 'er up.
           this.multipleParticleModel.setContainerExploded( true );

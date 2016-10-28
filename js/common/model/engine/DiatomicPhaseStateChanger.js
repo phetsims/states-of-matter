@@ -102,7 +102,7 @@ define( function( require ) {
       var moleculesInsideContainer = this.multipleParticleModel.moleculeDataSet.insideContainer;
 
       // Create and initialize other variables needed to do the job.
-      var temperatureSqrt = Math.sqrt( this.multipleParticleModel.temperatureSetPoint );
+      var temperatureSqrt = Math.sqrt( this.multipleParticleModel.temperatureSetPointProperty.get() );
       var moleculesPerLayer = (Math.round( Math.sqrt( numberOfMolecules * 2 ) ) / 2 );
 
       // Establish the starting position, which will be the lower left corner

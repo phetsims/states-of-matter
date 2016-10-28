@@ -26,6 +26,7 @@ define( function( require ) {
   var DiatomicAtomPositionUpdater = require( 'STATES_OF_MATTER/common/model/engine/DiatomicAtomPositionUpdater' );
   var DiatomicPhaseStateChanger = require( 'STATES_OF_MATTER/common/model/engine/DiatomicPhaseStateChanger' );
   var DiatomicVerletAlgorithm = require( 'STATES_OF_MATTER/common/model/engine/DiatomicVerletAlgorithm' );
+  var Emitter = require( 'AXON/Emitter' );
   var HydrogenAtom = require( 'STATES_OF_MATTER/common/model/particle/HydrogenAtom' );
   var inherit = require( 'PHET_CORE/inherit' );
   var InteractionStrengthTable = require( 'STATES_OF_MATTER/common/model/InteractionStrengthTable' );
@@ -40,7 +41,7 @@ define( function( require ) {
   var ObservableArray = require( 'AXON/ObservableArray' );
   var OxygenAtom = require( 'STATES_OF_MATTER/common/model/particle/OxygenAtom' );
   var PhaseStateEnum = require( 'STATES_OF_MATTER/common/PhaseStateEnum' );
-  var PropertySet = require( 'AXON/PropertySet' );
+  var Property = require( 'AXON/Property' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
   var Util = require( 'DOT/Util' );
@@ -123,30 +124,30 @@ define( function( require ) {
 
     var self = this;
 
-    this.timeStepMovingAverage = new MovingAverage(
-      TIME_STEP_MOVING_AVERAGE_LENGTH,
-      { initialValue: NOMINAL_TIME_STEP }
-    );
+    //-----------------------------------------------------------------------------------------------------------------
+    // observable model properties
+    //-----------------------------------------------------------------------------------------------------------------
 
-    // everything that had a listener in the java version becomes a property
-    PropertySet.call( this, {
-        particleContainerHeight: StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT,
-        targetContainerHeight: StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT,
-        isExploded: false, // notifyContainerExplodedStateChanged
-        expanded: true,// phase diagram
-        interactionExpanded: true,// interaction diagram
-        temperatureSetPoint: INITIAL_TEMPERATURE, // notifyTemperatureChanged
-        pressure: 0, // notifyPressureChanged
-        moleculeType: StatesOfMatterConstants.NEON, // notifyMoleculeTypeChanged,
-        interactionStrength: MAX_ADJUSTABLE_EPSILON, // notifyInteractionStrengthChanged
-        isPlaying: true,
-        speed: 'normal',
-        heatingCoolingAmount: 0,
-        keepingUp: true, // tracks whether targeted min frame rate is being maintained
-        averageDt: this.timeStepMovingAverage.average,
-        maxParticleMoveTimePerStep: Number.POSITIVE_INFINITY
-      }
-    );
+    this.particleContainerHeightProperty = new Property( StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT );
+    this.targetContainerHeightProperty = new Property( StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT );
+    this.isExplodedProperty = new Property( false );
+    this.phaseDiagramExpandedProperty = new Property( true );
+    this.interactionExpandedProperty = new Property( true );
+    this.temperatureSetPointProperty = new Property( INITIAL_TEMPERATURE );
+    this.pressureProperty = new Property( 0 );
+    this.moleculeTypeProperty = new Property( StatesOfMatterConstants.NEON );
+    this.interactionStrengthProperty = new Property( MAX_ADJUSTABLE_EPSILON );
+    this.isPlayingProperty = new Property( true );
+    this.simSpeedProperty = new Property( 'normal' );
+    this.heatingCoolingAmountProperty = new Property( 0 );
+    this.keepingUpProperty = new Property( true ); // tracks whether targeted min frame rate is being maintained
+    this.averageDtProperty = new Property( NOMINAL_TIME_STEP );
+    this.maxParticleMoveTimePerStepProperty = new Property( Number.POSITIVE_INFINITY );
+    this.resetEmitter = new Emitter();
+
+    //-----------------------------------------------------------------------------------------------------------------
+    // other model attributes
+    //-----------------------------------------------------------------------------------------------------------------
 
     // Strategy patterns that are applied to the data set in order to create the overall behavior of the simulation.
     this.atomPositionUpdater = null;
@@ -177,14 +178,24 @@ define( function( require ) {
     this.injectionPointY = 0;
     this.heightChangeThisStep = 0;
 
-    // @public, normalized version of the container height, changes as the lid position changes
-    this.normalizedContainerHeight = this.particleContainerHeight / this.particleDiameter;
+    // @public, read-only, normalized version of the container height, changes as the lid position changes
+    this.normalizedContainerHeight = this.particleContainerHeightProperty.get() / this.particleDiameter;
 
-    // @public, normalized version of the total container height regardless of the lid position
-    this.normalizedTotalContainerHeight = this.particleContainerHeight / this.particleDiameter;
+    // @public, normalized version of the TOTAL container height regardless of the lid position, set once at init
+    this.normalizedTotalContainerHeight = this.particleContainerHeightProperty.get / this.particleDiameter;
 
     // @public, normalized velocity at which lid is moving in y direction
     this.normalizedLidVelocityY = 0;
+
+    // TODO: For working on performance issues, consider removing before publication
+    this.timeStepMovingAverage = new MovingAverage(
+      TIME_STEP_MOVING_AVERAGE_LENGTH,
+      { initialValue: NOMINAL_TIME_STEP }
+    );
+
+    //-----------------------------------------------------------------------------------------------------------------
+    // other initialization
+    //-----------------------------------------------------------------------------------------------------------------
 
     // Do just enough initialization to allow the view and control portions of the simulation to be properly created.
     // The rest of the initialization will occur when the model is reset.
@@ -198,7 +209,7 @@ define( function( require ) {
 
   statesOfMatter.register( 'MultipleParticleModel', MultipleParticleModel );
 
-  return inherit( PropertySet, MultipleParticleModel, {
+  return inherit( Object, MultipleParticleModel, {
 
     /**
      * @param {number} newTemperature
@@ -207,13 +218,13 @@ define( function( require ) {
     setTemperature: function( newTemperature ) {
 
       if ( newTemperature > MAX_TEMPERATURE ) {
-        this.temperatureSetPoint = MAX_TEMPERATURE;
+        this.temperatureSetPointProperty.set( MAX_TEMPERATURE );
       }
       else if ( newTemperature < MIN_TEMPERATURE ) {
-        this.temperatureSetPoint = MIN_TEMPERATURE;
+        this.temperatureSetPointProperty.set( MIN_TEMPERATURE );
       }
       else {
-        this.temperatureSetPoint = newTemperature;
+        this.temperatureSetPointProperty.set( newTemperature );
       }
 
       if ( this.isoKineticThermostat !== null ) {
@@ -274,12 +285,12 @@ define( function( require ) {
           throw( new Error( 'unsupported molecule type' ) ); // should never happen, debug if it does
       }
 
-      if ( this.temperatureSetPoint <= this.minModelTemperature ) {
+      if ( this.temperatureSetPointProperty.get() <= this.minModelTemperature ) {
         // We treat anything below the minimum temperature as absolute zero.
         temperatureInKelvin = 0;
       }
-      else if ( this.temperatureSetPoint < TRIPLE_POINT_INTERNAL_MODEL_TEMPERATURE ) {
-        temperatureInKelvin = this.temperatureSetPoint * triplePoint / TRIPLE_POINT_INTERNAL_MODEL_TEMPERATURE;
+      else if ( this.temperatureSetPointProperty.get() < TRIPLE_POINT_INTERNAL_MODEL_TEMPERATURE ) {
+        temperatureInKelvin = this.temperatureSetPointProperty.get() * triplePoint / TRIPLE_POINT_INTERNAL_MODEL_TEMPERATURE;
 
         if ( temperatureInKelvin < 0.5 ) {
           // Don't return zero - or anything that would round to it - as
@@ -287,14 +298,15 @@ define( function( require ) {
           temperatureInKelvin = 0.5;
         }
       }
-      else if ( this.temperatureSetPoint < CRITICAL_POINT_INTERNAL_MODEL_TEMPERATURE ) {
+      else if ( this.temperatureSetPointProperty.get() < CRITICAL_POINT_INTERNAL_MODEL_TEMPERATURE ) {
         var slope = ( criticalPoint - triplePoint ) /
                     ( CRITICAL_POINT_INTERNAL_MODEL_TEMPERATURE - TRIPLE_POINT_INTERNAL_MODEL_TEMPERATURE );
         var offset = triplePoint - ( slope * TRIPLE_POINT_INTERNAL_MODEL_TEMPERATURE );
-        temperatureInKelvin = this.temperatureSetPoint * slope + offset;
+        temperatureInKelvin = this.temperatureSetPointProperty.get() * slope + offset;
       }
       else {
-        temperatureInKelvin = this.temperatureSetPoint * criticalPoint / CRITICAL_POINT_INTERNAL_MODEL_TEMPERATURE;
+        temperatureInKelvin = this.temperatureSetPointProperty.get() * criticalPoint /
+                              CRITICAL_POINT_INTERNAL_MODEL_TEMPERATURE;
       }
       return temperatureInKelvin;
     },
@@ -385,14 +397,14 @@ define( function( require ) {
 
       // Start over on averaging the incoming time steps.
       this.timeStepMovingAverage.reset();
-      this.keepingUp = true;
+      this.keepingUpProperty.set( true );
     },
 
     /**
      *  @private
      */
     updatePressure: function() {
-      this.pressure = this.getPressureInAtmospheres();
+      this.pressureProperty.set( this.getPressureInAtmospheres() );
     },
 
     /**
@@ -402,11 +414,11 @@ define( function( require ) {
      * @public
      */
     setTargetParticleContainerHeight: function( desiredContainerHeight ) {
-      this.targetContainerHeight = Util.clamp(
+      this.targetContainerHeightProperty.set( Util.clamp(
         desiredContainerHeight,
         MIN_ALLOWABLE_CONTAINER_HEIGHT,
         StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT
-      );
+      ) );
     },
 
     /**
@@ -525,11 +537,29 @@ define( function( require ) {
      * @public
      */
     reset: function() {
+
+      // reset observable properties
+      this.particleContainerHeightProperty.reset();
+      this.targetContainerHeightProperty.reset();
+      this.isExplodedProperty.reset();
+      this.phaseDiagramExpandedProperty.reset();
+      this.interactionExpandedProperty.reset();
+      this.temperatureSetPointProperty.reset();
+      this.pressureProperty.reset();
+      this.moleculeTypeProperty.reset();
+      this.interactionStrengthProperty.reset();
+      this.isPlayingProperty.reset();
+      this.simSpeedProperty.reset();
+      this.heatingCoolingAmountProperty.reset();
+      this.keepingUpProperty.reset();
+      this.averageDtProperty.reset();
+      this.maxParticleMoveTimePerStepProperty.reset();
+
+      // other reset
       this.initializeModelParameters();
       this.setMoleculeType( DEFAULT_MOLECULE );
       this.timeStepMovingAverage.reset();
-      PropertySet.prototype.reset.call( this );
-      this.trigger( 'reset' );
+      this.resetEmitter.emit();
     },
 
     /**
@@ -552,7 +582,7 @@ define( function( require ) {
      */
     setHeatingCoolingAmount: function( normalizedHeatingCoolingAmount ) {
       assert && assert( ( normalizedHeatingCoolingAmount <= 1.0 ) && ( normalizedHeatingCoolingAmount >= -1.0 ) );
-      this.heatingCoolingAmount = normalizedHeatingCoolingAmount;
+      this.heatingCoolingAmountProperty.set( normalizedHeatingCoolingAmount );
     },
 
     /**
@@ -577,10 +607,10 @@ define( function( require ) {
     injectMoleculeInternal: function() {
 
       // Check if conditions are right for injection of molecules and, if not, don't do it.
-      if ( !this.isPlaying ||
+      if ( !this.isPlayingProperty.get() ||
            this.moleculeDataSet.getNumberOfRemainingSlots() <= 0 ||
            this.normalizedContainerHeight < this.injectionPointY * 1.05 ||
-           this.isExploded ) {
+           this.isExplodedProperty.get() ) {
 
         this.numMoleculesAwaitingInjection = 0;
         return;
@@ -589,9 +619,9 @@ define( function( require ) {
       // If the container is empty, its temperature will be be reported as zero Kelvin, so injecting particles will
       // cause there to be a defined temperature.  Set that temperature to a reasonable value.
       if ( this.particles.length === 0 ) {
-        this.temperatureSetPoint = CRITICAL_POINT_INTERNAL_MODEL_TEMPERATURE;
-        this.isoKineticThermostat.targetTemperature = this.temperatureSetPoint;
-        this.andersenThermostat.targetTemperature = this.temperatureSetPoint;
+        this.temperatureSetPointProperty.set( CRITICAL_POINT_INTERNAL_MODEL_TEMPERATURE );
+        this.isoKineticThermostat.targetTemperature = this.temperatureSetPointProperty.get();
+        this.andersenThermostat.targetTemperature = this.temperatureSetPointProperty.get();
       }
 
       // Introduce a little bit of randomness into the injection angle.
@@ -670,9 +700,9 @@ define( function( require ) {
       // treating the addition of particles more generally, see https://github.com/phetsims/states-of-matter/issues/129
       // for more detail.
       if ( this.getTemperatureInKelvin() === 0 || this.getTemperatureInKelvin() === null ) {
-        this.temperatureSetPoint = this.getTwoDegreesKelvinInInternalTemperature();
-        this.isoKineticThermostat.targetTemperature = this.temperatureSetPoint;
-        this.andersenThermostat.targetTemperature = this.temperatureSetPoint;
+        this.temperatureSetPointProperty.set( this.getTwoDegreesKelvinInInternalTemperature() );
+        this.isoKineticThermostat.targetTemperature = this.temperatureSetPointProperty.get();
+        this.andersenThermostat.targetTemperature = this.temperatureSetPointProperty.get();
       }
 
       this.syncParticlePositions();
@@ -730,9 +760,9 @@ define( function( require ) {
 
       // Initialize the system parameters.
       this.gravitationalAcceleration = INITIAL_GRAVITATIONAL_ACCEL;
-      this.heatingCoolingAmount = 0;
-      this.temperatureSetPoint = INITIAL_TEMPERATURE;
-      this.isExploded = false;
+      this.heatingCoolingAmountProperty.set( 0 );
+      this.temperatureSetPointProperty.set( INITIAL_TEMPERATURE );
+      this.isExplodedProperty.set( false );
     },
 
     /**
@@ -742,11 +772,11 @@ define( function( require ) {
      */
     resetContainerSize: function() {
       // Set the initial size of the container.
-      this.particleContainerHeight = PARTICLE_CONTAINER_INITIAL_HEIGHT;
-      this.targetContainerHeight = PARTICLE_CONTAINER_INITIAL_HEIGHT;
+      this.particleContainerHeightProperty.reset();
+      this.targetContainerHeightProperty.reset();
       this.normalizedContainerWidth = PARTICLE_CONTAINER_WIDTH / this.particleDiameter;
-      this.normalizedContainerHeight = this.particleContainerHeight / this.particleDiameter;
-      this.normalizedTotalContainerHeight = this.particleContainerHeight / this.particleDiameter;
+      this.normalizedContainerHeight = this.particleContainerHeightProperty.get() / this.particleDiameter;
+      this.normalizedTotalContainerHeight = this.particleContainerHeightProperty.get() / this.particleDiameter;
     },
 
     /**
@@ -758,33 +788,33 @@ define( function( require ) {
       this.timeStepMovingAverage.addValue( dt );
       this.averageDt = this.timeStepMovingAverage.average;
 
-      if ( !this.isExploded ) {
+      if ( !this.isExplodedProperty.get() ) {
 
         // Adjust the particle container height if needed.
-        if ( this.targetContainerHeight !== this.particleContainerHeight ) {
+        if ( this.targetContainerHeightProperty.get() !== this.particleContainerHeightProperty.get() ) {
           this.heightChangeCountdownTime = CONTAINER_SIZE_CHANGE_COUNTDOWN_RESET;
-          this.heightChangeThisStep = this.targetContainerHeight - this.particleContainerHeight;
+          this.heightChangeThisStep = this.targetContainerHeightProperty.get() - this.particleContainerHeightProperty.get();
           if ( this.heightChangeThisStep > 0 ) {
 
             // the container is expanding, limit the change to the max allowed rate
             this.heightChangeThisStep = Math.min( this.heightChangeThisStep, MAX_CONTAINER_EXPAND_RATE * dt );
 
-            this.particleContainerHeight = Math.min(
-              this.particleContainerHeight + this.heightChangeThisStep,
+            this.particleContainerHeightProperty.set( Math.min(
+              this.particleContainerHeightProperty.get() + this.heightChangeThisStep,
               StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT
-            );
+            ) );
           }
           else {
 
             // the container is shrinking, limit the change to the max allowed rate
             this.heightChangeThisStep = Math.max( this.heightChangeThisStep, -MAX_CONTAINER_SHRINK_RATE * dt );
 
-            this.particleContainerHeight = Math.max(
-              this.particleContainerHeight + this.heightChangeThisStep,
+            this.particleContainerHeightProperty.set( Math.max(
+              this.particleContainerHeightProperty.get() + this.heightChangeThisStep,
               MIN_ALLOWABLE_CONTAINER_HEIGHT
-            );
+            ) );
           }
-          this.normalizedContainerHeight = this.particleContainerHeight / this.particleDiameter;
+          this.normalizedContainerHeight = this.particleContainerHeightProperty.get() / this.particleDiameter;
           this.normalizedLidVelocityY = ( this.heightChangeThisStep / this.particleDiameter ) / dt;
         }
         else {
@@ -798,8 +828,10 @@ define( function( require ) {
       else {
 
         // The lid is blowing off the container, so increase the container size until the lid should be well off the screen.
-        if ( this.particleContainerHeight < StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT * 3 ) {
-          this.particleContainerHeight += POST_EXPLOSION_CONTAINER_EXPANSION_RATE * dt;
+        if ( this.particleContainerHeightProperty.get() < StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT * 3 ) {
+          this.particleContainerHeightProperty.set(
+            this.particleContainerHeightProperty.get() + POST_EXPLOSION_CONTAINER_EXPANSION_RATE * dt
+          );
         }
       }
 
@@ -808,7 +840,10 @@ define( function( require ) {
 
       // Calculate the amount of time to advance the particle engine.  This is based purely on aesthetics - we looked at
       // the particle motion and tweaked the multiplier until we felt that it looked good.
-      var particleMotionAdvancementTime = Math.min( dt * PARTICLE_SPEED_UP_FACTOR, this.maxParticleMoveTimePerStep );
+      var particleMotionAdvancementTime = Math.min(
+        dt * PARTICLE_SPEED_UP_FACTOR,
+        this.maxParticleMoveTimePerStepProperty.get()
+      );
 
       // Determine the number of model steps and the size of the time step
       var particleMotionTimeStep;
@@ -832,7 +867,7 @@ define( function( require ) {
 
         // if the container is exploded reduce the speed of particles
         // TODO: Is this really needed?  If so, comment should explain why.
-        if ( this.isExploded ) {
+        if ( this.isExplodedProperty.get() ) {
           particleMotionTimeStep = particleMotionTimeStep * 0.9;
         }
         this.moleculeForceAndMotionCalculator.updateForcesAndMotion( particleMotionTimeStep );
@@ -851,16 +886,18 @@ define( function( require ) {
       }
 
       // Adjust the temperature if needed.
-      if ( this.heatingCoolingAmount !== 0 ) {
-        var temperatureChange = this.heatingCoolingAmount * TEMPERATURE_CHANGE_RATE_FACTOR * dt;
+      if ( this.heatingCoolingAmountProperty.get() !== 0 ) {
+        var temperatureChange = this.heatingCoolingAmountProperty.get() * TEMPERATURE_CHANGE_RATE_FACTOR * dt;
         var newTemperature;
-        if ( this.temperatureSetPoint < StatesOfMatterConstants.SOLID_TEMPERATURE * 0.75 && this.heatingCoolingAmount < 0 ) {
+        if ( this.temperatureSetPointProperty.get() < StatesOfMatterConstants.SOLID_TEMPERATURE * 0.75 &&
+             this.heatingCoolingAmountProperty.get() < 0 ) {
 
           // The temperature adjusts more slowly as we begin to approach absolute zero, multiplier empirically determined.
-          newTemperature = this.temperatureSetPoint + this.heatingCoolingAmount * TEMPERATURE_CHANGE_RATE_FACTOR * dt * 0.1;
+          newTemperature = this.temperatureSetPointProperty.get() +
+                           this.heatingCoolingAmountProperty.get() * TEMPERATURE_CHANGE_RATE_FACTOR * dt * 0.1;
         }
         else {
-          newTemperature = Math.min( this.temperatureSetPoint + temperatureChange, MAX_TEMPERATURE );
+          newTemperature = Math.min( this.temperatureSetPointProperty.get() + temperatureChange, MAX_TEMPERATURE );
         }
 
         // limit bottom end of temperature range
@@ -869,9 +906,9 @@ define( function( require ) {
         }
 
         // record the new set point
-        this.temperatureSetPoint = newTemperature;
-        this.isoKineticThermostat.targetTemperature = this.temperatureSetPoint;
-        this.andersenThermostat.targetTemperature = this.temperatureSetPoint;
+        this.temperatureSetPointProperty.set( newTemperature );
+        this.isoKineticThermostat.targetTemperature = this.temperatureSetPointProperty.get();
+        this.andersenThermostat.targetTemperature = this.temperatureSetPointProperty.get();
       }
 
       // Inject new particles if some are ready and waiting.
@@ -931,7 +968,7 @@ define( function( require ) {
         return;
       }
 
-      if ( this.isPlaying ) {
+      if ( this.isPlayingProperty.get() ) {
         this.stepInternal( dt );
       }
     },
@@ -941,7 +978,7 @@ define( function( require ) {
      */
     runThermostat: function() {
 
-      if ( this.isExploded ) {
+      if ( this.isExplodedProperty.get() ) {
         // Don't bother to run any thermostat if the lid is blown off - just let those little particles run free!
         return;
       }
@@ -949,8 +986,8 @@ define( function( require ) {
       var calculatedTemperature = this.moleculeForceAndMotionCalculator.temperature;
       var temperatureIsChanging = false;
 
-      if ( ( this.heatingCoolingAmount !== 0 ) ||
-           ( Math.abs( calculatedTemperature - this.temperatureSetPoint ) > TEMPERATURE_CLOSENESS_RANGE ) ) {
+      if ( ( this.heatingCoolingAmountProperty.get() !== 0 ) ||
+           ( Math.abs( calculatedTemperature - this.temperatureSetPointProperty.get() ) > TEMPERATURE_CLOSENESS_RANGE ) ) {
         temperatureIsChanging = true;
       }
 
@@ -963,8 +1000,8 @@ define( function( require ) {
         // to some of the energy being tied up in potential rather than kinetic energy, so there are some constraints
         // here.  See https://github.com/phetsims/states-of-matter/issues/169 for more information.
         if ( this.heightChangeThisStep === 0 ||
-             this.heightChangeThisStep > 0 && calculatedTemperature < this.temperatureSetPoint ||
-             this.heightChangeThisStep < 0 && calculatedTemperature > this.temperatureSetPoint ) {
+             this.heightChangeThisStep > 0 && calculatedTemperature < this.temperatureSetPointProperty.get() ||
+             this.heightChangeThisStep < 0 && calculatedTemperature > this.temperatureSetPointProperty.get() ) {
           this.setTemperature( calculatedTemperature );
         }
 
@@ -974,7 +1011,7 @@ define( function( require ) {
       else if ( ( this.thermostatType === ISOKINETIC_THERMOSTAT ) ||
                 ( this.thermostatType === ADAPTIVE_THERMOSTAT &&
                   ( temperatureIsChanging ||
-                    this.temperatureSetPoint > StatesOfMatterConstants.LIQUID_TEMPERATURE ) ) ) {
+                    this.temperatureSetPointProperty.get() > StatesOfMatterConstants.LIQUID_TEMPERATURE ) ) ) {
         // Use the isokinetic thermostat.
         this.isoKineticThermostat.adjustTemperature();
       }
@@ -1138,7 +1175,7 @@ define( function( require ) {
      * @public
      */
     getTemperatureSetPoint: function() {
-      return this.temperatureSetPoint;
+      return this.temperatureSetPointProperty.get();
     },
 
     /**
@@ -1295,14 +1332,14 @@ define( function( require ) {
      */
     mapTemperatureToPhase: function() {
       var phase;
-      if ( this.temperatureSetPoint < StatesOfMatterConstants.SOLID_TEMPERATURE +
-                                      ( ( StatesOfMatterConstants.LIQUID_TEMPERATURE -
-                                          StatesOfMatterConstants.SOLID_TEMPERATURE ) / 2 ) ) {
+      if ( this.temperatureSetPointProperty.get() < StatesOfMatterConstants.SOLID_TEMPERATURE +
+                                                    ( ( StatesOfMatterConstants.LIQUID_TEMPERATURE -
+                                                        StatesOfMatterConstants.SOLID_TEMPERATURE ) / 2 ) ) {
         phase = PhaseStateEnum.SOLID;
       }
-      else if ( this.temperatureSetPoint < StatesOfMatterConstants.LIQUID_TEMPERATURE +
-                                           ( ( StatesOfMatterConstants.GAS_TEMPERATURE -
-                                               StatesOfMatterConstants.LIQUID_TEMPERATURE ) / 2 ) ) {
+      else if ( this.temperatureSetPointProperty.get() < StatesOfMatterConstants.LIQUID_TEMPERATURE +
+                                                         ( ( StatesOfMatterConstants.GAS_TEMPERATURE -
+                                                             StatesOfMatterConstants.LIQUID_TEMPERATURE ) / 2 ) ) {
         phase = PhaseStateEnum.LIQUID;
       }
       else {
@@ -1339,18 +1376,18 @@ define( function( require ) {
      * @public
      */
     getContainerExploded: function() {
-      return this.isExploded;
+      return this.isExplodedProperty.get();
     },
 
     /**
      * This method is used for an external entity to notify the model that it should explode.
      * @param {boolean} isExploded
-     * @private
+     * @public
      */
     setContainerExploded: function( isExploded ) {
-      if ( this.isExploded !== isExploded ) {
-        this.isExploded = isExploded;
-        if ( !this.isExploded ) {
+      if ( this.isExplodedProperty.get() !== isExploded ) {
+        this.isExplodedProperty.set( isExploded );
+        if ( !isExploded ) {
           this.resetContainerSize();
         }
       }
@@ -1364,8 +1401,8 @@ define( function( require ) {
     returnLid: function() {
 
       // state checking
-      assert && assert( this.isExploded, 'attempt to return lid when container hadn\'t exploded' );
-      if ( !this.isExploded ) {
+      assert && assert( this.isExplodedProperty.get(), 'attempt to return lid when container hadn\'t exploded' );
+      if ( !this.isExplodedProperty.get() ) {
         // ignore request if container hasn't exploded
         return;
       }
@@ -1418,7 +1455,7 @@ define( function( require ) {
      * @public
      */
     getParticleContainerHeight: function() {
-      return this.particleContainerHeight;
+      return this.particleContainerHeightProperty.get();
     },
 
     getInitialParticleContainerHeight: function() {

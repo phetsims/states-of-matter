@@ -54,7 +54,7 @@ define( function( require ) {
     this.motionPausedProperty = new Property( false );
     this.atomPairProperty = new Property( AtomPair.NEON_NEON );
     this.isPlayingProperty = new Property( true );
-    this.speedProperty = new Property( 'normal' );
+    this.simSpeedProperty = new Property( 'normal' );
     this.atomDiameterProperty = new Property( 300 );
     this.forcesDisplayModeProperty = new Property( 'hideForces' );
     this.forcesControlPanelExpandedProperty = new Property( false );
@@ -421,7 +421,7 @@ define( function( require ) {
       this.motionPausedProperty.reset();
       this.atomPairProperty.reset();
       this.isPlayingProperty.reset();
-      this.speedProperty.reset();
+      this.simSpeedProperty.reset();
       this.atomDiameterProperty.reset();
       this.forcesDisplayModeProperty.reset();
       this.forcesControlPanelExpandedProperty.reset();
@@ -470,7 +470,7 @@ define( function( require ) {
         // Using real world time for this results in the atoms moving a little slowly, so the time step is adjusted
         // here.  The multipliers were empirically determined.
         var adjustedTimeStep;
-        switch( this.speedProperty.get() ) {
+        switch( this.simSpeedProperty.get() ) {
           case 'normal':
             adjustedTimeStep = simulationTimeStep * 2;
             break;

@@ -98,7 +98,7 @@ define( function( require ) {
     } );
 
     // Set the initial value.
-    multipleParticleModel.pressure = multipleParticleModel.getPressureInAtmospheres();
+    multipleParticleModel.pressureProperty.set( multipleParticleModel.getPressureInAtmospheres() );
     this.pressureChanged = false;
     multipleParticleModel.pressureProperty.link( function() {
       self.pressureChanged = true;

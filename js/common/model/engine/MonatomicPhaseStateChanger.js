@@ -92,7 +92,7 @@ define( function( require ) {
       var moleculeCenterOfMassPositions = this.multipleParticleModel.moleculeDataSet.moleculeCenterOfMassPositions;
       var moleculeVelocities = this.multipleParticleModel.moleculeDataSet.moleculeVelocities;
       var moleculesInsideContainer = this.multipleParticleModel.moleculeDataSet.insideContainer;
-      var temperatureSqrt = Math.sqrt( this.multipleParticleModel.temperatureSetPoint );
+      var temperatureSqrt = Math.sqrt( this.multipleParticleModel.temperatureSetPointProperty.get() );
       var atomsPerLayer = Math.round( Math.sqrt( numberOfAtoms ) );
 
       // Establish the starting position, which will be the lower left corner of the "cube".

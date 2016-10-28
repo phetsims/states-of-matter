@@ -383,9 +383,9 @@ define( function( require ) {
       }
       else {
 
-        // the container has exploded, so rotate the lid as it goes up so that it looks like it have been blown off
-        var deltaY = lidYPosition - this.centerY;
-        var rotationAmount = deltaY * Math.PI * 0.00013; // multiplier empirically determined
+        // the container has exploded, so rotate the lid as it goes up so that it looks like it has been blown off.
+        var deltaY = lidYPosition - this.containerLid.centerY;
+        var rotationAmount = deltaY * Math.PI * 0.002; // multiplier empirically determined
         containerLid.centerX = this.containerViewCenterX;
         containerLid.centerY = lidYPosition;
         containerLid.rotateAround( containerLid.center, rotationAmount );

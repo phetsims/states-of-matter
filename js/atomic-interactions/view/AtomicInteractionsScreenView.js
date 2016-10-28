@@ -179,11 +179,11 @@ define( function( require ) {
     };
     var speedSelectionButtonRadius = 8;
     var slowText = new Text( slowMotionString, speedSelectionButtonOptions );
-    var slowMotionRadioBox = new AquaRadioButton( dualAtomModel.speedProperty, 'slow', slowText, {
+    var slowMotionRadioBox = new AquaRadioButton( dualAtomModel.simSpeedProperty, 'slow', slowText, {
       radius: speedSelectionButtonRadius
     } );
     var normalText = new Text( normalString, speedSelectionButtonOptions );
-    var normalMotionRadioBox = new AquaRadioButton( dualAtomModel.speedProperty, 'normal', normalText, {
+    var normalMotionRadioBox = new AquaRadioButton( dualAtomModel.simSpeedProperty, 'normal', normalText, {
       radius: speedSelectionButtonRadius
     } );
 
