@@ -1,9 +1,8 @@
 // Copyright 2014-2015, University of Colorado Boulder
 
 /**
- * This class represents a node that displays a dial gauge, which is a
- * circular instrument that can be used to portray measurements of temperature,
- * pressure, etc.
+ * This class represents a node that displays a dial gauge, which is a circular instrument that can be used to portray
+ * measurements of temperature, pressure, etc.
  *
  * @author John Blanco
  * @author Siddhartha Chinthapally (Actual Concepts)
@@ -13,16 +12,16 @@ define( function( require ) {
 
   // modules
   var inherit = require( 'PHET_CORE/inherit' );
-  var Node = require( 'SCENERY/nodes/Node' );
-  var Shape = require( 'KITE/Shape' );
-  var Path = require( 'SCENERY/nodes/Path' );
-  var LinearGradient = require( 'SCENERY/util/LinearGradient' );
   var GaugeNode = require( 'SCENERY_PHET/GaugeNode' );
-  var Text = require( 'SCENERY/nodes/Text' );
+  var LinearGradient = require( 'SCENERY/util/LinearGradient' );
+  var Node = require( 'SCENERY/nodes/Node' );
+  var Path = require( 'SCENERY/nodes/Path' );
   var PhetColorScheme = require( 'SCENERY_PHET/PhetColorScheme' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
+  var Shape = require( 'KITE/Shape' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  var Text = require( 'SCENERY/nodes/Text' );
   var Util = require( 'DOT/Util' );
 
   // strings
@@ -35,12 +34,11 @@ define( function( require ) {
   var CONNECTOR_WIDTH_PROPORTION = 0.2; // Width of connector wrt overall diameter.
   var MAX_PRESSURE = 200; // in atm units
   var TIME_BETWEEN_UPDATES = 0.5; // in seconds
-
   var ELBOW_WIDTH = ( CONNECTOR_WIDTH_PROPORTION * 30 );
   var ELBOW_LENGTH = ( CONNECTOR_LENGTH_PROPORTION * 60 );
 
   /**
-   * @param {MultipleParticleModel} multipleParticleModel - model  of the simulation
+   * @param {MultipleParticleModel} multipleParticleModel - model of the simulation
    * @constructor
    */
   function DialGaugeNode( multipleParticleModel ) {
@@ -119,6 +117,11 @@ define( function( require ) {
 
   return inherit( Node, DialGaugeNode, {
 
+    /**
+     * update function
+     * @param dt
+     * @public
+     */
     step: function( dt ){
 
       this.timeSinceLastUpdate += dt;

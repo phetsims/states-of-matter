@@ -318,7 +318,7 @@ define( function( require ) {
      * @public
      */
     getModelPressure: function() {
-      return this.moleculeForceAndMotionCalculator.pressure;
+      return this.moleculeForceAndMotionCalculator.pressureProperty.get();
     },
 
     /**
