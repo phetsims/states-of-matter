@@ -122,8 +122,8 @@ define( function( require ) {
       this.alteredCharges[ 2 ] = 0.33 * q0;
 
       // Calculate the force and torque due to inter-particle interactions.
-      var numberOfSafeMolecules = moleculeDataSet.getNumberOfSafeMolecules();
-      for ( var i = 0; i < numberOfSafeMolecules; i++ ) {
+      var numberOfMolecules = moleculeDataSet.getNumberOfMolecules();
+      for ( var i = 0; i < numberOfMolecules; i++ ) {
         var moleculeCenterOfMassPosition1 = moleculeCenterOfMassPositions[ i ];
         var m1x = moleculeCenterOfMassPosition1.x;
         var m1y = moleculeCenterOfMassPosition1.y;
@@ -139,7 +139,7 @@ define( function( require ) {
           chargesA = this.alteredCharges;
         }
 
-        for ( var j = i + 1; j < numberOfSafeMolecules; j++ ) {
+        for ( var j = i + 1; j < numberOfMolecules; j++ ) {
           var moleculeCenterOfMassPosition2 = moleculeCenterOfMassPositions[ j ];
           var m2x = moleculeCenterOfMassPosition2.x;
           var m2y = moleculeCenterOfMassPosition2.y;

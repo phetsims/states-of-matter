@@ -71,9 +71,6 @@ define( function( require ) {
 
       var moleculeDataSet = this.multipleParticleModel.moleculeDataSet;
 
-      // Assume that we've done our job correctly and that all the atoms are in safe positions.
-      this.multipleParticleModel.moleculeDataSet.numberOfSafeMolecules = moleculeDataSet.getNumberOfMolecules();
-
       // Sync up the atom positions with the molecule positions.
       this.positionUpdater.updateAtomPositions( moleculeDataSet );
 

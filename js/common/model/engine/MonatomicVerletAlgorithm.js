@@ -60,17 +60,17 @@ define( function( require ) {
     // @private
     updateInteractionForces: function( moleculeDataSet ) {
 
-      var numberOfSafeAtoms = moleculeDataSet.numberOfSafeMolecules;
+      var numberOfAtoms = moleculeDataSet.numberOfMolecules;
       var atomCenterOfMassPositions = moleculeDataSet.moleculeCenterOfMassPositions;
       var nextAtomForces = moleculeDataSet.nextMoleculeForces;
 
-      for ( var i = 0; i < numberOfSafeAtoms; i++ ) {
+      for ( var i = 0; i < numberOfAtoms; i++ ) {
 
         var atomCenterOfMassPositionsIX = atomCenterOfMassPositions[ i ].x;
         var atomCenterOfMassPositionsIY = atomCenterOfMassPositions[ i ].y;
         var nextAtomForcesI = nextAtomForces[ i ];
 
-        for ( var j = i + 1; j < numberOfSafeAtoms; j++ ) {
+        for ( var j = i + 1; j < numberOfAtoms; j++ ) {
 
           var dx = atomCenterOfMassPositionsIX - atomCenterOfMassPositions[ j ].x;
           var dy = atomCenterOfMassPositionsIY - atomCenterOfMassPositions[ j ].y;

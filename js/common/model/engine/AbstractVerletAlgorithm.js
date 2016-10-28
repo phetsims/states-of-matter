@@ -17,7 +17,6 @@ define( function( require ) {
 
   // constants that control various aspects of the Verlet algorithm.
   var PRESSURE_CALC_TIME_WINDOW = 12; // in seconds, empirically determined to be responsive but not jumpy
-  var SAFE_INTER_MOLECULE_DISTANCE = 2.0;
 
   // Pressure at which explosion of the container will occur.  This is currently set so that container blows roughly
   // when the pressure gauge hits its max value.
@@ -185,89 +184,6 @@ define( function( require ) {
     },
 
     /**
-     * Update the safety status of any molecules that may have previously been designated as unsafe.  An "unsafe"
-     * molecule is one that was injected into the container and was found to be so close to one or more of the other
-     * molecules that if its interaction forces were calculated, it would be given a ridiculously large amount of
-     * kinetic energy that could end up launching it out of the container.
-     * @protected
-     */
-    updateMoleculeSafety: function( moleculeDataSet ) {
-
-      var numberOfSafeMolecules = moleculeDataSet.getNumberOfSafeMolecules();
-      var numberOfMolecules = moleculeDataSet.getNumberOfMolecules();
-
-      if ( numberOfMolecules === numberOfSafeMolecules ) {
-        // Nothing to do, so quit now.
-        return;
-      }
-
-      var atomsPerMolecule = moleculeDataSet.getAtomsPerMolecule();
-      var moleculeCenterOfMassPositions = moleculeDataSet.getMoleculeCenterOfMassPositions();
-      var atomPositions = moleculeDataSet.getAtomPositions();
-      var moleculeVelocities = moleculeDataSet.getMoleculeVelocities();
-      var moleculeForces = moleculeDataSet.getMoleculeForces();
-      var moleculeRotationRates = moleculeDataSet.getMoleculeRotationRates();
-      var moleculeRotationAngles = moleculeDataSet.getMoleculeRotationAngles();
-
-      for ( var i = numberOfSafeMolecules; i < numberOfMolecules; i++ ) {
-
-        var moleculeIsUnsafe = false;
-
-        // Find out if this molecule is still too close to all the "safe" molecules to become safe itself.
-        for ( var j = 0; j < numberOfSafeMolecules; j++ ) {
-          if ( moleculeCenterOfMassPositions[ i ].distance( moleculeCenterOfMassPositions[ j ] ) <
-               SAFE_INTER_MOLECULE_DISTANCE ) {
-            moleculeIsUnsafe = true;
-            break;
-          }
-        }
-
-        if ( !moleculeIsUnsafe ) {
-          // The molecule just tested was safe, so adjust the arrays accordingly.
-          if ( i !== numberOfSafeMolecules ) {
-            // There is at least one unsafe atom/molecule in front of this one in the arrays, so some swapping must be
-            // done before the number of safe atoms can be incremented.
-
-            // Swap the atoms that comprise the safe molecules with the first unsafe one.
-            var tempAtomPosition;
-            for ( j = 0; j < atomsPerMolecule; j++ ) {
-              tempAtomPosition = atomPositions[ ( numberOfSafeMolecules * atomsPerMolecule ) + j ];
-              atomPositions[ ( numberOfSafeMolecules * atomsPerMolecule ) + j ] =
-                atomPositions[ ( atomsPerMolecule * i ) + j ];
-              atomPositions[ ( atomsPerMolecule * i ) + j ] = tempAtomPosition;
-            }
-
-            var firstUnsafeMoleculeIndex = numberOfSafeMolecules;
-
-            var tempMoleculeCenterOfMassPosition = moleculeCenterOfMassPositions[ firstUnsafeMoleculeIndex ];
-            moleculeCenterOfMassPositions[ firstUnsafeMoleculeIndex ] = moleculeCenterOfMassPositions[ i ];
-            moleculeCenterOfMassPositions[ i ] = tempMoleculeCenterOfMassPosition;
-
-            var tempMoleculeVelocity = moleculeVelocities[ firstUnsafeMoleculeIndex ];
-            moleculeVelocities[ firstUnsafeMoleculeIndex ] = moleculeVelocities[ i ];
-            moleculeVelocities[ i ] = tempMoleculeVelocity;
-
-            var tempMoleculeForce = moleculeForces[ firstUnsafeMoleculeIndex ];
-            moleculeForces[ firstUnsafeMoleculeIndex ] = moleculeForces[ i ];
-            moleculeForces[ i ] = tempMoleculeForce;
-
-            var tempMoleculeRotationAngle = moleculeRotationAngles[ firstUnsafeMoleculeIndex ];
-            moleculeRotationAngles[ firstUnsafeMoleculeIndex ] = moleculeRotationAngles[ i ];
-            moleculeRotationAngles[ i ] = tempMoleculeRotationAngle;
-
-            var tempMoleculeRotationRate = moleculeRotationRates[ firstUnsafeMoleculeIndex ];
-            moleculeRotationRates[ firstUnsafeMoleculeIndex ] = moleculeRotationRates[ i ];
-            moleculeRotationRates[ i ] = tempMoleculeRotationRate;
-
-            // Note: Don't worry about torque, since there isn't any until the molecules become "safe".
-          }
-          numberOfSafeMolecules++;
-          moleculeDataSet.setNumberOfSafeMolecules( numberOfSafeMolecules );
-        }
-      }
-    },
-
-    /**
      * Update the motion of the particles and the forces that are acting upon them.  This is the heart of this class,
      * and it is here that the actual Verlet algorithm is contained.
      * @public
@@ -279,9 +195,6 @@ define( function( require ) {
 
       // Update the atom positions based on velocities, current forces, and interactions with the wall.
       this.updateMoleculePositions( moleculeDataSet, timeStep );
-
-      // Update the "safety status" of the molecules, which determines if they are okay to interact with others.
-      this.updateMoleculeSafety( moleculeDataSet );
 
       // Set initial values for the forces that are acting on each atom or molecule, will be further updated below.
       this.initializeForces( moleculeDataSet );

@@ -52,12 +52,12 @@ define( function( require ) {
       var nextMoleculeForces = moleculeDataSet.getNextMoleculeForces();
       var atomPositions = moleculeDataSet.getAtomPositions();
       var nextMoleculeTorques = moleculeDataSet.getNextMoleculeTorques();
-      var numberOfSafeMolecules = moleculeDataSet.numberOfSafeMolecules;
+      var numberOfMolecules = moleculeDataSet.numberOfMolecules;
 
-      for ( var i = 0; i < numberOfSafeMolecules; i++ ) {
+      for ( var i = 0; i < numberOfMolecules; i++ ) {
         var moleculeCenterOfMassIX = moleculeCenterOfMassPositions[ i ].x;
         var moleculeCenterOfMassIY = moleculeCenterOfMassPositions[ i ].y;
-        for ( var j = i + 1; j < numberOfSafeMolecules; j++ ) {
+        for ( var j = i + 1; j < numberOfMolecules; j++ ) {
           var moleculeCenterOfMassJX = moleculeCenterOfMassPositions[ j ].x;
           var moleculeCenterOfMassJY = moleculeCenterOfMassPositions[ j ].y;
           for ( var ii = 0; ii < 2; ii++ ) {

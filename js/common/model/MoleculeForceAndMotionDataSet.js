@@ -29,7 +29,7 @@ define( function( require ) {
 
     // Attributes that describe the data set as a whole.
     this.numberOfAtoms = 0;
-    this.numberOfSafeMolecules = 0;
+    this.numberOfMolecules = 0;
 
     // Attributes that apply to all elements of the data set.
     this.atomsPerMolecule = atomsPerMolecule;
@@ -140,8 +140,8 @@ define( function( require ) {
      * @returns {number}
      * @public
      */
-    getNumberOfSafeMolecules: function() {
-      return this.numberOfSafeMolecules;
+    getnumberOfMolecules: function() {
+      return this.numberOfMolecules;
     },
 
     /**
@@ -217,17 +217,7 @@ define( function( require ) {
     },
 
     /**
-     * @param {number} numSafeMolecules
-     * @public
-     */
-    setNumberOfSafeMolecules: function( numSafeMolecules ) {
-      this.numberOfSafeMolecules = numSafeMolecules;
-    },
-
-    /**
-     * Add a new molecule to the model.  The molecule must have been created and initialized before being added.  It is
-     * considered to be "unsafe", meaning that it can't interact with other molecules, until an external entity
-     * (generally the motion-and-force calculator) changes that designation.
+     * Add a new molecule to the model.  The molecule must have been created and initialized before being added.
      * @param {Array<Vector2>} atomPositions
      * @param {Vector2} moleculeCenterOfMassPosition
      * @param {Vector2} moleculeVelocity
@@ -258,12 +248,11 @@ define( function( require ) {
       this.moleculeForces[ numberOfMolecules ] = new Vector2();
       this.nextMoleculeForces[ numberOfMolecules ] = new Vector2();
 
-      // Increment the number of atoms.  Note that we DON'T increment the number of safe atoms - that must be done by
-      // some outside entity.
+      // Increment the number of atoms.
       this.numberOfAtoms += this.atomsPerMolecule;
 
       // TODO - TEMP - for testing of different particle injection strategies, see https://github.com/phetsims/states-of-matter/issues/161
-      this.numberOfSafeMolecules++;
+      this.numberOfMolecules++;
       // end of TODO - TEMP
 
       assert && assert( !isNaN( this.moleculeCenterOfMassPositions[ numberOfMolecules ].x ) );

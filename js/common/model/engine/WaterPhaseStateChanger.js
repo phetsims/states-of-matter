@@ -68,16 +68,11 @@ define( function( require ) {
       }
       var moleculeDataSet = this.multiPleParticleModel.getMoleculeDataSetRef();
 
-      // Assume that we've done our job correctly and that all the atoms are
-      // in safe positions.
-      this.multiPleParticleModel.getMoleculeDataSetRef().setNumberOfSafeMolecules( moleculeDataSet.getNumberOfMolecules() );
-
       // Sync up the atom positions with the molecule positions.
       this.positionUpdater.updateAtomPositions( moleculeDataSet );
 
-      // Step the model a number of times in order to prevent the particles
-      // from looking too organized.  The number of steps was empirically
-      // determined.
+      // Step the model a number of times in order to prevent the particles from looking too organized.  The number of
+      // steps was empirically determined.
       for ( var i = 0; i < 5; i++ ) {
         this.multiPleParticleModel.stepInternal( 0.016 );
       }

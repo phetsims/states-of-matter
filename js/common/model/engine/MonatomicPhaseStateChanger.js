@@ -56,9 +56,6 @@ define( function( require ) {
 
       var moleculeDataSet = this.multipleParticleModel.moleculeDataSet;
 
-      // Assume that we've done our job correctly and that all the atoms are in safe positions.
-      this.multipleParticleModel.moleculeDataSet.numberOfSafeMolecules = moleculeDataSet.getNumberOfMolecules();
-
       var offset = 0;
       if ( this.multipleParticleModel.currentMolecule === StatesOfMatterConstants.ARGON ){
         offset = 6;
