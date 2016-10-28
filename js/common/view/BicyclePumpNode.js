@@ -55,7 +55,14 @@ define( function( require ) {
   function BicyclePumpNode( width, height, multipleParticleModel, options ) {
 
     Node.call( this );
-    this.multipleParticleModel = multipleParticleModel;
+    var self = this;
+    this.multipleParticleModel = multipleParticleModel; // @private
+    this.injectionCapacity; // @private, number of molecules that can be injected by the pump
+
+    // update the total capacity whenever the molecule type changes
+    multipleParticleModel.moleculeTypeProperty.link( function() {
+      self.injectionCapacity = multipleParticleModel.moleculeDataSet.getNumberOfRemainingSlots();
+    } );
 
     var pumpShaft;
     var pumpingRequiredToInject = height * PUMPING_REQUIRED_TO_INJECT_PROPORTION;
@@ -349,13 +356,13 @@ define( function( require ) {
     hoseBottomConnector.setTranslation( hoseToPumpAttachPtX + 1, hoseToPumpAttachPtY - hoseBottomConnector.height / 2 );
 
     // define a property that tracks the remaining capacity
-    this.remainingCapacityProportionProperty = new Property( 1 );
+    this.remainingPumpCapacityProportionProperty = new Property( 1 );
 
     // create the node that will be used to indicate the remaining capacity
     var remainingCapacityIndicator = new SegmentedBarGraphNode(
       pumpBodyWidth * 0.6,
       pumpBodyHeight * 0.7,
-      this.remainingCapacityProportionProperty,
+      this.remainingPumpCapacityProportionProperty,
       {
         centerX: pumpShaft.centerX,
         centerY: ( pumpBody.top + pipeConnectorPath.top ) / 2,
@@ -387,11 +394,15 @@ define( function( require ) {
     step: function() {
 
       // update the remaining capacity proportion
-      var remainingSlots = this.multipleParticleModel.moleculeDataSet.getNumberOfRemainingSlots();
-      var atomsPerMolecule = this.multipleParticleModel.moleculeDataSet.getAtomsPerMolecule();
-      this.remainingCapacityProportionProperty.set(
-        ( remainingSlots * atomsPerMolecule ) / StatesOfMatterConstants.MAX_NUM_ATOMS
-      );
+      if ( this.multipleParticleModel.getContainerExploded() ) {
+        this.remainingPumpCapacityProportionProperty.set( 0 );
+      }
+      else {
+        var remainingMoleculeSlots = this.multipleParticleModel.moleculeDataSet.getNumberOfRemainingSlots();
+        this.remainingPumpCapacityProportionProperty.set(
+          Math.min( remainingMoleculeSlots / this.injectionCapacity, 1 )
+        );
+      }
     }
   } );
 } );
