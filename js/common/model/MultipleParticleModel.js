@@ -350,18 +350,22 @@ define( function( require ) {
 
       // Set the model parameters that are dependent upon the molecule type.
       switch( this.currentMolecule ) {
+
         case StatesOfMatterConstants.DIATOMIC_OXYGEN:
           this.particleDiameter = OxygenAtom.RADIUS * 2;
           this.minModelTemperature = 0.5 * TRIPLE_POINT_INTERNAL_MODEL_TEMPERATURE / O2_TRIPLE_POINT_IN_KELVIN;
           break;
+
         case StatesOfMatterConstants.NEON:
           this.particleDiameter = NeonAtom.RADIUS * 2;
           this.minModelTemperature = 0.5 * TRIPLE_POINT_INTERNAL_MODEL_TEMPERATURE / NEON_TRIPLE_POINT_IN_KELVIN;
           break;
+
         case StatesOfMatterConstants.ARGON:
           this.particleDiameter = ArgonAtom.RADIUS * 2;
           this.minModelTemperature = 0.5 * TRIPLE_POINT_INTERNAL_MODEL_TEMPERATURE / ARGON_TRIPLE_POINT_IN_KELVIN;
           break;
+
         case StatesOfMatterConstants.WATER:
 
           // Use a radius value that is artificially large, because the educators have requested that water look
@@ -370,11 +374,13 @@ define( function( require ) {
           this.particleDiameter = OxygenAtom.RADIUS * 2.9;
           this.minModelTemperature = 0.5 * TRIPLE_POINT_INTERNAL_MODEL_TEMPERATURE / WATER_TRIPLE_POINT_IN_KELVIN;
           break;
+
         case StatesOfMatterConstants.USER_DEFINED_MOLECULE:
           this.particleDiameter = ConfigurableStatesOfMatterAtom.DEFAULT_RADIUS * 2;
           this.minModelTemperature = 0.5 * TRIPLE_POINT_INTERNAL_MODEL_TEMPERATURE /
                                      ADJUSTABLE_ATOM_TRIPLE_POINT_IN_KELVIN;
           break;
+
         default:
           throw( new Error( 'unsupported molecule type' ) ); // should never happen, debug if it does
       }
