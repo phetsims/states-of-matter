@@ -44,6 +44,7 @@ define( function( require ) {
   var Property = require( 'AXON/Property' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
+  var StatesOfMatterQueryParameters = require( 'STATES_OF_MATTER/common/StatesOfMatterQueryParameters' );
   var Util = require( 'DOT/Util' );
   var Vector2 = require( 'DOT/Vector2' );
   var WaterVerletAlgorithm = require( 'STATES_OF_MATTER/common/model/engine/WaterVerletAlgorithm' );
@@ -591,7 +592,7 @@ define( function( require ) {
      */
     setHeatingCoolingAmount: function( normalizedHeatingCoolingAmount ) {
       assert && assert( ( normalizedHeatingCoolingAmount <= 1.0 ) && ( normalizedHeatingCoolingAmount >= -1.0 ) );
-      this.heatingCoolingAmountProperty.set( normalizedHeatingCoolingAmount );
+      this.heatingCoolingAmountProperty.set( normalizedHeatingCoolingAmount * 5 );
     },
 
     /**
@@ -940,7 +941,7 @@ define( function( require ) {
     step: function( dt ) {
 
       // TODO: Consider removing this at some point if things are working well.
-      if ( window.phet.chipper.getQueryParameters().hasOwnProperty( 'somProfiler' ) ) {
+      if ( StatesOfMatterQueryParameters.debugTimeStep ) {
         if ( this.dialogShownLastTime ) {
           this.accumulatedDt = 0;
           this.largestDt = 0;

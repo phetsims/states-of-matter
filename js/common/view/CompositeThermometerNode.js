@@ -109,7 +109,7 @@ define( function( require ) {
     this.addChild( panel );
 
     // Define a function that will update the various properties and textual values.
-    function update() {
+    function updateTemperatureValues() {
       var tempInKelvin = self.multipleParticleModel.getTemperatureInKelvin();
       if ( tempInKelvin !== null ) {
         var tempInKelvinRounded = Util.roundSymmetric( tempInKelvin );
@@ -128,7 +128,7 @@ define( function( require ) {
     // Call the update when any of several properties change value.
     Property.multilink(
       [ multipleParticleModel.temperatureSetPointProperty, multipleParticleModel.moleculeTypeProperty ],
-      update
+      updateTemperatureValues
     );
 
     this.mutate( options );
@@ -141,36 +141,6 @@ define( function( require ) {
     // @public
     reset: function() {
       this.temperatureProperty.reset();
-    },
-
-    /**
-     * Updates the thermometer's position and rotation. When the container is unexploded, the thermometer is positioned
-     * so that it moves with the lid.  When the container explodes, the thermometer rotates in anti-clockwise director
-     * and moves up in the air.
-     * @public
-     */
-    updatePositionAndOrientation: function() {
-      var containerHeight = this.multipleParticleModel.getParticleContainerHeight();
-      if ( !this.multipleParticleModel.getContainerExploded() ) {
-        if ( this.getRotation() !== 0 ) {
-          this.setRotation( 0 );
-        }
-        this.centerY = this.modelViewTransform.modelToViewY( containerHeight );
-      }
-      else {
-        var rotationAmount = -( Math.PI / 100 + ( phet.joist.random.nextDouble() * Math.PI / 50 ) );
-        var centerPosY = this.modelViewTransform.modelToViewY( containerHeight );
-        var currentPosY = this.y;
-        var newPosY;
-        if ( currentPosY > centerPosY ) {
-          newPosY = centerPosY;
-        }
-        else {
-          newPosY = currentPosY;
-        }
-        this.y = newPosY;
-        this.rotate( rotationAmount );
-      }
     }
   } );
 } );

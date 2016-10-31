@@ -267,7 +267,20 @@ define( function( require ) {
 
     // TODO: Can I get rid of this flag?
     this.particleContainerHeightPropertyChanged = false;
-    multipleParticleModel.particleContainerHeightProperty.link( function( containerHeight ) {
+    multipleParticleModel.particleContainerHeightProperty.link( function( containerHeight, previousContainerHeight ) {
+
+      // move the thermometer with the lid
+      self.compositeThermometerNode.centerY = modelViewTransform.modelToViewY( containerHeight );
+
+      // if the container has exploded, rotate the thermometer as it moves up
+      if ( multipleParticleModel.isExplodedProperty.get() ) {
+        var containerHeightChange = previousContainerHeight - containerHeight;
+        self.compositeThermometerNode.rotateAround(
+          self.compositeThermometerNode.center,
+          containerHeightChange * 0.0001 * Math.PI );
+      }
+
+      // other updates
       self.particleContainerHeightPropertyChanged = true;
       self.updatePhaseDiagram();
     } );
@@ -326,7 +339,6 @@ define( function( require ) {
       this.particleContainerNode.step( dt );
       this.pumpNode.step( dt );
       if ( this.particleContainerHeightPropertyChanged ) {
-        this.compositeThermometerNode.updatePositionAndOrientation();
         this.particleContainerNode.handleContainerSizeChanged();
         this.particleContainerHeightPropertyChanged = false;
       }

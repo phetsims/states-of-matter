@@ -139,7 +139,20 @@ define( function( require ) {
     this.addChild( playPauseButton );
 
     this.particleContainerHeightPropertyChanged = false;
-    multipleParticleModel.particleContainerHeightProperty.link( function() {
+    multipleParticleModel.particleContainerHeightProperty.link( function( containerHeight, previousContainerHeight ) {
+
+      // Set the thermometer's Y position to match that of the lid.
+      self.compositeThermometerNode.centerY = modelViewTransform.modelToViewY( containerHeight );
+
+      // If the container explodes, the thermometer moves up with it and rotates.
+      if ( multipleParticleModel.isExplodedProperty.get() ) {
+
+        var containerHeightChange = previousContainerHeight - containerHeight;
+        self.compositeThermometerNode.rotateAround(
+          self.compositeThermometerNode.center,
+          containerHeightChange * 0.0001 * Math.PI );
+      }
+
       self.particleContainerHeightPropertyChanged = true;
     } );
 
@@ -185,7 +198,6 @@ define( function( require ) {
     step: function() {
       this.particleContainerNode.step();
       if ( this.particleContainerHeightPropertyChanged ) {
-        this.compositeThermometerNode.updatePositionAndOrientation();
         this.particleContainerNode.handleContainerSizeChanged();
         this.particleContainerHeightPropertyChanged = false;
       }
