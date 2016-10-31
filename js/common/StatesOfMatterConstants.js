@@ -40,14 +40,6 @@ define( function( require ) {
     // size of container in view, empirically determined
     VIEW_CONTAINER_WIDTH: 280,
 
-    // Identifiers for the various supported molecules.
-    NEON: 1,
-    ARGON: 2,
-    MONATOMIC_OXYGEN: 3,
-    DIATOMIC_OXYGEN: 4,
-    WATER: 5,
-    USER_DEFINED_MOLECULE: 6,
-
     // Lennard-Jones potential interaction values for multi-atomic atoms.
     EPSILON_FOR_DIATOMIC_OXYGEN: 113, // Epsilon/k-Boltzmann is in Kelvin.
     SIGMA_FOR_DIATOMIC_OXYGEN: 365,   // In picometers.

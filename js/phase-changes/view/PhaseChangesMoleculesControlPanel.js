@@ -24,6 +24,7 @@ define( function( require ) {
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var StatesOfMatterColorProfile = require( 'STATES_OF_MATTER/common/view/StatesOfMatterColorProfile' );
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
+  var SubstanceEnum = require( 'STATES_OF_MATTER/common/SubstanceEnum' );
   var Text = require( 'SCENERY/nodes/Text' );
   var VBox = require( 'SCENERY/nodes/VBox' );
 
@@ -181,19 +182,19 @@ define( function( require ) {
     var radioButtonContent;
     if ( !isBasicVersion ) {
       radioButtonContent = [
-        { value: StatesOfMatterConstants.NEON, node: createLabelAndIconNode( neon ) },
-        { value: StatesOfMatterConstants.ARGON, node: createLabelAndIconNode( argon ) },
-        { value: StatesOfMatterConstants.DIATOMIC_OXYGEN, node: createLabelAndIconNode( oxygen ) },
-        { value: StatesOfMatterConstants.WATER, node: createLabelAndIconNode( water ) }
+        { value: SubstanceEnum.NEON, node: createLabelAndIconNode( neon ) },
+        { value: SubstanceEnum.ARGON, node: createLabelAndIconNode( argon ) },
+        { value: SubstanceEnum.DIATOMIC_OXYGEN, node: createLabelAndIconNode( oxygen ) },
+        { value: SubstanceEnum.WATER, node: createLabelAndIconNode( water ) }
       ];
     }
     else {
       radioButtonContent = [
-        { value: StatesOfMatterConstants.NEON, node: createLabelAndIconNode( neon ) },
-        { value: StatesOfMatterConstants.ARGON, node: createLabelAndIconNode( argon ) },
-        { value: StatesOfMatterConstants.DIATOMIC_OXYGEN, node: createLabelAndIconNode( oxygen ) },
-        { value: StatesOfMatterConstants.WATER, node: createLabelAndIconNode( water ) },
-        { value: StatesOfMatterConstants.USER_DEFINED_MOLECULE, node: createLabelAndIconNode( adjustableAttraction ) }
+        { value: SubstanceEnum.NEON, node: createLabelAndIconNode( neon ) },
+        { value: SubstanceEnum.ARGON, node: createLabelAndIconNode( argon ) },
+        { value: SubstanceEnum.DIATOMIC_OXYGEN, node: createLabelAndIconNode( oxygen ) },
+        { value: SubstanceEnum.WATER, node: createLabelAndIconNode( water ) },
+        { value: SubstanceEnum.USER_DEFINED_MOLECULE, node: createLabelAndIconNode( adjustableAttraction ) }
       ];
     }
 
