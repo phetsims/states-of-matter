@@ -20,7 +20,6 @@ define( function( require ) {
   var Shape = require( 'KITE/Shape' );
   var SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
   var SegmentedBarGraphNode = require( 'STATES_OF_MATTER/common/view/SegmentedBarGraphNode' );
 
   // The follow constants define the size and positions of the various components of the pump as proportions of the

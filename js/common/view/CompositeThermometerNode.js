@@ -5,6 +5,7 @@
  * degrees Kelvin or degrees Celsius.
  *
  * @author Siddhartha Chinthapally (Actual Concepts)
+ * @author John Blanco
  */
 define( function( require ) {
   'use strict';
@@ -19,7 +20,6 @@ define( function( require ) {
   var Text = require( 'SCENERY/nodes/Text' );
   var ThermometerNode = require( 'SCENERY_PHET/ThermometerNode' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
   var Util = require( 'DOT/Util' );
   var VBox = require( 'SCENERY/nodes/VBox' );
 
@@ -28,8 +28,6 @@ define( function( require ) {
   var celsiusUnitsString = require( 'string!STATES_OF_MATTER/celsiusUnits' );
 
   // constants
-  var inset = 147; // empirically determined for positioning the thermometer on the lid
-  var LID_POSITION_TWEAK_FACTOR = 65; // Empirically determined value for aligning lid and container body.
   var MAX_LENGTH_TEMPERATURE_TEXT = '99999 ' + celsiusUnitsString;
   var MAX_TEMPERATURE_TEXT_WIDTH = 35; // empirically determined
   var TEMPERATURE_READOUT_FONT = new PhetFont( 11 );
@@ -140,14 +138,16 @@ define( function( require ) {
 
   return inherit( Panel, CompositeThermometerNode, {
 
+    // @public
     reset: function() {
       this.temperatureProperty.reset();
     },
 
     /**
+     * Updates the thermometer's position and rotation. When the container is unexploded, the thermometer is positioned
+     * so that it moves with the lid.  When the container explodes, the thermometer rotates in anti-clockwise director
+     * and moves up in the air.
      * @public
-     * Updates the thermometers position and rotation.
-     * When the container explodes, the thermometer rotates in anti-clockwise director and moves up in the air.
      */
     updatePositionAndOrientation: function() {
       var containerHeight = this.multipleParticleModel.getParticleContainerHeight();
@@ -155,14 +155,11 @@ define( function( require ) {
         if ( this.getRotation() !== 0 ) {
           this.setRotation( 0 );
         }
-        this.bottom = -this.modelViewTransform.modelToViewDeltaY(
-            StatesOfMatterConstants.CONTAINER_BOUNDS.width - containerHeight ) + inset;
+        this.centerY = this.modelViewTransform.modelToViewY( containerHeight );
       }
       else {
         var rotationAmount = -( Math.PI / 100 + ( phet.joist.random.nextDouble() * Math.PI / 50 ) );
-        var centerPosY = -this.modelViewTransform.modelToViewDeltaY(
-            StatesOfMatterConstants.CONTAINER_BOUNDS.height - containerHeight ) +
-                         LID_POSITION_TWEAK_FACTOR;
+        var centerPosY = this.modelViewTransform.modelToViewY( containerHeight );
         var currentPosY = this.y;
         var newPosY;
         if ( currentPosY > centerPosY ) {

@@ -253,7 +253,6 @@ define( function( require ) {
                                    ( pressureZoneWallForce / ( this.multipleParticleModel.normalizedContainerWidth +
                                                     this.multipleParticleModel.normalizedContainerHeight ) ) +
                                    ( PRESSURE_CALC_TIME_WINDOW - dt ) / PRESSURE_CALC_TIME_WINDOW * this.pressureProperty.get() );
-
         if ( ( this.pressureProperty.get() > EXPLOSION_PRESSURE ) && !this.multipleParticleModel.isExplodedProperty.get() ) {
 
           // The pressure has reached the point where the container should explode, so blow 'er up.

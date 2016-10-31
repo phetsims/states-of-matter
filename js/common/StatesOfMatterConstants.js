@@ -16,8 +16,6 @@ define( function( require ) {
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   // constants (these are vars because other constants refer to them)
-  var PARTICLE_CONTAINER_WIDTH = 10000;
-  var PARTICLE_CONTAINER_INITIAL_HEIGHT = PARTICLE_CONTAINER_WIDTH * 1.00;
   var SOLID_TEMPERATURE = 0.15;
   var NEON_ATOM_EPSILON = 32.8; // epsilon/k-Boltzmann is in Kelvin.
 
@@ -25,8 +23,8 @@ define( function( require ) {
 
     SCREEN_VIEW_OPTIONS: { layoutBounds: new Bounds2( 0, 0, 834, 504 ) },
 
-    TRIPLE_POINT_MONATOMIC_MODEL_TEMPERATURE: 0.26,    // Empirically determined.
-    CRITICAL_POINT_MONATOMIC_MODEL_TEMPERATURE: 0.8,  // Empirically determined.
+    TRIPLE_POINT_MONATOMIC_MODEL_TEMPERATURE: 0.26, // empirically determined
+    CRITICAL_POINT_MONATOMIC_MODEL_TEMPERATURE: 0.8, // empirically determined
     NEON_TRIPLE_POINT_IN_KELVIN: 23,  // Tweaked a little from actual value for better temperature mapping.
     NEON_CRITICAL_POINT_IN_KELVIN: 44,
     ARGON_TRIPLE_POINT_IN_KELVIN: 75, // Tweaked a little from actual value for better temperature mapping.
@@ -39,12 +37,7 @@ define( function( require ) {
     // Maximum number of atoms that can be simulated.
     MAX_NUM_ATOMS: 500,
 
-    // Dimensions of the container in which the particles will reside, in picometers.
-    PARTICLE_CONTAINER_WIDTH: PARTICLE_CONTAINER_WIDTH,
-    PARTICLE_CONTAINER_INITIAL_HEIGHT: PARTICLE_CONTAINER_INITIAL_HEIGHT,
-    CONTAINER_BOUNDS: new Bounds2( 0, 0, PARTICLE_CONTAINER_WIDTH, PARTICLE_CONTAINER_INITIAL_HEIGHT ),
-
-    // size of container in view
+    // size of container in view, empirically determined
     VIEW_CONTAINER_WIDTH: 280,
 
     // Identifiers for the various supported molecules.
@@ -55,15 +48,14 @@ define( function( require ) {
     WATER: 5,
     USER_DEFINED_MOLECULE: 6,
 
-    // Lennard-Jones potential interaction values for multiatomic atoms.
+    // Lennard-Jones potential interaction values for multi-atomic atoms.
     EPSILON_FOR_DIATOMIC_OXYGEN: 113, // Epsilon/k-Boltzmann is in Kelvin.
     SIGMA_FOR_DIATOMIC_OXYGEN: 365,   // In picometers.
     EPSILON_FOR_WATER: 200,           // Epsilon/k-Boltzmann is in Kelvin.
     SIGMA_FOR_WATER: 444,             // In picometers.
 
-    // Max and min values for parameters of Lennard-Jones potential
-    // calculations.  These are used in places were non-normalized LJ
-    // calculations are made, graphed, and otherwise controlled.
+    // Max and min values for parameters of Lennard-Jones potential calculations.  These are used in places were non-
+    // normalized LJ calculations are made, graphed, and otherwise used.
     MAX_SIGMA: 500,      // In picometers.
     MIN_SIGMA: 75,       // In picometers.
     MAX_EPSILON: 450,    // Epsilon/k-Boltzmann is in Kelvin.
@@ -72,8 +64,8 @@ define( function( require ) {
     // constants used to describe the spatial relationship between the atoms that comprise a water molecule
     THETA_HOH: ( 120 * Math.PI / 180 ),  // This is not quite the real value for a water
 
-    // molecule, but it is close and worked better in
-    // the simulation.
+    // Distance from oxygen to hydrogen in water molecules.  This is not exactly accurate, but it is close and worked
+    // better in the simulation than the actual value.
     DISTANCE_FROM_OXYGEN_TO_HYDROGEN: 1.0 / 3.12,  // Number supplied by Paul Beale.
 
     // Distance between diatomic pairs.
@@ -94,7 +86,6 @@ define( function( require ) {
 
     // constants moved from MultipleParticleModel
     SOLID_TEMPERATURE: SOLID_TEMPERATURE,
-    SLUSH_TEMPERATURE: 0.33,
     LIQUID_TEMPERATURE: 0.34,
     GAS_TEMPERATURE: 1.0,
     INITIAL_TEMPERATURE: SOLID_TEMPERATURE,

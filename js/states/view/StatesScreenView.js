@@ -16,6 +16,7 @@ define( function( require ) {
   var HeaterCoolerNode = require( 'SCENERY_PHET/HeaterCoolerNode' );
   var inherit = require( 'PHET_CORE/inherit' );
   var ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
+  var MultipleParticleModel = require( 'STATES_OF_MATTER/common/model/MultipleParticleModel' );
   var ParticleContainerNode = require( 'STATES_OF_MATTER/common/view/ParticleContainerNode' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var PlayPauseButton = require( 'SCENERY_PHET/buttons/PlayPauseButton' );
@@ -50,7 +51,7 @@ define( function( require ) {
     var modelViewTransform = ModelViewTransform2.createSinglePointScaleInvertedYMapping(
       new Vector2( 0, 0 ),
       new Vector2( this.layoutBounds.width * 0.325, this.layoutBounds.height * 0.75 ),
-      StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / StatesOfMatterConstants.CONTAINER_BOUNDS.width
+      StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / MultipleParticleModel.PARTICLE_CONTAINER_WIDTH
     );
 
     // Figure out where in the view the interior of the particle container will be.

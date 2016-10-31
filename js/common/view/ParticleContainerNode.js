@@ -16,6 +16,7 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var LinearGradient = require( 'SCENERY/util/LinearGradient' );
   var Matrix3 = require( 'DOT/Matrix3' );
+  var MultipleParticleModel = require( 'STATES_OF_MATTER/common/model/MultipleParticleModel' );
   var Node = require( 'SCENERY/nodes/Node' );
   var ParticleImageCanvasNode = require( 'STATES_OF_MATTER/common/view/ParticleImageCanvasNode' );
   var Path = require( 'SCENERY/nodes/Path' );
@@ -132,7 +133,7 @@ define( function( require ) {
       // Add the pressure meter.
       this.pressureMeter = new DialGaugeNode( multipleParticleModel );
       this.pressureMeter.updateConnector();
-      this.pressureMeter.right = this.particleAreaViewBounds.minX + this.particleAreaViewBounds.width * 0.25;
+      this.pressureMeter.right = this.particleAreaViewBounds.minX + this.particleAreaViewBounds.width * 0.2;
       postParticleLayer.addChild( this.pressureMeter );
     }
 
@@ -345,7 +346,8 @@ define( function( require ) {
      */
     updatePressureGauge: function() {
 
-        var containerHeight = this.multipleParticleModel.getParticleContainerHeight();
+      var containerHeight = this.multipleParticleModel.getParticleContainerHeight();
+
       if ( this.pressureMeter ) {
         if ( !this.multipleParticleModel.getContainerExploded() ) {
           if ( this.pressureMeter.getRotation() !== 0 ) {
@@ -354,7 +356,7 @@ define( function( require ) {
           this.pressureMeter.top = this.particleAreaViewBounds.top - 75; // position adjust to connect to lid
           this.pressureMeter.setElbowHeight(
             PRESSURE_METER_ELBOW_OFFSET + Math.abs( this.modelViewTransform.modelToViewDeltaY(
-              StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT - containerHeight
+              MultipleParticleModel.PARTICLE_CONTAINER_INITIAL_HEIGHT - containerHeight
             ) )
           );
         }

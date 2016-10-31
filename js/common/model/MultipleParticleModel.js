@@ -51,10 +51,9 @@ define( function( require ) {
   var WaterAtomPositionUpdater = require( 'STATES_OF_MATTER/common/model/engine/WaterAtomPositionUpdater' );
 
   // constants (general)
-  var PARTICLE_CONTAINER_WIDTH = StatesOfMatterConstants.PARTICLE_CONTAINER_WIDTH;
-  var PARTICLE_CONTAINER_INITIAL_HEIGHT = StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT;
+  var PARTICLE_CONTAINER_WIDTH = 10000; // essentially arbitrary
+  var PARTICLE_CONTAINER_INITIAL_HEIGHT = 10000;  // essentially arbitrary
   var DEFAULT_MOLECULE = StatesOfMatterConstants.NEON;
-  var INITIAL_TEMPERATURE = StatesOfMatterConstants.SOLID_TEMPERATURE;
   var MAX_TEMPERATURE = 50.0;
   var MIN_TEMPERATURE = 0.0001;
   var INITIAL_GRAVITATIONAL_ACCEL = -0.045;
@@ -71,6 +70,12 @@ define( function( require ) {
   var PARTICLE_SPEED_UP_FACTOR = 4; // empirically determined to make the particles move at a speed that looks reasonable
   var MAX_PARTICLE_MOTION_TIME_STEP = 0.025; // max time step that model can handle, empirically determined
   var TIME_STEP_MOVING_AVERAGE_LENGTH = 20; // number of samples in the moving average of time steps
+
+  // constants that define the normalized temperatures used for the various states
+  var SOLID_TEMPERATURE = StatesOfMatterConstants.SOLID_TEMPERATURE;
+  var LIQUID_TEMPERATURE = StatesOfMatterConstants.LIQUID_TEMPERATURE;
+  var GAS_TEMPERATURE = StatesOfMatterConstants.GAS_TEMPERATURE;
+  var INITIAL_TEMPERATURE = SOLID_TEMPERATURE;
 
   // possible thermostat settings
   var ISOKINETIC_THERMOSTAT = 1;
@@ -128,8 +133,8 @@ define( function( require ) {
     // observable model properties
     //-----------------------------------------------------------------------------------------------------------------
 
-    this.particleContainerHeightProperty = new Property( StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT );
-    this.targetContainerHeightProperty = new Property( StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT );
+    this.particleContainerHeightProperty = new Property( PARTICLE_CONTAINER_INITIAL_HEIGHT );
+    this.targetContainerHeightProperty = new Property( PARTICLE_CONTAINER_INITIAL_HEIGHT );
     this.isExplodedProperty = new Property( false );
     this.phaseDiagramExpandedProperty = new Property( true );
     this.interactionExpandedProperty = new Property( true );
@@ -165,7 +170,7 @@ define( function( require ) {
 
     // @private, various internal model variables
     this.particleDiameter = 1;
-    this.normalizedContainerWidth = StatesOfMatterConstants.PARTICLE_CONTAINER_WIDTH / this.particleDiameter;
+    this.normalizedContainerWidth = PARTICLE_CONTAINER_WIDTH / this.particleDiameter;
     this.gravitationalAcceleration = null;
     this.currentMolecule = null;
     this.thermostatType = ADAPTIVE_THERMOSTAT;
@@ -390,10 +395,8 @@ define( function( require ) {
       this.resetContainerSize();
 
       // Adjust the injection point based on the new particle diameter.
-      this.injectionPointX = StatesOfMatterConstants.CONTAINER_BOUNDS.width / this.particleDiameter *
-                             INJECTION_POINT_HORIZ_PROPORTION;
-      this.injectionPointY = StatesOfMatterConstants.CONTAINER_BOUNDS.height / this.particleDiameter *
-                             INJECTION_POINT_VERT_PROPORTION;
+      this.injectionPointX = PARTICLE_CONTAINER_WIDTH / this.particleDiameter * INJECTION_POINT_HORIZ_PROPORTION;
+      this.injectionPointY = PARTICLE_CONTAINER_INITIAL_HEIGHT / this.particleDiameter * INJECTION_POINT_VERT_PROPORTION;
 
       // Add the particles and set their initial positions.
       this.initializeParticles( phase );
@@ -423,7 +426,7 @@ define( function( require ) {
       this.targetContainerHeightProperty.set( Util.clamp(
         desiredContainerHeight,
         MIN_ALLOWABLE_CONTAINER_HEIGHT,
-        StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT
+        PARTICLE_CONTAINER_INITIAL_HEIGHT
       ) );
     },
 
@@ -766,9 +769,9 @@ define( function( require ) {
 
       // Initialize the system parameters.
       this.gravitationalAcceleration = INITIAL_GRAVITATIONAL_ACCEL;
-      this.heatingCoolingAmountProperty.set( 0 );
-      this.temperatureSetPointProperty.set( INITIAL_TEMPERATURE );
-      this.isExplodedProperty.set( false );
+      this.heatingCoolingAmountProperty.reset();
+      this.temperatureSetPointProperty.reset();
+      this.isExplodedProperty.reset();
     },
 
     /**
@@ -777,6 +780,7 @@ define( function( require ) {
      * @private
      */
     resetContainerSize: function() {
+
       // Set the initial size of the container.
       this.particleContainerHeightProperty.reset();
       this.targetContainerHeightProperty.reset();
@@ -807,7 +811,7 @@ define( function( require ) {
 
             this.particleContainerHeightProperty.set( Math.min(
               this.particleContainerHeightProperty.get() + this.heightChangeThisStep,
-              StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT
+              PARTICLE_CONTAINER_INITIAL_HEIGHT
             ) );
           }
           else {
@@ -834,7 +838,7 @@ define( function( require ) {
       else {
 
         // The lid is blowing off the container, so increase the container size until the lid should be well off the screen.
-        if ( this.particleContainerHeightProperty.get() < StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT * 3 ) {
+        if ( this.particleContainerHeightProperty.get() < PARTICLE_CONTAINER_INITIAL_HEIGHT * 3 ) {
           this.particleContainerHeightProperty.set(
             this.particleContainerHeightProperty.get() + POST_EXPLOSION_CONTAINER_EXPANSION_RATE * dt
           );
@@ -895,7 +899,7 @@ define( function( require ) {
       if ( this.heatingCoolingAmountProperty.get() !== 0 ) {
         var temperatureChange = this.heatingCoolingAmountProperty.get() * TEMPERATURE_CHANGE_RATE_FACTOR * dt;
         var newTemperature;
-        if ( this.temperatureSetPointProperty.get() < StatesOfMatterConstants.SOLID_TEMPERATURE * 0.75 &&
+        if ( this.temperatureSetPointProperty.get() < SOLID_TEMPERATURE * 0.75 &&
              this.heatingCoolingAmountProperty.get() < 0 ) {
 
           // The temperature adjusts more slowly as we begin to approach absolute zero, multiplier empirically determined.
@@ -1017,7 +1021,7 @@ define( function( require ) {
       else if ( ( this.thermostatType === ISOKINETIC_THERMOSTAT ) ||
                 ( this.thermostatType === ADAPTIVE_THERMOSTAT &&
                   ( temperatureIsChanging ||
-                    this.temperatureSetPointProperty.get() > StatesOfMatterConstants.LIQUID_TEMPERATURE ) ) ) {
+                    this.temperatureSetPointProperty.get() > LIQUID_TEMPERATURE ) ) ) {
         // Use the isokinetic thermostat.
         this.isoKineticThermostat.adjustTemperature();
       }
@@ -1046,8 +1050,7 @@ define( function( require ) {
       // Determine the number of atoms/molecules to create.  This will be a cube (really a square, since it's 2D, but
       // you get the idea) that takes up a fixed amount of the bottom of the container, so the number of molecules that
       // can fit depends on the size of the individual atom.
-      var numberOfAtoms = Math.pow( Math.round( StatesOfMatterConstants.CONTAINER_BOUNDS.width /
-                                                ((OxygenAtom.RADIUS * 2.1) * 3) ), 2 );
+      var numberOfAtoms = Math.pow( Math.round( PARTICLE_CONTAINER_WIDTH / ( ( OxygenAtom.RADIUS * 2.1 ) * 3 ) ), 2 );
       if ( numberOfAtoms % 2 !== 0 ) {
         numberOfAtoms--;
       }
@@ -1103,8 +1106,7 @@ define( function( require ) {
       // you get the idea) that takes up a fixed amount of the bottom of the container, so the number of molecules that
       // can fit depends on the size of the individual atom.
       var waterMoleculeDiameter = OxygenAtom.RADIUS * 2.1;
-      var moleculesAcrossBottom = Math.round( StatesOfMatterConstants.CONTAINER_BOUNDS.width /
-                                              (waterMoleculeDiameter * 1.2) );
+      var moleculesAcrossBottom = Math.round( PARTICLE_CONTAINER_WIDTH / ( waterMoleculeDiameter * 1.2 ) );
       var numberOfMolecules = Math.pow( moleculesAcrossBottom / 3, 2 );
 
       // Create the normalized data set for the one-atom-per-molecule case.
@@ -1254,8 +1256,7 @@ define( function( require ) {
 
       // Initialize the number of atoms assuming that the solid form, when made into a square, will consume about 1/3
       // the width of the container.
-      var numberOfAtoms = Math.pow( Math.round( StatesOfMatterConstants.CONTAINER_BOUNDS.width /
-                                                ( ( particleDiameter * 1.05 ) * 3 ) ), 2 );
+      var numberOfAtoms = Math.pow( Math.round( PARTICLE_CONTAINER_WIDTH / ( ( particleDiameter * 1.05 ) * 3 ) ), 2 );
 
       // Create the normalized data set for the one-atom-per-molecule case.
       this.moleculeDataSet = new MoleculeForceAndMotionDataSet( 1 );
@@ -1338,14 +1339,10 @@ define( function( require ) {
      */
     mapTemperatureToPhase: function() {
       var phase;
-      if ( this.temperatureSetPointProperty.get() < StatesOfMatterConstants.SOLID_TEMPERATURE +
-                                                    ( ( StatesOfMatterConstants.LIQUID_TEMPERATURE -
-                                                        StatesOfMatterConstants.SOLID_TEMPERATURE ) / 2 ) ) {
+      if ( this.temperatureSetPointProperty.get() < SOLID_TEMPERATURE + ( ( LIQUID_TEMPERATURE - SOLID_TEMPERATURE ) / 2 ) ) {
         phase = PhaseStateEnum.SOLID;
       }
-      else if ( this.temperatureSetPointProperty.get() < StatesOfMatterConstants.LIQUID_TEMPERATURE +
-                                                         ( ( StatesOfMatterConstants.GAS_TEMPERATURE -
-                                                             StatesOfMatterConstants.LIQUID_TEMPERATURE ) / 2 ) ) {
+      else if ( this.temperatureSetPointProperty.get() < LIQUID_TEMPERATURE + ( ( GAS_TEMPERATURE - LIQUID_TEMPERATURE ) / 2 ) ) {
         phase = PhaseStateEnum.LIQUID;
       }
       else {
@@ -1421,7 +1418,7 @@ define( function( require ) {
               firstOutsideMoleculeIndex++ ) {
           var pos = this.moleculeDataSet.getMoleculeCenterOfMassPositions()[ firstOutsideMoleculeIndex ];
           if ( pos.x < 0 || pos.x > this.normalizedContainerWidth || pos.y < 0 ||
-               pos.y > StatesOfMatterConstants.PARTICLE_CONTAINER_INITIAL_HEIGHT / this.particleDiameter ) {
+               pos.y > PARTICLE_CONTAINER_INITIAL_HEIGHT / this.particleDiameter ) {
             // This particle is outside of the container.
             break;
           }
