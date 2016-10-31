@@ -114,8 +114,7 @@ define( function( require ) {
     // add the thermometer node
     this.compositeThermometerNode = new CompositeThermometerNode( multipleParticleModel, modelViewTransform, {
       font: new PhetFont( 20 ),
-      fill: 'white',
-      centerX: nominalParticleAreaViewBounds.minX + nominalParticleAreaViewBounds.width * 0.35
+      fill: 'white'
     } );
     this.addChild( this.compositeThermometerNode );
 
@@ -123,11 +122,9 @@ define( function( require ) {
     var resetAllButton = new ResetAllButton( {
       listener: function() {
         self.modelTemperatureHistory.clear();
-        multipleParticleModel.reset();
-        self.compositeThermometerNode.setRotation( 0 );
-        self.particleContainerNode.reset();
         self.compositeThermometerNode.reset();
-        //Reset  phase diagram state in SOM basic version
+        multipleParticleModel.reset();
+        // Reset phase diagram state in SOM basic version.
         multipleParticleModel.phaseDiagramExpandedProperty.value = isInteractionDiagramEnabled;
       },
       right: this.layoutBounds.right - CONTROL_PANEL_X_INSET,
@@ -173,7 +170,6 @@ define( function( require ) {
       maxWidth: 100,
       listener: function() {
         multipleParticleModel.returnLid();
-        self.particleContainerNode.reset();
       },
       visible: false,
       xMargin: 10,
@@ -222,8 +218,15 @@ define( function( require ) {
     } );
     this.addChild( this.phaseDiagram );
 
-    multipleParticleModel.isExplodedProperty.link( function() {
+    multipleParticleModel.isExplodedProperty.link( function( isExploded ) {
       self.modelTemperatureHistory.clear();
+      if ( !isExploded ) {
+        self.compositeThermometerNode.setRotation( 0 );
+        self.compositeThermometerNode.centerX = nominalParticleAreaViewBounds.minX + nominalParticleAreaViewBounds.width * 0.35;
+        self.compositeThermometerNode.centerY = modelViewTransform.modelToViewY(
+          multipleParticleModel.particleContainerHeightProperty.get()
+        );
+      }
       self.updatePhaseDiagram();
     } );
 
@@ -265,11 +268,11 @@ define( function( require ) {
       }
     } );
 
-    // TODO: Can I get rid of this flag?
-    this.particleContainerHeightPropertyChanged = false;
+    // Monitor the model for changes of the container size and adjust the view accordingly.
     multipleParticleModel.particleContainerHeightProperty.link( function( containerHeight, previousContainerHeight ) {
 
       // move the thermometer with the lid
+      self.compositeThermometerNode.centerX = nominalParticleAreaViewBounds.minX + nominalParticleAreaViewBounds.width * 0.35;
       self.compositeThermometerNode.centerY = modelViewTransform.modelToViewY( containerHeight );
 
       // if the container has exploded, rotate the thermometer as it moves up
@@ -281,7 +284,6 @@ define( function( require ) {
       }
 
       // other updates
-      self.particleContainerHeightPropertyChanged = true;
       self.updatePhaseDiagram();
     } );
 
@@ -338,10 +340,6 @@ define( function( require ) {
     step: function( dt ) {
       this.particleContainerNode.step( dt );
       this.pumpNode.step( dt );
-      if ( this.particleContainerHeightPropertyChanged ) {
-        this.particleContainerNode.handleContainerSizeChanged();
-        this.particleContainerHeightPropertyChanged = false;
-      }
     },
 
     /**

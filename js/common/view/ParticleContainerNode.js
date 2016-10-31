@@ -43,6 +43,7 @@ define( function( require ) {
   function ParticleContainerNode( multipleParticleModel, modelViewTransform, volumeControlEnabled, pressureGaugeEnabled ) {
 
     Node.call( this, { preventFit: true } );
+    var self = this;
 
     // @private, view bounds for the particle area, everything is basically constructed and positioned based on this
     this.particleAreaViewBounds = new Bounds2(
@@ -55,7 +56,6 @@ define( function( require ) {
     // @private
     this.multipleParticleModel = multipleParticleModel;
     this.modelViewTransform = modelViewTransform;
-    this.pressureGaugeEnabled = pressureGaugeEnabled;
     this.previousContainerViewSize = this.particleAreaViewBounds.height;
 
     // add nodes for the various layers
@@ -316,6 +316,54 @@ define( function( require ) {
     bevel.centerX = this.particleAreaViewBounds.centerX;
     bevel.top = this.particleAreaViewBounds.minY + cutoutTopY;
     postParticleLayer.addChild( bevel );
+
+    // Monitor the height of the container in the model and adjust the view when changes occur.
+    multipleParticleModel.particleContainerHeightProperty.link( function( containerHeight, oldContainerHeight ) {
+
+      if ( oldContainerHeight ) {
+        self.previousContainerViewSize = modelViewTransform.modelToViewDeltaY( oldContainerHeight );
+      }
+
+      var containerLid = self.containerLid; // optimization
+      var lidYPosition = modelViewTransform.modelToViewY( containerHeight );
+
+      containerLid.centerY = lidYPosition;
+
+      if ( multipleParticleModel.getContainerExploded() ) {
+
+        // the container has exploded, so rotate the lid as it goes up so that it looks like it has been blown off.
+        var deltaY = oldContainerHeight - containerHeight;
+        var rotationAmount = deltaY * Math.PI * 0.00008; // multiplier empirically determined
+        containerLid.rotateAround( containerLid.center, rotationAmount );
+      }
+
+      // update the position of the pointing hand
+      self.pointingHandNode && self.pointingHandNode.setFingertipYPosition( lidYPosition );
+
+      // update the pressure gauge position (if present)
+      self.updatePressureGaugePosition();
+
+      // keep a record of the 
+    } );
+
+    // Monitor the model for changes in the exploded state of the container and update the view as needed.
+    multipleParticleModel.isExplodedProperty.link( function( isExploded, wasExploded ) {
+
+      var containerLid = self.containerLid;
+
+      if ( !isExploded && wasExploded ) {
+
+        // return the lid to the top of the container
+        containerLid.setRotation( 0 );
+        containerLid.centerX = modelViewTransform.modelToViewX( multipleParticleModel.getParticleContainerWidth() / 2 );
+        containerLid.centerY = modelViewTransform.modelToViewY(
+          multipleParticleModel.particleContainerHeightProperty.get()
+        );
+
+        // return the pressure gauge to its original position
+        self.updatePressureGaugePosition();
+      }
+    } );
   }
 
   statesOfMatter.register( 'ParticleContainerNode', ParticleContainerNode );
@@ -332,79 +380,37 @@ define( function( require ) {
     },
 
     /**
-     * @public
-     */
-    reset: function() {
-      this.handleContainerSizeChanged();
-    },
-
-    /**
-     * Update the position and other aspects of the gauge so that it stays
-     * connected to the lid or moves as it should when the container
-     * explodes.
+     * Update the position and other aspects of the gauge so that it stays connected to the lid or moves as it should
+     * when the container explodes.
      * @private
      */
-    updatePressureGauge: function() {
+    updatePressureGaugePosition: function() {
+
+      if ( !this.pressureMeter ) {
+        // nothing to update, so bail out
+        return;
+      }
 
       var containerHeight = this.multipleParticleModel.getParticleContainerHeight();
 
-      if ( this.pressureMeter ) {
-        if ( !this.multipleParticleModel.getContainerExploded() ) {
-          if ( this.pressureMeter.getRotation() !== 0 ) {
-            this.pressureMeter.setRotation( 0 );
-          }
-          this.pressureMeter.top = this.particleAreaViewBounds.top - 75; // position adjust to connect to lid
-          this.pressureMeter.setElbowHeight(
-            PRESSURE_METER_ELBOW_OFFSET + Math.abs( this.modelViewTransform.modelToViewDeltaY(
-              MultipleParticleModel.PARTICLE_CONTAINER_INITIAL_HEIGHT - containerHeight
-            ) )
-          );
-        }
-        else {
-
-          // The container is exploding, so move the gauge up and spin it.
-          var deltaHeight = this.modelViewTransform.modelToViewDeltaY( containerHeight ) - this.previousContainerViewSize;
-          this.pressureMeter.rotate( deltaHeight * 0.01 * Math.PI );
-          this.pressureMeter.centerY = this.pressureMeter.centerY + deltaHeight;
-        }
-      }
-    },
-
-    /**
-     * Handle a notification that the container size has changed.
-     * @public
-     */
-    handleContainerSizeChanged: function() {
-
-      var containerHeight = this.multipleParticleModel.getParticleContainerHeight(); // convenience variable
-      var containerLid = this.containerLid; // optimization
-      var lidYPosition = this.particleAreaViewBounds.maxY + this.modelViewTransform.modelToViewDeltaY( containerHeight );
-
       if ( !this.multipleParticleModel.getContainerExploded() ) {
-        if ( containerLid.getRotation() !== 0 ) {
-          containerLid.setRotation( 0 );
+        if ( this.pressureMeter.getRotation() !== 0 ) {
+          this.pressureMeter.setRotation( 0 );
         }
-        containerLid.setTranslation( this.containerViewCenterX - containerLid.width / 2, lidYPosition );
+        this.pressureMeter.top = this.particleAreaViewBounds.top - 75; // position adjusted to connect to lid
+        this.pressureMeter.setElbowHeight(
+          PRESSURE_METER_ELBOW_OFFSET + Math.abs( this.modelViewTransform.modelToViewDeltaY(
+            MultipleParticleModel.PARTICLE_CONTAINER_INITIAL_HEIGHT - containerHeight
+          ) )
+        );
       }
       else {
 
-        // the container has exploded, so rotate the lid as it goes up so that it looks like it has been blown off.
-        var deltaY = lidYPosition - this.containerLid.centerY;
-        var rotationAmount = deltaY * Math.PI * 0.002; // multiplier empirically determined
-        containerLid.centerX = this.containerViewCenterX;
-        containerLid.centerY = lidYPosition;
-        containerLid.rotateAround( containerLid.center, rotationAmount );
+        // The container is exploding, so move the gauge up and spin it.
+        var deltaHeight = this.modelViewTransform.modelToViewDeltaY( containerHeight ) - this.previousContainerViewSize;
+        this.pressureMeter.rotate( deltaHeight * 0.01 * Math.PI );
+        this.pressureMeter.centerY = this.pressureMeter.centerY + deltaHeight * 2;
       }
-
-      // update the position of the pointing hand
-      this.pointingHandNode && this.pointingHandNode.setFingertipYPosition( lidYPosition );
-
-      // update the pressure gauge
-      this.pressureGaugeEnabled && this.updatePressureGauge();
-
-      // track the previous size so that deltas can be calculated on the next update
-      this.previousContainerViewSize = this.modelViewTransform.modelToViewDeltaY( containerHeight );
     }
-
   } );
 } );

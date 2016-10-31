@@ -792,7 +792,7 @@ define( function( require ) {
 
     /**
      * Step the model.
-     * @private
+     * @public
      */
     stepInternal: function( dt ) {
 

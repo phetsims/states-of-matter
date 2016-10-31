@@ -197,10 +197,6 @@ define( function( require ) {
   return inherit( ScreenView, StatesScreenView, {
     step: function() {
       this.particleContainerNode.step();
-      if ( this.particleContainerHeightPropertyChanged ) {
-        this.particleContainerNode.handleContainerSizeChanged();
-        this.particleContainerHeightPropertyChanged = false;
-      }
     }
   } );
 } );
