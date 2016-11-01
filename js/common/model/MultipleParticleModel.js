@@ -132,48 +132,43 @@ define( function( require ) {
     var self = this;
 
     //-----------------------------------------------------------------------------------------------------------------
-    // observable model properties
+    // observable model properties, all @public
     //-----------------------------------------------------------------------------------------------------------------
 
-    this.particleContainerHeightProperty = new Property( PARTICLE_CONTAINER_INITIAL_HEIGHT );
-    this.targetContainerHeightProperty = new Property( PARTICLE_CONTAINER_INITIAL_HEIGHT );
-    this.isExplodedProperty = new Property( false );
-    this.phaseDiagramExpandedProperty = new Property( true );
-    this.interactionExpandedProperty = new Property( true );
-    this.temperatureSetPointProperty = new Property( INITIAL_TEMPERATURE );
-    this.pressureProperty = new Property( 0 );
-    this.substanceProperty = new Property( SubstanceType.NEON );
-    this.interactionStrengthProperty = new Property( MAX_ADJUSTABLE_EPSILON );
-    this.isPlayingProperty = new Property( true );
-    this.simSpeedProperty = new Property( 'normal' );
-    this.heatingCoolingAmountProperty = new Property( 0 );
+    this.particleContainerHeightProperty = new Property( PARTICLE_CONTAINER_INITIAL_HEIGHT ); // read only
+    this.targetContainerHeightProperty = new Property( PARTICLE_CONTAINER_INITIAL_HEIGHT ); // read-write
+    this.isExplodedProperty = new Property( false ); // read only
+    this.phaseDiagramExpandedProperty = new Property( true ); // read-write
+    this.interactionExpandedProperty = new Property( true ); // read-write
+    this.temperatureSetPointProperty = new Property( INITIAL_TEMPERATURE ); // read-write
+    this.pressureProperty = new Property( 0 ); // read only
+    this.substanceProperty = new Property( SubstanceType.NEON ); // read-write
+    this.interactionStrengthProperty = new Property( MAX_ADJUSTABLE_EPSILON ); // read-wrte
+    this.isPlayingProperty = new Property( true ); // read-write
+    this.simSpeedProperty = new Property( 'normal' ); // read-write
+    this.heatingCoolingAmountProperty = new Property( 0 ); // read-write
     this.keepingUpProperty = new Property( true ); // tracks whether targeted min frame rate is being maintained
-    this.averageDtProperty = new Property( NOMINAL_TIME_STEP );
-    this.maxParticleMoveTimePerStepProperty = new Property( Number.POSITIVE_INFINITY );
-    this.resetEmitter = new Emitter();
+    this.averageDtProperty = new Property( NOMINAL_TIME_STEP ); // read only
+    this.maxParticleMoveTimePerStepProperty = new Property( Number.POSITIVE_INFINITY ); // read only
+    this.resetEmitter = new Emitter(); // listen only
 
     //-----------------------------------------------------------------------------------------------------------------
     // other model attributes
     //-----------------------------------------------------------------------------------------------------------------
 
-    // Strategy patterns that are applied to the data set in order to create the overall behavior of the simulation.
-    this.atomPositionUpdater = null;
-    this.moleculeForceAndMotionCalculator = null;
-    this.phaseStateChanger = null;
-    this.isoKineticThermostat = null;
-    this.andersenThermostat = null;
+    // arrays containing references to the individual particles
+    this.particles = new ObservableArray(); // @public, read-only
+    this.copyOfParticles = new ObservableArray(); // @private
 
-    // Attributes of the container and simulation as a whole.
-    this.particles = new ObservableArray();
-    this.copyOfParticles = new ObservableArray();
-
-    // @private, data set containing the atom and molecule position, motion, and force information
+    // @public, data set containing information about the position, motion, and force for each particle
     this.moleculeDataSet = null;
+
+    // @public, various non-property attributes
+    this.normalizedContainerWidth = PARTICLE_CONTAINER_WIDTH / this.particleDiameter;
+    this.gravitationalAcceleration = null;
 
     // @private, various internal model variables
     this.particleDiameter = 1;
-    this.normalizedContainerWidth = PARTICLE_CONTAINER_WIDTH / this.particleDiameter;
-    this.gravitationalAcceleration = null;
     this.thermostatType = ADAPTIVE_THERMOSTAT;
     this.heightChangeCountdownTime = 0;
     this.minModelTemperature = null;
@@ -187,11 +182,18 @@ define( function( require ) {
     // @public, read-only, normalized version of the container height, changes as the lid position changes
     this.normalizedContainerHeight = this.particleContainerHeightProperty.get() / this.particleDiameter;
 
-    // @public, normalized version of the TOTAL container height regardless of the lid position, set once at init
+    // @public, read-only, normalized version of the TOTAL container height regardless of the lid position, set once at init
     this.normalizedTotalContainerHeight = this.particleContainerHeightProperty.get / this.particleDiameter;
 
     // @public, normalized velocity at which lid is moving in y direction
     this.normalizedLidVelocityY = 0;
+
+    // @private, strategy patterns that are applied to the data set
+    this.atomPositionUpdater = null;
+    this.moleculeForceAndMotionCalculator = null;
+    this.phaseStateChanger = null;
+    this.isoKineticThermostat = null;
+    this.andersenThermostat = null;
 
     // TODO: For working on performance issues, consider removing before publication
     this.timeStepMovingAverage = new MovingAverage(
@@ -1138,46 +1140,6 @@ define( function( require ) {
       }
       // Initialize the particle positions according the to requested phase.
       this.setPhase( phase );
-    },
-
-    /***
-     * @returns {number}
-     * @public
-     */
-    getNormalizedContainerWidth: function() {
-      return this.normalizedContainerWidth;
-    },
-
-    /**
-     * @returns {number}
-     * @public
-     */
-    getNormalizedContainerHeight: function() {
-      return this.normalizedContainerHeight;
-    },
-
-    /**
-     * @returns {MoleculeForceAndMotionDataSet}
-     * @public
-     */
-    getMoleculeDataSetRef: function() {
-      return this.moleculeDataSet;
-    },
-
-    /**
-     * @returns {Array}
-     * @public
-     */
-    getMoleculeCenterOfMassPositions: function() {
-      return this.moleculeCenterOfMassPositions;
-    },
-
-    /**
-     * @returns {number}
-     * @public
-     */
-    getGravitationalAcceleration: function() {
-      return this.gravitationalAcceleration;
     },
 
     /**

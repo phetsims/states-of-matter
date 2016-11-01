@@ -52,7 +52,7 @@ define( function( require ) {
     // @override
     initializeForces: function( moleculeDataSet ){
       var temperatureSetPoint = this.multipleParticleModel.temperatureSetPointProperty.get();
-      var accelerationDueToGravity = this.multipleParticleModel.getGravitationalAcceleration();
+      var accelerationDueToGravity = this.multipleParticleModel.gravitationalAcceleration;
       if ( temperatureSetPoint < TEMPERATURE_BELOW_WHICH_GRAVITY_INCREASES ) {
 
         // Below a certain temperature, gravity is increased to counteract some odd-looking behavior caused by the

@@ -35,7 +35,7 @@ define( function( require ) {
   function WaterPhaseStateChanger( multipleParticleModel ) {
 
     // Make sure this is not being used on an inappropriate data set.
-    assert && assert( multipleParticleModel.getMoleculeDataSetRef().getAtomsPerMolecule() === 3 );
+    assert && assert( multipleParticleModel.moleculeDataSet.getAtomsPerMolecule() === 3 );
 
     this.multiPleParticleModel = multipleParticleModel;
     this.rand = new Random(); //@private
@@ -66,7 +66,7 @@ define( function( require ) {
         default:
           throw new Error( 'invalid phaseID: ' + phaseID );
       }
-      var moleculeDataSet = this.multiPleParticleModel.getMoleculeDataSetRef();
+      var moleculeDataSet = this.multiPleParticleModel.moleculeDataSet;
 
       // Sync up the atom positions with the molecule positions.
       this.positionUpdater.updateAtomPositions( moleculeDataSet );
@@ -88,7 +88,7 @@ define( function( require ) {
       this.multiPleParticleModel.setTemperature( StatesOfMatterConstants.SOLID_TEMPERATURE );
 
       // Get references to the various elements of the data set.
-      var moleculeDataSet = this.multiPleParticleModel.getMoleculeDataSetRef();
+      var moleculeDataSet = this.multiPleParticleModel.moleculeDataSet;
       var numberOfMolecules = moleculeDataSet.getNumberOfMolecules();
       var moleculeCenterOfMassPositions = moleculeDataSet.moleculeCenterOfMassPositions;
       var moleculeVelocities = moleculeDataSet.moleculeVelocities;
@@ -113,7 +113,7 @@ define( function( require ) {
       // Establish the starting position, which will be the lower left corner
       // of the "cube".
       var crystalWidth = (moleculesPerLayer - 1) * MIN_INITIAL_DIAMETER_DISTANCE;
-      var startingPosX = (this.multiPleParticleModel.getNormalizedContainerWidth() / 2) - (crystalWidth / 2);
+      var startingPosX = (this.multiPleParticleModel.normalizedContainerWidth / 2) - (crystalWidth / 2);
       var startingPosY = MIN_INITIAL_DIAMETER_DISTANCE;
 
       // Place the molecules by placing their centers of mass.
@@ -150,7 +150,7 @@ define( function( require ) {
       this.multiPleParticleModel.setTemperature( StatesOfMatterConstants.LIQUID_TEMPERATURE );
 
       // Get references to the various elements of the data set.
-      var moleculeDataSet = this.multiPleParticleModel.getMoleculeDataSetRef();
+      var moleculeDataSet = this.multiPleParticleModel.moleculeDataSet;
       var moleculeCenterOfMassPositions = moleculeDataSet.moleculeCenterOfMassPositions;
       var moleculeVelocities = moleculeDataSet.moleculeVelocities;
       var moleculeRotationAngles = moleculeDataSet.moleculeRotationAngles;
@@ -176,8 +176,8 @@ define( function( require ) {
 
       // Assign each molecule to a position.
       var moleculesPlaced = 0;
-      var centerPointX = this.multiPleParticleModel.getNormalizedContainerWidth() / 2;
-      var centerPointY = this.multiPleParticleModel.getNormalizedContainerHeight() / 4;
+      var centerPointX = this.multiPleParticleModel.normalizedContainerWidth / 2;
+      var centerPointY = this.multiPleParticleModel.normalizedContainerHeight / 4;
       var currentLayer = 0;
       var particlesOnCurrentLayer = 0;
       var particlesThatWillFitOnCurrentLayer = 1;
@@ -205,9 +205,9 @@ define( function( require ) {
           // Check if the position is too close to the wall.  Note that we don't check inter-particle distances here -
           // we rely on the placement algorithm to make sure that this is not a problem.
           if ( (xPos > this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE) &&
-               (xPos < this.multiPleParticleModel.getNormalizedContainerWidth() - this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE) &&
+               (xPos < this.multiPleParticleModel.normalizedContainerWidth - this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE) &&
                (yPos > this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE) &&
-               (xPos < this.multiPleParticleModel.getNormalizedContainerHeight() - this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE) ) {
+               (xPos < this.multiPleParticleModel.normalizedContainerHeight - this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE) ) {
 
             // This is an acceptable position.
             moleculeCenterOfMassPositions[ moleculesPlaced ].setXY( xPos, yPos );
@@ -229,7 +229,7 @@ define( function( require ) {
       this.multiPleParticleModel.setTemperature( StatesOfMatterConstants.GAS_TEMPERATURE );
 
       // Get references to the various elements of the data set.
-      var moleculeDataSet = this.multiPleParticleModel.getMoleculeDataSetRef();
+      var moleculeDataSet = this.multiPleParticleModel.moleculeDataSet;
       var moleculeCenterOfMassPositions = moleculeDataSet.getMoleculeCenterOfMassPositions();
       var moleculeVelocities = moleculeDataSet.getMoleculeVelocities();
       var moleculeRotationAngles = moleculeDataSet.getMoleculeRotationAngles();
@@ -261,14 +261,14 @@ define( function( require ) {
       // they end up with a disproportionate amount of kinetic energy.
       var newPosX;
       var newPosY;
-      var rangeX = this.multiPleParticleModel.getNormalizedContainerWidth() - (2 * this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE);
-      var rangeY = this.multiPleParticleModel.getNormalizedContainerHeight() - (2 * this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE);
+      var rangeX = this.multiPleParticleModel.normalizedContainerWidth - ( 2 * this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE );
+      var rangeY = this.multiPleParticleModel.normalizedContainerHeight - ( 2 * this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE );
       for ( i = 0; i < numberOfMolecules; i++ ) {
         for ( var j = 0; j < this.MAX_PLACEMENT_ATTEMPTS; j++ ) {
 
           // Pick a random position.
-          newPosX = this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE + (  phet.joist.random.nextDouble() * rangeX);
-          newPosY = this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE + (  phet.joist.random.nextDouble() * rangeY);
+          newPosX = this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE + ( phet.joist.random.nextDouble() * rangeX );
+          newPosY = this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE + ( phet.joist.random.nextDouble() * rangeY );
           var positionAvailable = true;
 
           // See if this position is available.

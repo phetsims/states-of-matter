@@ -33,7 +33,7 @@ define( function( require ) {
   function DiatomicPhaseStateChanger( multipleParticleModel ) {
 
     // Make sure this is not being used on an inappropriate data set.
-    assert && assert( multipleParticleModel.getMoleculeDataSetRef().getAtomsPerMolecule() === 2 );
+    assert && assert( multipleParticleModel.moleculeDataSet.getAtomsPerMolecule() === 2 );
 
     // initialization
     this.positionUpdater = DiatomicAtomPositionUpdater; // @private
@@ -150,7 +150,7 @@ define( function( require ) {
       this.multipleParticleModel.setTemperature( StatesOfMatterConstants.LIQUID_TEMPERATURE );
 
       // Get references to the various elements of the data set.
-      var moleculeDataSet = this.multipleParticleModel.getMoleculeDataSetRef();
+      var moleculeDataSet = this.multipleParticleModel.moleculeDataSet;
       var moleculeCenterOfMassPositions = moleculeDataSet.getMoleculeCenterOfMassPositions();
       var moleculeVelocities = moleculeDataSet.getMoleculeVelocities();
       var moleculeRotationAngles = moleculeDataSet.getMoleculeRotationAngles();
@@ -175,8 +175,8 @@ define( function( require ) {
       }
       // Assign each molecule to a position.
       var moleculesPlaced = 0;
-      var centerPointX = this.multipleParticleModel.getNormalizedContainerWidth() / 2;
-      var centerPointY = this.multipleParticleModel.getNormalizedContainerHeight() / 4;
+      var centerPointX = this.multipleParticleModel.normalizedContainerWidth / 2;
+      var centerPointY = this.multipleParticleModel.normalizedContainerHeight / 4;
       var currentLayer = 0;
       var particlesOnCurrentLayer = 0;
       var particlesThatWillFitOnCurrentLayer = 1;
@@ -203,9 +203,9 @@ define( function( require ) {
           // on the placement algorithm to make sure that this is not a
           // problem.
           if ( (xPos > this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE) &&
-               (xPos < this.multipleParticleModel.getNormalizedContainerWidth() - this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE) &&
+               (xPos < this.multipleParticleModel.normalizedContainerWidth - this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE) &&
                (yPos > this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE) &&
-               (xPos < this.multipleParticleModel.getNormalizedContainerHeight() - this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE) ) {
+               (xPos < this.multipleParticleModel.normalizedContainerHeight - this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE) ) {
 
             // This is an acceptable position.
             moleculeCenterOfMassPositions[ moleculesPlaced ].setXY( xPos, yPos );
@@ -227,7 +227,7 @@ define( function( require ) {
       this.multipleParticleModel.setTemperature( StatesOfMatterConstants.GAS_TEMPERATURE );
 
       // Get references to the various elements of the data set.
-      var moleculeDataSet = this.multipleParticleModel.getMoleculeDataSetRef();
+      var moleculeDataSet = this.multipleParticleModel.moleculeDataSet;
       var moleculeCenterOfMassPositions = moleculeDataSet.getMoleculeCenterOfMassPositions();
       var moleculeVelocities = moleculeDataSet.getMoleculeVelocities();
       var moleculeRotationAngles = moleculeDataSet.getMoleculeRotationAngles();
@@ -259,8 +259,8 @@ define( function( require ) {
       // they end up with a disproportionate amount of kinetic energy.
       var newPosX;
       var newPosY;
-      var rangeX = this.multipleParticleModel.getNormalizedContainerWidth() - (2 * this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE);
-      var rangeY = this.multipleParticleModel.getNormalizedContainerWidth() - ( 2 * this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE);
+      var rangeX = this.multipleParticleModel.normalizedContainerWidth - (2 * this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE);
+      var rangeY = this.multipleParticleModel.normalizedContainerWidth - ( 2 * this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE);
       for ( i = 0; i < numberOfMolecules; i++ ) {
         for ( var j = 0; j < this.MAX_PLACEMENT_ATTEMPTS; j++ ) {
 
