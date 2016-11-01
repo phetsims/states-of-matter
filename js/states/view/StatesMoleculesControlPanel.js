@@ -58,11 +58,11 @@ define( function( require ) {
   var OXYGEN_ICON = new Node( { children: [ oxygen1, oxygen2 ] } );
 
   /**
-   * @param {Property<number>} moleculeTypeProperty that tracks the molecule type selected in the panel
+   * @param {Property<number>} substanceProperty that tracks the substance selected in the panel
    * @param {Object} [options] for various panel display properties
    * @constructor
    */
-  function StatesMoleculesControlPanel( moleculeTypeProperty, options ) {
+  function StatesMoleculesControlPanel( substanceProperty, options ) {
 
     options = _.extend( {
       xMargin: 5,
@@ -133,7 +133,7 @@ define( function( require ) {
       { value: SubstanceEnum.WATER, node: createLabelAndIconNode( water ) }
     ];
 
-    var radioButtonGroup = new RadioButtonGroup( moleculeTypeProperty, radioButtonContent, {
+    var radioButtonGroup = new RadioButtonGroup( substanceProperty, radioButtonContent, {
       orientation: 'vertical',
       cornerRadius: 5,
       baseColor: 'black',

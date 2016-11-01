@@ -233,7 +233,7 @@ define( function( require ) {
     }
     else {
 
-      // allows the user to choose the type of molecule when both are the same.
+      // allows the user to choose the type of atom when both are the same
       var title = new Text( atomsString, {
         font: new PhetFont( 14 ),
         fill: options.panelTextFill,

@@ -1,8 +1,8 @@
 // Copyright 2014-2015, University of Colorado Boulder
 
 /**
- * This class extends the Interaction Potential diagram to allow the user to adjust the interaction strength parameter
- * (i.e. epsilon).
+ * This class extends the interaction potential diagram to allow the user to adjust the interaction strength parameter
+ * (i.e. epsilon) through direct interaction with the graph.
  *
  * @author John Blanco
  * @author Siddhartha Chinthapally (Actual Concepts)
@@ -28,6 +28,7 @@ define( function( require ) {
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var StatesOfMatterColorProfile = require( 'STATES_OF_MATTER/common/view/StatesOfMatterColorProfile' );
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
+  var SubstanceEnum = require( 'STATES_OF_MATTER/common/SubstanceEnum' );
   var Text = require( 'SCENERY/nodes/Text' );
 
   // strings
@@ -180,10 +181,11 @@ define( function( require ) {
     this.setLjPotentialParameters( multipleParticleModel.getSigma(), multipleParticleModel.getEpsilon() );
     this.drawPotentialCurve();
 
-    // Update the text when the value or units changes.
-    Property.multilink( [ multipleParticleModel.moleculeTypeProperty, multipleParticleModel.interactionStrengthProperty ],
-      function( moleculeType, interactionStrength ) {
-        if ( multipleParticleModel.currentMolecule === StatesOfMatterConstants.USER_DEFINED_MOLECULE ) {
+    // Update the graph when the substance or interaction strength changes.
+    Property.multilink(
+      [ multipleParticleModel.substanceProperty, multipleParticleModel.interactionStrengthProperty ],
+      function( substance, interactionStrength ) {
+        if ( substance === SubstanceEnum.USER_DEFINED_MOLECULE ) {
           multipleParticleModel.setEpsilon( interactionStrength );
         }
         self.updateInteractivityState();
@@ -220,7 +222,7 @@ define( function( require ) {
      * @private
      */
     updateInteractivityState: function() {
-      this.interactionEnabled = ( this.multipleParticleModel.getMoleculeType() === StatesOfMatterConstants.USER_DEFINED_MOLECULE );
+      this.interactionEnabled = ( this.multipleParticleModel.getMoleculeType() === SubstanceEnum.USER_DEFINED_MOLECULE );
     }
   } );
 } );

@@ -127,7 +127,7 @@ define( function( require ) {
 
     // Call the update when any of several properties change value.
     Property.multilink(
-      [ multipleParticleModel.temperatureSetPointProperty, multipleParticleModel.moleculeTypeProperty ],
+      [ multipleParticleModel.temperatureSetPointProperty, multipleParticleModel.substanceProperty ],
       updateTemperatureValues
     );
 

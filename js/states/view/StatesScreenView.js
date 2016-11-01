@@ -87,8 +87,8 @@ define( function( require ) {
     } );
     this.addChild( this.compositeThermometerNode );
 
-    // add the selection panel for the molecules
-    var atomsAndMoleculesSelectionPanel = new StatesMoleculesControlPanel( multipleParticleModel.moleculeTypeProperty, {
+    // add the selection panel for the atoms/molecules
+    var atomsAndMoleculesSelectionPanel = new StatesMoleculesControlPanel( multipleParticleModel.substanceProperty, {
       right: this.layoutBounds.right - CONTROL_PANEL_X_INSET,
       top: this.layoutBounds.top + CONTROL_PANEL_Y_INSET
     } );
@@ -105,7 +105,6 @@ define( function( require ) {
     var resetAllButton = new ResetAllButton( {
       listener: function() {
         multipleParticleModel.reset();
-        self.particleContainerNode.reset();
         self.compositeThermometerNode.reset();
       },
       right: this.layoutBounds.right - CONTROL_PANEL_X_INSET,

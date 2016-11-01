@@ -1,9 +1,8 @@
 // Copyright 2014-2015, University of Colorado Boulder
 
 /**
- * Model for AndersonThermostat, which adjusts the velocity of all
- * molecules in the system by the same amount in order to get the overall
- * system temperature to the desired set point.
+ * Model for AndersonThermostat, which adjusts the velocity of all atoms/molecules in the system by the same amount in
+ * order to get the overall system temperature to the desired set point.
  *
  * @author John Blanco
  * @author Aaron Davis

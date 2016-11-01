@@ -28,7 +28,7 @@ define( function( require ) {
   var StatesOfMatterColorProfile = require( 'STATES_OF_MATTER/common/view/StatesOfMatterColorProfile' );
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
 
-  //constants
+  // constants
   var RESIZE_HANDLE_SIZE_PROPORTION = 0.05;  // Size of handles as function of node width.
   var EPSILON_HANDLE_OFFSET_PROPORTION = 0.08; // Position of handle as function of node width.
   var RESIZE_HANDLE_NORMAL_COLOR = '#32FE00';
@@ -42,7 +42,6 @@ define( function( require ) {
    * @param {Object} [options] that can be passed on to the underlying node
    * @constructor
    */
-
   function InteractiveInteractionPotentialDiagram( dualAtomModel, wide, options ) {
 
     InteractionPotentialDiagramNode.call( this, dualAtomModel.getSigma(), dualAtomModel.getEpsilon(), wide );
@@ -158,8 +157,7 @@ define( function( require ) {
       }
     } ) );
 
-    // Add the ability to grab and move the position marker.
-    // This node will need to be pickable so the user can grab it.
+    // Add the ability to grab and move the position marker. This node will need to be pickable so the user can grab it.
     this.positionMarker.setPickable( true );
     this.positionMarker.touchArea = Shape.circle( 0, 0, 13 );
     this.positionMarker.addInputListener( new SimpleDragHandler( {
@@ -198,10 +196,10 @@ define( function( require ) {
       }
     ) );
 
-    Property.multilink( [ dualAtomModel.atomPairProperty, dualAtomModel.interactionStrengthProperty, dualAtomModel.atomDiameterProperty ],
-      function( moleculeType, interactionStrength, atomDiameter ) {
-
-        if ( moleculeType === AtomType.ADJUSTABLE ) {
+    Property.multilink(
+      [ dualAtomModel.atomPairProperty, dualAtomModel.interactionStrengthProperty, dualAtomModel.atomDiameterProperty ],
+      function( atomPair, interactionStrength, atomDiameter ) {
+        if ( atomPair === AtomType.ADJUSTABLE ) {
           dualAtomModel.atomPairProperty.set( AtomPair.ADJUSTABLE );
           dualAtomModel.setEpsilon( interactionStrength );
           dualAtomModel.setAdjustableAtomSigma( atomDiameter );
@@ -214,6 +212,7 @@ define( function( require ) {
     );
 
     this.interactionPotentialCanvasNode = new InteractionPotentialCanvasNode( this, true, {
+      // TODO: canvas size - where does this come from?
       canvasBounds: new Bounds2( 0, 0, 500, this.graphHeight + 10 )
     } );
     this.addChild( this.interactionPotentialCanvasNode );
@@ -293,5 +292,4 @@ define( function( require ) {
       this.horizontalAxisLabel.top += 8; // amount empirically determined
     }
   } );
-} )
-;
+} );

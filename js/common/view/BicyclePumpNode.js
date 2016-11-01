@@ -58,8 +58,8 @@ define( function( require ) {
     this.multipleParticleModel = multipleParticleModel; // @private
     this.injectionCapacity; // @private, number of molecules that can be injected by the pump
 
-    // update the total capacity whenever the molecule type changes
-    multipleParticleModel.moleculeTypeProperty.link( function() {
+    // update the total capacity whenever the substance changes
+    multipleParticleModel.substanceProperty.link( function() {
       self.injectionCapacity = multipleParticleModel.moleculeDataSet.getNumberOfRemainingSlots();
     } );
 

@@ -142,7 +142,7 @@ define( function( require ) {
     this.interactionExpandedProperty = new Property( true );
     this.temperatureSetPointProperty = new Property( INITIAL_TEMPERATURE );
     this.pressureProperty = new Property( 0 );
-    this.moleculeTypeProperty = new Property( SubstanceEnum.NEON );
+    this.substanceProperty = new Property( SubstanceEnum.NEON );
     this.interactionStrengthProperty = new Property( MAX_ADJUSTABLE_EPSILON );
     this.isPlayingProperty = new Property( true );
     this.simSpeedProperty = new Property( 'normal' );
@@ -174,7 +174,6 @@ define( function( require ) {
     this.particleDiameter = 1;
     this.normalizedContainerWidth = PARTICLE_CONTAINER_WIDTH / this.particleDiameter;
     this.gravitationalAcceleration = null;
-    this.currentMolecule = null;
     this.thermostatType = ADAPTIVE_THERMOSTAT;
     this.heightChangeCountdownTime = 0;
     this.minModelTemperature = null;
@@ -209,7 +208,7 @@ define( function( require ) {
     this.initializeModelParameters();
     this.setSubstance( DEFAULT_SUBSTANCE );
 
-    this.moleculeTypeProperty.link( function( substanceId ) {
+    this.substanceProperty.link( function( substanceId ) {
       self.setSubstance( substanceId );
     } );
   }
@@ -261,7 +260,7 @@ define( function( require ) {
       var triplePoint = 0;
       var criticalPoint = 0;
 
-      switch( this.currentMolecule ) {
+      switch( this.substanceProperty.get() ) {
 
         case SubstanceEnum.NEON:
           triplePoint = NEON_TRIPLE_POINT_IN_KELVIN;
@@ -289,7 +288,7 @@ define( function( require ) {
           break;
 
         default:
-          throw( new Error( 'unsupported molecule type' ) ); // should never happen, debug if it does
+          throw( new Error( 'unsupported substance' ) ); // should never happen, debug if it does
       }
 
       if ( this.temperatureSetPointProperty.get() <= this.minModelTemperature ) {
@@ -329,19 +328,19 @@ define( function( require ) {
     },
 
     /**
-     * Set the molecule type to be simulated.
-     * @param {number} moleculeID
+     * Set the substance to be simulated.
+     * @param {number} substance
      * @private
      */
-    setSubstance: function( moleculeID ) {
+    setSubstance: function( substance ) {
 
       assert && assert(
-        moleculeID === SubstanceEnum.DIATOMIC_OXYGEN ||
-        moleculeID === SubstanceEnum.NEON ||
-        moleculeID === SubstanceEnum.ARGON ||
-        moleculeID === SubstanceEnum.WATER ||
-        moleculeID === SubstanceEnum.USER_DEFINED_MOLECULE,
-        'unsupported molecule type'
+        substance === SubstanceEnum.DIATOMIC_OXYGEN ||
+        substance === SubstanceEnum.NEON ||
+        substance === SubstanceEnum.ARGON ||
+        substance === SubstanceEnum.WATER ||
+        substance === SubstanceEnum.USER_DEFINED_MOLECULE,
+        'unsupported substance'
       );
 
       // Retain the current phase so that we can set the particles back to this phase once they have been created and
@@ -352,11 +351,11 @@ define( function( require ) {
       this.removeAllParticles();
       this.initializeModelParameters();
 
-      // Set the new molecule type.
-      this.currentMolecule = moleculeID;
+      // Set the new substance.
+      this.substanceProperty.set( substance );
 
-      // Set the model parameters that are dependent upon the molecule type.
-      switch( this.currentMolecule ) {
+      // Set the model parameters that are dependent upon the substance being simulated.
+      switch( substance ) {
 
         case SubstanceEnum.DIATOMIC_OXYGEN:
           this.particleDiameter = OxygenAtom.RADIUS * 2;
@@ -389,7 +388,7 @@ define( function( require ) {
           break;
 
         default:
-          throw( new Error( 'unsupported molecule type' ) ); // should never happen, debug if it does
+          throw( new Error( 'unsupported substance' ) ); // should never happen, debug if it does
       }
 
       // Reset the container size. This must be done after the diameter is initialized because the normalized size is
@@ -403,7 +402,7 @@ define( function( require ) {
       // Add the particles and set their initial positions.
       this.initializeParticles( phase );
 
-      // Reset any time step limits that had kicked in for the previous molecule type.
+      // Reset any time step limits that had kicked in for the previous substance.
       this.maxParticleMoveTimePerStepProperty.reset();
 
       // Start over on averaging the incoming time steps.
@@ -439,7 +438,7 @@ define( function( require ) {
      */
     getSigma: function() {
       var sigma;
-      switch( this.currentMolecule ) {
+      switch( this.substanceProperty.get() ) {
         case SubstanceEnum.NEON:
           sigma = NeonAtom.RADIUS * 2;
           break;
@@ -456,7 +455,7 @@ define( function( require ) {
           sigma = ConfigurableStatesOfMatterAtom.DEFAULT_RADIUS * 2;
           break;
         default:
-          throw( new Error( 'unsupported molecule type' ) ); // should never happen, debug if it does
+          throw( new Error( 'unsupported substance' ) ); // should never happen, debug if it does
       }
 
       return sigma;
@@ -469,7 +468,7 @@ define( function( require ) {
      */
     getEpsilon: function() {
       var epsilon;
-      switch( this.currentMolecule ) {
+      switch( this.substanceProperty.get() ) {
         case SubstanceEnum.NEON:
           epsilon = InteractionStrengthTable.getInteractionPotential( AtomType.NEON, AtomType.NEON );
           break;
@@ -486,7 +485,7 @@ define( function( require ) {
           epsilon = this.convertScaledEpsilonToEpsilon( this.moleculeForceAndMotionCalculator.getScaledEpsilon() );
           break;
         default:
-          throw( new Error( 'unsupported molecule type' ) ); // should never happen, debug if it does
+          throw( new Error( 'unsupported substance' ) ); // should never happen, debug if it does
       }
 
       return epsilon;
@@ -499,7 +498,7 @@ define( function( require ) {
 
       var triplePointInKelvin;
 
-      switch( this.currentMolecule ) {
+      switch( this.substanceProperty.get() ) {
 
         case SubstanceEnum.NEON:
           triplePointInKelvin = NEON_TRIPLE_POINT_IN_KELVIN;
@@ -522,7 +521,7 @@ define( function( require ) {
           break;
 
         default:
-          throw( new Error( 'unsupported molecule type' ) ); // should never happen, debug if it does
+          throw( new Error( 'unsupported substance' ) ); // should never happen, debug if it does
       }
 
       var mapKelvinToInternal = new LinearFunction(
@@ -550,7 +549,7 @@ define( function( require ) {
       this.interactionExpandedProperty.reset();
       this.temperatureSetPointProperty.reset();
       this.pressureProperty.reset();
-      this.moleculeTypeProperty.reset();
+      this.substanceProperty.reset();
       this.interactionStrengthProperty.reset();
       this.isPlayingProperty.reset();
       this.simSpeedProperty.reset();
@@ -586,7 +585,7 @@ define( function( require ) {
      */
     setHeatingCoolingAmount: function( normalizedHeatingCoolingAmount ) {
       assert && assert( ( normalizedHeatingCoolingAmount <= 1.0 ) && ( normalizedHeatingCoolingAmount >= -1.0 ) );
-      this.heatingCoolingAmountProperty.set( normalizedHeatingCoolingAmount * 5 );
+      this.heatingCoolingAmountProperty.set( normalizedHeatingCoolingAmount );
     },
 
     /**
@@ -664,7 +663,7 @@ define( function( require ) {
 
         // Add particle to model set.
         var particle;
-        switch( this.currentMolecule ) {
+        switch( this.substanceProperty.get() ) {
           case SubstanceEnum.ARGON:
             particle = new ArgonAtom( 0, 0 );
             break;
@@ -683,7 +682,7 @@ define( function( require ) {
       }
       else if ( atomsPerMolecule === 2 ) {
 
-        assert && assert( this.currentMolecule === SubstanceEnum.DIATOMIC_OXYGEN );
+        assert && assert( this.substanceProperty.get() === SubstanceEnum.DIATOMIC_OXYGEN );
 
         // Add particles to model set.
         this.particles.add( new OxygenAtom( 0, 0 ) );
@@ -691,7 +690,7 @@ define( function( require ) {
       }
       else if ( atomsPerMolecule === 3 ) {
 
-        assert && assert( this.currentMolecule === SubstanceEnum.WATER );
+        assert && assert( this.substanceProperty.get() === SubstanceEnum.WATER );
 
         // Add atoms to model set.
         this.particles.add( new OxygenAtom( 0, 0 ) );
@@ -733,24 +732,24 @@ define( function( require ) {
     initializeParticles: function( phase ) {
 
       // Initialize the particles.
-      switch( this.currentMolecule ) {
+      switch( this.substanceProperty.get() ) {
         case SubstanceEnum.DIATOMIC_OXYGEN:
-          this.initializeDiatomic( this.currentMolecule, phase );
+          this.initializeDiatomic( this.substanceProperty.get(), phase );
           break;
         case SubstanceEnum.NEON:
-          this.initializeMonatomic( this.currentMolecule, phase );
+          this.initializeMonatomic( this.substanceProperty.get(), phase );
           break;
         case SubstanceEnum.ARGON:
-          this.initializeMonatomic( this.currentMolecule, phase );
+          this.initializeMonatomic( this.substanceProperty.get(), phase );
           break;
         case SubstanceEnum.USER_DEFINED_MOLECULE:
-          this.initializeMonatomic( this.currentMolecule, phase );
+          this.initializeMonatomic( this.substanceProperty.get(), phase );
           break;
         case SubstanceEnum.WATER:
-          this.initializeTriatomic( this.currentMolecule, phase );
+          this.initializeTriatomic( this.substanceProperty.get(), phase );
           break;
         default:
-          throw( new Error( 'unsupported molecule type' ) ); // should never happen, debug if it does
+          throw( new Error( 'unsupported substance' ) ); // should never happen, debug if it does
       }
 
       // This is needed in case we were switching from another molecule that was under pressure.
@@ -1033,14 +1032,14 @@ define( function( require ) {
 
     /**
      * Initialize the various model components to handle a simulation in which all the molecules are single atoms.
-     * @param {number} moleculeID
+     * @param {number} substance
      * @param {number} phase
      * @private
      */
-    initializeDiatomic: function( moleculeID, phase ) {
+    initializeDiatomic: function( substance, phase ) {
 
       // Verify that a valid molecule ID was provided.
-      assert && assert( (moleculeID === SubstanceEnum.DIATOMIC_OXYGEN) );
+      assert && assert( (substance === SubstanceEnum.DIATOMIC_OXYGEN) );
 
       // Determine the number of atoms/molecules to create.  This will be a cube (really a square, since it's 2D, but
       // you get the idea) that takes up a fixed amount of the bottom of the container, so the number of molecules that
@@ -1088,14 +1087,14 @@ define( function( require ) {
     /**
      * Initialize the various model components to handle a simulation in which each molecule consists of three atoms,
      * e.g. water.
-     * @param {number} moleculeID
+     * @param {number} substance
      * @param {number} phase
      * @private
      */
-    initializeTriatomic: function( moleculeID, phase ) {
+    initializeTriatomic: function( substance, phase ) {
 
       // Only water is supported so far.
-      assert && assert( (moleculeID === SubstanceEnum.WATER) );
+      assert && assert( (substance === SubstanceEnum.WATER) );
 
       // Determine the number of atoms/molecules to create.  This will be a cube (really a square, since it's 2D, but
       // you get the idea) that takes up a fixed amount of the bottom of the container, so the number of molecules that
@@ -1194,7 +1193,7 @@ define( function( require ) {
      * @public
      */
     getMoleculeType: function() {
-      return this.currentMolecule;
+      return this.substanceProperty.get();
     },
 
     /**
@@ -1202,7 +1201,7 @@ define( function( require ) {
      * @public
      */
     setEpsilon: function( epsilon ) {
-      if ( this.currentMolecule === SubstanceEnum.USER_DEFINED_MOLECULE ) {
+      if ( this.substanceProperty.get() === SubstanceEnum.USER_DEFINED_MOLECULE ) {
         if ( epsilon < MIN_ADJUSTABLE_EPSILON ) {
           epsilon = MIN_ADJUSTABLE_EPSILON;
         }
@@ -1407,23 +1406,25 @@ define( function( require ) {
 
       // Remove any particles that are outside of the container.  We work with the normalized particles for this.
       var particlesOutsideOfContainerCount = 0;
-      var firstOutsideMoleculeIndex;
+      var firstOutsideParticleIndex;
       do {
-        for ( firstOutsideMoleculeIndex = 0; firstOutsideMoleculeIndex < this.moleculeDataSet.getNumberOfMolecules();
-              firstOutsideMoleculeIndex++ ) {
-          var pos = this.moleculeDataSet.getMoleculeCenterOfMassPositions()[ firstOutsideMoleculeIndex ];
-          if ( pos.x < 0 || pos.x > this.normalizedContainerWidth || pos.y < 0 ||
+        for ( firstOutsideParticleIndex = 0; firstOutsideParticleIndex < this.moleculeDataSet.getNumberOfMolecules();
+              firstOutsideParticleIndex++ ) {
+          var pos = this.moleculeDataSet.getMoleculeCenterOfMassPositions()[ firstOutsideParticleIndex ];
+          if ( pos.x < 0 ||
+               pos.x > this.normalizedContainerWidth ||
+               pos.y < 0 ||
                pos.y > PARTICLE_CONTAINER_INITIAL_HEIGHT / this.particleDiameter ) {
             // This particle is outside of the container.
             break;
           }
         }
-        if ( firstOutsideMoleculeIndex < this.moleculeDataSet.getNumberOfMolecules() ) {
+        if ( firstOutsideParticleIndex < this.moleculeDataSet.getNumberOfMolecules() ) {
           // Remove the particle that was found.
-          this.moleculeDataSet.removeMolecule( firstOutsideMoleculeIndex );
+          this.moleculeDataSet.removeMolecule( firstOutsideParticleIndex );
           particlesOutsideOfContainerCount++;
         }
-      } while ( firstOutsideMoleculeIndex !== this.moleculeDataSet.getNumberOfMolecules() );
+      } while ( firstOutsideParticleIndex !== this.moleculeDataSet.getNumberOfMolecules() );
 
       // Remove enough of the non-normalized particles so that we have the same number as the normalized.  They don't
       // have to be the same particles since the normalized and non-normalized particles are explicitly synced up
@@ -1437,6 +1438,7 @@ define( function( require ) {
         var particle = this.copyOfParticles.get( i );
         this.particles.remove( particle );
       }
+
       // Set the container to be unexploded.
       this.setContainerExploded( false );
 

@@ -248,14 +248,9 @@ define( function( require ) {
       this.moleculeForces[ numberOfMolecules ] = new Vector2();
       this.nextMoleculeForces[ numberOfMolecules ] = new Vector2();
 
-      // Increment the number of atoms.
+      // Increment the counts of atoms and molecules.
       this.numberOfAtoms += this.atomsPerMolecule;
-
-      // TODO - TEMP - for testing of different particle injection strategies, see https://github.com/phetsims/states-of-matter/issues/161
       this.numberOfMolecules++;
-      // end of TODO - TEMP
-
-      assert && assert( !isNaN( this.moleculeCenterOfMassPositions[ numberOfMolecules ].x ) );
 
       return true;
     },
@@ -270,11 +265,9 @@ define( function( require ) {
      * @public
      */
     removeMolecule: function( moleculeIndex ) {
-      // assert moleculeIndex < this.numberOfAtoms / this.atomsPerMolecule;
-      if ( moleculeIndex >= this.numberOfAtoms / this.atomsPerMolecule ) {
-        // Ignore this out-of-range request.
-        return;
-      }
+
+      assert && assert( moleculeIndex < this.numberOfAtoms / this.atomsPerMolecule, 'molecule index out of range' );
+
       var i;
 
       // Handle all data arrays that are maintained on a per-molecule basis.
@@ -298,8 +291,9 @@ define( function( require ) {
         }
       }
 
-      // Reduce the atom count.
+      // Reduce the counts.
       this.numberOfAtoms -= this.atomsPerMolecule;
+      this.numberOfMolecules--;
     }
 
   } );

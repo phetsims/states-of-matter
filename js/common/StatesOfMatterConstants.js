@@ -63,7 +63,7 @@ define( function( require ) {
     // Distance between diatomic pairs.
     DIATOMIC_PARTICLE_DISTANCE: 0.9,  // In particle diameters.
 
-    // atoms and molecules colors
+    // atoms colors
     OXYGEN_COLOR: Element.O.color.toCSS(),
     NEON_COLOR: Element.Ne.color,
     ARGON_COLOR: Element.Ar.color,

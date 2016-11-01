@@ -31,6 +31,7 @@ define( function( require ) {
   var StatesOfMatterQueryParameters = require( 'STATES_OF_MATTER/common/StatesOfMatterQueryParameters' );
   var ScreenView = require( 'JOIST/ScreenView' );
   var StepForwardButton = require( 'SCENERY_PHET/buttons/StepForwardButton' );
+  var SubstanceEnum = require( 'STATES_OF_MATTER/common/SubstanceEnum' );
   var Text = require( 'SCENERY/nodes/Text' );
   var TextPushButton = require( 'SUN/buttons/TextPushButton' );
   var Vector2 = require( 'DOT/Vector2' );
@@ -230,15 +231,15 @@ define( function( require ) {
       self.updatePhaseDiagram();
     } );
 
-    // Hook up a function that updates several view attributes when the molecule type changes.
-    multipleParticleModel.moleculeTypeProperty.link( function( moleculeId ) {
+    // Hook up a function that updates several view attributes when the substance changes.
+    multipleParticleModel.substanceProperty.link( function( substance ) {
       self.modelTemperatureHistory.clear();
       self.updatePhaseDiagram();
-      self.phaseDiagram.setDepictingWater( moleculeId === StatesOfMatterConstants.WATER );
+      self.phaseDiagram.setDepictingWater( substance === StatesOfMatterConstants.WATER );
       if ( isInteractionDiagramEnabled ) {
-        if ( moleculeId === StatesOfMatterConstants.USER_DEFINED_MOLECULE ||
-             moleculeId === StatesOfMatterConstants.DIATOMIC_OXYGEN ||
-             moleculeId === StatesOfMatterConstants.WATER ) {
+        if ( substance === SubstanceEnum.USER_DEFINED_MOLECULE ||
+             substance === SubstanceEnum.DIATOMIC_OXYGEN ||
+             substance === SubstanceEnum.WATER ) {
           epsilonControlInteractionPotentialDiagram.setMolecular( true );
         }
         else {
@@ -247,7 +248,7 @@ define( function( require ) {
       }
 
       // don't show the phase diagram for adjustable attraction, since we need the space for other things
-      if ( moleculeId === StatesOfMatterConstants.USER_DEFINED_MOLECULE ) {
+      if ( substance === SubstanceEnum.USER_DEFINED_MOLECULE ) {
         self.phaseDiagram.visible = false;
         if ( isInteractionDiagramEnabled ) {
           epsilonControlInteractionPotentialDiagram.top = phaseChangesMoleculesControlPanel.bottom + INTER_PANEL_SPACING;
@@ -262,9 +263,6 @@ define( function( require ) {
         else {
           self.phaseDiagram.top = phaseChangesMoleculesControlPanel.bottom + INTER_PANEL_SPACING;
         }
-      }
-      if ( multipleParticleModel.getContainerExploded() ) {
-        self.particleContainerNode.reset();
       }
     } );
 

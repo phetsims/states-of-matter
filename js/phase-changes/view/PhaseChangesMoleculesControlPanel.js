@@ -198,7 +198,7 @@ define( function( require ) {
       ];
     }
 
-    var radioButtonGroup = new RadioButtonGroup( multipleParticleModel.moleculeTypeProperty, radioButtonContent, {
+    var radioButtonGroup = new RadioButtonGroup( multipleParticleModel.substanceProperty, radioButtonContent, {
       orientation: 'vertical',
       spacing: 3,
       cornerRadius: 5,
@@ -212,7 +212,7 @@ define( function( require ) {
     } );
 
     multipleParticleModel.interactionStrengthProperty.link( function( value ) {
-      if ( multipleParticleModel.currentMolecule === StatesOfMatterConstants.USER_DEFINED_MOLECULE ) {
+      if ( multipleParticleModel.substanceProperty.get() === SubstanceEnum.USER_DEFINED_MOLECULE ) {
         multipleParticleModel.setEpsilon( value );
       }
     } );
@@ -231,10 +231,10 @@ define( function( require ) {
     interactionStrengthNode.centerX = radioButtonGroup.centerX;
     interactionStrengthNode.top = radioButtonGroup.bottom + inset;
 
-    multipleParticleModel.moleculeTypeProperty.link( function( value ) {
+    multipleParticleModel.substanceProperty.link( function( value ) {
 
       // adjust the control panel border when adjustable attraction selected or deselect
-      if ( value === StatesOfMatterConstants.USER_DEFINED_MOLECULE ) {
+      if ( value === SubstanceEnum.USER_DEFINED_MOLECULE ) {
         content.addChild( interactionStrengthNode );
       }
       else {

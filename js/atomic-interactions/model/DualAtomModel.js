@@ -194,7 +194,7 @@ define( function( require ) {
     },
 
     /**
-     * @param {string} atomType -  indicates type of molecule
+     * @param {AtomType} atomType
      * @private
      */
     setFixedAtomType: function( atomType ) {
@@ -236,7 +236,7 @@ define( function( require ) {
     },
 
     /**
-     * @param {string} atomType - indicates type of molecule
+     * @param {AtomType} atomType
      * @private
      */
     setMovableAtomType: function( atomType ) {
@@ -275,7 +275,7 @@ define( function( require ) {
     },
 
     /**
-     * @param {string} atomType - indicates type of molecule
+     * @param {AtomType} atomType
      * @public
      */
     ensureValidAtomType: function( atomType ) {

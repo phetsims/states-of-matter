@@ -58,11 +58,11 @@ define( function( require ) {
       var moleculeDataSet = this.multipleParticleModel.moleculeDataSet;
 
       var offset = 0;
-      if ( this.multipleParticleModel.currentMolecule === SubstanceEnum.ARGON ) {
+      if ( this.multipleParticleModel.substanceProperty.get() === SubstanceEnum.ARGON ) {
         offset = 6;
       }
 
-      if ( this.multipleParticleModel.currentMolecule === StatesOfMatterConstants.USER_DEFINED_MOLECULE ){
+      if ( this.multipleParticleModel.substanceProperty.get() === SubstanceEnum.USER_DEFINED_MOLECULE ) {
         offset = 4;
       }
 
