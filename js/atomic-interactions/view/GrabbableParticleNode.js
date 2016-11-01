@@ -59,7 +59,7 @@ define( function( require ) {
 
       drag: function( event ) {
 
-        if ( dualAtomModel.getBondingState() !== BondingState.UNBONDED ) {
+        if ( dualAtomModel.bondingState !== BondingState.UNBONDED ) {
           // Need to release the bond before we can move the atom.
           dualAtomModel.releaseBond();
         }

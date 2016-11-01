@@ -55,8 +55,8 @@ define( function( require ) {
     ScreenView.call( this, { layoutBounds: new Bounds2( 0, 0, 834, 504 ) } );
 
     this.dualAtomModel = dualAtomModel;
-    this.movableParticle = dualAtomModel.getMovableAtomRef();
-    this.fixedParticle = dualAtomModel.getFixedAtomRef();
+    this.movableParticle = dualAtomModel.movableAtom;
+    this.fixedParticle = dualAtomModel.fixedAtom;
     this.showAttractiveForces = false;
     this.showRepulsiveForces = false;
     this.showTotalForces = false;
@@ -93,6 +93,10 @@ define( function( require ) {
       top: atomicInteractionsControlPanel.top + 5 // additional offset empirically determined to look good
     } );
     this.addChild( this.interactiveInteractionPotentialDiagram );
+
+    this.interactiveInteractionPotentialDiagram.addEventListener( 'bounds', function() {
+      debugger;
+    } );
 
     // add the button for returning the atom to the screen
     this.returnAtomButton = new TextPushButton( returnAtomString, {
@@ -436,22 +440,20 @@ define( function( require ) {
       this.updateForceVectors();
 
       var scale = Math.min( window.innerWidth / this.layoutBounds.width, window.innerHeight / this.layoutBounds.height );
-      var atomWindowPosition = scale * ( this.modelViewTransform.modelToViewX(
-          this.dualAtomModel.getMovableAtomRef().getX() ) );
+      var atomWindowPosition = scale * ( this.modelViewTransform.modelToViewX( this.dualAtomModel.movableAtom.getX() ) );
+
       // account for the view centering
       if ( scale === window.innerHeight / this.layoutBounds.height ) {
-        atomWindowPosition += (window.innerWidth - this.layoutBounds.width * scale) / 2 - 50;
+        atomWindowPosition += ( window.innerWidth - this.layoutBounds.width * scale ) / 2 - 50;
       }
       if ( atomWindowPosition > window.innerWidth ) {
         if ( !this.returnAtomButton.isVisible() ) {
-          // The particle is off the canvas and the button is not
-          // yet shown, so show it.
+          // The particle is off the canvas and the button is not yet shown, so show it.
           this.returnAtomButton.setVisible( true );
         }
       }
       else if ( this.returnAtomButton.isVisible() ) {
-        // The particle is on the canvas but the button is visible
-        // (which it shouldn't be), so hide it.
+        // The particle is on the canvas but the button is visible (which it shouldn't be), so hide it.
         this.returnAtomButton.setVisible( false );
       }
     },
@@ -509,10 +511,8 @@ define( function( require ) {
      */
     updateForceVectors: function() {
       if ( ( this.fixedParticle !== null ) && ( this.movableParticle !== null ) ) {
-        this.fixedParticleNode.setForces( this.dualAtomModel.getAttractiveForce(),
-          -this.dualAtomModel.getRepulsiveForce() );
-        this.movableParticleNode.setForces( -this.dualAtomModel.getAttractiveForce(),
-          this.dualAtomModel.getRepulsiveForce() );
+        this.fixedParticleNode.setForces( this.dualAtomModel.attractiveForce, -this.dualAtomModel.repulsiveForce );
+        this.movableParticleNode.setForces( -this.dualAtomModel.attractiveForce, this.dualAtomModel.repulsiveForce );
       }
     }
   } );

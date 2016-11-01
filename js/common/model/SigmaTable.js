@@ -26,8 +26,8 @@ define( function( require ) {
     /**
      * Get the value of sigma, in picometers, for the atom types specified.
      * @public
-     * @param {string} atomType1
-     * @param {string} atomType2
+     * @param {AtomType} atomType1
+     * @param {AtomType} atomType2
      * @returns {number}
      */
     getSigma: function( atomType1, atomType2 ) {

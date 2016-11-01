@@ -49,7 +49,7 @@ define( function( require ) {
     // observable model properties
     //-----------------------------------------------------------------------------------------------------------------
 
-    // @public
+    // @public, read-write
     this.interactionStrengthProperty = new Property( 100 ); // Epsilon/k-Boltzmann is in Kelvin.
     this.motionPausedProperty = new Property( false );
     this.atomPairProperty = new Property( AtomPair.NEON_NEON );
@@ -63,15 +63,18 @@ define( function( require ) {
     // other model attributes
     //-----------------------------------------------------------------------------------------------------------------
 
-    // TODO: viz annotations
+    // @public, read only
     this.fixedAtom = null;
     this.movableAtom = null;
+    this.attractiveForce = 0;
+    this.repulsiveForce = 0;
+
+    // @private
     this.settingBothAtomTypes = false;  // Flag used to prevent getting in disallowed state.
     this.bondingState = BondingState.UNBONDED; // Tracks whether the atoms have formed a chemical bond.
     this.fixedAtomVibrationCountdown = 0; // Used to vibrate fixed atom during bonding.
     this.movableAtomVibrationCountdown = 0; // Used to vibrate movable atom during bonding and when bonded.
     this.potentialWhenAtomReleased = 0; // Used to set magnitude of vibration.
-    this.atomFactory = AtomFactory;
     this.isHandNodeVisible = true; // indicate moving hand node visible or not
     this.ljPotentialCalculator = new LjPotentialCalculator(
       StatesOfMatterConstants.MIN_SIGMA,
@@ -138,62 +141,6 @@ define( function( require ) {
   return inherit( Object, DualAtomModel, {
 
     /**
-     * @returns {StatesOfMatterAtom/null}
-     * @public
-     */
-    getFixedAtomRef: function() {
-      return this.fixedAtom;
-    },
-
-    /**
-     * @returns {StatesOfMatterAtom/null}
-     * @public
-     */
-    getMovableAtomRef: function() {
-      return this.movableAtom;
-    },
-
-    /**
-     * @returns {number}
-     * @public
-     */
-    getAttractiveForce: function() {
-      return this.attractiveForce;
-    },
-
-    /**
-     * @returns {number}
-     * @public
-     */
-    getRepulsiveForce: function() {
-      return this.repulsiveForce;
-    },
-
-    /**
-     * @returns {string}
-     * @public
-     */
-    getFixedAtomType: function() {
-      return this.fixedAtom.getType();
-    },
-
-    /**
-     * @returns {string}
-     * @public
-     */
-    getMovableAtomType: function() {
-      return this.movableAtom.getType();
-    },
-
-    /***
-     * @returns {boolean}
-     * @public
-     */
-    getMotionPaused: function() {
-      return this.motionPaused;
-    },
-
-    /**
      * @param {AtomType} atomType
      * @private
      */
@@ -215,19 +162,20 @@ define( function( require ) {
           this.fixedAtom = null;
         }
 
-        this.fixedAtom = this.atomFactory.createAtom( atomType );
+        this.fixedAtom = AtomFactory.createAtom( atomType );
 
         // Set the value for sigma used in the LJ potential calculations.
         if ( this.movableAtom !== null ) {
-          this.ljPotentialCalculator.setSigma( SigmaTable.getSigma( this.getFixedAtomType(),
-            this.getMovableAtomType() ) );
+          this.ljPotentialCalculator.setSigma(
+            SigmaTable.getSigma( this.fixedAtom.getType(), this.movableAtom.getType() )
+          );
         }
 
         // If both atoms exist, set the value of epsilon.
         if ( this.movableAtom !== null ) {
           this.ljPotentialCalculator.setEpsilon(
-            InteractionStrengthTable.getInteractionPotential( this.fixedAtom.getType(),
-              this.movableAtom.getType() ) );
+            InteractionStrengthTable.getInteractionPotential( this.fixedAtom.getType(), this.movableAtom.getType() )
+          );
         }
 
         this.fixedAtom.setPosition( 0, 0 );
@@ -256,19 +204,19 @@ define( function( require ) {
           this.movableAtom = null;
         }
 
-        this.movableAtom = this.atomFactory.createAtom( atomType );
+        this.movableAtom = AtomFactory.createAtom( atomType );
 
         // Set the value for sigma used in the LJ potential calculations.
         if ( this.movableAtom !== null ) {
-          this.ljPotentialCalculator.setSigma( SigmaTable.getSigma( this.getFixedAtomType(),
-            this.getMovableAtomType() ) );
+          this.ljPotentialCalculator.setSigma(
+            SigmaTable.getSigma( this.fixedAtom.getType(), this.movableAtom.getType() )
+          );
         }
 
         // If both atoms exist, set the value of epsilon.
         if ( this.fixedAtom !== null ) {
           this.ljPotentialCalculator.setEpsilon(
-            InteractionStrengthTable.getInteractionPotential( this.fixedAtom.getType(),
-              this.movableAtom.getType() ) );
+            InteractionStrengthTable.getInteractionPotential( this.fixedAtom.getType(), this.movableAtom.getType() ) );
         }
         this.resetMovableAtomPos();
       }
@@ -288,7 +236,7 @@ define( function( require ) {
     },
 
     /**
-     * @param {string} atomType
+     * @param {AtomType} atomType
      * @private
      */
     setBothAtomTypes: function( atomType ) {
@@ -328,8 +276,8 @@ define( function( require ) {
     },
 
     /**
-     * Get the value of the sigma parameter that is being used for the motion calculations.  If the atoms are the
-     * same, it will be the diameter of one atom.  If they are not, it will be a function of the diameters.
+     * Get the value of the sigma parameter that is being used for the motion calculations.  If the atoms are the same,
+     * it will be the diameter of one atom.  If they are not, it will be a function of the diameters.
      * @return {number}
      * @public
      */
@@ -367,14 +315,6 @@ define( function( require ) {
      */
     getEpsilon: function() {
       return this.ljPotentialCalculator.getEpsilon();
-    },
-
-    /**
-     * @returns {number}
-     * @public
-     */
-    getBondingState: function() {
-      return this.bondingState;
     },
 
     /**

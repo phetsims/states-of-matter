@@ -171,7 +171,7 @@ define( function( require ) {
         drag: function( event ) {
 
           // If the atoms are bonded, release them.
-          if ( dualAtomModel.getBondingState() !== BondingState.UNBONDED ) {
+          if ( dualAtomModel.bondingState !== BondingState.UNBONDED ) {
             dualAtomModel.releaseBond();
           }
 
@@ -179,7 +179,7 @@ define( function( require ) {
           dualAtomModel.isHandNodeVisible = false;
 
           // Move the movable atom based on this drag event.
-          var atom = dualAtomModel.getMovableAtomRef();
+          var atom = dualAtomModel.movableAtom;
           endDragX = self.positionMarker.globalToParentPoint( event.pointer.point ).x;
           var xDifference = endDragX - startDragX;
           var scaleFactor = self.GRAPH_X_RANGE / ( self.getGraphWidth() );
@@ -280,7 +280,7 @@ define( function( require ) {
      * @private
      */
     updateInteractivityState: function() {
-      this.interactionEnabled = ( this.dualAtomModel.getFixedAtomType() === AtomType.ADJUSTABLE );
+      this.interactionEnabled = ( this.dualAtomModel.fixedAtom.getType() === AtomType.ADJUSTABLE );
     },
 
     /**

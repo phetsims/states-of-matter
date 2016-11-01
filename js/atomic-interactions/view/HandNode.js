@@ -53,7 +53,7 @@ define( function( require ) {
       drag: function( event ) {
 
         // Only allow the user to move unbonded atoms.
-        if ( dualAtomModel.getBondingState() !== dualAtomModel.BONDING_STATE_UNBONDED ) {
+        if ( dualAtomModel.bondingState !== dualAtomModel.BONDING_STATE_UNBONDED ) {
 
           // Need to release the bond before we can move the atom.
           dualAtomModel.releaseBond();
