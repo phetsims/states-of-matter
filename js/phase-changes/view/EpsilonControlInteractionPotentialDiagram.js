@@ -212,7 +212,7 @@ define( function( require ) {
      */
     drawPotentialCurve: function() {
 
-      //  draw potential curve
+      // draw potential curve
       if ( this.interactionPotentialCanvasNode !== undefined ) {
         this.interactionPotentialCanvasNode.update( POTENTIAL_LINE_COLOR );
       }
@@ -222,7 +222,7 @@ define( function( require ) {
      * @private
      */
     updateInteractivityState: function() {
-      this.interactionEnabled = ( this.multipleParticleModel.getMoleculeType() === SubstanceType.USER_DEFINED_MOLECULE );
+      this.interactionEnabled = this.multipleParticleModel.substanceProperty.get() === SubstanceType.USER_DEFINED_MOLECULE;
     }
   } );
 } );

@@ -82,14 +82,17 @@ define( function( require ) {
 
     // add a listener to handle drag events
     this.pointingHandImageNode.addInputListener( new SimpleDragHandler( {
+
       allowTouchSnag: true,
+
       start: function( event ) {
         startY = self.globalToParentPoint( event.pointer.point ).y;
         self.beingDragged = true;
-        self.containerSizeAtDragStart = multipleParticleModel.getParticleContainerHeight();
+        self.containerSizeAtDragStart = multipleParticleModel.particleContainerHeightProperty.get();
         self.updateHintVisibility();
 
       },
+
       drag: function( event ) {
         endY = self.globalToParentPoint( event.pointer.point ).y;
 
@@ -99,10 +102,13 @@ define( function( require ) {
         );
         self.updateHintVisibility();
       },
+
       end: function() {
 
         // Set the target size to the current size, which will stop any change in size that is currently underway.
-        multipleParticleModel.setTargetParticleContainerHeight( multipleParticleModel.getParticleContainerHeight() );
+        multipleParticleModel.setTargetParticleContainerHeight(
+          multipleParticleModel.particleContainerHeightProperty.get()
+        );
         self.beingDragged = false;
         self.updateHintVisibility();
       }

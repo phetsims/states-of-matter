@@ -51,7 +51,7 @@ define( function( require ) {
 
     // @override
     initializeForces: function( moleculeDataSet ){
-      var temperatureSetPoint = this.multipleParticleModel.getTemperatureSetPoint();
+      var temperatureSetPoint = this.multipleParticleModel.temperatureSetPointProperty.get();
       var accelerationDueToGravity = this.multipleParticleModel.getGravitationalAcceleration();
       if ( temperatureSetPoint < TEMPERATURE_BELOW_WHICH_GRAVITY_INCREASES ) {
 
@@ -75,7 +75,7 @@ define( function( require ) {
       var atomPositions = moleculeDataSet.atomPositions;
       var nextMoleculeForces = moleculeDataSet.nextMoleculeForces;
       var nextMoleculeTorques = moleculeDataSet.nextMoleculeTorques;
-      var temperatureSetPoint = this.multipleParticleModel.getTemperatureSetPoint();
+      var temperatureSetPoint = this.multipleParticleModel.temperatureSetPointProperty.get();
 
       // Verify that this is being used on an appropriate data set.
       assert && assert( moleculeDataSet.getAtomsPerMolecule() === 3 );

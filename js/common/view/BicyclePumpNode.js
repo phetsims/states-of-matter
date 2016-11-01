@@ -393,7 +393,7 @@ define( function( require ) {
     step: function() {
 
       // update the remaining capacity proportion
-      if ( this.multipleParticleModel.getContainerExploded() ) {
+      if ( this.multipleParticleModel.isExplodedProperty.get() ) {
         this.remainingPumpCapacityProportionProperty.set( 0 );
       }
       else {

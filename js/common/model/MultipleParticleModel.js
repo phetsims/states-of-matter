@@ -1149,6 +1149,14 @@ define( function( require ) {
     },
 
     /**
+     * @returns {number}
+     * @public
+     */
+    getNormalizedContainerHeight: function() {
+      return this.normalizedContainerHeight;
+    },
+
+    /**
      * @returns {MoleculeForceAndMotionDataSet}
      * @public
      */
@@ -1168,32 +1176,8 @@ define( function( require ) {
      * @returns {number}
      * @public
      */
-    getNormalizedContainerHeight: function() {
-      return this.normalizedContainerHeight;
-    },
-
-    /**
-     * @returns {number}
-     * @public
-     */
-    getTemperatureSetPoint: function() {
-      return this.temperatureSetPointProperty.get();
-    },
-
-    /**
-     * @returns {number}
-     * @public
-     */
     getGravitationalAcceleration: function() {
       return this.gravitationalAcceleration;
-    },
-
-    /**
-     * @returns {number}
-     * @public
-     */
-    getMoleculeType: function() {
-      return this.substanceProperty.get();
     },
 
     /**
@@ -1369,14 +1353,6 @@ define( function( require ) {
     },
 
     /**
-     * @returns {boolean}
-     * @public
-     */
-    getContainerExploded: function() {
-      return this.isExplodedProperty.get();
-    },
-
-    /**
      * This method is used for an external entity to notify the model that it should explode.
      * @param {boolean} isExploded
      * @public
@@ -1448,14 +1424,6 @@ define( function( require ) {
       if ( particlesOutsideOfContainerCount > 0 ) {
         this.phaseStateChanger.setPhase( PhaseStateEnum.GAS );
       }
-    },
-
-    /**
-     * @returns {number}
-     * @public
-     */
-    getParticleContainerHeight: function() {
-      return this.particleContainerHeightProperty.get();
     },
 
     getInitialParticleContainerHeight: function() {

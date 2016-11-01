@@ -329,7 +329,7 @@ define( function( require ) {
 
       containerLid.centerY = lidYPosition;
 
-      if ( multipleParticleModel.getContainerExploded() ) {
+      if ( multipleParticleModel.isExplodedProperty.get() ) {
 
         // the container has exploded, so rotate the lid as it goes up so that it looks like it has been blown off.
         var deltaY = oldContainerHeight - containerHeight;
@@ -391,9 +391,9 @@ define( function( require ) {
         return;
       }
 
-      var containerHeight = this.multipleParticleModel.getParticleContainerHeight();
+      var containerHeight = this.multipleParticleModel.particleContainerHeightProperty.get();
 
-      if ( !this.multipleParticleModel.getContainerExploded() ) {
+      if ( !this.multipleParticleModel.isExplodedProperty.get() ) {
         if ( this.pressureMeter.getRotation() !== 0 ) {
           this.pressureMeter.setRotation( 0 );
         }

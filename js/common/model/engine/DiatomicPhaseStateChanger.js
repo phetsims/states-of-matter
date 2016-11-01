@@ -158,7 +158,7 @@ define( function( require ) {
       var moleculesInsideContainer = this.multipleParticleModel.moleculeDataSet.insideContainer;
 
       // Create and initialize other variables needed to do the job.
-      var temperatureSqrt = Math.sqrt( this.multipleParticleModel.getTemperatureSetPoint() );
+      var temperatureSqrt = Math.sqrt( this.multipleParticleModel.temperatureSetPointProperty.get() );
       var numberOfMolecules = moleculeDataSet.getNumberOfMolecules();
 
       // Initialize the velocities and angles of the molecules.
@@ -235,7 +235,7 @@ define( function( require ) {
       var moleculesInsideContainer = this.multipleParticleModel.moleculeDataSet.insideContainer;
 
       // Create and initialize other variables needed to do the job.
-      var temperatureSqrt = Math.sqrt( this.multipleParticleModel.getTemperatureSetPoint() );
+      var temperatureSqrt = Math.sqrt( this.multipleParticleModel.temperatureSetPointProperty.get() );
       var numberOfMolecules = moleculeDataSet.getNumberOfMolecules();
       for ( var i = 0; i < numberOfMolecules; i++ ) {
 

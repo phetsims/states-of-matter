@@ -138,7 +138,7 @@ define( function( require ) {
           // handle bounce off the top
           else if ( yPos >= maxY ) {
 
-            if ( !this.multipleParticleModel.getContainerExploded() ) {
+            if ( !this.multipleParticleModel.isExplodedProperty.get() ) {
 
               yPos = maxY;
               var lidVelocity = this.multipleParticleModel.normalizedLidVelocityY;

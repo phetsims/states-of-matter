@@ -348,12 +348,14 @@ define( function( require ) {
     updatePhaseDiagram: function() {
 
       // If the container has exploded, don't bother showing the dot.
-      if ( this.multipleParticleModel.getContainerExploded() || this.multipleParticleModel.particles.length === 0 ) {
+      if ( this.multipleParticleModel.isExplodedProperty.get() || this.multipleParticleModel.particles.length === 0 ) {
         this.phaseDiagram.setStateMarkerVisible( false );
       }
       else {
         this.phaseDiagram.setStateMarkerVisible( true );
-        var movingAverageTemperature = this.updateMovingAverageTemperature( this.multipleParticleModel.getTemperatureSetPoint() );
+        var movingAverageTemperature = this.updateMovingAverageTemperature(
+          this.multipleParticleModel.temperatureSetPointProperty.get()
+        );
         var modelPressure = this.multipleParticleModel.getModelPressure();
         var mappedTemperature = this.mapModelTemperatureToPhaseDiagramTemperature( movingAverageTemperature );
         var mappedPressure = this.mapModelTempAndPressureToPhaseDiagramPressure( modelPressure, movingAverageTemperature );
