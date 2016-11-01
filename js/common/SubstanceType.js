@@ -5,7 +5,7 @@ define( function( require ) {
 
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
-  var SubstanceEnum = {
+  var SubstanceType = {
     NEON: 'NEON',
     ARGON: 'ARGON',
     DIATOMIC_OXYGEN: 'DIATOMIC_OXYGEN',
@@ -13,10 +13,10 @@ define( function( require ) {
     USER_DEFINED_MOLECULE: 'USER_DEFINED_MOLECULE'
   };
 
-  // verify that enum is immutable, without the runtime penalty in production code
-  if ( assert ) { Object.freeze( SubstanceEnum ); }
+  // verify that the enum is immutable, without the runtime penalty in production code
+  if ( assert ) { Object.freeze( SubstanceType ); }
 
-  statesOfMatter.register( 'SubstanceEnum', SubstanceEnum );
+  statesOfMatter.register( 'SubstanceType', SubstanceType );
 
-  return SubstanceEnum;
+  return SubstanceType;
 } );

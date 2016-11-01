@@ -31,7 +31,7 @@ define( function( require ) {
   var StatesOfMatterQueryParameters = require( 'STATES_OF_MATTER/common/StatesOfMatterQueryParameters' );
   var ScreenView = require( 'JOIST/ScreenView' );
   var StepForwardButton = require( 'SCENERY_PHET/buttons/StepForwardButton' );
-  var SubstanceEnum = require( 'STATES_OF_MATTER/common/SubstanceEnum' );
+  var SubstanceType = require( 'STATES_OF_MATTER/common/SubstanceType' );
   var Text = require( 'SCENERY/nodes/Text' );
   var TextPushButton = require( 'SUN/buttons/TextPushButton' );
   var Vector2 = require( 'DOT/Vector2' );
@@ -237,9 +237,9 @@ define( function( require ) {
       self.updatePhaseDiagram();
       self.phaseDiagram.setDepictingWater( substance === StatesOfMatterConstants.WATER );
       if ( isInteractionDiagramEnabled ) {
-        if ( substance === SubstanceEnum.USER_DEFINED_MOLECULE ||
-             substance === SubstanceEnum.DIATOMIC_OXYGEN ||
-             substance === SubstanceEnum.WATER ) {
+        if ( substance === SubstanceType.USER_DEFINED_MOLECULE ||
+             substance === SubstanceType.DIATOMIC_OXYGEN ||
+             substance === SubstanceType.WATER ) {
           epsilonControlInteractionPotentialDiagram.setMolecular( true );
         }
         else {
@@ -248,7 +248,7 @@ define( function( require ) {
       }
 
       // don't show the phase diagram for adjustable attraction, since we need the space for other things
-      if ( substance === SubstanceEnum.USER_DEFINED_MOLECULE ) {
+      if ( substance === SubstanceType.USER_DEFINED_MOLECULE ) {
         self.phaseDiagram.visible = false;
         if ( isInteractionDiagramEnabled ) {
           epsilonControlInteractionPotentialDiagram.top = phaseChangesMoleculesControlPanel.bottom + INTER_PANEL_SPACING;

@@ -45,7 +45,7 @@ define( function( require ) {
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
   var StatesOfMatterQueryParameters = require( 'STATES_OF_MATTER/common/StatesOfMatterQueryParameters' );
-  var SubstanceEnum = require( 'STATES_OF_MATTER/common/SubstanceEnum' );
+  var SubstanceType = require( 'STATES_OF_MATTER/common/SubstanceType' );
   var Util = require( 'DOT/Util' );
   var Vector2 = require( 'DOT/Vector2' );
   var WaterVerletAlgorithm = require( 'STATES_OF_MATTER/common/model/engine/WaterVerletAlgorithm' );
@@ -55,7 +55,7 @@ define( function( require ) {
   // constants (general)
   var PARTICLE_CONTAINER_WIDTH = 10000; // essentially arbitrary
   var PARTICLE_CONTAINER_INITIAL_HEIGHT = 10000;  // essentially arbitrary
-  var DEFAULT_SUBSTANCE = SubstanceEnum.NEON;
+  var DEFAULT_SUBSTANCE = SubstanceType.NEON;
   var MAX_TEMPERATURE = 50.0;
   var MIN_TEMPERATURE = 0.0001;
   var INITIAL_GRAVITATIONAL_ACCEL = -0.045;
@@ -142,7 +142,7 @@ define( function( require ) {
     this.interactionExpandedProperty = new Property( true );
     this.temperatureSetPointProperty = new Property( INITIAL_TEMPERATURE );
     this.pressureProperty = new Property( 0 );
-    this.substanceProperty = new Property( SubstanceEnum.NEON );
+    this.substanceProperty = new Property( SubstanceType.NEON );
     this.interactionStrengthProperty = new Property( MAX_ADJUSTABLE_EPSILON );
     this.isPlayingProperty = new Property( true );
     this.simSpeedProperty = new Property( 'normal' );
@@ -262,27 +262,27 @@ define( function( require ) {
 
       switch( this.substanceProperty.get() ) {
 
-        case SubstanceEnum.NEON:
+        case SubstanceType.NEON:
           triplePoint = NEON_TRIPLE_POINT_IN_KELVIN;
           criticalPoint = NEON_CRITICAL_POINT_IN_KELVIN;
           break;
 
-        case SubstanceEnum.ARGON:
+        case SubstanceType.ARGON:
           triplePoint = ARGON_TRIPLE_POINT_IN_KELVIN;
           criticalPoint = ARGON_CRITICAL_POINT_IN_KELVIN;
           break;
 
-        case SubstanceEnum.USER_DEFINED_MOLECULE:
+        case SubstanceType.USER_DEFINED_MOLECULE:
           triplePoint = ADJUSTABLE_ATOM_TRIPLE_POINT_IN_KELVIN;
           criticalPoint = ADJUSTABLE_ATOM_CRITICAL_POINT_IN_KELVIN;
           break;
 
-        case SubstanceEnum.WATER:
+        case SubstanceType.WATER:
           triplePoint = WATER_TRIPLE_POINT_IN_KELVIN;
           criticalPoint = WATER_CRITICAL_POINT_IN_KELVIN;
           break;
 
-        case SubstanceEnum.DIATOMIC_OXYGEN:
+        case SubstanceType.DIATOMIC_OXYGEN:
           triplePoint = O2_TRIPLE_POINT_IN_KELVIN;
           criticalPoint = O2_CRITICAL_POINT_IN_KELVIN;
           break;
@@ -335,11 +335,11 @@ define( function( require ) {
     setSubstance: function( substance ) {
 
       assert && assert(
-        substance === SubstanceEnum.DIATOMIC_OXYGEN ||
-        substance === SubstanceEnum.NEON ||
-        substance === SubstanceEnum.ARGON ||
-        substance === SubstanceEnum.WATER ||
-        substance === SubstanceEnum.USER_DEFINED_MOLECULE,
+        substance === SubstanceType.DIATOMIC_OXYGEN ||
+        substance === SubstanceType.NEON ||
+        substance === SubstanceType.ARGON ||
+        substance === SubstanceType.WATER ||
+        substance === SubstanceType.USER_DEFINED_MOLECULE,
         'unsupported substance'
       );
 
@@ -357,22 +357,22 @@ define( function( require ) {
       // Set the model parameters that are dependent upon the substance being simulated.
       switch( substance ) {
 
-        case SubstanceEnum.DIATOMIC_OXYGEN:
+        case SubstanceType.DIATOMIC_OXYGEN:
           this.particleDiameter = OxygenAtom.RADIUS * 2;
           this.minModelTemperature = 0.5 * TRIPLE_POINT_INTERNAL_MODEL_TEMPERATURE / O2_TRIPLE_POINT_IN_KELVIN;
           break;
 
-        case SubstanceEnum.NEON:
+        case SubstanceType.NEON:
           this.particleDiameter = NeonAtom.RADIUS * 2;
           this.minModelTemperature = 0.5 * TRIPLE_POINT_INTERNAL_MODEL_TEMPERATURE / NEON_TRIPLE_POINT_IN_KELVIN;
           break;
 
-        case SubstanceEnum.ARGON:
+        case SubstanceType.ARGON:
           this.particleDiameter = ArgonAtom.RADIUS * 2;
           this.minModelTemperature = 0.5 * TRIPLE_POINT_INTERNAL_MODEL_TEMPERATURE / ARGON_TRIPLE_POINT_IN_KELVIN;
           break;
 
-        case SubstanceEnum.WATER:
+        case SubstanceType.WATER:
 
           // Use a radius value that is artificially large, because the educators have requested that water look
           // "spaced out" so that users can see the crystal structure better, and so that the solid form will look
@@ -381,7 +381,7 @@ define( function( require ) {
           this.minModelTemperature = 0.5 * TRIPLE_POINT_INTERNAL_MODEL_TEMPERATURE / WATER_TRIPLE_POINT_IN_KELVIN;
           break;
 
-        case SubstanceEnum.USER_DEFINED_MOLECULE:
+        case SubstanceType.USER_DEFINED_MOLECULE:
           this.particleDiameter = ConfigurableStatesOfMatterAtom.DEFAULT_RADIUS * 2;
           this.minModelTemperature = 0.5 * TRIPLE_POINT_INTERNAL_MODEL_TEMPERATURE /
                                      ADJUSTABLE_ATOM_TRIPLE_POINT_IN_KELVIN;
@@ -439,19 +439,19 @@ define( function( require ) {
     getSigma: function() {
       var sigma;
       switch( this.substanceProperty.get() ) {
-        case SubstanceEnum.NEON:
+        case SubstanceType.NEON:
           sigma = NeonAtom.RADIUS * 2;
           break;
-        case SubstanceEnum.ARGON:
+        case SubstanceType.ARGON:
           sigma = ArgonAtom.RADIUS * 2;
           break;
-        case SubstanceEnum.DIATOMIC_OXYGEN:
+        case SubstanceType.DIATOMIC_OXYGEN:
           sigma = StatesOfMatterConstants.SIGMA_FOR_DIATOMIC_OXYGEN;
           break;
-        case SubstanceEnum.WATER:
+        case SubstanceType.WATER:
           sigma = StatesOfMatterConstants.SIGMA_FOR_WATER;
           break;
-        case SubstanceEnum.USER_DEFINED_MOLECULE:
+        case SubstanceType.USER_DEFINED_MOLECULE:
           sigma = ConfigurableStatesOfMatterAtom.DEFAULT_RADIUS * 2;
           break;
         default:
@@ -469,19 +469,19 @@ define( function( require ) {
     getEpsilon: function() {
       var epsilon;
       switch( this.substanceProperty.get() ) {
-        case SubstanceEnum.NEON:
+        case SubstanceType.NEON:
           epsilon = InteractionStrengthTable.getInteractionPotential( AtomType.NEON, AtomType.NEON );
           break;
-        case SubstanceEnum.ARGON:
+        case SubstanceType.ARGON:
           epsilon = InteractionStrengthTable.getInteractionPotential( AtomType.ARGON, AtomType.ARGON );
           break;
-        case SubstanceEnum.DIATOMIC_OXYGEN:
+        case SubstanceType.DIATOMIC_OXYGEN:
           epsilon = StatesOfMatterConstants.EPSILON_FOR_DIATOMIC_OXYGEN;
           break;
-        case SubstanceEnum.WATER:
+        case SubstanceType.WATER:
           epsilon = StatesOfMatterConstants.EPSILON_FOR_WATER;
           break;
-        case SubstanceEnum.USER_DEFINED_MOLECULE:
+        case SubstanceType.USER_DEFINED_MOLECULE:
           epsilon = this.convertScaledEpsilonToEpsilon( this.moleculeForceAndMotionCalculator.getScaledEpsilon() );
           break;
         default:
@@ -500,23 +500,23 @@ define( function( require ) {
 
       switch( this.substanceProperty.get() ) {
 
-        case SubstanceEnum.NEON:
+        case SubstanceType.NEON:
           triplePointInKelvin = NEON_TRIPLE_POINT_IN_KELVIN;
           break;
 
-        case SubstanceEnum.ARGON:
+        case SubstanceType.ARGON:
           triplePointInKelvin = ARGON_TRIPLE_POINT_IN_KELVIN;
           break;
 
-        case SubstanceEnum.USER_DEFINED_MOLECULE:
+        case SubstanceType.USER_DEFINED_MOLECULE:
           triplePointInKelvin = ADJUSTABLE_ATOM_TRIPLE_POINT_IN_KELVIN;
           break;
 
-        case SubstanceEnum.WATER:
+        case SubstanceType.WATER:
           triplePointInKelvin = WATER_TRIPLE_POINT_IN_KELVIN;
           break;
 
-        case SubstanceEnum.DIATOMIC_OXYGEN:
+        case SubstanceType.DIATOMIC_OXYGEN:
           triplePointInKelvin = O2_TRIPLE_POINT_IN_KELVIN;
           break;
 
@@ -664,13 +664,13 @@ define( function( require ) {
         // Add particle to model set.
         var particle;
         switch( this.substanceProperty.get() ) {
-          case SubstanceEnum.ARGON:
+          case SubstanceType.ARGON:
             particle = new ArgonAtom( 0, 0 );
             break;
-          case SubstanceEnum.NEON:
+          case SubstanceType.NEON:
             particle = new NeonAtom( 0, 0 );
             break;
-          case SubstanceEnum.USER_DEFINED_MOLECULE:
+          case SubstanceType.USER_DEFINED_MOLECULE:
             particle = new ConfigurableStatesOfMatterAtom( 0, 0 );
             break;
           default:
@@ -682,7 +682,7 @@ define( function( require ) {
       }
       else if ( atomsPerMolecule === 2 ) {
 
-        assert && assert( this.substanceProperty.get() === SubstanceEnum.DIATOMIC_OXYGEN );
+        assert && assert( this.substanceProperty.get() === SubstanceType.DIATOMIC_OXYGEN );
 
         // Add particles to model set.
         this.particles.add( new OxygenAtom( 0, 0 ) );
@@ -690,7 +690,7 @@ define( function( require ) {
       }
       else if ( atomsPerMolecule === 3 ) {
 
-        assert && assert( this.substanceProperty.get() === SubstanceEnum.WATER );
+        assert && assert( this.substanceProperty.get() === SubstanceType.WATER );
 
         // Add atoms to model set.
         this.particles.add( new OxygenAtom( 0, 0 ) );
@@ -733,19 +733,19 @@ define( function( require ) {
 
       // Initialize the particles.
       switch( this.substanceProperty.get() ) {
-        case SubstanceEnum.DIATOMIC_OXYGEN:
+        case SubstanceType.DIATOMIC_OXYGEN:
           this.initializeDiatomic( this.substanceProperty.get(), phase );
           break;
-        case SubstanceEnum.NEON:
+        case SubstanceType.NEON:
           this.initializeMonatomic( this.substanceProperty.get(), phase );
           break;
-        case SubstanceEnum.ARGON:
+        case SubstanceType.ARGON:
           this.initializeMonatomic( this.substanceProperty.get(), phase );
           break;
-        case SubstanceEnum.USER_DEFINED_MOLECULE:
+        case SubstanceType.USER_DEFINED_MOLECULE:
           this.initializeMonatomic( this.substanceProperty.get(), phase );
           break;
-        case SubstanceEnum.WATER:
+        case SubstanceType.WATER:
           this.initializeTriatomic( this.substanceProperty.get(), phase );
           break;
         default:
@@ -1039,7 +1039,7 @@ define( function( require ) {
     initializeDiatomic: function( substance, phase ) {
 
       // Verify that a valid molecule ID was provided.
-      assert && assert( (substance === SubstanceEnum.DIATOMIC_OXYGEN) );
+      assert && assert( (substance === SubstanceType.DIATOMIC_OXYGEN) );
 
       // Determine the number of atoms/molecules to create.  This will be a cube (really a square, since it's 2D, but
       // you get the idea) that takes up a fixed amount of the bottom of the container, so the number of molecules that
@@ -1094,7 +1094,7 @@ define( function( require ) {
     initializeTriatomic: function( substance, phase ) {
 
       // Only water is supported so far.
-      assert && assert( (substance === SubstanceEnum.WATER) );
+      assert && assert( (substance === SubstanceType.WATER) );
 
       // Determine the number of atoms/molecules to create.  This will be a cube (really a square, since it's 2D, but
       // you get the idea) that takes up a fixed amount of the bottom of the container, so the number of molecules that
@@ -1201,7 +1201,7 @@ define( function( require ) {
      * @public
      */
     setEpsilon: function( epsilon ) {
-      if ( this.substanceProperty.get() === SubstanceEnum.USER_DEFINED_MOLECULE ) {
+      if ( this.substanceProperty.get() === SubstanceType.USER_DEFINED_MOLECULE ) {
         if ( epsilon < MIN_ADJUSTABLE_EPSILON ) {
           epsilon = MIN_ADJUSTABLE_EPSILON;
         }
@@ -1218,33 +1218,33 @@ define( function( require ) {
 
     /**
      * Initialize the various model components to handle a simulation in which all the molecules are single atoms.
-     * @param {SubstanceEnum} substance
+     * @param {SubstanceType} substance
      * @param {number} phase
      * @private
      */
     initializeMonatomic: function( substance, phase ) {
 
       // Verify that a valid molecule ID was provided.
-      assert && assert( substance === SubstanceEnum.USER_DEFINED_MOLECULE ||
-                        substance === SubstanceEnum.NEON ||
-                        substance === SubstanceEnum.ARGON );
+      assert && assert( substance === SubstanceType.USER_DEFINED_MOLECULE ||
+                        substance === SubstanceType.NEON ||
+                        substance === SubstanceType.ARGON );
 
       // Determine the number of atoms/molecules to create.  This will be a cube (really a square, since it's 2D, but
       // you get the idea) that takes up a fixed amount of the bottom of the container, so the number of molecules that
       // can fit depends on the size of the individual.
       var particleDiameter;
-      if ( substance === SubstanceEnum.NEON ) {
+      if ( substance === SubstanceType.NEON ) {
         particleDiameter = NeonAtom.RADIUS * 2;
       }
-      else if ( substance === SubstanceEnum.ARGON ) {
+      else if ( substance === SubstanceType.ARGON ) {
         particleDiameter = ArgonAtom.RADIUS * 2;
       }
-      else if ( substance === SubstanceEnum.USER_DEFINED_MOLECULE ) {
+      else if ( substance === SubstanceType.USER_DEFINED_MOLECULE ) {
         particleDiameter = ConfigurableStatesOfMatterAtom.DEFAULT_RADIUS * 2;
       }
       else {
         // Force it to neon.
-        substance = SubstanceEnum.NEON;
+        substance = SubstanceType.NEON;
         particleDiameter = NeonAtom.RADIUS * 2;
       }
 
@@ -1275,13 +1275,13 @@ define( function( require ) {
 
         // Add particle to model set.
         var atom;
-        if ( substance === SubstanceEnum.NEON ) {
+        if ( substance === SubstanceType.NEON ) {
           atom = new NeonAtom( 0, 0 );
         }
-        else if ( substance === SubstanceEnum.ARGON ) {
+        else if ( substance === SubstanceType.ARGON ) {
           atom = new ArgonAtom( 0, 0 );
         }
-        else if ( substance === SubstanceEnum.USER_DEFINED_MOLECULE ) {
+        else if ( substance === SubstanceType.USER_DEFINED_MOLECULE ) {
           atom = new ConfigurableStatesOfMatterAtom( 0, 0 );
         }
         else {

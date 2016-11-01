@@ -17,7 +17,7 @@ define( function( require ) {
   var Random = require( 'DOT/Random' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
-  var SubstanceEnum = require( 'STATES_OF_MATTER/common/SubstanceEnum' );
+  var SubstanceType = require( 'STATES_OF_MATTER/common/SubstanceType' );
 
   // constants
   var MIN_INITIAL_INTER_PARTICLE_DISTANCE = 1.12; // empirically determined
@@ -58,11 +58,11 @@ define( function( require ) {
       var moleculeDataSet = this.multipleParticleModel.moleculeDataSet;
 
       var offset = 0;
-      if ( this.multipleParticleModel.substanceProperty.get() === SubstanceEnum.ARGON ) {
+      if ( this.multipleParticleModel.substanceProperty.get() === SubstanceType.ARGON ) {
         offset = 6;
       }
 
-      if ( this.multipleParticleModel.substanceProperty.get() === SubstanceEnum.USER_DEFINED_MOLECULE ) {
+      if ( this.multipleParticleModel.substanceProperty.get() === SubstanceType.USER_DEFINED_MOLECULE ) {
         offset = 4;
       }
 

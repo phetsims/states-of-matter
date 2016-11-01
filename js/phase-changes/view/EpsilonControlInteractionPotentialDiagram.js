@@ -28,7 +28,7 @@ define( function( require ) {
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var StatesOfMatterColorProfile = require( 'STATES_OF_MATTER/common/view/StatesOfMatterColorProfile' );
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
-  var SubstanceEnum = require( 'STATES_OF_MATTER/common/SubstanceEnum' );
+  var SubstanceType = require( 'STATES_OF_MATTER/common/SubstanceType' );
   var Text = require( 'SCENERY/nodes/Text' );
 
   // strings
@@ -185,7 +185,7 @@ define( function( require ) {
     Property.multilink(
       [ multipleParticleModel.substanceProperty, multipleParticleModel.interactionStrengthProperty ],
       function( substance, interactionStrength ) {
-        if ( substance === SubstanceEnum.USER_DEFINED_MOLECULE ) {
+        if ( substance === SubstanceType.USER_DEFINED_MOLECULE ) {
           multipleParticleModel.setEpsilon( interactionStrength );
         }
         self.updateInteractivityState();
@@ -222,7 +222,7 @@ define( function( require ) {
      * @private
      */
     updateInteractivityState: function() {
-      this.interactionEnabled = ( this.multipleParticleModel.getMoleculeType() === SubstanceEnum.USER_DEFINED_MOLECULE );
+      this.interactionEnabled = ( this.multipleParticleModel.getMoleculeType() === SubstanceType.USER_DEFINED_MOLECULE );
     }
   } );
 } );

@@ -21,7 +21,7 @@ define( function( require ) {
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var StatesOfMatterColorProfile = require( 'STATES_OF_MATTER/common/view/StatesOfMatterColorProfile' );
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
-  var SubstanceEnum = require( 'STATES_OF_MATTER/common/SubstanceEnum' );
+  var SubstanceType = require( 'STATES_OF_MATTER/common/SubstanceType' );
   var Text = require( 'SCENERY/nodes/Text' );
 
   // strings
@@ -127,10 +127,10 @@ define( function( require ) {
     };
 
     var radioButtonContent = [
-      { value: SubstanceEnum.NEON, node: createLabelAndIconNode( neon ) },
-      { value: SubstanceEnum.ARGON, node: createLabelAndIconNode( argon ) },
-      { value: SubstanceEnum.DIATOMIC_OXYGEN, node: createLabelAndIconNode( oxygen ) },
-      { value: SubstanceEnum.WATER, node: createLabelAndIconNode( water ) }
+      { value: SubstanceType.NEON, node: createLabelAndIconNode( neon ) },
+      { value: SubstanceType.ARGON, node: createLabelAndIconNode( argon ) },
+      { value: SubstanceType.DIATOMIC_OXYGEN, node: createLabelAndIconNode( oxygen ) },
+      { value: SubstanceType.WATER, node: createLabelAndIconNode( water ) }
     ];
 
     var radioButtonGroup = new RadioButtonGroup( substanceProperty, radioButtonContent, {

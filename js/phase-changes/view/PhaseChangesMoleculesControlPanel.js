@@ -24,7 +24,7 @@ define( function( require ) {
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var StatesOfMatterColorProfile = require( 'STATES_OF_MATTER/common/view/StatesOfMatterColorProfile' );
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
-  var SubstanceEnum = require( 'STATES_OF_MATTER/common/SubstanceEnum' );
+  var SubstanceType = require( 'STATES_OF_MATTER/common/SubstanceType' );
   var Text = require( 'SCENERY/nodes/Text' );
   var VBox = require( 'SCENERY/nodes/VBox' );
 
@@ -182,19 +182,19 @@ define( function( require ) {
     var radioButtonContent;
     if ( !isBasicVersion ) {
       radioButtonContent = [
-        { value: SubstanceEnum.NEON, node: createLabelAndIconNode( neon ) },
-        { value: SubstanceEnum.ARGON, node: createLabelAndIconNode( argon ) },
-        { value: SubstanceEnum.DIATOMIC_OXYGEN, node: createLabelAndIconNode( oxygen ) },
-        { value: SubstanceEnum.WATER, node: createLabelAndIconNode( water ) }
+        { value: SubstanceType.NEON, node: createLabelAndIconNode( neon ) },
+        { value: SubstanceType.ARGON, node: createLabelAndIconNode( argon ) },
+        { value: SubstanceType.DIATOMIC_OXYGEN, node: createLabelAndIconNode( oxygen ) },
+        { value: SubstanceType.WATER, node: createLabelAndIconNode( water ) }
       ];
     }
     else {
       radioButtonContent = [
-        { value: SubstanceEnum.NEON, node: createLabelAndIconNode( neon ) },
-        { value: SubstanceEnum.ARGON, node: createLabelAndIconNode( argon ) },
-        { value: SubstanceEnum.DIATOMIC_OXYGEN, node: createLabelAndIconNode( oxygen ) },
-        { value: SubstanceEnum.WATER, node: createLabelAndIconNode( water ) },
-        { value: SubstanceEnum.USER_DEFINED_MOLECULE, node: createLabelAndIconNode( adjustableAttraction ) }
+        { value: SubstanceType.NEON, node: createLabelAndIconNode( neon ) },
+        { value: SubstanceType.ARGON, node: createLabelAndIconNode( argon ) },
+        { value: SubstanceType.DIATOMIC_OXYGEN, node: createLabelAndIconNode( oxygen ) },
+        { value: SubstanceType.WATER, node: createLabelAndIconNode( water ) },
+        { value: SubstanceType.USER_DEFINED_MOLECULE, node: createLabelAndIconNode( adjustableAttraction ) }
       ];
     }
 
@@ -212,7 +212,7 @@ define( function( require ) {
     } );
 
     multipleParticleModel.interactionStrengthProperty.link( function( value ) {
-      if ( multipleParticleModel.substanceProperty.get() === SubstanceEnum.USER_DEFINED_MOLECULE ) {
+      if ( multipleParticleModel.substanceProperty.get() === SubstanceType.USER_DEFINED_MOLECULE ) {
         multipleParticleModel.setEpsilon( value );
       }
     } );
@@ -234,7 +234,7 @@ define( function( require ) {
     multipleParticleModel.substanceProperty.link( function( value ) {
 
       // adjust the control panel border when adjustable attraction selected or deselect
-      if ( value === SubstanceEnum.USER_DEFINED_MOLECULE ) {
+      if ( value === SubstanceType.USER_DEFINED_MOLECULE ) {
         content.addChild( interactionStrengthNode );
       }
       else {
