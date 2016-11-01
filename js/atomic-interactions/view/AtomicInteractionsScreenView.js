@@ -94,10 +94,6 @@ define( function( require ) {
     } );
     this.addChild( this.interactiveInteractionPotentialDiagram );
 
-    this.interactiveInteractionPotentialDiagram.addEventListener( 'bounds', function() {
-      debugger;
-    } );
-
     // add the button for returning the atom to the screen
     this.returnAtomButton = new TextPushButton( returnAtomString, {
       font: new PhetFont( 17 ),
