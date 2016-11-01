@@ -23,21 +23,23 @@ define( function( require ) {
   // constants
   var WIDTH = 80; // empirically determined to look good
 
-  /***
+  /**
    * @param {DualAtomModel} dualAtomModel - model of the atomic interactions screen
    * @param {StatesOfMatterAtom} particle - model of the atom that is draggable
    * @param {ModelViewTransform2} modelViewTransform to convert between model and view co-ordinates
    * @param {number} minX - grabbable particle min x position
-   * @param {number} maxX - grabbable particle max x position
    * @constructor
    */
-  function HandNode( dualAtomModel, particle, modelViewTransform, minX, maxX ) {
+  function HandNode( dualAtomModel, particle, modelViewTransform, minX ) {
 
     Node.call( this, { cursor: 'pointer' } );
     var self = this;
     this.minX = minX;
-    this.maxX = maxX;
-    this.addChild( new Image( handImage, { minWidth: WIDTH, maxWidth: WIDTH } ) );
+    this.addChild( new Image( handImage, {
+      minWidth: WIDTH,
+      maxWidth: WIDTH,
+      y: modelViewTransform.modelToViewY( particle.positionProperty.get().y )
+    } ) );
     var startDragX;
     var endDragX;
 
@@ -61,20 +63,15 @@ define( function( require ) {
         endDragX = self.globalToParentPoint( event.pointer.point ).x;
         var d = endDragX - startDragX;
         startDragX = endDragX;        // Make sure we don't exceed the positional limits.
-        var newPosX = modelViewTransform.modelToViewX( particle.getX() ) + d;
-        if ( newPosX > self.maxX ) {
-          newPosX = self.maxX;
-        }
-        else if ( newPosX < self.minX ) {
-          newPosX = self.minX;
-        }
+        var newPosX = Math.max( modelViewTransform.modelToViewX( particle.getX() ) + d, self.minX );
+
         // Move the particle based on the amount of mouse movement.
         particle.setPosition( modelViewTransform.viewToModelX( newPosX ), particle.getY() );
       },
 
       end: function() {
 
-        // Let the model move the particles again.  Note that this happens even if the motion was paused by some otherz
+        // Let the model move the particles again.  Note that this happens even if the motion was paused by some other
         // means.
         dualAtomModel.setMotionPaused( false );
         dualAtomModel.isHandNodeVisible = false;
@@ -83,8 +80,7 @@ define( function( require ) {
     } ) );
 
     dualAtomModel.movableAtom.positionProperty.link( function( position ) {
-      self.setTranslation( modelViewTransform.modelToViewX( position.x ),
-        modelViewTransform.modelToViewY( position.y ) );
+      self.x = modelViewTransform.modelToViewX( position.x );
     } );
   }
 

@@ -378,8 +378,7 @@ define( function( require ) {
         this.dualAtomModel,
         this.dualAtomModel.movableAtom,
         this.modelViewTransform,
-        0,
-        1.0 / 0.0
+        0
       );
       this.movableParticleNode = new GrabbableParticleNode(
         this.handNode,
@@ -409,6 +408,7 @@ define( function( require ) {
      * @private
      */
     handleMovableParticleRemoved: function() {
+
       // Get rid of the node for this guy.
       if ( this.movableParticleNode !== null ) {
         // Remove the particle node.
@@ -422,7 +422,7 @@ define( function( require ) {
       this.movableParticleNode = null;
 
       if ( this.handNode !== null ) {
-        // Remove the particle node.
+        // Remove the hand node.
         this.movableParticleLayer.removeChild( this.handNode );
       }
     },
