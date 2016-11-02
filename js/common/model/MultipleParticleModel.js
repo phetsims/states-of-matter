@@ -142,7 +142,7 @@ define( function( require ) {
     this.interactionExpandedProperty = new Property( true ); // read-write
     this.temperatureSetPointProperty = new Property( INITIAL_TEMPERATURE ); // read-write
     this.pressureProperty = new Property( 0 ); // read only
-    this.substanceProperty = new Property( SubstanceType.NEON ); // read-write
+    this.substanceProperty = new Property( DEFAULT_SUBSTANCE ); // read-write
     this.interactionStrengthProperty = new Property( MAX_ADJUSTABLE_EPSILON ); // read-wrte
     this.isPlayingProperty = new Property( true ); // read-write
     this.simSpeedProperty = new Property( 'normal' ); // read-write
@@ -164,7 +164,7 @@ define( function( require ) {
 
     // @public, various non-property attributes
     this.normalizedContainerWidth = PARTICLE_CONTAINER_WIDTH / this.particleDiameter;
-    this.gravitationalAcceleration = null;
+    this.gravitationalAcceleration = INITIAL_GRAVITATIONAL_ACCEL;
 
     // @private, various internal model variables
     this.particleDiameter = 1;
@@ -204,13 +204,9 @@ define( function( require ) {
     // other initialization
     //-----------------------------------------------------------------------------------------------------------------
 
-    // Do just enough initialization to allow the view and control portions of the simulation to be properly created.
-    // The rest of the initialization will occur when the model is reset.
-    this.initializeModelParameters();
-    this.setSubstance( DEFAULT_SUBSTANCE );
-
-    this.substanceProperty.link( function( substanceId ) {
-      self.setSubstance( substanceId );
+    // listen for changes to the substance being simulated and update the internals as needed
+    this.substanceProperty.link( function() {
+      self.handleSubtanceChanged();
     } );
   }
 
@@ -330,10 +326,12 @@ define( function( require ) {
 
     /**
      * Set the substance to be simulated.
-     * @param {number} substance
+     * @param {SubstanceType} substance
      * @private
      */
-    setSubstance: function( substance ) {
+    handleSubtanceChanged: function() {
+
+      var substance = this.substanceProperty.get();
 
       assert && assert(
         substance === SubstanceType.DIATOMIC_OXYGEN ||
@@ -351,9 +349,6 @@ define( function( require ) {
       // Remove existing particles and reset the global model parameters.
       this.removeAllParticles();
       this.initializeModelParameters();
-
-      // Set the new substance.
-      this.substanceProperty.set( substance );
 
       // Set the model parameters that are dependent upon the substance being simulated.
       switch( substance ) {
@@ -561,7 +556,6 @@ define( function( require ) {
 
       // other reset
       this.initializeModelParameters();
-      this.setSubstance( DEFAULT_SUBSTANCE );
       this.timeStepMovingAverage.reset();
       this.resetEmitter.emit();
     },
