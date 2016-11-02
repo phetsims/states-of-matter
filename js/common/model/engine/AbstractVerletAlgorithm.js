@@ -16,11 +16,11 @@ define( function( require ) {
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   // constants that control various aspects of the Verlet algorithm.
-  var PRESSURE_CALC_TIME_WINDOW = 12; // in seconds, empirically determined to be responsive but not jumpy
+  var PRESSURE_CALC_TIME_WINDOW = 8; // in seconds, empirically determined to be responsive but not jumpy
 
   // Pressure at which explosion of the container will occur.  This is currently set so that container blows roughly
   // when the pressure gauge hits its max value.
-  var EXPLOSION_PRESSURE = 1.05;
+  var EXPLOSION_PRESSURE = 0.016;
 
   /**
    * @param {MultipleParticleModel} multipleParticleModel of the simulation
@@ -80,7 +80,7 @@ define( function( require ) {
       var massInverse = 1 / moleculeDataSet.getMoleculeMass();
       var inertiaInverse = 1 / moleculeDataSet.getMoleculeRotationalInertia();
       var timeStepSqrHalf = timeStep * timeStep * 0.5;
-      var middleHeight = this.multipleParticleModel.normalizedContainerHeight / 2;
+      var pressureAccumulationMinHeight = this.multipleParticleModel.normalizedContainerHeight * 0.3;
       var accumulatedPressure = 0;
 
       // Since the normalized particle diameter is 1.0, and this is a diatomic particle joined at the center, use a
@@ -118,14 +118,14 @@ define( function( require ) {
           if ( xPos <= minX && moleculeVelocityX < 0 ) {
             xPos = minX;
             moleculeVelocity.x = -moleculeVelocityX;
-            if ( xPos > middleHeight ) {
+            if ( yPos > pressureAccumulationMinHeight ) {
               accumulatedPressure += -moleculeVelocityX;
             }
           }
           else if ( xPos >= maxX && moleculeVelocityX > 0 ) {
             xPos = maxX;
             moleculeVelocity.x = -moleculeVelocityX;
-            if ( xPos > middleHeight ) {
+            if ( yPos > pressureAccumulationMinHeight ) {
               accumulatedPressure += moleculeVelocityX;
             }
           }
@@ -178,9 +178,8 @@ define( function( require ) {
       // Now that the molecule position information has been updated, update the positions of the individual atoms.
       this.positionUpdater.updateAtomPositions( moleculeDataSet );
 
-      // Update the pressure - the multiplier is empirically determined to get pressure values that work in the larger
-      // context of the sim.
-      this.updatePressure( accumulatedPressure * 65, timeStep );
+      // Update the pressure.
+      this.updatePressure( accumulatedPressure, timeStep );
     },
 
     /**

@@ -46,7 +46,6 @@ define( function( require ) {
 
     Node.call( this );
     this.elbowHeight = 0;
-    this.timeOfLastUpdate = Number.NEGATIVE_INFINITY;
 
     var gaugeNode = new GaugeNode(
       multipleParticleModel.pressureProperty,
@@ -102,14 +101,11 @@ define( function( require ) {
       }
     );
 
-    // Set the initial value.
-    multipleParticleModel.pressureProperty.set( multipleParticleModel.getPressureInAtmospheres() );
-
     // Update the pressure readout at regular intervals.  This was done rather than listening to the pressure property
     // because the readout changes too quickly in that case.
     var previousPressure = -1;
     Timer.setInterval( function() {
-      var pressure = multipleParticleModel.getPressureInAtmospheres();
+      var pressure = multipleParticleModel.pressureProperty.get();
       if ( pressure !== previousPressure ) {
         if ( pressure < MAX_PRESSURE ) {
           textualReadout.setText( Util.toFixed( pressure, 2 ) + ' ' + pressureUnitsInAtmString );
