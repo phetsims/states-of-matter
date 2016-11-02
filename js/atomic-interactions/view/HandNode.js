@@ -35,14 +35,20 @@ define( function( require ) {
     Node.call( this, { cursor: 'pointer' } );
     var self = this;
     this.minX = minX;
+
+    // add the main image that represents the hand
     this.addChild( new Image( handImage, {
       minWidth: WIDTH,
       maxWidth: WIDTH,
       y: modelViewTransform.modelToViewY( particle.positionProperty.get().y )
     } ) );
+
+    // control visibility
+    dualAtomModel.movementHintVisibleProperty.linkAttribute( this, 'visible' );
+
+    // add the drag handler
     var startDragX;
     var endDragX;
-
     this.addInputListener( new SimpleDragHandler( {
 
       start: function( event ) {
@@ -74,11 +80,11 @@ define( function( require ) {
         // Let the model move the particles again.  Note that this happens even if the motion was paused by some other
         // means.
         dualAtomModel.setMotionPaused( false );
-        dualAtomModel.isHandNodeVisible = false;
-        self.setVisible( false );
+        dualAtomModel.movementHintVisibleProperty.set( false );
       }
     } ) );
 
+    // move with the movable atom
     dualAtomModel.movableAtom.positionProperty.link( function( position ) {
       self.x = modelViewTransform.modelToViewX( position.x );
     } );

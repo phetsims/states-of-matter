@@ -18,7 +18,6 @@ define( function( require ) {
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   /**
-   * @param {HandNode} handNode - view for the hand node
    * @param {DualAtomModel} dualAtomModel - model of the simulation
    * @param {StatesOfMatterAtom} particle
    * @param {ModelViewTransform2} modelViewTransform to convert between model and view co-ordinates
@@ -27,14 +26,13 @@ define( function( require ) {
    * @param {number} maxX - grabbable particle  max x position
    * @constructor
    */
-  function GrabbableParticleNode( handNode, dualAtomModel, particle, modelViewTransform,  enableOverlap, minX, maxX ) {
+  function GrabbableParticleNode( dualAtomModel, particle, modelViewTransform, enableOverlap, minX, maxX ) {
 
     ParticleForceNode.call( this, particle, modelViewTransform, enableOverlap );
 
     this.minX = minX;
     this.maxX = maxX;
     var self = this;
-    this.handNode = handNode;
     this.dualAtomModel = dualAtomModel;
 
     // This node will need to be pickable so the user can grab it.
@@ -79,10 +77,10 @@ define( function( require ) {
       },
 
       end: function() {
-        // Let the model move the particles again.  Note that this happens
-        // even if the motion was paused by some other means.
+        // Let the model move the particles again.  Note that this happens even if the motion was paused by some other
+        // means.
         dualAtomModel.setMotionPaused( false );
-        dualAtomModel.isHandNodeVisible = false;
+        dualAtomModel.movementHintVisibleProperty.set( false );
       }
     } ) );
 
@@ -101,7 +99,6 @@ define( function( require ) {
         if ( !this.dualAtomModel.isPlayingProperty.get() ) {
           this.dualAtomModel.positionChanged();
         }
-        this.handNode.setVisible( this.dualAtomModel.isHandNodeVisible );
         this.positionChanged = false;
       }
     },

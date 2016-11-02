@@ -45,14 +45,13 @@ define( function( require ) {
   var MAX_TEXT_WIDTH = 80;
 
   /**
-   *
    * @param {DualAtomModel} dualAtomModel of the simulation
    * @param {boolean} enableHeterogeneousAtoms
    * @constructor
    */
   function AtomicInteractionsScreenView( dualAtomModel, enableHeterogeneousAtoms ) {
 
-    ScreenView.call( this, { layoutBounds: new Bounds2( 0, 0, 834, 504 ) } );
+    ScreenView.call( this, StatesOfMatterConstants.SCREEN_VIEW_OPTIONS );
 
     this.dualAtomModel = dualAtomModel;
     this.movableParticle = dualAtomModel.movableAtom;
@@ -111,8 +110,6 @@ define( function( require ) {
     var resetAllButton = new ResetAllButton( {
       listener: function() {
         dualAtomModel.reset();
-        dualAtomModel.isHandNodeVisible = true;
-        self.handNode.setVisible( true );
         self.interactiveInteractionPotentialDiagram.reset();
       },
       right: this.layoutBounds.maxX - INSET,
@@ -212,7 +209,6 @@ define( function( require ) {
       right: playPauseButton.left - 2 * INSET,
       centerY: playPauseButton.centerY
     } );
-    //this.addChild( speedControl.mutate( { right: playPauseButton.left - 2 * inset, bottom: playPauseButton.bottom } ) );
     this.addChild( speedControl );
 
     // Create the push pin node that will be used to convey the idea that the fixed atom is pinned to the canvas.  It
@@ -236,18 +232,17 @@ define( function( require ) {
     this.addChild( atomicInteractionsControlPanel );
     this.addChild( forcesControlPanel );
 
-    // set up the default particles
-    this.handleFixedParticleAdded( dualAtomModel.fixedAtom );
-    this.handleMovableParticleAdded( dualAtomModel.movableAtom );
-    dualAtomModel.atomPairProperty.link( function( atomPair ) {
+    // listen to the setting for atomPair and update the view when it changes
+    dualAtomModel.atomPairProperty.link( function() {
       forcesControlPanel.top = atomicInteractionsControlPanel.bottom + INSET / 2;
       forcesControlPanel.right = atomicInteractionsControlPanel.right;
-      self.handleFixedParticleRemoved( dualAtomModel.fixedAtom );
+      self.handleFixedParticleRemoved();
       self.handleFixedParticleAdded( dualAtomModel.fixedAtom );
-      self.handleMovableParticleRemoved( dualAtomModel.movableAtom );
+      self.handleMovableParticleRemoved();
       self.handleMovableParticleAdded( dualAtomModel.movableAtom );
-      self.handNode.setVisible( dualAtomModel.isHandNodeVisible );
     } );
+
+    // update the visibility of the force arrows when the settings change
     dualAtomModel.forcesDisplayModeProperty.link( function( forces ) {
       switch( forces ) {
         case 'hideForces':
@@ -275,8 +270,6 @@ define( function( require ) {
       self.movableParticleNode.handleParticleRadiusChanged();
       self.updateMinimumXForMovableAtom();
     } );
-
-    self.handNode.setVisible( true );
   }
 
   statesOfMatter.register( 'AtomicInteractionsScreenView', AtomicInteractionsScreenView );
@@ -350,17 +343,15 @@ define( function( require ) {
      * @public
      */
     handleFixedParticleRemoved: function() {
+
       // Get rid of the node for this guy.
-      if ( this.fixedParticleLayer.hasChild( this.fixedParticleNode ) ) {
+      if ( this.fixedParticleNode && this.fixedParticleLayer.hasChild( this.fixedParticleNode ) ) {
 
         // Remove the particle node.
         this.fixedParticleLayer.removeChild( this.fixedParticleNode );
 
         // Remove the pin holding the node.
         this.removeChild( this.pushPinNode );
-      }
-      else {
-        assert( false, 'Problem encountered removing node from canvas.' );
       }
       this.updatePositionMarkerOnDiagram();
       this.fixedParticleNode = null;
@@ -381,7 +372,6 @@ define( function( require ) {
         0
       );
       this.movableParticleNode = new GrabbableParticleNode(
-        this.handNode,
         this.dualAtomModel,
         particle,
         this.modelViewTransform,
@@ -395,9 +385,8 @@ define( function( require ) {
       this.movableParticleLayer.addChild( this.movableParticleNode );
       this.movableParticleLayer.addChild( this.handNode );
 
-      // Limit the particle's motion in the X direction so that it can't
-      // get to where there is too much overlap, or is on the other side
-      // of the fixed particle.
+      // Limit the particle's motion in the X direction so that it can't get to where there is too much overlap, or is
+      // on the other side of the fixed particle.
       this.updateMinimumXForMovableAtom();
 
       // Update the position marker to represent the new particle's position.
@@ -410,18 +399,15 @@ define( function( require ) {
     handleMovableParticleRemoved: function() {
 
       // Get rid of the node for this guy.
-      if ( this.movableParticleNode !== null ) {
+      if ( this.movableParticleNode ) {
         // Remove the particle node.
         this.movableParticleLayer.removeChild( this.movableParticleNode );
-      }
-      else {
-        assert( false, 'Problem encountered removing node from canvas.' );
       }
 
       this.updatePositionMarkerOnDiagram();
       this.movableParticleNode = null;
 
-      if ( this.handNode !== null ) {
+      if ( this.handNode ) {
         // Remove the hand node.
         this.movableParticleLayer.removeChild( this.handNode );
       }

@@ -175,8 +175,8 @@ define( function( require ) {
             dualAtomModel.releaseBond();
           }
 
-          // Make sure the hand node is now hidden, since the user has figured out what to drag.
-          dualAtomModel.isHandNodeVisible = false;
+          // Make sure the movement hint is now hidden, since the user has figured out what to drag.
+          dualAtomModel.movementHintVisibleProperty.set( false );
 
           // Move the movable atom based on this drag event.
           var atom = dualAtomModel.movableAtom;

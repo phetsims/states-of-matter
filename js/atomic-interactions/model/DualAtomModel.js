@@ -58,6 +58,7 @@ define( function( require ) {
     this.atomDiameterProperty = new Property( 300 );
     this.forcesDisplayModeProperty = new Property( 'hideForces' );
     this.forcesControlPanelExpandedProperty = new Property( false );
+    this.movementHintVisibleProperty = new Property( true );
 
     //-----------------------------------------------------------------------------------------------------------------
     // other model attributes
@@ -75,7 +76,6 @@ define( function( require ) {
     this.fixedAtomVibrationCountdown = 0; // Used to vibrate fixed atom during bonding.
     this.movableAtomVibrationCountdown = 0; // Used to vibrate movable atom during bonding and when bonded.
     this.potentialWhenAtomReleased = 0; // Used to set magnitude of vibration.
-    this.isHandNodeVisible = true; // indicate moving hand node visible or not
     this.ljPotentialCalculator = new LjPotentialCalculator(
       StatesOfMatterConstants.MIN_SIGMA,
       StatesOfMatterConstants.MIN_EPSILON
@@ -365,6 +365,7 @@ define( function( require ) {
       this.atomDiameterProperty.reset();
       this.forcesDisplayModeProperty.reset();
       this.forcesControlPanelExpandedProperty.reset();
+      this.movementHintVisibleProperty.reset();
 
       // set the default atom types
       if ( this.fixedAtom === null || this.fixedAtom.getType() !== DEFAULT_ATOM_TYPE ||
