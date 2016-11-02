@@ -206,7 +206,7 @@ define( function( require ) {
 
     // listen for changes to the substance being simulated and update the internals as needed
     this.substanceProperty.link( function() {
-      self.handleSubtanceChanged();
+      self.handleSubstanceChanged();
     } );
   }
 
@@ -329,7 +329,7 @@ define( function( require ) {
      * @param {SubstanceType} substance
      * @private
      */
-    handleSubtanceChanged: function() {
+    handleSubstanceChanged: function() {
 
       var substance = this.substanceProperty.get();
 
@@ -537,6 +537,8 @@ define( function( require ) {
      */
     reset: function() {
 
+      var substanceAtStartOfReset = this.substanceProperty.get();
+
       // reset observable properties
       this.particleContainerHeightProperty.reset();
       this.targetContainerHeightProperty.reset();
@@ -554,8 +556,15 @@ define( function( require ) {
       this.averageDtProperty.reset();
       this.maxParticleMoveTimePerStepProperty.reset();
 
+      // if the substance wasn't changed during reset, so some additional work is necessary
+      if ( substanceAtStartOfReset === this.substanceProperty.get() ) {
+        this.removeAllParticles();
+        this.resetContainerSize();
+        this.initializeParticles( PhaseStateEnum.SOLID );
+      }
+
       // other reset
-      this.initializeModelParameters();
+      this.gravitationalAcceleration = INITIAL_GRAVITATIONAL_ACCEL;
       this.timeStepMovingAverage.reset();
       this.resetEmitter.emit();
     },
