@@ -61,20 +61,17 @@ define( function( require ) {
     // add nodes for the various layers
     var preParticleLayer = new Node();
     this.addChild( preParticleLayer );
-    this.particlesLayer = new ParticleImageCanvasNode( multipleParticleModel.particles, modelViewTransform, {
+    this.particlesCanvasNode = new ParticleImageCanvasNode( multipleParticleModel.particles, modelViewTransform, {
       canvasBounds: StatesOfMatterConstants.SCREEN_VIEW_OPTIONS.layoutBounds.dilated( 500, 500 ) // dilation amount empirically determined
     } );
-    this.addChild( this.particlesLayer );
+    this.addChild( this.particlesCanvasNode );
     var postParticleLayer = new Node();
     this.addChild( postParticleLayer );
 
     // set up variables used to create and position the various parts of the container
-    this.containerWidthWithMargin = modelViewTransform.modelToViewDeltaX(
-        multipleParticleModel.getParticleContainerWidth()
-      ) + 2 * CONTAINER_X_MARGIN;
-    this.containerViewCenterX = this.particleAreaViewBounds.centerX;
-
-    var topEllipseRadiusX = this.containerWidthWithMargin / 2;
+    var containerWidthWithMargin = modelViewTransform.modelToViewDeltaX( multipleParticleModel.getParticleContainerWidth() ) +
+                                   2 * CONTAINER_X_MARGIN;
+    var topEllipseRadiusX = containerWidthWithMargin / 2;
     var topEllipseRadiusY = topEllipseRadiusX * PERSPECTIVE_TILT_FACTOR;
 
     // shape of the ellipse at the top of the container
@@ -98,19 +95,19 @@ define( function( require ) {
     } ) );
 
     // create and add the node that will act as the elliptical background for the lid, other nodes may be added later
-    this.containerLid = new Path( topEllipseShape, {
+    var containerLid = new Path( topEllipseShape, {
       fill: 'rgba( 126, 126, 126, 0.8 )',
       centerX: this.particleAreaViewBounds.centerX
     } );
-    postParticleLayer.addChild( this.containerLid );
+    postParticleLayer.addChild( containerLid );
 
     if ( volumeControlEnabled ) {
 
       // Add the pointing hand, the finger of which can push down on the top of the container.
-      this.pointingHandNode = new PointingHandNode( multipleParticleModel, modelViewTransform, {
+      var pointingHandNode = new PointingHandNode( multipleParticleModel, modelViewTransform, {
         centerX: this.particleAreaViewBounds.centerX + 30 // offset empirically determined
       } );
-      postParticleLayer.addChild( this.pointingHandNode );
+      postParticleLayer.addChild( pointingHandNode );
 
       // Add the handle to the lid.
       var handleAreaEllipseShape = topEllipseShape.transformed( Matrix3.scale( 0.8 ) ); // scale empirically determined
@@ -118,23 +115,24 @@ define( function( require ) {
         lineWidth: 1,
         stroke: '#888888',
         fill: 'rgba( 200, 200, 200, 0.5 )',
-        centerX: this.containerLid.width / 2,
+        centerX: containerLid.width / 2,
         centerY: 0
       } );
-      this.containerLid.addChild( handleAreaEllipse );
+      containerLid.addChild( handleAreaEllipse );
       var handleNode = new HandleNode();
-      handleNode.centerX = this.containerLid.width / 2;
+      handleNode.centerX = containerLid.width / 2;
       handleNode.bottom = handleAreaEllipse.centerY + 5; // position tweaked a bit to look better
-      this.containerLid.addChild( handleNode );
+      containerLid.addChild( handleNode );
     }
 
     if ( pressureGaugeEnabled ) {
 
       // Add the pressure meter.
-      this.pressureMeter = new DialGaugeNode( multipleParticleModel );
-      this.pressureMeter.updateConnector();
-      this.pressureMeter.right = this.particleAreaViewBounds.minX + this.particleAreaViewBounds.width * 0.2;
-      postParticleLayer.addChild( this.pressureMeter );
+      var pressureMeter = new DialGaugeNode( multipleParticleModel );
+      this.pressureMeter = pressureMeter;
+      //pressureMeter.updateConnector();
+      pressureMeter.right = this.particleAreaViewBounds.minX + this.particleAreaViewBounds.width * 0.2;
+      postParticleLayer.addChild( pressureMeter );
     }
 
     // define a function to evaluate the bottom edge of the ellipse at the top, used for relative positioning
@@ -149,7 +147,7 @@ define( function( require ) {
     var cutoutHeight = this.particleAreaViewBounds.getHeight() - 2 * CONTAINER_CUTOUT_Y_MARGIN;
     var cutoutTopY = getEllipseLowerEdgeYPos( CONTAINER_CUTOUT_X_MARGIN ) + CONTAINER_CUTOUT_Y_MARGIN;
     var cutoutBottomY = cutoutTopY + cutoutHeight;
-    var cutoutWidth = this.containerWidthWithMargin - 2 * CONTAINER_CUTOUT_X_MARGIN;
+    var cutoutWidth = containerWidthWithMargin - 2 * CONTAINER_CUTOUT_X_MARGIN;
 
     // create and add the main container node, excluding the bevel
     var mainContainer = new Path( new Shape()
@@ -159,18 +157,18 @@ define( function( require ) {
       .cubicCurveTo(
         0,
         outerShapeTiltFactor,
-        this.containerWidthWithMargin,
+        containerWidthWithMargin,
         outerShapeTiltFactor,
-        this.containerWidthWithMargin,
+        containerWidthWithMargin,
         0
       )
 
       // line from outer top right to outer bottom right
-      .lineTo( this.containerWidthWithMargin, this.particleAreaViewBounds.height )
+      .lineTo( containerWidthWithMargin, this.particleAreaViewBounds.height )
 
       // bottom outer curve
       .cubicCurveTo(
-        this.containerWidthWithMargin,
+        containerWidthWithMargin,
         this.particleAreaViewBounds.height + outerShapeTiltFactor,
         0,
         this.particleAreaViewBounds.height + outerShapeTiltFactor,
@@ -189,18 +187,18 @@ define( function( require ) {
 
       // bottom inner curve
       .quadraticCurveTo(
-        this.containerWidthWithMargin / 2,
+        containerWidthWithMargin / 2,
         cutoutBottomY + cutoutShapeTiltFactor,
-        this.containerWidthWithMargin - CONTAINER_CUTOUT_X_MARGIN,
+        containerWidthWithMargin - CONTAINER_CUTOUT_X_MARGIN,
         cutoutBottomY
       )
 
       // line from inner bottom right to inner top right
-      .lineTo( this.containerWidthWithMargin - CONTAINER_CUTOUT_X_MARGIN, cutoutTopY )
+      .lineTo( containerWidthWithMargin - CONTAINER_CUTOUT_X_MARGIN, cutoutTopY )
 
       // top inner curve
       .quadraticCurveTo(
-        this.containerWidthWithMargin / 2,
+        containerWidthWithMargin / 2,
         cutoutTopY + cutoutShapeTiltFactor,
         CONTAINER_CUTOUT_X_MARGIN,
         cutoutTopY
@@ -208,7 +206,7 @@ define( function( require ) {
 
       .close(),
       {
-        fill: new LinearGradient( 0, 0, this.containerWidthWithMargin, 0 )
+        fill: new LinearGradient( 0, 0, containerWidthWithMargin, 0 )
           .addColorStop( 0, '#6D6D6D' )
           .addColorStop( 0.1, '#8B8B8B' )
           .addColorStop( 0.2, '#AEAFAF' )
@@ -317,6 +315,36 @@ define( function( require ) {
     bevel.top = this.particleAreaViewBounds.minY + cutoutTopY;
     postParticleLayer.addChild( bevel );
 
+    // Define a function for updating the position and appearance of the pressure gauge.
+    function updatePressureGaugePosition() {
+
+      if ( !pressureMeter ) {
+        // nothing to update, so bail out
+        return;
+      }
+
+      var containerHeight = self.multipleParticleModel.particleContainerHeightProperty.get();
+
+      if ( !self.multipleParticleModel.isExplodedProperty.get() ) {
+        if ( pressureMeter.getRotation() !== 0 ) {
+          pressureMeter.setRotation( 0 );
+        }
+        pressureMeter.top = self.particleAreaViewBounds.top - 75; // empirical position adjustment to connect to lid
+        pressureMeter.setElbowHeight(
+          PRESSURE_METER_ELBOW_OFFSET + Math.abs( self.modelViewTransform.modelToViewDeltaY(
+            MultipleParticleModel.PARTICLE_CONTAINER_INITIAL_HEIGHT - containerHeight
+          ) )
+        );
+      }
+      else {
+
+        // The container is exploding, so move the gauge up and spin it.
+        var deltaHeight = self.modelViewTransform.modelToViewDeltaY( containerHeight ) - self.previousContainerViewSize;
+        pressureMeter.rotate( deltaHeight * 0.01 * Math.PI );
+        pressureMeter.centerY = pressureMeter.centerY + deltaHeight * 2;
+      }
+    }
+
     // Monitor the height of the container in the model and adjust the view when changes occur.
     multipleParticleModel.particleContainerHeightProperty.link( function( containerHeight, oldContainerHeight ) {
 
@@ -324,7 +352,6 @@ define( function( require ) {
         self.previousContainerViewSize = modelViewTransform.modelToViewDeltaY( oldContainerHeight );
       }
 
-      var containerLid = self.containerLid; // optimization
       var lidYPosition = modelViewTransform.modelToViewY( containerHeight );
 
       containerLid.centerY = lidYPosition;
@@ -338,18 +365,14 @@ define( function( require ) {
       }
 
       // update the position of the pointing hand
-      self.pointingHandNode && self.pointingHandNode.setFingertipYPosition( lidYPosition );
+      pointingHandNode && pointingHandNode.setFingertipYPosition( lidYPosition );
 
       // update the pressure gauge position (if present)
-      self.updatePressureGaugePosition();
-
-      // keep a record of the 
+      updatePressureGaugePosition();
     } );
 
     // Monitor the model for changes in the exploded state of the container and update the view as needed.
     multipleParticleModel.isExplodedProperty.link( function( isExploded, wasExploded ) {
-
-      var containerLid = self.containerLid;
 
       if ( !isExploded && wasExploded ) {
 
@@ -361,7 +384,7 @@ define( function( require ) {
         );
 
         // return the pressure gauge to its original position
-        self.updatePressureGaugePosition();
+        updatePressureGaugePosition();
       }
     } );
   }
@@ -372,45 +395,11 @@ define( function( require ) {
 
     /**
      * step
-     * @param dt
+     * @param {number} dt - delta time
+     * @public
      */
     step: function( dt ) {
-      this.particlesLayer.step( dt );
-      this.pressureMeter && this.pressureMeter.step( dt );
-    },
-
-    /**
-     * Update the position and other aspects of the gauge so that it stays connected to the lid or moves as it should
-     * when the container explodes.
-     * @private
-     */
-    updatePressureGaugePosition: function() {
-
-      if ( !this.pressureMeter ) {
-        // nothing to update, so bail out
-        return;
-      }
-
-      var containerHeight = this.multipleParticleModel.particleContainerHeightProperty.get();
-
-      if ( !this.multipleParticleModel.isExplodedProperty.get() ) {
-        if ( this.pressureMeter.getRotation() !== 0 ) {
-          this.pressureMeter.setRotation( 0 );
-        }
-        this.pressureMeter.top = this.particleAreaViewBounds.top - 75; // position adjusted to connect to lid
-        this.pressureMeter.setElbowHeight(
-          PRESSURE_METER_ELBOW_OFFSET + Math.abs( this.modelViewTransform.modelToViewDeltaY(
-            MultipleParticleModel.PARTICLE_CONTAINER_INITIAL_HEIGHT - containerHeight
-          ) )
-        );
-      }
-      else {
-
-        // The container is exploding, so move the gauge up and spin it.
-        var deltaHeight = this.modelViewTransform.modelToViewDeltaY( containerHeight ) - this.previousContainerViewSize;
-        this.pressureMeter.rotate( deltaHeight * 0.01 * Math.PI );
-        this.pressureMeter.centerY = this.pressureMeter.centerY + deltaHeight * 2;
-      }
+      this.particlesCanvasNode.step( dt );
     }
   } );
 } );

@@ -22,6 +22,7 @@ define( function( require ) {
   var Shape = require( 'KITE/Shape' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var Text = require( 'SCENERY/nodes/Text' );
+  var Timer = require( 'PHET_CORE/Timer' );
   var Util = require( 'DOT/Util' );
 
   // strings
@@ -33,9 +34,9 @@ define( function( require ) {
   var CONNECTOR_LENGTH_PROPORTION = 1; // Length of non-elbowed connector wrt overall diameter.
   var CONNECTOR_WIDTH_PROPORTION = 0.2; // Width of connector wrt overall diameter.
   var MAX_PRESSURE = 200; // in atm units
-  var TIME_BETWEEN_UPDATES = 0.5; // in seconds
   var ELBOW_WIDTH = ( CONNECTOR_WIDTH_PROPORTION * 30 );
   var ELBOW_LENGTH = ( CONNECTOR_LENGTH_PROPORTION * 60 );
+  var PRESSURE_UPDATE_PERIOD = 100; // in milliseconds
 
   /**
    * @param {MultipleParticleModel} multipleParticleModel - model of the simulation
@@ -43,74 +44,97 @@ define( function( require ) {
    */
   function DialGaugeNode( multipleParticleModel ) {
 
-    var self = this;
     Node.call( this );
-    this.multipleParticleModel = multipleParticleModel;
-
     this.elbowHeight = 0;
-    this.timeSinceLastUpdate = Number.POSITIVE_INFINITY;
+    this.timeOfLastUpdate = Number.NEGATIVE_INFINITY;
 
-    var gaugeNode = new GaugeNode( multipleParticleModel.pressureProperty, pressureString,
-      { min: 0, max: MAX_PRESSURE }, { scale: 0.5, radius: 80, backgroundLineWidth: 3 } );
+    var gaugeNode = new GaugeNode(
+      multipleParticleModel.pressureProperty,
+      pressureString,
+      { min: 0, max: MAX_PRESSURE },
+      { scale: 0.5, radius: 80, backgroundLineWidth: 3 }
+    );
 
     // Add the textual readout display.
-    this.textualReadoutBackground = new Rectangle( 0, 0, 80, 15, 2, 2, { fill: 'white', stroke: 'black' } );
-    this.textualReadoutBackground.centerX = gaugeNode.centerX;
-    this.textualReadoutBackground.top = gaugeNode.bottom - 15;
-    this.textualReadout = new Text( '', {
+    var textualReadoutBackground = new Rectangle( 0, 0, 80, 15, 2, 2, {
+      fill: 'white',
+      stroke: 'black',
+      centerX: gaugeNode.centerX,
+      top: gaugeNode.bottom - 15
+    } );
+
+    var textualReadout = new Text( '', {
       font: new PhetFont( 12 ),
       fill: 'black',
-      maxWidth: this.textualReadoutBackground.width * 0.9
+      maxWidth: textualReadoutBackground.width * 0.9,
+      center: textualReadoutBackground.center
     } );
-    this.textualReadout.center = this.textualReadoutBackground.center;
 
     // To accurately reproduce the previous version (which consisted of a path stroked with lineWidth 10), we need to
     // include the stroke width effects (where it had a default lineCap of butt). We have a part that doesn't change
     // shape (the connector) which includes the left part and the curve, and then an overlapping dynamic rectangle
     // (the connectorExtension) whose height is adjusted to be the elbowHeight. This reduces the overhead significantly.
     var halfStroke = 5;
-    this.connector = new Path( new Shape().moveTo( 0, -halfStroke )
-                               .lineTo( ELBOW_LENGTH + ELBOW_WIDTH / 2, -halfStroke )
-                               .quadraticCurveTo( ELBOW_LENGTH + ELBOW_WIDTH + halfStroke, -halfStroke, ELBOW_LENGTH + ELBOW_WIDTH + halfStroke, ELBOW_WIDTH / 2 )
-                               .lineTo( ELBOW_LENGTH - halfStroke, ELBOW_WIDTH + halfStroke )
-                               .lineTo( 0, ELBOW_WIDTH + halfStroke )
-                               .close(), {
-      fill: '#ddd'
-    } );
+    var connector = new Path(
+      new Shape().moveTo( 0, -halfStroke )
+        .lineTo( ELBOW_LENGTH + ELBOW_WIDTH / 2, -halfStroke )
+        .quadraticCurveTo( ELBOW_LENGTH + ELBOW_WIDTH + halfStroke, -halfStroke, ELBOW_LENGTH + ELBOW_WIDTH + halfStroke, ELBOW_WIDTH / 2 )
+        .lineTo( ELBOW_LENGTH - halfStroke, ELBOW_WIDTH + halfStroke )
+        .lineTo( 0, ELBOW_WIDTH + halfStroke )
+        .close(),
+      { fill: '#ddd' }
+    );
     this.connectorExtension = new Rectangle( ELBOW_LENGTH - halfStroke, ELBOW_WIDTH / 2, ELBOW_WIDTH + 2 * halfStroke, 0, {
       fill: '#ddd'
     } );
-    this.connector.addChild( this.connectorExtension );
+    connector.addChild( this.connectorExtension );
 
-    this.roundedRectangle = new Rectangle( 0, 0, 30, 25, 2, 2, {
+    var connectorCollar = new Rectangle( 0, 0, 30, 25, 2, 2, {
       fill: new LinearGradient( 0, 0, 0, 25 )
         .addColorStop( 0, '#5F6973' )
         .addColorStop( 0.6, '#F0F1F2' )
     } );
 
-    this.roundedRectangle.centerY = gaugeNode.centerY;
-    this.roundedRectangle.left = gaugeNode.right - 10;
+    connectorCollar.centerY = gaugeNode.centerY;
+    connectorCollar.left = gaugeNode.right - 10;
     var dialComponentsNode = new Node( {
-      children: [ this.connector, this.roundedRectangle, gaugeNode,
-        this.textualReadoutBackground, this.textualReadout ]
-    } );
+        children: [ connector, connectorCollar, gaugeNode, textualReadoutBackground, textualReadout ]
+      }
+    );
 
     // Set the initial value.
     multipleParticleModel.pressureProperty.set( multipleParticleModel.getPressureInAtmospheres() );
-    this.pressureChanged = false;
-    multipleParticleModel.pressureProperty.link( function() {
-      self.pressureChanged = true;
-    } );
 
-    // TODO: was buggy before, where we had to update the connector once with the elbow disabled to position things properly.
-    this.connector.setTranslation( this.roundedRectangle.centerX + this.roundedRectangle.width / 2,
-                                   this.roundedRectangle.centerY - CONNECTOR_WIDTH_PROPORTION * 30 / 2 );
+    // Update the pressure readout at regular intervals.  This was done rather than listening to the pressure property
+    // because the readout changes too quickly in that case.
+    var previousPressure = -1;
+    Timer.setInterval( function() {
+      var pressure = multipleParticleModel.getPressureInAtmospheres();
+      if ( pressure !== previousPressure ) {
+        if ( pressure < MAX_PRESSURE ) {
+          textualReadout.setText( Util.toFixed( pressure, 2 ) + ' ' + pressureUnitsInAtmString );
+          textualReadout.fill = 'black';
+        }
+        else {
+          textualReadout.setText( pressureOverloadString );
+          textualReadout.fill = PhetColorScheme.RED_COLORBLIND;
+        }
+        previousPressure = pressure;
+      }
+      textualReadout.center = textualReadoutBackground.center;
+    }, PRESSURE_UPDATE_PERIOD );
 
+    // position the connector
+    connector.setTranslation(
+      connectorCollar.centerX + connectorCollar.width / 2,
+      connectorCollar.centerY - CONNECTOR_WIDTH_PROPORTION * 30 / 2
+    );
+
+    // Do the initial update of the connector.
     this.updateConnector();
 
-    // Now add the dial as a child of the main node.
+    // Add the dial as a child of the main node.
     this.addChild( dialComponentsNode );
-
   }
 
   statesOfMatter.register( 'DialGaugeNode', DialGaugeNode );
@@ -118,36 +142,7 @@ define( function( require ) {
   return inherit( Node, DialGaugeNode, {
 
     /**
-     * update function
-     * @param dt
-     * @public
-     */
-    step: function( dt ){
-
-      this.timeSinceLastUpdate += dt;
-
-      if ( this.timeSinceLastUpdate > TIME_BETWEEN_UPDATES ) {
-
-        if ( this.pressureChanged ) {
-          if ( this.multipleParticleModel.getPressureInAtmospheres() < MAX_PRESSURE ) {
-            this.textualReadout.setText( Util.toFixed( this.multipleParticleModel.getPressureInAtmospheres(), 2 ) + ' ' + pressureUnitsInAtmString );
-            this.textualReadout.fill = 'black';
-          }
-          else {
-            this.textualReadout.setText( pressureOverloadString );
-            this.textualReadout.fill = PhetColorScheme.RED_COLORBLIND;
-          }
-          this.textualReadout.center = this.textualReadoutBackground.center;
-          this.pressureChanged = false;
-        }
-
-        this.timeSinceLastUpdate = 0;
-      }
-    },
-
-    /**
-     * Set the height of the elbow.  Height is specified with respect to the
-     * vertical center of the node.
+     * Set the height of the elbow.  Height is specified with respect to the vertical center of the node.
      * @param {number} height
      * @public
      */
