@@ -158,7 +158,6 @@ define( function( require ) {
 
     // arrays containing references to the individual particles
     this.particles = new ObservableArray(); // @public, read-only
-    this.copyOfParticles = new ObservableArray(); // @private
 
     // @public, data set containing information about the position, motion, and force for each particle
     this.moleculeDataSet = null;
@@ -1343,7 +1342,7 @@ define( function( require ) {
       }
 
       // Remove any particles that are outside of the container.  We work with the normalized particles for this.
-      var particlesOutsideOfContainerCount = 0;
+      var numParticlesOutsideContainer = 0;
       var firstOutsideParticleIndex;
       do {
         for ( firstOutsideParticleIndex = 0; firstOutsideParticleIndex < this.moleculeDataSet.getNumberOfMolecules();
@@ -1360,21 +1359,15 @@ define( function( require ) {
         if ( firstOutsideParticleIndex < this.moleculeDataSet.getNumberOfMolecules() ) {
           // Remove the particle that was found.
           this.moleculeDataSet.removeMolecule( firstOutsideParticleIndex );
-          particlesOutsideOfContainerCount++;
+          numParticlesOutsideContainer++;
         }
       } while ( firstOutsideParticleIndex !== this.moleculeDataSet.getNumberOfMolecules() );
 
       // Remove enough of the non-normalized particles so that we have the same number as the normalized.  They don't
       // have to be the same particles since the normalized and non-normalized particles are explicitly synced up
-      // elsewhere.
-      this.copyOfParticles.clear();
-      for ( var k = 0; k < this.particles.length; k++ ) {
-        this.copyOfParticles.push( this.particles.get( k ) );
-      }
-
-      for ( var i = 0; i < this.copyOfParticles.length - this.moleculeDataSet.getNumberOfAtoms(); i++ ) {
-        var particle = this.copyOfParticles.get( i );
-        this.particles.remove( particle );
+      // during each model step.
+      for ( var i = 0; i < numParticlesOutsideContainer * this.moleculeDataSet.getAtomsPerMolecule(); i++ ) {
+        this.particles.pop();
       }
 
       // Set the container to be unexploded.
@@ -1383,7 +1376,7 @@ define( function( require ) {
       // Set the phase to be gas, since otherwise the extremely high kinetic energy of the particles causes an
       // unreasonably high temperature for the particles that remain in the container. Doing this generally cools them
       // down into a more manageable state.
-      if ( particlesOutsideOfContainerCount > 0 ) {
+      if ( numParticlesOutsideContainer > 0 ) {
         this.phaseStateChanger.setPhase( PhaseStateEnum.GAS );
       }
     },
