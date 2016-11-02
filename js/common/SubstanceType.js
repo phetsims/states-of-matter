@@ -10,7 +10,7 @@ define( function( require ) {
     ARGON: 'ARGON',
     DIATOMIC_OXYGEN: 'DIATOMIC_OXYGEN',
     WATER: 'WATER',
-    USER_DEFINED_MOLECULE: 'USER_DEFINED_MOLECULE'
+    ADJUSTABLE_ATOM: 'ADJUSTABLE_ATOM'
   };
 
   // verify that the enum is immutable, without the runtime penalty in production code

@@ -62,7 +62,7 @@ define( function( require ) {
         offset = 6;
       }
 
-      if ( this.multipleParticleModel.substanceProperty.get() === SubstanceType.USER_DEFINED_MOLECULE ) {
+      if ( this.multipleParticleModel.substanceProperty.get() === SubstanceType.ADJUSTABLE_ATOM ) {
         offset = 4;
       }
 

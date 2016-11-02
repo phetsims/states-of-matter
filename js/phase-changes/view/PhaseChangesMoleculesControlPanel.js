@@ -194,7 +194,7 @@ define( function( require ) {
         { value: SubstanceType.ARGON, node: createLabelAndIconNode( argon ) },
         { value: SubstanceType.DIATOMIC_OXYGEN, node: createLabelAndIconNode( oxygen ) },
         { value: SubstanceType.WATER, node: createLabelAndIconNode( water ) },
-        { value: SubstanceType.USER_DEFINED_MOLECULE, node: createLabelAndIconNode( adjustableAttraction ) }
+        { value: SubstanceType.ADJUSTABLE_ATOM, node: createLabelAndIconNode( adjustableAttraction ) }
       ];
     }
 
@@ -212,7 +212,7 @@ define( function( require ) {
     } );
 
     multipleParticleModel.interactionStrengthProperty.link( function( value ) {
-      if ( multipleParticleModel.substanceProperty.get() === SubstanceType.USER_DEFINED_MOLECULE ) {
+      if ( multipleParticleModel.substanceProperty.get() === SubstanceType.ADJUSTABLE_ATOM ) {
         multipleParticleModel.setEpsilon( value );
       }
     } );
@@ -234,7 +234,7 @@ define( function( require ) {
     multipleParticleModel.substanceProperty.link( function( value ) {
 
       // adjust the control panel border when adjustable attraction selected or deselect
-      if ( value === SubstanceType.USER_DEFINED_MOLECULE ) {
+      if ( value === SubstanceType.ADJUSTABLE_ATOM ) {
         content.addChild( interactionStrengthNode );
       }
       else {

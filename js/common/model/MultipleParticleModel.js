@@ -269,7 +269,7 @@ define( function( require ) {
           criticalPoint = ARGON_CRITICAL_POINT_IN_KELVIN;
           break;
 
-        case SubstanceType.USER_DEFINED_MOLECULE:
+        case SubstanceType.ADJUSTABLE_ATOM:
           triplePoint = ADJUSTABLE_ATOM_TRIPLE_POINT_IN_KELVIN;
           criticalPoint = ADJUSTABLE_ATOM_CRITICAL_POINT_IN_KELVIN;
           break;
@@ -338,7 +338,7 @@ define( function( require ) {
         substance === SubstanceType.NEON ||
         substance === SubstanceType.ARGON ||
         substance === SubstanceType.WATER ||
-        substance === SubstanceType.USER_DEFINED_MOLECULE,
+        substance === SubstanceType.ADJUSTABLE_ATOM,
         'unsupported substance'
       );
 
@@ -377,7 +377,7 @@ define( function( require ) {
           this.minModelTemperature = 0.5 * TRIPLE_POINT_INTERNAL_MODEL_TEMPERATURE / WATER_TRIPLE_POINT_IN_KELVIN;
           break;
 
-        case SubstanceType.USER_DEFINED_MOLECULE:
+        case SubstanceType.ADJUSTABLE_ATOM:
           this.particleDiameter = ConfigurableStatesOfMatterAtom.DEFAULT_RADIUS * 2;
           this.minModelTemperature = 0.5 * TRIPLE_POINT_INTERNAL_MODEL_TEMPERATURE /
                                      ADJUSTABLE_ATOM_TRIPLE_POINT_IN_KELVIN;
@@ -447,7 +447,7 @@ define( function( require ) {
         case SubstanceType.WATER:
           sigma = StatesOfMatterConstants.SIGMA_FOR_WATER;
           break;
-        case SubstanceType.USER_DEFINED_MOLECULE:
+        case SubstanceType.ADJUSTABLE_ATOM:
           sigma = ConfigurableStatesOfMatterAtom.DEFAULT_RADIUS * 2;
           break;
         default:
@@ -477,7 +477,7 @@ define( function( require ) {
         case SubstanceType.WATER:
           epsilon = StatesOfMatterConstants.EPSILON_FOR_WATER;
           break;
-        case SubstanceType.USER_DEFINED_MOLECULE:
+        case SubstanceType.ADJUSTABLE_ATOM:
           epsilon = this.convertScaledEpsilonToEpsilon( this.moleculeForceAndMotionCalculator.getScaledEpsilon() );
           break;
         default:
@@ -504,7 +504,7 @@ define( function( require ) {
           triplePointInKelvin = ARGON_TRIPLE_POINT_IN_KELVIN;
           break;
 
-        case SubstanceType.USER_DEFINED_MOLECULE:
+        case SubstanceType.ADJUSTABLE_ATOM:
           triplePointInKelvin = ADJUSTABLE_ATOM_TRIPLE_POINT_IN_KELVIN;
           break;
 
@@ -665,7 +665,7 @@ define( function( require ) {
           case SubstanceType.NEON:
             particle = new NeonAtom( 0, 0 );
             break;
-          case SubstanceType.USER_DEFINED_MOLECULE:
+          case SubstanceType.ADJUSTABLE_ATOM:
             particle = new ConfigurableStatesOfMatterAtom( 0, 0 );
             break;
           default:
@@ -737,7 +737,7 @@ define( function( require ) {
         case SubstanceType.ARGON:
           this.initializeMonatomic( this.substanceProperty.get(), phase );
           break;
-        case SubstanceType.USER_DEFINED_MOLECULE:
+        case SubstanceType.ADJUSTABLE_ATOM:
           this.initializeMonatomic( this.substanceProperty.get(), phase );
           break;
         case SubstanceType.WATER:
@@ -1140,7 +1140,7 @@ define( function( require ) {
      * @public
      */
     setEpsilon: function( epsilon ) {
-      if ( this.substanceProperty.get() === SubstanceType.USER_DEFINED_MOLECULE ) {
+      if ( this.substanceProperty.get() === SubstanceType.ADJUSTABLE_ATOM ) {
         if ( epsilon < MIN_ADJUSTABLE_EPSILON ) {
           epsilon = MIN_ADJUSTABLE_EPSILON;
         }
@@ -1164,7 +1164,7 @@ define( function( require ) {
     initializeMonatomic: function( substance, phase ) {
 
       // Verify that a valid molecule ID was provided.
-      assert && assert( substance === SubstanceType.USER_DEFINED_MOLECULE ||
+      assert && assert( substance === SubstanceType.ADJUSTABLE_ATOM ||
                         substance === SubstanceType.NEON ||
                         substance === SubstanceType.ARGON );
 
@@ -1178,7 +1178,7 @@ define( function( require ) {
       else if ( substance === SubstanceType.ARGON ) {
         particleDiameter = ArgonAtom.RADIUS * 2;
       }
-      else if ( substance === SubstanceType.USER_DEFINED_MOLECULE ) {
+      else if ( substance === SubstanceType.ADJUSTABLE_ATOM ) {
         particleDiameter = ConfigurableStatesOfMatterAtom.DEFAULT_RADIUS * 2;
       }
       else {
@@ -1220,7 +1220,7 @@ define( function( require ) {
         else if ( substance === SubstanceType.ARGON ) {
           atom = new ArgonAtom( 0, 0 );
         }
-        else if ( substance === SubstanceType.USER_DEFINED_MOLECULE ) {
+        else if ( substance === SubstanceType.ADJUSTABLE_ATOM ) {
           atom = new ConfigurableStatesOfMatterAtom( 0, 0 );
         }
         else {

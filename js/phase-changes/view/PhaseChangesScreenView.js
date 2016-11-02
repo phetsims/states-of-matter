@@ -237,7 +237,7 @@ define( function( require ) {
       self.updatePhaseDiagram();
       self.phaseDiagram.setDepictingWater( substance === StatesOfMatterConstants.WATER );
       if ( isInteractionDiagramEnabled ) {
-        if ( substance === SubstanceType.USER_DEFINED_MOLECULE ||
+        if ( substance === SubstanceType.ADJUSTABLE_ATOM ||
              substance === SubstanceType.DIATOMIC_OXYGEN ||
              substance === SubstanceType.WATER ) {
           epsilonControlInteractionPotentialDiagram.setMolecular( true );
@@ -248,7 +248,7 @@ define( function( require ) {
       }
 
       // don't show the phase diagram for adjustable attraction, since we need the space for other things
-      if ( substance === SubstanceType.USER_DEFINED_MOLECULE ) {
+      if ( substance === SubstanceType.ADJUSTABLE_ATOM ) {
         self.phaseDiagram.visible = false;
         if ( isInteractionDiagramEnabled ) {
           epsilonControlInteractionPotentialDiagram.top = phaseChangesMoleculesControlPanel.bottom + INTER_PANEL_SPACING;

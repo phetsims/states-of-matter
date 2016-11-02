@@ -185,7 +185,7 @@ define( function( require ) {
     Property.multilink(
       [ multipleParticleModel.substanceProperty, multipleParticleModel.interactionStrengthProperty ],
       function( substance, interactionStrength ) {
-        if ( substance === SubstanceType.USER_DEFINED_MOLECULE ) {
+        if ( substance === SubstanceType.ADJUSTABLE_ATOM ) {
           multipleParticleModel.setEpsilon( interactionStrength );
         }
         self.updateInteractivityState();
@@ -222,7 +222,7 @@ define( function( require ) {
      * @private
      */
     updateInteractivityState: function() {
-      this.interactionEnabled = this.multipleParticleModel.substanceProperty.get() === SubstanceType.USER_DEFINED_MOLECULE;
+      this.interactionEnabled = this.multipleParticleModel.substanceProperty.get() === SubstanceType.ADJUSTABLE_ATOM;
     }
   } );
 } );
