@@ -23,15 +23,13 @@ define( function( require ) {
    * @param {ModelViewTransform2} modelViewTransform to convert between model and view co-ordinates
    * @param {boolean} enableOverlap - true if the node should be larger than the actual particle, thus allowing particles
    * @param {number} minX - grabbable particle  min x position
-   * @param {number} maxX - grabbable particle  max x position
    * @constructor
    */
-  function GrabbableParticleNode( dualAtomModel, particle, modelViewTransform, enableOverlap, minX, maxX ) {
+  function GrabbableParticleNode( dualAtomModel, particle, modelViewTransform, enableOverlap, minX ) {
 
     ParticleForceNode.call( this, particle, modelViewTransform, enableOverlap );
 
     this.minX = minX;
-    this.maxX = maxX;
     var self = this;
     this.dualAtomModel = dualAtomModel;
 
@@ -64,14 +62,10 @@ define( function( require ) {
 
         endDragX = self.globalToParentPoint( event.pointer.point ).x;
         var d = endDragX - startDragX;
+
         // Make sure we don't exceed the positional limits.
-        var newPosX = initialStartX + d;
-        if ( newPosX > self.maxX ) {
-          newPosX = self.maxX;
-        }
-        else if ( newPosX < self.minX ) {
-          newPosX = self.minX;
-        }
+        var newPosX = Math.max( initialStartX + d, self.minX );
+
         // Move the particle based on the amount of mouse movement.
         self.particle.setPosition( modelViewTransform.viewToModelX( newPosX ), particle.positionProperty.value.y );
       },
@@ -117,22 +111,6 @@ define( function( require ) {
      */
     setMinX: function( minX ) {
       this.minX = minX;
-    },
-
-    /**
-     * @public
-     * @returns {number}
-     */
-    getMaxX: function() {
-      return this.maxX;
-    },
-
-    /**
-     * @public
-     * @param {number} maxX - grabbable particle  max x position
-     */
-    setMaxX: function( maxX ) {
-      this.maxX = maxX;
     }
   } );
 } );

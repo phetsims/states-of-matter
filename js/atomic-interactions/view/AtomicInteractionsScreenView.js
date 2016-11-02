@@ -376,8 +376,7 @@ define( function( require ) {
         particle,
         this.modelViewTransform,
         true,
-        0,
-        1.0 / 0.0
+        0
       );
       this.movableParticleNode.setShowAttractiveForces( this.showAttractiveForces );
       this.movableParticleNode.setShowRepulsiveForces( this.showRepulsiveForces );

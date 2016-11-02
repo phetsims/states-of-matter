@@ -1,8 +1,8 @@
 // Copyright 2015, University of Colorado Boulder
 
 /**
- * View for the hand node which looks like a human hand with thumb and pointing finger expanded and the other three
- * fingers folded.
+ * View for the hand node which looks like a cartoonish human hand with thumb and pointing finger expanded and the other
+ * three fingers folded.
  *
  * @author Siddhartha Chinthapally (Actual Concepts)
  * @author John Blanco
@@ -84,9 +84,26 @@ define( function( require ) {
       }
     } ) );
 
-    // move with the movable atom
-    dualAtomModel.movableAtom.positionProperty.link( function( position ) {
-      self.x = modelViewTransform.modelToViewX( position.x );
+    // TODO: Below, some code was added to improve a situation where other elements on the screen were moving about due
+    // to the presence of this node, see https://github.com/phetsims/states-of-matter/issues/176.  When that issue is
+    // resolved, the commented-out code should be restored and the subsequent two links should be removed.
+
+
+    // move the hint with the particle
+    //particle.positionProperty.link( function( position ) {
+    //  self.x = modelViewTransform.modelToViewX( position.x );
+    //} );
+
+    particle.positionProperty.link( function( position ) {
+      if ( dualAtomModel.movementHintVisibleProperty.get() ) {
+        self.x = modelViewTransform.modelToViewX( position.x );
+      }
+    } );
+
+    dualAtomModel.movementHintVisibleProperty.link( function( visible, wasVisible ) {
+      if ( wasVisible && !visible ) {
+        self.x = 0;
+      }
     } );
   }
 
@@ -95,34 +112,19 @@ define( function( require ) {
   return inherit( Node, HandNode, {
 
     /**
-     * @public
      * @returns {number}
+     * @public
      */
     getMinX: function() {
       return this.minX;
     },
 
     /**
-     *
-     * @param {number} minX - particle min x  position
+     * @param {number} minX
+     * @public
      */
     setMinX: function( minX ) {
       this.minX = minX;
-    },
-
-    /**
-     * @public
-     * @returns {number}
-     */
-    getMaxX: function() {
-      return this.maxX;
-    },
-
-    /**
-     * @param {number} maxX - particle max x  position
-     */
-    setMaxX: function( maxX ) {
-      this.maxX = maxX;
     }
   } );
 } );
