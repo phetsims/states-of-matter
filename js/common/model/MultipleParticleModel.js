@@ -156,15 +156,24 @@ define( function( require ) {
     // other model attributes
     //-----------------------------------------------------------------------------------------------------------------
 
-    // arrays containing references to the individual particles
+    // @public, array containing references to the non-normalized particles
     this.particles = new ObservableArray(); // @public, read-only
 
-    // @public, data set containing information about the position, motion, and force for each particle
+    // @public, data set containing information about the position, motion, and force for the normalized particles
     this.moleculeDataSet = null;
 
     // @public, various non-property attributes
     this.normalizedContainerWidth = PARTICLE_CONTAINER_WIDTH / this.particleDiameter;
     this.gravitationalAcceleration = INITIAL_GRAVITATIONAL_ACCEL;
+
+    // @public, read-only, normalized version of the container height, changes as the lid position changes
+    this.normalizedContainerHeight = this.particleContainerHeightProperty.get() / this.particleDiameter;
+
+    // @public, read-only, normalized version of the TOTAL container height regardless of the lid position, set once at init
+    this.normalizedTotalContainerHeight = this.particleContainerHeightProperty.get / this.particleDiameter;
+
+    // @public, normalized velocity at which lid is moving in y direction
+    this.normalizedLidVelocityY = 0;
 
     // @private, various internal model variables
     this.particleDiameter = 1;
@@ -177,15 +186,6 @@ define( function( require ) {
     this.injectionPointX = 0;
     this.injectionPointY = 0;
     this.heightChangeThisStep = 0;
-
-    // @public, read-only, normalized version of the container height, changes as the lid position changes
-    this.normalizedContainerHeight = this.particleContainerHeightProperty.get() / this.particleDiameter;
-
-    // @public, read-only, normalized version of the TOTAL container height regardless of the lid position, set once at init
-    this.normalizedTotalContainerHeight = this.particleContainerHeightProperty.get / this.particleDiameter;
-
-    // @public, normalized velocity at which lid is moving in y direction
-    this.normalizedLidVelocityY = 0;
 
     // @private, strategy patterns that are applied to the data set
     this.atomPositionUpdater = null;
