@@ -1271,7 +1271,7 @@ define( function( require ) {
      * @public
      */
     getPressureInAtmospheres: function() {
-      return 13000 * this.getModelPressure(); // multiplier empirically determined
+      return 5 * this.getModelPressure(); // multiplier empirically determined
     },
 
     /**

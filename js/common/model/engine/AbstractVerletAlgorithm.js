@@ -14,13 +14,16 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var Property = require( 'AXON/Property' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  var TimeSpanDataQueue = require( 'STATES_OF_MATTER/common/model/TimeSpanDataQueue' );
 
-  // constants that control various aspects of the Verlet algorithm.
+  // constants that control the pressure calculation.  The size of the pressure accumulator assumes a max sim rate of
+  // 1 / 60, which derives from the standard 60 FPS rate at which browsers currently run.  May need to go up someday.
   var PRESSURE_CALC_TIME_WINDOW = 8; // in seconds, empirically determined to be responsive but not jumpy
+  var PRESSURE_ACCUMULATOR_LENGTH = Math.ceil( PRESSURE_CALC_TIME_WINDOW / ( 1 / 60 ) * 1.1 );
 
-  // Pressure at which explosion of the container will occur.  This is currently set so that container blows roughly
-  // when the pressure gauge hits its max value.
-  var EXPLOSION_PRESSURE = 0.016;
+  // constants that control when the container explodes
+  var EXPLOSION_PRESSURE = 41; // in model units, empirically determined
+  var EXPLOSION_TIME = 1; // in seconds, time that the pressure must be above the threshold before explostion occurs
 
   /**
    * @param {MultipleParticleModel} multipleParticleModel of the simulation
@@ -41,9 +44,15 @@ define( function( require ) {
     this.potentialEnergy = 0;
     this.temperature = 0;
 
-    // Flag that indicates whether the lid affected the velocity of one or more particles, set during execution of the
-    // Verlet algorithm, must be cleared by the client.
+    // @public, read-write, flag that indicates whether the lid affected the velocity of one or more particles, set
+    // during execution of the Verlet algorithm, must be cleared by the client.
     this.lidChangedParticleVelocity = false;
+
+    // @private, moving time window queue for tracking the pressure data
+    this.pressureAccumatorQueue = new TimeSpanDataQueue( PRESSURE_ACCUMULATOR_LENGTH, PRESSURE_CALC_TIME_WINDOW );
+
+    // @private, tracks time above the explosion threshold
+    this.timeAboveExplosionPressure = 0;
   }
 
   statesOfMatter.register( 'AbstractVerletAlgorithm', AbstractVerletAlgorithm );
@@ -135,6 +144,7 @@ define( function( require ) {
             yPos = minY;
             moleculeVelocity.y = -moleculeVelocityY;
           }
+
           // handle bounce off the top
           else if ( yPos >= maxY ) {
 
@@ -154,11 +164,11 @@ define( function( require ) {
                 // velocity is used, and the multiplier was empirically determined to look reasonable without causing
                 // the pressure to go up too quickly when compressing the container.
                 moleculeVelocity.y = -moleculeVelocityY + lidVelocity * 0.3;
-                accumulatedPressure += Math.abs( moleculeVelocityY );
               }
               else if ( Math.abs( moleculeVelocityY ) < Math.abs( lidVelocity ) ) {
                 moleculeVelocity.y = lidVelocity;
               }
+              accumulatedPressure += Math.abs( moleculeVelocityY );
             }
             else {
               // This particle has left the container.
@@ -236,26 +246,31 @@ define( function( require ) {
     },
 
     /**
-     * @param {number} pressureZoneWallForce
+     * @param {number} pressureThisStep
      * @param {number} dt
      * @public
      */
-    updatePressure: function( pressureZoneWallForce, dt ) {
+    updatePressure: function( pressureThisStep, dt ) {
 
       if ( this.multipleParticleModel.isExplodedProperty.get() ) {
 
-        // If the container has exploded, there is essentially no pressure.
+        // If the container has exploded, there is no pressureThisStep.
+        this.pressureAccumatorQueue.clear();
         this.pressureProperty.set( 0 );
       }
       else {
-        this.pressureProperty.set( ( dt / PRESSURE_CALC_TIME_WINDOW ) *
-                                   ( pressureZoneWallForce / ( this.multipleParticleModel.normalizedContainerWidth +
-                                                    this.multipleParticleModel.normalizedContainerHeight ) ) +
-                                   ( PRESSURE_CALC_TIME_WINDOW - dt ) / PRESSURE_CALC_TIME_WINDOW * this.pressureProperty.get() );
-        if ( ( this.pressureProperty.get() > EXPLOSION_PRESSURE ) && !this.multipleParticleModel.isExplodedProperty.get() ) {
+        this.pressureAccumatorQueue.add( pressureThisStep, dt );
+        this.pressureProperty.set( this.pressureAccumatorQueue.total / PRESSURE_CALC_TIME_WINDOW );
 
-          // The pressure has reached the point where the container should explode, so blow 'er up.
-          this.multipleParticleModel.setContainerExploded( true );
+        if ( this.pressureProperty.get() > EXPLOSION_PRESSURE ) {
+          this.timeAboveExplosionPressure += dt;
+          if ( this.timeAboveExplosionPressure > EXPLOSION_TIME ) {
+            // Thar she blows!
+            this.multipleParticleModel.setContainerExploded( true );
+          }
+        }
+        else {
+          this.timeAboveExplosionPressure = 0;
         }
       }
     },
