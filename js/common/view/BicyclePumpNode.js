@@ -56,11 +56,21 @@ define( function( require ) {
     Node.call( this );
     var self = this;
     this.multipleParticleModel = multipleParticleModel; // @private
-    this.injectionCapacity; // @private, number of molecules that can be injected by the pump
+    this.injectionCapacity = 0; // @private, number of molecules that can be injected by the pump
 
     // update the total capacity whenever the substance changes
     multipleParticleModel.substanceProperty.link( function() {
       self.injectionCapacity = multipleParticleModel.moleculeDataSet.getNumberOfRemainingSlots();
+    } );
+
+    // update the total capacity whenever the exploded state changes
+    multipleParticleModel.isExplodedProperty.link( function( isExploded ) {
+      if ( isExploded ) {
+        self.injectionCapacity = 0;
+      }
+      else {
+        self.injectionCapacity = multipleParticleModel.moleculeDataSet.getNumberOfRemainingSlots();
+      }
     } );
 
     var pumpShaft;
@@ -390,18 +400,15 @@ define( function( require ) {
   statesOfMatter.register( 'BicyclePumpNode', BicyclePumpNode );
 
   return inherit( Node, BicyclePumpNode, {
+
+    // @public
     step: function() {
 
       // update the remaining capacity proportion
-      if ( this.multipleParticleModel.isExplodedProperty.get() ) {
-        this.remainingPumpCapacityProportionProperty.set( 0 );
-      }
-      else {
-        var remainingMoleculeSlots = this.multipleParticleModel.moleculeDataSet.getNumberOfRemainingSlots();
-        this.remainingPumpCapacityProportionProperty.set(
-          Math.min( remainingMoleculeSlots / this.injectionCapacity, 1 )
-        );
-      }
+      var remainingMoleculeSlots = this.multipleParticleModel.moleculeDataSet.getNumberOfRemainingSlots();
+      this.remainingPumpCapacityProportionProperty.set(
+        this.injectionCapacity > 0 ? Math.min( remainingMoleculeSlots / this.injectionCapacity, 1 ) : 0
+      );
     }
   } );
 } );
