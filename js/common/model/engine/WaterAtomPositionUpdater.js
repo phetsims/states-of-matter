@@ -24,7 +24,7 @@ define( function( require ) {
     /**
      * @public
      * @param {MoleculeForceAndMotionDataSet} moleculeDataSet
-     * @param {Number} timeStep
+     * @param {number} timeStep
      */
     updateAtomPositions: function( moleculeDataSet ) {
 
