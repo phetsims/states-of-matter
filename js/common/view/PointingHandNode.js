@@ -35,13 +35,9 @@ define( function( require ) {
 
     var self = this;
     Node.call( this );
-    this.multipleParticleModel = multipleParticleModel;
-    this.modelViewTransform = modelViewTransform;
-    this.mouseOver = false;
-    this.beingDragged = false;
 
     // Add the up arrow.
-    this.upArrowNode = new ArrowNode( 0, 0, 0, 25, {
+    var upArrowNode = new ArrowNode( 0, 0, 0, 25, {
       headHeight: 10,
       headWidth: 10,
       tailWidth: 6,
@@ -52,44 +48,52 @@ define( function( require ) {
     } );
 
     // Add the down arrow.
-    this.downArrowNode = new ArrowNode( 0, 0, 0, 25, {
+    var downArrowNode = new ArrowNode( 0, 0, 0, 25, {
       headHeight: 10,
       headWidth: 10,
       tailWidth: 6,
       fill: '#33FF00',
       stroke: '#33FF00',
       pickable: true,
-      top: this.upArrowNode.bottom + 5
+      top: upArrowNode.bottom + 5
     } );
 
     // Load and scale the image.  Scale was empirically determined.
-    this.pointingHandImageNode = new Image( pointingHandImage, {
+    var pointingHandImageNode = new Image( pointingHandImage, {
       cursor: 'ns-resize',
       pickable: true
     } );
-    this.pointingHandImageNode.scale( WIDTH / this.pointingHandImageNode.width );
+    pointingHandImageNode.scale( WIDTH / pointingHandImageNode.width );
 
-    this.hintNode = new Node( {
-      children: [ this.upArrowNode, this.downArrowNode ],
+    var hintNode = new Node( {
+      children: [ upArrowNode, downArrowNode ],
       visible: false,
-      top: this.pointingHandImageNode.bottom - 50, // adjusted a bit for better look
-      left: this.pointingHandImageNode.right - 20 // adjusted a bit for better look
+      top: pointingHandImageNode.bottom - 50, // adjusted a bit for better look
+      left: pointingHandImageNode.right - 20 // adjusted a bit for better look
     } );
+
+    var mouseOver = false;
+    var beingDragged = false;
+
+    function updateHintVisibility() {
+      hintNode.setVisible( mouseOver || beingDragged );
+    }
 
     // Set ourself up to listen for and handle mouse dragging events.
     var startY;
     var endY;
+    var containerSizeAtDragStart;
 
     // add a listener to handle drag events
-    this.pointingHandImageNode.addInputListener( new SimpleDragHandler( {
+    pointingHandImageNode.addInputListener( new SimpleDragHandler( {
 
       allowTouchSnag: true,
 
       start: function( event ) {
         startY = self.globalToParentPoint( event.pointer.point ).y;
-        self.beingDragged = true;
-        self.containerSizeAtDragStart = multipleParticleModel.particleContainerHeightProperty.get();
-        self.updateHintVisibility();
+        beingDragged = true;
+        containerSizeAtDragStart = multipleParticleModel.particleContainerHeightProperty.get();
+        updateHintVisibility();
 
       },
 
@@ -98,9 +102,9 @@ define( function( require ) {
 
         // Resize the container based on the amount that the node has moved.
         multipleParticleModel.setTargetParticleContainerHeight(
-          self.containerSizeAtDragStart + modelViewTransform.viewToModelDeltaY( endY - startY )
+          containerSizeAtDragStart + modelViewTransform.viewToModelDeltaY( endY - startY )
         );
-        self.updateHintVisibility();
+        updateHintVisibility();
       },
 
       end: function() {
@@ -109,26 +113,28 @@ define( function( require ) {
         multipleParticleModel.setTargetParticleContainerHeight(
           multipleParticleModel.particleContainerHeightProperty.get()
         );
-        self.beingDragged = false;
-        self.updateHintVisibility();
+        beingDragged = false;
+        updateHintVisibility();
       }
     } ) );
 
     // add the listener that will show and hide the hint
-    this.pointingHandImageNode.addInputListener( {
+    this.addInputListener( {
       enter: function() {
-        self.mouseOver = true;
-        self.updateHintVisibility();
+        mouseOver = true;
+        updateHintVisibility();
       },
       exit: function() {
-        self.mouseOver = false;
-        self.updateHintVisibility();
+        mouseOver = false;
+        updateHintVisibility();
       }
     } );
 
-    // Add the image node as a child.
-    this.addChild( this.pointingHandImageNode );
-    this.addChild( this.hintNode );
+    // Add the child nodes.
+    this.addChild( pointingHandImageNode );
+    this.addChild( hintNode );
+
+    // Expand the touch area.
     this.touchArea = this.localBounds.dilatedXY( 10, 10 );
 
     // Add a listener to update the individual arrow visibility.
@@ -136,20 +142,23 @@ define( function( require ) {
       if ( particleContainerHeight === MultipleParticleModel.PARTICLE_CONTAINER_INITIAL_HEIGHT ) {
 
         // At the height limit, so only show the down arrow.
-        self.upArrowNode.setVisible( false );
-        self.downArrowNode.setVisible( true );
+        upArrowNode.setVisible( false );
+        downArrowNode.setVisible( true );
       }
       else if ( particleContainerHeight === MultipleParticleModel.PARTICLE_CONTAINER_MIN_HEIGHT ) {
 
         // Particle container all the way down, so show only the up arrow.
-        self.upArrowNode.setVisible( true );
-        self.downArrowNode.setVisible( false );
+        upArrowNode.setVisible( true );
+        downArrowNode.setVisible( false );
       }
       else {
-        self.upArrowNode.setVisible( true );
-        self.downArrowNode.setVisible( true );
+        upArrowNode.setVisible( true );
+        downArrowNode.setVisible( true );
       }
     } );
+
+    // Set a value that will be used to position the fingertip.
+    this.fingertipToBottomDistanceY = hintNode.bottom - pointingHandImageNode.bottom;
 
     this.mutate( options );
   }
@@ -159,19 +168,13 @@ define( function( require ) {
   return inherit( Node, PointingHandNode, {
 
     /**
-     * Set the position of this node such that the tip of the finger is at the provided Y location.
-     * @param {number} fingerYPos
+     * Set the position of this node such that the tip of the finger is at the provided Y location.  The x position
+     * remains unchanged.
+     * @param {number} fingertipYPos
      * @public
      */
     setFingertipYPosition: function( fingertipYPos ) {
-      this.bottom = fingertipYPos + ( this.hintNode.bottom - this.pointingHandImageNode.bottom );
-    },
-
-    /**
-     * @public
-     */
-    updateHintVisibility: function() {
-      this.hintNode.setVisible( this.mouseOver || this.beingDragged );
+      this.bottom = fingertipYPos + this.fingertipToBottomDistanceY;
     }
   } );
 } );
