@@ -18,7 +18,7 @@ define( function( require ) {
 
   // constants that control the pressure calculation.  The size of the pressure accumulator assumes a max sim rate of
   // 1 / 60, which derives from the standard 60 FPS rate at which browsers currently run.  May need to go up someday.
-  var PRESSURE_CALC_TIME_WINDOW = 8; // in seconds, empirically determined to be responsive but not jumpy
+  var PRESSURE_CALC_TIME_WINDOW = 12; // in seconds, empirically determined to be responsive but not jumpy
   var PRESSURE_ACCUMULATOR_LENGTH = Math.ceil( PRESSURE_CALC_TIME_WINDOW / ( 1 / 60 ) * 1.1 );
 
   // constants that control when the container explodes
