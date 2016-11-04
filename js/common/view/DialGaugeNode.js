@@ -108,7 +108,7 @@ define( function( require ) {
       var pressure = multipleParticleModel.pressureProperty.get();
       if ( pressure !== previousPressure ) {
         if ( pressure < MAX_PRESSURE ) {
-          textualReadout.setText( Util.toFixed( pressure, 2 ) + ' ' + pressureUnitsInAtmString );
+          textualReadout.setText( Util.toFixed( pressure, 1 ) + ' ' + pressureUnitsInAtmString );
           textualReadout.fill = 'black';
         }
         else {
