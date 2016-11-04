@@ -23,7 +23,7 @@ define( function( require ) {
 
   // constants that control when the container explodes
   var EXPLOSION_PRESSURE = 41; // in model units, empirically determined
-  var EXPLOSION_TIME = 1; // in seconds, time that the pressure must be above the threshold before explostion occurs
+  var EXPLOSION_TIME = 1; // in seconds, time that the pressure must be above the threshold before explosion occurs
 
   /**
    * @param {MultipleParticleModel} multipleParticleModel of the simulation
@@ -181,8 +181,8 @@ define( function( require ) {
         moleculeCenterOfMassPositions[ i ].setXY( xPos, yPos );
 
         // set new rotation (does nothing in the monatomic case)
-        moleculeRotationAngles[ i ] += ( timeStep * moleculeRotationRates[ i ]) +
-                                       ( timeStepSqrHalf * moleculeTorques[ i ] * inertiaInverse);
+        moleculeRotationAngles[ i ] += ( timeStep * moleculeRotationRates[ i ] ) +
+                                       ( timeStepSqrHalf * moleculeTorques[ i ] * inertiaInverse );
       }
 
       // Now that the molecule position information has been updated, update the positions of the individual atoms.

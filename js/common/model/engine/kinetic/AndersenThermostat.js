@@ -52,9 +52,8 @@ define( function( require ) {
       var gammaY = 0.9999;
       var temperature = this.targetTemperature;
       if ( temperature <= this.minModelTemperature ) {
-        // Use a values that will cause the molecules to stop
-        // moving if we are below the minimum temperature, since
-        // we want to create the appearance of absolute zero.
+        // Use a values that will cause the molecules to stop moving if we are below the minimum temperature, since we
+        // want to create the appearance of absolute zero.
         gammaX = 0.992;
         gammaY = 0.999; // Scale a little differently in Y direction so particles don't stop falling when absolute zero is reached.
         temperature = 0;

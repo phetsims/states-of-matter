@@ -58,8 +58,8 @@ define( function( require ) {
   var DEFAULT_SUBSTANCE = SubstanceType.NEON;
   var MAX_TEMPERATURE = 50.0;
   var MIN_TEMPERATURE = 0.0001;
-  var INITIAL_GRAVITATIONAL_ACCEL = -0.045;
-  var TEMPERATURE_CHANGE_RATE_FACTOR = 0.07; // empirically determined to make temperate change at a good rate
+  var NOMINAL_GRAVITATIONAL_ACCEL = -0.045;
+  var TEMPERATURE_CHANGE_RATE = 0.07; // empirically determined to make temperate change at a reasonable rate
   var INJECTED_MOLECULE_VELOCITY = 2.0; // in normalized model units per second, empirically determined to look reasonable
   var INJECTED_MOLECULE_ANGLE_SPREAD = Math.PI * 0.25; // in radians, empirically determined to look reasonable
   var INJECTION_POINT_HORIZ_PROPORTION = 0.00;
@@ -78,6 +78,7 @@ define( function( require ) {
   var LIQUID_TEMPERATURE = StatesOfMatterConstants.LIQUID_TEMPERATURE;
   var GAS_TEMPERATURE = StatesOfMatterConstants.GAS_TEMPERATURE;
   var INITIAL_TEMPERATURE = SOLID_TEMPERATURE;
+  var APPROACHING_ABSOLUTE_ZERO_TEMPERATURE = SOLID_TEMPERATURE * 0.9;
 
   // possible thermostat settings
   var ISOKINETIC_THERMOSTAT = 1;
@@ -164,7 +165,7 @@ define( function( require ) {
 
     // @public, various non-property attributes
     this.normalizedContainerWidth = PARTICLE_CONTAINER_WIDTH / this.particleDiameter;
-    this.gravitationalAcceleration = INITIAL_GRAVITATIONAL_ACCEL;
+    this.gravitationalAcceleration = NOMINAL_GRAVITATIONAL_ACCEL;
 
     // @public, read-only, normalized version of the container height, changes as the lid position changes
     this.normalizedContainerHeight = this.particleContainerHeightProperty.get() / this.particleDiameter;
@@ -564,7 +565,7 @@ define( function( require ) {
       }
 
       // other reset
-      this.gravitationalAcceleration = INITIAL_GRAVITATIONAL_ACCEL;
+      this.gravitationalAcceleration = NOMINAL_GRAVITATIONAL_ACCEL;
       this.timeStepMovingAverage.reset();
       this.resetEmitter.emit();
     },
@@ -766,7 +767,7 @@ define( function( require ) {
     initializeModelParameters: function() {
 
       // Initialize the system parameters.
-      this.gravitationalAcceleration = INITIAL_GRAVITATIONAL_ACCEL;
+      this.gravitationalAcceleration = NOMINAL_GRAVITATIONAL_ACCEL;
       this.heatingCoolingAmountProperty.reset();
       this.temperatureSetPointProperty.reset();
       this.isExplodedProperty.reset();
@@ -854,20 +855,28 @@ define( function( require ) {
       );
 
       // Determine the number of model steps and the size of the time step
-      var particleMotionTimeStep;
-      var numParticleEngineSteps = 1;
-      if ( particleMotionAdvancementTime > MAX_PARTICLE_MOTION_TIME_STEP ) {
-        particleMotionTimeStep = MAX_PARTICLE_MOTION_TIME_STEP;
-        numParticleEngineSteps = Math.floor( particleMotionAdvancementTime / MAX_PARTICLE_MOTION_TIME_STEP );
-        this.residualTime = particleMotionAdvancementTime - ( numParticleEngineSteps * particleMotionTimeStep );
+      var numParticleEngineSteps;
+
+      if ( this.getTemperatureInKelvin() > 0 ) {
+        var particleMotionTimeStep;
+        numParticleEngineSteps = 1;
+        if ( particleMotionAdvancementTime > MAX_PARTICLE_MOTION_TIME_STEP ) {
+          particleMotionTimeStep = MAX_PARTICLE_MOTION_TIME_STEP;
+          numParticleEngineSteps = Math.floor( particleMotionAdvancementTime / MAX_PARTICLE_MOTION_TIME_STEP );
+          this.residualTime = particleMotionAdvancementTime - ( numParticleEngineSteps * particleMotionTimeStep );
+        }
+        else {
+          particleMotionTimeStep = particleMotionAdvancementTime;
+        }
+
+        if ( this.residualTime > particleMotionTimeStep ) {
+          numParticleEngineSteps++;
+          this.residualTime -= particleMotionTimeStep;
+        }
       }
       else {
-        particleMotionTimeStep = particleMotionAdvancementTime;
-      }
-
-      if ( this.residualTime > particleMotionTimeStep ) {
-        numParticleEngineSteps++;
-        this.residualTime -= particleMotionTimeStep;
+        // Don't update particle motion if we are at absolute zero.
+        numParticleEngineSteps = 0;
       }
 
       // Execute the Verlet algorithm, a.k.a. the "particle engine", in order to determine the new particle positions.
@@ -895,16 +904,25 @@ define( function( require ) {
 
       // Adjust the temperature if needed.
       if ( this.heatingCoolingAmountProperty.get() !== 0 ) {
-        var temperatureChange = this.heatingCoolingAmountProperty.get() * TEMPERATURE_CHANGE_RATE_FACTOR * dt;
+
         var newTemperature;
-        if ( this.temperatureSetPointProperty.get() < SOLID_TEMPERATURE * 0.75 &&
+
+        if ( this.temperatureSetPointProperty.get() < APPROACHING_ABSOLUTE_ZERO_TEMPERATURE &&
              this.heatingCoolingAmountProperty.get() < 0 ) {
 
-          // The temperature adjusts more slowly as we begin to approach absolute zero, multiplier empirically determined.
+          // The temperature adjusts more slowly as we begin to approach absolute zero so that all the particles have
+          // time to reach the bottom of the container.  This is not linear - the rate of change slows as we get closer,
+          // to zero degrees Kelvin, which is somewhat real world-ish.
+          var adjustmentFactor = Math.pow(
+            this.temperatureSetPointProperty.get() / APPROACHING_ABSOLUTE_ZERO_TEMPERATURE,
+            2 // exponent chosen empirically to be as small as possible and still get all particles to bottom before 0K
+          );
+
           newTemperature = this.temperatureSetPointProperty.get() +
-                           this.heatingCoolingAmountProperty.get() * TEMPERATURE_CHANGE_RATE_FACTOR * dt * 0.1;
+                           this.heatingCoolingAmountProperty.get() * TEMPERATURE_CHANGE_RATE * dt * adjustmentFactor;
         }
         else {
+          var temperatureChange = this.heatingCoolingAmountProperty.get() * TEMPERATURE_CHANGE_RATE * dt;
           newTemperature = Math.min( this.temperatureSetPointProperty.get() + temperatureChange, MAX_TEMPERATURE );
         }
 

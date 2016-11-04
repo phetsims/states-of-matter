@@ -19,22 +19,17 @@ define( function( require ) {
   /**
    * Constructor for the Isokinetic thermostat.
    * @param {MoleculeForceAndMotionDataSet} moleculeDataSet -  Data set on which operations will be performed.
-   * @param {number} minTemperature - The temperature that should be considered absolute zero, below which motion should cease.
    * @constructor
    */
-  function IsokineticThermostat( moleculeDataSet, minTemperature ) {
+  function IsokineticThermostat( moleculeDataSet ) {
 
     this.moleculeDataSet = moleculeDataSet;
-
-    // Minimum temperature in normalized model units, below this is considered absolute 0;
-    this.minModelTemperature = minTemperature;
 
     // Target temperature in normalized model units
     this.targetTemperature = StatesOfMatterConstants.INITIAL_TEMPERATURE;
 
-
-    // Set up references to the various arrays within the data set so that
-    // the calculations can be performed as fast as is possible.
+    // Set up references to the various arrays within the data set so that the calculations can be performed as fast as
+    // is possible.
     this.moleculeVelocities = moleculeDataSet.moleculeVelocities;
     this.moleculeRotationRates = moleculeDataSet.moleculeRotationRates;
   }
@@ -42,10 +37,12 @@ define( function( require ) {
   statesOfMatter.register( 'IsokineticThermostat', IsokineticThermostat );
 
   return inherit( Object, IsokineticThermostat, {
+
     /**
      * @public
      */
     adjustTemperature: function() {
+
       // Calculate the internal temperature of the system from the kinetic energy.
       var measuredTemperature;
       var i;
@@ -82,19 +79,13 @@ define( function( require ) {
     },
 
     /**
-     * @public
      * @param {number} measuredTemperature
+     * @private
      */
     adjustMeasuredTemperature: function( measuredTemperature ) {
 
       // Calculate the scaling factor that will be used to adjust the temperature.
-      var temperatureScaleFactor;
-      if ( this.targetTemperature <= this.minModelTemperature ) {
-        temperatureScaleFactor = 0;
-      }
-      else {
-        temperatureScaleFactor = Math.sqrt( this.targetTemperature / measuredTemperature );
-      }
+      var temperatureScaleFactor = Math.sqrt( this.targetTemperature / measuredTemperature );
       for ( var i = 0; i < this.moleculeDataSet.getNumberOfMolecules(); i++ ) {
         this.moleculeVelocities[ i ].setXY( this.moleculeVelocities[ i ].x * temperatureScaleFactor,
           this.moleculeVelocities[ i ].y * temperatureScaleFactor );
