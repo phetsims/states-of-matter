@@ -87,8 +87,19 @@ define( function( require ) {
       // Calculate the scaling factor that will be used to adjust the temperature.
       var temperatureScaleFactor = Math.sqrt( this.targetTemperature / measuredTemperature );
       for ( var i = 0; i < this.moleculeDataSet.getNumberOfMolecules(); i++ ) {
-        this.moleculeVelocities[ i ].setXY( this.moleculeVelocities[ i ].x * temperatureScaleFactor,
-          this.moleculeVelocities[ i ].y * temperatureScaleFactor );
+
+
+        if ( this.moleculeVelocities[ i ].y < 0 ) {
+          // only scale the x velocity to avoid slowing down particles that are falling
+          this.moleculeVelocities[ i ].x = this.moleculeVelocities[ i ].x * temperatureScaleFactor;
+        }
+        else {
+          // scale both the x and y velocities
+          this.moleculeVelocities[ i ].setXY(
+            this.moleculeVelocities[ i ].x * temperatureScaleFactor,
+            this.moleculeVelocities[ i ].y * temperatureScaleFactor
+          );
+        }
         this.moleculeRotationRates[ i ] *= temperatureScaleFactor; // Doesn't hurt anything in the monatomic case.
       }
     }

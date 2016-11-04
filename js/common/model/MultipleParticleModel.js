@@ -915,7 +915,7 @@ define( function( require ) {
           // to zero degrees Kelvin, which is somewhat real world-ish.
           var adjustmentFactor = Math.pow(
             this.temperatureSetPointProperty.get() / APPROACHING_ABSOLUTE_ZERO_TEMPERATURE,
-            2 // exponent chosen empirically to be as small as possible and still get all particles to bottom before 0K
+            1.3 // exponent chosen empirically to be as small as possible and still get all particles to bottom before absolute zero
           );
 
           newTemperature = this.temperatureSetPointProperty.get() +
