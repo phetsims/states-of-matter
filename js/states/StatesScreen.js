@@ -39,7 +39,7 @@ define( function( require ) {
     );
     var self = this;
     StatesOfMatterColorProfile.backgroundProperty.link( function( color ) {
-      self.backgroundColor = color;
+      self.backgroundColorProperty.value = color;
     } );
   }
 
