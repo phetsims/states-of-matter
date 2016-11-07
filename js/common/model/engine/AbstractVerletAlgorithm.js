@@ -49,7 +49,7 @@ define( function( require ) {
     this.lidChangedParticleVelocity = false;
 
     // @private, moving time window queue for tracking the pressure data
-    this.pressureAccumatorQueue = new TimeSpanDataQueue( PRESSURE_ACCUMULATOR_LENGTH, PRESSURE_CALC_TIME_WINDOW );
+    this.pressureAccumulatorQueue = new TimeSpanDataQueue( PRESSURE_ACCUMULATOR_LENGTH, PRESSURE_CALC_TIME_WINDOW );
 
     // @private, tracks time above the explosion threshold
     this.timeAboveExplosionPressure = 0;
@@ -255,12 +255,12 @@ define( function( require ) {
       if ( this.multipleParticleModel.isExplodedProperty.get() ) {
 
         // If the container has exploded, there is no pressureThisStep.
-        this.pressureAccumatorQueue.clear();
+        this.pressureAccumulatorQueue.clear();
         this.pressureProperty.set( 0 );
       }
       else {
-        this.pressureAccumatorQueue.add( pressureThisStep, dt );
-        this.pressureProperty.set( this.pressureAccumatorQueue.total / PRESSURE_CALC_TIME_WINDOW );
+        this.pressureAccumulatorQueue.add( pressureThisStep, dt );
+        this.pressureProperty.set( this.pressureAccumulatorQueue.total / PRESSURE_CALC_TIME_WINDOW );
 
         if ( this.pressureProperty.get() > EXPLOSION_PRESSURE ) {
           this.timeAboveExplosionPressure += dt;
