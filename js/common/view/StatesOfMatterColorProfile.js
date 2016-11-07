@@ -1,4 +1,4 @@
-// Copyright 2015, University of Colorado Boulder
+// Copyright 2015-2016, University of Colorado Boulder
 
 /**
  * An object that contains the colors used for various major components of the States of Matter simulation.  This
@@ -14,49 +14,40 @@ define( function( require ) {
   // modules
   var Color = require( 'SCENERY/util/Color' );
   var ColorProfile = require( 'SCENERY_PHET/ColorProfile' );
-  var inherit = require( 'PHET_CORE/inherit' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   // constants
-  var BLACK = new Color( 0, 0, 0 );
   var GRAY = new Color( 230, 230, 230 );
-  var WHITE = new Color( 255, 255, 255 );
 
-  function Profile() {
-    ColorProfile.call( this, {
-      background: {
-        default: BLACK,
-        projector: WHITE
-      },
-      controlPanelBackground: {
-        default: 'black',
-        projector: 'white'
-      },
-      controlPanelStroke: {
-        default: 'white',
-        projector: 'black'
-      },
-      controlPanelText: {
-        default: GRAY,
-        projector: BLACK
-      },
-      ljGraphColorsMode: {
-        default: GRAY,
-        projector: BLACK
-      },
-      particleStroke: {
-        default: WHITE,
-        projector: BLACK
-      },
-      removePairGroup: {
-        default: new Color( '#d00' )
-      }
-    } );
-  }
-
-  inherit( ColorProfile, Profile );
-
-  var StatesOfMatterColorProfile = new Profile();
+  var StatesOfMatterColorProfile = new ColorProfile( {
+    background: {
+      default: 'black',
+      projector: 'white'
+    },
+    controlPanelBackground: {
+      default: 'black',
+      projector: 'white'
+    },
+    controlPanelStroke: {
+      default: 'white',
+      projector: 'black'
+    },
+    controlPanelText: {
+      default: GRAY,
+      projector: 'black'
+    },
+    ljGraphColorsMode: {
+      default: GRAY,
+      projector: 'black'
+    },
+    particleStroke: {
+      default: 'white',
+      projector: 'black'
+    },
+    removePairGroup: {
+      default: new Color( '#d00' )
+    }
+  } );
 
   statesOfMatter.register( 'StatesOfMatterColorProfile', StatesOfMatterColorProfile );
 
