@@ -36,6 +36,7 @@ define( function( require ) {
       default: GRAY,
       projector: 'black'
     },
+    //TODO this is poorly named
     ljGraphColorsMode: {
       default: GRAY,
       projector: 'black'
