@@ -252,6 +252,8 @@ define( function( require ) {
      */
     updatePressure: function( pressureThisStep, dt ) {
 
+      assert && assert( pressureThisStep >= 0, 'pressure value can\'t be negative' );
+
       if ( this.multipleParticleModel.isExplodedProperty.get() ) {
 
         // If the container has exploded, there is no pressureThisStep.
@@ -260,16 +262,23 @@ define( function( require ) {
       }
       else {
         this.pressureAccumulatorQueue.add( pressureThisStep, dt );
-        this.pressureProperty.set( this.pressureAccumulatorQueue.total / PRESSURE_CALC_TIME_WINDOW );
+        var newPressure = this.pressureAccumulatorQueue.total / PRESSURE_CALC_TIME_WINDOW;
+
+        assert && assert( newPressure >= 0, 'pressure accumulator ended up with a negative value' );
 
         if ( this.pressureProperty.get() > EXPLOSION_PRESSURE ) {
           this.timeAboveExplosionPressure += dt;
           if ( this.timeAboveExplosionPressure > EXPLOSION_TIME ) {
             // Thar she blows!
             this.multipleParticleModel.setContainerExploded( true );
+            this.pressureProperty.set( 0 );
+          }
+          else {
+            this.pressureProperty.set( newPressure );
           }
         }
         else {
+          this.pressureProperty.set( newPressure );
           this.timeAboveExplosionPressure = 0;
         }
       }

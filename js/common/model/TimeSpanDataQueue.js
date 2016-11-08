@@ -54,8 +54,8 @@ define( function( require ) {
       }
 
       // add the new data item to the queue
-      this.dataQueue[ nextHead ].value = value;
-      this.dataQueue[ nextHead ].deltaTime = dt;
+      this.dataQueue[ this.head ].value = value;
+      this.dataQueue[ this.head ].deltaTime = dt;
       this.timeSpan += dt;
       this.total += value;
       this.head = nextHead;
