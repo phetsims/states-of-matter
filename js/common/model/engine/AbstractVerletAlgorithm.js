@@ -16,7 +16,7 @@ define( function( require ) {
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var TimeSpanDataQueue = require( 'STATES_OF_MATTER/common/model/TimeSpanDataQueue' );
 
-  // constants that control the pressure calculation.  The size of the pressure accumulator assumes a max sim rate of
+  // Constants that control the pressure calculation.  The size of the pressure accumulator assumes a max sim rate of
   // 1 / 60, which derives from the standard 60 FPS rate at which browsers currently run.  May need to go up someday.
   var PRESSURE_CALC_TIME_WINDOW = 12; // in seconds, empirically determined to be responsive but not jumpy
   var PRESSURE_ACCUMULATOR_LENGTH = Math.ceil( PRESSURE_CALC_TIME_WINDOW / ( 1 / 60 ) * 1.1 );
@@ -24,6 +24,9 @@ define( function( require ) {
   // constants that control when the container explodes
   var EXPLOSION_PRESSURE = 41; // in model units, empirically determined
   var EXPLOSION_TIME = 1; // in seconds, time that the pressure must be above the threshold before explosion occurs
+
+  // threshold to compare to zero, necessary due to floating point variations
+  var COMPARE_THRESHOLD = 1E-5;
 
   /**
    * @param {MultipleParticleModel} multipleParticleModel of the simulation
@@ -261,12 +264,21 @@ define( function( require ) {
         this.pressureProperty.set( 0 );
       }
       else {
+
+        // Zero out the pressure value if the model is at absolute zero.
+        if ( pressureThisStep > 0 &&
+             this.multipleParticleModel.temperatureSetPointProperty.get() <= this.multipleParticleModel.minModelTemperature ) {
+
+          pressureThisStep = 0;
+        }
+
+        // Accumulate the latest pressure value and calculate the new total value.
         this.pressureAccumulatorQueue.add( pressureThisStep, dt );
         var newPressure = this.pressureAccumulatorQueue.total / PRESSURE_CALC_TIME_WINDOW;
 
-        assert && assert( newPressure >= 0, 'pressure accumulator ended up with a negative value' );
+        assert && assert( newPressure >= -COMPARE_THRESHOLD, 'pressure accumulator ended up with a negative value' );
 
-        if ( this.pressureProperty.get() > EXPLOSION_PRESSURE ) {
+        if ( newPressure > EXPLOSION_PRESSURE ) {
           this.timeAboveExplosionPressure += dt;
           if ( this.timeAboveExplosionPressure > EXPLOSION_TIME ) {
             // Thar she blows!
