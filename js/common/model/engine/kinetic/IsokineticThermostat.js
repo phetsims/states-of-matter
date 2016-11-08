@@ -19,11 +19,15 @@ define( function( require ) {
   /**
    * Constructor for the Isokinetic thermostat.
    * @param {MoleculeForceAndMotionDataSet} moleculeDataSet -  Data set on which operations will be performed.
+   * @param {number} minTemperature - The temperature that should be considered absolute zero, below which motion should cease.
    * @constructor
    */
-  function IsokineticThermostat( moleculeDataSet ) {
+  function IsokineticThermostat( moleculeDataSet, minTemperature ) {
 
     this.moleculeDataSet = moleculeDataSet;
+
+    // Minimum temperature in normalized model units, below this is considered absolute 0
+    this.minModelTemperature = minTemperature;
 
     // Target temperature in normalized model units
     this.targetTemperature = StatesOfMatterConstants.INITIAL_TEMPERATURE;
@@ -54,7 +58,6 @@ define( function( require ) {
         // Include rotational inertia in the calculation.
         var rotationalKineticEnergy = 0;
         for ( i = 0; i < numberOfMolecules; i++ ) {
-
           centersOfMassKineticEnergy += 0.5 * this.moleculeDataSet.getMoleculeMass() *
                                         ( Math.pow( this.moleculeVelocities[ i ].x, 2 ) +
                                           Math.pow( this.moleculeVelocities[ i ].y, 2 ) );
@@ -85,7 +88,14 @@ define( function( require ) {
     adjustMeasuredTemperature: function( measuredTemperature ) {
 
       // Calculate the scaling factor that will be used to adjust the temperature.
-      var temperatureScaleFactor = Math.sqrt( this.targetTemperature / measuredTemperature );
+      var temperatureScaleFactor;
+      if ( this.targetTemperature <= this.minModelTemperature ) {
+        temperatureScaleFactor = 0;
+      }
+      else {
+        temperatureScaleFactor = Math.sqrt( this.targetTemperature / measuredTemperature );
+      }
+
       for ( var i = 0; i < this.moleculeDataSet.getNumberOfMolecules(); i++ ) {
 
 

@@ -13,7 +13,6 @@ define( function( require ) {
 
   // modules
   var inherit = require( 'PHET_CORE/inherit' );
-  var Random = require( 'DOT/Random' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
 
@@ -38,7 +37,7 @@ define( function( require ) {
     this.moleculeVelocities = moleculeDataSet.moleculeVelocities;
     this.moleculeRotationRates = moleculeDataSet.moleculeRotationRates;
 
-    this.random = new Random();
+    this.random = phet.joist.random;
   }
 
   statesOfMatter.register( 'AndersenThermostat', AndersenThermostat );
@@ -52,10 +51,10 @@ define( function( require ) {
       var gammaY = 0.9999;
       var temperature = this.targetTemperature;
       if ( temperature <= this.minModelTemperature ) {
-        // Use a values that will cause the molecules to stop moving if we are below the minimum temperature, since we
-        // want to create the appearance of absolute zero.
-        gammaX = 0.992;
-        gammaY = 0.999; // Scale a little differently in Y direction so particles don't stop falling when absolute zero is reached.
+        // Use a values that will cause the molecules to stop moving pretty quickly if we are below the minimum
+        // temperature, since we want to create the appearance of absolute zero.  Values were empirically determined.
+        gammaX = 0.5;
+        gammaY = 0.5;
         temperature = 0;
       }
 

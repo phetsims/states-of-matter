@@ -57,7 +57,7 @@ define( function( require ) {
   var PARTICLE_CONTAINER_INITIAL_HEIGHT = 10000;  // essentially arbitrary
   var DEFAULT_SUBSTANCE = SubstanceType.NEON;
   var MAX_TEMPERATURE = 50.0;
-  var MIN_TEMPERATURE = 0.0001;
+  var MIN_TEMPERATURE = 0.00001;
   var NOMINAL_GRAVITATIONAL_ACCEL = -0.045;
   var TEMPERATURE_CHANGE_RATE = 0.07; // empirically determined to make temperate change at a reasonable rate
   var INJECTED_MOLECULE_VELOCITY = 2.0; // in normalized model units per second, empirically determined to look reasonable
@@ -78,7 +78,7 @@ define( function( require ) {
   var LIQUID_TEMPERATURE = StatesOfMatterConstants.LIQUID_TEMPERATURE;
   var GAS_TEMPERATURE = StatesOfMatterConstants.GAS_TEMPERATURE;
   var INITIAL_TEMPERATURE = SOLID_TEMPERATURE;
-  var APPROACHING_ABSOLUTE_ZERO_TEMPERATURE = SOLID_TEMPERATURE * 0.9;
+  var APPROACHING_ABSOLUTE_ZERO_TEMPERATURE = SOLID_TEMPERATURE * 0.85;
 
   // possible thermostat settings
   var ISOKINETIC_THERMOSTAT = 1;
@@ -774,6 +774,21 @@ define( function( require ) {
     },
 
     /**
+     * Reduce the upward motion of the particles.  This is generally done to reduce some behavior that is sometimes
+     * seen where the particles float rapidly upwards after being heated.
+     * @param {number} dt
+     * @private
+     */
+    dampUpwardMotion: function( dt ) {
+
+      for ( var i = 0; i < this.moleculeDataSet.getNumberOfMolecules(); i++ ) {
+        if ( this.moleculeDataSet.moleculeVelocities[ i ].y > 0 ) {
+          this.moleculeDataSet.moleculeVelocities[ i ].y *= 1 - ( dt * 0.9 );
+        }
+      }
+    },
+
+    /**
      * Reset both the normalized and non-normalized sizes of the container. Note that the particle diameter must be
      * valid before this will work properly.
      * @private
@@ -836,7 +851,9 @@ define( function( require ) {
       }
       else {
 
-        // The lid is blowing off the container, so increase the container size until the lid should be well off the screen.
+        // The lid is blowing off the container, so increase the container size until the lid should be well off the
+        // screen.
+        this.heightChangeThisStep = POST_EXPLOSION_CONTAINER_EXPANSION_RATE * dt;
         if ( this.particleContainerHeightProperty.get() < PARTICLE_CONTAINER_INITIAL_HEIGHT * 3 ) {
           this.particleContainerHeightProperty.set(
             this.particleContainerHeightProperty.get() + POST_EXPLOSION_CONTAINER_EXPANSION_RATE * dt
@@ -854,29 +871,21 @@ define( function( require ) {
         this.maxParticleMoveTimePerStepProperty.get()
       );
 
-      // Determine the number of model steps and the size of the time step
-      var numParticleEngineSteps;
-
-      if ( this.getTemperatureInKelvin() > 0 ) {
-        var particleMotionTimeStep;
-        numParticleEngineSteps = 1;
-        if ( particleMotionAdvancementTime > MAX_PARTICLE_MOTION_TIME_STEP ) {
-          particleMotionTimeStep = MAX_PARTICLE_MOTION_TIME_STEP;
-          numParticleEngineSteps = Math.floor( particleMotionAdvancementTime / MAX_PARTICLE_MOTION_TIME_STEP );
-          this.residualTime = particleMotionAdvancementTime - ( numParticleEngineSteps * particleMotionTimeStep );
-        }
-        else {
-          particleMotionTimeStep = particleMotionAdvancementTime;
-        }
-
-        if ( this.residualTime > particleMotionTimeStep ) {
-          numParticleEngineSteps++;
-          this.residualTime -= particleMotionTimeStep;
-        }
+      // Determine the number of model steps and the size of the time step.
+      var numParticleEngineSteps = 1;
+      var particleMotionTimeStep;
+      if ( particleMotionAdvancementTime > MAX_PARTICLE_MOTION_TIME_STEP ) {
+        particleMotionTimeStep = MAX_PARTICLE_MOTION_TIME_STEP;
+        numParticleEngineSteps = Math.floor( particleMotionAdvancementTime / MAX_PARTICLE_MOTION_TIME_STEP );
+        this.residualTime = particleMotionAdvancementTime - ( numParticleEngineSteps * particleMotionTimeStep );
       }
       else {
-        // Don't update particle motion if we are at absolute zero.
-        numParticleEngineSteps = 0;
+        particleMotionTimeStep = particleMotionAdvancementTime;
+      }
+
+      if ( this.residualTime > particleMotionTimeStep ) {
+        numParticleEngineSteps++;
+        this.residualTime -= particleMotionTimeStep;
       }
 
       // Execute the Verlet algorithm, a.k.a. the "particle engine", in order to determine the new particle positions.
@@ -903,32 +912,44 @@ define( function( require ) {
       }
 
       // Adjust the temperature if needed.
+      var currentTemperature = this.temperatureSetPointProperty.get(); // convenience variable
       if ( this.heatingCoolingAmountProperty.get() !== 0 ) {
 
         var newTemperature;
 
-        if ( this.temperatureSetPointProperty.get() < APPROACHING_ABSOLUTE_ZERO_TEMPERATURE &&
+        if ( currentTemperature < APPROACHING_ABSOLUTE_ZERO_TEMPERATURE &&
              this.heatingCoolingAmountProperty.get() < 0 ) {
 
           // The temperature adjusts more slowly as we begin to approach absolute zero so that all the particles have
           // time to reach the bottom of the container.  This is not linear - the rate of change slows as we get closer,
           // to zero degrees Kelvin, which is somewhat real world-ish.
           var adjustmentFactor = Math.pow(
-            this.temperatureSetPointProperty.get() / APPROACHING_ABSOLUTE_ZERO_TEMPERATURE,
+            currentTemperature / APPROACHING_ABSOLUTE_ZERO_TEMPERATURE,
             1.3 // exponent chosen empirically to be as small as possible and still get all particles to bottom before absolute zero
           );
 
-          newTemperature = this.temperatureSetPointProperty.get() +
+          newTemperature = currentTemperature +
                            this.heatingCoolingAmountProperty.get() * TEMPERATURE_CHANGE_RATE * dt * adjustmentFactor;
         }
         else {
           var temperatureChange = this.heatingCoolingAmountProperty.get() * TEMPERATURE_CHANGE_RATE * dt;
-          newTemperature = Math.min( this.temperatureSetPointProperty.get() + temperatureChange, MAX_TEMPERATURE );
+          newTemperature = Math.min( currentTemperature + temperatureChange, MAX_TEMPERATURE );
         }
 
-        // limit bottom end of temperature range
-        if ( newTemperature <= this.minModelTemperature ) {
-          newTemperature = this.minModelTemperature;
+        // Prevent the substance from floating up too rapidly when heated.
+        if ( currentTemperature < LIQUID_TEMPERATURE && this.heatingCoolingAmountProperty.get() > 0 ) {
+          // This is necessary to prevent the substance from floating up when heated from absolute zero.
+          this.dampUpwardMotion( dt );
+        }
+
+        // Jump to the minimum model temperature if the substance has reached absolute zero.
+        if ( this.heatingCoolingAmountProperty.get() <= 0 &&
+             this.getTemperatureInKelvin() === 0 &&
+             newTemperature > MIN_TEMPERATURE ) {
+
+          // Absolute zero has been reached for this substance.  Set the temperature to the minimum allowed value to
+          // minimize motion in the particles.
+          newTemperature = MIN_TEMPERATURE;
         }
 
         // record the new set point
