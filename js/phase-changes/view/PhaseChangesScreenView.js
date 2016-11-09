@@ -18,6 +18,7 @@ define( function( require ) {
   var EpsilonControlInteractionPotentialDiagram = require( 'STATES_OF_MATTER/phase-changes/view/EpsilonControlInteractionPotentialDiagram' );
   var inherit = require( 'PHET_CORE/inherit' );
   var ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
+  var MultiLineText = require( 'SCENERY_PHET/MultiLineText' );
   var MultipleParticleModel = require( 'STATES_OF_MATTER/common/model/MultipleParticleModel' );
   var ObservableArray = require( 'AXON/ObservableArray' );
   var ParticleContainerNode = require( 'STATES_OF_MATTER/common/view/ParticleContainerNode' );
@@ -263,6 +264,25 @@ define( function( require ) {
         else {
           self.phaseDiagram.top = phaseChangesMoleculesControlPanel.bottom + INTER_PANEL_SPACING;
         }
+      }
+    } );
+
+    // Happy Easter
+    var egg = new MultiLineText( 'Goodbye boiling water -\nyou will be mist!', {
+      fill: 'yellow',
+      font: new PhetFont( 14 ),
+      align: 'left',
+      left: this.returnLidButton.left,
+      top: this.returnLidButton.bottom + 20
+    } );
+    this.addChild( egg );
+
+    var eggShown = false;
+    multipleParticleModel.isPlayingProperty.link( function( isPlaying ) {
+      egg.visible = !isPlaying && multipleParticleModel.isExplodedProperty.get() &&
+                    multipleParticleModel.substanceProperty.get() === SubstanceType.WATER && !eggShown;
+      if ( egg.visible ) {
+        eggShown = true;
       }
     } );
 
