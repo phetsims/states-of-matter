@@ -2,6 +2,7 @@
 
 /**
  * a node that represents a quantity as a segmented bar graph, supports a number of options to control appearance
+ * @author John Blanco
  */
 define( function( require ) {
   'use strict';

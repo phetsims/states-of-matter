@@ -151,7 +151,7 @@ define( function( require ) {
     this.keepingUpProperty = new Property( true ); // tracks whether targeted min frame rate is being maintained
     this.averageDtProperty = new Property( NOMINAL_TIME_STEP ); // read only
     this.maxParticleMoveTimePerStepProperty = new Property( Number.POSITIVE_INFINITY ); // read only
-    this.resetEmitter = new Emitter(); // listen only
+    this.resetEmitter = new Emitter(); // listen only, fires when a reset occurs
 
     //-----------------------------------------------------------------------------------------------------------------
     // other model attributes

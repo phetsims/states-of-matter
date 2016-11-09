@@ -17,10 +17,11 @@ define( function( require ) {
   var Path = require( 'SCENERY/nodes/Path' );
   var Property = require( 'AXON/Property' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
+  var SegmentedBarGraphNode = require( 'STATES_OF_MATTER/common/view/SegmentedBarGraphNode' );
   var Shape = require( 'KITE/Shape' );
   var SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  var SegmentedBarGraphNode = require( 'STATES_OF_MATTER/common/view/SegmentedBarGraphNode' );
+  var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
 
   // The follow constants define the size and positions of the various components of the pump as proportions of the
   // overall width and height of the node.
@@ -56,21 +57,12 @@ define( function( require ) {
     Node.call( this );
     var self = this;
     this.multipleParticleModel = multipleParticleModel; // @private
-    this.injectionCapacity = 0; // @private, number of molecules that can be injected by the pump
+    this.containerAtomCapacity = 0; // @private
 
-    // update the total capacity whenever the substance changes
+    // Update the container capacity when the substance changes.
     multipleParticleModel.substanceProperty.link( function() {
-      self.injectionCapacity = multipleParticleModel.moleculeDataSet.getNumberOfRemainingSlots();
-    } );
-
-    // update the total capacity whenever the exploded state changes
-    multipleParticleModel.isExplodedProperty.link( function( isExploded ) {
-      if ( isExploded ) {
-        self.injectionCapacity = 0;
-      }
-      else {
-        self.injectionCapacity = multipleParticleModel.moleculeDataSet.getNumberOfRemainingSlots();
-      }
+      var apm = multipleParticleModel.moleculeDataSet.atomsPerMolecule;
+      self.containerAtomCapacity = Math.floor( StatesOfMatterConstants.MAX_NUM_ATOMS / apm ) * apm;
     } );
 
     var pumpShaft;
@@ -404,11 +396,16 @@ define( function( require ) {
     // @public
     step: function() {
 
-      // update the remaining capacity proportion
-      var remainingMoleculeSlots = this.multipleParticleModel.moleculeDataSet.getNumberOfRemainingSlots();
-      this.remainingPumpCapacityProportionProperty.set(
-        this.injectionCapacity > 0 ? Math.min( remainingMoleculeSlots / this.injectionCapacity, 1 ) : 0
-      );
+      // update the remaining capacity proportion, which is reflected on the indicator on the pump shaft
+      var remainingCapacityProportion;
+      if ( this.multipleParticleModel.isExplodedProperty.get() ) {
+        remainingCapacityProportion = 0;
+      }
+      else {
+        remainingCapacityProportion =
+          1 - this.multipleParticleModel.moleculeDataSet.numberOfAtoms / this.containerAtomCapacity;
+      }
+      this.remainingPumpCapacityProportionProperty.set( remainingCapacityProportion );
     }
   } );
 } );
