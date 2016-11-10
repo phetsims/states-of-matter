@@ -249,7 +249,7 @@ define( function( require ) {
         .addColorStop( 0.4, '#D50000' )
         .addColorStop( 0.7, '#B30000' )
     } );
-    pumpBody.setTranslation( (pumpBaseWidth - pumpBodyWidth) / 2, height - pumpBodyHeight - pumpBaseHeight );
+    pumpBody.setTranslation( ( pumpBaseWidth - pumpBodyWidth ) / 2, height - pumpBodyHeight - pumpBaseHeight );
 
     // add the back portion of the opening at the top of the pump body
     var pumpOpeningBackShape = new Shape()
@@ -267,7 +267,7 @@ define( function( require ) {
       fill: SHAFT_OPENING_FILL,
       stroke: SHAFT_OPENING_STROKE,
       centerX: pumpBody.centerX,
-      y: height - pumpBodyHeight - pumpBaseHeight
+      bottom: pumpBody.top
     } );
 
     // add the front portion of the opening at the top of the pump body
@@ -286,7 +286,7 @@ define( function( require ) {
       fill: SHAFT_OPENING_FILL,
       stroke: SHAFT_OPENING_STROKE,
       centerX: pumpBody.centerX,
-      y: height - pumpBodyHeight - pumpBaseHeight
+      top: pumpOpeningBack.bottom - 0.1 // tweak the position very slightly to prevent pump body from showing through
     } );
 
     // Add the hose.
