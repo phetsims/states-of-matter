@@ -13,11 +13,12 @@ define( function( require ) {
 
   var StatesOfMatterQueryParameters = QueryStringMachine.getAll( {
 
-    // fill the shape placement boards on the 'Explore' screen during startup, useful for testing
-    projectorMode: { type: 'flag' },
-
     // show some debug information on the first screen related to timing in the multi-particle model
-    debugTimeStep: { type: 'flag' }
+    debugTimeStep: { type: 'flag' },
+
+    // sets projector mode at startup so that users doesn't have to go through options menu
+    projectorMode: { type: 'flag' }
+
   } );
 
   statesOfMatter.register( 'StatesOfMatterQueryParameters', StatesOfMatterQueryParameters );
