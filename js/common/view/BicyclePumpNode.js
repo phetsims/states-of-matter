@@ -286,7 +286,7 @@ define( function( require ) {
       fill: SHAFT_OPENING_FILL,
       stroke: SHAFT_OPENING_STROKE,
       centerX: pumpBody.centerX,
-      top: pumpOpeningBack.bottom - 0.1 // tweak the position very slightly to prevent pump body from showing through
+      top: pumpOpeningBack.bottom - 0.4 // tweak the position very slightly to prevent pump body from showing through
     } );
 
     // Add the hose.
