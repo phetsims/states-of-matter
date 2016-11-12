@@ -174,7 +174,7 @@ define( function( require ) {
 
     this.horizontalAxisLabel = new Text( distanceBetweenAtomsString, {
       fill: StatesOfMatterColorProfile.controlPanelTextProperty,
-      font: wide ? AXIS_LABEL_FONT : AXIS_LABEL_FONT - 1
+      font: wide ? AXIS_LABEL_FONT : AXIS_LABEL_FONT.copy( { size: AXIS_LABEL_FONT.size - 1 } )
     } );
     if ( this.horizontalAxisLabel.width > this.horizontalAxis.width ) {
       if ( wide ) {
