@@ -29,7 +29,7 @@ define( function( require ) {
 
     var options = {
       name: phaseChangesString,
-      backgroundColor: StatesOfMatterColorProfile.background.toCSS(),
+      backgroundColor: StatesOfMatterColorProfile.backgroundProperty.value.toCSS(),
       homeScreenIcon: new PhaseChangesIcon( Screen.MINIMUM_HOME_SCREEN_ICON_SIZE )
     };
 

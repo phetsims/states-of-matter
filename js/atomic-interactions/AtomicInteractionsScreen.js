@@ -26,7 +26,7 @@ define( function( require ) {
 
     var options = {
       name: screenTitle,
-      backgroundColor: StatesOfMatterColorProfile.background.toCSS(),
+      backgroundColor: StatesOfMatterColorProfile.backgroundProperty.value.toCSS(),
       homeScreenIcon: new AtomicInteractionsIcon( Screen.MINIMUM_HOME_SCREEN_ICON_SIZE )
     };
 
