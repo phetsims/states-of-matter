@@ -51,7 +51,11 @@ define( function( require ) {
    */
   function AtomicInteractionsScreenView( dualAtomModel, enableHeterogeneousAtoms ) {
 
-    ScreenView.call( this, StatesOfMatterConstants.SCREEN_VIEW_OPTIONS );
+    // due to some odd behavior, we need to turn on preventFit for this screen, see
+    // https://github.com/phetsims/states-of-matter/issues/176
+    var screenViewOptions = _.extend( { preventFit: true }, StatesOfMatterConstants.SCREEN_VIEW_OPTIONS );
+
+    ScreenView.call( this, screenViewOptions );
 
     this.dualAtomModel = dualAtomModel;
     this.movableParticle = dualAtomModel.movableAtom;
