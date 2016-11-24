@@ -29,7 +29,7 @@ define( function( require ) {
 
     var options = {
       name: phaseChangesString,
-      backgroundColor: StatesOfMatterColorProfile.backgroundProperty.value.toCSS(),
+      backgroundColorProperty: StatesOfMatterColorProfile.backgroundProperty,
       homeScreenIcon: new PhaseChangesIcon( Screen.MINIMUM_HOME_SCREEN_ICON_SIZE )
     };
 
@@ -38,11 +38,6 @@ define( function( require ) {
       function( model ) { return new PhaseChangesScreenView( model, isInteractionDiagramEnabled ); },
       options
     );
-
-    var self = this;
-    StatesOfMatterColorProfile.backgroundProperty.link( function( color ) {
-      self.backgroundColorProperty.value = color;
-    } );
   }
 
   statesOfMatter.register( 'PhaseChangesScreen', PhaseChangesScreen );

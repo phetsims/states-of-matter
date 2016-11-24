@@ -26,7 +26,7 @@ define( function( require ) {
 
     var options = {
       name: screenTitle,
-      backgroundColor: StatesOfMatterColorProfile.backgroundProperty.value.toCSS(),
+      backgroundColorProperty: StatesOfMatterColorProfile.backgroundProperty,
       homeScreenIcon: new AtomicInteractionsIcon( Screen.MINIMUM_HOME_SCREEN_ICON_SIZE )
     };
 
@@ -35,11 +35,6 @@ define( function( require ) {
       function( model ) { return new AtomicInteractionsScreenView( model, enableHeterogeneousMolecules ); },
       options
     );
-
-    var self = this;
-    StatesOfMatterColorProfile.backgroundProperty.link( function( color ){
-      self.backgroundColorProperty.value = color;
-    } );
   }
 
   statesOfMatter.register( 'AtomicInteractionsScreen', AtomicInteractionsScreen );

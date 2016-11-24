@@ -28,7 +28,7 @@ define( function( require ) {
 
     var options = {
       name: statesString,
-      backgroundColor: StatesOfMatterColorProfile.backgroundProperty.value.toCSS(),
+      backgroundColorProperty: StatesOfMatterColorProfile.backgroundProperty,
       homeScreenIcon: new StatesIcon( Screen.MINIMUM_HOME_SCREEN_ICON_SIZE )
     };
 
@@ -37,10 +37,6 @@ define( function( require ) {
       function( model ) { return new StatesScreenView( model ); },
       options
     );
-    var self = this;
-    StatesOfMatterColorProfile.backgroundProperty.link( function( color ) {
-      self.backgroundColorProperty.value = color;
-    } );
   }
 
   statesOfMatter.register( 'StatesScreen', StatesScreen );
