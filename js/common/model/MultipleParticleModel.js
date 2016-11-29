@@ -80,11 +80,6 @@ define( function( require ) {
   var INITIAL_TEMPERATURE = SOLID_TEMPERATURE;
   var APPROACHING_ABSOLUTE_ZERO_TEMPERATURE = SOLID_TEMPERATURE * 0.85;
 
-  // possible thermostat settings
-  var ISOKINETIC_THERMOSTAT = 1;
-  var ANDERSEN_THERMOSTAT = 2;
-  var ADAPTIVE_THERMOSTAT = 3;
-
   // parameters to control rates of change of the container size
   var MAX_CONTAINER_SHRINK_RATE = 1250; // in model units per second
   var MAX_CONTAINER_EXPAND_RATE = 1500; // in model units per second
@@ -178,7 +173,6 @@ define( function( require ) {
 
     // @private, various internal model variables
     this.particleDiameter = 1;
-    this.thermostatType = ADAPTIVE_THERMOSTAT;
     this.heightChangeCountdownTime = 0;
     this.minModelTemperature = null;
     this.residualTime = 0;
@@ -1055,22 +1049,19 @@ define( function( require ) {
         // Clear the flag for the next time through.
         this.moleculeForceAndMotionCalculator.lidChangedParticleVelocity = false;
       }
-      else if ( ( this.thermostatType === ISOKINETIC_THERMOSTAT ) ||
-                ( this.thermostatType === ADAPTIVE_THERMOSTAT &&
-                  ( temperatureIsChanging ||
-                    this.temperatureSetPointProperty.get() > LIQUID_TEMPERATURE ) ) ) {
+      else if ( temperatureIsChanging ||
+                this.temperatureSetPointProperty.get() > LIQUID_TEMPERATURE ||
+                this.temperatureSetPointProperty.get() < SOLID_TEMPERATURE / 5 ) {
         // Use the isokinetic thermostat.
         this.isoKineticThermostat.adjustTemperature();
       }
-      else if ( ( this.thermostatType === ANDERSEN_THERMOSTAT ) ||
-                ( this.thermostatType === ADAPTIVE_THERMOSTAT && !temperatureIsChanging ) ) {
-        // The temperature isn't changing and it is below a certain threshold, so use the Andersen thermostat.  This is
-        // done for purely visual reasons - it looks better than the isokinetic in these circumstances.
+      else if ( !temperatureIsChanging ) {
+        // The temperature isn't changing and it is within a certain range where the Andersen thermostat works better.
+        //  This is done for purely visual reasons - it looks better than the isokinetic in these circumstances.
         this.andersenThermostat.adjustTemperature();
       }
 
-      // Note that there will be some circumstances in which no thermostat
-      // is run.  This is intentional.
+      // Note that there will be some circumstances in which no thermostat is run.  This is intentional.
     },
 
     /**
