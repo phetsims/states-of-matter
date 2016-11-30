@@ -17,7 +17,8 @@ define( function( require ) {
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
 
   // constants
-  var MIN_POST_ZERO_VELOCITY = 1E-3; // min velocity when warming up from absolute zero, emprically determined
+  var MIN_POST_ZERO_VELOCITY = 1E-3; // min velocity when warming up from absolute zero, empirically determined
+  var MIN_X_VEL_WHEN_FALLING; // a velocity below which x should not be scaled when falling,  empirically determined
 
   /**
    * Constructor for the Isokinetic thermostat.
@@ -112,16 +113,23 @@ define( function( require ) {
         // This is the 'normal' case, where the scale factor is used to adjust the energy of the particles
         for ( i = 0; i < numberOfParticles; i++ ) {
 
-          if ( this.moleculeVelocities[ i ].y < 0 ) {
+          var moleculeVelocity = this.moleculeVelocities[ i ];
 
-            // only scale the x velocity to avoid slowing down particles that are falling
-            this.moleculeVelocities[ i ].x = this.moleculeVelocities[ i ].x * temperatureScaleFactor;
+          if ( moleculeVelocity.y < 0 ) {
+
+            // The particle is falling.  To avoid unnatural looking behavior and to prevent particles from getting
+            // suspended in midair at absolute zero, don't scale down the Y veloctiy.  However, to avoid a situation
+            // where the particle is bouncing straight up and down, also stop scaling the X velocity when below a
+            // certain temperature.
+            if ( Math.abs( moleculeVelocity.x ) > MIN_X_VEL_WHEN_FALLING ) {
+              moleculeVelocity.x = moleculeVelocity.x * temperatureScaleFactor;
+            }
           }
           else {
             // scale both the x and y velocities
-            this.moleculeVelocities[ i ].setXY(
-              this.moleculeVelocities[ i ].x * temperatureScaleFactor,
-              this.moleculeVelocities[ i ].y * temperatureScaleFactor
+            moleculeVelocity.setXY(
+              moleculeVelocity.x * temperatureScaleFactor,
+              moleculeVelocity.y * temperatureScaleFactor
             );
           }
           this.moleculeRotationRates[ i ] *= temperatureScaleFactor; // Doesn't hurt anything in the monatomic case.
