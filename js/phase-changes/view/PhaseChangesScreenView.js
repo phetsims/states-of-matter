@@ -130,7 +130,7 @@ define( function( require ) {
         multipleParticleModel.phaseDiagramExpandedProperty.value = isInteractionDiagramEnabled;
       },
       right: this.layoutBounds.right - CONTROL_PANEL_X_INSET,
-      bottom: this.layoutBounds.bottom - 5,
+      bottom: this.layoutBounds.bottom - 7,
       radius: StatesOfMatterConstants.RESET_ALL_BUTTON_RADIUS,
       touchAreaDilation: 4
     } );

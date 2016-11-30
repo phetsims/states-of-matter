@@ -117,7 +117,7 @@ define( function( require ) {
         self.interactiveInteractionPotentialDiagram.reset();
       },
       right: this.layoutBounds.maxX - INSET,
-      bottom: this.layoutBounds.maxY - 5,
+      bottom: this.layoutBounds.maxY - 7,
       radius: StatesOfMatterConstants.RESET_ALL_BUTTON_RADIUS,
       touchAreaDilation: 4
     } );
@@ -130,7 +130,7 @@ define( function( require ) {
       radius: 12,
       stroke: 'black',
       fill: '#005566',
-      centerX: this.layoutBounds.centerX + 100,
+      centerX: this.layoutBounds.centerX + 50,
       bottom: this.layoutBounds.bottom - 20, // empirically determined
       touchAreaDilation: 4
     } );
@@ -162,7 +162,7 @@ define( function( require ) {
       stroke: 'black',
       fill: '#005566',
       y: stepButton.centerY,
-      right: stepButton.left - 2 * INSET,
+      right: stepButton.left - 10,
       touchAreaDilation: 4
     } );
     this.addChild( playPauseButton );

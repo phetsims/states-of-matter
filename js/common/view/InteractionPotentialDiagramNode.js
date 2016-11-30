@@ -48,8 +48,6 @@ define( function( require ) {
   var VERT_AXIS_SIZE_PROPORTION = 0.85;
 
   // Font for the labels used on the axes and within the graph.
-  var AXIS_LABEL_FONT_SIZE = 12;
-  var AXIS_LABEL_FONT;
   var GREEK_LETTER_FONT_SIZE = 18;
   var GREEK_LETTER_FONT = new PhetFont( GREEK_LETTER_FONT_SIZE );
   var GREEK_LETTER_MAX_WIDTH;
@@ -72,21 +70,20 @@ define( function( require ) {
     this.markerDistance = 0;
     this.ljPotentialCalculator = new LjPotentialCalculator( sigma, epsilon );
 
+    var axisLabelFont;
+
     // Set up for the normal or wide version of the graph.
     if ( wide ) {
       this.widthOfGraph = WIDE_VERSION_WIDTH;
       this.heightOfGraph = this.widthOfGraph * 0.75;
       GREEK_LETTER_FONT = new PhetFont( 22 );
-      AXIS_LABEL_FONT = new PhetFont( { size: 16, fill: StatesOfMatterColorProfile.controlPanelTextProperty } );
+      axisLabelFont = new PhetFont( { size: 16, fill: StatesOfMatterColorProfile.controlPanelTextProperty } );
       GREEK_LETTER_MAX_WIDTH = 60;
     }
     else {
       this.widthOfGraph = NARROW_VERSION_WIDTH;
       this.heightOfGraph = this.widthOfGraph * 0.8;
-      AXIS_LABEL_FONT = new PhetFont( {
-        size: AXIS_LABEL_FONT_SIZE,
-        fill: StatesOfMatterColorProfile.controlPanelTextProperty
-      } );
+      axisLabelFont = new PhetFont( { size: 11, fill: StatesOfMatterColorProfile.controlPanelTextProperty } );
       GREEK_LETTER_FONT = new PhetFont( GREEK_LETTER_FONT_SIZE );
       GREEK_LETTER_MAX_WIDTH = 17;
     }
@@ -174,7 +171,7 @@ define( function( require ) {
 
     this.horizontalAxisLabel = new Text( distanceBetweenAtomsString, {
       fill: StatesOfMatterColorProfile.controlPanelTextProperty,
-      font: wide ? AXIS_LABEL_FONT : AXIS_LABEL_FONT.copy( { size: AXIS_LABEL_FONT.size - 1 } )
+      font: axisLabelFont
     } );
     if ( this.horizontalAxisLabel.width > this.horizontalAxis.width ) {
       if ( wide ) {
@@ -200,7 +197,7 @@ define( function( require ) {
 
     this.verticalAxisLabel = new Text( potentialEnergyString, {
       fill: StatesOfMatterColorProfile.controlPanelTextProperty,
-      font: AXIS_LABEL_FONT
+      font: axisLabelFont
     } );
 
     // restricted vertical  axis label
