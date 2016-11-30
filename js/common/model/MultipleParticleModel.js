@@ -181,6 +181,7 @@ define( function( require ) {
     this.injectionPointX = 0;
     this.injectionPointY = 0;
     this.heightChangeThisStep = 0;
+    this.particleInjectedThisStep = false;
 
     // @private, strategy patterns that are applied to the data set
     this.atomPositionUpdater = null;
@@ -618,14 +619,6 @@ define( function( require ) {
         return;
       }
 
-      // If the container is empty, its temperature will be be reported as zero Kelvin, so injecting particles will
-      // cause there to be a defined temperature.  Set that temperature to a reasonable value.
-      if ( this.particles.length === 0 ) {
-        this.temperatureSetPointProperty.set( CRITICAL_POINT_INTERNAL_MODEL_TEMPERATURE );
-        this.isoKineticThermostat.targetTemperature = this.temperatureSetPointProperty.get();
-        this.andersenThermostat.targetTemperature = this.temperatureSetPointProperty.get();
-      }
-
       // Introduce a little bit of randomness into the injection angle.
       var angle = ( phet.joist.random.nextDouble() - 0.5 ) * INJECTED_MOLECULE_ANGLE_SPREAD;
       var xVel = Math.cos( angle ) * INJECTED_MOLECULE_VELOCITY;
@@ -697,17 +690,9 @@ define( function( require ) {
         this.particles.add( new HydrogenAtom( 0, 0, phet.joist.random.nextDouble() > 0.5 ) );
       }
 
-      // If the particles are at absolute zero and additional particles are added, this bumps up the temperature,
-      // since if there is any motion absolute zero is not correct.  This is handled as a special case rather than
-      // treating the addition of particles more generally, see https://github.com/phetsims/states-of-matter/issues/129
-      // for more detail.
-      if ( this.getTemperatureInKelvin() === 0 || this.getTemperatureInKelvin() === null ) {
-        this.temperatureSetPointProperty.set( this.getTwoDegreesKelvinInInternalTemperature() );
-        this.isoKineticThermostat.targetTemperature = this.temperatureSetPointProperty.get();
-        this.andersenThermostat.targetTemperature = this.temperatureSetPointProperty.get();
-      }
-
       this.syncParticlePositions();
+
+      this.particleInjectedThisStep = true;
     },
 
     /**
@@ -804,6 +789,7 @@ define( function( require ) {
     stepInternal: function( dt ) {
 
       this.timeStepMovingAverage.addValue( dt );
+      this.particleInjectedThisStep = false;
 
       if ( !this.isExplodedProperty.get() ) {
 
@@ -881,6 +867,18 @@ define( function( require ) {
         this.residualTime -= particleMotionTimeStep;
       }
 
+      // Inject a new particle if there is one ready and it isn't too soon after a previous injection.  This is done
+      // before execution of the Verlet algorithm so that its velocity will be taken into account when the temperature
+      // is calculated.
+      if ( this.numMoleculesAwaitingInjection > 0 && this.moleculeInjectionHoldoffTimer === 0 ) {
+        this.injectMoleculeInternal();
+        this.numMoleculesAwaitingInjection--;
+        this.moleculeInjectionHoldoffTimer = MOLECULE_INJECTION_HOLDOFF_TIME;
+      }
+      else if ( this.moleculeInjectionHoldoffTimer > 0 ) {
+        this.moleculeInjectionHoldoffTimer = Math.max( this.moleculeInjectionHoldoffTimer - dt, 0 );
+      }
+
       // Execute the Verlet algorithm, a.k.a. the "particle engine", in order to determine the new particle positions.
       for ( var i = 0; i < numParticleEngineSteps; i++ ) {
         this.moleculeForceAndMotionCalculator.updateForcesAndMotion( particleMotionTimeStep );
@@ -912,7 +910,7 @@ define( function( require ) {
           // to zero degrees Kelvin, which is somewhat real world-ish.
           var adjustmentFactor = Math.pow(
             currentTemperature / APPROACHING_ABSOLUTE_ZERO_TEMPERATURE,
-            1.3 // exponent chosen empirically to be as small as possible and still get all particles to bottom before absolute zero
+            1.35 // exponent chosen empirically to be as small as possible and still get all particles to bottom before absolute zero
           );
 
           newTemperature = currentTemperature +
@@ -943,16 +941,6 @@ define( function( require ) {
         this.temperatureSetPointProperty.set( newTemperature );
         this.isoKineticThermostat.targetTemperature = this.temperatureSetPointProperty.get();
         this.andersenThermostat.targetTemperature = this.temperatureSetPointProperty.get();
-      }
-
-      // Inject new particles if some are ready and waiting.
-      if ( this.numMoleculesAwaitingInjection > 0 && this.moleculeInjectionHoldoffTimer === 0 ) {
-        this.injectMoleculeInternal();
-        this.numMoleculesAwaitingInjection--;
-        this.moleculeInjectionHoldoffTimer = MOLECULE_INJECTION_HOLDOFF_TIME;
-      }
-      else if ( this.moleculeInjectionHoldoffTimer > 0 ) {
-        this.moleculeInjectionHoldoffTimer = Math.max( this.moleculeInjectionHoldoffTimer - dt, 0 );
       }
     },
 
@@ -1025,14 +1013,15 @@ define( function( require ) {
         temperatureIsChanging = true;
       }
 
-      if ( this.moleculeForceAndMotionCalculator.lidChangedParticleVelocity ) {
+      if ( this.moleculeForceAndMotionCalculator.lidChangedParticleVelocity || this.particleInjectedThisStep ) {
 
-        // The velocity of one or more particles was changed through interaction with the lid.  Since this can change
-        // the kinetic energy of the particles in the system, no thermostat is run.  Instead, the temperature is
-        // determined by looking at the kinetic energy of the molecules and that value is used to determine the system
-        // temperature set point.  However, sometimes the calculation can return some unexpected results, probably due
-        // to some of the energy being tied up in potential rather than kinetic energy, so there are some constraints
-        // here.  See https://github.com/phetsims/states-of-matter/issues/169 for more information.
+        // The velocity of one or more particles was changed through interaction with the lid or a new particle was
+        // injected into the container.  Since this can change the total kinetic energy of the particles in the system,
+        // no thermostat is run.  Instead, the temperature is determined by looking at the kinetic energy of the
+        // particles and that value is used to determine the new system temperature set point.  However, sometimes the
+        // calculation can return some unexpected results, probably due to some of the energy being tied up in potential
+        // rather than kinetic energy, so there are some constraints here.
+        // See https://github.com/phetsims/states-of-matter/issues/169 for more information.
         if ( this.heightChangeThisStep === 0 ||
              this.heightChangeThisStep > 0 && calculatedTemperature < this.temperatureSetPointProperty.get() ||
              this.heightChangeThisStep < 0 && calculatedTemperature > this.temperatureSetPointProperty.get() ) {

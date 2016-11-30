@@ -17,7 +17,7 @@ define( function( require ) {
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
 
   // constants
-  var MIN_POST_ZERO_VELOCITY = 1E-3; // min velocity when warming up from absolute zero, empirically determined
+  var MIN_POST_ZERO_VELOCITY = 0.1; // min velocity when warming up from absolute zero, empirically determined
   var MIN_X_VEL_WHEN_FALLING = 1.0; // a velocity below which x should not be scaled when falling,  empirically determined
 
   /**
@@ -108,7 +108,9 @@ define( function( require ) {
         temperatureScaleFactor = 0;
       }
 
-      if ( this.previousTemperatureScaleFactor !== 0 || temperatureScaleFactor === 0 ) {
+      if ( this.previousTemperatureScaleFactor !== 0 ||
+           temperatureScaleFactor === 0 ||
+           measuredTemperature > this.minModelTemperature ) {
 
         // This is the 'normal' case, where the scale factor is used to adjust the energy of the particles
         for ( i = 0; i < numberOfParticles; i++ ) {
@@ -138,7 +140,8 @@ define( function( require ) {
       else {
 
         // The temperature has just risen above the minimum model temperature (essentially absolute zero), so we need
-        // to make sure all particles have a reasonable amount of kinetic energy.  Only linear kinetic energy is
+        // to make sure all particles have a reasonable amount of kinetic energy, otherwise some of them can appear to
+        // get stuck on the bottom of the container since they have no energy to scale.  Only linear kinetic energy is
         // adjusted here, since it is simpler and seems to work.
         for ( i = 0; i < numberOfParticles; i++ ) {
           var angle = phet.joist.random.nextDouble() * Math.PI;
