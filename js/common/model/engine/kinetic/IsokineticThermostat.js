@@ -18,7 +18,7 @@ define( function( require ) {
 
   // constants
   var MIN_POST_ZERO_VELOCITY = 1E-3; // min velocity when warming up from absolute zero, empirically determined
-  var MIN_X_VEL_WHEN_FALLING; // a velocity below which x should not be scaled when falling,  empirically determined
+  var MIN_X_VEL_WHEN_FALLING = 1.0; // a velocity below which x should not be scaled when falling,  empirically determined
 
   /**
    * Constructor for the Isokinetic thermostat.
@@ -118,7 +118,7 @@ define( function( require ) {
           if ( moleculeVelocity.y < 0 ) {
 
             // The particle is falling.  To avoid unnatural looking behavior and to prevent particles from getting
-            // suspended in midair at absolute zero, don't scale down the Y veloctiy.  However, to avoid a situation
+            // suspended in midair at absolute zero, don't scale down the Y velocity.  However, to avoid a situation
             // where the particle is bouncing straight up and down, also stop scaling the X velocity when below a
             // certain temperature.
             if ( Math.abs( moleculeVelocity.x ) > MIN_X_VEL_WHEN_FALLING ) {
