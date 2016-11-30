@@ -1,19 +1,19 @@
 {
-  "comment": "# states-of-matter 1.0.0-dev.14 Wed Nov 09 2016 13:12:54 GMT-0700 (Mountain Standard Time)",
+  "comment": "# states-of-matter 1.0.0-dev.15 Wed Nov 30 2016 14:11:20 GMT-0700 (Mountain Standard Time)",
   "assert": {
-    "sha": "845be6b591cb746b0b05b7023208aef2e49a8855",
+    "sha": "47c12d191b9697389f0ad0e9ca7b48e276bfb79f",
     "branch": "master"
   },
   "axon": {
-    "sha": "8353fe86e7737424bdd6ad52fdca7f6ced5b33c4",
+    "sha": "835a8b044aebec1e8ced83fb06d6ced6a73e8c66",
     "branch": "master"
   },
   "brand": {
-    "sha": "880a18ded11185580cf5950e568931cf0df4eb87",
+    "sha": "6d85e08a11e5e7482e62cd0c1d177337aabc34b2",
     "branch": "master"
   },
   "chipper": {
-    "sha": "957db829e7808c3759fa4cca91dd299989facb56",
+    "sha": "f57edeb4b54deefa02a7365a3b67e074074ae473",
     "branch": "master"
   },
   "dot": {
@@ -21,7 +21,7 @@
     "branch": "master"
   },
   "joist": {
-    "sha": "3bb749cf86ccace6c20064030e43d8cfac0fc30b",
+    "sha": "6430512a4b1bb621b885fc42a1004577f8a381cd",
     "branch": "master"
   },
   "kite": {
@@ -33,39 +33,39 @@
     "branch": "master"
   },
   "phet-core": {
-    "sha": "4222a05a927792580846b3bf9b1b53decf154943",
+    "sha": "9e9fe9de6dbb073b7c89b509b8a79f8a16a50e5d",
     "branch": "master"
   },
   "phetcommon": {
-    "sha": "8df1bf7d38949062dd6bf08800a0eebdce838d98",
+    "sha": "16feff3e89d36e2dffcc67ff82c02222cd56341c",
     "branch": "master"
   },
   "query-string-machine": {
-    "sha": "13ba45df40a07ab84f4942ce3797607ac179b28b",
+    "sha": "24ad72efe69d4bd6301e0b05fab98b4cca2635fc",
     "branch": "master"
   },
   "scenery": {
-    "sha": "fb9d77c5c0c2d9dafddf87263c509829ef40e651",
+    "sha": "1bf0a92ef95ba21564796abf3d6fd141f9bcf752",
     "branch": "master"
   },
   "scenery-phet": {
-    "sha": "89cce959490dac19720523a034f7c43a9edc6916",
+    "sha": "a3ccf91d85c2da3a6c5160d7c2a4c03e5338e573",
     "branch": "master"
   },
   "sherpa": {
-    "sha": "7a7b88b0658d2ee65bdf66cf232a46a6c20c9917",
+    "sha": "c2e033b0cba79aa26f9b76b00f3c9130090668f3",
     "branch": "master"
   },
   "states-of-matter": {
-    "sha": "d98639729e6b674f93a76d8a0349450ffcb0cda6",
+    "sha": "87fba6002314dafb789b5ad52a28ae1b07440375",
     "branch": "master"
   },
   "sun": {
-    "sha": "2f55106098902caa6c271e79df5a28380e8c78a4",
+    "sha": "0810acad0cb1ab77965ec313f22c73a43b3905e1",
     "branch": "master"
   },
   "tandem": {
-    "sha": "005c5582da1cba304d5d650533e6059eae197c6b",
+    "sha": "f37e6d7ccbef54e99d7f16a6de9a988ab47242f5",
     "branch": "master"
   }
 }
