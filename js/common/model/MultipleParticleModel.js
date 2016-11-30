@@ -804,7 +804,6 @@ define( function( require ) {
     stepInternal: function( dt ) {
 
       this.timeStepMovingAverage.addValue( dt );
-      this.averageDt = this.timeStepMovingAverage.average;
 
       if ( !this.isExplodedProperty.get() ) {
 
@@ -884,12 +883,6 @@ define( function( require ) {
 
       // Execute the Verlet algorithm, a.k.a. the "particle engine", in order to determine the new particle positions.
       for ( var i = 0; i < numParticleEngineSteps; i++ ) {
-
-        // if the container is exploded reduce the speed of particles
-        // TODO: Is this really needed?  If so, comment should explain why.
-        if ( this.isExplodedProperty.get() ) {
-          particleMotionTimeStep = particleMotionTimeStep * 0.9;
-        }
         this.moleculeForceAndMotionCalculator.updateForcesAndMotion( particleMotionTimeStep );
       }
 
