@@ -75,7 +75,8 @@ define( function( require ) {
     this.bondingState = BondingState.UNBONDED; // Tracks whether the atoms have formed a chemical bond.
     this.fixedAtomVibrationCountdown = 0; // Used to vibrate fixed atom during bonding.
     this.movableAtomVibrationCountdown = 0; // Used to vibrate movable atom during bonding and when bonded.
-    this.potentialWhenAtomReleased = 0; // Used to set magnitude of vibration.
+    this.potentialWhenReleased = 0; // Used to set magnitude of vibration.
+    this.distanceWhenReleased = 0; // Used to determine whether atom should escape or bond.
     this.ljPotentialCalculator = new LjPotentialCalculator(
       StatesOfMatterConstants.MIN_SIGMA,
       StatesOfMatterConstants.MIN_EPSILON
@@ -326,12 +327,9 @@ define( function( require ) {
       this.movableAtom.setVx( 0 );
       if ( !paused ) {
         // The atom is being released by the user.  Record the amount of energy that the atom has at this point in
-        // time for later use.  The calculation is made be evaluating the force at the current location and
-        // multiplying it by the distance to the point where the LJ potential is minimized.  Note that this is not
-        // precisely correct, since the potential is not continuous, but is close enough for our purposes.
-        this.potentialWhenAtomReleased =
-          this.ljPotentialCalculator.calculatePotentialEnergy( this.movableAtom.getPositionReference().distance(
-            this.fixedAtom.getPositionReference() ) );
+        // time and its position for later use.
+        this.distanceWhenReleased = this.movableAtom.getPositionReference().distance( this.fixedAtom.getPositionReference() );
+        this.potentialWhenReleased = this.ljPotentialCalculator.calculatePotentialEnergy( this.distanceWhenReleased );
 
         // set a flag that indicates that this was just released, which will be used by the bonding update method
         this.justReleased = true;
@@ -534,8 +532,8 @@ define( function( require ) {
                  ( this.movableAtom.getPositionReference().distance( this.fixedAtom.getPositionReference() ) <
                    this.fixedAtom.getRadius() * 2.5 ) ) {
 
-              if ( this.justReleased && this.potentialWhenAtomReleased > ESCAPE_POTENTIAL_THRESHOLD ) {
-                // the user just released the movable atom in an area of relatively high potential, so let it escape
+              if ( this.justReleased && this.distanceWhenReleased < this.ljPotentialCalculator.getSigma() ) {
+                // the user just released the movable atom in an area of high potential, so let it escape
                 this.bondingState = BondingState.ALLOWING_ESCAPE;
               }
               else {
@@ -636,7 +634,7 @@ define( function( require ) {
           else {
             // Calculate the max motion amount based on the amount of potential in the bond.  The multiplier was
             // empirically determined.
-            var maxMovement = Math.min( this.potentialWhenAtomReleased * 5e19, this.fixedAtom.radius / 2 ) *
+            var maxMovement = Math.min( this.potentialWhenReleased * 5e19, this.fixedAtom.radius / 2 ) *
                               vibrationScaleFactor;
 
             // Move some distance from the original position, but only move away from the movable atom so that we don't
