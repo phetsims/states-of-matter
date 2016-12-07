@@ -130,7 +130,7 @@ define( function( require ) {
 
     // solid area background
     this.solidAreaBackground = new Path( null, {
-      fill: '#C6BCD7'
+      fill: '#AB9CC4'
     } );
     accordionContent.addChild( this.solidAreaBackground );
 
