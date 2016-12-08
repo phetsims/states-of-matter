@@ -23,8 +23,7 @@ define( function( require ) {
   // @private
   var MIN_INITIAL_DIAMETER_DISTANCE = 1.4;
 
-  // The following constants can be adjusted to make the the corresponding
-  // phase more or less dense.
+  // The following constants can be adjusted to make the the corresponding phase more or less dense.
   var LIQUID_SPACING_FACTOR = 0.8;
   var GAS_SPACING_FACTOR = 1.0;
 
@@ -279,18 +278,19 @@ define( function( require ) {
               break;
             }
           }
-          if ( positionAvailable ) {
+          if ( positionAvailable || j === this.MAX_PLACEMENT_ATTEMPTS - 1 ) {
 
-            // We found an open position.
+            // We found an open position or we've done all the searching we can.
             moleculeCenterOfMassPositions[ i ].setXY( newPosX, newPosY );
             break;
           }
-          else if ( j === this.MAX_PLACEMENT_ATTEMPTS - 1 ) {
+          else if ( j === this.MAX_PLACEMENT_ATTEMPTS - 2 ) {
 
-            // This is the last attempt, so do a linear search for a usable spot
+            // This is the second to last attempt, so try a linear search for a usable spot.
             var openPoint = this.findOpenMoleculeLocation();
             if ( openPoint !== null ) {
-              moleculeCenterOfMassPositions[ i ].setXY( openPoint );
+              moleculeCenterOfMassPositions[ i ].set( openPoint );
+              break;
             }
           }
         }

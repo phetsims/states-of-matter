@@ -32,8 +32,8 @@ define( function( require ) {
   return inherit( Object, AbstractPhaseStateChanger, {
 
     /**
-     * Does a linear search for a location that is suitably far away enough from all other molecules.  This is
-     * generally used when the attempt to place a molecule at a random location fails.  This is expensive in terms of
+     * Do a linear search for a location that is suitably far away enough from all other molecules.  This is generally
+     * used when the attempt to place a molecule at a random location fails.  This is expensive in terms of
      * computational power, and should thus be used sparingly.
      * @return {Vector2}
      * @public
@@ -46,7 +46,7 @@ define( function( require ) {
       var moleculeDataSet = this.multipleParticleModel.moleculeDataSet;
       var moleculeCenterOfMassPositions = moleculeDataSet.moleculeCenterOfMassPositions;
 
-      minInitialInterParticleDistance = 1.2;
+      minInitialInterParticleDistance = 1.2; // empirically chosen
       var rangeX = this.multipleParticleModel.normalizedContainerWidth - ( 2 * MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE );
       var rangeY = this.multipleParticleModel.normalizedContainerHeight - ( 2 * MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE );
       for ( var i = 0; i < rangeX / minInitialInterParticleDistance; i++ ) {
@@ -70,14 +70,8 @@ define( function( require ) {
         }
       }
 
-      // if this can't find a spot, it may need its parameters adjusted
-      assert && assert( false, 'Error: No open positions available for molecule.' );
-
-      // in the non-debug case, just pick a random location and go with it
-      posX = MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE + phet.joist.random.nextDouble() * rangeX;
-      posY = MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE + phet.joist.random.nextDouble() * rangeY;
-      this.moleculeLocation.setXY( posX, posY );
-      return this.moleculeLocation;
+      // no open position found, return null
+      return null;
     },
 
     MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE: MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE,
