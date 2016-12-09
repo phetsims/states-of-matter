@@ -232,20 +232,20 @@ define( function( require ) {
     this.addChild( this.ljPotentialGraph );
 
     // applying color scheme to lj graph elements
-    this.verticalAxis.fill = StatesOfMatterColorProfile.ljGraphColorsModeProperty;
-    this.horizontalAxis.fill = StatesOfMatterColorProfile.ljGraphColorsModeProperty;
-    this.verticalAxis.stroke = StatesOfMatterColorProfile.ljGraphColorsModeProperty;
-    this.horizontalAxis.stroke = StatesOfMatterColorProfile.ljGraphColorsModeProperty;
-    this.epsilonArrow.fill = StatesOfMatterColorProfile.ljGraphColorsModeProperty;
-    this.epsilonArrow.fill = StatesOfMatterColorProfile.ljGraphColorsModeProperty;
-    this.sigmaArrow.fill = StatesOfMatterColorProfile.ljGraphColorsModeProperty;
-    this.epsilonLabel.fill = StatesOfMatterColorProfile.ljGraphColorsModeProperty;
-    this.sigmaLabel.fill = StatesOfMatterColorProfile.ljGraphColorsModeProperty;
-    this.epsilonArrow.stroke = StatesOfMatterColorProfile.ljGraphColorsModeProperty;
-    this.gridNode.verticalLinesNode.stroke = StatesOfMatterColorProfile.ljGraphColorsModeProperty;
-    this.horizontalAxisLabel.fill = StatesOfMatterColorProfile.ljGraphColorsModeProperty;
-    this.verticalAxisLabel.fill = StatesOfMatterColorProfile.ljGraphColorsModeProperty;
-    this.gridNode.horizontalLinesNode.stroke = StatesOfMatterColorProfile.ljGraphColorsModeProperty;
+    this.verticalAxis.fill = StatesOfMatterColorProfile.ljGraphAxesAndGridColorProperty;
+    this.horizontalAxis.fill = StatesOfMatterColorProfile.ljGraphAxesAndGridColorProperty;
+    this.verticalAxis.stroke = StatesOfMatterColorProfile.ljGraphAxesAndGridColorProperty;
+    this.horizontalAxis.stroke = StatesOfMatterColorProfile.ljGraphAxesAndGridColorProperty;
+    this.epsilonArrow.fill = StatesOfMatterColorProfile.ljGraphAxesAndGridColorProperty;
+    this.epsilonArrow.fill = StatesOfMatterColorProfile.ljGraphAxesAndGridColorProperty;
+    this.sigmaArrow.fill = StatesOfMatterColorProfile.ljGraphAxesAndGridColorProperty;
+    this.epsilonLabel.fill = StatesOfMatterColorProfile.ljGraphAxesAndGridColorProperty;
+    this.sigmaLabel.fill = StatesOfMatterColorProfile.ljGraphAxesAndGridColorProperty;
+    this.epsilonArrow.stroke = StatesOfMatterColorProfile.ljGraphAxesAndGridColorProperty;
+    this.gridNode.verticalLinesNode.stroke = StatesOfMatterColorProfile.ljGraphAxesAndGridColorProperty;
+    this.horizontalAxisLabel.fill = StatesOfMatterColorProfile.ljGraphAxesAndGridColorProperty;
+    this.verticalAxisLabel.fill = StatesOfMatterColorProfile.ljGraphAxesAndGridColorProperty;
+    this.gridNode.horizontalLinesNode.stroke = StatesOfMatterColorProfile.ljGraphAxesAndGridColorProperty;
 
     this.mutate( options );
   }
