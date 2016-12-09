@@ -211,10 +211,11 @@ define( function( require ) {
       }
     );
 
-    this.interactionPotentialCanvasNode = new InteractionPotentialCanvasNode( this, true, {
-      // TODO: canvas size - where does this come from?
-      canvasBounds: new Bounds2( 0, 0, 500, this.graphHeight + 10 )
-    } );
+    this.interactionPotentialCanvasNode = new InteractionPotentialCanvasNode(
+      this,
+      true,
+      { canvasBounds: new Bounds2( 0, 0, this.graphWidth, this.graphHeight ) }
+    );
     this.addChild( this.interactionPotentialCanvasNode );
 
     // Update interactivity state.
