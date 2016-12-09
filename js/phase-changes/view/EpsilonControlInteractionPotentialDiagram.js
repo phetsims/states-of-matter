@@ -61,19 +61,40 @@ define( function( require ) {
     this.multipleParticleModel = multipleParticleModel;
     var accordionContent = new Node();
 
-    // Add the line that will indicate the value of epsilon.
-    var epsilonLineLength = EPSILON_HANDLE_OFFSET_PROPORTION * this.widthOfGraph * 2.2;
+    // variables used to track dragging of controls related to epsilon value
+    var startDragY;
+    var endDragY;
 
     // Add the line that will indicate the value of epsilon.
+    var epsilonLineLength = EPSILON_HANDLE_OFFSET_PROPORTION * this.widthOfGraph * 2.2;
     this.epsilonLine = new Rectangle( -epsilonLineLength / 2, 0, epsilonLineLength, 1, {
       cursor: 'ns-resize',
       pickable: true,
       fill: EPSILON_LINE_COLOR,
       stroke: EPSILON_LINE_COLOR
     } );
+    this.epsilonLine.addInputListener( new FillHighlightListener(
+      RESIZE_HANDLE_NORMAL_COLOR,
+      RESIZE_HANDLE_HIGHLIGHTED_COLOR
+    ) );
+    this.ljPotentialGraph.addChild( this.epsilonLine );
+    this.epsilonLine.touchArea = this.epsilonLine.localBounds.dilatedXY( 20, 20 );
+    this.epsilonLine.addInputListener( new SimpleDragHandler( {
+      start: function( event ) {
+        startDragY = self.epsilonLine.globalToParentPoint( event.pointer.point ).y;
+      },
+      drag: function( event ) {
+        endDragY = self.epsilonLine.globalToParentPoint( event.pointer.point ).y;
+        var d = endDragY - startDragY;
+        startDragY = endDragY;
+        var scaleFactor = StatesOfMatterConstants.MAX_EPSILON /
+                          ( self.getGraphHeight() / 2);
+        multipleParticleModel.interactionStrengthProperty.set( multipleParticleModel.getEpsilon() + ( d * scaleFactor ) );
+        self.drawPotentialCurve();
+      }
+    } ) );
 
-    // Add the arrow node that will allow the user to control the value of
-    // the epsilon parameter.
+    // Add the arrow node that will allow the user to control the value of the epsilon parameter.
     this.epsilonResizeHandle = new ArrowNode( 0, -RESIZE_HANDLE_SIZE_PROPORTION * this.widthOfGraph / 2, 0,
       RESIZE_HANDLE_SIZE_PROPORTION * this.widthOfGraph / 2, {
         headHeight: 10,
@@ -85,8 +106,6 @@ define( function( require ) {
         pickable: true,
         cursor: 'pointer'
       } );
-    var startDragY;
-    var endDragY;
     this.epsilonResizeHandle.addInputListener( new FillHighlightListener( RESIZE_HANDLE_NORMAL_COLOR,
       RESIZE_HANDLE_HIGHLIGHTED_COLOR ) );
     this.ljPotentialGraph.addChild( this.epsilonResizeHandle );
@@ -101,28 +120,6 @@ define( function( require ) {
         var scaleFactor = StatesOfMatterConstants.MAX_EPSILON /
                           ( self.getGraphHeight() / 2);
         multipleParticleModel.interactionStrengthProperty.value = multipleParticleModel.getEpsilon() + ( d * scaleFactor );
-        self.drawPotentialCurve();
-      }
-    } ) );
-
-    this.epsilonLine.addInputListener( new FillHighlightListener( RESIZE_HANDLE_NORMAL_COLOR,
-      RESIZE_HANDLE_HIGHLIGHTED_COLOR ) );
-    this.ljPotentialGraph.addChild( this.epsilonLine );
-
-    // touch area
-    this.epsilonLine.touchArea = this.epsilonLine.localBounds.dilatedXY( 20, 20 );
-
-    this.epsilonLine.addInputListener( new SimpleDragHandler( {
-      start: function( event ) {
-        startDragY = self.epsilonLine.globalToParentPoint( event.pointer.point ).y;
-      },
-      drag: function( event ) {
-        endDragY = self.epsilonLine.globalToParentPoint( event.pointer.point ).y;
-        var d = endDragY - startDragY;
-        startDragY = endDragY;
-        var scaleFactor = StatesOfMatterConstants.MAX_EPSILON /
-                          ( self.getGraphHeight() / 2);
-        multipleParticleModel.interactionStrengthProperty.set( multipleParticleModel.getEpsilon() + ( d * scaleFactor ) );
         self.drawPotentialCurve();
       }
     } ) );

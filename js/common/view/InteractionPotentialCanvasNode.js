@@ -165,25 +165,11 @@ define( function( require ) {
       // Position the control handles if used.
       if ( this.interactionDiagram.epsilonResizeHandle !== undefined ) {
         var graphMin = this.interactionDiagram.getGraphMin();
-        if ( this.isLjGraphWider ) {
-          this.interactionDiagram.epsilonResizeHandle.setVisible( this.interactionDiagram.interactionEnabled );
-          this.interactionDiagram.epsilonLine.setTranslation( graphMin.x, graphMin.y + EPSILON_LINE_WIDTH );
-          this.interactionDiagram.epsilonLine.setVisible( this.interactionDiagram.interactionEnabled );
-          this.interactionDiagram.epsilonResizeHandle.centerX = this.interactionDiagram.epsilonLine.right;
-          this.interactionDiagram.epsilonResizeHandle.centerY = this.interactionDiagram.epsilonLine.centerY;
-        }
-        else {
-          // TODO: the following code had to be changed to use !!, but I (jblanco) think it probably shouldn't be being
-          // hit at all in cases where interactionEnabled is undefined because the resize handle shouldn't be defined,
-          // so I need to track this down and resolve it.
-          this.interactionDiagram.epsilonResizeHandle.setVisible( !!this.interactionDiagram.interactionEnabled );
-          this.interactionDiagram.epsilonLine.setTranslation( graphMin.x, graphMin.y );
-          this.interactionDiagram.epsilonLine.setVisible( !!this.interactionDiagram.interactionEnabled );
-          this.interactionDiagram.epsilonResizeHandle.setTranslation(
-            this.interactionDiagram.epsilonLine.right,
-            graphMin.y
-          );
-        }
+        this.interactionDiagram.epsilonLine.setTranslation( graphMin.x, graphMin.y + EPSILON_LINE_WIDTH );
+        this.interactionDiagram.epsilonResizeHandle.setVisible( this.interactionDiagram.interactionEnabled );
+        this.interactionDiagram.epsilonLine.setVisible( this.interactionDiagram.interactionEnabled );
+        this.interactionDiagram.epsilonResizeHandle.centerX = this.interactionDiagram.epsilonLine.right;
+        this.interactionDiagram.epsilonResizeHandle.centerY = this.interactionDiagram.epsilonLine.centerY;
       }
       if ( this.interactionDiagram.sigmaResizeHandle !== undefined ) {
         this.interactionDiagram.sigmaResizeHandle.centerX = sigmaHandleXPos;
