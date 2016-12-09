@@ -84,26 +84,9 @@ define( function( require ) {
       }
     } ) );
 
-    // TODO: Below, some code was added to improve a situation where other elements on the screen were moving about due
-    // to the presence of this node, see https://github.com/phetsims/states-of-matter/issues/176.  When that issue is
-    // resolved, the commented-out code should be restored and the subsequent two links should be removed.
-
-
     // move the hint with the particle
-    //particle.positionProperty.link( function( position ) {
-    //  self.x = modelViewTransform.modelToViewX( position.x );
-    //} );
-
     particle.positionProperty.link( function( position ) {
-      if ( dualAtomModel.movementHintVisibleProperty.get() ) {
-        self.x = modelViewTransform.modelToViewX( position.x );
-      }
-    } );
-
-    dualAtomModel.movementHintVisibleProperty.link( function( visible, wasVisible ) {
-      if ( wasVisible && !visible ) {
-        self.x = 0;
-      }
+      self.x = modelViewTransform.modelToViewX( position.x );
     } );
   }
 
