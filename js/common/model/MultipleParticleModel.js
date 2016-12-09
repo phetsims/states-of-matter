@@ -190,12 +190,6 @@ define( function( require ) {
     this.isoKineticThermostat = null;
     this.andersenThermostat = null;
 
-    // TODO: For working on performance issues, consider removing before publication
-    this.timeStepMovingAverage = new MovingAverage(
-      TIME_STEP_MOVING_AVERAGE_LENGTH,
-      { initialValue: NOMINAL_TIME_STEP }
-    );
-
     //-----------------------------------------------------------------------------------------------------------------
     // other initialization
     //-----------------------------------------------------------------------------------------------------------------
@@ -396,10 +390,6 @@ define( function( require ) {
 
       // Reset any time step limits that had kicked in for the previous substance.
       this.maxParticleMoveTimePerStepProperty.reset();
-
-      // Start over on averaging the incoming time steps.
-      this.timeStepMovingAverage.reset();
-      this.keepingUpProperty.set( true );
     },
 
     /**
@@ -561,7 +551,6 @@ define( function( require ) {
 
       // other reset
       this.gravitationalAcceleration = NOMINAL_GRAVITATIONAL_ACCEL;
-      this.timeStepMovingAverage.reset();
       this.resetEmitter.emit();
     },
 
@@ -788,7 +777,6 @@ define( function( require ) {
      */
     stepInternal: function( dt ) {
 
-      this.timeStepMovingAverage.addValue( dt );
       this.particleInjectedThisStep = false;
 
       if ( !this.isExplodedProperty.get() ) {
@@ -950,39 +938,6 @@ define( function( require ) {
      * @public
      */
     step: function( dt ) {
-
-      // TODO: Consider removing this at some point if things are working well.
-      if ( StatesOfMatterQueryParameters.debugTimeStep ) {
-        if ( this.dialogShownLastTime ) {
-          this.accumulatedDt = 0;
-          this.largestDt = 0;
-          this.smallestDt = Number.POSITIVE_INFINITY;
-          this.dialogShownLastTime = false;
-          this.numDts = 0;
-          return;
-        }
-        if ( !this.largestDt || this.largestDt < dt ) {
-          this.largestDt = dt;
-        }
-        if ( !this.smallestDt || this.smallestDt > dt ) {
-          this.smallestDt = dt;
-        }
-        if ( !this.accumulatedDt ) {
-          this.accumulatedDt = 0;
-        }
-        this.accumulatedDt += dt;
-        if ( !this.numDts ) {
-          this.numDts = 0;
-        }
-        this.numDts++;
-        if ( this.accumulatedDt > 10 ) {
-          alert( 'largest dt = ' + this.largestDt + '\n' +
-                 'smallest dt = ' + this.smallestDt + '\n' +
-                 'average dt = ' + ( this.accumulatedDt / this.numDts ) + '\n'
-          );
-          this.dialogShownLastTime = true;
-        }
-      }
 
       // If the time step is excessively large, ignore it - it probably means that the user was on another tab or that
       // the browser was hidden, and they just came back to the sim.

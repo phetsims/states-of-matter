@@ -13,8 +13,6 @@ define( function( require ) {
 
   var StatesOfMatterQueryParameters = QueryStringMachine.getAll( {
 
-    // show some debug information on the first screen related to timing in the multi-particle model
-    debugTimeStep: { type: 'flag' }
   } );
 
   statesOfMatter.register( 'StatesOfMatterQueryParameters', StatesOfMatterQueryParameters );
