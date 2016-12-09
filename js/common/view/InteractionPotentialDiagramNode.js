@@ -124,7 +124,7 @@ define( function( require ) {
       font: GREEK_LETTER_FONT,
       fill: StatesOfMatterColorProfile.controlPanelTextProperty,
       maxWidth: GREEK_LETTER_MAX_WIDTH,
-      boundsMethod: 'accurate' // TODO: this seems necessary for good graph layout, but is it costly for performance?
+      boundsMethod: 'accurate' // This seems necessary for good graph layout, and doesn't seem to impact performance.
     } );
     this.ljPotentialGraph.addChild( this.epsilonLabel );
 
