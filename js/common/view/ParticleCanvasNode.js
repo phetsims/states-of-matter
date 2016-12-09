@@ -48,7 +48,6 @@ define( function( require ) {
     this.invalidatePaint();
 
     StatesOfMatterColorProfile.particleStrokeProperty.link( function( color ) {
-      // TODO: what is strokeColor?
       self.strokeColor = color.toCSS();
     } );
     this.mutate( options );
