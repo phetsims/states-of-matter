@@ -32,7 +32,6 @@ define( function( require ) {
   var FIXED_ATOM_JUMP_PERIOD = 2 * ( 1 / 60 ); // in seconds, intended to work well with 60 Hz frame rate
   var MOVABLE_ATOM_OSCILLATION_PERIOD = 4 * ( 1 / 60 ); // in seconds, intended to work well with 60 Hz frame rate
   var MAX_ATOM_VELOCITY = 10000; // used to limit velocity so that atom doesn't move so quickly that it can't be seen
-  var ESCAPE_POTENTIAL_THRESHOLD = 5E-18; // empirically determined
 
   // The maximum time step was empirically determined to be as large as possible while still making sure that energy
   // is conserved in all interaction cases.  See https://github.com/phetsims/states-of-matter/issues/53 for more info.

@@ -36,7 +36,6 @@ define( function( require ) {
   var MonatomicAtomPositionUpdater = require( 'STATES_OF_MATTER/common/model/engine/MonatomicAtomPositionUpdater' );
   var MonatomicPhaseStateChanger = require( 'STATES_OF_MATTER/common/model/engine/MonatomicPhaseStateChanger' );
   var MonatomicVerletAlgorithm = require( 'STATES_OF_MATTER/common/model/engine/MonatomicVerletAlgorithm' );
-  var MovingAverage = require( 'STATES_OF_MATTER/common/model/MovingAverage' );
   var NeonAtom = require( 'STATES_OF_MATTER/common/model/particle/NeonAtom' );
   var ObservableArray = require( 'AXON/ObservableArray' );
   var OxygenAtom = require( 'STATES_OF_MATTER/common/model/particle/OxygenAtom' );
@@ -44,7 +43,6 @@ define( function( require ) {
   var Property = require( 'AXON/Property' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
-  var StatesOfMatterQueryParameters = require( 'STATES_OF_MATTER/common/StatesOfMatterQueryParameters' );
   var SubstanceType = require( 'STATES_OF_MATTER/common/SubstanceType' );
   var Util = require( 'DOT/Util' );
   var Vector2 = require( 'DOT/Vector2' );
@@ -71,7 +69,6 @@ define( function( require ) {
   var NOMINAL_TIME_STEP = 1 / NOMINAL_FRAME_RATE;
   var PARTICLE_SPEED_UP_FACTOR = 4; // empirically determined to make the particles move at a speed that looks reasonable
   var MAX_PARTICLE_MOTION_TIME_STEP = 0.025; // max time step that model can handle, empirically determined
-  var TIME_STEP_MOVING_AVERAGE_LENGTH = 20; // number of samples in the moving average of time steps
 
   // constants that define the normalized temperatures used for the various states
   var SOLID_TEMPERATURE = StatesOfMatterConstants.SOLID_TEMPERATURE;
