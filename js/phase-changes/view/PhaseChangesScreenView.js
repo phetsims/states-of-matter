@@ -313,41 +313,6 @@ define( function( require ) {
     multipleParticleModel.particles.lengthProperty.link( function() {
       self.updatePhaseDiagram();
     } );
-
-    // if the appropriate query param is set, show some information used in debugging time step adjustments
-    // TODO: Consider removing this once performance issues are worked out.
-    if ( StatesOfMatterQueryParameters.debugTimeStep ) {
-      var keepingUpReadout = new Text( '', {
-        font: new PhetFont( 20 ),
-        fill: 'red',
-        top: 40,
-        left: 20
-      } );
-      this.addChild( keepingUpReadout );
-      multipleParticleModel.keepingUpProperty.link( function( keepingUp ) {
-        keepingUpReadout.text = keepingUp.toString();
-      } );
-      var averageDtReadout = new Text( '', {
-        font: new PhetFont( 20 ),
-        fill: 'red',
-        top: keepingUpReadout.bottom + 5,
-        left: keepingUpReadout.left
-      } );
-      this.addChild( averageDtReadout );
-      multipleParticleModel.averageDtProperty.link( function( averageDt ) {
-        averageDtReadout.text = averageDt.toFixed( 3 );
-      } );
-      var maxAdvanceTimePerStep = new Text( '', {
-        font: new PhetFont( 20 ),
-        fill: 'red',
-        top: averageDtReadout.bottom + 5,
-        left: averageDtReadout.left
-      } );
-      this.addChild( maxAdvanceTimePerStep );
-      multipleParticleModel.maxParticleMoveTimePerStepProperty.link( function( maxAdvance ) {
-        maxAdvanceTimePerStep.text = maxAdvance.toFixed( 3 );
-      } );
-    }
   }
 
   statesOfMatter.register( 'PhaseChangesScreenView', PhaseChangesScreenView );
