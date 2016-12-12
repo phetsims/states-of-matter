@@ -202,10 +202,10 @@ define( function( require ) {
           // that we don't check inter-particle distances here - we rely
           // on the placement algorithm to make sure that this is not a
           // problem.
-          if ( (xPos > this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE) &&
-               (xPos < this.multipleParticleModel.normalizedContainerWidth - this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE) &&
-               (yPos > this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE) &&
-               (xPos < this.multipleParticleModel.normalizedContainerHeight - this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE) ) {
+          if ( ( xPos > this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE ) &&
+               ( xPos < this.multipleParticleModel.normalizedContainerWidth - this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE ) &&
+               ( yPos > this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE ) &&
+               ( xPos < this.multipleParticleModel.normalizedContainerHeight - this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE ) ) {
 
             // This is an acceptable position.
             moleculeCenterOfMassPositions[ moleculesPlaced ].setXY( xPos, yPos );

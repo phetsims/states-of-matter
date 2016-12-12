@@ -51,7 +51,33 @@ define( function( require ) {
     this.interactionEnabled = false;
     this.minXForAtom = Number.NEGATIVE_INFINITY;
 
-    // Add the line that will indicate the value of epsilon.
+    // Create a convenience function for adding a drag handler that adjusts epsilon, this is done to avoid code duplication.
+    var startDragY;
+    var endDragY;
+
+    function addEpsilonDragHandler( node ) {
+      node.addInputListener( new SimpleDragHandler( {
+
+        start: function( event ) {
+          dualAtomModel.setMotionPaused( true );
+          startDragY = node.globalToParentPoint( event.pointer.point ).y;
+        },
+
+        drag: function( event ) {
+          endDragY = node.globalToParentPoint( event.pointer.point ).y;
+          var d = endDragY - startDragY;
+          startDragY = endDragY;
+          var scaleFactor = StatesOfMatterConstants.MAX_EPSILON / ( self.getGraphHeight() / 2 );
+          dualAtomModel.interactionStrengthProperty.value = dualAtomModel.getEpsilon() + ( d * scaleFactor );
+        },
+
+        end: function() {
+          dualAtomModel.setMotionPaused( false );
+        }
+      } ) );
+    }
+
+    // Add the line that will indicate and control the value of epsilon.
     var epsilonLineLength = EPSILON_HANDLE_OFFSET_PROPORTION * this.widthOfGraph * 1.2;
     this.epsilonLine = new Rectangle( -epsilonLineLength / 2, 0, epsilonLineLength, 1, {
       cursor: 'ns-resize',
@@ -59,32 +85,15 @@ define( function( require ) {
       fill: EPSILON_LINE_COLOR,
       stroke: EPSILON_LINE_COLOR
     } );
-    this.epsilonLine.addInputListener( new FillHighlightListener( RESIZE_HANDLE_NORMAL_COLOR,
-      RESIZE_HANDLE_HIGHLIGHTED_COLOR ) );
+    this.epsilonLine.addInputListener(
+      new FillHighlightListener( RESIZE_HANDLE_NORMAL_COLOR, RESIZE_HANDLE_HIGHLIGHTED_COLOR )
+    );
     this.epsilonLine.touchArea = this.epsilonLine.localBounds.dilatedXY( 8, 8 );
-    var startDragY;
-    var endDragY;
-    this.epsilonLine.addInputListener( new SimpleDragHandler( {
-
-      start: function( event ) {
-        dualAtomModel.setMotionPaused( true );
-        startDragY = self.epsilonLine.globalToParentPoint( event.pointer.point ).y;
-      },
-
-      drag: function( event ) {
-        endDragY = self.epsilonLine.globalToParentPoint( event.pointer.point ).y;
-        var d = endDragY - startDragY;
-        startDragY = endDragY;
-        var scaleFactor = StatesOfMatterConstants.MAX_EPSILON / ( self.getGraphHeight() / 2 );
-        dualAtomModel.interactionStrengthProperty.value = dualAtomModel.getEpsilon() + ( d * scaleFactor );
-      },
-
-      end: function() {
-        dualAtomModel.setMotionPaused( false );
-      }
-    } ) );
+    this.epsilonLine.mouseArea = this.epsilonLine.localBounds.dilatedXY( 0, 4 );
+    addEpsilonDragHandler( this.epsilonLine );
     this.epsilonLineLayer.addChild( this.epsilonLine );
 
+    // Add the arrow nodes that will allow the user to control the epsilon value.
     var arrowNodeOptions = {
       headHeight: 10,
       headWidth: 18,
@@ -95,35 +104,20 @@ define( function( require ) {
       pickable: true,
       cursor: 'pointer'
     };
-
-    // Add the arrow nodes that will allow the user to control the parameters of the LJ potential.
-    this.epsilonResizeHandle = new ArrowNode( 0, -RESIZE_HANDLE_SIZE_PROPORTION * this.widthOfGraph / 2, 0,
-      RESIZE_HANDLE_SIZE_PROPORTION * this.widthOfGraph, arrowNodeOptions );
+    this.epsilonResizeHandle = new ArrowNode(
+      0,
+      -RESIZE_HANDLE_SIZE_PROPORTION * this.widthOfGraph / 2,
+      0,
+      RESIZE_HANDLE_SIZE_PROPORTION * this.widthOfGraph,
+      arrowNodeOptions
+    );
     this.epsilonResizeHandle.addInputListener( new FillHighlightListener(
       RESIZE_HANDLE_NORMAL_COLOR,
       RESIZE_HANDLE_HIGHLIGHTED_COLOR
     ) );
     this.ljPotentialGraph.addChild( this.epsilonResizeHandle );
     this.epsilonResizeHandle.touchArea = this.epsilonResizeHandle.localBounds.dilatedXY( 3, 10 );
-    this.epsilonResizeHandle.addInputListener( new SimpleDragHandler( {
-
-      start: function( event ) {
-        dualAtomModel.setMotionPaused( true );
-        startDragY = self.epsilonResizeHandle.globalToParentPoint( event.pointer.point ).y;
-      },
-
-      drag: function( event ) {
-        endDragY = self.epsilonResizeHandle.globalToParentPoint( event.pointer.point ).y;
-        var d = endDragY - startDragY;
-        startDragY = endDragY;
-        var scaleFactor = StatesOfMatterConstants.MAX_EPSILON / ( self.getGraphHeight() / 2 );
-        dualAtomModel.interactionStrengthProperty.value = dualAtomModel.getEpsilon() + ( d * scaleFactor );
-      },
-
-      end: function() {
-        dualAtomModel.setMotionPaused( false );
-      }
-    } ) );
+    addEpsilonDragHandler( this.epsilonResizeHandle );
 
     // add sigma arrow node
     this.sigmaResizeHandle = new ArrowNode( -RESIZE_HANDLE_SIZE_PROPORTION * this.widthOfGraph / 2, 0,

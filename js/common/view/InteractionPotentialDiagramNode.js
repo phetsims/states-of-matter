@@ -144,8 +144,8 @@ define( function( require ) {
     } );
     this.ljPotentialGraph.addChild( this.sigmaArrow );
 
-    // Add the layer where the
-    this.epsilonLineLayer = new Node();
+    // Add the layer where the eplison line marker will go, this is done so we can achieve the desired layering.
+    this.epsilonLineLayer = new Node(); // @protected
     this.ljPotentialGraph.addChild( this.epsilonLineLayer );
 
     // Add the position marker.
