@@ -198,10 +198,9 @@ define( function( require ) {
                                                              ( MIN_INITIAL_DIAMETER_DISTANCE * LIQUID_SPACING_FACTOR ) );
             particlesOnCurrentLayer = 0;
           }
-          // Check if the position is too close to the wall.  Note
-          // that we don't check inter-particle distances here - we rely
-          // on the placement algorithm to make sure that this is not a
-          // problem.
+
+          // Check if the position is too close to the wall.  Note that we don't check inter-particle distances here -
+          // we rely on the placement algorithm to make sure that this is not a problem.
           if ( ( xPos > this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE ) &&
                ( xPos < this.multipleParticleModel.normalizedContainerWidth - this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE ) &&
                ( yPos > this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE ) &&
@@ -212,84 +211,6 @@ define( function( require ) {
             moleculeRotationAngles[ moleculesPlaced ] = angle + Math.PI / 2;
             moleculesPlaced++;
             break;
-          }
-        }
-      }
-    },
-
-    /**
-     * Set the phase to the gaseous state.
-     * @private
-     */
-    setPhaseGas: function() {
-
-      // Set the model temperature for this phase.
-      this.multipleParticleModel.setTemperature( StatesOfMatterConstants.GAS_TEMPERATURE );
-
-      // Get references to the various elements of the data set.
-      var moleculeDataSet = this.multipleParticleModel.moleculeDataSet;
-      var moleculeCenterOfMassPositions = moleculeDataSet.getMoleculeCenterOfMassPositions();
-      var moleculeVelocities = moleculeDataSet.getMoleculeVelocities();
-      var moleculeRotationAngles = moleculeDataSet.getMoleculeRotationAngles();
-      var moleculeRotationRates = moleculeDataSet.getMoleculeRotationRates();
-      var moleculesInsideContainer = this.multipleParticleModel.moleculeDataSet.insideContainer;
-
-      // Create and initialize other variables needed to do the job.
-      var temperatureSqrt = Math.sqrt( this.multipleParticleModel.temperatureSetPointProperty.get() );
-      var numberOfMolecules = moleculeDataSet.getNumberOfMolecules();
-      for ( var i = 0; i < numberOfMolecules; i++ ) {
-
-        // Temporarily position the molecules at (0,0).
-        moleculeCenterOfMassPositions[ i ].setXY( 0, 0 );
-
-        // Assign each molecule an initial velocity.
-        moleculeVelocities[ i ].setXY( temperatureSqrt * this.rand.nextGaussian(), temperatureSqrt * this.rand.nextGaussian() );
-
-        // Assign each molecule an initial rotational position.
-        moleculeRotationAngles[ i ] = phet.joist.random.nextDouble() * Math.PI * 2;
-
-        // Assign each molecule an initial rotation rate.
-        moleculeRotationRates[ i ] = phet.joist.random.nextDouble() * temperatureSqrt * Math.PI * 2;
-
-        // Mark each molecule as being in the container.
-        moleculesInsideContainer[ i ] = true;
-      }
-
-      // Redistribute the molecules randomly around the container, but make sure that they are not too close together or
-      // they end up with a disproportionate amount of kinetic energy.
-      var newPosX;
-      var newPosY;
-      var rangeX = this.multipleParticleModel.normalizedContainerWidth - (2 * this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE);
-      var rangeY = this.multipleParticleModel.normalizedContainerWidth - ( 2 * this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE);
-      for ( i = 0; i < numberOfMolecules; i++ ) {
-        for ( var j = 0; j < this.MAX_PLACEMENT_ATTEMPTS; j++ ) {
-
-          // Pick a random position.
-          newPosX = this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE + ( phet.joist.random.nextDouble() * rangeX);
-          newPosY = this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE + ( phet.joist.random.nextDouble() * rangeY);
-          var positionAvailable = true;
-
-          // See if this position is available.
-          for ( var k = 0; k < i; k++ ) {
-            if ( moleculeCenterOfMassPositions[ k ].distanceXY( newPosX, newPosY ) <
-                 MIN_INITIAL_DIAMETER_DISTANCE * GAS_SPACING_FACTOR ) {
-              positionAvailable = false;
-              break;
-            }
-          }
-          if ( positionAvailable ) {
-
-            // We found an open position.
-            moleculeCenterOfMassPositions[ i ].setXY( newPosX, newPosY );
-            break;
-          }
-          else if ( j === this.MAX_PLACEMENT_ATTEMPTS - 1 ) {
-
-            // This is the last attempt, so use this position anyway.
-            var openPoint = this.findOpenMoleculeLocation();
-            if ( openPoint !== null ) {
-              moleculeCenterOfMassPositions[ i ].setXY( openPoint.x, openPoint.y );
-            }
           }
         }
       }

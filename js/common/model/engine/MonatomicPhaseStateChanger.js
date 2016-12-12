@@ -173,10 +173,8 @@ define( function( require ) {
             particlesOnCurrentLayer = 0;
           }
 
-          // Check if the position is too close to the wall.  Note
-          // that we don't check inter-particle distances here - we
-          // rely on the placement algorithm to make sure that we don't
-          // run into problems with this.
+          // Check if the position is too close to the wall.  Note that we don't check inter-particle distances here -
+          // we rely on the placement algorithm to make sure that we don't run into problems with this.
           if ( ( xPos > this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE ) &&
                ( xPos < this.multipleParticleModel.normalizedContainerWidth - this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE ) &&
                ( yPos > this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE ) &&
@@ -189,63 +187,6 @@ define( function( require ) {
             break;
           }
         }
-      }
-    },
-
-    /**
-     * Set the phase to the gaseous state.
-     * @private
-     */
-    setPhaseGas: function() {
-
-      // Set the temperature for the new state.
-      this.multipleParticleModel.setTemperature( StatesOfMatterConstants.GAS_TEMPERATURE );
-      var temperatureSqrt = Math.sqrt( StatesOfMatterConstants.GAS_TEMPERATURE );
-      var numberOfAtoms = this.multipleParticleModel.moleculeDataSet.numberOfAtoms;
-      var moleculeCenterOfMassPositions = this.multipleParticleModel.moleculeDataSet.moleculeCenterOfMassPositions;
-      var moleculeVelocities = this.multipleParticleModel.moleculeDataSet.moleculeVelocities;
-      var moleculesInsideContainer = this.multipleParticleModel.moleculeDataSet.insideContainer;
-
-      for ( var i = 0; i < numberOfAtoms; i++ ) {
-        // Temporarily position the particles at (0,0).
-        moleculeCenterOfMassPositions[ i ].setXY( 0, 0 );
-
-        // Assign each particle an initial velocity.
-        moleculeVelocities[ i ].setXY( temperatureSqrt * this.random.nextGaussian(),
-          temperatureSqrt * this.random.nextGaussian() );
-      }
-
-      // Redistribute the particles randomly around the container, but make sure that they are not too close together or
-      // they end up with a disproportionate amount of kinetic energy.
-      var newPosX;
-      var newPosY;
-      var rangeX = this.multipleParticleModel.normalizedContainerWidth - ( 2 * this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE );
-      var rangeY = this.multipleParticleModel.normalizedContainerWidth - ( 2 * this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE );
-      for ( i = 0; i < numberOfAtoms; i++ ) {
-        for ( var j = 0; j < this.MAX_PLACEMENT_ATTEMPTS; j++ ) {
-
-          // Pick a random position.
-          newPosX = this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE + ( phet.joist.random.nextDouble() * rangeX );
-          newPosY = this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE + ( phet.joist.random.nextDouble() * rangeY );
-          var positionAvailable = true;
-          // See if this position is available.
-          for ( var k = 0; k < i; k++ ) {
-            if ( moleculeCenterOfMassPositions[ k ].distanceXY( newPosX, newPosY ) < MIN_INITIAL_INTER_PARTICLE_DISTANCE ) {
-              positionAvailable = false;
-              break;
-            }
-          }
-          if ( positionAvailable ) {
-            // We found an open position.
-            moleculeCenterOfMassPositions[ i ].setXY( newPosX, newPosY );
-            break;
-          }
-          else if ( j === this.MAX_PLACEMENT_ATTEMPTS - 1 ) {
-            // This is the last attempt, so use this position anyway.
-            moleculeCenterOfMassPositions[ i ].setXY( newPosX, newPosY );
-          }
-        }
-        moleculesInsideContainer[ i ] = true;
       }
     }
   } );
