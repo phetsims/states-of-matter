@@ -45,11 +45,14 @@ define( function( require ) {
   function InteractiveInteractionPotentialDiagram( dualAtomModel, wide, options ) {
 
     InteractionPotentialDiagramNode.call( this, dualAtomModel.getSigma(), dualAtomModel.getEpsilon(), wide );
-    this.dualAtomModel = dualAtomModel;
     var self = this;
 
-    this.interactionEnabled = false;
+    // @private
+    this.dualAtomModel = dualAtomModel;
     this.minXForAtom = Number.NEGATIVE_INFINITY;
+
+    // @public, read-only
+    this.interactionEnabled = false;
 
     // Create a convenience function for adding a drag handler that adjusts epsilon, this is done to avoid code duplication.
     var startDragY;

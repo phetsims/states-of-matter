@@ -29,7 +29,7 @@ define( function( require ) {
    */
   function HydrogenAtom( x, y, renderBelowOxygen ) {
     StatesOfMatterAtom.call( this, x, y, RADIUS, MASS, StatesOfMatterConstants.HYDROGEN_COLOR );
-    this.renderBelowOxygen = renderBelowOxygen;
+    this.renderBelowOxygen = renderBelowOxygen; // @public, read-only
   }
 
   statesOfMatter.register( 'HydrogenAtom', HydrogenAtom );

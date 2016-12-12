@@ -40,6 +40,7 @@ define( function( require ) {
 
     Node.call( this );
 
+    // @private
     this.particle = particle;
     this.modelViewTransform = modelViewTransform;
     this.overlapEnabled = enableOverlap;
@@ -53,7 +54,7 @@ define( function( require ) {
       circleDiameter = circleDiameter * OVERLAP_ENLARGEMENT_FACTOR;
     }
 
-    // Create the node that will represent this particle.
+    // @private node that will represent this particle
     this.circle = new Path( new Shape().circle( 0, 0, circleDiameter / 2 ), { fill: this.createFill( particle ) } );
     this.addChild( this.circle );
 

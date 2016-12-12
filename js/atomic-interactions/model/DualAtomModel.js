@@ -240,7 +240,6 @@ define( function( require ) {
      * @private
      */
     setBothAtomTypes: function( atomType ) {
-
       if ( this.fixedAtom === null || this.movableAtom === null || this.fixedAtom.getType() !== atomType ||
            this.movableAtom.getType() !== atomType ) {
         this.settingBothAtomTypes = true;
@@ -522,6 +521,9 @@ define( function( require ) {
       }
     },
 
+    /**
+     * @private
+     */
     updateBondingState: function() {
       if ( this.movableAtom.getType() === AtomType.OXYGEN && this.fixedAtom.getType() === AtomType.OXYGEN ) {
         switch( this.bondingState ) {
@@ -683,7 +685,6 @@ define( function( require ) {
         }
         equivalentPotentialDistance -= distanceChangePerIteration;
       }
-
       return equivalentPotentialDistance;
     }
   } );

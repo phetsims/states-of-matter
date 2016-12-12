@@ -67,7 +67,7 @@ define( function( require ) {
 
     /**
      * Set the phase to the solid state.
-     * @private
+     * @protected
      */
     setPhaseSolid: function() {
 
@@ -117,7 +117,7 @@ define( function( require ) {
 
     /**
      * Set the phase to the liquid state.
-     * @private
+     * @protected
      */
     setPhaseLiquid: function() {
 

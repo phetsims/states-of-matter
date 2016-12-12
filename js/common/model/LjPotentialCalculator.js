@@ -36,32 +36,32 @@ define( function( require ) {
   return inherit( Object, LjPotentialCalculator, {
 
     /**
-     * @public
      * @returns {number}
+     * @public
      */
     getSigma: function() {
       return this.sigma;
     },
 
     /**
-     * @public
      * @param {number} sigma
+     * @public
      */
     setSigma: function( sigma ) {
       this.sigma = sigma;
     },
 
     /**
-     * @public
      * @returns {number}
+     * @public
      */
     getEpsilon: function() {
       return this.epsilon;
     },
 
     /**
-     * @public
      * @param {number} epsilon
+     * @public
      */
     setEpsilon: function( epsilon ) {
       this.epsilon = epsilon;
@@ -70,9 +70,9 @@ define( function( require ) {
 
     /**
      * Calculate the Lennard-Jones potential for the specified distance.
-     * @public
      * @param {number} distance - Distance between interacting molecules in picometers.
      * @returns {number} Strength of the potential in newton-meters (N*m).
+     * @public
      */
     calculateLjPotential: function( distance ) {
       var distanceRatio = this.sigma / distance;
@@ -80,22 +80,20 @@ define( function( require ) {
     },
 
     /**
-     * Calculate only the repulsive component of the Lennard-Jones force for
-     * the specified distance.
-     * @public
+     * Calculate only the repulsive component of the Lennard-Jones force for the specified distance.
      * @param {number} distance - Distance between interacting molecules in picometers.
      * @return {number} Force in newtons.
+     * @public
      */
     calculateRepulsiveLjForce: function( distance ) {
       return (48 * this.epsilonForCalcs * Math.pow( this.sigma, 12 ) / Math.pow( distance, 13 ));
     },
 
     /**
-     * Calculate only the attractive component of the Lennard-Jones force for
-     * the specified distance.
-     * @public
+     * Calculate only the attractive component of the Lennard-Jones force for the specified distance.
      * @param {number} distance - Distance between interacting molecules in picometers.
      * @return {number} - Force in newtons.
+     * @public
      */
     calculateAttractiveLjForce: function( distance ) {
       return ( 24 * this.epsilonForCalcs * Math.pow( this.sigma, 6 ) / Math.pow( distance, 7 ) );
@@ -104,8 +102,8 @@ define( function( require ) {
     /**
      * Calculate the distance at which the force is 0 because the attractive and repulsive forces are balanced.  Note
      * that this is where the potential energy is at a minimum.
-     * @public
      * @return {number} - Distance where force is 0 (or very close) in picometers.
+     * @public
      */
     calculateMinimumForceDistance: function() {
       // this is the solution for the min potential
@@ -115,9 +113,9 @@ define( function( require ) {
     /**
      * Calculate the potential energy of a particle at the given distance. This calculation is performed by calculating
      * the potential at the given point and subtracting the potential at the minimum point.
-     * @public
      * @param {number} distance
      * @returns {number}
+     * @public
      */
     calculatePotentialEnergy: function( distance ) {
       return this.calculateLjPotential( distance ) - this.calculateLjPotential( this.calculateMinimumForceDistance() );

@@ -24,16 +24,17 @@ define( function( require ) {
    */
   function AndersenThermostat( moleculeDataSet, minTemperature ) {
 
-    this.moleculeDataSet = moleculeDataSet;
-
-    // Target temperature in normalized model units.
+    // @public target temperature in normalized model units
     this.targetTemperature = StatesOfMatterConstants.INITIAL_TEMPERATURE;
 
-    // Minimum temperature in normalized model units, below this is considered absolute 0;
+    // @public minimum temperature in normalized model units, below this is considered absolute 0;
     this.minModelTemperature = minTemperature;
 
-    // Set up references to the various arrays within the data set so that
-    // the calculations can be performed as fast as is possible.
+    // @private reference to the molecule data set
+    this.moleculeDataSet = moleculeDataSet;
+
+    // @private references to the various arrays within the data set, set up so that the calculations can be performed
+    // as fast as as possible
     this.moleculeVelocities = moleculeDataSet.moleculeVelocities;
     this.moleculeRotationRates = moleculeDataSet.moleculeRotationRates;
 
@@ -43,6 +44,7 @@ define( function( require ) {
   statesOfMatter.register( 'AndersenThermostat', AndersenThermostat );
 
   return inherit( Object, AndersenThermostat, {
+
     /**
      * @public
      */
@@ -73,6 +75,5 @@ define( function( require ) {
                                           this.random.nextGaussian() * rotationScalingFactor;
       }
     }
-
   } );
 } );

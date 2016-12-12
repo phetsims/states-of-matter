@@ -129,8 +129,6 @@ define( function( require ) {
 
       // Add the pressure meter.
       var pressureMeter = new DialGaugeNode( multipleParticleModel );
-      this.pressureMeter = pressureMeter;
-      //pressureMeter.updateConnector();
       pressureMeter.right = this.particleAreaViewBounds.minX + this.particleAreaViewBounds.width * 0.2;
       postParticleLayer.addChild( pressureMeter );
     }

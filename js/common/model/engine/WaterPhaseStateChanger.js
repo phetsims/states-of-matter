@@ -35,10 +35,12 @@ define( function( require ) {
     // Make sure this is not being used on an inappropriate data set.
     assert && assert( multipleParticleModel.moleculeDataSet.getAtomsPerMolecule() === 3 );
 
+    AbstractPhaseStateChanger.call( this, multipleParticleModel );
+
+    // @private
     this.multipleParticleModel = multipleParticleModel;
     this.rand = new Random(); //@private
     this.positionUpdater = WaterAtomPositionUpdater; // @private
-    AbstractPhaseStateChanger.call( this, multipleParticleModel );
   }
 
   statesOfMatter.register( 'WaterPhaseStateChanger', WaterPhaseStateChanger );
@@ -64,8 +66,8 @@ define( function( require ) {
     },
 
     /**
-     * @private
      * Set the phase to the solid state.
+     * @protected
      */
     setPhaseSolid: function() {
 
@@ -126,8 +128,8 @@ define( function( require ) {
     },
 
     /**
-     * @private
      * Set the phase to the liquid state.
+     * @protected
      */
     setPhaseLiquid: function() {
       AbstractPhaseStateChanger.prototype.setPhaseLiquidMultiAtom.call(

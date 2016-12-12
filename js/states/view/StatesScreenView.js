@@ -60,11 +60,11 @@ define( function( require ) {
       modelViewTransform.modelToViewY( 0 )
     );
 
-    // add particle container
+    // @private particle container
     this.particleContainerNode = new ParticleContainerNode( multipleParticleModel, modelViewTransform, false, false );
     this.addChild( this.particleContainerNode );
 
-    // add heater/cooler node
+    // @private add heater/cooler node
     var heaterCoolerNode = new HeaterCoolerNode( {
       scale: 0.8,
       centerX: particleContainerViewBounds.centerX,
@@ -77,7 +77,7 @@ define( function( require ) {
       multipleParticleModel.setHeatingCoolingAmount( heat );
     } );
 
-    // add the thermometer node
+    // @private thermometer node
     this.compositeThermometerNode = new CompositeThermometerNode( multipleParticleModel, modelViewTransform, {
       font: new PhetFont( 20 ),
       fill: 'white',
@@ -85,21 +85,21 @@ define( function( require ) {
     } );
     this.addChild( this.compositeThermometerNode );
 
-    // add the selection panel for the atoms/molecules
+    // @private selection panel for the atoms/molecules
     var atomsAndMoleculesSelectionPanel = new StatesMoleculesControlPanel( multipleParticleModel.substanceProperty, {
       right: this.layoutBounds.right - CONTROL_PANEL_X_INSET,
       top: this.layoutBounds.top + CONTROL_PANEL_Y_INSET
     } );
     this.addChild( atomsAndMoleculesSelectionPanel );
 
-    // add phases control node
+    // @private phases control node
     var solidLiquidGasPhaseControlNode = new StatesPhaseControlNode( multipleParticleModel, {
       right: atomsAndMoleculesSelectionPanel.right,
       top: atomsAndMoleculesSelectionPanel.bottom + CONTROL_PANEL_Y_INSET
     } );
     this.addChild( solidLiquidGasPhaseControlNode );
 
-    // add reset all button
+    // @private reset all button
     var resetAllButton = new ResetAllButton( {
       listener: function() {
         multipleParticleModel.reset();
@@ -112,7 +112,7 @@ define( function( require ) {
     } );
     this.addChild( resetAllButton );
 
-    // add the play/pause and step buttons
+    // @private
     var stepButton = new StepForwardButton( {
       playingProperty: multipleParticleModel.isPlayingProperty,
       listener: function() { multipleParticleModel.stepInternal( StatesOfMatterConstants.NOMINAL_TIME_STEP ); },
@@ -125,6 +125,7 @@ define( function( require ) {
     } );
     this.addChild( stepButton );
 
+    // @private
     var playPauseButton = new PlayPauseButton( multipleParticleModel.isPlayingProperty, {
       radius: 18,
       stroke: 'black',
@@ -135,6 +136,7 @@ define( function( require ) {
     } );
     this.addChild( playPauseButton );
 
+    // @private
     this.particleContainerHeightPropertyChanged = false;
     multipleParticleModel.particleContainerHeightProperty.link( function( containerHeight, previousContainerHeight ) {
 
@@ -157,6 +159,10 @@ define( function( require ) {
   statesOfMatter.register( 'StatesScreenView', StatesScreenView );
 
   return inherit( ScreenView, StatesScreenView, {
+
+    /**
+     * @public
+     */
     step: function() {
       this.particleContainerNode.step();
     }

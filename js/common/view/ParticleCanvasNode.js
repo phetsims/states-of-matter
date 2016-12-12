@@ -7,7 +7,8 @@
  * This was replaced in August 2016 with ParticleImageCanvasNode because using images instead for drawing shapes using
  * context.arc, context.fill, and so forth, improved the performance significantly on devices like iPad 2s.  See
  * https://github.com/phetsims/states-of-matter/issues/71 for details.  I am keeping this file around, however, in
- * case we ever run into issues where the images are not clear enough, and we decide that we'd rather draw them.
+ * case we ever run into issues where the images are not clear enough, and we decide that we'd rather draw them.  If
+ * the sim has been out for years and no complaints have ever arisen, this can probably be removed.
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
  *
  * @author Siddhartha Chinthapally (Actual Concepts)

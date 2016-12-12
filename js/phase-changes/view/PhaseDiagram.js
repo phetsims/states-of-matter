@@ -106,70 +106,78 @@ define( function( require ) {
     Node.call( this );
     var accordionContent = new Node();
 
-    // phase diagram - the order in which these are added is important
+    // @private
     this.topOfSolidLiquidLine = new Vector2( DEFAULT_TOP_OF_SOLID_LIQUID_LINE.x, DEFAULT_TOP_OF_SOLID_LIQUID_LINE.y );
 
-    // gas area background
+    // @private gas area background
     this.gasAreaBackground = new Path( null, {
       fill: '#FFBC00',
       stroke: '#FFBC00'
     } );
     accordionContent.addChild( this.gasAreaBackground );
 
-    // super critical area background
+    // @private super critical area background
     this.superCriticalAreaBackground = new Path( null, {
       fill: '#C3DF53'
     } );
     accordionContent.addChild( this.superCriticalAreaBackground );
 
-    // liquid area background
+    // @private liquid area background
     this.liquidAreaBackground = new Path( null, {
       fill: '#83FFB9'
     } );
     accordionContent.addChild( this.liquidAreaBackground );
 
-    // solid area background
+    // @private solid area background
     this.solidAreaBackground = new Path( null, {
       fill: '#AB9CC4'
     } );
     accordionContent.addChild( this.solidAreaBackground );
 
+    // @private
     this.solidLiquidLine = new Path( null, { lineWidth: 1, stroke: 'black' } );
     accordionContent.addChild( this.solidLiquidLine );
 
+    // @private
     this.solidGasLine = new Path( null, { lineWidth: 1, stroke: 'black' } );
     accordionContent.addChild( this.solidGasLine );
 
+    // @private
     this.liquidGasLine = new Path( null, { lineWidth: 1, stroke: 'black' } );
     accordionContent.addChild( this.liquidGasLine );
 
+    // @private
     this.triplePoint = new Path( new Shape()
       .ellipse( 0, 0, POINT_MARKER_DIAMETER, POINT_MARKER_DIAMETER ), { fill: 'black' } );
     accordionContent.addChild( this.triplePoint );
 
+    // @private
     this.criticalPoint = new Path( new Shape()
       .ellipse( 0, 0, POINT_MARKER_DIAMETER, POINT_MARKER_DIAMETER ), { fill: 'black' } );
     accordionContent.addChild( this.criticalPoint );
 
-    // Create the labels that will exist inside the phase diagram.
+    // @private
     this.solidLabel = new Text( solidString, { font: LARGER_INNER_FONT, fill: 'black' } );
     accordionContent.addChild( this.solidLabel );
     if ( this.solidLabel.width > STATES_MAX_WIDTH ) {
       this.solidLabel.scale( STATES_MAX_WIDTH / this.solidLabel.width );
     }
 
+    // @private
     this.liquidLabel = new Text( liquidString, { font: LARGER_INNER_FONT, fill: 'black' } );
     accordionContent.addChild( this.liquidLabel );
     if ( this.liquidLabel.width > STATES_MAX_WIDTH ) {
       this.liquidLabel.scale( STATES_MAX_WIDTH / this.liquidLabel.width );
     }
 
+    // @private
     this.gasLabel = new Text( gasString, { font: LARGER_INNER_FONT, fill: 'black' } );
     accordionContent.addChild( this.gasLabel );
     if ( this.gasLabel.width > STATES_MAX_WIDTH ) {
       this.gasLabel.scale( STATES_MAX_WIDTH / this.gasLabel.width );
     }
 
+    // @private
     this.triplePointLabel = new MultiLineText( triplePointString, {
       font: SMALLER_INNER_FONT,
       fill: 'black',
@@ -180,6 +188,7 @@ define( function( require ) {
       this.triplePointLabel.setScaleMagnitude( SMALLER_INNER_TEXT_WIDTH / this.triplePointLabel.width );
     }
 
+    // @private
     this.criticalPointLabel = new MultiLineText( criticalPointString, {
       font: SMALLER_INNER_FONT,
       fill: 'black',
@@ -374,9 +383,9 @@ define( function( require ) {
 
     /**
      * Set the normalized position for this marker.
-     * @public
      * @param normalizedTemperature - Temperature (X position) value between 0 and 1 (inclusive).
      * @param normalizedPressure    - Pressure (Y position) value between 0 and 1 (inclusive).
+     * @public
      */
     setStateMarkerPos: function( normalizedTemperature, normalizedPressure ) {
 
@@ -399,23 +408,21 @@ define( function( require ) {
 
     /**
      * Set the visibility of the state marker.
-     * @public
      * @param {boolean} isVisible
+     * @public
      */
     setStateMarkerVisible: function( isVisible ) {
       this.currentStateMarker.setVisible( isVisible );
     },
 
     /**
-     * Set the phase diagram to be shaped such that it looks like water, which
-     * is to say that the solid-liquid line leans to the left rather than to
-     * the right, as it does for most substances.  Note that this is a very
-     * non-general approach - it would be more general to allow the various
-     * points in the graph (e.g. triple point, critical point) to be
-     * positioned anywhere, but currently it isn't worth the extra effort to
-     * do so.  Feel free if it is ever needed.
-     * @public
+     * Set the phase diagram to be shaped such that it looks like water, which is to say that the solid-liquid line
+     * leans to the left rather than to the right, as it does for most substances.  Note that this is a very non-general
+     * approach - it would be more general to allow the various points in the graph (e.g. triple point, critical point)
+     * to be positioned anywhere, but currently it isn't worth the extra effort to do so.  Feel free if it is ever
+     * needed.
      * @param {boolean} depictingWater
+     * @public
      */
     setDepictingWater: function( depictingWater ) {
       if ( depictingWater ) {

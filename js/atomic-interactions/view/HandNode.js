@@ -34,7 +34,7 @@ define( function( require ) {
 
     Node.call( this, { cursor: 'pointer' } );
     var self = this;
-    this.minX = minX;
+    this.minX = minX; // @private
 
     // add the main image that represents the hand
     this.addChild( new Image( handImage, {

@@ -23,6 +23,8 @@ define( function( require ) {
    * @constructor
    */
   function StatesOfMatterAtom( x, y, radius, mass, color ) {
+
+    // @private, accessed through getter and setter methods below, basically because that's how it worked in Java sim
     this.positionProperty = new Property( new Vector2( x, y ) );
     this.velocity = new Vector2( 0, 0 );
     this.accel = new Vector2( 0, 0 );
@@ -48,9 +50,9 @@ define( function( require ) {
     },
 
     /**
-     * @public
      * @param other
      * @returns {boolean}
+     * @public
      */
     equals: function( other ) {
       if ( this === other ) {
@@ -76,30 +78,29 @@ define( function( require ) {
     },
 
     /**
-     * @public
      * @returns {number}
+     * @public
      */
     getVy: function() {
       return this.velocity.y;
     },
     /**
-     * @public
      * @param {number} vy - atom velocity in y-direction
+     * @public
      */
     setVy: function( vy ) {
       this.velocity.setY( vy );
     },
 
     /**
-     * @public
      * @returns {number}
+     * @public
      */
     getVx: function() {
       return this.velocity.x;
     },
 
     /**
-     *
      * @param {number} vx - atom velocity in x-direction
      */
     setVx: function( vx ) {
@@ -107,96 +108,96 @@ define( function( require ) {
     },
 
     /**
-     * @public
      * @returns {number}
+     * @public
      */
     getAx: function() {
       return this.accel.x;
     },
 
     /**
-     * @public
      * @returns {number}
+     * @public
      */
     getAy: function() {
       return this.accel.y;
     },
 
     /**
-     * @public
      * @param {number} ax - atom acceleration in x-direction
+     * @public
      */
     setAx: function( ax ) {
       this.accel.setX( ax );
     },
 
     /**
-     * @public
      * @param {number} ay - atom acceleration in y-direction
+     * @public
      */
     setAy: function( ay ) {
       this.accel.setY( ay );
-
     },
+
     /**
-     * @public
      * @returns {number}
+     * @public
      */
     getX: function() {
       return this.positionProperty.value.x;
     },
 
     /**
-     * @public
      * @returns {number}
+     * @public
      */
     getY: function() {
       return this.positionProperty.value.y;
     },
 
     /**
-     * @public
      * @returns {number}
+     * @public
      */
     getMass: function() {
       return this.mass;
     },
 
     /**
-     * @public
      * @returns {number}
+     * @public
      */
     getRadius: function() {
       return this.radius;
     },
 
     /**
-     * @public
      * @param {number} radius - radius of the atom
+     * @public
      */
     setRadius: function( radius ) {
       this.radius = radius;
     },
 
     /**
-     * @public
      * @returns {Vector2}
+     * @public
      */
     getPositionReference: function() {
       return this.positionProperty.value;
     },
 
     /**
-     * @public
      * @returns {Vector2}
+     * @public
      */
     getVelocity: function() {
       return this.velocity;
     },
 
     /**
-     * @public
      * @returns {Vector2}
+     * @public
      */
     getAccel: function() {
       return this.accel;

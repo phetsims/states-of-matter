@@ -15,16 +15,14 @@ define( function( require ) {
   var DimensionalArrowNode = require( 'STATES_OF_MATTER/atomic-interactions/view/DimensionalArrowNode' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
-  // The following constants control some of the aspects of the appearance of
-  // the force arrows.  The values were empirically chosen to look good in
-  // this particular sim.
+  // The following constants control some of the aspects of the appearance of the force arrows.  The values were
+  // empirically chosen to look good in this particular sim.
   var ATTRACTIVE_FORCE_COLOR = '#FC9732';
   var REPULSIVE_FORCE_COLOR = new Color( 255, 0, 255, 175 ); // Magenta.
   var TOTAL_FORCE_COLOR = '#49B649';
   var COMPONENT_FORCE_ARROW_REFERENCE_LENGTH = 150;
   var COMPONENT_FORCE_ARROW_REFERENCE_MAGNITUDE = 1E-22;
   var TOTAL_FORCE_ARROW_REFERENCE_LENGTH = 200;
-
   var TOTAL_FORCE_ARROW_REFERENCE_MAGNITUDE = 1E-22;
   var FORCE_ARROW_TAIL_WIDTH = 30;
   var FORCE_ARROW_HEAD_WIDTH = 50;
@@ -51,21 +49,21 @@ define( function( require ) {
       opacity: 0.7 // empirically determined
     };
 
-    // add attractive force node
+    // @private attractive force node
     this.attractiveForceVectorNode = new DimensionalArrowNode( 0, 0, COMPONENT_FORCE_ARROW_REFERENCE_LENGTH, 0, _.extend( {
       fill: ATTRACTIVE_FORCE_COLOR
     }, commonForceArrowNodeOptions ) );
     this.addChild( this.attractiveForceVectorNode );
     this.attractiveForceVectorNode.setVisible( false );
 
-    // add repulsive force node
+    // @private repulsive force node
     this.repulsiveForceVectorNode = new DimensionalArrowNode( 0, 0, COMPONENT_FORCE_ARROW_REFERENCE_LENGTH, 0, _.extend( {
       fill: REPULSIVE_FORCE_COLOR
     }, commonForceArrowNodeOptions ) );
     this.addChild( this.repulsiveForceVectorNode );
     this.repulsiveForceVectorNode.setVisible( false );
 
-    // add total force node
+    // @private total force node
     this.totalForceVectorNode = new DimensionalArrowNode( 0, 0, TOTAL_FORCE_ARROW_REFERENCE_LENGTH, 0, _.extend( {
       fill: TOTAL_FORCE_COLOR
     }, commonForceArrowNodeOptions ) );
@@ -83,11 +81,11 @@ define( function( require ) {
   return inherit( ParticleNode, ParticleForceNode, {
 
     /**
-     * Set the levels of attractive and repulsive forces being experienced by
-     * the particle in the model so that they may be represented as force
-     * vectors.
+     * Set the levels of attractive and repulsive forces being experienced by the particle in the model so that they may
+     * be represented as force vectors.
      * @param {number}attractiveForce
      * @param {number}repulsiveForce
+     * @public
      */
     setForces: function( attractiveForce, repulsiveForce ) {
       this.attractiveForce = attractiveForce;
@@ -97,14 +95,15 @@ define( function( require ) {
 
     /**
      * @param {boolean} showAttractiveForces - true to show attractive force, false to hide
+     * @public
      */
     setShowAttractiveForces: function( showAttractiveForces ) {
       this.attractiveForceVectorNode.setVisible( showAttractiveForces );
     },
 
     /**
-     *
      * @param {boolean} showRepulsiveForces - true to show repulsive force, false to hide
+     * @public
      */
     setShowRepulsiveForces: function( showRepulsiveForces ) {
       this.repulsiveForceVectorNode.setVisible( showRepulsiveForces );
@@ -112,6 +111,7 @@ define( function( require ) {
 
     /**
      * @param {boolean} showTotalForce - true to show total force, false to hide
+     * @public
      */
     setShowTotalForces: function( showTotalForce ) {
       this.totalForceVectorNode.setVisible( showTotalForce );
@@ -119,6 +119,7 @@ define( function( require ) {
 
     /**
      * Update the force vectors to reflect the forces being experienced by the atom.
+     * @private
      */
     updateForceVectors: function() {
       var angle = 0;

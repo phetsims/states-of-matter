@@ -39,6 +39,8 @@ define( function( require ) {
       lineWidth: 1,
       stroke: mainColor.darkerColor()
     }, options );
+
+    // @private
     this.radius = radius;
     this.haloNode = new Circle( 1.75 * radius,
       { fill: mainColor.withAlpha( options.haloAlpha ), pickable: false, visible: false } );
@@ -61,6 +63,7 @@ define( function( require ) {
   statesOfMatter.register( 'PositionMarker', PositionMarker );
 
   return inherit( Node, PositionMarker, {
+
     /**
      * @param color
      * @public

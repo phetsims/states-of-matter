@@ -45,6 +45,7 @@ define( function( require ) {
     /**
      * Paints the potential energy curve.
      * @param {CanvasRenderingContext2D} context
+     * @public
      */
     paintCanvas: function( context ) {
       context.beginPath();

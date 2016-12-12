@@ -36,7 +36,7 @@ define( function( require ) {
       lineWidth: 1
     }, options );
 
-    // arrowNode tip and tail locations
+    // @private arrowNode tip and tail locations
     this.tailLocation = new Vector2( 0, 0 );
     this.tipLocation = new Vector2( 0, 0 );
 
@@ -52,11 +52,11 @@ define( function( require ) {
   return inherit( Path, DimensionalArrowNode, {
 
     /**
-     * @public
      * @param {number} tailX - tail X position
      * @param {number} tailY - tail Y position
      * @param {number} tipX - tip X position
      * @param {number} tipY - tip Y position
+     * @public
      */
     setTailAndTip: function( tailX, tailY, tipX, tipY ) {
       this.tailLocation.setXY( tailX, tailY );

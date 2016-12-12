@@ -125,9 +125,10 @@ define( function( require ) {
     var self = this;
 
     //-----------------------------------------------------------------------------------------------------------------
-    // observable model properties, all @public
+    // observable model properties
     //-----------------------------------------------------------------------------------------------------------------
 
+    // @public
     this.particleContainerHeightProperty = new Property( PARTICLE_CONTAINER_INITIAL_HEIGHT ); // read only
     this.targetContainerHeightProperty = new Property( PARTICLE_CONTAINER_INITIAL_HEIGHT ); // read-write
     this.isExplodedProperty = new Property( false ); // read only

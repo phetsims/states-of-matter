@@ -45,10 +45,12 @@ define( function( require ) {
 
     Node.call( this );
     var self = this;
+
+    // @private
     this.multipleParticleModel = multipleParticleModel;
     this.modelViewTransform = modelViewTransform;
 
-    // Create the property that will be used by the thermometer node to control how high the liquid is.
+    // @private property that will be used by the thermometer node to control how high the liquid is
     this.temperatureInKelvinProperty = new Property( multipleParticleModel.getTemperatureInKelvin() );
 
     // add thermometer
@@ -64,7 +66,7 @@ define( function( require ) {
       tubeHeight: 65
     } );
 
-    // add temperature combo box
+    // @private temperature nodes combo box
     this.temperatureKelvinText = new Text( '', {
       font: TEMPERATURE_READOUT_FONT,
       maxWidth: MAX_TEMPERATURE_TEXT_WIDTH
@@ -74,6 +76,7 @@ define( function( require ) {
       maxWidth: MAX_TEMPERATURE_TEXT_WIDTH
     } );
 
+    // @private
     this.temperatureProperty = new Property( 'kelvin' );
     var temperatureComboBox = new ComboBox(
       [

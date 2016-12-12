@@ -21,8 +21,7 @@ define( function( require ) {
    * @constructor
    */
   function DiatomicVerletAlgorithm( multipleParticleModel ) {
-
-    this.positionUpdater = DiatomicAtomPositionUpdater;
+    this.positionUpdater = DiatomicAtomPositionUpdater; // @private
     AbstractVerletAlgorithm.call( this, multipleParticleModel );
   }
 
@@ -30,8 +29,11 @@ define( function( require ) {
 
   return inherit( AbstractVerletAlgorithm, DiatomicVerletAlgorithm, {
 
-    // @override
-    initializeForces: function( moleculeDataSet ){
+    /**
+     * @override
+     * @protected
+     */
+    initializeForces: function( moleculeDataSet ) {
       var accelerationDueToGravity = this.multipleParticleModel.gravitationalAcceleration;
       var nextMoleculeForces = moleculeDataSet.nextMoleculeForces;
       var nextMoleculeTorques = moleculeDataSet.nextMoleculeTorques;
@@ -46,7 +48,7 @@ define( function( require ) {
      * @param moleculeDataSet
      * @private
      */
-    updateInteractionForces: function( moleculeDataSet ){
+    updateInteractionForces: function( moleculeDataSet ) {
 
       var moleculeCenterOfMassPositions = moleculeDataSet.getMoleculeCenterOfMassPositions();
       var nextMoleculeForces = moleculeDataSet.getNextMoleculeForces();
@@ -102,7 +104,7 @@ define( function( require ) {
      * @param timeStep
      * @private
      */
-    updateVelocitiesAndRotationRates: function( moleculeDataSet, timeStep ){
+    updateVelocitiesAndRotationRates: function( moleculeDataSet, timeStep ) {
 
       // Obtain references to the model data and parameters so that we can perform fast manipulations.
       var moleculeVelocities = moleculeDataSet.getMoleculeVelocities();

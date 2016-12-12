@@ -4,10 +4,10 @@
  * This class provides the interaction strength value between a number of
  * different pairs of atoms.  To do them all would be too much, so this is a
  * sparse table.  Feel free to fill them in as more are needed.
- * <p/>
+ *
  * The value provided by this table is generally designated as "epsilon" in
  * Lennard-Jones potential calculations.
- * <p/>
+ *
  * @author John Blanco
  * @author Aaron Davis
  * @author Chandrashekar Bemagoni (Actual Concepts)

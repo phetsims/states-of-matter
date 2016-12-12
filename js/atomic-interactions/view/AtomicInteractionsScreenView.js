@@ -57,6 +57,7 @@ define( function( require ) {
 
     ScreenView.call( this, screenViewOptions );
 
+    // @private, vars needed to do the job
     this.dualAtomModel = dualAtomModel;
     this.movableParticle = dualAtomModel.movableAtom;
     this.fixedParticle = dualAtomModel.fixedAtom;
@@ -64,7 +65,7 @@ define( function( require ) {
     this.showRepulsiveForces = false;
     this.showTotalForces = false;
 
-    // set up the model-view transform
+    // set up the model-view transform, @private
     this.modelViewTransform = ModelViewTransform2.createSinglePointScaleMapping(
       new Vector2( 0, 0 ),
       new Vector2( 145, 360 ),
@@ -89,7 +90,7 @@ define( function( require ) {
       panelTextFill: panelTextFill
     } );
 
-    // add interactive potential diagram
+    // @private interactive potential diagram
     this.interactiveInteractionPotentialDiagram = new InteractiveInteractionPotentialDiagram( dualAtomModel, true, {
       left: this.modelViewTransform.modelToViewX( 0 ) - 43, // empirically determined such left edge of graph is at
                                                             // center of fixed atom
@@ -97,7 +98,7 @@ define( function( require ) {
     } );
     this.addChild( this.interactiveInteractionPotentialDiagram );
 
-    // add the button for returning the atom to the screen
+    // @private button for returning the atom to the screen
     this.returnAtomButton = new TextPushButton( returnAtomString, {
       font: new PhetFont( 17 ),
       baseColor: '#61BEE3',

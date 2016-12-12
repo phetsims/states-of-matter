@@ -36,16 +36,22 @@ define( function( require ) {
     Node.call( this );
     var self = this;
     atomsView.horizontalLineCount = MIN_LINES_HORIZONTAL;
+
+    // @private horizontal grid lines
     this.horizontalLinesNode = new Path( null, {
       stroke: 'white',
       lineWidth: 0.8,
       opacity: 0.6
     } );
+
+    // @private vertical grid lines
     this.verticalLinesNode = new Path( null, {
       stroke: 'white',
       lineWidth: 0.8,
       opacity: 0.6
     } );
+
+    // @private zoom in button
     this.zoomInButton = new ZoomButton( {
       listener: function() {
         atomsView.horizontalLineCount -= ZOOM_INCREMENT;
@@ -62,6 +68,7 @@ define( function( require ) {
     } );
     this.zoomInButton.enabled = false;
 
+    // @private zoom out button
     this.zoomOutButton = new ZoomButton( {
       listener: function() {
         atomsView.horizontalLineCount += ZOOM_INCREMENT;
@@ -124,12 +131,12 @@ define( function( require ) {
   return inherit( Node, ZoomableGridNode, {
 
     /**
-     * @public
      * @param {number} offsetX
      * @param {number} offsetY
      * @param {number} width -- width of the grid
      * @param {number} height -- height of the grid
      * @param {number} horizontalLineCount -- number of horizontal lines
+     * @public
      */
     setHorizontalLines: function( offsetX, offsetY, width, height, horizontalLineCount ) {
 

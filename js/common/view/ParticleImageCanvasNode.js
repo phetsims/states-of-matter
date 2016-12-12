@@ -49,19 +49,21 @@ define( function( require ) {
   function ParticleImageCanvasNode( particles, modelViewTransform, options ) {
 
     var self = this;
-    this.particles = particles;
-    this.modelViewTransform = modelViewTransform;
     CanvasNode.call( this, options );
 
-    // create a canvas and render the particle images that will be used, one row with strokes and one row without
+    // @private
+    this.particles = particles;
+    this.modelViewTransform = modelViewTransform;
+
+    // @private canvas where particle images will reside, one row with strokes and one row without
     this.particleImageCanvas = document.createElement( 'canvas' );
     this.particleImageCanvas.width = Object.getOwnPropertyNames( AtomType ).length * PARTICLE_IMAGE_CANVAS_LENGTH;
     this.particleImageCanvas.height = PARTICLE_IMAGE_CANVAS_LENGTH * 2;
 
-    // create a map of particle types to position in the particle image canvas, will be populated below
+    // @private create a map of particle types to position in the particle image canvas, will be populated below
     this.mapAtomTypeToImageXPosition = {};
 
-    // create a table of particle view radii so they don't have to keep being recalculated, populated below
+    // @private create a table of particle view radii so they don't have to keep being recalculated, populated below
     this.particleRadii = {};
 
     // Draw the particles on the canvas, top row is without black stroke, the bottom row is with black stroke (for
@@ -125,6 +127,9 @@ define( function( require ) {
 
   return inherit( CanvasNode, ParticleImageCanvasNode, {
 
+    /**
+     * @private
+     */
     renderParticle: function( context, particle ) {
       var particleViewRadius = this.particleRadii[ particle.getType() ];
       context.drawImage(
@@ -143,6 +148,7 @@ define( function( require ) {
     /**
      * Paints the particles on the canvas node.
      * @param {CanvasRenderingContext2D} context
+     * @public
      */
     paintCanvas: function( context ) {
       var particle;
@@ -169,6 +175,9 @@ define( function( require ) {
       }
     },
 
+    /**
+     * @public
+     */
     step: function() {
       this.invalidatePaint();
     }

@@ -18,10 +18,8 @@ define( function( require ) {
   var moleculeStructureX = [];
   var moleculeStructureY = [];
 
-  // Initialize the data that defines the molecular structure of the
-  // water molecule.  This defines the distances in the x and y
-  // dimensions from the center of mass when the rotational angle is
-  // zero.
+  // Initialize the data that defines the molecular structure of the water molecule.  This defines the distances in the
+  // x and y dimensions from the center of mass when the rotational angle is zero.
   moleculeStructureX[ 0 ] = 0;
   moleculeStructureY[ 0 ] = 0;
   moleculeStructureX[ 1 ] = StatesOfMatterConstants.DISTANCE_FROM_OXYGEN_TO_HYDROGEN;

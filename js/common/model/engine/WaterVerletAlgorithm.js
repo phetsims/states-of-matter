@@ -36,11 +36,11 @@ define( function( require ) {
     this.positionUpdater = WaterAtomPositionUpdater;
     AbstractVerletAlgorithm.call( this, multipleParticleModel );
 
-    // precompute a couple of values to save time later
+    // @private precomputed values to save time later
     this.massInverse = 1 / multipleParticleModel.moleculeDataSet.getMoleculeMass();
     this.inertiaInverse = 1 / multipleParticleModel.moleculeDataSet.getMoleculeRotationalInertia();
 
-    // pre-allocate arrays so that they don't have to be reallocated with each force and position update
+    // @private pre-allocated arrays to avoid reallocation with each force and position update
     this.normalCharges = new Array( 3 );
     this.alteredCharges = new Array( 3 );
   }
@@ -49,7 +49,11 @@ define( function( require ) {
 
   return inherit( AbstractVerletAlgorithm, WaterVerletAlgorithm, {
 
-    // @override
+    /**
+     * @param moleculeDataSet
+     * @override
+     * @protected
+     */
     initializeForces: function( moleculeDataSet ){
       var temperatureSetPoint = this.multipleParticleModel.temperatureSetPointProperty.get();
       var accelerationDueToGravity = this.multipleParticleModel.gravitationalAcceleration;
@@ -68,7 +72,11 @@ define( function( require ) {
       }
     },
 
-    // @override
+    /**
+     * @param moleculeDataSet
+     * @override
+     * @protected
+     */
     updateInteractionForces: function( moleculeDataSet ) {
 
       var moleculeCenterOfMassPositions = moleculeDataSet.moleculeCenterOfMassPositions;
@@ -218,7 +226,12 @@ define( function( require ) {
       }
     },
 
-    // @override
+    /**
+     * @param moleculeDataSet
+     * @param {number} timeStep
+     * @override
+     * @protected
+     */
     updateVelocitiesAndRotationRates: function( moleculeDataSet, timeStep ) {
 
       var numberOfMolecules = moleculeDataSet.getNumberOfMolecules();

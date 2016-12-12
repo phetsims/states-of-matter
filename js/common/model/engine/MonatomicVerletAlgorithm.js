@@ -23,6 +23,8 @@ define( function( require ) {
    */
   function MonatomicVerletAlgorithm( multipleParticleModel ) {
     AbstractVerletAlgorithm.call( this, multipleParticleModel );
+
+    // @private
     this.positionUpdater = MonatomicAtomPositionUpdater;
     this.epsilon = 1; // controls the strength of particle interaction
     this.velocityVector = new Vector2(); // reusable vector to save allocations
@@ -48,7 +50,11 @@ define( function( require ) {
       return this.epsilon;
     },
 
-    // @override
+    /**
+     * @param {MoleculeForcesAndMotionDataSet} moleculeDataSet
+     * @override
+     * @protected
+     */
     initializeForces: function( moleculeDataSet ){
       var accelerationDueToGravity = this.multipleParticleModel.gravitationalAcceleration;
       var nextAtomForces = moleculeDataSet.nextMoleculeForces;
@@ -57,7 +63,10 @@ define( function( require ) {
       }
     },
 
-    // @private
+    /**
+     * @param {MoleculeForcesAndMotionDataSet} moleculeDataSet
+     * @private
+     */
     updateInteractionForces: function( moleculeDataSet ) {
 
       var numberOfAtoms = moleculeDataSet.numberOfMolecules;
@@ -98,6 +107,11 @@ define( function( require ) {
       }
     },
 
+    /**
+     * @param {MoleculeForcesAndMotionDataSet} moleculeDataSet
+     * @param {number} timeStep
+     * @protected
+     */
     updateVelocitiesAndRotationRates: function( moleculeDataSet, timeStep ){
 
       var atomVelocity;

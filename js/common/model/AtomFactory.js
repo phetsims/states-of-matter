@@ -20,9 +20,9 @@ define( function( require ) {
   var AtomFactory = {
 
     /**
-     * @public
      * @param {AtomType} atomType
      * @returns {StatesOfMatterAtom}
+     * @public
      */
     createAtom: function( atomType ) {
       var atom = null;

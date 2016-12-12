@@ -27,17 +27,17 @@ define( function( require ) {
    */
   function MoleculeForceAndMotionDataSet( atomsPerMolecule ) {
 
-    // Attributes that describe the data set as a whole.
+    // @public Attributes that describe the data set as a whole.
     this.numberOfAtoms = 0;
     this.numberOfMolecules = 0;
 
-    // Attributes that apply to all elements of the data set.
+    // @public Attributes that apply to all elements of the data set.
     this.atomsPerMolecule = atomsPerMolecule;
 
     // convenience variable
     var maxNumMolecules = Math.floor( StatesOfMatterConstants.MAX_NUM_ATOMS / atomsPerMolecule );
 
-    // Attributes of the individual molecules and the atoms that comprise them.
+    // @public Attributes of the individual molecules and the atoms that comprise them.
     this.atomPositions = new Array( StatesOfMatterConstants.MAX_NUM_ATOMS );
     this.moleculeCenterOfMassPositions = new Array( maxNumMolecules );
     this.moleculeVelocities = new Array( maxNumMolecules );
@@ -45,7 +45,7 @@ define( function( require ) {
     this.nextMoleculeForces = new Array( maxNumMolecules );
     this.insideContainer = new Array( maxNumMolecules );
 
-    // Note that some of the following are not used in the monatomic case, but need to be here for compatibility.
+    // @public Note that some of the following are not used in the monatomic case, but need to be here for compatibility.
     this.moleculeRotationAngles = new Array( maxNumMolecules );
     this.moleculeRotationRates = new Array( maxNumMolecules );
     this.moleculeTorques = new Array( maxNumMolecules );

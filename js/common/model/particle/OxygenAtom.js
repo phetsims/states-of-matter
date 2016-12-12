@@ -35,8 +35,8 @@ define( function( require ) {
   return inherit( StatesOfMatterAtom, OxygenAtom, {
 
       /**
-       * @public
        * @returns {string}
+       * @public
        */
       getType: function() {
         return AtomType.OXYGEN;

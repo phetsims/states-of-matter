@@ -28,9 +28,10 @@ define( function( require ) {
   function GrabbableParticleNode( dualAtomModel, particle, modelViewTransform, enableOverlap, minX ) {
 
     ParticleForceNode.call( this, particle, modelViewTransform, enableOverlap );
-
-    this.minX = minX;
     var self = this;
+
+    // @private
+    this.minX = minX;
     this.dualAtomModel = dualAtomModel;
 
     // This node will need to be pickable so the user can grab it.
@@ -88,6 +89,9 @@ define( function( require ) {
 
   return inherit( ParticleForceNode, GrabbableParticleNode, {
 
+    /**
+     * @public
+     */
     step: function(){
       if( this.positionChanged ){
         if ( !this.dualAtomModel.isPlayingProperty.get() ) {
@@ -98,16 +102,16 @@ define( function( require ) {
     },
 
     /**
-     * @public
      * @returns {number}
+     * @public
      */
     getMinX: function() {
       return this.minX;
     },
 
     /**
-     * @public
      * @param {number} minX - min x position
+     * @public
      */
     setMinX: function( minX ) {
       this.minX = minX;

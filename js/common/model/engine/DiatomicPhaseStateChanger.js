@@ -37,8 +37,8 @@ define( function( require ) {
     // initialization
     this.positionUpdater = DiatomicAtomPositionUpdater; // @private
     AbstractPhaseStateChanger.call( this, multipleParticleModel );
-    this.multipleParticleModel = multipleParticleModel;
-    this.rand = new Random();
+    this.multipleParticleModel = multipleParticleModel; // @private
+    this.rand = new Random(); // @private
   }
 
   statesOfMatter.register( 'DiatomicPhaseStateChanger', DiatomicPhaseStateChanger );
@@ -82,7 +82,7 @@ define( function( require ) {
 
     /**
      * Set the phase to the solid state.
-     * @private
+     * @public
      */
     setPhaseSolid: function() {
 
@@ -141,7 +141,7 @@ define( function( require ) {
 
     /**
      * Set the phase to the liquid state.
-     * @private
+     * @protected
      */
     setPhaseLiquid: function() {
       AbstractPhaseStateChanger.prototype.setPhaseLiquidMultiAtom.call(

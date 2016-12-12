@@ -45,7 +45,7 @@ define( function( require ) {
   function DialGaugeNode( multipleParticleModel ) {
 
     Node.call( this );
-    this.elbowHeight = 0;
+    this.elbowHeight = 0; // @private, set through accessor methods
 
     var gaugeNode = new GaugeNode(
       multipleParticleModel.pressureProperty,
