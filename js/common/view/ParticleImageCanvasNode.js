@@ -23,7 +23,7 @@ define( function( require ) {
 
   // constants
   var PARTICLE_IMAGE_CANVAS_LENGTH = 32; // amount of canvas used to create a particle image, will be squared 
-  
+
   // set up the association between atom types and the colors used to represent them
   var PARTICLE_COLOR_TABLE = {};
   PARTICLE_COLOR_TABLE[ AtomType.ARGON ] = StatesOfMatterConstants.ARGON_COLOR;
@@ -68,9 +68,9 @@ define( function( require ) {
     // projector mode).
     var context = this.particleImageCanvas.getContext( '2d' );
     var index = 0;
-    for ( var atomType in AtomType ){
+    for ( var atomType in AtomType ) {
 
-      if ( !AtomType.hasOwnProperty( atomType ) ){
+      if ( !AtomType.hasOwnProperty( atomType ) ) {
         // skip prototype properties
         continue;
       }
@@ -125,6 +125,21 @@ define( function( require ) {
 
   return inherit( CanvasNode, ParticleImageCanvasNode, {
 
+    renderParticle: function( context, particle ) {
+      var particleViewRadius = this.particleRadii[ particle.getType() ];
+      context.drawImage(
+        this.particleImageCanvas,
+        this.mapAtomTypeToImageXPosition[ particle.getType() ],
+        this.useStrokedParticles ? PARTICLE_IMAGE_CANVAS_LENGTH : 0,
+        PARTICLE_IMAGE_CANVAS_LENGTH,
+        PARTICLE_IMAGE_CANVAS_LENGTH,
+        this.modelViewTransform.modelToViewX( particle.positionProperty.value.x ) - particleViewRadius,
+        this.modelViewTransform.modelToViewY( particle.positionProperty.value.y ) - particleViewRadius,
+        particleViewRadius * 2,
+        particleViewRadius * 2
+      );
+    },
+
     /**
      * Paints the particles on the canvas node.
      * @param {CanvasRenderingContext2D} context
@@ -132,47 +147,24 @@ define( function( require ) {
     paintCanvas: function( context ) {
       var particle;
       var i;
-      var particleViewRadius;
 
-      // Paint the atoms with a flag indicating that they should be in back first first.  This is done so that when
+      // Paint all atoms with a flag indicating that they should be in back first first.  This is done so that when
       // water is rendered, some of the hydrogen ends up in the back and some ends up in front so that there is
       // variation in the appearance of the molecules.  OPTIMIZATION NOTE: At the time of this writing, it is only
       // hydrogen atoms that will ever have this flag set, so several context values are set prior to the loop rather
       // than inside of it.
       for ( i = 0; i < this.particles.length; i++ ) {
         particle = this.particles.get( i );
-        if ( particle.renderBelowOxygen ){
-          particleViewRadius = this.particleRadii[ particle.getType() ];
-          context.drawImage(
-            this.particleImageCanvas,
-            this.mapAtomTypeToImageXPosition[ particle.getType() ],
-            this.useStrokedParticles ? PARTICLE_IMAGE_CANVAS_LENGTH : 0,
-            PARTICLE_IMAGE_CANVAS_LENGTH,
-            PARTICLE_IMAGE_CANVAS_LENGTH,
-            this.modelViewTransform.modelToViewX( particle.positionProperty.value.x ) - particleViewRadius,
-            this.modelViewTransform.modelToViewY( particle.positionProperty.value.y ) - particleViewRadius,
-            particleViewRadius * 2,
-            particleViewRadius * 2
-          );
+        if ( particle.renderBelowOxygen ) {
+          this.renderParticle( context, particle );
         }
       }
 
-      // paint the non-flagged particles
+      // Paint the non-flagged particles.
       for ( i = 0; i < this.particles.length; i++ ) {
         particle = this.particles.get( i );
         if ( !particle.renderBelowOxygen ) {
-          particleViewRadius = this.particleRadii[ particle.getType() ];
-          context.drawImage(
-            this.particleImageCanvas,
-            this.mapAtomTypeToImageXPosition[ particle.getType() ],
-            this.useStrokedParticles ? PARTICLE_IMAGE_CANVAS_LENGTH : 0,
-            PARTICLE_IMAGE_CANVAS_LENGTH,
-            PARTICLE_IMAGE_CANVAS_LENGTH,
-            this.modelViewTransform.modelToViewX( particle.positionProperty.value.x ) - particleViewRadius,
-            this.modelViewTransform.modelToViewY( particle.positionProperty.value.y ) - particleViewRadius,
-            particleViewRadius * 2,
-            particleViewRadius * 2
-          );
+          this.renderParticle( context, particle );
         }
       }
     },
