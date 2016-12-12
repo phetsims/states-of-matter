@@ -29,11 +29,9 @@ define( function( require ) {
   var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
-  var StatesOfMatterQueryParameters = require( 'STATES_OF_MATTER/common/StatesOfMatterQueryParameters' );
   var ScreenView = require( 'JOIST/ScreenView' );
   var StepForwardButton = require( 'SCENERY_PHET/buttons/StepForwardButton' );
   var SubstanceType = require( 'STATES_OF_MATTER/common/SubstanceType' );
-  var Text = require( 'SCENERY/nodes/Text' );
   var TextPushButton = require( 'SUN/buttons/TextPushButton' );
   var Vector2 = require( 'DOT/Vector2' );
 
