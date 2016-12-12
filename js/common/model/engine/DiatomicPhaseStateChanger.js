@@ -24,7 +24,6 @@ define( function( require ) {
 
   // The following constants can be adjusted to make the the corresponding phase more or less dense.
   var LIQUID_SPACING_FACTOR = 0.7;
-  var GAS_SPACING_FACTOR = 1.0;
 
   /**
    * @param {MultipleParticleModel} multipleParticleModel of the simulation

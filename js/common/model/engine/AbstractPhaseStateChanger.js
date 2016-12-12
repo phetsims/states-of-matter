@@ -19,7 +19,7 @@ define( function( require ) {
   // constants
   var MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE = 1.5;
   var MAX_PLACEMENT_ATTEMPTS = 500; // for random placement of particles
-  var MIN_INITIAL_GAS_PARTICLE_DISTANCE = 1.12; // empirically determined
+  var MIN_INITIAL_GAS_PARTICLE_DISTANCE = 1.1; // empirically determined
 
   /**
    * @param { MultipleParticleModel } multipleParticleModel of the simulation
