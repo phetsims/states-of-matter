@@ -180,8 +180,86 @@ define( function( require ) {
       }
     },
 
+    /**
+     * Set the phase state to liquid, works for all multi-atom molecules (so far).
+     * @protected
+     */
+    setPhaseLiquidMultiAtom: function( minInitialDistance, spacingFactor ) {
+
+      // Set the model temperature for this phase.
+      this.multipleParticleModel.setTemperature( StatesOfMatterConstants.LIQUID_TEMPERATURE );
+
+      // Get references to the various elements of the data set.
+      var moleculeDataSet = this.multipleParticleModel.moleculeDataSet;
+      var moleculeCenterOfMassPositions = moleculeDataSet.moleculeCenterOfMassPositions;
+      var moleculeVelocities = moleculeDataSet.moleculeVelocities;
+      var moleculeRotationAngles = moleculeDataSet.moleculeRotationAngles;
+      var moleculeRotationRates = moleculeDataSet.moleculeRotationRates;
+      var moleculesInsideContainer = this.multipleParticleModel.moleculeDataSet.insideContainer;
+
+      // Create and initialize other variables needed to do the job.
+      var temperatureSqrt = Math.sqrt( this.multipleParticleModel.temperatureSetPointProperty.get() );
+      var numberOfMolecules = moleculeDataSet.getNumberOfMolecules();
+
+      // Initialize the velocities and angles of the molecules.
+      for ( var i = 0; i < numberOfMolecules; i++ ) {
+
+        // Assign each molecule an initial velocity.
+        moleculeVelocities[ i ].setXY( temperatureSqrt * this.rand.nextGaussian(), temperatureSqrt * this.rand.nextGaussian() );
+
+        // Assign each molecule an initial rotation rate.
+        moleculeRotationRates[ i ] = phet.joist.random.nextDouble() * temperatureSqrt * Math.PI * 2;
+
+        // Mark each molecule as in the container.
+        moleculesInsideContainer[ i ] = true;
+      }
+
+      // Assign each molecule to a position.
+      var moleculesPlaced = 0;
+      var centerPointX = this.multipleParticleModel.normalizedContainerWidth / 2;
+      var centerPointY = this.multipleParticleModel.normalizedContainerHeight / 4;
+      var currentLayer = 0;
+      var particlesOnCurrentLayer = 0;
+      var particlesThatWillFitOnCurrentLayer = 1;
+      for ( i = 0; i < numberOfMolecules; i++ ) {
+        for ( var j = 0; j < this.MAX_PLACEMENT_ATTEMPTS; j++ ) {
+          var distanceFromCenter = currentLayer * minInitialDistance * spacingFactor;
+          var angle = (particlesOnCurrentLayer / particlesThatWillFitOnCurrentLayer * 2 * Math.PI) +
+                      (particlesThatWillFitOnCurrentLayer / (4 * Math.PI));
+          var xPos = centerPointX + (distanceFromCenter * Math.cos( angle ));
+          var yPos = centerPointY + (distanceFromCenter * Math.sin( angle ));
+
+          // Consider this spot used even if we don't actually put the particle there.
+          particlesOnCurrentLayer++;
+          if ( particlesOnCurrentLayer >= particlesThatWillFitOnCurrentLayer ) {
+
+            // This layer is full - move to the next one.
+            currentLayer++;
+            particlesThatWillFitOnCurrentLayer = Math.floor( currentLayer * 2 * Math.PI /
+                                                             ( minInitialDistance * spacingFactor ) );
+            particlesOnCurrentLayer = 0;
+          }
+
+          // Check if the position is too close to the wall.  Note that we don't check inter-particle distances here -
+          // we rely on the placement algorithm to make sure that this is not a problem.
+          if ( ( xPos > this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE ) &&
+               ( xPos < this.multipleParticleModel.normalizedContainerWidth - this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE ) &&
+               ( yPos > this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE ) &&
+               ( xPos < this.multipleParticleModel.normalizedContainerHeight - this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE ) ) {
+
+            // This is an acceptable position.
+            moleculeCenterOfMassPositions[ moleculesPlaced ].setXY( xPos, yPos );
+            moleculeRotationAngles[ moleculesPlaced ] = angle + Math.PI / 2;
+            moleculesPlaced++;
+            break;
+          }
+        }
+      }
+    },
+
     MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE: MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE,
     DISTANCE_BETWEEN_PARTICLES_IN_CRYSTAL: 0.12,  // In particle diameters.
     MAX_PLACEMENT_ATTEMPTS: 500 // For random placement of particles.
   } );
-} );
+} )
+;

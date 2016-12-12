@@ -35,7 +35,7 @@ define( function( require ) {
     // Make sure this is not being used on an inappropriate data set.
     assert && assert( multipleParticleModel.moleculeDataSet.getAtomsPerMolecule() === 3 );
 
-    this.multiPleParticleModel = multipleParticleModel;
+    this.multipleParticleModel = multipleParticleModel;
     this.rand = new Random(); //@private
     this.positionUpdater = WaterAtomPositionUpdater; // @private
     AbstractPhaseStateChanger.call( this, multipleParticleModel );
@@ -54,12 +54,12 @@ define( function( require ) {
       AbstractPhaseStateChanger.prototype.setPhase.call( this, phaseID );
 
       // Sync up the atom positions with the molecule positions.
-      this.positionUpdater.updateAtomPositions( this.multiPleParticleModel.moleculeDataSet );
+      this.positionUpdater.updateAtomPositions( this.multipleParticleModel.moleculeDataSet );
 
       // Step the model a number of times in order to prevent the particles from looking too organized.  The number of
       // steps was empirically determined.
       for ( var i = 0; i < 5; i++ ) {
-        this.multiPleParticleModel.stepInternal( StatesOfMatterConstants.NOMINAL_TIME_STEP );
+        this.multipleParticleModel.stepInternal( StatesOfMatterConstants.NOMINAL_TIME_STEP );
       }
     },
 
@@ -69,11 +69,11 @@ define( function( require ) {
      */
     setPhaseSolid: function() {
 
-      // Set the multiPleParticleModel temperature for this phase.
-      this.multiPleParticleModel.setTemperature( StatesOfMatterConstants.SOLID_TEMPERATURE );
+      // Set the multipleParticleModel temperature for this phase.
+      this.multipleParticleModel.setTemperature( StatesOfMatterConstants.SOLID_TEMPERATURE );
 
       // Get references to the various elements of the data set.
-      var moleculeDataSet = this.multiPleParticleModel.moleculeDataSet;
+      var moleculeDataSet = this.multipleParticleModel.moleculeDataSet;
       var numberOfMolecules = moleculeDataSet.getNumberOfMolecules();
       var moleculeCenterOfMassPositions = moleculeDataSet.moleculeCenterOfMassPositions;
       var moleculeVelocities = moleculeDataSet.moleculeVelocities;
@@ -82,7 +82,7 @@ define( function( require ) {
       var moleculesInsideContainer = this.multipleParticleModel.moleculeDataSet.insideContainer;
 
       // Create and initialize other variables needed to do the job
-      var temperatureSqrt = Math.sqrt( this.multiPleParticleModel.temperatureSetPointProperty.get() );
+      var temperatureSqrt = Math.sqrt( this.multipleParticleModel.temperatureSetPointProperty.get() );
       var moleculesPerLayer = Math.floor( Math.sqrt( numberOfMolecules ) );
 
       // Initialize the velocities and angles of the molecules.
@@ -98,7 +98,7 @@ define( function( require ) {
       // Establish the starting position, which will be the lower left corner
       // of the "cube".
       var crystalWidth = (moleculesPerLayer - 1) * MIN_INITIAL_DIAMETER_DISTANCE;
-      var startingPosX = (this.multiPleParticleModel.normalizedContainerWidth / 2) - (crystalWidth / 2);
+      var startingPosX = (this.multipleParticleModel.normalizedContainerWidth / 2) - (crystalWidth / 2);
       var startingPosY = MIN_INITIAL_DIAMETER_DISTANCE;
 
       // Place the molecules by placing their centers of mass.
@@ -130,78 +130,11 @@ define( function( require ) {
      * Set the phase to the liquid state.
      */
     setPhaseLiquid: function() {
-
-      // Set the model temperature for this phase.
-      this.multiPleParticleModel.setTemperature( StatesOfMatterConstants.LIQUID_TEMPERATURE );
-
-      // Get references to the various elements of the data set.
-      var moleculeDataSet = this.multiPleParticleModel.moleculeDataSet;
-      var moleculeCenterOfMassPositions = moleculeDataSet.moleculeCenterOfMassPositions;
-      var moleculeVelocities = moleculeDataSet.moleculeVelocities;
-      var moleculeRotationAngles = moleculeDataSet.moleculeRotationAngles;
-      var moleculeRotationRates = moleculeDataSet.moleculeRotationRates;
-      var moleculesInsideContainer = this.multipleParticleModel.moleculeDataSet.insideContainer;
-
-      // Create and initialize other variables needed to do the job.
-      var temperatureSqrt = Math.sqrt( this.multiPleParticleModel.temperatureSetPointProperty.get() );
-      var numberOfMolecules = moleculeDataSet.getNumberOfMolecules();
-
-      // Initialize the velocities and angles of the molecules.
-      for ( var i = 0; i < numberOfMolecules; i++ ) {
-
-        // Assign each molecule an initial velocity.
-        moleculeVelocities[ i ].setXY( temperatureSqrt * this.rand.nextGaussian(), temperatureSqrt * this.rand.nextGaussian() );
-
-        // Assign each molecule an initial rotation rate.
-        moleculeRotationRates[ i ] = phet.joist.random.nextDouble() * temperatureSqrt * Math.PI * 2;
-
-        // Mark each molecule as in the container.
-        moleculesInsideContainer[ i ] = true;
-      }
-
-      // Assign each molecule to a position.
-      var moleculesPlaced = 0;
-      var centerPointX = this.multiPleParticleModel.normalizedContainerWidth / 2;
-      var centerPointY = this.multiPleParticleModel.normalizedContainerHeight / 4;
-      var currentLayer = 0;
-      var particlesOnCurrentLayer = 0;
-      var particlesThatWillFitOnCurrentLayer = 1;
-      for ( i = 0; i < numberOfMolecules; i++ ) {
-        for ( var j = 0; j < this.MAX_PLACEMENT_ATTEMPTS; j++ ) {
-          var distanceFromCenter = currentLayer * MIN_INITIAL_DIAMETER_DISTANCE * LIQUID_SPACING_FACTOR;
-          var angle = (particlesOnCurrentLayer / particlesThatWillFitOnCurrentLayer * 2 * Math.PI) +
-                      (particlesThatWillFitOnCurrentLayer / (4 * Math.PI));
-          var xPos = centerPointX + (distanceFromCenter * Math.cos( angle ));
-          var yPos = centerPointY + (distanceFromCenter * Math.sin( angle ));
-
-          // Consider this spot used even if we don't actually put the particle there.
-          particlesOnCurrentLayer++;
-
-
-          if ( particlesOnCurrentLayer >= particlesThatWillFitOnCurrentLayer ) {
-
-            // This layer is full - move to the next one.
-            currentLayer++;
-            particlesThatWillFitOnCurrentLayer = Math.floor( currentLayer * 2 * Math.PI /
-                                                             (MIN_INITIAL_DIAMETER_DISTANCE * LIQUID_SPACING_FACTOR) );
-            particlesOnCurrentLayer = 0;
-          }
-
-          // Check if the position is too close to the wall.  Note that we don't check inter-particle distances here -
-          // we rely on the placement algorithm to make sure that this is not a problem.
-          if ( ( xPos > this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE ) &&
-               ( xPos < this.multiPleParticleModel.normalizedContainerWidth - this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE ) &&
-               ( yPos > this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE ) &&
-               ( xPos < this.multiPleParticleModel.normalizedContainerHeight - this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE ) ) {
-
-            // This is an acceptable position.
-            moleculeCenterOfMassPositions[ moleculesPlaced ].setXY( xPos, yPos );
-            moleculeRotationAngles[ moleculesPlaced ] = angle + Math.PI / 2;
-            moleculesPlaced++;
-            break;
-          }
-        }
-      }
+      AbstractPhaseStateChanger.prototype.setPhaseLiquidMultiAtom.call(
+        this,
+        MIN_INITIAL_DIAMETER_DISTANCE,
+        LIQUID_SPACING_FACTOR
+      );
     }
   } );
 } );
