@@ -9,7 +9,7 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var Circle = require( 'SCENERY/nodes/Circle' );
+  var AtomAndMoleculeIcons = require( 'STATES_OF_MATTER/common/view/AtomAndMoleculeIcons' );
   var Dimension2 = require( 'DOT/Dimension2' );
   var HBox = require( 'SCENERY/nodes/HBox' );
   var HSlider = require( 'SUN/HSlider' );
@@ -44,32 +44,6 @@ define( function( require ) {
   var MAX_WIDTH = 120;
   var TICK_TEXT_MAX_WIDTH = 40;
   var NORMAL_TEXT_FONT_SIZE = 12;
-
-  // icon for the adjustable attraction button
-  var ADJUSTABLE_ATTRACTION_ICON = new Circle( 6, { fill: StatesOfMatterConstants.ADJUSTABLE_ATTRACTION_COLOR } );
-
-  // icon for the neon button
-  var NEON_ICON = new Circle( 5, { fill: StatesOfMatterConstants.NEON_COLOR } );
-
-  // icon for the argon button
-  var ARGON_ICON = new Circle( 6, { fill: StatesOfMatterConstants.ARGON_COLOR } );
-
-  // icon for the water button
-  var dot1 = new Circle( 5, { fill: StatesOfMatterConstants.OXYGEN_COLOR } );
-  var dot2 = new Circle( 3, {
-    fill: StatesOfMatterConstants.HYDROGEN_COLOR,
-    stroke: StatesOfMatterConstants.HYDROGEN_COLOR, bottom: dot1.top + 5, right: dot1.left + 5
-  } );
-  var dot3 = new Circle( 3, {
-    fill: StatesOfMatterConstants.HYDROGEN_COLOR,
-    stroke: StatesOfMatterConstants.HYDROGEN_COLOR, bottom: dot1.top + 5, left: dot1.right - 5
-  } );
-  var WATER_ICON = new Node( { children: [ dot3, dot1, dot2 ] } );
-
-  // icon for the oxygen button
-  var oxygen1 = new Circle( 5, { fill: StatesOfMatterConstants.OXYGEN_COLOR } );
-  var oxygen2 = new Circle( 5, { fill: StatesOfMatterConstants.OXYGEN_COLOR, left: oxygen1.right - 4 } );
-  var OXYGEN_ICON = new Node( { children: [ oxygen1, oxygen2 ] } );
 
   /**
    * @param { MultipleParticleModel } multipleParticleModel - model of the simulation
@@ -150,13 +124,13 @@ define( function( require ) {
 
     // create objest that describe the pieces that make up a selector item in the control panel, conforms to the
     // contract: { label: {Node}, icon: {Node} (optional) }
-    var neon = { label: neonText, icon: NEON_ICON };
-    var argon = { label: argonText, icon: ARGON_ICON };
-    var water = { label: waterText, icon: WATER_ICON };
-    var oxygen = { label: oxygenText, icon: OXYGEN_ICON };
+    var neon = { label: neonText, icon: AtomAndMoleculeIcons.NEON_ICON };
+    var argon = { label: argonText, icon: AtomAndMoleculeIcons.ARGON_ICON };
+    var water = { label: waterText, icon: AtomAndMoleculeIcons.WATER_ICON };
+    var oxygen = { label: oxygenText, icon: AtomAndMoleculeIcons.OXYGEN_ICON };
     var adjustableAttraction = {
       label: adjustableAttractionText,
-      icon: ADJUSTABLE_ATTRACTION_ICON
+      icon: AtomAndMoleculeIcons.ADJUSTABLE_ATTRACTION_ICON
     };
     var titleText = {
       label: title

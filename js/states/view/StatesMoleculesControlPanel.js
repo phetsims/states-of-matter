@@ -9,7 +9,7 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var Circle = require( 'SCENERY/nodes/Circle' );
+  var AtomAndMoleculeIcons = require( 'STATES_OF_MATTER/common/view/AtomAndMoleculeIcons' );
   var HBox = require( 'SCENERY/nodes/HBox' );
   var HStrut = require( 'SCENERY/nodes/HStrut' );
   var inherit = require( 'PHET_CORE/inherit' );
@@ -33,29 +33,6 @@ define( function( require ) {
 
   // constants
   var MAX_WIDTH = 118;
-
-  // icon for the neon button
-  var NEON_ICON = new Circle( 5, { fill: StatesOfMatterConstants.NEON_COLOR } );
-
-  // icon for the argon button
-  var ARGON_ICON = new Circle( 6, { fill: StatesOfMatterConstants.ARGON_COLOR } );
-
-  // icon for the water button
-  var dot1 = new Circle( 5, { fill: StatesOfMatterConstants.OXYGEN_COLOR } );
-  var dot2 = new Circle( 3, {
-    fill: StatesOfMatterConstants.HYDROGEN_COLOR,
-    stroke: StatesOfMatterConstants.HYDROGEN_COLOR, bottom: dot1.top + 5, right: dot1.left + 5
-  } );
-  var dot3 = new Circle( 3, {
-    fill: StatesOfMatterConstants.HYDROGEN_COLOR,
-    stroke: StatesOfMatterConstants.HYDROGEN_COLOR, bottom: dot1.top + 5, left: dot1.right - 5
-  } );
-  var WATER_ICON = new Node( { children: [ dot3, dot1, dot2 ] } );
-
-  // icon for the oxygen button
-  var oxygen1 = new Circle( 5, { fill: StatesOfMatterConstants.OXYGEN_COLOR } );
-  var oxygen2 = new Circle( 5, { fill: StatesOfMatterConstants.OXYGEN_COLOR, left: oxygen1.right - 4 } );
-  var OXYGEN_ICON = new Node( { children: [ oxygen1, oxygen2 ] } );
 
   /**
    * @param {Property<number>} substanceProperty that tracks the substance selected in the panel
@@ -100,10 +77,10 @@ define( function( require ) {
 
     // create objects that describe the pieces that make up an item in the control panel, conforms to the contract:
     // { label: {Node}, icon: {Node} }
-    var neon = { label: neonText, icon: NEON_ICON };
-    var argon = { label: argonText, icon: ARGON_ICON };
-    var water = { label: waterText, icon: WATER_ICON };
-    var oxygen = { label: oxygenText, icon: OXYGEN_ICON };
+    var neon = { label: neonText, icon: AtomAndMoleculeIcons.NEON_ICON };
+    var argon = { label: argonText, icon: AtomAndMoleculeIcons.ARGON_ICON };
+    var water = { label: waterText, icon: AtomAndMoleculeIcons.WATER_ICON };
+    var oxygen = { label: oxygenText, icon: AtomAndMoleculeIcons.OXYGEN_ICON };
 
     var titleText = {
       label: title
