@@ -41,19 +41,8 @@ define( function( require ) {
      * @param {number} phaseID - state(solid/liquid/gas) of Molecule
      */
     setPhase: function( phaseID ) {
-      switch( phaseID ) {
-        case PhaseStateEnum.SOLID:
-          this.setPhaseSolid();
-          break;
-        case PhaseStateEnum.LIQUID:
-          this.setPhaseLiquid();
-          break;
-        case PhaseStateEnum.GAS:
-          this.setPhaseGas();
-          break;
-        default:
-          throw new Error( 'invalid phaseID: ' + phaseID );
-      }
+
+      AbstractPhaseStateChanger.prototype.setPhase.call( this, phaseID );
 
       var moleculeDataSet = this.multipleParticleModel.moleculeDataSet;
 
@@ -69,10 +58,10 @@ define( function( require ) {
       // Sync up the atom positions with the molecule positions.
       this.positionUpdater.updateAtomPositions( moleculeDataSet, offset );
 
-      // Step the model a number of times in order to prevent the particles
-      // from looking too organized.  The number of steps was empirically determined.
+      // Step the model a number of times in order to prevent the particles from looking too organized.  The number of
+      // steps was empirically determined.
       for ( var i = 0; i < 5; i++ ) {
-        this.multipleParticleModel.stepInternal( 0.016 );
+        this.multipleParticleModel.stepInternal( StatesOfMatterConstants.NOMINAL_TIME_STEP );
       }
     },
 

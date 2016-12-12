@@ -51,28 +51,15 @@ define( function( require ) {
      */
     setPhase: function( phaseID ) {
 
-      switch( phaseID ) {
-        case PhaseStateEnum.SOLID:
-          this.setPhaseSolid();
-          break;
-        case PhaseStateEnum.LIQUID:
-          this.setPhaseLiquid();
-          break;
-        case PhaseStateEnum.GAS:
-          this.setPhaseGas();
-          break;
-        default:
-          throw new Error( 'invalid phaseID: ' + phaseID );
-      }
-      var moleculeDataSet = this.multiPleParticleModel.moleculeDataSet;
+      AbstractPhaseStateChanger.prototype.setPhase.call( this, phaseID );
 
       // Sync up the atom positions with the molecule positions.
-      this.positionUpdater.updateAtomPositions( moleculeDataSet );
+      this.positionUpdater.updateAtomPositions( this.multiPleParticleModel.moleculeDataSet );
 
       // Step the model a number of times in order to prevent the particles from looking too organized.  The number of
       // steps was empirically determined.
       for ( var i = 0; i < 5; i++ ) {
-        this.multiPleParticleModel.stepInternal( 0.016 );
+        this.multiPleParticleModel.stepInternal( StatesOfMatterConstants.NOMINAL_TIME_STEP );
       }
     },
 

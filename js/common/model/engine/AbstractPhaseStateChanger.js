@@ -12,6 +12,7 @@ define( function( require ) {
 
   // modules
   var inherit = require( 'PHET_CORE/inherit' );
+  var PhaseStateEnum = require( 'STATES_OF_MATTER/common/PhaseStateEnum' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
   var Vector2 = require( 'DOT/Vector2' );
@@ -33,6 +34,27 @@ define( function( require ) {
   statesOfMatter.register( 'AbstractPhaseStateChanger', AbstractPhaseStateChanger );
 
   return inherit( Object, AbstractPhaseStateChanger, {
+
+    /**
+     * Set the phase based on the specified ID.  This often needs to be overridden in descendant classes to do more
+     * specific activities.
+     * @param phaseID
+     */
+    setPhase: function( phaseID ) {
+      switch( phaseID ) {
+        case PhaseStateEnum.SOLID:
+          this.setPhaseSolid();
+          break;
+        case PhaseStateEnum.LIQUID:
+          this.setPhaseLiquid();
+          break;
+        case PhaseStateEnum.GAS:
+          this.setPhaseGas();
+          break;
+        default:
+          throw new Error( 'invalid phaseID: ' + phaseID );
+      }
+    },
 
     /**
      * Do a linear search for a location that is suitably far away enough from all other molecules.  This is generally

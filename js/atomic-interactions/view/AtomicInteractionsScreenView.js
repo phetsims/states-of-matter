@@ -126,7 +126,7 @@ define( function( require ) {
     // add play/pause and step buttons
     var stepButton = new StepForwardButton( {
       playingProperty: dualAtomModel.isPlayingProperty,
-      listener: function() { dualAtomModel.stepInternal( 0.016 ); },
+      listener: function() { dualAtomModel.stepInternal( StatesOfMatterConstants.NOMINAL_TIME_STEP ); },
       radius: 12,
       stroke: 'black',
       fill: '#005566',

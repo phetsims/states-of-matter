@@ -84,7 +84,8 @@ define( function( require ) {
 
     // misc
     RESET_ALL_BUTTON_RADIUS: 17,
-    PANEL_CORNER_RADIUS: 6
+    PANEL_CORNER_RADIUS: 6,
+    NOMINAL_TIME_STEP: 1 / 60 // seconds, the expected delta time (dt) value per model step, based on nominal browser frame rate
   };
 
   statesOfMatter.register( 'StatesOfMatterConstants', StatesOfMatterConstants );
