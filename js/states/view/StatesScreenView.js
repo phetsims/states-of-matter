@@ -73,7 +73,7 @@ define( function( require ) {
     this.addChild( heaterCoolerNode );
 
     // hook up the heater/cooler node to the model
-    heaterCoolerNode.heatCoolLevelProperty.link( function( heat ) {
+    heaterCoolerNode.heatCoolAmountProperty.link( function( heat ) {
       multipleParticleModel.setHeatingCoolingAmount( heat );
     } );
 
