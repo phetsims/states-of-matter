@@ -84,6 +84,9 @@ define( function( require ) {
 
     // misc
     RESET_ALL_BUTTON_RADIUS: 17,
+    RESET_ALL_BUTTON_TOUCH_AREA_DILATION: 4,
+    RESET_ALL_BUTTON_DISTANCE_FROM_SIDE: 15,
+    RESET_ALL_BUTTON_DISTANCE_FROM_BOTTOM: 5,
     PANEL_CORNER_RADIUS: 6,
     NOMINAL_TIME_STEP: 1 / 60 // seconds, the expected delta time (dt) value per model step, based on nominal browser frame rate
   };

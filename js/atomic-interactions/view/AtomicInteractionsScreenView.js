@@ -117,10 +117,10 @@ define( function( require ) {
         dualAtomModel.reset();
         self.interactiveInteractionPotentialDiagram.reset();
       },
-      right: this.layoutBounds.maxX - INSET,
-      bottom: this.layoutBounds.maxY - 7,
       radius: StatesOfMatterConstants.RESET_ALL_BUTTON_RADIUS,
-      touchAreaDilation: 4
+      touchAreaDilation: StatesOfMatterConstants.RESET_ALL_BUTTON_TOUCH_AREA_DILATION,
+      right: this.layoutBounds.maxX - StatesOfMatterConstants.RESET_ALL_BUTTON_DISTANCE_FROM_SIDE,
+      bottom: this.layoutBounds.maxY - StatesOfMatterConstants.RESET_ALL_BUTTON_DISTANCE_FROM_BOTTOM
     } );
     this.addChild( resetAllButton );
 
