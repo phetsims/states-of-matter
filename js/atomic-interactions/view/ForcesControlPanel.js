@@ -195,9 +195,9 @@ define( function( require ) {
 
     // expand the touch areas of the radio buttons so that they are easier to work with on touch-based devices
     var xDilation = 8;
-    var yDilation = 1;
-    hideForcesRadio.touchArea = totalForce.localBounds.dilatedXY( xDilation, yDilation );
-    totalForceRadio.touchArea = totalForce.localBounds.dilatedXY( xDilation, yDilation );
+    var yDilation = 1.5;
+    hideForcesRadio.touchArea = hideForcesRadio.localBounds.dilatedXY( xDilation, yDilation );
+    totalForceRadio.touchArea = totalForceRadio.localBounds.dilatedXY( xDilation, yDilation );
 
     // show white stroke around the force panel within SOM full version  else  show black stroke
     var accordionBox = new AccordionBox( accordionContent, {
@@ -217,8 +217,8 @@ define( function( require ) {
       contentXMargin: 10,
       buttonYMargin: 4,
       buttonXMargin: 10,
-      buttonTouchAreaXDilation: 15,
-      buttonTouchAreaYDilation: 10,
+      buttonTouchAreaXDilation: 8,
+      buttonTouchAreaYDilation: 3,
       showTitleWhenExpanded: options.showTitleWhenExpanded
     } );
     this.addChild( accordionBox );
