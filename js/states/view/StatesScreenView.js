@@ -105,10 +105,10 @@ define( function( require ) {
         multipleParticleModel.reset();
         self.compositeThermometerNode.reset();
       },
-      right: this.layoutBounds.right - CONTROL_PANEL_X_INSET,
-      bottom: this.layoutBounds.bottom - 7,
       radius: StatesOfMatterConstants.RESET_ALL_BUTTON_RADIUS,
-      touchAreaDilation: 4
+      touchAreaDilation: StatesOfMatterConstants.RESET_ALL_BUTTON_TOUCH_AREA_DILATION,
+      right: this.layoutBounds.maxX - StatesOfMatterConstants.RESET_ALL_BUTTON_DISTANCE_FROM_SIDE,
+      bottom: this.layoutBounds.maxY - StatesOfMatterConstants.RESET_ALL_BUTTON_DISTANCE_FROM_BOTTOM
     } );
     this.addChild( resetAllButton );
 
