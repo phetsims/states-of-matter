@@ -43,6 +43,7 @@ define( function( require ) {
   var PUSH_PIN_WIDTH = 20;
   var INSET = 15;
   var MAX_TEXT_WIDTH = 80;
+  var PANEL_WIDTH = 190; // empirically determined to work well for English and most other translations
 
   /**
    * @param {DualAtomModel} dualAtomModel of the simulation
@@ -87,7 +88,9 @@ define( function( require ) {
       textColor: textColor,
       fill: panelFill,
       stroke: panelStroke,
-      panelTextFill: panelTextFill
+      panelTextFill: panelTextFill,
+      maxWidth: PANEL_WIDTH,
+      minWidth: PANEL_WIDTH
     } );
 
     // @private interactive potential diagram
@@ -149,8 +152,8 @@ define( function( require ) {
         textFill: panelTextFill,
         buttonAlign: forceControlPanelButtonAlign,
         showTitleWhenExpanded: !enableHeterogeneousAtoms,
-        minWidth: atomicInteractionsControlPanel.width,
-        maxWidth: atomicInteractionsControlPanel.width
+        minWidth: PANEL_WIDTH,
+        maxWidth: PANEL_WIDTH
       }
     );
 
@@ -240,7 +243,7 @@ define( function( require ) {
     // listen to the setting for atomPair and update the view when it changes
     dualAtomModel.atomPairProperty.link( function() {
       forcesControlPanel.top = atomicInteractionsControlPanel.bottom + INSET / 2;
-      forcesControlPanel.right = atomicInteractionsControlPanel.right;
+      forcesControlPanel.left = atomicInteractionsControlPanel.left;
       self.handleFixedParticleRemoved();
       self.handleFixedParticleAdded( dualAtomModel.fixedAtom );
       self.handleMovableParticleRemoved();
