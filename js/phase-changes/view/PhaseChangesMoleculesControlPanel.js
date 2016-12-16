@@ -62,7 +62,7 @@ define( function( require ) {
       minWidth: 120 // somewhat arbitrary, will generally be set by constructor
     }, options );
 
-    var selectorWidth = options.minWidth - 2 * options.xMargin
+    var selectorWidth = options.minWidth - 2 * options.xMargin;
 
     Node.call( this );
     var textOptions = { font: new PhetFont( NORMAL_TEXT_FONT_SIZE ), fill: '#FFFFFF', maxWidth: selectorWidth * 0.75 };
