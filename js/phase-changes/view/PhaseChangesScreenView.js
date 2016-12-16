@@ -25,12 +25,11 @@ define( function( require ) {
   var PhaseChangesMoleculesControlPanel = require( 'STATES_OF_MATTER/phase-changes/view/PhaseChangesMoleculesControlPanel' );
   var PhaseDiagram = require( 'STATES_OF_MATTER/phase-changes/view/PhaseDiagram' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
-  var PlayPauseButton = require( 'SCENERY_PHET/buttons/PlayPauseButton' );
   var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
   var ScreenView = require( 'JOIST/ScreenView' );
-  var StepForwardButton = require( 'SCENERY_PHET/buttons/StepForwardButton' );
+  var SOMPlayPauseStepControl = require( 'STATES_OF_MATTER/common/view/SOMPlayPauseStepControl' );
   var SubstanceType = require( 'STATES_OF_MATTER/common/SubstanceType' );
   var TextPushButton = require( 'SUN/buttons/TextPushButton' );
   var Vector2 = require( 'DOT/Vector2' );
@@ -135,26 +134,11 @@ define( function( require ) {
     this.addChild( resetAllButton );
 
     // add play pause button and step button
-    var stepButton = new StepForwardButton( {
-      playingProperty: multipleParticleModel.isPlayingProperty,
-      listener: function() { multipleParticleModel.stepInternal( 1 / 60 ); },
-      radius: 12,
-      stroke: 'black',
-      fill: '#005566',
-      right: heaterCoolerNode.left - STEP_BUTTON_X_OFFSET,
-      centerY: heaterCoolerNode.centerY,
-      touchAreaDilation: 4
-    } );
-    this.addChild( stepButton );
-
-    var playPauseButton = new PlayPauseButton( multipleParticleModel.isPlayingProperty, {
-      radius: 18, stroke: 'black',
-      fill: '#005566',
-      y: stepButton.centerY,
-      right: stepButton.left - 10,
-      touchAreaDilation: 4
-    } );
-    this.addChild( playPauseButton );
+    this.addChild( new SOMPlayPauseStepControl(
+      multipleParticleModel.isPlayingProperty,
+      multipleParticleModel.stepInternal.bind( multipleParticleModel ),
+      { right: heaterCoolerNode.left - 50, centerY: heaterCoolerNode.centerY }
+    ) );
 
     // add bicycle pump node
     this.pumpNode = new BicyclePumpNode( 200, 250, multipleParticleModel, {
