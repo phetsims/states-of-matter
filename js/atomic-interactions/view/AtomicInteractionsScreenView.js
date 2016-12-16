@@ -21,7 +21,6 @@ define( function( require ) {
   var Node = require( 'SCENERY/nodes/Node' );
   var ParticleForceNode = require( 'STATES_OF_MATTER/atomic-interactions/view/ParticleForceNode' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
-  var PlayPauseButton = require( 'SCENERY_PHET/buttons/PlayPauseButton' );
   var PushPinNode = require( 'STATES_OF_MATTER/atomic-interactions/view/PushPinNode' );
   var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
   var ScreenView = require( 'JOIST/ScreenView' );
@@ -30,6 +29,7 @@ define( function( require ) {
   var TextPushButton = require( 'SUN/buttons/TextPushButton' );
   var VBox = require( 'SCENERY/nodes/VBox' );
   var Vector2 = require( 'DOT/Vector2' );
+  var SOMPlayPauseStepControl = require( 'STATES_OF_MATTER/common/view/SOMPlayPauseStepControl' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var StatesOfMatterColorProfile = require( 'STATES_OF_MATTER/common/view/StatesOfMatterColorProfile' );
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
@@ -127,19 +127,6 @@ define( function( require ) {
     } );
     this.addChild( resetAllButton );
 
-    // add play/pause and step buttons
-    var stepButton = new StepForwardButton( {
-      playingProperty: dualAtomModel.isPlayingProperty,
-      listener: function() { dualAtomModel.stepInternal( StatesOfMatterConstants.NOMINAL_TIME_STEP ); },
-      radius: 12,
-      stroke: 'black',
-      fill: '#005566',
-      centerX: this.layoutBounds.centerX + 50,
-      bottom: this.layoutBounds.bottom - 20, // empirically determined
-      touchAreaDilation: 4
-    } );
-    this.addChild( stepButton );
-
     // add force control
     var forcesControlPanel = new ForcesControlPanel(
       dualAtomModel.forcesDisplayModeProperty,
@@ -160,21 +147,13 @@ define( function( require ) {
     // the control panels will overlap the reset all button if fully opened, so they must be a bit to the left
     atomicInteractionsControlPanel.right = resetAllButton.left - 20; // offset empirically determined
 
-    // add play pause
-    var playPauseButton = new PlayPauseButton( dualAtomModel.isPlayingProperty, {
-      radius: 18,
-      stroke: 'black',
-      fill: '#005566',
-      y: stepButton.centerY,
-      right: stepButton.left - 10,
-      touchAreaDilation: 4
-    } );
-    this.addChild( playPauseButton );
-
-    var pauseSizeIncreaseFactor = 1.25;
-    dualAtomModel.isPlayingProperty.lazyLink( function( isPlaying ) {
-      playPauseButton.scale( isPlaying ? ( 1 / pauseSizeIncreaseFactor ) : pauseSizeIncreaseFactor );
-    } );
+    // add control for play/pause/step
+    var playControl = new SOMPlayPauseStepControl(
+      dualAtomModel.isPlayingProperty,
+      dualAtomModel.stepInternal.bind( dualAtomModel ),
+      { centerX: this.layoutBounds.centerX + 27, bottom: this.layoutBounds.bottom - 14 } // empirically determined
+    );
+    this.addChild( playControl );
 
     // add sim speed controls
     var speedSelectionButtonOptions = {
@@ -214,8 +193,8 @@ define( function( require ) {
       align: 'left',
       spacing: radioButtonSpacing,
       children: [ slowMotionRadioBox, normalMotionRadioBox ],
-      right: playPauseButton.left - 2 * INSET,
-      centerY: playPauseButton.centerY
+      right: playControl.left - 2 * INSET,
+      centerY: playControl.centerY
     } );
     this.addChild( speedControl );
 

@@ -19,18 +19,16 @@ define( function( require ) {
   var MultipleParticleModel = require( 'STATES_OF_MATTER/common/model/MultipleParticleModel' );
   var ParticleContainerNode = require( 'STATES_OF_MATTER/common/view/ParticleContainerNode' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
-  var PlayPauseButton = require( 'SCENERY_PHET/buttons/PlayPauseButton' );
   var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
   var ScreenView = require( 'JOIST/ScreenView' );
+  var SOMPlayPauseStepControl = require( 'STATES_OF_MATTER/common/view/SOMPlayPauseStepControl' );
   var StatesMoleculesControlPanel = require( 'STATES_OF_MATTER/states/view/StatesMoleculesControlPanel' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
   var StatesPhaseControlNode = require( 'STATES_OF_MATTER/states/view/StatesPhaseControlNode' );
-  var StepForwardButton = require( 'SCENERY_PHET/buttons/StepForwardButton' );
   var Vector2 = require( 'DOT/Vector2' );
 
   // constants
-  var STEP_BUTTON_X_OFFSET = 50;
   var CONTROL_PANEL_X_INSET = 15;
   var CONTROL_PANEL_Y_INSET = 10;
 
@@ -85,21 +83,20 @@ define( function( require ) {
     } );
     this.addChild( this.compositeThermometerNode );
 
-    // @private selection panel for the atoms/molecules
+    // selection panel for the atoms/molecules
     var atomsAndMoleculesSelectionPanel = new StatesMoleculesControlPanel( multipleParticleModel.substanceProperty, {
       right: this.layoutBounds.right - CONTROL_PANEL_X_INSET,
       top: this.layoutBounds.top + CONTROL_PANEL_Y_INSET
     } );
     this.addChild( atomsAndMoleculesSelectionPanel );
 
-    // @private phases control node
+    // phases control node
     var solidLiquidGasPhaseControlNode = new StatesPhaseControlNode( multipleParticleModel, {
       right: atomsAndMoleculesSelectionPanel.right,
       top: atomsAndMoleculesSelectionPanel.bottom + CONTROL_PANEL_Y_INSET
     } );
     this.addChild( solidLiquidGasPhaseControlNode );
 
-    // @private reset all button
     var resetAllButton = new ResetAllButton( {
       listener: function() {
         multipleParticleModel.reset();
@@ -112,29 +109,11 @@ define( function( require ) {
     } );
     this.addChild( resetAllButton );
 
-    // @private
-    var stepButton = new StepForwardButton( {
-      playingProperty: multipleParticleModel.isPlayingProperty,
-      listener: function() { multipleParticleModel.stepInternal( StatesOfMatterConstants.NOMINAL_TIME_STEP ); },
-      radius: 12,
-      stroke: 'black',
-      fill: '#005566',
-      right: heaterCoolerNode.left - STEP_BUTTON_X_OFFSET,
-      centerY: heaterCoolerNode.centerY,
-      touchAreaDilation: 4
-    } );
-    this.addChild( stepButton );
-
-    // @private
-    var playPauseButton = new PlayPauseButton( multipleParticleModel.isPlayingProperty, {
-      radius: 18,
-      stroke: 'black',
-      fill: '#005566',
-      y: stepButton.centerY,
-      right: stepButton.left - 10,
-      touchAreaDilation: 4
-    } );
-    this.addChild( playPauseButton );
+    this.addChild( new SOMPlayPauseStepControl(
+      multipleParticleModel.isPlayingProperty,
+      multipleParticleModel.stepInternal.bind( multipleParticleModel ),
+      { right: heaterCoolerNode.left - 50, centerY: heaterCoolerNode.centerY }
+    ) );
 
     // @private
     this.particleContainerHeightPropertyChanged = false;
