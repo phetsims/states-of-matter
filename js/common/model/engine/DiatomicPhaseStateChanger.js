@@ -15,7 +15,6 @@ define( function( require ) {
   var DiatomicAtomPositionUpdater = require( 'STATES_OF_MATTER/common/model/engine/DiatomicAtomPositionUpdater' );
   var inherit = require( 'PHET_CORE/inherit' );
   var PhaseStateEnum = require( 'STATES_OF_MATTER/common/PhaseStateEnum' );
-  var Random = require( 'DOT/Random' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
 
@@ -38,7 +37,6 @@ define( function( require ) {
     this.positionUpdater = DiatomicAtomPositionUpdater; // @private
     AbstractPhaseStateChanger.call( this, multipleParticleModel );
     this.multipleParticleModel = multipleParticleModel; // @private
-    this.rand = new Random(); // @private
   }
 
   statesOfMatter.register( 'DiatomicPhaseStateChanger', DiatomicPhaseStateChanger );
@@ -89,53 +87,15 @@ define( function( require ) {
       // Set the model temperature for this phase.
       this.multipleParticleModel.setTemperature( StatesOfMatterConstants.SOLID_TEMPERATURE );
 
-      // Get references to the various elements of the data set.
-      var moleculeDataSet = this.multipleParticleModel.moleculeDataSet;
-      var numberOfMolecules = moleculeDataSet.getNumberOfMolecules();
-      var moleculeCenterOfMassPositions = moleculeDataSet.moleculeCenterOfMassPositions;
-      var moleculeVelocities = moleculeDataSet.moleculeVelocities;
-      var moleculeRotationAngles = moleculeDataSet.moleculeRotationAngles;
-      var moleculesInsideContainer = this.multipleParticleModel.moleculeDataSet.insideContainer;
-
-      // Create and initialize other variables needed to do the job.
-      var temperatureSqrt = Math.sqrt( this.multipleParticleModel.temperatureSetPointProperty.get() );
-      var moleculesPerLayer = (Math.round( Math.sqrt( numberOfMolecules * 2 ) ) / 2 );
-
-      // Establish the starting position, which will be the lower left corner of the "cube".  The molecules will all be
-      // rotated so that they are lying down.
-      var crystalWidth = moleculesPerLayer * ( 2.0 - 0.3 ); // Final term is a fudge factor that can be adjusted to center the cube.
-      var startingPosX = ( this.multipleParticleModel.normalizedContainerWidth / 2 ) - ( crystalWidth / 2);
-
-      var startingPosY = 1.2 + this.DISTANCE_BETWEEN_PARTICLES_IN_CRYSTAL; // multiplier can be tweaked to minimize initial "bounce"
-
-      // Place the molecules by placing their centers of mass.
-      var moleculesPlaced = 0;
-      var xPos;
-      var yPos;
-      for ( var i = 0; i < numberOfMolecules; i++ ) {      // One iteration per layer.
-
-        for ( var j = 0; ( j < moleculesPerLayer ) && ( moleculesPlaced < numberOfMolecules ); j++ ) {
-          xPos = startingPosX + ( j * MIN_INITIAL_DIAMETER_DISTANCE );
-          if ( i % 2 !== 0 ) {
-
-            // Every other row is shifted a bit to create hexagonal pattern.
-            xPos += ( 1 + this.DISTANCE_BETWEEN_PARTICLES_IN_CRYSTAL ) / 2;
-          }
-          yPos = startingPosY + ( i * MIN_INITIAL_DIAMETER_DISTANCE * 0.5 );
-          var moleculeIndex = ( i * moleculesPerLayer ) + j;
-          moleculeCenterOfMassPositions[ moleculeIndex ].setXY( xPos, yPos );
-          moleculeRotationAngles[ moleculeIndex ] = 0;
-          moleculesPlaced++;
-
-          // Assign each molecule an initial velocity.
-          var xVel = temperatureSqrt * this.rand.nextGaussian();
-          var yVel = temperatureSqrt * this.rand.nextGaussian();
-          moleculeVelocities[ moleculeIndex ].setXY( xVel, yVel );
-
-          // Mark the molecule as being in the container.
-          moleculesInsideContainer[ i ] = true;
-        }
-      }
+      // Place the molecules into a cube, a.k.a. a crystal.
+      this.formCrystal(
+        Math.round( Math.sqrt( this.multipleParticleModel.moleculeDataSet.getNumberOfMolecules() * 2 ) ) / 2,
+        MIN_INITIAL_DIAMETER_DISTANCE,
+        MIN_INITIAL_DIAMETER_DISTANCE * 0.5,
+        0.5,
+        1.5, // empirically determined to minimize bounce
+        false
+      );
     },
 
     /**

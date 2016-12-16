@@ -29,6 +29,7 @@ define( function( require ) {
   function AbstractPhaseStateChanger( multipleParticleModel ) {
     this.multipleParticleModel = multipleParticleModel;
     this.moleculeLocation = new Vector2();
+    this.random = phet.joist.random;
   }
 
   statesOfMatter.register( 'AbstractPhaseStateChanger', AbstractPhaseStateChanger );
@@ -100,6 +101,66 @@ define( function( require ) {
     },
 
     /**
+     * form the molecules into a crystal, which is essentially a cube shape
+     * @param {number} moleculesPerLayer
+     * @param {number} xSpacing
+     * @param {number} ySpacing
+     * @param {number} alternateRowOffset
+     * @param {number} bottomY
+     * @param {boolean} randomizeRotationalAngle
+     */
+    formCrystal: function( moleculesPerLayer, xSpacing, ySpacing, alternateRowOffset, bottomY, randomizeRotationalAngle ) {
+
+      // Get references to the various elements of the data set.
+      var moleculeDataSet = this.multipleParticleModel.moleculeDataSet;
+      var numberOfMolecules = moleculeDataSet.getNumberOfMolecules();
+      var moleculeCenterOfMassPositions = moleculeDataSet.moleculeCenterOfMassPositions;
+      var moleculeVelocities = moleculeDataSet.moleculeVelocities;
+      var moleculeRotationAngles = moleculeDataSet.moleculeRotationAngles;
+      var moleculesInsideContainer = this.multipleParticleModel.moleculeDataSet.insideContainer;
+
+      // Set up other variables needed to do the job.
+      var temperatureSqrt = Math.sqrt( this.multipleParticleModel.temperatureSetPointProperty.get() );
+      var crystalWidth = moleculesPerLayer * xSpacing;
+      var startingPosX = ( this.multipleParticleModel.normalizedContainerWidth / 2 ) - ( crystalWidth / 2 );
+
+      // Place the molecules by placing their centers of mass.
+      var moleculesPlaced = 0;
+      var xPos;
+      var yPos;
+      for ( var i = 0; i < numberOfMolecules; i++ ) {
+
+        // Position one layer of molecules.
+        for ( var j = 0; ( j < moleculesPerLayer ) && ( moleculesPlaced < numberOfMolecules ); j++ ) {
+          xPos = startingPosX + ( j * xSpacing );
+          if ( i % 2 !== 0 ) {
+
+            // Every other row is shifted a bit.
+            xPos += alternateRowOffset;
+          }
+          yPos = bottomY + ( i * ySpacing );
+          var moleculeIndex = ( i * moleculesPerLayer ) + j;
+          moleculeCenterOfMassPositions[ moleculeIndex ].setXY( xPos, yPos );
+          moleculeRotationAngles[ moleculeIndex ] = 0;
+          moleculesPlaced++;
+
+          // Assign each molecule an initial velocity.
+          var xVel = temperatureSqrt * this.random.nextGaussian();
+          var yVel = temperatureSqrt * this.random.nextGaussian();
+          moleculeVelocities[ moleculeIndex ].setXY( xVel, yVel );
+
+          // Assign an initial rotational angle (has no effect for single-atom data sets)
+          moleculeRotationAngles[ moleculeIndex ] = randomizeRotationalAngle ?
+                                                    this.random.nextDouble() * 2 * Math.PI :
+                                                    0;
+
+          // Mark the molecule as being in the container.
+          moleculesInsideContainer[ i ] = true;
+        }
+      }
+    },
+
+    /**
      * Set the phase to gas.  This can be generalized more than the liquid and solid phases, hence it can be defined in
      * the base class.
      * @protected
@@ -128,14 +189,14 @@ define( function( require ) {
 
         // Assign each molecule an initial velocity.
         moleculeVelocities[ i ].setXY(
-          temperatureSqrt * phet.joist.random.nextGaussian(),
-          temperatureSqrt * phet.joist.random.nextGaussian()
+          temperatureSqrt * this.random.nextGaussian(),
+          temperatureSqrt * this.random.nextGaussian()
         );
 
         // Assign each molecule an initial rotational angle and rate.  This isn't used in the monatomic case, but it
         // doesn't hurt anything to set the values.
-        moleculeRotationAngles[ i ] = phet.joist.random.nextDouble() * Math.PI * 2;
-        moleculeRotationRates[ i ] = ( phet.joist.random.nextDouble() * 2 - 1 ) * temperatureSqrt * Math.PI * 2;
+        moleculeRotationAngles[ i ] = this.random.nextDouble() * Math.PI * 2;
+        moleculeRotationRates[ i ] = ( this.random.nextDouble() * 2 - 1 ) * temperatureSqrt * Math.PI * 2;
 
         // Mark each molecule as in the container.
         moleculesInsideContainer[ i ] = true;
@@ -151,8 +212,8 @@ define( function( require ) {
         for ( var j = 0; j < MAX_PLACEMENT_ATTEMPTS; j++ ) {
 
           // Pick a random position.
-          newPosX = this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE + ( phet.joist.random.nextDouble() * rangeX );
-          newPosY = this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE + ( phet.joist.random.nextDouble() * rangeY );
+          newPosX = this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE + ( this.random.nextDouble() * rangeX );
+          newPosY = this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE + ( this.random.nextDouble() * rangeY );
           var positionAvailable = true;
 
           // See if this position is available.
@@ -196,13 +257,13 @@ define( function( require ) {
 
         // Assign each molecule an initial velocity.
         moleculeVelocities[ i ].setXY(
-          temperatureSqrt * this.rand.nextGaussian(),
-          temperatureSqrt * this.rand.nextGaussian()
+          temperatureSqrt * this.random.nextGaussian(),
+          temperatureSqrt * this.random.nextGaussian()
         );
 
         // Assign each molecule an initial rotation rate.  This has no effect for multi-atom particles, but doesn't
         // hurt anything.
-        moleculeRotationRates[ i ] = phet.joist.random.nextDouble() * temperatureSqrt * Math.PI * 2;
+        moleculeRotationRates[ i ] = this.random.nextDouble() * temperatureSqrt * Math.PI * 2;
 
         // Mark each molecule as in the container.
         moleculesInsideContainer[ i ] = true;
