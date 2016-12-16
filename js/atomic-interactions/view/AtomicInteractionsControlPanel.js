@@ -9,9 +9,9 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var AtomAndMoleculeIconFactory = require( 'STATES_OF_MATTER/common/view/AtomAndMoleculeIconFactory' );
   var AquaRadioButton = require( 'SUN/AquaRadioButton' );
   var AtomPair = require( 'STATES_OF_MATTER/atomic-interactions/model/AtomPair' );
-  var Circle = require( 'SCENERY/nodes/Circle' );
   var Dimension2 = require( 'DOT/Dimension2' );
   var HBox = require( 'SCENERY/nodes/HBox' );
   var HSlider = require( 'SUN/HSlider' );
@@ -25,6 +25,7 @@ define( function( require ) {
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
+  var SubstanceType = require( 'STATES_OF_MATTER/common/SubstanceType' );
   var Text = require( 'SCENERY/nodes/Text' );
   var VBox = require( 'SCENERY/nodes/VBox' );
 
@@ -53,15 +54,6 @@ define( function( require ) {
   var SLIDER_TICK_TEXT_MAX_WIDTH = 35;
   var TITLE_TEXT_WIDTH = 130;
   var PANEL_X_MARGIN = 10;
-
-  // icon for the adjustable attraction button
-  var ADJUSTABLE_ATTRACTION_ICON = new Circle( 6, { fill: StatesOfMatterConstants.ADJUSTABLE_ATTRACTION_COLOR } );
-
-  // icon for the neon button
-  var NEON_ICON = new Circle( 5, { fill: StatesOfMatterConstants.NEON_COLOR } );
-
-  // icon for the argon button
-  var ARGON_ICON = new Circle( 6, { fill: StatesOfMatterConstants.ARGON_COLOR } );
 
   /**
    * @param {DualAtomModel} dualAtomModel - model of the simulation
@@ -242,15 +234,21 @@ define( function( require ) {
 
       // Set up objects that describe the pieces that make up a selector item in the control panel, conforms to the
       // contract: { label: {Node}, icon: {Node} }
-      var neon = { label: new Text( neonString, labelTextOptions ), icon: NEON_ICON };
-      var argon = { label: new Text( argonString, labelTextOptions ), icon: ARGON_ICON };
+      var neon = {
+        label: new Text( neonString, labelTextOptions ),
+        icon: AtomAndMoleculeIconFactory.createIcon( SubstanceType.NEON )
+      };
+      var argon = {
+        label: new Text( argonString, labelTextOptions ),
+        icon: AtomAndMoleculeIconFactory.createIcon( SubstanceType.ARGON )
+      };
       adjustableAttraction = {
         label: new Text( adjustableAttractionString, {
           font: NORMAL_TEXT_FONT,
           fill: options.buttonTextFill,
           maxWidth: NORMAL_TEXT_MAX_WIDTH
         } ),
-        icon: ADJUSTABLE_ATTRACTION_ICON
+        icon: AtomAndMoleculeIconFactory.createIcon( SubstanceType.ADJUSTABLE_ATOM )
       };
       titleText = {
         label: title

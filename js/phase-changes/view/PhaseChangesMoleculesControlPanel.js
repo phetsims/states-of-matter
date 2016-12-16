@@ -1,7 +1,7 @@
 // Copyright 2014-2015, University of Colorado Boulder
 
 /**
- * View for the panel for selecting the atoms/molecules
+ * panel for selecting the atoms/molecules
  *
  * @author Siddhartha Chinthapally (Actual Concepts)
  */
@@ -9,7 +9,7 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var AtomAndMoleculeIcons = require( 'STATES_OF_MATTER/common/view/AtomAndMoleculeIcons' );
+  var AtomAndMoleculeIconFactory = require( 'STATES_OF_MATTER/common/view/AtomAndMoleculeIconFactory' );
   var Dimension2 = require( 'DOT/Dimension2' );
   var HBox = require( 'SCENERY/nodes/HBox' );
   var HSlider = require( 'SUN/HSlider' );
@@ -40,8 +40,7 @@ define( function( require ) {
   var interactionStrengthWithSymbolString = require( 'string!STATES_OF_MATTER/interactionStrengthWithSymbol' );
 
   // constants
-  var inset = 10;
-  var MAX_WIDTH = 120;
+  var INSET = 10;
   var TICK_TEXT_MAX_WIDTH = 40;
   var NORMAL_TEXT_FONT_SIZE = 12;
 
@@ -60,11 +59,13 @@ define( function( require ) {
       stroke: StatesOfMatterColorProfile.controlPanelStrokeProperty,
       lineWidth: 1,
       cornerRadius: StatesOfMatterConstants.PANEL_CORNER_RADIUS,
-      minWidth: 0
+      minWidth: 120 // somewhat arbitrary, will generally be set by constructor
     }, options );
 
+    var selectorWidth = options.minWidth - 2 * options.xMargin
+
     Node.call( this );
-    var textOptions = { font: new PhetFont( NORMAL_TEXT_FONT_SIZE ), fill: '#FFFFFF', maxWidth: MAX_WIDTH };
+    var textOptions = { font: new PhetFont( NORMAL_TEXT_FONT_SIZE ), fill: '#FFFFFF', maxWidth: selectorWidth * 0.75 };
     var tickTextOptions = {
       font: new PhetFont( NORMAL_TEXT_FONT_SIZE ),
       fill: StatesOfMatterColorProfile.controlPanelTextProperty,
@@ -72,7 +73,6 @@ define( function( require ) {
     };
 
     var weakTitle = new Text( weakString, tickTextOptions );
-
     var strongTitle = new Text( strongString, tickTextOptions );
 
     // add interaction strength slider and title
@@ -103,9 +103,7 @@ define( function( require ) {
         majorTickLineWidth: 1,
         minorTickStroke: StatesOfMatterColorProfile.controlPanelTextProperty,
         minorTickLineWidth: 1,
-
         cursor: 'pointer'
-
       } );
     interactionStrengthNode.addChild( interactionStrengthSlider );
     interactionStrengthSlider.addMajorTick( MultipleParticleModel.MAX_ADJUSTABLE_EPSILON, strongTitle );
@@ -116,59 +114,48 @@ define( function( require ) {
     var waterText = new Text( waterString, textOptions );
     var oxygenText = new Text( diatomicOxygenString, textOptions );
     var adjustableAttractionText = new Text( adjustableAttractionString, textOptions );
-    var title = new Text( atomsAndMoleculesString, {
+    var titleText = new Text( atomsAndMoleculesString, {
       font: new PhetFont( 14 ),
       fill: StatesOfMatterColorProfile.controlPanelTextProperty,
-      maxWidth: MAX_WIDTH
+      maxWidth: options.minWidth * 0.85
     } );
 
-    // create objest that describe the pieces that make up a selector item in the control panel, conforms to the
+    // create objects that describe the pieces that make up a selector item in the control panel, conforms to the
     // contract: { label: {Node}, icon: {Node} (optional) }
-    var neon = { label: neonText, icon: AtomAndMoleculeIcons.NEON_ICON };
-    var argon = { label: argonText, icon: AtomAndMoleculeIcons.ARGON_ICON };
-    var water = { label: waterText, icon: AtomAndMoleculeIcons.WATER_ICON };
-    var oxygen = { label: oxygenText, icon: AtomAndMoleculeIcons.OXYGEN_ICON };
-    var adjustableAttraction = {
+    var neonSelectorInfo = { label: neonText, icon: AtomAndMoleculeIconFactory.createIcon( SubstanceType.NEON ) };
+    var argonSelectorInfo = { label: argonText, icon: AtomAndMoleculeIconFactory.createIcon( SubstanceType.ARGON ) };
+    var waterSelectorInfo = { label: waterText, icon: AtomAndMoleculeIconFactory.createIcon( SubstanceType.WATER ) };
+    var oxygenSelectorInfo = {
+      label: oxygenText,
+      icon: AtomAndMoleculeIconFactory.createIcon( SubstanceType.DIATOMIC_OXYGEN )
+    };
+    var adjustableAttractionSelectorInfo = {
       label: adjustableAttractionText,
-      icon: AtomAndMoleculeIcons.ADJUSTABLE_ATTRACTION_ICON
-    };
-    var titleText = {
-      label: title
+      icon: AtomAndMoleculeIconFactory.createIcon( SubstanceType.ADJUSTABLE_ATOM )
     };
 
-    // compute the maximum item width
-    var widestLabelAndIconSpec = _.max( [ neon, argon, water, oxygen, adjustableAttraction, titleText ], function( item ) {
-      return item.label.width + ((item.icon) ? item.icon.width : 0);
-    } );
-    var maxWidth = widestLabelAndIconSpec.label.width + ((widestLabelAndIconSpec.icon) ? widestLabelAndIconSpec.icon.width : 0);
-    maxWidth = Math.max( maxWidth, interactionStrengthNode.width );
+    // function that creates the selector nodes, which have a label and an icon with a space between
+    function createLabelAndIconNode( labelAndIconSpec ) {
+      var strutWidth = selectorWidth - labelAndIconSpec.label.width - labelAndIconSpec.icon.width;
+      return new HBox( { children: [ labelAndIconSpec.label, new HStrut( strutWidth ), labelAndIconSpec.icon ] } );
+    }
 
-    // pad inserts a spacing node (HStrut) so that the text, space and image together occupy a certain fixed width.
-    var createLabelAndIconNode = function( labelAndIconSpec ) {
-      if ( labelAndIconSpec.icon ) {
-        var strutWidth = maxWidth - labelAndIconSpec.label.width - labelAndIconSpec.icon.width + 12;
-        return new HBox( { children: [ labelAndIconSpec.label, new HStrut( strutWidth ), labelAndIconSpec.icon ] } );
-      }
-      else {
-        return new HBox( { children: [ labelAndIconSpec.label ] } );
-      }
-    };
     var radioButtonContent;
     if ( !isBasicVersion ) {
       radioButtonContent = [
-        { value: SubstanceType.NEON, node: createLabelAndIconNode( neon ) },
-        { value: SubstanceType.ARGON, node: createLabelAndIconNode( argon ) },
-        { value: SubstanceType.DIATOMIC_OXYGEN, node: createLabelAndIconNode( oxygen ) },
-        { value: SubstanceType.WATER, node: createLabelAndIconNode( water ) }
+        { value: SubstanceType.NEON, node: createLabelAndIconNode( neonSelectorInfo ) },
+        { value: SubstanceType.ARGON, node: createLabelAndIconNode( argonSelectorInfo ) },
+        { value: SubstanceType.DIATOMIC_OXYGEN, node: createLabelAndIconNode( oxygenSelectorInfo ) },
+        { value: SubstanceType.WATER, node: createLabelAndIconNode( waterSelectorInfo ) }
       ];
     }
     else {
       radioButtonContent = [
-        { value: SubstanceType.NEON, node: createLabelAndIconNode( neon ) },
-        { value: SubstanceType.ARGON, node: createLabelAndIconNode( argon ) },
-        { value: SubstanceType.DIATOMIC_OXYGEN, node: createLabelAndIconNode( oxygen ) },
-        { value: SubstanceType.WATER, node: createLabelAndIconNode( water ) },
-        { value: SubstanceType.ADJUSTABLE_ATOM, node: createLabelAndIconNode( adjustableAttraction ) }
+        { value: SubstanceType.NEON, node: createLabelAndIconNode( neonSelectorInfo ) },
+        { value: SubstanceType.ARGON, node: createLabelAndIconNode( argonSelectorInfo ) },
+        { value: SubstanceType.DIATOMIC_OXYGEN, node: createLabelAndIconNode( oxygenSelectorInfo ) },
+        { value: SubstanceType.WATER, node: createLabelAndIconNode( waterSelectorInfo ) },
+        { value: SubstanceType.ADJUSTABLE_ATOM, node: createLabelAndIconNode( adjustableAttractionSelectorInfo ) }
       ];
     }
 
@@ -203,7 +190,7 @@ define( function( require ) {
     interactionTitle.bottom = interactionStrengthSlider.top - 5;
     interactionTitle.centerX = interactionStrengthSlider.centerX;
     interactionStrengthNode.centerX = radioButtonGroup.centerX;
-    interactionStrengthNode.top = radioButtonGroup.bottom + inset;
+    interactionStrengthNode.top = radioButtonGroup.bottom + INSET;
 
     multipleParticleModel.substanceProperty.link( function( value ) {
 
@@ -217,17 +204,17 @@ define( function( require ) {
         }
       }
     } );
-    var titleBackground = new Rectangle( 0, 0, titleText.label.width + 5, titleText.label.height, {
+    var titleBackground = new Rectangle( 0, 0, titleText.width + 5, titleText.height, {
       fill: StatesOfMatterColorProfile.controlPanelBackgroundProperty
     } );
     titleBackground.centerX = radioButtonPanel.centerX;
     titleBackground.centerY = radioButtonPanel.top;
-    titleText.label.centerX = titleBackground.centerX;
-    titleText.label.centerY = titleBackground.centerY;
+    titleText.centerX = titleBackground.centerX;
+    titleText.centerY = titleBackground.centerY;
 
     this.addChild( radioButtonPanel );
     //add the title node
-    this.addChild( new Node( { children: [ titleBackground, titleText.label ] } ) );
+    this.addChild( new Node( { children: [ titleBackground, titleText ] } ) );
     this.mutate( options );
   }
 
