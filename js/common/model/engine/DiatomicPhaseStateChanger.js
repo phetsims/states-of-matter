@@ -101,9 +101,8 @@ define( function( require ) {
       var temperatureSqrt = Math.sqrt( this.multipleParticleModel.temperatureSetPointProperty.get() );
       var moleculesPerLayer = (Math.round( Math.sqrt( numberOfMolecules * 2 ) ) / 2 );
 
-      // Establish the starting position, which will be the lower left corner
-      // of the "cube".  The molecules will all be rotated so that they are
-      // lying down.
+      // Establish the starting position, which will be the lower left corner of the "cube".  The molecules will all be
+      // rotated so that they are lying down.
       var crystalWidth = moleculesPerLayer * ( 2.0 - 0.3 ); // Final term is a fudge factor that can be adjusted to center the cube.
       var startingPosX = ( this.multipleParticleModel.normalizedContainerWidth / 2 ) - ( crystalWidth / 2);
 

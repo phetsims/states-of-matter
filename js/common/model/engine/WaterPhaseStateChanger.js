@@ -77,24 +77,14 @@ define( function( require ) {
       var moleculeDataSet = this.multipleParticleModel.moleculeDataSet;
       var numberOfMolecules = moleculeDataSet.getNumberOfMolecules();
       var moleculeCenterOfMassPositions = moleculeDataSet.moleculeCenterOfMassPositions;
-      var moleculeVelocities = moleculeDataSet.moleculeVelocities;
       var moleculeRotationAngles = moleculeDataSet.moleculeRotationAngles;
-      var moleculeRotationRates = moleculeDataSet.moleculeRotationRates;
       var moleculesInsideContainer = this.multipleParticleModel.moleculeDataSet.insideContainer;
 
-      // Create and initialize other variables needed to do the job
-      var temperatureSqrt = Math.sqrt( this.multipleParticleModel.temperatureSetPointProperty.get() );
+      // Set up other variables needed to do the job.
       var moleculesPerLayer = Math.floor( Math.sqrt( numberOfMolecules ) );
 
-      // Initialize the velocities and angles of the molecules.
-      for ( var i = 0; i < numberOfMolecules; i++ ) {
-
-        // Assign each molecule an initial velocity.
-        moleculeVelocities[ i ].setXY( temperatureSqrt * this.rand.nextGaussian(), temperatureSqrt * this.rand.nextGaussian() );
-
-        // Assign each molecule an initial rotation rate.
-        moleculeRotationRates[ i ] = phet.joist.random.nextDouble() * temperatureSqrt * Math.PI * 2;
-      }
+      // Initialize the velocities of the molecules.
+      this.initializeVelocities();
 
       // Establish the starting position, which will be the lower left corner
       // of the "cube".
@@ -106,7 +96,7 @@ define( function( require ) {
       var moleculesPlaced = 0;
       var xPos;
       var yPos;
-      for ( i = 0; i < numberOfMolecules; i++ ) {
+      for ( var i = 0; i < numberOfMolecules; i++ ) {
 
         // One iteration per layer.
         for ( var j = 0; (j < moleculesPerLayer) && (moleculesPlaced < numberOfMolecules); j++ ) {

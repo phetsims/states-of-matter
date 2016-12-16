@@ -117,9 +117,10 @@ define( function( require ) {
       var moleculeRotationRates = moleculeDataSet.getMoleculeRotationRates();
       var moleculesInsideContainer = this.multipleParticleModel.moleculeDataSet.insideContainer;
 
-      // Create and initialize other variables needed to do the job.
+      // Set up other variables needed to do the job.
       var temperatureSqrt = Math.sqrt( this.multipleParticleModel.temperatureSetPointProperty.get() );
       var numberOfMolecules = moleculeDataSet.getNumberOfMolecules();
+
       for ( var i = 0; i < numberOfMolecules; i++ ) {
 
         // Temporarily position the molecules at (0,0).
@@ -181,6 +182,34 @@ define( function( require ) {
     },
 
     /**
+     * Set the initial linear and rotational velocities for molecules with more than one atom.
+     */
+    initializeVelocities: function() {
+
+      var moleculeDataSet = this.multipleParticleModel.moleculeDataSet;
+      var moleculeVelocities = moleculeDataSet.moleculeVelocities;
+      var moleculeRotationRates = moleculeDataSet.moleculeRotationRates;
+      var moleculesInsideContainer = this.multipleParticleModel.moleculeDataSet.insideContainer;
+      var temperatureSqrt = Math.sqrt( this.multipleParticleModel.temperatureSetPointProperty.get() );
+
+      for ( var i = 0; i < moleculeDataSet.getNumberOfMolecules(); i++ ) {
+
+        // Assign each molecule an initial velocity.
+        moleculeVelocities[ i ].setXY(
+          temperatureSqrt * this.rand.nextGaussian(),
+          temperatureSqrt * this.rand.nextGaussian()
+        );
+
+        // Assign each molecule an initial rotation rate.  This has no effect for multi-atom particles, but doesn't
+        // hurt anything.
+        moleculeRotationRates[ i ] = phet.joist.random.nextDouble() * temperatureSqrt * Math.PI * 2;
+
+        // Mark each molecule as in the container.
+        moleculesInsideContainer[ i ] = true;
+      }
+    },
+
+    /**
      * Set the phase state to liquid, works for all multi-atom molecules (so far).
      * @protected
      */
@@ -192,27 +221,10 @@ define( function( require ) {
       // Get references to the various elements of the data set.
       var moleculeDataSet = this.multipleParticleModel.moleculeDataSet;
       var moleculeCenterOfMassPositions = moleculeDataSet.moleculeCenterOfMassPositions;
-      var moleculeVelocities = moleculeDataSet.moleculeVelocities;
       var moleculeRotationAngles = moleculeDataSet.moleculeRotationAngles;
-      var moleculeRotationRates = moleculeDataSet.moleculeRotationRates;
-      var moleculesInsideContainer = this.multipleParticleModel.moleculeDataSet.insideContainer;
 
-      // Create and initialize other variables needed to do the job.
-      var temperatureSqrt = Math.sqrt( this.multipleParticleModel.temperatureSetPointProperty.get() );
-      var numberOfMolecules = moleculeDataSet.getNumberOfMolecules();
-
-      // Initialize the velocities and angles of the molecules.
-      for ( var i = 0; i < numberOfMolecules; i++ ) {
-
-        // Assign each molecule an initial velocity.
-        moleculeVelocities[ i ].setXY( temperatureSqrt * this.rand.nextGaussian(), temperatureSqrt * this.rand.nextGaussian() );
-
-        // Assign each molecule an initial rotation rate.
-        moleculeRotationRates[ i ] = phet.joist.random.nextDouble() * temperatureSqrt * Math.PI * 2;
-
-        // Mark each molecule as in the container.
-        moleculesInsideContainer[ i ] = true;
-      }
+      // Initialize the velocities of the molecules.
+      this.initializeVelocities();
 
       // Assign each molecule to a position.
       var moleculesPlaced = 0;
@@ -221,7 +233,7 @@ define( function( require ) {
       var currentLayer = 0;
       var particlesOnCurrentLayer = 0;
       var particlesThatWillFitOnCurrentLayer = 1;
-      for ( i = 0; i < numberOfMolecules; i++ ) {
+      for ( var i = 0; i < moleculeDataSet.getNumberOfMolecules(); i++ ) {
         for ( var j = 0; j < this.MAX_PLACEMENT_ATTEMPTS; j++ ) {
           var distanceFromCenter = currentLayer * minInitialDistance * spacingFactor;
           var angle = (particlesOnCurrentLayer / particlesThatWillFitOnCurrentLayer * 2 * Math.PI) +
