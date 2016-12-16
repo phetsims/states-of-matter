@@ -73,45 +73,15 @@ define( function( require ) {
       // Set the temperature in the model.
       this.multipleParticleModel.setTemperature( StatesOfMatterConstants.SOLID_TEMPERATURE );
 
-      // Create the solid form, a.k.a. a crystal.
-      var numberOfAtoms = this.multipleParticleModel.moleculeDataSet.numberOfAtoms;
-      var moleculeCenterOfMassPositions = this.multipleParticleModel.moleculeDataSet.moleculeCenterOfMassPositions;
-      var moleculeVelocities = this.multipleParticleModel.moleculeDataSet.moleculeVelocities;
-      var moleculesInsideContainer = this.multipleParticleModel.moleculeDataSet.insideContainer;
-      var temperatureSqrt = Math.sqrt( this.multipleParticleModel.temperatureSetPointProperty.get() );
-      var atomsPerLayer = Math.round( Math.sqrt( numberOfAtoms ) );
-
-      // Establish the starting position, which will be the lower left corner of the "cube".
-      var crystalWidth = ( atomsPerLayer - 1 ) * MIN_INITIAL_INTER_PARTICLE_DISTANCE;
-
-      var startingPosX = ( this.multipleParticleModel.normalizedContainerWidth / 2 ) - ( crystalWidth / 2 );
-      var startingPosY = MIN_INITIAL_INTER_PARTICLE_DISTANCE;
-
-      var particlesPlaced = 0;
-      var xPos;
-      var yPos;
-      for ( var i = 0; particlesPlaced < numberOfAtoms; i++ ) { // One iteration per layer.
-        for ( var j = 0; ( j < atomsPerLayer ) && ( particlesPlaced < numberOfAtoms ); j++ ) {
-          xPos = startingPosX + ( j * MIN_INITIAL_INTER_PARTICLE_DISTANCE );
-          if ( i % 2 !== 0 ) {
-
-            // Every other row is shifted a bit to create hexagonal pattern.
-            xPos += MIN_INITIAL_INTER_PARTICLE_DISTANCE / 2;
-          }
-          var atomIndex = ( i * atomsPerLayer ) + j;
-          yPos = startingPosY + i * MIN_INITIAL_INTER_PARTICLE_DISTANCE * 0.866;
-          moleculeCenterOfMassPositions[ atomIndex ].setXY( xPos, yPos );
-
-          particlesPlaced++;
-
-          // Assign each particle an initial velocity.
-          moleculeVelocities[ atomIndex ].x = temperatureSqrt * this.random.nextGaussian();
-          moleculeVelocities[ atomIndex ].y = temperatureSqrt * this.random.nextGaussian();
-
-          // Mark particle as inside the container.
-          moleculesInsideContainer[ atomIndex ] = true;
-        }
-      }
+      // Place the molecules into a cube, a.k.a. a crystal.
+      this.formCrystal(
+        Math.round( Math.sqrt( this.multipleParticleModel.moleculeDataSet.getNumberOfMolecules() ) ),
+        MIN_INITIAL_INTER_PARTICLE_DISTANCE,
+        MIN_INITIAL_INTER_PARTICLE_DISTANCE * 0.866,
+        MIN_INITIAL_INTER_PARTICLE_DISTANCE / 2,
+        MIN_INITIAL_INTER_PARTICLE_DISTANCE,
+        false
+      );
     },
 
     /**
