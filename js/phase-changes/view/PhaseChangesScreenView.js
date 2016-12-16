@@ -57,7 +57,6 @@ define( function( require ) {
 
   // constants used in the layout process
   var CONTROL_PANEL_X_INSET = 15;
-  var STEP_BUTTON_X_OFFSET = 50;
 
   /**
    * @param {MultipleParticleModel} multipleParticleModel - model of the simulation
