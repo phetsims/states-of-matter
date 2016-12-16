@@ -215,9 +215,7 @@ define( function( require ) {
 
     // Draw the initial curve upon the graph.
     this.drawPotentialCurve();
-    var epsilonLabelYOffset = wide ? 60 : 24;
-    this.epsilonLabel.setTranslation( this.graphMin.x + this.epsilonLabel.width,
-      ( this.graphMin.y - this.epsilonLabel.height / 2 + this.graphHeight / 2) / 2 + epsilonLabelYOffset );
+
     if ( wide ) {
       this.gridNode = new ZoomableGridNode( this, 0, 0, this.graphWidth, this.graphHeight );
       this.ljPotentialGraph.addChild( this.gridNode );
