@@ -9,7 +9,7 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var AtomAndMoleculeIcons = require( 'STATES_OF_MATTER/common/view/AtomAndMoleculeIcons' );
+  var AtomAndMoleculeIconFactory = require( 'STATES_OF_MATTER/common/view/AtomAndMoleculeIconFactory' );
   var HBox = require( 'SCENERY/nodes/HBox' );
   var HStrut = require( 'SCENERY/nodes/HStrut' );
   var inherit = require( 'PHET_CORE/inherit' );
@@ -77,10 +77,10 @@ define( function( require ) {
 
     // create objects that describe the pieces that make up an item in the control panel, conforms to the contract:
     // { label: {Node}, icon: {Node} }
-    var neon = { label: neonText, icon: AtomAndMoleculeIcons.NEON_ICON };
-    var argon = { label: argonText, icon: AtomAndMoleculeIcons.ARGON_ICON };
-    var water = { label: waterText, icon: AtomAndMoleculeIcons.WATER_ICON };
-    var oxygen = { label: oxygenText, icon: AtomAndMoleculeIcons.OXYGEN_ICON };
+    var neon = { label: neonText, icon: AtomAndMoleculeIconFactory.createIcon( SubstanceType.NEON ) };
+    var argon = { label: argonText, icon: AtomAndMoleculeIconFactory.createIcon( SubstanceType.ARGON ) };
+    var water = { label: waterText, icon: AtomAndMoleculeIconFactory.createIcon( SubstanceType.WATER ) };
+    var oxygen = { label: oxygenText, icon: AtomAndMoleculeIconFactory.createIcon( SubstanceType.DIATOMIC_OXYGEN ) };
 
     var titleText = {
       label: title
