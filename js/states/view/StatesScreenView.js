@@ -31,6 +31,7 @@ define( function( require ) {
   // constants
   var CONTROL_PANEL_X_INSET = 15;
   var CONTROL_PANEL_Y_INSET = 10;
+  var CONTROL_PANEL_WIDTH = 175; // empirically determined by looks
 
   /**
    * @param {MultipleParticleModel} multipleParticleModel - model of the simulation
@@ -86,14 +87,17 @@ define( function( require ) {
     // selection panel for the atoms/molecules
     var atomsAndMoleculesSelectionPanel = new StatesMoleculesControlPanel( multipleParticleModel.substanceProperty, {
       right: this.layoutBounds.right - CONTROL_PANEL_X_INSET,
-      top: this.layoutBounds.top + CONTROL_PANEL_Y_INSET
+      top: this.layoutBounds.top + CONTROL_PANEL_Y_INSET,
+      minWidth: CONTROL_PANEL_WIDTH,
+      maxWidth: CONTROL_PANEL_WIDTH
     } );
     this.addChild( atomsAndMoleculesSelectionPanel );
 
     // phases control node
     var solidLiquidGasPhaseControlNode = new StatesPhaseControlNode( multipleParticleModel, {
       right: atomsAndMoleculesSelectionPanel.right,
-      top: atomsAndMoleculesSelectionPanel.bottom + CONTROL_PANEL_Y_INSET
+      top: atomsAndMoleculesSelectionPanel.bottom + CONTROL_PANEL_Y_INSET,
+      buttonWidth: CONTROL_PANEL_WIDTH
     } );
     this.addChild( solidLiquidGasPhaseControlNode );
 

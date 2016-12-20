@@ -32,7 +32,7 @@ define( function( require ) {
   var atomsAndMoleculesString = require( 'string!STATES_OF_MATTER/AtomsAndMolecules' );
 
   // constants
-  var MAX_WIDTH = 118;
+  var DEFAULT_WIDTH = 160;
 
   /**
    * @param {Property<number>} substanceProperty that tracks the substance selected in the panel
@@ -47,32 +47,23 @@ define( function( require ) {
       fill: StatesOfMatterColorProfile.controlPanelBackgroundProperty,
       stroke: StatesOfMatterColorProfile.controlPanelStrokeProperty,
       lineWidth: 1,
-      cornerRadius: StatesOfMatterConstants.PANEL_CORNER_RADIUS
+      cornerRadius: StatesOfMatterConstants.PANEL_CORNER_RADIUS,
+      maxWidth: DEFAULT_WIDTH,
+      minWidth: DEFAULT_WIDTH
     }, options );
 
     Node.call( this );
-    var textOptions = { font: new PhetFont( 12 ), fill: '#FFFFFF' };
+    var maxTextWidth = options.maxWidth * 0.75;
+    var textOptions = { font: new PhetFont( 12 ), fill: '#FFFFFF', maxWidth: maxTextWidth };
 
     var neonText = new Text( neonString, textOptions );
-    if ( neonText.width > MAX_WIDTH ) {
-      neonText.scale( MAX_WIDTH / neonText.width );
-    }
     var argonText = new Text( argonString, textOptions );
-    if ( argonText.width > MAX_WIDTH ) {
-      argonText.scale( MAX_WIDTH / argonText.width );
-    }
     var waterText = new Text( waterString, textOptions );
-    if ( waterText.width > MAX_WIDTH ) {
-      waterText.scale( MAX_WIDTH / waterText.width );
-    }
     var oxygenText = new Text( diatomicOxygenString, textOptions );
-    if ( oxygenText.width > MAX_WIDTH ) {
-      oxygenText.scale( MAX_WIDTH / oxygenText.width );
-    }
     var title = new Text( atomsAndMoleculesString, {
       font: new PhetFont( 14 ),
       fill: StatesOfMatterColorProfile.controlPanelTextProperty,
-      maxWidth: MAX_WIDTH
+      maxWidth: maxTextWidth
     } );
 
     // create objects that describe the pieces that make up an item in the control panel, conforms to the contract:
@@ -86,16 +77,12 @@ define( function( require ) {
       label: title
     };
 
-    // compute the maximum item width
-    var widestLabelAndIconSpec = _.max( [ neon, argon, water, oxygen, titleText ], function( item ) {
-      return item.label.width + ((item.icon) ? item.icon.width : 0);
-    } );
-    var maxWidth = widestLabelAndIconSpec.label.width + ((widestLabelAndIconSpec.icon) ? widestLabelAndIconSpec.icon.width : 0);
+    var selectorWidth = options.minWidth - 2 * options.xMargin;
 
     // pad inserts a spacing node (HStrut) so that the text, space and image together occupy a certain fixed width.
     var createLabelAndIconNode = function( labelAndIconSpec ) {
       if ( labelAndIconSpec.icon ) {
-        var strutWidth = maxWidth - labelAndIconSpec.label.width - labelAndIconSpec.icon.width + 36;
+        var strutWidth = selectorWidth - labelAndIconSpec.label.width - labelAndIconSpec.icon.width;
         return new HBox( { children: [ labelAndIconSpec.label, new HStrut( strutWidth ), labelAndIconSpec.icon ] } );
       }
       else {
@@ -132,7 +119,8 @@ define( function( require ) {
       lineWidth: options.lineWidth,
       cornerRadius: options.cornerRadius,
       fill: options.fill,
-      minWidth: 166
+      minWidth: options.minWidth,
+      maxWidth: options.maxWidth
     } );
     this.addChild( radioButtonPanel );
 
