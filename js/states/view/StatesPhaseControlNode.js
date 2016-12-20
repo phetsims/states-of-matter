@@ -34,13 +34,13 @@ define( function( require ) {
   var solidIconImage = require( 'image!STATES_OF_MATTER/solid-icon.png' );
 
   // constants
-  var STATES_BUTTON_WIDTH = 160;
+  var DEFAULT_BUTTON_WIDTH = 160;
   var ICON_HEIGHT = 25; // in screen coordinates, empirically determined
   var SELECTED_BUTTON_COLOR = '#a5a7ff';
   var DESELECTED_BUTTON_COLOR = '#F8D980';
 
   // function that puts icon and label together with some struts into an HBox for using as content node on button
-  function createButtonContent( iconImage, string ) {
+  function createButtonContent( iconImage, string, buttonWidth ) {
 
     assert && assert( iconImage && string, 'both icon and label must be defined' );
 
@@ -48,24 +48,21 @@ define( function( require ) {
     var imageNode = new Image( iconImage );
     imageNode.scale( ICON_HEIGHT / imageNode.height );
 
-    // Create the text node and, if it consumes more than 1/2 the button width, scale it.
-    var label = new Text( string, { font: new PhetFont( 14 ), fill: 'black' } );
-    if ( label.width > STATES_BUTTON_WIDTH / 2 ) {
-      label.scale( (STATES_BUTTON_WIDTH / 2) / label.width );
-    }
+    // Create the text node, limiting it to 1/2 of the button width.
+    var label = new Text( string, { font: new PhetFont( 14 ), fill: 'black', maxWidth: buttonWidth / 2 } );
 
     // create the left strut such that the icons will be centered around the same horizontal location
-    var desiredIconHorizontalCenter = STATES_BUTTON_WIDTH * 0.25; // multiplier is empirically determined
+    var desiredIconHorizontalCenter = buttonWidth * 0.25; // multiplier is empirically determined
     var leftStrutWidth = Math.max( desiredIconHorizontalCenter - ( imageNode.width / 2 ), 0 );
     assert && assert( leftStrutWidth > 0, 'icon is too wide, either adjust it or adjust the icon position multiplier' );
 
     // create the center strut such that the labels are centered around the same horizontal location
-    var desiredLabelHorizontalCenter = STATES_BUTTON_WIDTH * 0.65;
+    var desiredLabelHorizontalCenter = buttonWidth * 0.65;
     var centerStrutWidth = Math.max( desiredLabelHorizontalCenter - ( label.width / 2 ) - leftStrutWidth - imageNode.width, 0 );
     assert && assert( centerStrutWidth >= 0, 'label is too wide - was it scaled properly?' );
 
     // create the right strut to fill out the rest of the button
-    var rightStrutWidth = STATES_BUTTON_WIDTH - leftStrutWidth - imageNode.width - centerStrutWidth - label.width;
+    var rightStrutWidth = buttonWidth - leftStrutWidth - imageNode.width - centerStrutWidth - label.width;
 
     return new HBox( {
       children: [
@@ -92,7 +89,8 @@ define( function( require ) {
       fill: '#C8C8C8',
       stroke: 'gray',
       lineWidth: 1,
-      cornerRadius: 5 // radius of the rounded corners on the background
+      cornerRadius: 5, // radius of the rounded corners on the background
+      buttonWidth: DEFAULT_BUTTON_WIDTH
     }, options );
 
     Node.call( this );
@@ -107,17 +105,23 @@ define( function( require ) {
 
     // create solid state selection button
     var solidStateButton = new BooleanRectangularStickyToggleButton( solidSelectedProperty, {
-      content: createButtonContent( solidIconImage, solidString )
+      content: createButtonContent( solidIconImage, solidString, options.buttonWidth ),
+      maxWidth: options.buttonWidth,
+      minWidth: options.buttonWidth
     } );
 
     // create liquid state selection button
     var liquidStateButton = new BooleanRectangularStickyToggleButton( liquidSelectedProperty, {
-      content: createButtonContent( liquidIconImage, liquidString )
+      content: createButtonContent( liquidIconImage, liquidString, options.buttonWidth ),
+      maxWidth: options.buttonWidth,
+      minWidth: options.buttonWidth
     } );
 
     // create gas state selection button
     var gasStateButton = new BooleanRectangularStickyToggleButton( gasSelectedProperty, {
-      content: createButtonContent( gasIconImage, gasString )
+      content: createButtonContent( gasIconImage, gasString, options.buttonWidth ),
+      maxWidth: options.buttonWidth,
+      minWidth: options.buttonWidth
     } );
 
     // set the state when the buttons are pushed
