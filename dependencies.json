@@ -1,5 +1,5 @@
 {
-  "comment": "# states-of-matter 1.0.0-rc.2 Fri Dec 16 2016 16:17:09 GMT-0700 (Mountain Standard Time)",
+  "comment": "# states-of-matter 1.0.0-rc.3 Tue Dec 20 2016 14:16:54 GMT-0700 (Mountain Standard Time)",
   "assert": {
     "sha": "1ea1df653504bc6eeb454051cedc7fb970a10cac",
     "branch": "HEAD"
@@ -57,7 +57,7 @@
     "branch": "HEAD"
   },
   "states-of-matter": {
-    "sha": "2c0fb4c17e1a5a592069ffb0d1e09124f4d21b6c",
+    "sha": "0ecbcc173fb3d3771f13694e26224ef33a8053b5",
     "branch": "1.0"
   },
   "sun": {
