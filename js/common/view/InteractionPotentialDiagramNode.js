@@ -126,6 +126,12 @@ define( function( require ) {
       maxWidth: GREEK_LETTER_MAX_WIDTH,
       boundsMethod: 'accurate' // This seems necessary for good graph layout, and doesn't seem to impact performance.
     } );
+
+    // For some of the string tests, a boundsMethod value of 'accurate' causes undefined bounds, so handle this here.
+    // TODO: Removve this code if the issue https://github.com/phetsims/scenery/issues/595 is addressed.
+    if ( isNaN( this.epsilonLabel.width ) || isNaN( this.epsilonLabel.height ) ) {
+      this.epsilonLabel.boundsMethod = 'hybrid';
+    }
     this.ljPotentialGraph.addChild( this.epsilonLabel );
 
     this.sigmaLabel = new Text( sigmaString, {
