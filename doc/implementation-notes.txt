@@ -1,23 +1,32 @@
 Implementation Notes
+====================
 
-This repo contains the code for three simulations: States of Matter, States of Matter Basics, and Atomic Interactions.
+This repo contains the bulk of the code for three simulations: States of Matter, States of Matter Basics, and Atomic
+Interactions.
 
-This was ported from a Java simulation, so some elements of the code look quite "Javaesque".  For example, there are a
-number of getter/setter methods that would probably be done using direct access if this had originally been a
-JavaScript sim.  There are also a lot of places where inheritance is used that probably wouldn't be done in this way
-in a started-from-scratch JavaScript sim.
+The code was ported from a Java simulation, and as a result some portions look quite "Javaesque".  For example, there
+are a number of getter/setter methods that would probably wouldn't exist if this had originally been a JavaScript sim -
+the values would just be accessed directly. There are also a number of places where inheritance is used that probably
+wouldn't be done this way in a started-from-scratch JavaScript simulation.
 
-The code was ported by Actual Concepts initially, then PhET took it over.  Due to this, there is some variation in the
-coding style and adherence to coding standards.
+A strategy pattern is used in the primary model - MultipleParticleModel - for the objects that set the initial position
+for the various phases and that update the particle positions at each time step.  This allowed us to use a single
+model for all substances and switch out the "phase state changers" and the "molecule forces and motion calculators".
 
 So that the code could be written in a general way, there are a lot of places where the term 'molecule' is used where
 the associated element could be either a multi-atom molecule or a single atom.
 
-There is a construct that contains the data for all of the molecules being simulated at a given moment.  It is arranged
-as a set of arrays with all of the data for all of the molecules, as opposed to an array of molecule objects, each of
-which has its own data.  This was done this way in the Java version because the performance was significantly better.
-We retained this approach for the JavaScript version.  It's possible that the performance would have been as good for
-and array of objects.
+There is a data structure called MoleculeDataSet that contains the position and motion data for all of the molecules
+being simulated at a given moment.  It is arranged as a set of arrays with all of the data for all of the molecules, as
+opposed to an array of molecule objects, each of which has its own data.  This was done in this way in the Java version
+because the performance was significantly better. We retained this approach for the JavaScript version.  It's possible
+that the performance would have been as good for an array of objects.
 
-Visibility annotations are not complete - this was something that was started during development, and we didn't go
-update all portions of the code.
+In areas where optimal performance is needed, C-style loop structure were used in order to avoid the creation of
+closures.
+
+A CanvasNode was used to render the particles.  We were able to get adequate performance this way.  If better
+performance is needed at some point, WebGL could potentially be used.
+
+The code was ported by Actual Concepts initially, then PhET took it over.  Due to this, there is some variation in the
+coding style and adherence to PhET's coding standards.
