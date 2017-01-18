@@ -23,6 +23,7 @@ define( function( require ) {
   /**
    * @param {Property.<boolean>} playingProperty
    * @param {function} stepFunction
+   * @param {Object} options
    * @constructor
    */
   function SOMPlayPauseStepControl( playingProperty, stepFunction, options ) {
