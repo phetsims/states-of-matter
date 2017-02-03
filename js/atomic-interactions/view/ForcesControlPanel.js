@@ -118,7 +118,7 @@ define( function( require ) {
     };
 
     // compute the maximum item width
-    var widestItem = _.max( [ hideForcesText, totalForceText, attractiveText, vanderwaalsText, repulsiveText,
+    var widestItem = _.maxBy( [ hideForcesText, totalForceText, attractiveText, vanderwaalsText, repulsiveText,
       electronOverlapText ], function( item ) {
       return item.label.width + ( ( item.icon ) ? item.icon.width + ICON_PADDING : 0 );
     } );

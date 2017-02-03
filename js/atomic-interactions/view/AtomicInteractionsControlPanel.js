@@ -255,7 +255,7 @@ define( function( require ) {
       };
 
       // compute the maximum item width
-      var widestLabelAndIconSpec = _.max( [ neon, argon, adjustableAttraction, titleText ], function( item ) {
+      var widestLabelAndIconSpec = _.maxBy( [ neon, argon, adjustableAttraction, titleText ], function( item ) {
         return item.label.width + ( ( item.icon ) ? item.icon.width : 0 );
       } );
       maxLabelWidth = widestLabelAndIconSpec.label.width + ( ( widestLabelAndIconSpec.icon ) ? widestLabelAndIconSpec.icon.width : 0 );
