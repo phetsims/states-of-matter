@@ -22,7 +22,6 @@ define( function( require ) {
   var projectorModeString = require( 'string!STATES_OF_MATTER/projectorMode' );
 
   /**
-   *
    * @param { Property<boolean> } projectorModeProperty
    * @constructor
    */
@@ -43,7 +42,8 @@ define( function( require ) {
     VBox.call( this, _.extend( {
       children: children,
       spacing: OptionsDialog.DEFAULT_SPACING,
-      align: 'left'
+      align: 'left',
+      maxWidth: 350 // empirically determined to span no more than roughly 1/2 of the screen
     } ) );
   }
 
