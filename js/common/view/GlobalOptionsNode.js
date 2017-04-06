@@ -21,6 +21,9 @@ define( function( require ) {
   // strings
   var projectorModeString = require( 'string!STATES_OF_MATTER/projectorMode' );
 
+  // constants
+  var MAX_CHECKBOX_TEXT_WIDTH = 350;
+
   /**
    * @param { Property<boolean> } projectorModeProperty
    * @constructor
@@ -36,14 +39,15 @@ define( function( require ) {
       }
     } );
 
-    children.push( new CheckBox( new Text( projectorModeString, { font: OptionsDialog.DEFAULT_FONT } ),
-      projectorModeProperty, {} ) );
+    children.push( new CheckBox(
+      new Text( projectorModeString, { font: OptionsDialog.DEFAULT_FONT, maxWidth: MAX_CHECKBOX_TEXT_WIDTH } ),
+      projectorModeProperty
+    ) );
 
     VBox.call( this, _.extend( {
       children: children,
       spacing: OptionsDialog.DEFAULT_SPACING,
-      align: 'left',
-      maxWidth: 350 // empirically determined to span no more than roughly 1/2 of the screen
+      align: 'left'
     } ) );
   }
 
