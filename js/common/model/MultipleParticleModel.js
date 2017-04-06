@@ -305,7 +305,7 @@ define( function( require ) {
     /**
      * Get the pressure value which is being calculated by the model and is not adjusted to represent any "real" units
      * (such as atmospheres).
-     * @return {number}
+     * @returns {number}
      * @public
      */
     getModelPressure: function() {

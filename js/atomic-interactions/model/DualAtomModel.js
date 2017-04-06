@@ -277,7 +277,7 @@ define( function( require ) {
     /**
      * Get the value of the sigma parameter that is being used for the motion calculations.  If the atoms are the same,
      * it will be the diameter of one atom.  If they are not, it will be a function of the diameters.
-     * @return {number}
+     * @returns {number}
      * @public
      */
     getSigma: function() {

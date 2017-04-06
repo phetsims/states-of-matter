@@ -223,7 +223,7 @@ define( function( require ) {
      * @param {Vector2} moleculeVelocity
      * @param {number} moleculeRotationRate
      * @param {boolean} insideContainer
-     * @return {boolean} true if able to add, false if not.
+     * @returns {boolean} true if able to add, false if not.
      * @public
      */
     addMolecule: function( atomPositions, moleculeCenterOfMassPosition, moleculeVelocity, moleculeRotationRate, insideContainer ) {

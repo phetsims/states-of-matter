@@ -61,7 +61,7 @@ define( function( require ) {
      * Do a linear search for a location that is suitably far away enough from all other molecules.  This is generally
      * used when the attempt to place a molecule at a random location fails.  This is expensive in terms of
      * computational power, and should thus be used sparingly.
-     * @return {Vector2}
+     * @returns {Vector2}
      * @private
      */
     findOpenMoleculeLocation: function() {

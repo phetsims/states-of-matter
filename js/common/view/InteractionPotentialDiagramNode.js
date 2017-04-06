@@ -340,7 +340,7 @@ define( function( require ) {
     /**
      * Calculate the Lennard-Jones potential for the given distance.
      * @param {number} radius
-     * @return {number}
+     * @returns {number}
      * @public
      */
     calculateLennardJonesPotential: function( radius ) {

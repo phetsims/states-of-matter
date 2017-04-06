@@ -82,7 +82,7 @@ define( function( require ) {
     /**
      * Calculate only the repulsive component of the Lennard-Jones force for the specified distance.
      * @param {number} distance - Distance between interacting molecules in picometers.
-     * @return {number} Force in newtons.
+     * @returns {number} Force in newtons.
      * @public
      */
     calculateRepulsiveLjForce: function( distance ) {
@@ -92,7 +92,7 @@ define( function( require ) {
     /**
      * Calculate only the attractive component of the Lennard-Jones force for the specified distance.
      * @param {number} distance - Distance between interacting molecules in picometers.
-     * @return {number} - Force in newtons.
+     * @returns {number} - Force in newtons.
      * @public
      */
     calculateAttractiveLjForce: function( distance ) {
@@ -102,7 +102,7 @@ define( function( require ) {
     /**
      * Calculate the distance at which the force is 0 because the attractive and repulsive forces are balanced.  Note
      * that this is where the potential energy is at a minimum.
-     * @return {number} - Distance where force is 0 (or very close) in picometers.
+     * @returns {number} - Distance where force is 0 (or very close) in picometers.
      * @public
      */
     calculateMinimumForceDistance: function() {
