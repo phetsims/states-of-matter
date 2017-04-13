@@ -1,5 +1,5 @@
 {
-  "comment": "# states-of-matter 1.0.1 Fri Apr 07 2017 17:44:12 GMT-0600 (MDT)",
+  "comment": "# states-of-matter 1.0.1 Thu Apr 13 2017 14:49:00 GMT-0600 (MDT)",
   "assert": {
     "sha": "1ea1df653504bc6eeb454051cedc7fb970a10cac",
     "branch": "HEAD"
@@ -9,12 +9,12 @@
     "branch": "HEAD"
   },
   "brand": {
-    "sha": "41d9b92adef21c5d626551a3644a09b1700b84d7",
-    "branch": "HEAD"
+    "sha": "2c7dc287c75f020db24637a240b597c078a29711",
+    "branch": "states-of-matter-1.0"
   },
   "chipper": {
-    "sha": "c231a50ce429928eeb2a5666f0d08d4767b49136",
-    "branch": "HEAD"
+    "sha": "c18236bfcb2e49855f0dc1a7a4ede626881049f3",
+    "branch": "states-of-matter-1.0"
   },
   "dot": {
     "sha": "a014950f7aa5a27f4e053138dac562e6fa3b3e22",
@@ -37,8 +37,8 @@
     "branch": "HEAD"
   },
   "phetcommon": {
-    "sha": "afb66c63430bc02d05f60eeb090afa9929325ec8",
-    "branch": "HEAD"
+    "sha": "8d21b38f17701a8adf110b9c0550f18604b202aa",
+    "branch": "states-of-matter-1.0"
   },
   "query-string-machine": {
     "sha": "b38c3c253f61e068339ee6f3e0de958dd68cc2e1",
@@ -57,7 +57,7 @@
     "branch": "HEAD"
   },
   "states-of-matter": {
-    "sha": "91e6c449c648178d0b46623763d41f4e37d32d75",
+    "sha": "1b71c018d9aa70911e6866e0878538621a6bd059",
     "branch": "1.0"
   },
   "sun": {
