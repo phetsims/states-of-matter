@@ -1,5 +1,5 @@
 {
-  "comment": "# states-of-matter 1.0.1 Thu Apr 13 2017 21:34:02 GMT-0600 (MDT)",
+  "comment": "# states-of-matter 1.0.2-rc.1 Thu Apr 13 2017 23:01:04 GMT-0600 (MDT)",
   "assert": {
     "sha": "1ea1df653504bc6eeb454051cedc7fb970a10cac",
     "branch": "HEAD"
@@ -38,7 +38,7 @@
   },
   "phetcommon": {
     "sha": "4c738814b597a0dac314822b13087d7d2baa6311",
-    "branch": "states-of-matter-1.0"
+    "branch": "HEAD"
   },
   "query-string-machine": {
     "sha": "b38c3c253f61e068339ee6f3e0de958dd68cc2e1",
@@ -57,7 +57,7 @@
     "branch": "HEAD"
   },
   "states-of-matter": {
-    "sha": "e785a68aaa6125b3302f30e239c7ad4cf6382d07",
+    "sha": "a365879ab08668c4c2a4e3810a838f7724ecfeb7",
     "branch": "1.0"
   },
   "sun": {
