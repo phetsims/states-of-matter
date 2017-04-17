@@ -7,8 +7,7 @@
     "url": "https://github.com/phetsims/states-of-matter.git"
   },
   "devDependencies": {
-    "grunt": "~1.0.0",
-    "grunt-eslint": "~19.0.0"
+    "grunt": "~1.0.0"
   },
   "phet": {
     "requirejsNamespace": "STATES_OF_MATTER",
