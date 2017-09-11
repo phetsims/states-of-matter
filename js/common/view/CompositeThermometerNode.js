@@ -17,15 +17,15 @@ define( function( require ) {
   var Panel = require( 'SUN/Panel' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Property = require( 'AXON/Property' );
+  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var Text = require( 'SCENERY/nodes/Text' );
   var ThermometerNode = require( 'SCENERY_PHET/ThermometerNode' );
-  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var Util = require( 'DOT/Util' );
   var VBox = require( 'SCENERY/nodes/VBox' );
 
   // strings
-  var kelvinUnitsString = require( 'string!STATES_OF_MATTER/kelvinUnits' );
   var celsiusUnitsString = require( 'string!STATES_OF_MATTER/celsiusUnits' );
+  var kelvinUnitsString = require( 'string!STATES_OF_MATTER/kelvinUnits' );
 
   // constants
   var MAX_LENGTH_TEMPERATURE_TEXT = '99999 ' + celsiusUnitsString;

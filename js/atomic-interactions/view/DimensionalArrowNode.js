@@ -9,9 +9,9 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var ArrowShape = require( 'SCENERY_PHET/ArrowShape' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Path = require( 'SCENERY/nodes/Path' );
-  var ArrowShape = require( 'SCENERY_PHET/ArrowShape' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var Vector2 = require( 'DOT/Vector2' );
 

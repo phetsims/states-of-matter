@@ -26,13 +26,13 @@ define( function( require ) {
   var VStrut = require( 'SCENERY/nodes/VStrut' );
 
   //strings
+  var attractiveString = require( 'string!STATES_OF_MATTER/attractive' );
+  var electronOverlapString = require( 'string!STATES_OF_MATTER/electronOverlap' );
   var forcesString = require( 'string!STATES_OF_MATTER/forces' );
   var hideForcesString = require( 'string!STATES_OF_MATTER/hideForces' );
-  var totalForceString = require( 'string!STATES_OF_MATTER/totalForce' );
-  var attractiveString = require( 'string!STATES_OF_MATTER/attractive' );
   var repulsiveString = require( 'string!STATES_OF_MATTER/repulsive' );
+  var totalForceString = require( 'string!STATES_OF_MATTER/totalForce' );
   var vanderwaalsString = require( 'string!STATES_OF_MATTER/vanderwaals' );
-  var electronOverlapString = require( 'string!STATES_OF_MATTER/electronOverlap' );
 
   // constants
   var TEXT_LABEL_MAX_WIDTH = 130; // max width of text label in the panel

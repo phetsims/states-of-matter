@@ -28,9 +28,9 @@ define( function( require ) {
   // strings
   var distanceBetweenAtomsString = require( 'string!STATES_OF_MATTER/distanceBetweenAtoms' );
   var distanceBetweenMoleculesString = require( 'string!STATES_OF_MATTER/distanceBetweenMolecules' );
+  var epsilonString = require( 'string!STATES_OF_MATTER/epsilon' );
   var potentialEnergyString = require( 'string!STATES_OF_MATTER/potentialEnergy' );
   var sigmaString = require( 'string!STATES_OF_MATTER/sigma' );
-  var epsilonString = require( 'string!STATES_OF_MATTER/epsilon' );
 
   // Constant that controls the range of data that is graphed.
   var GRAPH_X_RANGE = 1300; // in picometers

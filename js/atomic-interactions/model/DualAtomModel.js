@@ -10,18 +10,18 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var AtomFactory = require( 'STATES_OF_MATTER/common/model/AtomFactory' );
+  var AtomPair = require( 'STATES_OF_MATTER/atomic-interactions/model/AtomPair' );
+  var AtomType = require( 'STATES_OF_MATTER/common/model/AtomType' );
   var BondingState = require( 'STATES_OF_MATTER/atomic-interactions/model/BondingState' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var Property = require( 'AXON/Property' );
-  var Vector2 = require( 'DOT/Vector2' );
-  var LjPotentialCalculator = require( 'STATES_OF_MATTER/common/model/LjPotentialCalculator' );
   var InteractionStrengthTable = require( 'STATES_OF_MATTER/common/model/InteractionStrengthTable' );
+  var LjPotentialCalculator = require( 'STATES_OF_MATTER/common/model/LjPotentialCalculator' );
+  var Property = require( 'AXON/Property' );
   var SigmaTable = require( 'STATES_OF_MATTER/common/model/SigmaTable' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
-  var AtomType = require( 'STATES_OF_MATTER/common/model/AtomType' );
-  var AtomFactory = require( 'STATES_OF_MATTER/common/model/AtomFactory' );
-  var AtomPair = require( 'STATES_OF_MATTER/atomic-interactions/model/AtomPair' );
+  var Vector2 = require( 'DOT/Vector2' );
 
   // constants
   var BONDED_OSCILLATION_PROPORTION = 0.06; // Proportion of atom radius.

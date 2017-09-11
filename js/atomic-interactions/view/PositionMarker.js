@@ -16,8 +16,8 @@ define( function( require ) {
   var Color = require( 'SCENERY/util/Color' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Node = require( 'SCENERY/nodes/Node' );
-  var ShadedSphereNode = require( 'SCENERY_PHET/ShadedSphereNode' );
   var RadialGradient = require( 'SCENERY/util/RadialGradient' );
+  var ShadedSphereNode = require( 'SCENERY_PHET/ShadedSphereNode' );
   var Shape = require( 'KITE/Shape' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 

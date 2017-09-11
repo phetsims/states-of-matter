@@ -19,8 +19,8 @@ define( function( require ) {
   var Node = require( 'SCENERY/nodes/Node' );
   var Panel = require( 'SUN/Panel' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
-  var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var RadioButtonGroup = require( 'SUN/buttons/RadioButtonGroup' );
+  var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var StatesOfMatterColorProfile = require( 'STATES_OF_MATTER/common/view/StatesOfMatterColorProfile' );
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
@@ -29,15 +29,15 @@ define( function( require ) {
   var VBox = require( 'SCENERY/nodes/VBox' );
 
   // strings
-  var neonString = require( 'string!STATES_OF_MATTER/neon' );
-  var weakString = require( 'string!STATES_OF_MATTER/weak' );
-  var strongString = require( 'string!STATES_OF_MATTER/strong' );
-  var argonString = require( 'string!STATES_OF_MATTER/argon' );
-  var waterString = require( 'string!STATES_OF_MATTER/water' );
-  var diatomicOxygenString = require( 'string!STATES_OF_MATTER/diatomicOxygen' );
   var adjustableAttractionString = require( 'string!STATES_OF_MATTER/adjustableAttraction' );
+  var argonString = require( 'string!STATES_OF_MATTER/argon' );
   var atomsAndMoleculesString = require( 'string!STATES_OF_MATTER/AtomsAndMolecules' );
+  var diatomicOxygenString = require( 'string!STATES_OF_MATTER/diatomicOxygen' );
   var interactionStrengthWithSymbolString = require( 'string!STATES_OF_MATTER/interactionStrengthWithSymbol' );
+  var neonString = require( 'string!STATES_OF_MATTER/neon' );
+  var strongString = require( 'string!STATES_OF_MATTER/strong' );
+  var waterString = require( 'string!STATES_OF_MATTER/water' );
+  var weakString = require( 'string!STATES_OF_MATTER/weak' );
 
   // constants
   var INSET = 10;

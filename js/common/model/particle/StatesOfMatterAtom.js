@@ -10,9 +10,9 @@ define( function( require ) {
 
   // modules
   var inherit = require( 'PHET_CORE/inherit' );
-  var Vector2 = require( 'DOT/Vector2' );
   var Property = require( 'AXON/Property' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  var Vector2 = require( 'DOT/Vector2' );
 
   /**
    * @param {number} x - x position in picometers

@@ -9,8 +9,8 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var AtomAndMoleculeIconFactory = require( 'STATES_OF_MATTER/common/view/AtomAndMoleculeIconFactory' );
   var AquaRadioButton = require( 'SUN/AquaRadioButton' );
+  var AtomAndMoleculeIconFactory = require( 'STATES_OF_MATTER/common/view/AtomAndMoleculeIconFactory' );
   var AtomPair = require( 'STATES_OF_MATTER/atomic-interactions/model/AtomPair' );
   var Dimension2 = require( 'DOT/Dimension2' );
   var HBox = require( 'SCENERY/nodes/HBox' );
@@ -33,20 +33,20 @@ define( function( require ) {
   var pushPinImg = require( 'image!STATES_OF_MATTER/push-pin.png' );
 
   // strings
-  var neonString = require( 'string!STATES_OF_MATTER/neon' );
-  var argonString = require( 'string!STATES_OF_MATTER/argon' );
-  var oxygenString = require( 'string!STATES_OF_MATTER/oxygen' );
   var adjustableAttractionString = require( 'string!STATES_OF_MATTER/adjustableAttraction' );
-  var customAttractionString = require( 'string!STATES_OF_MATTER/customAttraction' );
-  var atomsString = require( 'string!STATES_OF_MATTER/Atoms' );
-  var pinnedString = require( 'string!STATES_OF_MATTER/pinned' );
-  var movingString = require( 'string!STATES_OF_MATTER/moving' );
+  var argonString = require( 'string!STATES_OF_MATTER/argon' );
   var atomDiameterString = require( 'string!STATES_OF_MATTER/atomDiameter' );
+  var atomsString = require( 'string!STATES_OF_MATTER/Atoms' );
+  var customAttractionString = require( 'string!STATES_OF_MATTER/customAttraction' );
   var interactionStrengthString = require( 'string!STATES_OF_MATTER/interactionStrength' );
-  var smallString = require( 'string!STATES_OF_MATTER/small' );
   var largeString = require( 'string!STATES_OF_MATTER/large' );
-  var weakString = require( 'string!STATES_OF_MATTER/weak' );
+  var movingString = require( 'string!STATES_OF_MATTER/moving' );
+  var neonString = require( 'string!STATES_OF_MATTER/neon' );
+  var oxygenString = require( 'string!STATES_OF_MATTER/oxygen' );
+  var pinnedString = require( 'string!STATES_OF_MATTER/pinned' );
+  var smallString = require( 'string!STATES_OF_MATTER/small' );
   var strongString = require( 'string!STATES_OF_MATTER/strong' );
+  var weakString = require( 'string!STATES_OF_MATTER/weak' );
 
   // constants
   var NORMAL_TEXT_FONT = new PhetFont( 12 );

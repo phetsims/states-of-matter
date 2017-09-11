@@ -25,11 +25,11 @@ define( function( require ) {
   var Text = require( 'SCENERY/nodes/Text' );
 
   // strings
-  var neonString = require( 'string!STATES_OF_MATTER/neon' );
   var argonString = require( 'string!STATES_OF_MATTER/argon' );
-  var waterString = require( 'string!STATES_OF_MATTER/water' );
-  var diatomicOxygenString = require( 'string!STATES_OF_MATTER/diatomicOxygen' );
   var atomsAndMoleculesString = require( 'string!STATES_OF_MATTER/AtomsAndMolecules' );
+  var diatomicOxygenString = require( 'string!STATES_OF_MATTER/diatomicOxygen' );
+  var neonString = require( 'string!STATES_OF_MATTER/neon' );
+  var waterString = require( 'string!STATES_OF_MATTER/water' );
 
   // constants
   var DEFAULT_WIDTH = 160;

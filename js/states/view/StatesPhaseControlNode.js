@@ -24,9 +24,9 @@ define( function( require ) {
   var VBox = require( 'SCENERY/nodes/VBox' );
 
   // strings
-  var solidString = require( 'string!STATES_OF_MATTER/Solid' );
-  var liquidString = require( 'string!STATES_OF_MATTER/Liquid' );
   var gasString = require( 'string!STATES_OF_MATTER/Gas' );
+  var liquidString = require( 'string!STATES_OF_MATTER/Liquid' );
+  var solidString = require( 'string!STATES_OF_MATTER/Solid' );
 
   // images
   var gasIconImage = require( 'image!STATES_OF_MATTER/gas-icon.png' );

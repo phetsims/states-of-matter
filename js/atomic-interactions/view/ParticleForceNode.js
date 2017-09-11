@@ -9,10 +9,10 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var inherit = require( 'PHET_CORE/inherit' );
-  var ParticleNode = require( 'STATES_OF_MATTER/atomic-interactions/view/ParticleNode' );
   var Color = require( 'SCENERY/util/Color' );
   var DimensionalArrowNode = require( 'STATES_OF_MATTER/atomic-interactions/view/DimensionalArrowNode' );
+  var inherit = require( 'PHET_CORE/inherit' );
+  var ParticleNode = require( 'STATES_OF_MATTER/atomic-interactions/view/ParticleNode' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   // The following constants control some of the aspects of the appearance of the force arrows.  The values were

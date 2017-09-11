@@ -11,12 +11,12 @@ define( function( require ) {
 
   // modules
   var inherit = require( 'PHET_CORE/inherit' );
-  var Screen = require( 'JOIST/Screen' );
-  var StatesScreenView = require( 'STATES_OF_MATTER/states/view/StatesScreenView' );
   var MultipleParticleModel = require( 'STATES_OF_MATTER/common/model/MultipleParticleModel' );
+  var Screen = require( 'JOIST/Screen' );
   var StatesIcon = require( 'STATES_OF_MATTER/states/StatesIcon' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var StatesOfMatterColorProfile = require( 'STATES_OF_MATTER/common/view/StatesOfMatterColorProfile' );
+  var StatesScreenView = require( 'STATES_OF_MATTER/states/view/StatesScreenView' );
 
   // strings
   var statesString = require( 'string!STATES_OF_MATTER/states' );

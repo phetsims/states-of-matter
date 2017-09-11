@@ -11,9 +11,9 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var inherit = require( 'PHET_CORE/inherit' );
   var AbstractVerletAlgorithm = require( 'STATES_OF_MATTER/common/model/engine/AbstractVerletAlgorithm' );
   var DiatomicAtomPositionUpdater = require( 'STATES_OF_MATTER/common/model/engine/DiatomicAtomPositionUpdater' );
+  var inherit = require( 'PHET_CORE/inherit' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   /**

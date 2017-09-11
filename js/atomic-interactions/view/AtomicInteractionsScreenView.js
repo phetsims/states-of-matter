@@ -24,19 +24,19 @@ define( function( require ) {
   var PushPinNode = require( 'STATES_OF_MATTER/atomic-interactions/view/PushPinNode' );
   var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
   var ScreenView = require( 'JOIST/ScreenView' );
-  var Text = require( 'SCENERY/nodes/Text' );
-  var TextPushButton = require( 'SUN/buttons/TextPushButton' );
-  var VBox = require( 'SCENERY/nodes/VBox' );
-  var Vector2 = require( 'DOT/Vector2' );
   var SOMPlayPauseStepControl = require( 'STATES_OF_MATTER/common/view/SOMPlayPauseStepControl' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var StatesOfMatterColorProfile = require( 'STATES_OF_MATTER/common/view/StatesOfMatterColorProfile' );
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
+  var Text = require( 'SCENERY/nodes/Text' );
+  var TextPushButton = require( 'SUN/buttons/TextPushButton' );
+  var VBox = require( 'SCENERY/nodes/VBox' );
+  var Vector2 = require( 'DOT/Vector2' );
 
   // strings
   var normalString = require( 'string!STATES_OF_MATTER/normal' );
-  var slowMotionString = require( 'string!STATES_OF_MATTER/slowMotion' );
   var returnAtomString = require( 'string!STATES_OF_MATTER/returnAtom' );
+  var slowMotionString = require( 'string!STATES_OF_MATTER/slowMotion' );
 
   // Constant used to control size of push pin, empirically determined.
   var PUSH_PIN_WIDTH = 20;

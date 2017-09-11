@@ -13,10 +13,10 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var Node = require( 'SCENERY/nodes/Node' );
   var Path = require( 'SCENERY/nodes/Path' );
-  var Shape = require( 'KITE/Shape' );
-  var ZoomButton = require( 'SCENERY_PHET/buttons/ZoomButton' );
   var RectangularButtonView = require( 'SUN/buttons/RectangularButtonView' );
+  var Shape = require( 'KITE/Shape' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  var ZoomButton = require( 'SCENERY_PHET/buttons/ZoomButton' );
 
   // constants
   var MAX_LINES_HORIZONTAL = 13;

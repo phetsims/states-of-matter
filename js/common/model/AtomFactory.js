@@ -10,10 +10,10 @@ define( function( require ) {
 
   // modules
   var ArgonAtom = require( 'STATES_OF_MATTER/common/model/particle/ArgonAtom' );
+  var AtomType = require( 'STATES_OF_MATTER/common/model/AtomType' );
   var ConfigurableStatesOfMatterAtom = require( 'STATES_OF_MATTER/common/model/particle/ConfigurableStatesOfMatterAtom' );
   var NeonAtom = require( 'STATES_OF_MATTER/common/model/particle/NeonAtom' );
   var OxygenAtom = require( 'STATES_OF_MATTER/common/model/particle/OxygenAtom' );
-  var AtomType = require( 'STATES_OF_MATTER/common/model/AtomType' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   // static object (no constructor)

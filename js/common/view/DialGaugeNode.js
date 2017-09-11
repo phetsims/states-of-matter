@@ -11,8 +11,8 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var inherit = require( 'PHET_CORE/inherit' );
   var GaugeNode = require( 'SCENERY_PHET/GaugeNode' );
+  var inherit = require( 'PHET_CORE/inherit' );
   var LinearGradient = require( 'SCENERY/util/LinearGradient' );
   var Node = require( 'SCENERY/nodes/Node' );
   var Path = require( 'SCENERY/nodes/Path' );
@@ -26,8 +26,8 @@ define( function( require ) {
   var Util = require( 'DOT/Util' );
 
   // strings
-  var pressureString = require( 'string!STATES_OF_MATTER/pressure' );
   var pressureOverloadString = require( 'string!STATES_OF_MATTER/pressureOverload' );
+  var pressureString = require( 'string!STATES_OF_MATTER/pressure' );
   var pressureUnitsInAtmString = require( 'string!STATES_OF_MATTER/pressureUnitsInAtm' );
 
   // constants

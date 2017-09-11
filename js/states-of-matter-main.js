@@ -18,8 +18,8 @@ define( function( require ) {
   var StatesScreen = require( 'STATES_OF_MATTER/states/StatesScreen' );
 
   // strings
-  var statesOfMatterTitleString = require( 'string!STATES_OF_MATTER/states-of-matter.title' );
   var interactionString = require( 'string!STATES_OF_MATTER/interaction' );
+  var statesOfMatterTitleString = require( 'string!STATES_OF_MATTER/states-of-matter.title' );
 
   // property that controls projector mode, initial value can be set via a query parameter
   var projectorModeProperty = new Property( phet.chipper.queryParameters.colorProfile === 'projector' );

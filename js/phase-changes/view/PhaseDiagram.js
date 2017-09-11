@@ -16,8 +16,8 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var MultiLineText = require( 'SCENERY_PHET/MultiLineText' );
   var Node = require( 'SCENERY/nodes/Node' );
-  var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Path = require( 'SCENERY/nodes/Path' );
+  var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Shape = require( 'KITE/Shape' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var StatesOfMatterColorProfile = require( 'STATES_OF_MATTER/common/view/StatesOfMatterColorProfile' );
@@ -26,14 +26,14 @@ define( function( require ) {
   var Vector2 = require( 'DOT/Vector2' );
 
   // strings
-  var solidString = require( 'string!STATES_OF_MATTER/solid' );
-  var pressureString = require( 'string!STATES_OF_MATTER/pressure' );
+  var criticalPointString = require( 'string!STATES_OF_MATTER/criticalPoint' );
   var gasString = require( 'string!STATES_OF_MATTER/gas' );
   var liquidString = require( 'string!STATES_OF_MATTER/liquid' );
-  var temperatureString = require( 'string!STATES_OF_MATTER/temperature' );
   var phaseDiagramString = require( 'string!STATES_OF_MATTER/phaseDiagram' );
+  var pressureString = require( 'string!STATES_OF_MATTER/pressure' );
+  var solidString = require( 'string!STATES_OF_MATTER/solid' );
+  var temperatureString = require( 'string!STATES_OF_MATTER/temperature' );
   var triplePointString = require( 'string!STATES_OF_MATTER/triplePoint' );
-  var criticalPointString = require( 'string!STATES_OF_MATTER/criticalPoint' );
 
   // constants that control the size of the canvas.
   var WIDTH = 148;

@@ -11,8 +11,8 @@ define( function( require ) {
   var Node = require( 'SCENERY/nodes/Node' );
   var PlayPauseButton = require( 'SCENERY_PHET/buttons/PlayPauseButton' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  var StepForwardButton = require( 'SCENERY_PHET/buttons/StepForwardButton' );
   var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
+  var StepForwardButton = require( 'SCENERY_PHET/buttons/StepForwardButton' );
 
   // constants
   var TOUCH_AREA_DILATION = 4;
