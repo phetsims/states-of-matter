@@ -1,4 +1,4 @@
-// Copyright 2016, University of Colorado Boulder
+// Copyright 2017, University of Colorado Boulder
 
 /**
  * combination of Play/Pause and step buttons

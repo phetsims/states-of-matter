@@ -1,4 +1,4 @@
-// Copyright 2014-2015, University of Colorado Boulder
+// Copyright 2014-2016, University of Colorado Boulder
 
 /**
  * This class represents creates a graphical display that is meant to look like a bicycle pump.  It allows the user to

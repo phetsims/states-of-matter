@@ -1,4 +1,4 @@
-// Copyright 2014-2015, University of Colorado Boulder
+// Copyright 2014-2017, University of Colorado Boulder
 
 /**
  * This class represents a node that displays a dial gauge, which is a circular instrument that can be used to portray
