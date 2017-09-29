@@ -45,9 +45,6 @@ require.config( {
     // this sim
     STATES_OF_MATTER: '.'
   },
-  shim: {
-    underscore: { exports: '_' }
-  },
 
   // optional cache buster to make browser refresh load all included scripts, can be disabled with ?cacheBuster=false
   urlArgs: phet.chipper.getCacheBusterArgs()
