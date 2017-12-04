@@ -13,6 +13,11 @@
     "requirejsNamespace": "STATES_OF_MATTER",
     "phetLibs": [
       "nitroglycerin"
-    ]
+    ],
+    "runnable": true,
+    "supportedBrands": [
+      "phet"
+    ],
+    "simulation": true
   }
 }
