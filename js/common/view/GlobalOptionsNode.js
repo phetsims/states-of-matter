@@ -10,7 +10,7 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var CheckBox = require( 'SUN/CheckBox' );
+  var Checkbox = require( 'SUN/Checkbox' );
   var inherit = require( 'PHET_CORE/inherit' );
   var OptionsDialog = require( 'JOIST/OptionsDialog' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
@@ -39,7 +39,7 @@ define( function( require ) {
       }
     } );
 
-    children.push( new CheckBox(
+    children.push( new Checkbox(
       new Text( projectorModeString, { font: OptionsDialog.DEFAULT_FONT, maxWidth: MAX_CHECKBOX_TEXT_WIDTH } ),
       projectorModeProperty
     ) );
