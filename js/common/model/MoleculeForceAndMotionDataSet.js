@@ -60,6 +60,7 @@ define( function( require ) {
     // Set default values.
     if ( atomsPerMolecule === 1 ) {
       this.moleculeMass = 1;
+      this.moleculeRotationalInertia = 0;
     }
     else if ( atomsPerMolecule === 2 ) {
       this.moleculeMass = 2; // Two molecules, assumed to be the same.
@@ -77,6 +78,47 @@ define( function( require ) {
   statesOfMatter.register( 'MoleculeForceAndMotionDataSet', MoleculeForceAndMotionDataSet );
 
   return inherit( Object, MoleculeForceAndMotionDataSet, {
+
+    /**
+     * get the total kinetic energy of the particles in this data set
+     */
+    getTotalKineticEnergy: function(){
+
+      var translationalKineticEnergy = 0;
+      var rotationalKineticEnergy = 0;
+      var particleMass = this.moleculeMass;
+      var numberOfParticles = this.getNumberOfMolecules();
+      var i;
+
+      if ( this.atomsPerMolecule > 1 ) {
+
+        // Include rotational inertia in the calculation.
+        var rotationalInertia = this.getMoleculeRotationalInertia();
+        for ( i = 0; i < numberOfParticles; i++ ) {
+          translationalKineticEnergy += 0.5 * particleMass *
+                                        ( Math.pow( this.moleculeVelocities[ i ].x, 2 ) +
+                                          Math.pow( this.moleculeVelocities[ i ].y, 2 ) );
+          rotationalKineticEnergy += 0.5 * rotationalInertia * Math.pow( this.moleculeRotationRates[ i ], 2 );
+        }
+      }
+      else {
+        for ( i = 0; i < this.getNumberOfMolecules(); i++ ) {
+
+          // For single-atom molecules only translational kinetic energy is used.
+          translationalKineticEnergy += 0.5 * particleMass *
+                                        ( Math.pow( this.moleculeVelocities[ i ].x, 2 ) +
+                                          Math.pow( this.moleculeVelocities[ i ].y, 2 ) );
+        }
+      }
+
+      return translationalKineticEnergy + rotationalKineticEnergy;
+    },
+
+    getTemperature: function(){
+
+      // The formula for kinetic energy in an ideal gas is used here with Boltzmann's constant normalized, i.e. equal to 1.
+      return ( 2 / 3 ) * this.getTotalKineticEnergy() / this.getNumberOfMolecules();
+    },
 
     /**
      * @returns {number}
@@ -100,6 +142,20 @@ define( function( require ) {
      */
     getMoleculeMass: function() {
       return this.moleculeMass;
+    },
+
+    /**
+     * get the kinetic energy of the specified molecule
+     * @param moleculeIndex
+     */
+    getMoleculeKineticEnergy: function( moleculeIndex ){
+      assert && assert ( moleculeIndex >= 0 && moleculeIndex < this.numberOfMolecules );
+      var translationalKineticEnergy = 0.5 * this.moleculeMass *
+                                    ( Math.pow( this.moleculeVelocities[ moleculeIndex ].x, 2 ) +
+                                      Math.pow( this.moleculeVelocities[ moleculeIndex ].y, 2 ) );
+      var rotationalKineticEnergy = 0.5 * this.moleculeRotationalInertia *
+                                    Math.pow( this.moleculeRotationRates[ moleculeIndex ], 2 );
+      return translationalKineticEnergy + rotationalKineticEnergy;
     },
 
     /**

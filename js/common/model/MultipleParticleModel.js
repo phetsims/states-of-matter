@@ -36,6 +36,7 @@ define( function( require ) {
   var MonatomicAtomPositionUpdater = require( 'STATES_OF_MATTER/common/model/engine/MonatomicAtomPositionUpdater' );
   var MonatomicPhaseStateChanger = require( 'STATES_OF_MATTER/common/model/engine/MonatomicPhaseStateChanger' );
   var MonatomicVerletAlgorithm = require( 'STATES_OF_MATTER/common/model/engine/MonatomicVerletAlgorithm' );
+  var MovingAverage = require( 'STATES_OF_MATTER/common/model/MovingAverage' );
   var NeonAtom = require( 'STATES_OF_MATTER/common/model/particle/NeonAtom' );
   var ObservableArray = require( 'AXON/ObservableArray' );
   var OxygenAtom = require( 'STATES_OF_MATTER/common/model/particle/OxygenAtom' );
@@ -58,7 +59,7 @@ define( function( require ) {
   var MIN_TEMPERATURE = 0.00001;
   var NOMINAL_GRAVITATIONAL_ACCEL = -0.045;
   var TEMPERATURE_CHANGE_RATE = 0.07; // empirically determined to make temperate change at a reasonable rate
-  var INJECTED_MOLECULE_VELOCITY = 2.0; // in normalized model units per second, empirically determined to look reasonable
+  var INJECTED_MOLECULE_SPEED = 2.0; // in normalized model units per second, empirically determined to look reasonable
   var INJECTED_MOLECULE_ANGLE_SPREAD = Math.PI * 0.25; // in radians, empirically determined to look reasonable
   var INJECTION_POINT_HORIZ_PROPORTION = 0.00;
   var INJECTION_POINT_VERT_PROPORTION = 0.25;
@@ -187,6 +188,9 @@ define( function( require ) {
     this.phaseStateChanger = null;
     this.isoKineticThermostat = null;
     this.andersenThermostat = null;
+
+    // moving average calculator that tracks the average difference between the calculated and target temperatures
+    this.averageTemperatureDifference = new MovingAverage( 10 );
 
     //-----------------------------------------------------------------------------------------------------------------
     // other initialization
@@ -388,6 +392,9 @@ define( function( require ) {
 
       // Reset any time step limits that had kicked in for the previous substance.
       this.maxParticleMoveTimePerStepProperty.reset();
+
+      // Reset the moving average of temperature differences.
+      this.averageTemperatureDifference.reset();
     },
 
     /**
@@ -606,15 +613,20 @@ define( function( require ) {
         return;
       }
 
-      // Introduce a little bit of randomness into the injection angle.
-      var angle = ( phet.joist.random.nextDouble() - 0.5 ) * INJECTED_MOLECULE_ANGLE_SPREAD;
-      var xVel = Math.cos( angle ) * INJECTED_MOLECULE_VELOCITY;
-      var yVel = Math.sin( angle ) * INJECTED_MOLECULE_VELOCITY;
+      // Choose an injection angle with some amount of randomness.
+      var injectionAngle = ( phet.joist.random.nextDouble() - 0.5 ) * INJECTED_MOLECULE_ANGLE_SPREAD;
 
+      // Set the molecule's velocity.
+      var xVel = Math.cos( injectionAngle ) * INJECTED_MOLECULE_SPEED;
+      var yVel = Math.sin( injectionAngle ) * INJECTED_MOLECULE_SPEED;
+
+      // Set the rotational velocity to a random value within a range (will be ignored for single atom cases).
+      var moleculeRotationRate = ( phet.joist.random.nextDouble() - 0.5 ) * ( Math.PI / 4 );
+
+      // Set the position(s) of the atom(s).
       var atomsPerMolecule = this.moleculeDataSet.atomsPerMolecule;
       var moleculeCenterOfMassPosition = new Vector2( this.injectionPointX, this.injectionPointY );
       var moleculeVelocity = new Vector2( xVel, yVel );
-      var moleculeRotationRate = ( phet.joist.random.nextDouble() - 0.5 ) * ( Math.PI / 2 );
       var atomPositions = [];
       for ( var i = 0; i < atomsPerMolecule; i++ ) {
         atomPositions[ i ] = Vector2.ZERO;
@@ -630,6 +642,7 @@ define( function( require ) {
       );
 
       if ( atomsPerMolecule > 1 ) {
+
         // randomize the rotational angle of multi-atom molecules
         this.moleculeDataSet.moleculeRotationAngles[ this.moleculeDataSet.getNumberOfMolecules() - 1 ] =
           phet.joist.random.nextDouble() * 2 * Math.PI;
@@ -882,7 +895,7 @@ define( function( require ) {
         this.updatePressure();
       }
 
-      // Adjust the temperature if needed.
+      // Adjust the temperature set point if needed.
       var currentTemperature = this.temperatureSetPointProperty.get(); // convenience variable
       if ( this.heatingCoolingAmountProperty.get() !== 0 ) {
 
@@ -958,7 +971,7 @@ define( function( require ) {
         return;
       }
 
-      var calculatedTemperature = this.moleculeForceAndMotionCalculator.temperature;
+      var calculatedTemperature = this.moleculeForceAndMotionCalculator.calculatedTemperature;
       var temperatureIsChanging = false;
 
       if ( ( this.heatingCoolingAmountProperty.get() !== 0 ) ||
@@ -966,19 +979,31 @@ define( function( require ) {
         temperatureIsChanging = true;
       }
 
-      if ( this.moleculeForceAndMotionCalculator.lidChangedParticleVelocity || this.particleInjectedThisStep ) {
+      if ( this.particleInjectedThisStep ) {
 
-        // The velocity of one or more particles was changed through interaction with the lid or a new particle was
-        // injected into the container.  Since this can change the total kinetic energy of the particles in the system,
-        // no thermostat is run.  Instead, the temperature is determined by looking at the kinetic energy of the
-        // particles and that value is used to determine the new system temperature set point.  However, sometimes the
-        // calculation can return some unexpected results, probably due to some of the energy being tied up in potential
-        // rather than kinetic energy, so there are some constraints here.
-        // See https://github.com/phetsims/states-of-matter/issues/169 for more information.
-        if ( this.heightChangeThisStep === 0 ||
-             this.heightChangeThisStep > 0 && calculatedTemperature < this.temperatureSetPointProperty.get() ||
+        // A particle was injected this step.  By design, only one can be injected in a single step, so we use the
+        // attributes of the most recently added particle to figure out how much the temperature set point should be
+        // adjusted. No thermostat is run on this step - it will kick in on the next step.
+        var numParticles = this.moleculeDataSet.getNumberOfMolecules();
+        var injectedParticleTemperature = ( 2 / 3 ) * this.moleculeDataSet.getMoleculeKineticEnergy( numParticles - 1 );
+        var newTemperature = this.temperatureSetPointProperty.get() * ( numParticles - 1 ) / numParticles +
+                             injectedParticleTemperature / numParticles;
+        this.setTemperature( newTemperature );
+      }
+      else if ( this.moleculeForceAndMotionCalculator.lidChangedParticleVelocity ) {
+
+        // The velocity of one or more particles was changed through interaction with the lid.  Since this can change
+        // the total kinetic energy of the particles in the system, no thermostat is run.  Instead, the temperature is
+        // determined by looking at the kinetic energy of the particles, and that value is used to determine the new
+        // system temperature set point.  However, sometimes the calculation can return some unexpected results,
+        // probably due to some of the energy being tied up in potential rather than kinetic energy, so there are some
+        // constraints here. See https://github.com/phetsims/states-of-matter/issues/169 for more information.
+        if ( this.heightChangeThisStep > 0 && calculatedTemperature < this.temperatureSetPointProperty.get() ||
              this.heightChangeThisStep < 0 && calculatedTemperature > this.temperatureSetPointProperty.get() ) {
-          this.setTemperature( calculatedTemperature );
+
+          // Set the target temperature to the calculated value adjusted by the average error that has been recorded.
+          // This adjustment is necessary because otherwise big, or strange, temperature changes can occur.
+          this.setTemperature( calculatedTemperature + this.averageTemperatureDifference.average );
         }
 
         // Clear the flag for the next time through.
@@ -987,16 +1012,27 @@ define( function( require ) {
       else if ( temperatureIsChanging ||
                 this.temperatureSetPointProperty.get() > LIQUID_TEMPERATURE ||
                 this.temperatureSetPointProperty.get() < SOLID_TEMPERATURE / 5 ) {
+
         // Use the isokinetic thermostat.
-        this.isoKineticThermostat.adjustTemperature();
+        this.isoKineticThermostat.adjustTemperature( calculatedTemperature );
       }
       else if ( !temperatureIsChanging ) {
+
         // The temperature isn't changing and it is within a certain range where the Andersen thermostat works better.
-        //  This is done for purely visual reasons - it looks better than the isokinetic in these circumstances.
+        // This is done for purely visual reasons - it looks better than the isokinetic in these circumstances.
         this.andersenThermostat.adjustTemperature();
       }
 
       // Note that there will be some circumstances in which no thermostat is run.  This is intentional.
+
+      // Update the average difference between the set point and the calculated temperature, but only if nothing has
+      // happened that may have affected the calculated value or the set point.
+      if ( !temperatureIsChanging && !this.particleInjectedThisStep && !this.lidChangedParticleVelocity ) {
+        this.averageTemperatureDifference.addValue( this.temperatureSetPointProperty.get() - calculatedTemperature );
+      }
+
+      // Keep track of the calculated temperature from this cycle, since it may be needed for the next iteraction.
+      this.temperatureAtPreviousStep = calculatedTemperature;
     },
 
     /**

@@ -50,50 +50,10 @@ define( function( require ) {
   return inherit( Object, IsokineticThermostat, {
 
     /**
+     * @param {number} measuredTemperature - measured temperature of particles, in model units
      * @public
      */
-    adjustTemperature: function() {
-
-      // Calculate the internal temperature of the system from the kinetic energy.
-      var measuredTemperature;
-      var i;
-      var numberOfMolecules = this.moleculeDataSet.getNumberOfMolecules();
-      var centersOfMassKineticEnergy = 0;
-      var particleMass = this.moleculeDataSet.getMoleculeMass();
-
-      if ( this.moleculeDataSet.atomsPerMolecule > 1 ) {
-
-        // Include rotational inertia in the calculation.
-        var rotationalInertia = this.moleculeDataSet.getMoleculeRotationalInertia();
-        var rotationalKineticEnergy = 0;
-        for ( i = 0; i < numberOfMolecules; i++ ) {
-          centersOfMassKineticEnergy += 0.5 * particleMass *
-                                        ( Math.pow( this.moleculeVelocities[ i ].x, 2 ) +
-                                          Math.pow( this.moleculeVelocities[ i ].y, 2 ) );
-          rotationalKineticEnergy += 0.5 * rotationalInertia * Math.pow( this.moleculeRotationRates[ i ], 2 );
-        }
-        measuredTemperature = ( centersOfMassKineticEnergy + rotationalKineticEnergy ) / numberOfMolecules / 1.5;
-      }
-      else {
-        for ( i = 0; i < this.moleculeDataSet.getNumberOfMolecules(); i++ ) {
-
-          // For single-atom molecules, exclude rotational inertia from the calculation.
-          centersOfMassKineticEnergy += 0.5 * particleMass *
-                                        ( Math.pow( this.moleculeVelocities[ i ].x, 2 ) +
-                                          Math.pow( this.moleculeVelocities[ i ].y, 2 ) );
-        }
-        measuredTemperature = centersOfMassKineticEnergy / numberOfMolecules;
-      }
-
-      // Adjust the temperature.
-      this.adjustMeasuredTemperature( measuredTemperature );
-    },
-
-    /**
-     * @param {number} measuredTemperature
-     * @private
-     */
-    adjustMeasuredTemperature: function( measuredTemperature ) {
+    adjustTemperature: function( measuredTemperature ) {
 
       var i;
       var numberOfParticles = this.moleculeDataSet.getNumberOfMolecules();
@@ -104,6 +64,7 @@ define( function( require ) {
         temperatureScaleFactor = Math.sqrt( this.targetTemperature / measuredTemperature );
       }
       else {
+
         // The particles are at absolute zero, so stop all motion.
         temperatureScaleFactor = 0;
       }

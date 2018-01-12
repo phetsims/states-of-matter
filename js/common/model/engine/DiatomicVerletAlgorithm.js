@@ -98,7 +98,7 @@ define( function( require ) {
     },
 
     /**
-     * Update the linear and rotational velocities for the molecules, calculate the total energy, and record the
+     * Update the translational and rotational velocities for the molecules, calculate the total energy, and record the
      * temperature value for the system.
      * @param moleculeDataSet
      * @param timeStep
@@ -119,9 +119,11 @@ define( function( require ) {
       var massInverse = 1 / moleculeDataSet.getMoleculeMass();
       var inertiaInverse = 1 / moleculeDataSet.getMoleculeRotationalInertia();
       var timeStepHalf = timeStep / 2;
-
-      var linearKineticEnergy = 0;
+      var translationalKineticEnergy = 0;
       var rotationalKineticEnergy = 0;
+
+      // Update the velocities and rotation rates based on the forces being exerted on the molecules, then calculate
+      // the kinetic energy of the system.
       for ( var i = 0; i < numberOfMolecules; i++ ) {
         var xVel = moleculeVelocities[ i ].x +
                    timeStepHalf * ( moleculeForces[ i ].x + nextMoleculeForces[ i ].x ) * massInverse;
@@ -130,7 +132,7 @@ define( function( require ) {
         moleculeVelocities[ i ].setXY( xVel, yVel );
         moleculeRotationRates[ i ] += timeStepHalf * ( moleculeTorques[ i ] + nextMoleculeTorques[ i ] ) *
                                       inertiaInverse;
-        linearKineticEnergy += 0.5 * moleculeDataSet.moleculeMass * moleculeVelocities[ i ].magnitudeSquared();
+        translationalKineticEnergy += 0.5 * moleculeDataSet.moleculeMass * moleculeVelocities[ i ].magnitudeSquared();
         rotationalKineticEnergy += 0.5 * moleculeDataSet.moleculeRotationalInertia *
                                    Math.pow( moleculeRotationRates[ i ], 2 );
 
@@ -140,7 +142,7 @@ define( function( require ) {
       }
 
       // Record the calculated temperature.
-      this.temperature = ( linearKineticEnergy + rotationalKineticEnergy ) / numberOfMolecules / 1.5;
+      this.calculatedTemperature = ( 2 / 3 ) * ( translationalKineticEnergy + rotationalKineticEnergy ) / numberOfMolecules;
     }
   } );
 } );

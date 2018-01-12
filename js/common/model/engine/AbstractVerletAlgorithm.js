@@ -45,7 +45,7 @@ define( function( require ) {
 
     // @protected
     this.potentialEnergy = 0;
-    this.temperature = 0;
+    this.calculatedTemperature = 0;
 
     // @public, read-write, flag that indicates whether the lid affected the velocity of one or more particles, set
     // during execution of the Verlet algorithm, must be cleared by the client.

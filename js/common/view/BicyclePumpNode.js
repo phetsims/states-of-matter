@@ -224,6 +224,11 @@ define( function( require ) {
             currentPumpingAmount = 0;
           }
         }
+        else if ( travel > 0 ){
+
+          // This motion is in the non-pumping direction, so reset any accumulated pumping amount.
+          currentPumpingAmount = 0;
+        }
       }
     } ) );
 

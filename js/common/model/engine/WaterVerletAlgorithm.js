@@ -241,11 +241,14 @@ define( function( require ) {
       var moleculeRotationRates = moleculeDataSet.moleculeRotationRates;
       var moleculeTorques = moleculeDataSet.moleculeTorques;
       var nextMoleculeTorques = moleculeDataSet.nextMoleculeTorques;
+      var moleculeMass = moleculeDataSet.getMoleculeMass();
+      var moleculeRotationalInertia = moleculeDataSet.getMoleculeRotationalInertia();
 
       var timeStepHalf = timeStep / 2;
 
-      // Update the velocities and rotation rates and calculate kinetic energy.
-      var centersOfMassKineticEnergy = 0;
+      // Update the velocities and rotation rates based on the forces being exerted on the molecules, then calculate
+      // the kinetic energy of the system.
+      var translationalKineticEnergy = 0;
       var rotationalKineticEnergy = 0;
       for ( var i = 0; i < numberOfMolecules; i++ ) {
         var xVel = moleculeVelocities[ i ].x + timeStepHalf * ( moleculeForces[ i ].x + nextMoleculeForces[ i ].x ) * this.massInverse;
@@ -265,9 +268,8 @@ define( function( require ) {
         moleculeRotationRates[ i ] = rotationRate;
 
         // calculate the kinetic energy
-        centersOfMassKineticEnergy += 0.5 * moleculeDataSet.getMoleculeMass() * moleculeVelocities[ i ].magnitudeSquared();
-        rotationalKineticEnergy += 0.5 * moleculeDataSet.getMoleculeRotationalInertia() *
-                                   moleculeRotationRates[ i ] * moleculeRotationRates[ i ];
+        translationalKineticEnergy += 0.5 * moleculeMass * moleculeVelocities[ i ].magnitudeSquared();
+        rotationalKineticEnergy += 0.5 * moleculeRotationalInertia * moleculeRotationRates[ i ] * moleculeRotationRates[ i ];
 
         // Move the newly calculated forces and torques into the current spots.
         moleculeForces[ i ].setXY( nextMoleculeForces[ i ].x, nextMoleculeForces[ i ].y );
@@ -275,7 +277,8 @@ define( function( require ) {
       }
 
       // Record the calculated temperature.
-      this.temperature = ( centersOfMassKineticEnergy + rotationalKineticEnergy ) / numberOfMolecules / 1.5;
+      // this.calculatedTemperature = ( 2 / 3 ) * ( translationalKineticEnergy + rotationalKineticEnergy ) / numberOfMolecules;
+      this.calculatedTemperature = ( translationalKineticEnergy + rotationalKineticEnergy ) / numberOfMolecules;
     }
   } );
 } );

@@ -21,7 +21,7 @@ define( function( require ) {
 
     // @public
     this.size = size;
-    this.average;
+    this.average = 0;
 
     // @private
     this.initialValue = options.initialValue;

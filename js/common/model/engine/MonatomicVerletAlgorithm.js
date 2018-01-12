@@ -120,9 +120,10 @@ define( function( require ) {
       var atomForces = moleculeDataSet.moleculeForces;
       var nextAtomForces = moleculeDataSet.nextMoleculeForces;
       var timeStepHalf = timeStep / 2;
-      var kineticEnergy = 0;
+      var totalKineticEnergy = 0;
       var velocityVector = this.velocityVector;
 
+      // Update the atom velocities based upon the forces that are acting on them, then calculate the kinetic energy.
       for ( var i = 0; i < numberOfAtoms; i++ ) {
         atomVelocity = atomVelocities[ i ];
         var moleculeForce = atomForces[ i ];
@@ -135,15 +136,14 @@ define( function( require ) {
         }
 
         atomVelocity.set( velocityVector );
-        kineticEnergy += ( ( atomVelocity.x * atomVelocity.x ) +
-                           ( atomVelocity.y * atomVelocity.y ) ) / 2;
+        totalKineticEnergy += ( ( atomVelocity.x * atomVelocity.x ) + ( atomVelocity.y * atomVelocity.y ) ) / 2;
 
         // update to the new force value for the next model step
         moleculeForce.setXY( nextAtomForces[ i ].x, nextAtomForces[ i ].y );
       }
 
       // Update the temperature.
-      this.temperature = kineticEnergy / numberOfAtoms;
+      this.calculatedTemperature = ( 2 / 3 ) * ( totalKineticEnergy / numberOfAtoms );
     }
   } );
 } );
