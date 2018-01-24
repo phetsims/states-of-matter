@@ -34,8 +34,8 @@ define( function( require ) {
   statesOfMatter.register( 'MonatomicPhaseStateChanger', MonatomicPhaseStateChanger );
 
   // Initial positions for liquid phase, which is hard to create algorithmically.  These were created by setting the
-  // appropriate temperature and iterating until a visually accepting configuration was created, then capturing a
-  // snapshot of the state.
+  // appropriate temperature and iterating until a visually acceptable configuration was  emerged, then capturing a
+  // "snapshot" of the state.
   var NEON_LIQUID_INITIAL_STATE = {
     numberOfMolecules: 100,
     atomsPerMolecule: 1,
