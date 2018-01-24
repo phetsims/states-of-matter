@@ -789,12 +789,6 @@ define( function( require ) {
     stepInternal: function( dt ) {
 
       this.particleInjectedThisStep = false;
-      // debugger;
-      if ( window.printTheStuff ){
-        console.log( JSON.stringify( this.moleculeDataSet, function( key, val ) {
-          return typeof val === 'number' ? Number( val.toFixed( 3 ) ) : val;
-        } ) );
-      }
 
       if ( !this.isExplodedProperty.get() ) {
 

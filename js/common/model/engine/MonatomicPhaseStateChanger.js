@@ -1421,46 +1421,16 @@ define( function( require ) {
      * @protected
      */
     setPhaseLiquid: function() {
-
       var dataSetToLoad;
-
       if ( this.multipleParticleModel.substanceProperty.get() === SubstanceType.NEON ) {
         dataSetToLoad = NEON_LIQUID_INITIAL_STATE;
       }
       else if ( this.multipleParticleModel.substanceProperty.get() === SubstanceType.ARGON ) {
         dataSetToLoad = ARGON_LIQUID_INITIAL_STATE;
       }
-      else {
-        assert && assert( false, 'unhandled substance: ' + this.multipleParticleModel.substanceProperty.get() );
-      }
-
-      assert && assert(
-        this.multipleParticleModel.moleculeDataSet.numberOfMolecules = dataSetToLoad.numberOfMolecules,
-        'unexpected number of particles in data set'
-      );
-
+      assert && assert( dataSetToLoad, 'unhandled substance: ' + this.multipleParticleModel.substanceProperty.get() );
+      this.loadSavedState( dataSetToLoad );
       this.multipleParticleModel.setTemperature( StatesOfMatterConstants.LIQUID_TEMPERATURE );
-
-      // Set the initial velocity for each of the atoms based on the new temperature.
-      var numberOfAtoms = this.multipleParticleModel.moleculeDataSet.numberOfAtoms;
-      var moleculeCenterOfMassPositions = this.multipleParticleModel.moleculeDataSet.moleculeCenterOfMassPositions;
-      var moleculeVelocities = this.multipleParticleModel.moleculeDataSet.moleculeVelocities;
-      var moleculesInsideContainer = this.multipleParticleModel.moleculeDataSet.insideContainer;
-
-      for ( var i = 0; i < numberOfAtoms; i++ ) {
-
-        moleculeCenterOfMassPositions[ i ].setXY(
-          dataSetToLoad.moleculeCenterOfMassPositions[ i ].x,
-          dataSetToLoad.moleculeCenterOfMassPositions[ i ].y
-        );
-
-        moleculeVelocities[ i ].setXY(
-          dataSetToLoad.moleculeVelocities[ i ].x,
-          dataSetToLoad.moleculeVelocities[ i ].y
-        );
-
-        moleculesInsideContainer[ i ] = true;
-      }
     }
   } );
 } );

@@ -622,42 +622,17 @@ define( function( require ) {
 
       var dataSetToLoad;
 
+      // find the data for this substance
       if ( this.multipleParticleModel.substanceProperty.get() === SubstanceType.DIATOMIC_OXYGEN ) {
         dataSetToLoad = OXYGEN_LIQUID_INITIAL_STATE;
       }
-      else {
-        assert && assert( false, 'unhandled substance: ' + this.multipleParticleModel.substanceProperty.get() );
-      }
+      assert && assert( dataSetToLoad, 'unhandled substance: ' + this.multipleParticleModel.substanceProperty.get() );
 
-      assert && assert(
-        this.multipleParticleModel.moleculeDataSet.numberOfMolecules === dataSetToLoad.numberOfMolecules,
-        'unexpected number of particles in data set'
-      );
+      // load the previously saved state
+      this.loadSavedState( dataSetToLoad );
 
+      // set the temperature
       this.multipleParticleModel.setTemperature( StatesOfMatterConstants.LIQUID_TEMPERATURE );
-
-      // Set the initial velocity for each of the atoms based on the new temperature.
-      var numberOfMolecules = this.multipleParticleModel.moleculeDataSet.numberOfMolecules;
-      var moleculeCenterOfMassPositions = this.multipleParticleModel.moleculeDataSet.moleculeCenterOfMassPositions;
-      var moleculeVelocities = this.multipleParticleModel.moleculeDataSet.moleculeVelocities;
-      var moleculeRotationAngles = this.multipleParticleModel.moleculeDataSet.moleculeRotationAngles;
-      var moleculeRotationRates = this.multipleParticleModel.moleculeDataSet.moleculeRotationRates;
-      var moleculesInsideContainer = this.multipleParticleModel.moleculeDataSet.insideContainer;
-
-      // for ( var i = 0; i < numberOfMolecules; i++ ) {
-      for ( var i = 0; i < numberOfMolecules; i++ ) {
-        moleculeCenterOfMassPositions[ i ].setXY(
-          dataSetToLoad.moleculeCenterOfMassPositions[ i ].x,
-          dataSetToLoad.moleculeCenterOfMassPositions[ i ].y
-        );
-        moleculeVelocities[ i ].setXY(
-          dataSetToLoad.moleculeVelocities[ i ].x,
-          dataSetToLoad.moleculeVelocities[ i ].y
-        );
-        moleculeRotationAngles[ i ] = dataSetToLoad.moleculeRotationAngles[ i ];
-        moleculeRotationRates[ i ] = dataSetToLoad.moleculeRotationRates[ i ];
-        moleculesInsideContainer[ i ] = true;
-      }
     }
   } );
 } );

@@ -271,62 +271,41 @@ define( function( require ) {
     },
 
     /**
-     * Set the phase state to liquid, works for all multi-atom molecules (so far).
+     * Load previously saved position and motion state, does NOT load forces state
      * @protected
      */
-    setPhaseLiquidMultiAtom: function( minInitialDistance, spacingFactor ) {
+    loadSavedState: function( savedState ) {
 
-      // Set the model temperature for this phase.
-      this.multipleParticleModel.setTemperature( StatesOfMatterConstants.LIQUID_TEMPERATURE );
+      assert && assert(
+        this.multipleParticleModel.moleculeDataSet.numberOfMolecules === savedState.numberOfMolecules,
+        'unexpected number of particles in saved data set'
+      );
 
-      // Get references to the various elements of the data set.
-      var moleculeDataSet = this.multipleParticleModel.moleculeDataSet;
-      var moleculeCenterOfMassPositions = moleculeDataSet.moleculeCenterOfMassPositions;
-      var moleculeRotationAngles = moleculeDataSet.moleculeRotationAngles;
+      // Set the initial velocity for each of the atoms based on the new temperature.
+      var numberOfMolecules = this.multipleParticleModel.moleculeDataSet.numberOfMolecules;
+      var moleculeCenterOfMassPositions = this.multipleParticleModel.moleculeDataSet.moleculeCenterOfMassPositions;
+      var moleculeVelocities = this.multipleParticleModel.moleculeDataSet.moleculeVelocities;
+      var moleculeRotationAngles = this.multipleParticleModel.moleculeDataSet.moleculeRotationAngles;
+      var moleculeRotationRates = this.multipleParticleModel.moleculeDataSet.moleculeRotationRates;
+      var moleculesInsideContainer = this.multipleParticleModel.moleculeDataSet.insideContainer;
 
-      // Initialize the velocities of the molecules.
-      this.initializeVelocities();
-
-      // Assign each molecule to a position.
-      var moleculesPlaced = 0;
-      var centerPointX = this.multipleParticleModel.normalizedContainerWidth / 2;
-      var centerPointY = this.multipleParticleModel.normalizedContainerHeight / 4;
-      var currentLayer = 0;
-      var particlesOnCurrentLayer = 0;
-      var particlesThatWillFitOnCurrentLayer = 1;
-      for ( var i = 0; i < moleculeDataSet.getNumberOfMolecules(); i++ ) {
-        for ( var j = 0; j < this.MAX_PLACEMENT_ATTEMPTS; j++ ) {
-          var distanceFromCenter = currentLayer * minInitialDistance * spacingFactor;
-          var angle = (particlesOnCurrentLayer / particlesThatWillFitOnCurrentLayer * 2 * Math.PI) +
-                      (particlesThatWillFitOnCurrentLayer / (4 * Math.PI));
-          var xPos = centerPointX + (distanceFromCenter * Math.cos( angle ));
-          var yPos = centerPointY + (distanceFromCenter * Math.sin( angle ));
-
-          // Consider this spot used even if we don't actually put the particle there.
-          particlesOnCurrentLayer++;
-          if ( particlesOnCurrentLayer >= particlesThatWillFitOnCurrentLayer ) {
-
-            // This layer is full - move to the next one.
-            currentLayer++;
-            particlesThatWillFitOnCurrentLayer = Math.floor( currentLayer * 2 * Math.PI /
-                                                             ( minInitialDistance * spacingFactor ) );
-            particlesOnCurrentLayer = 0;
-          }
-
-          // Check if the position is too close to the wall.  Note that we don't check inter-particle distances here -
-          // we rely on the placement algorithm to make sure that this is not a problem.
-          if ( ( xPos > this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE ) &&
-               ( xPos < this.multipleParticleModel.normalizedContainerWidth - this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE ) &&
-               ( yPos > this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE ) &&
-               ( xPos < this.multipleParticleModel.normalizedContainerHeight - this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE ) ) {
-
-            // This is an acceptable position.
-            moleculeCenterOfMassPositions[ moleculesPlaced ].setXY( xPos, yPos );
-            moleculeRotationAngles[ moleculesPlaced ] = angle + Math.PI / 2;
-            moleculesPlaced++;
-            break;
-          }
+      // for ( var i = 0; i < numberOfMolecules; i++ ) {
+      for ( var i = 0; i < numberOfMolecules; i++ ) {
+        moleculeCenterOfMassPositions[ i ].setXY(
+          savedState.moleculeCenterOfMassPositions[ i ].x,
+          savedState.moleculeCenterOfMassPositions[ i ].y
+        );
+        moleculeVelocities[ i ].setXY(
+          savedState.moleculeVelocities[ i ].x,
+          savedState.moleculeVelocities[ i ].y
+        );
+        if ( savedState.moleculeRotationAngles ) {
+          moleculeRotationAngles[ i ] = savedState.moleculeRotationAngles[ i ];
         }
+        if ( savedState.moleculeRotationAngles ) {
+          moleculeRotationRates[ i ] = savedState.moleculeRotationRates[ i ];
+        }
+        moleculesInsideContainer[ i ] = true;
       }
     },
 
