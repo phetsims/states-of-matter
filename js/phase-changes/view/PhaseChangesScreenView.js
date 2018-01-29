@@ -29,7 +29,7 @@ define( function( require ) {
   var ScreenView = require( 'JOIST/ScreenView' );
   var SOMPlayPauseStepControl = require( 'STATES_OF_MATTER/common/view/SOMPlayPauseStepControl' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
+  var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
   var SubstanceType = require( 'STATES_OF_MATTER/common/SubstanceType' );
   var TextPushButton = require( 'SUN/buttons/TextPushButton' );
   var Vector2 = require( 'DOT/Vector2' );
@@ -42,9 +42,9 @@ define( function( require ) {
   var INTER_PANEL_SPACING = 8;
 
   // constants used when mapping the model pressure and temperature to the phase diagram.
-  var TRIPLE_POINT_TEMPERATURE_IN_MODEL = StatesOfMatterConstants.TRIPLE_POINT_MONATOMIC_MODEL_TEMPERATURE;
+  var TRIPLE_POINT_TEMPERATURE_IN_MODEL = SOMConstants.TRIPLE_POINT_MONATOMIC_MODEL_TEMPERATURE;
   var TRIPLE_POINT_TEMPERATURE_ON_DIAGRAM = 0.375;
-  var CRITICAL_POINT_TEMPERATURE_IN_MODEL = StatesOfMatterConstants.CRITICAL_POINT_MONATOMIC_MODEL_TEMPERATURE;
+  var CRITICAL_POINT_TEMPERATURE_IN_MODEL = SOMConstants.CRITICAL_POINT_MONATOMIC_MODEL_TEMPERATURE;
   var CRITICAL_POINT_TEMPERATURE_ON_DIAGRAM = 0.8;
   var SLOPE_IN_1ST_REGION = TRIPLE_POINT_TEMPERATURE_ON_DIAGRAM / TRIPLE_POINT_TEMPERATURE_IN_MODEL;
   var SLOPE_IN_2ND_REGION = ( CRITICAL_POINT_TEMPERATURE_ON_DIAGRAM - TRIPLE_POINT_TEMPERATURE_ON_DIAGRAM ) /
@@ -66,7 +66,7 @@ define( function( require ) {
   function PhaseChangesScreenView( multipleParticleModel, isInteractionDiagramEnabled ) {
     var self = this;
 
-    ScreenView.call( this, StatesOfMatterConstants.SCREEN_VIEW_OPTIONS );
+    ScreenView.call( this, SOMConstants.SCREEN_VIEW_OPTIONS );
     this.multipleParticleModel = multipleParticleModel;
     this.modelTemperatureHistory = new ObservableArray( { allowDuplicates: true } );
 
@@ -76,7 +76,7 @@ define( function( require ) {
     var modelViewTransform = ModelViewTransform2.createSinglePointScaleInvertedYMapping(
       new Vector2( 0, 0 ),
       new Vector2( this.layoutBounds.width * 0.325, this.layoutBounds.height * 0.75 ),
-      StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / MultipleParticleModel.PARTICLE_CONTAINER_WIDTH
+      SOMConstants.VIEW_CONTAINER_WIDTH / MultipleParticleModel.PARTICLE_CONTAINER_WIDTH
     );
 
     // figure out where in the view the particles will be when the container is not exploded
@@ -125,10 +125,10 @@ define( function( require ) {
         // Reset phase diagram state in SOM basic version.
         multipleParticleModel.phaseDiagramExpandedProperty.value = isInteractionDiagramEnabled;
       },
-      radius: StatesOfMatterConstants.RESET_ALL_BUTTON_RADIUS,
-      touchAreaDilation: StatesOfMatterConstants.RESET_ALL_BUTTON_TOUCH_AREA_DILATION,
-      right: this.layoutBounds.maxX - StatesOfMatterConstants.RESET_ALL_BUTTON_DISTANCE_FROM_SIDE,
-      bottom: this.layoutBounds.maxY - StatesOfMatterConstants.RESET_ALL_BUTTON_DISTANCE_FROM_BOTTOM
+      radius: SOMConstants.RESET_ALL_BUTTON_RADIUS,
+      touchAreaDilation: SOMConstants.RESET_ALL_BUTTON_TOUCH_AREA_DILATION,
+      right: this.layoutBounds.maxX - SOMConstants.RESET_ALL_BUTTON_DISTANCE_FROM_SIDE,
+      bottom: this.layoutBounds.maxY - SOMConstants.RESET_ALL_BUTTON_DISTANCE_FROM_BOTTOM
     } );
     this.addChild( resetAllButton );
 
@@ -165,8 +165,8 @@ define( function( require ) {
     // add interaction potential diagram
     if ( isInteractionDiagramEnabled ) {
       var epsilonControlInteractionPotentialDiagram = new EpsilonControlInteractionPotentialDiagram(
-        StatesOfMatterConstants.MAX_SIGMA,
-        StatesOfMatterConstants.MIN_EPSILON,
+        SOMConstants.MAX_SIGMA,
+        SOMConstants.MIN_EPSILON,
         false,
         multipleParticleModel,
         {
@@ -217,7 +217,7 @@ define( function( require ) {
     multipleParticleModel.substanceProperty.link( function( substance ) {
       self.modelTemperatureHistory.clear();
       self.updatePhaseDiagram();
-      self.phaseDiagram.setDepictingWater( substance === StatesOfMatterConstants.WATER );
+      self.phaseDiagram.setDepictingWater( substance === SOMConstants.WATER );
       if ( isInteractionDiagramEnabled ) {
         if ( substance === SubstanceType.ADJUSTABLE_ATOM ||
              substance === SubstanceType.DIATOMIC_OXYGEN ||

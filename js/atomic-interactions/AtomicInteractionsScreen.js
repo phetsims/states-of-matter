@@ -15,8 +15,8 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var Screen = require( 'JOIST/Screen' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  var StatesOfMatterColorProfile = require( 'STATES_OF_MATTER/common/view/StatesOfMatterColorProfile' );
-  var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
+  var SOMColorProfile = require( 'STATES_OF_MATTER/common/view/SOMColorProfile' );
+  var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
 
   /**
    * @param {boolean} enableHeterogeneousMolecules
@@ -27,9 +27,9 @@ define( function( require ) {
 
     var options = {
       name: screenTitle,
-      backgroundColorProperty: StatesOfMatterColorProfile.backgroundProperty,
+      backgroundColorProperty: SOMColorProfile.backgroundProperty,
       homeScreenIcon: new AtomicInteractionsIcon( Screen.MINIMUM_HOME_SCREEN_ICON_SIZE ),
-      maxDT: StatesOfMatterConstants.MAX_DT
+      maxDT: SOMConstants.MAX_DT
     };
 
     Screen.call( this,

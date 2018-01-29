@@ -13,11 +13,11 @@ define( function( require ) {
   var AtomType = require( 'STATES_OF_MATTER/common/model/AtomType' );
   var inherit = require( 'PHET_CORE/inherit' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  var StatesOfMatterAtom = require( 'STATES_OF_MATTER/common/model/particle/StatesOfMatterAtom' );
-  var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
+  var SOMAtom = require( 'STATES_OF_MATTER/common/model/particle/SOMAtom' );
+  var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
 
   // constants
-  var DEFAULT_INTERACTION_POTENTIAL = StatesOfMatterConstants.MAX_EPSILON / 2;
+  var DEFAULT_INTERACTION_POTENTIAL = SOMConstants.MAX_EPSILON / 2;
   var DEFAULT_RADIUS = 175; // in picometers
   var MASS = 25; // in atomic mass units
 
@@ -27,12 +27,12 @@ define( function( require ) {
    * @constructor
    */
   function ConfigurableStatesOfMatterAtom( x, y ) {
-    StatesOfMatterAtom.call( this, x, y, DEFAULT_RADIUS, MASS, StatesOfMatterConstants.ADJUSTABLE_ATTRACTION_COLOR );
+    SOMAtom.call( this, x, y, DEFAULT_RADIUS, MASS, SOMConstants.ADJUSTABLE_ATTRACTION_COLOR );
   }
 
   statesOfMatter.register( 'ConfigurableStatesOfMatterAtom', ConfigurableStatesOfMatterAtom );
 
-  return inherit( StatesOfMatterAtom, ConfigurableStatesOfMatterAtom, {
+  return inherit( SOMAtom, ConfigurableStatesOfMatterAtom, {
 
       /**
        * @returns {string}

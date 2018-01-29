@@ -26,8 +26,8 @@ define( function( require ) {
   var ScreenView = require( 'JOIST/ScreenView' );
   var SOMPlayPauseStepControl = require( 'STATES_OF_MATTER/common/view/SOMPlayPauseStepControl' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  var StatesOfMatterColorProfile = require( 'STATES_OF_MATTER/common/view/StatesOfMatterColorProfile' );
-  var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
+  var SOMColorProfile = require( 'STATES_OF_MATTER/common/view/SOMColorProfile' );
+  var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
   var Text = require( 'SCENERY/nodes/Text' );
   var TextPushButton = require( 'SUN/buttons/TextPushButton' );
   var VBox = require( 'SCENERY/nodes/VBox' );
@@ -53,7 +53,7 @@ define( function( require ) {
 
     // due to some odd behavior, we need to turn on preventFit for this screen, see
     // https://github.com/phetsims/states-of-matter/issues/176
-    var screenViewOptions = _.extend( { preventFit: true }, StatesOfMatterConstants.SCREEN_VIEW_OPTIONS );
+    var screenViewOptions = _.extend( { preventFit: true }, SOMConstants.SCREEN_VIEW_OPTIONS );
 
     ScreenView.call( this, screenViewOptions );
 
@@ -74,11 +74,11 @@ define( function( require ) {
 
     // initialize local variables
     var self = this;
-    var tickTextColor = enableHeterogeneousAtoms ? 'black' : StatesOfMatterColorProfile.controlPanelTextProperty;
-    var textColor = enableHeterogeneousAtoms ? 'black' : StatesOfMatterColorProfile.controlPanelTextProperty;
-    var panelFill = enableHeterogeneousAtoms ? '#D1D2FF' : StatesOfMatterColorProfile.controlPanelBackgroundProperty;
-    var panelStroke = enableHeterogeneousAtoms ? '#D1D2FF' : StatesOfMatterColorProfile.controlPanelStrokeProperty;
-    var panelTextFill = enableHeterogeneousAtoms ? 'black' : StatesOfMatterColorProfile.controlPanelTextProperty;
+    var tickTextColor = enableHeterogeneousAtoms ? 'black' : SOMColorProfile.controlPanelTextProperty;
+    var textColor = enableHeterogeneousAtoms ? 'black' : SOMColorProfile.controlPanelTextProperty;
+    var panelFill = enableHeterogeneousAtoms ? '#D1D2FF' : SOMColorProfile.controlPanelBackgroundProperty;
+    var panelStroke = enableHeterogeneousAtoms ? '#D1D2FF' : SOMColorProfile.controlPanelStrokeProperty;
+    var panelTextFill = enableHeterogeneousAtoms ? 'black' : SOMColorProfile.controlPanelTextProperty;
     var forceControlPanelButtonAlign = enableHeterogeneousAtoms ? 'right' : 'left';
     var atomicInteractionsControlPanel = new AtomicInteractionsControlPanel( dualAtomModel, enableHeterogeneousAtoms, {
       right: this.layoutBounds.maxX - INSET,
@@ -119,10 +119,10 @@ define( function( require ) {
         dualAtomModel.reset();
         self.interactiveInteractionPotentialDiagram.reset();
       },
-      radius: StatesOfMatterConstants.RESET_ALL_BUTTON_RADIUS,
-      touchAreaDilation: StatesOfMatterConstants.RESET_ALL_BUTTON_TOUCH_AREA_DILATION,
-      right: this.layoutBounds.maxX - StatesOfMatterConstants.RESET_ALL_BUTTON_DISTANCE_FROM_SIDE,
-      bottom: this.layoutBounds.maxY - StatesOfMatterConstants.RESET_ALL_BUTTON_DISTANCE_FROM_BOTTOM
+      radius: SOMConstants.RESET_ALL_BUTTON_RADIUS,
+      touchAreaDilation: SOMConstants.RESET_ALL_BUTTON_TOUCH_AREA_DILATION,
+      right: this.layoutBounds.maxX - SOMConstants.RESET_ALL_BUTTON_DISTANCE_FROM_SIDE,
+      bottom: this.layoutBounds.maxY - SOMConstants.RESET_ALL_BUTTON_DISTANCE_FROM_BOTTOM
     } );
     this.addChild( resetAllButton );
 
@@ -156,7 +156,7 @@ define( function( require ) {
 
     // add sim speed controls
     var speedSelectionButtonOptions = {
-      fill: StatesOfMatterColorProfile.controlPanelTextProperty,
+      fill: SOMColorProfile.controlPanelTextProperty,
       font: new PhetFont( 14 ),
       maxWidth: MAX_TEXT_WIDTH
     };
@@ -305,7 +305,7 @@ define( function( require ) {
     },
 
     /**
-     * @param {StatesOfMatterAtom} particle
+     * @param {SOMAtom} particle
      * @public
      */
     handleFixedParticleAdded: function( particle ) {

@@ -15,7 +15,7 @@ define( function( require ) {
   // modules
   var inherit = require( 'PHET_CORE/inherit' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
+  var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
 
   /**
    * @param {number} sigma
@@ -28,7 +28,7 @@ define( function( require ) {
 
     this.sigma = sigma;  // Molecular diameter in picometers.
     this.epsilon = epsilon; // Interaction strength, epsilon/k-boltzmann is in Kelvin.
-    this.epsilonForCalcs = this.epsilon * StatesOfMatterConstants.K_BOLTZMANN;  // Epsilon multiplied by k-boltzmann.
+    this.epsilonForCalcs = this.epsilon * SOMConstants.K_BOLTZMANN;  // Epsilon multiplied by k-boltzmann.
   }
 
   statesOfMatter.register( 'LjPotentialCalculator', LjPotentialCalculator );
@@ -65,7 +65,7 @@ define( function( require ) {
      */
     setEpsilon: function( epsilon ) {
       this.epsilon = epsilon;
-      this.epsilonForCalcs = this.epsilon * StatesOfMatterConstants.K_BOLTZMANN;
+      this.epsilonForCalcs = this.epsilon * SOMConstants.K_BOLTZMANN;
     },
 
     /**

@@ -19,7 +19,7 @@ define( function( require ) {
   var SOLID_TEMPERATURE = 0.15;
   var NEON_ATOM_EPSILON = 32.8; // epsilon/k-Boltzmann is in Kelvin.
 
-  var StatesOfMatterConstants  = {
+  var SOMConstants  = {
 
     MAX_DT: 0.320, // seconds, max time step (delta time), this is 20x the nominal step 0f 16ms
 
@@ -93,8 +93,8 @@ define( function( require ) {
     NOMINAL_TIME_STEP: 1 / 60 // seconds, the expected delta time (dt) value per model step, based on nominal browser frame rate
   };
 
-  statesOfMatter.register( 'StatesOfMatterConstants', StatesOfMatterConstants );
+  statesOfMatter.register( 'SOMConstants', SOMConstants );
 
-  return StatesOfMatterConstants;
+  return SOMConstants;
 
 } );

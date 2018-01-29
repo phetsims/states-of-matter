@@ -14,7 +14,7 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var PhaseStateEnum = require( 'STATES_OF_MATTER/common/PhaseStateEnum' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
+  var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
   var Vector2 = require( 'DOT/Vector2' );
 
   // constants
@@ -168,7 +168,7 @@ define( function( require ) {
     setPhaseGas: function() {
 
       // Set the multipleParticleModel temperature for this phase.
-      this.multipleParticleModel.setTemperature( StatesOfMatterConstants.GAS_TEMPERATURE );
+      this.multipleParticleModel.setTemperature( SOMConstants.GAS_TEMPERATURE );
 
       // Get references to the various elements of the data set.
       var moleculeDataSet = this.multipleParticleModel.moleculeDataSet;

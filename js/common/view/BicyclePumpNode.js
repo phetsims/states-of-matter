@@ -21,7 +21,7 @@ define( function( require ) {
   var Shape = require( 'KITE/Shape' );
   var SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
+  var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
 
   // The follow constants define the size and positions of the various components of the pump as proportions of the
   // overall width and height of the node.
@@ -62,7 +62,7 @@ define( function( require ) {
     // Update the container capacity when the substance changes.
     multipleParticleModel.substanceProperty.link( function() {
       var apm = multipleParticleModel.moleculeDataSet.atomsPerMolecule;
-      self.containerAtomCapacity = Math.floor( StatesOfMatterConstants.MAX_NUM_ATOMS / apm ) * apm;
+      self.containerAtomCapacity = Math.floor( SOMConstants.MAX_NUM_ATOMS / apm ) * apm;
     } );
 
     var pumpShaft;

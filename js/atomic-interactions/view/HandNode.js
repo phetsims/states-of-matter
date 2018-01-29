@@ -25,7 +25,7 @@ define( function( require ) {
 
   /**
    * @param {DualAtomModel} dualAtomModel - model of the atomic interactions screen
-   * @param {StatesOfMatterAtom} particle - model of the atom that is draggable
+   * @param {SOMAtom} particle - model of the atom that is draggable
    * @param {ModelViewTransform2} modelViewTransform to convert between model and view co-ordinates
    * @param {number} minX - grabbable particle min x position
    * @constructor

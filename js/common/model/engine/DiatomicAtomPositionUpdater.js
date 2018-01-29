@@ -13,7 +13,7 @@ define( function( require ) {
 
   // modules
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
+  var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
 
   // static object (no constructor)
   var DiatomicAtomPositionUpdater = {
@@ -39,14 +39,14 @@ define( function( require ) {
         cosineTheta = Math.cos( moleculeRotationAngles[ i ] );
         sineTheta = Math.sin( moleculeRotationAngles[ i ] );
         xPos = moleculeCenterOfMassPositions[ i ].x +
-               cosineTheta * (StatesOfMatterConstants.DIATOMIC_PARTICLE_DISTANCE / 2);
+               cosineTheta * (SOMConstants.DIATOMIC_PARTICLE_DISTANCE / 2);
         yPos = moleculeCenterOfMassPositions[ i ].y +
-               sineTheta * (StatesOfMatterConstants.DIATOMIC_PARTICLE_DISTANCE / 2);
+               sineTheta * (SOMConstants.DIATOMIC_PARTICLE_DISTANCE / 2);
         atomPositions[ i * 2 ].setXY( xPos, yPos );
         xPos = moleculeCenterOfMassPositions[ i ].x -
-               cosineTheta * (StatesOfMatterConstants.DIATOMIC_PARTICLE_DISTANCE / 2);
+               cosineTheta * (SOMConstants.DIATOMIC_PARTICLE_DISTANCE / 2);
         yPos = moleculeCenterOfMassPositions[ i ].y -
-               sineTheta * (StatesOfMatterConstants.DIATOMIC_PARTICLE_DISTANCE / 2);
+               sineTheta * (SOMConstants.DIATOMIC_PARTICLE_DISTANCE / 2);
         atomPositions[ i * 2 + 1 ].setXY( xPos, yPos );
       }
     }

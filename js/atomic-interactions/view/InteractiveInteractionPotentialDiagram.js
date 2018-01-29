@@ -25,8 +25,8 @@ define( function( require ) {
   var Shape = require( 'KITE/Shape' );
   var SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  var StatesOfMatterColorProfile = require( 'STATES_OF_MATTER/common/view/StatesOfMatterColorProfile' );
-  var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
+  var SOMColorProfile = require( 'STATES_OF_MATTER/common/view/SOMColorProfile' );
+  var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
 
   // constants
   var RESIZE_HANDLE_SIZE_PROPORTION = 0.05;  // Size of handles as function of node width.
@@ -70,7 +70,7 @@ define( function( require ) {
           endDragY = node.globalToParentPoint( event.pointer.point ).y;
           var d = endDragY - startDragY;
           startDragY = endDragY;
-          var scaleFactor = StatesOfMatterConstants.MAX_EPSILON / ( self.getGraphHeight() / 2 );
+          var scaleFactor = SOMConstants.MAX_EPSILON / ( self.getGraphHeight() / 2 );
           dualAtomModel.interactionStrengthProperty.value = dualAtomModel.getEpsilon() + ( d * scaleFactor );
         },
 
@@ -144,9 +144,9 @@ define( function( require ) {
         startDragX = endDragX;
         var scaleFactor = self.GRAPH_X_RANGE / ( self.getGraphWidth() );
         var atomDiameter = dualAtomModel.getSigma() + ( d * scaleFactor );
-        dualAtomModel.atomDiameterProperty.value = atomDiameter > StatesOfMatterConstants.MIN_SIGMA ?
-                                                   (atomDiameter < StatesOfMatterConstants.MAX_SIGMA ? atomDiameter :
-                                                    StatesOfMatterConstants.MAX_SIGMA) : StatesOfMatterConstants.MIN_SIGMA;
+        dualAtomModel.atomDiameterProperty.value = atomDiameter > SOMConstants.MIN_SIGMA ?
+                                                   (atomDiameter < SOMConstants.MAX_SIGMA ? atomDiameter :
+                                                    SOMConstants.MAX_SIGMA) : SOMConstants.MIN_SIGMA;
       },
 
       end: function() {
@@ -229,20 +229,20 @@ define( function( require ) {
     this.addChild( this.ljPotentialGraph );
 
     // applying color scheme to lj graph elements
-    this.verticalAxis.fill = StatesOfMatterColorProfile.ljGraphAxesAndGridColorProperty;
-    this.horizontalAxis.fill = StatesOfMatterColorProfile.ljGraphAxesAndGridColorProperty;
-    this.verticalAxis.stroke = StatesOfMatterColorProfile.ljGraphAxesAndGridColorProperty;
-    this.horizontalAxis.stroke = StatesOfMatterColorProfile.ljGraphAxesAndGridColorProperty;
-    this.epsilonArrow.fill = StatesOfMatterColorProfile.ljGraphAxesAndGridColorProperty;
-    this.epsilonArrow.fill = StatesOfMatterColorProfile.ljGraphAxesAndGridColorProperty;
-    this.sigmaArrow.fill = StatesOfMatterColorProfile.ljGraphAxesAndGridColorProperty;
-    this.epsilonLabel.fill = StatesOfMatterColorProfile.ljGraphAxesAndGridColorProperty;
-    this.sigmaLabel.fill = StatesOfMatterColorProfile.ljGraphAxesAndGridColorProperty;
-    this.epsilonArrow.stroke = StatesOfMatterColorProfile.ljGraphAxesAndGridColorProperty;
-    this.gridNode.verticalLinesNode.stroke = StatesOfMatterColorProfile.ljGraphAxesAndGridColorProperty;
-    this.horizontalAxisLabel.fill = StatesOfMatterColorProfile.ljGraphAxesAndGridColorProperty;
-    this.verticalAxisLabel.fill = StatesOfMatterColorProfile.ljGraphAxesAndGridColorProperty;
-    this.gridNode.horizontalLinesNode.stroke = StatesOfMatterColorProfile.ljGraphAxesAndGridColorProperty;
+    this.verticalAxis.fill = SOMColorProfile.ljGraphAxesAndGridColorProperty;
+    this.horizontalAxis.fill = SOMColorProfile.ljGraphAxesAndGridColorProperty;
+    this.verticalAxis.stroke = SOMColorProfile.ljGraphAxesAndGridColorProperty;
+    this.horizontalAxis.stroke = SOMColorProfile.ljGraphAxesAndGridColorProperty;
+    this.epsilonArrow.fill = SOMColorProfile.ljGraphAxesAndGridColorProperty;
+    this.epsilonArrow.fill = SOMColorProfile.ljGraphAxesAndGridColorProperty;
+    this.sigmaArrow.fill = SOMColorProfile.ljGraphAxesAndGridColorProperty;
+    this.epsilonLabel.fill = SOMColorProfile.ljGraphAxesAndGridColorProperty;
+    this.sigmaLabel.fill = SOMColorProfile.ljGraphAxesAndGridColorProperty;
+    this.epsilonArrow.stroke = SOMColorProfile.ljGraphAxesAndGridColorProperty;
+    this.gridNode.verticalLinesNode.stroke = SOMColorProfile.ljGraphAxesAndGridColorProperty;
+    this.horizontalAxisLabel.fill = SOMColorProfile.ljGraphAxesAndGridColorProperty;
+    this.verticalAxisLabel.fill = SOMColorProfile.ljGraphAxesAndGridColorProperty;
+    this.gridNode.horizontalLinesNode.stroke = SOMColorProfile.ljGraphAxesAndGridColorProperty;
 
     this.mutate( options );
   }

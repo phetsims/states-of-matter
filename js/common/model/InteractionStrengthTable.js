@@ -19,7 +19,7 @@ define( function( require ) {
   var AtomType = require( 'STATES_OF_MATTER/common/model/AtomType' );
   var ConfigurableStatesOfMatterAtom = require( 'STATES_OF_MATTER/common/model/particle/ConfigurableStatesOfMatterAtom' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
+  var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
 
   // static object (no constructor)
   var InteractionStrengthTable = {
@@ -55,7 +55,7 @@ define( function( require ) {
         }
         else {
           assert && assert( false, 'Interaction potential not available for requested atom: ' + atomType1 );
-          return StatesOfMatterConstants.MAX_EPSILON / 2;  // In the real world, default to an arbitrary value.
+          return SOMConstants.MAX_EPSILON / 2;  // In the real world, default to an arbitrary value.
         }
       }
       else {
@@ -76,11 +76,11 @@ define( function( require ) {
         }
         else if ( ( atomType1 === AtomType.ADJUSTABLE ) || ( atomType2 === AtomType.ADJUSTABLE ) ) {
           // In this case, where one of the atoms is adjustable, we just use a default value.
-          return ( StatesOfMatterConstants.MAX_EPSILON - StatesOfMatterConstants.MIN_EPSILON ) / 2;
+          return ( SOMConstants.MAX_EPSILON - SOMConstants.MIN_EPSILON ) / 2;
         }
         else {
           assert && assert( false, 'Error: No data for this combination of molecules' );
-          return ( StatesOfMatterConstants.MAX_EPSILON - StatesOfMatterConstants.MIN_EPSILON ) / 2;
+          return ( SOMConstants.MAX_EPSILON - SOMConstants.MIN_EPSILON ) / 2;
         }
       }
     }

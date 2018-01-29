@@ -14,7 +14,7 @@ define( function( require ) {
   // modules
   var inherit = require( 'PHET_CORE/inherit' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
+  var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
 
   /**
    * Constructor for the Andersen thermostat.
@@ -25,7 +25,7 @@ define( function( require ) {
   function AndersenThermostat( moleculeDataSet, minTemperature ) {
 
     // @public target temperature in normalized model units
-    this.targetTemperature = StatesOfMatterConstants.INITIAL_TEMPERATURE;
+    this.targetTemperature = SOMConstants.INITIAL_TEMPERATURE;
 
     // @public minimum temperature in normalized model units, below this is considered absolute 0;
     this.minModelTemperature = minTemperature;

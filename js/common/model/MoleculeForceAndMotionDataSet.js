@@ -15,7 +15,7 @@ define( function( require ) {
   // modules
   var inherit = require( 'PHET_CORE/inherit' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
+  var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
   var Vector2 = require( 'DOT/Vector2' );
   var WaterMoleculeStructure = require( 'STATES_OF_MATTER/common/model/engine/WaterMoleculeStructure' );
 
@@ -35,10 +35,10 @@ define( function( require ) {
     this.atomsPerMolecule = atomsPerMolecule;
 
     // convenience variable
-    var maxNumMolecules = Math.floor( StatesOfMatterConstants.MAX_NUM_ATOMS / atomsPerMolecule );
+    var maxNumMolecules = Math.floor( SOMConstants.MAX_NUM_ATOMS / atomsPerMolecule );
 
     // @public Attributes of the individual molecules and the atoms that comprise them.
-    this.atomPositions = new Array( StatesOfMatterConstants.MAX_NUM_ATOMS );
+    this.atomPositions = new Array( SOMConstants.MAX_NUM_ATOMS );
     this.moleculeCenterOfMassPositions = new Array( maxNumMolecules );
     this.moleculeVelocities = new Array( maxNumMolecules );
     this.moleculeForces = new Array( maxNumMolecules );
@@ -50,7 +50,7 @@ define( function( require ) {
     this.moleculeRotationRates = new Array( maxNumMolecules );
     this.moleculeTorques = new Array( maxNumMolecules );
     this.nextMoleculeTorques = new Array( maxNumMolecules );
-    for ( var i = 0; i < StatesOfMatterConstants.MAX_NUM_ATOMS / this.atomsPerMolecule; i++ ) {
+    for ( var i = 0; i < SOMConstants.MAX_NUM_ATOMS / this.atomsPerMolecule; i++ ) {
       this.moleculeRotationAngles [ i ] = 0;
       this.moleculeRotationRates[ i ] = 0;
       this.moleculeTorques[ i ] = 0;
@@ -65,7 +65,7 @@ define( function( require ) {
     else if ( atomsPerMolecule === 2 ) {
       this.moleculeMass = 2; // Two molecules, assumed to be the same.
       this.moleculeRotationalInertia = this.moleculeMass *
-                                       Math.pow( StatesOfMatterConstants.DIATOMIC_PARTICLE_DISTANCE, 2 ) / 2;
+                                       Math.pow( SOMConstants.DIATOMIC_PARTICLE_DISTANCE, 2 ) / 2;
     }
     else if ( atomsPerMolecule === 3 ) {
       // NOTE: These settings only work for water, since that is the only supported triatomic molecule at the time of
@@ -164,7 +164,7 @@ define( function( require ) {
      * @public
      */
     getNumberOfRemainingSlots: function() {
-      return ( Math.floor( StatesOfMatterConstants.MAX_NUM_ATOMS / this.atomsPerMolecule ) -
+      return ( Math.floor( SOMConstants.MAX_NUM_ATOMS / this.atomsPerMolecule ) -
                ( this.numberOfAtoms / this.atomsPerMolecule ) );
     },
 

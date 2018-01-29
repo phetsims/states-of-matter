@@ -14,8 +14,8 @@ define( function( require ) {
   var Element = require( 'NITROGLYCERIN/Element' );
   var inherit = require( 'PHET_CORE/inherit' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  var StatesOfMatterAtom = require( 'STATES_OF_MATTER/common/model/particle/StatesOfMatterAtom' );
-  var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
+  var SOMAtom = require( 'STATES_OF_MATTER/common/model/particle/SOMAtom' );
+  var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
 
   // constants
   var RADIUS = Element.Ar.vanDerWaalsRadius;  // In picometers.
@@ -27,12 +27,12 @@ define( function( require ) {
    * @constructor
    */
   function ArgonAtom( x, y ) {
-    StatesOfMatterAtom.call( this, x, y, RADIUS, MASS, StatesOfMatterConstants.ARGON_COLOR );
+    SOMAtom.call( this, x, y, RADIUS, MASS, SOMConstants.ARGON_COLOR );
   }
 
   statesOfMatter.register( 'ArgonAtom', ArgonAtom );
 
-  return inherit( StatesOfMatterAtom, ArgonAtom, {
+  return inherit( SOMAtom, ArgonAtom, {
 
       /**
        * @returns {string}

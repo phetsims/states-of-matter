@@ -20,7 +20,7 @@ define( function( require ) {
   var Node = require( 'SCENERY/nodes/Node' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
+  var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
   var Text = require( 'SCENERY/nodes/Text' );
   var VBox = require( 'SCENERY/nodes/VBox' );
   var VStrut = require( 'SCENERY/nodes/VStrut' );
@@ -209,7 +209,7 @@ define( function( require ) {
       contentAlign: 'left',
       titleAlignX: 'left',
       buttonAlign: options.buttonAlign,
-      cornerRadius: StatesOfMatterConstants.PANEL_CORNER_RADIUS,
+      cornerRadius: SOMConstants.PANEL_CORNER_RADIUS,
       minWidth: options.minWidth,
       maxWidth: options.maxWidth,
       contentYSpacing: 1,

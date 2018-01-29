@@ -22,7 +22,7 @@ define( function( require ) {
    * @param {Color} color  - color of the atom
    * @constructor
    */
-  function StatesOfMatterAtom( x, y, radius, mass, color ) {
+  function SOMAtom( x, y, radius, mass, color ) {
 
     // @private, accessed through getter and setter methods below, basically because that's how it worked in Java sim
     this.positionProperty = new Property( new Vector2( x, y ) );
@@ -33,9 +33,9 @@ define( function( require ) {
     this.radius = radius;
   }
 
-  statesOfMatter.register( 'StatesOfMatterAtom', StatesOfMatterAtom );
+  statesOfMatter.register( 'SOMAtom', SOMAtom );
 
-  return inherit( Object, StatesOfMatterAtom, {
+  return inherit( Object, SOMAtom, {
 
     /**
      * @public

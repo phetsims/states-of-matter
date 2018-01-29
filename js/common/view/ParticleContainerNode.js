@@ -23,7 +23,7 @@ define( function( require ) {
   var PointingHandNode = require( 'STATES_OF_MATTER/common/view/PointingHandNode' );
   var Shape = require( 'KITE/Shape' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
+  var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
 
   // constants
   var PRESSURE_METER_ELBOW_OFFSET = 30;
@@ -62,7 +62,7 @@ define( function( require ) {
     var preParticleLayer = new Node();
     this.addChild( preParticleLayer );
     this.particlesCanvasNode = new ParticleImageCanvasNode( multipleParticleModel.particles, modelViewTransform, {
-      canvasBounds: StatesOfMatterConstants.SCREEN_VIEW_OPTIONS.layoutBounds.dilated( 500, 500 ) // dilation amount empirically determined
+      canvasBounds: SOMConstants.SCREEN_VIEW_OPTIONS.layoutBounds.dilated( 500, 500 ) // dilation amount empirically determined
     } );
     this.addChild( this.particlesCanvasNode );
     var postParticleLayer = new Node();

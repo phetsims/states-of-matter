@@ -19,8 +19,8 @@ define( function( require ) {
   var PositionMarker = require( 'STATES_OF_MATTER/atomic-interactions/view/PositionMarker' );
   var Shape = require( 'KITE/Shape' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  var StatesOfMatterColorProfile = require( 'STATES_OF_MATTER/common/view/StatesOfMatterColorProfile' );
-  var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
+  var SOMColorProfile = require( 'STATES_OF_MATTER/common/view/SOMColorProfile' );
+  var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
   var Text = require( 'SCENERY/nodes/Text' );
   var Vector2 = require( 'DOT/Vector2' );
   var ZoomableGridNode = require( 'STATES_OF_MATTER/atomic-interactions/view/ZoomableGridNode' );
@@ -77,13 +77,13 @@ define( function( require ) {
       this.widthOfGraph = WIDE_VERSION_WIDTH;
       this.heightOfGraph = this.widthOfGraph * 0.75;
       GREEK_LETTER_FONT = new PhetFont( 22 );
-      axisLabelFont = new PhetFont( { size: 16, fill: StatesOfMatterColorProfile.controlPanelTextProperty } );
+      axisLabelFont = new PhetFont( { size: 16, fill: SOMColorProfile.controlPanelTextProperty } );
       GREEK_LETTER_MAX_WIDTH = 60;
     }
     else {
       this.widthOfGraph = NARROW_VERSION_WIDTH;
       this.heightOfGraph = this.widthOfGraph * 0.8;
-      axisLabelFont = new PhetFont( { size: 11, fill: StatesOfMatterColorProfile.controlPanelTextProperty } );
+      axisLabelFont = new PhetFont( { size: 11, fill: SOMColorProfile.controlPanelTextProperty } );
       GREEK_LETTER_FONT = new PhetFont( GREEK_LETTER_FONT_SIZE );
       GREEK_LETTER_MAX_WIDTH = 17;
     }
@@ -101,7 +101,7 @@ define( function( require ) {
     // see https://github.com/phetsims/states-of-matter/issues/63 and
     // https://github.com/phetsims/states-of-matter/issues/25
     this.verticalScalingFactor = ( this.graphHeight / 2.2 ) /
-                                 ( StatesOfMatterConstants.MAX_EPSILON * StatesOfMatterConstants.K_BOLTZMANN );
+                                 ( SOMConstants.MAX_EPSILON * SOMConstants.K_BOLTZMANN );
     this.horizontalLineCount = 5;
 
     // Create and add the center axis line for the graph.
@@ -115,14 +115,14 @@ define( function( require ) {
       headWidth: 20,
       tailWidth: 9,
       doubleHead: false,
-      fill: StatesOfMatterColorProfile.controlPanelTextProperty,
+      fill: SOMColorProfile.controlPanelTextProperty,
       lineWidth: 0.5
     } );
     this.ljPotentialGraph.addChild( this.epsilonArrow );
 
     this.epsilonLabel = new Text( epsilonString, {
       font: GREEK_LETTER_FONT,
-      fill: StatesOfMatterColorProfile.controlPanelTextProperty,
+      fill: SOMColorProfile.controlPanelTextProperty,
       maxWidth: GREEK_LETTER_MAX_WIDTH,
       boundsMethod: 'accurate' // This seems necessary for good graph layout, and doesn't seem to impact performance.
     } );
@@ -136,7 +136,7 @@ define( function( require ) {
 
     this.sigmaLabel = new Text( sigmaString, {
       font: GREEK_LETTER_FONT,
-      fill: StatesOfMatterColorProfile.controlPanelTextProperty,
+      fill: SOMColorProfile.controlPanelTextProperty,
       maxWidth: GREEK_LETTER_MAX_WIDTH
     } );
     this.ljPotentialGraph.addChild( this.sigmaLabel );
@@ -145,7 +145,7 @@ define( function( require ) {
       headWidth: 8,
       tailWidth: 3,
       doubleHead: true,
-      fill: StatesOfMatterColorProfile.controlPanelTextProperty,
+      fill: SOMColorProfile.controlPanelTextProperty,
       lineWidth: 0.5
     } );
     this.ljPotentialGraph.addChild( this.sigmaArrow );
@@ -166,8 +166,8 @@ define( function( require ) {
 
     // Create and add the horizontal axis line for the graph.
     this.horizontalAxis = new ArrowNode( 0, 0, this.graphWidth + AXES_ARROW_HEAD_HEIGHT, 0, {
-      fill: StatesOfMatterColorProfile.controlPanelTextProperty,
-      stroke: StatesOfMatterColorProfile.controlPanelTextProperty,
+      fill: SOMColorProfile.controlPanelTextProperty,
+      stroke: SOMColorProfile.controlPanelTextProperty,
       headHeight: 8,
       headWidth: 8,
       tailWidth: 2,
@@ -176,7 +176,7 @@ define( function( require ) {
     } );
 
     this.horizontalAxisLabel = new Text( distanceBetweenAtomsString, {
-      fill: StatesOfMatterColorProfile.controlPanelTextProperty,
+      fill: SOMColorProfile.controlPanelTextProperty,
       font: axisLabelFont
     } );
     if ( this.horizontalAxisLabel.width > this.horizontalAxis.width ) {
@@ -192,8 +192,8 @@ define( function( require ) {
 
     // Create and add the vertical axis line for the graph.
     this.verticalAxis = new ArrowNode( 0, 0, 0, -this.graphHeight - AXES_ARROW_HEAD_HEIGHT, {
-      fill: StatesOfMatterColorProfile.controlPanelTextProperty,
-      stroke: StatesOfMatterColorProfile.controlPanelTextProperty,
+      fill: SOMColorProfile.controlPanelTextProperty,
+      stroke: SOMColorProfile.controlPanelTextProperty,
       headHeight: 8,
       headWidth: 8,
       tailWidth: AXIS_LINE_WIDTH,
@@ -202,7 +202,7 @@ define( function( require ) {
     } );
 
     this.verticalAxisLabel = new Text( potentialEnergyString, {
-      fill: StatesOfMatterColorProfile.controlPanelTextProperty,
+      fill: SOMColorProfile.controlPanelTextProperty,
       font: axisLabelFont
     } );
 
@@ -255,7 +255,7 @@ define( function( require ) {
      */
     reset: function() {
       this.verticalScalingFactor = (this.graphHeight / 2.2) /
-                                   (StatesOfMatterConstants.MAX_EPSILON * StatesOfMatterConstants.K_BOLTZMANN);
+                                   (SOMConstants.MAX_EPSILON * SOMConstants.K_BOLTZMANN);
       this.horizontalLineCount = 5;
       this.gridNode.setHorizontalLines( 0, 0, this.graphWidth, this.graphHeight, this.horizontalLineCount );
       this.drawPotentialCurve();

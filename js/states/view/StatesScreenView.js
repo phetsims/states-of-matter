@@ -24,7 +24,7 @@ define( function( require ) {
   var SOMPlayPauseStepControl = require( 'STATES_OF_MATTER/common/view/SOMPlayPauseStepControl' );
   var StatesMoleculesControlPanel = require( 'STATES_OF_MATTER/states/view/StatesMoleculesControlPanel' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
+  var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
   var StatesPhaseControlNode = require( 'STATES_OF_MATTER/states/view/StatesPhaseControlNode' );
   var Vector2 = require( 'DOT/Vector2' );
 
@@ -40,7 +40,7 @@ define( function( require ) {
   function StatesScreenView( multipleParticleModel ) {
 
     var self = this;
-    ScreenView.call( this, StatesOfMatterConstants.SCREEN_VIEW_OPTIONS );
+    ScreenView.call( this, SOMConstants.SCREEN_VIEW_OPTIONS );
 
     // Create the model-view transform. The multipliers for the 2nd parameter can be used to adjust where the point
     // (0, 0) in the model, which is the lower left corner of the particle container, appears in the view.The final
@@ -48,7 +48,7 @@ define( function( require ) {
     var modelViewTransform = ModelViewTransform2.createSinglePointScaleInvertedYMapping(
       new Vector2( 0, 0 ),
       new Vector2( this.layoutBounds.width * 0.325, this.layoutBounds.height * 0.75 ),
-      StatesOfMatterConstants.VIEW_CONTAINER_WIDTH / MultipleParticleModel.PARTICLE_CONTAINER_WIDTH
+      SOMConstants.VIEW_CONTAINER_WIDTH / MultipleParticleModel.PARTICLE_CONTAINER_WIDTH
     );
 
     // Figure out where in the view the interior of the particle container will be.
@@ -106,10 +106,10 @@ define( function( require ) {
         multipleParticleModel.reset();
         self.compositeThermometerNode.reset();
       },
-      radius: StatesOfMatterConstants.RESET_ALL_BUTTON_RADIUS,
-      touchAreaDilation: StatesOfMatterConstants.RESET_ALL_BUTTON_TOUCH_AREA_DILATION,
-      right: this.layoutBounds.maxX - StatesOfMatterConstants.RESET_ALL_BUTTON_DISTANCE_FROM_SIDE,
-      bottom: this.layoutBounds.maxY - StatesOfMatterConstants.RESET_ALL_BUTTON_DISTANCE_FROM_BOTTOM
+      radius: SOMConstants.RESET_ALL_BUTTON_RADIUS,
+      touchAreaDilation: SOMConstants.RESET_ALL_BUTTON_TOUCH_AREA_DILATION,
+      right: this.layoutBounds.maxX - SOMConstants.RESET_ALL_BUTTON_DISTANCE_FROM_SIDE,
+      bottom: this.layoutBounds.maxY - SOMConstants.RESET_ALL_BUTTON_DISTANCE_FROM_BOTTOM
     } );
     this.addChild( resetAllButton );
 

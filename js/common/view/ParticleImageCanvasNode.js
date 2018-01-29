@@ -18,19 +18,19 @@ define( function( require ) {
   var NeonAtom = require( 'STATES_OF_MATTER/common/model/particle/NeonAtom' );
   var OxygenAtom = require( 'STATES_OF_MATTER/common/model/particle/OxygenAtom' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  var StatesOfMatterColorProfile = require( 'STATES_OF_MATTER/common/view/StatesOfMatterColorProfile' );
-  var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
+  var SOMColorProfile = require( 'STATES_OF_MATTER/common/view/SOMColorProfile' );
+  var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
 
   // constants
   var PARTICLE_IMAGE_CANVAS_LENGTH = 32; // amount of canvas used to create a particle image, will be squared 
 
   // set up the association between atom types and the colors used to represent them
   var PARTICLE_COLOR_TABLE = {};
-  PARTICLE_COLOR_TABLE[ AtomType.ARGON ] = StatesOfMatterConstants.ARGON_COLOR;
-  PARTICLE_COLOR_TABLE[ AtomType.NEON ] = StatesOfMatterConstants.NEON_COLOR;
-  PARTICLE_COLOR_TABLE[ AtomType.OXYGEN ] = StatesOfMatterConstants.OXYGEN_COLOR;
-  PARTICLE_COLOR_TABLE[ AtomType.HYDROGEN ] = StatesOfMatterConstants.HYDROGEN_COLOR;
-  PARTICLE_COLOR_TABLE[ AtomType.ADJUSTABLE ] = StatesOfMatterConstants.ADJUSTABLE_ATTRACTION_COLOR;
+  PARTICLE_COLOR_TABLE[ AtomType.ARGON ] = SOMConstants.ARGON_COLOR;
+  PARTICLE_COLOR_TABLE[ AtomType.NEON ] = SOMConstants.NEON_COLOR;
+  PARTICLE_COLOR_TABLE[ AtomType.OXYGEN ] = SOMConstants.OXYGEN_COLOR;
+  PARTICLE_COLOR_TABLE[ AtomType.HYDROGEN ] = SOMConstants.HYDROGEN_COLOR;
+  PARTICLE_COLOR_TABLE[ AtomType.ADJUSTABLE ] = SOMConstants.ADJUSTABLE_ATTRACTION_COLOR;
 
   // set up the association between atom types and their radii in the model
   var PARTICLE_RADIUS_TABLE = {};
@@ -117,7 +117,7 @@ define( function( require ) {
     // initiate the first paint
     this.invalidatePaint();
 
-    StatesOfMatterColorProfile.particleStrokeProperty.link( function( color ) {
+    SOMColorProfile.particleStrokeProperty.link( function( color ) {
       self.useStrokedParticles = color.toCSS() !== 'rgb(255,255,255)';
     } );
     this.mutate( options );

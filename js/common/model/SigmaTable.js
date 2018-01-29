@@ -18,7 +18,7 @@ define( function( require ) {
   var NeonAtom = require( 'STATES_OF_MATTER/common/model/particle/NeonAtom' );
   var OxygenAtom = require( 'STATES_OF_MATTER/common/model/particle/OxygenAtom' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
+  var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
 
   // static object (no constructor)
   var SigmaTable = {
@@ -50,7 +50,7 @@ define( function( require ) {
         }
         else {
           assert && assert( false, 'Error: Interaction potential not available for requested atom: ' + atomType1 );
-          return StatesOfMatterConstants.MAX_EPSILON / 2;
+          return SOMConstants.MAX_EPSILON / 2;
         }
       }
       else {
@@ -76,7 +76,7 @@ define( function( require ) {
         else {
           assert && assert( false, 'Error: sigma data not available for this combination of molecules: ' + atomType1 +
                                    ', ' + atomType2 );
-          return (StatesOfMatterConstants.MAX_SIGMA - StatesOfMatterConstants.MIN_SIGMA) / 2;
+          return (SOMConstants.MAX_SIGMA - SOMConstants.MIN_SIGMA) / 2;
         }
       }
     }

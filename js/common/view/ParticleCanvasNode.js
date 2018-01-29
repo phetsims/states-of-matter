@@ -22,8 +22,8 @@ define( function( require ) {
   var HydrogenAtom = require( 'STATES_OF_MATTER/common/model/particle/HydrogenAtom' );
   var inherit = require( 'PHET_CORE/inherit' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  var StatesOfMatterColorProfile = require( 'STATES_OF_MATTER/common/view/StatesOfMatterColorProfile' );
-  var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
+  var SOMColorProfile = require( 'STATES_OF_MATTER/common/view/SOMColorProfile' );
+  var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
 
   // constants
   var TWO_PI_RADIANS = Math.PI * 2;
@@ -48,7 +48,7 @@ define( function( require ) {
     // initiate the first paint
     this.invalidatePaint();
 
-    StatesOfMatterColorProfile.particleStrokeProperty.link( function( color ) {
+    SOMColorProfile.particleStrokeProperty.link( function( color ) {
       self.strokeColor = color.toCSS();
     } );
     this.mutate( options );
@@ -77,8 +77,8 @@ define( function( require ) {
       // variation in the appearance of the molecules.  OPTIMIZATION NOTE: At the time of this writing, it is only
       // hydrogen atoms that will ever have this flag set, so several context values are set prior to the loop rather
       // than inside of it.
-      context.fillStyle = StatesOfMatterConstants.HYDROGEN_COLOR;
-      context.strokeStyle = isParticleStrokeWhite ? StatesOfMatterConstants.HYDROGEN_COLOR : this.strokeColor;
+      context.fillStyle = SOMConstants.HYDROGEN_COLOR;
+      context.strokeStyle = isParticleStrokeWhite ? SOMConstants.HYDROGEN_COLOR : this.strokeColor;
       context.beginPath();
       var fillAndStrokeNeeded = false;
       for ( i = 0; i < this.particles.length; i++ ) {

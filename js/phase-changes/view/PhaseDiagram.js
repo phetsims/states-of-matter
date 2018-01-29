@@ -20,8 +20,8 @@ define( function( require ) {
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Shape = require( 'KITE/Shape' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  var StatesOfMatterColorProfile = require( 'STATES_OF_MATTER/common/view/StatesOfMatterColorProfile' );
-  var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
+  var SOMColorProfile = require( 'STATES_OF_MATTER/common/view/SOMColorProfile' );
+  var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
   var Text = require( 'SCENERY/nodes/Text' );
   var Vector2 = require( 'DOT/Vector2' );
 
@@ -205,8 +205,8 @@ define( function( require ) {
       X_ORIGIN_OFFSET + (HORIZ_AXIS_SIZE_PROPORTION * WIDTH),
       Y_ORIGIN_OFFSET,
       {
-        fill: StatesOfMatterColorProfile.controlPanelTextProperty,
-        stroke: StatesOfMatterColorProfile.controlPanelTextProperty,
+        fill: SOMColorProfile.controlPanelTextProperty,
+        stroke: SOMColorProfile.controlPanelTextProperty,
         headHeight: 8,
         headWidth: 8,
         tailWidth: AXES_LINE_WIDTH
@@ -220,8 +220,8 @@ define( function( require ) {
       X_ORIGIN_OFFSET,
       Y_ORIGIN_OFFSET - Y_USABLE_RANGE - AXES_ARROW_HEAD_HEIGHT,
       {
-        fill: StatesOfMatterColorProfile.controlPanelTextProperty,
-        stroke: StatesOfMatterColorProfile.controlPanelTextProperty,
+        fill: SOMColorProfile.controlPanelTextProperty,
+        stroke: SOMColorProfile.controlPanelTextProperty,
         headHeight: 8,
         headWidth: 8,
         tailWidth: AXES_LINE_WIDTH
@@ -232,7 +232,7 @@ define( function( require ) {
     // Create and add the labels for the axes.
     var horizontalAxisLabel = new Text( temperatureString, {
       font: AXIS_LABEL_FONT,
-      fill: StatesOfMatterColorProfile.controlPanelTextProperty
+      fill: SOMColorProfile.controlPanelTextProperty
     } );
     if ( horizontalAxisLabel.width > horizontalAxis.width ) {
       horizontalAxisLabel.scale( horizontalAxis.width / horizontalAxisLabel.width );
@@ -242,7 +242,7 @@ define( function( require ) {
 
     var verticalAxisLabel = new Text( pressureString, {
       font: AXIS_LABEL_FONT,
-      fill: StatesOfMatterColorProfile.controlPanelTextProperty
+      fill: SOMColorProfile.controlPanelTextProperty
     } );
     if ( verticalAxisLabel.width > verticalAxis.height ) {
       verticalAxisLabel.scale( verticalAxis.height / verticalAxisLabel.width );
@@ -257,7 +257,7 @@ define( function( require ) {
     accordionContent.addChild( this.currentStateMarker );
 
     var titleNode = new Text( phaseDiagramString, {
-      fill: StatesOfMatterColorProfile.controlPanelTextProperty,
+      fill: SOMColorProfile.controlPanelTextProperty,
       font: new PhetFont( { size: 13 } )
     } );
 
@@ -266,13 +266,13 @@ define( function( require ) {
     }
     this.accordionBox = new AccordionBox( accordionContent, {
       titleNode: titleNode,
-      fill: StatesOfMatterColorProfile.controlPanelBackgroundProperty,
-      stroke: StatesOfMatterColorProfile.controlPanelStrokeProperty,
+      fill: SOMColorProfile.controlPanelBackgroundProperty,
+      stroke: SOMColorProfile.controlPanelStrokeProperty,
       expandedProperty: expandedProperty,
       contentAlign: 'center',
       titleAlignX: 'center',
       buttonAlign: 'left',
-      cornerRadius: StatesOfMatterConstants.PANEL_CORNER_RADIUS,
+      cornerRadius: SOMConstants.PANEL_CORNER_RADIUS,
       contentYSpacing: -15,
       contentYMargin: 5,
       contentXMargin: 5,

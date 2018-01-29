@@ -22,8 +22,8 @@ define( function( require ) {
   var RadioButtonGroup = require( 'SUN/buttons/RadioButtonGroup' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  var StatesOfMatterColorProfile = require( 'STATES_OF_MATTER/common/view/StatesOfMatterColorProfile' );
-  var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
+  var SOMColorProfile = require( 'STATES_OF_MATTER/common/view/SOMColorProfile' );
+  var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
   var SubstanceType = require( 'STATES_OF_MATTER/common/SubstanceType' );
   var Text = require( 'SCENERY/nodes/Text' );
   var VBox = require( 'SCENERY/nodes/VBox' );
@@ -55,10 +55,10 @@ define( function( require ) {
     options = _.extend( {
       xMargin: 5,
       yMargin: 5,
-      fill: StatesOfMatterColorProfile.controlPanelBackgroundProperty,
-      stroke: StatesOfMatterColorProfile.controlPanelStrokeProperty,
+      fill: SOMColorProfile.controlPanelBackgroundProperty,
+      stroke: SOMColorProfile.controlPanelStrokeProperty,
       lineWidth: 1,
-      cornerRadius: StatesOfMatterConstants.PANEL_CORNER_RADIUS,
+      cornerRadius: SOMConstants.PANEL_CORNER_RADIUS,
       minWidth: 120 // somewhat arbitrary, will generally be set by constructor
     }, options );
 
@@ -68,7 +68,7 @@ define( function( require ) {
     var textOptions = { font: new PhetFont( NORMAL_TEXT_FONT_SIZE ), fill: '#FFFFFF', maxWidth: selectorWidth * 0.75 };
     var tickTextOptions = {
       font: new PhetFont( NORMAL_TEXT_FONT_SIZE ),
-      fill: StatesOfMatterColorProfile.controlPanelTextProperty,
+      fill: SOMColorProfile.controlPanelTextProperty,
       maxWidth: TICK_TEXT_MAX_WIDTH
     };
 
@@ -79,35 +79,35 @@ define( function( require ) {
     var interactionStrengthNode = new Node();
     var interactionTitle = new Text( interactionStrengthWithSymbolString, {
       font: new PhetFont( NORMAL_TEXT_FONT_SIZE ),
-      fill: StatesOfMatterColorProfile.controlPanelTextProperty,
+      fill: SOMColorProfile.controlPanelTextProperty,
       maxWidth: 140
     } );
 
     interactionStrengthNode.addChild( interactionTitle );
     var interactionStrengthSlider = new HSlider(
       multipleParticleModel.interactionStrengthProperty, {
-        min: StatesOfMatterConstants.MIN_ADJUSTABLE_EPSILON, max: MultipleParticleModel.MAX_ADJUSTABLE_EPSILON
+        min: SOMConstants.MIN_ADJUSTABLE_EPSILON, max: MultipleParticleModel.MAX_ADJUSTABLE_EPSILON
       }, {
         trackFill: 'white',
         thumbSize: new Dimension2( 14, 25 ),
         majorTickLength: 15,
         minorTickLength: 12,
         trackSize: new Dimension2( 110, 4 ),
-        trackStroke: StatesOfMatterColorProfile.controlPanelTextProperty,
+        trackStroke: SOMColorProfile.controlPanelTextProperty,
         trackLineWidth: 1,
         thumbLineWidth: 1,
         thumbTouchAreaXDilation: 8,
         thumbTouchAreaYDilation: 8,
         tickLabelSpacing: 6,
-        majorTickStroke: StatesOfMatterColorProfile.controlPanelTextProperty,
+        majorTickStroke: SOMColorProfile.controlPanelTextProperty,
         majorTickLineWidth: 1,
-        minorTickStroke: StatesOfMatterColorProfile.controlPanelTextProperty,
+        minorTickStroke: SOMColorProfile.controlPanelTextProperty,
         minorTickLineWidth: 1,
         cursor: 'pointer'
       } );
     interactionStrengthNode.addChild( interactionStrengthSlider );
     interactionStrengthSlider.addMajorTick( MultipleParticleModel.MAX_ADJUSTABLE_EPSILON, strongTitle );
-    interactionStrengthSlider.addMajorTick( StatesOfMatterConstants.MIN_ADJUSTABLE_EPSILON, weakTitle );
+    interactionStrengthSlider.addMajorTick( SOMConstants.MIN_ADJUSTABLE_EPSILON, weakTitle );
 
     var neonText = new Text( neonString, textOptions );
     var argonText = new Text( argonString, textOptions );
@@ -116,7 +116,7 @@ define( function( require ) {
     var adjustableAttractionText = new Text( adjustableAttractionString, textOptions );
     var titleText = new Text( atomsAndMoleculesString, {
       font: new PhetFont( 14 ),
-      fill: StatesOfMatterColorProfile.controlPanelTextProperty,
+      fill: SOMColorProfile.controlPanelTextProperty,
       maxWidth: options.minWidth * 0.85
     } );
 
@@ -205,7 +205,7 @@ define( function( require ) {
       }
     } );
     var titleBackground = new Rectangle( 0, 0, titleText.width + 5, titleText.height, {
-      fill: StatesOfMatterColorProfile.controlPanelBackgroundProperty
+      fill: SOMColorProfile.controlPanelBackgroundProperty
     } );
     titleBackground.centerX = radioButtonPanel.centerX;
     titleBackground.centerY = radioButtonPanel.top;

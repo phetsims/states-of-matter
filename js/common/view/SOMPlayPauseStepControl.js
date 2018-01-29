@@ -11,7 +11,7 @@ define( function( require ) {
   var Node = require( 'SCENERY/nodes/Node' );
   var PlayPauseButton = require( 'SCENERY_PHET/buttons/PlayPauseButton' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
+  var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
   var StepForwardButton = require( 'SCENERY_PHET/buttons/StepForwardButton' );
 
   // constants
@@ -40,7 +40,7 @@ define( function( require ) {
 
     var stepButton = new StepForwardButton( {
       playingProperty: playingProperty,
-      listener: function() { stepFunction( StatesOfMatterConstants.NOMINAL_TIME_STEP ); },
+      listener: function() { stepFunction( SOMConstants.NOMINAL_TIME_STEP ); },
       radius: 12,
       stroke: STROKE,
       fill: FILL,

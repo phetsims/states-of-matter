@@ -14,7 +14,7 @@ define( function( require ) {
   // modules
   var inherit = require( 'PHET_CORE/inherit' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
+  var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
 
   // constants
   var MIN_POST_ZERO_VELOCITY = 0.1; // min velocity when warming up from absolute zero, empirically determined
@@ -31,7 +31,7 @@ define( function( require ) {
     this.moleculeDataSet = moleculeDataSet; // @private
 
     // @public, target temperature in normalized model units
-    this.targetTemperature = StatesOfMatterConstants.INITIAL_TEMPERATURE;
+    this.targetTemperature = SOMConstants.INITIAL_TEMPERATURE;
 
     // @private, minimum temperature in normalized model units, below this is considered absolute 0
     this.minModelTemperature = minTemperature;

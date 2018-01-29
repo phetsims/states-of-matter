@@ -24,7 +24,7 @@ define( function( require ) {
   var RadioButtonGroup = require( 'SUN/buttons/RadioButtonGroup' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
+  var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
   var SubstanceType = require( 'STATES_OF_MATTER/common/SubstanceType' );
   var Text = require( 'SCENERY/nodes/Text' );
   var VBox = require( 'SCENERY/nodes/VBox' );
@@ -73,7 +73,7 @@ define( function( require ) {
       tickTextColor: 'black',
       buttonTextFill: enableHeterogeneousAtoms ? 'black' : 'white',
       lineWidth: 1,
-      cornerRadius: StatesOfMatterConstants.PANEL_CORNER_RADIUS,
+      cornerRadius: SOMConstants.PANEL_CORNER_RADIUS,
       minWidth: 0
     }, options );
 
@@ -326,7 +326,7 @@ define( function( require ) {
 
     var atomDiameterSlider = new HSlider(
       dualAtomModel.atomDiameterProperty,
-      { min: StatesOfMatterConstants.MIN_SIGMA, max: StatesOfMatterConstants.MAX_SIGMA },
+      { min: SOMConstants.MIN_SIGMA, max: SOMConstants.MAX_SIGMA },
       sliderOptions
     );
 
@@ -335,12 +335,12 @@ define( function( require ) {
     var largeText = new Text( largeString, tickTextOptions );
 
     if ( enableHeterogeneousAtoms ) {
-      atomDiameterSlider.addMajorTick( StatesOfMatterConstants.MIN_SIGMA );
-      atomDiameterSlider.addMajorTick( StatesOfMatterConstants.MAX_SIGMA );
+      atomDiameterSlider.addMajorTick( SOMConstants.MIN_SIGMA );
+      atomDiameterSlider.addMajorTick( SOMConstants.MAX_SIGMA );
     }
     else {
-      atomDiameterSlider.addMajorTick( StatesOfMatterConstants.MIN_SIGMA, smallText );
-      atomDiameterSlider.addMajorTick( StatesOfMatterConstants.MAX_SIGMA, largeText );
+      atomDiameterSlider.addMajorTick( SOMConstants.MIN_SIGMA, smallText );
+      atomDiameterSlider.addMajorTick( SOMConstants.MAX_SIGMA, largeText );
     }
 
     var atomDiameter = new Node( { children: [ atomDiameterTitle, atomDiameterSlider ] } );
@@ -354,13 +354,13 @@ define( function( require ) {
     } );
     var interactionStrengthSlider = new HSlider(
       dualAtomModel.interactionStrengthProperty,
-      { min: StatesOfMatterConstants.MIN_EPSILON, max: StatesOfMatterConstants.MAX_EPSILON },
+      { min: SOMConstants.MIN_EPSILON, max: SOMConstants.MAX_EPSILON },
       sliderOptions
     );
     var weakText = new Text( weakString, tickTextOptions );
     var strongText = new Text( strongString, tickTextOptions );
-    interactionStrengthSlider.addMajorTick( StatesOfMatterConstants.MIN_EPSILON, weakText );
-    interactionStrengthSlider.addMajorTick( StatesOfMatterConstants.MAX_EPSILON, strongText );
+    interactionStrengthSlider.addMajorTick( SOMConstants.MIN_EPSILON, weakText );
+    interactionStrengthSlider.addMajorTick( SOMConstants.MAX_EPSILON, strongText );
     var interactionStrength = new Node( { children: [ interactionStrengthTitle, interactionStrengthSlider ] } );
 
     var content = new VBox( {

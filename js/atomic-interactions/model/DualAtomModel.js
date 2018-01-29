@@ -20,7 +20,7 @@ define( function( require ) {
   var Property = require( 'AXON/Property' );
   var SigmaTable = require( 'STATES_OF_MATTER/common/model/SigmaTable' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
+  var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
   var Vector2 = require( 'DOT/Vector2' );
 
   // constants
@@ -77,8 +77,8 @@ define( function( require ) {
     this.potentialWhenReleased = 0; // Used to set magnitude of vibration.
     this.distanceWhenReleased = 0; // Used to determine whether atom should escape or bond.
     this.ljPotentialCalculator = new LjPotentialCalculator(
-      StatesOfMatterConstants.MIN_SIGMA,
-      StatesOfMatterConstants.MIN_EPSILON
+      SOMConstants.MIN_SIGMA,
+      SOMConstants.MIN_EPSILON
     );
     this.residualTime = 0; // accumulates dt values not yet applied to model
     this.justReleased = false;
@@ -261,11 +261,11 @@ define( function( require ) {
            ( this.movableAtom.getType() === AtomType.ADJUSTABLE ) &&
            ( sigma !== this.ljPotentialCalculator.getSigma() ) ) {
 
-        if ( sigma > StatesOfMatterConstants.MAX_SIGMA ) {
-          sigma = StatesOfMatterConstants.MAX_SIGMA;
+        if ( sigma > SOMConstants.MAX_SIGMA ) {
+          sigma = SOMConstants.MAX_SIGMA;
         }
-        else if ( sigma < StatesOfMatterConstants.MIN_SIGMA ) {
-          sigma = StatesOfMatterConstants.MIN_SIGMA;
+        else if ( sigma < SOMConstants.MIN_SIGMA ) {
+          sigma = SOMConstants.MIN_SIGMA;
         }
         this.ljPotentialCalculator.setSigma( sigma );
         this.movableAtom.setPosition( this.ljPotentialCalculator.calculateMinimumForceDistance(), 0 );
@@ -292,11 +292,11 @@ define( function( require ) {
      */
     setEpsilon: function( epsilon ) {
 
-      if ( epsilon < StatesOfMatterConstants.MIN_EPSILON ) {
-        epsilon = StatesOfMatterConstants.MIN_EPSILON;
+      if ( epsilon < SOMConstants.MIN_EPSILON ) {
+        epsilon = SOMConstants.MIN_EPSILON;
       }
-      else if ( epsilon > StatesOfMatterConstants.MAX_EPSILON ) {
-        epsilon = StatesOfMatterConstants.MAX_EPSILON;
+      else if ( epsilon > SOMConstants.MAX_EPSILON ) {
+        epsilon = SOMConstants.MAX_EPSILON;
       }
 
       if ( ( this.fixedAtom.getType() === AtomType.ADJUSTABLE ) &&

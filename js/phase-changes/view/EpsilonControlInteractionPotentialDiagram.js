@@ -26,8 +26,8 @@ define( function( require ) {
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  var StatesOfMatterColorProfile = require( 'STATES_OF_MATTER/common/view/StatesOfMatterColorProfile' );
-  var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
+  var SOMColorProfile = require( 'STATES_OF_MATTER/common/view/SOMColorProfile' );
+  var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
   var SubstanceType = require( 'STATES_OF_MATTER/common/SubstanceType' );
   var Text = require( 'SCENERY/nodes/Text' );
 
@@ -87,7 +87,7 @@ define( function( require ) {
         endDragY = self.epsilonLine.globalToParentPoint( event.pointer.point ).y;
         var d = endDragY - startDragY;
         startDragY = endDragY;
-        var scaleFactor = StatesOfMatterConstants.MAX_EPSILON /
+        var scaleFactor = SOMConstants.MAX_EPSILON /
                           ( self.getGraphHeight() / 2);
         multipleParticleModel.interactionStrengthProperty.set( multipleParticleModel.getEpsilon() + ( d * scaleFactor ) );
         self.drawPotentialCurve();
@@ -117,7 +117,7 @@ define( function( require ) {
         endDragY = self.epsilonResizeHandle.globalToParentPoint( event.pointer.point ).y;
         var d = endDragY - startDragY;
         startDragY = endDragY;
-        var scaleFactor = StatesOfMatterConstants.MAX_EPSILON /
+        var scaleFactor = SOMConstants.MAX_EPSILON /
                           ( self.getGraphHeight() / 2);
         multipleParticleModel.interactionStrengthProperty.value = multipleParticleModel.getEpsilon() + ( d * scaleFactor );
         self.drawPotentialCurve();
@@ -143,7 +143,7 @@ define( function( require ) {
 
     var accordionContentHBox = new HBox( { children: [ accordionContent ] } );
     var titleNode = new Text( interactionPotentialString, {
-      fill: StatesOfMatterColorProfile.controlPanelTextProperty,
+      fill: SOMColorProfile.controlPanelTextProperty,
       font: new PhetFont( { size: 13 } )
     } );
     if ( titleNode.width > this.horizontalAxis.width ) {
@@ -151,13 +151,13 @@ define( function( require ) {
     }
     var accordionBox = new AccordionBox( accordionContentHBox, {
       titleNode: titleNode,
-      fill: StatesOfMatterColorProfile.controlPanelBackgroundProperty,
-      stroke: StatesOfMatterColorProfile.controlPanelStrokeProperty,
+      fill: SOMColorProfile.controlPanelBackgroundProperty,
+      stroke: SOMColorProfile.controlPanelStrokeProperty,
       expandedProperty: multipleParticleModel.interactionExpandedProperty,
       contentAlign: 'center',
       titleAlignX: 'center',
       buttonAlign: 'left',
-      cornerRadius: StatesOfMatterConstants.PANEL_CORNER_RADIUS,
+      cornerRadius: SOMConstants.PANEL_CORNER_RADIUS,
       contentYSpacing: -3,
       contentYMargin: 5,
       contentXMargin: 6,

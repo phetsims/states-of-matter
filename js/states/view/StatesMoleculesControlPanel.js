@@ -19,8 +19,8 @@ define( function( require ) {
   var RadioButtonGroup = require( 'SUN/buttons/RadioButtonGroup' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  var StatesOfMatterColorProfile = require( 'STATES_OF_MATTER/common/view/StatesOfMatterColorProfile' );
-  var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
+  var SOMColorProfile = require( 'STATES_OF_MATTER/common/view/SOMColorProfile' );
+  var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
   var SubstanceType = require( 'STATES_OF_MATTER/common/SubstanceType' );
   var Text = require( 'SCENERY/nodes/Text' );
 
@@ -44,10 +44,10 @@ define( function( require ) {
     options = _.extend( {
       xMargin: 5,
       yMargin: 8,
-      fill: StatesOfMatterColorProfile.controlPanelBackgroundProperty,
-      stroke: StatesOfMatterColorProfile.controlPanelStrokeProperty,
+      fill: SOMColorProfile.controlPanelBackgroundProperty,
+      stroke: SOMColorProfile.controlPanelStrokeProperty,
       lineWidth: 1,
-      cornerRadius: StatesOfMatterConstants.PANEL_CORNER_RADIUS,
+      cornerRadius: SOMConstants.PANEL_CORNER_RADIUS,
       maxWidth: DEFAULT_WIDTH,
       minWidth: DEFAULT_WIDTH
     }, options );
@@ -62,7 +62,7 @@ define( function( require ) {
     var oxygenText = new Text( diatomicOxygenString, textOptions );
     var title = new Text( atomsAndMoleculesString, {
       font: new PhetFont( 14 ),
-      fill: StatesOfMatterColorProfile.controlPanelTextProperty,
+      fill: SOMColorProfile.controlPanelTextProperty,
       maxWidth: maxTextWidth
     } );
 
@@ -108,7 +108,7 @@ define( function( require ) {
       deselectedContentOpacity: 1
     } );
 
-    StatesOfMatterColorProfile.controlPanelBackgroundProperty.link( function( color ){
+    SOMColorProfile.controlPanelBackgroundProperty.link( function( color ){
       radioButtonGroup.baseColor = color;
     } );
 

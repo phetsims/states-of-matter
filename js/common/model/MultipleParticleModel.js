@@ -43,7 +43,7 @@ define( function( require ) {
   var PhaseStateEnum = require( 'STATES_OF_MATTER/common/PhaseStateEnum' );
   var Property = require( 'AXON/Property' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
+  var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
   var SubstanceType = require( 'STATES_OF_MATTER/common/SubstanceType' );
   var Util = require( 'DOT/Util' );
   var Vector2 = require( 'DOT/Vector2' );
@@ -72,9 +72,9 @@ define( function( require ) {
   var MAX_PARTICLE_MOTION_TIME_STEP = 0.025; // max time step that model can handle, empirically determined
 
   // constants that define the normalized temperatures used for the various states
-  var SOLID_TEMPERATURE = StatesOfMatterConstants.SOLID_TEMPERATURE;
-  var LIQUID_TEMPERATURE = StatesOfMatterConstants.LIQUID_TEMPERATURE;
-  var GAS_TEMPERATURE = StatesOfMatterConstants.GAS_TEMPERATURE;
+  var SOLID_TEMPERATURE = SOMConstants.SOLID_TEMPERATURE;
+  var LIQUID_TEMPERATURE = SOMConstants.LIQUID_TEMPERATURE;
+  var GAS_TEMPERATURE = SOMConstants.GAS_TEMPERATURE;
   var INITIAL_TEMPERATURE = SOLID_TEMPERATURE;
   var APPROACHING_ABSOLUTE_ZERO_TEMPERATURE = SOLID_TEMPERATURE * 0.85;
 
@@ -110,8 +110,8 @@ define( function( require ) {
 
   // Min a max values for adjustable epsilon.  Originally there was a wider allowable range, but the simulation did not
   // work so well, so the range below was arrived at empirically and seems to work reasonably well.
-  var MIN_ADJUSTABLE_EPSILON = StatesOfMatterConstants.MIN_ADJUSTABLE_EPSILON;
-  var MAX_ADJUSTABLE_EPSILON = StatesOfMatterConstants.EPSILON_FOR_WATER * 1.7;
+  var MIN_ADJUSTABLE_EPSILON = SOMConstants.MIN_ADJUSTABLE_EPSILON;
+  var MAX_ADJUSTABLE_EPSILON = SOMConstants.EPSILON_FOR_WATER * 1.7;
 
   // Time value used to prevent molecule injections from being too close together so that they don't overlap after
   // injection and cause high initial velocities.
@@ -433,10 +433,10 @@ define( function( require ) {
           sigma = ArgonAtom.RADIUS * 2;
           break;
         case SubstanceType.DIATOMIC_OXYGEN:
-          sigma = StatesOfMatterConstants.SIGMA_FOR_DIATOMIC_OXYGEN;
+          sigma = SOMConstants.SIGMA_FOR_DIATOMIC_OXYGEN;
           break;
         case SubstanceType.WATER:
-          sigma = StatesOfMatterConstants.SIGMA_FOR_WATER;
+          sigma = SOMConstants.SIGMA_FOR_WATER;
           break;
         case SubstanceType.ADJUSTABLE_ATOM:
           sigma = ConfigurableStatesOfMatterAtom.DEFAULT_RADIUS * 2;
@@ -463,10 +463,10 @@ define( function( require ) {
           epsilon = InteractionStrengthTable.getInteractionPotential( AtomType.ARGON, AtomType.ARGON );
           break;
         case SubstanceType.DIATOMIC_OXYGEN:
-          epsilon = StatesOfMatterConstants.EPSILON_FOR_DIATOMIC_OXYGEN;
+          epsilon = SOMConstants.EPSILON_FOR_DIATOMIC_OXYGEN;
           break;
         case SubstanceType.WATER:
-          epsilon = StatesOfMatterConstants.EPSILON_FOR_WATER;
+          epsilon = SOMConstants.EPSILON_FOR_WATER;
           break;
         case SubstanceType.ADJUSTABLE_ATOM:
           epsilon = this.convertScaledEpsilonToEpsilon( this.moleculeForceAndMotionCalculator.getScaledEpsilon() );
@@ -1299,7 +1299,7 @@ define( function( require ) {
       // The following conversion of the target value for epsilon to a scaled value for the motion calculator object was
       // determined empirically such that the resulting behavior roughly matched that of the existing monatomic
       // molecules.
-      return epsilon / ( StatesOfMatterConstants.MAX_EPSILON / 2 );
+      return epsilon / ( SOMConstants.MAX_EPSILON / 2 );
     },
 
     /**
@@ -1308,7 +1308,7 @@ define( function( require ) {
      * @private
      */
     convertScaledEpsilonToEpsilon: function( scaledEpsilon ) {
-      return scaledEpsilon * StatesOfMatterConstants.MAX_EPSILON / 2;
+      return scaledEpsilon * SOMConstants.MAX_EPSILON / 2;
     },
 
     /**

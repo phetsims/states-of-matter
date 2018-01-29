@@ -16,10 +16,10 @@ define( function( require ) {
     var Node = require( 'SCENERY/nodes/Node' );
     var Rectangle = require( 'SCENERY/nodes/Rectangle' );
     var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-    var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
+    var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
 
     // constants
-    var PARTICLE_COLOR = StatesOfMatterConstants.NEON_COLOR;
+    var PARTICLE_COLOR = SOMConstants.NEON_COLOR;
     var CUBE_WIDTH = 5; // particles
     var CUBE_HEIGHT = 5; // particles
 

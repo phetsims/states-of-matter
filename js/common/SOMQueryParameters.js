@@ -11,11 +11,11 @@ define( function( require ) {
   // modules
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
-  var StatesOfMatterQueryParameters = QueryStringMachine.getAll( {
+  var SOMQueryParameters = QueryStringMachine.getAll( {
 
   } );
 
-  statesOfMatter.register( 'StatesOfMatterQueryParameters', StatesOfMatterQueryParameters );
+  statesOfMatter.register( 'SOMQueryParameters', SOMQueryParameters );
 
-  return StatesOfMatterQueryParameters;
+  return SOMQueryParameters;
 } );

@@ -21,7 +21,7 @@ define( function( require ) {
 
     /**
      * @param {AtomType} atomType
-     * @returns {StatesOfMatterAtom}
+     * @returns {SOMAtom}
      * @public
      */
     createAtom: function( atomType ) {

@@ -16,10 +16,10 @@ define( function( require ) {
     var RadialGradient = require( 'SCENERY/util/RadialGradient' );
     var Rectangle = require( 'SCENERY/nodes/Rectangle' );
     var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-    var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
+    var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
 
     // constants
-    var PARTICLE_COLOR = new Color( StatesOfMatterConstants.ADJUSTABLE_ATTRACTION_COLOR );
+    var PARTICLE_COLOR = new Color( SOMConstants.ADJUSTABLE_ATTRACTION_COLOR );
 
     /**
      * {Dimension2} size

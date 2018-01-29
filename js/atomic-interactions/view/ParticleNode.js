@@ -21,7 +21,7 @@ define( function( require ) {
   var RadialGradient = require( 'SCENERY/util/RadialGradient' );
   var Shape = require( 'KITE/Shape' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
+  var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
   var Vector2 = require( 'DOT/Vector2' );
 
   // constants
@@ -130,19 +130,19 @@ define( function( require ) {
       var baseColor;
 
       if ( atom instanceof ArgonAtom ) {
-        baseColor = new Color( StatesOfMatterConstants.ARGON_COLOR );
+        baseColor = new Color( SOMConstants.ARGON_COLOR );
       }
       else if ( atom instanceof NeonAtom ) {
-        baseColor = new Color( StatesOfMatterConstants.NEON_COLOR );
+        baseColor = new Color( SOMConstants.NEON_COLOR );
       }
       else if ( atom instanceof OxygenAtom ) {
-        baseColor = new Color( StatesOfMatterConstants.OXYGEN_COLOR );
+        baseColor = new Color( SOMConstants.OXYGEN_COLOR );
       }
       else if ( atom instanceof HydrogenAtom ) {
-        baseColor = new Color( StatesOfMatterConstants.HYDROGEN_COLOR );
+        baseColor = new Color( SOMConstants.HYDROGEN_COLOR );
       }
       else if ( atom instanceof ConfigurableStatesOfMatterAtom ) {
-        baseColor = new Color( StatesOfMatterConstants.ADJUSTABLE_ATTRACTION_COLOR );
+        baseColor = new Color( SOMConstants.ADJUSTABLE_ATTRACTION_COLOR );
       }
       else {
         assert && assert( false, 'unrecognized atom type, unable to assign a color' );

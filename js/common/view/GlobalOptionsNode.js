@@ -14,7 +14,7 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var OptionsDialog = require( 'JOIST/OptionsDialog' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  var StatesOfMatterColorProfile = require( 'STATES_OF_MATTER/common/view/StatesOfMatterColorProfile' );
+  var SOMColorProfile = require( 'STATES_OF_MATTER/common/view/SOMColorProfile' );
   var Text = require( 'SCENERY/nodes/Text' );
   var VBox = require( 'SCENERY/nodes/VBox' );
 
@@ -32,10 +32,10 @@ define( function( require ) {
     var children = [];
     projectorModeProperty.link( function( projectorMode ) {
       if ( projectorMode ) {
-        StatesOfMatterColorProfile.profileNameProperty.set( 'projector' );
+        SOMColorProfile.profileNameProperty.set( 'projector' );
       }
       else {
-        StatesOfMatterColorProfile.profileNameProperty.set( 'default' );
+        SOMColorProfile.profileNameProperty.set( 'default' );
       }
     } );
 

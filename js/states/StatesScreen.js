@@ -15,8 +15,8 @@ define( function( require ) {
   var Screen = require( 'JOIST/Screen' );
   var StatesIcon = require( 'STATES_OF_MATTER/states/StatesIcon' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  var StatesOfMatterColorProfile = require( 'STATES_OF_MATTER/common/view/StatesOfMatterColorProfile' );
-  var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
+  var SOMColorProfile = require( 'STATES_OF_MATTER/common/view/SOMColorProfile' );
+  var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
   var StatesScreenView = require( 'STATES_OF_MATTER/states/view/StatesScreenView' );
 
   // strings
@@ -29,9 +29,9 @@ define( function( require ) {
 
     var options = {
       name: statesString,
-      backgroundColorProperty: StatesOfMatterColorProfile.backgroundProperty,
+      backgroundColorProperty: SOMColorProfile.backgroundProperty,
       homeScreenIcon: new StatesIcon( Screen.MINIMUM_HOME_SCREEN_ICON_SIZE ),
-      maxDT: StatesOfMatterConstants.MAX_DT
+      maxDT: SOMConstants.MAX_DT
     };
 
     Screen.call( this,

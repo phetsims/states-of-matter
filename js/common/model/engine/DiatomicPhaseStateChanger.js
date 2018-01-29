@@ -16,7 +16,7 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var PhaseStateEnum = require( 'STATES_OF_MATTER/common/PhaseStateEnum' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
+  var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
   var SubstanceType = require( 'STATES_OF_MATTER/common/SubstanceType' );
 
   // constants
@@ -592,7 +592,7 @@ define( function( require ) {
       // Step the model a number of times in order to prevent the particles from looking too organized.  The number of
       // steps was empirically determined.
       for ( var i = 0; i < postChangeModelSteps; i++ ) {
-        this.multipleParticleModel.stepInternal( StatesOfMatterConstants.NOMINAL_TIME_STEP );
+        this.multipleParticleModel.stepInternal( SOMConstants.NOMINAL_TIME_STEP );
       }
     },
 
@@ -603,7 +603,7 @@ define( function( require ) {
     setPhaseSolid: function() {
 
       // Set the model temperature for this phase.
-      this.multipleParticleModel.setTemperature( StatesOfMatterConstants.SOLID_TEMPERATURE );
+      this.multipleParticleModel.setTemperature( SOMConstants.SOLID_TEMPERATURE );
 
       // Place the molecules into a cube, a.k.a. a crystal.
       this.formCrystal(
@@ -634,7 +634,7 @@ define( function( require ) {
       this.loadSavedState( dataSetToLoad );
 
       // set the temperature
-      this.multipleParticleModel.setTemperature( StatesOfMatterConstants.LIQUID_TEMPERATURE );
+      this.multipleParticleModel.setTemperature( SOMConstants.LIQUID_TEMPERATURE );
     }
   } );
 } );

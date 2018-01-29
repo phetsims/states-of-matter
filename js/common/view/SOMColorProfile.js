@@ -19,7 +19,7 @@ define( function( require ) {
   // constants
   var GRAY = new Color( 230, 230, 230 );
 
-  var StatesOfMatterColorProfile = new ColorProfile( {
+  var SOMColorProfile = new ColorProfile( {
     background: {
       default: 'black',
       projector: 'white'
@@ -49,8 +49,8 @@ define( function( require ) {
     }
   }, [ 'default', 'projector' ] );
 
-  statesOfMatter.register( 'StatesOfMatterColorProfile', StatesOfMatterColorProfile );
+  statesOfMatter.register( 'SOMColorProfile', SOMColorProfile );
 
-  return StatesOfMatterColorProfile;
+  return SOMColorProfile;
 } );
 
