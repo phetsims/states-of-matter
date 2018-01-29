@@ -21,6 +21,8 @@ define( function( require ) {
 
   var StatesOfMatterConstants  = {
 
+    MAX_DT: 0.320, // seconds, max time step (delta time), this is 20x the nominal step 0f 16ms
+
     SCREEN_VIEW_OPTIONS: { layoutBounds: new Bounds2( 0, 0, 834, 504 ) },
 
     TRIPLE_POINT_MONATOMIC_MODEL_TEMPERATURE: 0.26, // empirically determined

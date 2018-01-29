@@ -109,13 +109,13 @@ define( function( require ) {
         var moleculeVelocityY = moleculeVelocity.y; // optimization
         var moleculeCenterOfMassPosition = moleculeCenterOfMassPositions[ i ];
 
-        // calculate new position based on time and velocity
+        // calculate new position based on time, velocity, and acceleration
         var xPos = moleculeCenterOfMassPosition.x +
                    ( timeStep * moleculeVelocityX ) +
-                   ( timeStepSqrHalf * moleculeForces[ i ].x * massInverse);
+                   ( timeStepSqrHalf * moleculeForces[ i ].x * massInverse );
         var yPos = moleculeCenterOfMassPosition.y +
                    ( timeStep * moleculeVelocityY ) +
-                   ( timeStepSqrHalf * moleculeForces[ i ].y * massInverse);
+                   ( timeStepSqrHalf * moleculeForces[ i ].y * massInverse );
 
         if ( !moleculeDataSet.insideContainer[ i ] && this.isNormalizedPositionInContainer( xPos, yPos ) ) {
 

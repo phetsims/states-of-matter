@@ -950,12 +950,6 @@ define( function( require ) {
      */
     step: function( dt ) {
 
-      // If the time step is excessively large, ignore it - it probably means that the user was on another tab or that
-      // the browser was hidden, and they just came back to the sim.
-      if ( dt > 0.5 ) {
-        return;
-      }
-
       if ( this.isPlayingProperty.get() ) {
         this.stepInternal( dt );
       }

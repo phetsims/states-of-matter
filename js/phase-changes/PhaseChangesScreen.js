@@ -17,6 +17,7 @@ define( function( require ) {
   var Screen = require( 'JOIST/Screen' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var StatesOfMatterColorProfile = require( 'STATES_OF_MATTER/common/view/StatesOfMatterColorProfile' );
+  var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
 
   // strings
   var phaseChangesString = require( 'string!STATES_OF_MATTER/phaseChanges' );
@@ -30,7 +31,8 @@ define( function( require ) {
     var options = {
       name: phaseChangesString,
       backgroundColorProperty: StatesOfMatterColorProfile.backgroundProperty,
-      homeScreenIcon: new PhaseChangesIcon( Screen.MINIMUM_HOME_SCREEN_ICON_SIZE )
+      homeScreenIcon: new PhaseChangesIcon( Screen.MINIMUM_HOME_SCREEN_ICON_SIZE ),
+      maxDT: StatesOfMatterConstants.MAX_DT
     };
 
     Screen.call( this,

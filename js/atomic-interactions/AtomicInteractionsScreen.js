@@ -16,6 +16,7 @@ define( function( require ) {
   var Screen = require( 'JOIST/Screen' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var StatesOfMatterColorProfile = require( 'STATES_OF_MATTER/common/view/StatesOfMatterColorProfile' );
+  var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
 
   /**
    * @param {boolean} enableHeterogeneousMolecules
@@ -27,7 +28,8 @@ define( function( require ) {
     var options = {
       name: screenTitle,
       backgroundColorProperty: StatesOfMatterColorProfile.backgroundProperty,
-      homeScreenIcon: new AtomicInteractionsIcon( Screen.MINIMUM_HOME_SCREEN_ICON_SIZE )
+      homeScreenIcon: new AtomicInteractionsIcon( Screen.MINIMUM_HOME_SCREEN_ICON_SIZE ),
+      maxDT: StatesOfMatterConstants.MAX_DT
     };
 
     Screen.call( this,

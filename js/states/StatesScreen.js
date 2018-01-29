@@ -16,6 +16,7 @@ define( function( require ) {
   var StatesIcon = require( 'STATES_OF_MATTER/states/StatesIcon' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var StatesOfMatterColorProfile = require( 'STATES_OF_MATTER/common/view/StatesOfMatterColorProfile' );
+  var StatesOfMatterConstants = require( 'STATES_OF_MATTER/common/StatesOfMatterConstants' );
   var StatesScreenView = require( 'STATES_OF_MATTER/states/view/StatesScreenView' );
 
   // strings
@@ -29,7 +30,8 @@ define( function( require ) {
     var options = {
       name: statesString,
       backgroundColorProperty: StatesOfMatterColorProfile.backgroundProperty,
-      homeScreenIcon: new StatesIcon( Screen.MINIMUM_HOME_SCREEN_ICON_SIZE )
+      homeScreenIcon: new StatesIcon( Screen.MINIMUM_HOME_SCREEN_ICON_SIZE ),
+      maxDT: StatesOfMatterConstants.MAX_DT
     };
 
     Screen.call( this,
