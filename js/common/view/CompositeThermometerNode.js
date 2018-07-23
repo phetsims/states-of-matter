@@ -17,6 +17,7 @@ define( function( require ) {
   var Panel = require( 'SUN/Panel' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Property = require( 'AXON/Property' );
+  var SOMQueryParameters = require( 'STATES_OF_MATTER/common/SOMQueryParameters' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var Text = require( 'SCENERY/nodes/Text' );
   var ThermometerNode = require( 'SCENERY_PHET/ThermometerNode' );
@@ -77,7 +78,7 @@ define( function( require ) {
     } );
 
     // @private
-    this.temperatureProperty = new Property( 'kelvin' );
+    this.temperatureProperty = new Property( SOMQueryParameters.defaultCelsius ? 'celsius' : 'kelvin' );
     var temperatureComboBox = new ComboBox(
       [
         ComboBox.createItem( this.temperatureKelvinText, 'kelvin' ),
