@@ -47,8 +47,8 @@ define( function( require ) {
           return 111.84;
         }
         else if ( atomType1 === AtomType.OXYGEN ) {
-          // Source: Noah P, who got it from Robert Parsons.
-          return 59500;
+          //  "Hollywoded" value to be larger than other values, but not really as big as bonded oxygen
+          return 1000;
         }
         else if ( atomType1 === AtomType.ADJUSTABLE ) {
           return ConfigurableStatesOfMatterAtom.DEFAULT_INTERACTION_POTENTIAL;

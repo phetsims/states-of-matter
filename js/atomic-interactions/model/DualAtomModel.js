@@ -456,7 +456,7 @@ define( function( require ) {
         }
 
         // Update the bonding state (only affects some combinations of atoms).
-        this.updateBondingState( dt );
+        // this.updateBondingState( dt );
       }
 
       this.stepAtomVibration( dt );

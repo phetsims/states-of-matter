@@ -42,8 +42,8 @@ define( function( require ) {
           return 376;
         }
         else if ( atomType1 === AtomType.OXYGEN ) {
-          // Source: Noah P, who got it from Robert Parsons.
-          return 110;
+          // "Hollywoded" value to be smaller than other values, but not really as small as bonded oxygen
+          return 200;
         }
         else if ( atomType1 === AtomType.ADJUSTABLE ) {
           return ConfigurableStatesOfMatterAtom.DEFAULT_RADIUS * 2;

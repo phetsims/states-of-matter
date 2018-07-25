@@ -19,9 +19,9 @@ define( function( require ) {
   var ZoomButton = require( 'SCENERY_PHET/buttons/ZoomButton' );
 
   // constants
-  var MAX_LINES_HORIZONTAL = 13;
+  var MAX_LINES_HORIZONTAL = 9;
   var MIN_LINES_HORIZONTAL = 5;
-  var ZOOM_INCREMENT = 2; // 2 lines per zoom
+  var ZOOM_INCREMENT = 2; // lines per zoom
 
   /**
    * @param atomsView
