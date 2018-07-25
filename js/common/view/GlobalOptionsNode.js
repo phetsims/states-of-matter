@@ -25,7 +25,7 @@ define( function( require ) {
   var MAX_CHECKBOX_TEXT_WIDTH = 350;
 
   /**
-   * @param { Property<boolean> } projectorModeProperty
+   * @param {Property<boolean>} projectorModeProperty
    * @constructor
    */
   function GlobalOptionsNode( projectorModeProperty ) {
