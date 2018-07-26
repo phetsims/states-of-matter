@@ -1,5 +1,5 @@
 {
-  "comment": "# states-of-matter 1.0.4-rc.1 Wed Jul 25 2018 04:41:29 GMT-0600 (MDT)",
+  "comment": "# states-of-matter 1.0.4-rc.1 Thu Jul 26 2018 17:39:16 GMT-0600 (MDT)",
   "assert": {
     "sha": "1ea1df653504bc6eeb454051cedc7fb970a10cac",
     "branch": "HEAD"
@@ -45,8 +45,8 @@
     "branch": "HEAD"
   },
   "scenery": {
-    "sha": "8fa701c6c77c1325d0e5ddd43b93c55686da9554",
-    "branch": "HEAD"
+    "sha": "c8671be727b18ab3d992297b5119f2c9125ce6d3",
+    "branch": "states-of-matter-1.0"
   },
   "scenery-phet": {
     "sha": "fdf8f08ea10098c23de9fc8fa7f20fff5d52c0be",
@@ -57,7 +57,7 @@
     "branch": "HEAD"
   },
   "states-of-matter": {
-    "sha": "620f48a32387700ab5e662e836c2665b4bb54374",
+    "sha": "5c482085c6398b5aec1df9a09fccb16c6aa6cc10",
     "branch": "1.0"
   },
   "sun": {
