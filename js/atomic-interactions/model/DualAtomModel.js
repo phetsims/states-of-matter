@@ -13,7 +13,6 @@ define( function( require ) {
   var AtomFactory = require( 'STATES_OF_MATTER/common/model/AtomFactory' );
   var AtomPair = require( 'STATES_OF_MATTER/atomic-interactions/model/AtomPair' );
   var AtomType = require( 'STATES_OF_MATTER/common/model/AtomType' );
-  var BondingState = require( 'STATES_OF_MATTER/atomic-interactions/model/BondingState' );
   var inherit = require( 'PHET_CORE/inherit' );
   var InteractionStrengthTable = require( 'STATES_OF_MATTER/common/model/InteractionStrengthTable' );
   var LjPotentialCalculator = require( 'STATES_OF_MATTER/common/model/LjPotentialCalculator' );
@@ -24,18 +23,11 @@ define( function( require ) {
   var Vector2 = require( 'DOT/Vector2' );
 
   // constants
-  var BONDED_OSCILLATION_PROPORTION = 0.06; // Proportion of atom radius.
   var DEFAULT_ATOM_TYPE = AtomType.NEON;
-  var MAX_APPROXIMATION_ITERATIONS = 100;
-  var BONDING_THRESHOLD_VELOCITY = 100;  // Used to distinguish small oscillations from real movement, empirically determined.
-  var FIXED_ATOM_VIBRATION_TIME = 2; // seconds
-  var FIXED_ATOM_JUMP_PERIOD = 2 * ( 1 / 60 ); // in seconds, intended to work well with 60 Hz frame rate
-  var MOVABLE_ATOM_OSCILLATION_PERIOD = 4 * ( 1 / 60 ); // in seconds, intended to work well with 60 Hz frame rate
-  var MAX_ATOM_VELOCITY = 10000; // used to limit velocity so that atom doesn't move so quickly that it can't be seen
 
   // The maximum time step was empirically determined to be as large as possible while still making sure that energy
   // is conserved in all interaction cases.  See https://github.com/phetsims/states-of-matter/issues/53 for more info.
-  var MAX_TIME_STEP = 0.005;
+  var MAX_TIME_STEP = 0.005; // in seconds
 
   /**
    * @constructor
@@ -71,17 +63,8 @@ define( function( require ) {
 
     // @private
     this.settingBothAtomTypes = false;  // Flag used to prevent getting in disallowed state.
-    this.bondingState = BondingState.UNBONDED; // Tracks whether the atoms have formed a chemical bond.
-    this.fixedAtomVibrationCountdown = 0; // Used to vibrate fixed atom during bonding.
-    this.movableAtomVibrationCountdown = 0; // Used to vibrate movable atom during bonding and when bonded.
-    this.potentialWhenReleased = 0; // Used to set magnitude of vibration.
-    this.distanceWhenReleased = 0; // Used to determine whether atom should escape or bond.
-    this.ljPotentialCalculator = new LjPotentialCalculator(
-      SOMConstants.MIN_SIGMA,
-      SOMConstants.MIN_EPSILON
-    );
+    this.ljPotentialCalculator = new LjPotentialCalculator( SOMConstants.MIN_SIGMA, SOMConstants.MIN_EPSILON );
     this.residualTime = 0; // accumulates dt values not yet applied to model
-    this.justReleased = false;
 
     //-----------------------------------------------------------------------------------------------------------------
     // other initialization
@@ -156,7 +139,6 @@ define( function( require ) {
         );
 
         this.ensureValidAtomType( atomType );
-        this.bondingState = BondingState.UNBONDED;
 
         if ( this.fixedAtom !== null ) {
           this.fixedAtom = null;
@@ -198,7 +180,6 @@ define( function( require ) {
         );
 
         this.ensureValidAtomType( atomType );
-        this.bondingState = BondingState.UNBONDED;
 
         if ( this.movableAtom !== null ) {
           this.movableAtom = null;
@@ -323,27 +304,6 @@ define( function( require ) {
     setMotionPaused: function( paused ) {
       this.motionPausedProperty.set( paused );
       this.movableAtom.setVx( 0 );
-      if ( !paused ) {
-        // The atom is being released by the user.  Record the amount of energy that the atom has at this point in
-        // time and its position for later use.
-        this.distanceWhenReleased = this.movableAtom.getPositionReference().distance( this.fixedAtom.getPositionReference() );
-        this.potentialWhenReleased = this.ljPotentialCalculator.calculatePotentialEnergy( this.distanceWhenReleased );
-
-        // set a flag that indicates that this was just released, which will be used by the bonding update method
-        this.justReleased = true;
-      }
-    },
-
-    /**
-     * Release the bond that exists between the two atoms (if there is one).
-     * @public
-     */
-    releaseBond: function() {
-      if ( this.bondingState === BondingState.BONDING ) {
-        // A bond is in the process of forming, so reset everything that is involved in the bonding process.
-        this.fixedAtomVibrationCountdown = 0;
-      }
-      this.bondingState = BondingState.UNBONDED;
     },
 
     /**
@@ -450,16 +410,9 @@ define( function( require ) {
         // Execute the force calculation.
         this.updateForces();
 
-        // Update the motion information (unless the atoms are bonded).
-        if ( this.bondingState !== BondingState.BONDED ) {
-          this.updateAtomMotion( modelTimeStep );
-        }
-
-        // Update the bonding state (only affects some combinations of atoms).
-        // this.updateBondingState( dt );
+        // Update the motion information.
+        this.updateAtomMotion( modelTimeStep );
       }
-
-      this.stepAtomVibration( dt );
     },
 
     /**
@@ -510,182 +463,11 @@ define( function( require ) {
         // Calculate tne new velocity.
         var newVelocity = this.movableAtom.getVx() + ( acceleration * dt );
 
-        // If the velocity gets too large, the atom can get away before the bond can be tested, and it will appear to
-        // vanish from the screen, so we limit it here to an empirically determined max value.
-        newVelocity = Math.min( newVelocity, MAX_ATOM_VELOCITY );
-
         // Update the position and velocity of the atom.
         this.movableAtom.setVx( newVelocity );
         var xPos = this.movableAtom.getX() + ( this.movableAtom.getVx() * dt );
         this.movableAtom.setPosition( xPos, 0 );
       }
-    },
-
-    /**
-     * @private
-     */
-    updateBondingState: function() {
-      if ( this.movableAtom.getType() === AtomType.OXYGEN && this.fixedAtom.getType() === AtomType.OXYGEN ) {
-        switch( this.bondingState ) {
-
-          case BondingState.UNBONDED:
-            if ( ( this.movableAtom.getVx() > BONDING_THRESHOLD_VELOCITY ) &&
-                 ( this.movableAtom.getPositionReference().distance( this.fixedAtom.getPositionReference() ) <
-                   this.fixedAtom.getRadius() * 2.5 ) ) {
-
-              if ( this.justReleased && this.distanceWhenReleased < this.ljPotentialCalculator.getSigma() ) {
-                // the user just released the movable atom in an area of high potential, so let it escape
-                this.bondingState = BondingState.ALLOWING_ESCAPE;
-              }
-              else {
-                // The atoms are close together and the movable one is starting to move away, and the potential does
-                // not exceed the escape threshold, so we consider this to be the start of bond formation.
-                this.bondingState = BondingState.BONDING;
-                this.startFixedAtomVibration();
-              }
-            }
-            break;
-
-          case BondingState.BONDING:
-            if ( this.attractiveForce > this.repulsiveForce ) {
-
-              // A bond is forming and the force just exceeded the repulsive force, meaning that the atom is starting
-              // to pass the bottom of the well.
-              this.movableAtom.setAx( 0 );
-              this.movableAtom.setVx( 0 );
-              this.minPotentialDistance = this.ljPotentialCalculator.calculateMinimumForceDistance();
-              this.bondedOscillationRightDistance = this.minPotentialDistance +
-                                                    BONDED_OSCILLATION_PROPORTION * this.movableAtom.getRadius();
-              this.bondedOscillationLeftDistance = this.approximateEquivalentPotentialDistance(
-                this.bondedOscillationRightDistance );
-              this.bondingState = BondingState.BONDED;
-              this.movableAtomVibrationCountdown = 0;
-            }
-            break;
-
-          case BondingState.BONDED:
-            // Nothing done here, bonded state ends when user grabs atom or performs a reset.
-            break;
-
-          case BondingState.ALLOWING_ESCAPE:
-            // Nothing done here, this state ends when user grabs atom or performs a reset.
-            break;
-
-          default:
-            assert && assert( false, 'invalid bonding state' );
-            break;
-        }
-      }
-
-      // clear the flag that indicates whether the atom was just released by the user
-      this.justReleased = false;
-    },
-
-    /**
-     * @private
-     */
-    startFixedAtomVibration: function() {
-      this.fixedAtomVibrationCountdown = FIXED_ATOM_VIBRATION_TIME;
-      this.timeSinceLastFixedAtomJump = Number.POSITIVE_INFINITY;
-    },
-
-    /**
-     * Make the atoms appear to vibrate if they are in the correct state.
-     * @private
-     */
-    stepAtomVibration: function( dt ) {
-
-      // handle movable atom vibration
-      if ( this.bondingState === BondingState.BONDED ) {
-
-        // Override the atom motion calculations and cause the atom to oscillate a fixed distance from the bottom
-        // of the well. This is necessary because otherwise we tend to have an aliasing problem where it appears
-        // that the atom oscillates for a while, then damps out, then starts up again.
-        this.movableAtom.setAx( 0 );
-        this.movableAtom.setVx( 0 );
-        this.movableAtomVibrationCountdown -= dt;
-        if ( this.movableAtomVibrationCountdown <= 0 ) {
-          if ( this.movableAtom.getX() > this.minPotentialDistance ) {
-            this.movableAtom.setPosition( this.bondedOscillationLeftDistance, 0 );
-          }
-          else {
-            this.movableAtom.setPosition( this.bondedOscillationRightDistance, 0 );
-          }
-          this.movableAtomVibrationCountdown = MOVABLE_ATOM_OSCILLATION_PERIOD;
-        }
-      }
-
-      // handle the fixed atom vibration
-      if ( ( this.bondingState === BondingState.BONDING || this.bondingState === BondingState.BONDED ) &&
-           this.fixedAtomVibrationCountdown > 0 ) {
-
-        if ( this.timeSinceLastFixedAtomJump > FIXED_ATOM_JUMP_PERIOD ) {
-          this.timeSinceLastFixedAtomJump = 0;
-          var vibrationScaleFactor = 1;
-
-          if ( this.fixedAtomVibrationCountdown < FIXED_ATOM_VIBRATION_TIME / 4 ) {
-            // In the last part of the vibration, starting to wind it down.
-            vibrationScaleFactor = this.fixedAtomVibrationCountdown / ( FIXED_ATOM_VIBRATION_TIME / 4 );
-          }
-
-          if ( this.fixedAtom.getX() !== 0 ) {
-            // Go back to the original position every other time.
-            this.fixedAtom.setPosition( 0, 0 );
-          }
-          else {
-            // Calculate the max motion amount based on the amount of potential in the bond.  The multiplier was
-            // empirically determined.
-            var maxMovement = Math.min( this.potentialWhenReleased * 5e19, this.fixedAtom.radius / 2 ) *
-                              vibrationScaleFactor;
-
-            // Move some distance from the original position, but only move away from the movable atom so that we don't
-            // end up creating high repulsive forces.
-            var xPos = -phet.joist.random.nextDouble() * maxMovement;
-            var yPos = ( phet.joist.random.nextDouble() * 2 - 1 ) * maxMovement;
-            this.fixedAtom.setPosition( xPos, yPos );
-          }
-        }
-        else {
-          this.timeSinceLastFixedAtomJump += dt;
-        }
-
-        // Decrement the vibration countdown value.
-        this.fixedAtomVibrationCountdown -= dt;
-      }
-      else if ( this.fixedAtom.getX() !== 0 || this.fixedAtom.getY() !== 0 ) {
-        this.fixedAtom.setPosition( 0, 0 );
-      }
-    },
-
-    /**
-     * This is a highly specialized function that is used for figuring out the inter-atom distance at which the value
-     * of the potential on the left side of the of the min of the LJ potential curve is equal to that at the given
-     * distance to the right of the min of the LJ potential curve.
-     * @param {number} distance - inter-atom distance, must be greater than the point at which the potential is at the
-     * minimum value.
-     * @return{number}
-     * @private
-     */
-    approximateEquivalentPotentialDistance: function( distance ) {
-
-      assert && assert(
-        distance >= this.ljPotentialCalculator.calculateMinimumForceDistance(),
-        'Error: Distance value out of range.'
-      );
-
-      // Iterate by a fixed amount until a reasonable value is found.
-      var totalSpanDistance = distance - this.ljPotentialCalculator.getSigma();
-      var distanceChangePerIteration = totalSpanDistance / MAX_APPROXIMATION_ITERATIONS;
-      var targetPotential = this.ljPotentialCalculator.calculateLjPotential( distance );
-      var equivalentPotentialDistance = this.ljPotentialCalculator.calculateMinimumForceDistance();
-      for ( var i = 0; i < MAX_APPROXIMATION_ITERATIONS; i++ ) {
-        if ( this.ljPotentialCalculator.calculateLjPotential( equivalentPotentialDistance ) > targetPotential ) {
-          // We've crossed over to where the potential is less negative. Close enough.
-          break;
-        }
-        equivalentPotentialDistance -= distanceChangePerIteration;
-      }
-      return equivalentPotentialDistance;
     }
   } );
 } );

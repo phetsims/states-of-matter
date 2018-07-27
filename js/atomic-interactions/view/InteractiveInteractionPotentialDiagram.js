@@ -13,7 +13,6 @@ define( function( require ) {
   var ArrowNode = require( 'SCENERY_PHET/ArrowNode' );
   var AtomPair = require( 'STATES_OF_MATTER/atomic-interactions/model/AtomPair' );
   var AtomType = require( 'STATES_OF_MATTER/common/model/AtomType' );
-  var BondingState = require( 'STATES_OF_MATTER/atomic-interactions/model/BondingState' );
   var Bounds2 = require( 'DOT/Bounds2' );
   var Color = require( 'SCENERY/util/Color' );
   var FillHighlightListener = require( 'SCENERY_PHET/input/FillHighlightListener' );
@@ -166,11 +165,6 @@ define( function( require ) {
         },
 
         drag: function( event ) {
-
-          // If the atoms are bonded, release them.
-          if ( dualAtomModel.bondingState !== BondingState.UNBONDED ) {
-            dualAtomModel.releaseBond();
-          }
 
           // Make sure the movement hint is now hidden, since the user has figured out what to drag.
           dualAtomModel.movementHintVisibleProperty.set( false );
