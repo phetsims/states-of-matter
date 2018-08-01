@@ -28,9 +28,6 @@ define( function( require ) {
   // threshold to compare to zero, necessary due to floating point variations
   var COMPARE_THRESHOLD = 1E-5;
 
-  // a factor that controls how concave the bottom is, value empirically determined, see usage
-  var BOTTOM_CONCAVITY_FACTOR = 0.1;
-
   /**
    * @param {MultipleParticleModel} multipleParticleModel of the simulation
    * @constructor
@@ -59,9 +56,6 @@ define( function( require ) {
 
     // @private, tracks time above the explosion threshold
     this.timeAboveExplosionPressure = 0;
-
-    // @private, middle X position of the container
-    this.middleX = this.multipleParticleModel.normalizedContainerWidth / 2;
   }
 
   statesOfMatter.register( 'AbstractVerletAlgorithm', AbstractVerletAlgorithm );
@@ -152,12 +146,6 @@ define( function( require ) {
           if ( yPos <= minY && moleculeVelocityY <= 0 ) {
             yPos = minY;
             moleculeVelocity.y = -moleculeVelocityY;
-
-            // simulate a slight concavity in order to keep the substance centered if sitting on the bottom
-            var deltaXFromCenter = xPos - this.middleX;
-            var sign = deltaXFromCenter >= 0 ? -1 : 1;
-            var xAdjustmentDueToConvexBottom = timeStep * sign * Math.pow( deltaXFromCenter, 2 ) * BOTTOM_CONCAVITY_FACTOR;
-            moleculeVelocity.x += xAdjustmentDueToConvexBottom;
           }
 
           // handle bounce off the top
