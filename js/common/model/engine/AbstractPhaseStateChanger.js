@@ -139,7 +139,7 @@ define( function( require ) {
           xPos = startingPosX + ( j * xSpacing );
           if ( i % 2 !== 0 ) {
 
-            // Every other row is shifted a bit.
+            // Every other row is shifted a little.
             xPos += alternateRowOffset;
           }
           yPos = bottomY + ( i * ySpacing );

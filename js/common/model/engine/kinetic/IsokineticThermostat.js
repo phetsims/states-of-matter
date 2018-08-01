@@ -21,6 +21,7 @@ define( function( require ) {
   var MIN_POST_ZERO_VELOCITY = 0.1; // min velocity when warming up from absolute zero, empirically determined
   var MIN_X_VEL_WHEN_FALLING = 1.0; // a velocity below which x should not be scaled when falling,  empirically determined
   var NOMINAL_RUN_RATE = 60; // the number of times per second this is generally run
+  var COMPENSATION_FACTOR = 0.8; // an empirically determined factor to help with drift compensation, see usage below
 
   /**
    * Constructor for the Isokinetic thermostat.
@@ -67,8 +68,6 @@ define( function( require ) {
       var i;
       var numberOfParticles = this.moleculeDataSet.getNumberOfMolecules();
 
-      console.log( '----------------- IsokineticThermostat.adjustTemperature --------------------------' );
-
       // Calculate the scaling factor that will be used to adjust the temperature.
       var temperatureScaleFactor;
       if ( this.targetTemperature > this.minModelTemperature ) {
@@ -105,14 +104,11 @@ define( function( require ) {
           }
           else {
 
-            // TODO: Expensive alternative to simple scaling, must be made efficient.
-            // var velocityChange = moleculeVelocity.timesScalar( temperatureScaleFactor - 1 );
-            // velocityChange.rotate( 2 * Math.PI * phet.joist.random.nextDouble() );
-            // moleculeVelocity.add( velocityChange );
-
-            // Scale both the x and y velocities.
+            // Scale both the x and y velocities.  This has a factor that compensates for drift that can occur if the
+            // substance has a bit of velocity in one direction when this thermostat started running, see
+            // https://github.com/phetsims/states-of-matter/issues/214.
             moleculeVelocity.setXY(
-              moleculeVelocity.x * temperatureScaleFactor,
+              moleculeVelocity.x * temperatureScaleFactor - this.accumulatedVelocityChange.x * dt * COMPENSATION_FACTOR,
               moleculeVelocity.y * temperatureScaleFactor
             );
           }
@@ -147,12 +143,14 @@ define( function( require ) {
 
 
       this.accumulatedVelocityChange.addXY( this.totalVelocityChangeThisStep.x, this.totalVelocityChangeThisStep.y );
-      console.log( 'this.totalVelocityChangeThisStep = ' + this.totalVelocityChangeThisStep );
-      console.log( 'this.accumulatedVelocityChange = ' + this.accumulatedVelocityChange );
     },
 
+    /**
+     * clear the accumulated velocity bias, should be done when this thermostat starts being used for a number of steps
+     * in a row
+     * @public
+     */
     clearAccumulatedBias: function() {
-      console.log( 'biases cleared' );
       this.accumulatedVelocityChange.setXY( 0, 0 );
     }
   } );
