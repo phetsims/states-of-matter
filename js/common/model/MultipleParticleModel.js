@@ -888,7 +888,7 @@ define( function( require ) {
       this.syncParticlePositions();
 
       // run the thermostat to keep particle energies from getting out of hand
-      this.runThermostat();
+      this.runThermostat( dt );
 
       // If the pressure changed, update it.
       if ( this.getModelPressure() !== pressureBeforeAlgorithm ) {
@@ -956,17 +956,22 @@ define( function( require ) {
     },
 
     /**
-     * Run the appropriate thermostat based on the settings and the state of the simulation.
+     * Run the appropriate thermostat based on the settings and the state of the simulation.  This serves to either
+     * maintain the particle motions in a range that corresponds to a steady temperature or to increase or decrease the
+     * particle motion if the user is heating or cooling the substance.
+     * @private
      */
-    runThermostat: function() {
+    runThermostat: function( dt ) {
 
       if ( this.isExplodedProperty.get() ) {
+
         // Don't bother to run any thermostat if the lid is blown off - just let those little particles run free!
         return;
       }
 
       var calculatedTemperature = this.moleculeForceAndMotionCalculator.calculatedTemperature;
       var temperatureIsChanging = false;
+      var thermostatRunThisStep = null;
 
       if ( ( this.heatingCoolingAmountProperty.get() !== 0 ) ||
            ( Math.abs( calculatedTemperature - this.temperatureSetPointProperty.get() ) > TEMPERATURE_CLOSENESS_RANGE ) ) {
@@ -1007,26 +1012,33 @@ define( function( require ) {
                 this.temperatureSetPointProperty.get() > LIQUID_TEMPERATURE ||
                 this.temperatureSetPointProperty.get() < SOLID_TEMPERATURE / 5 ) {
 
+        // If this is the first run of this thermostat in a while, clear its accumulated biases
+        if ( this.thermostatRunPreviousStep !== this.isoKineticThermostat ) {
+          this.isoKineticThermostat.clearAccumulatedBias();
+        }
+
         // Use the isokinetic thermostat.
-        this.isoKineticThermostat.adjustTemperature( calculatedTemperature );
+        this.isoKineticThermostat.adjustTemperature( calculatedTemperature, dt );
+        thermostatRunThisStep = this.isoKineticThermostat;
       }
       else if ( !temperatureIsChanging ) {
 
         // The temperature isn't changing and it is within a certain range where the Andersen thermostat works better.
         // This is done for purely visual reasons - it looks better than the isokinetic in these circumstances.
         this.andersenThermostat.adjustTemperature();
+        thermostatRunThisStep = this.andersenThermostat;
       }
 
       // Note that there will be some circumstances in which no thermostat is run.  This is intentional.
+
+      // @private - keep track of which thermostat was run since this is used in some cases to reset thermostat state
+      this.thermostatRunPreviousStep = thermostatRunThisStep;
 
       // Update the average difference between the set point and the calculated temperature, but only if nothing has
       // happened that may have affected the calculated value or the set point.
       if ( !temperatureIsChanging && !this.particleInjectedThisStep && !this.lidChangedParticleVelocity ) {
         this.averageTemperatureDifference.addValue( this.temperatureSetPointProperty.get() - calculatedTemperature );
       }
-
-      // Keep track of the calculated temperature from this cycle, since it may be needed for the next iteraction.
-      this.temperatureAtPreviousStep = calculatedTemperature;
     },
 
     /**

@@ -15,10 +15,12 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
+  var Vector2 = require( 'DOT/Vector2' );
 
   // constants
   var MIN_POST_ZERO_VELOCITY = 0.1; // min velocity when warming up from absolute zero, empirically determined
   var MIN_X_VEL_WHEN_FALLING = 1.0; // a velocity below which x should not be scaled when falling,  empirically determined
+  var NOMINAL_RUN_RATE = 60; // the number of times per second this is generally run
 
   /**
    * Constructor for the Isokinetic thermostat.
@@ -43,6 +45,13 @@ define( function( require ) {
     // as is possible.
     this.moleculeVelocities = moleculeDataSet.moleculeVelocities;
     this.moleculeRotationRates = moleculeDataSet.moleculeRotationRates;
+
+    // @private {Vector2} - reusable vector used for calculating velocity changes
+    this.previousParticleVelocity = new Vector2( 0, 0 );
+
+    // @private {Vector2} - used to correct for a collective drift that can occur
+    this.totalVelocityChangeThisStep = new Vector2( 0, 0 );
+    this.accumulatedVelocityChange = new Vector2( 0, 0 );
   }
 
   statesOfMatter.register( 'IsokineticThermostat', IsokineticThermostat );
@@ -53,15 +62,17 @@ define( function( require ) {
      * @param {number} measuredTemperature - measured temperature of particles, in model units
      * @public
      */
-    adjustTemperature: function( measuredTemperature ) {
+    adjustTemperature: function( measuredTemperature, dt ) {
 
       var i;
       var numberOfParticles = this.moleculeDataSet.getNumberOfMolecules();
 
+      console.log( '----------------- IsokineticThermostat.adjustTemperature --------------------------' );
+
       // Calculate the scaling factor that will be used to adjust the temperature.
       var temperatureScaleFactor;
       if ( this.targetTemperature > this.minModelTemperature ) {
-        temperatureScaleFactor = Math.sqrt( this.targetTemperature / measuredTemperature );
+        temperatureScaleFactor = Math.sqrt( this.targetTemperature / measuredTemperature ) * ( dt * NOMINAL_RUN_RATE );
       }
       else {
 
@@ -69,14 +80,18 @@ define( function( require ) {
         temperatureScaleFactor = 0;
       }
 
+      // Clear the vector the is used to sum velocity changes - it's only used in the 'normal' case.
+      this.totalVelocityChangeThisStep.setXY( 0, 0 );
+
       if ( this.previousTemperatureScaleFactor !== 0 ||
            temperatureScaleFactor === 0 ||
            measuredTemperature > this.minModelTemperature ) {
 
-        // This is the 'normal' case, where the scale factor is used to adjust the energy of the particles
+        // This is the 'normal' case, where the scale factor is used to adjust the energy of the particles.
         for ( i = 0; i < numberOfParticles; i++ ) {
 
           var moleculeVelocity = this.moleculeVelocities[ i ];
+          this.previousParticleVelocity.set( moleculeVelocity );
 
           if ( moleculeVelocity.y < 0 ) {
 
@@ -89,13 +104,27 @@ define( function( require ) {
             }
           }
           else {
-            // scale both the x and y velocities
+
+            // TODO: Expensive alternative to simple scaling, must be made efficient.
+            // var velocityChange = moleculeVelocity.timesScalar( temperatureScaleFactor - 1 );
+            // velocityChange.rotate( 2 * Math.PI * phet.joist.random.nextDouble() );
+            // moleculeVelocity.add( velocityChange );
+
+            // Scale both the x and y velocities.
             moleculeVelocity.setXY(
               moleculeVelocity.x * temperatureScaleFactor,
               moleculeVelocity.y * temperatureScaleFactor
             );
           }
-          this.moleculeRotationRates[ i ] *= temperatureScaleFactor; // Doesn't hurt anything in the monatomic case.
+
+          // Scale the rotation rates (this has no effect in the monatomic case).
+          this.moleculeRotationRates[ i ] *= temperatureScaleFactor;
+
+          // Track the total of all velocity changes - used to correct for drift
+          this.totalVelocityChangeThisStep.addXY(
+            moleculeVelocity.x - this.previousParticleVelocity.x,
+            moleculeVelocity.y - this.previousParticleVelocity.y
+          );
         }
       }
       else {
@@ -115,6 +144,16 @@ define( function( require ) {
 
       // Save the scaling factor for next time.
       this.previousTemperatureScaleFactor = temperatureScaleFactor;
+
+
+      this.accumulatedVelocityChange.addXY( this.totalVelocityChangeThisStep.x, this.totalVelocityChangeThisStep.y );
+      console.log( 'this.totalVelocityChangeThisStep = ' + this.totalVelocityChangeThisStep );
+      console.log( 'this.accumulatedVelocityChange = ' + this.accumulatedVelocityChange );
+    },
+
+    clearAccumulatedBias: function() {
+      console.log( 'biases cleared' );
+      this.accumulatedVelocityChange.setXY( 0, 0 );
     }
   } );
 } );
