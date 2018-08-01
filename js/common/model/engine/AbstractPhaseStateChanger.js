@@ -27,9 +27,12 @@ define( function( require ) {
    * @constructor
    */
   function AbstractPhaseStateChanger( multipleParticleModel ) {
+
+    // @private
     this.multipleParticleModel = multipleParticleModel;
     this.moleculeLocation = new Vector2();
     this.random = phet.joist.random;
+    this.reusableVector = new Vector2();
   }
 
   statesOfMatter.register( 'AbstractPhaseStateChanger', AbstractPhaseStateChanger );
@@ -128,6 +131,7 @@ define( function( require ) {
       var moleculesPlaced = 0;
       var xPos;
       var yPos;
+      this.reusableVector.setXY( 0, 0 );
       for ( var i = 0; i < numberOfMolecules; i++ ) {
 
         // Position one layer of molecules.
@@ -149,6 +153,9 @@ define( function( require ) {
           var yVel = temperatureSqrt * this.random.nextGaussian();
           moleculeVelocities[ moleculeIndex ].setXY( xVel, yVel );
 
+          // Track total velocity in the X direction.
+          this.reusableVector.addXY( xVel, yVel );
+
           // Assign an initial rotational angle (has no effect for single-atom data sets)
           moleculeRotationAngles[ moleculeIndex ] = randomizeRotationalAngle ?
                                                     this.random.nextDouble() * 2 * Math.PI :
@@ -157,6 +164,14 @@ define( function( require ) {
           // Mark the molecule as being in the container.
           moleculesInsideContainer[ i ] = true;
         }
+      }
+
+      // The number of particles is often not large enough to count on having a zero average X and Y velocity, so the
+      // substance can end up with some initial drive.  This compensates for that problem.
+      var xAdjustment = -this.reusableVector.x / numberOfMolecules;
+      var yAdjustment = -this.reusableVector.y / numberOfMolecules;
+      for ( i = 0; i < numberOfMolecules; i++ ) {
+        moleculeVelocities[ i ].addXY( xAdjustment, yAdjustment );
       }
     },
 
