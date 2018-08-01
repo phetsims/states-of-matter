@@ -1,8 +1,9 @@
 // Copyright 2014-2017, University of Colorado Boulder
 
 /**
- * Model for AndersonThermostat, which adjusts the velocity of all atoms/molecules in the system by the same amount in
- * order to get the overall system temperature to the desired set point.
+ * Model for an Andersen Thermostat, which adjusts the velocity of all atoms/molecules in the system by the same amount
+ * in order to get the overall system temperature to the desired set point.  There is a short Wikipedia entry for this
+ * algorithm at https://en.wikipedia.org/wiki/Andersen_thermostat.
  *
  * @author John Blanco
  * @author Aaron Davis
@@ -62,14 +63,15 @@ define( function( require ) {
 
       var massInverse = 1 / this.moleculeDataSet.moleculeMass;
       var inertiaInverse = 1 / this.moleculeDataSet.moleculeRotationalInertia;
-      var velocityScalingFactor = Math.sqrt( temperature * massInverse * ( 1 - Math.pow( gammaX, 2 ) ) );
+      var xVelocityScalingFactor = Math.sqrt( temperature * massInverse * ( 1 - Math.pow( gammaX, 2 ) ) );
+      var yVelocityScalingFactor = Math.sqrt( temperature * massInverse * ( 1 - Math.pow( gammaY, 2 ) ) );
       var rotationScalingFactor = Math.sqrt( temperature * inertiaInverse * ( 1 - Math.pow( gammaX, 2 ) ) );
 
       for ( var i = 0; i < this.moleculeDataSet.getNumberOfMolecules(); i++ ) {
         var xVel = this.moleculeVelocities[ i ].x * gammaX +
-                   this.random.nextGaussian() * velocityScalingFactor;
+                   this.random.nextGaussian() * xVelocityScalingFactor;
         var yVel = this.moleculeVelocities[ i ].y * gammaY +
-                   this.random.nextGaussian() * velocityScalingFactor;
+                   this.random.nextGaussian() * yVelocityScalingFactor;
         this.moleculeVelocities[ i ].setXY( xVel, yVel );
         this.moleculeRotationRates[ i ] = gammaX * this.moleculeRotationRates[ i ] +
                                           this.random.nextGaussian() * rotationScalingFactor;
