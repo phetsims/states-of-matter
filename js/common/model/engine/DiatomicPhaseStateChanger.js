@@ -20,7 +20,7 @@ define( function( require ) {
   var SubstanceType = require( 'STATES_OF_MATTER/common/SubstanceType' );
 
   // constants
-  var MIN_INITIAL_DIAMETER_DISTANCE = 2.0;
+  var MIN_INITIAL_DIAMETER_DISTANCE = 2.02;
 
   /**
    * @param {MultipleParticleModel} multipleParticleModel of the simulation
@@ -611,7 +611,7 @@ define( function( require ) {
         MIN_INITIAL_DIAMETER_DISTANCE,
         MIN_INITIAL_DIAMETER_DISTANCE * 0.5,
         0.5,
-        1.5, // empirically determined to minimize bounce
+        1.4, // empirically determined to minimize bounce
         false
       );
     },
