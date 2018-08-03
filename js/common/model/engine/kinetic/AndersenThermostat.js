@@ -16,6 +16,11 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
+  var Vector2 = require( 'DOT/Vector2' );
+
+  // constants
+  var PROPORTION_COMPENSATION_FACTOR = 0.001; // used for drift compensation, value empirically determined
+  var INTEGRAL_COMPENSATION_FACTOR = 0.01; // used for drift compensation, value empirically determined
 
   /**
    * Constructor for the Andersen thermostat.
@@ -39,7 +44,16 @@ define( function( require ) {
     this.moleculeVelocities = moleculeDataSet.moleculeVelocities;
     this.moleculeRotationRates = moleculeDataSet.moleculeRotationRates;
 
+    // @private - pseudo-random number generator
     this.random = phet.joist.random;
+
+    // @private {Vector2} - reusable vector used for calculating velocity changes
+    this.previousParticleVelocity = new Vector2( 0, 0 );
+
+    // @private {Vector2} - used to correct for a collective drift that can occur
+    this.totalVelocityChangePreviousStep = new Vector2( 0, 0 );
+    this.totalVelocityChangeThisStep = new Vector2( 0, 0 );
+    this.accumulatedVelocityChange = new Vector2( 0, 0 );
   }
 
   statesOfMatter.register( 'AndersenThermostat', AndersenThermostat );
@@ -50,32 +64,69 @@ define( function( require ) {
      * @public
      */
     adjustTemperature: function() {
-      var gammaX = 0.9999;
-      var gammaY = 0.9999;
+
+      // A Note to Future Maintainers: This code was originally provided by Paul Beale of the University of Colorado.
+      // For many years, it had separate gamma values the X and Y directions, but those values were always set to the
+      // same thing.  In early August of 2018, I (jbphet) refactored this to have a single gamma value in order to
+      // reduce the number of calculations done and thus improve performance.  If it's ever needed, separate values
+      // could be brought back for X and Y.
+
+      var gamma;
       var temperature = this.targetTemperature;
-      if ( temperature <= this.minModelTemperature ) {
+      if ( temperature > this.minModelTemperature ) {
+
         // Use a values that will cause the molecules to stop moving pretty quickly if we are below the minimum
         // temperature, since we want to create the appearance of absolute zero.  Values were empirically determined.
-        gammaX = 0.5;
-        gammaY = 0.5;
+        gamma = 0.999;
+      }
+      else {
+
+        // Use a values that will cause the molecules to stop moving pretty quickly if we are below the minimum
+        // temperature, since we want to create the appearance of absolute zero.  Values were empirically determined.
+        gamma = 0.5;
         temperature = 0;
       }
 
       var massInverse = 1 / this.moleculeDataSet.moleculeMass;
       var inertiaInverse = 1 / this.moleculeDataSet.moleculeRotationalInertia;
-      var xVelocityScalingFactor = Math.sqrt( temperature * massInverse * ( 1 - Math.pow( gammaX, 2 ) ) );
-      var yVelocityScalingFactor = Math.sqrt( temperature * massInverse * ( 1 - Math.pow( gammaY, 2 ) ) );
-      var rotationScalingFactor = Math.sqrt( temperature * inertiaInverse * ( 1 - Math.pow( gammaX, 2 ) ) );
+      var scalingFactor = temperature * ( 1 - Math.pow( gamma, 2 ) );
+      var velocityScalingFactor = Math.sqrt( massInverse * scalingFactor );
+      var rotationScalingFactor = Math.sqrt( inertiaInverse * scalingFactor );
+
+      // Calculate a compensation factor for any overall drift that is being added by this thermostat.  Without this,
+      // we often see solids drifting to the left or right for no apparent reason.  Compensation is only done in the X
+      // direction since the Y direction wasn't visually problematic.  For more information on this, please see
+      // https://github.com/phetsims/states-of-matter-basics/issues/15.
+      var xCompensation = -this.totalVelocityChangePreviousStep.x * PROPORTION_COMPENSATION_FACTOR -
+                          this.accumulatedVelocityChange.x * INTEGRAL_COMPENSATION_FACTOR;
 
       for ( var i = 0; i < this.moleculeDataSet.getNumberOfMolecules(); i++ ) {
-        var xVel = this.moleculeVelocities[ i ].x * gammaX +
-                   this.random.nextGaussian() * xVelocityScalingFactor;
-        var yVel = this.moleculeVelocities[ i ].y * gammaY +
-                   this.random.nextGaussian() * yVelocityScalingFactor;
-        this.moleculeVelocities[ i ].setXY( xVel, yVel );
-        this.moleculeRotationRates[ i ] = gammaX * this.moleculeRotationRates[ i ] +
+        var moleculeVelocity = this.moleculeVelocities[ i ];
+        this.previousParticleVelocity.set( moleculeVelocity );
+
+        // Calculate the new x and y velocity for this particle.
+        var xVel = moleculeVelocity.x * gamma + this.random.nextGaussian() * velocityScalingFactor + xCompensation;
+        var yVel = moleculeVelocity.y * gamma + this.random.nextGaussian() * velocityScalingFactor;
+        moleculeVelocity.setXY( xVel, yVel );
+        this.moleculeRotationRates[ i ] = gamma * this.moleculeRotationRates[ i ] +
                                           this.random.nextGaussian() * rotationScalingFactor;
+        this.totalVelocityChangeThisStep.addXY(
+          xVel - this.previousParticleVelocity.x,
+          yVel - this.previousParticleVelocity.y
+        );
       }
+      this.accumulatedVelocityChange.add( this.totalVelocityChangeThisStep );
+      this.totalVelocityChangePreviousStep.set( this.totalVelocityChangeThisStep );
+    },
+
+    /**
+     * clear the accumulated velocity bias, should be done when this thermostat starts being used for a number of steps
+     * in a row
+     * @public
+     */
+    clearAccumulatedBias: function() {
+      this.accumulatedVelocityChange.setXY( 0, 0 );
+      this.totalVelocityChangePreviousStep.setXY( 0, 0 );
     }
   } );
 } );

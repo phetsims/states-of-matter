@@ -20,7 +20,6 @@ define( function( require ) {
   // constants
   var MIN_POST_ZERO_VELOCITY = 0.1; // min velocity when warming up from absolute zero, empirically determined
   var MIN_X_VEL_WHEN_FALLING = 1.0; // a velocity below which x should not be scaled when falling,  empirically determined
-  var NOMINAL_RUN_RATE = 60; // the number of times per second this is generally run
   var COMPENSATION_FACTOR = 0.8; // an empirically determined factor to help with drift compensation, see usage below
 
   /**
@@ -71,7 +70,8 @@ define( function( require ) {
       // Calculate the scaling factor that will be used to adjust the temperature.
       var temperatureScaleFactor;
       if ( this.targetTemperature > this.minModelTemperature ) {
-        temperatureScaleFactor = Math.sqrt( this.targetTemperature / measuredTemperature ) * ( dt * NOMINAL_RUN_RATE );
+        temperatureScaleFactor = Math.sqrt( this.targetTemperature / measuredTemperature ) *
+                                 ( dt / SOMConstants.NOMINAL_TIME_STEP );
       }
       else {
 

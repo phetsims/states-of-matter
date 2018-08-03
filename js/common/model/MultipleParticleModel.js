@@ -547,6 +547,10 @@ define( function( require ) {
       this.averageDtProperty.reset();
       this.maxParticleMoveTimePerStepProperty.reset();
 
+      // reset thermostats
+      this.isoKineticThermostat.clearAccumulatedBias();
+      this.andersenThermostat.clearAccumulatedBias();
+
       // if the substance wasn't changed during reset, so some additional work is necessary
       if ( substanceAtStartOfReset === this.substanceProperty.get() ) {
         this.removeAllParticles();
@@ -1022,6 +1026,11 @@ define( function( require ) {
         thermostatRunThisStep = this.isoKineticThermostat;
       }
       else if ( !temperatureIsChanging ) {
+
+        // If this is the first run of this thermostat in a while, clear its accumulated biases
+        if ( this.thermostatRunPreviousStep !== this.andersenThermostat ) {
+          this.andersenThermostat.clearAccumulatedBias();
+        }
 
         // The temperature isn't changing and it is within a certain range where the Andersen thermostat works better.
         // This is done for purely visual reasons - it looks better than the isokinetic in these circumstances.
