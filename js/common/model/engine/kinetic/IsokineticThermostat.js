@@ -105,8 +105,9 @@ define( function( require ) {
           else {
 
             // Scale both the x and y velocities.  This has a factor that compensates for drift that can occur if the
-            // substance has a bit of velocity in one direction when this thermostat started running, see
-            // https://github.com/phetsims/states-of-matter/issues/214.
+            // substance has a bit of velocity in one direction when this thermostat starts running.  Only the x
+            // direction is compensated since the behavior in the y direction doesn't seem problematic. See
+            // https://github.com/phetsims/states-of-matter/issues/214 for more information and history.
             moleculeVelocity.setXY(
               moleculeVelocity.x * temperatureScaleFactor - this.accumulatedVelocityChange.x * dt * COMPENSATION_FACTOR,
               moleculeVelocity.y * temperatureScaleFactor
@@ -141,7 +142,7 @@ define( function( require ) {
       // Save the scaling factor for next time.
       this.previousTemperatureScaleFactor = temperatureScaleFactor;
 
-
+      // Accumulate the total velocity changes that have occurred, used for drift compensation.
       this.accumulatedVelocityChange.addXY( this.totalVelocityChangeThisStep.x, this.totalVelocityChangeThisStep.y );
     },
 
