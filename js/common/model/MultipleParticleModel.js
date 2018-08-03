@@ -1022,7 +1022,7 @@ define( function( require ) {
         }
 
         // Use the isokinetic thermostat.
-        this.isoKineticThermostat.adjustTemperature( calculatedTemperature, dt );
+        this.isoKineticThermostat.adjustTemperature( calculatedTemperature );
         thermostatRunThisStep = this.isoKineticThermostat;
       }
       else if ( !temperatureIsChanging ) {

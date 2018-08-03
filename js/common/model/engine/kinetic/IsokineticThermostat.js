@@ -20,7 +20,7 @@ define( function( require ) {
   // constants
   var MIN_POST_ZERO_VELOCITY = 0.1; // min velocity when warming up from absolute zero, empirically determined
   var MIN_X_VEL_WHEN_FALLING = 1.0; // a velocity below which x should not be scaled when falling,  empirically determined
-  var COMPENSATION_FACTOR = 0.8; // an empirically determined factor to help with drift compensation, see usage below
+  var COMPENSATION_FACTOR = 0.014; // an empirically determined factor to help with drift compensation, see usage below
 
   /**
    * Constructor for the Isokinetic thermostat.
@@ -62,7 +62,7 @@ define( function( require ) {
      * @param {number} measuredTemperature - measured temperature of particles, in model units
      * @public
      */
-    adjustTemperature: function( measuredTemperature, dt ) {
+    adjustTemperature: function( measuredTemperature ) {
 
       var i;
       var numberOfParticles = this.moleculeDataSet.getNumberOfMolecules();
@@ -70,8 +70,7 @@ define( function( require ) {
       // Calculate the scaling factor that will be used to adjust the temperature.
       var temperatureScaleFactor;
       if ( this.targetTemperature > this.minModelTemperature ) {
-        temperatureScaleFactor = Math.sqrt( this.targetTemperature / measuredTemperature ) *
-                                 ( dt / SOMConstants.NOMINAL_TIME_STEP );
+        temperatureScaleFactor = Math.sqrt( this.targetTemperature / measuredTemperature );
       }
       else {
 
@@ -109,7 +108,7 @@ define( function( require ) {
             // direction is compensated since the behavior in the y direction doesn't seem problematic. See
             // https://github.com/phetsims/states-of-matter/issues/214 for more information and history.
             moleculeVelocity.setXY(
-              moleculeVelocity.x * temperatureScaleFactor - this.accumulatedVelocityChange.x * dt * COMPENSATION_FACTOR,
+              moleculeVelocity.x * temperatureScaleFactor - this.accumulatedVelocityChange.x * COMPENSATION_FACTOR,
               moleculeVelocity.y * temperatureScaleFactor
             );
           }
