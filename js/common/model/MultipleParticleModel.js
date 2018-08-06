@@ -892,7 +892,7 @@ define( function( require ) {
       this.syncParticlePositions();
 
       // run the thermostat to keep particle energies from getting out of hand
-      this.runThermostat( dt );
+      this.runThermostat();
 
       // If the pressure changed, update it.
       if ( this.getModelPressure() !== pressureBeforeAlgorithm ) {
@@ -965,7 +965,7 @@ define( function( require ) {
      * particle motion if the user is heating or cooling the substance.
      * @private
      */
-    runThermostat: function( dt ) {
+    runThermostat: function() {
 
       if ( this.isExplodedProperty.get() ) {
 
