@@ -12,7 +12,7 @@ define( function( require ) {
   // modules
   var Bounds2 = require( 'DOT/Bounds2' );
   var DialGaugeNode = require( 'STATES_OF_MATTER/common/view/DialGaugeNode' );
-  var HandleNode = require( 'STATES_OF_MATTER/common/view/HandleNode' );
+  var HandleNode = require( 'SCENERY_PHET/HandleNode' );
   var inherit = require( 'PHET_CORE/inherit' );
   var LinearGradient = require( 'SCENERY/util/LinearGradient' );
   var Matrix3 = require( 'DOT/Matrix3' );
@@ -119,7 +119,7 @@ define( function( require ) {
         centerY: 0
       } );
       containerLid.addChild( handleAreaEllipse );
-      var handleNode = new HandleNode();
+      var handleNode = new HandleNode( { scale: 0.28, attachmentFillColor: 'black', gripLineWidth: 4 } );
       handleNode.centerX = containerLid.width / 2;
       handleNode.bottom = handleAreaEllipse.centerY + 5; // position tweaked a bit to look better
       containerLid.addChild( handleNode );
