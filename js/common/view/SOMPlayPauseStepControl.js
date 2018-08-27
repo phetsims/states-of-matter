@@ -39,7 +39,7 @@ define( function( require ) {
     this.addChild( playPauseButton );
 
     var stepButton = new StepForwardButton( {
-      playingProperty: playingProperty,
+      isPlayingProperty: playingProperty,
       listener: function() { stepFunction( SOMConstants.NOMINAL_TIME_STEP ); },
       radius: 12,
       stroke: STROKE,
