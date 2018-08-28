@@ -134,6 +134,11 @@ define( function( require ) {
           self.compositeThermometerNode.center,
           containerHeightChange * 0.0001 * Math.PI );
       }
+      else if ( self.compositeThermometerNode.getRotation() !== 0 ) {
+
+        // set the thermometer's rotation back to zero (necessary if the container explodes and lid is then returned)
+        self.compositeThermometerNode.setRotation( 0 );
+      }
 
       self.particleContainerHeightPropertyChanged = true;
     } );
