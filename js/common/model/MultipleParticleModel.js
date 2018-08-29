@@ -1059,7 +1059,7 @@ define( function( require ) {
     initializeDiatomic: function( substance, phase ) {
 
       // Verify that a valid molecule ID was provided.
-      assert && assert( (substance === SubstanceType.DIATOMIC_OXYGEN) );
+      assert && assert( ( substance === SubstanceType.DIATOMIC_OXYGEN ) );
 
       // Determine the number of atoms/molecules to create.  This will be a cube (really a square, since it's 2D, but
       // you get the idea) that takes up a fixed amount of the bottom of the container, so the number of molecules that
@@ -1114,7 +1114,7 @@ define( function( require ) {
     initializeTriatomic: function( substance, phase ) {
 
       // Only water is supported so far.
-      assert && assert( (substance === SubstanceType.WATER) );
+      assert && assert( ( substance === SubstanceType.WATER ) );
 
       // Determine the number of atoms/molecules to create.  This will be a cube (really a square, since it's 2D, but
       // you get the idea) that takes up a fixed amount of the bottom of the container, so the number of molecules that
