@@ -20,7 +20,7 @@ define( function( require ) {
   // constants
   var MIN_POST_ZERO_VELOCITY = 0.1; // min velocity when warming up from absolute zero, empirically determined
   var MIN_X_VEL_WHEN_FALLING = 1.0; // a velocity below which x should not be scaled when falling,  empirically determined
-  var COMPENSATION_FACTOR = 0.014; // an empirically determined factor to help with drift compensation, see usage below
+  var COMPENSATION_FACTOR = 0.9; // an empirically determined factor to help with drift compensation, see usage below
 
   /**
    * Constructor for the Isokinetic thermostat.
@@ -51,7 +51,7 @@ define( function( require ) {
 
     // @private {Vector2} - used to correct for a collective drift that can occur
     this.totalVelocityChangeThisStep = new Vector2( 0, 0 );
-    this.accumulatedVelocityChange = new Vector2( 0, 0 );
+    this.accumulatedAverageVelocityChange = new Vector2( 0, 0 );
   }
 
   statesOfMatter.register( 'IsokineticThermostat', IsokineticThermostat );
@@ -105,10 +105,10 @@ define( function( require ) {
 
             // Scale both the x and y velocities.  This has a factor that compensates for drift that can occur if the
             // substance has a bit of velocity in one direction when this thermostat starts running.  Only the x
-            // direction is compensated since the behavior in the y direction doesn't seem problematic. See
-            // https://github.com/phetsims/states-of-matter/issues/214 for more information and history.
+            // direction is compensated since the design team decided that the behavior in the y direction isn't
+            // problematic. See https://github.com/phetsims/states-of-matter/issues/214 for more info and history.
             moleculeVelocity.setXY(
-              moleculeVelocity.x * temperatureScaleFactor - this.accumulatedVelocityChange.x * COMPENSATION_FACTOR,
+              moleculeVelocity.x * temperatureScaleFactor - this.accumulatedAverageVelocityChange.x * COMPENSATION_FACTOR,
               moleculeVelocity.y * temperatureScaleFactor
             );
           }
@@ -141,8 +141,11 @@ define( function( require ) {
       // Save the scaling factor for next time.
       this.previousTemperatureScaleFactor = temperatureScaleFactor;
 
-      // Accumulate the total velocity changes that have occurred, used for drift compensation.
-      this.accumulatedVelocityChange.addXY( this.totalVelocityChangeThisStep.x, this.totalVelocityChangeThisStep.y );
+      // Accumulate the average velocity changes that have occurred, used for drift compensation.
+      this.accumulatedAverageVelocityChange.addXY(
+        this.totalVelocityChangeThisStep.x / numberOfParticles,
+        this.totalVelocityChangeThisStep.y / numberOfParticles
+      );
     },
 
     /**
@@ -151,7 +154,7 @@ define( function( require ) {
      * @public
      */
     clearAccumulatedBias: function() {
-      this.accumulatedVelocityChange.setXY( 0, 0 );
+      this.accumulatedAverageVelocityChange.setXY( 0, 0 );
     }
   } );
 } );
