@@ -49,7 +49,7 @@ define( function( require ) {
     // @private {Vector2} - reusable vector used for calculating velocity changes
     this.previousParticleVelocity = new Vector2( 0, 0 );
 
-    // @private {Vector2} - used to correct for a collective drift that can occur
+    // @private {Vector2} - used to correct for a collective drift that can occur, see usage for details
     this.totalVelocityChangeThisStep = new Vector2( 0, 0 );
     this.accumulatedAverageVelocityChange = new Vector2( 0, 0 );
   }
@@ -76,6 +76,7 @@ define( function( require ) {
 
         // The particles are at absolute zero, so stop all motion.
         temperatureScaleFactor = 0;
+        this.accumulatedAverageVelocityChange.setXY( 0, 0 );
       }
 
       // Clear the vector the is used to sum velocity changes - it's only used in the 'normal' case.
