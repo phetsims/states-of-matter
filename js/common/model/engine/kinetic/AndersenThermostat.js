@@ -19,8 +19,8 @@ define( function( require ) {
   var Vector2 = require( 'DOT/Vector2' );
 
   // constants
-  var PROPORTION_COMPENSATION_FACTOR = 0.001; // used for drift compensation, value empirically determined
-  var INTEGRAL_COMPENSATION_FACTOR = 0.01; // used for drift compensation, value empirically determined
+  var PROPORTION_COMPENSATION_FACTOR = 0.25; // used for drift compensation, value empirically determined
+  var INTEGRAL_COMPENSATION_FACTOR = 0.5; // used for drift compensation, value empirically determined
 
   /**
    * Constructor for the Andersen thermostat.
@@ -50,10 +50,10 @@ define( function( require ) {
     // @private {Vector2} - reusable vector used for calculating velocity changes
     this.previousParticleVelocity = new Vector2( 0, 0 );
 
-    // @private {Vector2} - used to correct for a collective drift that can occur
+    // @private {Vector2} - vectors used to correct for a collective drift that can occur
     this.totalVelocityChangePreviousStep = new Vector2( 0, 0 );
     this.totalVelocityChangeThisStep = new Vector2( 0, 0 );
-    this.accumulatedVelocityChange = new Vector2( 0, 0 );
+    this.accumulatedAverageVelocityChange = new Vector2( 0, 0 );
   }
 
   statesOfMatter.register( 'AndersenThermostat', AndersenThermostat );
@@ -92,15 +92,16 @@ define( function( require ) {
       var scalingFactor = temperature * ( 1 - Math.pow( gamma, 2 ) );
       var velocityScalingFactor = Math.sqrt( massInverse * scalingFactor );
       var rotationScalingFactor = Math.sqrt( inertiaInverse * scalingFactor );
+      var numMolecules = this.moleculeDataSet.getNumberOfMolecules();
 
       // Calculate a compensation factor for any overall drift that is being added by this thermostat.  Without this,
       // we often see solids drifting to the left or right for no apparent reason.  Compensation is only done in the X
       // direction since the Y direction wasn't visually problematic.  For more information on this, please see
       // https://github.com/phetsims/states-of-matter-basics/issues/15.
-      var xCompensation = -this.totalVelocityChangePreviousStep.x * PROPORTION_COMPENSATION_FACTOR -
-                          this.accumulatedVelocityChange.x * INTEGRAL_COMPENSATION_FACTOR;
+      var xCompensation = -this.totalVelocityChangePreviousStep.x / numMolecules * PROPORTION_COMPENSATION_FACTOR -
+                          this.accumulatedAverageVelocityChange.x * INTEGRAL_COMPENSATION_FACTOR;
 
-      for ( var i = 0; i < this.moleculeDataSet.getNumberOfMolecules(); i++ ) {
+      for ( var i = 0; i < numMolecules; i++ ) {
         var moleculeVelocity = this.moleculeVelocities[ i ];
         this.previousParticleVelocity.set( moleculeVelocity );
 
@@ -115,7 +116,10 @@ define( function( require ) {
           yVel - this.previousParticleVelocity.y
         );
       }
-      this.accumulatedVelocityChange.add( this.totalVelocityChangeThisStep );
+      this.accumulatedAverageVelocityChange.addXY(
+        this.totalVelocityChangeThisStep.x / numMolecules,
+        this.totalVelocityChangeThisStep.y / numMolecules
+      );
       this.totalVelocityChangePreviousStep.set( this.totalVelocityChangeThisStep );
     },
 
@@ -125,7 +129,7 @@ define( function( require ) {
      * @public
      */
     clearAccumulatedBias: function() {
-      this.accumulatedVelocityChange.setXY( 0, 0 );
+      this.accumulatedAverageVelocityChange.setXY( 0, 0 );
       this.totalVelocityChangePreviousStep.setXY( 0, 0 );
     }
   } );
