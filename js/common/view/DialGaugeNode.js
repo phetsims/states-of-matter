@@ -22,7 +22,7 @@ define( function( require ) {
   var Shape = require( 'KITE/Shape' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var Text = require( 'SCENERY/nodes/Text' );
-  var Timer = require( 'PHET_CORE/Timer' );
+  var timer = require( 'PHET_CORE/timer' );
   var Util = require( 'DOT/Util' );
 
   // strings
@@ -104,7 +104,7 @@ define( function( require ) {
     // Update the pressure readout at regular intervals.  This was done rather than listening to the pressure property
     // because the readout changes too quickly in that case.
     var previousPressure = -1;
-    Timer.setInterval( function() {
+    timer.setInterval( function() {
       var pressure = multipleParticleModel.pressureProperty.get();
       if ( pressure !== previousPressure ) {
         if ( pressure < MAX_PRESSURE ) {
