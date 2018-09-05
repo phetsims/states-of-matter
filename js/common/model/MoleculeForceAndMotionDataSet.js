@@ -350,6 +350,54 @@ define( function( require ) {
       // Reduce the counts.
       this.numberOfAtoms -= this.atomsPerMolecule;
       this.numberOfMolecules--;
+    },
+
+    /**
+     * Dump this data set's information in a way that can then be incorporated into a phase state changer that needs to
+     * use fixed positions, velocities, etc. to set the state of a substance.  This was created in order to come up with
+     * good initial configurations instead of using an algorithmically generated ones, which can look unnatural.  See
+     * https://github.com/phetsims/states-of-matter/issues/212.  To use this, set a debugger at a point in the code
+     * where the substance is in the desired position, call this from the command line, and then incorporate the output
+     * into the appropriate phase state changer object (e.g. WaterPhaseStateChanger).  Some hand-tweaking is generally
+     * necessary.
+     * @public
+     */
+    dump: function() {
+
+      var i;
+      var numMolecules = this.numberOfMolecules;
+
+      console.log( 'moleculeCenterOfMassPositions:' );
+      console.log( '[' );
+      for ( i = 0; i < numMolecules; i++ ) {
+        var comPos = this.moleculeCenterOfMassPositions[ i ];
+        console.log( '{', 'x: ', comPos.x.toFixed( 3 ), ', y: ', comPos.y.toFixed( 3 ), '},' );
+      }
+      console.log( '],' );
+
+      console.log( 'moleculeVelocities:' );
+      console.log( '[' );
+      for ( i = 0; i < numMolecules; i++ ) {
+        var vel = this.moleculeVelocities[ i ];
+        console.log( '{', 'x: ', vel.x.toFixed( 3 ), ', y: ', vel.y.toFixed( 3 ), '},' );
+      }
+      console.log( '],' );
+
+      console.log( 'moleculeRotationAngles:' );
+      console.log( '[' );
+      for ( i = 0; i < numMolecules; i++ ) {
+        var angle = this.moleculeRotationAngles[ i ];
+        console.log( angle.toFixed( 3 ), ',' );
+      }
+      console.log( '],' );
+
+      console.log( 'moleculeRotationRates:' );
+      console.log( '[' );
+      for ( i = 0; i < numMolecules; i++ ) {
+        var rate = this.moleculeRotationRates[ i ];
+        console.log( rate.toFixed( 3 ), ',' );
+      }
+      console.log( '],' );
     }
 
   } );
