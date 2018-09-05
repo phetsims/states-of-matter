@@ -54,7 +54,7 @@ define( function( require ) {
      * @override
      * @protected
      */
-    initializeForces: function( moleculeDataSet ){
+    initializeForces: function( moleculeDataSet ) {
       var temperatureSetPoint = this.multipleParticleModel.temperatureSetPointProperty.get();
       var accelerationDueToGravity = this.multipleParticleModel.gravitationalAcceleration;
       if ( temperatureSetPoint < TEMPERATURE_BELOW_WHICH_GRAVITY_INCREASES ) {
@@ -62,7 +62,7 @@ define( function( require ) {
         // Below a certain temperature, gravity is increased to counteract some odd-looking behavior caused by the
         // thermostat.  The multiplier was empirically determined.
         accelerationDueToGravity = accelerationDueToGravity *
-                                    ( 1 + ( TEMPERATURE_BELOW_WHICH_GRAVITY_INCREASES - temperatureSetPoint ) * 0.32 );
+                                   ( 1 + ( TEMPERATURE_BELOW_WHICH_GRAVITY_INCREASES - temperatureSetPoint ) * 0.32 );
       }
       var nextMoleculeForces = moleculeDataSet.nextMoleculeForces;
       var nextMoleculeTorques = moleculeDataSet.nextMoleculeTorques;
@@ -120,7 +120,7 @@ define( function( require ) {
         q0 = WATER_FULLY_FROZEN_ELECTROSTATIC_FORCE -
              ( temperatureFactor * ( WATER_FULLY_FROZEN_ELECTROSTATIC_FORCE - WATER_FULLY_MELTED_ELECTROSTATIC_FORCE ) );
         repulsiveForceScalingFactor = MAX_REPULSIVE_SCALING_FACTOR_FOR_WATER -
-                                      ( temperatureFactor * (MAX_REPULSIVE_SCALING_FACTOR_FOR_WATER - 1 ) );
+                                      ( temperatureFactor * ( MAX_REPULSIVE_SCALING_FACTOR_FOR_WATER - 1 ) );
       }
       this.normalCharges[ 0 ] = -2 * q0;
       this.normalCharges[ 1 ] = q0;
