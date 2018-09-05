@@ -720,6 +720,9 @@ define( function( require ) {
       // load the previously saved state
       this.loadSavedState( dataSetToLoad );
 
+      // prevent drift
+      this.zeroOutCollectiveVelocity();
+
       // set the multipleParticleModel temperature for this phase
       this.multipleParticleModel.setTemperature( SOMConstants.SOLID_TEMPERATURE );
     },

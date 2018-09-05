@@ -166,13 +166,7 @@ define( function( require ) {
         }
       }
 
-      // The number of particles is often not large enough to count on having a zero average X and Y velocity, so the
-      // substance can end up with some initial drive.  This compensates for that problem.
-      var xAdjustment = -this.reusableVector.x / numberOfMolecules;
-      var yAdjustment = -this.reusableVector.y / numberOfMolecules;
-      for ( i = 0; i < numberOfMolecules; i++ ) {
-        moleculeVelocities[ i ].addXY( xAdjustment, yAdjustment );
-      }
+      this.zeroOutCollectiveVelocity();
     },
 
     /**
@@ -258,30 +252,23 @@ define( function( require ) {
     },
 
     /**
-     * Set the initial linear and rotational velocities for molecules with more than one atom.
+     * zero out the collective velocity of the substance, generally used to help prevent drift after changing phase
+     * @protected
      */
-    initializeVelocities: function() {
+    zeroOutCollectiveVelocity: function() {
 
       var moleculeDataSet = this.multipleParticleModel.moleculeDataSet;
-      var moleculeVelocities = moleculeDataSet.moleculeVelocities;
-      var moleculeRotationRates = moleculeDataSet.moleculeRotationRates;
-      var moleculesInsideContainer = this.multipleParticleModel.moleculeDataSet.insideContainer;
-      var temperatureSqrt = Math.sqrt( this.multipleParticleModel.temperatureSetPointProperty.get() );
-
-      for ( var i = 0; i < moleculeDataSet.getNumberOfMolecules(); i++ ) {
-
-        // Assign each molecule an initial velocity.
-        moleculeVelocities[ i ].setXY(
-          temperatureSqrt * this.random.nextGaussian(),
-          temperatureSqrt * this.random.nextGaussian()
-        );
-
-        // Assign each molecule an initial rotation rate.  This has no effect for multi-atom particles, but doesn't
-        // hurt anything.
-        moleculeRotationRates[ i ] = this.random.nextDouble() * temperatureSqrt * Math.PI * 2;
-
-        // Mark each molecule as in the container.
-        moleculesInsideContainer[ i ] = true;
+      var numberOfMolecules = moleculeDataSet.getNumberOfMolecules();
+      var moleculeVelocities = moleculeDataSet.getMoleculeVelocities();
+      this.reusableVector.setXY( 0, 0 );
+      var i;
+      for ( i = 0; i < numberOfMolecules; i++ ) {
+        this.reusableVector.add( moleculeVelocities[ i ] );
+      }
+      var xAdjustment = -this.reusableVector.x / numberOfMolecules;
+      var yAdjustment = -this.reusableVector.y / numberOfMolecules;
+      for ( i = 0; i < numberOfMolecules; i++ ) {
+        moleculeVelocities[ i ].addXY( xAdjustment, yAdjustment );
       }
     },
 
