@@ -31,7 +31,6 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var InteractionStrengthTable = require( 'STATES_OF_MATTER/common/model/InteractionStrengthTable' );
   var IsokineticThermostat = require( 'STATES_OF_MATTER/common/model/engine/kinetic/IsokineticThermostat' );
-  var LinearFunction = require( 'DOT/LinearFunction' );
   var MoleculeForceAndMotionDataSet = require( 'STATES_OF_MATTER/common/model/MoleculeForceAndMotionDataSet' );
   var MonatomicAtomPositionUpdater = require( 'STATES_OF_MATTER/common/model/engine/MonatomicAtomPositionUpdater' );
   var MonatomicPhaseStateChanger = require( 'STATES_OF_MATTER/common/model/engine/MonatomicPhaseStateChanger' );
@@ -90,16 +89,14 @@ define( function( require ) {
   var TEMPERATURE_CLOSENESS_RANGE = 0.15;
 
   // Values used for converting from model temperature to the temperature for a given particle.
-  var TRIPLE_POINT_INTERNAL_MODEL_TEMPERATURE = 0.26;   // Empirically determined.
-  var CRITICAL_POINT_INTERNAL_MODEL_TEMPERATURE = 0.8;  // Empirically determined.
-  var NEON_TRIPLE_POINT_IN_KELVIN = 23;   // Tweaked a little from actual value for better temperature mapping.
-  var NEON_CRITICAL_POINT_IN_KELVIN = 44;
-  var ARGON_TRIPLE_POINT_IN_KELVIN = 75;  // Tweaked a little from actual value for better temperature mapping.
-  var ARGON_CRITICAL_POINT_IN_KELVIN = 151;
-  var O2_TRIPLE_POINT_IN_KELVIN = 54;
-  var O2_CRITICAL_POINT_IN_KELVIN = 155;
-  var WATER_TRIPLE_POINT_IN_KELVIN = 273;
-  var WATER_CRITICAL_POINT_IN_KELVIN = 647;
+  var NEON_TRIPLE_POINT_IN_KELVIN = SOMConstants.NEON_TRIPLE_POINT_IN_KELVIN;
+  var NEON_CRITICAL_POINT_IN_KELVIN = SOMConstants.NEON_CRITICAL_POINT_IN_KELVIN;
+  var ARGON_TRIPLE_POINT_IN_KELVIN = SOMConstants.ARGON_TRIPLE_POINT_IN_KELVIN;
+  var ARGON_CRITICAL_POINT_IN_KELVIN = SOMConstants.ARGON_CRITICAL_POINT_IN_KELVIN;
+  var O2_TRIPLE_POINT_IN_KELVIN = SOMConstants.O2_TRIPLE_POINT_IN_KELVIN;
+  var O2_CRITICAL_POINT_IN_KELVIN = SOMConstants.O2_CRITICAL_POINT_IN_KELVIN;
+  var WATER_TRIPLE_POINT_IN_KELVIN = SOMConstants.WATER_TRIPLE_POINT_IN_KELVIN;
+  var WATER_CRITICAL_POINT_IN_KELVIN = SOMConstants.WATER_CRITICAL_POINT_IN_KELVIN;
 
   // The following values are used for temperature conversion for the adjustable molecule.  These are somewhat
   // arbitrary, since in the real world the values would change if epsilon were changed.  They have been chosen to be
@@ -146,6 +143,14 @@ define( function( require ) {
     this.averageDtProperty = new Property( NOMINAL_TIME_STEP ); // read only
     this.maxParticleMoveTimePerStepProperty = new Property( Number.POSITIVE_INFINITY ); // read only
     this.resetEmitter = new Emitter(); // listen only, fires when a reset occurs
+
+    // TODO: temp
+    if ( !window.phet.logTempFunctions ) {
+      window.phet.logTempFunctions = [];
+    }
+    window.phet.logTempFunctions.push( function() {
+      console.log( 'self.temperatureSetPointProperty.get() = ' + self.temperatureSetPointProperty.get() );
+    } );
 
     //-----------------------------------------------------------------------------------------------------------------
     // other model attributes
@@ -241,39 +246,52 @@ define( function( require ) {
     getTemperatureInKelvin: function() {
 
       if ( this.particles.length === 0 ) {
-        // Temperature is reported as 0 if there are no particles.
+
+        // temperature is reported as 0 if there are no particles
         return null;
       }
 
       var temperatureInKelvin;
-      var triplePoint = 0;
-      var criticalPoint = 0;
+      var triplePointInKelvin = 0;
+      var criticalPointInKelvin = 0;
+      var triplePointInModelUnits = 0;
+      var criticalPointInModelUnits = 0;
 
       switch( this.substanceProperty.get() ) {
 
         case SubstanceType.NEON:
-          triplePoint = NEON_TRIPLE_POINT_IN_KELVIN;
-          criticalPoint = NEON_CRITICAL_POINT_IN_KELVIN;
+          triplePointInKelvin = NEON_TRIPLE_POINT_IN_KELVIN;
+          criticalPointInKelvin = NEON_CRITICAL_POINT_IN_KELVIN;
+          triplePointInModelUnits = SOMConstants.TRIPLE_POINT_MONATOMIC_MODEL_TEMPERATURE;
+          criticalPointInModelUnits = SOMConstants.CRITICAL_POINT_MONATOMIC_MODEL_TEMPERATURE;
           break;
 
         case SubstanceType.ARGON:
-          triplePoint = ARGON_TRIPLE_POINT_IN_KELVIN;
-          criticalPoint = ARGON_CRITICAL_POINT_IN_KELVIN;
+          triplePointInKelvin = ARGON_TRIPLE_POINT_IN_KELVIN;
+          criticalPointInKelvin = ARGON_CRITICAL_POINT_IN_KELVIN;
+          triplePointInModelUnits = SOMConstants.TRIPLE_POINT_MONATOMIC_MODEL_TEMPERATURE;
+          criticalPointInModelUnits = SOMConstants.CRITICAL_POINT_MONATOMIC_MODEL_TEMPERATURE;
           break;
 
         case SubstanceType.ADJUSTABLE_ATOM:
-          triplePoint = ADJUSTABLE_ATOM_TRIPLE_POINT_IN_KELVIN;
-          criticalPoint = ADJUSTABLE_ATOM_CRITICAL_POINT_IN_KELVIN;
+          triplePointInKelvin = ADJUSTABLE_ATOM_TRIPLE_POINT_IN_KELVIN;
+          criticalPointInKelvin = ADJUSTABLE_ATOM_CRITICAL_POINT_IN_KELVIN;
+          triplePointInModelUnits = SOMConstants.TRIPLE_POINT_MONATOMIC_MODEL_TEMPERATURE;
+          criticalPointInModelUnits = SOMConstants.CRITICAL_POINT_MONATOMIC_MODEL_TEMPERATURE;
           break;
 
         case SubstanceType.WATER:
-          triplePoint = WATER_TRIPLE_POINT_IN_KELVIN;
-          criticalPoint = WATER_CRITICAL_POINT_IN_KELVIN;
+          triplePointInKelvin = WATER_TRIPLE_POINT_IN_KELVIN;
+          criticalPointInKelvin = WATER_CRITICAL_POINT_IN_KELVIN;
+          triplePointInModelUnits = SOMConstants.TRIPLE_POINT_WATER_MODEL_TEMPERATURE;
+          criticalPointInModelUnits = SOMConstants.CRITICAL_POINT_WATER_MODEL_TEMPERATURE;
           break;
 
         case SubstanceType.DIATOMIC_OXYGEN:
-          triplePoint = O2_TRIPLE_POINT_IN_KELVIN;
-          criticalPoint = O2_CRITICAL_POINT_IN_KELVIN;
+          triplePointInKelvin = O2_TRIPLE_POINT_IN_KELVIN;
+          criticalPointInKelvin = O2_CRITICAL_POINT_IN_KELVIN;
+          triplePointInModelUnits = SOMConstants.TRIPLE_POINT_DIATOMIC_MODEL_TEMPERATURE;
+          criticalPointInModelUnits = SOMConstants.CRITICAL_POINT_DIATOMIC_MODEL_TEMPERATURE;
           break;
 
         default:
@@ -281,27 +299,29 @@ define( function( require ) {
       }
 
       if ( this.temperatureSetPointProperty.get() <= this.minModelTemperature ) {
-        // We treat anything below the minimum temperature as absolute zero.
+
+        // we treat anything below the minimum temperature as absolute zero
         temperatureInKelvin = 0;
       }
-      else if ( this.temperatureSetPointProperty.get() < TRIPLE_POINT_INTERNAL_MODEL_TEMPERATURE ) {
-        temperatureInKelvin = this.temperatureSetPointProperty.get() * triplePoint / TRIPLE_POINT_INTERNAL_MODEL_TEMPERATURE;
+      else if ( this.temperatureSetPointProperty.get() < triplePointInModelUnits ) {
+        temperatureInKelvin = this.temperatureSetPointProperty.get() * triplePointInKelvin / triplePointInModelUnits;
 
         if ( temperatureInKelvin < 0.5 ) {
-          // Don't return zero - or anything that would round to it - as
-          // a value until we actually reach the minimum internal temperature.
+
+          // Don't return zero - or anything that would round to it - as a value until we actually reach the minimum
+          // internal temperature.
           temperatureInKelvin = 0.5;
         }
       }
-      else if ( this.temperatureSetPointProperty.get() < CRITICAL_POINT_INTERNAL_MODEL_TEMPERATURE ) {
-        var slope = ( criticalPoint - triplePoint ) /
-                    ( CRITICAL_POINT_INTERNAL_MODEL_TEMPERATURE - TRIPLE_POINT_INTERNAL_MODEL_TEMPERATURE );
-        var offset = triplePoint - ( slope * TRIPLE_POINT_INTERNAL_MODEL_TEMPERATURE );
+      else if ( this.temperatureSetPointProperty.get() < criticalPointInModelUnits ) {
+        var slope = ( criticalPointInKelvin - triplePointInKelvin ) /
+                    ( criticalPointInModelUnits - triplePointInModelUnits );
+        var offset = triplePointInKelvin - ( slope * triplePointInModelUnits );
         temperatureInKelvin = this.temperatureSetPointProperty.get() * slope + offset;
       }
       else {
-        temperatureInKelvin = this.temperatureSetPointProperty.get() * criticalPoint /
-                              CRITICAL_POINT_INTERNAL_MODEL_TEMPERATURE;
+        temperatureInKelvin = this.temperatureSetPointProperty.get() * criticalPointInKelvin /
+                              criticalPointInModelUnits;
       }
       return temperatureInKelvin;
     },
@@ -347,17 +367,20 @@ define( function( require ) {
 
         case SubstanceType.DIATOMIC_OXYGEN:
           this.particleDiameter = OxygenAtom.RADIUS * 2;
-          this.minModelTemperature = 0.5 * TRIPLE_POINT_INTERNAL_MODEL_TEMPERATURE / O2_TRIPLE_POINT_IN_KELVIN;
+          this.minModelTemperature = 0.5 * SOMConstants.TRIPLE_POINT_DIATOMIC_MODEL_TEMPERATURE /
+                                     O2_TRIPLE_POINT_IN_KELVIN;
           break;
 
         case SubstanceType.NEON:
           this.particleDiameter = NeonAtom.RADIUS * 2;
-          this.minModelTemperature = 0.5 * TRIPLE_POINT_INTERNAL_MODEL_TEMPERATURE / NEON_TRIPLE_POINT_IN_KELVIN;
+          this.minModelTemperature = 0.5 * SOMConstants.TRIPLE_POINT_MONATOMIC_MODEL_TEMPERATURE /
+                                     NEON_TRIPLE_POINT_IN_KELVIN;
           break;
 
         case SubstanceType.ARGON:
           this.particleDiameter = ArgonAtom.RADIUS * 2;
-          this.minModelTemperature = 0.5 * TRIPLE_POINT_INTERNAL_MODEL_TEMPERATURE / ARGON_TRIPLE_POINT_IN_KELVIN;
+          this.minModelTemperature = 0.5 * SOMConstants.TRIPLE_POINT_MONATOMIC_MODEL_TEMPERATURE /
+                                     ARGON_TRIPLE_POINT_IN_KELVIN;
           break;
 
         case SubstanceType.WATER:
@@ -366,12 +389,13 @@ define( function( require ) {
           // "spaced out" so that users can see the crystal structure better, and so that the solid form will look
           // larger (since water expands when frozen).
           this.particleDiameter = OxygenAtom.RADIUS * 2.9;
-          this.minModelTemperature = 0.5 * TRIPLE_POINT_INTERNAL_MODEL_TEMPERATURE / WATER_TRIPLE_POINT_IN_KELVIN;
+          this.minModelTemperature = 0.5 * SOMConstants.TRIPLE_POINT_WATER_MODEL_TEMPERATURE /
+                                     WATER_TRIPLE_POINT_IN_KELVIN;
           break;
 
         case SubstanceType.ADJUSTABLE_ATOM:
           this.particleDiameter = ConfigurableStatesOfMatterAtom.DEFAULT_RADIUS * 2;
-          this.minModelTemperature = 0.5 * TRIPLE_POINT_INTERNAL_MODEL_TEMPERATURE /
+          this.minModelTemperature = 0.5 * SOMConstants.TRIPLE_POINT_MONATOMIC_MODEL_TEMPERATURE /
                                      ADJUSTABLE_ATOM_TRIPLE_POINT_IN_KELVIN;
           break;
 
@@ -479,50 +503,6 @@ define( function( require ) {
     },
 
     /**
-     * get the internal model temperature that corresponds to one degree Kelvin
-     */
-    getTwoDegreesKelvinInInternalTemperature: function() {
-
-      var triplePointInKelvin;
-
-      switch( this.substanceProperty.get() ) {
-
-        case SubstanceType.NEON:
-          triplePointInKelvin = NEON_TRIPLE_POINT_IN_KELVIN;
-          break;
-
-        case SubstanceType.ARGON:
-          triplePointInKelvin = ARGON_TRIPLE_POINT_IN_KELVIN;
-          break;
-
-        case SubstanceType.ADJUSTABLE_ATOM:
-          triplePointInKelvin = ADJUSTABLE_ATOM_TRIPLE_POINT_IN_KELVIN;
-          break;
-
-        case SubstanceType.WATER:
-          triplePointInKelvin = WATER_TRIPLE_POINT_IN_KELVIN;
-          break;
-
-        case SubstanceType.DIATOMIC_OXYGEN:
-          triplePointInKelvin = O2_TRIPLE_POINT_IN_KELVIN;
-          break;
-
-        default:
-          throw( new Error( 'unsupported substance' ) ); // should never happen, debug if it does
-      }
-
-      var mapKelvinToInternal = new LinearFunction(
-        0,
-        triplePointInKelvin,
-        this.minModelTemperature,
-        TRIPLE_POINT_INTERNAL_MODEL_TEMPERATURE
-      );
-
-      return mapKelvinToInternal( 2 );
-
-    },
-
-    /**
      * @override
      * @public
      */
@@ -569,8 +549,10 @@ define( function( require ) {
      * @public
      */
     setPhase: function( phaseSate ) {
-      assert && assert( phaseSate === PhaseStateEnum.SOLID || phaseSate === PhaseStateEnum.LIQUID || phaseSate === PhaseStateEnum.GAS,
-        'invalid phase state specified' );
+      assert && assert(
+        phaseSate === PhaseStateEnum.SOLID || phaseSate === PhaseStateEnum.LIQUID || phaseSate === PhaseStateEnum.GAS,
+        'invalid phase state specified'
+      );
       this.phaseStateChanger.setPhase( phaseSate );
       this.syncParticlePositions();
     },

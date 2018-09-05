@@ -42,15 +42,8 @@ define( function( require ) {
   var INTER_PANEL_SPACING = 8;
 
   // constants used when mapping the model pressure and temperature to the phase diagram.
-  var TRIPLE_POINT_TEMPERATURE_IN_MODEL = SOMConstants.TRIPLE_POINT_MONATOMIC_MODEL_TEMPERATURE;
   var TRIPLE_POINT_TEMPERATURE_ON_DIAGRAM = 0.375;
-  var CRITICAL_POINT_TEMPERATURE_IN_MODEL = SOMConstants.CRITICAL_POINT_MONATOMIC_MODEL_TEMPERATURE;
   var CRITICAL_POINT_TEMPERATURE_ON_DIAGRAM = 0.8;
-  var SLOPE_IN_1ST_REGION = TRIPLE_POINT_TEMPERATURE_ON_DIAGRAM / TRIPLE_POINT_TEMPERATURE_IN_MODEL;
-  var SLOPE_IN_2ND_REGION = ( CRITICAL_POINT_TEMPERATURE_ON_DIAGRAM - TRIPLE_POINT_TEMPERATURE_ON_DIAGRAM ) /
-                            ( CRITICAL_POINT_TEMPERATURE_IN_MODEL - TRIPLE_POINT_TEMPERATURE_IN_MODEL );
-  var OFFSET_IN_2ND_REGION = TRIPLE_POINT_TEMPERATURE_ON_DIAGRAM -
-                             ( SLOPE_IN_2ND_REGION * TRIPLE_POINT_TEMPERATURE_IN_MODEL );
 
   // Used for calculating moving averages needed to mellow out the graph behavior.  Value empirically determined.
   var MAX_NUM_HISTORY_SAMPLES = 100;
@@ -201,6 +194,38 @@ define( function( require ) {
     } );
     this.addChild( this.phaseDiagram );
 
+    // @private - variables used to map temperature on to the phase diagram
+    this.triplePointTemperatureInModelUnits = 0;
+    this.criticalPointTemperatureInModelUnits = 0;
+    this.slopeInFirstRegion = 0;
+    this.slopeInSecondRegion = 0;
+    this.offsetInSecondRegion = 0;
+
+    // set up
+    multipleParticleModel.substanceProperty.link( function( substance ) {
+
+      if ( substance === SubstanceType.NEON ||
+           substance === SubstanceType.ARGON ||
+           substance === SubstanceType.ADJUSTABLE_ATOM ) {
+        self.triplePointTemperatureInModelUnits = SOMConstants.TRIPLE_POINT_MONATOMIC_MODEL_TEMPERATURE;
+        self.criticalPointTemperatureInModelUnits = SOMConstants.CRITICAL_POINT_MONATOMIC_MODEL_TEMPERATURE;
+      }
+      else if ( substance === SubstanceType.DIATOMIC_OXYGEN ) {
+        self.triplePointTemperatureInModelUnits = SOMConstants.TRIPLE_POINT_DIATOMIC_MODEL_TEMPERATURE;
+        self.criticalPointTemperatureInModelUnits = SOMConstants.CRITICAL_POINT_DIATOMIC_MODEL_TEMPERATURE;
+      }
+      else if ( substance === SubstanceType.WATER ) {
+        self.triplePointTemperatureInModelUnits = SOMConstants.TRIPLE_POINT_WATER_MODEL_TEMPERATURE;
+        self.criticalPointTemperatureInModelUnits = SOMConstants.CRITICAL_POINT_WATER_MODEL_TEMPERATURE;
+      }
+      self.slopeInFirstRegion = TRIPLE_POINT_TEMPERATURE_ON_DIAGRAM / self.triplePointTemperatureInModelUnits;
+      self.slopeInSecondRegion = ( CRITICAL_POINT_TEMPERATURE_ON_DIAGRAM - TRIPLE_POINT_TEMPERATURE_ON_DIAGRAM ) /
+                                 ( self.criticalPointTemperatureInModelUnits - self.triplePointTemperatureInModelUnits );
+      self.offsetInSecondRegion = TRIPLE_POINT_TEMPERATURE_ON_DIAGRAM -
+                                  ( self.slopeInSecondRegion * self.triplePointTemperatureInModelUnits );
+    } );
+
+    // handle explosions of the container
     multipleParticleModel.isExplodedProperty.link( function( isExploded ) {
       self.modelTemperatureHistory.clear();
       if ( !isExploded ) {
@@ -356,11 +381,11 @@ define( function( require ) {
     mapModelTemperatureToPhaseDiagramTemperature: function( modelTemperature ) {
 
       var mappedTemperature;
-      if ( modelTemperature < TRIPLE_POINT_TEMPERATURE_IN_MODEL ) {
-        mappedTemperature = SLOPE_IN_1ST_REGION * modelTemperature;
+      if ( modelTemperature < this.triplePointTemperatureInModelUnits ) {
+        mappedTemperature = this.slopeInFirstRegion * modelTemperature;
       }
       else {
-        mappedTemperature = modelTemperature * SLOPE_IN_2ND_REGION + OFFSET_IN_2ND_REGION;
+        mappedTemperature = modelTemperature * this.slopeInSecondRegion + this.offsetInSecondRegion;
       }
 
       return Math.min( mappedTemperature, 1 );
