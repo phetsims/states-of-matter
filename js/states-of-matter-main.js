@@ -12,7 +12,6 @@ define( function( require ) {
   var AtomicInteractionsScreen = require( 'STATES_OF_MATTER/atomic-interactions/AtomicInteractionsScreen' );
   var GlobalOptionsNode = require( 'STATES_OF_MATTER/common/view/GlobalOptionsNode' );
   var PhaseChangesScreen = require( 'STATES_OF_MATTER/phase-changes/PhaseChangesScreen' );
-  var Property = require( 'AXON/Property' );
   var Sim = require( 'JOIST/Sim' );
   var SimLauncher = require( 'JOIST/SimLauncher' );
   var StatesScreen = require( 'STATES_OF_MATTER/states/StatesScreen' );
@@ -20,9 +19,6 @@ define( function( require ) {
   // strings
   var interactionString = require( 'string!STATES_OF_MATTER/interaction' );
   var statesOfMatterTitleString = require( 'string!STATES_OF_MATTER/states-of-matter.title' );
-
-  // property that controls projector mode, initial value can be set via a query parameter
-  var projectorModeProperty = new Property( phet.chipper.queryParameters.colorProfile === 'projector' );
 
   var simOptions = {
     credits: {
@@ -33,7 +29,7 @@ define( function( require ) {
                         'Benjamin Roberts, Bryan Yoelin',
       thanks: 'Thanks to Actual Concepts for working with the PhET development team to convert this simulation to HTML5.'
     },
-    optionsNode: new GlobalOptionsNode( projectorModeProperty ),
+    optionsNode: new GlobalOptionsNode(),
     showSmallHomeScreenIconFrame: true
   };
 

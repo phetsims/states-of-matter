@@ -10,27 +10,21 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var Checkbox = require( 'SUN/Checkbox' );
   var inherit = require( 'PHET_CORE/inherit' );
   var OptionsDialog = require( 'JOIST/OptionsDialog' );
+  var ProjectorModeCheckbox = require( 'JOIST/ProjectorModeCheckbox' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var SOMColorProfile = require( 'STATES_OF_MATTER/common/view/SOMColorProfile' );
-  var Text = require( 'SCENERY/nodes/Text' );
   var VBox = require( 'SCENERY/nodes/VBox' );
 
-  // strings
-  var projectorModeString = require( 'string!STATES_OF_MATTER/projectorMode' );
-
-  // constants
-  var MAX_CHECKBOX_TEXT_WIDTH = 350;
-
   /**
-   * @param {Property<boolean>} projectorModeProperty
    * @constructor
    */
-  function GlobalOptionsNode( projectorModeProperty ) {
-    var children = [];
-    projectorModeProperty.link( function( projectorMode ) {
+  function GlobalOptionsNode() {
+
+    // add support for setting projector mode
+    var projectorModeCheckbox = new ProjectorModeCheckbox();
+    projectorModeCheckbox.projectorModeEnabledProperty.link( function( projectorMode ) {
       if ( projectorMode ) {
         SOMColorProfile.profileNameProperty.set( 'projector' );
       }
@@ -39,13 +33,9 @@ define( function( require ) {
       }
     } );
 
-    children.push( new Checkbox(
-      new Text( projectorModeString, { font: OptionsDialog.DEFAULT_FONT, maxWidth: MAX_CHECKBOX_TEXT_WIDTH } ),
-      projectorModeProperty
-    ) );
-
+    // VBox is used to make it easy to add additional options
     VBox.call( this, _.extend( {
-      children: children,
+      children: [ projectorModeCheckbox ],
       spacing: OptionsDialog.DEFAULT_SPACING,
       align: 'left'
     } ) );
