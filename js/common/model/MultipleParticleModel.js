@@ -956,12 +956,14 @@ define( function( require ) {
       }
 
       var calculatedTemperature = this.moleculeForceAndMotionCalculator.calculatedTemperature;
-      var temperatureIsChanging = false;
+      var temperatureSetPoint = this.temperatureSetPointProperty.get();
+      var temperatureAdjustmentNeeded = false;
       var thermostatRunThisStep = null;
 
-      if ( ( this.heatingCoolingAmountProperty.get() !== 0 ) ||
-           ( Math.abs( calculatedTemperature - this.temperatureSetPointProperty.get() ) > TEMPERATURE_CLOSENESS_RANGE ) ) {
-        temperatureIsChanging = true;
+      if ( this.heatingCoolingAmountProperty.get() > 0 && calculatedTemperature < temperatureSetPoint ||
+           this.heatingCoolingAmountProperty.get() < 0 && calculatedTemperature > temperatureSetPoint ||
+           Math.abs( calculatedTemperature - temperatureSetPoint ) > TEMPERATURE_CLOSENESS_RANGE ) {
+        temperatureAdjustmentNeeded = true;
       }
 
       if ( this.particleInjectedThisStep ) {
@@ -971,7 +973,7 @@ define( function( require ) {
         // adjusted. No thermostat is run on this step - it will kick in on the next step.
         var numParticles = this.moleculeDataSet.getNumberOfMolecules();
         var injectedParticleTemperature = ( 2 / 3 ) * this.moleculeDataSet.getMoleculeKineticEnergy( numParticles - 1 );
-        var newTemperature = this.temperatureSetPointProperty.get() * ( numParticles - 1 ) / numParticles +
+        var newTemperature = temperatureSetPoint * ( numParticles - 1 ) / numParticles +
                              injectedParticleTemperature / numParticles;
         this.setTemperature( newTemperature );
       }
@@ -983,8 +985,8 @@ define( function( require ) {
         // system temperature set point.  However, sometimes the calculation can return some unexpected results,
         // probably due to some of the energy being tied up in potential rather than kinetic energy, so there are some
         // constraints here. See https://github.com/phetsims/states-of-matter/issues/169 for more information.
-        if ( this.heightChangeThisStep > 0 && calculatedTemperature < this.temperatureSetPointProperty.get() ||
-             this.heightChangeThisStep < 0 && calculatedTemperature > this.temperatureSetPointProperty.get() ) {
+        if ( this.heightChangeThisStep > 0 && calculatedTemperature < temperatureSetPoint ||
+             this.heightChangeThisStep < 0 && calculatedTemperature > temperatureSetPoint ) {
 
           // Set the target temperature to the calculated value adjusted by the average error that has been recorded.
           // This adjustment is necessary because otherwise big, or strange, temperature changes can occur.
@@ -994,9 +996,9 @@ define( function( require ) {
         // Clear the flag for the next time through.
         this.moleculeForceAndMotionCalculator.lidChangedParticleVelocity = false;
       }
-      else if ( temperatureIsChanging ||
-                this.temperatureSetPointProperty.get() > LIQUID_TEMPERATURE ||
-                this.temperatureSetPointProperty.get() < SOLID_TEMPERATURE / 5 ) {
+      else if ( temperatureAdjustmentNeeded ||
+                temperatureSetPoint > LIQUID_TEMPERATURE ||
+                temperatureSetPoint < SOLID_TEMPERATURE / 5 ) {
 
         // If this is the first run of this thermostat in a while, clear its accumulated biases
         if ( this.thermostatRunPreviousStep !== this.isoKineticThermostat ) {
@@ -1007,7 +1009,7 @@ define( function( require ) {
         this.isoKineticThermostat.adjustTemperature( calculatedTemperature );
         thermostatRunThisStep = this.isoKineticThermostat;
       }
-      else if ( !temperatureIsChanging ) {
+      else if ( !temperatureAdjustmentNeeded ) {
 
         // If this is the first run of this thermostat in a while, clear its accumulated biases
         if ( this.thermostatRunPreviousStep !== this.andersenThermostat ) {
@@ -1027,8 +1029,8 @@ define( function( require ) {
 
       // Update the average difference between the set point and the calculated temperature, but only if nothing has
       // happened that may have affected the calculated value or the set point.
-      if ( !temperatureIsChanging && !this.particleInjectedThisStep && !this.lidChangedParticleVelocity ) {
-        this.averageTemperatureDifference.addValue( this.temperatureSetPointProperty.get() - calculatedTemperature );
+      if ( !temperatureAdjustmentNeeded && !this.particleInjectedThisStep && !this.lidChangedParticleVelocity ) {
+        this.averageTemperatureDifference.addValue( temperatureSetPoint - calculatedTemperature );
       }
     },
 
