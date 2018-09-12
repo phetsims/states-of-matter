@@ -144,14 +144,6 @@ define( function( require ) {
     this.maxParticleMoveTimePerStepProperty = new Property( Number.POSITIVE_INFINITY ); // read only
     this.resetEmitter = new Emitter(); // listen only, fires when a reset occurs
 
-    // TODO: temp
-    if ( !window.phet.logTempFunctions ) {
-      window.phet.logTempFunctions = [];
-    }
-    window.phet.logTempFunctions.push( function() {
-      console.log( 'self.temperatureSetPointProperty.get() = ' + self.temperatureSetPointProperty.get() );
-    } );
-
     //-----------------------------------------------------------------------------------------------------------------
     // other model attributes
     //-----------------------------------------------------------------------------------------------------------------
