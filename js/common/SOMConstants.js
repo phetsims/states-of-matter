@@ -31,8 +31,8 @@ define( function( require ) {
     CRITICAL_POINT_DIATOMIC_MODEL_TEMPERATURE: 1.5, // empirically determined
     TRIPLE_POINT_WATER_MODEL_TEMPERATURE: 0.28, // empirically determined
     CRITICAL_POINT_WATER_MODEL_TEMPERATURE: 2.0, // empirically determined
-    NEON_TRIPLE_POINT_IN_KELVIN: 23,  // Tweaked a little from actual value for better temperature mapping.
-    NEON_CRITICAL_POINT_IN_KELVIN: 44,
+    NEON_TRIPLE_POINT_IN_KELVIN: 24.5,
+    NEON_CRITICAL_POINT_IN_KELVIN: 45,
     ARGON_TRIPLE_POINT_IN_KELVIN: 75, // Tweaked a little from actual value for better temperature mapping.
     ARGON_CRITICAL_POINT_IN_KELVIN: 151,
     O2_TRIPLE_POINT_IN_KELVIN: 54,
