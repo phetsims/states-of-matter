@@ -104,7 +104,7 @@ define( function( require ) {
     var labelTextOptions = {
       font: NORMAL_TEXT_FONT,
       fill: options.buttonTextFill,
-      maxWidth: NORMAL_TEXT_MAX_WIDTH / 2
+      maxWidth: enableHeterogeneousAtoms ? NORMAL_TEXT_MAX_WIDTH / 2 : NORMAL_TEXT_MAX_WIDTH
     };
 
     // allows user to select from a fixed list of heterogeneous and homogeneous combinations of atoms
