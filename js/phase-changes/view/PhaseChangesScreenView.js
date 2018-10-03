@@ -91,7 +91,7 @@ define( function( require ) {
 
     // add heater/cooler node
     var heaterCoolerNode = new HeaterCoolerNode( {
-      scale: 0.8,
+      scale: 0.89,
       centerX: nominalParticleAreaViewBounds.centerX,
       top: nominalParticleAreaViewBounds.maxY + 30 // offset from container bottom empirically determined
     } );

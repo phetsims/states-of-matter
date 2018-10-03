@@ -65,7 +65,7 @@ define( function( require ) {
 
     // @private add heater/cooler node
     var heaterCoolerNode = new HeaterCoolerNode( {
-      scale: 0.8,
+      scale: 0.89,
       centerX: particleContainerViewBounds.centerX,
       top: particleContainerViewBounds.bottom + 30 // distance from bottom of particle area empirically determined
     } );
