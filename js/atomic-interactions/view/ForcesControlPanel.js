@@ -201,7 +201,7 @@ define( function( require ) {
 
     // show white stroke around the force panel within SOM full version  else  show black stroke
     var accordionBox = new AccordionBox( accordionContent, {
-      titleNode: createText( forcesString, TEXT_LABEL_MAX_WIDTH / 2, 14 ),
+      titleNode: createText( forcesString, TEXT_LABEL_MAX_WIDTH * 0.9, 14 ),
       fill: options.fill,
       stroke: options.stroke,
       lineWidth: options.lineWidth,
