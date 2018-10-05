@@ -76,11 +76,17 @@ define( function( require ) {
       multipleParticleModel.setHeatingCoolingAmount( heat );
     } );
 
+    // the thermometer node should be at the top left of the container
+    var thermometerInitialCenterPosition = new Vector2(
+      particleContainerViewBounds.minX + particleContainerViewBounds.width * 0.2,
+      modelViewTransform.modelToViewY( multipleParticleModel.particleContainerHeightProperty.value )
+    );
+
     // @private thermometer node
     this.compositeThermometerNode = new CompositeThermometerNode( multipleParticleModel, modelViewTransform, {
       font: new PhetFont( 20 ),
       fill: 'white',
-      centerX: particleContainerViewBounds.minX + particleContainerViewBounds.width * 0.2 // left top of container
+      center: thermometerInitialCenterPosition
     } );
     this.addChild( this.compositeThermometerNode );
 
@@ -131,16 +137,15 @@ define( function( require ) {
           self.compositeThermometerNode.center,
           containerHeightChange * 0.0001 * Math.PI
         );
+        self.compositeThermometerNode.centerY = modelViewTransform.modelToViewY( containerHeight );
       }
-      else if ( self.compositeThermometerNode.getRotation() !== 0 ) {
+      else if ( !self.compositeThermometerNode.center.equals( thermometerInitialCenterPosition ) ||
+                self.compositeThermometerNode.getRotation() !== 0 ) {
 
-        // set the thermometer's rotation back to zero (necessary if the container explodes and lid is then returned)
+        // restore the thermometer's initial position, since it can be moved due to an explosion
         self.compositeThermometerNode.setRotation( 0 );
+        self.compositeThermometerNode.center = thermometerInitialCenterPosition;
       }
-
-      // set the thermometer's Y position to match that of the lid.
-      var centerY = modelViewTransform.modelToViewY( containerHeight );
-      self.compositeThermometerNode.centerY = centerY;
 
       self.particleContainerHeightPropertyChanged = true;
     } );
