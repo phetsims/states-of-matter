@@ -123,22 +123,24 @@ define( function( require ) {
     this.particleContainerHeightPropertyChanged = false;
     multipleParticleModel.particleContainerHeightProperty.link( function( containerHeight, previousContainerHeight ) {
 
-      // Set the thermometer's Y position to match that of the lid.
-      self.compositeThermometerNode.centerY = modelViewTransform.modelToViewY( containerHeight );
-
-      // If the container explodes, the thermometer moves up with it and rotates.
+      // set or reset any rotation of the thermometer
       if ( multipleParticleModel.isExplodedProperty.get() ) {
 
         var containerHeightChange = previousContainerHeight - containerHeight;
         self.compositeThermometerNode.rotateAround(
           self.compositeThermometerNode.center,
-          containerHeightChange * 0.0001 * Math.PI );
+          containerHeightChange * 0.0001 * Math.PI
+        );
       }
       else if ( self.compositeThermometerNode.getRotation() !== 0 ) {
 
         // set the thermometer's rotation back to zero (necessary if the container explodes and lid is then returned)
         self.compositeThermometerNode.setRotation( 0 );
       }
+
+      // set the thermometer's Y position to match that of the lid.
+      var centerY = modelViewTransform.modelToViewY( containerHeight );
+      self.compositeThermometerNode.centerY = centerY;
 
       self.particleContainerHeightPropertyChanged = true;
     } );
