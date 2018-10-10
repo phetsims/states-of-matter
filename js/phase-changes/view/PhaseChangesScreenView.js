@@ -242,7 +242,7 @@ define( function( require ) {
     multipleParticleModel.substanceProperty.link( function( substance ) {
       self.modelTemperatureHistory.clear();
       self.updatePhaseDiagram();
-      self.phaseDiagram.setDepictingWater( substance === SOMConstants.WATER );
+      self.phaseDiagram.setDepictingWater( substance === SubstanceType.WATER );
       if ( isInteractionDiagramEnabled ) {
         if ( substance === SubstanceType.ADJUSTABLE_ATOM ||
              substance === SubstanceType.DIATOMIC_OXYGEN ||

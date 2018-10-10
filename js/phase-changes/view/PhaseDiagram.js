@@ -1,8 +1,7 @@
 // Copyright 2014-2017, University of Colorado Boulder
 
 /**
- * This class displays a phase diagram suitable for inclusion on the control
- * panel of a PhET simulation.
+ * a phase diagram suitable for inclusion on the control panel of a PhET simulation
  *
  * @author John Blanco
  * @author Siddhartha Chinthapally (Actual Concepts)
@@ -84,16 +83,16 @@ define( function( require ) {
     Y_ORIGIN_OFFSET - ( Y_USABLE_RANGE * 0.45 )
   );
   var DEFAULT_SOLID_LABEL_LOCATION = new Vector2(
-    X_ORIGIN_OFFSET + ( X_USABLE_RANGE * 0.2 ),
-    Y_ORIGIN_OFFSET - ( Y_USABLE_RANGE * 0.7 )
+    X_ORIGIN_OFFSET + ( X_USABLE_RANGE * 0.175 ),
+    Y_ORIGIN_OFFSET - ( Y_USABLE_RANGE * 0.9 )
   );
   var DEFAULT_LIQUID_LABEL_LOCATION = new Vector2(
-    X_ORIGIN_OFFSET + ( X_USABLE_RANGE * 0.6 ),
-    Y_ORIGIN_OFFSET - ( Y_USABLE_RANGE * 0.7 )
+    X_ORIGIN_OFFSET + ( X_USABLE_RANGE * 0.65 ),
+    Y_ORIGIN_OFFSET - ( Y_USABLE_RANGE * 0.9 )
   );
   var DEFAULT_GAS_LABEL_LOCATION = new Vector2(
-    X_ORIGIN_OFFSET + ( X_USABLE_RANGE * 0.6 ),
-    Y_ORIGIN_OFFSET - ( Y_USABLE_RANGE * 0.1 )
+    X_ORIGIN_OFFSET + ( X_USABLE_RANGE * 0.7 ),
+    Y_ORIGIN_OFFSET - ( Y_USABLE_RANGE * 0.15 )
   );
 
   /**
@@ -192,12 +191,10 @@ define( function( require ) {
     this.criticalPointLabel = new MultiLineText( criticalPointString, {
       font: SMALLER_INNER_FONT,
       fill: 'black',
-      align: 'right'
+      align: 'right',
+      maxWidth: SMALLER_INNER_TEXT_WIDTH
     } );
     accordionContent.addChild( this.criticalPointLabel );
-    if ( this.criticalPointLabel.width > SMALLER_INNER_TEXT_WIDTH ) {
-      this.criticalPointLabel.setScaleMagnitude( SMALLER_INNER_TEXT_WIDTH / this.criticalPointLabel.width );
-    }
 
     var horizontalAxis = new ArrowNode(
       X_ORIGIN_OFFSET,
@@ -368,17 +365,14 @@ define( function( require ) {
 
       this.superCriticalAreaBackground.setShape( superCriticalBackground );
 
-      // hopefully will work better for translated strings.
-      this.solidLabel.setTranslation( DEFAULT_SOLID_LABEL_LOCATION.x - this.solidLabel.width / 2,
-        DEFAULT_SOLID_LABEL_LOCATION.y - this.solidLabel.height / 2 );
-      this.liquidLabel.setTranslation( DEFAULT_LIQUID_LABEL_LOCATION.x - this.liquidLabel.width / 2,
-        DEFAULT_LIQUID_LABEL_LOCATION.y - this.liquidLabel.height / 2 );
-      this.gasLabel.setTranslation( DEFAULT_GAS_LABEL_LOCATION.x - this.gasLabel.width / 2,
-        DEFAULT_GAS_LABEL_LOCATION.y );
-      this.triplePointLabel.setTranslation( DEFAULT_TRIPLE_POINT.x - this.triplePointLabel.width - 8,
-        DEFAULT_TRIPLE_POINT.y - this.triplePointLabel.height );
-      this.criticalPointLabel.setTranslation( DEFAULT_CRITICAL_POINT.x - this.criticalPointLabel.width - 8,
-        DEFAULT_CRITICAL_POINT.y - this.criticalPointLabel.height * 0.9 );
+      // position the labels - some of the values were empirically determined for optimal layout
+      this.solidLabel.center = DEFAULT_SOLID_LABEL_LOCATION;
+      this.liquidLabel.center = DEFAULT_LIQUID_LABEL_LOCATION;
+      this.gasLabel.center = DEFAULT_GAS_LABEL_LOCATION;
+      this.triplePointLabel.right = DEFAULT_TRIPLE_POINT.x - 7;
+      this.triplePointLabel.bottom = DEFAULT_TRIPLE_POINT.y;
+      this.criticalPointLabel.right = DEFAULT_CRITICAL_POINT.x - 7;
+      this.criticalPointLabel.bottom = DEFAULT_CRITICAL_POINT.y;
     },
 
     /**
