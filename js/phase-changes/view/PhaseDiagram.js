@@ -84,7 +84,7 @@ define( function( require ) {
     Y_ORIGIN_OFFSET - ( Y_USABLE_RANGE * 0.45 )
   );
   var DEFAULT_SOLID_LABEL_LOCATION = new Vector2(
-    X_ORIGIN_OFFSET + ( X_USABLE_RANGE * 0.2 ),
+    X_ORIGIN_OFFSET + ( X_USABLE_RANGE * 0.175 ),
     Y_ORIGIN_OFFSET - ( Y_USABLE_RANGE * 0.7 )
   );
   var DEFAULT_LIQUID_LABEL_LOCATION = new Vector2(
