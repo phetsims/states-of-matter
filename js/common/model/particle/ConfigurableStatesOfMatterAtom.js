@@ -22,8 +22,8 @@ define( function( require ) {
   var MASS = 25; // in atomic mass units
 
   /**
-   * @param {number} x position
-   * @param {number} y position
+   * @param {number} x - position
+   * @param {number} y - position
    * @constructor
    */
   function ConfigurableStatesOfMatterAtom( x, y ) {

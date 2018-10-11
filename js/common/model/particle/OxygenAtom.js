@@ -22,8 +22,8 @@ define( function( require ) {
   var MASS = Element.O.atomicWeight; // In atomic mass units.
 
   /**
-   * @param {number} x   - atom x position in picometers
-   * @param {number} y   - atom y  position in picometers
+   * @param {number} x - atom x position in picometers
+   * @param {number} y - atom y  position in picometers
    * @constructor
    */
   function OxygenAtom( x, y ) {

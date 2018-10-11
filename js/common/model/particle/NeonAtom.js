@@ -23,8 +23,8 @@ define( function( require ) {
   var EPSILON = 32.8; // epsilon/k-Boltzmann is in Kelvin.
 
   /**
-   * @param {number} x  position in picometers
-   * @param {number} y  position in picometers
+   * @param {number} x - position in picometers
+   * @param {number} y - position in picometers
    * @constructor
    */
   function NeonAtom( x, y ) {
