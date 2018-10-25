@@ -22,6 +22,7 @@ define( function( require ) {
   var Panel = require( 'SUN/Panel' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var RadioButtonGroup = require( 'SUN/buttons/RadioButtonGroup' );
+  var Range = require( 'DOT/Range' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
@@ -326,7 +327,7 @@ define( function( require ) {
 
     var atomDiameterSlider = new HSlider(
       dualAtomModel.atomDiameterProperty,
-      { min: SOMConstants.MIN_SIGMA, max: SOMConstants.MAX_SIGMA },
+      new Range( SOMConstants.MIN_SIGMA, SOMConstants.MAX_SIGMA ),
       sliderOptions
     );
 
@@ -354,7 +355,7 @@ define( function( require ) {
     } );
     var interactionStrengthSlider = new HSlider(
       dualAtomModel.interactionStrengthProperty,
-      { min: SOMConstants.MIN_EPSILON, max: SOMConstants.MAX_EPSILON },
+      new Range( SOMConstants.MIN_EPSILON, SOMConstants.MAX_EPSILON ),
       sliderOptions
     );
     var weakText = new Text( weakString, tickTextOptions );

@@ -21,6 +21,7 @@ define( function( require ) {
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var Shape = require( 'KITE/Shape' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  var Range = require( 'DOT/Range' );
   var Text = require( 'SCENERY/nodes/Text' );
   var timer = require( 'PHET_CORE/timer' );
   var Util = require( 'DOT/Util' );
@@ -50,7 +51,7 @@ define( function( require ) {
     var gaugeNode = new GaugeNode(
       multipleParticleModel.pressureProperty,
       pressureString,
-      { min: 0, max: MAX_PRESSURE },
+      new Range( 0, MAX_PRESSURE ),
       { scale: 0.5, radius: 80, backgroundLineWidth: 3 }
     );
 
