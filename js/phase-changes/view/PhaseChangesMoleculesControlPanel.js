@@ -20,6 +20,7 @@ define( function( require ) {
   var Panel = require( 'SUN/Panel' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var RadioButtonGroup = require( 'SUN/buttons/RadioButtonGroup' );
+  var Range = require( 'DOT/Range' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var SOMColorProfile = require( 'STATES_OF_MATTER/common/view/SOMColorProfile' );
@@ -85,9 +86,8 @@ define( function( require ) {
 
     interactionStrengthNode.addChild( interactionTitle );
     var interactionStrengthSlider = new HSlider(
-      multipleParticleModel.interactionStrengthProperty, {
-        min: SOMConstants.MIN_ADJUSTABLE_EPSILON, max: MultipleParticleModel.MAX_ADJUSTABLE_EPSILON
-      }, {
+      multipleParticleModel.interactionStrengthProperty,
+      new Range( SOMConstants.MIN_ADJUSTABLE_EPSILON, MultipleParticleModel.MAX_ADJUSTABLE_EPSILON ), {
         trackFill: 'white',
         thumbSize: new Dimension2( 14, 25 ),
         majorTickLength: 15,
