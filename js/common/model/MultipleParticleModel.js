@@ -41,8 +41,8 @@ define( function( require ) {
   var OxygenAtom = require( 'STATES_OF_MATTER/common/model/particle/OxygenAtom' );
   var PhaseStateEnum = require( 'STATES_OF_MATTER/common/PhaseStateEnum' );
   var Property = require( 'AXON/Property' );
-  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
+  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var SubstanceType = require( 'STATES_OF_MATTER/common/SubstanceType' );
   var Util = require( 'DOT/Util' );
   var Vector2 = require( 'DOT/Vector2' );

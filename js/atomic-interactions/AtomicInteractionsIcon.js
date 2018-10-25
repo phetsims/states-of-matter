@@ -15,8 +15,8 @@ define( function( require ) {
     var Node = require( 'SCENERY/nodes/Node' );
     var RadialGradient = require( 'SCENERY/util/RadialGradient' );
     var Rectangle = require( 'SCENERY/nodes/Rectangle' );
-    var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
     var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
+    var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
     // constants
     var PARTICLE_COLOR = new Color( SOMConstants.ADJUSTABLE_ATTRACTION_COLOR );

@@ -24,10 +24,10 @@ define( function( require ) {
   var PushPinNode = require( 'STATES_OF_MATTER/atomic-interactions/view/PushPinNode' );
   var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
   var ScreenView = require( 'JOIST/ScreenView' );
-  var SOMPlayPauseStepControl = require( 'STATES_OF_MATTER/common/view/SOMPlayPauseStepControl' );
-  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var SOMColorProfile = require( 'STATES_OF_MATTER/common/view/SOMColorProfile' );
   var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
+  var SOMPlayPauseStepControl = require( 'STATES_OF_MATTER/common/view/SOMPlayPauseStepControl' );
+  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var Text = require( 'SCENERY/nodes/Text' );
   var TextPushButton = require( 'SUN/buttons/TextPushButton' );
   var VBox = require( 'SCENERY/nodes/VBox' );

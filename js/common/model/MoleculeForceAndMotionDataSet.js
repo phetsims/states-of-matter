@@ -14,8 +14,8 @@ define( function( require ) {
 
   // modules
   var inherit = require( 'PHET_CORE/inherit' );
-  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
+  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var Vector2 = require( 'DOT/Vector2' );
   var WaterMoleculeStructure = require( 'STATES_OF_MATTER/common/model/engine/WaterMoleculeStructure' );
 

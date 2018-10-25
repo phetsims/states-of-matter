@@ -17,9 +17,9 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var NeonAtom = require( 'STATES_OF_MATTER/common/model/particle/NeonAtom' );
   var OxygenAtom = require( 'STATES_OF_MATTER/common/model/particle/OxygenAtom' );
-  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var SOMColorProfile = require( 'STATES_OF_MATTER/common/view/SOMColorProfile' );
   var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
+  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   // constants
   var PARTICLE_IMAGE_CANVAS_LENGTH = 32; // amount of canvas used to create a particle image, will be squared 

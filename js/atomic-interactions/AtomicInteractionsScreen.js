@@ -14,9 +14,9 @@ define( function( require ) {
   var DualAtomModel = require( 'STATES_OF_MATTER/atomic-interactions/model/DualAtomModel' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Screen = require( 'JOIST/Screen' );
-  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var SOMColorProfile = require( 'STATES_OF_MATTER/common/view/SOMColorProfile' );
   var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
+  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   /**
    * @param {boolean} enableHeterogeneousMolecules

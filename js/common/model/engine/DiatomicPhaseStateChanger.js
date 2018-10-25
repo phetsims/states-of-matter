@@ -15,8 +15,8 @@ define( function( require ) {
   var DiatomicAtomPositionUpdater = require( 'STATES_OF_MATTER/common/model/engine/DiatomicAtomPositionUpdater' );
   var inherit = require( 'PHET_CORE/inherit' );
   var PhaseStateEnum = require( 'STATES_OF_MATTER/common/PhaseStateEnum' );
-  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
+  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var SubstanceType = require( 'STATES_OF_MATTER/common/SubstanceType' );
 
   // constants

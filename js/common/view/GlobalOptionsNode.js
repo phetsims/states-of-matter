@@ -13,8 +13,8 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var OptionsDialog = require( 'JOIST/OptionsDialog' );
   var ProjectorModeCheckbox = require( 'JOIST/ProjectorModeCheckbox' );
-  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var SOMColorProfile = require( 'STATES_OF_MATTER/common/view/SOMColorProfile' );
+  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var VBox = require( 'SCENERY/nodes/VBox' );
 
   /**

@@ -21,9 +21,9 @@ define( function( require ) {
   var CanvasNode = require( 'SCENERY/nodes/CanvasNode' );
   var HydrogenAtom = require( 'STATES_OF_MATTER/common/model/particle/HydrogenAtom' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var SOMColorProfile = require( 'STATES_OF_MATTER/common/view/SOMColorProfile' );
   var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
+  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   // constants
   var TWO_PI_RADIANS = Math.PI * 2;

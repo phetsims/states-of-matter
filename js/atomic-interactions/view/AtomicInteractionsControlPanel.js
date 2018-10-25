@@ -24,8 +24,8 @@ define( function( require ) {
   var RadioButtonGroup = require( 'SUN/buttons/RadioButtonGroup' );
   var Range = require( 'DOT/Range' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
-  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
+  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var SubstanceType = require( 'STATES_OF_MATTER/common/SubstanceType' );
   var Text = require( 'SCENERY/nodes/Text' );
   var VBox = require( 'SCENERY/nodes/VBox' );

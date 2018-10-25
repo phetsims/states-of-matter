@@ -11,8 +11,8 @@ define( function( require ) {
   // modules
   var Circle = require( 'SCENERY/nodes/Circle' );
   var Node = require( 'SCENERY/nodes/Node' );
-  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
+  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var SubstanceType = require( 'STATES_OF_MATTER/common/SubstanceType' );
 
   // define the object where all of the icons will be available

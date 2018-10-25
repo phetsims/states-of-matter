@@ -17,8 +17,8 @@ define( function( require ) {
   var ConfigurableStatesOfMatterAtom = require( 'STATES_OF_MATTER/common/model/particle/ConfigurableStatesOfMatterAtom' );
   var NeonAtom = require( 'STATES_OF_MATTER/common/model/particle/NeonAtom' );
   var OxygenAtom = require( 'STATES_OF_MATTER/common/model/particle/OxygenAtom' );
-  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
+  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   // static object (no constructor)
   var SigmaTable = {

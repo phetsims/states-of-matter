@@ -18,8 +18,8 @@ define( function( require ) {
   var LjPotentialCalculator = require( 'STATES_OF_MATTER/common/model/LjPotentialCalculator' );
   var Property = require( 'AXON/Property' );
   var SigmaTable = require( 'STATES_OF_MATTER/common/model/SigmaTable' );
-  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
+  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var Vector2 = require( 'DOT/Vector2' );
 
   // constants

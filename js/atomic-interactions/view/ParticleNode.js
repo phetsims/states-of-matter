@@ -20,8 +20,8 @@ define( function( require ) {
   var Path = require( 'SCENERY/nodes/Path' );
   var RadialGradient = require( 'SCENERY/util/RadialGradient' );
   var Shape = require( 'KITE/Shape' );
-  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
+  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var Vector2 = require( 'DOT/Vector2' );
 
   // constants

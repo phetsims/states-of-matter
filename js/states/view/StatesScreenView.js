@@ -21,10 +21,10 @@ define( function( require ) {
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
   var ScreenView = require( 'JOIST/ScreenView' );
+  var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
   var SOMPlayPauseStepControl = require( 'STATES_OF_MATTER/common/view/SOMPlayPauseStepControl' );
   var StatesMoleculesControlPanel = require( 'STATES_OF_MATTER/states/view/StatesMoleculesControlPanel' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
   var StatesPhaseControlNode = require( 'STATES_OF_MATTER/states/view/StatesPhaseControlNode' );
   var Vector2 = require( 'DOT/Vector2' );
 

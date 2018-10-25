@@ -13,10 +13,10 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var MultipleParticleModel = require( 'STATES_OF_MATTER/common/model/MultipleParticleModel' );
   var Screen = require( 'JOIST/Screen' );
-  var StatesIcon = require( 'STATES_OF_MATTER/states/StatesIcon' );
-  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var SOMColorProfile = require( 'STATES_OF_MATTER/common/view/SOMColorProfile' );
   var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
+  var StatesIcon = require( 'STATES_OF_MATTER/states/StatesIcon' );
+  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var StatesScreenView = require( 'STATES_OF_MATTER/states/view/StatesScreenView' );
 
   // strings

@@ -12,8 +12,8 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
+  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   var moleculeStructureX = [];
   var moleculeStructureY = [];

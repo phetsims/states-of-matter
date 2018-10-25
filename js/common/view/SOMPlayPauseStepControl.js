@@ -10,8 +10,8 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var Node = require( 'SCENERY/nodes/Node' );
   var PlayPauseButton = require( 'SCENERY_PHET/buttons/PlayPauseButton' );
-  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
+  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var StepForwardButton = require( 'SCENERY_PHET/buttons/StepForwardButton' );
 
   // constants

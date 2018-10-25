@@ -13,9 +13,9 @@ define( function( require ) {
   var AtomType = require( 'STATES_OF_MATTER/common/model/AtomType' );
   var Element = require( 'NITROGLYCERIN/Element' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var SOMAtom = require( 'STATES_OF_MATTER/common/model/particle/SOMAtom' );
   var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
+  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   // constants
   var RADIUS = Element.H.vanDerWaalsRadius;   // In picometers.

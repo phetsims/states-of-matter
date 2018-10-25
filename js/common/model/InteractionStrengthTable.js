@@ -18,8 +18,8 @@ define( function( require ) {
   // modules
   var AtomType = require( 'STATES_OF_MATTER/common/model/AtomType' );
   var ConfigurableStatesOfMatterAtom = require( 'STATES_OF_MATTER/common/model/particle/ConfigurableStatesOfMatterAtom' );
-  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
+  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   // static object (no constructor)
   var InteractionStrengthTable = {

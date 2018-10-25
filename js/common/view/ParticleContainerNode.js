@@ -22,8 +22,8 @@ define( function( require ) {
   var Path = require( 'SCENERY/nodes/Path' );
   var PointingHandNode = require( 'STATES_OF_MATTER/common/view/PointingHandNode' );
   var Shape = require( 'KITE/Shape' );
-  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
+  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   // constants
   var PRESSURE_METER_ELBOW_OFFSET = 30;

@@ -27,9 +27,9 @@ define( function( require ) {
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
   var ScreenView = require( 'JOIST/ScreenView' );
+  var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
   var SOMPlayPauseStepControl = require( 'STATES_OF_MATTER/common/view/SOMPlayPauseStepControl' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
   var SubstanceType = require( 'STATES_OF_MATTER/common/SubstanceType' );
   var TextPushButton = require( 'SUN/buttons/TextPushButton' );
   var Vector2 = require( 'DOT/Vector2' );

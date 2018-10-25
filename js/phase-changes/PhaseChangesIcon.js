@@ -15,8 +15,8 @@ define( function( require ) {
     var inherit = require( 'PHET_CORE/inherit' );
     var Node = require( 'SCENERY/nodes/Node' );
     var Rectangle = require( 'SCENERY/nodes/Rectangle' );
-    var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
     var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
+    var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
     // constants
     var PARTICLE_COLOR = SOMConstants.NEON_COLOR;

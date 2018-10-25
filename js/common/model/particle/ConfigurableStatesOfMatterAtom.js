@@ -12,9 +12,9 @@ define( function( require ) {
   // modules
   var AtomType = require( 'STATES_OF_MATTER/common/model/AtomType' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var SOMAtom = require( 'STATES_OF_MATTER/common/model/particle/SOMAtom' );
   var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
+  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   // constants
   var DEFAULT_INTERACTION_POTENTIAL = SOMConstants.MAX_EPSILON / 2;
