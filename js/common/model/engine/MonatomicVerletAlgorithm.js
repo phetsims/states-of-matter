@@ -55,7 +55,7 @@ define( function( require ) {
      * @override
      * @protected
      */
-    initializeForces: function( moleculeDataSet ){
+    initializeForces: function( moleculeDataSet ) {
       var accelerationDueToGravity = this.multipleParticleModel.gravitationalAcceleration;
       var nextAtomForces = moleculeDataSet.nextMoleculeForces;
       for ( var i = 0; i < moleculeDataSet.getNumberOfMolecules(); i++ ) {
@@ -112,7 +112,7 @@ define( function( require ) {
      * @param {number} timeStep
      * @protected
      */
-    updateVelocitiesAndRotationRates: function( moleculeDataSet, timeStep ){
+    updateVelocitiesAndRotationRates: function( moleculeDataSet, timeStep ) {
 
       var atomVelocity;
       var numberOfAtoms = moleculeDataSet.numberOfAtoms;
@@ -131,7 +131,7 @@ define( function( require ) {
           atomVelocity.x + timeStepHalf * ( moleculeForce.x + nextAtomForces[ i ].x ),
           atomVelocity.y + timeStepHalf * ( moleculeForce.y + nextAtomForces[ i ].y )
         );
-        if ( velocityVector.magnitude() > 10 ){
+        if ( velocityVector.magnitude() > 10 ) {
           velocityVector.setMagnitude( 10 );
         }
 
@@ -143,7 +143,12 @@ define( function( require ) {
       }
 
       // Update the temperature.
-      this.calculatedTemperature = ( 2 / 3 ) * ( totalKineticEnergy / numberOfAtoms );
+      if ( numberOfAtoms > 0 ) {
+        this.calculatedTemperature = ( 2 / 3 ) * ( totalKineticEnergy / numberOfAtoms );
+      }
+      else {
+        this.calculatedTemperature = this.multipleParticleModel.minModelTemperature;
+      }
     }
   } );
 } );
