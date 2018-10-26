@@ -277,8 +277,12 @@ define( function( require ) {
       }
 
       // Record the calculated temperature.
-      // this.calculatedTemperature = ( 2 / 3 ) * ( translationalKineticEnergy + rotationalKineticEnergy ) / numberOfMolecules;
-      this.calculatedTemperature = ( translationalKineticEnergy + rotationalKineticEnergy ) / numberOfMolecules;
+      if ( numberOfMolecules > 0 ) {
+        this.calculatedTemperature = ( translationalKineticEnergy + rotationalKineticEnergy ) / numberOfMolecules;
+      }
+      else {
+        this.calculatedTemperature = this.multipleParticleModel.minModelTemperature;
+      }
     }
   } );
 } );
