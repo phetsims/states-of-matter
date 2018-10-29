@@ -44,7 +44,8 @@ define( function( require ) {
   var AXES_ARROW_HEAD_HEIGHT = 4 * AXES_LINE_WIDTH;
   var HORIZ_AXIS_SIZE_PROPORTION = 0.85;
   var VERT_AXIS_SIZE_PROPORTION = 0.85;
-  var STATES_MAX_WIDTH = 35;
+  var LIQUID_AND_GAS_LABEL_MAX_WIDTH = 35;
+  var SOLID_LABEL_MAX_WIDTH = 30; // has to be narrow enough to fit on the graph when modified for water
   var SMALLER_INNER_TEXT_WIDTH = 30;
 
   // constants that control the location of the origin for the graph.
@@ -84,12 +85,16 @@ define( function( require ) {
     Y_ORIGIN_OFFSET - ( Y_USABLE_RANGE * 0.45 )
   );
   var DEFAULT_SOLID_LABEL_LOCATION = new Vector2(
-    X_ORIGIN_OFFSET + ( X_USABLE_RANGE * 0.175 ),
-    Y_ORIGIN_OFFSET - ( Y_USABLE_RANGE * 0.7 )
+    X_ORIGIN_OFFSET + ( X_USABLE_RANGE * 0.19 ),
+    Y_ORIGIN_OFFSET - ( Y_USABLE_RANGE * 0.75 )
+  );
+  var WATER_SOLID_LABEL_LOCATION = new Vector2(
+    X_ORIGIN_OFFSET + ( X_USABLE_RANGE * 0.16 ),
+    Y_ORIGIN_OFFSET - ( Y_USABLE_RANGE * 0.75 )
   );
   var DEFAULT_LIQUID_LABEL_LOCATION = new Vector2(
-    X_ORIGIN_OFFSET + ( X_USABLE_RANGE * 0.6 ),
-    Y_ORIGIN_OFFSET - ( Y_USABLE_RANGE * 0.7 )
+    X_ORIGIN_OFFSET + ( X_USABLE_RANGE * 0.65 ),
+    Y_ORIGIN_OFFSET - ( Y_USABLE_RANGE * 0.75 )
   );
   var DEFAULT_GAS_LABEL_LOCATION = new Vector2(
     X_ORIGIN_OFFSET + ( X_USABLE_RANGE * 0.6 ),
@@ -105,9 +110,6 @@ define( function( require ) {
 
     Node.call( this );
     var accordionContent = new Node();
-
-    // @private
-    this.topOfSolidLiquidLine = new Vector2( DEFAULT_TOP_OF_SOLID_LIQUID_LINE.x, DEFAULT_TOP_OF_SOLID_LIQUID_LINE.y );
 
     // @private gas area background
     this.gasAreaBackground = new Path( null, {
@@ -159,22 +161,22 @@ define( function( require ) {
     // @private
     this.solidLabel = new Text( solidString, { font: LARGER_INNER_FONT, fill: 'black' } );
     accordionContent.addChild( this.solidLabel );
-    if ( this.solidLabel.width > STATES_MAX_WIDTH ) {
-      this.solidLabel.scale( STATES_MAX_WIDTH / this.solidLabel.width );
+    if ( this.solidLabel.width > SOLID_LABEL_MAX_WIDTH ) {
+      this.solidLabel.scale( SOLID_LABEL_MAX_WIDTH / this.solidLabel.width );
     }
 
     // @private
     this.liquidLabel = new Text( liquidString, { font: LARGER_INNER_FONT, fill: 'black' } );
     accordionContent.addChild( this.liquidLabel );
-    if ( this.liquidLabel.width > STATES_MAX_WIDTH ) {
-      this.liquidLabel.scale( STATES_MAX_WIDTH / this.liquidLabel.width );
+    if ( this.liquidLabel.width > LIQUID_AND_GAS_LABEL_MAX_WIDTH ) {
+      this.liquidLabel.scale( LIQUID_AND_GAS_LABEL_MAX_WIDTH / this.liquidLabel.width );
     }
 
     // @private
     this.gasLabel = new Text( gasString, { font: LARGER_INNER_FONT, fill: 'black' } );
     accordionContent.addChild( this.gasLabel );
-    if ( this.gasLabel.width > STATES_MAX_WIDTH ) {
-      this.gasLabel.scale( STATES_MAX_WIDTH / this.gasLabel.width );
+    if ( this.gasLabel.width > LIQUID_AND_GAS_LABEL_MAX_WIDTH ) {
+      this.gasLabel.scale( LIQUID_AND_GAS_LABEL_MAX_WIDTH / this.gasLabel.width );
     }
 
     // @private
@@ -198,6 +200,9 @@ define( function( require ) {
     if ( this.criticalPointLabel.width > SMALLER_INNER_TEXT_WIDTH ) {
       this.criticalPointLabel.setScaleMagnitude( SMALLER_INNER_TEXT_WIDTH / this.criticalPointLabel.width );
     }
+
+    // @private - flag that indicates whether water is being depicted, which alters aspects of the diagram
+    this.depictingWater = false;
 
     var horizontalAxis = new ArrowNode(
       X_ORIGIN_OFFSET,
@@ -303,6 +308,12 @@ define( function( require ) {
      */
     drawPhaseDiagram: function() {
 
+      // Handle the variations due to water vs. non-water
+      var topOfSolidLiquidLine = this.depictingWater ?
+                                 TOP_OF_SOLID_LIQUID_LINE_FOR_WATER :
+                                 DEFAULT_TOP_OF_SOLID_LIQUID_LINE;
+      var solidLabelLocation = this.depictingWater ? WATER_SOLID_LABEL_LOCATION : DEFAULT_SOLID_LABEL_LOCATION;
+
       // Place the triple point marker.
       this.triplePoint.setTranslation( DEFAULT_TRIPLE_POINT.x, DEFAULT_TRIPLE_POINT.y );
 
@@ -315,14 +326,14 @@ define( function( require ) {
       // Add the line that separates solid and liquid.
       var solidLiquidLine = new Shape()
         .lineTo( DEFAULT_TRIPLE_POINT.x, DEFAULT_TRIPLE_POINT.y )
-        .lineTo( this.topOfSolidLiquidLine.x, this.topOfSolidLiquidLine.y );
+        .lineToPoint( topOfSolidLiquidLine );
       this.solidLiquidLine.setShape( solidLiquidLine );
 
       // Update the shape of the background for the area that represents the solid phase.
       var solidBackground = new Shape().moveTo( X_ORIGIN_OFFSET, Y_ORIGIN_OFFSET )
         .quadraticCurveTo( X_ORIGIN_OFFSET + (X_USABLE_RANGE * 0.2), Y_ORIGIN_OFFSET - (Y_USABLE_RANGE * 0.02),
           DEFAULT_TRIPLE_POINT.x, DEFAULT_TRIPLE_POINT.y )
-        .lineTo( this.topOfSolidLiquidLine.x, this.topOfSolidLiquidLine.y )
+        .lineToPoint( topOfSolidLiquidLine )
         .lineTo( X_ORIGIN_OFFSET, (Y_ORIGIN_OFFSET - Y_USABLE_RANGE) )
         .lineTo( X_ORIGIN_OFFSET, Y_ORIGIN_OFFSET )
         .close();
@@ -345,7 +356,7 @@ define( function( require ) {
         .quadraticCurveTo( controlCurveXPos, controlCurveYPos,
           DEFAULT_CRITICAL_POINT.x, DEFAULT_CRITICAL_POINT.y )
         .lineTo( (X_ORIGIN_OFFSET + X_USABLE_RANGE), (Y_ORIGIN_OFFSET - Y_USABLE_RANGE) )
-        .lineTo( (this.topOfSolidLiquidLine.x), (Y_ORIGIN_OFFSET - Y_USABLE_RANGE) )
+        .lineTo( ( topOfSolidLiquidLine.x ), ( Y_ORIGIN_OFFSET - Y_USABLE_RANGE ) )
         .lineTo( (DEFAULT_TRIPLE_POINT.x), (DEFAULT_TRIPLE_POINT.y) ).close();
       this.liquidAreaBackground.setShape( liquidBackground );
 
@@ -369,8 +380,8 @@ define( function( require ) {
       this.superCriticalAreaBackground.setShape( superCriticalBackground );
 
       // hopefully will work better for translated strings.
-      this.solidLabel.setTranslation( DEFAULT_SOLID_LABEL_LOCATION.x - this.solidLabel.width / 2,
-        DEFAULT_SOLID_LABEL_LOCATION.y - this.solidLabel.height / 2 );
+      this.solidLabel.setTranslation( solidLabelLocation.x - this.solidLabel.width / 2,
+        solidLabelLocation.y - this.solidLabel.height / 2 );
       this.liquidLabel.setTranslation( DEFAULT_LIQUID_LABEL_LOCATION.x - this.liquidLabel.width / 2,
         DEFAULT_LIQUID_LABEL_LOCATION.y - this.liquidLabel.height / 2 );
       this.gasLabel.setTranslation( DEFAULT_GAS_LABEL_LOCATION.x - this.gasLabel.width / 2,
@@ -416,21 +427,15 @@ define( function( require ) {
     },
 
     /**
-     * Set the phase diagram to be shaped such that it looks like water, which is to say that the solid-liquid line
-     * leans to the left rather than to the right, as it does for most substances.  Note that this is a very non-general
-     * approach - it would be more general to allow the various points in the graph (e.g. triple point, critical point)
-     * to be positioned anywhere, but currently it isn't worth the extra effort to do so.  Feel free if it is ever
-     * needed.
+     * Set the phase diagram to be shaped such that it looks more like the phase diagram water, which is to say that the
+     * solid-liquid line leans to the left rather than to the right.  Note that this is a very non-general approach - it
+     * would be more general to allow the various points in the graph (e.g. triple point, critical point) to be
+     * positioned anywhere, but currently it isn't worth the extra effort to do so.  Feel free if it is ever needed.
      * @param {boolean} depictingWater
      * @public
      */
     setDepictingWater: function( depictingWater ) {
-      if ( depictingWater ) {
-        this.topOfSolidLiquidLine.setXY( TOP_OF_SOLID_LIQUID_LINE_FOR_WATER.x, TOP_OF_SOLID_LIQUID_LINE_FOR_WATER.y );
-      }
-      else {
-        this.topOfSolidLiquidLine.setXY( DEFAULT_TOP_OF_SOLID_LIQUID_LINE.x, DEFAULT_TOP_OF_SOLID_LIQUID_LINE.y );
-      }
+      this.depictingWater = depictingWater;
       this.drawPhaseDiagram();
     }
 
