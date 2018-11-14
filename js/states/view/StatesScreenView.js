@@ -13,7 +13,6 @@ define( function( require ) {
   // modules
   var Bounds2 = require( 'DOT/Bounds2' );
   var CompositeThermometerNode = require( 'STATES_OF_MATTER/common/view/CompositeThermometerNode' );
-  var Dimension2 = require( 'DOT/Dimension2' );
   var HeaterCoolerNode = require( 'SCENERY_PHET/HeaterCoolerNode' );
   var inherit = require( 'PHET_CORE/inherit' );
   var ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
