@@ -1,8 +1,7 @@
 // Copyright 2015-2017, University of Colorado Boulder
 
 /**
- * This class adds the ability to display force-depicting arrows to its super class.
- *
+ * this type adds the ability to display force arrows to a particle node
  * @author Siddhartha Chinthapally (Actual Concepts)
  */
 define( function( require ) {
@@ -70,15 +69,32 @@ define( function( require ) {
     this.addChild( this.totalForceVectorNode );
     this.totalForceVectorNode.setVisible( false );
 
-    particle.positionProperty.link( function( position ) {
-      self.setTranslation( modelViewTransform.modelToViewX( position.x ),
-        modelViewTransform.modelToViewY( position.y ) );
-    } );
+    function handlePositionChanged( position ) {
+      self.setTranslation(
+        modelViewTransform.modelToViewX( position.x ),
+        modelViewTransform.modelToViewY( position.y )
+      );
+    }
+
+    particle.positionProperty.link( handlePositionChanged );
+
+    // dispose function
+    this.disposeParticleForceNode = function() {
+      particle.positionProperty.unlink( handlePositionChanged );
+    };
   }
 
   statesOfMatter.register( 'ParticleForceNode', ParticleForceNode );
 
   return inherit( ParticleNode, ParticleForceNode, {
+
+    /**
+     * @public
+     */
+    dispose: function() {
+      this.disposeParticleForceNode();
+      ParticleNode.prototype.dispose.call( this );
+    },
 
     /**
      * Set the levels of attractive and repulsive forces being experienced by the particle in the model so that they may

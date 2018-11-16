@@ -306,7 +306,7 @@ define( function( require ) {
 
     /**
      * @param {SOMAtom} particle
-     * @public
+     * @private
      */
     handleFixedParticleAdded: function( particle ) {
 
@@ -326,7 +326,7 @@ define( function( require ) {
     },
 
     /**
-     * @public
+     * @private
      */
     handleFixedParticleRemoved: function() {
 
@@ -335,6 +335,8 @@ define( function( require ) {
 
         // Remove the particle node.
         this.fixedParticleLayer.removeChild( this.fixedParticleNode );
+        this.fixedParticleNode.dispose();
+        this.fixedParticleNode = null;
 
         // Remove the pin holding the node.
         this.removeChild( this.pushPinNode );
@@ -344,8 +346,8 @@ define( function( require ) {
     },
 
     /**
-     * @param particle
-     * @public
+     * @param {SOMAtom} particle
+     * @private
      */
     handleMovableParticleAdded: function( particle ) {
 
@@ -385,16 +387,19 @@ define( function( require ) {
 
       // Get rid of the node for this guy.
       if ( this.movableParticleNode ) {
-        // Remove the particle node.
         this.movableParticleLayer.removeChild( this.movableParticleNode );
+        this.movableParticleNode.dispose();
+        this.movableParticleNode = null;
       }
 
       this.updatePositionMarkerOnDiagram();
       this.movableParticleNode = null;
 
+      // Remove the hand node.
       if ( this.handNode ) {
-        // Remove the hand node.
         this.movableParticleLayer.removeChild( this.handNode );
+        this.handNode.dispose();
+        this.handNode = null;
       }
     },
 

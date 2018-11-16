@@ -43,7 +43,7 @@ define( function( require ) {
     var endDragX;
     var initialStartX = this.x;
 
-    this.addInputListener( new SimpleDragHandler( {
+    var inputListener = new SimpleDragHandler( {
 
       start: function( event ) {
 
@@ -71,17 +71,36 @@ define( function( require ) {
         dualAtomModel.setMotionPaused( false );
         dualAtomModel.movementHintVisibleProperty.set( false );
       }
-    } ) );
+    } );
+
+    this.addInputListener( inputListener );
 
     this.positionChanged = false;
-    particle.positionProperty.link( function() {
+
+    function positionListener() {
       self.positionChanged = true;
-    } );
+    }
+
+    particle.positionProperty.link( positionListener );
+
+    // dispose function
+    this.disposeGrabbableParticleNode = function() {
+      self.removeInputListener( inputListener );
+      particle.positionProperty.unlink( positionListener );
+    };
   }
 
   statesOfMatter.register( 'GrabbableParticleNode', GrabbableParticleNode );
 
   return inherit( ParticleForceNode, GrabbableParticleNode, {
+
+    /**
+     * @public
+     */
+    dispose: function() {
+      this.disposeGrabbableParticleNode();
+      ParticleForceNode.prototype.dispose.call( this );
+    },
 
     /**
      * @public
