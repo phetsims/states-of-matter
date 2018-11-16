@@ -44,12 +44,12 @@ define( function( require ) {
     } ) );
 
     // control visibility
-    dualAtomModel.movementHintVisibleProperty.linkAttribute( this, 'visible' );
+    var visibilityListener = dualAtomModel.movementHintVisibleProperty.linkAttribute( this, 'visible' );
 
     // add the drag handler
     var startDragX;
     var endDragX;
-    this.addInputListener( new SimpleDragHandler( {
+    var inputListener = new SimpleDragHandler( {
 
       start: function( event ) {
 
@@ -76,17 +76,32 @@ define( function( require ) {
         dualAtomModel.setMotionPaused( false );
         dualAtomModel.movementHintVisibleProperty.set( false );
       }
-    } ) );
+    } );
+    this.addInputListener( inputListener );
 
     // move the hint with the particle
-    particle.positionProperty.link( function( position ) {
+    function positionListener( position ) {
       self.x = modelViewTransform.modelToViewX( position.x );
-    } );
+    }
+
+    particle.positionProperty.link( positionListener );
+
+    // dispose function
+    this.disposeHandNode = function() {
+      self.removeInputListener( inputListener );
+      particle.positionProperty.unlink( positionListener );
+      dualAtomModel.movementHintVisibleProperty.unlinkAttribute( visibilityListener );
+    };
   }
 
   statesOfMatter.register( 'HandNode', HandNode );
 
   return inherit( Node, HandNode, {
+
+    dispose: function() {
+      this.disposeHandNode();
+      Node.prototype.dispose.call( this );
+    },
 
     /**
      * @returns {number}
