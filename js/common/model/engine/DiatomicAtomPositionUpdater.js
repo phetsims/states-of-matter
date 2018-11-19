@@ -1,4 +1,4 @@
-// Copyright 2014-2017, University of Colorado Boulder
+// Copyright 2014-2018, University of Colorado Boulder
 
 /**
  * This class updates the positions of atoms in a diatomic data set (i.e. where each molecule is made up of two

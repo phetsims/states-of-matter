@@ -1,4 +1,4 @@
-// Copyright 2014-2017, University of Colorado Boulder
+// Copyright 2014-2018, University of Colorado Boulder
 
 /**
  * Implementation of the Verlet algorithm for simulating molecular interaction based on the Lennard-Jones potential -
