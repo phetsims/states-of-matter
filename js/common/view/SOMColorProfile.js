@@ -19,7 +19,7 @@ define( function( require ) {
   // constants
   var GRAY = new Color( 230, 230, 230 );
 
-  var SOMColorProfile = new ColorProfile( {
+  var SOMColorProfile = new ColorProfile( [ 'default', 'projector' ], {
     background: {
       default: 'black',
       projector: 'white'
@@ -47,7 +47,7 @@ define( function( require ) {
     removePairGroup: {
       default: new Color( '#d00' )
     }
-  }, [ 'default', 'projector' ] );
+  } );
 
   statesOfMatter.register( 'SOMColorProfile', SOMColorProfile );
 
