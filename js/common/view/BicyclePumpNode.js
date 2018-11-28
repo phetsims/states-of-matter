@@ -11,6 +11,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var Color = require( 'SCENERY/util/Color' );
   var inherit = require( 'PHET_CORE/inherit' );
   var LinearGradient = require( 'SCENERY/util/LinearGradient' );
   var Node = require( 'SCENERY/nodes/Node' );
@@ -56,6 +57,18 @@ define( function( require ) {
 
     Node.call( this );
     var self = this;
+
+    //TODO: This file is currently under development by @chrisklus and @SaurabhTotey to be generalized and moved to
+    // scenery-phet, see https://github.com/phetsims/states-of-matter/issues/217. Some things may be in a weird state
+    // while we do this, e.g. most of the options below currently don't do anything yet.
+    options = _.extend( {
+      handleBaseColor: '',
+      bodyBaseColor: '',
+      indicatorBaseColor: '',
+      bottomBaseColor: new Color( 170, 170, 170 ),
+      hoseColor: ''
+    }, options );
+
     this.multipleParticleModel = multipleParticleModel; // @private
     this.containerAtomCapacity = 0; // @private
 
@@ -71,31 +84,41 @@ define( function( require ) {
 
     // Add the base of the pump.  Many of the multipliers and point positions were arrived at empirically in the process
     // of trying to make the base look good.
-    var pumpBaseWidth = width * PUMP_BASE_WIDTH_PROPORTION;
-    var pumpBaseHeight = height * PUMP_BASE_HEIGHT_PROPORTION;
+    var baseWidth = width * PUMP_BASE_WIDTH_PROPORTION;
+    var baseHeight = height * PUMP_BASE_HEIGHT_PROPORTION;
 
-    var topOfBaseHeight = pumpBaseHeight * 0.7;
-    var topOfBaseNode = new Rectangle( -pumpBaseWidth / 2, -topOfBaseHeight / 2, pumpBaseWidth, topOfBaseHeight, 20, 20, {
-      fill: new LinearGradient( -pumpBaseWidth / 2, 0, pumpBaseWidth / 2, 0 )
-        .addColorStop( 0, '#bbbbbb' )
-        .addColorStop( 1, '#888888' )
+    // 3D effect is being used, so most of the height makes up the surface
+    var topOfBaseHeight = baseHeight * 0.7;
+    var halfOfBaseWidth = baseWidth / 2;
+
+    // rounded rectangle that is the top of the base
+    var topOfBaseNode = new Rectangle( -halfOfBaseWidth, -topOfBaseHeight / 2, baseWidth, topOfBaseHeight, 20, 20, {
+      fill: new LinearGradient( -halfOfBaseWidth, 0, halfOfBaseWidth, 0 )
+        .addColorStop( 0, options.bottomBaseColor.brighterColor( 0.8 ) )
+        .addColorStop( 0.5, options.bottomBaseColor )
+        .addColorStop( 1, options.bottomBaseColor.darkerColor( 0.8 ) )
     } );
 
-    var pumpBaseEdgeHeight = pumpBaseHeight * 0.65;
+    var pumpBaseEdgeHeight = baseHeight * 0.65;
+    var pumpBaseSideEdgeYControlPoint = pumpBaseEdgeHeight * 1.05;
+    var pumpBaseBottomEdgeXCurveStart = baseWidth * 0.35;
+
+    // the front edge of the pump base, draw counter-clockwise starting at left edge
     var pumpEdgeShape = new Shape()
-      .moveTo( -pumpBaseWidth / 2, 0 )
-      .lineTo( -pumpBaseWidth / 2, pumpBaseEdgeHeight / 2 )
-      .quadraticCurveTo( -pumpBaseWidth * 0.5, pumpBaseEdgeHeight * 1.05, -pumpBaseWidth * 0.35, pumpBaseEdgeHeight )
-      .lineTo( pumpBaseWidth * 0.35, pumpBaseEdgeHeight )
-      .quadraticCurveTo( pumpBaseWidth * 0.5, pumpBaseEdgeHeight * 1.05, pumpBaseWidth / 2, pumpBaseEdgeHeight / 2 )
-      .lineTo( pumpBaseWidth / 2, 0 )
+      .moveTo( -halfOfBaseWidth, 0 )
+      .lineTo( -halfOfBaseWidth, pumpBaseEdgeHeight / 2 )
+      .quadraticCurveTo( -halfOfBaseWidth, pumpBaseSideEdgeYControlPoint, -pumpBaseBottomEdgeXCurveStart, pumpBaseEdgeHeight )
+      .lineTo( pumpBaseBottomEdgeXCurveStart, pumpBaseEdgeHeight )
+      .quadraticCurveTo( halfOfBaseWidth, pumpBaseSideEdgeYControlPoint, halfOfBaseWidth, pumpBaseEdgeHeight / 2 )
+      .lineTo( halfOfBaseWidth, 0 )
       .close();
 
+    // color the front edge of the pump base
     var pumpEdgeNode = new Path( pumpEdgeShape, {
-      fill: new LinearGradient( -pumpBaseWidth / 2, 0, pumpBaseWidth / 2, 0 )
-        .addColorStop( 0, '#666666' )
-        .addColorStop( 0.85, '#888888' )
-        .addColorStop( 1, '#555555' )
+      fill: new LinearGradient( -halfOfBaseWidth, 0, halfOfBaseWidth, 0 )
+        .addColorStop( 0, options.bottomBaseColor.darkerColor( 0.6 ) )
+        .addColorStop( 0.85, options.bottomBaseColor.darkerColor( 0.8 ) )
+        .addColorStop( 1, options.bottomBaseColor.darkerColor( 0.6 ) )
     } );
 
     var pumpBase = new Node( {
@@ -191,8 +214,8 @@ define( function( require ) {
     pumpHandleNode.touchArea = pumpHandleNode.localBounds.dilatedXY( 100, 100 );
     pumpHandleNode.scale( pumpHandleHeight / pumpHandleNode.height );
     pumpHandleNode.setTranslation(
-      ( pumpBaseWidth - pumpHandleNode.width ) / 2,
-      height - ( height * PUMP_HANDLE_INIT_VERT_POS_PROPORTION ) - pumpHandleHeight - pumpBaseHeight
+      ( baseWidth - pumpHandleNode.width ) / 2,
+      height - ( height * PUMP_HANDLE_INIT_VERT_POS_PROPORTION ) - pumpHandleHeight - baseHeight
     );
 
     var maxHandleYOffset = -PUMP_SHAFT_HEIGHT_PROPORTION * height / 2;
@@ -242,8 +265,8 @@ define( function( require ) {
       stroke: '#888888',
       pickable: false
     } );
-    pumpShaft.setTranslation( (pumpBaseWidth - pumpShaftWidth) / 2,
-      height - ( height * PUMP_HANDLE_INIT_VERT_POS_PROPORTION ) - pumpBaseHeight );
+    pumpShaft.setTranslation( ( baseWidth - pumpShaftWidth ) / 2,
+      height - ( height * PUMP_HANDLE_INIT_VERT_POS_PROPORTION ) - baseHeight );
 
     // Add the body of the pump
     var pumpBodyWidth = width * PUMP_BODY_WIDTH_PROPORTION;
@@ -254,7 +277,7 @@ define( function( require ) {
         .addColorStop( 0.4, '#D50000' )
         .addColorStop( 0.7, '#B30000' )
     } );
-    pumpBody.setTranslation( ( pumpBaseWidth - pumpBodyWidth ) / 2, height - pumpBodyHeight - pumpBaseHeight );
+    pumpBody.setTranslation( ( baseWidth - pumpBodyWidth ) / 2, height - pumpBodyHeight - baseHeight );
 
     // add the back portion of the opening at the top of the pump body
     var pumpOpeningBackShape = new Shape()
@@ -295,7 +318,7 @@ define( function( require ) {
     } );
 
     // Add the hose.
-    var hoseToPumpAttachPtX = (pumpBaseWidth + pumpBodyWidth) / 2;
+    var hoseToPumpAttachPtX = ( baseWidth + pumpBodyWidth ) / 2;
     var hoseToPumpAttachPtY = height - ( height * HOSE_ATTACH_VERT_POS_PROPORTION );
     var hoseExternalAttachPtX = width - width * HOSE_CONNECTOR_WIDTH_PROPORTION;
     var hoseExternalAttachPtY = height - ( height * HOSE_CONNECTOR_VERT_POS_PROPORTION );
@@ -326,7 +349,7 @@ define( function( require ) {
         .addColorStop( 0.7, '#A0A2A5' )
         .addColorStop( 1, '#727375' )
     } );
-    pipeConnectorPath.setTranslation( pumpBaseWidth / 2, height - pumpBaseHeight * 0.65 - pipeConnectorHeight - 3 );
+    pipeConnectorPath.setTranslation( baseWidth / 2, height - baseHeight * 0.65 - pipeConnectorHeight - 3 );
 
     var pipeConnectorOpening = new Path( new Shape()
       .ellipse( 0, 0, pipeConnectorTopWidth / 2, 3, 0, 0, true ), {
@@ -334,8 +357,8 @@ define( function( require ) {
         .addColorStop( 0, '#727375' )
         .addColorStop( 1, '#575859' ),
       stroke: 'black',
-      centerX: pumpBaseWidth / 2,
-      centerY: height - pumpBaseHeight - pipeConnectorHeight + 4
+      centerX: baseWidth / 2,
+      centerY: height - baseHeight - pipeConnectorHeight + 4
     } );
 
     // Add the hose connector.
