@@ -17,8 +17,10 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
   var MultipleParticleModel = require( 'STATES_OF_MATTER/common/model/MultipleParticleModel' );
+  var NumberProperty = require( 'AXON/NumberProperty' );
   var ParticleContainerNode = require( 'STATES_OF_MATTER/common/view/ParticleContainerNode' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
+  var Range = require( 'DOT/Range' );
   var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
   var ScreenView = require( 'JOIST/ScreenView' );
   var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
@@ -64,7 +66,9 @@ define( function( require ) {
     this.addChild( this.particleContainerNode );
 
     // @private add heater/cooler node
-    var heaterCoolerNode = new HeaterCoolerNode( {
+    var heaterCoolerNode = new HeaterCoolerNode( new NumberProperty( 0, {
+      range: new Range( -1, 1 ) // +1 for max heating, -1 for max cooling
+    } ), {
       scale: 0.89,
       centerX: particleContainerViewBounds.centerX,
       top: particleContainerViewBounds.bottom + 30 // distance from bottom of particle area empirically determined

@@ -20,11 +20,13 @@ define( function( require ) {
   var ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
   var MultiLineText = require( 'SCENERY_PHET/MultiLineText' );
   var MultipleParticleModel = require( 'STATES_OF_MATTER/common/model/MultipleParticleModel' );
+  var NumberProperty = require( 'AXON/NumberProperty' );
   var ObservableArray = require( 'AXON/ObservableArray' );
   var ParticleContainerNode = require( 'STATES_OF_MATTER/common/view/ParticleContainerNode' );
   var PhaseChangesMoleculesControlPanel = require( 'STATES_OF_MATTER/phase-changes/view/PhaseChangesMoleculesControlPanel' );
   var PhaseDiagram = require( 'STATES_OF_MATTER/phase-changes/view/PhaseDiagram' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
+  var Range = require( 'DOT/Range' );
   var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
   var ScreenView = require( 'JOIST/ScreenView' );
   var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
@@ -90,7 +92,9 @@ define( function( require ) {
     this.addChild( this.particleContainerNode );
 
     // add heater/cooler node
-    var heaterCoolerNode = new HeaterCoolerNode( {
+    var heaterCoolerNode = new HeaterCoolerNode( new NumberProperty( 0, {
+      range: new Range( -1, 1 ) // +1 for max heating, -1 for max cooling
+    } ), {
       scale: 0.89,
       centerX: nominalParticleAreaViewBounds.centerX,
       top: nominalParticleAreaViewBounds.maxY + 30 // offset from container bottom empirically determined
