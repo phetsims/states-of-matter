@@ -42,10 +42,6 @@ define( function( require ) {
   var PUMPING_REQUIRED_TO_INJECT_PROPORTION = PUMP_SHAFT_HEIGHT_PROPORTION / 6;
   var SHAFT_OPENING_TILT_FACTOR = 0.33;
 
-  // color constants
-  var SHAFT_OPENING_FILL = '#997777';
-  var SHAFT_OPENING_STROKE = '#775555';
-
   /**
    * @param {number} width  - width of the BicyclePump
    * @param {number} height - height of the BicyclePump
@@ -63,7 +59,9 @@ define( function( require ) {
     // while we do this, e.g. most of the options below currently don't do anything yet.
     options = _.extend( {
       handleBaseColor: '',
-      bodyBaseColor: '',
+      shaftBaseColor: new Color( 202, 202, 202 ),
+      shaftOpeningFillColor: new Color( 153, 119, 119 ),
+      bodyBaseColor: new Color( 213, 0, 0 ),
       indicatorBaseColor: '',
       bottomBaseColor: new Color( 170, 170, 170 ),
       hoseColor: ''
@@ -255,31 +253,32 @@ define( function( require ) {
       }
     } ) );
 
-    // Add the shaft for the pump.
+    // Create the shaft for the pump.
+    // The shaft of the pump is the part which is under the handle and inside the body
     var pumpShaftWidth = width * PUMP_SHAFT_WIDTH_PROPORTION;
     var pumpShaftHeight = height * PUMP_SHAFT_HEIGHT_PROPORTION;
     pumpShaft = new Rectangle( 0, 0, pumpShaftWidth, pumpShaftHeight, {
       fill: new LinearGradient( 0, 0, pumpShaftHeight, 0 )
-        .addColorStop( 0, '#CBCBCB' )
-        .addColorStop( 0.2, '#CACACA' ),
-      stroke: '#888888',
+        .addColorStop( 0, options.shaftBaseColor.darkerColor( 0.8 ) )
+        .addColorStop( 0.2, options.shaftBaseColor ),
+      stroke: options.shaftBaseColor.darkerColor( 0.6 ),
       pickable: false
     } );
     pumpShaft.setTranslation( ( baseWidth - pumpShaftWidth ) / 2,
       height - ( height * PUMP_HANDLE_INIT_VERT_POS_PROPORTION ) - baseHeight );
 
-    // Add the body of the pump
+    // Create the body of the pump
     var pumpBodyWidth = width * PUMP_BODY_WIDTH_PROPORTION;
     var pumpBodyHeight = height * PUMP_BODY_HEIGHT_PROPORTION;
     var pumpBody = new Rectangle( 0, 0, pumpBodyWidth, pumpBodyHeight, 0, 0, {
       fill: new LinearGradient( 0, 0, pumpBodyWidth, 0 )
-        .addColorStop( 0, '#DA0000' )
-        .addColorStop( 0.4, '#D50000' )
-        .addColorStop( 0.7, '#B30000' )
+        .addColorStop( 0, options.bodyBaseColor.brighterColor( 0.8 ) )
+        .addColorStop( 0.4, options.bodyBaseColor )
+        .addColorStop( 0.7, options.bodyBaseColor.darkerColor( 0.8 ) )
     } );
     pumpBody.setTranslation( ( baseWidth - pumpBodyWidth ) / 2, height - pumpBodyHeight - baseHeight );
 
-    // add the back portion of the opening at the top of the pump body
+    // Create the back portion of the opening at the top of the pump body
     var pumpOpeningBackShape = new Shape()
       .moveTo( 0, 0 )
       .cubicCurveTo(
@@ -291,14 +290,17 @@ define( function( require ) {
         0
       );
 
+    var pumpOpeningFillColor = options.shaftOpeningFillColor;
+    var pumpOpeningStrokeColor = options.shaftOpeningFillColor.darkerColor( 0.8 );
+
     var pumpOpeningBack = new Path( pumpOpeningBackShape, {
-      fill: SHAFT_OPENING_FILL,
-      stroke: SHAFT_OPENING_STROKE,
+      fill: pumpOpeningFillColor,
+      stroke: pumpOpeningStrokeColor,
       centerX: pumpBody.centerX,
       bottom: pumpBody.top
     } );
 
-    // add the front portion of the opening at the top of the pump body
+    // Create the front portion of the opening at the top of the pump body
     var pumpOpeningFrontShape = new Shape()
       .moveTo( 0, 0 )
       .cubicCurveTo(
@@ -311,21 +313,23 @@ define( function( require ) {
       );
 
     var pumpOpeningFront = new Path( pumpOpeningFrontShape, {
-      fill: SHAFT_OPENING_FILL,
-      stroke: SHAFT_OPENING_STROKE,
+      fill: pumpOpeningFillColor,
+      stroke: pumpOpeningStrokeColor,
       centerX: pumpBody.centerX,
       top: pumpOpeningBack.bottom - 0.4 // tweak the position very slightly to prevent pump body from showing through
     } );
 
     // Add the hose.
     var hoseToPumpAttachPtX = ( baseWidth + pumpBodyWidth ) / 2;
-    var hoseToPumpAttachPtY = height - ( height * HOSE_ATTACH_VERT_POS_PROPORTION );
+    var hoseToPumpAttachPtY = height - height * HOSE_ATTACH_VERT_POS_PROPORTION;
+    //TODO external attach point works relative to the upper left corner, but the 0, 0 origin point should be the bottom right corner of the node
+    //TODO potentially add listener for bounds change to allow for global coordinates in hose external attachment point
     var hoseExternalAttachPtX = width - width * HOSE_CONNECTOR_WIDTH_PROPORTION;
-    var hoseExternalAttachPtY = height - ( height * HOSE_CONNECTOR_VERT_POS_PROPORTION );
+    var hoseExternalAttachPtY = height - height * HOSE_CONNECTOR_VERT_POS_PROPORTION;
     var hosePath = new Path( new Shape()
       .moveTo( hoseToPumpAttachPtX, hoseToPumpAttachPtY )
       .cubicCurveTo( width, height - ( height * HOSE_ATTACH_VERT_POS_PROPORTION ),
-        0, height - ( height * HOSE_CONNECTOR_VERT_POS_PROPORTION ),
+        0, height - height * HOSE_CONNECTOR_VERT_POS_PROPORTION,
         hoseExternalAttachPtX, hoseExternalAttachPtY ), {
       lineWidth: 4, stroke: '#B3B3B3'
     } );
