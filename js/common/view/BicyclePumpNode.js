@@ -64,7 +64,7 @@ define( function( require ) {
       bodyBaseColor: new Color( 213, 0, 0 ),
       indicatorBaseColor: '',
       bottomBaseColor: new Color( 170, 170, 170 ),
-      hoseColor: ''
+      hoseColor: '#B3B3B3'
     }, options );
 
     this.multipleParticleModel = multipleParticleModel; // @private
@@ -331,7 +331,7 @@ define( function( require ) {
       .cubicCurveTo( width, height - ( height * HOSE_ATTACH_VERT_POS_PROPORTION ),
         0, height - height * HOSE_CONNECTOR_VERT_POS_PROPORTION,
         hoseExternalAttachPtX, hoseExternalAttachPtY ), {
-      lineWidth: 4, stroke: '#B3B3B3'
+      lineWidth: 4, stroke: options.hoseColor
     } );
     this.addChild( hosePath );
 
