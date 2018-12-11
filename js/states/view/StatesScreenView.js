@@ -69,7 +69,7 @@ define( function( require ) {
     var heaterCoolerNode = new HeaterCoolerNode( new NumberProperty( 0, {
       range: new Range( -1, 1 ) // +1 for max heating, -1 for max cooling
     } ), {
-      scale: 0.89,
+      scale: 0.79,
       centerX: particleContainerViewBounds.centerX,
       top: particleContainerViewBounds.bottom + 30 // distance from bottom of particle area empirically determined
     } );
