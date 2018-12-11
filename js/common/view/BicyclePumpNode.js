@@ -335,14 +335,19 @@ define( function( require ) {
     } );
     this.addChild( hosePath );
 
+    // create the pipe connector, which is the cone between the base and the pump body
     var pipeConnectorTopWidth = pumpBodyWidth * 1.2;
+    var pipeConnectorTopRadiusY = 3;
+    var pipeConnectorTopRadiusX = pipeConnectorTopWidth / 2;
     var pipeConnectorBottomWidth = pumpBodyWidth * 2;
+    var pipeConnectorBottomRadiusY = 4;
+    var pipeConnectorBottomRadiusX = pipeConnectorBottomWidth / 2;
     var pipeConnectorHeight = height * PIPE_CONNECTOR_HEIGHT_PROPORTION;
     var pipeConnectorPath = new Path( new Shape()
-      .moveTo( pipeConnectorTopWidth / 2, 0 )
-      .ellipticalArc( 0, 0, pipeConnectorTopWidth / 2, 3, 0, 0, Math.PI, false )
-      .moveTo( -pipeConnectorTopWidth / 2, 0 )
-      .lineTo( ( -pipeConnectorBottomWidth / 2), pipeConnectorHeight )
+      .moveTo( pipeConnectorTopRadiusX, 0 ) // move to right side of shape
+      .ellipticalArc( 0, 0, pipeConnectorTopRadiusX, pipeConnectorTopRadiusY, 0, 0, Math.PI, false ) // draw top ellipse
+      .moveTo( -pipeConnectorTopRadiusX, 0 ) // move to left edge of shape
+      .lineTo( -pipeConnectorBottomRadiusX, pipeConnectorHeight ) // line to bottom left edge of shape
       .ellipticalArc( 0, pipeConnectorHeight, pipeConnectorBottomWidth / 2, 4, 0, Math.PI, 0, true )
       .lineTo( pipeConnectorTopWidth / 2, 0 ), {
       fill: new LinearGradient( -pipeConnectorBottomWidth / 2, 0, pipeConnectorBottomWidth / 2, 0 )
