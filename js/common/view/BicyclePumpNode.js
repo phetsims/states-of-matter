@@ -245,7 +245,7 @@ define( function( require ) {
             currentPumpingAmount = 0;
           }
         }
-        else if ( travel > 0 ){
+        else if ( travel > 0 ) {
 
           // This motion is in the non-pumping direction, so reset any accumulated pumping amount.
           currentPumpingAmount = 0;
@@ -344,20 +344,23 @@ define( function( require ) {
     var pipeConnectorBottomRadiusX = pipeConnectorBottomWidth / 2;
     var pipeConnectorHeight = height * PIPE_CONNECTOR_HEIGHT_PROPORTION;
     var pipeConnectorPath = new Path( new Shape()
-      .moveTo( pipeConnectorTopRadiusX, 0 ) // move to right side of shape
-      .ellipticalArc( 0, 0, pipeConnectorTopRadiusX, pipeConnectorTopRadiusY, 0, 0, Math.PI, false ) // draw top ellipse
-      .moveTo( -pipeConnectorTopRadiusX, 0 ) // move to left edge of shape
-      .lineTo( -pipeConnectorBottomRadiusX, pipeConnectorHeight ) // line to bottom left edge of shape
-      .ellipticalArc( 0, pipeConnectorHeight, pipeConnectorBottomWidth / 2, 4, 0, Math.PI, 0, true )
-      .lineTo( pipeConnectorTopWidth / 2, 0 ), {
-      fill: new LinearGradient( -pipeConnectorBottomWidth / 2, 0, pipeConnectorBottomWidth / 2, 0 )
-        .addColorStop( 0, '#5A5B5D' )
-        .addColorStop( 0.50, '#A1A3A6' )
-        .addColorStop( 0.55, '#B9BBBD' )
-        .addColorStop( 0.65, '#B9BBBD' )
-        .addColorStop( 0.7, '#A0A2A5' )
-        .addColorStop( 1, '#727375' )
-    } );
+
+      // start in upper right corner of shape, draw top ellipse right to left
+        .ellipticalArc( 0, 0, pipeConnectorTopRadiusX, pipeConnectorTopRadiusY, 0, 0, Math.PI, false )
+        .lineTo( -pipeConnectorBottomRadiusX, pipeConnectorHeight ) // line to bottom left corner of shape
+
+        // draw bottom ellipse left to right
+        .ellipticalArc( 0, pipeConnectorHeight, pipeConnectorBottomRadiusX, pipeConnectorBottomRadiusY, 0, Math.PI, 0, true )
+        .lineTo( pipeConnectorTopRadiusX, 0 ), // line to upper right corner of shape
+      {
+        fill: new LinearGradient( -pipeConnectorBottomWidth / 2, 0, pipeConnectorBottomWidth / 2, 0 )
+          .addColorStop( 0, options.bottomBaseColor.darkerColor( 0.5 ) )
+          .addColorStop( 0.50, options.bottomBaseColor )
+          .addColorStop( 0.55, options.bottomBaseColor.brighterColor( 0.9 ) )
+          .addColorStop( 0.65, options.bottomBaseColor.brighterColor( 0.9 ) )
+          .addColorStop( 0.7, options.bottomBaseColor )
+          .addColorStop( 1, options.bottomBaseColor.darkerColor( 0.6 ) )
+      } );
     pipeConnectorPath.setTranslation( baseWidth / 2, height - baseHeight * 0.65 - pipeConnectorHeight - 3 );
 
     var pipeConnectorOpening = new Path( new Shape()
