@@ -363,17 +363,7 @@ define( function( require ) {
       } );
     pipeConnectorPath.setTranslation( baseWidth / 2, height - baseHeight * 0.65 - pipeConnectorHeight - 3 );
 
-    var pipeConnectorOpening = new Path( new Shape()
-      .ellipse( 0, 0, pipeConnectorTopWidth / 2, 3, 0, 0, true ), {
-      fill: new LinearGradient( 0, 0, pipeConnectorTopWidth, 0 )
-        .addColorStop( 0, '#727375' )
-        .addColorStop( 1, '#575859' ),
-      stroke: 'black',
-      centerX: baseWidth / 2,
-      centerY: height - baseHeight - pipeConnectorHeight + 4
-    } );
-
-    // Add the hose connector.
+    // Create the hose connector
     var hoseConnectorWidth = width * HOSE_CONNECTOR_WIDTH_PROPORTION;
     var hoseConnectorHeight = height * HOSE_CONNECTOR_HEIGHT_PROPORTION;
     var hoseConnector = new Rectangle( 0, 0, hoseConnectorWidth, hoseConnectorHeight, 2, 2, {
@@ -418,7 +408,6 @@ define( function( require ) {
     this.addChild( pumpOpeningBack );
     this.addChild( pumpShaft );
     this.addChild( pumpHandleNode );
-    this.addChild( pipeConnectorOpening );
     this.addChild( pumpBody );
     this.addChild( remainingCapacityIndicator );
     this.addChild( pumpOpeningFront );
