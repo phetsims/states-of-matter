@@ -91,8 +91,10 @@ define( function( require ) {
 
     var connectorCollar = new Rectangle( 0, 0, 30, 25, 2, 2, {
       fill: new LinearGradient( 0, 0, 0, 25 )
-        .addColorStop( 0, '#5F6973' )
-        .addColorStop( 0.6, '#F0F1F2' )
+        .addColorStop( 0, 'rgb( 120, 120, 120 )' )
+        .addColorStop( 0.3, 'rgb( 220, 220, 220 )' )
+        .addColorStop( 0.5, 'rgb( 220, 220, 220 )' )
+        .addColorStop( 1, 'rgb( 100, 100, 100 )' )
     } );
 
     connectorCollar.centerY = gaugeNode.centerY;
