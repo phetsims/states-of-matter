@@ -62,7 +62,8 @@ define( function( require ) {
       shaftBaseColor: new Color( 202, 202, 202 ),
       shaftOpeningFillColor: new Color( 153, 119, 119 ),
       bodyBaseColor: new Color( 213, 0, 0 ),
-      indicatorBaseColor: '',
+      indicatorBackgroundColor: '#443333',
+      indicatorRemainingColor: '#999999',
       bottomBaseColor: new Color( 170, 170, 170 ),
       hoseColor: '#B3B3B3'
     }, options );
@@ -366,24 +367,20 @@ define( function( require ) {
     // Create the hose connector
     var hoseConnectorWidth = width * HOSE_CONNECTOR_WIDTH_PROPORTION;
     var hoseConnectorHeight = height * HOSE_CONNECTOR_HEIGHT_PROPORTION;
-    var hoseConnector = new Rectangle( 0, 0, hoseConnectorWidth, hoseConnectorHeight, 2, 2, {
-      fill: new LinearGradient( 0, 0, 0, hoseConnectorHeight )
-        .addColorStop( 0, '#828282' )
-        .addColorStop( 0.3, '#A2A3A4' )
-        .addColorStop( 0.35, '#C6C8CA' )
-        .addColorStop( 0.4, '#BFC1C3' )
-        .addColorStop( 1, '#808080' )
-    } );
+    var createHoseConnectorNode = function() {
+      return new Rectangle( 0, 0, hoseConnectorWidth, hoseConnectorHeight, 2, 2, {
+        fill: new LinearGradient( 0, 0, 0, hoseConnectorHeight )
+          .addColorStop( 0, options.bottomBaseColor.darkerColor( 0.8 ) )
+          .addColorStop( 0.3, options.bottomBaseColor )
+          .addColorStop( 0.35, options.bottomBaseColor.brighterColor( 0.9 ) )
+          .addColorStop( 0.4, options.bottomBaseColor.brighterColor( 0.9 ) )
+          .addColorStop( 1, options.bottomBaseColor.darkerColor( 0.8 ) )
+      } );
+    };
+    var hoseConnector = createHoseConnectorNode();
+    var hoseBottomConnector = createHoseConnectorNode();
     hoseConnector.setTranslation( width - hoseConnectorWidth,
       height - ( height * HOSE_CONNECTOR_VERT_POS_PROPORTION ) - hoseConnectorHeight / 2 );
-    var hoseBottomConnector = new Rectangle( 0, 0, hoseConnectorWidth, hoseConnectorHeight, 2, 2, {
-      fill: new LinearGradient( 0, 0, 0, hoseConnectorHeight )
-        .addColorStop( 0, '#828282' )
-        .addColorStop( 0.3, '#A2A3A4' )
-        .addColorStop( 0.35, '#C6C8CA' )
-        .addColorStop( 0.4, '#BFC1C3' )
-        .addColorStop( 1, '#808080' )
-    } );
     hoseBottomConnector.setTranslation( hoseToPumpAttachPtX + 1, hoseToPumpAttachPtY - hoseBottomConnector.height / 2 );
 
     // define a property that tracks the remaining capacity
@@ -398,8 +395,8 @@ define( function( require ) {
         centerX: pumpShaft.centerX,
         centerY: ( pumpBody.top + pipeConnectorPath.top ) / 2,
         numSegments: 36,
-        backgroundColor: '#443333',
-        fullyLitIndicatorColor: '#999999',
+        backgroundColor: options.indicatorBackgroundColor,
+        fullyLitIndicatorColor: options.indicatorRemainingColor,
         indicatorHeightProportion: 0.7
       }
     );
