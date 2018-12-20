@@ -119,7 +119,7 @@ define( function( require ) {
         centerY: 0
       } );
       containerLid.addChild( handleAreaEllipse );
-      var handleNode = new HandleNode( { scale: 0.28, attachmentFillColor: 'black', gripLineWidth: 4 } );
+      var handleNode = new HandleNode( { scale: 0.28, attachmentFill: 'black', gripLineWidth: 4 } );
       handleNode.centerX = containerLid.width / 2;
       handleNode.bottom = handleAreaEllipse.centerY + 5; // position tweaked a bit to look better
       containerLid.addChild( handleNode );
