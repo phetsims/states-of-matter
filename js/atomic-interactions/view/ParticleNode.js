@@ -97,7 +97,7 @@ define( function( require ) {
 
     /**
      * Select the color and create the gradient fill for this particle.
-     * @return paint to use for this particle
+     * @returns {RadialGradint} - paint to use for this particle
      * @private
      */
     createFill: function( atom ) {
@@ -112,12 +112,11 @@ define( function( require ) {
       );
 
       var radius = ( this.overlapEnabled ? ( atom.getRadius() * OVERLAP_ENLARGEMENT_FACTOR ) :
-                     atom.getRadius()) * MVT_SCALE;
+                     atom.getRadius() ) * MVT_SCALE;
 
-      return ( new RadialGradient( 0, 0, 0, 0, 0, radius )
-          .addColorStop( 0, baseColor )
-          .addColorStop( 0.95, transparentDarkenedBasedColor )
-      );
+      return new RadialGradient( 0, 0, 0, 0, 0, radius )
+        .addColorStop( 0, baseColor )
+        .addColorStop( 0.95, transparentDarkenedBasedColor );
     },
 
     /**
