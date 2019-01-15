@@ -31,6 +31,7 @@ define( function( require ) {
       name: statesString,
       backgroundColorProperty: SOMColorProfile.backgroundProperty,
       homeScreenIcon: new StatesIcon( Screen.MINIMUM_HOME_SCREEN_ICON_SIZE ),
+      showUnselectedHomeScreenIconFrame: true,
       maxDT: SOMConstants.MAX_DT
     };
 

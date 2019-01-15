@@ -32,6 +32,7 @@ define( function( require ) {
       name: phaseChangesString,
       backgroundColorProperty: SOMColorProfile.backgroundProperty,
       homeScreenIcon: new PhaseChangesIcon( Screen.MINIMUM_HOME_SCREEN_ICON_SIZE ),
+      showUnselectedHomeScreenIconFrame: true,
       maxDT: SOMConstants.MAX_DT
     };
 

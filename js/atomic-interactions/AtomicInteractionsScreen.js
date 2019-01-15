@@ -29,6 +29,7 @@ define( function( require ) {
       name: screenTitle,
       backgroundColorProperty: SOMColorProfile.backgroundProperty,
       homeScreenIcon: new AtomicInteractionsIcon( Screen.MINIMUM_HOME_SCREEN_ICON_SIZE ),
+      showUnselectedHomeScreenIconFrame: true,
       maxDT: SOMConstants.MAX_DT
     };
 
