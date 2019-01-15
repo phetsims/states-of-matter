@@ -87,11 +87,9 @@ define( function( require ) {
       this.temperatureProperty,
       this,
       {
-        buttonXMargin: 5,
-        buttonYMargin: 2,
-        buttonCornerRadius: 5,
-        itemXMargin: 2,
-        itemYMargin: 2,
+        xMargin: 6,
+        yMargin: 4,
+        cornerRadius: 5,
         buttonLineWidth: 0.4
       }
     );
