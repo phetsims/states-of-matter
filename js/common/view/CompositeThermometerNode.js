@@ -12,6 +12,7 @@ define( function( require ) {
 
   // modules
   var ComboBox = require( 'SUN/ComboBox' );
+  var ComboBoxItem = require( 'SUN/ComboBoxItem' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Node = require( 'SCENERY/nodes/Node' );
   var Panel = require( 'SUN/Panel' );
@@ -81,14 +82,14 @@ define( function( require ) {
     this.temperatureProperty = new Property( SOMQueryParameters.defaultCelsius ? 'celsius' : 'kelvin' );
     var temperatureComboBox = new ComboBox(
       [
-        ComboBox.createItem( this.temperatureKelvinText, 'kelvin' ),
-        ComboBox.createItem( this.temperatureCelsiusText, 'celsius' )
+        new ComboBoxItem( this.temperatureKelvinText, 'kelvin' ),
+        new ComboBoxItem( this.temperatureCelsiusText, 'celsius' )
       ],
       this.temperatureProperty,
       this,
       {
         xMargin: 6,
-        yMargin: 4,
+        yMargin: 6,
         cornerRadius: 5,
         buttonLineWidth: 0.4
       }
