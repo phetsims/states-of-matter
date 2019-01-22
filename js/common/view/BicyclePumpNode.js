@@ -39,7 +39,7 @@ define( function( require ) {
   var HOSE_CONNECTOR_WIDTH_PROPORTION = 0.05;
   var HOSE_CONNECTOR_VERT_POS_PROPORTION = 0.68; // empirically determined to line up with injection point in model
   var HOSE_ATTACH_VERT_POS_PROPORTION = 0.11;
-  var PUMPING_REQUIRED_TO_INJECT_PROPORTION = PUMP_SHAFT_HEIGHT_PROPORTION / 6;
+  var PUMPING_DISTANCE_REQUIRED_TO_ADD_PARTICLE_PROPORTION = PUMP_SHAFT_HEIGHT_PROPORTION / 6;
   var SHAFT_OPENING_TILT_FACTOR = 0.33;
 
   /**
@@ -78,8 +78,8 @@ define( function( require ) {
     } );
 
     var pumpShaft;
-    var pumpingRequiredToInject = height * PUMPING_REQUIRED_TO_INJECT_PROPORTION;
-    var currentPumpingAmount = 0;
+    var pumpingDistanceRequiredToAddParticle = height * PUMPING_DISTANCE_REQUIRED_TO_ADD_PARTICLE_PROPORTION;
+    var currentPumpingDistance = 0;
 
     // Add the base of the pump.  Many of the multipliers and point positions were arrived at empirically in the process
     // of trying to make the base look good.
@@ -225,31 +225,32 @@ define( function( require ) {
 
       drag: function( event ) {
 
-        // update the handle and shaft position
+        // the position at the start of the drag event
         var handleStartYPos = pumpHandleNode.centerY;
+
+        // update the handle and shaft position based on the user's pointer position
         var dragPositionY = pumpHandleNode.globalToParentPoint( event.pointer.point ).y;
         dragPositionY = Math.max( dragPositionY, maxHandleYOffset );
         dragPositionY = Math.min( dragPositionY, minHandleYOffset );
         pumpHandleNode.centerY = dragPositionY;
         pumpShaft.top = pumpHandleNode.bottom;
 
-        // accumulate pumping
-        var travel = handleStartYPos - pumpHandleNode.centerY;
-        if ( travel < 0 ) {
+        var travelDistance = handleStartYPos - pumpHandleNode.centerY;
+        if ( travelDistance < 0 ) {
 
-          // This motion is in the pumping direction, so accumulate it.
-          currentPumpingAmount += Math.abs( travel );
-          if ( currentPumpingAmount >= pumpingRequiredToInject ) {
+          // This motion is in the downward direction, so add its distance to the pumping distance.
+          currentPumpingDistance += Math.abs( travelDistance );
+          while ( currentPumpingDistance >= pumpingDistanceRequiredToAddParticle ) {
 
-            // Enough pumping has been done to inject a new particle.
+            // Enough distance has been travelled to inject a new particle.
             multipleParticleModel.injectMolecule();
-            currentPumpingAmount = 0;
+            currentPumpingDistance -= pumpingDistanceRequiredToAddParticle;
           }
         }
-        else if ( travel > 0 ) {
+        else if ( travelDistance > 0 ) {
 
-          // This motion is in the non-pumping direction, so reset any accumulated pumping amount.
-          currentPumpingAmount = 0;
+          // This motion is in the upward direction, so reset any accumulated pumping distance.
+          currentPumpingDistance = 0;
         }
       }
     } ) );
