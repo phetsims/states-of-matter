@@ -39,7 +39,6 @@ define( function( require ) {
   var HOSE_CONNECTOR_WIDTH_PROPORTION = 0.05;
   var HOSE_CONNECTOR_VERT_POS_PROPORTION = 0.68; // empirically determined to line up with injection point in model
   var HOSE_ATTACH_VERT_POS_PROPORTION = 0.11;
-  var PUMPING_DISTANCE_REQUIRED_TO_ADD_PARTICLE_PROPORTION = PUMP_SHAFT_HEIGHT_PROPORTION / 6;
   var SHAFT_OPENING_TILT_FACTOR = 0.33;
 
   /**
@@ -65,7 +64,8 @@ define( function( require ) {
       indicatorBackgroundColor: '#443333',
       indicatorRemainingColor: '#999999',
       bottomBaseColor: new Color( 170, 170, 170 ),
-      hoseColor: '#B3B3B3'
+      hoseColor: '#B3B3B3',
+      numberOfParticlesPerPumpAction: 4
     }, options );
 
     this.multipleParticleModel = multipleParticleModel; // @private
@@ -78,7 +78,6 @@ define( function( require ) {
     } );
 
     var pumpShaft;
-    var pumpingDistanceRequiredToAddParticle = height * PUMPING_DISTANCE_REQUIRED_TO_ADD_PARTICLE_PROPORTION;
     var currentPumpingDistance = 0;
 
     // Add the base of the pump.  Many of the multipliers and point positions were arrived at empirically in the process
@@ -219,6 +218,11 @@ define( function( require ) {
 
     var maxHandleYOffset = -PUMP_SHAFT_HEIGHT_PROPORTION * height / 2;
     var minHandleYOffset = pumpHandleNode.centerY;
+
+    // How far the pump shaft needs to travel before the pump releases a particle. -1 is added to account for minor drag
+    // listener and floating-point errors.
+    var pumpingDistanceRequiredToAddParticle = ( -maxHandleYOffset + minHandleYOffset ) /
+                                               options.numberOfParticlesPerPumpAction - 1;
 
     // Set ourself up to listen for and handle mouse dragging events on the handle.
     pumpHandleNode.addInputListener( new SimpleDragHandler( {
