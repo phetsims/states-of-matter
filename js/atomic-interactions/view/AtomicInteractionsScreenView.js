@@ -120,7 +120,6 @@ define( function( require ) {
         self.interactiveInteractionPotentialDiagram.reset();
       },
       radius: SOMConstants.RESET_ALL_BUTTON_RADIUS,
-      touchAreaDilation: SOMConstants.RESET_ALL_BUTTON_TOUCH_AREA_DILATION,
       right: this.layoutBounds.maxX - SOMConstants.RESET_ALL_BUTTON_DISTANCE_FROM_SIDE,
       bottom: this.layoutBounds.maxY - SOMConstants.RESET_ALL_BUTTON_DISTANCE_FROM_BOTTOM
     } );
