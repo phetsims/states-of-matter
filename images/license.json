@@ -1,21 +1,5 @@
 {
-  "flame.png": {
-    "text": [
-      "Copyright 2002-2015 University of Colorado Boulder"
-    ],
-    "projectURL": "http://phet.colorado.edu",
-    "license": "contact phethelp@colorado.edu",
-    "notes": ""
-  },
   "gas-icon.png": {
-    "text": [
-      "Copyright 2002-2015 University of Colorado Boulder"
-    ],
-    "projectURL": "http://phet.colorado.edu",
-    "license": "contact phethelp@colorado.edu",
-    "notes": ""
-  },
-  "ice-cube-stack.png": {
     "text": [
       "Copyright 2002-2015 University of Colorado Boulder"
     ],
@@ -48,14 +32,6 @@
     "notes": ""
   },
   "solid-icon.png": {
-    "text": [
-      "Copyright 2002-2015 University of Colorado Boulder"
-    ],
-    "projectURL": "http://phet.colorado.edu",
-    "license": "contact phethelp@colorado.edu",
-    "notes": ""
-  },
-  "som-atomic-interactions-icon.png": {
     "text": [
       "Copyright 2002-2015 University of Colorado Boulder"
     ],
