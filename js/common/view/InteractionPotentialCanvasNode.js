@@ -15,6 +15,7 @@ define( function( require ) {
   var CanvasNode = require( 'SCENERY/nodes/CanvasNode' );
   var inherit = require( 'PHET_CORE/inherit' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  var Util = require( 'DOT/Util' );
 
   // constants
   var AXIS_LINE_WIDTH = 1;
@@ -35,7 +36,7 @@ define( function( require ) {
 
     // For efficiency, pre-allocate the array that represents the Y positions of the curve.  The X positions are the
     // index into the array.
-    this.curveYPositions = new Array( Math.round( interactionDiagram.graphWidth ) );  // @private
+    this.curveYPositions = new Array( Util.roundSymmetric( interactionDiagram.graphWidth ) );  // @private
   }
 
   statesOfMatter.register( 'InteractionPotentialCanvasNode', InteractionPotentialCanvasNode );

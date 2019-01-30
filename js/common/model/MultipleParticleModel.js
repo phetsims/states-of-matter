@@ -1040,7 +1040,7 @@ define( function( require ) {
       // Determine the number of atoms/molecules to create.  This will be a cube (really a square, since it's 2D, but
       // you get the idea) that takes up a fixed amount of the bottom of the container, so the number of molecules that
       // can fit depends on the size of the individual atom.
-      var numberOfAtoms = Math.pow( Math.round( PARTICLE_CONTAINER_WIDTH / ( ( OxygenAtom.RADIUS * 2.1 ) * 3 ) ), 2 );
+      var numberOfAtoms = Math.pow( Util.roundSymmetric( PARTICLE_CONTAINER_WIDTH / ( ( OxygenAtom.RADIUS * 2.1 ) * 3 ) ), 2 );
       if ( numberOfAtoms % 2 !== 0 ) {
         numberOfAtoms--;
       }
@@ -1096,7 +1096,7 @@ define( function( require ) {
       // you get the idea) that takes up a fixed amount of the bottom of the container, so the number of molecules that
       // can fit depends on the size of the individual atom.
       var waterMoleculeDiameter = OxygenAtom.RADIUS * 2.1;
-      var moleculesAcrossBottom = Math.round( PARTICLE_CONTAINER_WIDTH / ( waterMoleculeDiameter * 1.2 ) );
+      var moleculesAcrossBottom = Util.roundSymmetric( PARTICLE_CONTAINER_WIDTH / ( waterMoleculeDiameter * 1.2 ) );
       var numberOfMolecules = Math.pow( moleculesAcrossBottom / 3, 2 );
 
       // Create the normalized data set for the one-atom-per-molecule case.
@@ -1190,7 +1190,7 @@ define( function( require ) {
 
       // Initialize the number of atoms assuming that the solid form, when made into a square, will consume about 1/3
       // the width of the container.
-      var numberOfAtoms = Math.pow( Math.round( PARTICLE_CONTAINER_WIDTH / ( ( particleDiameter * 1.05 ) * 3 ) ), 2 );
+      var numberOfAtoms = Math.pow( Util.roundSymmetric( PARTICLE_CONTAINER_WIDTH / ( ( particleDiameter * 1.05 ) * 3 ) ), 2 );
 
       // Create the normalized data set for the one-atom-per-molecule case.
       this.moleculeDataSet = new MoleculeForceAndMotionDataSet( 1 );
