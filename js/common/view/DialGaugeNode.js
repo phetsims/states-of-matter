@@ -23,7 +23,7 @@ define( function( require ) {
   var Shape = require( 'KITE/Shape' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var Text = require( 'SCENERY/nodes/Text' );
-  var timer = require( 'PHET_CORE/timer' );
+  var timer = require( 'AXON/timer' );
   var Util = require( 'DOT/Util' );
 
   // strings
