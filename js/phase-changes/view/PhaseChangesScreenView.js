@@ -138,7 +138,8 @@ define( function( require ) {
     // add bicycle pump node
     this.pumpNode = new BicyclePumpNode( 200, 250, multipleParticleModel, {
       right: nominalParticleAreaViewBounds.left,
-      bottom: nominalParticleAreaViewBounds.bottom + 100 // empirically determined to line up with injection point
+      bottom: nominalParticleAreaViewBounds.bottom + 100, // empirically determined to line up with injection point
+      hoseExternalAttachmentPointOffset: new Vector2( 190, 80 )
     } );
     this.addChild( this.pumpNode );
 

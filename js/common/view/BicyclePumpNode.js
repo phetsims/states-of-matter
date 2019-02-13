@@ -23,6 +23,7 @@ define( function( require ) {
   var SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
   var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  var Vector2 = require( 'DOT/Vector2' );
 
   // The follow constants define the size and positions of the various components of the pump as proportions of the
   // overall width and height of the node.
@@ -65,7 +66,10 @@ define( function( require ) {
       indicatorRemainingColor: '#999999',
       bottomBaseColor: new Color( 170, 170, 170 ),
       hoseColor: '#B3B3B3',
-      numberOfParticlesPerPumpAction: 4
+      numberOfParticlesPerPumpAction: 4,
+
+      // {Vector2} where the hose will attach externally relative to the center of the pump
+      hoseExternalAttachmentPointOffset: new Vector2( 100, 100 )
     }, options );
 
     this.multipleParticleModel = multipleParticleModel; // @private
@@ -329,14 +333,11 @@ define( function( require ) {
     var hoseToPumpAttachPtX = ( baseWidth + pumpBodyWidth ) / 2;
     var hoseToPumpAttachPtY = height - height * HOSE_ATTACH_VERT_POS_PROPORTION;
     //TODO external attach point works relative to the upper left corner, but the 0, 0 origin point should be the bottom right corner of the node
-    //TODO potentially add listener for bounds change to allow for global coordinates in hose external attachment point
-    var hoseExternalAttachPtX = width - width * HOSE_CONNECTOR_WIDTH_PROPORTION;
-    var hoseExternalAttachPtY = height - height * HOSE_CONNECTOR_VERT_POS_PROPORTION;
     var hosePath = new Path( new Shape()
       .moveTo( hoseToPumpAttachPtX, hoseToPumpAttachPtY )
-      .cubicCurveTo( width, height - ( height * HOSE_ATTACH_VERT_POS_PROPORTION ),
-        0, height - height * HOSE_CONNECTOR_VERT_POS_PROPORTION,
-        hoseExternalAttachPtX, hoseExternalAttachPtY ), {
+      .cubicCurveTo( 1.5 * ( options.hoseExternalAttachmentPointOffset.x - hoseToPumpAttachPtX ), hoseToPumpAttachPtY,
+        0, options.hoseExternalAttachmentPointOffset.y,
+        options.hoseExternalAttachmentPointOffset.x, options.hoseExternalAttachmentPointOffset.y ), {
       lineWidth: 4, stroke: options.hoseColor
     } );
     this.addChild( hosePath );
