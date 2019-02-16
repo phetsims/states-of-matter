@@ -44,7 +44,7 @@ define( function( require ) {
     this.particle = particle;
     this.modelViewTransform = modelViewTransform;
     this.overlapEnabled = enableOverlap;
-    this.position = new Vector2();
+    this.position = new Vector2( 0, 0 );
 
     // Calculate the diameter of the circle.
     var circleDiameter = particle.radius * 2 * MVT_SCALE;

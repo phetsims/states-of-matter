@@ -27,7 +27,7 @@ define( function( require ) {
     // @private
     this.positionUpdater = MonatomicAtomPositionUpdater;
     this.epsilon = 1; // controls the strength of particle interaction
-    this.velocityVector = new Vector2(); // reusable vector to save allocations
+    this.velocityVector = new Vector2( 0, 0 ); // reusable vector to save allocations
   }
 
   statesOfMatter.register( 'MonatomicVerletAlgorithm', MonatomicVerletAlgorithm );

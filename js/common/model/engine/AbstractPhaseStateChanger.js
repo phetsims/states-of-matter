@@ -30,9 +30,9 @@ define( function( require ) {
 
     // @private
     this.multipleParticleModel = multipleParticleModel;
-    this.moleculeLocation = new Vector2();
+    this.moleculeLocation = new Vector2( 0, 0 );
     this.random = phet.joist.random;
-    this.reusableVector = new Vector2();
+    this.reusableVector = new Vector2( 0, 0 );
   }
 
   statesOfMatter.register( 'AbstractPhaseStateChanger', AbstractPhaseStateChanger );

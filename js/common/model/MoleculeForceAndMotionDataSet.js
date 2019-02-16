@@ -301,8 +301,8 @@ define( function( require ) {
       this.insideContainer[ numberOfMolecules ] = insideContainer;
 
       // Allocate memory for the information that is not specified.
-      this.moleculeForces[ numberOfMolecules ] = new Vector2();
-      this.nextMoleculeForces[ numberOfMolecules ] = new Vector2();
+      this.moleculeForces[ numberOfMolecules ] = new Vector2( 0, 0 );
+      this.nextMoleculeForces[ numberOfMolecules ] = new Vector2( 0, 0 );
 
       // Increment the counts of atoms and molecules.
       this.numberOfAtoms += this.atomsPerMolecule;

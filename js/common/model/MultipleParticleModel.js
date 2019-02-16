@@ -1056,7 +1056,7 @@ define( function( require ) {
       this.andersenThermostat = new AndersenThermostat( this.moleculeDataSet, this.minModelTemperature );
 
       var numberOfMolecules = numberOfAtoms / 2;
-      var atomPositionInVector = new Vector2();
+      var atomPositionInVector = new Vector2( 0, 0 );
       var atomPositions = [];
       atomPositions[ 0 ] = atomPositionInVector;
       atomPositions[ 1 ] = atomPositionInVector;
@@ -1065,8 +1065,8 @@ define( function( require ) {
       for ( var i = 0; i < numberOfMolecules; i++ ) {
 
         // Create the molecule.
-        var moleculeCenterOfMassPosition = new Vector2();
-        var moleculeVelocity = new Vector2();
+        var moleculeCenterOfMassPosition = new Vector2( 0, 0 );
+        var moleculeVelocity = new Vector2( 0, 0 );
 
         // Add the atom to the data set.
         this.moleculeDataSet.addMolecule( atomPositions, moleculeCenterOfMassPosition, moleculeVelocity, 0, true );
@@ -1110,7 +1110,7 @@ define( function( require ) {
       this.andersenThermostat = new AndersenThermostat( this.moleculeDataSet, this.minModelTemperature );
 
       // Create the individual atoms and add them to the data set.
-      var atomPositionInVector = new Vector2();
+      var atomPositionInVector = new Vector2( 0, 0 );
       var atomPositions = [];
       atomPositions[ 0 ] = atomPositionInVector;
       atomPositions[ 1 ] = atomPositionInVector;
@@ -1118,8 +1118,8 @@ define( function( require ) {
       for ( var i = 0; i < numberOfMolecules; i++ ) {
 
         // Create the molecule.
-        var moleculeCenterOfMassPosition = new Vector2();
-        var moleculeVelocity = new Vector2();
+        var moleculeCenterOfMassPosition = new Vector2( 0, 0 );
+        var moleculeVelocity = new Vector2( 0, 0 );
 
         // Add the atom to the data set.
         this.moleculeDataSet.addMolecule( atomPositions, moleculeCenterOfMassPosition, moleculeVelocity, 0, true );
@@ -1204,12 +1204,12 @@ define( function( require ) {
 
       // Create the individual atoms and add them to the data set.
       var atomPositions = [];
-      atomPositions.push( new Vector2() );
+      atomPositions.push( new Vector2( 0, 0 ) );
       for ( var i = 0; i < numberOfAtoms; i++ ) {
 
         // Create the atom.
-        var moleculeCenterOfMassPosition = new Vector2();
-        var moleculeVelocity = new Vector2();
+        var moleculeCenterOfMassPosition = new Vector2( 0, 0 );
+        var moleculeVelocity = new Vector2( 0, 0 );
         // Add the atom to the data set.
         this.moleculeDataSet.addMolecule( atomPositions, moleculeCenterOfMassPosition, moleculeVelocity, 0, true );
 
