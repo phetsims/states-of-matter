@@ -131,7 +131,7 @@ define( function( require ) {
           atomVelocity.x + timeStepHalf * ( moleculeForce.x + nextAtomForces[ i ].x ),
           atomVelocity.y + timeStepHalf * ( moleculeForce.y + nextAtomForces[ i ].y )
         );
-        if ( velocityVector.magnitude() > 10 ) {
+        if ( velocityVector.magnitude > 10 ) {
           velocityVector.setMagnitude( 10 );
         }
 
