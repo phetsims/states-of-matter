@@ -38,7 +38,6 @@ define( function( require ) {
   var PIPE_CONNECTOR_HEIGHT_PROPORTION = 0.09;
   var HOSE_CONNECTOR_HEIGHT_PROPORTION = 0.04;
   var HOSE_CONNECTOR_WIDTH_PROPORTION = 0.05;
-  var HOSE_CONNECTOR_VERT_POS_PROPORTION = 0.68; // empirically determined to line up with injection point in model
   var HOSE_ATTACH_VERT_POS_PROPORTION = 0.11;
   var SHAFT_OPENING_TILT_FACTOR = 0.33;
 
@@ -69,11 +68,12 @@ define( function( require ) {
       numberOfParticlesPerPumpAction: 4,
 
       // {Vector2} where the hose will attach externally relative to the center of the pump
-      hoseExternalAttachmentPointOffset: new Vector2( 100, 100 )
+      hoseAttachmentOffset: new Vector2( 100, 100 )
     }, options );
 
     this.multipleParticleModel = multipleParticleModel; // @private
     this.containerAtomCapacity = 0; // @private
+    this.hoseAttachmentOffset = options.hoseAttachmentOffset;
 
     // Update the container capacity when the substance changes.
     multipleParticleModel.substanceProperty.link( function() {
@@ -335,9 +335,9 @@ define( function( require ) {
     //TODO external attach point works relative to the upper left corner, but the 0, 0 origin point should be the bottom right corner of the node
     var hosePath = new Path( new Shape()
       .moveTo( hoseToPumpAttachPtX, hoseToPumpAttachPtY )
-      .cubicCurveTo( 1.5 * ( options.hoseExternalAttachmentPointOffset.x - hoseToPumpAttachPtX ), hoseToPumpAttachPtY,
-        0, options.hoseExternalAttachmentPointOffset.y,
-        options.hoseExternalAttachmentPointOffset.x, options.hoseExternalAttachmentPointOffset.y ), {
+      .cubicCurveTo( 1.5 * ( options.hoseAttachmentOffset.x - hoseToPumpAttachPtX ), hoseToPumpAttachPtY,
+        0, options.hoseAttachmentOffset.y,
+        options.hoseAttachmentOffset.x, options.hoseAttachmentOffset.y ), {
       lineWidth: 4, stroke: options.hoseColor
     } );
     this.addChild( hosePath );
@@ -383,11 +383,13 @@ define( function( require ) {
           .addColorStop( 1, options.bottomBaseColor.darkerColor( 0.8 ) )
       } );
     };
-    var hoseConnector = createHoseConnectorNode();
-    var hoseBottomConnector = createHoseConnectorNode();
-    hoseConnector.setTranslation( width - hoseConnectorWidth,
-      height - ( height * HOSE_CONNECTOR_VERT_POS_PROPORTION ) - hoseConnectorHeight / 2 );
-    hoseBottomConnector.setTranslation( hoseToPumpAttachPtX + 1, hoseToPumpAttachPtY - hoseBottomConnector.height / 2 );
+    var externalHoseConnector = createHoseConnectorNode();
+    var localHoseConnector = createHoseConnectorNode();
+    externalHoseConnector.setTranslation(
+      options.hoseAttachmentOffset.x - externalHoseConnector.width / 2,
+      options.hoseAttachmentOffset.y - externalHoseConnector.height / 2
+    );
+    localHoseConnector.setTranslation( hoseToPumpAttachPtX + 1, hoseToPumpAttachPtY - localHoseConnector.height / 2 );
 
     // define a property that tracks the remaining capacity
     this.remainingPumpCapacityProportionProperty = new Property( 1 );
@@ -415,8 +417,8 @@ define( function( require ) {
     this.addChild( remainingCapacityIndicator );
     this.addChild( pumpOpeningFront );
     this.addChild( pipeConnectorPath );
-    this.addChild( hoseConnector );
-    this.addChild( hoseBottomConnector );
+    this.addChild( externalHoseConnector );
+    this.addChild( localHoseConnector );
 
     this.mutate( options );
   }
@@ -438,6 +440,19 @@ define( function( require ) {
           1 - this.multipleParticleModel.moleculeDataSet.numberOfAtoms / this.containerAtomCapacity;
       }
       this.remainingPumpCapacityProportionProperty.set( remainingCapacityProportion );
+    },
+
+    /**
+     * This function sets the position of this whole node by translating itself so that the external end of the hose
+     * is at the provided screen coordinates.
+     *
+     * @param {number} x
+     * @param {number} y
+     * @public
+     */
+    setHoseAttachmentPosition: function( x, y ) {
+      this.x = x - this.hoseAttachmentOffset.x;
+      this.y = y - this.hoseAttachmentOffset.y;
     }
   } );
 } );
