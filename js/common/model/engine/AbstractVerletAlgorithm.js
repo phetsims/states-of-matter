@@ -25,9 +25,6 @@ define( function( require ) {
   var EXPLOSION_PRESSURE = 41; // in model units, empirically determined
   var EXPLOSION_TIME = 1; // in seconds, time that the pressure must be above the threshold before explosion occurs
 
-  // threshold to compare to zero, necessary due to floating point variations
-  var COMPARE_THRESHOLD = 1E-5;
-
   /**
    * @param {MultipleParticleModel} multipleParticleModel of the simulation
    * @constructor
@@ -274,9 +271,10 @@ define( function( require ) {
 
         // Accumulate the latest pressure value and calculate the new total value.
         this.pressureAccumulatorQueue.add( pressureThisStep, dt );
-        var newPressure = this.pressureAccumulatorQueue.total / PRESSURE_CALC_TIME_WINDOW;
 
-        assert && assert( newPressure >= -COMPARE_THRESHOLD, 'pressure accumulator ended up with a negative value' );
+        // Get the pressure value, but make sure it doesn't go below zero, because we have seen instances of that due
+        // to floating point errors, see https://github.com/phetsims/states-of-matter/issues/240.
+        var newPressure = Math.max( this.pressureAccumulatorQueue.total / PRESSURE_CALC_TIME_WINDOW, 0 );
 
         if ( newPressure > EXPLOSION_PRESSURE ) {
           this.timeAboveExplosionPressure += dt;
