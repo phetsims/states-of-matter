@@ -1,4 +1,4 @@
-// Copyright 2016-2018, University of Colorado Boulder
+// Copyright 2019, University of Colorado Boulder
 
 /**
  * simple moving average calculator
@@ -35,7 +35,7 @@ define( function( require ) {
 
   return inherit( Object, MovingAverage, {
 
-    addValue: function( newValue ){
+    addValue: function( newValue ) {
       var replacedValue = this.array[ this.currentIndex ];
       this.array[ this.currentIndex ] = newValue;
       this.currentIndex = ( this.currentIndex + 1 ) % this.size;
@@ -43,8 +43,8 @@ define( function( require ) {
       this.average = this.total / this.size;
     },
 
-    reset: function(){
-      for( var i = 0; i < this.size; i++ ){
+    reset: function() {
+      for ( var i = 0; i < this.size; i++ ) {
         this.array[ i ] = this.initialValue;
       }
       this.total = this.initialValue * this.size;
