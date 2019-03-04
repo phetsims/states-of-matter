@@ -217,8 +217,10 @@ define( function( require ) {
       contentXMargin: 10,
       buttonYMargin: 4,
       buttonXMargin: 10,
-      buttonTouchAreaXDilation: 8,
-      buttonTouchAreaYDilation: 3,
+      expandCollapseButtonOptions: {
+        touchAreaXDilation: 8,
+        touchAreaYDilation: 3
+      },
       showTitleWhenExpanded: options.showTitleWhenExpanded
     } );
     this.addChild( accordionBox );

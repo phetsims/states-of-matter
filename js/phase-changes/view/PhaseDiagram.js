@@ -279,9 +279,11 @@ define( function( require ) {
       maxWidth: options.maxWidth,
       buttonYMargin: 4,
       buttonXMargin: 5,
-      buttonLength: 12,
-      buttonTouchAreaXDilation: 15,
-      buttonTouchAreaYDilation: 10
+      expandCollapseButtonOptions: {
+        sideLength: 12,
+        touchAreaXDilation: 15,
+        touchAreaYDilation: 10
+      }
     } );
     this.addChild( this.accordionBox );
 
