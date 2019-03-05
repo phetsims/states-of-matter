@@ -309,7 +309,7 @@ define( function( require ) {
       trackSize: new Dimension2( sliderTrackWidth, 5 ),
       trackFill: 'white',
       thumbSize: new Dimension2( 14, 25 ),
-      thumbFillEnabled: '#A670DB',
+      thumbFill: '#A670DB',
       thumbFillHighlighted: '#D966FF',
       thumbCenterLineStroke: 'black',
       thumbTouchAreaXDilation: 8,
