@@ -137,7 +137,7 @@ define( function( require ) {
 
     // add bicycle pump node
     this.pumpNode = new BicyclePumpNode( 200, 250, multipleParticleModel, {
-      hoseAttachmentOffset: new Vector2( 190, 80 )
+      hoseAttachmentOffset: new Vector2( 160, -158 )
     } );
     // TODO: fix setHoseAttachmentPosition so that "- 5" is not needed
     this.pumpNode.setHoseAttachmentPosition( nominalParticleAreaViewBounds.left - 5, nominalParticleAreaViewBounds.bottom - 70 );

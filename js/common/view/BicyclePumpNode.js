@@ -23,6 +23,7 @@ define( function( require ) {
   var SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
   var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  var Util = require( 'DOT/Util' );
   var Vector2 = require( 'DOT/Vector2' );
 
   // The follow constants define the size and positions of the various components of the pump as proportions of the
@@ -38,8 +39,9 @@ define( function( require ) {
   var PIPE_CONNECTOR_HEIGHT_PROPORTION = 0.09;
   var HOSE_CONNECTOR_HEIGHT_PROPORTION = 0.04;
   var HOSE_CONNECTOR_WIDTH_PROPORTION = 0.05;
-  var HOSE_ATTACH_VERT_POS_PROPORTION = 0.11;
   var SHAFT_OPENING_TILT_FACTOR = 0.33;
+  var BODY_TO_HOSE_ATTACH_POINT_X = 13;
+  var BODY_TO_HOSE_ATTACH_POINT_Y = -15;
 
   /**
    * @param {number} width  - width of the BicyclePump
@@ -107,7 +109,7 @@ define( function( require ) {
 
     // the front edge of the pump base, draw counter-clockwise starting at left edge
     var pumpEdgeShape = new Shape()
-      .moveTo( -halfOfBaseWidth, 0 )
+      .lineTo( -halfOfBaseWidth, 0 )
       .lineTo( -halfOfBaseWidth, pumpBaseEdgeHeight / 2 )
       .quadraticCurveTo( -halfOfBaseWidth, pumpBaseSideEdgeYControlPoint, -pumpBaseBottomEdgeXCurveStart, pumpBaseEdgeHeight )
       .lineTo( pumpBaseBottomEdgeXCurveStart, pumpBaseEdgeHeight )
@@ -124,9 +126,7 @@ define( function( require ) {
     } );
 
     var pumpBase = new Node( {
-      children: [ pumpEdgeNode, topOfBaseNode ],
-      left: 0,
-      bottom: height
+      children: [ pumpEdgeNode, topOfBaseNode ]
     } );
     this.addChild( pumpBase );
 
@@ -216,16 +216,16 @@ define( function( require ) {
     pumpHandleNode.touchArea = pumpHandleNode.localBounds.dilatedXY( 100, 100 );
     pumpHandleNode.scale( pumpHandleHeight / pumpHandleNode.height );
     pumpHandleNode.setTranslation(
-      ( baseWidth - pumpHandleNode.width ) / 2,
-      height - ( height * PUMP_HANDLE_INIT_VERT_POS_PROPORTION ) - pumpHandleHeight - baseHeight
+      -pumpHandleNode.width / 2,
+      -( ( height * PUMP_HANDLE_INIT_VERT_POS_PROPORTION ) + pumpHandleNode.height )
     );
 
-    var maxHandleYOffset = -PUMP_SHAFT_HEIGHT_PROPORTION * height / 2;
-    var minHandleYOffset = pumpHandleNode.centerY;
+    var maxHandleYOffset = pumpHandleNode.centerY;
+    var minHandleYOffset = maxHandleYOffset + ( -PUMP_SHAFT_HEIGHT_PROPORTION * height / 2 );
 
     // How far the pump shaft needs to travel before the pump releases a particle. -1 is added to account for minor drag
     // listener and floating-point errors.
-    var pumpingDistanceRequiredToAddParticle = ( -maxHandleYOffset + minHandleYOffset ) /
+    var pumpingDistanceRequiredToAddParticle = ( -minHandleYOffset + maxHandleYOffset ) /
                                                options.numberOfParticlesPerPumpAction - 1;
 
     // Set ourself up to listen for and handle mouse dragging events on the handle.
@@ -238,9 +238,7 @@ define( function( require ) {
 
         // update the handle and shaft position based on the user's pointer position
         var dragPositionY = pumpHandleNode.globalToParentPoint( event.pointer.point ).y;
-        dragPositionY = Math.max( dragPositionY, maxHandleYOffset );
-        dragPositionY = Math.min( dragPositionY, minHandleYOffset );
-        pumpHandleNode.centerY = dragPositionY;
+        pumpHandleNode.centerY = Util.clamp( dragPositionY, minHandleYOffset, maxHandleYOffset );
         pumpShaft.top = pumpHandleNode.bottom;
 
         var travelDistance = handleStartYPos - pumpHandleNode.centerY;
@@ -274,8 +272,8 @@ define( function( require ) {
       stroke: options.shaftBaseColor.darkerColor( 0.6 ),
       pickable: false
     } );
-    pumpShaft.setTranslation( ( baseWidth - pumpShaftWidth ) / 2,
-      height - ( height * PUMP_HANDLE_INIT_VERT_POS_PROPORTION ) - baseHeight );
+    pumpShaft.x = -pumpShaftWidth / 2;
+    pumpShaft.top = pumpHandleNode.bottom;
 
     // Create the body of the pump
     var pumpBodyWidth = width * PUMP_BODY_WIDTH_PROPORTION;
@@ -286,7 +284,7 @@ define( function( require ) {
         .addColorStop( 0.4, options.bodyBaseColor )
         .addColorStop( 0.7, options.bodyBaseColor.darkerColor( 0.8 ) )
     } );
-    pumpBody.setTranslation( ( baseWidth - pumpBodyWidth ) / 2, height - pumpBodyHeight - baseHeight );
+    pumpBody.setTranslation( -pumpBodyWidth / 2, -pumpBodyHeight );
 
     // Create the back portion of the opening at the top of the pump body
     var pumpOpeningBackShape = new Shape()
@@ -330,15 +328,13 @@ define( function( require ) {
     } );
 
     // Add the hose.
-    var hoseToPumpAttachPtX = ( baseWidth + pumpBodyWidth ) / 2;
-    var hoseToPumpAttachPtY = height - height * HOSE_ATTACH_VERT_POS_PROPORTION;
-    //TODO external attach point works relative to the upper left corner, but the 0, 0 origin point should be the bottom right corner of the node
     var hosePath = new Path( new Shape()
-      .moveTo( hoseToPumpAttachPtX, hoseToPumpAttachPtY )
-      .cubicCurveTo( 1.5 * ( options.hoseAttachmentOffset.x - hoseToPumpAttachPtX ), hoseToPumpAttachPtY,
+      .moveTo( 0, BODY_TO_HOSE_ATTACH_POINT_Y )
+      .cubicCurveTo( 1.5 * ( options.hoseAttachmentOffset.x - BODY_TO_HOSE_ATTACH_POINT_X ), BODY_TO_HOSE_ATTACH_POINT_Y,
         0, options.hoseAttachmentOffset.y,
         options.hoseAttachmentOffset.x, options.hoseAttachmentOffset.y ), {
-      lineWidth: 4, stroke: options.hoseColor
+      lineWidth: 4,
+      stroke: options.hoseColor
     } );
     this.addChild( hosePath );
 
@@ -368,7 +364,7 @@ define( function( require ) {
           .addColorStop( 0.7, options.bottomBaseColor )
           .addColorStop( 1, options.bottomBaseColor.darkerColor( 0.6 ) )
       } );
-    pipeConnectorPath.setTranslation( baseWidth / 2, height - baseHeight * 0.65 - pipeConnectorHeight - 3 );
+    pipeConnectorPath.setTranslation( 0, -pipeConnectorHeight - baseHeight * 0.15 );
 
     // Create the hose connector
     var hoseConnectorWidth = width * HOSE_CONNECTOR_WIDTH_PROPORTION;
@@ -389,7 +385,11 @@ define( function( require ) {
       options.hoseAttachmentOffset.x - externalHoseConnector.width / 2,
       options.hoseAttachmentOffset.y - externalHoseConnector.height / 2
     );
-    localHoseConnector.setTranslation( hoseToPumpAttachPtX + 1, hoseToPumpAttachPtY - localHoseConnector.height / 2 );
+    var localHoseOffsetX = options.hoseAttachmentOffset.x > 0 ? BODY_TO_HOSE_ATTACH_POINT_X : -BODY_TO_HOSE_ATTACH_POINT_X;
+    localHoseConnector.setTranslation(
+      localHoseOffsetX - hoseConnectorWidth / 2,
+      BODY_TO_HOSE_ATTACH_POINT_Y - localHoseConnector.height / 2
+    );
 
     // define a property that tracks the remaining capacity
     this.remainingPumpCapacityProportionProperty = new Property( 1 );
