@@ -139,8 +139,7 @@ define( function( require ) {
     this.pumpNode = new BicyclePumpNode( 200, 250, multipleParticleModel, {
       hoseAttachmentOffset: new Vector2( 160, -158 )
     } );
-    // TODO: fix setHoseAttachmentPosition so that "- 5" is not needed
-    this.pumpNode.setHoseAttachmentPosition( nominalParticleAreaViewBounds.left - 5, nominalParticleAreaViewBounds.bottom - 70 );
+    this.pumpNode.setHoseAttachmentPosition( nominalParticleAreaViewBounds.left, nominalParticleAreaViewBounds.bottom - 70 );
     this.addChild( this.pumpNode );
 
     // add return lid button

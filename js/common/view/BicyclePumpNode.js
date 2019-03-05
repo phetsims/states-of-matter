@@ -382,7 +382,7 @@ define( function( require ) {
     var externalHoseConnector = createHoseConnectorNode();
     var localHoseConnector = createHoseConnectorNode();
     externalHoseConnector.setTranslation(
-      options.hoseAttachmentOffset.x - externalHoseConnector.width / 2,
+      options.hoseAttachmentOffset.x - externalHoseConnector.width,
       options.hoseAttachmentOffset.y - externalHoseConnector.height / 2
     );
     var localHoseOffsetX = options.hoseAttachmentOffset.x > 0 ? BODY_TO_HOSE_ATTACH_POINT_X : -BODY_TO_HOSE_ATTACH_POINT_X;
