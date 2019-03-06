@@ -268,7 +268,7 @@ define( function( require ) {
         moleculeRotationRates[ i ] = rotationRate;
 
         // calculate the kinetic energy
-        translationalKineticEnergy += 0.5 * moleculeMass * moleculeVelocities[ i ].magnitudeSquared();
+        translationalKineticEnergy += 0.5 * moleculeMass * moleculeVelocities[ i ].magnitudeSquared;
         rotationalKineticEnergy += 0.5 * moleculeRotationalInertia * moleculeRotationRates[ i ] * moleculeRotationRates[ i ];
 
         // Move the newly calculated forces and torques into the current spots.

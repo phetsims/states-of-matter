@@ -132,7 +132,7 @@ define( function( require ) {
         moleculeVelocities[ i ].setXY( xVel, yVel );
         moleculeRotationRates[ i ] += timeStepHalf * ( moleculeTorques[ i ] + nextMoleculeTorques[ i ] ) *
                                       inertiaInverse;
-        translationalKineticEnergy += 0.5 * moleculeDataSet.moleculeMass * moleculeVelocities[ i ].magnitudeSquared();
+        translationalKineticEnergy += 0.5 * moleculeDataSet.moleculeMass * moleculeVelocities[ i ].magnitudeSquared;
         rotationalKineticEnergy += 0.5 * moleculeDataSet.moleculeRotationalInertia *
                                    Math.pow( moleculeRotationRates[ i ], 2 );
 
