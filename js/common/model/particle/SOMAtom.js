@@ -10,9 +10,9 @@ define( function( require ) {
 
   // modules
   var inherit = require( 'PHET_CORE/inherit' );
-  var Property = require( 'AXON/Property' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var Vector2 = require( 'DOT/Vector2' );
+  var Vector2Property = require( 'DOT/Vector2Property' );
 
   /**
    * @param {number} x - x position in picometers
@@ -25,7 +25,7 @@ define( function( require ) {
   function SOMAtom( x, y, radius, mass, color ) {
 
     // @private, accessed through getter and setter methods below, basically because that's how it worked in Java sim
-    this.positionProperty = new Property( new Vector2( x, y ) );
+    this.positionProperty = new Vector2Property( new Vector2( x, y ) );
     this.velocity = new Vector2( 0, 0 );
     this.accel = new Vector2( 0, 0 );
     this.color = color;
