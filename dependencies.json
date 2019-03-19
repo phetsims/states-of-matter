@@ -1,5 +1,5 @@
 {
-  "comment": "# states-of-matter 1.1.1 Fri Mar 08 2019 13:23:13 GMT-0700 (Mountain Standard Time)",
+  "comment": "# states-of-matter 1.1.1 Tue Mar 19 2019 17:19:26 GMT-0400 (EDT)",
   "assert": {
     "sha": "928741cfc8fe804334d5b35292140314511f8678",
     "branch": "HEAD"
@@ -13,8 +13,8 @@
     "branch": "HEAD"
   },
   "chipper": {
-    "sha": "bbbb514a831d30b088b6e017d4621a90bcbbebdb",
-    "branch": "HEAD"
+    "sha": "e4ee8850e2eb471f3e7c01fba0017adcec2adefe",
+    "branch": "states-of-matter-1.1"
   },
   "dot": {
     "sha": "820111c8c6bdfa729446dd40fa5493511cdb5c05",
@@ -60,6 +60,10 @@
     "sha": "22b158d078466ad06f8f9fb9f7b79ecccbbcc7a5",
     "branch": "HEAD"
   },
+  "phetmarks": {
+    "sha": "d0c2ec7c217bc517bbb192173e0506e243cdd39b",
+    "branch": "HEAD"
+  },
   "query-string-machine": {
     "sha": "c2e502fb0a850c700630c2c507081c2f4e160a16",
     "branch": "HEAD"
@@ -77,7 +81,7 @@
     "branch": "HEAD"
   },
   "states-of-matter": {
-    "sha": "47ab286059803abd43ebf91fc9213cc6f98fa2fb",
+    "sha": "8c1299e7b1127fb3dd89d78394fbef1718406de4",
     "branch": "1.1"
   },
   "sun": {
@@ -91,9 +95,5 @@
   "tandem": {
     "sha": "a2348c0cd40df5246dbf4571d8af133fcb89903c",
     "branch": "HEAD"
-  },
-  "phetmarks": {
-    "branch": "master",
-    "sha": "d0c2ec7c217bc517bbb192173e0506e243cdd39b"
   }
 }
