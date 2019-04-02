@@ -61,14 +61,14 @@ define( function( require ) {
     // scenery-phet, see https://github.com/phetsims/states-of-matter/issues/217. Some things may be in a weird state
     // while we do this, e.g. most of the options below currently don't do anything yet.
     options = _.extend( {
-      handleBaseColor: new Color( 173, 175, 177 ),
-      shaftBaseColor: new Color( 202, 202, 202 ),
-      shaftOpeningFillColor: new Color( 153, 119, 119 ),
-      bodyBaseColor: new Color( 213, 0, 0 ),
-      indicatorBackgroundColor: '#443333',
-      indicatorRemainingColor: '#999999',
-      bottomBaseColor: new Color( 170, 170, 170 ),
-      hoseColor: '#B3B3B3',
+      handleFill: new Color( 173, 175, 177 ),
+      shaftFill: new Color( 202, 202, 202 ),
+      shaftOpeningFill: new Color( 153, 119, 119 ),
+      bodyFill: new Color( 213, 0, 0 ),
+      indicatorBackgroundFill: '#443333',
+      indicatorRemainingFill: '#999999',
+      baseFill: new Color( 170, 170, 170 ),
+      hoseFill: '#B3B3B3',
       numberOfParticlesPerPumpAction: 4,
 
       // {Vector2} where the hose will attach externally relative to the center of the pump
@@ -104,9 +104,9 @@ define( function( require ) {
     // rounded rectangle that is the top of the base
     var topOfBaseNode = new Rectangle( -halfOfBaseWidth, -topOfBaseHeight / 2, baseWidth, topOfBaseHeight, 20, 20, {
       fill: new LinearGradient( -halfOfBaseWidth, 0, halfOfBaseWidth, 0 )
-        .addColorStop( 0, options.bottomBaseColor.brighterColor( 0.8 ) )
-        .addColorStop( 0.5, options.bottomBaseColor )
-        .addColorStop( 1, options.bottomBaseColor.darkerColor( 0.8 ) )
+        .addColorStop( 0, options.baseFill.brighterColor( 0.8 ) )
+        .addColorStop( 0.5, options.baseFill )
+        .addColorStop( 1, options.baseFill.darkerColor( 0.8 ) )
     } );
 
     var pumpBaseEdgeHeight = baseHeight * 0.65;
@@ -126,9 +126,9 @@ define( function( require ) {
     // color the front edge of the pump base
     var pumpEdgeNode = new Path( pumpEdgeShape, {
       fill: new LinearGradient( -halfOfBaseWidth, 0, halfOfBaseWidth, 0 )
-        .addColorStop( 0, options.bottomBaseColor.darkerColor( 0.6 ) )
-        .addColorStop( 0.85, options.bottomBaseColor.darkerColor( 0.8 ) )
-        .addColorStop( 1, options.bottomBaseColor.darkerColor( 0.6 ) )
+        .addColorStop( 0, options.baseFill.darkerColor( 0.6 ) )
+        .addColorStop( 0.85, options.baseFill.darkerColor( 0.8 ) )
+        .addColorStop( 1, options.baseFill.darkerColor( 0.6 ) )
     } );
 
     var pumpBase = new Node( {
@@ -232,7 +232,7 @@ define( function( require ) {
 
     // setup the gradient for the handle
     var pumpHandleWidth = pumpHandleShape.bounds.width;
-    var handleBaseColor = options.handleBaseColor;
+    var handleBaseColor = options.handleFill;
     var handleBaseColorDarker = handleBaseColor.darkerColor( 0.6 );
     var pumpHandleGradient = new LinearGradient( -pumpHandleWidth / 2, 0, pumpHandleWidth / 2, 0 );
 
@@ -320,9 +320,9 @@ define( function( require ) {
     var pumpShaftHeight = height * PUMP_SHAFT_HEIGHT_PROPORTION;
     pumpShaft = new Rectangle( 0, 0, pumpShaftWidth, pumpShaftHeight, {
       fill: new LinearGradient( 0, 0, pumpShaftHeight, 0 )
-        .addColorStop( 0, options.shaftBaseColor.darkerColor( 0.8 ) )
-        .addColorStop( 0.2, options.shaftBaseColor ),
-      stroke: options.shaftBaseColor.darkerColor( 0.6 ),
+        .addColorStop( 0, options.shaftFill.darkerColor( 0.8 ) )
+        .addColorStop( 0.2, options.shaftFill ),
+      stroke: options.shaftFill.darkerColor( 0.6 ),
       pickable: false
     } );
     pumpShaft.x = -pumpShaftWidth / 2;
@@ -333,9 +333,9 @@ define( function( require ) {
     var pumpBodyHeight = height * PUMP_BODY_HEIGHT_PROPORTION;
     var pumpBody = new Rectangle( 0, 0, pumpBodyWidth, pumpBodyHeight, 0, 0, {
       fill: new LinearGradient( 0, 0, pumpBodyWidth, 0 )
-        .addColorStop( 0, options.bodyBaseColor.brighterColor( 0.8 ) )
-        .addColorStop( 0.4, options.bodyBaseColor )
-        .addColorStop( 0.7, options.bodyBaseColor.darkerColor( 0.8 ) )
+        .addColorStop( 0, options.bodyFill.brighterColor( 0.8 ) )
+        .addColorStop( 0.4, options.bodyFill )
+        .addColorStop( 0.7, options.bodyFill.darkerColor( 0.8 ) )
     } );
     pumpBody.setTranslation( -pumpBodyWidth / 2, -pumpBodyHeight );
 
@@ -351,8 +351,8 @@ define( function( require ) {
         0
       );
 
-    var pumpOpeningFillColor = options.shaftOpeningFillColor;
-    var pumpOpeningStrokeColor = options.shaftOpeningFillColor.darkerColor( 0.8 );
+    var pumpOpeningFillColor = options.shaftOpeningFill;
+    var pumpOpeningStrokeColor = options.shaftOpeningFill.darkerColor( 0.8 );
 
     var pumpOpeningBack = new Path( pumpOpeningBackShape, {
       fill: pumpOpeningFillColor,
@@ -387,7 +387,7 @@ define( function( require ) {
         0, options.hoseAttachmentOffset.y,
         options.hoseAttachmentOffset.x, options.hoseAttachmentOffset.y ), {
       lineWidth: 4,
-      stroke: options.hoseColor
+      stroke: options.hoseFill
     } );
     this.addChild( hosePath );
 
@@ -410,12 +410,12 @@ define( function( require ) {
         .lineTo( pipeConnectorTopRadiusX, 0 ), // line to upper right corner of shape
       {
         fill: new LinearGradient( -pipeConnectorBottomWidth / 2, 0, pipeConnectorBottomWidth / 2, 0 )
-          .addColorStop( 0, options.bottomBaseColor.darkerColor( 0.5 ) )
-          .addColorStop( 0.50, options.bottomBaseColor )
-          .addColorStop( 0.55, options.bottomBaseColor.brighterColor( 0.9 ) )
-          .addColorStop( 0.65, options.bottomBaseColor.brighterColor( 0.9 ) )
-          .addColorStop( 0.7, options.bottomBaseColor )
-          .addColorStop( 1, options.bottomBaseColor.darkerColor( 0.6 ) )
+          .addColorStop( 0, options.baseFill.darkerColor( 0.5 ) )
+          .addColorStop( 0.50, options.baseFill )
+          .addColorStop( 0.55, options.baseFill.brighterColor( 0.9 ) )
+          .addColorStop( 0.65, options.baseFill.brighterColor( 0.9 ) )
+          .addColorStop( 0.7, options.baseFill )
+          .addColorStop( 1, options.baseFill.darkerColor( 0.6 ) )
       } );
     pipeConnectorPath.setTranslation( 0, -pipeConnectorHeight - baseHeight * 0.15 );
 
@@ -425,11 +425,11 @@ define( function( require ) {
     var createHoseConnectorNode = function() {
       return new Rectangle( 0, 0, hoseConnectorWidth, hoseConnectorHeight, 2, 2, {
         fill: new LinearGradient( 0, 0, 0, hoseConnectorHeight )
-          .addColorStop( 0, options.bottomBaseColor.darkerColor( 0.8 ) )
-          .addColorStop( 0.3, options.bottomBaseColor )
-          .addColorStop( 0.35, options.bottomBaseColor.brighterColor( 0.9 ) )
-          .addColorStop( 0.4, options.bottomBaseColor.brighterColor( 0.9 ) )
-          .addColorStop( 1, options.bottomBaseColor.darkerColor( 0.8 ) )
+          .addColorStop( 0, options.baseFill.darkerColor( 0.8 ) )
+          .addColorStop( 0.3, options.baseFill )
+          .addColorStop( 0.35, options.baseFill.brighterColor( 0.9 ) )
+          .addColorStop( 0.4, options.baseFill.brighterColor( 0.9 ) )
+          .addColorStop( 1, options.baseFill.darkerColor( 0.8 ) )
       } );
     };
     var externalHoseConnector = createHoseConnectorNode();
@@ -456,8 +456,8 @@ define( function( require ) {
         centerX: pumpShaft.centerX,
         centerY: ( pumpBody.top + pipeConnectorPath.top ) / 2,
         numSegments: 36,
-        backgroundColor: options.indicatorBackgroundColor,
-        fullyLitIndicatorColor: options.indicatorRemainingColor,
+        backgroundColor: options.indicatorBackgroundFill,
+        fullyLitIndicatorColor: options.indicatorRemainingFill,
         indicatorHeightProportion: 0.7
       }
     );
