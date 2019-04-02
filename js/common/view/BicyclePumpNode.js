@@ -52,18 +52,20 @@ define( require => {
      * @param {number} width  - width of the BicyclePump
      * @param {number} height - height of the BicyclePump
      * @param {MultipleParticleModel} multipleParticleModel - model of the simulation
-     * @param {Object} [options] that can be passed on to the underlying node
+     * @param {Object} [options]
      */
     constructor( width, height, multipleParticleModel, options ) {
 
       options = _.extend( {
-        handleFill: new Color( 173, 175, 177 ),
-        shaftFill: new Color( 202, 202, 202 ),
-        shaftOpeningFill: new Color( 153, 119, 119 ),
-        bodyFill: new Color( 213, 0, 0 ),
+
+        // {string|Color} - various colors used by the pump
+        handleFill: '#adafb1',
+        shaftFill: '#cacaca',
+        bodyFill: '#d50000',
+        bodyTopFill: '#997777',
         indicatorBackgroundFill: '#443333',
         indicatorRemainingFill: '#999999',
-        baseFill: new Color( 170, 170, 170 ),
+        baseFill: '#aaaaaa',
         hoseFill: '#B3B3B3',
         numberOfParticlesPerPumpAction: 4,
 
@@ -97,13 +99,14 @@ define( require => {
       // 3D effect is being used, so most of the height makes up the surface
       const topOfBaseHeight = baseHeight * 0.7;
       const halfOfBaseWidth = baseWidth / 2;
+      const baseFill = Color.toColor( options.baseFill );
 
       // rounded rectangle that is the top of the base
       const topOfBaseNode = new Rectangle( -halfOfBaseWidth, -topOfBaseHeight / 2, baseWidth, topOfBaseHeight, 20, 20, {
         fill: new LinearGradient( -halfOfBaseWidth, 0, halfOfBaseWidth, 0 )
-          .addColorStop( 0, options.baseFill.brighterColor( 0.8 ) )
-          .addColorStop( 0.5, options.baseFill )
-          .addColorStop( 1, options.baseFill.darkerColor( 0.8 ) )
+          .addColorStop( 0, baseFill.brighterColor( 0.8 ) )
+          .addColorStop( 0.5, baseFill )
+          .addColorStop( 1, baseFill.darkerColor( 0.8 ) )
       } );
 
       const pumpBaseEdgeHeight = baseHeight * 0.65;
@@ -123,9 +126,9 @@ define( require => {
       // color the front edge of the pump base
       const pumpEdgeNode = new Path( pumpEdgeShape, {
         fill: new LinearGradient( -halfOfBaseWidth, 0, halfOfBaseWidth, 0 )
-          .addColorStop( 0, options.baseFill.darkerColor( 0.6 ) )
-          .addColorStop( 0.85, options.baseFill.darkerColor( 0.8 ) )
-          .addColorStop( 1, options.baseFill.darkerColor( 0.6 ) )
+          .addColorStop( 0, baseFill.darkerColor( 0.6 ) )
+          .addColorStop( 0.85, baseFill.darkerColor( 0.8 ) )
+          .addColorStop( 1, baseFill.darkerColor( 0.6 ) )
       } );
 
       const pumpBase = new Node( {
@@ -212,6 +215,7 @@ define( require => {
       pumpHandleShape.close();
 
       /**
+       * Adds a color stop to the given gradient at
        *
        * @param gradient - the gradient being appended to
        * @param deltaDistance - the distance of this added color stop
@@ -229,31 +233,31 @@ define( require => {
 
       // setup the gradient for the handle
       const pumpHandleWidth = pumpHandleShape.bounds.width;
-      const handleBaseColor = options.handleFill;
-      const handleBaseColorDarker = handleBaseColor.darkerColor( 0.6 );
+      const handleFill = Color.toColor( options.handleFill );
+      const handleFillDarker = handleFill.darkerColor( 0.6 );
       const pumpHandleGradient = new LinearGradient( -pumpHandleWidth / 2, 0, pumpHandleWidth / 2, 0 );
 
       // fill the left side handle gradient
       for ( let i = 0; i < numberOfGripBumps; i++ ) {
-        addRelativeColorStop( pumpHandleGradient, 0, pumpHandleWidth, handleBaseColor );
-        addRelativeColorStop( pumpHandleGradient, gripSingleBumpHalfWidth, pumpHandleWidth, handleBaseColor );
-        addRelativeColorStop( pumpHandleGradient, gripSingleBumpHalfWidth, pumpHandleWidth, handleBaseColorDarker );
-        addRelativeColorStop( pumpHandleGradient, 0, pumpHandleWidth, handleBaseColor );
-        addRelativeColorStop( pumpHandleGradient, gripInterBumpWidth, pumpHandleWidth, handleBaseColorDarker );
+        addRelativeColorStop( pumpHandleGradient, 0, pumpHandleWidth, handleFill );
+        addRelativeColorStop( pumpHandleGradient, gripSingleBumpHalfWidth, pumpHandleWidth, handleFill );
+        addRelativeColorStop( pumpHandleGradient, gripSingleBumpHalfWidth, pumpHandleWidth, handleFillDarker );
+        addRelativeColorStop( pumpHandleGradient, 0, pumpHandleWidth, handleFill );
+        addRelativeColorStop( pumpHandleGradient, gripInterBumpWidth, pumpHandleWidth, handleFillDarker );
       }
 
       // fill the center section handle gradient
-      addRelativeColorStop( pumpHandleGradient, 0, pumpHandleWidth, handleBaseColor );
-      addRelativeColorStop( pumpHandleGradient, centerCurveWidth + centerSectionWidth, pumpHandleWidth, handleBaseColor );
-      addRelativeColorStop( pumpHandleGradient, centerCurveWidth, pumpHandleWidth, handleBaseColorDarker );
+      addRelativeColorStop( pumpHandleGradient, 0, pumpHandleWidth, handleFill );
+      addRelativeColorStop( pumpHandleGradient, centerCurveWidth + centerSectionWidth, pumpHandleWidth, handleFill );
+      addRelativeColorStop( pumpHandleGradient, centerCurveWidth, pumpHandleWidth, handleFillDarker );
 
       // fill the right side handle gradient
       for ( let i = 0; i < numberOfGripBumps; i++ ) {
-        addRelativeColorStop( pumpHandleGradient, 0, pumpHandleWidth, handleBaseColor );
-        addRelativeColorStop( pumpHandleGradient, gripInterBumpWidth, pumpHandleWidth, handleBaseColorDarker );
-        addRelativeColorStop( pumpHandleGradient, 0, pumpHandleWidth, handleBaseColor );
-        addRelativeColorStop( pumpHandleGradient, gripSingleBumpHalfWidth, pumpHandleWidth, handleBaseColor );
-        addRelativeColorStop( pumpHandleGradient, gripSingleBumpHalfWidth, pumpHandleWidth, handleBaseColorDarker );
+        addRelativeColorStop( pumpHandleGradient, 0, pumpHandleWidth, handleFill );
+        addRelativeColorStop( pumpHandleGradient, gripInterBumpWidth, pumpHandleWidth, handleFillDarker );
+        addRelativeColorStop( pumpHandleGradient, 0, pumpHandleWidth, handleFill );
+        addRelativeColorStop( pumpHandleGradient, gripSingleBumpHalfWidth, pumpHandleWidth, handleFill );
+        addRelativeColorStop( pumpHandleGradient, gripSingleBumpHalfWidth, pumpHandleWidth, handleFillDarker );
       }
 
       const pumpHandleNode = new Path( pumpHandleShape, {
@@ -278,7 +282,6 @@ define( require => {
       const pumpingDistanceRequiredToAddParticle = ( -minHandleYOffset + maxHandleYOffset ) /
                                                  options.numberOfParticlesPerPumpAction - 1;
 
-      // Set ourself up to listen for and handle mouse dragging events on the handle.
       pumpHandleNode.addInputListener( new SimpleDragHandler( {
 
         drag: event => {
@@ -311,15 +314,16 @@ define( require => {
         }
       } ) );
 
-      // Create the shaft for the pump.
-      // The shaft of the pump is the part which is under the handle and inside the body
+      // Create the shaft for the pump, which is the part below the handle and inside the body
       const pumpShaftWidth = width * PUMP_SHAFT_WIDTH_PROPORTION;
       const pumpShaftHeight = height * PUMP_SHAFT_HEIGHT_PROPORTION;
+      const shaftFill = Color.toColor( options.shaftFill );
+
       const pumpShaft = new Rectangle( 0, 0, pumpShaftWidth, pumpShaftHeight, {
         fill: new LinearGradient( 0, 0, pumpShaftHeight, 0 )
-          .addColorStop( 0, options.shaftFill.darkerColor( 0.8 ) )
-          .addColorStop( 0.2, options.shaftFill ),
-        stroke: options.shaftFill.darkerColor( 0.6 ),
+          .addColorStop( 0, shaftFill.darkerColor( 0.8 ) )
+          .addColorStop( 0.2, shaftFill ),
+        stroke: shaftFill.darkerColor( 0.6 ),
         pickable: false
       } );
       pumpShaft.x = -pumpShaftWidth / 2;
@@ -328,16 +332,18 @@ define( require => {
       // Create the body of the pump
       const pumpBodyWidth = width * PUMP_BODY_WIDTH_PROPORTION;
       const pumpBodyHeight = height * PUMP_BODY_HEIGHT_PROPORTION;
+      const bodyFill = Color.toColor( options.bodyFill );
+
       const pumpBody = new Rectangle( 0, 0, pumpBodyWidth, pumpBodyHeight, 0, 0, {
         fill: new LinearGradient( 0, 0, pumpBodyWidth, 0 )
-          .addColorStop( 0, options.bodyFill.brighterColor( 0.8 ) )
-          .addColorStop( 0.4, options.bodyFill )
-          .addColorStop( 0.7, options.bodyFill.darkerColor( 0.8 ) )
+          .addColorStop( 0, bodyFill.brighterColor( 0.8 ) )
+          .addColorStop( 0.4, bodyFill )
+          .addColorStop( 0.7, bodyFill.darkerColor( 0.8 ) )
       } );
       pumpBody.setTranslation( -pumpBodyWidth / 2, -pumpBodyHeight );
 
       // Create the back portion of the opening at the top of the pump body
-      const pumpOpeningBackShape = new Shape()
+      const bodyTopBackShape = new Shape()
         .moveTo( 0, 0 )
         .cubicCurveTo(
           0,
@@ -348,18 +354,18 @@ define( require => {
           0
         );
 
-      const pumpOpeningFillColor = options.shaftOpeningFill;
-      const pumpOpeningStrokeColor = options.shaftOpeningFill.darkerColor( 0.8 );
+      const bodyTopFill = Color.toColor( options.bodyTopFill );
+      const pumpOpeningStroke = bodyTopFill.darkerColor( 0.8 );
 
-      const pumpOpeningBack = new Path( pumpOpeningBackShape, {
-        fill: pumpOpeningFillColor,
-        stroke: pumpOpeningStrokeColor,
+      const bodyTopBack = new Path( bodyTopBackShape, {
+        fill: bodyTopFill,
+        stroke: pumpOpeningStroke,
         centerX: pumpBody.centerX,
         bottom: pumpBody.top
       } );
 
       // Create the front portion of the opening at the top of the pump body
-      const pumpOpeningFrontShape = new Shape()
+      const bodyTopFrontShape = new Shape()
         .moveTo( 0, 0 )
         .cubicCurveTo(
           0,
@@ -370,11 +376,11 @@ define( require => {
           0
         );
 
-      const pumpOpeningFront = new Path( pumpOpeningFrontShape, {
-        fill: pumpOpeningFillColor,
-        stroke: pumpOpeningStrokeColor,
+      const bodyTopFront = new Path( bodyTopFrontShape, {
+        fill: bodyTopFill,
+        stroke: pumpOpeningStroke,
         centerX: pumpBody.centerX,
-        top: pumpOpeningBack.bottom - 0.4 // tweak the position very slightly to prevent pump body from showing through
+        top: bodyTopBack.bottom - 0.4 // tweak the position very slightly to prevent pump body from showing through
       } );
 
       // Add the hose.
@@ -407,12 +413,12 @@ define( require => {
           .lineTo( pipeConnectorTopRadiusX, 0 ), // line to upper right corner of shape
         {
           fill: new LinearGradient( -pipeConnectorBottomWidth / 2, 0, pipeConnectorBottomWidth / 2, 0 )
-            .addColorStop( 0, options.baseFill.darkerColor( 0.5 ) )
-            .addColorStop( 0.50, options.baseFill )
-            .addColorStop( 0.55, options.baseFill.brighterColor( 0.9 ) )
-            .addColorStop( 0.65, options.baseFill.brighterColor( 0.9 ) )
-            .addColorStop( 0.7, options.baseFill )
-            .addColorStop( 1, options.baseFill.darkerColor( 0.6 ) )
+            .addColorStop( 0, baseFill.darkerColor( 0.5 ) )
+            .addColorStop( 0.50, baseFill )
+            .addColorStop( 0.55, baseFill.brighterColor( 0.9 ) )
+            .addColorStop( 0.65, baseFill.brighterColor( 0.9 ) )
+            .addColorStop( 0.7, baseFill )
+            .addColorStop( 1, baseFill.darkerColor( 0.6 ) )
         } );
       pipeConnectorPath.setTranslation( 0, -pipeConnectorHeight - baseHeight * 0.15 );
 
@@ -423,11 +429,11 @@ define( require => {
       const createHoseConnectorNode = () => {
         return new Rectangle( 0, 0, hoseConnectorWidth, hoseConnectorHeight, 2, 2, {
           fill: new LinearGradient( 0, 0, 0, hoseConnectorHeight )
-            .addColorStop( 0, options.baseFill.darkerColor( 0.8 ) )
-            .addColorStop( 0.3, options.baseFill )
-            .addColorStop( 0.35, options.baseFill.brighterColor( 0.9 ) )
-            .addColorStop( 0.4, options.baseFill.brighterColor( 0.9 ) )
-            .addColorStop( 1, options.baseFill.darkerColor( 0.8 ) )
+            .addColorStop( 0, baseFill.darkerColor( 0.8 ) )
+            .addColorStop( 0.3, baseFill )
+            .addColorStop( 0.35, baseFill.brighterColor( 0.9 ) )
+            .addColorStop( 0.4, baseFill.brighterColor( 0.9 ) )
+            .addColorStop( 1, baseFill.darkerColor( 0.8 ) )
         } );
       };
       
@@ -462,12 +468,12 @@ define( require => {
       );
 
       // add the pieces with the correct layering
-      this.addChild( pumpOpeningBack );
+      this.addChild( bodyTopBack );
       this.addChild( pumpShaft );
       this.addChild( pumpHandleNode );
       this.addChild( pumpBody );
       this.addChild( remainingCapacityIndicator );
-      this.addChild( pumpOpeningFront );
+      this.addChild( bodyTopFront );
       this.addChild( pipeConnectorPath );
       this.addChild( externalHoseConnector );
       this.addChild( localHoseConnector );
