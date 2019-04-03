@@ -15,7 +15,7 @@ define( function( require ) {
   var StepForwardButton = require( 'SCENERY_PHET/buttons/StepForwardButton' );
 
   // constants
-  var TOUCH_AREA_DILATION = 4;
+  var TOUCH_AREA_DILATION = 2.5;
   var STROKE = 'black';
   var FILL = '#005566';
   var PAUSE_SIZE_INCREASE_FACTOR = 1.25;
