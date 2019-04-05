@@ -454,11 +454,11 @@ define( require => {
 
       // create the node that will be used to indicate the remaining capacity
       const remainingCapacityIndicator = new SegmentedBarGraphNode(
-        pumpBodyWidth * 0.6,
-        pumpBodyHeight * 0.7,
         numberProperty,
         rangeProperty,
         {
+          width: pumpBodyWidth * 0.6,
+          height: pumpBodyHeight * 0.7,
           centerX: pumpShaft.centerX,
           centerY: ( pumpBody.top + pipeConnectorPath.top ) / 2,
           numSegments: 36,

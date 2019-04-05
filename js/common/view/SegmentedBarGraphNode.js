@@ -18,14 +18,14 @@ define( require => {
   class SegmentedBarGraphNode extends Node {
 
     /**
-     * @param {number} width
-     * @param {number} height
      * @param {NumberProperty} numberProperty
      * @param {Property.<Range>} rangeProperty
      * @param {Object} [options]
      */
-    constructor( width, height, numberProperty, rangeProperty, options ) {
+    constructor( numberProperty, rangeProperty, options ) {
       options = _.extend( {
+        width: 10,
+        height: 100,
         numSegments: 10,
         backgroundColor: 'black',
         fullyLitIndicatorColor: '#1EC700',
@@ -40,17 +40,17 @@ define( require => {
       super();
 
       // add the background
-      this.addChild( new Rectangle( 0, 0, width, height, { fill: options.backgroundColor } ) );
+      this.addChild( new Rectangle( 0, 0, options.width, options.height, { fill: options.backgroundColor } ) );
 
       // add the indicator segments
-      const indicatorWidth = width * options.indicatorWidthProportion;
-      const segmentHeight = height / options.numSegments;
+      const indicatorWidth = options.width * options.indicatorWidthProportion;
+      const segmentHeight = options.height / options.numSegments;
       const indicatorHeight = segmentHeight * options.indicatorHeightProportion;
       const indicators = [];
       _.times( options.numSegments, index => {
         const indicator = new Rectangle( 0, 0, indicatorWidth, indicatorHeight, {
-          centerX: width / 2,
-          centerY: height - index * segmentHeight - segmentHeight * 0.5,
+          centerX: options.width / 2,
+          centerY: options.height - index * segmentHeight - segmentHeight * 0.5,
           fill: options.fullyLitIndicatorColor
         } );
         this.addChild( indicator );
