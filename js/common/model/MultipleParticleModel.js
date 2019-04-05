@@ -37,10 +37,12 @@ define( function( require ) {
   var MonatomicVerletAlgorithm = require( 'STATES_OF_MATTER/common/model/engine/MonatomicVerletAlgorithm' );
   var MovingAverage = require( 'STATES_OF_MATTER/common/model/MovingAverage' );
   var NeonAtom = require( 'STATES_OF_MATTER/common/model/particle/NeonAtom' );
+  var NumberProperty = require( 'AXON/NumberProperty' );
   var ObservableArray = require( 'AXON/ObservableArray' );
   var OxygenAtom = require( 'STATES_OF_MATTER/common/model/particle/OxygenAtom' );
   var PhaseStateEnum = require( 'STATES_OF_MATTER/common/PhaseStateEnum' );
   var Property = require( 'AXON/Property' );
+  var Range = require( 'DOT/Range' );
   var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   var SubstanceType = require( 'STATES_OF_MATTER/common/SubstanceType' );
@@ -142,6 +144,8 @@ define( function( require ) {
     this.keepingUpProperty = new Property( true ); // tracks whether targeted min frame rate is being maintained
     this.averageDtProperty = new Property( NOMINAL_TIME_STEP ); // read only
     this.maxParticleMoveTimePerStepProperty = new Property( Number.POSITIVE_INFINITY ); // read only
+    this.numberOfMoleculesProperty = new NumberProperty( 0, { numberType: 'Integer' } ); // read-write
+    this.numberOfMoleculesRangeProperty = new Property( new Range( 0, SOMConstants.MAX_NUM_ATOMS ) ); // read only
     this.resetEmitter = new Emitter(); // listen only, fires when a reset occurs
 
     //-----------------------------------------------------------------------------------------------------------------
@@ -196,6 +200,20 @@ define( function( require ) {
     // listen for changes to the substance being simulated and update the internals as needed
     this.substanceProperty.link( function() {
       self.handleSubstanceChanged();
+    } );
+
+    // listen for new molecules being added with the pump
+    this.numberOfMoleculesProperty.lazyLink( ( newValue, oldValue ) => {
+      var currentNumberOfMolecules = Math.floor( this.moleculeDataSet.numberOfAtoms / this.moleculeDataSet.atomsPerMolecule );
+
+      // make sure that the pump doesn't release particles when the substance is changed, only when a molecule is added
+      if ( newValue !== currentNumberOfMolecules ) {
+        var delta = newValue - oldValue;
+
+        for ( let i = 0; i < delta; i++ ) {
+          self.injectMolecule();
+        }
+      }
     } );
   }
 
@@ -411,6 +429,13 @@ define( function( require ) {
 
       // Reset the moving average of temperature differences.
       this.averageTemperatureDifference.reset();
+
+      // Set the number of molecules and range for the current substance
+      const atomsPerMolecule = this.moleculeDataSet.atomsPerMolecule;
+      this.numberOfMoleculesProperty.set( Math.floor( this.moleculeDataSet.numberOfAtoms / atomsPerMolecule ) );
+      this.numberOfMoleculesRangeProperty.set(
+        new Range( 0, Util.toFixedNumber( SOMConstants.MAX_NUM_ATOMS / atomsPerMolecule, 0 ) )
+      );
     },
 
     /**

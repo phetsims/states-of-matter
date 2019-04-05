@@ -10,17 +10,19 @@ define( function( require ) {
   // modules
   var inherit = require( 'PHET_CORE/inherit' );
   var Node = require( 'SCENERY/nodes/Node' );
+  var Property = require( 'AXON/Property' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   /**
    * @param {number} width
    * @param {number} height
-   * @param {Property.<number>} proportionProperty - a property with a value range from 0 to 1
+   * @param {NumberProperty} numberProperty
+   * @param {Property.<Range>} rangeProperty
    * @param {Object} options
    * @constructor
    */
-  function SegmentedBarGraphNode( width, height, proportionProperty, options ) {
+  function SegmentedBarGraphNode( width, height, numberProperty, rangeProperty, options ) {
     Node.call( this );
     var self = this;
     options = _.extend( {
@@ -53,18 +55,23 @@ define( function( require ) {
       indicators.push( indicator );
     } );
 
-    // set the visibility and opacity of each of the segments based and the proportion property
-    proportionProperty.link( function( proportion ) {
-      var numVisibleIndicators = Math.ceil( options.numSegments * proportion );
-      for ( var i = 0; i < options.numSegments; i++ ) {
-        indicators[ i ].visible = i < numVisibleIndicators;
-        indicators[ i ].opacity = 1;
-      }
-      if ( numVisibleIndicators > 0 ) {
-        indicators[ numVisibleIndicators - 1 ].opacity =
-          1 - ( Math.ceil( options.numSegments * proportion ) - ( options.numSegments * proportion ) );
-      }
-    } );
+    // set the visibility and opacity of each of the segments based on the number and range
+    Property.multilink( [ numberProperty, rangeProperty ],
+      function( number, range ) {
+        assert && assert( range.min <= number && number <= range.max,
+          'numberProperty is out of range, ' + number );
+
+        var proportion = 1 - number / range.max;
+        var numVisibleIndicators = Math.ceil( options.numSegments * proportion );
+        for ( var i = 0; i < options.numSegments; i++ ) {
+          indicators[ i ].visible = i < numVisibleIndicators;
+          indicators[ i ].opacity = 1;
+        }
+        if ( numVisibleIndicators > 0 ) {
+          indicators[ numVisibleIndicators - 1 ].opacity =
+            1 - ( Math.ceil( options.numSegments * proportion ) - ( options.numSegments * proportion ) );
+        }
+      } );
 
     this.mutate( options );
   }

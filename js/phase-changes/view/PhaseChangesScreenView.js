@@ -136,9 +136,12 @@ define( function( require ) {
     ) );
 
     // add bicycle pump node
-    this.pumpNode = new BicyclePumpNode( 200, 250, multipleParticleModel, {
-      hoseAttachmentOffset: new Vector2( 160, -158 )
-    } );
+    this.pumpNode = new BicyclePumpNode(
+      multipleParticleModel.numberOfMoleculesProperty,
+      multipleParticleModel.numberOfMoleculesRangeProperty, {
+        hoseAttachmentOffset: new Vector2( 160, -158 ),
+        enabledProperty: multipleParticleModel.isPlayingProperty
+      } );
     this.pumpNode.setHoseAttachmentPosition( nominalParticleAreaViewBounds.left, nominalParticleAreaViewBounds.bottom - 70 );
     this.addChild( this.pumpNode );
 
@@ -331,7 +334,6 @@ define( function( require ) {
     // @public
     step: function( dt ) {
       this.particleContainerNode.step( dt );
-      this.pumpNode.step( dt );
     },
 
     /**

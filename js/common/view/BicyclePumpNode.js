@@ -12,16 +12,15 @@ define( require => {
   'use strict';
 
   // modules
+  const BooleanProperty = require( 'AXON/BooleanProperty' );
   const Color = require( 'SCENERY/util/Color' );
   const LinearGradient = require( 'SCENERY/util/LinearGradient' );
   const Node = require( 'SCENERY/nodes/Node' );
   const Path = require( 'SCENERY/nodes/Path' );
-  const Property = require( 'AXON/Property' );
   const Rectangle = require( 'SCENERY/nodes/Rectangle' );
   const SegmentedBarGraphNode = require( 'STATES_OF_MATTER/common/view/SegmentedBarGraphNode' );
   const Shape = require( 'KITE/Shape' );
   const SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
-  const SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
   const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   const Util = require( 'DOT/Util' );
   const Vector2 = require( 'DOT/Vector2' );
@@ -49,14 +48,17 @@ define( require => {
   class BicyclePumpNode extends Node {
 
     /**
-     * @param {number} width  - width of the BicyclePump
-     * @param {number} height - height of the BicyclePump
-     * @param {MultipleParticleModel} multipleParticleModel - model of the simulation
+     * @param {NumberProperty} numberProperty - number of particles in the simulation
+     * @param {Property.<Range>} rangeProperty - allowed range
      * @param {Object} [options]
      */
-    constructor( width, height, multipleParticleModel, options ) {
+    constructor( numberProperty, rangeProperty, options ) {
 
       options = _.extend( {
+
+        // {number} - sizing
+        width: 200,
+        height: 250,
 
         // {string|Color} - various colors used by the pump
         handleFill: '#adafb1',
@@ -70,24 +72,23 @@ define( require => {
         numberOfParticlesPerPumpAction: 4,
 
         // {Vector2} where the hose will attach externally relative to the center of the pump
-        hoseAttachmentOffset: new Vector2( 100, 100 )
+        hoseAttachmentOffset: new Vector2( 100, 100 ),
+
+        // {BooleanProperty} Determines whether the pump will be updated when its number changes. If the pump's range
+        // changes, the pumps indicator will update regardless of enabledProperty.
+        enabledProperty: new BooleanProperty( true )
       }, options );
+
+      const width = options.width;
+      const height = options.height;
 
       super( options );
 
       // @private
-      this.multipleParticleModel = multipleParticleModel;
-      this.containerAtomCapacity = 0;
       this.hoseAttachmentOffset = options.hoseAttachmentOffset;
 
       // @private - used to track where the current position is on the handle when drawing its gradient
       this.handleGradientPosition = 0;
-
-      // Update the container capacity when the substance changes.
-      multipleParticleModel.substanceProperty.link( () => {
-        const apm = multipleParticleModel.moleculeDataSet.atomsPerMolecule;
-        this.containerAtomCapacity = Math.floor( SOMConstants.MAX_NUM_ATOMS / apm ) * apm;
-      } );
 
       let currentPumpingDistance = 0;
 
@@ -280,7 +281,7 @@ define( require => {
       // How far the pump shaft needs to travel before the pump releases a particle. -1 is added to account for minor drag
       // listener and floating-point errors.
       const pumpingDistanceRequiredToAddParticle = ( -minHandleYOffset + maxHandleYOffset ) /
-                                                 options.numberOfParticlesPerPumpAction - 1;
+                                                   options.numberOfParticlesPerPumpAction - 1;
 
       pumpHandleNode.addInputListener( new SimpleDragHandler( {
 
@@ -301,8 +302,10 @@ define( require => {
             currentPumpingDistance += Math.abs( travelDistance );
             while ( currentPumpingDistance >= pumpingDistanceRequiredToAddParticle ) {
 
-              // Enough distance has been travelled to inject a new particle.
-              multipleParticleModel.injectMolecule();
+              // Enough distance has been traveled to inject a new particle.
+              if ( rangeProperty.value.max - numberProperty.value > 0 && options.enabledProperty.get() ) {
+                numberProperty.value++;
+              }
               currentPumpingDistance -= pumpingDistanceRequiredToAddParticle;
             }
           }
@@ -425,7 +428,7 @@ define( require => {
       // Create the hose connector
       const hoseConnectorWidth = width * HOSE_CONNECTOR_WIDTH_PROPORTION;
       const hoseConnectorHeight = height * HOSE_CONNECTOR_HEIGHT_PROPORTION;
-      
+
       const createHoseConnectorNode = () => {
         return new Rectangle( 0, 0, hoseConnectorWidth, hoseConnectorHeight, 2, 2, {
           fill: new LinearGradient( 0, 0, 0, hoseConnectorHeight )
@@ -436,7 +439,7 @@ define( require => {
             .addColorStop( 1, baseFill.darkerColor( 0.8 ) )
         } );
       };
-      
+
       const externalHoseConnector = createHoseConnectorNode();
       const localHoseConnector = createHoseConnectorNode();
       externalHoseConnector.setTranslation(
@@ -449,14 +452,12 @@ define( require => {
         BODY_TO_HOSE_ATTACH_POINT_Y - localHoseConnector.height / 2
       );
 
-      // define a property that tracks the remaining capacity
-      this.remainingPumpCapacityProportionProperty = new Property( 1 );
-
       // create the node that will be used to indicate the remaining capacity
       const remainingCapacityIndicator = new SegmentedBarGraphNode(
         pumpBodyWidth * 0.6,
         pumpBodyHeight * 0.7,
-        this.remainingPumpCapacityProportionProperty,
+        numberProperty,
+        rangeProperty,
         {
           centerX: pumpShaft.centerX,
           centerY: ( pumpBody.top + pipeConnectorPath.top ) / 2,
@@ -477,23 +478,6 @@ define( require => {
       this.addChild( pipeConnectorPath );
       this.addChild( externalHoseConnector );
       this.addChild( localHoseConnector );
-
-      this.mutate( options );
-    }
-
-    // @public
-    step() {
-
-      // update the remaining capacity proportion, which is reflected on the indicator on the pump shaft
-      let remainingCapacityProportion;
-      if ( this.multipleParticleModel.isExplodedProperty.get() ) {
-        remainingCapacityProportion = 0;
-      }
-      else {
-        remainingCapacityProportion =
-          1 - this.multipleParticleModel.moleculeDataSet.numberOfAtoms / this.containerAtomCapacity;
-      }
-      this.remainingPumpCapacityProportionProperty.set( remainingCapacityProportion );
     }
 
     /**
