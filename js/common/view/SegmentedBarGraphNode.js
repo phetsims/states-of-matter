@@ -1,82 +1,83 @@
-// Copyright 2016, University of Colorado Boulder
+// Copyright 2016-2019, University of Colorado Boulder
 
 /**
- * a node that represents a quantity as a segmented bar graph, supports a number of options to control appearance
+ * A node that represents a quantity as a segmented bar graph.
+ *
  * @author John Blanco
+ * @author Chris Klusendorf (PhET Interactive Simulations)
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var inherit = require( 'PHET_CORE/inherit' );
-  var Node = require( 'SCENERY/nodes/Node' );
-  var Property = require( 'AXON/Property' );
-  var Rectangle = require( 'SCENERY/nodes/Rectangle' );
-  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  const Node = require( 'SCENERY/nodes/Node' );
+  const Property = require( 'AXON/Property' );
+  const Rectangle = require( 'SCENERY/nodes/Rectangle' );
+  const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  
+  class SegmentedBarGraphNode extends Node {
 
-  /**
-   * @param {number} width
-   * @param {number} height
-   * @param {NumberProperty} numberProperty
-   * @param {Property.<Range>} rangeProperty
-   * @param {Object} options
-   * @constructor
-   */
-  function SegmentedBarGraphNode( width, height, numberProperty, rangeProperty, options ) {
-    Node.call( this );
-    var self = this;
-    options = _.extend( {
-      numSegments: 10,
-      backgroundColor: 'black',
-      fullyLitIndicatorColor: '#1EC700',
+    /**
+     * @param {number} width
+     * @param {number} height
+     * @param {NumberProperty} numberProperty
+     * @param {Property.<Range>} rangeProperty
+     * @param {Object} [options]
+     * @constructor
+     */
+    constructor( width, height, numberProperty, rangeProperty, options ) {
+      options = _.extend( {
+        numSegments: 10,
+        backgroundColor: 'black',
+        fullyLitIndicatorColor: '#1EC700',
 
-      // proportion of the width consumed by the indicator in the vertical direction, must be > 0 and <= to 1
-      indicatorWidthProportion: 0.8,
+        // proportion of the width consumed by the indicator in the vertical direction, must be > 0 and <= to 1
+        indicatorWidthProportion: 0.8,
 
-      // proportion of the each segment consumed by the indicator in the vertical direction, must be > 0 and <= to 1
-      indicatorHeightProportion: 0.8
-    }, options );
+        // proportion of the each segment consumed by the indicator in the vertical direction, must be > 0 and <= to 1
+        indicatorHeightProportion: 0.8
+      }, options );
+      
+      super();
 
-    // add the background
-    this.addChild( new Rectangle( 0, 0, width, height, { fill: options.backgroundColor } ) );
+      // add the background
+      this.addChild( new Rectangle( 0, 0, width, height, { fill: options.backgroundColor } ) );
 
-    // add the indicator segments
-    var indicatorWidth = width * options.indicatorWidthProportion;
-    var segmentHeight = height / options.numSegments;
-    var indicatorHeight = segmentHeight * options.indicatorHeightProportion;
-    var indicators = [];
-    _.times( options.numSegments, function( index ) {
-      var indicator = new Rectangle( 0, 0, indicatorWidth, indicatorHeight, {
-        centerX: width / 2,
-        centerY: height - index * segmentHeight - segmentHeight * 0.5,
-        fill: options.fullyLitIndicatorColor
-      } );
-      self.addChild( indicator );
-      indicators.push( indicator );
-    } );
-
-    // set the visibility and opacity of each of the segments based on the number and range
-    Property.multilink( [ numberProperty, rangeProperty ],
-      function( number, range ) {
-        assert && assert( range.min <= number && number <= range.max,
-          'numberProperty is out of range, ' + number );
-
-        var proportion = 1 - number / range.max;
-        var numVisibleIndicators = Math.ceil( options.numSegments * proportion );
-        for ( var i = 0; i < options.numSegments; i++ ) {
-          indicators[ i ].visible = i < numVisibleIndicators;
-          indicators[ i ].opacity = 1;
-        }
-        if ( numVisibleIndicators > 0 ) {
-          indicators[ numVisibleIndicators - 1 ].opacity =
-            1 - ( Math.ceil( options.numSegments * proportion ) - ( options.numSegments * proportion ) );
-        }
+      // add the indicator segments
+      const indicatorWidth = width * options.indicatorWidthProportion;
+      const segmentHeight = height / options.numSegments;
+      const indicatorHeight = segmentHeight * options.indicatorHeightProportion;
+      const indicators = [];
+      _.times( options.numSegments, index => {
+        const indicator = new Rectangle( 0, 0, indicatorWidth, indicatorHeight, {
+          centerX: width / 2,
+          centerY: height - index * segmentHeight - segmentHeight * 0.5,
+          fill: options.fullyLitIndicatorColor
+        } );
+        this.addChild( indicator );
+        indicators.push( indicator );
       } );
 
-    this.mutate( options );
+      // set the visibility and opacity of each of the segments based on the number and range
+      Property.multilink( [ numberProperty, rangeProperty ], ( number, range ) => {
+          assert && assert( range.min <= number && number <= range.max,
+            'numberProperty is out of range, ' + number );
+
+          const proportion = 1 - number / range.max;
+          const numVisibleIndicators = Math.ceil( options.numSegments * proportion );
+          for ( let i = 0; i < options.numSegments; i++ ) {
+            indicators[ i ].visible = i < numVisibleIndicators;
+            indicators[ i ].opacity = 1;
+          }
+          if ( numVisibleIndicators > 0 ) {
+            indicators[ numVisibleIndicators - 1 ].opacity =
+              1 - ( Math.ceil( options.numSegments * proportion ) - ( options.numSegments * proportion ) );
+          }
+        } );
+
+      this.mutate( options );
+    }
   }
 
-  statesOfMatter.register( 'SegmentedBarGraphNode', SegmentedBarGraphNode );
-
-  return inherit( Node, SegmentedBarGraphNode );
+  return statesOfMatter.register( 'SegmentedBarGraphNode', SegmentedBarGraphNode );
 } );
