@@ -23,7 +23,6 @@ define( require => {
      * @param {NumberProperty} numberProperty
      * @param {Property.<Range>} rangeProperty
      * @param {Object} [options]
-     * @constructor
      */
     constructor( width, height, numberProperty, rangeProperty, options ) {
       options = _.extend( {
