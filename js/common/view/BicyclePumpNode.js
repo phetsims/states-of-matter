@@ -92,12 +92,11 @@ define( require => {
 
       let currentPumpingDistance = 0;
 
-      // create and add the base of the pump
+      // create the base of the pump
       const baseWidth = width * PUMP_BASE_WIDTH_PROPORTION;
       const baseHeight = height * PUMP_BASE_HEIGHT_PROPORTION;
       const baseFill = Color.toColor( options.baseFill );
-      const pumpBase = this.createPumpBaseNode( baseWidth, baseHeight, baseFill );
-      this.addChild( pumpBase );
+      const pumpBaseNode = this.createPumpBaseNode( baseWidth, baseHeight, baseFill );
 
       // create the handle of the pump
       const pumpHandleNode = this.createPumpHandleNode( options.handleFill );
@@ -109,68 +108,24 @@ define( require => {
         -( ( height * PUMP_HANDLE_INIT_VERT_POS_PROPORTION ) + pumpHandleNode.height )
       );
 
-      const maxHandleYOffset = pumpHandleNode.centerY;
-      const minHandleYOffset = maxHandleYOffset + ( -PUMP_SHAFT_HEIGHT_PROPORTION * height / 2 );
-
-      // How far the pump shaft needs to travel before the pump releases a particle. -1 is added to account for minor drag
-      // listener and floating-point errors.
-      const pumpingDistanceRequiredToAddParticle = ( -minHandleYOffset + maxHandleYOffset ) /
-                                                   options.numberOfParticlesPerPumpAction - 1;
-
-      pumpHandleNode.addInputListener( new SimpleDragHandler( {
-
-        drag: event => {
-
-          // the position at the start of the drag event
-          const handleStartYPos = pumpHandleNode.centerY;
-
-          // update the handle and shaft position based on the user's pointer position
-          const dragPositionY = pumpHandleNode.globalToParentPoint( event.pointer.point ).y;
-          pumpHandleNode.centerY = Util.clamp( dragPositionY, minHandleYOffset, maxHandleYOffset );
-          pumpShaft.top = pumpHandleNode.bottom;
-
-          const travelDistance = handleStartYPos - pumpHandleNode.centerY;
-          if ( travelDistance < 0 ) {
-
-            // This motion is in the downward direction, so add its distance to the pumping distance.
-            currentPumpingDistance += Math.abs( travelDistance );
-            while ( currentPumpingDistance >= pumpingDistanceRequiredToAddParticle ) {
-
-              // Enough distance has been traveled to inject a new particle.
-              if ( rangeProperty.value.max - numberProperty.value > 0 && options.enabledProperty.get() ) {
-                numberProperty.value++;
-              }
-              currentPumpingDistance -= pumpingDistanceRequiredToAddParticle;
-            }
-          }
-          else if ( travelDistance > 0 ) {
-
-            // This motion is in the upward direction, so reset any accumulated pumping distance.
-            currentPumpingDistance = 0;
-          }
-        }
-      } ) );
-
-      // Create the shaft for the pump, which is the part below the handle and inside the body
+      // create the shaft for the pump, which is the part below the handle and inside the body
       const pumpShaftWidth = width * PUMP_SHAFT_WIDTH_PROPORTION;
       const pumpShaftHeight = height * PUMP_SHAFT_HEIGHT_PROPORTION;
       const shaftFill = Color.toColor( options.shaftFill );
-
-      const pumpShaft = new Rectangle( 0, 0, pumpShaftWidth, pumpShaftHeight, {
+      const pumpShaftNode = new Rectangle( 0, 0, pumpShaftWidth, pumpShaftHeight, {
         fill: new LinearGradient( 0, 0, pumpShaftHeight, 0 )
           .addColorStop( 0, shaftFill.darkerColor( 0.8 ) )
           .addColorStop( 0.2, shaftFill ),
         stroke: shaftFill.darkerColor( 0.6 ),
         pickable: false
       } );
-      pumpShaft.x = -pumpShaftWidth / 2;
-      pumpShaft.top = pumpHandleNode.bottom;
+      pumpShaftNode.x = -pumpShaftWidth / 2;
+      pumpShaftNode.top = pumpHandleNode.bottom;
 
-      // Create the body of the pump
+      // create the body of the pump
       const pumpBodyWidth = width * PUMP_BODY_WIDTH_PROPORTION;
       const pumpBodyHeight = height * PUMP_BODY_HEIGHT_PROPORTION;
       const bodyFill = Color.toColor( options.bodyFill );
-
       const pumpBody = new Rectangle( 0, 0, pumpBodyWidth, pumpBodyHeight, 0, 0, {
         fill: new LinearGradient( 0, 0, pumpBodyWidth, 0 )
           .addColorStop( 0, bodyFill.brighterColor( 0.8 ) )
@@ -180,7 +135,7 @@ define( require => {
       pumpBody.setTranslation( -pumpBodyWidth / 2, -pumpBodyHeight );
 
       // Create the back portion of the opening at the top of the pump body
-      const bodyTopBackShape = new Shape()
+      const bodyTopBackShapeNode = new Shape()
         .moveTo( 0, 0 )
         .cubicCurveTo(
           0,
@@ -194,7 +149,7 @@ define( require => {
       const bodyTopFill = Color.toColor( options.bodyTopFill );
       const pumpOpeningStroke = bodyTopFill.darkerColor( 0.8 );
 
-      const bodyTopBack = new Path( bodyTopBackShape, {
+      const bodyTopBack = new Path( bodyTopBackShapeNode, {
         fill: bodyTopFill,
         stroke: pumpOpeningStroke,
         centerX: pumpBody.centerX,
@@ -286,6 +241,48 @@ define( require => {
         BODY_TO_HOSE_ATTACH_POINT_Y - localHoseConnector.height / 2
       );
 
+      const maxHandleYOffset = pumpHandleNode.centerY;
+      const minHandleYOffset = maxHandleYOffset + ( -PUMP_SHAFT_HEIGHT_PROPORTION * height / 2 );
+
+      // How far the pump shaft needs to travel before the pump releases a particle. -1 is added to account for minor drag
+      // listener and floating-point errors.
+      const pumpingDistanceRequiredToAddParticle = ( -minHandleYOffset + maxHandleYOffset ) /
+                                                   options.numberOfParticlesPerPumpAction - 1;
+
+      pumpHandleNode.addInputListener( new SimpleDragHandler( {
+
+        drag: event => {
+
+          // the position at the start of the drag event
+          const handleStartYPos = pumpHandleNode.centerY;
+
+          // update the handle and shaft position based on the user's pointer position
+          const dragPositionY = pumpHandleNode.globalToParentPoint( event.pointer.point ).y;
+          pumpHandleNode.centerY = Util.clamp( dragPositionY, minHandleYOffset, maxHandleYOffset );
+          pumpShaftNode.top = pumpHandleNode.bottom;
+
+          const travelDistance = handleStartYPos - pumpHandleNode.centerY;
+          if ( travelDistance < 0 ) {
+
+            // This motion is in the downward direction, so add its distance to the pumping distance.
+            currentPumpingDistance += Math.abs( travelDistance );
+            while ( currentPumpingDistance >= pumpingDistanceRequiredToAddParticle ) {
+
+              // Enough distance has been traveled to inject a new particle.
+              if ( rangeProperty.value.max - numberProperty.value > 0 && options.enabledProperty.get() ) {
+                numberProperty.value++;
+              }
+              currentPumpingDistance -= pumpingDistanceRequiredToAddParticle;
+            }
+          }
+          else if ( travelDistance > 0 ) {
+
+            // This motion is in the upward direction, so reset any accumulated pumping distance.
+            currentPumpingDistance = 0;
+          }
+        }
+      } ) );
+
       // create the node that will be used to indicate the remaining capacity
       const remainingCapacityIndicator = new SegmentedBarGraphNode(
         numberProperty,
@@ -293,7 +290,7 @@ define( require => {
         {
           width: pumpBodyWidth * 0.6,
           height: pumpBodyHeight * 0.7,
-          centerX: pumpShaft.centerX,
+          centerX: pumpShaftNode.centerX,
           centerY: ( pumpBody.top + pipeConnectorPath.top ) / 2,
           numSegments: 36,
           backgroundColor: options.indicatorBackgroundFill,
@@ -303,8 +300,9 @@ define( require => {
       );
 
       // add the pieces with the correct layering
+      this.addChild( pumpBaseNode );
       this.addChild( bodyTopBack );
-      this.addChild( pumpShaft );
+      this.addChild( pumpShaftNode );
       this.addChild( pumpHandleNode );
       this.addChild( pumpBody );
       this.addChild( remainingCapacityIndicator );
@@ -320,6 +318,7 @@ define( require => {
      * @param {number} width - the width of the base
      * @param {number} height - the height of the base
      * @param {Color} fill
+     * @private
      */
     createPumpBaseNode( width, height, fill ) {
 
@@ -364,6 +363,7 @@ define( require => {
      * Create the handle of the pump. This is the node that the user will interact with in order to use the pump.
      *
      * @param fill
+     * @private
      */
     createPumpHandleNode( fill ) {
 
