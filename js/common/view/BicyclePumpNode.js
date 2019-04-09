@@ -35,7 +35,7 @@ define( require => {
   const PUMP_SHAFT_HEIGHT_PROPORTION = PUMP_BODY_HEIGHT_PROPORTION;
   const PUMP_HANDLE_HEIGHT_PROPORTION = 0.05;
   const PUMP_HANDLE_INIT_VERT_POS_PROPORTION = PUMP_BODY_HEIGHT_PROPORTION * 1.1;
-  const PIPE_CONNECTOR_HEIGHT_PROPORTION = 0.09;
+  const CONE_HEIGHT_PROPORTION = 0.09;
   const HOSE_CONNECTOR_HEIGHT_PROPORTION = 0.04;
   const HOSE_CONNECTOR_WIDTH_PROPORTION = 0.05;
   const SHAFT_OPENING_TILT_FACTOR = 0.33;
@@ -135,20 +135,20 @@ define( require => {
       pumpBodyNode.setTranslation( -pumpBodyWidth / 2, -pumpBodyHeight );
 
       const bodyTopFill = Color.toColor( options.bodyTopFill );
-      const pumpOpeningStroke = bodyTopFill.darkerColor( 0.8 );
+      const bodyTopStroke = bodyTopFill.darkerColor( 0.8 );
 
       // create the back part of the top of the body
-      const bodyTopBackNode = this.createBodyTopHalfNode( pumpBodyWidth, -1, bodyTopFill, pumpOpeningStroke );
+      const bodyTopBackNode = this.createBodyTopHalfNode( pumpBodyWidth, -1, bodyTopFill, bodyTopStroke );
       bodyTopBackNode.centerX = pumpBodyNode.centerX;
       bodyTopBackNode.bottom = pumpBodyNode.top;
 
       // create the front part of the top of the body
-      const bodyTopFrontNode = this.createBodyTopHalfNode( pumpBodyWidth, 1, bodyTopFill, pumpOpeningStroke );
+      const bodyTopFrontNode = this.createBodyTopHalfNode( pumpBodyWidth, 1, bodyTopFill, bodyTopStroke );
       bodyTopFrontNode.centerX = pumpBodyNode.centerX;
       bodyTopFrontNode.top = bodyTopBackNode.bottom - 0.4; // tweak slightly to prevent pump body from showing through
 
-      // Add the hose.
-      const hosePath = new Path( new Shape()
+      // create the hose
+      const hoseNode = new Path( new Shape()
         .moveTo( 0, BODY_TO_HOSE_ATTACH_POINT_Y )
         .cubicCurveTo( 1.5 * ( options.hoseAttachmentOffset.x - BODY_TO_HOSE_ATTACH_POINT_X ), BODY_TO_HOSE_ATTACH_POINT_Y,
           0, options.hoseAttachmentOffset.y,
@@ -156,35 +156,11 @@ define( require => {
         lineWidth: 4,
         stroke: options.hoseFill
       } );
-      this.addChild( hosePath );
 
-      // create the pipe connector, which is the cone between the base and the pump body
-      const pipeConnectorTopWidth = pumpBodyWidth * 1.2;
-      const pipeConnectorTopRadiusY = 3;
-      const pipeConnectorTopRadiusX = pipeConnectorTopWidth / 2;
-      const pipeConnectorBottomWidth = pumpBodyWidth * 2;
-      const pipeConnectorBottomRadiusY = 4;
-      const pipeConnectorBottomRadiusX = pipeConnectorBottomWidth / 2;
-      const pipeConnectorHeight = height * PIPE_CONNECTOR_HEIGHT_PROPORTION;
-      const pipeConnectorPath = new Path( new Shape()
-
-        // start in upper right corner of shape, draw top ellipse right to left
-          .ellipticalArc( 0, 0, pipeConnectorTopRadiusX, pipeConnectorTopRadiusY, 0, 0, Math.PI, false )
-          .lineTo( -pipeConnectorBottomRadiusX, pipeConnectorHeight ) // line to bottom left corner of shape
-
-          // draw bottom ellipse left to right
-          .ellipticalArc( 0, pipeConnectorHeight, pipeConnectorBottomRadiusX, pipeConnectorBottomRadiusY, 0, Math.PI, 0, true )
-          .lineTo( pipeConnectorTopRadiusX, 0 ), // line to upper right corner of shape
-        {
-          fill: new LinearGradient( -pipeConnectorBottomWidth / 2, 0, pipeConnectorBottomWidth / 2, 0 )
-            .addColorStop( 0, baseFill.darkerColor( 0.5 ) )
-            .addColorStop( 0.50, baseFill )
-            .addColorStop( 0.55, baseFill.brighterColor( 0.9 ) )
-            .addColorStop( 0.65, baseFill.brighterColor( 0.9 ) )
-            .addColorStop( 0.7, baseFill )
-            .addColorStop( 1, baseFill.darkerColor( 0.6 ) )
-        } );
-      pipeConnectorPath.setTranslation( 0, -pipeConnectorHeight - baseHeight * 0.15 );
+      // create the cone, which is the connector between the base and the body
+      const coneHeight = height * CONE_HEIGHT_PROPORTION;
+      const coneNode = this.createConeNode( pumpBodyWidth, coneHeight, baseFill );
+      coneNode.setTranslation( 0, -coneHeight - baseHeight * 0.15 );
 
       // Create the hose connector
       const hoseConnectorWidth = width * HOSE_CONNECTOR_WIDTH_PROPORTION;
@@ -263,7 +239,7 @@ define( require => {
           width: pumpBodyWidth * 0.6,
           height: pumpBodyHeight * 0.7,
           centerX: pumpShaftNode.centerX,
-          centerY: ( pumpBodyNode.top + pipeConnectorPath.top ) / 2,
+          centerY: ( pumpBodyNode.top + coneNode.top ) / 2,
           numSegments: 36,
           backgroundColor: options.indicatorBackgroundFill,
           fullyLitIndicatorColor: options.indicatorRemainingFill,
@@ -272,6 +248,7 @@ define( require => {
       );
 
       // add the pieces with the correct layering
+      this.addChild( hoseNode );
       this.addChild( pumpBaseNode );
       this.addChild( bodyTopBackNode );
       this.addChild( pumpShaftNode );
@@ -279,7 +256,7 @@ define( require => {
       this.addChild( pumpBodyNode );
       this.addChild( remainingCapacityIndicator );
       this.addChild( bodyTopFrontNode );
-      this.addChild( pipeConnectorPath );
+      this.addChild( coneNode );
       this.addChild( externalHoseConnector );
       this.addChild( localHoseConnector );
     }
@@ -494,6 +471,37 @@ define( require => {
       return new Path( bodyTopShape, {
         fill: fill,
         stroke: stroke
+      } );
+    }
+
+    createConeNode( pumpBodyWidth, height, fill ) {
+      const coneTopWidth = pumpBodyWidth * 1.2;
+      const coneTopRadiusY = 3;
+      const coneTopRadiusX = coneTopWidth / 2;
+      const coneBottomWidth = pumpBodyWidth * 2;
+      const coneBottomRadiusY = 4;
+      const coneBottomRadiusX = coneBottomWidth / 2;
+
+      const coneShape = new Shape()
+
+      // start in upper right corner of shape, draw top ellipse right to left
+        .ellipticalArc( 0, 0, coneTopRadiusX, coneTopRadiusY, 0, 0, Math.PI, false )
+        .lineTo( -coneBottomRadiusX, height ) // line to bottom left corner of shape
+
+        // draw bottom ellipse left to right
+        .ellipticalArc( 0, height, coneBottomRadiusX, coneBottomRadiusY, 0, Math.PI, 0, true )
+        .lineTo( coneTopRadiusX, 0 ); // line to upper right corner of shape
+
+      const coneGradient = new LinearGradient( -coneBottomWidth / 2, 0, coneBottomWidth / 2, 0 )
+        .addColorStop( 0, fill.darkerColor( 0.5 ) )
+        .addColorStop( 0.50, fill )
+        .addColorStop( 0.55, fill.brighterColor( 0.9 ) )
+        .addColorStop( 0.65, fill.brighterColor( 0.9 ) )
+        .addColorStop( 0.7, fill )
+        .addColorStop( 1, fill.darkerColor( 0.6 ) );
+
+      return new Path( coneShape, {
+        fill: coneGradient
       } );
     }
 
