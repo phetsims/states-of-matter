@@ -126,54 +126,26 @@ define( require => {
       const pumpBodyWidth = width * PUMP_BODY_WIDTH_PROPORTION;
       const pumpBodyHeight = height * PUMP_BODY_HEIGHT_PROPORTION;
       const bodyFill = Color.toColor( options.bodyFill );
-      const pumpBody = new Rectangle( 0, 0, pumpBodyWidth, pumpBodyHeight, 0, 0, {
+      const pumpBodyNode = new Rectangle( 0, 0, pumpBodyWidth, pumpBodyHeight, 0, 0, {
         fill: new LinearGradient( 0, 0, pumpBodyWidth, 0 )
           .addColorStop( 0, bodyFill.brighterColor( 0.8 ) )
           .addColorStop( 0.4, bodyFill )
           .addColorStop( 0.7, bodyFill.darkerColor( 0.8 ) )
       } );
-      pumpBody.setTranslation( -pumpBodyWidth / 2, -pumpBodyHeight );
-
-      // Create the back portion of the opening at the top of the pump body
-      const bodyTopBackShapeNode = new Shape()
-        .moveTo( 0, 0 )
-        .cubicCurveTo(
-          0,
-          -pumpBodyWidth * SHAFT_OPENING_TILT_FACTOR,
-          pumpBodyWidth,
-          -pumpBodyWidth * SHAFT_OPENING_TILT_FACTOR,
-          pumpBodyWidth,
-          0
-        );
+      pumpBodyNode.setTranslation( -pumpBodyWidth / 2, -pumpBodyHeight );
 
       const bodyTopFill = Color.toColor( options.bodyTopFill );
       const pumpOpeningStroke = bodyTopFill.darkerColor( 0.8 );
 
-      const bodyTopBack = new Path( bodyTopBackShapeNode, {
-        fill: bodyTopFill,
-        stroke: pumpOpeningStroke,
-        centerX: pumpBody.centerX,
-        bottom: pumpBody.top
-      } );
+      // create the back part of the top of the body
+      const bodyTopBackNode = this.createBodyTopHalfNode( pumpBodyWidth, -1, bodyTopFill, pumpOpeningStroke );
+      bodyTopBackNode.centerX = pumpBodyNode.centerX;
+      bodyTopBackNode.bottom = pumpBodyNode.top;
 
-      // Create the front portion of the opening at the top of the pump body
-      const bodyTopFrontShape = new Shape()
-        .moveTo( 0, 0 )
-        .cubicCurveTo(
-          0,
-          pumpBodyWidth * SHAFT_OPENING_TILT_FACTOR,
-          pumpBodyWidth,
-          pumpBodyWidth * SHAFT_OPENING_TILT_FACTOR,
-          pumpBodyWidth,
-          0
-        );
-
-      const bodyTopFront = new Path( bodyTopFrontShape, {
-        fill: bodyTopFill,
-        stroke: pumpOpeningStroke,
-        centerX: pumpBody.centerX,
-        top: bodyTopBack.bottom - 0.4 // tweak the position very slightly to prevent pump body from showing through
-      } );
+      // create the front part of the top of the body
+      const bodyTopFrontNode = this.createBodyTopHalfNode( pumpBodyWidth, 1, bodyTopFill, pumpOpeningStroke );
+      bodyTopFrontNode.centerX = pumpBodyNode.centerX;
+      bodyTopFrontNode.top = bodyTopBackNode.bottom - 0.4; // tweak slightly to prevent pump body from showing through
 
       // Add the hose.
       const hosePath = new Path( new Shape()
@@ -291,7 +263,7 @@ define( require => {
           width: pumpBodyWidth * 0.6,
           height: pumpBodyHeight * 0.7,
           centerX: pumpShaftNode.centerX,
-          centerY: ( pumpBody.top + pipeConnectorPath.top ) / 2,
+          centerY: ( pumpBodyNode.top + pipeConnectorPath.top ) / 2,
           numSegments: 36,
           backgroundColor: options.indicatorBackgroundFill,
           fullyLitIndicatorColor: options.indicatorRemainingFill,
@@ -301,12 +273,12 @@ define( require => {
 
       // add the pieces with the correct layering
       this.addChild( pumpBaseNode );
-      this.addChild( bodyTopBack );
+      this.addChild( bodyTopBackNode );
       this.addChild( pumpShaftNode );
       this.addChild( pumpHandleNode );
-      this.addChild( pumpBody );
+      this.addChild( pumpBodyNode );
       this.addChild( remainingCapacityIndicator );
-      this.addChild( bodyTopFront );
+      this.addChild( bodyTopFrontNode );
       this.addChild( pipeConnectorPath );
       this.addChild( externalHoseConnector );
       this.addChild( localHoseConnector );
@@ -495,6 +467,33 @@ define( require => {
         stroke: 'black ',
         fill: pumpHandleGradient,
         cursor: 'ns-resize'
+      } );
+    }
+
+    /**
+     * Creates half of the opening at the top of the pump body. Passing in -1 for the sign creates the back half, and
+     * passing in 1 creates the front.
+     *
+     * @param pumpBodyWidth
+     * @param sign
+     * @param fill
+     * @param stroke
+     */
+    createBodyTopHalfNode( pumpBodyWidth, sign, fill, stroke ) {
+      const bodyTopShape = new Shape()
+        .moveTo( 0, 0 )
+        .cubicCurveTo(
+          0,
+          sign * pumpBodyWidth * SHAFT_OPENING_TILT_FACTOR,
+          pumpBodyWidth,
+          sign * pumpBodyWidth * SHAFT_OPENING_TILT_FACTOR,
+          pumpBodyWidth,
+          0
+        );
+
+      return new Path( bodyTopShape, {
+        fill: fill,
+        stroke: stroke
       } );
     }
 
