@@ -157,32 +157,23 @@ define( require => {
         stroke: options.hoseFill
       } );
 
-      // create the cone, which is the connector between the base and the body
+      // create the cone
       const coneHeight = height * CONE_HEIGHT_PROPORTION;
       const coneNode = this.createConeNode( pumpBodyWidth, coneHeight, baseFill );
       coneNode.setTranslation( 0, -coneHeight - baseHeight * 0.15 );
 
-      // Create the hose connector
       const hoseConnectorWidth = width * HOSE_CONNECTOR_WIDTH_PROPORTION;
       const hoseConnectorHeight = height * HOSE_CONNECTOR_HEIGHT_PROPORTION;
 
-      const createHoseConnectorNode = () => {
-        return new Rectangle( 0, 0, hoseConnectorWidth, hoseConnectorHeight, 2, 2, {
-          fill: new LinearGradient( 0, 0, 0, hoseConnectorHeight )
-            .addColorStop( 0, baseFill.darkerColor( 0.8 ) )
-            .addColorStop( 0.3, baseFill )
-            .addColorStop( 0.35, baseFill.brighterColor( 0.9 ) )
-            .addColorStop( 0.4, baseFill.brighterColor( 0.9 ) )
-            .addColorStop( 1, baseFill.darkerColor( 0.8 ) )
-        } );
-      };
-
-      const externalHoseConnector = createHoseConnectorNode();
-      const localHoseConnector = createHoseConnectorNode();
+      // create the external hose connector, which connects the hose to an external point
+      const externalHoseConnector = this.createHoseConnectorNode( hoseConnectorWidth, hoseConnectorHeight, baseFill );
       externalHoseConnector.setTranslation(
         options.hoseAttachmentOffset.x - externalHoseConnector.width,
         options.hoseAttachmentOffset.y - externalHoseConnector.height / 2
       );
+
+      // create the local hose connector, which connects the hose to the cone
+      const localHoseConnector = this.createHoseConnectorNode( hoseConnectorWidth, hoseConnectorHeight, baseFill );
       const localHoseOffsetX = options.hoseAttachmentOffset.x > 0 ? BODY_TO_HOSE_ATTACH_POINT_X : -BODY_TO_HOSE_ATTACH_POINT_X;
       localHoseConnector.setTranslation(
         localHoseOffsetX - hoseConnectorWidth / 2,
@@ -474,6 +465,13 @@ define( require => {
       } );
     }
 
+    /**
+     * Creates the cone, which connects the pump base to the pump body.
+     *
+     * @param pumpBodyWidth
+     * @param height
+     * @param fill
+     */
     createConeNode( pumpBodyWidth, height, fill ) {
       const coneTopWidth = pumpBodyWidth * 1.2;
       const coneTopRadiusY = 3;
@@ -502,6 +500,24 @@ define( require => {
 
       return new Path( coneShape, {
         fill: coneGradient
+      } );
+    }
+
+    /**
+     * Creates a hose connector. The hose has one on each of its ends.
+     *
+     * @param hoseConnectorWidth
+     * @param hoseConnectorHeight
+     * @param fill
+     */
+    createHoseConnectorNode( hoseConnectorWidth, hoseConnectorHeight, fill ) {
+      return new Rectangle( 0, 0, hoseConnectorWidth, hoseConnectorHeight, 2, 2, {
+        fill: new LinearGradient( 0, 0, 0, hoseConnectorHeight )
+          .addColorStop( 0, fill.darkerColor( 0.8 ) )
+          .addColorStop( 0.3, fill )
+          .addColorStop( 0.35, fill.brighterColor( 0.9 ) )
+          .addColorStop( 0.4, fill.brighterColor( 0.9 ) )
+          .addColorStop( 1, fill.darkerColor( 0.8 ) )
       } );
     }
 
