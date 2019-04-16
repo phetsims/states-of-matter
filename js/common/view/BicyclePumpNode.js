@@ -68,8 +68,8 @@ define( require => {
         bodyTopFill: '#997777',
         indicatorBackgroundFill: '#443333',
         indicatorRemainingFill: '#999999',
-        baseFill: '#aaaaaa',
         hoseFill: '#B3B3B3',
+        baseFill: '#aaaaaa', // this color is also used for the cone shape and hose connectors
 
         // {number} number of particles released by the pump during one pumping action
         numberOfParticlesPerPumpAction: 4,
@@ -98,8 +98,8 @@ define( require => {
       // create the base of the pump
       const baseWidth = width * PUMP_BASE_WIDTH_PROPORTION;
       const baseHeight = height * PUMP_BASE_HEIGHT_PROPORTION;
-      const baseFill = Color.toColor( options.baseFill );
-      const pumpBaseNode = this.createPumpBaseNode( baseWidth, baseHeight, baseFill );
+      const baseFillColorProperty = new PaintColorProperty( options.baseFill );
+      const pumpBaseNode = this.createPumpBaseNode( baseWidth, baseHeight, baseFillColorProperty );
 
       // create the handle of the pump
       const pumpHandleNode = this.createPumpHandleNode( options.handleFill );
@@ -171,21 +171,21 @@ define( require => {
 
       // create the cone
       const coneHeight = height * CONE_HEIGHT_PROPORTION;
-      const coneNode = this.createConeNode( pumpBodyWidth, coneHeight, baseFill );
+      const coneNode = this.createConeNode( pumpBodyWidth, coneHeight, baseFillColorProperty );
       coneNode.setTranslation( 0, -coneHeight - baseHeight * 0.15 );
 
       const hoseConnectorWidth = width * HOSE_CONNECTOR_WIDTH_PROPORTION;
       const hoseConnectorHeight = height * HOSE_CONNECTOR_HEIGHT_PROPORTION;
 
       // create the external hose connector, which connects the hose to an external point
-      const externalHoseConnector = this.createHoseConnectorNode( hoseConnectorWidth, hoseConnectorHeight, baseFill );
+      const externalHoseConnector = this.createHoseConnectorNode( hoseConnectorWidth, hoseConnectorHeight, baseFillColorProperty );
       externalHoseConnector.setTranslation(
         options.hoseAttachmentOffset.x - externalHoseConnector.width,
         options.hoseAttachmentOffset.y - externalHoseConnector.height / 2
       );
 
       // create the local hose connector, which connects the hose to the cone
-      const localHoseConnector = this.createHoseConnectorNode( hoseConnectorWidth, hoseConnectorHeight, baseFill );
+      const localHoseConnector = this.createHoseConnectorNode( hoseConnectorWidth, hoseConnectorHeight, baseFillColorProperty );
       const localHoseOffsetX = options.hoseAttachmentOffset.x > 0 ? BODY_TO_HOSE_ATTACH_POINT_X : -BODY_TO_HOSE_ATTACH_POINT_X;
       localHoseConnector.setTranslation(
         localHoseOffsetX - hoseConnectorWidth / 2,
@@ -269,21 +269,25 @@ define( require => {
      *
      * @param {number} width - the width of the base
      * @param {number} height - the height of the base
-     * @param {Color} fill
+     * @param {PaintColorProperty} fill
      * @private
      */
-    createPumpBaseNode( width, height, fill ) {
+    createPumpBaseNode( width, height, baseFillColorProperty ) {
 
       // 3D effect is being used, so most of the height makes up the surface
       const topOfBaseHeight = height * 0.7;
       const halfOfBaseWidth = width / 2;
 
+      const baseFillBrighterColorProperty = new PaintColorProperty( baseFillColorProperty, { luminanceFactor: 0.05 } );
+      const baseFillDarkerColorProperty = new PaintColorProperty( baseFillColorProperty, { luminanceFactor: -0.2 } );
+      const baseFillDarkestColorProperty = new PaintColorProperty( baseFillColorProperty, { luminanceFactor: -0.4 } );
+
       // rounded rectangle that is the top of the base
       const topOfBaseNode = new Rectangle( -halfOfBaseWidth, -topOfBaseHeight / 2, width, topOfBaseHeight, 20, 20, {
         fill: new LinearGradient( -halfOfBaseWidth, 0, halfOfBaseWidth, 0 )
-          .addColorStop( 0, fill.brighterColor( 0.8 ) )
-          .addColorStop( 0.5, fill )
-          .addColorStop( 1, fill.darkerColor( 0.8 ) )
+          .addColorStop( 0, baseFillBrighterColorProperty )
+          .addColorStop( 0.5, baseFillColorProperty )
+          .addColorStop( 1, baseFillDarkerColorProperty )
       } );
 
       const pumpBaseEdgeHeight = height * 0.65;
@@ -303,9 +307,9 @@ define( require => {
       // color the front edge of the pump base
       const pumpEdgeNode = new Path( pumpEdgeShape, {
         fill: new LinearGradient( -halfOfBaseWidth, 0, halfOfBaseWidth, 0 )
-          .addColorStop( 0, fill.darkerColor( 0.6 ) )
-          .addColorStop( 0.85, fill.darkerColor( 0.8 ) )
-          .addColorStop( 1, fill.darkerColor( 0.6 ) )
+          .addColorStop( 0, baseFillDarkestColorProperty )
+          .addColorStop( 0.85, baseFillDarkerColorProperty )
+          .addColorStop( 1, baseFillDarkestColorProperty )
       } );
 
       return new Node( { children: [ pumpEdgeNode, topOfBaseNode ] } );
@@ -482,11 +486,11 @@ define( require => {
     /**
      * Creates the cone, which connects the pump base to the pump body.
      *
-     * @param pumpBodyWidth
-     * @param height
-     * @param fill
+     * @param {number} pumpBodyWidth - the width of the pump body (and therefore the width of the top of the cone)
+     * @param {number} height - the height of the cone
+     * @param {PaintColorProperty} fillColorProperty
      */
-    createConeNode( pumpBodyWidth, height, fill ) {
+    createConeNode( pumpBodyWidth, height, fillColorProperty ) {
       const coneTopWidth = pumpBodyWidth * 1.2;
       const coneTopRadiusY = 3;
       const coneTopRadiusX = coneTopWidth / 2;
@@ -504,13 +508,18 @@ define( require => {
         .ellipticalArc( 0, height, coneBottomRadiusX, coneBottomRadiusY, 0, Math.PI, 0, true )
         .lineTo( coneTopRadiusX, 0 ); // line to upper right corner of shape
 
+      // use PaintColorProperty so that colors can be updated dynamically via ColorProfile
+      const fillBrighterColorProperty = new PaintColorProperty( fillColorProperty, { luminanceFactor: 0.1 } );
+      const fillDarkerColorProperty = new PaintColorProperty( fillColorProperty, { luminanceFactor: -0.4 } );
+      const fillDarkestColorProperty = new PaintColorProperty( fillColorProperty, { luminanceFactor: -0.5 } );
+
       const coneGradient = new LinearGradient( -coneBottomWidth / 2, 0, coneBottomWidth / 2, 0 )
-        .addColorStop( 0, fill.darkerColor( 0.5 ) )
-        .addColorStop( 0.50, fill )
-        .addColorStop( 0.55, fill.brighterColor( 0.9 ) )
-        .addColorStop( 0.65, fill.brighterColor( 0.9 ) )
-        .addColorStop( 0.7, fill )
-        .addColorStop( 1, fill.darkerColor( 0.6 ) );
+        .addColorStop( 0, fillDarkerColorProperty )
+        .addColorStop( 0.3, fillColorProperty )
+        .addColorStop( 0.35, fillBrighterColorProperty )
+        .addColorStop( 0.45, fillBrighterColorProperty )
+        .addColorStop( 0.5, fillColorProperty )
+        .addColorStop( 1, fillDarkestColorProperty );
 
       return new Path( coneShape, {
         fill: coneGradient
@@ -520,18 +529,22 @@ define( require => {
     /**
      * Creates a hose connector. The hose has one on each of its ends.
      *
-     * @param hoseConnectorWidth
-     * @param hoseConnectorHeight
-     * @param fill
+     * @param {number} hoseConnectorWidth
+     * @param {number} hoseConnectorHeight
+     * @param {PaintColorProperty} fillColorProperty
      */
-    createHoseConnectorNode( hoseConnectorWidth, hoseConnectorHeight, fill ) {
+    createHoseConnectorNode( hoseConnectorWidth, hoseConnectorHeight, fillColorProperty ) {
+
+      const fillBrighterColorProperty = new PaintColorProperty( fillColorProperty, { luminanceFactor: 0.1 } );
+      const fillDarkerColorProperty = new PaintColorProperty( fillColorProperty, { luminanceFactor: -0.2 } );
+
       return new Rectangle( 0, 0, hoseConnectorWidth, hoseConnectorHeight, 2, 2, {
         fill: new LinearGradient( 0, 0, 0, hoseConnectorHeight )
-          .addColorStop( 0, fill.darkerColor( 0.8 ) )
-          .addColorStop( 0.3, fill )
-          .addColorStop( 0.35, fill.brighterColor( 0.9 ) )
-          .addColorStop( 0.4, fill.brighterColor( 0.9 ) )
-          .addColorStop( 1, fill.darkerColor( 0.8 ) )
+          .addColorStop( 0, fillDarkerColorProperty )
+          .addColorStop( 0.3, fillColorProperty )
+          .addColorStop( 0.35, fillBrighterColorProperty )
+          .addColorStop( 0.4, fillBrighterColorProperty )
+          .addColorStop( 1, fillDarkerColorProperty )
       } );
     }
 
