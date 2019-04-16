@@ -13,7 +13,6 @@ define( require => {
 
   // modules
   const BooleanProperty = require( 'AXON/BooleanProperty' );
-  const Color = require( 'SCENERY/util/Color' );
   const LinearGradient = require( 'SCENERY/util/LinearGradient' );
   const Node = require( 'SCENERY/nodes/Node' );
   const PaintColorProperty = require( 'SCENERY/util/PaintColorProperty' );
@@ -146,16 +145,17 @@ define( require => {
       } );
       pumpBodyNode.setTranslation( -pumpBodyWidth / 2, -pumpBodyHeight );
 
-      const bodyTopFill = Color.toColor( options.bodyTopFill );
-      const bodyTopStroke = bodyTopFill.darkerColor( 0.8 );
+      // use PaintColorProperty so that colors can be updated dynamically via ColorProfile
+      const bodyTopFillColorProperty = new PaintColorProperty( options.bodyTopFill );
+      const bodyTopStrokeColorProperty = new PaintColorProperty( bodyTopFillColorProperty, { luminanceFactor: -0.2 } );
 
       // create the back part of the top of the body
-      const bodyTopBackNode = this.createBodyTopHalfNode( pumpBodyWidth, -1, bodyTopFill, bodyTopStroke );
+      const bodyTopBackNode = this.createBodyTopHalfNode( pumpBodyWidth, -1, bodyTopFillColorProperty, bodyTopStrokeColorProperty );
       bodyTopBackNode.centerX = pumpBodyNode.centerX;
       bodyTopBackNode.bottom = pumpBodyNode.top;
 
       // create the front part of the top of the body
-      const bodyTopFrontNode = this.createBodyTopHalfNode( pumpBodyWidth, 1, bodyTopFill, bodyTopStroke );
+      const bodyTopFrontNode = this.createBodyTopHalfNode( pumpBodyWidth, 1, bodyTopFillColorProperty, bodyTopStrokeColorProperty );
       bodyTopFrontNode.centerX = pumpBodyNode.centerX;
       bodyTopFrontNode.top = bodyTopBackNode.bottom - 0.4; // tweak slightly to prevent pump body from showing through
 
