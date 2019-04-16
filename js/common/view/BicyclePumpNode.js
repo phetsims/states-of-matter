@@ -16,6 +16,7 @@ define( require => {
   const Color = require( 'SCENERY/util/Color' );
   const LinearGradient = require( 'SCENERY/util/LinearGradient' );
   const Node = require( 'SCENERY/nodes/Node' );
+  const PaintColorProperty = require( 'SCENERY/util/PaintColorProperty' );
   const Path = require( 'SCENERY/nodes/Path' );
   const Rectangle = require( 'SCENERY/nodes/Rectangle' );
   const SegmentedBarGraphNode = require( 'STATES_OF_MATTER/common/view/SegmentedBarGraphNode' );
@@ -110,29 +111,38 @@ define( require => {
         -( ( height * PUMP_HANDLE_INIT_VERT_POS_PROPORTION ) + pumpHandleNode.height )
       );
 
-      // create the shaft for the pump, which is the part below the handle and inside the body
+      // sizing for the pump shaft
       const pumpShaftWidth = width * PUMP_SHAFT_WIDTH_PROPORTION;
       const pumpShaftHeight = height * PUMP_SHAFT_HEIGHT_PROPORTION;
-      const shaftFill = Color.toColor( options.shaftFill );
+
+      // use PaintColorProperty so that colors can be updated dynamically via ColorProfile
+      const shaftFillColorProperty = new PaintColorProperty( options.shaftFill );
+      const shaftStrokeColorProperty = new PaintColorProperty( shaftFillColorProperty, { luminanceFactor: -0.38 } );
+
+      // create the pump shaft, which is the part below the handle and inside the body
       const pumpShaftNode = new Rectangle( 0, 0, pumpShaftWidth, pumpShaftHeight, {
-        fill: new LinearGradient( 0, 0, pumpShaftHeight, 0 )
-          .addColorStop( 0, shaftFill.darkerColor( 0.8 ) )
-          .addColorStop( 0.2, shaftFill ),
-        stroke: shaftFill.darkerColor( 0.6 ),
+        fill: shaftFillColorProperty,
+        stroke: shaftStrokeColorProperty,
         pickable: false
       } );
       pumpShaftNode.x = -pumpShaftWidth / 2;
       pumpShaftNode.top = pumpHandleNode.bottom;
 
-      // create the body of the pump
+      // sizing for the body of the pump
       const pumpBodyWidth = width * PUMP_BODY_WIDTH_PROPORTION;
       const pumpBodyHeight = height * PUMP_BODY_HEIGHT_PROPORTION;
-      const bodyFill = Color.toColor( options.bodyFill );
+
+      // use PaintColorProperty so that colors can be updated dynamically via ColorProfile
+      const bodyFillColorProperty = new PaintColorProperty( options.bodyFill );
+      const bodyFillBrighterColorProperty = new PaintColorProperty( bodyFillColorProperty, { luminanceFactor: 0.2 } );
+      const bodyFillDarkerColorProperty = new PaintColorProperty( bodyFillColorProperty, { luminanceFactor: -0.2 } );
+
+      // create the body of the pump
       const pumpBodyNode = new Rectangle( 0, 0, pumpBodyWidth, pumpBodyHeight, 0, 0, {
         fill: new LinearGradient( 0, 0, pumpBodyWidth, 0 )
-          .addColorStop( 0, bodyFill.brighterColor( 0.8 ) )
-          .addColorStop( 0.4, bodyFill )
-          .addColorStop( 0.7, bodyFill.darkerColor( 0.8 ) )
+          .addColorStop( 0, bodyFillBrighterColorProperty )
+          .addColorStop( 0.4, bodyFillColorProperty )
+          .addColorStop( 0.7, bodyFillDarkerColorProperty )
       } );
       pumpBodyNode.setTranslation( -pumpBodyWidth / 2, -pumpBodyHeight );
 
@@ -403,33 +413,35 @@ define( require => {
         this.handleGradientPosition = newPosition;
       };
 
-      // setup the gradient for the handle
+      // set up the gradient for the handle
       const pumpHandleWidth = pumpHandleShape.bounds.width;
-      const handleFill = Color.toColor( fill );
-      const handleFillDarker = handleFill.darkerColor( 0.6 );
       const pumpHandleGradient = new LinearGradient( -pumpHandleWidth / 2, 0, pumpHandleWidth / 2, 0 );
+
+      // use PaintColorProperty so that colors can be updated dynamically via ColorProfile
+      const handleFillColorProperty = new PaintColorProperty( fill );
+      const handleFillDarkerColorProperty = new PaintColorProperty( handleFillColorProperty, { luminanceFactor: -0.35 } );
 
       // fill the left side handle gradient
       for ( let i = 0; i < numberOfGripBumps; i++ ) {
-        addRelativeColorStop( pumpHandleGradient, 0, pumpHandleWidth, handleFill );
-        addRelativeColorStop( pumpHandleGradient, gripSingleBumpHalfWidth, pumpHandleWidth, handleFill );
-        addRelativeColorStop( pumpHandleGradient, gripSingleBumpHalfWidth, pumpHandleWidth, handleFillDarker );
-        addRelativeColorStop( pumpHandleGradient, 0, pumpHandleWidth, handleFill );
-        addRelativeColorStop( pumpHandleGradient, gripInterBumpWidth, pumpHandleWidth, handleFillDarker );
+        addRelativeColorStop( pumpHandleGradient, 0, pumpHandleWidth, handleFillColorProperty );
+        addRelativeColorStop( pumpHandleGradient, gripSingleBumpHalfWidth, pumpHandleWidth, handleFillColorProperty );
+        addRelativeColorStop( pumpHandleGradient, gripSingleBumpHalfWidth, pumpHandleWidth, handleFillDarkerColorProperty );
+        addRelativeColorStop( pumpHandleGradient, 0, pumpHandleWidth, handleFillColorProperty );
+        addRelativeColorStop( pumpHandleGradient, gripInterBumpWidth, pumpHandleWidth, handleFillDarkerColorProperty );
       }
 
       // fill the center section handle gradient
-      addRelativeColorStop( pumpHandleGradient, 0, pumpHandleWidth, handleFill );
-      addRelativeColorStop( pumpHandleGradient, centerCurveWidth + centerSectionWidth, pumpHandleWidth, handleFill );
-      addRelativeColorStop( pumpHandleGradient, centerCurveWidth, pumpHandleWidth, handleFillDarker );
+      addRelativeColorStop( pumpHandleGradient, 0, pumpHandleWidth, handleFillColorProperty );
+      addRelativeColorStop( pumpHandleGradient, centerCurveWidth + centerSectionWidth, pumpHandleWidth, handleFillColorProperty );
+      addRelativeColorStop( pumpHandleGradient, centerCurveWidth, pumpHandleWidth, handleFillDarkerColorProperty );
 
       // fill the right side handle gradient
       for ( let i = 0; i < numberOfGripBumps; i++ ) {
-        addRelativeColorStop( pumpHandleGradient, 0, pumpHandleWidth, handleFill );
-        addRelativeColorStop( pumpHandleGradient, gripInterBumpWidth, pumpHandleWidth, handleFillDarker );
-        addRelativeColorStop( pumpHandleGradient, 0, pumpHandleWidth, handleFill );
-        addRelativeColorStop( pumpHandleGradient, gripSingleBumpHalfWidth, pumpHandleWidth, handleFill );
-        addRelativeColorStop( pumpHandleGradient, gripSingleBumpHalfWidth, pumpHandleWidth, handleFillDarker );
+        addRelativeColorStop( pumpHandleGradient, 0, pumpHandleWidth, handleFillColorProperty );
+        addRelativeColorStop( pumpHandleGradient, gripInterBumpWidth, pumpHandleWidth, handleFillDarkerColorProperty );
+        addRelativeColorStop( pumpHandleGradient, 0, pumpHandleWidth, handleFillColorProperty );
+        addRelativeColorStop( pumpHandleGradient, gripSingleBumpHalfWidth, pumpHandleWidth, handleFillColorProperty );
+        addRelativeColorStop( pumpHandleGradient, gripSingleBumpHalfWidth, pumpHandleWidth, handleFillDarkerColorProperty );
       }
 
       return new Path( pumpHandleShape, {
