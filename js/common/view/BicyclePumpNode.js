@@ -56,11 +56,11 @@ define( require => {
 
       options = _.extend( {
 
-        // {number} - sizing
+        // {number} sizing
         width: 200,
         height: 250,
 
-        // {string|Color} - various colors used by the pump
+        // {ColorDef} various colors used by the pump
         handleFill: '#adafb1',
         shaftFill: '#cacaca',
         bodyFill: '#d50000',
@@ -69,6 +69,8 @@ define( require => {
         indicatorRemainingFill: '#999999',
         baseFill: '#aaaaaa',
         hoseFill: '#B3B3B3',
+
+        // {number} number of particles released by the pump during one pumping action
         numberOfParticlesPerPumpAction: 4,
 
         // {Vector2} where the hose will attach externally relative to the center of the pump
