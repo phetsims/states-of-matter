@@ -13,6 +13,7 @@ define( require => {
 
   // modules
   const BooleanProperty = require( 'AXON/BooleanProperty' );
+  const DragListener = require( 'SCENERY/listeners/DragListener' );
   const LinearGradient = require( 'SCENERY/util/LinearGradient' );
   const Node = require( 'SCENERY/nodes/Node' );
   const PaintColorProperty = require( 'SCENERY/util/PaintColorProperty' );
@@ -20,7 +21,6 @@ define( require => {
   const Rectangle = require( 'SCENERY/nodes/Rectangle' );
   const SegmentedBarGraphNode = require( 'STATES_OF_MATTER/common/view/SegmentedBarGraphNode' );
   const Shape = require( 'KITE/Shape' );
-  const SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
   const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   const Util = require( 'DOT/Util' );
   const Vector2 = require( 'DOT/Vector2' );
@@ -71,7 +71,7 @@ define( require => {
         baseFill: '#aaaaaa', // this color is also used for the cone shape and hose connectors
 
         // {number} number of particles released by the pump during one pumping action
-        numberOfParticlesPerPumpAction: 4,
+        numberOfParticlesPerPumpAction: 8,
 
         // {Vector2} where the hose will attach externally relative to the center of the pump
         hoseAttachmentOffset: new Vector2( 100, 100 ),
@@ -200,39 +200,10 @@ define( require => {
       const pumpingDistanceRequiredToAddParticle = ( -minHandleYOffset + maxHandleYOffset ) /
                                                    options.numberOfParticlesPerPumpAction - 1;
 
-      pumpHandleNode.addInputListener( new SimpleDragHandler( {
-
-        drag: event => {
-
-          // the position at the start of the drag event
-          const handleStartYPos = pumpHandleNode.centerY;
-
-          // update the handle and shaft position based on the user's pointer position
-          const dragPositionY = pumpHandleNode.globalToParentPoint( event.pointer.point ).y;
-          pumpHandleNode.centerY = Util.clamp( dragPositionY, minHandleYOffset, maxHandleYOffset );
-          pumpShaftNode.top = pumpHandleNode.bottom;
-
-          const travelDistance = handleStartYPos - pumpHandleNode.centerY;
-          if ( travelDistance < 0 ) {
-
-            // This motion is in the downward direction, so add its distance to the pumping distance.
-            currentPumpingDistance += Math.abs( travelDistance );
-            while ( currentPumpingDistance >= pumpingDistanceRequiredToAddParticle ) {
-
-              // Enough distance has been traveled to inject a new particle.
-              if ( rangeProperty.value.max - numberProperty.value > 0 && options.enabledProperty.get() ) {
-                numberProperty.value++;
-              }
-              currentPumpingDistance -= pumpingDistanceRequiredToAddParticle;
-            }
-          }
-          else if ( travelDistance > 0 ) {
-
-            // This motion is in the upward direction, so reset any accumulated pumping distance.
-            currentPumpingDistance = 0;
-          }
-        }
-      } ) );
+      pumpHandleNode.addInputListener(
+        new HandleNodeDragListener( numberProperty, rangeProperty, options.enabledProperty,
+          minHandleYOffset, maxHandleYOffset, pumpHandleNode, pumpShaftNode, options.numberOfParticlesPerPumpAction )
+      );
 
       // create the node that will be used to indicate the remaining capacity
       const remainingCapacityIndicator = new SegmentedBarGraphNode(
@@ -269,7 +240,7 @@ define( require => {
      *
      * @param {number} width - the width of the base
      * @param {number} height - the height of the base
-     * @param {PaintColorProperty} fill
+     * @param {PaintColorProperty} baseFillColorProperty
      * @private
      */
     createPumpBaseNode( width, height, baseFillColorProperty ) {
@@ -559,6 +530,77 @@ define( require => {
     setHoseAttachmentPosition( x, y ) {
       this.x = x - this.hoseAttachmentOffset.x;
       this.y = y - this.hoseAttachmentOffset.y;
+    }
+  }
+
+  /**
+   * Drag listener for the pump's handle.
+   */
+  class HandleNodeDragListener extends DragListener {
+
+    /**
+     *
+     * @param numberProperty
+     * @param rangeProperty
+     * @param enabledProperty
+     * @param minHandleYOffset
+     * @param maxHandleYOffset
+     * @param pumpHandleNode
+     * @param pumpShaftNode
+     * @param numberOfParticlesPerPumpAction
+     */
+    constructor( numberProperty,
+                 rangeProperty,
+                 enabledProperty,
+                 minHandleYOffset,
+                 maxHandleYOffset,
+                 pumpHandleNode,
+                 pumpShaftNode,
+                 numberOfParticlesPerPumpAction
+    ) {
+
+      assert && assert( maxHandleYOffset > minHandleYOffset, 'bogus offsets' );
+
+      let handlePosition = null;
+      let lastHandlePosition = null;
+      let pumpingDistanceAccumulation = 0;
+
+      // How far the pump shaft needs to travel before the pump releases a particle. -1 is added to account for minor drag
+      // listener and floating-point errors.
+      const pumpingDistanceRequiredToAddParticle = ( maxHandleYOffset - minHandleYOffset ) / numberOfParticlesPerPumpAction;
+
+      super( {
+        drag: ( event, listener ) => {
+
+          // update the handle and shaft position based on the user's pointer position
+          const dragPositionY = pumpHandleNode.globalToParentPoint( event.pointer.point ).y;
+          handlePosition = Util.clamp( dragPositionY, minHandleYOffset, maxHandleYOffset );
+          pumpHandleNode.centerY = handlePosition;
+          pumpShaftNode.top = pumpHandleNode.bottom;
+
+          if ( lastHandlePosition !== null ) {
+            const travelDistance = handlePosition - lastHandlePosition;
+            if ( travelDistance > 0 ) {
+
+              // This motion is in the downward direction, so add its distance to the pumping distance.
+              pumpingDistanceAccumulation += travelDistance;
+              while ( pumpingDistanceAccumulation >= pumpingDistanceRequiredToAddParticle ) {
+
+                // inject a particle
+                if ( rangeProperty.value.max - numberProperty.value > 0 && enabledProperty.get() ) {
+                  numberProperty.value++;
+                }
+                pumpingDistanceAccumulation -= pumpingDistanceRequiredToAddParticle;
+              }
+            }
+            else {
+              pumpingDistanceAccumulation = 0;
+            }
+          }
+
+          lastHandlePosition = handlePosition;
+        }
+      } );
     }
   }
 
