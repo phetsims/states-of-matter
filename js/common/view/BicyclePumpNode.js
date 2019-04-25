@@ -89,9 +89,6 @@ define( require => {
       // @private
       this.hoseAttachmentOffset = options.hoseAttachmentOffset;
 
-      // @private - used to track where the current position is on the handle when drawing its gradient
-      this.handleGradientPosition = 0;
-
       // create the base of the pump
       const baseWidth = width * PUMP_BASE_WIDTH_PROPORTION;
       const baseHeight = height * PUMP_BASE_HEIGHT_PROPORTION;
@@ -99,7 +96,7 @@ define( require => {
       const pumpBaseNode = createPumpBaseNode( baseWidth, baseHeight, baseFillColorProperty );
 
       // create the handle of the pump
-      const pumpHandleNode = this.createPumpHandleNode( options.handleFill );
+      const pumpHandleNode = createPumpHandleNode( options.handleFill );
       const pumpHandleHeight = height * PUMP_HANDLE_HEIGHT_PROPORTION;
       pumpHandleNode.touchArea = pumpHandleNode.localBounds.dilatedXY( 100, 100 );
       pumpHandleNode.scale( pumpHandleHeight / pumpHandleNode.height );
@@ -226,148 +223,6 @@ define( require => {
       this.addChild( coneNode );
       this.addChild( externalHoseConnector );
       this.addChild( localHoseConnector );
-    }
-
-    /**
-     * Create the handle of the pump. This is the node that the user will interact with in order to use the pump.
-     *
-     * @param fill
-     * @private
-     */
-    createPumpHandleNode( fill ) {
-
-      const centerSectionWidth = 35;
-      const centerCurveWidth = 14;
-      const centerCurveHeight = 8;
-
-      const gripSingleBumpWidth = 16;
-      const gripSingleBumpHalfWidth = gripSingleBumpWidth / 2;
-      const gripInterBumpWidth = gripSingleBumpWidth * 0.31;
-      const numberOfGripBumps = 4;
-
-      const gripEndHeight = 23;
-
-      // start the handle from the center bottom, drawing around counterclockwise
-      const pumpHandleShape = new Shape().moveTo( 0, 0 );
-
-      /**
-       * Add a "bump" to the top or bottom of the grip
-       * @param {Shape} shape - the shape to append to
-       * @param {number} sign - +1 for bottom side of grip, -1 for top side of grip
-       */
-      const addGripBump = ( shape, sign ) => {
-
-        // control points for quadratic curve shape on grip
-        const controlPointX = gripSingleBumpWidth / 2;
-        const controlPointY = gripSingleBumpWidth / 2;
-
-        // this is a grip bump
-        shape.quadraticCurveToRelative(
-          sign * controlPointX,
-          sign * controlPointY,
-          sign * gripSingleBumpWidth,
-          0 );
-      };
-
-      // this is the lower right part of the handle, including half of the middle section and the grip bumps
-      pumpHandleShape.lineToRelative( centerSectionWidth / 2, 0 );
-      pumpHandleShape.quadraticCurveToRelative( centerCurveWidth / 2, 0, centerCurveWidth, -centerCurveHeight );
-      pumpHandleShape.lineToRelative( gripInterBumpWidth, 0 );
-      for ( let i = 0; i < numberOfGripBumps - 1; i++ ) {
-        addGripBump( pumpHandleShape, 1 );
-        pumpHandleShape.lineToRelative( gripInterBumpWidth, 0 );
-      }
-      addGripBump( pumpHandleShape, 1 );
-
-      // this is the right edge of the handle
-      pumpHandleShape.lineToRelative( 0, -gripEndHeight );
-
-      // this is the upper right part of the handle, including only the grip bumps
-      for ( let i = 0; i < numberOfGripBumps; i++ ) {
-        addGripBump( pumpHandleShape, -1 );
-        pumpHandleShape.lineToRelative( -gripInterBumpWidth, 0 );
-      }
-
-      // this is the upper middle section of the handle
-      pumpHandleShape.quadraticCurveToRelative( -centerCurveWidth / 2, -centerCurveHeight, -centerCurveWidth, -centerCurveHeight );
-      pumpHandleShape.lineToRelative( -centerSectionWidth, 0 );
-      pumpHandleShape.quadraticCurveToRelative( -centerCurveWidth / 2, 0, -centerCurveWidth, centerCurveHeight );
-      pumpHandleShape.lineToRelative( -gripInterBumpWidth, 0 );
-
-      // this is the upper left part of the handle, including only the grip bumps
-      for ( let i = 0; i < numberOfGripBumps - 1; i++ ) {
-        addGripBump( pumpHandleShape, -1 );
-        pumpHandleShape.lineToRelative( -gripInterBumpWidth, 0 );
-      }
-      addGripBump( pumpHandleShape, -1 );
-
-      // this is the left edge of the handle
-      pumpHandleShape.lineToRelative( 0, gripEndHeight );
-
-      // this is the lower left part of the handle, including the grip bumps and half of the middle section
-      for ( let i = 0; i < numberOfGripBumps; i++ ) {
-        addGripBump( pumpHandleShape, 1 );
-        pumpHandleShape.lineToRelative( gripInterBumpWidth, 0 );
-      }
-      pumpHandleShape.quadraticCurveToRelative( centerCurveWidth / 2, centerCurveHeight, centerCurveWidth, centerCurveHeight );
-      pumpHandleShape.lineToRelative( centerSectionWidth / 2, 0 );
-      pumpHandleShape.close();
-
-      /**
-       * Adds a color stop to the given gradient at
-       *
-       * @param gradient - the gradient being appended to
-       * @param deltaDistance - the distance of this added color stop
-       * @param totalDistance - the total width of the gradient
-       * @param color - the color of this color stop
-       */
-      const addRelativeColorStop = ( gradient, deltaDistance, totalDistance, color ) => {
-        //TODO #217 handleGradientPosition can be make local to this function, then make this function private
-        const newPosition = this.handleGradientPosition + deltaDistance;
-        let ratio = newPosition / totalDistance;
-        ratio = ratio > 1 ? 1 : ratio;
-
-        gradient.addColorStop( ratio, color );
-        this.handleGradientPosition = newPosition;
-      };
-
-      // set up the gradient for the handle
-      const pumpHandleWidth = pumpHandleShape.bounds.width;
-      const pumpHandleGradient = new LinearGradient( -pumpHandleWidth / 2, 0, pumpHandleWidth / 2, 0 );
-
-      // use PaintColorProperty so that colors can be updated dynamically via ColorProfile
-      const handleFillColorProperty = new PaintColorProperty( fill );
-      const handleFillDarkerColorProperty = new PaintColorProperty( handleFillColorProperty, { luminanceFactor: -0.35 } );
-
-      // fill the left side handle gradient
-      for ( let i = 0; i < numberOfGripBumps; i++ ) {
-        addRelativeColorStop( pumpHandleGradient, 0, pumpHandleWidth, handleFillColorProperty );
-        addRelativeColorStop( pumpHandleGradient, gripSingleBumpHalfWidth, pumpHandleWidth, handleFillColorProperty );
-        addRelativeColorStop( pumpHandleGradient, gripSingleBumpHalfWidth, pumpHandleWidth, handleFillDarkerColorProperty );
-        addRelativeColorStop( pumpHandleGradient, 0, pumpHandleWidth, handleFillColorProperty );
-        addRelativeColorStop( pumpHandleGradient, gripInterBumpWidth, pumpHandleWidth, handleFillDarkerColorProperty );
-      }
-
-      // fill the center section handle gradient
-      addRelativeColorStop( pumpHandleGradient, 0, pumpHandleWidth, handleFillColorProperty );
-      addRelativeColorStop( pumpHandleGradient, centerCurveWidth + centerSectionWidth, pumpHandleWidth, handleFillColorProperty );
-      addRelativeColorStop( pumpHandleGradient, centerCurveWidth, pumpHandleWidth, handleFillDarkerColorProperty );
-
-      // fill the right side handle gradient
-      for ( let i = 0; i < numberOfGripBumps; i++ ) {
-        addRelativeColorStop( pumpHandleGradient, 0, pumpHandleWidth, handleFillColorProperty );
-        addRelativeColorStop( pumpHandleGradient, gripInterBumpWidth, pumpHandleWidth, handleFillDarkerColorProperty );
-        addRelativeColorStop( pumpHandleGradient, 0, pumpHandleWidth, handleFillColorProperty );
-        addRelativeColorStop( pumpHandleGradient, gripSingleBumpHalfWidth, pumpHandleWidth, handleFillColorProperty );
-        addRelativeColorStop( pumpHandleGradient, gripSingleBumpHalfWidth, pumpHandleWidth, handleFillDarkerColorProperty );
-      }
-
-      return new Path( pumpHandleShape, {
-        lineWidth: 2,
-        stroke: 'black ',
-        fill: pumpHandleGradient,
-        cursor: 'ns-resize'
-      } );
     }
 
     /**
@@ -523,6 +378,150 @@ define( require => {
 
     return new Path( coneShape, {
       fill: coneGradient
+    } );
+  }
+
+  /**
+   * Create the handle of the pump. This is the node that the user will interact with in order to use the pump.
+   *
+   * @param fill
+   */
+  function createPumpHandleNode( fill ) {
+
+    const centerSectionWidth = 35;
+    const centerCurveWidth = 14;
+    const centerCurveHeight = 8;
+
+    const gripSingleBumpWidth = 16;
+    const gripSingleBumpHalfWidth = gripSingleBumpWidth / 2;
+    const gripInterBumpWidth = gripSingleBumpWidth * 0.31;
+    const numberOfGripBumps = 4;
+
+    const gripEndHeight = 23;
+
+    // start the handle from the center bottom, drawing around counterclockwise
+    const pumpHandleShape = new Shape().moveTo( 0, 0 );
+
+    /**
+     * Add a "bump" to the top or bottom of the grip
+     * @param {Shape} shape - the shape to append to
+     * @param {number} sign - +1 for bottom side of grip, -1 for top side of grip
+     */
+    const addGripBump = ( shape, sign ) => {
+
+      // control points for quadratic curve shape on grip
+      const controlPointX = gripSingleBumpWidth / 2;
+      const controlPointY = gripSingleBumpWidth / 2;
+
+      // this is a grip bump
+      shape.quadraticCurveToRelative(
+          sign * controlPointX,
+          sign * controlPointY,
+          sign * gripSingleBumpWidth,
+          0 );
+    };
+
+    // this is the lower right part of the handle, including half of the middle section and the grip bumps
+    pumpHandleShape.lineToRelative( centerSectionWidth / 2, 0 );
+    pumpHandleShape.quadraticCurveToRelative( centerCurveWidth / 2, 0, centerCurveWidth, -centerCurveHeight );
+    pumpHandleShape.lineToRelative( gripInterBumpWidth, 0 );
+    for ( let i = 0; i < numberOfGripBumps - 1; i++ ) {
+      addGripBump( pumpHandleShape, 1 );
+      pumpHandleShape.lineToRelative( gripInterBumpWidth, 0 );
+    }
+    addGripBump( pumpHandleShape, 1 );
+
+    // this is the right edge of the handle
+    pumpHandleShape.lineToRelative( 0, -gripEndHeight );
+
+    // this is the upper right part of the handle, including only the grip bumps
+    for ( let i = 0; i < numberOfGripBumps; i++ ) {
+      addGripBump( pumpHandleShape, -1 );
+      pumpHandleShape.lineToRelative( -gripInterBumpWidth, 0 );
+    }
+
+    // this is the upper middle section of the handle
+    pumpHandleShape.quadraticCurveToRelative( -centerCurveWidth / 2, -centerCurveHeight, -centerCurveWidth, -centerCurveHeight );
+    pumpHandleShape.lineToRelative( -centerSectionWidth, 0 );
+    pumpHandleShape.quadraticCurveToRelative( -centerCurveWidth / 2, 0, -centerCurveWidth, centerCurveHeight );
+    pumpHandleShape.lineToRelative( -gripInterBumpWidth, 0 );
+
+    // this is the upper left part of the handle, including only the grip bumps
+    for ( let i = 0; i < numberOfGripBumps - 1; i++ ) {
+      addGripBump( pumpHandleShape, -1 );
+      pumpHandleShape.lineToRelative( -gripInterBumpWidth, 0 );
+    }
+    addGripBump( pumpHandleShape, -1 );
+
+    // this is the left edge of the handle
+    pumpHandleShape.lineToRelative( 0, gripEndHeight );
+
+    // this is the lower left part of the handle, including the grip bumps and half of the middle section
+    for ( let i = 0; i < numberOfGripBumps; i++ ) {
+      addGripBump( pumpHandleShape, 1 );
+      pumpHandleShape.lineToRelative( gripInterBumpWidth, 0 );
+    }
+    pumpHandleShape.quadraticCurveToRelative( centerCurveWidth / 2, centerCurveHeight, centerCurveWidth, centerCurveHeight );
+    pumpHandleShape.lineToRelative( centerSectionWidth / 2, 0 );
+    pumpHandleShape.close();
+
+    // used to track where the current position is on the handle when drawing its gradient
+    let handleGradientPosition = 0;
+
+    /**
+     * Adds a color stop to the given gradient at
+     *
+     * @param gradient - the gradient being appended to
+     * @param deltaDistance - the distance of this added color stop
+     * @param totalDistance - the total width of the gradient
+     * @param color - the color of this color stop
+     */
+    const addRelativeColorStop = ( gradient, deltaDistance, totalDistance, color ) => {
+      //TODO #217 handleGradientPosition can be make local to this function, then make this function private
+      const newPosition = handleGradientPosition + deltaDistance;
+      let ratio = newPosition / totalDistance;
+      ratio = ratio > 1 ? 1 : ratio;
+
+      gradient.addColorStop( ratio, color );
+      handleGradientPosition = newPosition;
+    };
+
+    // set up the gradient for the handle
+    const pumpHandleWidth = pumpHandleShape.bounds.width;
+    const pumpHandleGradient = new LinearGradient( -pumpHandleWidth / 2, 0, pumpHandleWidth / 2, 0 );
+
+    // use PaintColorProperty so that colors can be updated dynamically via ColorProfile
+    const handleFillColorProperty = new PaintColorProperty( fill );
+    const handleFillDarkerColorProperty = new PaintColorProperty( handleFillColorProperty, { luminanceFactor: -0.35 } );
+
+    // fill the left side handle gradient
+    for ( let i = 0; i < numberOfGripBumps; i++ ) {
+      addRelativeColorStop( pumpHandleGradient, 0, pumpHandleWidth, handleFillColorProperty );
+      addRelativeColorStop( pumpHandleGradient, gripSingleBumpHalfWidth, pumpHandleWidth, handleFillColorProperty );
+      addRelativeColorStop( pumpHandleGradient, gripSingleBumpHalfWidth, pumpHandleWidth, handleFillDarkerColorProperty );
+      addRelativeColorStop( pumpHandleGradient, 0, pumpHandleWidth, handleFillColorProperty );
+      addRelativeColorStop( pumpHandleGradient, gripInterBumpWidth, pumpHandleWidth, handleFillDarkerColorProperty );
+    }
+
+    // fill the center section handle gradient
+    addRelativeColorStop( pumpHandleGradient, 0, pumpHandleWidth, handleFillColorProperty );
+    addRelativeColorStop( pumpHandleGradient, centerCurveWidth + centerSectionWidth, pumpHandleWidth, handleFillColorProperty );
+    addRelativeColorStop( pumpHandleGradient, centerCurveWidth, pumpHandleWidth, handleFillDarkerColorProperty );
+
+    // fill the right side handle gradient
+    for ( let i = 0; i < numberOfGripBumps; i++ ) {
+      addRelativeColorStop( pumpHandleGradient, 0, pumpHandleWidth, handleFillColorProperty );
+      addRelativeColorStop( pumpHandleGradient, gripInterBumpWidth, pumpHandleWidth, handleFillDarkerColorProperty );
+      addRelativeColorStop( pumpHandleGradient, 0, pumpHandleWidth, handleFillColorProperty );
+      addRelativeColorStop( pumpHandleGradient, gripSingleBumpHalfWidth, pumpHandleWidth, handleFillColorProperty );
+      addRelativeColorStop( pumpHandleGradient, gripSingleBumpHalfWidth, pumpHandleWidth, handleFillDarkerColorProperty );
+    }
+
+    return new Path( pumpHandleShape, {
+      lineWidth: 2,
+      stroke: 'black ',
+      fill: pumpHandleGradient,
+      cursor: 'ns-resize'
     } );
   }
 
