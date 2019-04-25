@@ -67,7 +67,7 @@ define( require => {
         bodyTopFill: '#997777',
         indicatorBackgroundFill: '#443333',
         indicatorRemainingFill: '#999999',
-        hoseFill: '#B3B3B3',
+        hoseFill: '#b3b3b3',
         baseFill: '#aaaaaa', // this color is also used for the cone shape and hose connectors
 
         // {number} number of particles released by the pump during one pumping action
@@ -94,6 +94,61 @@ define( require => {
       const baseHeight = height * PUMP_BASE_HEIGHT_PROPORTION;
       const baseFillColorProperty = new PaintColorProperty( options.baseFill );
       const pumpBaseNode = createPumpBaseNode( baseWidth, baseHeight, baseFillColorProperty );
+
+      // sizing for the body of the pump
+      const pumpBodyWidth = width * PUMP_BODY_WIDTH_PROPORTION;
+      const pumpBodyHeight = height * PUMP_BODY_HEIGHT_PROPORTION;
+
+      // create the cone
+      const coneHeight = height * CONE_HEIGHT_PROPORTION;
+      const coneNode = createConeNode( pumpBodyWidth, coneHeight, baseFillColorProperty );
+      coneNode.bottom = pumpBaseNode.top + 8;
+
+      // use PaintColorProperty so that colors can be updated dynamically via ColorProfile
+      const bodyFillColorProperty = new PaintColorProperty( options.bodyFill );
+      const bodyFillBrighterColorProperty = new PaintColorProperty( bodyFillColorProperty, { luminanceFactor: 0.2 } );
+      const bodyFillDarkerColorProperty = new PaintColorProperty( bodyFillColorProperty, { luminanceFactor: -0.2 } );
+
+      // create the body of the pump
+      const pumpBodyNode = new Rectangle( 0, 0, pumpBodyWidth, pumpBodyHeight, 0, 0, {
+        fill: new LinearGradient( 0, 0, pumpBodyWidth, 0 )
+          .addColorStop( 0, bodyFillBrighterColorProperty )
+          .addColorStop( 0.4, bodyFillColorProperty )
+          .addColorStop( 0.7, bodyFillDarkerColorProperty )
+      } );
+      // pumpBodyNode.setTranslation( -pumpBodyWidth / 2, -pumpBodyHeight );
+      pumpBodyNode.centerX = coneNode.centerX;
+      pumpBodyNode.bottom = coneNode.top + 5;
+
+      // use PaintColorProperty so that colors can be updated dynamically via ColorProfile
+      const bodyTopFillColorProperty = new PaintColorProperty( options.bodyTopFill );
+      const bodyTopStrokeColorProperty = new PaintColorProperty( bodyTopFillColorProperty, { luminanceFactor: -0.2 } );
+
+      // create the back part of the top of the body
+      const bodyTopBackNode = createBodyTopHalfNode( pumpBodyWidth, -1, bodyTopFillColorProperty, bodyTopStrokeColorProperty );
+      bodyTopBackNode.centerX = pumpBodyNode.centerX;
+      bodyTopBackNode.bottom = pumpBodyNode.top;
+
+      // create the front part of the top of the body
+      const bodyTopFrontNode = createBodyTopHalfNode( pumpBodyWidth, 1, bodyTopFillColorProperty, bodyTopStrokeColorProperty );
+      bodyTopFrontNode.centerX = pumpBodyNode.centerX;
+      bodyTopFrontNode.top = bodyTopBackNode.bottom - 0.4; // tweak slightly to prevent pump body from showing through
+
+      // create the node that will be used to indicate the remaining capacity
+      const remainingCapacityIndicator = new SegmentedBarGraphNode(
+        numberProperty,
+        rangeProperty,
+        {
+          width: pumpBodyWidth * 0.6,
+          height: pumpBodyHeight * 0.7,
+          centerX: pumpBodyNode.centerX,
+          centerY: ( pumpBodyNode.top + coneNode.top ) / 2,
+          numSegments: 36,
+          backgroundColor: options.indicatorBackgroundFill,
+          fullyLitIndicatorColor: options.indicatorRemainingFill,
+          indicatorHeightProportion: 0.7
+        }
+      );
 
       // create the handle of the pump
       const pumpHandleNode = createPumpHandleNode( options.handleFill );
@@ -122,38 +177,6 @@ define( require => {
       pumpShaftNode.x = -pumpShaftWidth / 2;
       pumpShaftNode.top = pumpHandleNode.bottom;
 
-      // sizing for the body of the pump
-      const pumpBodyWidth = width * PUMP_BODY_WIDTH_PROPORTION;
-      const pumpBodyHeight = height * PUMP_BODY_HEIGHT_PROPORTION;
-
-      // use PaintColorProperty so that colors can be updated dynamically via ColorProfile
-      const bodyFillColorProperty = new PaintColorProperty( options.bodyFill );
-      const bodyFillBrighterColorProperty = new PaintColorProperty( bodyFillColorProperty, { luminanceFactor: 0.2 } );
-      const bodyFillDarkerColorProperty = new PaintColorProperty( bodyFillColorProperty, { luminanceFactor: -0.2 } );
-
-      // create the body of the pump
-      const pumpBodyNode = new Rectangle( 0, 0, pumpBodyWidth, pumpBodyHeight, 0, 0, {
-        fill: new LinearGradient( 0, 0, pumpBodyWidth, 0 )
-          .addColorStop( 0, bodyFillBrighterColorProperty )
-          .addColorStop( 0.4, bodyFillColorProperty )
-          .addColorStop( 0.7, bodyFillDarkerColorProperty )
-      } );
-      pumpBodyNode.setTranslation( -pumpBodyWidth / 2, -pumpBodyHeight );
-
-      // use PaintColorProperty so that colors can be updated dynamically via ColorProfile
-      const bodyTopFillColorProperty = new PaintColorProperty( options.bodyTopFill );
-      const bodyTopStrokeColorProperty = new PaintColorProperty( bodyTopFillColorProperty, { luminanceFactor: -0.2 } );
-
-      // create the back part of the top of the body
-      const bodyTopBackNode = createBodyTopHalfNode( pumpBodyWidth, -1, bodyTopFillColorProperty, bodyTopStrokeColorProperty );
-      bodyTopBackNode.centerX = pumpBodyNode.centerX;
-      bodyTopBackNode.bottom = pumpBodyNode.top;
-
-      // create the front part of the top of the body
-      const bodyTopFrontNode = createBodyTopHalfNode( pumpBodyWidth, 1, bodyTopFillColorProperty, bodyTopStrokeColorProperty );
-      bodyTopFrontNode.centerX = pumpBodyNode.centerX;
-      bodyTopFrontNode.top = bodyTopBackNode.bottom - 0.4; // tweak slightly to prevent pump body from showing through
-
       // create the hose
       const hoseNode = new Path( new Shape()
         .moveTo( 0, BODY_TO_HOSE_ATTACH_POINT_Y )
@@ -163,11 +186,6 @@ define( require => {
         lineWidth: 4,
         stroke: options.hoseFill
       } );
-
-      // create the cone
-      const coneHeight = height * CONE_HEIGHT_PROPORTION;
-      const coneNode = createConeNode( pumpBodyWidth, coneHeight, baseFillColorProperty );
-      coneNode.setTranslation( 0, -coneHeight - baseHeight * 0.15 );
 
       const hoseConnectorWidth = width * HOSE_CONNECTOR_WIDTH_PROPORTION;
       const hoseConnectorHeight = height * HOSE_CONNECTOR_HEIGHT_PROPORTION;
@@ -193,22 +211,6 @@ define( require => {
       pumpHandleNode.addInputListener(
         new HandleNodeDragListener( numberProperty, rangeProperty, options.enabledProperty,
           minHandleYOffset, maxHandleYOffset, pumpHandleNode, pumpShaftNode, options.numberOfParticlesPerPumpAction )
-      );
-
-      // create the node that will be used to indicate the remaining capacity
-      const remainingCapacityIndicator = new SegmentedBarGraphNode(
-        numberProperty,
-        rangeProperty,
-        {
-          width: pumpBodyWidth * 0.6,
-          height: pumpBodyHeight * 0.7,
-          centerX: pumpShaftNode.centerX,
-          centerY: ( pumpBodyNode.top + coneNode.top ) / 2,
-          numSegments: 36,
-          backgroundColor: options.indicatorBackgroundFill,
-          fullyLitIndicatorColor: options.indicatorRemainingFill,
-          indicatorHeightProportion: 0.7
-        }
       );
 
       // add the pieces with the correct layering
