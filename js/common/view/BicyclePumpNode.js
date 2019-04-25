@@ -92,8 +92,6 @@ define( require => {
       // @private - used to track where the current position is on the handle when drawing its gradient
       this.handleGradientPosition = 0;
 
-      let currentPumpingDistance = 0;
-
       // create the base of the pump
       const baseWidth = width * PUMP_BASE_WIDTH_PROPORTION;
       const baseHeight = height * PUMP_BASE_HEIGHT_PROPORTION;
@@ -194,11 +192,6 @@ define( require => {
 
       const maxHandleYOffset = pumpHandleNode.centerY;
       const minHandleYOffset = maxHandleYOffset + ( -PUMP_SHAFT_HEIGHT_PROPORTION * height / 2 );
-
-      // How far the pump shaft needs to travel before the pump releases a particle. -1 is added to account for minor drag
-      // listener and floating-point errors.
-      const pumpingDistanceRequiredToAddParticle = ( -minHandleYOffset + maxHandleYOffset ) /
-                                                   options.numberOfParticlesPerPumpAction - 1;
 
       pumpHandleNode.addInputListener(
         new HandleNodeDragListener( numberProperty, rangeProperty, options.enabledProperty,
