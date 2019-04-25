@@ -477,7 +477,6 @@ define( require => {
      * @param color - the color of this color stop
      */
     const addRelativeColorStop = ( gradient, deltaDistance, totalDistance, color ) => {
-      //TODO #217 handleGradientPosition can be make local to this function, then make this function private
       const newPosition = handleGradientPosition + deltaDistance;
       let ratio = newPosition / totalDistance;
       ratio = ratio > 1 ? 1 : ratio;
