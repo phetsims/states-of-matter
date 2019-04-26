@@ -116,9 +116,8 @@ define( require => {
           .addColorStop( 0.4, bodyFillColorProperty )
           .addColorStop( 0.7, bodyFillDarkerColorProperty )
       } );
-      // pumpBodyNode.setTranslation( -pumpBodyWidth / 2, -pumpBodyHeight );
       pumpBodyNode.centerX = coneNode.centerX;
-      pumpBodyNode.bottom = coneNode.top + 5;
+      pumpBodyNode.bottom = coneNode.top + 18;
 
       // use PaintColorProperty so that colors can be updated dynamically via ColorProfile
       const bodyTopFillColorProperty = new PaintColorProperty( options.bodyTopFill );
