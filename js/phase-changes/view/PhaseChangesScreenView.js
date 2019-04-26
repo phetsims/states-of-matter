@@ -139,7 +139,7 @@ define( function( require ) {
     this.pumpNode = new BicyclePumpNode(
       multipleParticleModel.numberOfMoleculesProperty,
       multipleParticleModel.numberOfMoleculesRangeProperty, {
-        hoseAttachmentOffset: new Vector2( 160, -158 ),
+        hoseAttachmentOffset: new Vector2( 165, -158 ),
         enabledProperty: multipleParticleModel.isPlayingProperty
       } );
     this.pumpNode.setHoseAttachmentPosition( nominalParticleAreaViewBounds.left, nominalParticleAreaViewBounds.bottom - 70 );

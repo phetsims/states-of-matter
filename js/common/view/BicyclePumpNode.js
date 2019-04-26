@@ -64,7 +64,7 @@ define( require => {
         handleFill: '#adafb1',
         shaftFill: '#cacaca',
         bodyFill: '#d50000',
-        bodyTopFill: '#997777',
+        bodyTopFill: '#997677',
         indicatorBackgroundFill: '#443333',
         indicatorRemainingFill: '#999999',
         hoseFill: '#b3b3b3',
@@ -116,13 +116,12 @@ define( require => {
           .addColorStop( 0.4, bodyFillColorProperty )
           .addColorStop( 0.7, bodyFillDarkerColorProperty )
       } );
-      // pumpBodyNode.setTranslation( -pumpBodyWidth / 2, -pumpBodyHeight );
       pumpBodyNode.centerX = coneNode.centerX;
-      pumpBodyNode.bottom = coneNode.top + 5;
+      pumpBodyNode.bottom = coneNode.top + 18;
 
       // use PaintColorProperty so that colors can be updated dynamically via ColorProfile
       const bodyTopFillColorProperty = new PaintColorProperty( options.bodyTopFill );
-      const bodyTopStrokeColorProperty = new PaintColorProperty( bodyTopFillColorProperty, { luminanceFactor: -0.2 } );
+      const bodyTopStrokeColorProperty = new PaintColorProperty( bodyTopFillColorProperty, { luminanceFactor: -0.3 } );
 
       // create the back part of the top of the body
       const bodyTopBackNode = createBodyTopHalfNode( pumpBodyWidth, -1, bodyTopFillColorProperty, bodyTopStrokeColorProperty );
@@ -149,33 +148,6 @@ define( require => {
           indicatorHeightProportion: 0.7
         }
       );
-
-      // create the handle of the pump
-      const pumpHandleNode = createPumpHandleNode( options.handleFill );
-      const pumpHandleHeight = height * PUMP_HANDLE_HEIGHT_PROPORTION;
-      pumpHandleNode.touchArea = pumpHandleNode.localBounds.dilatedXY( 100, 100 );
-      pumpHandleNode.scale( pumpHandleHeight / pumpHandleNode.height );
-      pumpHandleNode.setTranslation(
-        0,
-        -( ( height * PUMP_HANDLE_INIT_VERT_POS_PROPORTION ) + pumpHandleNode.height )
-      );
-
-      // sizing for the pump shaft
-      const pumpShaftWidth = width * PUMP_SHAFT_WIDTH_PROPORTION;
-      const pumpShaftHeight = height * PUMP_SHAFT_HEIGHT_PROPORTION;
-
-      // use PaintColorProperty so that colors can be updated dynamically via ColorProfile
-      const shaftFillColorProperty = new PaintColorProperty( options.shaftFill );
-      const shaftStrokeColorProperty = new PaintColorProperty( shaftFillColorProperty, { luminanceFactor: -0.38 } );
-
-      // create the pump shaft, which is the part below the handle and inside the body
-      const pumpShaftNode = new Rectangle( 0, 0, pumpShaftWidth, pumpShaftHeight, {
-        fill: shaftFillColorProperty,
-        stroke: shaftStrokeColorProperty,
-        pickable: false
-      } );
-      pumpShaftNode.x = -pumpShaftWidth / 2;
-      pumpShaftNode.top = pumpHandleNode.bottom;
 
       // create the hose
       const hoseNode = new Path( new Shape()
@@ -204,6 +176,33 @@ define( require => {
         localHoseOffsetX - hoseConnectorWidth / 2,
         BODY_TO_HOSE_ATTACH_POINT_Y - localHoseConnector.height / 2
       );
+
+      // create the handle of the pump
+      const pumpHandleNode = createPumpHandleNode( options.handleFill );
+      const pumpHandleHeight = height * PUMP_HANDLE_HEIGHT_PROPORTION;
+      pumpHandleNode.touchArea = pumpHandleNode.localBounds.dilatedXY( 100, 100 );
+      pumpHandleNode.scale( pumpHandleHeight / pumpHandleNode.height );
+      pumpHandleNode.setTranslation(
+        0,
+        -( ( height * PUMP_HANDLE_INIT_VERT_POS_PROPORTION ) + pumpHandleNode.height )
+      );
+
+      // sizing for the pump shaft
+      const pumpShaftWidth = width * PUMP_SHAFT_WIDTH_PROPORTION;
+      const pumpShaftHeight = height * PUMP_SHAFT_HEIGHT_PROPORTION;
+
+      // use PaintColorProperty so that colors can be updated dynamically via ColorProfile
+      const shaftFillColorProperty = new PaintColorProperty( options.shaftFill );
+      const shaftStrokeColorProperty = new PaintColorProperty( shaftFillColorProperty, { luminanceFactor: -0.38 } );
+
+      // create the pump shaft, which is the part below the handle and inside the body
+      const pumpShaftNode = new Rectangle( 0, 0, pumpShaftWidth, pumpShaftHeight, {
+        fill: shaftFillColorProperty,
+        stroke: shaftStrokeColorProperty,
+        pickable: false
+      } );
+      pumpShaftNode.x = -pumpShaftWidth / 2;
+      pumpShaftNode.top = pumpHandleNode.bottom;
 
       const maxHandleYOffset = pumpHandleNode.centerY;
       const minHandleYOffset = maxHandleYOffset + ( -PUMP_SHAFT_HEIGHT_PROPORTION * height / 2 );
