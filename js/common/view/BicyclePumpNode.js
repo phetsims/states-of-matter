@@ -136,7 +136,7 @@ define( require => {
       // create the bottom cap on the body
       var bodyBottomCapNode = new Path( new Shape()
         .ellipse( 0, 0, bodyTopFrontNode.width * 0.55, 3, 0, 0, true ), {
-        fill: options.baseFill,
+        fill: new PaintColorProperty( baseFillColorProperty, { luminanceFactor: -0.3 } ),
         centerX: bodyTopFrontNode.centerX,
         bottom: coneNode.top + 4
       } );
@@ -292,7 +292,7 @@ define( require => {
     const pumpEdgeNode = new Path( pumpEdgeShape, {
       fill: new LinearGradient( -halfOfBaseWidth, 0, halfOfBaseWidth, 0 )
         .addColorStop( 0, baseFillDarkestColorProperty )
-        .addColorStop( 0.85, baseFillDarkerColorProperty )
+        .addColorStop( 0.15, baseFillDarkerColorProperty )
         .addColorStop( 1, baseFillDarkestColorProperty )
     } );
 
@@ -337,6 +337,7 @@ define( require => {
 
     const fillBrighterColorProperty = new PaintColorProperty( fillColorProperty, { luminanceFactor: 0.1 } );
     const fillDarkerColorProperty = new PaintColorProperty( fillColorProperty, { luminanceFactor: -0.2 } );
+    const fillDarkestColorProperty = new PaintColorProperty( fillColorProperty, { luminanceFactor: -0.4 } );
 
     return new Rectangle( 0, 0, hoseConnectorWidth, hoseConnectorHeight, 2, 2, {
       fill: new LinearGradient( 0, 0, 0, hoseConnectorHeight )
@@ -344,7 +345,7 @@ define( require => {
         .addColorStop( 0.3, fillColorProperty )
         .addColorStop( 0.35, fillBrighterColorProperty )
         .addColorStop( 0.4, fillBrighterColorProperty )
-        .addColorStop( 1, fillDarkerColorProperty )
+        .addColorStop( 1, fillDarkestColorProperty )
     } );
   }
 
