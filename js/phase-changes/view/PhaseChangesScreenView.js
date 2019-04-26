@@ -11,7 +11,7 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var BicyclePumpNode = require( 'STATES_OF_MATTER/common/view/BicyclePumpNode' );
+  var BicyclePumpNode = require( 'SCENERY_PHET/BicyclePumpNode' );
   var Bounds2 = require( 'DOT/Bounds2' );
   var CompositeThermometerNode = require( 'STATES_OF_MATTER/common/view/CompositeThermometerNode' );
   var EpsilonControlInteractionPotentialDiagram = require( 'STATES_OF_MATTER/phase-changes/view/EpsilonControlInteractionPotentialDiagram' );
@@ -139,8 +139,9 @@ define( function( require ) {
     this.pumpNode = new BicyclePumpNode(
       multipleParticleModel.numberOfMoleculesProperty,
       multipleParticleModel.numberOfMoleculesRangeProperty, {
+        enabledProperty: multipleParticleModel.isPlayingProperty,
         hoseAttachmentOffset: new Vector2( 165, -158 ),
-        enabledProperty: multipleParticleModel.isPlayingProperty
+        numberOfParticlesPerPumpAction: 3
       } );
     this.pumpNode.setHoseAttachmentPosition( nominalParticleAreaViewBounds.left, nominalParticleAreaViewBounds.bottom - 70 );
     this.addChild( this.pumpNode );
