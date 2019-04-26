@@ -133,6 +133,14 @@ define( require => {
       bodyTopFrontNode.centerX = pumpBodyNode.centerX;
       bodyTopFrontNode.top = bodyTopBackNode.bottom - 0.4; // tweak slightly to prevent pump body from showing through
 
+      // create the bottom cap on the body
+      var bodyBottomCapNode = new Path( new Shape()
+        .ellipse( 0, 0, bodyTopFrontNode.width * 0.55, 3, 0, 0, true ), {
+        fill: options.baseFill,
+        centerX: bodyTopFrontNode.centerX,
+        bottom: coneNode.top + 4
+      } );
+
       // create the node that will be used to indicate the remaining capacity
       const remainingCapacityIndicator = new SegmentedBarGraphNode(
         numberProperty,
@@ -216,6 +224,7 @@ define( require => {
       this.addChild( hoseNode );
       this.addChild( pumpBaseNode );
       this.addChild( bodyTopBackNode );
+      this.addChild( bodyBottomCapNode );
       this.addChild( pumpShaftNode );
       this.addChild( pumpHandleNode );
       this.addChild( pumpBodyNode );
