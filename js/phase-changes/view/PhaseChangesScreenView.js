@@ -121,6 +121,7 @@ define( function( require ) {
         multipleParticleModel.reset();
         // Reset phase diagram state in SOM basic version.
         multipleParticleModel.phaseDiagramExpandedProperty.value = isInteractionDiagramEnabled;
+        self.pumpNode.reset();
       },
       radius: SOMConstants.RESET_ALL_BUTTON_RADIUS,
       right: this.layoutBounds.maxX - SOMConstants.RESET_ALL_BUTTON_DISTANCE_FROM_SIDE,
