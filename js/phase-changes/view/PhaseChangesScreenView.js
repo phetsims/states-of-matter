@@ -143,7 +143,10 @@ define( function( require ) {
         hoseAttachmentOffset: new Vector2( 165, -158 ),
         numberOfParticlesPerPumpAction: 3
       } );
-    this.pumpNode.setHoseAttachmentPosition( nominalParticleAreaViewBounds.left, nominalParticleAreaViewBounds.bottom - 70 );
+    this.pumpNode.setHoseAttachmentPosition( new Vector2(
+      nominalParticleAreaViewBounds.left,
+      nominalParticleAreaViewBounds.bottom - 70
+    ) );
     this.addChild( this.pumpNode );
 
     // add return lid button
