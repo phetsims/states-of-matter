@@ -142,7 +142,9 @@ define( function( require ) {
       multipleParticleModel.numberOfMoleculesRangeProperty, {
         enabledProperty: multipleParticleModel.isPlayingProperty,
         hoseAttachmentOffset: new Vector2( 165, -158 ),
-        numberOfParticlesPerPumpAction: 3
+        numberOfParticlesPerPumpAction: 3,
+        handleTouchAreaXDilation: 100,
+        handleTouchAreaYDilation: 100
       } );
     this.pumpNode.setHoseAttachmentPosition( new Vector2(
       nominalParticleAreaViewBounds.left,
