@@ -136,20 +136,23 @@ define( function( require ) {
       { right: heaterCoolerNode.left - 50, centerY: heaterCoolerNode.centerY }
     ) );
 
+    // Pump is located at the bottom left of the screen.
+    const pumpPosition = new Vector2( 106, 466 );
+
+    // Hose attaches to the bottom left side of the container.
+    const hoseAttachmentPoint = new Vector2( nominalParticleAreaViewBounds.left, nominalParticleAreaViewBounds.bottom - 70 );
+
     // add bicycle pump node
     this.pumpNode = new BicyclePumpNode(
       multipleParticleModel.numberOfMoleculesProperty,
       multipleParticleModel.numberOfMoleculesRangeProperty, {
         enabledProperty: multipleParticleModel.isPlayingProperty,
-        hoseAttachmentOffset: new Vector2( 165, -158 ),
+        translation: pumpPosition,
+        hoseAttachmentOffset: hoseAttachmentPoint.minus( pumpPosition ),
         numberOfParticlesPerPumpAction: 3,
         handleTouchAreaXDilation: 100,
         handleTouchAreaYDilation: 100
       } );
-    this.pumpNode.setHoseAttachmentPosition( new Vector2(
-      nominalParticleAreaViewBounds.left,
-      nominalParticleAreaViewBounds.bottom - 70
-    ) );
     this.addChild( this.pumpNode );
 
     // add return lid button
