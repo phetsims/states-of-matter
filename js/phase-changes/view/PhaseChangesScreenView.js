@@ -150,6 +150,7 @@ define( function( require ) {
         translation: pumpPosition,
         hoseAttachmentOffset: hoseAttachmentPoint.minus( pumpPosition ),
         numberOfParticlesPerPumpAction: 3,
+        hoseCurviness: 1.5,
         handleTouchAreaXDilation: 100,
         handleTouchAreaYDilation: 100
       } );
