@@ -84,9 +84,6 @@ define( function( require ) {
   var MAX_CONTAINER_EXPAND_RATE = 1500; // in model units per second
   var POST_EXPLOSION_CONTAINER_EXPANSION_RATE = 9000; // in model units per second
 
-  // countdown value used when recalculating temperature when the container size is changing
-  var CONTAINER_SIZE_CHANGE_COUNTDOWN_RESET = 0.5; // in seconds, empirically determined
-
   // Range for deciding if the temperature is near the current set point. The units are internal model units.
   var TEMPERATURE_CLOSENESS_RANGE = 0.15;
 
@@ -173,7 +170,6 @@ define( function( require ) {
 
     // @private, various internal model variables
     this.particleDiameter = 1;
-    this.heightChangeCountdownTime = 0;
     this.minModelTemperature = null;
     this.residualTime = 0;
     this.numMoleculesAwaitingInjection = 0;
@@ -586,7 +582,7 @@ define( function( require ) {
     },
 
     /**
-     * Inject a new molecule of the current type.  This method actually queues it for intejction, actualy injection
+     * Inject a new molecule of the current type.  This method actually queues it for injection, actual injection
      * occurs during model steps.
      * @public
      */
@@ -797,7 +793,6 @@ define( function( require ) {
 
         // Adjust the particle container height if needed.
         if ( this.targetContainerHeightProperty.get() !== this.particleContainerHeightProperty.get() ) {
-          this.heightChangeCountdownTime = CONTAINER_SIZE_CHANGE_COUNTDOWN_RESET;
           this.heightChangeThisStep = this.targetContainerHeightProperty.get() - this.particleContainerHeightProperty.get();
           if ( this.heightChangeThisStep > 0 ) {
 
@@ -824,9 +819,6 @@ define( function( require ) {
         }
         else {
           this.heightChangeThisStep = 0;
-          if ( this.heightChangeCountdownTime > 0 ) {
-            this.heightChangeCountdownTime = Math.max( this.heightChangeCountdownTime - dt, 0 );
-          }
           this.normalizedLidVelocityY = 0;
         }
       }
