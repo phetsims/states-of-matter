@@ -207,19 +207,19 @@ define( function( require ) {
       true,
       { canvasBounds: new Bounds2( 0, 0, this.graphWidth, this.graphHeight ) }
     );
-    this.addChild( this.interactionPotentialCanvasNode );
 
     // Update interactivity state.
     this.updateInteractivityState();
 
     // Redraw the potential curve.
     this.drawPotentialCurve();
+
+    // Add children
     this.addChild( this.horizontalAxisLabel );
-
     this.addChild( this.verticalAxisLabel );
-
     this.addChild( this.verticalAxis );
     this.addChild( this.horizontalAxis );
+    this.addChild( this.interactionPotentialCanvasNode );
     this.addChild( this.ljPotentialGraph );
 
     // applying color scheme to lj graph elements

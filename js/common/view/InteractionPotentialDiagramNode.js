@@ -14,10 +14,8 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var LjPotentialCalculator = require( 'STATES_OF_MATTER/common/model/LjPotentialCalculator' );
   var Node = require( 'SCENERY/nodes/Node' );
-  var Path = require( 'SCENERY/nodes/Path' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var PositionMarker = require( 'STATES_OF_MATTER/atomic-interactions/view/PositionMarker' );
-  var Shape = require( 'KITE/Shape' );
   var SOMColorProfile = require( 'STATES_OF_MATTER/common/view/SOMColorProfile' );
   var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
   var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
@@ -103,11 +101,6 @@ define( function( require ) {
     this.verticalScalingFactor = ( this.graphHeight / 2.2 ) /
                                  ( SOMConstants.MAX_EPSILON * SOMConstants.K_BOLTZMANN );
     this.horizontalLineCount = 5;
-
-    // Create and add the center axis line for the graph.
-    var centerAxis = new Path( Shape.lineSegment( 0, 0, this.graphWidth, 0 ), { lineWidth: 0.8, stroke: '#A7A7A7' } );
-    this.ljPotentialGraph.addChild( centerAxis );
-    centerAxis.setTranslation( 0, this.graphHeight / 2 );
 
     // Add the arrows and labels that will depict sigma and epsilon.
     this.epsilonArrow = new ArrowNode( 0, 0, 0, 0, {
@@ -224,7 +217,10 @@ define( function( require ) {
 
     if ( wide ) {
       this.gridNode = new ZoomableGridNode( this, 0, 0, this.graphWidth, this.graphHeight );
-      this.ljPotentialGraph.addChild( this.gridNode );
+      this.gridNode.x = this.graphXOrigin;
+      this.gridNode.y = this.graphYOrigin - this.graphHeight;
+      this.addChild( this.gridNode );
+
       // adjusting zoom buttons  position on interaction diagram
       this.gridNode.zoomInButton.right = this.verticalAxis.left - this.gridNode.zoomInButton.width;
       this.gridNode.zoomOutButton.right = this.verticalAxis.left - this.gridNode.zoomInButton.width;
