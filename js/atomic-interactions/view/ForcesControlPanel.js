@@ -35,7 +35,7 @@ define( function( require ) {
   var vanderwaalsString = require( 'string!STATES_OF_MATTER/vanderwaals' );
 
   // constants
-  var TEXT_LABEL_MAX_WIDTH = 130; // max width of text label in the panel
+  var TEXT_LABEL_MAX_WIDTH = 175; // max width of text label in the panel
   var RADIO_BUTTON_RADIUS = 6;
   var ICON_PADDING = 25; // empirically determined to put the icons in a good position on the panel
 
@@ -105,7 +105,7 @@ define( function( require ) {
     };
 
     var vanderwaalsText = {
-      label: createText( vanderwaalsString, TEXT_LABEL_MAX_WIDTH * 0.7, 11 )
+      label: createText( vanderwaalsString, TEXT_LABEL_MAX_WIDTH * 0.8, 11 )
     };
 
     var repulsiveText = {
@@ -114,7 +114,7 @@ define( function( require ) {
     };
 
     var electronOverlapText = {
-      label: createText( electronOverlapString, TEXT_LABEL_MAX_WIDTH * 0.7, 11 )
+      label: createText( electronOverlapString, TEXT_LABEL_MAX_WIDTH * 0.8, 11 )
     };
 
     // compute the maximum item width
