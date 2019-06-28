@@ -113,6 +113,7 @@ define( function( require ) {
         default:
           throw new Error( 'invalid atomPair: ' + atomPair );
       } //end of switch
+      self.updateForces();
     } );
 
     // Put the model into its initial state.

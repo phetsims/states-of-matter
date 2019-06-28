@@ -229,24 +229,11 @@ define( function( require ) {
 
     // update the visibility of the force arrows when the settings change
     dualAtomModel.forcesDisplayModeProperty.link( function( forces ) {
-      switch( forces ) {
-        case 'hideForces':
-          self.setShowAttractiveForces( false );
-          self.setShowRepulsiveForces( false );
-          self.setShowTotalForces( false );
-          break;
-        case 'totalForce':
-          self.setShowAttractiveForces( false );
-          self.setShowRepulsiveForces( false );
-          self.setShowTotalForces( true );
-          break;
-        case 'componentForce':
-          self.setShowAttractiveForces( true );
-          self.setShowRepulsiveForces( true );
-          self.setShowTotalForces( false );
-          break;
-        default:
-          throw new Error( 'invalid forces: ' + forces );
+      self.setShowAttractiveForces( forces === 'componentForce' );
+      self.setShowRepulsiveForces( forces === 'componentForce' );
+      self.setShowTotalForces( forces === 'totalForce' );
+      if ( !self.showAttractiveForces && !self.showTotalForces && forces !== 'hideForces' ) {
+        throw new Error( 'invalid forces: ' + forces );
       }
     } );
 
