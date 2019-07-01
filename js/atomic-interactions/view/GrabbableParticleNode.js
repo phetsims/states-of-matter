@@ -44,6 +44,7 @@ define( function( require ) {
     var initialStartX = this.x;
 
     var inputListener = new SimpleDragHandler( {
+      allowTouchSnag: true,
 
       start: function( event ) {
 

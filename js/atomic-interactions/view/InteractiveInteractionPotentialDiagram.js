@@ -157,6 +157,7 @@ define( function( require ) {
     this.positionMarker.setPickable( true );
     this.positionMarker.touchArea = Shape.circle( 0, 0, 13 );
     this.positionMarker.addInputListener( new SimpleDragHandler( {
+        allowTouchSnag: true,
 
         start: function( event ) {
           // Stop the particle from moving in the model.
