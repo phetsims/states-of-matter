@@ -217,9 +217,9 @@ define( function( require ) {
     // Add children
     this.addChild( this.horizontalAxisLabel );
     this.addChild( this.verticalAxisLabel );
+    this.addChild( this.interactionPotentialCanvasNode );
     this.addChild( this.verticalAxis );
     this.addChild( this.horizontalAxis );
-    this.addChild( this.interactionPotentialCanvasNode );
     this.addChild( this.ljPotentialGraph );
 
     // applying color scheme to lj graph elements
