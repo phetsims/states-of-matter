@@ -64,7 +64,10 @@ define( function( require ) {
       xMargin: 3,
       yMargin: 3,
       disabledBaseColor: '#EDEDED',
-      buttonAppearanceStrategy: RectangularButtonView.FlatAppearanceStrategy
+      buttonAppearanceStrategy: RectangularButtonView.FlatAppearanceStrategy,
+      touchAreaXDilation: 10,
+      touchAreaYDilation: 8,
+      touchAreaYShift: -7
     } );
     this.zoomInButton.enabled = false;
 
@@ -82,7 +85,10 @@ define( function( require ) {
       yMargin: 3,
       disabledBaseColor: '#EDEDED',
       buttonAppearanceStrategy: RectangularButtonView.FlatAppearanceStrategy,
-      in: false
+      in: false,
+      touchAreaXDilation: 10,
+      touchAreaYDilation: 8,
+      touchAreaYShift: 7
     } );
     this.zoomOutButton.enabled = true;
     this.addChild( this.zoomInButton );
