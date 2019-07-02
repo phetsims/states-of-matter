@@ -52,7 +52,6 @@ define( function( require ) {
   // constants
   var NORMAL_TEXT_FONT = new PhetFont( 12 );
   var RADIO_BUTTON_RADIUS = 6;
-  var SLIDER_TICK_TEXT_MAX_WIDTH = 35;
   var TITLE_TEXT_WIDTH = 130;
   var PANEL_X_MARGIN = 10;
 
@@ -82,7 +81,7 @@ define( function( require ) {
 
     // This control panel width differs between SOM full version and the Atomic Interactions sim, so we are using
     // different max width values.  These were empirically determined.
-    var SLIDER_TITLE_MAX_WIDTH = enableHeterogeneousAtoms ? 170 : 120;
+    var SLIDER_TITLE_MAX_WIDTH = enableHeterogeneousAtoms ? 225 : 150;
     var NORMAL_TEXT_MAX_WIDTH = enableHeterogeneousAtoms ? 200 : 120;
 
     // white text within SOM full version, black text in Atomic Interactions
@@ -164,8 +163,8 @@ define( function( require ) {
 
       // function to create a label node from
       createLabelNode = function( atomNameTextNodes ) {
-        var strutWidth1 = ( maxLabelWidth / 2 - atomNameTextNodes[ 0 ].width );
-        var strutWidth2 = ( maxLabelWidth / 2 - atomNameTextNodes[ 1 ].width );
+        var strutWidth1 = maxLabelWidth / 2 - atomNameTextNodes[ 0 ].width;
+        var strutWidth2 = maxLabelWidth / 2 - atomNameTextNodes[ 1 ].width;
         return new HBox( {
           children: [ atomNameTextNodes[ 0 ], new HStrut( strutWidth1 ), atomNameTextNodes[ 1 ], new HStrut( strutWidth2 ) ]
         } );
@@ -204,7 +203,7 @@ define( function( require ) {
         children: [ neonNeonRadio, argonArgonRadio, oxygenOxygenRadio,
           neonArgonRadio, neonOxygenRadio, argonOxygenRadio, adjustableAttractionRadio ],
         align: 'left',
-        spacing: 11
+        spacing: 13
       } );
       radioButtonGroup = new VBox( {
         children: [ titleNode, radioButtons ],
@@ -331,7 +330,8 @@ define( function( require ) {
       sliderOptions
     );
 
-    var tickTextOptions = { fill: options.panelTextFill, maxWidth: SLIDER_TICK_TEXT_MAX_WIDTH };
+    var maxTickTextWidth = enableHeterogeneousAtoms ? 85 : 35;
+    var tickTextOptions = { fill: options.panelTextFill, maxWidth: maxTickTextWidth };
     var smallText = new Text( smallString, tickTextOptions );
     var largeText = new Text( largeString, tickTextOptions );
 
