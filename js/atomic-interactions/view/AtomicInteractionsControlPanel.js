@@ -52,8 +52,8 @@ define( function( require ) {
   // constants
   var NORMAL_TEXT_FONT = new PhetFont( 12 );
   var RADIO_BUTTON_RADIUS = 6;
-  var SLIDER_TICK_TEXT_MAX_WIDTH = 50;
-  var TITLE_TEXT_WIDTH = 150;
+  var SLIDER_TICK_TEXT_MAX_WIDTH = 35;
+  var TITLE_TEXT_WIDTH = 130;
   var PANEL_X_MARGIN = 10;
 
   /**
@@ -82,8 +82,8 @@ define( function( require ) {
 
     // This control panel width differs between SOM full version and the Atomic Interactions sim, so we are using
     // different max width values.  These were empirically determined.
-    var SLIDER_TITLE_MAX_WIDTH = enableHeterogeneousAtoms ? 185 : 120;
-    var NORMAL_TEXT_MAX_WIDTH = enableHeterogeneousAtoms ? 145 : 120;
+    var SLIDER_TITLE_MAX_WIDTH = enableHeterogeneousAtoms ? 170 : 120;
+    var NORMAL_TEXT_MAX_WIDTH = enableHeterogeneousAtoms ? 200 : 120;
 
     // white text within SOM full version, black text in Atomic Interactions
     // white stroke around the atoms & molecules panel within SOM full version, black stroke in Atomic Interactions
@@ -141,7 +141,7 @@ define( function( require ) {
       } );
       var pushpinImage = new Image( pushPinImg );
       pushpinImage.scale( 15 / pushpinImage.height );
-      var maxWidthOfTitleText = 60; // empirically determined
+      var maxWidthOfTitleText = 100; // empirically determined
       var pinnedNodeText = new HBox( {
         children: [
           pushpinImage,
