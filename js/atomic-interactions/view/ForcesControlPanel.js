@@ -136,7 +136,7 @@ define( function( require ) {
     };
 
     var componentForceText = new VBox( {
-      spacing: 2,
+      spacing: 3,
       children: [
         createConsistentlySpacedLabel( attractiveText ),
         createConsistentlySpacedLabel( vanderwaalsText ),

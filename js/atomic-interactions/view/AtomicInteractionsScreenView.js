@@ -42,7 +42,7 @@ define( function( require ) {
   var PUSH_PIN_WIDTH = 20;
   var INSET = 15;
   var MAX_TEXT_WIDTH = 80;
-  var PANEL_WIDTH = 190; // empirically determined to work well for English and most other translations
+  var PANEL_WIDTH = 205; // empirically determined to work well for English and most other translations
 
   /**
    * @param {DualAtomModel} dualAtomModel of the simulation
