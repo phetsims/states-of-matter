@@ -384,7 +384,7 @@ define( function( require ) {
       fill: options.fill,
       xMargin: PANEL_X_MARGIN,
       minWidth: options.minWidth,
-      align: 'center'
+      align: 'left'
     } );
     this.addChild( radioButtonPanel );
 
