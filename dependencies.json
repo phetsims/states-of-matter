@@ -1,5 +1,5 @@
 {
-  "comment": "# states-of-matter 1.1.7 Mon Sep 09 2019 13:02:18 GMT-0600 (Mountain Daylight Time)",
+  "comment": "# states-of-matter 1.1.8-rc.1 Tue Sep 10 2019 00:58:59 GMT-0600 (Mountain Daylight Time)",
   "assert": {
     "sha": "928741cfc8fe804334d5b35292140314511f8678",
     "branch": "HEAD"
@@ -22,7 +22,7 @@
   },
   "joist": {
     "sha": "b6735673a4e84918acdf9e05abb9f572487eac25",
-    "branch": "states-of-matter-1.1"
+    "branch": "HEAD"
   },
   "kite": {
     "sha": "59755f7e658056e266dff6b4901b34bd01e0de70",
@@ -69,7 +69,7 @@
     "branch": "HEAD"
   },
   "states-of-matter": {
-    "sha": "b7b86b5f1c59002bd76cc2e8fde7e5a01264b578",
+    "sha": "d8f38a4d7268f9170716e8c293e1d3f32db2a57a",
     "branch": "1.1"
   },
   "sun": {
