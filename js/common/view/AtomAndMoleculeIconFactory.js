@@ -5,15 +5,15 @@
  * atoms and molecules.
  */
 
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var Circle = require( 'SCENERY/nodes/Circle' );
-  var Node = require( 'SCENERY/nodes/Node' );
-  var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
-  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  var SubstanceType = require( 'STATES_OF_MATTER/common/SubstanceType' );
+  const Circle = require( 'SCENERY/nodes/Circle' );
+  const Node = require( 'SCENERY/nodes/Node' );
+  const SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
+  const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  const SubstanceType = require( 'STATES_OF_MATTER/common/SubstanceType' );
 
   // define the object where all of the icons will be available
   var AtomAndMoleculeIconFactory = {

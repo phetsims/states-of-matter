@@ -5,14 +5,14 @@
  *
  * @author Aaron Davis
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var inherit = require( 'PHET_CORE/inherit' );
-  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  var Vector2 = require( 'DOT/Vector2' );
-  var Vector2Property = require( 'DOT/Vector2Property' );
+  const inherit = require( 'PHET_CORE/inherit' );
+  const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  const Vector2 = require( 'DOT/Vector2' );
+  const Vector2Property = require( 'DOT/Vector2Property' );
 
   /**
    * @param {number} x - x position in picometers

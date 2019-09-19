@@ -6,21 +6,21 @@
  * @author Aaron Davis
  * @author Siddhartha Chinthapally (Actual Concepts)
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var inherit = require( 'PHET_CORE/inherit' );
-  var MultipleParticleModel = require( 'STATES_OF_MATTER/common/model/MultipleParticleModel' );
-  var PhaseChangesIcon = require( 'STATES_OF_MATTER/phase-changes/PhaseChangesIcon' );
-  var PhaseChangesScreenView = require( 'STATES_OF_MATTER/phase-changes/view/PhaseChangesScreenView' );
-  var Screen = require( 'JOIST/Screen' );
-  var SOMColorProfile = require( 'STATES_OF_MATTER/common/view/SOMColorProfile' );
-  var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
-  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  const inherit = require( 'PHET_CORE/inherit' );
+  const MultipleParticleModel = require( 'STATES_OF_MATTER/common/model/MultipleParticleModel' );
+  const PhaseChangesIcon = require( 'STATES_OF_MATTER/phase-changes/PhaseChangesIcon' );
+  const PhaseChangesScreenView = require( 'STATES_OF_MATTER/phase-changes/view/PhaseChangesScreenView' );
+  const Screen = require( 'JOIST/Screen' );
+  const SOMColorProfile = require( 'STATES_OF_MATTER/common/view/SOMColorProfile' );
+  const SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
+  const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   // strings
-  var phaseChangesString = require( 'string!STATES_OF_MATTER/phaseChanges' );
+  const phaseChangesString = require( 'string!STATES_OF_MATTER/phaseChanges' );
 
   /**
    * @param {boolean} isInteractionDiagramEnabled

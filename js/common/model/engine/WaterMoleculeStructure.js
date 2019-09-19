@@ -8,12 +8,12 @@
  * @author John Blanco
  * @author Siddhartha Chinthapally (Actual Concepts)
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
-  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  const SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
+  const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   var moleculeStructureX = [];
   var moleculeStructureY = [];

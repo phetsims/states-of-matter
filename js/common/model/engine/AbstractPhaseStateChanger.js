@@ -7,15 +7,15 @@
  * @author John Blanco
  * @author Aaron Davis
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var inherit = require( 'PHET_CORE/inherit' );
-  var PhaseStateEnum = require( 'STATES_OF_MATTER/common/PhaseStateEnum' );
-  var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
-  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  var Vector2 = require( 'DOT/Vector2' );
+  const inherit = require( 'PHET_CORE/inherit' );
+  const PhaseStateEnum = require( 'STATES_OF_MATTER/common/PhaseStateEnum' );
+  const SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
+  const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  const Vector2 = require( 'DOT/Vector2' );
 
   // constants
   var MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE = 1.5;

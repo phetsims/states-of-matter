@@ -5,38 +5,38 @@
  *
  * @author John Blanco
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var AquaRadioButton = require( 'SUN/AquaRadioButton' );
-  var AtomicInteractionsControlPanel = require( 'STATES_OF_MATTER/atomic-interactions/view/AtomicInteractionsControlPanel' );
-  var Bounds2 = require( 'DOT/Bounds2' );
-  var ForcesControlPanel = require( 'STATES_OF_MATTER/atomic-interactions/view/ForcesControlPanel' );
-  var GrabbableParticleNode = require( 'STATES_OF_MATTER/atomic-interactions/view/GrabbableParticleNode' );
-  var HandNode = require( 'STATES_OF_MATTER/atomic-interactions/view/HandNode' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var InteractiveInteractionPotentialDiagram = require( 'STATES_OF_MATTER/atomic-interactions/view/InteractiveInteractionPotentialDiagram' );
-  var ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
-  var Node = require( 'SCENERY/nodes/Node' );
-  var ParticleForceNode = require( 'STATES_OF_MATTER/atomic-interactions/view/ParticleForceNode' );
-  var PhetFont = require( 'SCENERY_PHET/PhetFont' );
-  var PushPinNode = require( 'STATES_OF_MATTER/atomic-interactions/view/PushPinNode' );
-  var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
-  var ScreenView = require( 'JOIST/ScreenView' );
-  var SOMColorProfile = require( 'STATES_OF_MATTER/common/view/SOMColorProfile' );
-  var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
-  var SOMPlayPauseStepControl = require( 'STATES_OF_MATTER/common/view/SOMPlayPauseStepControl' );
-  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  var Text = require( 'SCENERY/nodes/Text' );
-  var TextPushButton = require( 'SUN/buttons/TextPushButton' );
-  var VBox = require( 'SCENERY/nodes/VBox' );
-  var Vector2 = require( 'DOT/Vector2' );
+  const AquaRadioButton = require( 'SUN/AquaRadioButton' );
+  const AtomicInteractionsControlPanel = require( 'STATES_OF_MATTER/atomic-interactions/view/AtomicInteractionsControlPanel' );
+  const Bounds2 = require( 'DOT/Bounds2' );
+  const ForcesControlPanel = require( 'STATES_OF_MATTER/atomic-interactions/view/ForcesControlPanel' );
+  const GrabbableParticleNode = require( 'STATES_OF_MATTER/atomic-interactions/view/GrabbableParticleNode' );
+  const HandNode = require( 'STATES_OF_MATTER/atomic-interactions/view/HandNode' );
+  const inherit = require( 'PHET_CORE/inherit' );
+  const InteractiveInteractionPotentialDiagram = require( 'STATES_OF_MATTER/atomic-interactions/view/InteractiveInteractionPotentialDiagram' );
+  const ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
+  const Node = require( 'SCENERY/nodes/Node' );
+  const ParticleForceNode = require( 'STATES_OF_MATTER/atomic-interactions/view/ParticleForceNode' );
+  const PhetFont = require( 'SCENERY_PHET/PhetFont' );
+  const PushPinNode = require( 'STATES_OF_MATTER/atomic-interactions/view/PushPinNode' );
+  const ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
+  const ScreenView = require( 'JOIST/ScreenView' );
+  const SOMColorProfile = require( 'STATES_OF_MATTER/common/view/SOMColorProfile' );
+  const SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
+  const SOMPlayPauseStepControl = require( 'STATES_OF_MATTER/common/view/SOMPlayPauseStepControl' );
+  const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  const Text = require( 'SCENERY/nodes/Text' );
+  const TextPushButton = require( 'SUN/buttons/TextPushButton' );
+  const VBox = require( 'SCENERY/nodes/VBox' );
+  const Vector2 = require( 'DOT/Vector2' );
 
   // strings
-  var normalString = require( 'string!STATES_OF_MATTER/normal' );
-  var returnAtomString = require( 'string!STATES_OF_MATTER/returnAtom' );
-  var slowMotionString = require( 'string!STATES_OF_MATTER/slowMotion' );
+  const normalString = require( 'string!STATES_OF_MATTER/normal' );
+  const returnAtomString = require( 'string!STATES_OF_MATTER/returnAtom' );
+  const slowMotionString = require( 'string!STATES_OF_MATTER/slowMotion' );
 
   // Constant used to control size of push pin, empirically determined.
   var PUSH_PIN_WIDTH = 20;

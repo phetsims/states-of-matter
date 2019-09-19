@@ -7,18 +7,18 @@
  * @author Siddhartha Chinthapally (Actual Concepts)
  * @author John Blanco
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var Image = require( 'SCENERY/nodes/Image' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var Node = require( 'SCENERY/nodes/Node' );
-  var SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
-  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  const Image = require( 'SCENERY/nodes/Image' );
+  const inherit = require( 'PHET_CORE/inherit' );
+  const Node = require( 'SCENERY/nodes/Node' );
+  const SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
+  const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   // images
-  var handImage = require( 'image!SCENERY_PHET/hand.png' );
+  const handImage = require( 'image!SCENERY_PHET/hand.png' );
 
   // constants
   var WIDTH = 80; // empirically determined to look good

@@ -5,15 +5,15 @@
  *
  * @author Chandrashekar Bemagoni (Actual Concepts)
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var ArrowShape = require( 'SCENERY_PHET/ArrowShape' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var Path = require( 'SCENERY/nodes/Path' );
-  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  var Vector2 = require( 'DOT/Vector2' );
+  const ArrowShape = require( 'SCENERY_PHET/ArrowShape' );
+  const inherit = require( 'PHET_CORE/inherit' );
+  const Path = require( 'SCENERY/nodes/Path' );
+  const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  const Vector2 = require( 'DOT/Vector2' );
 
   /*
    * @param {number} tailX - arrowNode tail X position

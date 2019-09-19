@@ -7,37 +7,37 @@
  * @author Siddhartha Chinthapally (Actual Concepts)
  * @author John Blanco
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var BicyclePumpNode = require( 'SCENERY_PHET/BicyclePumpNode' );
-  var Bounds2 = require( 'DOT/Bounds2' );
-  var CompositeThermometerNode = require( 'STATES_OF_MATTER/common/view/CompositeThermometerNode' );
-  var EpsilonControlInteractionPotentialDiagram = require( 'STATES_OF_MATTER/phase-changes/view/EpsilonControlInteractionPotentialDiagram' );
-  var HeaterCoolerNode = require( 'SCENERY_PHET/HeaterCoolerNode' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
-  var MultiLineText = require( 'SCENERY_PHET/MultiLineText' );
-  var MultipleParticleModel = require( 'STATES_OF_MATTER/common/model/MultipleParticleModel' );
-  var NumberProperty = require( 'AXON/NumberProperty' );
-  var ObservableArray = require( 'AXON/ObservableArray' );
-  var ParticleContainerNode = require( 'STATES_OF_MATTER/common/view/ParticleContainerNode' );
-  var PhaseChangesMoleculesControlPanel = require( 'STATES_OF_MATTER/phase-changes/view/PhaseChangesMoleculesControlPanel' );
-  var PhaseDiagram = require( 'STATES_OF_MATTER/phase-changes/view/PhaseDiagram' );
-  var PhetFont = require( 'SCENERY_PHET/PhetFont' );
-  var Range = require( 'DOT/Range' );
-  var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
-  var ScreenView = require( 'JOIST/ScreenView' );
-  var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
-  var SOMPlayPauseStepControl = require( 'STATES_OF_MATTER/common/view/SOMPlayPauseStepControl' );
-  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  var SubstanceType = require( 'STATES_OF_MATTER/common/SubstanceType' );
-  var TextPushButton = require( 'SUN/buttons/TextPushButton' );
-  var Vector2 = require( 'DOT/Vector2' );
+  const BicyclePumpNode = require( 'SCENERY_PHET/BicyclePumpNode' );
+  const Bounds2 = require( 'DOT/Bounds2' );
+  const CompositeThermometerNode = require( 'STATES_OF_MATTER/common/view/CompositeThermometerNode' );
+  const EpsilonControlInteractionPotentialDiagram = require( 'STATES_OF_MATTER/phase-changes/view/EpsilonControlInteractionPotentialDiagram' );
+  const HeaterCoolerNode = require( 'SCENERY_PHET/HeaterCoolerNode' );
+  const inherit = require( 'PHET_CORE/inherit' );
+  const ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
+  const MultiLineText = require( 'SCENERY_PHET/MultiLineText' );
+  const MultipleParticleModel = require( 'STATES_OF_MATTER/common/model/MultipleParticleModel' );
+  const NumberProperty = require( 'AXON/NumberProperty' );
+  const ObservableArray = require( 'AXON/ObservableArray' );
+  const ParticleContainerNode = require( 'STATES_OF_MATTER/common/view/ParticleContainerNode' );
+  const PhaseChangesMoleculesControlPanel = require( 'STATES_OF_MATTER/phase-changes/view/PhaseChangesMoleculesControlPanel' );
+  const PhaseDiagram = require( 'STATES_OF_MATTER/phase-changes/view/PhaseDiagram' );
+  const PhetFont = require( 'SCENERY_PHET/PhetFont' );
+  const Range = require( 'DOT/Range' );
+  const ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
+  const ScreenView = require( 'JOIST/ScreenView' );
+  const SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
+  const SOMPlayPauseStepControl = require( 'STATES_OF_MATTER/common/view/SOMPlayPauseStepControl' );
+  const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  const SubstanceType = require( 'STATES_OF_MATTER/common/SubstanceType' );
+  const TextPushButton = require( 'SUN/buttons/TextPushButton' );
+  const Vector2 = require( 'DOT/Vector2' );
 
   // strings
-  var returnLidString = require( 'string!STATES_OF_MATTER/returnLid' );
+  const returnLidString = require( 'string!STATES_OF_MATTER/returnLid' );
 
   // constants
   var PANEL_WIDTH = 170; // empirically determined to be wide enough for all contents using English strings with some margin

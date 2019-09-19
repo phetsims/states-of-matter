@@ -5,18 +5,18 @@
  *
  * @author John Blanco
  */
-define( function( require ) {
+define( require => {
     'use strict';
 
     // modules
-    var Circle = require( 'SCENERY/nodes/Circle' );
-    var Color = require( 'SCENERY/util/Color' );
-    var inherit = require( 'PHET_CORE/inherit' );
-    var Node = require( 'SCENERY/nodes/Node' );
-    var RadialGradient = require( 'SCENERY/util/RadialGradient' );
-    var Rectangle = require( 'SCENERY/nodes/Rectangle' );
-    var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
-    var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+    const Circle = require( 'SCENERY/nodes/Circle' );
+    const Color = require( 'SCENERY/util/Color' );
+    const inherit = require( 'PHET_CORE/inherit' );
+    const Node = require( 'SCENERY/nodes/Node' );
+    const RadialGradient = require( 'SCENERY/util/RadialGradient' );
+    const Rectangle = require( 'SCENERY/nodes/Rectangle' );
+    const SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
+    const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
     // constants
     var PARTICLE_COLOR = new Color( SOMConstants.ADJUSTABLE_ATTRACTION_COLOR );

@@ -7,28 +7,28 @@
  * @author Aaron Davis
  * @author Siddhartha Chinthapally (Actual Concepts)
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var Bounds2 = require( 'DOT/Bounds2' );
-  var CompositeThermometerNode = require( 'STATES_OF_MATTER/common/view/CompositeThermometerNode' );
-  var HeaterCoolerNode = require( 'SCENERY_PHET/HeaterCoolerNode' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
-  var MultipleParticleModel = require( 'STATES_OF_MATTER/common/model/MultipleParticleModel' );
-  var NumberProperty = require( 'AXON/NumberProperty' );
-  var ParticleContainerNode = require( 'STATES_OF_MATTER/common/view/ParticleContainerNode' );
-  var PhetFont = require( 'SCENERY_PHET/PhetFont' );
-  var Range = require( 'DOT/Range' );
-  var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
-  var ScreenView = require( 'JOIST/ScreenView' );
-  var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
-  var SOMPlayPauseStepControl = require( 'STATES_OF_MATTER/common/view/SOMPlayPauseStepControl' );
-  var StatesMoleculesControlPanel = require( 'STATES_OF_MATTER/states/view/StatesMoleculesControlPanel' );
-  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  var StatesPhaseControlNode = require( 'STATES_OF_MATTER/states/view/StatesPhaseControlNode' );
-  var Vector2 = require( 'DOT/Vector2' );
+  const Bounds2 = require( 'DOT/Bounds2' );
+  const CompositeThermometerNode = require( 'STATES_OF_MATTER/common/view/CompositeThermometerNode' );
+  const HeaterCoolerNode = require( 'SCENERY_PHET/HeaterCoolerNode' );
+  const inherit = require( 'PHET_CORE/inherit' );
+  const ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
+  const MultipleParticleModel = require( 'STATES_OF_MATTER/common/model/MultipleParticleModel' );
+  const NumberProperty = require( 'AXON/NumberProperty' );
+  const ParticleContainerNode = require( 'STATES_OF_MATTER/common/view/ParticleContainerNode' );
+  const PhetFont = require( 'SCENERY_PHET/PhetFont' );
+  const Range = require( 'DOT/Range' );
+  const ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
+  const ScreenView = require( 'JOIST/ScreenView' );
+  const SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
+  const SOMPlayPauseStepControl = require( 'STATES_OF_MATTER/common/view/SOMPlayPauseStepControl' );
+  const StatesMoleculesControlPanel = require( 'STATES_OF_MATTER/states/view/StatesMoleculesControlPanel' );
+  const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  const StatesPhaseControlNode = require( 'STATES_OF_MATTER/states/view/StatesPhaseControlNode' );
+  const Vector2 = require( 'DOT/Vector2' );
 
   // constants
   var CONTROL_PANEL_X_INSET = 15;

@@ -5,24 +5,24 @@
  * @author Aaron Davis
  * @author Chandrashekar Bemagoni (Actual Concepts)
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var ArgonAtom = require( 'STATES_OF_MATTER/common/model/particle/ArgonAtom' );
-  var Color = require( 'SCENERY/util/Color' );
-  var ConfigurableStatesOfMatterAtom = require( 'STATES_OF_MATTER/common/model/particle/ConfigurableStatesOfMatterAtom' );
-  var HydrogenAtom = require( 'STATES_OF_MATTER/common/model/particle/HydrogenAtom' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var NeonAtom = require( 'STATES_OF_MATTER/common/model/particle/NeonAtom' );
-  var Node = require( 'SCENERY/nodes/Node' );
-  var OxygenAtom = require( 'STATES_OF_MATTER/common/model/particle/OxygenAtom' );
-  var Path = require( 'SCENERY/nodes/Path' );
-  var RadialGradient = require( 'SCENERY/util/RadialGradient' );
-  var Shape = require( 'KITE/Shape' );
-  var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
-  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  var Vector2 = require( 'DOT/Vector2' );
+  const ArgonAtom = require( 'STATES_OF_MATTER/common/model/particle/ArgonAtom' );
+  const Color = require( 'SCENERY/util/Color' );
+  const ConfigurableStatesOfMatterAtom = require( 'STATES_OF_MATTER/common/model/particle/ConfigurableStatesOfMatterAtom' );
+  const HydrogenAtom = require( 'STATES_OF_MATTER/common/model/particle/HydrogenAtom' );
+  const inherit = require( 'PHET_CORE/inherit' );
+  const NeonAtom = require( 'STATES_OF_MATTER/common/model/particle/NeonAtom' );
+  const Node = require( 'SCENERY/nodes/Node' );
+  const OxygenAtom = require( 'STATES_OF_MATTER/common/model/particle/OxygenAtom' );
+  const Path = require( 'SCENERY/nodes/Path' );
+  const RadialGradient = require( 'SCENERY/util/RadialGradient' );
+  const Shape = require( 'KITE/Shape' );
+  const SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
+  const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  const Vector2 = require( 'DOT/Vector2' );
 
   // constants
   var MVT_SCALE = 0.25;

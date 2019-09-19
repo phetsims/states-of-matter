@@ -1,9 +1,9 @@
 // Copyright 2016, University of Colorado Boulder
 
-define( function( require ) {
+define( require => {
   'use strict';
 
-  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   var SubstanceType = {
     NEON: 'NEON',

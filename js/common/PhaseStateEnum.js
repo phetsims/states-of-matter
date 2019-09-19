@@ -1,9 +1,9 @@
 // Copyright 2015-2017, University of Colorado Boulder
 
-define( function( require ) {
+define( require => {
   'use strict';
 
-  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   var PhaseStateEnum = {
     SOLID: 'SOLID',

@@ -6,17 +6,17 @@
  * @author John Blanco
  * @author Aaron Davis
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var AbstractPhaseStateChanger = require( 'STATES_OF_MATTER/common/model/engine/AbstractPhaseStateChanger' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var MonatomicAtomPositionUpdater = require( 'STATES_OF_MATTER/common/model/engine/MonatomicAtomPositionUpdater' );
-  var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
-  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  var SubstanceType = require( 'STATES_OF_MATTER/common/SubstanceType' );
-  var Util = require( 'DOT/Util' );
+  const AbstractPhaseStateChanger = require( 'STATES_OF_MATTER/common/model/engine/AbstractPhaseStateChanger' );
+  const inherit = require( 'PHET_CORE/inherit' );
+  const MonatomicAtomPositionUpdater = require( 'STATES_OF_MATTER/common/model/engine/MonatomicAtomPositionUpdater' );
+  const SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
+  const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  const SubstanceType = require( 'STATES_OF_MATTER/common/SubstanceType' );
+  const Util = require( 'DOT/Util' );
 
   // constants
   var MIN_INITIAL_INTER_PARTICLE_DISTANCE = 1.12; // empirically determined

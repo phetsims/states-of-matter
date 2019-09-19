@@ -6,29 +6,29 @@
  * @author John Blanco
  * @author Siddhartha Chinthapally (Actual Concepts)
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var ArrowNode = require( 'SCENERY_PHET/ArrowNode' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var LjPotentialCalculator = require( 'STATES_OF_MATTER/common/model/LjPotentialCalculator' );
-  var Node = require( 'SCENERY/nodes/Node' );
-  var PhetFont = require( 'SCENERY_PHET/PhetFont' );
-  var PositionMarker = require( 'STATES_OF_MATTER/atomic-interactions/view/PositionMarker' );
-  var SOMColorProfile = require( 'STATES_OF_MATTER/common/view/SOMColorProfile' );
-  var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
-  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  var Text = require( 'SCENERY/nodes/Text' );
-  var Vector2 = require( 'DOT/Vector2' );
-  var ZoomableGridNode = require( 'STATES_OF_MATTER/atomic-interactions/view/ZoomableGridNode' );
+  const ArrowNode = require( 'SCENERY_PHET/ArrowNode' );
+  const inherit = require( 'PHET_CORE/inherit' );
+  const LjPotentialCalculator = require( 'STATES_OF_MATTER/common/model/LjPotentialCalculator' );
+  const Node = require( 'SCENERY/nodes/Node' );
+  const PhetFont = require( 'SCENERY_PHET/PhetFont' );
+  const PositionMarker = require( 'STATES_OF_MATTER/atomic-interactions/view/PositionMarker' );
+  const SOMColorProfile = require( 'STATES_OF_MATTER/common/view/SOMColorProfile' );
+  const SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
+  const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  const Text = require( 'SCENERY/nodes/Text' );
+  const Vector2 = require( 'DOT/Vector2' );
+  const ZoomableGridNode = require( 'STATES_OF_MATTER/atomic-interactions/view/ZoomableGridNode' );
 
   // strings
-  var distanceBetweenAtomsString = require( 'string!STATES_OF_MATTER/distanceBetweenAtoms' );
-  var distanceBetweenMoleculesString = require( 'string!STATES_OF_MATTER/distanceBetweenMolecules' );
-  var epsilonString = require( 'string!STATES_OF_MATTER/epsilon' );
-  var potentialEnergyString = require( 'string!STATES_OF_MATTER/potentialEnergy' );
-  var sigmaString = require( 'string!STATES_OF_MATTER/sigma' );
+  const distanceBetweenAtomsString = require( 'string!STATES_OF_MATTER/distanceBetweenAtoms' );
+  const distanceBetweenMoleculesString = require( 'string!STATES_OF_MATTER/distanceBetweenMolecules' );
+  const epsilonString = require( 'string!STATES_OF_MATTER/epsilon' );
+  const potentialEnergyString = require( 'string!STATES_OF_MATTER/potentialEnergy' );
+  const sigmaString = require( 'string!STATES_OF_MATTER/sigma' );
 
   // Constant that controls the range of data that is graphed.
   var GRAPH_X_RANGE = 1300; // in picometers

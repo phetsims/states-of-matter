@@ -6,21 +6,21 @@
  * @author John Blanco
  * @author Siddhartha Chinthapally (Actual Concepts)
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var AtomFactory = require( 'STATES_OF_MATTER/common/model/AtomFactory' );
-  var AtomPair = require( 'STATES_OF_MATTER/atomic-interactions/model/AtomPair' );
-  var AtomType = require( 'STATES_OF_MATTER/common/model/AtomType' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var InteractionStrengthTable = require( 'STATES_OF_MATTER/common/model/InteractionStrengthTable' );
-  var LjPotentialCalculator = require( 'STATES_OF_MATTER/common/model/LjPotentialCalculator' );
-  var Property = require( 'AXON/Property' );
-  var SigmaTable = require( 'STATES_OF_MATTER/common/model/SigmaTable' );
-  var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
-  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  var Vector2 = require( 'DOT/Vector2' );
+  const AtomFactory = require( 'STATES_OF_MATTER/common/model/AtomFactory' );
+  const AtomPair = require( 'STATES_OF_MATTER/atomic-interactions/model/AtomPair' );
+  const AtomType = require( 'STATES_OF_MATTER/common/model/AtomType' );
+  const inherit = require( 'PHET_CORE/inherit' );
+  const InteractionStrengthTable = require( 'STATES_OF_MATTER/common/model/InteractionStrengthTable' );
+  const LjPotentialCalculator = require( 'STATES_OF_MATTER/common/model/LjPotentialCalculator' );
+  const Property = require( 'AXON/Property' );
+  const SigmaTable = require( 'STATES_OF_MATTER/common/model/SigmaTable' );
+  const SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
+  const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  const Vector2 = require( 'DOT/Vector2' );
 
   // constants
   var DEFAULT_ATOM_TYPE = AtomType.NEON;

@@ -7,15 +7,15 @@
  * @author John Blanco
  * @author Aaron Davis
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var AbstractVerletAlgorithm = require( 'STATES_OF_MATTER/common/model/engine/AbstractVerletAlgorithm' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var MonatomicAtomPositionUpdater = require( 'STATES_OF_MATTER/common/model/engine/MonatomicAtomPositionUpdater' );
-  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  var Vector2 = require( 'DOT/Vector2' );
+  const AbstractVerletAlgorithm = require( 'STATES_OF_MATTER/common/model/engine/AbstractVerletAlgorithm' );
+  const inherit = require( 'PHET_CORE/inherit' );
+  const MonatomicAtomPositionUpdater = require( 'STATES_OF_MATTER/common/model/engine/MonatomicAtomPositionUpdater' );
+  const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  const Vector2 = require( 'DOT/Vector2' );
 
   /**
    * @param {MultipleParticleModel} multipleParticleModel of the simulation

@@ -5,21 +5,21 @@
  *
  * @author John Blanco
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var ArgonAtom = require( 'STATES_OF_MATTER/common/model/particle/ArgonAtom' );
-  var AtomType = require( 'STATES_OF_MATTER/common/model/AtomType' );
-  var CanvasNode = require( 'SCENERY/nodes/CanvasNode' );
-  var ConfigurableStatesOfMatterAtom = require( 'STATES_OF_MATTER/common/model/particle/ConfigurableStatesOfMatterAtom' );
-  var HydrogenAtom = require( 'STATES_OF_MATTER/common/model/particle/HydrogenAtom' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var NeonAtom = require( 'STATES_OF_MATTER/common/model/particle/NeonAtom' );
-  var OxygenAtom = require( 'STATES_OF_MATTER/common/model/particle/OxygenAtom' );
-  var SOMColorProfile = require( 'STATES_OF_MATTER/common/view/SOMColorProfile' );
-  var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
-  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  const ArgonAtom = require( 'STATES_OF_MATTER/common/model/particle/ArgonAtom' );
+  const AtomType = require( 'STATES_OF_MATTER/common/model/AtomType' );
+  const CanvasNode = require( 'SCENERY/nodes/CanvasNode' );
+  const ConfigurableStatesOfMatterAtom = require( 'STATES_OF_MATTER/common/model/particle/ConfigurableStatesOfMatterAtom' );
+  const HydrogenAtom = require( 'STATES_OF_MATTER/common/model/particle/HydrogenAtom' );
+  const inherit = require( 'PHET_CORE/inherit' );
+  const NeonAtom = require( 'STATES_OF_MATTER/common/model/particle/NeonAtom' );
+  const OxygenAtom = require( 'STATES_OF_MATTER/common/model/particle/OxygenAtom' );
+  const SOMColorProfile = require( 'STATES_OF_MATTER/common/view/SOMColorProfile' );
+  const SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
+  const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   // constants
   var PARTICLE_IMAGE_CANVAS_LENGTH = 32; // amount of canvas used to create a particle image, will be squared 

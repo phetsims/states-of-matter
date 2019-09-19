@@ -6,33 +6,33 @@
  * @author John Blanco
  * @author Siddhartha Chinthapally (Actual Concepts)
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var AccordionBox = require( 'SUN/AccordionBox' );
-  var ArrowNode = require( 'SCENERY_PHET/ArrowNode' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var MultiLineText = require( 'SCENERY_PHET/MultiLineText' );
-  var Node = require( 'SCENERY/nodes/Node' );
-  var Path = require( 'SCENERY/nodes/Path' );
-  var PhetFont = require( 'SCENERY_PHET/PhetFont' );
-  var Shape = require( 'KITE/Shape' );
-  var SOMColorProfile = require( 'STATES_OF_MATTER/common/view/SOMColorProfile' );
-  var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
-  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  var Text = require( 'SCENERY/nodes/Text' );
-  var Vector2 = require( 'DOT/Vector2' );
+  const AccordionBox = require( 'SUN/AccordionBox' );
+  const ArrowNode = require( 'SCENERY_PHET/ArrowNode' );
+  const inherit = require( 'PHET_CORE/inherit' );
+  const MultiLineText = require( 'SCENERY_PHET/MultiLineText' );
+  const Node = require( 'SCENERY/nodes/Node' );
+  const Path = require( 'SCENERY/nodes/Path' );
+  const PhetFont = require( 'SCENERY_PHET/PhetFont' );
+  const Shape = require( 'KITE/Shape' );
+  const SOMColorProfile = require( 'STATES_OF_MATTER/common/view/SOMColorProfile' );
+  const SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
+  const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  const Text = require( 'SCENERY/nodes/Text' );
+  const Vector2 = require( 'DOT/Vector2' );
 
   // strings
-  var criticalPointString = require( 'string!STATES_OF_MATTER/criticalPoint' );
-  var gasString = require( 'string!STATES_OF_MATTER/gas' );
-  var liquidString = require( 'string!STATES_OF_MATTER/liquid' );
-  var phaseDiagramString = require( 'string!STATES_OF_MATTER/phaseDiagram' );
-  var pressureString = require( 'string!STATES_OF_MATTER/pressure' );
-  var solidString = require( 'string!STATES_OF_MATTER/solid' );
-  var temperatureString = require( 'string!STATES_OF_MATTER/temperature' );
-  var triplePointString = require( 'string!STATES_OF_MATTER/triplePoint' );
+  const criticalPointString = require( 'string!STATES_OF_MATTER/criticalPoint' );
+  const gasString = require( 'string!STATES_OF_MATTER/gas' );
+  const liquidString = require( 'string!STATES_OF_MATTER/liquid' );
+  const phaseDiagramString = require( 'string!STATES_OF_MATTER/phaseDiagram' );
+  const pressureString = require( 'string!STATES_OF_MATTER/pressure' );
+  const solidString = require( 'string!STATES_OF_MATTER/solid' );
+  const temperatureString = require( 'string!STATES_OF_MATTER/temperature' );
+  const triplePointString = require( 'string!STATES_OF_MATTER/triplePoint' );
 
   // constants that control the size of the canvas.
   var WIDTH = 148;

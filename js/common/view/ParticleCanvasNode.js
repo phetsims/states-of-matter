@@ -14,16 +14,16 @@
  * @author Siddhartha Chinthapally (Actual Concepts)
  * @author John Blanco
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var CanvasNode = require( 'SCENERY/nodes/CanvasNode' );
-  var HydrogenAtom = require( 'STATES_OF_MATTER/common/model/particle/HydrogenAtom' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var SOMColorProfile = require( 'STATES_OF_MATTER/common/view/SOMColorProfile' );
-  var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
-  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  const CanvasNode = require( 'SCENERY/nodes/CanvasNode' );
+  const HydrogenAtom = require( 'STATES_OF_MATTER/common/model/particle/HydrogenAtom' );
+  const inherit = require( 'PHET_CORE/inherit' );
+  const SOMColorProfile = require( 'STATES_OF_MATTER/common/view/SOMColorProfile' );
+  const SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
+  const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   // constants
   var TWO_PI_RADIANS = Math.PI * 2;

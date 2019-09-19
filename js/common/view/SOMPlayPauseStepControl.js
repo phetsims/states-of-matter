@@ -3,16 +3,16 @@
 /**
  * combination of Play/Pause and step buttons
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var inherit = require( 'PHET_CORE/inherit' );
-  var Node = require( 'SCENERY/nodes/Node' );
-  var PlayPauseButton = require( 'SCENERY_PHET/buttons/PlayPauseButton' );
-  var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
-  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  var StepForwardButton = require( 'SCENERY_PHET/buttons/StepForwardButton' );
+  const inherit = require( 'PHET_CORE/inherit' );
+  const Node = require( 'SCENERY/nodes/Node' );
+  const PlayPauseButton = require( 'SCENERY_PHET/buttons/PlayPauseButton' );
+  const SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
+  const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  const StepForwardButton = require( 'SCENERY_PHET/buttons/StepForwardButton' );
 
   // constants
   var TOUCH_AREA_DILATION = 2.5;

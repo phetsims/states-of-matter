@@ -7,19 +7,19 @@
  * @author Chris Malley (PixelZoom, Inc.)
  * @author Siddhartha Chinthapally (Actual Concepts)
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var ButtonListener = require( 'SCENERY/input/ButtonListener' );
-  var Circle = require( 'SCENERY/nodes/Circle' );
-  var Color = require( 'SCENERY/util/Color' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var Node = require( 'SCENERY/nodes/Node' );
-  var RadialGradient = require( 'SCENERY/util/RadialGradient' );
-  var ShadedSphereNode = require( 'SCENERY_PHET/ShadedSphereNode' );
-  var Shape = require( 'KITE/Shape' );
-  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  const ButtonListener = require( 'SCENERY/input/ButtonListener' );
+  const Circle = require( 'SCENERY/nodes/Circle' );
+  const Color = require( 'SCENERY/util/Color' );
+  const inherit = require( 'PHET_CORE/inherit' );
+  const Node = require( 'SCENERY/nodes/Node' );
+  const RadialGradient = require( 'SCENERY/util/RadialGradient' );
+  const ShadedSphereNode = require( 'SCENERY_PHET/ShadedSphereNode' );
+  const Shape = require( 'KITE/Shape' );
+  const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   /**
    * @param {number} radius radius of the sphere

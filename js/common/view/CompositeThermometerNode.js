@@ -7,27 +7,27 @@
  * @author Siddhartha Chinthapally (Actual Concepts)
  * @author John Blanco
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var ComboBox = require( 'SUN/ComboBox' );
-  var ComboBoxItem = require( 'SUN/ComboBoxItem' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var Node = require( 'SCENERY/nodes/Node' );
-  var Panel = require( 'SUN/Panel' );
-  var PhetFont = require( 'SCENERY_PHET/PhetFont' );
-  var Property = require( 'AXON/Property' );
-  var SOMQueryParameters = require( 'STATES_OF_MATTER/common/SOMQueryParameters' );
-  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  var Text = require( 'SCENERY/nodes/Text' );
-  var ThermometerNode = require( 'SCENERY_PHET/ThermometerNode' );
-  var Util = require( 'DOT/Util' );
-  var VBox = require( 'SCENERY/nodes/VBox' );
+  const ComboBox = require( 'SUN/ComboBox' );
+  const ComboBoxItem = require( 'SUN/ComboBoxItem' );
+  const inherit = require( 'PHET_CORE/inherit' );
+  const Node = require( 'SCENERY/nodes/Node' );
+  const Panel = require( 'SUN/Panel' );
+  const PhetFont = require( 'SCENERY_PHET/PhetFont' );
+  const Property = require( 'AXON/Property' );
+  const SOMQueryParameters = require( 'STATES_OF_MATTER/common/SOMQueryParameters' );
+  const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  const Text = require( 'SCENERY/nodes/Text' );
+  const ThermometerNode = require( 'SCENERY_PHET/ThermometerNode' );
+  const Util = require( 'DOT/Util' );
+  const VBox = require( 'SCENERY/nodes/VBox' );
 
   // strings
-  var celsiusUnitsString = require( 'string!STATES_OF_MATTER/celsiusUnits' );
-  var kelvinUnitsString = require( 'string!STATES_OF_MATTER/kelvinUnits' );
+  const celsiusUnitsString = require( 'string!STATES_OF_MATTER/celsiusUnits' );
+  const kelvinUnitsString = require( 'string!STATES_OF_MATTER/kelvinUnits' );
 
   // constants
   var MAX_LENGTH_TEMPERATURE_TEXT = '99999 ' + celsiusUnitsString;

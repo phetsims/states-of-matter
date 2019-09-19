@@ -15,42 +15,42 @@
  * @author Aaron Davis
  * @author Siddhartha Chinthapally (Actual Concepts)
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var AndersenThermostat = require( 'STATES_OF_MATTER/common/model/engine/kinetic/AndersenThermostat' );
-  var ArgonAtom = require( 'STATES_OF_MATTER/common/model/particle/ArgonAtom' );
-  var AtomType = require( 'STATES_OF_MATTER/common/model/AtomType' );
-  var ConfigurableStatesOfMatterAtom = require( 'STATES_OF_MATTER/common/model/particle/ConfigurableStatesOfMatterAtom' );
-  var DiatomicAtomPositionUpdater = require( 'STATES_OF_MATTER/common/model/engine/DiatomicAtomPositionUpdater' );
-  var DiatomicPhaseStateChanger = require( 'STATES_OF_MATTER/common/model/engine/DiatomicPhaseStateChanger' );
-  var DiatomicVerletAlgorithm = require( 'STATES_OF_MATTER/common/model/engine/DiatomicVerletAlgorithm' );
-  var Emitter = require( 'AXON/Emitter' );
-  var HydrogenAtom = require( 'STATES_OF_MATTER/common/model/particle/HydrogenAtom' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var InteractionStrengthTable = require( 'STATES_OF_MATTER/common/model/InteractionStrengthTable' );
-  var IsokineticThermostat = require( 'STATES_OF_MATTER/common/model/engine/kinetic/IsokineticThermostat' );
-  var MoleculeForceAndMotionDataSet = require( 'STATES_OF_MATTER/common/model/MoleculeForceAndMotionDataSet' );
-  var MonatomicAtomPositionUpdater = require( 'STATES_OF_MATTER/common/model/engine/MonatomicAtomPositionUpdater' );
-  var MonatomicPhaseStateChanger = require( 'STATES_OF_MATTER/common/model/engine/MonatomicPhaseStateChanger' );
-  var MonatomicVerletAlgorithm = require( 'STATES_OF_MATTER/common/model/engine/MonatomicVerletAlgorithm' );
-  var MovingAverage = require( 'STATES_OF_MATTER/common/model/MovingAverage' );
-  var NeonAtom = require( 'STATES_OF_MATTER/common/model/particle/NeonAtom' );
-  var NumberProperty = require( 'AXON/NumberProperty' );
-  var ObservableArray = require( 'AXON/ObservableArray' );
-  var OxygenAtom = require( 'STATES_OF_MATTER/common/model/particle/OxygenAtom' );
-  var PhaseStateEnum = require( 'STATES_OF_MATTER/common/PhaseStateEnum' );
-  var Property = require( 'AXON/Property' );
-  var Range = require( 'DOT/Range' );
-  var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
-  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  var SubstanceType = require( 'STATES_OF_MATTER/common/SubstanceType' );
-  var Util = require( 'DOT/Util' );
-  var Vector2 = require( 'DOT/Vector2' );
-  var WaterAtomPositionUpdater = require( 'STATES_OF_MATTER/common/model/engine/WaterAtomPositionUpdater' );
-  var WaterPhaseStateChanger = require( 'STATES_OF_MATTER/common/model/engine/WaterPhaseStateChanger' );
-  var WaterVerletAlgorithm = require( 'STATES_OF_MATTER/common/model/engine/WaterVerletAlgorithm' );
+  const AndersenThermostat = require( 'STATES_OF_MATTER/common/model/engine/kinetic/AndersenThermostat' );
+  const ArgonAtom = require( 'STATES_OF_MATTER/common/model/particle/ArgonAtom' );
+  const AtomType = require( 'STATES_OF_MATTER/common/model/AtomType' );
+  const ConfigurableStatesOfMatterAtom = require( 'STATES_OF_MATTER/common/model/particle/ConfigurableStatesOfMatterAtom' );
+  const DiatomicAtomPositionUpdater = require( 'STATES_OF_MATTER/common/model/engine/DiatomicAtomPositionUpdater' );
+  const DiatomicPhaseStateChanger = require( 'STATES_OF_MATTER/common/model/engine/DiatomicPhaseStateChanger' );
+  const DiatomicVerletAlgorithm = require( 'STATES_OF_MATTER/common/model/engine/DiatomicVerletAlgorithm' );
+  const Emitter = require( 'AXON/Emitter' );
+  const HydrogenAtom = require( 'STATES_OF_MATTER/common/model/particle/HydrogenAtom' );
+  const inherit = require( 'PHET_CORE/inherit' );
+  const InteractionStrengthTable = require( 'STATES_OF_MATTER/common/model/InteractionStrengthTable' );
+  const IsokineticThermostat = require( 'STATES_OF_MATTER/common/model/engine/kinetic/IsokineticThermostat' );
+  const MoleculeForceAndMotionDataSet = require( 'STATES_OF_MATTER/common/model/MoleculeForceAndMotionDataSet' );
+  const MonatomicAtomPositionUpdater = require( 'STATES_OF_MATTER/common/model/engine/MonatomicAtomPositionUpdater' );
+  const MonatomicPhaseStateChanger = require( 'STATES_OF_MATTER/common/model/engine/MonatomicPhaseStateChanger' );
+  const MonatomicVerletAlgorithm = require( 'STATES_OF_MATTER/common/model/engine/MonatomicVerletAlgorithm' );
+  const MovingAverage = require( 'STATES_OF_MATTER/common/model/MovingAverage' );
+  const NeonAtom = require( 'STATES_OF_MATTER/common/model/particle/NeonAtom' );
+  const NumberProperty = require( 'AXON/NumberProperty' );
+  const ObservableArray = require( 'AXON/ObservableArray' );
+  const OxygenAtom = require( 'STATES_OF_MATTER/common/model/particle/OxygenAtom' );
+  const PhaseStateEnum = require( 'STATES_OF_MATTER/common/PhaseStateEnum' );
+  const Property = require( 'AXON/Property' );
+  const Range = require( 'DOT/Range' );
+  const SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
+  const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  const SubstanceType = require( 'STATES_OF_MATTER/common/SubstanceType' );
+  const Util = require( 'DOT/Util' );
+  const Vector2 = require( 'DOT/Vector2' );
+  const WaterAtomPositionUpdater = require( 'STATES_OF_MATTER/common/model/engine/WaterAtomPositionUpdater' );
+  const WaterPhaseStateChanger = require( 'STATES_OF_MATTER/common/model/engine/WaterPhaseStateChanger' );
+  const WaterVerletAlgorithm = require( 'STATES_OF_MATTER/common/model/engine/WaterVerletAlgorithm' );
 
   // constants (general)
   var PARTICLE_CONTAINER_WIDTH = 10000; // essentially arbitrary

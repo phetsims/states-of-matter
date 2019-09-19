@@ -7,14 +7,14 @@
  * @author John Blanco
  * @author Aaron Davis
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var inherit = require( 'PHET_CORE/inherit' );
-  var Property = require( 'AXON/Property' );
-  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  var TimeSpanDataQueue = require( 'STATES_OF_MATTER/common/model/TimeSpanDataQueue' );
+  const inherit = require( 'PHET_CORE/inherit' );
+  const Property = require( 'AXON/Property' );
+  const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  const TimeSpanDataQueue = require( 'STATES_OF_MATTER/common/model/TimeSpanDataQueue' );
 
   // Constants that control the pressure calculation.  The size of the pressure accumulator assumes a max sim rate of
   // 1 / 60, which derives from the standard 60 FPS rate at which browsers currently run.  May need to go up someday.

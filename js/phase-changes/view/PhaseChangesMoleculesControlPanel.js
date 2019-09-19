@@ -5,40 +5,40 @@
  *
  * @author Siddhartha Chinthapally (Actual Concepts)
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var AtomAndMoleculeIconFactory = require( 'STATES_OF_MATTER/common/view/AtomAndMoleculeIconFactory' );
-  var Dimension2 = require( 'DOT/Dimension2' );
-  var HBox = require( 'SCENERY/nodes/HBox' );
-  var HSlider = require( 'SUN/HSlider' );
-  var HStrut = require( 'SCENERY/nodes/HStrut' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var MultipleParticleModel = require( 'STATES_OF_MATTER/common/model/MultipleParticleModel' );
-  var Node = require( 'SCENERY/nodes/Node' );
-  var Panel = require( 'SUN/Panel' );
-  var PhetFont = require( 'SCENERY_PHET/PhetFont' );
-  var RadioButtonGroup = require( 'SUN/buttons/RadioButtonGroup' );
-  var Range = require( 'DOT/Range' );
-  var Rectangle = require( 'SCENERY/nodes/Rectangle' );
-  var SOMColorProfile = require( 'STATES_OF_MATTER/common/view/SOMColorProfile' );
-  var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
-  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  var SubstanceType = require( 'STATES_OF_MATTER/common/SubstanceType' );
-  var Text = require( 'SCENERY/nodes/Text' );
-  var VBox = require( 'SCENERY/nodes/VBox' );
+  const AtomAndMoleculeIconFactory = require( 'STATES_OF_MATTER/common/view/AtomAndMoleculeIconFactory' );
+  const Dimension2 = require( 'DOT/Dimension2' );
+  const HBox = require( 'SCENERY/nodes/HBox' );
+  const HSlider = require( 'SUN/HSlider' );
+  const HStrut = require( 'SCENERY/nodes/HStrut' );
+  const inherit = require( 'PHET_CORE/inherit' );
+  const MultipleParticleModel = require( 'STATES_OF_MATTER/common/model/MultipleParticleModel' );
+  const Node = require( 'SCENERY/nodes/Node' );
+  const Panel = require( 'SUN/Panel' );
+  const PhetFont = require( 'SCENERY_PHET/PhetFont' );
+  const RadioButtonGroup = require( 'SUN/buttons/RadioButtonGroup' );
+  const Range = require( 'DOT/Range' );
+  const Rectangle = require( 'SCENERY/nodes/Rectangle' );
+  const SOMColorProfile = require( 'STATES_OF_MATTER/common/view/SOMColorProfile' );
+  const SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
+  const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  const SubstanceType = require( 'STATES_OF_MATTER/common/SubstanceType' );
+  const Text = require( 'SCENERY/nodes/Text' );
+  const VBox = require( 'SCENERY/nodes/VBox' );
 
   // strings
-  var adjustableAttractionString = require( 'string!STATES_OF_MATTER/adjustableAttraction' );
-  var argonString = require( 'string!STATES_OF_MATTER/argon' );
-  var atomsAndMoleculesString = require( 'string!STATES_OF_MATTER/AtomsAndMolecules' );
-  var diatomicOxygenString = require( 'string!STATES_OF_MATTER/diatomicOxygen' );
-  var interactionStrengthWithSymbolString = require( 'string!STATES_OF_MATTER/interactionStrengthWithSymbol' );
-  var neonString = require( 'string!STATES_OF_MATTER/neon' );
-  var strongString = require( 'string!STATES_OF_MATTER/strong' );
-  var waterString = require( 'string!STATES_OF_MATTER/water' );
-  var weakString = require( 'string!STATES_OF_MATTER/weak' );
+  const adjustableAttractionString = require( 'string!STATES_OF_MATTER/adjustableAttraction' );
+  const argonString = require( 'string!STATES_OF_MATTER/argon' );
+  const atomsAndMoleculesString = require( 'string!STATES_OF_MATTER/AtomsAndMolecules' );
+  const diatomicOxygenString = require( 'string!STATES_OF_MATTER/diatomicOxygen' );
+  const interactionStrengthWithSymbolString = require( 'string!STATES_OF_MATTER/interactionStrengthWithSymbol' );
+  const neonString = require( 'string!STATES_OF_MATTER/neon' );
+  const strongString = require( 'string!STATES_OF_MATTER/strong' );
+  const waterString = require( 'string!STATES_OF_MATTER/water' );
+  const weakString = require( 'string!STATES_OF_MATTER/weak' );
 
   // constants
   var INSET = 10;

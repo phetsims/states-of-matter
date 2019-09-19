@@ -8,13 +8,13 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  * @author Siddhartha Chinthapally (Actual Concepts)
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var Color = require( 'SCENERY/util/Color' );
-  var ColorProfile = require( 'SCENERY_PHET/ColorProfile' );
-  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  const Color = require( 'SCENERY/util/Color' );
+  const ColorProfile = require( 'SCENERY_PHET/ColorProfile' );
+  const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   // constants
   var GRAY = new Color( 230, 230, 230 );

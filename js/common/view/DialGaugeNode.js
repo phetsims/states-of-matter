@@ -7,29 +7,29 @@
  * @author John Blanco
  * @author Siddhartha Chinthapally (Actual Concepts)
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var GaugeNode = require( 'SCENERY_PHET/GaugeNode' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var LinearGradient = require( 'SCENERY/util/LinearGradient' );
-  var Node = require( 'SCENERY/nodes/Node' );
-  var Path = require( 'SCENERY/nodes/Path' );
-  var PhetColorScheme = require( 'SCENERY_PHET/PhetColorScheme' );
-  var PhetFont = require( 'SCENERY_PHET/PhetFont' );
-  var Range = require( 'DOT/Range' );
-  var Rectangle = require( 'SCENERY/nodes/Rectangle' );
-  var Shape = require( 'KITE/Shape' );
-  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  var Text = require( 'SCENERY/nodes/Text' );
-  var timer = require( 'AXON/timer' );
-  var Util = require( 'DOT/Util' );
+  const GaugeNode = require( 'SCENERY_PHET/GaugeNode' );
+  const inherit = require( 'PHET_CORE/inherit' );
+  const LinearGradient = require( 'SCENERY/util/LinearGradient' );
+  const Node = require( 'SCENERY/nodes/Node' );
+  const Path = require( 'SCENERY/nodes/Path' );
+  const PhetColorScheme = require( 'SCENERY_PHET/PhetColorScheme' );
+  const PhetFont = require( 'SCENERY_PHET/PhetFont' );
+  const Range = require( 'DOT/Range' );
+  const Rectangle = require( 'SCENERY/nodes/Rectangle' );
+  const Shape = require( 'KITE/Shape' );
+  const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  const Text = require( 'SCENERY/nodes/Text' );
+  const timer = require( 'AXON/timer' );
+  const Util = require( 'DOT/Util' );
 
   // strings
-  var pressureOverloadString = require( 'string!STATES_OF_MATTER/pressureOverload' );
-  var pressureString = require( 'string!STATES_OF_MATTER/pressure' );
-  var pressureUnitsInAtmString = require( 'string!STATES_OF_MATTER/pressureUnitsInAtm' );
+  const pressureOverloadString = require( 'string!STATES_OF_MATTER/pressureOverload' );
+  const pressureString = require( 'string!STATES_OF_MATTER/pressure' );
+  const pressureUnitsInAtmString = require( 'string!STATES_OF_MATTER/pressureUnitsInAtm' );
 
   // constants
   var CONNECTOR_LENGTH_PROPORTION = 1; // Length of non-elbowed connector wrt overall diameter.

@@ -7,15 +7,15 @@
  * @author Chandrashekar Bemagoni (Actual Concepts)
  * @author John Blanco
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var ArrowShape = require( 'SCENERY_PHET/ArrowShape' );
-  var CanvasNode = require( 'SCENERY/nodes/CanvasNode' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  var Util = require( 'DOT/Util' );
+  const ArrowShape = require( 'SCENERY_PHET/ArrowShape' );
+  const CanvasNode = require( 'SCENERY/nodes/CanvasNode' );
+  const inherit = require( 'PHET_CORE/inherit' );
+  const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  const Util = require( 'DOT/Util' );
 
   // constants
   var AXIS_LINE_WIDTH = 1;

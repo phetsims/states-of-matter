@@ -6,33 +6,33 @@
  * @author John Blanco
  * @author Siddhartha Chinthapally (Actual Concepts)
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var AccordionBox = require( 'SUN/AccordionBox' );
-  var AquaRadioButton = require( 'SUN/AquaRadioButton' );
-  var ArrowNode = require( 'SCENERY_PHET/ArrowNode' );
-  var BracketNode = require( 'SCENERY_PHET/BracketNode' );
-  var HBox = require( 'SCENERY/nodes/HBox' );
-  var HStrut = require( 'SCENERY/nodes/HStrut' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var Node = require( 'SCENERY/nodes/Node' );
-  var PhetFont = require( 'SCENERY_PHET/PhetFont' );
-  var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
-  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  var Text = require( 'SCENERY/nodes/Text' );
-  var VBox = require( 'SCENERY/nodes/VBox' );
-  var VStrut = require( 'SCENERY/nodes/VStrut' );
+  const AccordionBox = require( 'SUN/AccordionBox' );
+  const AquaRadioButton = require( 'SUN/AquaRadioButton' );
+  const ArrowNode = require( 'SCENERY_PHET/ArrowNode' );
+  const BracketNode = require( 'SCENERY_PHET/BracketNode' );
+  const HBox = require( 'SCENERY/nodes/HBox' );
+  const HStrut = require( 'SCENERY/nodes/HStrut' );
+  const inherit = require( 'PHET_CORE/inherit' );
+  const Node = require( 'SCENERY/nodes/Node' );
+  const PhetFont = require( 'SCENERY_PHET/PhetFont' );
+  const SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
+  const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  const Text = require( 'SCENERY/nodes/Text' );
+  const VBox = require( 'SCENERY/nodes/VBox' );
+  const VStrut = require( 'SCENERY/nodes/VStrut' );
 
   //strings
-  var attractiveString = require( 'string!STATES_OF_MATTER/attractive' );
-  var electronOverlapString = require( 'string!STATES_OF_MATTER/electronOverlap' );
-  var forcesString = require( 'string!STATES_OF_MATTER/forces' );
-  var hideForcesString = require( 'string!STATES_OF_MATTER/hideForces' );
-  var repulsiveString = require( 'string!STATES_OF_MATTER/repulsive' );
-  var totalForceString = require( 'string!STATES_OF_MATTER/totalForce' );
-  var vanderwaalsString = require( 'string!STATES_OF_MATTER/vanderwaals' );
+  const attractiveString = require( 'string!STATES_OF_MATTER/attractive' );
+  const electronOverlapString = require( 'string!STATES_OF_MATTER/electronOverlap' );
+  const forcesString = require( 'string!STATES_OF_MATTER/forces' );
+  const hideForcesString = require( 'string!STATES_OF_MATTER/hideForces' );
+  const repulsiveString = require( 'string!STATES_OF_MATTER/repulsive' );
+  const totalForceString = require( 'string!STATES_OF_MATTER/totalForce' );
+  const vanderwaalsString = require( 'string!STATES_OF_MATTER/vanderwaals' );
 
   // constants
   var TEXT_LABEL_MAX_WIDTH = 175; // max width of text label in the panel

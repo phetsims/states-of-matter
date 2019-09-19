@@ -5,31 +5,31 @@
  *
  * @author Siddhartha Chinthapally (Actual Concepts)
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var AtomAndMoleculeIconFactory = require( 'STATES_OF_MATTER/common/view/AtomAndMoleculeIconFactory' );
-  var HBox = require( 'SCENERY/nodes/HBox' );
-  var HStrut = require( 'SCENERY/nodes/HStrut' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var Node = require( 'SCENERY/nodes/Node' );
-  var Panel = require( 'SUN/Panel' );
-  var PhetFont = require( 'SCENERY_PHET/PhetFont' );
-  var RadioButtonGroup = require( 'SUN/buttons/RadioButtonGroup' );
-  var Rectangle = require( 'SCENERY/nodes/Rectangle' );
-  var SOMColorProfile = require( 'STATES_OF_MATTER/common/view/SOMColorProfile' );
-  var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
-  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  var SubstanceType = require( 'STATES_OF_MATTER/common/SubstanceType' );
-  var Text = require( 'SCENERY/nodes/Text' );
+  const AtomAndMoleculeIconFactory = require( 'STATES_OF_MATTER/common/view/AtomAndMoleculeIconFactory' );
+  const HBox = require( 'SCENERY/nodes/HBox' );
+  const HStrut = require( 'SCENERY/nodes/HStrut' );
+  const inherit = require( 'PHET_CORE/inherit' );
+  const Node = require( 'SCENERY/nodes/Node' );
+  const Panel = require( 'SUN/Panel' );
+  const PhetFont = require( 'SCENERY_PHET/PhetFont' );
+  const RadioButtonGroup = require( 'SUN/buttons/RadioButtonGroup' );
+  const Rectangle = require( 'SCENERY/nodes/Rectangle' );
+  const SOMColorProfile = require( 'STATES_OF_MATTER/common/view/SOMColorProfile' );
+  const SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
+  const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  const SubstanceType = require( 'STATES_OF_MATTER/common/SubstanceType' );
+  const Text = require( 'SCENERY/nodes/Text' );
 
   // strings
-  var argonString = require( 'string!STATES_OF_MATTER/argon' );
-  var atomsAndMoleculesString = require( 'string!STATES_OF_MATTER/AtomsAndMolecules' );
-  var diatomicOxygenString = require( 'string!STATES_OF_MATTER/diatomicOxygen' );
-  var neonString = require( 'string!STATES_OF_MATTER/neon' );
-  var waterString = require( 'string!STATES_OF_MATTER/water' );
+  const argonString = require( 'string!STATES_OF_MATTER/argon' );
+  const atomsAndMoleculesString = require( 'string!STATES_OF_MATTER/AtomsAndMolecules' );
+  const diatomicOxygenString = require( 'string!STATES_OF_MATTER/diatomicOxygen' );
+  const neonString = require( 'string!STATES_OF_MATTER/neon' );
+  const waterString = require( 'string!STATES_OF_MATTER/water' );
 
   // constants
   var DEFAULT_WIDTH = 160;

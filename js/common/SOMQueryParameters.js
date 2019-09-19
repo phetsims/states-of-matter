@@ -5,11 +5,11 @@
  *
  * @author John Blanco
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   var SOMQueryParameters = QueryStringMachine.getAll( {
 

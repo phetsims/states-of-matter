@@ -6,16 +6,16 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  * @author Siddhartha Chinthapally (Actual Concepts)
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var inherit = require( 'PHET_CORE/inherit' );
-  var OptionsDialog = require( 'JOIST/OptionsDialog' );
-  var ProjectorModeCheckbox = require( 'JOIST/ProjectorModeCheckbox' );
-  var SOMColorProfile = require( 'STATES_OF_MATTER/common/view/SOMColorProfile' );
-  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  var VBox = require( 'SCENERY/nodes/VBox' );
+  const inherit = require( 'PHET_CORE/inherit' );
+  const OptionsDialog = require( 'JOIST/OptionsDialog' );
+  const ProjectorModeCheckbox = require( 'JOIST/ProjectorModeCheckbox' );
+  const SOMColorProfile = require( 'STATES_OF_MATTER/common/view/SOMColorProfile' );
+  const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  const VBox = require( 'SCENERY/nodes/VBox' );
 
   /**
    * @constructor

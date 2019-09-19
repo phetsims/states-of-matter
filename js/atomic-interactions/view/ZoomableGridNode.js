@@ -6,17 +6,17 @@
  * @author Sam Reid
  * @author Siddhartha Chinthapally
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var inherit = require( 'PHET_CORE/inherit' );
-  var Node = require( 'SCENERY/nodes/Node' );
-  var Path = require( 'SCENERY/nodes/Path' );
-  var RectangularButtonView = require( 'SUN/buttons/RectangularButtonView' );
-  var Shape = require( 'KITE/Shape' );
-  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  var ZoomButton = require( 'SCENERY_PHET/buttons/ZoomButton' );
+  const inherit = require( 'PHET_CORE/inherit' );
+  const Node = require( 'SCENERY/nodes/Node' );
+  const Path = require( 'SCENERY/nodes/Path' );
+  const RectangularButtonView = require( 'SUN/buttons/RectangularButtonView' );
+  const Shape = require( 'KITE/Shape' );
+  const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  const ZoomButton = require( 'SCENERY_PHET/buttons/ZoomButton' );
 
   // constants
   var MAX_LINES_HORIZONTAL = 9;

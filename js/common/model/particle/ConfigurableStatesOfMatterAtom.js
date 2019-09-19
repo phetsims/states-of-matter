@@ -6,15 +6,15 @@
  * @author John Blanco
  * @author Siddhartha Chinthapally (Actual Concepts)
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var AtomType = require( 'STATES_OF_MATTER/common/model/AtomType' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var SOMAtom = require( 'STATES_OF_MATTER/common/model/particle/SOMAtom' );
-  var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
-  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  const AtomType = require( 'STATES_OF_MATTER/common/model/AtomType' );
+  const inherit = require( 'PHET_CORE/inherit' );
+  const SOMAtom = require( 'STATES_OF_MATTER/common/model/particle/SOMAtom' );
+  const SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
+  const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   // constants
   var DEFAULT_INTERACTION_POTENTIAL = SOMConstants.MAX_EPSILON / 2;

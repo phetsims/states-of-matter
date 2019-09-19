@@ -7,14 +7,14 @@
  * @author Siddhartha Chinthapally (Actual Concepts)
  * @author John Blanco
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var inherit = require( 'PHET_CORE/inherit' );
-  var ParticleForceNode = require( 'STATES_OF_MATTER/atomic-interactions/view/ParticleForceNode' );
-  var SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
-  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  const inherit = require( 'PHET_CORE/inherit' );
+  const ParticleForceNode = require( 'STATES_OF_MATTER/atomic-interactions/view/ParticleForceNode' );
+  const SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
+  const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   /**
    * @param {DualAtomModel} dualAtomModel - model of the simulation

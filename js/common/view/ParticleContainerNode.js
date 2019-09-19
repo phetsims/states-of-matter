@@ -6,24 +6,24 @@
  * @author Siddhartha Chinthapally (Actual Concepts)
  * @author John Blanco
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var Bounds2 = require( 'DOT/Bounds2' );
-  var DialGaugeNode = require( 'STATES_OF_MATTER/common/view/DialGaugeNode' );
-  var HandleNode = require( 'SCENERY_PHET/HandleNode' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var LinearGradient = require( 'SCENERY/util/LinearGradient' );
-  var Matrix3 = require( 'DOT/Matrix3' );
-  var MultipleParticleModel = require( 'STATES_OF_MATTER/common/model/MultipleParticleModel' );
-  var Node = require( 'SCENERY/nodes/Node' );
-  var ParticleImageCanvasNode = require( 'STATES_OF_MATTER/common/view/ParticleImageCanvasNode' );
-  var Path = require( 'SCENERY/nodes/Path' );
-  var PointingHandNode = require( 'STATES_OF_MATTER/common/view/PointingHandNode' );
-  var Shape = require( 'KITE/Shape' );
-  var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
-  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  const Bounds2 = require( 'DOT/Bounds2' );
+  const DialGaugeNode = require( 'STATES_OF_MATTER/common/view/DialGaugeNode' );
+  const HandleNode = require( 'SCENERY_PHET/HandleNode' );
+  const inherit = require( 'PHET_CORE/inherit' );
+  const LinearGradient = require( 'SCENERY/util/LinearGradient' );
+  const Matrix3 = require( 'DOT/Matrix3' );
+  const MultipleParticleModel = require( 'STATES_OF_MATTER/common/model/MultipleParticleModel' );
+  const Node = require( 'SCENERY/nodes/Node' );
+  const ParticleImageCanvasNode = require( 'STATES_OF_MATTER/common/view/ParticleImageCanvasNode' );
+  const Path = require( 'SCENERY/nodes/Path' );
+  const PointingHandNode = require( 'STATES_OF_MATTER/common/view/PointingHandNode' );
+  const Shape = require( 'KITE/Shape' );
+  const SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
+  const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   // constants
   var PRESSURE_METER_ELBOW_OFFSET = 30;

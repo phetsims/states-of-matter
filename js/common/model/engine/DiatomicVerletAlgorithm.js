@@ -7,14 +7,14 @@
  * @author John Blanco
  * @author Siddhartha Chinthapally (Actual Concepts)
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var AbstractVerletAlgorithm = require( 'STATES_OF_MATTER/common/model/engine/AbstractVerletAlgorithm' );
-  var DiatomicAtomPositionUpdater = require( 'STATES_OF_MATTER/common/model/engine/DiatomicAtomPositionUpdater' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  const AbstractVerletAlgorithm = require( 'STATES_OF_MATTER/common/model/engine/AbstractVerletAlgorithm' );
+  const DiatomicAtomPositionUpdater = require( 'STATES_OF_MATTER/common/model/engine/DiatomicAtomPositionUpdater' );
+  const inherit = require( 'PHET_CORE/inherit' );
+  const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   /**
    * @param {MultipleParticleModel} multipleParticleModel - Model of a set of particles

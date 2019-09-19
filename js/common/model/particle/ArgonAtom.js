@@ -6,16 +6,16 @@
  * @author John Blanco
  * @author Aaron Davis
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var AtomType = require( 'STATES_OF_MATTER/common/model/AtomType' );
-  var Element = require( 'NITROGLYCERIN/Element' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var SOMAtom = require( 'STATES_OF_MATTER/common/model/particle/SOMAtom' );
-  var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
-  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  const AtomType = require( 'STATES_OF_MATTER/common/model/AtomType' );
+  const Element = require( 'NITROGLYCERIN/Element' );
+  const inherit = require( 'PHET_CORE/inherit' );
+  const SOMAtom = require( 'STATES_OF_MATTER/common/model/particle/SOMAtom' );
+  const SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
+  const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   // constants
   var RADIUS = Element.Ar.vanDerWaalsRadius;  // In picometers.

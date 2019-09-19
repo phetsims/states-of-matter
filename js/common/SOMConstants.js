@@ -7,13 +7,13 @@
  * @author John Blanco
  * @author Aaron Davis
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var Bounds2 = require( 'DOT/Bounds2' );
-  var Element = require( 'NITROGLYCERIN/Element' );
-  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  const Bounds2 = require( 'DOT/Bounds2' );
+  const Element = require( 'NITROGLYCERIN/Element' );
+  const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   // constants (these are vars because other constants refer to them)
   var SOLID_TEMPERATURE = 0.15;

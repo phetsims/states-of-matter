@@ -1,11 +1,11 @@
 // Copyright 2016, University of Colorado Boulder
 
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var inherit = require( 'PHET_CORE/inherit' );
-  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  const inherit = require( 'PHET_CORE/inherit' );
+  const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   /**
    * {number} length - max number of entries in the queue

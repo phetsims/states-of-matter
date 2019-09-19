@@ -7,12 +7,12 @@
  * @author John Blanco
  * @author Siddhartha Chinthapally (Actual Concepts)
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  var WaterMoleculeStructure = require( 'STATES_OF_MATTER/common/model/engine/WaterMoleculeStructure' );
+  const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  const WaterMoleculeStructure = require( 'STATES_OF_MATTER/common/model/engine/WaterMoleculeStructure' );
 
   // constants
   var STRUCTURE_X = WaterMoleculeStructure.moleculeStructureX;

@@ -5,20 +5,20 @@
  *
  * @author John Blanco
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var AtomicInteractionsScreen = require( 'STATES_OF_MATTER/atomic-interactions/AtomicInteractionsScreen' );
-  var GlobalOptionsNode = require( 'STATES_OF_MATTER/common/view/GlobalOptionsNode' );
-  var PhaseChangesScreen = require( 'STATES_OF_MATTER/phase-changes/PhaseChangesScreen' );
-  var Sim = require( 'JOIST/Sim' );
-  var SimLauncher = require( 'JOIST/SimLauncher' );
-  var StatesScreen = require( 'STATES_OF_MATTER/states/StatesScreen' );
+  const AtomicInteractionsScreen = require( 'STATES_OF_MATTER/atomic-interactions/AtomicInteractionsScreen' );
+  const GlobalOptionsNode = require( 'STATES_OF_MATTER/common/view/GlobalOptionsNode' );
+  const PhaseChangesScreen = require( 'STATES_OF_MATTER/phase-changes/PhaseChangesScreen' );
+  const Sim = require( 'JOIST/Sim' );
+  const SimLauncher = require( 'JOIST/SimLauncher' );
+  const StatesScreen = require( 'STATES_OF_MATTER/states/StatesScreen' );
 
   // strings
-  var interactionString = require( 'string!STATES_OF_MATTER/interaction' );
-  var statesOfMatterTitleString = require( 'string!STATES_OF_MATTER/states-of-matter.title' );
+  const interactionString = require( 'string!STATES_OF_MATTER/interaction' );
+  const statesOfMatterTitleString = require( 'string!STATES_OF_MATTER/states-of-matter.title' );
 
   var simOptions = {
     credits: {

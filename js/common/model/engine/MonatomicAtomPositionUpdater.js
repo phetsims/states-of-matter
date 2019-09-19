@@ -6,10 +6,10 @@
  * @author John Blanco
  * @author Aaron Davis
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
-  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   // static object (no constructor)
   var MonatomicAtomPositionUpdater = {

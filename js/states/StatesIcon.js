@@ -5,21 +5,21 @@
  *
  * @author John Blanco
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var HBox = require( 'SCENERY/nodes/HBox' );
-  var Image = require( 'SCENERY/nodes/Image' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var Node = require( 'SCENERY/nodes/Node' );
-  var Rectangle = require( 'SCENERY/nodes/Rectangle' );
-  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  const HBox = require( 'SCENERY/nodes/HBox' );
+  const Image = require( 'SCENERY/nodes/Image' );
+  const inherit = require( 'PHET_CORE/inherit' );
+  const Node = require( 'SCENERY/nodes/Node' );
+  const Rectangle = require( 'SCENERY/nodes/Rectangle' );
+  const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   // images
-  var gasIconImage = require( 'mipmap!STATES_OF_MATTER/gas-icon.png,level=5' );
-  var liquidIconImage = require( 'mipmap!STATES_OF_MATTER/liquid-icon.png,level=5' );
-  var solidIconImage = require( 'mipmap!STATES_OF_MATTER/solid-icon.png,level=5' );
+  const gasIconImage = require( 'mipmap!STATES_OF_MATTER/gas-icon.png,level=5' );
+  const liquidIconImage = require( 'mipmap!STATES_OF_MATTER/liquid-icon.png,level=5' );
+  const solidIconImage = require( 'mipmap!STATES_OF_MATTER/solid-icon.png,level=5' );
 
   /**
    * {Dimension2} size

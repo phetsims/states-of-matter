@@ -5,17 +5,17 @@
  *
  * @author Siddhartha Chinthapally (Actual Concepts)
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var Image = require( 'SCENERY/nodes/Image' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var Node = require( 'SCENERY/nodes/Node' );
-  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  const Image = require( 'SCENERY/nodes/Image' );
+  const inherit = require( 'PHET_CORE/inherit' );
+  const Node = require( 'SCENERY/nodes/Node' );
+  const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   // images
-  var pushPinImg = require( 'image!STATES_OF_MATTER/push-pin.png' );
+  const pushPinImg = require( 'image!STATES_OF_MATTER/push-pin.png' );
 
   /**
    * @constructor

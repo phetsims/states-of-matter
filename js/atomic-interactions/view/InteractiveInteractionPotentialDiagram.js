@@ -6,26 +6,26 @@
  *
  * @author John Blanco
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var ArrowNode = require( 'SCENERY_PHET/ArrowNode' );
-  var AtomPair = require( 'STATES_OF_MATTER/atomic-interactions/model/AtomPair' );
-  var AtomType = require( 'STATES_OF_MATTER/common/model/AtomType' );
-  var Bounds2 = require( 'DOT/Bounds2' );
-  var Color = require( 'SCENERY/util/Color' );
-  var FillHighlightListener = require( 'SCENERY_PHET/input/FillHighlightListener' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var InteractionPotentialCanvasNode = require( 'STATES_OF_MATTER/common/view/InteractionPotentialCanvasNode' );
-  var InteractionPotentialDiagramNode = require( 'STATES_OF_MATTER/common/view/InteractionPotentialDiagramNode' );
-  var Property = require( 'AXON/Property' );
-  var Rectangle = require( 'SCENERY/nodes/Rectangle' );
-  var Shape = require( 'KITE/Shape' );
-  var SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
-  var SOMColorProfile = require( 'STATES_OF_MATTER/common/view/SOMColorProfile' );
-  var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
-  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  const ArrowNode = require( 'SCENERY_PHET/ArrowNode' );
+  const AtomPair = require( 'STATES_OF_MATTER/atomic-interactions/model/AtomPair' );
+  const AtomType = require( 'STATES_OF_MATTER/common/model/AtomType' );
+  const Bounds2 = require( 'DOT/Bounds2' );
+  const Color = require( 'SCENERY/util/Color' );
+  const FillHighlightListener = require( 'SCENERY_PHET/input/FillHighlightListener' );
+  const inherit = require( 'PHET_CORE/inherit' );
+  const InteractionPotentialCanvasNode = require( 'STATES_OF_MATTER/common/view/InteractionPotentialCanvasNode' );
+  const InteractionPotentialDiagramNode = require( 'STATES_OF_MATTER/common/view/InteractionPotentialDiagramNode' );
+  const Property = require( 'AXON/Property' );
+  const Rectangle = require( 'SCENERY/nodes/Rectangle' );
+  const Shape = require( 'KITE/Shape' );
+  const SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
+  const SOMColorProfile = require( 'STATES_OF_MATTER/common/view/SOMColorProfile' );
+  const SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
+  const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   // constants
   var RESIZE_HANDLE_SIZE_PROPORTION = 0.05;  // Size of handles as function of node width.

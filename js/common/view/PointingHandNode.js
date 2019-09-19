@@ -7,20 +7,20 @@
  * @author Siddhartha Chinthapally (Actual Concepts)
  * @author John Blanco
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var ArrowNode = require( 'SCENERY_PHET/ArrowNode' );
-  var Image = require( 'SCENERY/nodes/Image' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var MultipleParticleModel = require( 'STATES_OF_MATTER/common/model/MultipleParticleModel' );
-  var Node = require( 'SCENERY/nodes/Node' );
-  var SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
-  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  const ArrowNode = require( 'SCENERY_PHET/ArrowNode' );
+  const Image = require( 'SCENERY/nodes/Image' );
+  const inherit = require( 'PHET_CORE/inherit' );
+  const MultipleParticleModel = require( 'STATES_OF_MATTER/common/model/MultipleParticleModel' );
+  const Node = require( 'SCENERY/nodes/Node' );
+  const SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
+  const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   // images
-  var pointingHandImage = require( 'mipmap!STATES_OF_MATTER/pointing-hand.png' );
+  const pointingHandImage = require( 'mipmap!STATES_OF_MATTER/pointing-hand.png' );
 
   // constants
   var WIDTH = 150; // in screen coords

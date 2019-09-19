@@ -5,49 +5,49 @@
  *
  * @author Siddhartha Chinthapally (Actual Concepts)
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var AquaRadioButton = require( 'SUN/AquaRadioButton' );
-  var AtomAndMoleculeIconFactory = require( 'STATES_OF_MATTER/common/view/AtomAndMoleculeIconFactory' );
-  var AtomPair = require( 'STATES_OF_MATTER/atomic-interactions/model/AtomPair' );
-  var Dimension2 = require( 'DOT/Dimension2' );
-  var HBox = require( 'SCENERY/nodes/HBox' );
-  var HSlider = require( 'SUN/HSlider' );
-  var HStrut = require( 'SCENERY/nodes/HStrut' );
-  var Image = require( 'SCENERY/nodes/Image' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var Node = require( 'SCENERY/nodes/Node' );
-  var Panel = require( 'SUN/Panel' );
-  var PhetFont = require( 'SCENERY_PHET/PhetFont' );
-  var RadioButtonGroup = require( 'SUN/buttons/RadioButtonGroup' );
-  var Range = require( 'DOT/Range' );
-  var Rectangle = require( 'SCENERY/nodes/Rectangle' );
-  var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
-  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  var SubstanceType = require( 'STATES_OF_MATTER/common/SubstanceType' );
-  var Text = require( 'SCENERY/nodes/Text' );
-  var VBox = require( 'SCENERY/nodes/VBox' );
+  const AquaRadioButton = require( 'SUN/AquaRadioButton' );
+  const AtomAndMoleculeIconFactory = require( 'STATES_OF_MATTER/common/view/AtomAndMoleculeIconFactory' );
+  const AtomPair = require( 'STATES_OF_MATTER/atomic-interactions/model/AtomPair' );
+  const Dimension2 = require( 'DOT/Dimension2' );
+  const HBox = require( 'SCENERY/nodes/HBox' );
+  const HSlider = require( 'SUN/HSlider' );
+  const HStrut = require( 'SCENERY/nodes/HStrut' );
+  const Image = require( 'SCENERY/nodes/Image' );
+  const inherit = require( 'PHET_CORE/inherit' );
+  const Node = require( 'SCENERY/nodes/Node' );
+  const Panel = require( 'SUN/Panel' );
+  const PhetFont = require( 'SCENERY_PHET/PhetFont' );
+  const RadioButtonGroup = require( 'SUN/buttons/RadioButtonGroup' );
+  const Range = require( 'DOT/Range' );
+  const Rectangle = require( 'SCENERY/nodes/Rectangle' );
+  const SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
+  const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  const SubstanceType = require( 'STATES_OF_MATTER/common/SubstanceType' );
+  const Text = require( 'SCENERY/nodes/Text' );
+  const VBox = require( 'SCENERY/nodes/VBox' );
 
   // images
-  var pushPinImg = require( 'image!STATES_OF_MATTER/push-pin.png' );
+  const pushPinImg = require( 'image!STATES_OF_MATTER/push-pin.png' );
 
   // strings
-  var adjustableAttractionString = require( 'string!STATES_OF_MATTER/adjustableAttraction' );
-  var argonString = require( 'string!STATES_OF_MATTER/argon' );
-  var atomDiameterString = require( 'string!STATES_OF_MATTER/atomDiameter' );
-  var atomsString = require( 'string!STATES_OF_MATTER/Atoms' );
-  var customAttractionString = require( 'string!STATES_OF_MATTER/customAttraction' );
-  var interactionStrengthString = require( 'string!STATES_OF_MATTER/interactionStrength' );
-  var largeString = require( 'string!STATES_OF_MATTER/large' );
-  var movingString = require( 'string!STATES_OF_MATTER/moving' );
-  var neonString = require( 'string!STATES_OF_MATTER/neon' );
-  var oxygenString = require( 'string!STATES_OF_MATTER/oxygen' );
-  var pinnedString = require( 'string!STATES_OF_MATTER/pinned' );
-  var smallString = require( 'string!STATES_OF_MATTER/small' );
-  var strongString = require( 'string!STATES_OF_MATTER/strong' );
-  var weakString = require( 'string!STATES_OF_MATTER/weak' );
+  const adjustableAttractionString = require( 'string!STATES_OF_MATTER/adjustableAttraction' );
+  const argonString = require( 'string!STATES_OF_MATTER/argon' );
+  const atomDiameterString = require( 'string!STATES_OF_MATTER/atomDiameter' );
+  const atomsString = require( 'string!STATES_OF_MATTER/Atoms' );
+  const customAttractionString = require( 'string!STATES_OF_MATTER/customAttraction' );
+  const interactionStrengthString = require( 'string!STATES_OF_MATTER/interactionStrength' );
+  const largeString = require( 'string!STATES_OF_MATTER/large' );
+  const movingString = require( 'string!STATES_OF_MATTER/moving' );
+  const neonString = require( 'string!STATES_OF_MATTER/neon' );
+  const oxygenString = require( 'string!STATES_OF_MATTER/oxygen' );
+  const pinnedString = require( 'string!STATES_OF_MATTER/pinned' );
+  const smallString = require( 'string!STATES_OF_MATTER/small' );
+  const strongString = require( 'string!STATES_OF_MATTER/strong' );
+  const weakString = require( 'string!STATES_OF_MATTER/weak' );
 
   // constants
   var NORMAL_TEXT_FONT = new PhetFont( 12 );

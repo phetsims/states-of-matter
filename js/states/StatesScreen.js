@@ -6,21 +6,21 @@
  * @author Aaron Davis
  * @author Siddhartha Chinthapally (Actual Concepts)
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var inherit = require( 'PHET_CORE/inherit' );
-  var MultipleParticleModel = require( 'STATES_OF_MATTER/common/model/MultipleParticleModel' );
-  var Screen = require( 'JOIST/Screen' );
-  var SOMColorProfile = require( 'STATES_OF_MATTER/common/view/SOMColorProfile' );
-  var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
-  var StatesIcon = require( 'STATES_OF_MATTER/states/StatesIcon' );
-  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  var StatesScreenView = require( 'STATES_OF_MATTER/states/view/StatesScreenView' );
+  const inherit = require( 'PHET_CORE/inherit' );
+  const MultipleParticleModel = require( 'STATES_OF_MATTER/common/model/MultipleParticleModel' );
+  const Screen = require( 'JOIST/Screen' );
+  const SOMColorProfile = require( 'STATES_OF_MATTER/common/view/SOMColorProfile' );
+  const SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
+  const StatesIcon = require( 'STATES_OF_MATTER/states/StatesIcon' );
+  const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  const StatesScreenView = require( 'STATES_OF_MATTER/states/view/StatesScreenView' );
 
   // strings
-  var statesString = require( 'string!STATES_OF_MATTER/states' );
+  const statesString = require( 'string!STATES_OF_MATTER/states' );
 
   /**
    * @constructor

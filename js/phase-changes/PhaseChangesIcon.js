@@ -5,18 +5,18 @@
  *
  * @author John Blanco
  */
-define( function( require ) {
+define( require => {
     'use strict';
 
     // modules
-    var ArrowNode = require( 'SCENERY_PHET/ArrowNode' );
-    var Circle = require( 'SCENERY/nodes/Circle' );
-    var Image = require( 'SCENERY/nodes/Image' );
-    var inherit = require( 'PHET_CORE/inherit' );
-    var Node = require( 'SCENERY/nodes/Node' );
-    var Rectangle = require( 'SCENERY/nodes/Rectangle' );
-    var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
-    var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+    const ArrowNode = require( 'SCENERY_PHET/ArrowNode' );
+    const Circle = require( 'SCENERY/nodes/Circle' );
+    const Image = require( 'SCENERY/nodes/Image' );
+    const inherit = require( 'PHET_CORE/inherit' );
+    const Node = require( 'SCENERY/nodes/Node' );
+    const Rectangle = require( 'SCENERY/nodes/Rectangle' );
+    const SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
+    const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
     // constants
     var PARTICLE_COLOR = SOMConstants.NEON_COLOR;

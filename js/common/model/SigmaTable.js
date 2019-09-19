@@ -8,17 +8,17 @@
  * @author John Blanco
  * @author Siddhartha Chinthapally (Actual Concepts)
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var ArgonAtom = require( 'STATES_OF_MATTER/common/model/particle/ArgonAtom' );
-  var AtomType = require( 'STATES_OF_MATTER/common/model/AtomType' );
-  var ConfigurableStatesOfMatterAtom = require( 'STATES_OF_MATTER/common/model/particle/ConfigurableStatesOfMatterAtom' );
-  var NeonAtom = require( 'STATES_OF_MATTER/common/model/particle/NeonAtom' );
-  var OxygenAtom = require( 'STATES_OF_MATTER/common/model/particle/OxygenAtom' );
-  var SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
-  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  const ArgonAtom = require( 'STATES_OF_MATTER/common/model/particle/ArgonAtom' );
+  const AtomType = require( 'STATES_OF_MATTER/common/model/AtomType' );
+  const ConfigurableStatesOfMatterAtom = require( 'STATES_OF_MATTER/common/model/particle/ConfigurableStatesOfMatterAtom' );
+  const NeonAtom = require( 'STATES_OF_MATTER/common/model/particle/NeonAtom' );
+  const OxygenAtom = require( 'STATES_OF_MATTER/common/model/particle/OxygenAtom' );
+  const SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
+  const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   // static object (no constructor)
   var SigmaTable = {

@@ -6,32 +6,32 @@
  * @author Siddhartha Chinthapally (Actual Concepts)
  * @author John Blanco
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var BooleanRectangularStickyToggleButton = require( 'SUN/buttons/BooleanRectangularStickyToggleButton' );
-  var HBox = require( 'SCENERY/nodes/HBox' );
-  var HStrut = require( 'SCENERY/nodes/HStrut' );
-  var Image = require( 'SCENERY/nodes/Image' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var Node = require( 'SCENERY/nodes/Node' );
-  var PhaseStateEnum = require( 'STATES_OF_MATTER/common/PhaseStateEnum' );
-  var PhetFont = require( 'SCENERY_PHET/PhetFont' );
-  var Property = require( 'AXON/Property' );
-  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  var Text = require( 'SCENERY/nodes/Text' );
-  var VBox = require( 'SCENERY/nodes/VBox' );
+  const BooleanRectangularStickyToggleButton = require( 'SUN/buttons/BooleanRectangularStickyToggleButton' );
+  const HBox = require( 'SCENERY/nodes/HBox' );
+  const HStrut = require( 'SCENERY/nodes/HStrut' );
+  const Image = require( 'SCENERY/nodes/Image' );
+  const inherit = require( 'PHET_CORE/inherit' );
+  const Node = require( 'SCENERY/nodes/Node' );
+  const PhaseStateEnum = require( 'STATES_OF_MATTER/common/PhaseStateEnum' );
+  const PhetFont = require( 'SCENERY_PHET/PhetFont' );
+  const Property = require( 'AXON/Property' );
+  const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  const Text = require( 'SCENERY/nodes/Text' );
+  const VBox = require( 'SCENERY/nodes/VBox' );
 
   // strings
-  var gasString = require( 'string!STATES_OF_MATTER/Gas' );
-  var liquidString = require( 'string!STATES_OF_MATTER/Liquid' );
-  var solidString = require( 'string!STATES_OF_MATTER/Solid' );
+  const gasString = require( 'string!STATES_OF_MATTER/Gas' );
+  const liquidString = require( 'string!STATES_OF_MATTER/Liquid' );
+  const solidString = require( 'string!STATES_OF_MATTER/Solid' );
 
   // images
-  var gasIconImage = require( 'image!STATES_OF_MATTER/gas-icon.png' );
-  var liquidIconImage = require( 'image!STATES_OF_MATTER/liquid-icon.png' );
-  var solidIconImage = require( 'image!STATES_OF_MATTER/solid-icon.png' );
+  const gasIconImage = require( 'image!STATES_OF_MATTER/gas-icon.png' );
+  const liquidIconImage = require( 'image!STATES_OF_MATTER/liquid-icon.png' );
+  const solidIconImage = require( 'image!STATES_OF_MATTER/solid-icon.png' );
 
   // constants
   var DEFAULT_BUTTON_WIDTH = 160;

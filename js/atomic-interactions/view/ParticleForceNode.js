@@ -4,15 +4,15 @@
  * this type adds the ability to display force arrows to a particle node
  * @author Siddhartha Chinthapally (Actual Concepts)
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var Color = require( 'SCENERY/util/Color' );
-  var DimensionalArrowNode = require( 'STATES_OF_MATTER/atomic-interactions/view/DimensionalArrowNode' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var ParticleNode = require( 'STATES_OF_MATTER/atomic-interactions/view/ParticleNode' );
-  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  const Color = require( 'SCENERY/util/Color' );
+  const DimensionalArrowNode = require( 'STATES_OF_MATTER/atomic-interactions/view/DimensionalArrowNode' );
+  const inherit = require( 'PHET_CORE/inherit' );
+  const ParticleNode = require( 'STATES_OF_MATTER/atomic-interactions/view/ParticleNode' );
+  const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   // The following constants control some of the aspects of the appearance of the force arrows.  The values were
   // empirically chosen to look good in this particular sim.

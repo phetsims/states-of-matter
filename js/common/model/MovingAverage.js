@@ -3,12 +3,12 @@
 /**
  * simple moving average calculator
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var inherit = require( 'PHET_CORE/inherit' );
-  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  const inherit = require( 'PHET_CORE/inherit' );
+  const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   /**
    * @constructor

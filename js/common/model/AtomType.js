@@ -5,10 +5,10 @@
  *
  * @author Aaron Davis
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
-  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   // NOTE: enum pattern recommends using {} for each value, but strings are more convenient for debugging
   var AtomType = Object.freeze( {

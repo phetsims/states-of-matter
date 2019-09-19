@@ -9,14 +9,14 @@
  * @author Siddhartha Chinthapally (Actual Concepts)
  * @author Jonathan Olson
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var AbstractVerletAlgorithm = require( 'STATES_OF_MATTER/common/model/engine/AbstractVerletAlgorithm' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  var WaterAtomPositionUpdater = require( 'STATES_OF_MATTER/common/model/engine/WaterAtomPositionUpdater' );
+  const AbstractVerletAlgorithm = require( 'STATES_OF_MATTER/common/model/engine/AbstractVerletAlgorithm' );
+  const inherit = require( 'PHET_CORE/inherit' );
+  const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  const WaterAtomPositionUpdater = require( 'STATES_OF_MATTER/common/model/engine/WaterAtomPositionUpdater' );
 
   // constants, mostly parameters used for "hollywooding" of the water crystal
   var WATER_FULLY_MELTED_TEMPERATURE = 0.3;
