@@ -22,10 +22,10 @@ define( require => {
   const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   // constants
-  var PARTICLE_IMAGE_CANVAS_LENGTH = 32; // amount of canvas used to create a particle image, will be squared 
+  const PARTICLE_IMAGE_CANVAS_LENGTH = 32; // amount of canvas used to create a particle image, will be squared 
 
   // set up the association between atom types and the colors used to represent them
-  var PARTICLE_COLOR_TABLE = {};
+  const PARTICLE_COLOR_TABLE = {};
   PARTICLE_COLOR_TABLE[ AtomType.ARGON ] = SOMConstants.ARGON_COLOR;
   PARTICLE_COLOR_TABLE[ AtomType.NEON ] = SOMConstants.NEON_COLOR;
   PARTICLE_COLOR_TABLE[ AtomType.OXYGEN ] = SOMConstants.OXYGEN_COLOR;
@@ -33,7 +33,7 @@ define( require => {
   PARTICLE_COLOR_TABLE[ AtomType.ADJUSTABLE ] = SOMConstants.ADJUSTABLE_ATTRACTION_COLOR;
 
   // set up the association between atom types and their radii in the model
-  var PARTICLE_RADIUS_TABLE = {};
+  const PARTICLE_RADIUS_TABLE = {};
   PARTICLE_RADIUS_TABLE[ AtomType.ARGON ] = ArgonAtom.RADIUS;
   PARTICLE_RADIUS_TABLE[ AtomType.NEON ] = NeonAtom.RADIUS;
   PARTICLE_RADIUS_TABLE[ AtomType.OXYGEN ] = OxygenAtom.RADIUS;
@@ -48,7 +48,7 @@ define( require => {
    */
   function ParticleImageCanvasNode( particles, modelViewTransform, options ) {
 
-    var self = this;
+    const self = this;
     CanvasNode.call( this, options );
 
     // @private
@@ -68,9 +68,9 @@ define( require => {
 
     // Draw the particles on the canvas, top row is without black stroke, the bottom row is with black stroke (for
     // projector mode).
-    var context = this.particleImageCanvas.getContext( '2d' );
-    var index = 0;
-    for ( var atomType in AtomType ) {
+    const context = this.particleImageCanvas.getContext( '2d' );
+    let index = 0;
+    for ( const atomType in AtomType ) {
 
       if ( !AtomType.hasOwnProperty( atomType ) ) {
         // skip prototype properties
@@ -131,7 +131,7 @@ define( require => {
      * @private
      */
     renderParticle: function( context, particle ) {
-      var particleViewRadius = this.particleRadii[ particle.getType() ];
+      const particleViewRadius = this.particleRadii[ particle.getType() ];
       context.drawImage(
         this.particleImageCanvas,
         this.mapAtomTypeToImageXPosition[ particle.getType() ],
@@ -151,8 +151,8 @@ define( require => {
      * @public
      */
     paintCanvas: function( context ) {
-      var particle;
-      var i;
+      let particle;
+      let i;
 
       // Paint all atoms with a flag indicating that they should be in back first first.  This is done so that when
       // water is rendered, some of the hydrogen ends up in the back and some ends up in front so that there is

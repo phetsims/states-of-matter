@@ -28,8 +28,8 @@ define( require => {
    * @constructor
    */
   function PositionMarker( radius, color, options ) {
-    var self = this;
-    var mainColor = Color.toColor( color );
+    const self = this;
+    const mainColor = Color.toColor( color );
     options = _.extend( {
       mainColor: mainColor,
       highlightColor: Color.WHITE,
@@ -70,9 +70,9 @@ define( require => {
      */
     changeColor: function( color ) {
       this.haloNode.fill = Color.toColor( color ).withAlpha( 0.5 );
-      var mainColor = Color.toColor( color );
-      var highlightColor = Color.WHITE;
-      var shadowColor = mainColor.darkerColor();
+      const mainColor = Color.toColor( color );
+      const highlightColor = Color.WHITE;
+      const shadowColor = mainColor.darkerColor();
       this.sphereNode.fill = new RadialGradient( this.radius * -0.4, this.radius * -0.4, 0, this.radius * -0.4,
         this.radius * -0.4, 2 * this.radius )
         .addColorStop( 0, highlightColor )

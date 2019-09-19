@@ -35,9 +35,9 @@ define( require => {
   const vanderwaalsString = require( 'string!STATES_OF_MATTER/vanderwaals' );
 
   // constants
-  var TEXT_LABEL_MAX_WIDTH = 175; // max width of text label in the panel
-  var RADIO_BUTTON_RADIUS = 6;
-  var ICON_PADDING = 25; // empirically determined to put the icons in a good position on the panel
+  const TEXT_LABEL_MAX_WIDTH = 175; // max width of text label in the panel
+  const RADIO_BUTTON_RADIUS = 6;
+  const ICON_PADDING = 25; // empirically determined to put the icons in a good position on the panel
 
   /**
    * @param {Property<string>} forcesProperty that determines which forces to display
@@ -62,72 +62,72 @@ define( require => {
     }, options );
 
     Node.call( this );
-    var accordionContent = new Node();
-    var arrowEndX = 20;
-    var arrowStartX = 0;
-    var arrowY = 0;
-    var arrowNodeOptions = {
+    const accordionContent = new Node();
+    const arrowEndX = 20;
+    const arrowStartX = 0;
+    const arrowY = 0;
+    const arrowNodeOptions = {
       headHeight: 10,
       headWidth: 14,
       tailWidth: 6
     };
 
-    var totalForceArrow = new ArrowNode( arrowEndX, arrowY, arrowStartX, arrowY, _.extend( {
+    const totalForceArrow = new ArrowNode( arrowEndX, arrowY, arrowStartX, arrowY, _.extend( {
       fill: '#49B649'
     }, arrowNodeOptions ) );
 
-    var attractiveArrow = new ArrowNode( arrowEndX, arrowY, arrowStartX, arrowY, _.extend( {
+    const attractiveArrow = new ArrowNode( arrowEndX, arrowY, arrowStartX, arrowY, _.extend( {
       fill: '#FC9732'
     }, arrowNodeOptions ) );
 
-    var repulsiveArrow = new ArrowNode( arrowStartX, arrowY, arrowEndX, arrowY, _.extend( {
+    const repulsiveArrow = new ArrowNode( arrowStartX, arrowY, arrowEndX, arrowY, _.extend( {
       fill: '#FD17FF'
     }, arrowNodeOptions ) );
 
-    var createText = function( string, width, fontSize ) {
-      var text = new Text( string, { font: new PhetFont( fontSize ), fill: options.textFill } );
+    const createText = function( string, width, fontSize ) {
+      const text = new Text( string, { font: new PhetFont( fontSize ), fill: options.textFill } );
       if ( text.width > width ) {
         text.scale( width / text.width );
       }
       return text;
     };
 
-    var hideForcesText = { label: createText( hideForcesString, TEXT_LABEL_MAX_WIDTH * 0.65, 12 ) };
+    const hideForcesText = { label: createText( hideForcesString, TEXT_LABEL_MAX_WIDTH * 0.65, 12 ) };
 
-    var totalForceText = {
+    const totalForceText = {
       label: createText( totalForceString, TEXT_LABEL_MAX_WIDTH * 0.65, 12 ),
       icon: totalForceArrow
     };
 
-    var attractiveText = {
+    const attractiveText = {
       label: createText( attractiveString, TEXT_LABEL_MAX_WIDTH * 0.6, 12 ),
       icon: attractiveArrow
     };
 
-    var vanderwaalsText = {
+    const vanderwaalsText = {
       label: createText( vanderwaalsString, TEXT_LABEL_MAX_WIDTH * 0.8, 11 )
     };
 
-    var repulsiveText = {
+    const repulsiveText = {
       label: createText( repulsiveString, TEXT_LABEL_MAX_WIDTH * 0.6, 12 ),
       icon: repulsiveArrow
     };
 
-    var electronOverlapText = {
+    const electronOverlapText = {
       label: createText( electronOverlapString, TEXT_LABEL_MAX_WIDTH * 0.8, 11 )
     };
 
     // compute the maximum item width
-    var widestItem = _.maxBy( [ hideForcesText, totalForceText, attractiveText, vanderwaalsText, repulsiveText,
+    const widestItem = _.maxBy( [ hideForcesText, totalForceText, attractiveText, vanderwaalsText, repulsiveText,
       electronOverlapText ], function( item ) {
       return item.label.width + ( ( item.icon ) ? item.icon.width + ICON_PADDING : 0 );
     } );
-    var maxWidth = widestItem.label.width + ( ( widestItem.icon ) ? widestItem.icon.width + ICON_PADDING : 0 );
+    const maxWidth = widestItem.label.width + ( ( widestItem.icon ) ? widestItem.icon.width + ICON_PADDING : 0 );
 
     // inserts a spacing node (HStrut) so that the text, space and image together occupy a certain fixed width
-    var createConsistentlySpacedLabel = function( labelSpec ) {
+    const createConsistentlySpacedLabel = function( labelSpec ) {
       if ( labelSpec.icon ) {
-        var strutWidth = maxWidth - labelSpec.label.width - labelSpec.icon.width;
+        const strutWidth = maxWidth - labelSpec.label.width - labelSpec.icon.width;
         return new HBox( { children: [ labelSpec.label, new HStrut( strutWidth ), labelSpec.icon ] } );
       }
       else {
@@ -135,7 +135,7 @@ define( require => {
       }
     };
 
-    var componentForceText = new VBox( {
+    const componentForceText = new VBox( {
       spacing: 3,
       children: [
         createConsistentlySpacedLabel( attractiveText ),
@@ -146,7 +146,7 @@ define( require => {
     } );
 
     // the bracket at the left - this is tweaked a bit for optimal appearance
-    var bracket = new VBox( {
+    const bracket = new VBox( {
       spacing: 0,
       children: [
         new VStrut( 4 ),
@@ -160,32 +160,32 @@ define( require => {
       ]
     } );
 
-    var bracketToTextSpacing = 2;
-    var componentForce = new HBox( {
+    const bracketToTextSpacing = 2;
+    const componentForce = new HBox( {
       spacing: bracketToTextSpacing,
       children: [ bracket, componentForceText ]
     } );
-    var totalForceStrutWidth = maxWidth - totalForceText.label.width - totalForceText.icon.width + bracket.width + bracketToTextSpacing;
-    var totalForceItem = new HBox( {
+    const totalForceStrutWidth = maxWidth - totalForceText.label.width - totalForceText.icon.width + bracket.width + bracketToTextSpacing;
+    const totalForceItem = new HBox( {
       children: [ totalForceText.label,
         new HStrut( totalForceStrutWidth ),
         totalForceText.icon ]
     } );
 
-    var totalForce = new HBox( { spacing: 2, children: [ totalForceItem ] } );
-    var hideForce = new HBox( { spacing: 2, children: [ createConsistentlySpacedLabel( hideForcesText ) ] } );
+    const totalForce = new HBox( { spacing: 2, children: [ totalForceItem ] } );
+    const hideForce = new HBox( { spacing: 2, children: [ createConsistentlySpacedLabel( hideForcesText ) ] } );
 
-    var hideForcesRadio = new AquaRadioButton( forcesProperty, 'hideForces', hideForce, {
+    const hideForcesRadio = new AquaRadioButton( forcesProperty, 'hideForces', hideForce, {
       radius: RADIO_BUTTON_RADIUS
     } );
-    var totalForceRadio = new AquaRadioButton( forcesProperty, 'totalForce', totalForce, {
+    const totalForceRadio = new AquaRadioButton( forcesProperty, 'totalForce', totalForce, {
       radius: RADIO_BUTTON_RADIUS
     } );
-    var componentForceRadio = new AquaRadioButton( forcesProperty, 'componentForce', componentForce, {
+    const componentForceRadio = new AquaRadioButton( forcesProperty, 'componentForce', componentForce, {
       radius: RADIO_BUTTON_RADIUS
     } );
 
-    var radioButtonGroup = new VBox( {
+    const radioButtonGroup = new VBox( {
       children: [ hideForcesRadio, totalForceRadio, componentForceRadio ],
       align: 'left',
       spacing: 3,
@@ -194,13 +194,13 @@ define( require => {
     accordionContent.addChild( radioButtonGroup );
 
     // expand the touch areas of the radio buttons so that they are easier to work with on touch-based devices
-    var xDilation = 8;
-    var yDilation = 1.5;
+    const xDilation = 8;
+    const yDilation = 1.5;
     hideForcesRadio.touchArea = hideForcesRadio.localBounds.dilatedXY( xDilation, yDilation );
     totalForceRadio.touchArea = totalForceRadio.localBounds.dilatedXY( xDilation, yDilation );
 
     // show white stroke around the force panel within SOM full version  else  show black stroke
-    var accordionBox = new AccordionBox( accordionContent, {
+    const accordionBox = new AccordionBox( accordionContent, {
       titleNode: createText( forcesString, TEXT_LABEL_MAX_WIDTH * 0.9, 14 ),
       fill: options.fill,
       stroke: options.stroke,

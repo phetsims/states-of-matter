@@ -18,12 +18,12 @@ define( require => {
 
   // Constants that control the pressure calculation.  The size of the pressure accumulator assumes a max sim rate of
   // 1 / 60, which derives from the standard 60 FPS rate at which browsers currently run.  May need to go up someday.
-  var PRESSURE_CALC_TIME_WINDOW = 12; // in seconds, empirically determined to be responsive but not jumpy
-  var PRESSURE_ACCUMULATOR_LENGTH = Math.ceil( PRESSURE_CALC_TIME_WINDOW / ( 1 / 60 ) * 1.1 );
+  const PRESSURE_CALC_TIME_WINDOW = 12; // in seconds, empirically determined to be responsive but not jumpy
+  const PRESSURE_ACCUMULATOR_LENGTH = Math.ceil( PRESSURE_CALC_TIME_WINDOW / ( 1 / 60 ) * 1.1 );
 
   // constants that control when the container explodes
-  var EXPLOSION_PRESSURE = 41; // in model units, empirically determined
-  var EXPLOSION_TIME = 1; // in seconds, time that the pressure must be above the threshold before explosion occurs
+  const EXPLOSION_PRESSURE = 41; // in model units, empirically determined
+  const EXPLOSION_TIME = 1; // in seconds, time that the pressure must be above the threshold before explosion occurs
 
   /**
    * @param {MultipleParticleModel} multipleParticleModel of the simulation
@@ -79,38 +79,38 @@ define( require => {
      */
     updateMoleculePositions: function( moleculeDataSet, timeStep ) {
 
-      var moleculeCenterOfMassPositions = moleculeDataSet.getMoleculeCenterOfMassPositions();
-      var moleculeVelocities = moleculeDataSet.getMoleculeVelocities();
-      var moleculeForces = moleculeDataSet.getMoleculeForces();
-      var numberOfMolecules = moleculeDataSet.getNumberOfMolecules();
-      var moleculeRotationAngles = moleculeDataSet.getMoleculeRotationAngles();
-      var moleculeRotationRates = moleculeDataSet.getMoleculeRotationRates();
-      var moleculeTorques = moleculeDataSet.getMoleculeTorques();
-      var massInverse = 1 / moleculeDataSet.getMoleculeMass();
-      var inertiaInverse = 1 / moleculeDataSet.getMoleculeRotationalInertia();
-      var timeStepSqrHalf = timeStep * timeStep * 0.5;
-      var pressureAccumulationMinHeight = this.multipleParticleModel.normalizedContainerHeight * 0.3;
-      var accumulatedPressure = 0;
+      const moleculeCenterOfMassPositions = moleculeDataSet.getMoleculeCenterOfMassPositions();
+      const moleculeVelocities = moleculeDataSet.getMoleculeVelocities();
+      const moleculeForces = moleculeDataSet.getMoleculeForces();
+      const numberOfMolecules = moleculeDataSet.getNumberOfMolecules();
+      const moleculeRotationAngles = moleculeDataSet.getMoleculeRotationAngles();
+      const moleculeRotationRates = moleculeDataSet.getMoleculeRotationRates();
+      const moleculeTorques = moleculeDataSet.getMoleculeTorques();
+      const massInverse = 1 / moleculeDataSet.getMoleculeMass();
+      const inertiaInverse = 1 / moleculeDataSet.getMoleculeRotationalInertia();
+      const timeStepSqrHalf = timeStep * timeStep * 0.5;
+      const pressureAccumulationMinHeight = this.multipleParticleModel.normalizedContainerHeight * 0.3;
+      let accumulatedPressure = 0;
 
       // Since the normalized particle diameter is 1.0, and this is a diatomic particle joined at the center, use a
       // 'compromise' value of 1.5 as the offset from the edges where these molecules should bounce.
-      var minX = this.sideBounceInset;
-      var minY = this.bottomBounceInset;
-      var maxX = this.multipleParticleModel.normalizedContainerWidth - this.sideBounceInset;
-      var maxY = this.multipleParticleModel.normalizedContainerHeight - this.topBounceInset;
+      const minX = this.sideBounceInset;
+      const minY = this.bottomBounceInset;
+      const maxX = this.multipleParticleModel.normalizedContainerWidth - this.sideBounceInset;
+      const maxY = this.multipleParticleModel.normalizedContainerHeight - this.topBounceInset;
 
-      for ( var i = 0; i < numberOfMolecules; i++ ) {
+      for ( let i = 0; i < numberOfMolecules; i++ ) {
 
-        var moleculeVelocity = moleculeVelocities[ i ];
-        var moleculeVelocityX = moleculeVelocity.x; // optimization
-        var moleculeVelocityY = moleculeVelocity.y; // optimization
-        var moleculeCenterOfMassPosition = moleculeCenterOfMassPositions[ i ];
+        const moleculeVelocity = moleculeVelocities[ i ];
+        const moleculeVelocityX = moleculeVelocity.x; // optimization
+        const moleculeVelocityY = moleculeVelocity.y; // optimization
+        const moleculeCenterOfMassPosition = moleculeCenterOfMassPositions[ i ];
 
         // calculate new position based on time, velocity, and acceleration
-        var xPos = moleculeCenterOfMassPosition.x +
+        let xPos = moleculeCenterOfMassPosition.x +
                    ( timeStep * moleculeVelocityX ) +
                    ( timeStepSqrHalf * moleculeForces[ i ].x * massInverse );
-        var yPos = moleculeCenterOfMassPosition.y +
+        let yPos = moleculeCenterOfMassPosition.y +
                    ( timeStep * moleculeVelocityY ) +
                    ( timeStepSqrHalf * moleculeForces[ i ].y * massInverse );
 
@@ -151,7 +151,7 @@ define( require => {
             if ( !this.multipleParticleModel.isExplodedProperty.get() ) {
 
               yPos = maxY;
-              var lidVelocity = this.multipleParticleModel.normalizedLidVelocityY;
+              const lidVelocity = this.multipleParticleModel.normalizedLidVelocityY;
 
               // if the lid velocity is non-zero, set a flag that indicates that the lid changed a particle's velocity
               if ( lidVelocity !== 0 ) {
@@ -200,7 +200,7 @@ define( require => {
     updateForcesAndMotion: function( timeStep ) {
 
       // Obtain references to the model data and parameters so that we can perform fast manipulations.
-      var moleculeDataSet = this.multipleParticleModel.moleculeDataSet;
+      const moleculeDataSet = this.multipleParticleModel.moleculeDataSet;
 
       // Update the atom positions based on velocities, current forces, and interactions with the wall.
       this.updateMoleculePositions( moleculeDataSet, timeStep );
@@ -274,7 +274,7 @@ define( require => {
 
         // Get the pressure value, but make sure it doesn't go below zero, because we have seen instances of that due
         // to floating point errors, see https://github.com/phetsims/states-of-matter/issues/240.
-        var newPressure = Math.max( this.pressureAccumulatorQueue.total / PRESSURE_CALC_TIME_WINDOW, 0 );
+        const newPressure = Math.max( this.pressureAccumulatorQueue.total / PRESSURE_CALC_TIME_WINDOW, 0 );
 
         if ( newPressure > EXPLOSION_PRESSURE ) {
           this.timeAboveExplosionPressure += dt;

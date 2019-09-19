@@ -21,7 +21,7 @@ define( require => {
   const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   // static object (no constructor)
-  var SigmaTable = {
+  const SigmaTable = {
 
     /**
      * Get the value of sigma, in picometers, for the atom types specified.

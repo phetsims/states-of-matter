@@ -35,67 +35,67 @@ define( require => {
   const triplePointString = require( 'string!STATES_OF_MATTER/triplePoint' );
 
   // constants that control the size of the canvas.
-  var WIDTH = 148;
-  var HEIGHT = (WIDTH * 0.75);
+  const WIDTH = 148;
+  const HEIGHT = (WIDTH * 0.75);
 
   // constants that control the look of the axes.
-  var AXES_LINE_WIDTH = 2;
-  var AXES_ARROW_HEAD_HEIGHT = 4 * AXES_LINE_WIDTH;
-  var HORIZ_AXIS_SIZE_PROPORTION = 0.85;
-  var VERT_AXIS_SIZE_PROPORTION = 0.85;
-  var LIQUID_AND_GAS_LABEL_MAX_WIDTH = 35;
-  var SOLID_LABEL_MAX_WIDTH = 30;  // has to be narrow enough to fit on the graph when modified for water
-  var SMALLER_INNER_TEXT_WIDTH = 30;
+  const AXES_LINE_WIDTH = 2;
+  const AXES_ARROW_HEAD_HEIGHT = 4 * AXES_LINE_WIDTH;
+  const HORIZ_AXIS_SIZE_PROPORTION = 0.85;
+  const VERT_AXIS_SIZE_PROPORTION = 0.85;
+  const LIQUID_AND_GAS_LABEL_MAX_WIDTH = 35;
+  const SOLID_LABEL_MAX_WIDTH = 30;  // has to be narrow enough to fit on the graph when modified for water
+  const SMALLER_INNER_TEXT_WIDTH = 30;
 
   // constants that control the location of the origin for the graph.
-  var X_ORIGIN_OFFSET = 0.10 * WIDTH;
-  var Y_ORIGIN_OFFSET = 0.85 * HEIGHT;
-  var X_USABLE_RANGE = WIDTH * HORIZ_AXIS_SIZE_PROPORTION - AXES_ARROW_HEAD_HEIGHT;
-  var Y_USABLE_RANGE = HEIGHT * ( VERT_AXIS_SIZE_PROPORTION - 0.11 );
+  const X_ORIGIN_OFFSET = 0.10 * WIDTH;
+  const Y_ORIGIN_OFFSET = 0.85 * HEIGHT;
+  const X_USABLE_RANGE = WIDTH * HORIZ_AXIS_SIZE_PROPORTION - AXES_ARROW_HEAD_HEIGHT;
+  const Y_USABLE_RANGE = HEIGHT * ( VERT_AXIS_SIZE_PROPORTION - 0.11 );
 
   // font for the labels used on the axes.
-  var AXIS_LABEL_FONT_SIZE = 12;
-  var AXIS_LABEL_FONT = new PhetFont( AXIS_LABEL_FONT_SIZE );
+  const AXIS_LABEL_FONT_SIZE = 12;
+  const AXIS_LABEL_FONT = new PhetFont( AXIS_LABEL_FONT_SIZE );
 
   // fonts for labels in the interior of the diagram.
-  var LARGER_INNER_FONT_SIZE = 12;
-  var LARGER_INNER_FONT = new PhetFont( LARGER_INNER_FONT_SIZE );
-  var SMALLER_INNER_FONT_SIZE = 10;
-  var SMALLER_INNER_FONT = new PhetFont( SMALLER_INNER_FONT_SIZE );
+  const LARGER_INNER_FONT_SIZE = 12;
+  const LARGER_INNER_FONT = new PhetFont( LARGER_INNER_FONT_SIZE );
+  const SMALLER_INNER_FONT_SIZE = 10;
+  const SMALLER_INNER_FONT = new PhetFont( SMALLER_INNER_FONT_SIZE );
 
   // constants that control the appearance of the phase diagram for the various substances.  Note that all points are
   // controlled as proportions of the overall graph size and not as absolute values.
-  var POINT_MARKER_DIAMETER = 2.5;
-  var CURRENT_STATE_MARKER_DIAMETER = 3.5;
-  var DEFAULT_TOP_OF_SOLID_LIQUID_LINE = new Vector2(
+  const POINT_MARKER_DIAMETER = 2.5;
+  const CURRENT_STATE_MARKER_DIAMETER = 3.5;
+  const DEFAULT_TOP_OF_SOLID_LIQUID_LINE = new Vector2(
     X_USABLE_RANGE * 0.40 + X_ORIGIN_OFFSET,
     Y_ORIGIN_OFFSET - Y_USABLE_RANGE
   );
-  var TOP_OF_SOLID_LIQUID_LINE_FOR_WATER = new Vector2(
+  const TOP_OF_SOLID_LIQUID_LINE_FOR_WATER = new Vector2(
     X_USABLE_RANGE * 0.30 + X_ORIGIN_OFFSET,
     Y_ORIGIN_OFFSET - Y_USABLE_RANGE
   );
-  var DEFAULT_TRIPLE_POINT = new Vector2(
+  const DEFAULT_TRIPLE_POINT = new Vector2(
     X_ORIGIN_OFFSET + ( X_USABLE_RANGE * 0.35 ),
     Y_ORIGIN_OFFSET - ( Y_USABLE_RANGE * 0.2 )
   );
-  var DEFAULT_CRITICAL_POINT = new Vector2(
+  const DEFAULT_CRITICAL_POINT = new Vector2(
     X_ORIGIN_OFFSET + ( X_USABLE_RANGE * 0.8 ),
     Y_ORIGIN_OFFSET - ( Y_USABLE_RANGE * 0.45 )
   );
-  var DEFAULT_SOLID_LABEL_LOCATION = new Vector2(
+  const DEFAULT_SOLID_LABEL_LOCATION = new Vector2(
     X_ORIGIN_OFFSET + ( X_USABLE_RANGE * 0.195 ),
     Y_ORIGIN_OFFSET - ( Y_USABLE_RANGE * 0.9 )
   );
-  var WATER_SOLID_LABEL_LOCATION = new Vector2(
+  const WATER_SOLID_LABEL_LOCATION = new Vector2(
     X_ORIGIN_OFFSET + ( X_USABLE_RANGE * 0.16 ),
     Y_ORIGIN_OFFSET - ( Y_USABLE_RANGE * 0.9 )
   );
-  var DEFAULT_LIQUID_LABEL_LOCATION = new Vector2(
+  const DEFAULT_LIQUID_LABEL_LOCATION = new Vector2(
     X_ORIGIN_OFFSET + ( X_USABLE_RANGE * 0.65 ),
     Y_ORIGIN_OFFSET - ( Y_USABLE_RANGE * 0.9 )
   );
-  var DEFAULT_GAS_LABEL_LOCATION = new Vector2(
+  const DEFAULT_GAS_LABEL_LOCATION = new Vector2(
     X_ORIGIN_OFFSET + ( X_USABLE_RANGE * 0.7 ),
     Y_ORIGIN_OFFSET - ( Y_USABLE_RANGE * 0.15 )
   );
@@ -108,7 +108,7 @@ define( require => {
   function PhaseDiagram( expandedProperty, options ) {
 
     Node.call( this );
-    var accordionContent = new Node();
+    const accordionContent = new Node();
 
     // @private gas area background
     this.gasAreaBackground = new Path( null, {
@@ -204,7 +204,7 @@ define( require => {
     // @private - flag that indicates whether water is being depicted, which alters aspects of the diagram
     this.depictingWater = false;
 
-    var horizontalAxis = new ArrowNode(
+    const horizontalAxis = new ArrowNode(
       X_ORIGIN_OFFSET,
       Y_ORIGIN_OFFSET,
       X_ORIGIN_OFFSET + (HORIZ_AXIS_SIZE_PROPORTION * WIDTH),
@@ -219,7 +219,7 @@ define( require => {
     );
     accordionContent.addChild( horizontalAxis );
 
-    var verticalAxis = new ArrowNode(
+    const verticalAxis = new ArrowNode(
       X_ORIGIN_OFFSET,
       Y_ORIGIN_OFFSET,
       X_ORIGIN_OFFSET,
@@ -235,7 +235,7 @@ define( require => {
     accordionContent.addChild( verticalAxis );
 
     // Create and add the labels for the axes.
-    var horizontalAxisLabel = new Text( temperatureString, {
+    const horizontalAxisLabel = new Text( temperatureString, {
       font: AXIS_LABEL_FONT,
       fill: SOMColorProfile.controlPanelTextProperty,
       maxWidth: horizontalAxis.width
@@ -243,7 +243,7 @@ define( require => {
     horizontalAxisLabel.setTranslation( horizontalAxis.centerX - horizontalAxisLabel.width / 2, Y_ORIGIN_OFFSET + horizontalAxisLabel.height * 1.2 );
     accordionContent.addChild( horizontalAxisLabel );
 
-    var verticalAxisLabel = new Text( pressureString, {
+    const verticalAxisLabel = new Text( pressureString, {
       font: AXIS_LABEL_FONT,
       fill: SOMColorProfile.controlPanelTextProperty,
       maxWidth: verticalAxis.height
@@ -257,7 +257,7 @@ define( require => {
       .ellipse( 0, 0, CURRENT_STATE_MARKER_DIAMETER, CURRENT_STATE_MARKER_DIAMETER ), { fill: 'red' } );
     accordionContent.addChild( this.currentStateMarker );
 
-    var titleNode = new Text( phaseDiagramString, {
+    const titleNode = new Text( phaseDiagramString, {
       fill: SOMColorProfile.controlPanelTextProperty,
       font: new PhetFont( { size: 13 } ),
       maxWidth: horizontalAxis.width
@@ -305,16 +305,16 @@ define( require => {
     drawPhaseDiagram: function() {
 
       // Handle the variations due to water vs. non-water
-      var topOfSolidLiquidLine = this.depictingWater ?
+      const topOfSolidLiquidLine = this.depictingWater ?
                                  TOP_OF_SOLID_LIQUID_LINE_FOR_WATER :
                                  DEFAULT_TOP_OF_SOLID_LIQUID_LINE;
-      var solidLabelCenter = this.depictingWater ? WATER_SOLID_LABEL_LOCATION : DEFAULT_SOLID_LABEL_LOCATION;
+      const solidLabelCenter = this.depictingWater ? WATER_SOLID_LABEL_LOCATION : DEFAULT_SOLID_LABEL_LOCATION;
 
       // Place the triple point marker.
       this.triplePoint.setTranslation( DEFAULT_TRIPLE_POINT.x, DEFAULT_TRIPLE_POINT.y );
 
       // Add the curve that separates the solid and gaseous regions.
-      var solidGasCurve = new Shape()
+      const solidGasCurve = new Shape()
         .moveTo( X_ORIGIN_OFFSET, Y_ORIGIN_OFFSET )
         .quadraticCurveTo(
           X_ORIGIN_OFFSET + ( X_USABLE_RANGE * 0.2 ),
@@ -325,13 +325,13 @@ define( require => {
       this.solidGasLine.setShape( solidGasCurve );
 
       // Add the line that separates solid and liquid.
-      var solidLiquidLine = new Shape()
+      const solidLiquidLine = new Shape()
         .lineTo( DEFAULT_TRIPLE_POINT.x, DEFAULT_TRIPLE_POINT.y )
         .lineToPoint( topOfSolidLiquidLine );
       this.solidLiquidLine.setShape( solidLiquidLine );
 
       // Update the shape of the background for the area that represents the solid phase.
-      var solidBackground = new Shape()
+      const solidBackground = new Shape()
         .moveTo( X_ORIGIN_OFFSET, Y_ORIGIN_OFFSET )
         .quadraticCurveTo(
           X_ORIGIN_OFFSET + ( X_USABLE_RANGE * 0.2 ),
@@ -349,9 +349,9 @@ define( require => {
       this.criticalPoint.setTranslation( DEFAULT_CRITICAL_POINT.x, DEFAULT_CRITICAL_POINT.y );
 
       // Add the curve that separates liquid and gas.
-      var controlCurveXPos = DEFAULT_TRIPLE_POINT.x + ( ( DEFAULT_CRITICAL_POINT.x - DEFAULT_TRIPLE_POINT.x ) / 2 );
-      var controlCurveYPos = DEFAULT_TRIPLE_POINT.y;
-      var liquidGasCurve = new Shape()
+      const controlCurveXPos = DEFAULT_TRIPLE_POINT.x + ( ( DEFAULT_CRITICAL_POINT.x - DEFAULT_TRIPLE_POINT.x ) / 2 );
+      const controlCurveYPos = DEFAULT_TRIPLE_POINT.y;
+      const liquidGasCurve = new Shape()
         .moveTo( DEFAULT_TRIPLE_POINT.x - 1, DEFAULT_TRIPLE_POINT.y )
         .quadraticCurveTo(
           controlCurveXPos,
@@ -362,7 +362,7 @@ define( require => {
       this.liquidGasLine.setShape( liquidGasCurve );
 
       // liquid phase (it is expected that the solid shape overlays this one)
-      var liquidBackground = new Shape()
+      const liquidBackground = new Shape()
         .moveTo( DEFAULT_TRIPLE_POINT.x - 1, DEFAULT_TRIPLE_POINT.y )
         .quadraticCurveTo(
           controlCurveXPos,
@@ -377,7 +377,7 @@ define( require => {
       this.liquidAreaBackground.setShape( liquidBackground );
 
       // gas phase
-      var gasBackground = new Shape()
+      const gasBackground = new Shape()
         .moveTo( X_ORIGIN_OFFSET, Y_ORIGIN_OFFSET )
         .lineToPoint( DEFAULT_TRIPLE_POINT )
         .lineToPoint( DEFAULT_CRITICAL_POINT )
@@ -386,7 +386,7 @@ define( require => {
         .close();
       this.gasAreaBackground.setShape( gasBackground );
 
-      var superCriticalBackground = new Shape()
+      const superCriticalBackground = new Shape()
         .moveToPoint( DEFAULT_CRITICAL_POINT )
         .lineTo( X_ORIGIN_OFFSET + X_USABLE_RANGE, Y_ORIGIN_OFFSET )
         .lineTo( X_ORIGIN_OFFSET + X_USABLE_RANGE, Y_ORIGIN_OFFSET - Y_USABLE_RANGE )
@@ -418,8 +418,8 @@ define( require => {
       assert && assert( normalizedPressure >= 0 && normalizedPressure <= 1, 'pressure value out of range' );
 
       // map the normalized temperature and pressure values to x and y positions on the graph
-      var markerXPos = normalizedTemperature * X_USABLE_RANGE + X_ORIGIN_OFFSET;
-      var markerYPos = -normalizedPressure * Y_USABLE_RANGE + Y_ORIGIN_OFFSET;
+      let markerXPos = normalizedTemperature * X_USABLE_RANGE + X_ORIGIN_OFFSET;
+      let markerYPos = -normalizedPressure * Y_USABLE_RANGE + Y_ORIGIN_OFFSET;
 
       // prevent marker from going off graph on right side
       markerXPos = Math.min( markerXPos, X_USABLE_RANGE + X_ORIGIN_OFFSET - CURRENT_STATE_MARKER_DIAMETER );

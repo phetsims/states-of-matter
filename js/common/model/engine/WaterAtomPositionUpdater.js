@@ -15,11 +15,11 @@ define( require => {
   const WaterMoleculeStructure = require( 'STATES_OF_MATTER/common/model/engine/WaterMoleculeStructure' );
 
   // constants
-  var STRUCTURE_X = WaterMoleculeStructure.moleculeStructureX;
-  var STRUCTURE_Y = WaterMoleculeStructure.moleculeStructureY;
+  const STRUCTURE_X = WaterMoleculeStructure.moleculeStructureX;
+  const STRUCTURE_Y = WaterMoleculeStructure.moleculeStructureY;
 
   // static object (no constructor)
-  var WaterAtomPositionUpdater = {
+  const WaterAtomPositionUpdater = {
 
     /**
      * @public
@@ -32,24 +32,24 @@ define( require => {
       assert && assert( moleculeDataSet.getAtomsPerMolecule() === 3 );
 
       // Get direct references to the data in the data set.
-      var atomPositions = moleculeDataSet.getAtomPositions();
-      var moleculeCenterOfMassPositions = moleculeDataSet.getMoleculeCenterOfMassPositions();
-      var moleculeRotationAngles = moleculeDataSet.getMoleculeRotationAngles();
+      const atomPositions = moleculeDataSet.getAtomPositions();
+      const moleculeCenterOfMassPositions = moleculeDataSet.getMoleculeCenterOfMassPositions();
+      const moleculeRotationAngles = moleculeDataSet.getMoleculeRotationAngles();
 
       // other vars
-      var xPos;
-      var yPos;
-      var cosineTheta;
-      var sineTheta;
+      let xPos;
+      let yPos;
+      let cosineTheta;
+      let sineTheta;
 
       // Loop through all molecules and position the individual atoms based on center of gravity position, molecule
       // structure, and rotational angle.
-      for ( var i = 0; i < moleculeDataSet.getNumberOfMolecules(); i++ ) {
+      for ( let i = 0; i < moleculeDataSet.getNumberOfMolecules(); i++ ) {
         cosineTheta = Math.cos( moleculeRotationAngles[ i ] );
         sineTheta = Math.sin( moleculeRotationAngles[ i ] );
-        for ( var j = 0; j < 3; j++ ) {
-          var xOffset = ( cosineTheta * STRUCTURE_X[ j ] ) - ( sineTheta * STRUCTURE_Y[ j ] );
-          var yOffset = ( sineTheta * STRUCTURE_X[ j ] ) + ( cosineTheta * STRUCTURE_Y[ j ] );
+        for ( let j = 0; j < 3; j++ ) {
+          const xOffset = ( cosineTheta * STRUCTURE_X[ j ] ) - ( sineTheta * STRUCTURE_Y[ j ] );
+          const yOffset = ( sineTheta * STRUCTURE_X[ j ] ) + ( cosineTheta * STRUCTURE_Y[ j ] );
           xPos = moleculeCenterOfMassPositions[ i ].x + xOffset;
           yPos = moleculeCenterOfMassPositions[ i ].y + yOffset;
           atomPositions[ i * 3 + j ].setXY( xPos, yPos );

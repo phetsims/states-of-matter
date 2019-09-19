@@ -16,16 +16,16 @@ define( require => {
 
   // The following constants control some of the aspects of the appearance of the force arrows.  The values were
   // empirically chosen to look good in this particular sim.
-  var ATTRACTIVE_FORCE_COLOR = '#FC9732';
-  var REPULSIVE_FORCE_COLOR = new Color( 255, 0, 255, 175 ); // Magenta.
-  var TOTAL_FORCE_COLOR = '#49B649';
-  var COMPONENT_FORCE_ARROW_REFERENCE_LENGTH = 150;
-  var COMPONENT_FORCE_ARROW_REFERENCE_MAGNITUDE = 1E-22;
-  var TOTAL_FORCE_ARROW_REFERENCE_LENGTH = 200;
-  var TOTAL_FORCE_ARROW_REFERENCE_MAGNITUDE = 1E-22;
-  var FORCE_ARROW_TAIL_WIDTH = 30;
-  var FORCE_ARROW_HEAD_WIDTH = 50;
-  var FORCE_ARROW_HEAD_LENGTH = 50;
+  const ATTRACTIVE_FORCE_COLOR = '#FC9732';
+  const REPULSIVE_FORCE_COLOR = new Color( 255, 0, 255, 175 ); // Magenta.
+  const TOTAL_FORCE_COLOR = '#49B649';
+  const COMPONENT_FORCE_ARROW_REFERENCE_LENGTH = 150;
+  const COMPONENT_FORCE_ARROW_REFERENCE_MAGNITUDE = 1E-22;
+  const TOTAL_FORCE_ARROW_REFERENCE_LENGTH = 200;
+  const TOTAL_FORCE_ARROW_REFERENCE_MAGNITUDE = 1E-22;
+  const FORCE_ARROW_TAIL_WIDTH = 30;
+  const FORCE_ARROW_HEAD_WIDTH = 50;
+  const FORCE_ARROW_HEAD_LENGTH = 50;
 
   /**
    * @param {Particle} particle - The particle in the model that this node will represent in the view.
@@ -40,8 +40,8 @@ define( require => {
 
     this.attractiveForce = 0;
     this.repulsiveForce = 0;
-    var self = this;
-    var commonForceArrowNodeOptions = {
+    const self = this;
+    const commonForceArrowNodeOptions = {
       headHeight: FORCE_ARROW_HEAD_LENGTH,
       headWidth: FORCE_ARROW_HEAD_WIDTH,
       tailWidth: FORCE_ARROW_TAIL_WIDTH,
@@ -138,22 +138,22 @@ define( require => {
      * @private
      */
     updateForceVectors: function() {
-      var angle = 0;
-      var attractiveY = this.attractiveForce * Math.sin( angle ) *
+      const angle = 0;
+      const attractiveY = this.attractiveForce * Math.sin( angle ) *
                         (COMPONENT_FORCE_ARROW_REFERENCE_LENGTH / COMPONENT_FORCE_ARROW_REFERENCE_MAGNITUDE);
-      var attractiveX = this.attractiveForce * Math.cos( angle ) *
+      const attractiveX = this.attractiveForce * Math.cos( angle ) *
                         (COMPONENT_FORCE_ARROW_REFERENCE_LENGTH / COMPONENT_FORCE_ARROW_REFERENCE_MAGNITUDE);
       this.attractiveForceVectorNode.setTailAndTip( 0, 0, attractiveX, attractiveY );
 
-      var repulsiveY = this.repulsiveForce * Math.sin( angle ) *
+      const repulsiveY = this.repulsiveForce * Math.sin( angle ) *
                        (COMPONENT_FORCE_ARROW_REFERENCE_LENGTH / COMPONENT_FORCE_ARROW_REFERENCE_MAGNITUDE);
-      var repulsiveX = this.repulsiveForce * Math.cos( angle ) *
+      const repulsiveX = this.repulsiveForce * Math.cos( angle ) *
                        (COMPONENT_FORCE_ARROW_REFERENCE_LENGTH / COMPONENT_FORCE_ARROW_REFERENCE_MAGNITUDE);
       this.repulsiveForceVectorNode.setTailAndTip( 0, 0, repulsiveX, repulsiveY );
 
-      var totalForceY = (this.attractiveForce + this.repulsiveForce) * Math.sin( angle ) *
+      const totalForceY = (this.attractiveForce + this.repulsiveForce) * Math.sin( angle ) *
                         (TOTAL_FORCE_ARROW_REFERENCE_LENGTH / TOTAL_FORCE_ARROW_REFERENCE_MAGNITUDE);
-      var totalForceX = (this.attractiveForce + this.repulsiveForce) * Math.cos( angle ) *
+      const totalForceX = (this.attractiveForce + this.repulsiveForce) * Math.cos( angle ) *
                         (TOTAL_FORCE_ARROW_REFERENCE_LENGTH / TOTAL_FORCE_ARROW_REFERENCE_MAGNITUDE );
       this.totalForceVectorNode.setTailAndTip( 0, 0, totalForceX, totalForceY );
     }

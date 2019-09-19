@@ -5,7 +5,7 @@ define( require => {
 
   const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
-  var PhaseStateEnum = {
+  const PhaseStateEnum = {
     SOLID: 'SOLID',
     LIQUID: 'LIQUID',
     GAS: 'GAS',

@@ -16,7 +16,7 @@ define( require => {
   const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   // static object (no constructor)
-  var DiatomicAtomPositionUpdater = {
+  const DiatomicAtomPositionUpdater = {
 
     /**
      * @public
@@ -28,14 +28,14 @@ define( require => {
       assert && assert( moleculeDataSet.atomsPerMolecule === 2 );
 
       // Get direct references to the data in the data set.
-      var atomPositions = moleculeDataSet.atomPositions;
-      var moleculeCenterOfMassPositions = moleculeDataSet.moleculeCenterOfMassPositions;
-      var moleculeRotationAngles = moleculeDataSet.moleculeRotationAngles;
-      var xPos;
-      var yPos;
-      var cosineTheta;
-      var sineTheta;
-      for ( var i = 0; i < moleculeDataSet.getNumberOfMolecules(); i++ ) {
+      const atomPositions = moleculeDataSet.atomPositions;
+      const moleculeCenterOfMassPositions = moleculeDataSet.moleculeCenterOfMassPositions;
+      const moleculeRotationAngles = moleculeDataSet.moleculeRotationAngles;
+      let xPos;
+      let yPos;
+      let cosineTheta;
+      let sineTheta;
+      for ( let i = 0; i < moleculeDataSet.getNumberOfMolecules(); i++ ) {
         cosineTheta = Math.cos( moleculeRotationAngles[ i ] );
         sineTheta = Math.sin( moleculeRotationAngles[ i ] );
         xPos = moleculeCenterOfMassPositions[ i ].x +

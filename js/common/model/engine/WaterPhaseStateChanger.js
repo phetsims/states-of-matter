@@ -38,7 +38,7 @@ define( require => {
   // Initial positions for liquid phase, which is hard to create algorithmically.  These were created by setting the
   // appropriate temperature and iterating until a visually acceptable configuration emerged, then capturing a
   // "snapshot" of the state.
-  var LIQUID_INITIAL_STATES = {
+  const LIQUID_INITIAL_STATES = {
     water: {
       numberOfMolecules: 76,
       atomsPerMolecule: 3,
@@ -359,7 +359,7 @@ define( require => {
     }
   };
 
-  var SOLID_INITIAL_STATES = {
+  const SOLID_INITIAL_STATES = {
     water: {
       numberOfMolecules: 76,
       atomsPerMolecule: 3,
@@ -698,7 +698,7 @@ define( require => {
 
       // Step the model a number of times in order to prevent the particles from looking too organized.  The number of
       // steps was empirically determined.
-      for ( var i = 0; i < 5; i++ ) {
+      for ( let i = 0; i < 5; i++ ) {
         this.multipleParticleModel.stepInternal( SOMConstants.NOMINAL_TIME_STEP );
       }
     },
@@ -709,7 +709,7 @@ define( require => {
      */
     setPhaseSolid: function() {
 
-      var dataSetToLoad;
+      let dataSetToLoad;
 
       // find the data for this substance
       if ( this.multipleParticleModel.substanceProperty.get() === SubstanceType.WATER ) {
@@ -733,7 +733,7 @@ define( require => {
      */
     setPhaseLiquid: function() {
 
-      var dataSetToLoad;
+      let dataSetToLoad;
 
       // find the data for this substance
       if ( this.multipleParticleModel.substanceProperty.get() === SubstanceType.WATER ) {

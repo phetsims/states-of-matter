@@ -39,10 +39,10 @@ define( require => {
   const slowMotionString = require( 'string!STATES_OF_MATTER/slowMotion' );
 
   // Constant used to control size of push pin, empirically determined.
-  var PUSH_PIN_WIDTH = 20;
-  var INSET = 15;
-  var MAX_TEXT_WIDTH = 80;
-  var PANEL_WIDTH = 209; // empirically determined to work well for English and most other translations
+  const PUSH_PIN_WIDTH = 20;
+  const INSET = 15;
+  const MAX_TEXT_WIDTH = 80;
+  const PANEL_WIDTH = 209; // empirically determined to work well for English and most other translations
 
   /**
    * @param {DualAtomModel} dualAtomModel of the simulation
@@ -53,7 +53,7 @@ define( require => {
 
     // due to some odd behavior, we need to turn on preventFit for this screen, see
     // https://github.com/phetsims/states-of-matter/issues/176
-    var screenViewOptions = _.extend( { preventFit: true }, SOMConstants.SCREEN_VIEW_OPTIONS );
+    const screenViewOptions = _.extend( { preventFit: true }, SOMConstants.SCREEN_VIEW_OPTIONS );
 
     ScreenView.call( this, screenViewOptions );
 
@@ -73,14 +73,14 @@ define( require => {
     );
 
     // initialize local variables
-    var self = this;
-    var tickTextColor = enableHeterogeneousAtoms ? 'black' : SOMColorProfile.controlPanelTextProperty;
-    var textColor = enableHeterogeneousAtoms ? 'black' : SOMColorProfile.controlPanelTextProperty;
-    var panelFill = enableHeterogeneousAtoms ? '#D1D2FF' : SOMColorProfile.controlPanelBackgroundProperty;
-    var panelStroke = enableHeterogeneousAtoms ? '#D1D2FF' : SOMColorProfile.controlPanelStrokeProperty;
-    var panelTextFill = enableHeterogeneousAtoms ? 'black' : SOMColorProfile.controlPanelTextProperty;
-    var forceControlPanelButtonAlign = enableHeterogeneousAtoms ? 'right' : 'left';
-    var atomicInteractionsControlPanel = new AtomicInteractionsControlPanel( dualAtomModel, enableHeterogeneousAtoms, {
+    const self = this;
+    const tickTextColor = enableHeterogeneousAtoms ? 'black' : SOMColorProfile.controlPanelTextProperty;
+    const textColor = enableHeterogeneousAtoms ? 'black' : SOMColorProfile.controlPanelTextProperty;
+    const panelFill = enableHeterogeneousAtoms ? '#D1D2FF' : SOMColorProfile.controlPanelBackgroundProperty;
+    const panelStroke = enableHeterogeneousAtoms ? '#D1D2FF' : SOMColorProfile.controlPanelStrokeProperty;
+    const panelTextFill = enableHeterogeneousAtoms ? 'black' : SOMColorProfile.controlPanelTextProperty;
+    const forceControlPanelButtonAlign = enableHeterogeneousAtoms ? 'right' : 'left';
+    const atomicInteractionsControlPanel = new AtomicInteractionsControlPanel( dualAtomModel, enableHeterogeneousAtoms, {
       right: this.layoutBounds.maxX - INSET,
       top: this.layoutBounds.minY + INSET,
       tickTextColor: tickTextColor,
@@ -114,7 +114,7 @@ define( require => {
     this.addChild( this.returnAtomButton );
 
     // create and add the Reset All Button in the bottom right
-    var resetAllButton = new ResetAllButton( {
+    const resetAllButton = new ResetAllButton( {
       listener: function() {
         dualAtomModel.reset();
         self.interactiveInteractionPotentialDiagram.reset();
@@ -126,7 +126,7 @@ define( require => {
     this.addChild( resetAllButton );
 
     // add force control
-    var forcesControlPanel = new ForcesControlPanel(
+    const forcesControlPanel = new ForcesControlPanel(
       dualAtomModel.forcesDisplayModeProperty,
       dualAtomModel.forcesControlPanelExpandedProperty,
       {
@@ -146,7 +146,7 @@ define( require => {
     atomicInteractionsControlPanel.right = resetAllButton.left - 20; // offset empirically determined
 
     // add control for play/pause/step
-    var playControl = new SOMPlayPauseStepControl(
+    const playControl = new SOMPlayPauseStepControl(
       dualAtomModel.isPlayingProperty,
       dualAtomModel.stepInternal.bind( dualAtomModel ),
       { centerX: this.layoutBounds.centerX + 27, bottom: this.layoutBounds.bottom - 14 } // empirically determined
@@ -154,25 +154,25 @@ define( require => {
     this.addChild( playControl );
 
     // add sim speed controls
-    var speedSelectionButtonOptions = {
+    const speedSelectionButtonOptions = {
       fill: SOMColorProfile.controlPanelTextProperty,
       font: new PhetFont( 14 ),
       maxWidth: MAX_TEXT_WIDTH
     };
-    var speedSelectionButtonRadius = 8;
-    var slowText = new Text( slowMotionString, speedSelectionButtonOptions );
-    var slowMotionRadioBox = new AquaRadioButton( dualAtomModel.simSpeedProperty, 'slow', slowText, {
+    const speedSelectionButtonRadius = 8;
+    const slowText = new Text( slowMotionString, speedSelectionButtonOptions );
+    const slowMotionRadioBox = new AquaRadioButton( dualAtomModel.simSpeedProperty, 'slow', slowText, {
       radius: speedSelectionButtonRadius
     } );
-    var normalText = new Text( normalString, speedSelectionButtonOptions );
-    var normalMotionRadioBox = new AquaRadioButton( dualAtomModel.simSpeedProperty, 'normal', normalText, {
+    const normalText = new Text( normalString, speedSelectionButtonOptions );
+    const normalMotionRadioBox = new AquaRadioButton( dualAtomModel.simSpeedProperty, 'normal', normalText, {
       radius: speedSelectionButtonRadius
     } );
 
-    var speedControlMaxWidth = ( slowMotionRadioBox.width > normalMotionRadioBox.width ) ? slowMotionRadioBox.width : normalMotionRadioBox.width;
+    const speedControlMaxWidth = ( slowMotionRadioBox.width > normalMotionRadioBox.width ) ? slowMotionRadioBox.width : normalMotionRadioBox.width;
 
-    var radioButtonSpacing = 4;
-    var touchAreaYDilation = radioButtonSpacing / 2;
+    const radioButtonSpacing = 4;
+    const touchAreaYDilation = radioButtonSpacing / 2;
     slowMotionRadioBox.touchArea = new Bounds2(
       slowMotionRadioBox.localBounds.minX,
       slowMotionRadioBox.localBounds.minY - touchAreaYDilation,
@@ -187,7 +187,7 @@ define( require => {
       normalMotionRadioBox.localBounds.maxY + touchAreaYDilation
     );
 
-    var speedControl = new VBox( {
+    const speedControl = new VBox( {
       align: 'left',
       spacing: radioButtonSpacing,
       children: [ slowMotionRadioBox, normalMotionRadioBox ],
@@ -397,8 +397,8 @@ define( require => {
       this.updatePositionMarkerOnDiagram();
       this.updateForceVectors();
 
-      var scale = Math.min( window.innerWidth / this.layoutBounds.width, window.innerHeight / this.layoutBounds.height );
-      var atomWindowPosition = scale * ( this.modelViewTransform.modelToViewX( this.dualAtomModel.movableAtom.getX() ) );
+      const scale = Math.min( window.innerWidth / this.layoutBounds.width, window.innerHeight / this.layoutBounds.height );
+      let atomWindowPosition = scale * ( this.modelViewTransform.modelToViewX( this.dualAtomModel.movableAtom.getX() ) );
 
       // account for the view centering
       if ( scale === window.innerHeight / this.layoutBounds.height ) {
@@ -424,7 +424,7 @@ define( require => {
     updatePositionMarkerOnDiagram: function() {
 
       if ( ( this.fixedParticle !== null ) && ( this.movableParticle !== null ) ) {
-        var distance = this.fixedParticle.getPositionReference().distance( this.movableParticle.getPositionReference() );
+        const distance = this.fixedParticle.getPositionReference().distance( this.movableParticle.getPositionReference() );
 
         if ( distance > 0 ) {
           this.interactiveInteractionPotentialDiagram.setMarkerEnabled( true );
@@ -440,9 +440,9 @@ define( require => {
     },
 
     updatePushPinPosition: function() {
-      var mvt = this.modelViewTransform;
-      var pinnedAtomPosition = this.dualAtomModel.fixedAtom.positionProperty.value;
-      var pinnedAtomRadius = this.dualAtomModel.fixedAtom.radius;
+      const mvt = this.modelViewTransform;
+      const pinnedAtomPosition = this.dualAtomModel.fixedAtom.positionProperty.value;
+      const pinnedAtomRadius = this.dualAtomModel.fixedAtom.radius;
       this.pushPinNode.right = mvt.modelToViewX( pinnedAtomPosition.x - pinnedAtomRadius * 0.5 );
       this.pushPinNode.bottom = mvt.modelToViewY( pinnedAtomPosition.y - pinnedAtomRadius * 0.5 );
     },
@@ -456,9 +456,9 @@ define( require => {
 
         // Use a minimum X value that is just a bit less than the sigma value, since the repulsive potential goes up
         // rapidly with smaller values.
-        var minXInModel = this.dualAtomModel.getSigma() * 0.9;
+        const minXInModel = this.dualAtomModel.getSigma() * 0.9;
         this.interactiveInteractionPotentialDiagram.setMinXForAtom( minXInModel );
-        var minXInView = this.modelViewTransform.modelToViewX( minXInModel );
+        const minXInView = this.modelViewTransform.modelToViewX( minXInModel );
         this.movableParticleNode.setMinX( minXInView );
         this.handNode.setMinX( minXInView );
       }

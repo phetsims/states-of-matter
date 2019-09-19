@@ -17,7 +17,7 @@ define( require => {
   const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   // static object (no constructor)
-  var AtomFactory = {
+  const AtomFactory = {
 
     /**
      * @param {AtomType} atomType
@@ -25,7 +25,7 @@ define( require => {
      * @public
      */
     createAtom: function( atomType ) {
-      var atom = null;
+      let atom = null;
       switch( atomType ) {
         case AtomType.ADJUSTABLE:
           atom = new ConfigurableStatesOfMatterAtom( 0, 0 );

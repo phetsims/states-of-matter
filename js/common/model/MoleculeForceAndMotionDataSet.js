@@ -35,7 +35,7 @@ define( require => {
     this.atomsPerMolecule = atomsPerMolecule;
 
     // convenience variable
-    var maxNumMolecules = Math.floor( SOMConstants.MAX_NUM_ATOMS / atomsPerMolecule );
+    const maxNumMolecules = Math.floor( SOMConstants.MAX_NUM_ATOMS / atomsPerMolecule );
 
     // @public Attributes of the individual molecules and the atoms that comprise them.
     this.atomPositions = new Array( SOMConstants.MAX_NUM_ATOMS );
@@ -50,7 +50,7 @@ define( require => {
     this.moleculeRotationRates = new Array( maxNumMolecules );
     this.moleculeTorques = new Array( maxNumMolecules );
     this.nextMoleculeTorques = new Array( maxNumMolecules );
-    for ( var i = 0; i < SOMConstants.MAX_NUM_ATOMS / this.atomsPerMolecule; i++ ) {
+    for ( let i = 0; i < SOMConstants.MAX_NUM_ATOMS / this.atomsPerMolecule; i++ ) {
       this.moleculeRotationAngles [ i ] = 0;
       this.moleculeRotationRates[ i ] = 0;
       this.moleculeTorques[ i ] = 0;
@@ -84,16 +84,16 @@ define( require => {
      */
     getTotalKineticEnergy: function(){
 
-      var translationalKineticEnergy = 0;
-      var rotationalKineticEnergy = 0;
-      var particleMass = this.moleculeMass;
-      var numberOfParticles = this.getNumberOfMolecules();
-      var i;
+      let translationalKineticEnergy = 0;
+      let rotationalKineticEnergy = 0;
+      const particleMass = this.moleculeMass;
+      const numberOfParticles = this.getNumberOfMolecules();
+      let i;
 
       if ( this.atomsPerMolecule > 1 ) {
 
         // Include rotational inertia in the calculation.
-        var rotationalInertia = this.getMoleculeRotationalInertia();
+        const rotationalInertia = this.getMoleculeRotationalInertia();
         for ( i = 0; i < numberOfParticles; i++ ) {
           translationalKineticEnergy += 0.5 * particleMass *
                                         ( Math.pow( this.moleculeVelocities[ i ].x, 2 ) +
@@ -150,10 +150,10 @@ define( require => {
      */
     getMoleculeKineticEnergy: function( moleculeIndex ){
       assert && assert ( moleculeIndex >= 0 && moleculeIndex < this.numberOfMolecules );
-      var translationalKineticEnergy = 0.5 * this.moleculeMass *
+      const translationalKineticEnergy = 0.5 * this.moleculeMass *
                                     ( Math.pow( this.moleculeVelocities[ moleculeIndex ].x, 2 ) +
                                       Math.pow( this.moleculeVelocities[ moleculeIndex ].y, 2 ) );
-      var rotationalKineticEnergy = 0.5 * this.moleculeRotationalInertia *
+      const rotationalKineticEnergy = 0.5 * this.moleculeRotationalInertia *
                                     Math.pow( this.moleculeRotationRates[ moleculeIndex ], 2 );
       return translationalKineticEnergy + rotationalKineticEnergy;
     },
@@ -291,10 +291,10 @@ define( require => {
       }
 
       // Add the information for this molecule to the data set.
-      for ( var i = 0; i < this.atomsPerMolecule; i++ ) {
+      for ( let i = 0; i < this.atomsPerMolecule; i++ ) {
         this.atomPositions[ i + this.numberOfAtoms ] = atomPositions[ i ].copy();
       }
-      var numberOfMolecules = this.numberOfAtoms / this.atomsPerMolecule;
+      const numberOfMolecules = this.numberOfAtoms / this.atomsPerMolecule;
       this.moleculeCenterOfMassPositions[ numberOfMolecules ] = moleculeCenterOfMassPosition;
       this.moleculeVelocities[ numberOfMolecules ] = moleculeVelocity;
       this.moleculeRotationRates[ numberOfMolecules ] = moleculeRotationRate;
@@ -324,7 +324,7 @@ define( require => {
 
       assert && assert( moleculeIndex < this.numberOfAtoms / this.atomsPerMolecule, 'molecule index out of range' );
 
-      var i;
+      let i;
 
       // Handle all data arrays that are maintained on a per-molecule basis.
       for ( i = moleculeIndex; i < this.numberOfAtoms / this.atomsPerMolecule - 1; i++ ) {
@@ -342,7 +342,7 @@ define( require => {
       // Handle all data arrays that are maintained on a per-atom basis.
       for ( i = moleculeIndex * this.atomsPerMolecule; i < ( this.numberOfAtoms - this.atomsPerMolecule );
             i += this.atomsPerMolecule ) {
-        for ( var j = 0; j < this.atomsPerMolecule; j++ ) {
+        for ( let j = 0; j < this.atomsPerMolecule; j++ ) {
           this.atomPositions[ i + j ] = this.atomPositions[ i + this.atomsPerMolecule + j ];
         }
       }
@@ -364,13 +364,13 @@ define( require => {
      */
     dump: function() {
 
-      var i;
-      var numMolecules = this.numberOfMolecules;
+      let i;
+      const numMolecules = this.numberOfMolecules;
 
       console.log( 'moleculeCenterOfMassPositions:' );
       console.log( '[' );
       for ( i = 0; i < numMolecules; i++ ) {
-        var comPos = this.moleculeCenterOfMassPositions[ i ];
+        const comPos = this.moleculeCenterOfMassPositions[ i ];
         console.log( '{', 'x: ', comPos.x.toFixed( 3 ), ', y: ', comPos.y.toFixed( 3 ), '},' );
       }
       console.log( '],' );
@@ -378,7 +378,7 @@ define( require => {
       console.log( 'moleculeVelocities:' );
       console.log( '[' );
       for ( i = 0; i < numMolecules; i++ ) {
-        var vel = this.moleculeVelocities[ i ];
+        const vel = this.moleculeVelocities[ i ];
         console.log( '{', 'x: ', vel.x.toFixed( 3 ), ', y: ', vel.y.toFixed( 3 ), '},' );
       }
       console.log( '],' );
@@ -386,7 +386,7 @@ define( require => {
       console.log( 'moleculeRotationAngles:' );
       console.log( '[' );
       for ( i = 0; i < numMolecules; i++ ) {
-        var angle = this.moleculeRotationAngles[ i ];
+        const angle = this.moleculeRotationAngles[ i ];
         console.log( angle.toFixed( 3 ), ',' );
       }
       console.log( '],' );
@@ -394,7 +394,7 @@ define( require => {
       console.log( 'moleculeRotationRates:' );
       console.log( '[' );
       for ( i = 0; i < numMolecules; i++ ) {
-        var rate = this.moleculeRotationRates[ i ];
+        const rate = this.moleculeRotationRates[ i ];
         console.log( rate.toFixed( 3 ), ',' );
       }
       console.log( '],' );

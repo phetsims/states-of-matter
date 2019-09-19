@@ -23,7 +23,7 @@ define( require => {
   const pointingHandImage = require( 'mipmap!STATES_OF_MATTER/pointing-hand.png' );
 
   // constants
-  var WIDTH = 150; // in screen coords
+  const WIDTH = 150; // in screen coords
 
   /**
    *
@@ -33,11 +33,11 @@ define( require => {
    */
   function PointingHandNode( multipleParticleModel, modelViewTransform, options ) {
 
-    var self = this;
+    const self = this;
     Node.call( this );
 
     // Add the up arrow.
-    var upArrowNode = new ArrowNode( 0, 0, 0, 25, {
+    const upArrowNode = new ArrowNode( 0, 0, 0, 25, {
       headHeight: 10,
       headWidth: 10,
       tailWidth: 6,
@@ -48,7 +48,7 @@ define( require => {
     } );
 
     // Add the down arrow.
-    var downArrowNode = new ArrowNode( 0, 0, 0, 25, {
+    const downArrowNode = new ArrowNode( 0, 0, 0, 25, {
       headHeight: 10,
       headWidth: 10,
       tailWidth: 6,
@@ -59,30 +59,30 @@ define( require => {
     } );
 
     // Load and scale the image.  Scale was empirically determined.
-    var pointingHandImageNode = new Image( pointingHandImage, {
+    const pointingHandImageNode = new Image( pointingHandImage, {
       cursor: 'ns-resize',
       pickable: true
     } );
     pointingHandImageNode.scale( WIDTH / pointingHandImageNode.width );
 
-    var hintNode = new Node( {
+    const hintNode = new Node( {
       children: [ upArrowNode, downArrowNode ],
       visible: false,
       top: pointingHandImageNode.bottom - 50, // adjusted a bit for better look
       left: pointingHandImageNode.right - 20 // adjusted a bit for better look
     } );
 
-    var mouseOver = false;
-    var beingDragged = false;
+    let mouseOver = false;
+    let beingDragged = false;
 
     function updateHintVisibility() {
       hintNode.setVisible( mouseOver || beingDragged );
     }
 
     // Set ourself up to listen for and handle mouse dragging events.
-    var startY;
-    var endY;
-    var containerSizeAtDragStart;
+    let startY;
+    let endY;
+    let containerSizeAtDragStart;
 
     // add a listener to handle drag events
     pointingHandImageNode.addInputListener( new SimpleDragHandler( {

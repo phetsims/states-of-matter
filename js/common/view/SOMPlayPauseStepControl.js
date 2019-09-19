@@ -15,10 +15,10 @@ define( require => {
   const StepForwardButton = require( 'SCENERY_PHET/buttons/StepForwardButton' );
 
   // constants
-  var TOUCH_AREA_DILATION = 2.5;
-  var STROKE = 'black';
-  var FILL = '#005566';
-  var PAUSE_SIZE_INCREASE_FACTOR = 1.25;
+  const TOUCH_AREA_DILATION = 2.5;
+  const STROKE = 'black';
+  const FILL = '#005566';
+  const PAUSE_SIZE_INCREASE_FACTOR = 1.25;
 
   /**
    * @param {Property.<boolean>} playingProperty
@@ -30,7 +30,7 @@ define( require => {
 
     Node.call( this );
 
-    var playPauseButton = new PlayPauseButton( playingProperty, {
+    const playPauseButton = new PlayPauseButton( playingProperty, {
       radius: 18,
       stroke: STROKE,
       fill: FILL,
@@ -38,7 +38,7 @@ define( require => {
     } );
     this.addChild( playPauseButton );
 
-    var stepButton = new StepForwardButton( {
+    const stepButton = new StepForwardButton( {
       isPlayingProperty: playingProperty,
       listener: function() { stepFunction( SOMConstants.NOMINAL_TIME_STEP ); },
       radius: 12,

@@ -11,7 +11,7 @@ define( require => {
   // modules
   const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
-  var SOMQueryParameters = QueryStringMachine.getAll( {
+  const SOMQueryParameters = QueryStringMachine.getAll( {
 
     // Default to displaying degrees Celsius instead of Kelvin, requested by user(s), see
     // https://github.com/phetsims/states-of-matter/issues/216

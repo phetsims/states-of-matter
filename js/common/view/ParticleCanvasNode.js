@@ -26,7 +26,7 @@ define( require => {
   const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   // constants
-  var TWO_PI_RADIANS = Math.PI * 2;
+  const TWO_PI_RADIANS = Math.PI * 2;
 
   /**
    * A particle layer rendered on canvas
@@ -37,7 +37,7 @@ define( require => {
    */
   function ParticleCanvasNode( particles, modelViewTransform, options ) {
 
-    var self = this;
+    const self = this;
     this.particles = particles;
     this.modelViewTransform = modelViewTransform;
     CanvasNode.call( this, options );
@@ -63,11 +63,11 @@ define( require => {
      * @param {CanvasRenderingContext2D} context
      */
     paintCanvas: function( context ) {
-      var particle;
-      var i;
-      var xPos;
-      var yPos;
-      var isParticleStrokeWhite = this.strokeColor === 'rgb(255,255,255)';
+      let particle;
+      let i;
+      let xPos;
+      let yPos;
+      const isParticleStrokeWhite = this.strokeColor === 'rgb(255,255,255)';
 
       // the same line width is used for all rendering, so set it once here
       context.lineWidth = 0.4;
@@ -80,7 +80,7 @@ define( require => {
       context.fillStyle = SOMConstants.HYDROGEN_COLOR;
       context.strokeStyle = isParticleStrokeWhite ? SOMConstants.HYDROGEN_COLOR : this.strokeColor;
       context.beginPath();
-      var fillAndStrokeNeeded = false;
+      let fillAndStrokeNeeded = false;
       for ( i = 0; i < this.particles.length; i++ ) {
         particle = this.particles.get( i );
         if ( particle.renderBelowOxygen ) {

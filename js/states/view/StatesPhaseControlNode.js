@@ -34,10 +34,10 @@ define( require => {
   const solidIconImage = require( 'image!STATES_OF_MATTER/solid-icon.png' );
 
   // constants
-  var DEFAULT_BUTTON_WIDTH = 160;
-  var ICON_HEIGHT = 25; // in screen coordinates, empirically determined
-  var SELECTED_BUTTON_COLOR = '#a5a7ff';
-  var DESELECTED_BUTTON_COLOR = '#F8D980';
+  const DEFAULT_BUTTON_WIDTH = 160;
+  const ICON_HEIGHT = 25; // in screen coordinates, empirically determined
+  const SELECTED_BUTTON_COLOR = '#a5a7ff';
+  const DESELECTED_BUTTON_COLOR = '#F8D980';
 
   // function that puts icon and label together with some struts into an HBox for using as content node on button
   function createButtonContent( iconImage, string, buttonWidth ) {
@@ -45,24 +45,24 @@ define( require => {
     assert && assert( iconImage && string, 'both icon and label must be defined' );
 
     // Create the image node and scale it so that it is the desired height.  Note that the width may vary.
-    var imageNode = new Image( iconImage );
+    const imageNode = new Image( iconImage );
     imageNode.scale( ICON_HEIGHT / imageNode.height );
 
     // Create the text node, limiting it to 1/2 of the button width.
-    var label = new Text( string, { font: new PhetFont( 14 ), fill: 'black', maxWidth: buttonWidth / 2 } );
+    const label = new Text( string, { font: new PhetFont( 14 ), fill: 'black', maxWidth: buttonWidth / 2 } );
 
     // create the left strut such that the icons will be centered around the same horizontal location
-    var desiredIconHorizontalCenter = buttonWidth * 0.25; // multiplier is empirically determined
-    var leftStrutWidth = Math.max( desiredIconHorizontalCenter - ( imageNode.width / 2 ), 0 );
+    const desiredIconHorizontalCenter = buttonWidth * 0.25; // multiplier is empirically determined
+    const leftStrutWidth = Math.max( desiredIconHorizontalCenter - ( imageNode.width / 2 ), 0 );
     assert && assert( leftStrutWidth > 0, 'icon is too wide, either adjust it or adjust the icon position multiplier' );
 
     // create the center strut such that the labels are centered around the same horizontal location
-    var desiredLabelHorizontalCenter = buttonWidth * 0.65;
-    var centerStrutWidth = Math.max( desiredLabelHorizontalCenter - ( label.width / 2 ) - leftStrutWidth - imageNode.width, 0 );
+    const desiredLabelHorizontalCenter = buttonWidth * 0.65;
+    const centerStrutWidth = Math.max( desiredLabelHorizontalCenter - ( label.width / 2 ) - leftStrutWidth - imageNode.width, 0 );
     assert && assert( centerStrutWidth >= 0, 'label is too wide - was it scaled properly?' );
 
     // create the right strut to fill out the rest of the button
-    var rightStrutWidth = buttonWidth - leftStrutWidth - imageNode.width - centerStrutWidth - label.width;
+    const rightStrutWidth = buttonWidth - leftStrutWidth - imageNode.width - centerStrutWidth - label.width;
 
     return new HBox( {
       children: [
@@ -96,29 +96,29 @@ define( require => {
     Node.call( this );
 
     // state of the atoms/molecules
-    var stateProperty = new Property( PhaseStateEnum.UNKNOWN );
+    const stateProperty = new Property( PhaseStateEnum.UNKNOWN );
 
     // boolean properties corresponding to each state
-    var solidSelectedProperty = new Property( false );
-    var liquidSelectedProperty = new Property( false );
-    var gasSelectedProperty = new Property( false );
+    const solidSelectedProperty = new Property( false );
+    const liquidSelectedProperty = new Property( false );
+    const gasSelectedProperty = new Property( false );
 
     // create solid state selection button
-    var solidStateButton = new BooleanRectangularStickyToggleButton( solidSelectedProperty, {
+    const solidStateButton = new BooleanRectangularStickyToggleButton( solidSelectedProperty, {
       content: createButtonContent( solidIconImage, solidString, options.buttonWidth ),
       maxWidth: options.buttonWidth,
       minWidth: options.buttonWidth
     } );
 
     // create liquid state selection button
-    var liquidStateButton = new BooleanRectangularStickyToggleButton( liquidSelectedProperty, {
+    const liquidStateButton = new BooleanRectangularStickyToggleButton( liquidSelectedProperty, {
       content: createButtonContent( liquidIconImage, liquidString, options.buttonWidth ),
       maxWidth: options.buttonWidth,
       minWidth: options.buttonWidth
     } );
 
     // create gas state selection button
-    var gasStateButton = new BooleanRectangularStickyToggleButton( gasSelectedProperty, {
+    const gasStateButton = new BooleanRectangularStickyToggleButton( gasSelectedProperty, {
       content: createButtonContent( gasIconImage, gasString, options.buttonWidth ),
       maxWidth: options.buttonWidth,
       minWidth: options.buttonWidth
@@ -154,7 +154,7 @@ define( require => {
     model.resetEmitter.addListener( function() { stateProperty.value = PhaseStateEnum.UNKNOWN; } );
 
     // put the buttons together in a single VBox
-    var buttons = new VBox( {
+    const buttons = new VBox( {
       children: [ solidStateButton, liquidStateButton, gasStateButton ],
       spacing: 10,
       align: 'center'

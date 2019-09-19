@@ -27,7 +27,7 @@ define( require => {
    */
   function StatesScreen() {
 
-    var options = {
+    const options = {
       name: statesString,
       backgroundColorProperty: SOMColorProfile.backgroundProperty,
       homeScreenIcon: new StatesIcon( Screen.MINIMUM_HOME_SCREEN_ICON_SIZE ),

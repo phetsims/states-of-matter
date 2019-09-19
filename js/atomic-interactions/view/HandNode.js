@@ -21,7 +21,7 @@ define( require => {
   const handImage = require( 'image!SCENERY_PHET/hand.png' );
 
   // constants
-  var WIDTH = 80; // empirically determined to look good
+  const WIDTH = 80; // empirically determined to look good
 
   /**
    * @param {DualAtomModel} dualAtomModel - model of the atomic interactions screen
@@ -33,7 +33,7 @@ define( require => {
   function HandNode( dualAtomModel, particle, modelViewTransform, minX ) {
 
     Node.call( this, { cursor: 'pointer' } );
-    var self = this;
+    const self = this;
     this.minX = minX; // @private
 
     // add the main image that represents the hand
@@ -44,12 +44,12 @@ define( require => {
     } ) );
 
     // control visibility
-    var visibilityListener = dualAtomModel.movementHintVisibleProperty.linkAttribute( this, 'visible' );
+    const visibilityListener = dualAtomModel.movementHintVisibleProperty.linkAttribute( this, 'visible' );
 
     // add the drag handler
-    var startDragX;
-    var endDragX;
-    var inputListener = new SimpleDragHandler( {
+    let startDragX;
+    let endDragX;
+    const inputListener = new SimpleDragHandler( {
 
       start: function( event ) {
 
@@ -61,9 +61,9 @@ define( require => {
       drag: function( event ) {
 
         endDragX = self.globalToParentPoint( event.pointer.point ).x;
-        var d = endDragX - startDragX;
+        const d = endDragX - startDragX;
         startDragX = endDragX;        // Make sure we don't exceed the positional limits.
-        var newPosX = Math.max( modelViewTransform.modelToViewX( particle.getX() ) + d, self.minX );
+        const newPosX = Math.max( modelViewTransform.modelToViewX( particle.getX() ) + d, self.minX );
 
         // Move the particle based on the amount of mouse movement.
         particle.setPosition( modelViewTransform.viewToModelX( newPosX ), particle.getY() );

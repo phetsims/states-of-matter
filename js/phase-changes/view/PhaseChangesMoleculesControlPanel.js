@@ -41,9 +41,9 @@ define( require => {
   const weakString = require( 'string!STATES_OF_MATTER/weak' );
 
   // constants
-  var INSET = 10;
-  var TICK_TEXT_MAX_WIDTH = 40;
-  var NORMAL_TEXT_FONT_SIZE = 12;
+  const INSET = 10;
+  const TICK_TEXT_MAX_WIDTH = 40;
+  const NORMAL_TEXT_FONT_SIZE = 12;
 
   /**
    * @param { MultipleParticleModel } multipleParticleModel - model of the simulation
@@ -63,29 +63,29 @@ define( require => {
       minWidth: 120 // somewhat arbitrary, will generally be set by constructor
     }, options );
 
-    var selectorWidth = options.minWidth - 2 * options.xMargin;
+    const selectorWidth = options.minWidth - 2 * options.xMargin;
 
     Node.call( this );
-    var textOptions = { font: new PhetFont( NORMAL_TEXT_FONT_SIZE ), fill: '#FFFFFF', maxWidth: selectorWidth * 0.75 };
-    var tickTextOptions = {
+    const textOptions = { font: new PhetFont( NORMAL_TEXT_FONT_SIZE ), fill: '#FFFFFF', maxWidth: selectorWidth * 0.75 };
+    const tickTextOptions = {
       font: new PhetFont( NORMAL_TEXT_FONT_SIZE ),
       fill: SOMColorProfile.controlPanelTextProperty,
       maxWidth: TICK_TEXT_MAX_WIDTH
     };
 
-    var weakTitle = new Text( weakString, tickTextOptions );
-    var strongTitle = new Text( strongString, tickTextOptions );
+    const weakTitle = new Text( weakString, tickTextOptions );
+    const strongTitle = new Text( strongString, tickTextOptions );
 
     // add interaction strength slider and title
-    var interactionStrengthNode = new Node();
-    var interactionTitle = new Text( interactionStrengthWithSymbolString, {
+    const interactionStrengthNode = new Node();
+    const interactionTitle = new Text( interactionStrengthWithSymbolString, {
       font: new PhetFont( NORMAL_TEXT_FONT_SIZE ),
       fill: SOMColorProfile.controlPanelTextProperty,
       maxWidth: 140
     } );
 
     interactionStrengthNode.addChild( interactionTitle );
-    var interactionStrengthSlider = new HSlider(
+    const interactionStrengthSlider = new HSlider(
       multipleParticleModel.interactionStrengthProperty,
       new Range( SOMConstants.MIN_ADJUSTABLE_EPSILON, MultipleParticleModel.MAX_ADJUSTABLE_EPSILON ), {
         trackFill: 'white',
@@ -109,12 +109,12 @@ define( require => {
     interactionStrengthSlider.addMajorTick( MultipleParticleModel.MAX_ADJUSTABLE_EPSILON, strongTitle );
     interactionStrengthSlider.addMajorTick( SOMConstants.MIN_ADJUSTABLE_EPSILON, weakTitle );
 
-    var neonText = new Text( neonString, textOptions );
-    var argonText = new Text( argonString, textOptions );
-    var waterText = new Text( waterString, textOptions );
-    var oxygenText = new Text( diatomicOxygenString, textOptions );
-    var adjustableAttractionText = new Text( adjustableAttractionString, textOptions );
-    var titleText = new Text( atomsAndMoleculesString, {
+    const neonText = new Text( neonString, textOptions );
+    const argonText = new Text( argonString, textOptions );
+    const waterText = new Text( waterString, textOptions );
+    const oxygenText = new Text( diatomicOxygenString, textOptions );
+    const adjustableAttractionText = new Text( adjustableAttractionString, textOptions );
+    const titleText = new Text( atomsAndMoleculesString, {
       font: new PhetFont( 14 ),
       fill: SOMColorProfile.controlPanelTextProperty,
       maxWidth: options.minWidth * 0.85
@@ -122,25 +122,25 @@ define( require => {
 
     // create objects that describe the pieces that make up a selector item in the control panel, conforms to the
     // contract: { label: {Node}, icon: {Node} (optional) }
-    var neonSelectorInfo = { label: neonText, icon: AtomAndMoleculeIconFactory.createIcon( SubstanceType.NEON ) };
-    var argonSelectorInfo = { label: argonText, icon: AtomAndMoleculeIconFactory.createIcon( SubstanceType.ARGON ) };
-    var waterSelectorInfo = { label: waterText, icon: AtomAndMoleculeIconFactory.createIcon( SubstanceType.WATER ) };
-    var oxygenSelectorInfo = {
+    const neonSelectorInfo = { label: neonText, icon: AtomAndMoleculeIconFactory.createIcon( SubstanceType.NEON ) };
+    const argonSelectorInfo = { label: argonText, icon: AtomAndMoleculeIconFactory.createIcon( SubstanceType.ARGON ) };
+    const waterSelectorInfo = { label: waterText, icon: AtomAndMoleculeIconFactory.createIcon( SubstanceType.WATER ) };
+    const oxygenSelectorInfo = {
       label: oxygenText,
       icon: AtomAndMoleculeIconFactory.createIcon( SubstanceType.DIATOMIC_OXYGEN )
     };
-    var adjustableAttractionSelectorInfo = {
+    const adjustableAttractionSelectorInfo = {
       label: adjustableAttractionText,
       icon: AtomAndMoleculeIconFactory.createIcon( SubstanceType.ADJUSTABLE_ATOM )
     };
 
     // function that creates the selector nodes, which have a label and an icon with a space between
     function createLabelAndIconNode( labelAndIconSpec ) {
-      var strutWidth = selectorWidth - labelAndIconSpec.label.width - labelAndIconSpec.icon.width;
+      const strutWidth = selectorWidth - labelAndIconSpec.label.width - labelAndIconSpec.icon.width;
       return new HBox( { children: [ labelAndIconSpec.label, new HStrut( strutWidth ), labelAndIconSpec.icon ] } );
     }
 
-    var radioButtonContent;
+    let radioButtonContent;
     if ( !isBasicVersion ) {
       radioButtonContent = [
         { value: SubstanceType.NEON, node: createLabelAndIconNode( neonSelectorInfo ) },
@@ -159,7 +159,7 @@ define( require => {
       ];
     }
 
-    var radioButtonGroup = new RadioButtonGroup( multipleParticleModel.substanceProperty, radioButtonContent, {
+    const radioButtonGroup = new RadioButtonGroup( multipleParticleModel.substanceProperty, radioButtonContent, {
       orientation: 'vertical',
       spacing: 3,
       cornerRadius: 5,
@@ -177,8 +177,8 @@ define( require => {
         multipleParticleModel.setEpsilon( value );
       }
     } );
-    var content = new VBox( { spacing: 4, children: [ radioButtonGroup ] } );
-    var radioButtonPanel = new Panel( content, {
+    const content = new VBox( { spacing: 4, children: [ radioButtonGroup ] } );
+    const radioButtonPanel = new Panel( content, {
       yMargin: 8,
       stroke: options.stroke,
       align: 'center',
@@ -204,7 +204,7 @@ define( require => {
         }
       }
     } );
-    var titleBackground = new Rectangle( 0, 0, titleText.width + 5, titleText.height, {
+    const titleBackground = new Rectangle( 0, 0, titleText.width + 5, titleText.height, {
       fill: SOMColorProfile.controlPanelBackgroundProperty
     } );
     titleBackground.centerX = radioButtonPanel.centerX;

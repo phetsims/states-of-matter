@@ -50,10 +50,10 @@ define( require => {
   const weakString = require( 'string!STATES_OF_MATTER/weak' );
 
   // constants
-  var NORMAL_TEXT_FONT = new PhetFont( 12 );
-  var RADIO_BUTTON_RADIUS = 6;
-  var TITLE_TEXT_WIDTH = 130;
-  var PANEL_X_MARGIN = 10;
+  const NORMAL_TEXT_FONT = new PhetFont( 12 );
+  const RADIO_BUTTON_RADIUS = 6;
+  const TITLE_TEXT_WIDTH = 130;
+  const PANEL_X_MARGIN = 10;
 
   /**
    * @param {DualAtomModel} dualAtomModel - model of the simulation
@@ -63,7 +63,7 @@ define( require => {
    */
   function AtomicInteractionsControlPanel( dualAtomModel, enableHeterogeneousAtoms, options ) {
 
-    var self = this;
+    const self = this;
     options = _.extend( {
       xMargin: 5,
       yMargin: 8,
@@ -81,27 +81,27 @@ define( require => {
 
     // This control panel width differs between SOM full version and the Atomic Interactions sim, so we are using
     // different max width values.  These were empirically determined.
-    var SLIDER_TITLE_MAX_WIDTH = enableHeterogeneousAtoms ? 225 : 150;
-    var NORMAL_TEXT_MAX_WIDTH = enableHeterogeneousAtoms ? 200 : 120;
+    const SLIDER_TITLE_MAX_WIDTH = enableHeterogeneousAtoms ? 225 : 150;
+    const NORMAL_TEXT_MAX_WIDTH = enableHeterogeneousAtoms ? 200 : 120;
 
     // white text within SOM full version, black text in Atomic Interactions
     // white stroke around the atoms & molecules panel within SOM full version, black stroke in Atomic Interactions
-    var neonAndNeon;
-    var argonAndArgon;
-    var oxygenAndOxygen;
-    var neonAndArgon;
-    var neonAndOxygen;
-    var argonAndOxygen;
-    var adjustableAttraction;
-    var radioButtonGroup;
-    var maxLabelWidth;
-    var createLabelNode;
-    var titleText;
-    var titleNode;
-    var sliderTrackWidth = 140; // empirically determined
+    let neonAndNeon;
+    let argonAndArgon;
+    let oxygenAndOxygen;
+    let neonAndArgon;
+    let neonAndOxygen;
+    let argonAndOxygen;
+    let adjustableAttraction;
+    let radioButtonGroup;
+    let maxLabelWidth;
+    let createLabelNode;
+    let titleText;
+    let titleNode;
+    const sliderTrackWidth = 140; // empirically determined
 
     // common options for radio button labels
-    var labelTextOptions = {
+    const labelTextOptions = {
       font: NORMAL_TEXT_FONT,
       fill: options.buttonTextFill,
       maxWidth: enableHeterogeneousAtoms ? NORMAL_TEXT_MAX_WIDTH / 2 : NORMAL_TEXT_MAX_WIDTH
@@ -133,15 +133,15 @@ define( require => {
         new Text( argonString, labelTextOptions ),
         new Text( oxygenString, labelTextOptions )
       ];
-      var customAttraction = new Text( customAttractionString, {
+      const customAttraction = new Text( customAttractionString, {
         font: NORMAL_TEXT_FONT,
         fill: options.buttonTextFill,
         maxWidth: NORMAL_TEXT_MAX_WIDTH
       } );
-      var pushpinImage = new Image( pushPinImg );
+      const pushpinImage = new Image( pushPinImg );
       pushpinImage.scale( 15 / pushpinImage.height );
-      var maxWidthOfTitleText = 100; // empirically determined
-      var pinnedNodeText = new HBox( {
+      const maxWidthOfTitleText = 100; // empirically determined
+      const pinnedNodeText = new HBox( {
         children: [
           pushpinImage,
           new Text( pinnedString, { font: new PhetFont( 10 ), maxWidth: maxWidthOfTitleText } ),
@@ -163,31 +163,31 @@ define( require => {
 
       // function to create a label node from
       createLabelNode = function( atomNameTextNodes ) {
-        var strutWidth1 = maxLabelWidth / 2 - atomNameTextNodes[ 0 ].width;
-        var strutWidth2 = maxLabelWidth / 2 - atomNameTextNodes[ 1 ].width;
+        const strutWidth1 = maxLabelWidth / 2 - atomNameTextNodes[ 0 ].width;
+        const strutWidth2 = maxLabelWidth / 2 - atomNameTextNodes[ 1 ].width;
         return new HBox( {
           children: [ atomNameTextNodes[ 0 ], new HStrut( strutWidth1 ), atomNameTextNodes[ 1 ], new HStrut( strutWidth2 ) ]
         } );
       };
 
-      var neonNeonRadio = new AquaRadioButton( dualAtomModel.atomPairProperty, AtomPair.NEON_NEON,
+      const neonNeonRadio = new AquaRadioButton( dualAtomModel.atomPairProperty, AtomPair.NEON_NEON,
         createLabelNode( neonAndNeon ), { radius: RADIO_BUTTON_RADIUS } );
-      var argonArgonRadio = new AquaRadioButton( dualAtomModel.atomPairProperty, AtomPair.ARGON_ARGON,
+      const argonArgonRadio = new AquaRadioButton( dualAtomModel.atomPairProperty, AtomPair.ARGON_ARGON,
         createLabelNode( argonAndArgon ), { radius: RADIO_BUTTON_RADIUS } );
-      var oxygenOxygenRadio = new AquaRadioButton( dualAtomModel.atomPairProperty, AtomPair.OXYGEN_OXYGEN,
+      const oxygenOxygenRadio = new AquaRadioButton( dualAtomModel.atomPairProperty, AtomPair.OXYGEN_OXYGEN,
         createLabelNode( oxygenAndOxygen ), { radius: RADIO_BUTTON_RADIUS } );
-      var neonArgonRadio = new AquaRadioButton( dualAtomModel.atomPairProperty, AtomPair.NEON_ARGON,
+      const neonArgonRadio = new AquaRadioButton( dualAtomModel.atomPairProperty, AtomPair.NEON_ARGON,
         createLabelNode( neonAndArgon ), { radius: RADIO_BUTTON_RADIUS } );
-      var neonOxygenRadio = new AquaRadioButton( dualAtomModel.atomPairProperty, AtomPair.NEON_OXYGEN,
+      const neonOxygenRadio = new AquaRadioButton( dualAtomModel.atomPairProperty, AtomPair.NEON_OXYGEN,
         createLabelNode( neonAndOxygen ), { radius: RADIO_BUTTON_RADIUS } );
-      var argonOxygenRadio = new AquaRadioButton( dualAtomModel.atomPairProperty, AtomPair.ARGON_OXYGEN,
+      const argonOxygenRadio = new AquaRadioButton( dualAtomModel.atomPairProperty, AtomPair.ARGON_OXYGEN,
         createLabelNode( argonAndOxygen ), { radius: RADIO_BUTTON_RADIUS } );
-      var adjustableAttractionRadio = new AquaRadioButton( dualAtomModel.atomPairProperty, AtomPair.ADJUSTABLE,
+      const adjustableAttractionRadio = new AquaRadioButton( dualAtomModel.atomPairProperty, AtomPair.ADJUSTABLE,
         new HBox( { children: [ customAttraction ] } ), { radius: RADIO_BUTTON_RADIUS } );
-      var createTitle = function( labelNodePair ) {
-        var strutWidth1 = RADIO_BUTTON_RADIUS;
-        var strutWidth2 = ( maxLabelWidth / 2 - labelNodePair[ 0 ].width );
-        var strutWidth3 = ( maxLabelWidth / 2 - labelNodePair[ 1 ].width );
+      const createTitle = function( labelNodePair ) {
+        const strutWidth1 = RADIO_BUTTON_RADIUS;
+        const strutWidth2 = ( maxLabelWidth / 2 - labelNodePair[ 0 ].width );
+        const strutWidth3 = ( maxLabelWidth / 2 - labelNodePair[ 1 ].width );
         return new HBox( {
           children: [
             new HStrut( strutWidth1 ),
@@ -199,7 +199,7 @@ define( require => {
         } );
       };
       titleNode = createTitle( titleText );
-      var radioButtons = new VBox( {
+      const radioButtons = new VBox( {
         children: [ neonNeonRadio, argonArgonRadio, oxygenOxygenRadio,
           neonArgonRadio, neonOxygenRadio, argonOxygenRadio, adjustableAttractionRadio ],
         align: 'left',
@@ -213,8 +213,8 @@ define( require => {
       titleNode.align = self.width / 2;
 
       // dilate the touch areas to make the buttons easier to work with on touch-based devices
-      var xDilation = 8;
-      var yDilation = 5;
+      const xDilation = 8;
+      const yDilation = 5;
       neonNeonRadio.touchArea = neonNeonRadio.localBounds.dilatedXY( xDilation, yDilation );
       argonArgonRadio.touchArea = argonArgonRadio.localBounds.dilatedXY( xDilation, yDilation );
       oxygenOxygenRadio.touchArea = oxygenOxygenRadio.localBounds.dilatedXY( xDilation, yDilation );
@@ -226,7 +226,7 @@ define( require => {
     else {
 
       // allows the user to choose the type of atom when both are the same
-      var title = new Text( atomsString, {
+      const title = new Text( atomsString, {
         font: new PhetFont( 14 ),
         fill: options.panelTextFill,
         maxWidth: TITLE_TEXT_WIDTH
@@ -234,11 +234,11 @@ define( require => {
 
       // Set up objects that describe the pieces that make up a selector item in the control panel, conforms to the
       // contract: { label: {Node}, icon: {Node} }
-      var neon = {
+      const neon = {
         label: new Text( neonString, labelTextOptions ),
         icon: AtomAndMoleculeIconFactory.createIcon( SubstanceType.NEON )
       };
-      var argon = {
+      const argon = {
         label: new Text( argonString, labelTextOptions ),
         icon: AtomAndMoleculeIconFactory.createIcon( SubstanceType.ARGON )
       };
@@ -255,7 +255,7 @@ define( require => {
       };
 
       // compute the maximum item width
-      var widestLabelAndIconSpec = _.maxBy( [ neon, argon, adjustableAttraction, titleText ], function( item ) {
+      const widestLabelAndIconSpec = _.maxBy( [ neon, argon, adjustableAttraction, titleText ], function( item ) {
         return item.label.width + ( ( item.icon ) ? item.icon.width : 0 );
       } );
       maxLabelWidth = widestLabelAndIconSpec.label.width + ( ( widestLabelAndIconSpec.icon ) ? widestLabelAndIconSpec.icon.width : 0 );
@@ -264,7 +264,7 @@ define( require => {
       // pad inserts a spacing node (HStrut) so that the text, space and image together occupy a certain fixed width.
       createLabelNode = function( atomSelectorLabelSpec ) {
         if ( atomSelectorLabelSpec.icon ) {
-          var strutWidth = maxLabelWidth - atomSelectorLabelSpec.label.width - atomSelectorLabelSpec.icon.width + 17;
+          const strutWidth = maxLabelWidth - atomSelectorLabelSpec.label.width - atomSelectorLabelSpec.icon.width + 17;
           return new HBox( { children: [ atomSelectorLabelSpec.label, new HStrut( strutWidth ), atomSelectorLabelSpec.icon ] } );
         }
         else {
@@ -272,7 +272,7 @@ define( require => {
         }
       };
 
-      var radioButtonContent = [
+      const radioButtonContent = [
         { value: AtomPair.NEON_NEON, node: createLabelNode( neon ) },
         { value: AtomPair.ARGON_ARGON, node: createLabelNode( argon ) },
         { value: AtomPair.ADJUSTABLE, node: createLabelNode( adjustableAttraction ) }
@@ -288,7 +288,7 @@ define( require => {
         deselectedContentOpacity: 1
       } );
 
-      var titleBackground = new Rectangle( 0, 0, titleText.label.width + 5, titleText.label.height, {
+      const titleBackground = new Rectangle( 0, 0, titleText.label.width + 5, titleText.label.height, {
         fill: options.fill,
         centerX: titleText.label.centerX,
         centerY: titleText.label.centerY
@@ -298,13 +298,13 @@ define( require => {
     }
 
     // add atom diameter slider
-    var atomDiameterTitle = new Text( atomDiameterString, {
+    const atomDiameterTitle = new Text( atomDiameterString, {
       font: NORMAL_TEXT_FONT,
       fill: options.panelTextFill,
       maxWidth: SLIDER_TITLE_MAX_WIDTH
     } );
 
-    var sliderOptions = {
+    const sliderOptions = {
       trackSize: new Dimension2( sliderTrackWidth, 5 ),
       trackFill: 'white',
       thumbSize: new Dimension2( 14, 25 ),
@@ -324,16 +324,16 @@ define( require => {
       }
     };
 
-    var atomDiameterSlider = new HSlider(
+    const atomDiameterSlider = new HSlider(
       dualAtomModel.atomDiameterProperty,
       new Range( SOMConstants.MIN_SIGMA, SOMConstants.MAX_SIGMA ),
       sliderOptions
     );
 
-    var maxTickTextWidth = enableHeterogeneousAtoms ? 85 : 35;
-    var tickTextOptions = { fill: options.panelTextFill, maxWidth: maxTickTextWidth };
-    var smallText = new Text( smallString, tickTextOptions );
-    var largeText = new Text( largeString, tickTextOptions );
+    const maxTickTextWidth = enableHeterogeneousAtoms ? 85 : 35;
+    const tickTextOptions = { fill: options.panelTextFill, maxWidth: maxTickTextWidth };
+    const smallText = new Text( smallString, tickTextOptions );
+    const largeText = new Text( largeString, tickTextOptions );
 
     if ( enableHeterogeneousAtoms ) {
       atomDiameterSlider.addMajorTick( SOMConstants.MIN_SIGMA );
@@ -344,31 +344,31 @@ define( require => {
       atomDiameterSlider.addMajorTick( SOMConstants.MAX_SIGMA, largeText );
     }
 
-    var atomDiameter = new Node( { children: [ atomDiameterTitle, atomDiameterSlider ] } );
+    const atomDiameter = new Node( { children: [ atomDiameterTitle, atomDiameterSlider ] } );
 
     // add interaction strength slider
-    var interactionStrengthTitle = new Text( interactionStrengthString, {
+    const interactionStrengthTitle = new Text( interactionStrengthString, {
       font: NORMAL_TEXT_FONT,
       fill: options.panelTextFill,
       top: atomDiameterSlider.bottom + 5,
       maxWidth: SLIDER_TITLE_MAX_WIDTH
     } );
-    var interactionStrengthSlider = new HSlider(
+    const interactionStrengthSlider = new HSlider(
       dualAtomModel.interactionStrengthProperty,
       new Range( SOMConstants.MIN_EPSILON, SOMConstants.MAX_EPSILON ),
       sliderOptions
     );
-    var weakText = new Text( weakString, tickTextOptions );
-    var strongText = new Text( strongString, tickTextOptions );
+    const weakText = new Text( weakString, tickTextOptions );
+    const strongText = new Text( strongString, tickTextOptions );
     interactionStrengthSlider.addMajorTick( SOMConstants.MIN_EPSILON, weakText );
     interactionStrengthSlider.addMajorTick( SOMConstants.MAX_EPSILON, strongText );
-    var interactionStrength = new Node( { children: [ interactionStrengthTitle, interactionStrengthSlider ] } );
+    const interactionStrength = new Node( { children: [ interactionStrengthTitle, interactionStrengthSlider ] } );
 
-    var content = new VBox( {
+    const content = new VBox( {
       align: 'left', children: [ radioButtonGroup ],
       spacing: 5
     } );
-    var verticalSpaceOffset = 7;
+    const verticalSpaceOffset = 7;
 
     // sliders and title adjustments
     atomDiameterSlider.top = atomDiameterTitle.bottom + verticalSpaceOffset;
@@ -377,7 +377,7 @@ define( require => {
     interactionStrengthSlider.top = interactionStrengthTitle.bottom + verticalSpaceOffset;
     interactionStrengthSlider.centerX = radioButtonGroup.centerX;
 
-    var radioButtonPanel = new Panel( content, {
+    const radioButtonPanel = new Panel( content, {
       stroke: options.stroke,
       cornerRadius: options.cornerRadius,
       lineWidth: options.lineWidth,

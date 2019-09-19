@@ -21,7 +21,7 @@ define( require => {
     this.dataQueue = new Array( length );
 
     // initialize the data array with a set of reusable objects so that subsequent allocations are not needed
-    for ( var i = 0; i < length; i++ ) {
+    for ( let i = 0; i < length; i++ ) {
       this.dataQueue[ i ] = { deltaTime: 0, value: null };
     }
 
@@ -45,7 +45,7 @@ define( require => {
     add: function( value, dt ) {
 
       assert && assert( dt < this.maxTimeSpan, 'dt value is greater than max time span' );
-      var nextHead = ( this.head + 1 ) % this.length;
+      const nextHead = ( this.head + 1 ) % this.length;
       assert && assert( nextHead !== this.tail, 'no space left in moving time window' );
 
       // in non-debug mode ignore requests that would exceed the capacity
@@ -62,7 +62,7 @@ define( require => {
 
       // remove the oldest data items until we are back within the maximum time span
       while ( this.timeSpan > this.maxTimeSpan ) {
-        var nextTail = ( this.tail + 1 ) % this.length;
+        const nextTail = ( this.tail + 1 ) % this.length;
         if ( nextTail === nextHead ) {
           // nothing more can be removed, so bail
           assert && assert( false, 'time span exceeded, but nothing appears to be in the queue - probably a bug' );

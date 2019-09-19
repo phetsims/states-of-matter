@@ -18,8 +18,8 @@ define( require => {
   const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   // constants
-  var RADIUS = Element.O.vanDerWaalsRadius;   // In picometers.
-  var MASS = Element.O.atomicWeight; // In atomic mass units.
+  const RADIUS = Element.O.vanDerWaalsRadius;   // In picometers.
+  const MASS = Element.O.atomicWeight; // In atomic mass units.
 
   /**
    * @param {number} x - atom x position in picometers

@@ -19,7 +19,7 @@ define( require => {
   const Util = require( 'DOT/Util' );
 
   // constants
-  var MIN_INITIAL_INTER_PARTICLE_DISTANCE = 1.12; // empirically determined
+  const MIN_INITIAL_INTER_PARTICLE_DISTANCE = 1.12; // empirically determined
 
   /**
    * @param {MultipleParticleModel} multipleParticleModel of the simulation
@@ -36,7 +36,7 @@ define( require => {
   // Initial positions for liquid phase, which is hard to create algorithmically.  These were created by setting the
   // appropriate temperature and iterating until a visually acceptable configuration was  emerged, then capturing a
   // "snapshot" of the state.
-  var LIQUID_INITIAL_STATES = {
+  const LIQUID_INITIAL_STATES = {
     neon: {
       numberOfMolecules: 100,
       atomsPerMolecule: 1,
@@ -2034,9 +2034,9 @@ define( require => {
 
       AbstractPhaseStateChanger.prototype.setPhase.call( this, phaseID );
 
-      var moleculeDataSet = this.multipleParticleModel.moleculeDataSet;
+      const moleculeDataSet = this.multipleParticleModel.moleculeDataSet;
 
-      var offset = 0;
+      let offset = 0;
       if ( this.multipleParticleModel.substanceProperty.get() === SubstanceType.ARGON ) {
         offset = 6;
       }
@@ -2050,7 +2050,7 @@ define( require => {
 
       // Step the model a number of times in order to prevent the particles from looking too organized.  The number of
       // steps was empirically determined.
-      for ( var i = 0; i < 5; i++ ) {
+      for ( let i = 0; i < 5; i++ ) {
         this.multipleParticleModel.stepInternal( SOMConstants.NOMINAL_TIME_STEP );
       }
     },
@@ -2080,7 +2080,7 @@ define( require => {
      * @protected
      */
     setPhaseLiquid: function() {
-      var dataSetToLoad;
+      let dataSetToLoad;
       if ( this.multipleParticleModel.substanceProperty.get() === SubstanceType.NEON ) {
         dataSetToLoad = LIQUID_INITIAL_STATES.neon;
       }

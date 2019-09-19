@@ -21,7 +21,7 @@ define( require => {
   const Util = require( 'DOT/Util' );
 
   // constants
-  var MIN_INITIAL_DIAMETER_DISTANCE = 2.02;
+  const MIN_INITIAL_DIAMETER_DISTANCE = 2.02;
 
   /**
    * @param {MultipleParticleModel} multipleParticleModel of the simulation
@@ -41,7 +41,7 @@ define( require => {
   // Initial positions for liquid phase, which is hard to create algorithmically.  These were created by setting the
   // appropriate temperature and iterating until a visually acceptable configuration emerged, then capturing a
   // "snapshot" of the state.
-  var LIQUID_INITIAL_STATES = {
+  const LIQUID_INITIAL_STATES = {
     oxygen: {
       numberOfMolecules: 50,
       atomsPerMolecule: 2,
@@ -567,7 +567,7 @@ define( require => {
      * @public
      */
     setPhase: function( phaseState ) {
-      var postChangeModelSteps = 0;
+      let postChangeModelSteps = 0;
       switch( phaseState ) {
         case PhaseStateEnum.SOLID:
           this.setPhaseSolid();
@@ -585,14 +585,14 @@ define( require => {
           throw new Error( 'invalid phaseState: ' + phaseState );
       }
 
-      var moleculeDataSet = this.multipleParticleModel.moleculeDataSet;
+      const moleculeDataSet = this.multipleParticleModel.moleculeDataSet;
 
       // Sync up the atom positions with the molecule positions.
       this.positionUpdater.updateAtomPositions( moleculeDataSet );
 
       // Step the model a number of times in order to prevent the particles from looking too organized.  The number of
       // steps was empirically determined.
-      for ( var i = 0; i < postChangeModelSteps; i++ ) {
+      for ( let i = 0; i < postChangeModelSteps; i++ ) {
         this.multipleParticleModel.stepInternal( SOMConstants.NOMINAL_TIME_STEP );
       }
     },
@@ -623,7 +623,7 @@ define( require => {
      */
     setPhaseLiquid: function() {
 
-      var dataSetToLoad;
+      let dataSetToLoad;
 
       // find the data for this substance
       if ( this.multipleParticleModel.substanceProperty.get() === SubstanceType.DIATOMIC_OXYGEN ) {

@@ -35,16 +35,16 @@ define( require => {
   const interactionPotentialString = require( 'string!STATES_OF_MATTER/interactionPotential' );
 
   // Size of handles as function of node width.
-  var RESIZE_HANDLE_SIZE_PROPORTION = 0.18;
+  const RESIZE_HANDLE_SIZE_PROPORTION = 0.18;
 
   // Position of handle as function of node width.
-  var EPSILON_HANDLE_OFFSET_PROPORTION = 0.08;
+  const EPSILON_HANDLE_OFFSET_PROPORTION = 0.08;
 
   // other constants
-  var RESIZE_HANDLE_NORMAL_COLOR = '#32FE00';
-  var RESIZE_HANDLE_HIGHLIGHTED_COLOR = new Color( 153, 255, 0 );
-  var EPSILON_LINE_COLOR = RESIZE_HANDLE_NORMAL_COLOR;
-  var POTENTIAL_LINE_COLOR = new Color( 'red' );
+  const RESIZE_HANDLE_NORMAL_COLOR = '#32FE00';
+  const RESIZE_HANDLE_HIGHLIGHTED_COLOR = new Color( 153, 255, 0 );
+  const EPSILON_LINE_COLOR = RESIZE_HANDLE_NORMAL_COLOR;
+  const POTENTIAL_LINE_COLOR = new Color( 'red' );
 
   /**
    * @param {number} sigma - atom diameter
@@ -56,17 +56,17 @@ define( require => {
    */
   function EpsilonControlInteractionPotentialDiagram( sigma, epsilon, wide, multipleParticleModel, options ) {
 
-    var self = this;
+    const self = this;
     InteractionPotentialDiagramNode.call( this, sigma, epsilon, wide, true );
     this.multipleParticleModel = multipleParticleModel;
-    var accordionContent = new Node();
+    const accordionContent = new Node();
 
     // variables used to track dragging of controls related to epsilon value
-    var startDragY;
-    var endDragY;
+    let startDragY;
+    let endDragY;
 
     // Add the line that will indicate the value of epsilon.
-    var epsilonLineLength = EPSILON_HANDLE_OFFSET_PROPORTION * this.widthOfGraph * 2.2;
+    const epsilonLineLength = EPSILON_HANDLE_OFFSET_PROPORTION * this.widthOfGraph * 2.2;
     this.epsilonLine = new Rectangle( -epsilonLineLength / 2, 0, epsilonLineLength, 1, {
       cursor: 'ns-resize',
       pickable: true,
@@ -85,9 +85,9 @@ define( require => {
       },
       drag: function( event ) {
         endDragY = self.epsilonLine.globalToParentPoint( event.pointer.point ).y;
-        var d = endDragY - startDragY;
+        const d = endDragY - startDragY;
         startDragY = endDragY;
-        var scaleFactor = SOMConstants.MAX_EPSILON /
+        const scaleFactor = SOMConstants.MAX_EPSILON /
                           ( self.getGraphHeight() / 2);
         multipleParticleModel.interactionStrengthProperty.set( multipleParticleModel.getEpsilon() + ( d * scaleFactor ) );
         self.drawPotentialCurve();
@@ -115,9 +115,9 @@ define( require => {
       },
       drag: function( event ) {
         endDragY = self.epsilonResizeHandle.globalToParentPoint( event.pointer.point ).y;
-        var d = endDragY - startDragY;
+        const d = endDragY - startDragY;
         startDragY = endDragY;
-        var scaleFactor = SOMConstants.MAX_EPSILON /
+        const scaleFactor = SOMConstants.MAX_EPSILON /
                           ( self.getGraphHeight() / 2);
         multipleParticleModel.interactionStrengthProperty.value = multipleParticleModel.getEpsilon() + ( d * scaleFactor );
         self.drawPotentialCurve();
@@ -141,15 +141,15 @@ define( require => {
     accordionContent.addChild( this.interactionPotentialCanvasNode );
     accordionContent.addChild( this.ljPotentialGraph );
 
-    var accordionContentHBox = new HBox( { children: [ accordionContent ] } );
-    var titleNode = new Text( interactionPotentialString, {
+    const accordionContentHBox = new HBox( { children: [ accordionContent ] } );
+    const titleNode = new Text( interactionPotentialString, {
       fill: SOMColorProfile.controlPanelTextProperty,
       font: new PhetFont( { size: 13 } )
     } );
     if ( titleNode.width > this.horizontalAxis.width ) {
       titleNode.scale( this.horizontalAxis.width / titleNode.width );
     }
-    var accordionBox = new AccordionBox( accordionContentHBox, {
+    const accordionBox = new AccordionBox( accordionContentHBox, {
       titleNode: titleNode,
       fill: SOMColorProfile.controlPanelBackgroundProperty,
       stroke: SOMColorProfile.controlPanelStrokeProperty,

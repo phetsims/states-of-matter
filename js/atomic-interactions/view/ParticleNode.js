@@ -25,8 +25,8 @@ define( require => {
   const Vector2 = require( 'DOT/Vector2' );
 
   // constants
-  var MVT_SCALE = 0.25;
-  var OVERLAP_ENLARGEMENT_FACTOR = 1.25;
+  const MVT_SCALE = 0.25;
+  const OVERLAP_ENLARGEMENT_FACTOR = 1.25;
 
   /**
    * @param {Particle} particle  - The particle in the model that this node will represent in the view.
@@ -47,7 +47,7 @@ define( require => {
     this.position = new Vector2( 0, 0 );
 
     // Calculate the diameter of the circle.
-    var circleDiameter = particle.radius * 2 * MVT_SCALE;
+    let circleDiameter = particle.radius * 2 * MVT_SCALE;
     if ( this.overlapEnabled ) {
       // Overlap is enabled, so make the shape slightly larger than the radius of the circle so that overlap will occur
       // during inter-particle collisions.
@@ -87,7 +87,7 @@ define( require => {
       // If the size changes, the gradient must also change to match.
       this.circle.fill = this.createFill( this.particle );
 
-      var circleDiameter = this.particle.getRadius() * 2 * MVT_SCALE;
+      let circleDiameter = this.particle.getRadius() * 2 * MVT_SCALE;
       if ( this.overlapEnabled ) {
         // Make node larger than particle so that overlap appears to happen when the particles collide.
         circleDiameter = circleDiameter * OVERLAP_ENLARGEMENT_FACTOR;
@@ -102,16 +102,16 @@ define( require => {
      */
     createFill: function( atom ) {
 
-      var baseColor = this.chooseColor( atom );
-      var darkenedBaseColor = baseColor.colorUtilsDarker( 0.5 );
-      var transparentDarkenedBasedColor = new Color(
+      const baseColor = this.chooseColor( atom );
+      const darkenedBaseColor = baseColor.colorUtilsDarker( 0.5 );
+      const transparentDarkenedBasedColor = new Color(
         darkenedBaseColor.getRed(),
         darkenedBaseColor.getGreen(),
         darkenedBaseColor.getBlue(),
         0.3
       );
 
-      var radius = ( this.overlapEnabled ? ( atom.getRadius() * OVERLAP_ENLARGEMENT_FACTOR ) :
+      const radius = ( this.overlapEnabled ? ( atom.getRadius() * OVERLAP_ENLARGEMENT_FACTOR ) :
                      atom.getRadius() ) * MVT_SCALE;
 
       return new RadialGradient( 0, 0, 0, 0, 0, radius )
@@ -126,7 +126,7 @@ define( require => {
      * @private
      */
     chooseColor: function( atom ) {
-      var baseColor;
+      let baseColor;
 
       if ( atom instanceof ArgonAtom ) {
         baseColor = new Color( SOMConstants.ARGON_COLOR );

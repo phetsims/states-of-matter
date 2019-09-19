@@ -28,12 +28,12 @@ define( require => {
   const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   // constants
-  var RESIZE_HANDLE_SIZE_PROPORTION = 0.05;  // Size of handles as function of node width.
-  var EPSILON_HANDLE_OFFSET_PROPORTION = 0.08; // Position of handle as function of node width.
-  var RESIZE_HANDLE_NORMAL_COLOR = '#32FE00';
-  var RESIZE_HANDLE_HIGHLIGHTED_COLOR = new Color( 153, 255, 0 );
-  var EPSILON_LINE_COLOR = RESIZE_HANDLE_NORMAL_COLOR;
-  var POTENTIAL_LINE_COLOR = new Color( 'red' );
+  const RESIZE_HANDLE_SIZE_PROPORTION = 0.05;  // Size of handles as function of node width.
+  const EPSILON_HANDLE_OFFSET_PROPORTION = 0.08; // Position of handle as function of node width.
+  const RESIZE_HANDLE_NORMAL_COLOR = '#32FE00';
+  const RESIZE_HANDLE_HIGHLIGHTED_COLOR = new Color( 153, 255, 0 );
+  const EPSILON_LINE_COLOR = RESIZE_HANDLE_NORMAL_COLOR;
+  const POTENTIAL_LINE_COLOR = new Color( 'red' );
 
   /**
    * @param {DualAtomModel} dualAtomModel - model of the simulation
@@ -44,7 +44,7 @@ define( require => {
   function InteractiveInteractionPotentialDiagram( dualAtomModel, wide, options ) {
 
     InteractionPotentialDiagramNode.call( this, dualAtomModel.getSigma(), dualAtomModel.getEpsilon(), wide );
-    var self = this;
+    const self = this;
 
     // @private
     this.dualAtomModel = dualAtomModel;
@@ -54,8 +54,8 @@ define( require => {
     this.interactionEnabled = false;
 
     // Create a convenience function for adding a drag handler that adjusts epsilon, this is done to avoid code duplication.
-    var startDragY;
-    var endDragY;
+    let startDragY;
+    let endDragY;
 
     function addEpsilonDragHandler( node ) {
       node.addInputListener( new SimpleDragHandler( {
@@ -67,9 +67,9 @@ define( require => {
 
         drag: function( event ) {
           endDragY = node.globalToParentPoint( event.pointer.point ).y;
-          var d = endDragY - startDragY;
+          const d = endDragY - startDragY;
           startDragY = endDragY;
-          var scaleFactor = SOMConstants.MAX_EPSILON / ( self.getGraphHeight() / 2 );
+          const scaleFactor = SOMConstants.MAX_EPSILON / ( self.getGraphHeight() / 2 );
           dualAtomModel.interactionStrengthProperty.value = dualAtomModel.getEpsilon() + ( d * scaleFactor );
         },
 
@@ -80,7 +80,7 @@ define( require => {
     }
 
     // Add the line that will indicate and control the value of epsilon.
-    var epsilonLineLength = EPSILON_HANDLE_OFFSET_PROPORTION * this.widthOfGraph * 1.2;
+    const epsilonLineLength = EPSILON_HANDLE_OFFSET_PROPORTION * this.widthOfGraph * 1.2;
     this.epsilonLine = new Rectangle( -epsilonLineLength / 2, 0, epsilonLineLength, 1, {
       cursor: 'ns-resize',
       pickable: true,
@@ -96,7 +96,7 @@ define( require => {
     this.epsilonLineLayer.addChild( this.epsilonLine );
 
     // Add the arrow nodes that will allow the user to control the epsilon value.
-    var arrowNodeOptions = {
+    const arrowNodeOptions = {
       headHeight: 10,
       headWidth: 18,
       tailWidth: 7,
@@ -128,8 +128,8 @@ define( require => {
       RESIZE_HANDLE_HIGHLIGHTED_COLOR ) );
     this.ljPotentialGraph.addChild( this.sigmaResizeHandle );
     this.sigmaResizeHandle.touchArea = this.sigmaResizeHandle.localBounds.dilatedXY( 10, 5 );
-    var startDragX;
-    var endDragX;
+    let startDragX;
+    let endDragX;
     this.sigmaResizeHandle.addInputListener( new SimpleDragHandler( {
 
       start: function( event ) {
@@ -139,10 +139,10 @@ define( require => {
 
       drag: function( event ) {
         endDragX = self.sigmaResizeHandle.globalToParentPoint( event.pointer.point ).x;
-        var d = endDragX - startDragX;
+        const d = endDragX - startDragX;
         startDragX = endDragX;
-        var scaleFactor = self.GRAPH_X_RANGE / ( self.getGraphWidth() );
-        var atomDiameter = dualAtomModel.getSigma() + ( d * scaleFactor );
+        const scaleFactor = self.GRAPH_X_RANGE / ( self.getGraphWidth() );
+        const atomDiameter = dualAtomModel.getSigma() + ( d * scaleFactor );
         dualAtomModel.atomDiameterProperty.value = atomDiameter > SOMConstants.MIN_SIGMA ?
                                                    (atomDiameter < SOMConstants.MAX_SIGMA ? atomDiameter :
                                                     SOMConstants.MAX_SIGMA) : SOMConstants.MIN_SIGMA;
@@ -171,11 +171,11 @@ define( require => {
           dualAtomModel.movementHintVisibleProperty.set( false );
 
           // Move the movable atom based on this drag event.
-          var atom = dualAtomModel.movableAtom;
+          const atom = dualAtomModel.movableAtom;
           endDragX = self.positionMarker.globalToParentPoint( event.pointer.point ).x;
-          var xDifference = endDragX - startDragX;
-          var scaleFactor = self.GRAPH_X_RANGE / ( self.getGraphWidth() );
-          var newPosX = Math.max( atom.getX() + ( xDifference * scaleFactor ), self.minXForAtom );
+          const xDifference = endDragX - startDragX;
+          const scaleFactor = self.GRAPH_X_RANGE / ( self.getGraphWidth() );
+          const newPosX = Math.max( atom.getX() + ( xDifference * scaleFactor ), self.minXForAtom );
           atom.setPosition( newPosX, atom.getY() );
           startDragX = endDragX;
         },

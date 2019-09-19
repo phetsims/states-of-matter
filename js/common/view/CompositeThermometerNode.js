@@ -30,12 +30,12 @@ define( require => {
   const kelvinUnitsString = require( 'string!STATES_OF_MATTER/kelvinUnits' );
 
   // constants
-  var MAX_LENGTH_TEMPERATURE_TEXT = '99999 ' + celsiusUnitsString;
-  var MAX_TEMPERATURE_TEXT_WIDTH = 35; // empirically determined
-  var TEMPERATURE_READOUT_FONT = new PhetFont( 11 );
+  const MAX_LENGTH_TEMPERATURE_TEXT = '99999 ' + celsiusUnitsString;
+  const MAX_TEMPERATURE_TEXT_WIDTH = 35; // empirically determined
+  const TEMPERATURE_READOUT_FONT = new PhetFont( 11 );
 
   // clamping the red mercury display at 1000
-  var MAX_TEMPERATURE_TO_CLAMP_RED_MERCURY = 1000;
+  const MAX_TEMPERATURE_TO_CLAMP_RED_MERCURY = 1000;
 
   /**
    * @param {MultipleParticleModel} multipleParticleModel - model of the simulation
@@ -46,7 +46,7 @@ define( require => {
   function CompositeThermometerNode( multipleParticleModel, modelViewTransform, options ) {
 
     Node.call( this );
-    var self = this;
+    const self = this;
 
     // @private
     this.multipleParticleModel = multipleParticleModel;
@@ -56,7 +56,7 @@ define( require => {
     this.temperatureInKelvinProperty = new Property( multipleParticleModel.getTemperatureInKelvin() );
 
     // add thermometer
-    var thermometer = new ThermometerNode( 0, MAX_TEMPERATURE_TO_CLAMP_RED_MERCURY, this.temperatureInKelvinProperty, {
+    const thermometer = new ThermometerNode( 0, MAX_TEMPERATURE_TO_CLAMP_RED_MERCURY, this.temperatureInKelvinProperty, {
       outlineStroke: 'black',
       backgroundFill: 'white',
       tickSpacing: 8,
@@ -80,7 +80,7 @@ define( require => {
 
     // @private
     this.temperatureProperty = new Property( SOMQueryParameters.defaultCelsius ? 'celsius' : 'kelvin' );
-    var temperatureComboBox = new ComboBox(
+    const temperatureComboBox = new ComboBox(
       [
         new ComboBoxItem( this.temperatureKelvinText, 'kelvin' ),
         new ComboBoxItem( this.temperatureCelsiusText, 'celsius' )
@@ -95,12 +95,12 @@ define( require => {
       }
     );
 
-    var contentNode = new VBox( {
+    const contentNode = new VBox( {
       spacing: 10,
       children: [ temperatureComboBox, thermometer ]
     } );
 
-    var panel = new Panel( contentNode, {
+    const panel = new Panel( contentNode, {
       xMargin: 0,
       yMargin: 0,
       fill: null,
@@ -113,9 +113,9 @@ define( require => {
 
     // Define a function that will update the various properties and textual values.
     function updateTemperatureValues() {
-      var tempInKelvin = self.multipleParticleModel.getTemperatureInKelvin();
+      const tempInKelvin = self.multipleParticleModel.getTemperatureInKelvin();
       if ( tempInKelvin !== null ) {
-        var tempInKelvinRounded = Util.roundSymmetric( tempInKelvin );
+        const tempInKelvinRounded = Util.roundSymmetric( tempInKelvin );
         self.temperatureKelvinText.setText( tempInKelvinRounded + ' ' + kelvinUnitsString );
         self.temperatureCelsiusText.setText( Util.roundSymmetric( tempInKelvin - 273.15 ) + ' ' + celsiusUnitsString );
         self.temperatureInKelvinProperty.value = tempInKelvinRounded > MAX_TEMPERATURE_TO_CLAMP_RED_MERCURY ?

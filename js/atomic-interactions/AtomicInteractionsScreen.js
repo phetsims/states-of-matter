@@ -25,7 +25,7 @@ define( require => {
    */
   function AtomicInteractionsScreen( enableHeterogeneousMolecules, screenTitle ) {
 
-    var options = {
+    const options = {
       name: screenTitle,
       backgroundColorProperty: SOMColorProfile.backgroundProperty,
       homeScreenIcon: new AtomicInteractionsIcon( Screen.MINIMUM_HOME_SCREEN_ICON_SIZE ),

@@ -5,7 +5,7 @@ define( require => {
 
   const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
-  var SubstanceType = {
+  const SubstanceType = {
     NEON: 'NEON',
     ARGON: 'ARGON',
     DIATOMIC_OXYGEN: 'DIATOMIC_OXYGEN',

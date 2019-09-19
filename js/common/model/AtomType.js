@@ -11,7 +11,7 @@ define( require => {
   const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   // NOTE: enum pattern recommends using {} for each value, but strings are more convenient for debugging
-  var AtomType = Object.freeze( {
+  const AtomType = Object.freeze( {
     NEON: 'NEON',
     ARGON: 'ARGON',
     OXYGEN: 'OXYGEN',

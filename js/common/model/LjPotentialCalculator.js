@@ -75,7 +75,7 @@ define( require => {
      * @public
      */
     calculateLjPotential: function( distance ) {
-      var distanceRatio = this.sigma / distance;
+      const distanceRatio = this.sigma / distance;
       return (4 * this.epsilonForCalcs * ( Math.pow( distanceRatio, 12 ) - Math.pow( distanceRatio, 6 )));
     },
 

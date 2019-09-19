@@ -53,73 +53,73 @@ define( require => {
   const WaterVerletAlgorithm = require( 'STATES_OF_MATTER/common/model/engine/WaterVerletAlgorithm' );
 
   // constants (general)
-  var PARTICLE_CONTAINER_WIDTH = 10000; // essentially arbitrary
-  var PARTICLE_CONTAINER_INITIAL_HEIGHT = 10000;  // essentially arbitrary
-  var DEFAULT_SUBSTANCE = SubstanceType.NEON;
-  var MAX_TEMPERATURE = 50.0;
-  var MIN_TEMPERATURE = 0.00001;
-  var NOMINAL_GRAVITATIONAL_ACCEL = -0.045;
-  var TEMPERATURE_CHANGE_RATE = 0.07; // empirically determined to make temperate change at a reasonable rate
-  var INJECTED_MOLECULE_SPEED = 2.0; // in normalized model units per second, empirically determined to look reasonable
-  var INJECTED_MOLECULE_ANGLE_SPREAD = Math.PI * 0.25; // in radians, empirically determined to look reasonable
-  var INJECTION_POINT_HORIZ_PROPORTION = 0.00;
-  var INJECTION_POINT_VERT_PROPORTION = 0.25;
-  var MIN_ALLOWABLE_CONTAINER_HEIGHT = 1500; // empirically determined, almost all the way to the bottom
+  const PARTICLE_CONTAINER_WIDTH = 10000; // essentially arbitrary
+  const PARTICLE_CONTAINER_INITIAL_HEIGHT = 10000;  // essentially arbitrary
+  const DEFAULT_SUBSTANCE = SubstanceType.NEON;
+  const MAX_TEMPERATURE = 50.0;
+  const MIN_TEMPERATURE = 0.00001;
+  const NOMINAL_GRAVITATIONAL_ACCEL = -0.045;
+  const TEMPERATURE_CHANGE_RATE = 0.07; // empirically determined to make temperate change at a reasonable rate
+  const INJECTED_MOLECULE_SPEED = 2.0; // in normalized model units per second, empirically determined to look reasonable
+  const INJECTED_MOLECULE_ANGLE_SPREAD = Math.PI * 0.25; // in radians, empirically determined to look reasonable
+  const INJECTION_POINT_HORIZ_PROPORTION = 0.00;
+  const INJECTION_POINT_VERT_PROPORTION = 0.25;
+  const MIN_ALLOWABLE_CONTAINER_HEIGHT = 1500; // empirically determined, almost all the way to the bottom
 
   // constants related to how time steps are handled
-  var NOMINAL_FRAME_RATE = 60; // in frames per second
-  var NOMINAL_TIME_STEP = 1 / NOMINAL_FRAME_RATE;
-  var PARTICLE_SPEED_UP_FACTOR = 4; // empirically determined to make the particles move at a speed that looks reasonable
-  var MAX_PARTICLE_MOTION_TIME_STEP = 0.025; // max time step that model can handle, empirically determined
+  const NOMINAL_FRAME_RATE = 60; // in frames per second
+  const NOMINAL_TIME_STEP = 1 / NOMINAL_FRAME_RATE;
+  const PARTICLE_SPEED_UP_FACTOR = 4; // empirically determined to make the particles move at a speed that looks reasonable
+  const MAX_PARTICLE_MOTION_TIME_STEP = 0.025; // max time step that model can handle, empirically determined
 
   // constants that define the normalized temperatures used for the various states
-  var SOLID_TEMPERATURE = SOMConstants.SOLID_TEMPERATURE;
-  var LIQUID_TEMPERATURE = SOMConstants.LIQUID_TEMPERATURE;
-  var GAS_TEMPERATURE = SOMConstants.GAS_TEMPERATURE;
-  var INITIAL_TEMPERATURE = SOLID_TEMPERATURE;
-  var APPROACHING_ABSOLUTE_ZERO_TEMPERATURE = SOLID_TEMPERATURE * 0.85;
+  const SOLID_TEMPERATURE = SOMConstants.SOLID_TEMPERATURE;
+  const LIQUID_TEMPERATURE = SOMConstants.LIQUID_TEMPERATURE;
+  const GAS_TEMPERATURE = SOMConstants.GAS_TEMPERATURE;
+  const INITIAL_TEMPERATURE = SOLID_TEMPERATURE;
+  const APPROACHING_ABSOLUTE_ZERO_TEMPERATURE = SOLID_TEMPERATURE * 0.85;
 
   // parameters to control rates of change of the container size
-  var MAX_CONTAINER_SHRINK_RATE = 1250; // in model units per second
-  var MAX_CONTAINER_EXPAND_RATE = 1500; // in model units per second
-  var POST_EXPLOSION_CONTAINER_EXPANSION_RATE = 9000; // in model units per second
+  const MAX_CONTAINER_SHRINK_RATE = 1250; // in model units per second
+  const MAX_CONTAINER_EXPAND_RATE = 1500; // in model units per second
+  const POST_EXPLOSION_CONTAINER_EXPANSION_RATE = 9000; // in model units per second
 
   // Range for deciding if the temperature is near the current set point. The units are internal model units.
-  var TEMPERATURE_CLOSENESS_RANGE = 0.15;
+  const TEMPERATURE_CLOSENESS_RANGE = 0.15;
 
   // Values used for converting from model temperature to the temperature for a given particle.
-  var NEON_TRIPLE_POINT_IN_KELVIN = SOMConstants.NEON_TRIPLE_POINT_IN_KELVIN;
-  var NEON_CRITICAL_POINT_IN_KELVIN = SOMConstants.NEON_CRITICAL_POINT_IN_KELVIN;
-  var ARGON_TRIPLE_POINT_IN_KELVIN = SOMConstants.ARGON_TRIPLE_POINT_IN_KELVIN;
-  var ARGON_CRITICAL_POINT_IN_KELVIN = SOMConstants.ARGON_CRITICAL_POINT_IN_KELVIN;
-  var O2_TRIPLE_POINT_IN_KELVIN = SOMConstants.O2_TRIPLE_POINT_IN_KELVIN;
-  var O2_CRITICAL_POINT_IN_KELVIN = SOMConstants.O2_CRITICAL_POINT_IN_KELVIN;
-  var WATER_TRIPLE_POINT_IN_KELVIN = SOMConstants.WATER_TRIPLE_POINT_IN_KELVIN;
-  var WATER_CRITICAL_POINT_IN_KELVIN = SOMConstants.WATER_CRITICAL_POINT_IN_KELVIN;
+  const NEON_TRIPLE_POINT_IN_KELVIN = SOMConstants.NEON_TRIPLE_POINT_IN_KELVIN;
+  const NEON_CRITICAL_POINT_IN_KELVIN = SOMConstants.NEON_CRITICAL_POINT_IN_KELVIN;
+  const ARGON_TRIPLE_POINT_IN_KELVIN = SOMConstants.ARGON_TRIPLE_POINT_IN_KELVIN;
+  const ARGON_CRITICAL_POINT_IN_KELVIN = SOMConstants.ARGON_CRITICAL_POINT_IN_KELVIN;
+  const O2_TRIPLE_POINT_IN_KELVIN = SOMConstants.O2_TRIPLE_POINT_IN_KELVIN;
+  const O2_CRITICAL_POINT_IN_KELVIN = SOMConstants.O2_CRITICAL_POINT_IN_KELVIN;
+  const WATER_TRIPLE_POINT_IN_KELVIN = SOMConstants.WATER_TRIPLE_POINT_IN_KELVIN;
+  const WATER_CRITICAL_POINT_IN_KELVIN = SOMConstants.WATER_CRITICAL_POINT_IN_KELVIN;
 
   // The following values are used for temperature conversion for the adjustable molecule.  These are somewhat
   // arbitrary, since in the real world the values would change if epsilon were changed.  They have been chosen to be
   // similar to argon, because the default epsilon value is half of the allowable range, and this value ends up being
   // similar to argon.
-  var ADJUSTABLE_ATOM_TRIPLE_POINT_IN_KELVIN = 75;
-  var ADJUSTABLE_ATOM_CRITICAL_POINT_IN_KELVIN = 140;
+  const ADJUSTABLE_ATOM_TRIPLE_POINT_IN_KELVIN = 75;
+  const ADJUSTABLE_ATOM_CRITICAL_POINT_IN_KELVIN = 140;
 
   // Min a max values for adjustable epsilon.  Originally there was a wider allowable range, but the simulation did not
   // work so well, so the range below was arrived at empirically and seems to work reasonably well.
-  var MIN_ADJUSTABLE_EPSILON = SOMConstants.MIN_ADJUSTABLE_EPSILON;
-  var MAX_ADJUSTABLE_EPSILON = SOMConstants.EPSILON_FOR_WATER * 1.7;
+  const MIN_ADJUSTABLE_EPSILON = SOMConstants.MIN_ADJUSTABLE_EPSILON;
+  const MAX_ADJUSTABLE_EPSILON = SOMConstants.EPSILON_FOR_WATER * 1.7;
 
   // Time value used to prevent molecule injections from being too close together so that they don't overlap after
   // injection and cause high initial velocities.
-  var MOLECULE_INJECTION_HOLDOFF_TIME = 0.25; // seconds, empirically determined
-  var MAX_MOLECULES_QUEUED_FOR_INJECTION = 3;
+  const MOLECULE_INJECTION_HOLDOFF_TIME = 0.25; // seconds, empirically determined
+  const MAX_MOLECULES_QUEUED_FOR_INJECTION = 3;
 
   /**
    * @constructor
    */
   function MultipleParticleModel() {
 
-    var self = this;
+    const self = this;
 
     //-----------------------------------------------------------------------------------------------------------------
     // observable model properties
@@ -200,11 +200,11 @@ define( require => {
 
     // listen for new molecules being added with the pump
     this.numberOfMoleculesProperty.lazyLink( ( newValue, oldValue ) => {
-      var currentNumberOfMolecules = Math.floor( this.moleculeDataSet.numberOfAtoms / this.moleculeDataSet.atomsPerMolecule );
+      const currentNumberOfMolecules = Math.floor( this.moleculeDataSet.numberOfAtoms / this.moleculeDataSet.atomsPerMolecule );
 
       // make sure that the pump doesn't release particles when the substance is changed, only when a molecule is added
       if ( newValue !== currentNumberOfMolecules ) {
-        var delta = newValue - oldValue;
+        const delta = newValue - oldValue;
 
         for ( let i = 0; i < delta; i++ ) {
           self.injectMolecule();
@@ -257,11 +257,11 @@ define( require => {
         return null;
       }
 
-      var temperatureInKelvin;
-      var triplePointInKelvin = 0;
-      var criticalPointInKelvin = 0;
-      var triplePointInModelUnits = 0;
-      var criticalPointInModelUnits = 0;
+      let temperatureInKelvin;
+      let triplePointInKelvin = 0;
+      let criticalPointInKelvin = 0;
+      let triplePointInModelUnits = 0;
+      let criticalPointInModelUnits = 0;
 
       switch( this.substanceProperty.get() ) {
 
@@ -320,9 +320,9 @@ define( require => {
         }
       }
       else if ( this.temperatureSetPointProperty.get() < criticalPointInModelUnits ) {
-        var slope = ( criticalPointInKelvin - triplePointInKelvin ) /
+        const slope = ( criticalPointInKelvin - triplePointInKelvin ) /
                     ( criticalPointInModelUnits - triplePointInModelUnits );
-        var offset = triplePointInKelvin - ( slope * triplePointInModelUnits );
+        const offset = triplePointInKelvin - ( slope * triplePointInModelUnits );
         temperatureInKelvin = this.temperatureSetPointProperty.get() * slope + offset;
       }
       else {
@@ -349,7 +349,7 @@ define( require => {
      */
     handleSubstanceChanged: function() {
 
-      var substance = this.substanceProperty.get();
+      const substance = this.substanceProperty.get();
 
       assert && assert(
         substance === SubstanceType.DIATOMIC_OXYGEN ||
@@ -362,7 +362,7 @@ define( require => {
 
       // Retain the current phase so that we can set the particles back to this phase once they have been created and
       // initialized.
-      var phase = this.mapTemperatureToPhase();
+      const phase = this.mapTemperatureToPhase();
 
       // Remove existing particles and reset the global model parameters.
       this.removeAllParticles();
@@ -461,7 +461,7 @@ define( require => {
      * @public
      */
     getSigma: function() {
-      var sigma;
+      let sigma;
       switch( this.substanceProperty.get() ) {
         case SubstanceType.NEON:
           sigma = NeonAtom.RADIUS * 2;
@@ -491,7 +491,7 @@ define( require => {
      * @public
      */
     getEpsilon: function() {
-      var epsilon;
+      let epsilon;
       switch( this.substanceProperty.get() ) {
         case SubstanceType.NEON:
           epsilon = InteractionStrengthTable.getInteractionPotential( AtomType.NEON, AtomType.NEON );
@@ -521,7 +521,7 @@ define( require => {
      */
     reset: function() {
 
-      var substanceAtStartOfReset = this.substanceProperty.get();
+      const substanceAtStartOfReset = this.substanceProperty.get();
 
       // reset observable properties
       this.particleContainerHeightProperty.reset();
@@ -613,21 +613,21 @@ define( require => {
       }
 
       // Choose an injection angle with some amount of randomness.
-      var injectionAngle = ( phet.joist.random.nextDouble() - 0.5 ) * INJECTED_MOLECULE_ANGLE_SPREAD;
+      const injectionAngle = ( phet.joist.random.nextDouble() - 0.5 ) * INJECTED_MOLECULE_ANGLE_SPREAD;
 
       // Set the molecule's velocity.
-      var xVel = Math.cos( injectionAngle ) * INJECTED_MOLECULE_SPEED;
-      var yVel = Math.sin( injectionAngle ) * INJECTED_MOLECULE_SPEED;
+      const xVel = Math.cos( injectionAngle ) * INJECTED_MOLECULE_SPEED;
+      const yVel = Math.sin( injectionAngle ) * INJECTED_MOLECULE_SPEED;
 
       // Set the rotational velocity to a random value within a range (will be ignored for single atom cases).
-      var moleculeRotationRate = ( phet.joist.random.nextDouble() - 0.5 ) * ( Math.PI / 4 );
+      const moleculeRotationRate = ( phet.joist.random.nextDouble() - 0.5 ) * ( Math.PI / 4 );
 
       // Set the position(s) of the atom(s).
-      var atomsPerMolecule = this.moleculeDataSet.atomsPerMolecule;
-      var moleculeCenterOfMassPosition = new Vector2( this.injectionPointX, this.injectionPointY );
-      var moleculeVelocity = new Vector2( xVel, yVel );
-      var atomPositions = [];
-      for ( var i = 0; i < atomsPerMolecule; i++ ) {
+      const atomsPerMolecule = this.moleculeDataSet.atomsPerMolecule;
+      const moleculeCenterOfMassPosition = new Vector2( this.injectionPointX, this.injectionPointY );
+      const moleculeVelocity = new Vector2( xVel, yVel );
+      const atomPositions = [];
+      for ( let i = 0; i < atomsPerMolecule; i++ ) {
         atomPositions[ i ] = Vector2.ZERO;
       }
 
@@ -653,7 +653,7 @@ define( require => {
       if ( atomsPerMolecule === 1 ) {
 
         // Add particle to model set.
-        var particle;
+        let particle;
         switch( this.substanceProperty.get() ) {
           case SubstanceType.ARGON:
             particle = new ArgonAtom( 0, 0 );
@@ -759,7 +759,7 @@ define( require => {
      */
     dampUpwardMotion: function( dt ) {
 
-      for ( var i = 0; i < this.moleculeDataSet.getNumberOfMolecules(); i++ ) {
+      for ( let i = 0; i < this.moleculeDataSet.getNumberOfMolecules(); i++ ) {
         if ( this.moleculeDataSet.moleculeVelocities[ i ].y > 0 ) {
           this.moleculeDataSet.moleculeVelocities[ i ].y *= 1 - ( dt * 0.9 );
         }
@@ -835,18 +835,18 @@ define( require => {
       }
 
       // Record the pressure to see if it changes.
-      var pressureBeforeAlgorithm = this.getModelPressure();
+      const pressureBeforeAlgorithm = this.getModelPressure();
 
       // Calculate the amount of time to advance the particle engine.  This is based purely on aesthetics - we looked at
       // the particle motion and tweaked the multiplier until we felt that it looked good.
-      var particleMotionAdvancementTime = Math.min(
+      const particleMotionAdvancementTime = Math.min(
         dt * PARTICLE_SPEED_UP_FACTOR,
         this.maxParticleMoveTimePerStepProperty.get()
       );
 
       // Determine the number of model steps and the size of the time step.
-      var numParticleEngineSteps = 1;
-      var particleMotionTimeStep;
+      let numParticleEngineSteps = 1;
+      let particleMotionTimeStep;
       if ( particleMotionAdvancementTime > MAX_PARTICLE_MOTION_TIME_STEP ) {
         particleMotionTimeStep = MAX_PARTICLE_MOTION_TIME_STEP;
         numParticleEngineSteps = Math.floor( particleMotionAdvancementTime / MAX_PARTICLE_MOTION_TIME_STEP );
@@ -874,7 +874,7 @@ define( require => {
       }
 
       // Execute the Verlet algorithm, a.k.a. the "particle engine", in order to determine the new particle positions.
-      for ( var i = 0; i < numParticleEngineSteps; i++ ) {
+      for ( let i = 0; i < numParticleEngineSteps; i++ ) {
         this.moleculeForceAndMotionCalculator.updateForcesAndMotion( particleMotionTimeStep );
       }
 
@@ -891,10 +891,10 @@ define( require => {
       }
 
       // Adjust the temperature set point if needed.
-      var currentTemperature = this.temperatureSetPointProperty.get(); // convenience variable
+      const currentTemperature = this.temperatureSetPointProperty.get(); // convenience variable
       if ( this.heatingCoolingAmountProperty.get() !== 0 ) {
 
-        var newTemperature;
+        let newTemperature;
 
         if ( currentTemperature < APPROACHING_ABSOLUTE_ZERO_TEMPERATURE &&
              this.heatingCoolingAmountProperty.get() < 0 ) {
@@ -902,7 +902,7 @@ define( require => {
           // The temperature adjusts more slowly as we begin to approach absolute zero so that all the particles have
           // time to reach the bottom of the container.  This is not linear - the rate of change slows as we get closer,
           // to zero degrees Kelvin, which is somewhat real world-ish.
-          var adjustmentFactor = Math.pow(
+          const adjustmentFactor = Math.pow(
             currentTemperature / APPROACHING_ABSOLUTE_ZERO_TEMPERATURE,
             1.35 // exponent chosen empirically to be as small as possible and still get all particles to bottom before absolute zero
           );
@@ -911,7 +911,7 @@ define( require => {
                            this.heatingCoolingAmountProperty.get() * TEMPERATURE_CHANGE_RATE * dt * adjustmentFactor;
         }
         else {
-          var temperatureChange = this.heatingCoolingAmountProperty.get() * TEMPERATURE_CHANGE_RATE * dt;
+          const temperatureChange = this.heatingCoolingAmountProperty.get() * TEMPERATURE_CHANGE_RATE * dt;
           newTemperature = Math.min( currentTemperature + temperatureChange, MAX_TEMPERATURE );
         }
 
@@ -964,10 +964,10 @@ define( require => {
         return;
       }
 
-      var calculatedTemperature = this.moleculeForceAndMotionCalculator.calculatedTemperature;
-      var temperatureSetPoint = this.temperatureSetPointProperty.get();
-      var temperatureAdjustmentNeeded = false;
-      var thermostatRunThisStep = null;
+      const calculatedTemperature = this.moleculeForceAndMotionCalculator.calculatedTemperature;
+      const temperatureSetPoint = this.temperatureSetPointProperty.get();
+      let temperatureAdjustmentNeeded = false;
+      let thermostatRunThisStep = null;
 
       if ( this.heatingCoolingAmountProperty.get() > 0 && calculatedTemperature < temperatureSetPoint ||
            this.heatingCoolingAmountProperty.get() < 0 && calculatedTemperature > temperatureSetPoint ||
@@ -980,9 +980,9 @@ define( require => {
         // A particle was injected this step.  By design, only one can be injected in a single step, so we use the
         // attributes of the most recently added particle to figure out how much the temperature set point should be
         // adjusted. No thermostat is run on this step - it will kick in on the next step.
-        var numParticles = this.moleculeDataSet.getNumberOfMolecules();
-        var injectedParticleTemperature = ( 2 / 3 ) * this.moleculeDataSet.getMoleculeKineticEnergy( numParticles - 1 );
-        var newTemperature = temperatureSetPoint * ( numParticles - 1 ) / numParticles +
+        const numParticles = this.moleculeDataSet.getNumberOfMolecules();
+        const injectedParticleTemperature = ( 2 / 3 ) * this.moleculeDataSet.getMoleculeKineticEnergy( numParticles - 1 );
+        const newTemperature = temperatureSetPoint * ( numParticles - 1 ) / numParticles +
                              injectedParticleTemperature / numParticles;
         this.setTemperature( newTemperature );
       }
@@ -1057,7 +1057,7 @@ define( require => {
       // Determine the number of atoms/molecules to create.  This will be a cube (really a square, since it's 2D, but
       // you get the idea) that takes up a fixed amount of the bottom of the container, so the number of molecules that
       // can fit depends on the size of the individual atom.
-      var numberOfAtoms = Math.pow( Util.roundSymmetric( PARTICLE_CONTAINER_WIDTH / ( ( OxygenAtom.RADIUS * 2.1 ) * 3 ) ), 2 );
+      let numberOfAtoms = Math.pow( Util.roundSymmetric( PARTICLE_CONTAINER_WIDTH / ( ( OxygenAtom.RADIUS * 2.1 ) * 3 ) ), 2 );
       if ( numberOfAtoms % 2 !== 0 ) {
         numberOfAtoms--;
       }
@@ -1072,18 +1072,18 @@ define( require => {
       this.isoKineticThermostat = new IsokineticThermostat( this.moleculeDataSet, this.minModelTemperature );
       this.andersenThermostat = new AndersenThermostat( this.moleculeDataSet, this.minModelTemperature );
 
-      var numberOfMolecules = numberOfAtoms / 2;
-      var atomPositionInVector = new Vector2( 0, 0 );
-      var atomPositions = [];
+      const numberOfMolecules = numberOfAtoms / 2;
+      const atomPositionInVector = new Vector2( 0, 0 );
+      const atomPositions = [];
       atomPositions[ 0 ] = atomPositionInVector;
       atomPositions[ 1 ] = atomPositionInVector;
 
       // Create the individual atoms and add them to the data set.
-      for ( var i = 0; i < numberOfMolecules; i++ ) {
+      for ( let i = 0; i < numberOfMolecules; i++ ) {
 
         // Create the molecule.
-        var moleculeCenterOfMassPosition = new Vector2( 0, 0 );
-        var moleculeVelocity = new Vector2( 0, 0 );
+        const moleculeCenterOfMassPosition = new Vector2( 0, 0 );
+        const moleculeVelocity = new Vector2( 0, 0 );
 
         // Add the atom to the data set.
         this.moleculeDataSet.addMolecule( atomPositions, moleculeCenterOfMassPosition, moleculeVelocity, 0, true );
@@ -1112,9 +1112,9 @@ define( require => {
       // Determine the number of atoms/molecules to create.  This will be a cube (really a square, since it's 2D, but
       // you get the idea) that takes up a fixed amount of the bottom of the container, so the number of molecules that
       // can fit depends on the size of the individual atom.
-      var waterMoleculeDiameter = OxygenAtom.RADIUS * 2.1;
-      var moleculesAcrossBottom = Util.roundSymmetric( PARTICLE_CONTAINER_WIDTH / ( waterMoleculeDiameter * 1.2 ) );
-      var numberOfMolecules = Math.pow( moleculesAcrossBottom / 3, 2 );
+      const waterMoleculeDiameter = OxygenAtom.RADIUS * 2.1;
+      const moleculesAcrossBottom = Util.roundSymmetric( PARTICLE_CONTAINER_WIDTH / ( waterMoleculeDiameter * 1.2 ) );
+      const numberOfMolecules = Math.pow( moleculesAcrossBottom / 3, 2 );
 
       // Create the normalized data set for the one-atom-per-molecule case.
       this.moleculeDataSet = new MoleculeForceAndMotionDataSet( 3 );
@@ -1127,16 +1127,16 @@ define( require => {
       this.andersenThermostat = new AndersenThermostat( this.moleculeDataSet, this.minModelTemperature );
 
       // Create the individual atoms and add them to the data set.
-      var atomPositionInVector = new Vector2( 0, 0 );
-      var atomPositions = [];
+      const atomPositionInVector = new Vector2( 0, 0 );
+      const atomPositions = [];
       atomPositions[ 0 ] = atomPositionInVector;
       atomPositions[ 1 ] = atomPositionInVector;
       atomPositions[ 2 ] = atomPositionInVector;
-      for ( var i = 0; i < numberOfMolecules; i++ ) {
+      for ( let i = 0; i < numberOfMolecules; i++ ) {
 
         // Create the molecule.
-        var moleculeCenterOfMassPosition = new Vector2( 0, 0 );
-        var moleculeVelocity = new Vector2( 0, 0 );
+        const moleculeCenterOfMassPosition = new Vector2( 0, 0 );
+        const moleculeVelocity = new Vector2( 0, 0 );
 
         // Add the atom to the data set.
         this.moleculeDataSet.addMolecule( atomPositions, moleculeCenterOfMassPosition, moleculeVelocity, 0, true );
@@ -1189,7 +1189,7 @@ define( require => {
       // Determine the number of atoms/molecules to create.  This will be a cube (really a square, since it's 2D, but
       // you get the idea) that takes up a fixed amount of the bottom of the container, so the number of molecules that
       // can fit depends on the size of the individual.
-      var particleDiameter;
+      let particleDiameter;
       if ( substance === SubstanceType.NEON ) {
         particleDiameter = NeonAtom.RADIUS * 2;
       }
@@ -1207,7 +1207,7 @@ define( require => {
 
       // Initialize the number of atoms assuming that the solid form, when made into a square, will consume about 1/3
       // the width of the container.
-      var numberOfAtoms = Math.pow( Util.roundSymmetric( PARTICLE_CONTAINER_WIDTH / ( ( particleDiameter * 1.05 ) * 3 ) ), 2 );
+      const numberOfAtoms = Math.pow( Util.roundSymmetric( PARTICLE_CONTAINER_WIDTH / ( ( particleDiameter * 1.05 ) * 3 ) ), 2 );
 
       // Create the normalized data set for the one-atom-per-molecule case.
       this.moleculeDataSet = new MoleculeForceAndMotionDataSet( 1 );
@@ -1220,13 +1220,13 @@ define( require => {
       this.andersenThermostat = new AndersenThermostat( this.moleculeDataSet, this.minModelTemperature );
 
       // Create the individual atoms and add them to the data set.
-      var atomPositions = [];
+      const atomPositions = [];
       atomPositions.push( new Vector2( 0, 0 ) );
-      for ( var i = 0; i < numberOfAtoms; i++ ) {
+      for ( let i = 0; i < numberOfAtoms; i++ ) {
 
         // Create the atom.
-        var moleculeCenterOfMassPosition = new Vector2( 0, 0 );
-        var moleculeVelocity = new Vector2( 0, 0 );
+        const moleculeCenterOfMassPosition = new Vector2( 0, 0 );
+        const moleculeVelocity = new Vector2( 0, 0 );
         // Add the atom to the data set.
         this.moleculeDataSet.addMolecule( atomPositions, moleculeCenterOfMassPosition, moleculeVelocity, 0, true );
 
@@ -1258,11 +1258,11 @@ define( require => {
     syncParticlePositions: function() {
       assert && assert( this.moleculeDataSet.numberOfAtoms === this.particles.length,
         'Inconsistent number of normalized versus non-normalized particles' );
-      var positionMultiplier = this.particleDiameter;
-      var atomPositions = this.moleculeDataSet.atomPositions;
+      const positionMultiplier = this.particleDiameter;
+      const atomPositions = this.moleculeDataSet.atomPositions;
 
       // use a C-style loop for optimal performance
-      for ( var i = 0; i < this.particles.length; i++ ) {
+      for ( let i = 0; i < this.particles.length; i++ ) {
         this.particles.get( i ).setPosition(
           atomPositions[ i ].x * positionMultiplier,
           atomPositions[ i ].y * positionMultiplier
@@ -1289,7 +1289,7 @@ define( require => {
      * @private
      */
     mapTemperatureToPhase: function() {
-      var phase;
+      let phase;
       if ( this.temperatureSetPointProperty.get() < SOLID_TEMPERATURE + ( ( LIQUID_TEMPERATURE - SOLID_TEMPERATURE ) / 2 ) ) {
         phase = PhaseStateEnum.SOLID;
       }
@@ -1354,12 +1354,12 @@ define( require => {
       }
 
       // Remove any particles that are outside of the container.  We work with the normalized particles for this.
-      var numParticlesOutsideContainer = 0;
-      var firstOutsideParticleIndex;
+      let numParticlesOutsideContainer = 0;
+      let firstOutsideParticleIndex;
       do {
         for ( firstOutsideParticleIndex = 0; firstOutsideParticleIndex < this.moleculeDataSet.getNumberOfMolecules();
               firstOutsideParticleIndex++ ) {
-          var pos = this.moleculeDataSet.getMoleculeCenterOfMassPositions()[ firstOutsideParticleIndex ];
+          const pos = this.moleculeDataSet.getMoleculeCenterOfMassPositions()[ firstOutsideParticleIndex ];
           if ( pos.x < 0 ||
                pos.x > this.normalizedContainerWidth ||
                pos.y < 0 ||
@@ -1378,7 +1378,7 @@ define( require => {
       // Remove enough of the non-normalized particles so that we have the same number as the normalized.  They don't
       // have to be the same particles since the normalized and non-normalized particles are explicitly synced up
       // during each model step.
-      for ( var i = 0; i < numParticlesOutsideContainer * this.moleculeDataSet.getAtomsPerMolecule(); i++ ) {
+      for ( let i = 0; i < numParticlesOutsideContainer * this.moleculeDataSet.getAtomsPerMolecule(); i++ ) {
         this.particles.pop();
       }
 

@@ -19,13 +19,13 @@ define( require => {
   const WaterAtomPositionUpdater = require( 'STATES_OF_MATTER/common/model/engine/WaterAtomPositionUpdater' );
 
   // constants, mostly parameters used for "hollywooding" of the water crystal
-  var WATER_FULLY_MELTED_TEMPERATURE = 0.3;
-  var WATER_FULLY_MELTED_ELECTROSTATIC_FORCE = 1.0;
-  var WATER_FULLY_FROZEN_TEMPERATURE = 0.22;
-  var WATER_FULLY_FROZEN_ELECTROSTATIC_FORCE = 4.25;
-  var MAX_REPULSIVE_SCALING_FACTOR_FOR_WATER = 5.25;
-  var MAX_ROTATION_RATE = 16; // revolutions per second, empirically determined, see usage below
-  var TEMPERATURE_BELOW_WHICH_GRAVITY_INCREASES = 0.10;
+  const WATER_FULLY_MELTED_TEMPERATURE = 0.3;
+  const WATER_FULLY_MELTED_ELECTROSTATIC_FORCE = 1.0;
+  const WATER_FULLY_FROZEN_TEMPERATURE = 0.22;
+  const WATER_FULLY_FROZEN_ELECTROSTATIC_FORCE = 4.25;
+  const MAX_REPULSIVE_SCALING_FACTOR_FOR_WATER = 5.25;
+  const MAX_ROTATION_RATE = 16; // revolutions per second, empirically determined, see usage below
+  const TEMPERATURE_BELOW_WHICH_GRAVITY_INCREASES = 0.10;
 
   /**
    * @param {MultipleParticleModel}  multipleParticleModel of the simulation
@@ -55,8 +55,8 @@ define( require => {
      * @protected
      */
     initializeForces: function( moleculeDataSet ) {
-      var temperatureSetPoint = this.multipleParticleModel.temperatureSetPointProperty.get();
-      var accelerationDueToGravity = this.multipleParticleModel.gravitationalAcceleration;
+      const temperatureSetPoint = this.multipleParticleModel.temperatureSetPointProperty.get();
+      let accelerationDueToGravity = this.multipleParticleModel.gravitationalAcceleration;
       if ( temperatureSetPoint < TEMPERATURE_BELOW_WHICH_GRAVITY_INCREASES ) {
 
         // Below a certain temperature, gravity is increased to counteract some odd-looking behavior caused by the
@@ -64,9 +64,9 @@ define( require => {
         accelerationDueToGravity = accelerationDueToGravity *
                                    ( 1 + ( TEMPERATURE_BELOW_WHICH_GRAVITY_INCREASES - temperatureSetPoint ) * 0.32 );
       }
-      var nextMoleculeForces = moleculeDataSet.nextMoleculeForces;
-      var nextMoleculeTorques = moleculeDataSet.nextMoleculeTorques;
-      for ( var i = 0; i < moleculeDataSet.getNumberOfMolecules(); i++ ) {
+      const nextMoleculeForces = moleculeDataSet.nextMoleculeForces;
+      const nextMoleculeTorques = moleculeDataSet.nextMoleculeTorques;
+      for ( let i = 0; i < moleculeDataSet.getNumberOfMolecules(); i++ ) {
         nextMoleculeForces[ i ].setXY( 0, accelerationDueToGravity );
         nextMoleculeTorques[ i ] = 0;
       }
@@ -79,23 +79,23 @@ define( require => {
      */
     updateInteractionForces: function( moleculeDataSet ) {
 
-      var moleculeCenterOfMassPositions = moleculeDataSet.moleculeCenterOfMassPositions;
-      var atomPositions = moleculeDataSet.atomPositions;
-      var nextMoleculeForces = moleculeDataSet.nextMoleculeForces;
-      var nextMoleculeTorques = moleculeDataSet.nextMoleculeTorques;
-      var temperatureSetPoint = this.multipleParticleModel.temperatureSetPointProperty.get();
+      const moleculeCenterOfMassPositions = moleculeDataSet.moleculeCenterOfMassPositions;
+      const atomPositions = moleculeDataSet.atomPositions;
+      const nextMoleculeForces = moleculeDataSet.nextMoleculeForces;
+      const nextMoleculeTorques = moleculeDataSet.nextMoleculeTorques;
+      const temperatureSetPoint = this.multipleParticleModel.temperatureSetPointProperty.get();
 
       // Verify that this is being used on an appropriate data set.
       assert && assert( moleculeDataSet.getAtomsPerMolecule() === 3 );
 
       // Set up the values for the charges that will be used when calculating the coloumb interactions.
-      var q0;
-      var temperatureFactor;
+      let q0;
+      let temperatureFactor;
 
       // A scaling factor is added here for the repulsive portion of the Lennard-Jones force.  The idea is that the
       // force goes up at lower temperatures in order to make the ice appear more spacious.  This is not real physics,
       // it is "hollywooding" in order to get the crystalline behavior we need for ice.
-      var repulsiveForceScalingFactor;
+      let repulsiveForceScalingFactor;
 
       if ( temperatureSetPoint < WATER_FULLY_FROZEN_TEMPERATURE ) {
 
@@ -130,12 +130,12 @@ define( require => {
       this.alteredCharges[ 2 ] = 0.33 * q0;
 
       // Calculate the force and torque due to inter-particle interactions.
-      var numberOfMolecules = moleculeDataSet.getNumberOfMolecules();
-      for ( var i = 0; i < numberOfMolecules; i++ ) {
-        var moleculeCenterOfMassPosition1 = moleculeCenterOfMassPositions[ i ];
-        var m1x = moleculeCenterOfMassPosition1.x;
-        var m1y = moleculeCenterOfMassPosition1.y;
-        var nextMoleculeForceI = nextMoleculeForces[ i ];
+      const numberOfMolecules = moleculeDataSet.getNumberOfMolecules();
+      for ( let i = 0; i < numberOfMolecules; i++ ) {
+        const moleculeCenterOfMassPosition1 = moleculeCenterOfMassPositions[ i ];
+        const m1x = moleculeCenterOfMassPosition1.x;
+        const m1y = moleculeCenterOfMassPosition1.y;
+        const nextMoleculeForceI = nextMoleculeForces[ i ];
 
         // Select which charges to use for this molecule.  This is part of the "hollywooding" to make the solid form
         // appear more crystalline.
@@ -147,16 +147,16 @@ define( require => {
           chargesA = this.alteredCharges;
         }
 
-        for ( var j = i + 1; j < numberOfMolecules; j++ ) {
-          var moleculeCenterOfMassPosition2 = moleculeCenterOfMassPositions[ j ];
-          var m2x = moleculeCenterOfMassPosition2.x;
-          var m2y = moleculeCenterOfMassPosition2.y;
-          var nextMoleculeForceJ = nextMoleculeForces[ j ];
+        for ( let j = i + 1; j < numberOfMolecules; j++ ) {
+          const moleculeCenterOfMassPosition2 = moleculeCenterOfMassPositions[ j ];
+          const m2x = moleculeCenterOfMassPosition2.x;
+          const m2y = moleculeCenterOfMassPosition2.y;
+          const nextMoleculeForceJ = nextMoleculeForces[ j ];
 
           // Calculate Lennard-Jones potential between mass centers.
-          var dx = m1x - m2x;
-          var dy = m1y - m2y;
-          var distanceSquared = Math.max( dx * dx + dy * dy, this.MIN_DISTANCE_SQUARED );
+          let dx = m1x - m2x;
+          let dy = m1y - m2y;
+          let distanceSquared = Math.max( dx * dx + dy * dy, this.MIN_DISTANCE_SQUARED );
           if ( distanceSquared < this.PARTICLE_INTERACTION_DISTANCE_THRESH_SQRD ) {
             // Select charges for the other molecule.
             var chargesB;
@@ -168,19 +168,19 @@ define( require => {
             }
 
             // Calculate the Lennard-Jones interaction forces.
-            var r2inv = 1 / distanceSquared;
-            var r6inv = r2inv * r2inv * r2inv;
+            let r2inv = 1 / distanceSquared;
+            const r6inv = r2inv * r2inv * r2inv;
 
-            var forceScalar = 48 * r2inv * r6inv * ( ( r6inv * repulsiveForceScalingFactor ) - 0.5 );
-            var forceX = dx * forceScalar;
-            var forceY = dy * forceScalar;
+            let forceScalar = 48 * r2inv * r6inv * ( ( r6inv * repulsiveForceScalingFactor ) - 0.5 );
+            let forceX = dx * forceScalar;
+            let forceY = dy * forceScalar;
             nextMoleculeForceI.addXY( forceX, forceY );
             nextMoleculeForceJ.subtractXY( forceX, forceY );
             this.potentialEnergy += 4 * r6inv * ( r6inv - 1 ) + 0.016316891136;
 
             // Calculate coulomb-like interactions between atoms on individual water molecules.
-            for ( var ii = 0; ii < 3; ii++ ) {
-              var atomIndex1 = 3 * i + ii;
+            for ( let ii = 0; ii < 3; ii++ ) {
+              const atomIndex1 = 3 * i + ii;
               if ( ( atomIndex1 + 1 ) % 6 === 0 ) {
 
                 // This is a hydrogen atom that is not going to be included in the calculation in order to try to
@@ -189,13 +189,13 @@ define( require => {
                 continue;
               }
 
-              var chargeAii = chargesA[ ii ];
-              var atomPosition1 = atomPositions[ atomIndex1 ];
-              var a1x = atomPosition1.x;
-              var a1y = atomPosition1.y;
+              const chargeAii = chargesA[ ii ];
+              const atomPosition1 = atomPositions[ atomIndex1 ];
+              const a1x = atomPosition1.x;
+              const a1y = atomPosition1.y;
 
-              for ( var jj = 0; jj < 3; jj++ ) {
-                var atomIndex2 = 3 * j + jj;
+              for ( let jj = 0; jj < 3; jj++ ) {
+                const atomIndex2 = 3 * j + jj;
                 if ( ( atomIndex2 + 1 ) % 6 === 0 ) {
 
                   // This is a hydrogen atom that is not going to be included in the calculation in order to try to
@@ -204,9 +204,9 @@ define( require => {
                   continue;
                 }
 
-                var atomPosition2 = atomPositions[ atomIndex2 ];
-                var a2x = atomPosition2.x;
-                var a2y = atomPosition2.y;
+                const atomPosition2 = atomPositions[ atomIndex2 ];
+                const a2x = atomPosition2.x;
+                const a2y = atomPosition2.y;
 
                 dx = atomPosition1.x - atomPosition2.x;
                 dy = atomPosition1.y - atomPosition2.y;
@@ -234,27 +234,27 @@ define( require => {
      */
     updateVelocitiesAndRotationRates: function( moleculeDataSet, timeStep ) {
 
-      var numberOfMolecules = moleculeDataSet.getNumberOfMolecules();
-      var moleculeVelocities = moleculeDataSet.moleculeVelocities;
-      var moleculeForces = moleculeDataSet.moleculeForces;
-      var nextMoleculeForces = moleculeDataSet.nextMoleculeForces;
-      var moleculeRotationRates = moleculeDataSet.moleculeRotationRates;
-      var moleculeTorques = moleculeDataSet.moleculeTorques;
-      var nextMoleculeTorques = moleculeDataSet.nextMoleculeTorques;
-      var moleculeMass = moleculeDataSet.getMoleculeMass();
-      var moleculeRotationalInertia = moleculeDataSet.getMoleculeRotationalInertia();
+      const numberOfMolecules = moleculeDataSet.getNumberOfMolecules();
+      const moleculeVelocities = moleculeDataSet.moleculeVelocities;
+      const moleculeForces = moleculeDataSet.moleculeForces;
+      const nextMoleculeForces = moleculeDataSet.nextMoleculeForces;
+      const moleculeRotationRates = moleculeDataSet.moleculeRotationRates;
+      const moleculeTorques = moleculeDataSet.moleculeTorques;
+      const nextMoleculeTorques = moleculeDataSet.nextMoleculeTorques;
+      const moleculeMass = moleculeDataSet.getMoleculeMass();
+      const moleculeRotationalInertia = moleculeDataSet.getMoleculeRotationalInertia();
 
-      var timeStepHalf = timeStep / 2;
+      const timeStepHalf = timeStep / 2;
 
       // Update the velocities and rotation rates based on the forces being exerted on the molecules, then calculate
       // the kinetic energy of the system.
-      var translationalKineticEnergy = 0;
-      var rotationalKineticEnergy = 0;
-      for ( var i = 0; i < numberOfMolecules; i++ ) {
-        var xVel = moleculeVelocities[ i ].x + timeStepHalf * ( moleculeForces[ i ].x + nextMoleculeForces[ i ].x ) * this.massInverse;
-        var yVel = moleculeVelocities[ i ].y + timeStepHalf * ( moleculeForces[ i ].y + nextMoleculeForces[ i ].y ) * this.massInverse;
+      let translationalKineticEnergy = 0;
+      let rotationalKineticEnergy = 0;
+      for ( let i = 0; i < numberOfMolecules; i++ ) {
+        const xVel = moleculeVelocities[ i ].x + timeStepHalf * ( moleculeForces[ i ].x + nextMoleculeForces[ i ].x ) * this.massInverse;
+        const yVel = moleculeVelocities[ i ].y + timeStepHalf * ( moleculeForces[ i ].y + nextMoleculeForces[ i ].y ) * this.massInverse;
         moleculeVelocities[ i ].setXY( xVel, yVel );
-        var rotationRate = moleculeRotationRates[ i ] +
+        let rotationRate = moleculeRotationRates[ i ] +
                            timeStepHalf * ( moleculeTorques[ i ] + nextMoleculeTorques[ i ] ) * this.inertiaInverse;
 
         // If needed, clamp the rotation rate to an empirically determined max to prevent runaway rotation, see

@@ -56,9 +56,9 @@ define( require => {
      * @protected
      */
     initializeForces: function( moleculeDataSet ) {
-      var accelerationDueToGravity = this.multipleParticleModel.gravitationalAcceleration;
-      var nextAtomForces = moleculeDataSet.nextMoleculeForces;
-      for ( var i = 0; i < moleculeDataSet.getNumberOfMolecules(); i++ ) {
+      const accelerationDueToGravity = this.multipleParticleModel.gravitationalAcceleration;
+      const nextAtomForces = moleculeDataSet.nextMoleculeForces;
+      for ( let i = 0; i < moleculeDataSet.getNumberOfMolecules(); i++ ) {
         nextAtomForces[ i ].setXY( 0, accelerationDueToGravity );
       }
     },
@@ -69,21 +69,21 @@ define( require => {
      */
     updateInteractionForces: function( moleculeDataSet ) {
 
-      var numberOfAtoms = moleculeDataSet.numberOfMolecules;
-      var atomCenterOfMassPositions = moleculeDataSet.moleculeCenterOfMassPositions;
-      var nextAtomForces = moleculeDataSet.nextMoleculeForces;
+      const numberOfAtoms = moleculeDataSet.numberOfMolecules;
+      const atomCenterOfMassPositions = moleculeDataSet.moleculeCenterOfMassPositions;
+      const nextAtomForces = moleculeDataSet.nextMoleculeForces;
 
-      for ( var i = 0; i < numberOfAtoms; i++ ) {
+      for ( let i = 0; i < numberOfAtoms; i++ ) {
 
-        var atomCenterOfMassPositionsIX = atomCenterOfMassPositions[ i ].x;
-        var atomCenterOfMassPositionsIY = atomCenterOfMassPositions[ i ].y;
-        var nextAtomForcesI = nextAtomForces[ i ];
+        const atomCenterOfMassPositionsIX = atomCenterOfMassPositions[ i ].x;
+        const atomCenterOfMassPositionsIY = atomCenterOfMassPositions[ i ].y;
+        const nextAtomForcesI = nextAtomForces[ i ];
 
-        for ( var j = i + 1; j < numberOfAtoms; j++ ) {
+        for ( let j = i + 1; j < numberOfAtoms; j++ ) {
 
-          var dx = atomCenterOfMassPositionsIX - atomCenterOfMassPositions[ j ].x;
-          var dy = atomCenterOfMassPositionsIY - atomCenterOfMassPositions[ j ].y;
-          var distanceSqrd = Math.max( dx * dx + dy * dy, this.MIN_DISTANCE_SQUARED );
+          let dx = atomCenterOfMassPositionsIX - atomCenterOfMassPositions[ j ].x;
+          let dy = atomCenterOfMassPositionsIY - atomCenterOfMassPositions[ j ].y;
+          let distanceSqrd = Math.max( dx * dx + dy * dy, this.MIN_DISTANCE_SQUARED );
 
           if ( distanceSqrd === 0 ) {
             // Handle the special case where the particles are right on top of each other by assigning an arbitrary
@@ -95,11 +95,11 @@ define( require => {
 
           if ( distanceSqrd < this.PARTICLE_INTERACTION_DISTANCE_THRESH_SQRD ) {
             // This pair of particles is close enough to one another that we need to calculate their interaction forces.
-            var r2inv = 1 / distanceSqrd;
-            var r6inv = r2inv * r2inv * r2inv;
-            var forceScalar = 48 * r2inv * r6inv * ( r6inv - 0.5 ) * this.epsilon;
-            var forceX = dx * forceScalar;
-            var forceY = dy * forceScalar;
+            const r2inv = 1 / distanceSqrd;
+            const r6inv = r2inv * r2inv * r2inv;
+            const forceScalar = 48 * r2inv * r6inv * ( r6inv - 0.5 ) * this.epsilon;
+            const forceX = dx * forceScalar;
+            const forceY = dy * forceScalar;
             nextAtomForcesI.addXY( forceX, forceY );
             nextAtomForces[ j ].subtractXY( forceX, forceY );
           }
@@ -114,19 +114,19 @@ define( require => {
      */
     updateVelocitiesAndRotationRates: function( moleculeDataSet, timeStep ) {
 
-      var atomVelocity;
-      var numberOfAtoms = moleculeDataSet.numberOfAtoms;
-      var atomVelocities = moleculeDataSet.moleculeVelocities;
-      var atomForces = moleculeDataSet.moleculeForces;
-      var nextAtomForces = moleculeDataSet.nextMoleculeForces;
-      var timeStepHalf = timeStep / 2;
-      var totalKineticEnergy = 0;
-      var velocityVector = this.velocityVector;
+      let atomVelocity;
+      const numberOfAtoms = moleculeDataSet.numberOfAtoms;
+      const atomVelocities = moleculeDataSet.moleculeVelocities;
+      const atomForces = moleculeDataSet.moleculeForces;
+      const nextAtomForces = moleculeDataSet.nextMoleculeForces;
+      const timeStepHalf = timeStep / 2;
+      let totalKineticEnergy = 0;
+      let velocityVector = this.velocityVector;
 
       // Update the atom velocities based upon the forces that are acting on them, then calculate the kinetic energy.
-      for ( var i = 0; i < numberOfAtoms; i++ ) {
+      for ( let i = 0; i < numberOfAtoms; i++ ) {
         atomVelocity = atomVelocities[ i ];
-        var moleculeForce = atomForces[ i ];
+        const moleculeForce = atomForces[ i ];
         velocityVector = velocityVector.setXY(
           atomVelocity.x + timeStepHalf * ( moleculeForce.x + nextAtomForces[ i ].x ),
           atomVelocity.y + timeStepHalf * ( moleculeForce.y + nextAtomForces[ i ].y )

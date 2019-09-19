@@ -23,18 +23,18 @@ define( require => {
   const Vector2 = require( 'DOT/Vector2' );
 
   // constants
-  var DEFAULT_ATOM_TYPE = AtomType.NEON;
+  const DEFAULT_ATOM_TYPE = AtomType.NEON;
 
   // The maximum time step was empirically determined to be as large as possible while still making sure that energy
   // is conserved in all interaction cases.  See https://github.com/phetsims/states-of-matter/issues/53 for more info.
-  var MAX_TIME_STEP = 0.005; // in seconds
+  const MAX_TIME_STEP = 0.005; // in seconds
 
   /**
    * @constructor
    */
   function DualAtomModel() {
 
-    var self = this;
+    const self = this;
 
     //-----------------------------------------------------------------------------------------------------------------
     // observable model properties
@@ -367,7 +367,7 @@ define( require => {
 
         // Using real world time for this results in the atoms moving a little slowly, so the time step is adjusted
         // here.  The multipliers were empirically determined.
-        var adjustedTimeStep;
+        let adjustedTimeStep;
         switch( this.simSpeedProperty.get() ) {
           case 'normal':
             adjustedTimeStep = simulationTimeStep * 2;
@@ -389,8 +389,8 @@ define( require => {
      */
     stepInternal: function( dt ) {
 
-      var numInternalModelIterations = 1;
-      var modelTimeStep = dt;
+      let numInternalModelIterations = 1;
+      let modelTimeStep = dt;
 
       // if the time step is bigger than the max allowed, set up multiple iterations of the model
       if ( dt > MAX_TIME_STEP ) {
@@ -406,7 +406,7 @@ define( require => {
       }
 
       // Update the forces and motion of the atoms.
-      for ( var i = 0; i < numInternalModelIterations; i++ ) {
+      for ( let i = 0; i < numInternalModelIterations; i++ ) {
 
         // Execute the force calculation.
         this.updateForces();
@@ -432,7 +432,7 @@ define( require => {
      */
     updateForces: function() {
 
-      var distance = this.movableAtom.getPositionReference().distance( Vector2.ZERO );
+      let distance = this.movableAtom.getPositionReference().distance( Vector2.ZERO );
 
       if ( distance < ( this.fixedAtom.getRadius() + this.movableAtom.getRadius() ) / 8 ) {
 
@@ -452,8 +452,8 @@ define( require => {
      */
     updateAtomMotion: function( dt ) {
 
-      var mass = this.movableAtom.getMass() * 1.6605402E-27;  // Convert mass to kilograms.
-      var acceleration = ( this.repulsiveForce - this.attractiveForce ) / mass;
+      const mass = this.movableAtom.getMass() * 1.6605402E-27;  // Convert mass to kilograms.
+      const acceleration = ( this.repulsiveForce - this.attractiveForce ) / mass;
 
       // Update the acceleration for the movable atom.  We do this regardless of whether movement is paused so that
       // the force vectors can be shown appropriately if the user moves the atoms.
@@ -462,11 +462,11 @@ define( require => {
       if ( !this.motionPausedProperty.get() ) {
 
         // Calculate tne new velocity.
-        var newVelocity = this.movableAtom.getVx() + ( acceleration * dt );
+        const newVelocity = this.movableAtom.getVx() + ( acceleration * dt );
 
         // Update the position and velocity of the atom.
         this.movableAtom.setVx( newVelocity );
-        var xPos = this.movableAtom.getX() + ( this.movableAtom.getVx() * dt );
+        const xPos = this.movableAtom.getX() + ( this.movableAtom.getVx() * dt );
         this.movableAtom.setPosition( xPos, 0 );
       }
     }

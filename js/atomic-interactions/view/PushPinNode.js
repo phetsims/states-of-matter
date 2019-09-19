@@ -23,7 +23,7 @@ define( require => {
   function PushPinNode() {
     Node.call( this );
     this.setPickable( false );
-    var imageNode = new Image( pushPinImg );
+    const imageNode = new Image( pushPinImg );
     this.addChild( imageNode, { scale: 0.3 } ); // scale empirically determined
   }
 

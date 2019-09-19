@@ -12,7 +12,7 @@ define( require => {
   const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   // static object (no constructor)
-  var MonatomicAtomPositionUpdater = {
+  const MonatomicAtomPositionUpdater = {
 
     /**
      * @param {MoleculeForceAndMotionDataSet} moleculeDataSet
@@ -24,11 +24,11 @@ define( require => {
       assert && assert( moleculeDataSet.atomsPerMolecule === 1 );
 
       // Get direct references to the data in the data set.
-      var atomPositions = moleculeDataSet.atomPositions;
-      var moleculeCenterOfMassPositions = moleculeDataSet.moleculeCenterOfMassPositions;
+      const atomPositions = moleculeDataSet.atomPositions;
+      const moleculeCenterOfMassPositions = moleculeDataSet.moleculeCenterOfMassPositions;
 
       // Position the atoms to match the position of the molecules.
-      for ( var i = 0; i < moleculeDataSet.getNumberOfMolecules(); i++ ) {
+      for ( let i = 0; i < moleculeDataSet.getNumberOfMolecules(); i++ ) {
           atomPositions[ i ] = moleculeCenterOfMassPositions[ i ];
       }
     }

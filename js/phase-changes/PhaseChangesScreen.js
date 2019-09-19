@@ -28,7 +28,7 @@ define( require => {
    */
   function PhaseChangesScreen( isInteractionDiagramEnabled ) {
 
-    var options = {
+    const options = {
       name: phaseChangesString,
       backgroundColorProperty: SOMColorProfile.backgroundProperty,
       homeScreenIcon: new PhaseChangesIcon( Screen.MINIMUM_HOME_SCREEN_ICON_SIZE ),

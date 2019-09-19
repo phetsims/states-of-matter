@@ -19,32 +19,32 @@ define( require => {
     const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
     // constants
-    var PARTICLE_COLOR = SOMConstants.NEON_COLOR;
-    var CUBE_WIDTH = 5; // particles
-    var CUBE_HEIGHT = 5; // particles
+    const PARTICLE_COLOR = SOMConstants.NEON_COLOR;
+    const CUBE_WIDTH = 5; // particles
+    const CUBE_HEIGHT = 5; // particles
 
     /**
      * {Dimension2} size
      * @constructor
      */
     function PhaseChangesIcon( size ) {
-      var self = this;
+      const self = this;
       Node.call( this );
 
       // background
-      var backgroundRect = new Rectangle( 0, 0, size.width, size.height, 0, 0, {
+      const backgroundRect = new Rectangle( 0, 0, size.width, size.height, 0, 0, {
         fill: 'black'
       } );
       this.addChild( backgroundRect );
 
-      var particleRadius = size.width * 0.02;
+      const particleRadius = size.width * 0.02;
 
       // create a node that will contain all particles and the arrow so that it can be turned into an image at the end
-      var particlesAndArrowNode = new Node();
+      const particlesAndArrowNode = new Node();
 
       // particles on left side in solid form
-      var cubeStartX = size.width * 0.15;
-      var cubeStartY = size.height * 0.35;
+      const cubeStartX = size.width * 0.15;
+      const cubeStartY = size.height * 0.35;
       _.times( CUBE_HEIGHT, function( row ) {
         _.times( CUBE_WIDTH, function( column ) {
           particlesAndArrowNode.addChild( new Circle( particleRadius, {
@@ -56,7 +56,7 @@ define( require => {
       } );
 
       // arrow in center, the multipliers are empirically determined
-      var arrow = new ArrowNode( 0, 0, size.width * 0.12, 0, {
+      const arrow = new ArrowNode( 0, 0, size.width * 0.12, 0, {
           headWidth: size.height * 0.12,
           tailWidth: size.height * 0.05,
           headHeight: size.width * 0.05,
@@ -68,8 +68,8 @@ define( require => {
       particlesAndArrowNode.addChild( arrow );
 
       // particles on right side in gaseous form
-      var gasCloudNode = new Node();
-      var gasCloudRadius = size.height * 0.3;
+      const gasCloudNode = new Node();
+      const gasCloudRadius = size.height * 0.3;
 
       function createGasParticle( angle, radius ) {
         return new Circle( particleRadius, {

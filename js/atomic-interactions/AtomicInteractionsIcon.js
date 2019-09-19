@@ -19,7 +19,7 @@ define( require => {
     const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
     // constants
-    var PARTICLE_COLOR = new Color( SOMConstants.ADJUSTABLE_ATTRACTION_COLOR );
+    const PARTICLE_COLOR = new Color( SOMConstants.ADJUSTABLE_ATTRACTION_COLOR );
 
     /**
      * {Dimension2} size
@@ -29,18 +29,18 @@ define( require => {
       Node.call( this );
 
       // background
-      var backgroundRect = new Rectangle( 0, 0, size.width, size.height, 0, 0, {
+      const backgroundRect = new Rectangle( 0, 0, size.width, size.height, 0, 0, {
         fill: 'black'
       } );
       this.addChild( backgroundRect );
 
       // create the two atoms under a parent node
-      var atomRadius = size.width * 0.2;
-      var gradient = new RadialGradient( 0, 0, 0, 0, 0, atomRadius )
+      const atomRadius = size.width * 0.2;
+      const gradient = new RadialGradient( 0, 0, 0, 0, 0, atomRadius )
         .addColorStop( 0, PARTICLE_COLOR )
         .addColorStop( 1, PARTICLE_COLOR.darkerColor( 0.5 ) );
 
-      var atomsNode = new Node();
+      const atomsNode = new Node();
       atomsNode.addChild( new Circle( atomRadius, {
         fill: gradient,
         opacity: 0.85,

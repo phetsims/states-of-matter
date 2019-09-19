@@ -18,9 +18,9 @@ define( require => {
   const Vector2 = require( 'DOT/Vector2' );
 
   // constants
-  var MIN_POST_ZERO_VELOCITY = 0.1; // min velocity when warming up from absolute zero, empirically determined
-  var MIN_X_VEL_WHEN_FALLING = 1.0; // a velocity below which x should not be scaled when falling,  empirically determined
-  var COMPENSATION_FACTOR = 0.9; // an empirically determined factor to help with drift compensation, see usage below
+  const MIN_POST_ZERO_VELOCITY = 0.1; // min velocity when warming up from absolute zero, empirically determined
+  const MIN_X_VEL_WHEN_FALLING = 1.0; // a velocity below which x should not be scaled when falling,  empirically determined
+  const COMPENSATION_FACTOR = 0.9; // an empirically determined factor to help with drift compensation, see usage below
 
   /**
    * Constructor for the Isokinetic thermostat.
@@ -64,11 +64,11 @@ define( require => {
      */
     adjustTemperature: function( measuredTemperature ) {
 
-      var i;
-      var numberOfParticles = this.moleculeDataSet.getNumberOfMolecules();
+      let i;
+      const numberOfParticles = this.moleculeDataSet.getNumberOfMolecules();
 
       // Calculate the scaling factor that will be used to adjust the temperature.
-      var temperatureScaleFactor;
+      let temperatureScaleFactor;
       if ( this.targetTemperature > this.minModelTemperature ) {
         temperatureScaleFactor = Math.sqrt( this.targetTemperature / measuredTemperature );
       }
@@ -89,7 +89,7 @@ define( require => {
         // This is the 'normal' case, where the scale factor is used to adjust the energy of the particles.
         for ( i = 0; i < numberOfParticles; i++ ) {
 
-          var moleculeVelocity = this.moleculeVelocities[ i ];
+          const moleculeVelocity = this.moleculeVelocities[ i ];
           this.previousParticleVelocity.set( moleculeVelocity );
 
           if ( moleculeVelocity.y < 0 ) {
@@ -131,7 +131,7 @@ define( require => {
         // get stuck on the bottom of the container since they have no energy to scale.  Only linear kinetic energy is
         // adjusted here, since it is simpler and seems to work.
         for ( i = 0; i < numberOfParticles; i++ ) {
-          var angle = phet.joist.random.nextDouble() * Math.PI;
+          let angle = phet.joist.random.nextDouble() * Math.PI;
           if ( angle < 0 ) {
             angle += Math.PI;
           }

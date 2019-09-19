@@ -27,7 +27,7 @@ define( require => {
   function GrabbableParticleNode( dualAtomModel, particle, modelViewTransform, enableOverlap, minX ) {
 
     ParticleForceNode.call( this, particle, modelViewTransform, enableOverlap );
-    var self = this;
+    const self = this;
 
     // @private
     this.minX = minX;
@@ -39,11 +39,11 @@ define( require => {
     // Put a cursor handler into place.
     this.cursor = 'pointer';
 
-    var startDragX;
-    var endDragX;
-    var initialStartX = this.x;
+    let startDragX;
+    let endDragX;
+    let initialStartX = this.x;
 
-    var inputListener = new SimpleDragHandler( {
+    const inputListener = new SimpleDragHandler( {
       allowTouchSnag: true,
 
       start: function( event ) {
@@ -57,10 +57,10 @@ define( require => {
       drag: function( event ) {
 
         endDragX = self.globalToParentPoint( event.pointer.point ).x;
-        var d = endDragX - startDragX;
+        const d = endDragX - startDragX;
 
         // Make sure we don't exceed the positional limits.
-        var newPosX = Math.max( initialStartX + d, self.minX );
+        const newPosX = Math.max( initialStartX + d, self.minX );
 
         // Move the particle based on the amount of mouse movement.
         self.particle.setPosition( modelViewTransform.viewToModelX( newPosX ), particle.positionProperty.value.y );

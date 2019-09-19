@@ -31,27 +31,27 @@ define( require => {
   const sigmaString = require( 'string!STATES_OF_MATTER/sigma' );
 
   // Constant that controls the range of data that is graphed.
-  var GRAPH_X_RANGE = 1300; // in picometers
+  const GRAPH_X_RANGE = 1300; // in picometers
 
   // constants that control the appearance of the diagram.
-  var NARROW_VERSION_WIDTH = 135;
-  var WIDE_VERSION_WIDTH = 350;
-  var AXIS_LINE_WIDTH = 2;
-  var AXES_ARROW_HEAD_HEIGHT = 4 * AXIS_LINE_WIDTH;
+  const NARROW_VERSION_WIDTH = 135;
+  const WIDE_VERSION_WIDTH = 350;
+  const AXIS_LINE_WIDTH = 2;
+  const AXES_ARROW_HEAD_HEIGHT = 4 * AXIS_LINE_WIDTH;
 
   // Size of pos marker wrt overall width.
-  var POSITION_MARKER_DIAMETER_PROPORTION = 0.03;
+  const POSITION_MARKER_DIAMETER_PROPORTION = 0.03;
 
   // constants that control the location and size of the graph.
-  var VERT_AXIS_SIZE_PROPORTION = 0.85;
+  const VERT_AXIS_SIZE_PROPORTION = 0.85;
 
   // Font for the labels used on the axes and within the graph.
-  var GREEK_LETTER_FONT_SIZE = 18;
-  var GREEK_LETTER_FONT = new PhetFont( GREEK_LETTER_FONT_SIZE );
-  var GREEK_LETTER_MAX_WIDTH;
+  const GREEK_LETTER_FONT_SIZE = 18;
+  let GREEK_LETTER_FONT = new PhetFont( GREEK_LETTER_FONT_SIZE );
+  let GREEK_LETTER_MAX_WIDTH;
 
   // zoom buttons height
-  var zoomButtonsHeight = 72;
+  const zoomButtonsHeight = 72;
 
   /**
    * @param {number} sigma - Initial value of sigma, a.k.a. the atom diameter
@@ -68,7 +68,7 @@ define( require => {
     this.markerDistance = 0;
     this.ljPotentialCalculator = new LjPotentialCalculator( sigma, epsilon );
 
-    var axisLabelFont;
+    let axisLabelFont;
 
     // Set up for the normal or wide version of the graph.
     if ( wide ) {
@@ -148,7 +148,7 @@ define( require => {
     this.ljPotentialGraph.addChild( this.epsilonLineLayer );
 
     // Add the position marker.
-    var markerDiameter = POSITION_MARKER_DIAMETER_PROPORTION * this.graphWidth;
+    const markerDiameter = POSITION_MARKER_DIAMETER_PROPORTION * this.graphWidth;
     this.positionMarker = new PositionMarker( markerDiameter / 2, 'rgb( 117, 217, 255 )' );
     this.positionMarker.setVisible( this.positionMarkerEnabled );
     this.ljPotentialGraph.addChild( this.positionMarker );
@@ -200,7 +200,7 @@ define( require => {
     } );
 
     // restricted vertical  axis label
-    var verticalAxisHeight = wide ? this.verticalAxis.height - zoomButtonsHeight : this.verticalAxis.height;
+    const verticalAxisHeight = wide ? this.verticalAxis.height - zoomButtonsHeight : this.verticalAxis.height;
     if ( this.verticalAxisLabel.width > verticalAxisHeight ) {
       this.verticalAxisLabel.scale( verticalAxisHeight / this.verticalAxisLabel.width );
     }
@@ -305,9 +305,9 @@ define( require => {
      */
     setMarkerPosition: function( distance ) {
       this.markerDistance = distance;
-      var xPos = this.markerDistance * ( this.graphWidth / GRAPH_X_RANGE );
-      var potential = this.calculateLennardJonesPotential( this.markerDistance );
-      var yPos = ( ( this.graphHeight / 2 ) - ( potential * this.verticalScalingFactor ) );
+      const xPos = this.markerDistance * ( this.graphWidth / GRAPH_X_RANGE );
+      const potential = this.calculateLennardJonesPotential( this.markerDistance );
+      const yPos = ( ( this.graphHeight / 2 ) - ( potential * this.verticalScalingFactor ) );
       if ( this.positionMarkerEnabled && xPos > 0 && xPos < this.graphWidth && yPos > 0 && yPos < this.graphHeight ) {
         this.positionMarker.setVisible( true );
         this.positionMarker.setTranslation( xPos, yPos );

@@ -19,8 +19,8 @@ define( require => {
   const Vector2 = require( 'DOT/Vector2' );
 
   // constants
-  var PROPORTION_COMPENSATION_FACTOR = 0.25; // used for drift compensation, value empirically determined
-  var INTEGRAL_COMPENSATION_FACTOR = 0.5; // used for drift compensation, value empirically determined
+  const PROPORTION_COMPENSATION_FACTOR = 0.25; // used for drift compensation, value empirically determined
+  const INTEGRAL_COMPENSATION_FACTOR = 0.5; // used for drift compensation, value empirically determined
 
   /**
    * Constructor for the Andersen thermostat.
@@ -71,8 +71,8 @@ define( require => {
       // reduce the number of calculations done and thus improve performance.  If it's ever needed, separate values
       // could be brought back for X and Y.
 
-      var gamma;
-      var temperature = this.targetTemperature;
+      let gamma;
+      let temperature = this.targetTemperature;
       if ( temperature > this.minModelTemperature ) {
 
         // Use a values that will cause the molecules to stop moving pretty quickly if we are below the minimum
@@ -87,27 +87,27 @@ define( require => {
         temperature = 0;
       }
 
-      var massInverse = 1 / this.moleculeDataSet.moleculeMass;
-      var inertiaInverse = 1 / this.moleculeDataSet.moleculeRotationalInertia;
-      var scalingFactor = temperature * ( 1 - Math.pow( gamma, 2 ) );
-      var velocityScalingFactor = Math.sqrt( massInverse * scalingFactor );
-      var rotationScalingFactor = Math.sqrt( inertiaInverse * scalingFactor );
-      var numMolecules = this.moleculeDataSet.getNumberOfMolecules();
+      const massInverse = 1 / this.moleculeDataSet.moleculeMass;
+      const inertiaInverse = 1 / this.moleculeDataSet.moleculeRotationalInertia;
+      const scalingFactor = temperature * ( 1 - Math.pow( gamma, 2 ) );
+      const velocityScalingFactor = Math.sqrt( massInverse * scalingFactor );
+      const rotationScalingFactor = Math.sqrt( inertiaInverse * scalingFactor );
+      const numMolecules = this.moleculeDataSet.getNumberOfMolecules();
 
       // Calculate a compensation factor for any overall drift that is being added by this thermostat.  Without this,
       // we often see solids drifting to the left or right for no apparent reason.  Compensation is only done in the X
       // direction since the Y direction wasn't visually problematic.  For more information on this, please see
       // https://github.com/phetsims/states-of-matter-basics/issues/15.
-      var xCompensation = -this.totalVelocityChangePreviousStep.x / numMolecules * PROPORTION_COMPENSATION_FACTOR -
+      const xCompensation = -this.totalVelocityChangePreviousStep.x / numMolecules * PROPORTION_COMPENSATION_FACTOR -
                           this.accumulatedAverageVelocityChange.x * INTEGRAL_COMPENSATION_FACTOR;
 
-      for ( var i = 0; i < numMolecules; i++ ) {
-        var moleculeVelocity = this.moleculeVelocities[ i ];
+      for ( let i = 0; i < numMolecules; i++ ) {
+        const moleculeVelocity = this.moleculeVelocities[ i ];
         this.previousParticleVelocity.set( moleculeVelocity );
 
         // Calculate the new x and y velocity for this particle.
-        var xVel = moleculeVelocity.x * gamma + this.random.nextGaussian() * velocityScalingFactor + xCompensation;
-        var yVel = moleculeVelocity.y * gamma + this.random.nextGaussian() * velocityScalingFactor;
+        const xVel = moleculeVelocity.x * gamma + this.random.nextGaussian() * velocityScalingFactor + xCompensation;
+        const yVel = moleculeVelocity.y * gamma + this.random.nextGaussian() * velocityScalingFactor;
         moleculeVelocity.setXY( xVel, yVel );
         this.moleculeRotationRates[ i ] = gamma * this.moleculeRotationRates[ i ] +
                                           this.random.nextGaussian() * rotationScalingFactor;

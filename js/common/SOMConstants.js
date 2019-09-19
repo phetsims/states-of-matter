@@ -16,10 +16,10 @@ define( require => {
   const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   // constants (these are vars because other constants refer to them)
-  var SOLID_TEMPERATURE = 0.15;
-  var NEON_ATOM_EPSILON = 32.8; // epsilon/k-Boltzmann is in Kelvin.
+  const SOLID_TEMPERATURE = 0.15;
+  const NEON_ATOM_EPSILON = 32.8; // epsilon/k-Boltzmann is in Kelvin.
 
-  var SOMConstants  = {
+  const SOMConstants  = {
 
     MAX_DT: 0.320, // seconds, max time step (delta time), this is 20x the nominal step 0f 16ms
 

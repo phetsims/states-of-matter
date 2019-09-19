@@ -20,7 +20,7 @@ define( require => {
   const interactionString = require( 'string!STATES_OF_MATTER/interaction' );
   const statesOfMatterTitleString = require( 'string!STATES_OF_MATTER/states-of-matter.title' );
 
-  var simOptions = {
+  const simOptions = {
     credits: {
       leadDesign: 'Paul Beale, Yuen-ying Carpenter, Sarah McKagan, Emily B. Moore, Noah Podolefsky,<br>Amy Rouinfar',
       softwareDevelopment: 'John Blanco, Aaron Davis, Aadish Gupta',
@@ -35,7 +35,7 @@ define( require => {
   };
 
   SimLauncher.launch( function() {
-    var sim = new Sim( statesOfMatterTitleString, [
+    const sim = new Sim( statesOfMatterTitleString, [
       new StatesScreen( ),
       new PhaseChangesScreen( true ),
       new AtomicInteractionsScreen( false, interactionString )

@@ -9,7 +9,7 @@ define( require => {
 
   const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
-  var AtomPair = {
+  const AtomPair = {
     NEON_NEON: 'NEON_NEON',
     ARGON_ARGON: 'ARGON_ARGON',
     OXYGEN_OXYGEN: 'OXYGEN_OXYGEN',

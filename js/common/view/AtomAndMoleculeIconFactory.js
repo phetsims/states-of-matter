@@ -16,10 +16,10 @@ define( require => {
   const SubstanceType = require( 'STATES_OF_MATTER/common/SubstanceType' );
 
   // define the object where all of the icons will be available
-  var AtomAndMoleculeIconFactory = {
+  const AtomAndMoleculeIconFactory = {
 
     createIcon: function( type ) {
-      var icon;
+      let icon;
       switch( type ) {
 
         case SubstanceType.NEON:

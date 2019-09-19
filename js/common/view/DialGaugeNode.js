@@ -32,12 +32,12 @@ define( require => {
   const pressureUnitsInAtmString = require( 'string!STATES_OF_MATTER/pressureUnitsInAtm' );
 
   // constants
-  var CONNECTOR_LENGTH_PROPORTION = 1; // Length of non-elbowed connector wrt overall diameter.
-  var CONNECTOR_WIDTH_PROPORTION = 0.2; // Width of connector wrt overall diameter.
-  var MAX_PRESSURE = 200; // in atm units
-  var ELBOW_WIDTH = ( CONNECTOR_WIDTH_PROPORTION * 30 );
-  var ELBOW_LENGTH = ( CONNECTOR_LENGTH_PROPORTION * 60 );
-  var PRESSURE_UPDATE_PERIOD = 100; // in milliseconds
+  const CONNECTOR_LENGTH_PROPORTION = 1; // Length of non-elbowed connector wrt overall diameter.
+  const CONNECTOR_WIDTH_PROPORTION = 0.2; // Width of connector wrt overall diameter.
+  const MAX_PRESSURE = 200; // in atm units
+  const ELBOW_WIDTH = ( CONNECTOR_WIDTH_PROPORTION * 30 );
+  const ELBOW_LENGTH = ( CONNECTOR_LENGTH_PROPORTION * 60 );
+  const PRESSURE_UPDATE_PERIOD = 100; // in milliseconds
 
   /**
    * @param {MultipleParticleModel} multipleParticleModel - model of the simulation
@@ -48,7 +48,7 @@ define( require => {
     Node.call( this );
     this.elbowHeight = 0; // @private, set through accessor methods
 
-    var gaugeNode = new GaugeNode(
+    const gaugeNode = new GaugeNode(
       multipleParticleModel.pressureProperty,
       pressureString,
       new Range( 0, MAX_PRESSURE ),
@@ -56,14 +56,14 @@ define( require => {
     );
 
     // Add the textual readout display.
-    var textualReadoutBackground = new Rectangle( 0, 0, 80, 15, 2, 2, {
+    const textualReadoutBackground = new Rectangle( 0, 0, 80, 15, 2, 2, {
       fill: 'white',
       stroke: 'black',
       centerX: gaugeNode.centerX,
       top: gaugeNode.bottom - 15
     } );
 
-    var textualReadout = new Text( '', {
+    const textualReadout = new Text( '', {
       font: new PhetFont( 12 ),
       fill: 'black',
       maxWidth: textualReadoutBackground.width * 0.9,
@@ -74,8 +74,8 @@ define( require => {
     // include the stroke width effects (where it had a default lineCap of butt). We have a part that doesn't change
     // shape (the connector) which includes the left part and the curve, and then an overlapping dynamic rectangle
     // (the connectorExtension) whose height is adjusted to be the elbowHeight. This reduces the overhead significantly.
-    var halfStroke = 5;
-    var connector = new Path(
+    const halfStroke = 5;
+    const connector = new Path(
       new Shape().moveTo( 0, -halfStroke )
         .lineTo( ELBOW_LENGTH + ELBOW_WIDTH / 2, -halfStroke )
         .quadraticCurveTo( ELBOW_LENGTH + ELBOW_WIDTH + halfStroke, -halfStroke, ELBOW_LENGTH + ELBOW_WIDTH + halfStroke, ELBOW_WIDTH / 2 )
@@ -89,7 +89,7 @@ define( require => {
     } );
     connector.addChild( this.connectorExtension );
 
-    var connectorCollar = new Rectangle( 0, 0, 30, 25, 2, 2, {
+    const connectorCollar = new Rectangle( 0, 0, 30, 25, 2, 2, {
       fill: new LinearGradient( 0, 0, 0, 25 )
         .addColorStop( 0, 'rgb( 120, 120, 120 )' )
         .addColorStop( 0.3, 'rgb( 220, 220, 220 )' )
@@ -99,16 +99,16 @@ define( require => {
 
     connectorCollar.centerY = gaugeNode.centerY;
     connectorCollar.left = gaugeNode.right - 10;
-    var dialComponentsNode = new Node( {
+    const dialComponentsNode = new Node( {
         children: [ connector, connectorCollar, gaugeNode, textualReadoutBackground, textualReadout ]
       }
     );
 
     // Update the pressure readout at regular intervals.  This was done rather than listening to the pressure property
     // because the readout changes too quickly in that case.
-    var previousPressure = -1;
+    let previousPressure = -1;
     timer.setInterval( function() {
-      var pressure = multipleParticleModel.pressureProperty.get();
+      const pressure = multipleParticleModel.pressureProperty.get();
       if ( pressure !== previousPressure ) {
         if ( pressure < MAX_PRESSURE ) {
           textualReadout.setText( Util.toFixed( pressure, 1 ) + ' ' + pressureUnitsInAtmString );

@@ -31,9 +31,9 @@ define( require => {
   const Vector2 = require( 'DOT/Vector2' );
 
   // constants
-  var CONTROL_PANEL_X_INSET = 15;
-  var CONTROL_PANEL_Y_INSET = 10;
-  var CONTROL_PANEL_WIDTH = 175; // empirically determined by looks
+  const CONTROL_PANEL_X_INSET = 15;
+  const CONTROL_PANEL_Y_INSET = 10;
+  const CONTROL_PANEL_WIDTH = 175; // empirically determined by looks
 
   /**
    * @param {MultipleParticleModel} multipleParticleModel - model of the simulation
@@ -41,20 +41,20 @@ define( require => {
    */
   function StatesScreenView( multipleParticleModel ) {
 
-    var self = this;
+    const self = this;
     ScreenView.call( this, SOMConstants.SCREEN_VIEW_OPTIONS );
 
     // Create the model-view transform. The multipliers for the 2nd parameter can be used to adjust where the point
     // (0, 0) in the model, which is the lower left corner of the particle container, appears in the view.The final
     // parameter is the scale, and can be changed to make the view more zoomed in or out.
-    var modelViewTransform = ModelViewTransform2.createSinglePointScaleInvertedYMapping(
+    const modelViewTransform = ModelViewTransform2.createSinglePointScaleInvertedYMapping(
       new Vector2( 0, 0 ),
       new Vector2( this.layoutBounds.width * 0.325, this.layoutBounds.height * 0.75 ),
       SOMConstants.VIEW_CONTAINER_WIDTH / MultipleParticleModel.PARTICLE_CONTAINER_WIDTH
     );
 
     // Figure out where in the view the interior of the particle container will be.
-    var particleContainerViewBounds = new Bounds2(
+    const particleContainerViewBounds = new Bounds2(
       modelViewTransform.modelToViewX( 0 ),
       modelViewTransform.modelToViewY( 0 ) + modelViewTransform.modelToViewDeltaY( multipleParticleModel.getInitialParticleContainerHeight() ),
       modelViewTransform.modelToViewX( 0 ) + modelViewTransform.modelToViewDeltaX( multipleParticleModel.getParticleContainerWidth() ),
@@ -66,7 +66,7 @@ define( require => {
     this.addChild( this.particleContainerNode );
 
     // @private add heater/cooler node
-    var heaterCoolerNode = new HeaterCoolerNode( new NumberProperty( 0, {
+    const heaterCoolerNode = new HeaterCoolerNode( new NumberProperty( 0, {
       range: new Range( -1, 1 ) // +1 for max heating, -1 for max cooling
     } ), {
       scale: 0.79,
@@ -81,7 +81,7 @@ define( require => {
     } );
 
     // the thermometer node should be at the top left of the container
-    var thermometerInitialCenterPosition = new Vector2(
+    const thermometerInitialCenterPosition = new Vector2(
       particleContainerViewBounds.minX + particleContainerViewBounds.width * 0.2,
       modelViewTransform.modelToViewY( multipleParticleModel.particleContainerHeightProperty.value )
     );
@@ -95,7 +95,7 @@ define( require => {
     this.addChild( this.compositeThermometerNode );
 
     // selection panel for the atoms/molecules
-    var atomsAndMoleculesSelectionPanel = new StatesMoleculesControlPanel( multipleParticleModel.substanceProperty, {
+    const atomsAndMoleculesSelectionPanel = new StatesMoleculesControlPanel( multipleParticleModel.substanceProperty, {
       right: this.layoutBounds.right - CONTROL_PANEL_X_INSET,
       top: this.layoutBounds.top + CONTROL_PANEL_Y_INSET,
       minWidth: CONTROL_PANEL_WIDTH,
@@ -104,14 +104,14 @@ define( require => {
     this.addChild( atomsAndMoleculesSelectionPanel );
 
     // phases control node
-    var solidLiquidGasPhaseControlNode = new StatesPhaseControlNode( multipleParticleModel, {
+    const solidLiquidGasPhaseControlNode = new StatesPhaseControlNode( multipleParticleModel, {
       right: atomsAndMoleculesSelectionPanel.right,
       top: atomsAndMoleculesSelectionPanel.bottom + CONTROL_PANEL_Y_INSET,
       buttonWidth: CONTROL_PANEL_WIDTH
     } );
     this.addChild( solidLiquidGasPhaseControlNode );
 
-    var resetAllButton = new ResetAllButton( {
+    const resetAllButton = new ResetAllButton( {
       listener: function() {
         multipleParticleModel.reset();
         self.compositeThermometerNode.reset();
@@ -135,7 +135,7 @@ define( require => {
       // set or reset any rotation of the thermometer
       if ( multipleParticleModel.isExplodedProperty.get() ) {
 
-        var containerHeightChange = previousContainerHeight - containerHeight;
+        const containerHeightChange = previousContainerHeight - containerHeight;
         self.compositeThermometerNode.rotateAround(
           self.compositeThermometerNode.center,
           containerHeightChange * 0.0001 * Math.PI

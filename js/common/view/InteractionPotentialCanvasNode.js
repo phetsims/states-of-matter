@@ -18,10 +18,10 @@ define( require => {
   const Util = require( 'DOT/Util' );
 
   // constants
-  var AXIS_LINE_WIDTH = 1;
-  var AXES_ARROW_HEAD_HEIGHT = 8 * AXIS_LINE_WIDTH;
-  var SIGMA_HANDLE_OFFSET_PROPORTION = 0.08;  // Position of handle as function of node width.
-  var EPSILON_LINE_WIDTH = 1;
+  const AXIS_LINE_WIDTH = 1;
+  const AXES_ARROW_HEAD_HEIGHT = 8 * AXIS_LINE_WIDTH;
+  const SIGMA_HANDLE_OFFSET_PROPORTION = 0.08;  // Position of handle as function of node width.
+  const EPSILON_LINE_WIDTH = 1;
 
   /**
    * @param {InteractionPotentialDiagramNode} interactionDiagram
@@ -51,9 +51,9 @@ define( require => {
     paintCanvas: function( context ) {
       context.beginPath();
       context.moveTo( 0, 0 );
-      for ( var i = 1; i < this.curveYPositions.length; i++ ) {
+      for ( let i = 1; i < this.curveYPositions.length; i++ ) {
 
-        var yPos = this.curveYPositions[ i ];
+        const yPos = this.curveYPositions[ i ];
 
         if ( ( yPos > 0 ) && ( yPos < this.interactionDiagram.graphHeight ) ) {
 
@@ -86,15 +86,15 @@ define( require => {
       // position the various arrows and labels.
       this.interactionDiagram.graphMin.setXY( 0, 0 );
       this.interactionDiagram.zeroCrossingPoint.setXY( 0, 0 );
-      var sigmaHandleYPos = ( this.interactionDiagram.getGraphHeight() / 2 ) -
+      const sigmaHandleYPos = ( this.interactionDiagram.getGraphHeight() / 2 ) -
                             2 * SIGMA_HANDLE_OFFSET_PROPORTION * this.interactionDiagram.heightOfGraph;
-      var sigmaHandleXPos = 0;
-      var horizontalIndexMultiplier = this.interactionDiagram.GRAPH_X_RANGE / this.interactionDiagram.graphWidth;
-      var previousPotential = Number.POSITIVE_INFINITY;
-      var previousYPos = Number.NEGATIVE_INFINITY;
-      for ( var i = 1; i < this.interactionDiagram.graphWidth; i++ ) {
-        var potential = this.interactionDiagram.calculateLennardJonesPotential( i * horizontalIndexMultiplier );
-        var yPos = ( ( this.interactionDiagram.graphHeight / 2 ) - ( potential * this.interactionDiagram.verticalScalingFactor ) );
+      let sigmaHandleXPos = 0;
+      const horizontalIndexMultiplier = this.interactionDiagram.GRAPH_X_RANGE / this.interactionDiagram.graphWidth;
+      let previousPotential = Number.POSITIVE_INFINITY;
+      let previousYPos = Number.NEGATIVE_INFINITY;
+      for ( let i = 1; i < this.interactionDiagram.graphWidth; i++ ) {
+        const potential = this.interactionDiagram.calculateLennardJonesPotential( i * horizontalIndexMultiplier );
+        const yPos = ( ( this.interactionDiagram.graphHeight / 2 ) - ( potential * this.interactionDiagram.verticalScalingFactor ) );
 
         // Record the data that will be used in the paintCanvas method to render the curve.
         this.curveYPositions[ i ] = yPos;
@@ -124,9 +124,9 @@ define( require => {
       );
       if ( this.interactionDiagram.epsilonArrowStartPt.distance( this.interactionDiagram.graphMin ) > 5 ) {
         this.interactionDiagram.epsilonArrow.setVisible( true );
-        var doubleHead = this.interactionDiagram.graphMin.y <= this.interactionDiagram.graphHeight ||
+        const doubleHead = this.interactionDiagram.graphMin.y <= this.interactionDiagram.graphHeight ||
                          this.interactionDiagram.graphMin.y - 10 < this.interactionDiagram.graphHeight;
-        var tailY = this.interactionDiagram.graphMin.y > this.interactionDiagram.graphHeight ?
+        const tailY = this.interactionDiagram.graphMin.y > this.interactionDiagram.graphHeight ?
                     this.interactionDiagram.graphHeight : this.interactionDiagram.graphMin.y;
         this.interactionDiagram.epsilonArrowShape = new ArrowShape(
           this.interactionDiagram.graphMin.x,
@@ -166,7 +166,7 @@ define( require => {
 
       // Position the control handles if used.
       if ( this.interactionDiagram.epsilonResizeHandle !== undefined ) {
-        var graphMin = this.interactionDiagram.getGraphMin();
+        const graphMin = this.interactionDiagram.getGraphMin();
         this.interactionDiagram.epsilonLine.setTranslation( graphMin.x, graphMin.y + EPSILON_LINE_WIDTH );
         this.interactionDiagram.epsilonResizeHandle.setVisible( this.interactionDiagram.interactionEnabled );
         this.interactionDiagram.epsilonLine.setVisible( this.interactionDiagram.interactionEnabled );

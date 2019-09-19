@@ -23,7 +23,7 @@ define( require => {
   function GlobalOptionsNode() {
 
     // add support for setting projector mode
-    var projectorModeCheckbox = new ProjectorModeCheckbox( SOMColorProfile );
+    const projectorModeCheckbox = new ProjectorModeCheckbox( SOMColorProfile );
 
     // VBox is used to make it easy to add additional options
     VBox.call( this, _.extend( {

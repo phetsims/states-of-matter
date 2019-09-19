@@ -36,7 +36,7 @@ define( require => {
   return inherit( Object, MovingAverage, {
 
     addValue: function( newValue ) {
-      var replacedValue = this.array[ this.currentIndex ];
+      const replacedValue = this.array[ this.currentIndex ];
       this.array[ this.currentIndex ] = newValue;
       this.currentIndex = ( this.currentIndex + 1 ) % this.size;
       this.total = ( this.total - replacedValue ) + newValue;
@@ -44,7 +44,7 @@ define( require => {
     },
 
     reset: function() {
-      for ( var i = 0; i < this.size; i++ ) {
+      for ( let i = 0; i < this.size; i++ ) {
         this.array[ i ] = this.initialValue;
       }
       this.total = this.initialValue * this.size;

@@ -32,7 +32,7 @@ define( require => {
   const waterString = require( 'string!STATES_OF_MATTER/water' );
 
   // constants
-  var DEFAULT_WIDTH = 160;
+  const DEFAULT_WIDTH = 160;
 
   /**
    * @param {Property<number>} substanceProperty that tracks the substance selected in the panel
@@ -53,14 +53,14 @@ define( require => {
     }, options );
 
     Node.call( this );
-    var maxTextWidth = options.maxWidth * 0.75;
-    var textOptions = { font: new PhetFont( 12 ), fill: '#FFFFFF', maxWidth: maxTextWidth };
+    const maxTextWidth = options.maxWidth * 0.75;
+    const textOptions = { font: new PhetFont( 12 ), fill: '#FFFFFF', maxWidth: maxTextWidth };
 
-    var neonText = new Text( neonString, textOptions );
-    var argonText = new Text( argonString, textOptions );
-    var waterText = new Text( waterString, textOptions );
-    var oxygenText = new Text( diatomicOxygenString, textOptions );
-    var title = new Text( atomsAndMoleculesString, {
+    const neonText = new Text( neonString, textOptions );
+    const argonText = new Text( argonString, textOptions );
+    const waterText = new Text( waterString, textOptions );
+    const oxygenText = new Text( diatomicOxygenString, textOptions );
+    const title = new Text( atomsAndMoleculesString, {
       font: new PhetFont( 14 ),
       fill: SOMColorProfile.controlPanelTextProperty,
       maxWidth: maxTextWidth
@@ -68,21 +68,21 @@ define( require => {
 
     // create objects that describe the pieces that make up an item in the control panel, conforms to the contract:
     // { label: {Node}, icon: {Node} }
-    var neon = { label: neonText, icon: AtomAndMoleculeIconFactory.createIcon( SubstanceType.NEON ) };
-    var argon = { label: argonText, icon: AtomAndMoleculeIconFactory.createIcon( SubstanceType.ARGON ) };
-    var water = { label: waterText, icon: AtomAndMoleculeIconFactory.createIcon( SubstanceType.WATER ) };
-    var oxygen = { label: oxygenText, icon: AtomAndMoleculeIconFactory.createIcon( SubstanceType.DIATOMIC_OXYGEN ) };
+    const neon = { label: neonText, icon: AtomAndMoleculeIconFactory.createIcon( SubstanceType.NEON ) };
+    const argon = { label: argonText, icon: AtomAndMoleculeIconFactory.createIcon( SubstanceType.ARGON ) };
+    const water = { label: waterText, icon: AtomAndMoleculeIconFactory.createIcon( SubstanceType.WATER ) };
+    const oxygen = { label: oxygenText, icon: AtomAndMoleculeIconFactory.createIcon( SubstanceType.DIATOMIC_OXYGEN ) };
 
-    var titleText = {
+    const titleText = {
       label: title
     };
 
-    var selectorWidth = options.minWidth - 2 * options.xMargin;
+    const selectorWidth = options.minWidth - 2 * options.xMargin;
 
     // pad inserts a spacing node (HStrut) so that the text, space and image together occupy a certain fixed width.
-    var createLabelAndIconNode = function( labelAndIconSpec ) {
+    const createLabelAndIconNode = function( labelAndIconSpec ) {
       if ( labelAndIconSpec.icon ) {
-        var strutWidth = selectorWidth - labelAndIconSpec.label.width - labelAndIconSpec.icon.width;
+        const strutWidth = selectorWidth - labelAndIconSpec.label.width - labelAndIconSpec.icon.width;
         return new HBox( { children: [ labelAndIconSpec.label, new HStrut( strutWidth ), labelAndIconSpec.icon ] } );
       }
       else {
@@ -90,14 +90,14 @@ define( require => {
       }
     };
 
-    var radioButtonContent = [
+    const radioButtonContent = [
       { value: SubstanceType.NEON, node: createLabelAndIconNode( neon ) },
       { value: SubstanceType.ARGON, node: createLabelAndIconNode( argon ) },
       { value: SubstanceType.DIATOMIC_OXYGEN, node: createLabelAndIconNode( oxygen ) },
       { value: SubstanceType.WATER, node: createLabelAndIconNode( water ) }
     ];
 
-    var radioButtonGroup = new RadioButtonGroup( substanceProperty, radioButtonContent, {
+    const radioButtonGroup = new RadioButtonGroup( substanceProperty, radioButtonContent, {
       orientation: 'vertical',
       cornerRadius: 5,
       baseColor: 'black',
@@ -112,7 +112,7 @@ define( require => {
       radioButtonGroup.baseColor = color;
     } );
 
-    var radioButtonPanel = new Panel( radioButtonGroup, {
+    const radioButtonPanel = new Panel( radioButtonGroup, {
       yMargin: 10,
       stroke: options.stroke,
       align: 'center',
@@ -124,14 +124,14 @@ define( require => {
     } );
     this.addChild( radioButtonPanel );
 
-    var titleBackground = new Rectangle( 0, 0, titleText.label.width + 5, titleText.label.height, {
+    const titleBackground = new Rectangle( 0, 0, titleText.label.width + 5, titleText.label.height, {
       fill: options.fill
     } );
     titleBackground.centerX = radioButtonPanel.centerX;
     titleBackground.centerY = radioButtonPanel.top;
     titleText.label.centerX = titleBackground.centerX;
     titleText.label.centerY = titleBackground.centerY;
-    var tittleNode = new Node( { children: [ titleBackground, titleText.label ] } );
+    const tittleNode = new Node( { children: [ titleBackground, titleText.label ] } );
     this.addChild( tittleNode );
 
     this.mutate( options );

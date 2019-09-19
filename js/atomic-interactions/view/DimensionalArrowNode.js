@@ -61,17 +61,17 @@ define( require => {
     setTailAndTip: function( tailX, tailY, tipX, tipY ) {
       this.tailLocation.setXY( tailX, tailY );
       this.tipLocation.setXY( tipX, tipY );
-      var tempHeadHeight;
-      var tempHeadWidth;
-      var tempTailWidth;
+      let tempHeadHeight;
+      let tempHeadWidth;
+      let tempTailWidth;
       if ( this.tailLocation.distance( this.tipLocation ) !== 0 ) {
 
         tempHeadHeight = this.options.headHeight;
         tempHeadWidth = this.options.headWidth;
         tempTailWidth = this.options.tailWidth;
-        var length = this.tipLocation.distance( this.tailLocation );
+        const length = this.tipLocation.distance( this.tailLocation );
 
-        var fractionalHeadHeight = 0.5;
+        const fractionalHeadHeight = 0.5;
         if ( length < this.options.headHeight / fractionalHeadHeight ) {
           tempHeadHeight = length * fractionalHeadHeight;
 

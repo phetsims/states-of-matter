@@ -22,7 +22,7 @@ define( require => {
   const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   // static object (no constructor)
-  var InteractionStrengthTable = {
+  const InteractionStrengthTable = {
 
     /**
      * Get the interaction potential between two atoms.  Units are such that

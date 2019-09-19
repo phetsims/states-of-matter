@@ -17,9 +17,9 @@ define( require => {
   const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   // constants
-  var DEFAULT_INTERACTION_POTENTIAL = SOMConstants.MAX_EPSILON / 2;
-  var DEFAULT_RADIUS = 175; // in picometers
-  var MASS = 25; // in atomic mass units
+  const DEFAULT_INTERACTION_POTENTIAL = SOMConstants.MAX_EPSILON / 2;
+  const DEFAULT_RADIUS = 175; // in picometers
+  const MASS = 25; // in atomic mass units
 
   /**
    * @param {number} x - position

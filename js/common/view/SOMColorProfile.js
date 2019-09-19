@@ -17,9 +17,9 @@ define( require => {
   const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   // constants
-  var GRAY = new Color( 230, 230, 230 );
+  const GRAY = new Color( 230, 230, 230 );
 
-  var SOMColorProfile = new ColorProfile( [ 'default', 'projector' ], {
+  const SOMColorProfile = new ColorProfile( [ 'default', 'projector' ], {
     background: {
       default: 'black',
       projector: 'white'

@@ -40,18 +40,18 @@ define( require => {
   const returnLidString = require( 'string!STATES_OF_MATTER/returnLid' );
 
   // constants
-  var PANEL_WIDTH = 170; // empirically determined to be wide enough for all contents using English strings with some margin
-  var INTER_PANEL_SPACING = 8;
+  const PANEL_WIDTH = 170; // empirically determined to be wide enough for all contents using English strings with some margin
+  const INTER_PANEL_SPACING = 8;
 
   // constants used when mapping the model pressure and temperature to the phase diagram.
-  var TRIPLE_POINT_TEMPERATURE_ON_DIAGRAM = 0.375;
-  var CRITICAL_POINT_TEMPERATURE_ON_DIAGRAM = 0.8;
+  const TRIPLE_POINT_TEMPERATURE_ON_DIAGRAM = 0.375;
+  const CRITICAL_POINT_TEMPERATURE_ON_DIAGRAM = 0.8;
 
   // Used for calculating moving averages needed to mellow out the graph behavior.  Value empirically determined.
-  var MAX_NUM_HISTORY_SAMPLES = 100;
+  const MAX_NUM_HISTORY_SAMPLES = 100;
 
   // constants used in the layout process
-  var CONTROL_PANEL_X_INSET = 15;
+  const CONTROL_PANEL_X_INSET = 15;
 
   /**
    * @param {MultipleParticleModel} multipleParticleModel - model of the simulation
@@ -59,7 +59,7 @@ define( require => {
    * @constructor
    */
   function PhaseChangesScreenView( multipleParticleModel, isInteractionDiagramEnabled ) {
-    var self = this;
+    const self = this;
 
     ScreenView.call( this, SOMConstants.SCREEN_VIEW_OPTIONS );
     this.multipleParticleModel = multipleParticleModel;
@@ -68,14 +68,14 @@ define( require => {
     // Create the model-view transform. The multipliers for the 2nd parameter can be used to adjust where the point
     // (0, 0) in the model, which is the lower left corner of the particle container, appears in the view.The final
     // parameter is the scale, and can be changed to make the view more zoomed in or out.
-    var modelViewTransform = ModelViewTransform2.createSinglePointScaleInvertedYMapping(
+    const modelViewTransform = ModelViewTransform2.createSinglePointScaleInvertedYMapping(
       new Vector2( 0, 0 ),
       new Vector2( this.layoutBounds.width * 0.325, this.layoutBounds.height * 0.75 ),
       SOMConstants.VIEW_CONTAINER_WIDTH / MultipleParticleModel.PARTICLE_CONTAINER_WIDTH
     );
 
     // figure out where in the view the particles will be when the container is not exploded
-    var nominalParticleAreaViewBounds = new Bounds2(
+    const nominalParticleAreaViewBounds = new Bounds2(
       modelViewTransform.modelToViewX( 0 ),
       modelViewTransform.modelToViewY( 0 ) + modelViewTransform.modelToViewDeltaY( multipleParticleModel.getInitialParticleContainerHeight() ),
       modelViewTransform.modelToViewX( 0 ) + modelViewTransform.modelToViewDeltaX( multipleParticleModel.getParticleContainerWidth() ),
@@ -92,7 +92,7 @@ define( require => {
     this.addChild( this.particleContainerNode );
 
     // add heater/cooler node
-    var heaterCoolerNode = new HeaterCoolerNode( new NumberProperty( 0, {
+    const heaterCoolerNode = new HeaterCoolerNode( new NumberProperty( 0, {
       range: new Range( -1, 1 ) // +1 for max heating, -1 for max cooling
     } ), {
       scale: 0.79,
@@ -114,7 +114,7 @@ define( require => {
     this.addChild( this.compositeThermometerNode );
 
     // add reset all button
-    var resetAllButton = new ResetAllButton( {
+    const resetAllButton = new ResetAllButton( {
       listener: function() {
         self.modelTemperatureHistory.clear();
         self.compositeThermometerNode.reset();
@@ -191,7 +191,7 @@ define( require => {
     }
 
     // add the atom/molecule selection control panel
-    var phaseChangesMoleculesControlPanel = new PhaseChangesMoleculesControlPanel(
+    const phaseChangesMoleculesControlPanel = new PhaseChangesMoleculesControlPanel(
       multipleParticleModel,
       isInteractionDiagramEnabled,
       {
@@ -293,7 +293,7 @@ define( require => {
     } );
 
     // Happy Easter
-    var egg = new MultiLineText( 'Goodbye boiling water -\nyou will be mist!', {
+    const egg = new MultiLineText( 'Goodbye boiling water -\nyou will be mist!', {
       fill: 'yellow',
       font: new PhetFont( 14 ),
       align: 'left',
@@ -302,7 +302,7 @@ define( require => {
     } );
     this.addChild( egg );
 
-    var eggShown = false;
+    let eggShown = false;
     multipleParticleModel.isPlayingProperty.link( function( isPlaying ) {
       egg.visible = !isPlaying && multipleParticleModel.isExplodedProperty.get() &&
                     multipleParticleModel.substanceProperty.get() === SubstanceType.WATER && !eggShown;
@@ -320,7 +320,7 @@ define( require => {
 
       // if the container has exploded, rotate the thermometer as it moves up
       if ( multipleParticleModel.isExplodedProperty.get() ) {
-        var containerHeightChange = previousContainerHeight - containerHeight;
+        const containerHeightChange = previousContainerHeight - containerHeight;
         self.compositeThermometerNode.rotateAround(
           self.compositeThermometerNode.center,
           containerHeightChange * 0.0001 * Math.PI );
@@ -362,12 +362,12 @@ define( require => {
       }
       else {
         this.phaseDiagram.setStateMarkerVisible( true );
-        var movingAverageTemperature = this.updateMovingAverageTemperature(
+        const movingAverageTemperature = this.updateMovingAverageTemperature(
           this.multipleParticleModel.temperatureSetPointProperty.get()
         );
-        var modelPressure = this.multipleParticleModel.getModelPressure();
-        var mappedTemperature = this.mapModelTemperatureToPhaseDiagramTemperature( movingAverageTemperature );
-        var mappedPressure = this.mapModelTempAndPressureToPhaseDiagramPressure( modelPressure, movingAverageTemperature );
+        const modelPressure = this.multipleParticleModel.getModelPressure();
+        const mappedTemperature = this.mapModelTemperatureToPhaseDiagramTemperature( movingAverageTemperature );
+        const mappedPressure = this.mapModelTempAndPressureToPhaseDiagramPressure( modelPressure, movingAverageTemperature );
         this.phaseDiagram.setStateMarkerPos( mappedTemperature, mappedPressure );
       }
     },
@@ -383,8 +383,8 @@ define( require => {
         this.modelTemperatureHistory.shift();
       }
       this.modelTemperatureHistory.push( newTemperatureValue );
-      var totalOfAllTemperatures = 0;
-      for ( var i = 0; i < this.modelTemperatureHistory.length; i++ ) {
+      let totalOfAllTemperatures = 0;
+      for ( let i = 0; i < this.modelTemperatureHistory.length; i++ ) {
         totalOfAllTemperatures += this.modelTemperatureHistory.get( i );
       }
       return totalOfAllTemperatures / this.modelTemperatureHistory.length;
@@ -398,7 +398,7 @@ define( require => {
      */
     mapModelTemperatureToPhaseDiagramTemperature: function( modelTemperature ) {
 
-      var mappedTemperature;
+      let mappedTemperature;
       if ( modelTemperature < this.triplePointTemperatureInModelUnits ) {
         mappedTemperature = this.slopeInFirstRegion * modelTemperature;
       }
@@ -421,9 +421,9 @@ define( require => {
 
       // This method is a total tweak fest.  All values and equations are made to map to the phase diagram, and are NOT
       // based on any real-world equations that define phases of matter.
-      var cutOverTemperature = TRIPLE_POINT_TEMPERATURE_ON_DIAGRAM - 0.025;
-      var mappedTemperature = this.mapModelTemperatureToPhaseDiagramTemperature( modelTemperature );
-      var mappedPressure;
+      const cutOverTemperature = TRIPLE_POINT_TEMPERATURE_ON_DIAGRAM - 0.025;
+      const mappedTemperature = this.mapModelTemperatureToPhaseDiagramTemperature( modelTemperature );
+      let mappedPressure;
       if ( mappedTemperature <= cutOverTemperature ) {
         mappedPressure = Math.pow( mappedTemperature, 1.6 );
       }

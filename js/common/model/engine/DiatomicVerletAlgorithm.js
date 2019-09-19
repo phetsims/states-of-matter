@@ -34,10 +34,10 @@ define( require => {
      * @protected
      */
     initializeForces: function( moleculeDataSet ) {
-      var accelerationDueToGravity = this.multipleParticleModel.gravitationalAcceleration;
-      var nextMoleculeForces = moleculeDataSet.nextMoleculeForces;
-      var nextMoleculeTorques = moleculeDataSet.nextMoleculeTorques;
-      for ( var i = 0; i < moleculeDataSet.getNumberOfMolecules(); i++ ) {
+      const accelerationDueToGravity = this.multipleParticleModel.gravitationalAcceleration;
+      const nextMoleculeForces = moleculeDataSet.nextMoleculeForces;
+      const nextMoleculeTorques = moleculeDataSet.nextMoleculeTorques;
+      for ( let i = 0; i < moleculeDataSet.getNumberOfMolecules(); i++ ) {
         nextMoleculeForces[ i ].setXY( 0, accelerationDueToGravity );
         nextMoleculeTorques[ i ] = 0;
       }
@@ -50,39 +50,39 @@ define( require => {
      */
     updateInteractionForces: function( moleculeDataSet ) {
 
-      var moleculeCenterOfMassPositions = moleculeDataSet.getMoleculeCenterOfMassPositions();
-      var nextMoleculeForces = moleculeDataSet.getNextMoleculeForces();
-      var atomPositions = moleculeDataSet.getAtomPositions();
-      var nextMoleculeTorques = moleculeDataSet.getNextMoleculeTorques();
-      var numberOfMolecules = moleculeDataSet.numberOfMolecules;
+      const moleculeCenterOfMassPositions = moleculeDataSet.getMoleculeCenterOfMassPositions();
+      const nextMoleculeForces = moleculeDataSet.getNextMoleculeForces();
+      const atomPositions = moleculeDataSet.getAtomPositions();
+      const nextMoleculeTorques = moleculeDataSet.getNextMoleculeTorques();
+      const numberOfMolecules = moleculeDataSet.numberOfMolecules;
 
-      for ( var i = 0; i < numberOfMolecules; i++ ) {
-        var moleculeCenterOfMassIX = moleculeCenterOfMassPositions[ i ].x;
-        var moleculeCenterOfMassIY = moleculeCenterOfMassPositions[ i ].y;
-        for ( var j = i + 1; j < numberOfMolecules; j++ ) {
-          var moleculeCenterOfMassJX = moleculeCenterOfMassPositions[ j ].x;
-          var moleculeCenterOfMassJY = moleculeCenterOfMassPositions[ j ].y;
-          for ( var ii = 0; ii < 2; ii++ ) {
-            var atom1PosX = atomPositions[ 2 * i + ii ].x;
-            var atom1PosY = atomPositions[ 2 * i + ii ].y;
-            for ( var jj = 0; jj < 2; jj++ ) {
-              var atom2PosX = atomPositions[ 2 * j + jj ].x;
-              var atom2PosY = atomPositions[ 2 * j + jj ].y;
+      for ( let i = 0; i < numberOfMolecules; i++ ) {
+        const moleculeCenterOfMassIX = moleculeCenterOfMassPositions[ i ].x;
+        const moleculeCenterOfMassIY = moleculeCenterOfMassPositions[ i ].y;
+        for ( let j = i + 1; j < numberOfMolecules; j++ ) {
+          const moleculeCenterOfMassJX = moleculeCenterOfMassPositions[ j ].x;
+          const moleculeCenterOfMassJY = moleculeCenterOfMassPositions[ j ].y;
+          for ( let ii = 0; ii < 2; ii++ ) {
+            const atom1PosX = atomPositions[ 2 * i + ii ].x;
+            const atom1PosY = atomPositions[ 2 * i + ii ].y;
+            for ( let jj = 0; jj < 2; jj++ ) {
+              const atom2PosX = atomPositions[ 2 * j + jj ].x;
+              const atom2PosY = atomPositions[ 2 * j + jj ].y;
 
               // Calculate the distance between the potentially interacting atoms.
-              var dx = atom1PosX - atom2PosX;
-              var dy = atom1PosY - atom2PosY;
-              var distanceSquared = dx * dx + dy * dy;
+              const dx = atom1PosX - atom2PosX;
+              const dy = atom1PosY - atom2PosY;
+              let distanceSquared = dx * dx + dy * dy;
               if ( distanceSquared < this.PARTICLE_INTERACTION_DISTANCE_THRESH_SQRD ) {
                 if ( distanceSquared < this.MIN_DISTANCE_SQUARED ) {
                   distanceSquared = this.MIN_DISTANCE_SQUARED;
                 }
                 // Calculate the Lennard-Jones interaction forces.
-                var r2inv = 1 / distanceSquared;
-                var r6inv = r2inv * r2inv * r2inv;
-                var forceScalar = 48 * r2inv * r6inv * (r6inv - 0.5);
-                var fx = dx * forceScalar;
-                var fy = dy * forceScalar;
+                const r2inv = 1 / distanceSquared;
+                const r6inv = r2inv * r2inv * r2inv;
+                const forceScalar = 48 * r2inv * r6inv * (r6inv - 0.5);
+                const fx = dx * forceScalar;
+                const fy = dy * forceScalar;
                 nextMoleculeForces[ i ].addXY( fx, fy );
                 nextMoleculeForces[ j ].subtractXY( fx, fy );
                 nextMoleculeTorques[ i ] += ( atom1PosX - moleculeCenterOfMassIX ) * fy -
@@ -107,27 +107,27 @@ define( require => {
     updateVelocitiesAndRotationRates: function( moleculeDataSet, timeStep ) {
 
       // Obtain references to the model data and parameters so that we can perform fast manipulations.
-      var moleculeVelocities = moleculeDataSet.getMoleculeVelocities();
-      var moleculeForces = moleculeDataSet.getMoleculeForces();
-      var nextMoleculeForces = moleculeDataSet.getNextMoleculeForces();
-      var numberOfMolecules = moleculeDataSet.getNumberOfMolecules();
-      var moleculeRotationRates = moleculeDataSet.getMoleculeRotationRates();
-      var moleculeTorques = moleculeDataSet.getMoleculeTorques();
-      var nextMoleculeTorques = moleculeDataSet.getNextMoleculeTorques();
+      const moleculeVelocities = moleculeDataSet.getMoleculeVelocities();
+      const moleculeForces = moleculeDataSet.getMoleculeForces();
+      const nextMoleculeForces = moleculeDataSet.getNextMoleculeForces();
+      const numberOfMolecules = moleculeDataSet.getNumberOfMolecules();
+      const moleculeRotationRates = moleculeDataSet.getMoleculeRotationRates();
+      const moleculeTorques = moleculeDataSet.getMoleculeTorques();
+      const nextMoleculeTorques = moleculeDataSet.getNextMoleculeTorques();
 
       // Initialize other values that will be needed for the calculation.
-      var massInverse = 1 / moleculeDataSet.getMoleculeMass();
-      var inertiaInverse = 1 / moleculeDataSet.getMoleculeRotationalInertia();
-      var timeStepHalf = timeStep / 2;
-      var translationalKineticEnergy = 0;
-      var rotationalKineticEnergy = 0;
+      const massInverse = 1 / moleculeDataSet.getMoleculeMass();
+      const inertiaInverse = 1 / moleculeDataSet.getMoleculeRotationalInertia();
+      const timeStepHalf = timeStep / 2;
+      let translationalKineticEnergy = 0;
+      let rotationalKineticEnergy = 0;
 
       // Update the velocities and rotation rates based on the forces being exerted on the molecules, then calculate
       // the kinetic energy of the system.
-      for ( var i = 0; i < numberOfMolecules; i++ ) {
-        var xVel = moleculeVelocities[ i ].x +
+      for ( let i = 0; i < numberOfMolecules; i++ ) {
+        const xVel = moleculeVelocities[ i ].x +
                    timeStepHalf * ( moleculeForces[ i ].x + nextMoleculeForces[ i ].x ) * massInverse;
-        var yVel = moleculeVelocities[ i ].y +
+        const yVel = moleculeVelocities[ i ].y +
                    timeStepHalf * ( moleculeForces[ i ].y + nextMoleculeForces[ i ].y ) * massInverse;
         moleculeVelocities[ i ].setXY( xVel, yVel );
         moleculeRotationRates[ i ] += timeStepHalf * ( moleculeTorques[ i ] + nextMoleculeTorques[ i ] ) *

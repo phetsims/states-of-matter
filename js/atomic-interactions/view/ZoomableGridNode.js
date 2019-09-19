@@ -19,9 +19,9 @@ define( require => {
   const ZoomButton = require( 'SCENERY_PHET/buttons/ZoomButton' );
 
   // constants
-  var MAX_LINES_HORIZONTAL = 9;
-  var MIN_LINES_HORIZONTAL = 5;
-  var ZOOM_INCREMENT = 2; // lines per zoom
+  const MAX_LINES_HORIZONTAL = 9;
+  const MIN_LINES_HORIZONTAL = 5;
+  const ZOOM_INCREMENT = 2; // lines per zoom
 
   /**
    * @param atomsView
@@ -34,7 +34,7 @@ define( require => {
   function ZoomableGridNode( atomsView, offsetX, offsetY, width, height ) {
 
     Node.call( this );
-    var self = this;
+    const self = this;
     atomsView.horizontalLineCount = MIN_LINES_HORIZONTAL;
 
     // @private horizontal grid lines
@@ -97,15 +97,15 @@ define( require => {
     this.addChild( this.verticalLinesNode );
 
     this.verticalLines = [];
-    for ( var x = 0; x < 4; x++ ) {
-      var viewX = x * (width / 3);
+    for ( let x = 0; x < 4; x++ ) {
+      const viewX = x * (width / 3);
       this.verticalLines.push( {
         x1: viewX + offsetX, y1: offsetY,
         x2: viewX + offsetX, y2: height + offsetY
       } );
     }
-    var verticalLineShape = new Shape();
-    var line;
+    const verticalLineShape = new Shape();
+    let line;
     for ( var i = 0; i < this.verticalLines.length; i++ ) {
       line = this.verticalLines[ i ];
       verticalLineShape.moveTo( line.x1, line.y1 );
@@ -114,8 +114,8 @@ define( require => {
     this.verticalLinesNode.setShape( verticalLineShape );
 
     this.horizontalLines = [];
-    for ( var y = 0; y < atomsView.horizontalLineCount; y++ ) {
-      var viewY = y * (height / (atomsView.horizontalLineCount - 1));
+    for ( let y = 0; y < atomsView.horizontalLineCount; y++ ) {
+      const viewY = y * (height / (atomsView.horizontalLineCount - 1));
       this.horizontalLines.push( {
         x1: offsetX,
         y1: viewY + offsetY,
@@ -123,7 +123,7 @@ define( require => {
         y2: viewY + offsetY
       } );
     }
-    var horizontalLineShape = new Shape();
+    const horizontalLineShape = new Shape();
     for ( i = 0; i < this.horizontalLines.length; i++ ) {
       line = this.horizontalLines[ i ];
       horizontalLineShape.moveTo( line.x1, line.y1 );
@@ -147,8 +147,8 @@ define( require => {
     setHorizontalLines: function( offsetX, offsetY, width, height, horizontalLineCount ) {
 
       this.horizontalLines = [];
-      for ( var y = 0; y < horizontalLineCount; y++ ) {
-        var viewY = y * (height / (horizontalLineCount - 1));
+      for ( let y = 0; y < horizontalLineCount; y++ ) {
+        const viewY = y * (height / (horizontalLineCount - 1));
         this.horizontalLines.push( {
           x1: offsetX,
           y1: viewY + offsetY,
@@ -156,9 +156,9 @@ define( require => {
           y2: viewY + offsetY
         } );
       }
-      var horizontalLineShape = new Shape();
-      var line;
-      for ( var i = 0; i < this.horizontalLines.length; i++ ) {
+      const horizontalLineShape = new Shape();
+      let line;
+      for ( let i = 0; i < this.horizontalLines.length; i++ ) {
         line = this.horizontalLines[ i ];
         horizontalLineShape.moveTo( line.x1, line.y1 );
         horizontalLineShape.lineTo( line.x2, line.y2 );

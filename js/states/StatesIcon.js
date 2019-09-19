@@ -35,7 +35,7 @@ define( require => {
     } ) );
 
     // icons packed into a nice little box
-    var iconsBox = new HBox( {
+    const iconsBox = new HBox( {
       children: [ new Image( solidIconImage ), new Image( liquidIconImage ), new Image( gasIconImage ) ],
       spacing: 20 // empirically determined
     } );

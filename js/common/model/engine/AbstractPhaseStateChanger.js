@@ -18,9 +18,9 @@ define( require => {
   const Vector2 = require( 'DOT/Vector2' );
 
   // constants
-  var MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE = 1.5;
-  var MAX_PLACEMENT_ATTEMPTS = 500; // for random placement of particles
-  var MIN_INITIAL_GAS_PARTICLE_DISTANCE = 1.1; // empirically determined
+  const MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE = 1.5;
+  const MAX_PLACEMENT_ATTEMPTS = 500; // for random placement of particles
+  const MIN_INITIAL_GAS_PARTICLE_DISTANCE = 1.1; // empirically determined
 
   /**
    * @param { MultipleParticleModel } multipleParticleModel of the simulation
@@ -69,23 +69,23 @@ define( require => {
      */
     findOpenMoleculeLocation: function() {
 
-      var posX;
-      var posY;
-      var minInitialInterParticleDistance;
-      var moleculeDataSet = this.multipleParticleModel.moleculeDataSet;
-      var moleculeCenterOfMassPositions = moleculeDataSet.moleculeCenterOfMassPositions;
+      let posX;
+      let posY;
+      let minInitialInterParticleDistance;
+      const moleculeDataSet = this.multipleParticleModel.moleculeDataSet;
+      const moleculeCenterOfMassPositions = moleculeDataSet.moleculeCenterOfMassPositions;
 
       minInitialInterParticleDistance = 1.2; // empirically chosen
-      var rangeX = this.multipleParticleModel.normalizedContainerWidth - ( 2 * MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE );
-      var rangeY = this.multipleParticleModel.normalizedContainerHeight - ( 2 * MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE );
-      for ( var i = 0; i < rangeX / minInitialInterParticleDistance; i++ ) {
-        for ( var j = 0; j < rangeY / minInitialInterParticleDistance; j++ ) {
+      const rangeX = this.multipleParticleModel.normalizedContainerWidth - ( 2 * MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE );
+      const rangeY = this.multipleParticleModel.normalizedContainerHeight - ( 2 * MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE );
+      for ( let i = 0; i < rangeX / minInitialInterParticleDistance; i++ ) {
+        for ( let j = 0; j < rangeY / minInitialInterParticleDistance; j++ ) {
           posX = MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE + ( i * minInitialInterParticleDistance );
           posY = MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE + ( j * minInitialInterParticleDistance );
 
           // See if this position is available.
-          var positionAvailable = true;
-          for ( var k = 0; k < moleculeDataSet.getNumberOfMolecules(); k++ ) {
+          let positionAvailable = true;
+          for ( let k = 0; k < moleculeDataSet.getNumberOfMolecules(); k++ ) {
             if ( moleculeCenterOfMassPositions[ k ].distanceXY( posX, posY ) < minInitialInterParticleDistance ) {
               positionAvailable = false;
               break;
@@ -115,27 +115,27 @@ define( require => {
     formCrystal: function( moleculesPerLayer, xSpacing, ySpacing, alternateRowOffset, bottomY, randomizeRotationalAngle ) {
 
       // Get references to the various elements of the data set.
-      var moleculeDataSet = this.multipleParticleModel.moleculeDataSet;
-      var numberOfMolecules = moleculeDataSet.getNumberOfMolecules();
-      var moleculeCenterOfMassPositions = moleculeDataSet.moleculeCenterOfMassPositions;
-      var moleculeVelocities = moleculeDataSet.moleculeVelocities;
-      var moleculeRotationAngles = moleculeDataSet.moleculeRotationAngles;
-      var moleculesInsideContainer = this.multipleParticleModel.moleculeDataSet.insideContainer;
+      const moleculeDataSet = this.multipleParticleModel.moleculeDataSet;
+      const numberOfMolecules = moleculeDataSet.getNumberOfMolecules();
+      const moleculeCenterOfMassPositions = moleculeDataSet.moleculeCenterOfMassPositions;
+      const moleculeVelocities = moleculeDataSet.moleculeVelocities;
+      const moleculeRotationAngles = moleculeDataSet.moleculeRotationAngles;
+      const moleculesInsideContainer = this.multipleParticleModel.moleculeDataSet.insideContainer;
 
       // Set up other variables needed to do the job.
-      var temperatureSqrt = Math.sqrt( this.multipleParticleModel.temperatureSetPointProperty.get() );
-      var crystalWidth = moleculesPerLayer * xSpacing;
-      var startingPosX = ( this.multipleParticleModel.normalizedContainerWidth / 2 ) - ( crystalWidth / 2 );
+      const temperatureSqrt = Math.sqrt( this.multipleParticleModel.temperatureSetPointProperty.get() );
+      const crystalWidth = moleculesPerLayer * xSpacing;
+      const startingPosX = ( this.multipleParticleModel.normalizedContainerWidth / 2 ) - ( crystalWidth / 2 );
 
       // Place the molecules by placing their centers of mass.
-      var moleculesPlaced = 0;
-      var xPos;
-      var yPos;
+      let moleculesPlaced = 0;
+      let xPos;
+      let yPos;
       this.reusableVector.setXY( 0, 0 );
-      for ( var i = 0; i < numberOfMolecules; i++ ) {
+      for ( let i = 0; i < numberOfMolecules; i++ ) {
 
         // Position one layer of molecules.
-        for ( var j = 0; ( j < moleculesPerLayer ) && ( moleculesPlaced < numberOfMolecules ); j++ ) {
+        for ( let j = 0; ( j < moleculesPerLayer ) && ( moleculesPlaced < numberOfMolecules ); j++ ) {
           xPos = startingPosX + ( j * xSpacing );
           if ( i % 2 !== 0 ) {
 
@@ -143,14 +143,14 @@ define( require => {
             xPos += alternateRowOffset;
           }
           yPos = bottomY + ( i * ySpacing );
-          var moleculeIndex = ( i * moleculesPerLayer ) + j;
+          const moleculeIndex = ( i * moleculesPerLayer ) + j;
           moleculeCenterOfMassPositions[ moleculeIndex ].setXY( xPos, yPos );
           moleculeRotationAngles[ moleculeIndex ] = 0;
           moleculesPlaced++;
 
           // Assign each molecule an initial velocity.
-          var xVel = temperatureSqrt * this.random.nextGaussian();
-          var yVel = temperatureSqrt * this.random.nextGaussian();
+          const xVel = temperatureSqrt * this.random.nextGaussian();
+          const yVel = temperatureSqrt * this.random.nextGaussian();
           moleculeVelocities[ moleculeIndex ].setXY( xVel, yVel );
 
           // Track total velocity in the X direction.
@@ -180,16 +180,16 @@ define( require => {
       this.multipleParticleModel.setTemperature( SOMConstants.GAS_TEMPERATURE );
 
       // Get references to the various elements of the data set.
-      var moleculeDataSet = this.multipleParticleModel.moleculeDataSet;
-      var moleculeCenterOfMassPositions = moleculeDataSet.getMoleculeCenterOfMassPositions();
-      var moleculeVelocities = moleculeDataSet.getMoleculeVelocities();
-      var moleculeRotationAngles = moleculeDataSet.getMoleculeRotationAngles();
-      var moleculeRotationRates = moleculeDataSet.getMoleculeRotationRates();
-      var moleculesInsideContainer = this.multipleParticleModel.moleculeDataSet.insideContainer;
+      const moleculeDataSet = this.multipleParticleModel.moleculeDataSet;
+      const moleculeCenterOfMassPositions = moleculeDataSet.getMoleculeCenterOfMassPositions();
+      const moleculeVelocities = moleculeDataSet.getMoleculeVelocities();
+      const moleculeRotationAngles = moleculeDataSet.getMoleculeRotationAngles();
+      const moleculeRotationRates = moleculeDataSet.getMoleculeRotationRates();
+      const moleculesInsideContainer = this.multipleParticleModel.moleculeDataSet.insideContainer;
 
       // Set up other variables needed to do the job.
-      var temperatureSqrt = Math.sqrt( this.multipleParticleModel.temperatureSetPointProperty.get() );
-      var numberOfMolecules = moleculeDataSet.getNumberOfMolecules();
+      const temperatureSqrt = Math.sqrt( this.multipleParticleModel.temperatureSetPointProperty.get() );
+      const numberOfMolecules = moleculeDataSet.getNumberOfMolecules();
 
       for ( var i = 0; i < numberOfMolecules; i++ ) {
 
@@ -213,20 +213,20 @@ define( require => {
 
       // Redistribute the molecules randomly around the container, but make sure that they are not too close together or
       // they end up with a disproportionate amount of kinetic energy.
-      var newPosX;
-      var newPosY;
-      var rangeX = this.multipleParticleModel.normalizedContainerWidth - ( 2 * this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE );
-      var rangeY = this.multipleParticleModel.normalizedContainerHeight - ( 2 * this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE );
+      let newPosX;
+      let newPosY;
+      const rangeX = this.multipleParticleModel.normalizedContainerWidth - ( 2 * this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE );
+      const rangeY = this.multipleParticleModel.normalizedContainerHeight - ( 2 * this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE );
       for ( i = 0; i < numberOfMolecules; i++ ) {
-        for ( var j = 0; j < MAX_PLACEMENT_ATTEMPTS; j++ ) {
+        for ( let j = 0; j < MAX_PLACEMENT_ATTEMPTS; j++ ) {
 
           // Pick a random position.
           newPosX = this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE + ( this.random.nextDouble() * rangeX );
           newPosY = this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE + ( this.random.nextDouble() * rangeY );
-          var positionAvailable = true;
+          let positionAvailable = true;
 
           // See if this position is available.
-          for ( var k = 0; k < i; k++ ) {
+          for ( let k = 0; k < i; k++ ) {
             if ( moleculeCenterOfMassPositions[ k ].distanceXY( newPosX, newPosY ) < MIN_INITIAL_GAS_PARTICLE_DISTANCE ) {
               positionAvailable = false;
               break;
@@ -241,7 +241,7 @@ define( require => {
           else if ( j === this.MAX_PLACEMENT_ATTEMPTS - 2 ) {
 
             // This is the second to last attempt, so try a linear search for a usable spot.
-            var openPoint = this.findOpenMoleculeLocation();
+            const openPoint = this.findOpenMoleculeLocation();
             if ( openPoint !== null ) {
               moleculeCenterOfMassPositions[ i ].set( openPoint );
               break;
@@ -257,16 +257,16 @@ define( require => {
      */
     zeroOutCollectiveVelocity: function() {
 
-      var moleculeDataSet = this.multipleParticleModel.moleculeDataSet;
-      var numberOfMolecules = moleculeDataSet.getNumberOfMolecules();
-      var moleculeVelocities = moleculeDataSet.getMoleculeVelocities();
+      const moleculeDataSet = this.multipleParticleModel.moleculeDataSet;
+      const numberOfMolecules = moleculeDataSet.getNumberOfMolecules();
+      const moleculeVelocities = moleculeDataSet.getMoleculeVelocities();
       this.reusableVector.setXY( 0, 0 );
-      var i;
+      let i;
       for ( i = 0; i < numberOfMolecules; i++ ) {
         this.reusableVector.add( moleculeVelocities[ i ] );
       }
-      var xAdjustment = -this.reusableVector.x / numberOfMolecules;
-      var yAdjustment = -this.reusableVector.y / numberOfMolecules;
+      const xAdjustment = -this.reusableVector.x / numberOfMolecules;
+      const yAdjustment = -this.reusableVector.y / numberOfMolecules;
       for ( i = 0; i < numberOfMolecules; i++ ) {
         moleculeVelocities[ i ].addXY( xAdjustment, yAdjustment );
       }
@@ -284,15 +284,15 @@ define( require => {
       );
 
       // Set the initial velocity for each of the atoms based on the new temperature.
-      var numberOfMolecules = this.multipleParticleModel.moleculeDataSet.numberOfMolecules;
-      var moleculeCenterOfMassPositions = this.multipleParticleModel.moleculeDataSet.moleculeCenterOfMassPositions;
-      var moleculeVelocities = this.multipleParticleModel.moleculeDataSet.moleculeVelocities;
-      var moleculeRotationAngles = this.multipleParticleModel.moleculeDataSet.moleculeRotationAngles;
-      var moleculeRotationRates = this.multipleParticleModel.moleculeDataSet.moleculeRotationRates;
-      var moleculesInsideContainer = this.multipleParticleModel.moleculeDataSet.insideContainer;
+      const numberOfMolecules = this.multipleParticleModel.moleculeDataSet.numberOfMolecules;
+      const moleculeCenterOfMassPositions = this.multipleParticleModel.moleculeDataSet.moleculeCenterOfMassPositions;
+      const moleculeVelocities = this.multipleParticleModel.moleculeDataSet.moleculeVelocities;
+      const moleculeRotationAngles = this.multipleParticleModel.moleculeDataSet.moleculeRotationAngles;
+      const moleculeRotationRates = this.multipleParticleModel.moleculeDataSet.moleculeRotationRates;
+      const moleculesInsideContainer = this.multipleParticleModel.moleculeDataSet.insideContainer;
 
       // for ( var i = 0; i < numberOfMolecules; i++ ) {
-      for ( var i = 0; i < numberOfMolecules; i++ ) {
+      for ( let i = 0; i < numberOfMolecules; i++ ) {
         moleculeCenterOfMassPositions[ i ].setXY(
           savedState.moleculeCenterOfMassPositions[ i ].x,
           savedState.moleculeCenterOfMassPositions[ i ].y
