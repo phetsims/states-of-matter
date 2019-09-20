@@ -71,11 +71,10 @@ define( require => {
 
       let posX;
       let posY;
-      let minInitialInterParticleDistance;
       const moleculeDataSet = this.multipleParticleModel.moleculeDataSet;
       const moleculeCenterOfMassPositions = moleculeDataSet.moleculeCenterOfMassPositions;
 
-      minInitialInterParticleDistance = 1.2; // empirically chosen
+      const minInitialInterParticleDistance = 1.2; // empirically chosen
       const rangeX = this.multipleParticleModel.normalizedContainerWidth - ( 2 * MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE );
       const rangeY = this.multipleParticleModel.normalizedContainerHeight - ( 2 * MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE );
       for ( let i = 0; i < rangeX / minInitialInterParticleDistance; i++ ) {
