@@ -1,4 +1,4 @@
-// Copyright 2014-2017, University of Colorado Boulder
+// Copyright 2014-2019, University of Colorado Boulder
 
 /**
  * This object updates the positions of atoms in a monatomic data set, i.e. where each molecule is just a single atom.

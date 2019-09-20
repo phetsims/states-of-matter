@@ -1,4 +1,4 @@
-// Copyright 2017-2018, University of Colorado Boulder
+// Copyright 2017-2019, University of Colorado Boulder
 
 /**
  * Icons, in the form of Scenery nodes, that are used in multiple places in the simulation to represent the various
