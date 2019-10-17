@@ -18,6 +18,7 @@ define( require => {
   const HStrut = require( 'SCENERY/nodes/HStrut' );
   const Image = require( 'SCENERY/nodes/Image' );
   const inherit = require( 'PHET_CORE/inherit' );
+  const merge = require( 'PHET_CORE/merge' );
   const Node = require( 'SCENERY/nodes/Node' );
   const Panel = require( 'SUN/Panel' );
   const PhetFont = require( 'SCENERY_PHET/PhetFont' );
@@ -64,7 +65,7 @@ define( require => {
   function AtomicInteractionsControlPanel( dualAtomModel, enableHeterogeneousAtoms, options ) {
 
     const self = this;
-    options = _.extend( {
+    options = merge( {
       xMargin: 5,
       yMargin: 8,
       fill: 'black',

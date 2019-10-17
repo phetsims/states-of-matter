@@ -11,6 +11,7 @@ define( require => {
   const Color = require( 'SCENERY/util/Color' );
   const DimensionalArrowNode = require( 'STATES_OF_MATTER/atomic-interactions/view/DimensionalArrowNode' );
   const inherit = require( 'PHET_CORE/inherit' );
+  const merge = require( 'PHET_CORE/merge' );
   const ParticleNode = require( 'STATES_OF_MATTER/atomic-interactions/view/ParticleNode' );
   const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
@@ -49,21 +50,21 @@ define( require => {
     };
 
     // @private attractive force node
-    this.attractiveForceVectorNode = new DimensionalArrowNode( 0, 0, COMPONENT_FORCE_ARROW_REFERENCE_LENGTH, 0, _.extend( {
+    this.attractiveForceVectorNode = new DimensionalArrowNode( 0, 0, COMPONENT_FORCE_ARROW_REFERENCE_LENGTH, 0, merge( {
       fill: ATTRACTIVE_FORCE_COLOR
     }, commonForceArrowNodeOptions ) );
     this.addChild( this.attractiveForceVectorNode );
     this.attractiveForceVectorNode.setVisible( false );
 
     // @private repulsive force node
-    this.repulsiveForceVectorNode = new DimensionalArrowNode( 0, 0, COMPONENT_FORCE_ARROW_REFERENCE_LENGTH, 0, _.extend( {
+    this.repulsiveForceVectorNode = new DimensionalArrowNode( 0, 0, COMPONENT_FORCE_ARROW_REFERENCE_LENGTH, 0, merge( {
       fill: REPULSIVE_FORCE_COLOR
     }, commonForceArrowNodeOptions ) );
     this.addChild( this.repulsiveForceVectorNode );
     this.repulsiveForceVectorNode.setVisible( false );
 
     // @private total force node
-    this.totalForceVectorNode = new DimensionalArrowNode( 0, 0, TOTAL_FORCE_ARROW_REFERENCE_LENGTH, 0, _.extend( {
+    this.totalForceVectorNode = new DimensionalArrowNode( 0, 0, TOTAL_FORCE_ARROW_REFERENCE_LENGTH, 0, merge( {
       fill: TOTAL_FORCE_COLOR
     }, commonForceArrowNodeOptions ) );
     this.addChild( this.totalForceVectorNode );

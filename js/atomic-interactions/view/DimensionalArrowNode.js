@@ -11,6 +11,7 @@ define( require => {
   // modules
   const ArrowShape = require( 'SCENERY_PHET/ArrowShape' );
   const inherit = require( 'PHET_CORE/inherit' );
+  const merge = require( 'PHET_CORE/merge' );
   const Path = require( 'SCENERY/nodes/Path' );
   const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   const Vector2 = require( 'DOT/Vector2' );
@@ -26,7 +27,7 @@ define( require => {
   function DimensionalArrowNode( tailX, tailY, tipX, tipY, options ) {
 
     // default options
-    options = _.extend( {
+    options = merge( {
       headHeight: 10,
       headWidth: 10,
       tailWidth: 5,

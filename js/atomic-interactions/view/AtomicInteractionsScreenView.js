@@ -17,6 +17,7 @@ define( require => {
   const HandNode = require( 'STATES_OF_MATTER/atomic-interactions/view/HandNode' );
   const inherit = require( 'PHET_CORE/inherit' );
   const InteractiveInteractionPotentialDiagram = require( 'STATES_OF_MATTER/atomic-interactions/view/InteractiveInteractionPotentialDiagram' );
+  const merge = require( 'PHET_CORE/merge' );
   const ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
   const Node = require( 'SCENERY/nodes/Node' );
   const ParticleForceNode = require( 'STATES_OF_MATTER/atomic-interactions/view/ParticleForceNode' );
@@ -53,7 +54,7 @@ define( require => {
 
     // due to some odd behavior, we need to turn on preventFit for this screen, see
     // https://github.com/phetsims/states-of-matter/issues/176
-    const screenViewOptions = _.extend( { preventFit: true }, SOMConstants.SCREEN_VIEW_OPTIONS );
+    const screenViewOptions = merge( { preventFit: true }, SOMConstants.SCREEN_VIEW_OPTIONS );
 
     ScreenView.call( this, screenViewOptions );
 

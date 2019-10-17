@@ -15,6 +15,7 @@ define( require => {
   const Circle = require( 'SCENERY/nodes/Circle' );
   const Color = require( 'SCENERY/util/Color' );
   const inherit = require( 'PHET_CORE/inherit' );
+  const merge = require( 'PHET_CORE/merge' );
   const Node = require( 'SCENERY/nodes/Node' );
   const RadialGradient = require( 'SCENERY/util/RadialGradient' );
   const ShadedSphereNode = require( 'SCENERY_PHET/ShadedSphereNode' );
@@ -30,7 +31,7 @@ define( require => {
   function PositionMarker( radius, color, options ) {
     const self = this;
     const mainColor = Color.toColor( color );
-    options = _.extend( {
+    options = merge( {
       mainColor: mainColor,
       highlightColor: Color.WHITE,
       shadowColor: mainColor.darkerColor(),

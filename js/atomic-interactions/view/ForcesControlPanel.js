@@ -17,6 +17,7 @@ define( require => {
   const HBox = require( 'SCENERY/nodes/HBox' );
   const HStrut = require( 'SCENERY/nodes/HStrut' );
   const inherit = require( 'PHET_CORE/inherit' );
+  const merge = require( 'PHET_CORE/merge' );
   const Node = require( 'SCENERY/nodes/Node' );
   const PhetFont = require( 'SCENERY_PHET/PhetFont' );
   const SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
@@ -47,7 +48,7 @@ define( require => {
    */
   function ForcesControlPanel( forcesProperty, forceControlPanelExpandProperty, options ) {
 
-    options = _.extend( {
+    options = merge( {
       xMargin: 5,
       yMargin: 8,
       fill: 'black',
@@ -72,15 +73,15 @@ define( require => {
       tailWidth: 6
     };
 
-    const totalForceArrow = new ArrowNode( arrowEndX, arrowY, arrowStartX, arrowY, _.extend( {
+    const totalForceArrow = new ArrowNode( arrowEndX, arrowY, arrowStartX, arrowY, merge( {
       fill: '#49B649'
     }, arrowNodeOptions ) );
 
-    const attractiveArrow = new ArrowNode( arrowEndX, arrowY, arrowStartX, arrowY, _.extend( {
+    const attractiveArrow = new ArrowNode( arrowEndX, arrowY, arrowStartX, arrowY, merge( {
       fill: '#FC9732'
     }, arrowNodeOptions ) );
 
-    const repulsiveArrow = new ArrowNode( arrowStartX, arrowY, arrowEndX, arrowY, _.extend( {
+    const repulsiveArrow = new ArrowNode( arrowStartX, arrowY, arrowEndX, arrowY, merge( {
       fill: '#FD17FF'
     }, arrowNodeOptions ) );
 

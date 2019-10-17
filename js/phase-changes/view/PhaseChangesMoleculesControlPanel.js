@@ -15,6 +15,7 @@ define( require => {
   const HSlider = require( 'SUN/HSlider' );
   const HStrut = require( 'SCENERY/nodes/HStrut' );
   const inherit = require( 'PHET_CORE/inherit' );
+  const merge = require( 'PHET_CORE/merge' );
   const MultipleParticleModel = require( 'STATES_OF_MATTER/common/model/MultipleParticleModel' );
   const Node = require( 'SCENERY/nodes/Node' );
   const Panel = require( 'SUN/Panel' );
@@ -53,7 +54,7 @@ define( require => {
    */
   function PhaseChangesMoleculesControlPanel( multipleParticleModel, isBasicVersion, options ) {
 
-    options = _.extend( {
+    options = merge( {
       xMargin: 5,
       yMargin: 5,
       fill: SOMColorProfile.controlPanelBackgroundProperty,

@@ -13,6 +13,7 @@ define( require => {
   const HBox = require( 'SCENERY/nodes/HBox' );
   const HStrut = require( 'SCENERY/nodes/HStrut' );
   const inherit = require( 'PHET_CORE/inherit' );
+  const merge = require( 'PHET_CORE/merge' );
   const Node = require( 'SCENERY/nodes/Node' );
   const Panel = require( 'SUN/Panel' );
   const PhetFont = require( 'SCENERY_PHET/PhetFont' );
@@ -41,7 +42,7 @@ define( require => {
    */
   function StatesMoleculesControlPanel( substanceProperty, options ) {
 
-    options = _.extend( {
+    options = merge( {
       xMargin: 5,
       yMargin: 8,
       fill: SOMColorProfile.controlPanelBackgroundProperty,

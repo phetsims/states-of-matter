@@ -8,6 +8,7 @@ define( require => {
 
   // modules
   const inherit = require( 'PHET_CORE/inherit' );
+  const merge = require( 'PHET_CORE/merge' );
   const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
   /**
@@ -15,7 +16,7 @@ define( require => {
    */
   function MovingAverage( size, options ) {
 
-    options = _.extend( {
+    options = merge( {
       initialValue: 0
     }, options );
 

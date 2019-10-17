@@ -11,6 +11,7 @@ define( require => {
 
   // modules
   const inherit = require( 'PHET_CORE/inherit' );
+  const merge = require( 'PHET_CORE/merge' );
   const OptionsDialog = require( 'JOIST/OptionsDialog' );
   const ProjectorModeCheckbox = require( 'JOIST/ProjectorModeCheckbox' );
   const SOMColorProfile = require( 'STATES_OF_MATTER/common/view/SOMColorProfile' );
@@ -26,7 +27,7 @@ define( require => {
     const projectorModeCheckbox = new ProjectorModeCheckbox( SOMColorProfile );
 
     // VBox is used to make it easy to add additional options
-    VBox.call( this, _.extend( {
+    VBox.call( this, merge( {
       children: [ projectorModeCheckbox ],
       spacing: OptionsDialog.DEFAULT_SPACING,
       align: 'left'

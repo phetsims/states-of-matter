@@ -15,6 +15,7 @@ define( require => {
   const HStrut = require( 'SCENERY/nodes/HStrut' );
   const Image = require( 'SCENERY/nodes/Image' );
   const inherit = require( 'PHET_CORE/inherit' );
+  const merge = require( 'PHET_CORE/merge' );
   const Node = require( 'SCENERY/nodes/Node' );
   const PhaseStateEnum = require( 'STATES_OF_MATTER/common/PhaseStateEnum' );
   const PhetFont = require( 'SCENERY_PHET/PhetFont' );
@@ -83,7 +84,7 @@ define( require => {
    */
   function StatesPhaseControlNode( model, options ) {
 
-    options = _.extend( {
+    options = merge( {
       xMargin: 5,
       yMargin: 8,
       fill: '#C8C8C8',
