@@ -44,9 +44,10 @@ define( require => {
      * @constructor
      */
     setPosition: function( x, y ) {
+
       // do the following instead of allocating a new vector for better performance
       this.positionProperty.value.setXY( x, y );
-      this.positionProperty._notifyListeners();
+      this.positionProperty._notifyListeners(); // TODO: Don't call this private method
     },
 
     /**
