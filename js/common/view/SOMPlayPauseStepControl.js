@@ -32,6 +32,7 @@ define( require => {
 
     const playPauseButton = new PlayPauseButton( playingProperty, {
       radius: 18,
+      playButtonScaleFactor: PAUSE_SIZE_INCREASE_FACTOR,
       stroke: STROKE,
       fill: FILL,
       touchAreaDilation: TOUCH_AREA_DILATION
@@ -49,12 +50,6 @@ define( require => {
       left: playPauseButton.right + 10
     } );
     this.addChild( stepButton );
-
-    // Blow up the play/pause button slightly when paused.  The PhET convention is to do this for sims where interaction
-    // does NOT unpause the sim, which is true for all usages in this sim.
-    playingProperty.lazyLink( function( isPlaying ) {
-      playPauseButton.scale( isPlaying ? ( 1 / PAUSE_SIZE_INCREASE_FACTOR ) : PAUSE_SIZE_INCREASE_FACTOR );
-    } );
 
     this.mutate( options );
   }
