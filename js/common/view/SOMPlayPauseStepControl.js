@@ -37,7 +37,6 @@ define( require => {
           touchAreaDilation: TOUCH_AREA_DILATION
         },
         stepForwardOptions: {
-          isPlayingProperty: playingProperty,
           listener: () => { stepFunction( SOMConstants.NOMINAL_TIME_STEP ); },
           radius: 12,
           stroke: STROKE,
