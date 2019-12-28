@@ -31,7 +31,7 @@ define( require => {
       options = merge( {
         playPauseOptions: {
           radius: 18,
-          playButtonScaleFactor: PAUSE_SIZE_INCREASE_FACTOR,
+          scaleFactorWhenPaused: PAUSE_SIZE_INCREASE_FACTOR,
           stroke: STROKE,
           fill: FILL,
           touchAreaDilation: TOUCH_AREA_DILATION
