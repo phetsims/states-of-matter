@@ -46,7 +46,7 @@ define( require => {
   const SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
   const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   const SubstanceType = require( 'STATES_OF_MATTER/common/SubstanceType' );
-  const Util = require( 'DOT/Util' );
+  const Utils = require( 'DOT/Utils' );
   const Vector2 = require( 'DOT/Vector2' );
   const WaterAtomPositionUpdater = require( 'STATES_OF_MATTER/common/model/engine/WaterAtomPositionUpdater' );
   const WaterPhaseStateChanger = require( 'STATES_OF_MATTER/common/model/engine/WaterPhaseStateChanger' );
@@ -430,7 +430,7 @@ define( require => {
       const atomsPerMolecule = this.moleculeDataSet.atomsPerMolecule;
       this.numberOfMoleculesProperty.set( Math.floor( this.moleculeDataSet.numberOfAtoms / atomsPerMolecule ) );
       this.numberOfMoleculesRangeProperty.set(
-        new Range( 0, Util.toFixedNumber( SOMConstants.MAX_NUM_ATOMS / atomsPerMolecule, 0 ) )
+        new Range( 0, Utils.toFixedNumber( SOMConstants.MAX_NUM_ATOMS / atomsPerMolecule, 0 ) )
       );
     },
 
@@ -448,7 +448,7 @@ define( require => {
      * @public
      */
     setTargetParticleContainerHeight: function( desiredContainerHeight ) {
-      this.targetContainerHeightProperty.set( Util.clamp(
+      this.targetContainerHeightProperty.set( Utils.clamp(
         desiredContainerHeight,
         MIN_ALLOWABLE_CONTAINER_HEIGHT,
         PARTICLE_CONTAINER_INITIAL_HEIGHT
@@ -1057,7 +1057,7 @@ define( require => {
       // Determine the number of atoms/molecules to create.  This will be a cube (really a square, since it's 2D, but
       // you get the idea) that takes up a fixed amount of the bottom of the container, so the number of molecules that
       // can fit depends on the size of the individual atom.
-      let numberOfAtoms = Math.pow( Util.roundSymmetric( PARTICLE_CONTAINER_WIDTH / ( ( OxygenAtom.RADIUS * 2.1 ) * 3 ) ), 2 );
+      let numberOfAtoms = Math.pow( Utils.roundSymmetric( PARTICLE_CONTAINER_WIDTH / ( ( OxygenAtom.RADIUS * 2.1 ) * 3 ) ), 2 );
       if ( numberOfAtoms % 2 !== 0 ) {
         numberOfAtoms--;
       }
@@ -1113,7 +1113,7 @@ define( require => {
       // you get the idea) that takes up a fixed amount of the bottom of the container, so the number of molecules that
       // can fit depends on the size of the individual atom.
       const waterMoleculeDiameter = OxygenAtom.RADIUS * 2.1;
-      const moleculesAcrossBottom = Util.roundSymmetric( PARTICLE_CONTAINER_WIDTH / ( waterMoleculeDiameter * 1.2 ) );
+      const moleculesAcrossBottom = Utils.roundSymmetric( PARTICLE_CONTAINER_WIDTH / ( waterMoleculeDiameter * 1.2 ) );
       const numberOfMolecules = Math.pow( moleculesAcrossBottom / 3, 2 );
 
       // Create the normalized data set for the one-atom-per-molecule case.
@@ -1207,7 +1207,7 @@ define( require => {
 
       // Initialize the number of atoms assuming that the solid form, when made into a square, will consume about 1/3
       // the width of the container.
-      const numberOfAtoms = Math.pow( Util.roundSymmetric( PARTICLE_CONTAINER_WIDTH / ( ( particleDiameter * 1.05 ) * 3 ) ), 2 );
+      const numberOfAtoms = Math.pow( Utils.roundSymmetric( PARTICLE_CONTAINER_WIDTH / ( ( particleDiameter * 1.05 ) * 3 ) ), 2 );
 
       // Create the normalized data set for the one-atom-per-molecule case.
       this.moleculeDataSet = new MoleculeForceAndMotionDataSet( 1 );

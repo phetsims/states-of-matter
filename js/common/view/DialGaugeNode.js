@@ -24,7 +24,7 @@ define( require => {
   const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   const Text = require( 'SCENERY/nodes/Text' );
   const timer = require( 'AXON/timer' );
-  const Util = require( 'DOT/Util' );
+  const Utils = require( 'DOT/Utils' );
 
   // strings
   const pressureOverloadString = require( 'string!STATES_OF_MATTER/pressureOverload' );
@@ -111,7 +111,7 @@ define( require => {
       const pressure = multipleParticleModel.pressureProperty.get();
       if ( pressure !== previousPressure ) {
         if ( pressure < MAX_PRESSURE ) {
-          textualReadout.setText( Util.toFixed( pressure, 1 ) + ' ' + pressureUnitsInAtmString );
+          textualReadout.setText( Utils.toFixed( pressure, 1 ) + ' ' + pressureUnitsInAtmString );
           textualReadout.fill = 'black';
         }
         else {

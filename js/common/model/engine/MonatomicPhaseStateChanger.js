@@ -16,7 +16,7 @@ define( require => {
   const SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
   const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   const SubstanceType = require( 'STATES_OF_MATTER/common/SubstanceType' );
-  const Util = require( 'DOT/Util' );
+  const Utils = require( 'DOT/Utils' );
 
   // constants
   const MIN_INITIAL_INTER_PARTICLE_DISTANCE = 1.12; // empirically determined
@@ -2066,7 +2066,7 @@ define( require => {
 
       // Place the molecules into a cube, a.k.a. a crystal.
       this.formCrystal(
-        Util.roundSymmetric( Math.sqrt( this.multipleParticleModel.moleculeDataSet.getNumberOfMolecules() ) ),
+        Utils.roundSymmetric( Math.sqrt( this.multipleParticleModel.moleculeDataSet.getNumberOfMolecules() ) ),
         MIN_INITIAL_INTER_PARTICLE_DISTANCE,
         MIN_INITIAL_INTER_PARTICLE_DISTANCE * 0.866,
         MIN_INITIAL_INTER_PARTICLE_DISTANCE / 2,

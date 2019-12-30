@@ -22,7 +22,7 @@ define( require => {
   const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   const Text = require( 'SCENERY/nodes/Text' );
   const ThermometerNode = require( 'SCENERY_PHET/ThermometerNode' );
-  const Util = require( 'DOT/Util' );
+  const Utils = require( 'DOT/Utils' );
   const VBox = require( 'SCENERY/nodes/VBox' );
 
   // strings
@@ -115,9 +115,9 @@ define( require => {
     function updateTemperatureValues() {
       const tempInKelvin = self.multipleParticleModel.getTemperatureInKelvin();
       if ( tempInKelvin !== null ) {
-        const tempInKelvinRounded = Util.roundSymmetric( tempInKelvin );
+        const tempInKelvinRounded = Utils.roundSymmetric( tempInKelvin );
         self.temperatureKelvinText.setText( tempInKelvinRounded + ' ' + kelvinUnitsString );
-        self.temperatureCelsiusText.setText( Util.roundSymmetric( tempInKelvin - 273.15 ) + ' ' + celsiusUnitsString );
+        self.temperatureCelsiusText.setText( Utils.roundSymmetric( tempInKelvin - 273.15 ) + ' ' + celsiusUnitsString );
         self.temperatureInKelvinProperty.value = tempInKelvinRounded > MAX_TEMPERATURE_TO_CLAMP_RED_MERCURY ?
                                                  MAX_TEMPERATURE_TO_CLAMP_RED_MERCURY : tempInKelvinRounded;
       }
