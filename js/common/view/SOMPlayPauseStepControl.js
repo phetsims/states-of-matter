@@ -10,7 +10,7 @@ define( require => {
   const SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
   const merge = require( 'PHET_CORE/merge' );
   const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  const TimeControlNode = require ( 'SCENERY_PHET/TimeControlNode' );
+  const TimeControlNode = require( 'SCENERY_PHET/TimeControlNode' );
 
   // constants
   const TOUCH_AREA_DILATION = 2.5;
