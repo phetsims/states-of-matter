@@ -156,7 +156,7 @@ define( require => {
           bracketLength: componentForceText.height,
           bracketLineWidth: 2,
           bracketStroke: options.textFill,
-          bracketTipLocation: 0.475
+          bracketTipPosition: 0.475
         } )
       ]
     } );
