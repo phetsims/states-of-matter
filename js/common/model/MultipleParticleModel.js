@@ -67,8 +67,6 @@ define( require => {
   const MIN_ALLOWABLE_CONTAINER_HEIGHT = 1500; // empirically determined, almost all the way to the bottom
 
   // constants related to how time steps are handled
-  const NOMINAL_FRAME_RATE = 60; // in frames per second
-  const NOMINAL_TIME_STEP = 1 / NOMINAL_FRAME_RATE;
   const PARTICLE_SPEED_UP_FACTOR = 4; // empirically determined to make the particles move at a speed that looks reasonable
   const MAX_PARTICLE_MOTION_TIME_STEP = 0.025; // max time step that model can handle, empirically determined
 
@@ -115,9 +113,10 @@ define( require => {
   const MAX_MOLECULES_QUEUED_FOR_INJECTION = 3;
 
   /**
+   * @param {Tandem} tandem
    * @constructor
    */
-  function MultipleParticleModel() {
+  function MultipleParticleModel( tandem ) {
 
     const self = this;
 
@@ -131,15 +130,20 @@ define( require => {
     this.isExplodedProperty = new Property( false ); // read only
     this.phaseDiagramExpandedProperty = new Property( true ); // read-write
     this.interactionExpandedProperty = new Property( true ); // read-write
-    this.temperatureSetPointProperty = new Property( INITIAL_TEMPERATURE ); // read-write
+
+    // @public (read-write)
+    this.temperatureSetPointProperty = new NumberProperty( INITIAL_TEMPERATURE, {
+      tandem: tandem.createTandem( 'temperatureSetPointProperty' ),
+      phetioReadOnly: true
+    } );
+
+    // @public
     this.pressureProperty = new Property( 0 ); // read only
     this.substanceProperty = new Property( DEFAULT_SUBSTANCE ); // read-write
-    this.interactionStrengthProperty = new Property( MAX_ADJUSTABLE_EPSILON ); // read-wrte
+    this.interactionStrengthProperty = new Property( MAX_ADJUSTABLE_EPSILON ); // read-write
     this.isPlayingProperty = new Property( true ); // read-write
     this.simSpeedProperty = new Property( 'normal' ); // read-write
     this.heatingCoolingAmountProperty = new Property( 0 ); // read-write
-    this.keepingUpProperty = new Property( true ); // tracks whether targeted min frame rate is being maintained
-    this.averageDtProperty = new Property( NOMINAL_TIME_STEP ); // read only
     this.maxParticleMoveTimePerStepProperty = new Property( Number.POSITIVE_INFINITY ); // read only
     this.numberOfMoleculesProperty = new NumberProperty( 0, { numberType: 'Integer' } ); // read-write
     this.numberOfMoleculesRangeProperty = new Property( new Range( 0, SOMConstants.MAX_NUM_ATOMS ) ); // read only
@@ -536,8 +540,6 @@ define( require => {
       this.isPlayingProperty.reset();
       this.simSpeedProperty.reset();
       this.heatingCoolingAmountProperty.reset();
-      this.keepingUpProperty.reset();
-      this.averageDtProperty.reset();
       this.maxParticleMoveTimePerStepProperty.reset();
 
       // reset thermostats

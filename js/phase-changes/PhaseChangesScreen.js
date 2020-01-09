@@ -24,20 +24,22 @@ define( require => {
 
   /**
    * @param {boolean} isInteractionDiagramEnabled
+   * @param {Tandem} tandem
    * @constructor
    */
-  function PhaseChangesScreen( isInteractionDiagramEnabled ) {
+  function PhaseChangesScreen( isInteractionDiagramEnabled, tandem ) {
 
     const options = {
       name: phaseChangesString,
       backgroundColorProperty: SOMColorProfile.backgroundProperty,
       homeScreenIcon: new PhaseChangesIcon( Screen.MINIMUM_HOME_SCREEN_ICON_SIZE ),
       showUnselectedHomeScreenIconFrame: true,
-      maxDT: SOMConstants.MAX_DT
+      maxDT: SOMConstants.MAX_DT,
+      tandem: tandem
     };
 
     Screen.call( this,
-      function() { return new MultipleParticleModel(); },
+      function() { return new MultipleParticleModel( tandem.createTandem( 'model' ) ); },
       function( model ) { return new PhaseChangesScreenView( model, isInteractionDiagramEnabled ); },
       options
     );

@@ -21,16 +21,18 @@ define( require => {
   /**
    * @param {boolean} enableHeterogeneousMolecules
    * @param {string} screenTitle
+   * @param {Tandem} tandem
    * @constructor
    */
-  function AtomicInteractionsScreen( enableHeterogeneousMolecules, screenTitle ) {
+  function AtomicInteractionsScreen( enableHeterogeneousMolecules, screenTitle, tandem ) {
 
     const options = {
       name: screenTitle,
       backgroundColorProperty: SOMColorProfile.backgroundProperty,
       homeScreenIcon: new AtomicInteractionsIcon( Screen.MINIMUM_HOME_SCREEN_ICON_SIZE ),
       showUnselectedHomeScreenIconFrame: true,
-      maxDT: SOMConstants.MAX_DT
+      maxDT: SOMConstants.MAX_DT,
+      tandem: tandem
     };
 
     Screen.call( this,

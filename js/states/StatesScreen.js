@@ -23,21 +23,23 @@ define( require => {
   const statesString = require( 'string!STATES_OF_MATTER/states' );
 
   /**
+   * @param {Tandem} tandem
    * @constructor
    */
-  function StatesScreen() {
+  function StatesScreen( tandem ) {
 
     const options = {
       name: statesString,
       backgroundColorProperty: SOMColorProfile.backgroundProperty,
       homeScreenIcon: new StatesIcon( Screen.MINIMUM_HOME_SCREEN_ICON_SIZE ),
       showUnselectedHomeScreenIconFrame: true,
-      maxDT: SOMConstants.MAX_DT
+      maxDT: SOMConstants.MAX_DT,
+      tandem: tandem
     };
 
     Screen.call( this,
-      function() { return new MultipleParticleModel(); },
-      function( model ) { return new StatesScreenView( model ); },
+      function() { return new MultipleParticleModel( tandem.createTandem( 'model' ) ); },
+      function( model ) { return new StatesScreenView( model, tandem.createTandem( 'view' ) ); },
       options
     );
   }

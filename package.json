@@ -18,6 +18,7 @@
     "runnable": true,
     "supportedBrands": [
       "phet",
+      "phet-io",
       "adapted-from-phet"
     ],
     "simulation": true

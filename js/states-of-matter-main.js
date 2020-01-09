@@ -15,6 +15,8 @@ define( require => {
   const Sim = require( 'JOIST/Sim' );
   const SimLauncher = require( 'JOIST/SimLauncher' );
   const StatesScreen = require( 'STATES_OF_MATTER/states/StatesScreen' );
+  const Tandem = require( 'TANDEM/Tandem' );
+
 
   // strings
   const interactionString = require( 'string!STATES_OF_MATTER/interaction' );
@@ -36,9 +38,9 @@ define( require => {
 
   SimLauncher.launch( function() {
     const sim = new Sim( statesOfMatterTitleString, [
-      new StatesScreen( ),
-      new PhaseChangesScreen( true ),
-      new AtomicInteractionsScreen( false, interactionString )
+      new StatesScreen( Tandem.ROOT.createTandem( 'statesScreen' ) ),
+      new PhaseChangesScreen( true, Tandem.ROOT.createTandem( 'phaseChangesScreen' ) ),
+      new AtomicInteractionsScreen( false, interactionString, Tandem.ROOT.createTandem( 'atomicInteractionsScreen' ) )
       ], simOptions );
     sim.start();
   } );
