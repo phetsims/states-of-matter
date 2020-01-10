@@ -22,11 +22,13 @@ define( require => {
   const AndersenThermostat = require( 'STATES_OF_MATTER/common/model/engine/kinetic/AndersenThermostat' );
   const ArgonAtom = require( 'STATES_OF_MATTER/common/model/particle/ArgonAtom' );
   const AtomType = require( 'STATES_OF_MATTER/common/model/AtomType' );
+  const BooleanProperty = require( 'AXON/BooleanProperty' );
   const ConfigurableStatesOfMatterAtom = require( 'STATES_OF_MATTER/common/model/particle/ConfigurableStatesOfMatterAtom' );
   const DiatomicAtomPositionUpdater = require( 'STATES_OF_MATTER/common/model/engine/DiatomicAtomPositionUpdater' );
   const DiatomicPhaseStateChanger = require( 'STATES_OF_MATTER/common/model/engine/DiatomicPhaseStateChanger' );
   const DiatomicVerletAlgorithm = require( 'STATES_OF_MATTER/common/model/engine/DiatomicVerletAlgorithm' );
   const Emitter = require( 'AXON/Emitter' );
+  const EnumerationProperty = require( 'AXON/EnumerationProperty' );
   const HydrogenAtom = require( 'STATES_OF_MATTER/common/model/particle/HydrogenAtom' );
   const inherit = require( 'PHET_CORE/inherit' );
   const InteractionStrengthTable = require( 'STATES_OF_MATTER/common/model/InteractionStrengthTable' );
@@ -124,12 +126,33 @@ define( require => {
     // observable model properties
     //-----------------------------------------------------------------------------------------------------------------
 
-    // @public
-    this.particleContainerHeightProperty = new Property( PARTICLE_CONTAINER_INITIAL_HEIGHT ); // read only
-    this.targetContainerHeightProperty = new Property( PARTICLE_CONTAINER_INITIAL_HEIGHT ); // read-write
-    this.isExplodedProperty = new Property( false ); // read only
-    this.phaseDiagramExpandedProperty = new Property( true ); // read-write
-    this.interactionExpandedProperty = new Property( true ); // read-write
+    // @public (read-only)
+    this.particleContainerHeightProperty = new NumberProperty( PARTICLE_CONTAINER_INITIAL_HEIGHT, {
+      tandem: tandem.createTandem( 'particleContainerHeightProperty' ),
+      phetioReadOnly: true
+    } );
+
+    // @public (read-write)
+    this.targetContainerHeightProperty = new NumberProperty( PARTICLE_CONTAINER_INITIAL_HEIGHT, {
+      tandem: tandem.createTandem( 'targetContainerHeightProperty' ),
+      range: new Range( MIN_ALLOWABLE_CONTAINER_HEIGHT, PARTICLE_CONTAINER_INITIAL_HEIGHT )
+    } );
+
+    // @public (read-only)
+    this.isExplodedProperty = new BooleanProperty( false, {
+      tandem: tandem.createTandem( 'isExplodedProperty' ),
+      phetioReadOnly: true
+    } );
+
+    // @public (read-write)
+    this.phaseDiagramExpandedProperty = new BooleanProperty( true, {
+      tandem: tandem.createTandem( 'phaseDiagramExpandedProperty' )
+    } );
+
+    // @public (read-write)
+    this.interactionPotentialDiagramExpandedProperty = new BooleanProperty( true, {
+      tandem: tandem.createTandem( 'interactionPotentialDiagramExpandedProperty' )
+    } );
 
     // @public (read-write)
     this.temperatureSetPointProperty = new NumberProperty( INITIAL_TEMPERATURE, {
@@ -137,9 +160,17 @@ define( require => {
       phetioReadOnly: true
     } );
 
-    // @public
-    this.pressureProperty = new Property( 0 ); // read only
-    this.substanceProperty = new Property( DEFAULT_SUBSTANCE ); // read-write
+    // @public (read-only)
+    this.pressureProperty = new NumberProperty( 0, {
+      tandem: tandem.createTandem( 'pressureProperty' ),
+      phetioReadOnly: true
+    } );
+
+    // @public (read-write)
+    this.substanceProperty = new EnumerationProperty( SubstanceType, DEFAULT_SUBSTANCE, {
+      tandem: tandem.createTandem( 'substanceProperty' )
+    } );
+
     this.interactionStrengthProperty = new Property( MAX_ADJUSTABLE_EPSILON ); // read-write
     this.isPlayingProperty = new Property( true ); // read-write
     this.simSpeedProperty = new Property( 'normal' ); // read-write
@@ -532,7 +563,7 @@ define( require => {
       this.targetContainerHeightProperty.reset();
       this.isExplodedProperty.reset();
       this.phaseDiagramExpandedProperty.reset();
-      this.interactionExpandedProperty.reset();
+      this.interactionPotentialDiagramExpandedProperty.reset();
       this.temperatureSetPointProperty.reset();
       this.pressureProperty.reset();
       this.substanceProperty.reset();

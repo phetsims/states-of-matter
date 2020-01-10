@@ -153,7 +153,7 @@ define( require => {
       titleNode: titleNode,
       fill: SOMColorProfile.controlPanelBackgroundProperty,
       stroke: SOMColorProfile.controlPanelStrokeProperty,
-      expandedProperty: multipleParticleModel.interactionExpandedProperty,
+      expandedProperty: multipleParticleModel.interactionPotentialDiagramExpandedProperty,
       contentAlign: 'center',
       titleAlignX: 'center',
       buttonAlign: 'left',

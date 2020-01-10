@@ -3,20 +3,9 @@
 define( require => {
   'use strict';
 
+  const Enumeration = require( 'PHET_CORE/Enumeration' );
   const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
-  const SubstanceType = {
-    NEON: 'NEON',
-    ARGON: 'ARGON',
-    DIATOMIC_OXYGEN: 'DIATOMIC_OXYGEN',
-    WATER: 'WATER',
-    ADJUSTABLE_ATOM: 'ADJUSTABLE_ATOM'
-  };
-
-  // verify that the enum is immutable, without the runtime penalty in production code
-  if ( assert ) { Object.freeze( SubstanceType ); }
-
-  statesOfMatter.register( 'SubstanceType', SubstanceType );
-
-  return SubstanceType;
+  const SubstanceType = Enumeration.byKeys( [ 'NEON', 'ARGON', 'DIATOMIC_OXYGEN', 'WATER', 'ADJUSTABLE_ATOM' ] );
+  return statesOfMatter.register( 'SubstanceType', SubstanceType );
 } );
