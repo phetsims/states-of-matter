@@ -56,9 +56,10 @@ define( require => {
   /**
    * @param {MultipleParticleModel} multipleParticleModel - model of the simulation
    * @param {boolean} isInteractionDiagramEnabled
+   * @param {Tandem} tandem
    * @constructor
    */
-  function PhaseChangesScreenView( multipleParticleModel, isInteractionDiagramEnabled ) {
+  function PhaseChangesScreenView( multipleParticleModel, isInteractionDiagramEnabled, tandem ) {
     const self = this;
 
     ScreenView.call( this, SOMConstants.SCREEN_VIEW_OPTIONS );
@@ -198,7 +199,8 @@ define( require => {
         right: this.layoutBounds.right - CONTROL_PANEL_X_INSET,
         top: 5,
         maxWidth: PANEL_WIDTH,
-        minWidth: PANEL_WIDTH
+        minWidth: PANEL_WIDTH,
+        tandem: tandem.createTandem( 'phaseChangesMoleculesControlPanel' )
       }
     );
     this.addChild( phaseChangesMoleculesControlPanel );

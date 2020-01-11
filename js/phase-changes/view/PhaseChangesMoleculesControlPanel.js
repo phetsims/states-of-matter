@@ -27,6 +27,7 @@ define( require => {
   const SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
   const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   const SubstanceType = require( 'STATES_OF_MATTER/common/SubstanceType' );
+  const Tandem = require( 'TANDEM/Tandem' );
   const Text = require( 'SCENERY/nodes/Text' );
   const VBox = require( 'SCENERY/nodes/VBox' );
 
@@ -61,13 +62,18 @@ define( require => {
       stroke: SOMColorProfile.controlPanelStrokeProperty,
       lineWidth: 1,
       cornerRadius: SOMConstants.PANEL_CORNER_RADIUS,
-      minWidth: 120 // somewhat arbitrary, will generally be set by constructor
+      minWidth: 120, // somewhat arbitrary, will generally be set by constructor
+      tandem: Tandem.REQUIRED
     }, options );
 
     const selectorWidth = options.minWidth - 2 * options.xMargin;
 
     Node.call( this );
-    const textOptions = { font: new PhetFont( NORMAL_TEXT_FONT_SIZE ), fill: '#FFFFFF', maxWidth: selectorWidth * 0.75 };
+    const textOptions = {
+      font: new PhetFont( NORMAL_TEXT_FONT_SIZE ),
+      fill: '#FFFFFF',
+      maxWidth: selectorWidth * 0.75
+    };
     const tickTextOptions = {
       font: new PhetFont( NORMAL_TEXT_FONT_SIZE ),
       fill: SOMColorProfile.controlPanelTextProperty,
@@ -115,10 +121,11 @@ define( require => {
     const waterText = new Text( waterString, textOptions );
     const oxygenText = new Text( diatomicOxygenString, textOptions );
     const adjustableAttractionText = new Text( adjustableAttractionString, textOptions );
-    const titleText = new Text( atomsAndMoleculesString, {
+    const title = new Text( atomsAndMoleculesString, {
       font: new PhetFont( 14 ),
       fill: SOMColorProfile.controlPanelTextProperty,
-      maxWidth: options.minWidth * 0.85
+      maxWidth: options.minWidth * 0.85,
+      tandem: options.tandem.createTandem( 'title' )
     } );
 
     // create objects that describe the pieces that make up a selector item in the control panel, conforms to the
@@ -188,34 +195,45 @@ define( require => {
       minWidth: options.minWidth,
       lineWidth: options.lineWidth
     } );
-    interactionTitle.bottom = interactionStrengthSlider.top - 5;
-    interactionTitle.centerX = interactionStrengthSlider.centerX;
+    this.addChild( radioButtonPanel );
+
+    // do some layout now that many of the pieces exist
     interactionStrengthNode.centerX = radioButtonGroup.centerX;
     interactionStrengthNode.top = radioButtonGroup.bottom + INSET;
 
+    // make any updates needed to the panel when the selected substance changes
     multipleParticleModel.substanceProperty.link( function( value ) {
 
-      // adjust the control panel border when adjustable attraction selected or deselect
+      // add or remove the node for controlling interaction strength
       if ( value === SubstanceType.ADJUSTABLE_ATOM ) {
         content.addChild( interactionStrengthNode );
       }
-      else {
-        if ( content.hasChild( interactionStrengthNode ) ) {
-          content.removeChild( interactionStrengthNode );
-        }
+      else if ( content.hasChild( interactionStrengthNode ) ) {
+        content.removeChild( interactionStrengthNode );
       }
     } );
-    const titleBackground = new Rectangle( 0, 0, titleText.width + 5, titleText.height, {
-      fill: SOMColorProfile.controlPanelBackgroundProperty
-    } );
-    titleBackground.centerX = radioButtonPanel.centerX;
-    titleBackground.centerY = radioButtonPanel.top;
-    titleText.centerX = titleBackground.centerX;
-    titleText.centerY = titleBackground.centerY;
 
-    this.addChild( radioButtonPanel );
-    //add the title node
-    this.addChild( new Node( { children: [ titleBackground, titleText ] } ) );
+    // create the background for the title - initial size is arbitrary, it will be sized and positioned below
+    const titleBackground = new Rectangle( 0, 0, 1, 1, { fill: options.fill } );
+    this.addChild( new Node( { children: [ titleBackground, title ] } ) );
+
+    // closure for updating the title background size and overall position
+    const updateTitle = () => {
+      titleBackground.rectWidth = title.width + 5;
+      titleBackground.rectHeight = title.height;
+      titleBackground.centerX = radioButtonPanel.centerX;
+      titleBackground.centerY = radioButtonPanel.top;
+      title.centerX = titleBackground.centerX;
+      title.centerY = titleBackground.centerY;
+    };
+
+    // do the initial update of the title
+    updateTitle();
+
+    // Listen for changes to the title text node's bounds and update the title when they occur.  There is no need to
+    // unlink this since the panel is permanent.
+    title.on( 'localBounds', updateTitle );
+
     this.mutate( options );
   }
 

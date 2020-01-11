@@ -40,7 +40,9 @@ define( require => {
 
     Screen.call( this,
       function() { return new MultipleParticleModel( tandem.createTandem( 'model' ) ); },
-      function( model ) { return new PhaseChangesScreenView( model, isInteractionDiagramEnabled ); },
+      function( model ) {
+        return new PhaseChangesScreenView( model, isInteractionDiagramEnabled, tandem.createTandem( 'view' ) );
+      },
       options
     );
   }
