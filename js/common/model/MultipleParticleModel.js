@@ -171,11 +171,10 @@ define( require => {
       tandem: tandem.createTandem( 'substanceProperty' )
     } );
 
-    this.interactionStrengthProperty = new Property( MAX_ADJUSTABLE_EPSILON ); // read-write
     this.isPlayingProperty = new Property( true ); // read-write
     this.simSpeedProperty = new Property( 'normal' ); // read-write
     this.heatingCoolingAmountProperty = new Property( 0 ); // read-write
-    this.maxParticleMoveTimePerStepProperty = new Property( Number.POSITIVE_INFINITY ); // read only
+    this.interactionStrengthProperty = new Property( MAX_ADJUSTABLE_EPSILON ); // read-write
     this.numberOfMoleculesProperty = new NumberProperty( 0, { numberType: 'Integer' } ); // read-write
     this.numberOfMoleculesRangeProperty = new Property( new Range( 0, SOMConstants.MAX_NUM_ATOMS ) ); // read only
     this.resetEmitter = new Emitter(); // listen only, fires when a reset occurs
@@ -455,9 +454,6 @@ define( require => {
       // Add the particles and set their initial positions.
       this.initializeParticles( phase );
 
-      // Reset any time step limits that had kicked in for the previous substance.
-      this.maxParticleMoveTimePerStepProperty.reset();
-
       // Reset the moving average of temperature differences.
       this.averageTemperatureDifference.reset();
 
@@ -571,7 +567,6 @@ define( require => {
       this.isPlayingProperty.reset();
       this.simSpeedProperty.reset();
       this.heatingCoolingAmountProperty.reset();
-      this.maxParticleMoveTimePerStepProperty.reset();
 
       // reset thermostats
       this.isoKineticThermostat.clearAccumulatedBias();
@@ -872,10 +867,7 @@ define( require => {
 
       // Calculate the amount of time to advance the particle engine.  This is based purely on aesthetics - we looked at
       // the particle motion and tweaked the multiplier until we felt that it looked good.
-      const particleMotionAdvancementTime = Math.min(
-        dt * PARTICLE_SPEED_UP_FACTOR,
-        this.maxParticleMoveTimePerStepProperty.get()
-      );
+      const particleMotionAdvancementTime = dt * PARTICLE_SPEED_UP_FACTOR;
 
       // Determine the number of model steps and the size of the time step.
       let numParticleEngineSteps = 1;
