@@ -185,7 +185,8 @@ define( require => {
         {
           maxWidth: PANEL_WIDTH,
           minWidth: PANEL_WIDTH,
-          right: this.layoutBounds.right - CONTROL_PANEL_X_INSET
+          right: this.layoutBounds.right - CONTROL_PANEL_X_INSET,
+          tandem: tandem.createTandem( 'epsilonControlInteractionPotentialDiagram' )
         }
       );
       this.addChild( epsilonControlInteractionPotentialDiagram );
@@ -211,7 +212,8 @@ define( require => {
       minWidth: PANEL_WIDTH,
       maxWidth: PANEL_WIDTH,
       right: phaseChangesMoleculesControlPanel.right,
-      top: phaseChangesMoleculesControlPanel.top + INTER_PANEL_SPACING
+      top: phaseChangesMoleculesControlPanel.top + INTER_PANEL_SPACING,
+      tandem: tandem.createTandem( 'phaseDiagram' )
     } );
     this.addChild( this.phaseDiagram );
 
