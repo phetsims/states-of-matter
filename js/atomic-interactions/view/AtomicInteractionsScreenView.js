@@ -25,6 +25,7 @@ define( require => {
   const PushPinNode = require( 'STATES_OF_MATTER/atomic-interactions/view/PushPinNode' );
   const ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
   const ScreenView = require( 'JOIST/ScreenView' );
+  const SimSpeed = require( 'STATES_OF_MATTER/common/model/SimSpeed' );
   const SOMColorProfile = require( 'STATES_OF_MATTER/common/view/SOMColorProfile' );
   const SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
   const SOMPlayPauseStepControl = require( 'STATES_OF_MATTER/common/view/SOMPlayPauseStepControl' );
@@ -162,11 +163,11 @@ define( require => {
     };
     const speedSelectionButtonRadius = 8;
     const slowText = new Text( slowMotionString, speedSelectionButtonOptions );
-    const slowMotionRadioBox = new AquaRadioButton( dualAtomModel.simSpeedProperty, 'slow', slowText, {
+    const slowMotionRadioBox = new AquaRadioButton( dualAtomModel.simSpeedProperty, SimSpeed.SLOW_MOTION, slowText, {
       radius: speedSelectionButtonRadius
     } );
     const normalText = new Text( normalString, speedSelectionButtonOptions );
-    const normalMotionRadioBox = new AquaRadioButton( dualAtomModel.simSpeedProperty, 'normal', normalText, {
+    const normalMotionRadioBox = new AquaRadioButton( dualAtomModel.simSpeedProperty, SimSpeed.NORMAL, normalText, {
       radius: speedSelectionButtonRadius
     } );
 

@@ -18,6 +18,7 @@ define( require => {
   const LjPotentialCalculator = require( 'STATES_OF_MATTER/common/model/LjPotentialCalculator' );
   const Property = require( 'AXON/Property' );
   const SigmaTable = require( 'STATES_OF_MATTER/common/model/SigmaTable' );
+  const SimSpeed = require( 'STATES_OF_MATTER/common/model/SimSpeed' );
   const SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
   const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   const Vector2 = require( 'DOT/Vector2' );
@@ -45,7 +46,7 @@ define( require => {
     this.motionPausedProperty = new Property( false );
     this.atomPairProperty = new Property( AtomPair.NEON_NEON );
     this.isPlayingProperty = new Property( true );
-    this.simSpeedProperty = new Property( 'normal' );
+    this.simSpeedProperty = new Property( SimSpeed.NORMAL );
     this.atomDiameterProperty = new Property( 300 );
     this.forcesDisplayModeProperty = new Property( 'hideForces' );
     this.forcesControlPanelExpandedProperty = new Property( false );
@@ -369,10 +370,10 @@ define( require => {
         // here.  The multipliers were empirically determined.
         let adjustedTimeStep;
         switch( this.simSpeedProperty.get() ) {
-          case 'normal':
+          case SimSpeed.NORMAL:
             adjustedTimeStep = simulationTimeStep * 2;
             break;
-          case 'slow':
+          case SimSpeed.SLOW_MOTION:
             adjustedTimeStep = simulationTimeStep * 0.5;
             break;
           default:

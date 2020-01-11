@@ -171,8 +171,11 @@ define( require => {
       tandem: tandem.createTandem( 'substanceProperty' )
     } );
 
-    this.isPlayingProperty = new Property( true ); // read-write
-    this.simSpeedProperty = new Property( 'normal' ); // read-write
+    // @public (read-write)
+    this.isPlayingProperty = new BooleanProperty( true, {
+      tandem: tandem.createTandem( 'isPlayingProperty' )
+    } );
+
     this.heatingCoolingAmountProperty = new Property( 0 ); // read-write
     this.interactionStrengthProperty = new Property( MAX_ADJUSTABLE_EPSILON ); // read-write
     this.numberOfMoleculesProperty = new NumberProperty( 0, { numberType: 'Integer' } ); // read-write
@@ -565,7 +568,6 @@ define( require => {
       this.substanceProperty.reset();
       this.interactionStrengthProperty.reset();
       this.isPlayingProperty.reset();
-      this.simSpeedProperty.reset();
       this.heatingCoolingAmountProperty.reset();
 
       // reset thermostats
