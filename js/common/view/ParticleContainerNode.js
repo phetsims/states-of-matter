@@ -38,9 +38,15 @@ define( require => {
    * @param {ModelViewTransform2} modelViewTransform
    * @param {boolean} volumeControlEnabled - set true to enable volume control by pushing the lid using a finger from above
    * @param {boolean} pressureGaugeEnabled - set true to show the pressure gauge
+   * @param {Tandem} tandem
    * @constructor
    */
-  function ParticleContainerNode( multipleParticleModel, modelViewTransform, volumeControlEnabled, pressureGaugeEnabled ) {
+  function ParticleContainerNode(
+    multipleParticleModel,
+    modelViewTransform,
+    volumeControlEnabled,
+    pressureGaugeEnabled,
+    tandem ) {
 
     Node.call( this, { preventFit: true } );
     const self = this;
@@ -70,7 +76,7 @@ define( require => {
 
     // set up variables used to create and position the various parts of the container
     const containerWidthWithMargin = modelViewTransform.modelToViewDeltaX( multipleParticleModel.getParticleContainerWidth() ) +
-                                   2 * CONTAINER_X_MARGIN;
+                                     2 * CONTAINER_X_MARGIN;
     const topEllipseRadiusX = containerWidthWithMargin / 2;
     const topEllipseRadiusY = topEllipseRadiusX * PERSPECTIVE_TILT_FACTOR;
 
@@ -105,7 +111,8 @@ define( require => {
 
       // Add the pointing hand, the finger of which can push down on the top of the container.
       var pointingHandNode = new PointingHandNode( multipleParticleModel, modelViewTransform, {
-        centerX: this.particleAreaViewBounds.centerX + 30 // offset empirically determined
+        centerX: this.particleAreaViewBounds.centerX + 30, // offset empirically determined
+        tandem: tandem.createTandem( 'pointingHandNode' )
       } );
       postParticleLayer.addChild( pointingHandNode );
 
@@ -149,60 +156,60 @@ define( require => {
 
     // create and add the main container node, excluding the bevel
     const mainContainer = new Path( new Shape()
-      .moveTo( 0, 0 )
+        .moveTo( 0, 0 )
 
-      // top curve, y-component of control points made to match up with lower edge of the lid
-      .cubicCurveTo(
-        0,
-        outerShapeTiltFactor,
-        containerWidthWithMargin,
-        outerShapeTiltFactor,
-        containerWidthWithMargin,
-        0
-      )
+        // top curve, y-component of control points made to match up with lower edge of the lid
+        .cubicCurveTo(
+          0,
+          outerShapeTiltFactor,
+          containerWidthWithMargin,
+          outerShapeTiltFactor,
+          containerWidthWithMargin,
+          0
+        )
 
-      // line from outer top right to outer bottom right
-      .lineTo( containerWidthWithMargin, this.particleAreaViewBounds.height )
+        // line from outer top right to outer bottom right
+        .lineTo( containerWidthWithMargin, this.particleAreaViewBounds.height )
 
-      // bottom outer curve
-      .cubicCurveTo(
-        containerWidthWithMargin,
-        this.particleAreaViewBounds.height + outerShapeTiltFactor,
-        0,
-        this.particleAreaViewBounds.height + outerShapeTiltFactor,
-        0,
-        this.particleAreaViewBounds.height
-      )
+        // bottom outer curve
+        .cubicCurveTo(
+          containerWidthWithMargin,
+          this.particleAreaViewBounds.height + outerShapeTiltFactor,
+          0,
+          this.particleAreaViewBounds.height + outerShapeTiltFactor,
+          0,
+          this.particleAreaViewBounds.height
+        )
 
-      // left outer side
-      .lineTo( 0, 0 )
+        // left outer side
+        .lineTo( 0, 0 )
 
-      // start drawing the cutout, must be drawn in opposite direction from outer shape to make the hole appear
-      .moveTo( CONTAINER_CUTOUT_X_MARGIN, cutoutTopY )
+        // start drawing the cutout, must be drawn in opposite direction from outer shape to make the hole appear
+        .moveTo( CONTAINER_CUTOUT_X_MARGIN, cutoutTopY )
 
-      // left inner line
-      .lineTo( CONTAINER_CUTOUT_X_MARGIN, cutoutBottomY )
+        // left inner line
+        .lineTo( CONTAINER_CUTOUT_X_MARGIN, cutoutBottomY )
 
-      // bottom inner curve
-      .quadraticCurveTo(
-        containerWidthWithMargin / 2,
-        cutoutBottomY + cutoutShapeTiltFactor,
-        containerWidthWithMargin - CONTAINER_CUTOUT_X_MARGIN,
-        cutoutBottomY
-      )
+        // bottom inner curve
+        .quadraticCurveTo(
+          containerWidthWithMargin / 2,
+          cutoutBottomY + cutoutShapeTiltFactor,
+          containerWidthWithMargin - CONTAINER_CUTOUT_X_MARGIN,
+          cutoutBottomY
+        )
 
-      // line from inner bottom right to inner top right
-      .lineTo( containerWidthWithMargin - CONTAINER_CUTOUT_X_MARGIN, cutoutTopY )
+        // line from inner bottom right to inner top right
+        .lineTo( containerWidthWithMargin - CONTAINER_CUTOUT_X_MARGIN, cutoutTopY )
 
-      // top inner curve
-      .quadraticCurveTo(
-        containerWidthWithMargin / 2,
-        cutoutTopY + cutoutShapeTiltFactor,
-        CONTAINER_CUTOUT_X_MARGIN,
-        cutoutTopY
-      )
+        // top inner curve
+        .quadraticCurveTo(
+          containerWidthWithMargin / 2,
+          cutoutTopY + cutoutShapeTiltFactor,
+          CONTAINER_CUTOUT_X_MARGIN,
+          cutoutTopY
+        )
 
-      .close(),
+        .close(),
       {
         fill: new LinearGradient( 0, 0, containerWidthWithMargin, 0 )
           .addColorStop( 0, '#6D6D6D' )
@@ -330,8 +337,8 @@ define( require => {
         pressureMeter.top = self.particleAreaViewBounds.top - 75; // empirical position adjustment to connect to lid
         pressureMeter.setElbowHeight(
           PRESSURE_METER_ELBOW_OFFSET + Math.abs( self.modelViewTransform.modelToViewDeltaY(
-            MultipleParticleModel.PARTICLE_CONTAINER_INITIAL_HEIGHT - containerHeight
-          ) )
+          MultipleParticleModel.PARTICLE_CONTAINER_INITIAL_HEIGHT - containerHeight
+                                      ) )
         );
       }
       else {

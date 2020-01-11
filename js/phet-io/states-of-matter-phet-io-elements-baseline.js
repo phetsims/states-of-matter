@@ -3719,6 +3719,58 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
+    "statesOfMatter.phaseChangesScreen.view.pointingHandNode": {
+      "phetioDocumentation": "",
+      "phetioDynamicElement": false,
+      "phetioEventType": "MODEL",
+      "phetioFeatured": false,
+      "phetioHighFrequency": false,
+      "phetioIsArchetype": false,
+      "phetioPlayback": false,
+      "phetioReadOnly": false,
+      "phetioState": false,
+      "phetioStudioControl": true,
+      "phetioTypeName": "NodeIO"
+    },
+    "statesOfMatter.phaseChangesScreen.view.pointingHandNode.opacityProperty": {
+      "phetioDocumentation": "Opacity of the parent NodeIO, between 0 (invisible) and 1 (fully visible)",
+      "phetioDynamicElement": false,
+      "phetioEventType": "MODEL",
+      "phetioFeatured": false,
+      "phetioHighFrequency": false,
+      "phetioIsArchetype": false,
+      "phetioPlayback": false,
+      "phetioReadOnly": false,
+      "phetioState": true,
+      "phetioStudioControl": true,
+      "phetioTypeName": "NumberPropertyIO"
+    },
+    "statesOfMatter.phaseChangesScreen.view.pointingHandNode.pickableProperty": {
+      "phetioDocumentation": "Sets whether the node will be pickable (and hence interactive), see the NodeIO documentation for more details",
+      "phetioDynamicElement": false,
+      "phetioEventType": "MODEL",
+      "phetioFeatured": false,
+      "phetioHighFrequency": false,
+      "phetioIsArchetype": false,
+      "phetioPlayback": false,
+      "phetioReadOnly": false,
+      "phetioState": true,
+      "phetioStudioControl": true,
+      "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
+    },
+    "statesOfMatter.phaseChangesScreen.view.pointingHandNode.visibleProperty": {
+      "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
+      "phetioDynamicElement": false,
+      "phetioEventType": "MODEL",
+      "phetioFeatured": false,
+      "phetioHighFrequency": false,
+      "phetioIsArchetype": false,
+      "phetioPlayback": false,
+      "phetioReadOnly": false,
+      "phetioState": true,
+      "phetioStudioControl": true,
+      "phetioTypeName": "PropertyIO<BooleanIO>"
+    },
     "statesOfMatter.statesScreen.activeProperty": {
       "phetioDocumentation": "Indicates whether the screen is currently displayed in the simulation.  For single-screen simulations, there is only one screen and it is always active.",
       "phetioDynamicElement": false,

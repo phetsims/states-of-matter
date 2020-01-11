@@ -63,7 +63,7 @@ define( require => {
     );
 
     // @private particle container
-    this.particleContainerNode = new ParticleContainerNode( multipleParticleModel, modelViewTransform, false, false );
+    this.particleContainerNode = new ParticleContainerNode( multipleParticleModel, modelViewTransform, false, false, tandem );
     this.addChild( this.particleContainerNode );
 
     // @private add heater/cooler node
