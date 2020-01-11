@@ -176,10 +176,31 @@ define( require => {
       tandem: tandem.createTandem( 'isPlayingProperty' )
     } );
 
-    this.heatingCoolingAmountProperty = new Property( 0 ); // read-write
-    this.interactionStrengthProperty = new Property( MAX_ADJUSTABLE_EPSILON ); // read-write
-    this.numberOfMoleculesProperty = new NumberProperty( 0, { numberType: 'Integer' } ); // read-write
-    this.numberOfMoleculesRangeProperty = new Property( new Range( 0, SOMConstants.MAX_NUM_ATOMS ) ); // read only
+    // @public (read-write)
+    this.heatingCoolingAmountProperty = new NumberProperty( 0, {
+      tandem: tandem.createTandem( 'heatingCoolingAmountProperty' ),
+      range: new Range( -1, 1 )
+    } );
+
+    // @public (read-write)
+    this.interactionStrengthProperty = new NumberProperty( MAX_ADJUSTABLE_EPSILON, {
+      tandem: tandem.createTandem( 'interactionStrengthProperty' ),
+      range: new Range( MIN_ADJUSTABLE_EPSILON, MAX_ADJUSTABLE_EPSILON )
+    } );
+
+    // @public (read-write)
+    this.numberOfMoleculesProperty = new NumberProperty( 0, {
+      tandem: tandem.createTandem( 'numberOfMoleculesProperty' ),
+      phetioReadOnly: true
+    } );
+
+    // @public (read-only)
+    // this.numberOfMoleculesRangeProperty = new Property( new Range( 0, SOMConstants.MAX_NUM_ATOMS ), {
+    //   tandem: tandem.createTandem( 'numberOfMoleculesRangeProperty' ),
+    //   phetioReadOnly: true
+    // } );
+    this.numberOfMoleculesRangeProperty = new Property( new Range( 0, SOMConstants.MAX_NUM_ATOMS ) );
+
     this.resetEmitter = new Emitter(); // listen only, fires when a reset occurs
 
     //-----------------------------------------------------------------------------------------------------------------
@@ -358,7 +379,7 @@ define( require => {
       }
       else if ( this.temperatureSetPointProperty.get() < criticalPointInModelUnits ) {
         const slope = ( criticalPointInKelvin - triplePointInKelvin ) /
-                    ( criticalPointInModelUnits - triplePointInModelUnits );
+                      ( criticalPointInModelUnits - triplePointInModelUnits );
         const offset = triplePointInKelvin - ( slope * triplePointInModelUnits );
         temperatureInKelvin = this.temperatureSetPointProperty.get() * slope + offset;
       }
@@ -1010,7 +1031,7 @@ define( require => {
         const numParticles = this.moleculeDataSet.getNumberOfMolecules();
         const injectedParticleTemperature = ( 2 / 3 ) * this.moleculeDataSet.getMoleculeKineticEnergy( numParticles - 1 );
         const newTemperature = temperatureSetPoint * ( numParticles - 1 ) / numParticles +
-                             injectedParticleTemperature / numParticles;
+                               injectedParticleTemperature / numParticles;
         this.setTemperature( newTemperature );
       }
       else if ( this.moleculeForceAndMotionCalculator.lidChangedParticleVelocity ) {
