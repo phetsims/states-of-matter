@@ -98,7 +98,8 @@ define( require => {
     } ), {
       scale: 0.79,
       centerX: nominalParticleAreaViewBounds.centerX,
-      top: nominalParticleAreaViewBounds.maxY + 30 // offset from container bottom empirically determined
+      top: nominalParticleAreaViewBounds.maxY + 30, // offset from container bottom empirically determined
+      tandem: tandem.createTandem( 'heaterCoolerNode' )
     } );
     this.addChild( heaterCoolerNode );
 
@@ -126,7 +127,8 @@ define( require => {
       },
       radius: SOMConstants.RESET_ALL_BUTTON_RADIUS,
       right: this.layoutBounds.maxX - SOMConstants.RESET_ALL_BUTTON_DISTANCE_FROM_SIDE,
-      bottom: this.layoutBounds.maxY - SOMConstants.RESET_ALL_BUTTON_DISTANCE_FROM_BOTTOM
+      bottom: this.layoutBounds.maxY - SOMConstants.RESET_ALL_BUTTON_DISTANCE_FROM_BOTTOM,
+      tandem: tandem.createTandem( 'resetAllButton' )
     } );
     this.addChild( resetAllButton );
 
@@ -134,7 +136,11 @@ define( require => {
     this.addChild( new SOMPlayPauseStepControl(
       multipleParticleModel.isPlayingProperty,
       multipleParticleModel.stepInternal.bind( multipleParticleModel ),
-      { right: heaterCoolerNode.left - 50, centerY: heaterCoolerNode.centerY }
+      {
+        right: heaterCoolerNode.left - 50,
+        centerY: heaterCoolerNode.centerY,
+        tandem: tandem.createTandem( 'playPauseControl' )
+      }
     ) );
 
     // Pump is located at the bottom left of the screen.
@@ -155,7 +161,8 @@ define( require => {
         handleTouchAreaYDilation: 100,
         dragListenerOptions: {
           numberOfParticlesPerPumpAction: 3
-        }
+        },
+        tandem: tandem.createTandem( 'pumpNode' )
       } );
     this.addChild( this.pumpNode );
 
@@ -170,7 +177,8 @@ define( require => {
       visible: false,
       xMargin: 10,
       centerX: nominalParticleAreaViewBounds.minX - 150,
-      centerY: nominalParticleAreaViewBounds.minY
+      centerY: nominalParticleAreaViewBounds.minY,
+      tandem: tandem.createTandem( 'returnLidButton' )
     } );
     this.addChild( this.returnLidButton );
     multipleParticleModel.isExplodedProperty.linkAttribute( this.returnLidButton, 'visible' );
@@ -224,7 +232,7 @@ define( require => {
     this.slopeInSecondRegion = 0;
     this.offsetInSecondRegion = 0;
 
-    // set up
+    // monitor the substance and update the mappings to triple and critical points when changes occur
     multipleParticleModel.substanceProperty.link( function( substance ) {
 
       if ( substance === SubstanceType.NEON ||

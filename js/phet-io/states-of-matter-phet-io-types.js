@@ -181,6 +181,28 @@ window.phet.phetio.phetioTypes = assert &&
       "supertype": "ObjectIO",
       "typeName": "ActionIO<Vector2IO, EventIO>"
     },
+    "ActionIO<Vector2IO>": {
+      "documentation": "Executes when an event occurs.",
+      "events": [
+        "emitted"
+      ],
+      "methodOrder": [],
+      "methods": {
+        "execute": {
+          "documentation": "Executes the function the Action is wrapping.",
+          "invocableForReadOnlyElements": false,
+          "parameterTypes": [
+            "Vector2IO"
+          ],
+          "returnType": "VoidIO"
+        }
+      },
+      "parameterTypes": [
+        "Vector2IO"
+      ],
+      "supertype": "ObjectIO",
+      "typeName": "ActionIO<Vector2IO>"
+    },
     "ArrayIO<StringIO>": {
       "documentation": "A wrapper for the built-in JS array type, with the element type specified.",
       "events": [],
@@ -196,6 +218,28 @@ window.phet.phetio.phetioTypes = assert &&
       "methods": {},
       "supertype": "ObjectIO",
       "typeName": "BooleanIO"
+    },
+    "DerivedPropertyIO<BooleanIO>": {
+      "documentation": "Like PropertyIO, but not settable.  Instead it is derived from other DerivedPropertyIO or PropertyIO instances",
+      "events": [
+        "changed"
+      ],
+      "methodOrder": [],
+      "methods": {
+        "setValue": {
+          "documentation": "Errors out when you try to set a derived property.",
+          "invocableForReadOnlyElements": false,
+          "parameterTypes": [
+            "BooleanIO"
+          ],
+          "returnType": "VoidIO"
+        }
+      },
+      "parameterTypes": [
+        "BooleanIO"
+      ],
+      "supertype": "PropertyIO<BooleanIO>",
+      "typeName": "DerivedPropertyIO<BooleanIO>"
     },
     "DialogIO": {
       "documentation": "A dialog panel",
@@ -391,6 +435,19 @@ window.phet.phetio.phetioTypes = assert &&
       "supertype": "ObjectIO",
       "typeName": "FunctionIO(ObjectIO)=>VoidIO"
     },
+    "FunctionIO(RangeIO,NullableIO<RangeIO>)=>VoidIO": {
+      "documentation": "Wrapper for the built-in JS function type.<br><strong>Arguments:</strong> RangeIO, NullableIO<RangeIO><br><strong>Return Type:</strong> VoidIO",
+      "events": [],
+      "methodOrder": [],
+      "methods": {},
+      "parameterTypes": [
+        "RangeIO",
+        "NullableIO<RangeIO>",
+        "VoidIO"
+      ],
+      "supertype": "ObjectIO",
+      "typeName": "FunctionIO(RangeIO,NullableIO<RangeIO>)=>VoidIO"
+    },
     "FunctionIO(StringIO,NullableIO<StringIO>)=>VoidIO": {
       "documentation": "Wrapper for the built-in JS function type.<br><strong>Arguments:</strong> StringIO, NullableIO<StringIO><br><strong>Return Type:</strong> VoidIO",
       "events": [],
@@ -430,6 +487,14 @@ window.phet.phetio.phetioTypes = assert &&
       ],
       "supertype": "ObjectIO",
       "typeName": "FunctionIO(StringIO,StringIO)=>VoidIO"
+    },
+    "LinkedElementIO": {
+      "documentation": "A LinkedElement",
+      "events": [],
+      "methodOrder": [],
+      "methods": {},
+      "supertype": "ObjectIO",
+      "typeName": "LinkedElementIO"
     },
     "NodeIO": {
       "documentation": "The base type for graphical and potentially interactive objects.  NodeIO has nested PropertyIO values for visibility, pickability and opacity.<br><br>Pickable can take one of three values:<br><ul><li>null: pass-through behavior. Nodes with input listeners are pickable, but nodes without input listeners won't block events for nodes behind it.</li><li>false: The node cannot be interacted with, and it blocks events for nodes behind it.</li><li>true: The node can be interacted with (if it has an input listener).</li></ul>For more about Scenery node pickability, please see <a href=\"http://phetsims.github.io/scenery/doc/implementation-notes#pickability\">http://phetsims.github.io/scenery/doc/implementation-notes#pickability</a>",
@@ -504,6 +569,17 @@ window.phet.phetio.phetioTypes = assert &&
       ],
       "supertype": "ObjectIO",
       "typeName": "NullableIO<NumberIO>"
+    },
+    "NullableIO<RangeIO>": {
+      "documentation": "A wrapper to wrap another IOType, adding support for null.",
+      "events": [],
+      "methodOrder": [],
+      "methods": {},
+      "parameterTypes": [
+        "RangeIO"
+      ],
+      "supertype": "ObjectIO",
+      "typeName": "NullableIO<RangeIO>"
     },
     "NullableIO<SceneryEventIO>": {
       "documentation": "A wrapper to wrap another IOType, adding support for null.",
@@ -1054,6 +1130,50 @@ window.phet.phetio.phetioTypes = assert &&
       "supertype": "ObjectIO",
       "typeName": "PropertyIO<NumberIO>"
     },
+    "PropertyIO<RangeIO>": {
+      "documentation": "Observable values that send out notifications when the value changes. This differs from the traditional listener pattern in that added listeners also receive a callback with the current value when the listeners are registered. This is a widely-used pattern in PhET-iO simulations.",
+      "events": [
+        "changed"
+      ],
+      "methodOrder": [
+        "link",
+        "lazyLink"
+      ],
+      "methods": {
+        "getValue": {
+          "documentation": "Gets the current value.",
+          "parameterTypes": [],
+          "returnType": "RangeIO"
+        },
+        "lazyLink": {
+          "documentation": "Adds a listener which will be called when the value changes. This method is like \"link\", but without the current-value callback on registration. The listener takes two arguments, the new value and the previous value.",
+          "parameterTypes": [
+            "FunctionIO(RangeIO,NullableIO<RangeIO>)=>VoidIO"
+          ],
+          "returnType": "VoidIO"
+        },
+        "link": {
+          "documentation": "Adds a listener which will be called when the value changes. On registration, the listener is also called with the current value. The listener takes two arguments, the new value and the previous value.",
+          "parameterTypes": [
+            "FunctionIO(RangeIO,NullableIO<RangeIO>)=>VoidIO"
+          ],
+          "returnType": "VoidIO"
+        },
+        "setValue": {
+          "documentation": "Sets the value of the Property. If the value differs from the previous value, listeners are notified with the new value.",
+          "invocableForReadOnlyElements": false,
+          "parameterTypes": [
+            "RangeIO"
+          ],
+          "returnType": "VoidIO"
+        }
+      },
+      "parameterTypes": [
+        "RangeIO"
+      ],
+      "supertype": "ObjectIO",
+      "typeName": "PropertyIO<RangeIO>"
+    },
     "PropertyIO<StringIO>": {
       "documentation": "Observable values that send out notifications when the value changes. This differs from the traditional listener pattern in that added listeners also receive a callback with the current value when the listeners are registered. This is a widely-used pattern in PhET-iO simulations.",
       "events": [
@@ -1098,6 +1218,26 @@ window.phet.phetio.phetioTypes = assert &&
       "supertype": "ObjectIO",
       "typeName": "PropertyIO<StringIO>"
     },
+    "RangeIO": {
+      "documentation": "A range with \"min\" and a \"max\" members.",
+      "events": [],
+      "methodOrder": [],
+      "methods": {},
+      "supertype": "ObjectIO",
+      "typeName": "RangeIO"
+    },
+    "ResetAllButtonIO": {
+      "documentation": "Button that performs an action while it is being pressed, and stops the action when released",
+      "events": [
+        "pressed",
+        "released",
+        "releasedDisabled"
+      ],
+      "methodOrder": [],
+      "methods": {},
+      "supertype": "NodeIO",
+      "typeName": "ResetAllButtonIO"
+    },
     "RichTextIO": {
       "documentation": "The tandem IO type for the scenery RichText node",
       "events": [],
@@ -1113,6 +1253,31 @@ window.phet.phetio.phetioTypes = assert &&
       "methods": {},
       "supertype": "ObjectIO",
       "typeName": "SceneryEventIO"
+    },
+    "SliderIO": {
+      "documentation": "A traditional slider component, with a knob and possibly tick marks",
+      "events": [],
+      "methodOrder": [],
+      "methods": {
+        "setMajorTicksVisible": {
+          "documentation": "Set whether the major tick marks should be shown",
+          "invocableForReadOnlyElements": false,
+          "parameterTypes": [
+            "BooleanIO"
+          ],
+          "returnType": "VoidIO"
+        },
+        "setMinorTicksVisible": {
+          "documentation": "Set whether the minor tick marks should be shown",
+          "invocableForReadOnlyElements": false,
+          "parameterTypes": [
+            "BooleanIO"
+          ],
+          "returnType": "VoidIO"
+        }
+      },
+      "supertype": "NodeIO",
+      "typeName": "SliderIO"
     },
     "StringIO": {
       "documentation": "Wrapper for the built-in JS string type",
@@ -1156,6 +1321,16 @@ window.phet.phetio.phetioTypes = assert &&
       },
       "supertype": "NodeIO",
       "typeName": "TextIO"
+    },
+    "ToggleButtonIO": {
+      "documentation": "A button that toggles state (in/out) when pressed",
+      "events": [
+        "toggled"
+      ],
+      "methodOrder": [],
+      "methods": {},
+      "supertype": "NodeIO",
+      "typeName": "ToggleButtonIO"
     },
     "Vector2IO": {
       "documentation": "A numerical object with x and y properties, like {x:3,y:4}",

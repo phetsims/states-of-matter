@@ -72,7 +72,8 @@ define( require => {
     } ), {
       scale: 0.79,
       centerX: particleContainerViewBounds.centerX,
-      top: particleContainerViewBounds.bottom + 30 // distance from bottom of particle area empirically determined
+      top: particleContainerViewBounds.bottom + 30, // distance from bottom of particle area empirically determined
+      tandem: tandem.createTandem( 'heaterCoolerNode' )
     } );
     this.addChild( heaterCoolerNode );
 
@@ -121,14 +122,19 @@ define( require => {
       },
       radius: SOMConstants.RESET_ALL_BUTTON_RADIUS,
       right: this.layoutBounds.maxX - SOMConstants.RESET_ALL_BUTTON_DISTANCE_FROM_SIDE,
-      bottom: this.layoutBounds.maxY - SOMConstants.RESET_ALL_BUTTON_DISTANCE_FROM_BOTTOM
+      bottom: this.layoutBounds.maxY - SOMConstants.RESET_ALL_BUTTON_DISTANCE_FROM_BOTTOM,
+      tandem: tandem.createTandem( 'resetAllButton' )
     } );
     this.addChild( resetAllButton );
 
     this.addChild( new SOMPlayPauseStepControl(
       multipleParticleModel.isPlayingProperty,
       multipleParticleModel.stepInternal.bind( multipleParticleModel ),
-      { right: heaterCoolerNode.left - 50, centerY: heaterCoolerNode.centerY }
+      {
+        right: heaterCoolerNode.left - 50,
+        centerY: heaterCoolerNode.centerY,
+        tandem: tandem.createTandem( 'playPauseStepControl' )
+      }
     ) );
 
     // @private
