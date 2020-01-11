@@ -1,7 +1,7 @@
 // Copyright 2014-2019, University of Colorado Boulder
 
 /**
- * View for the panel for selecting the atoms/molecules
+ * panel for selecting the atoms/molecules
  *
  * @author Siddhartha Chinthapally (Actual Concepts)
  */
@@ -23,6 +23,7 @@ define( require => {
   const SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
   const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   const SubstanceType = require( 'STATES_OF_MATTER/common/SubstanceType' );
+  const Tandem = require( 'TANDEM/Tandem' );
   const Text = require( 'SCENERY/nodes/Text' );
 
   // strings
@@ -50,7 +51,8 @@ define( require => {
       lineWidth: 1,
       cornerRadius: SOMConstants.PANEL_CORNER_RADIUS,
       maxWidth: DEFAULT_WIDTH,
-      minWidth: DEFAULT_WIDTH
+      minWidth: DEFAULT_WIDTH,
+      tandem: Tandem.REQUIRED
     }, options );
 
     Node.call( this );
@@ -64,7 +66,8 @@ define( require => {
     const title = new Text( atomsAndMoleculesString, {
       font: new PhetFont( 14 ),
       fill: SOMColorProfile.controlPanelTextProperty,
-      maxWidth: maxTextWidth
+      maxWidth: maxTextWidth,
+      tandem: options.tandem.createTandem( 'title' )
     } );
 
     // create objects that describe the pieces that make up an item in the control panel, conforms to the contract:
@@ -73,10 +76,6 @@ define( require => {
     const argon = { label: argonText, icon: AtomAndMoleculeIconFactory.createIcon( SubstanceType.ARGON ) };
     const water = { label: waterText, icon: AtomAndMoleculeIconFactory.createIcon( SubstanceType.WATER ) };
     const oxygen = { label: oxygenText, icon: AtomAndMoleculeIconFactory.createIcon( SubstanceType.DIATOMIC_OXYGEN ) };
-
-    const titleText = {
-      label: title
-    };
 
     const selectorWidth = options.minWidth - 2 * options.xMargin;
 
@@ -125,15 +124,26 @@ define( require => {
     } );
     this.addChild( radioButtonPanel );
 
-    const titleBackground = new Rectangle( 0, 0, titleText.label.width + 5, titleText.label.height, {
-      fill: options.fill
-    } );
-    titleBackground.centerX = radioButtonPanel.centerX;
-    titleBackground.centerY = radioButtonPanel.top;
-    titleText.label.centerX = titleBackground.centerX;
-    titleText.label.centerY = titleBackground.centerY;
-    const tittleNode = new Node( { children: [ titleBackground, titleText.label ] } );
-    this.addChild( tittleNode );
+    // create the background for the title - initial size is arbitrary, it will be sized and positioned below
+    const titleBackground = new Rectangle( 0, 0, 1, 1, { fill: options.fill } );
+    this.addChild( new Node( { children: [ titleBackground, title ] } ) );
+
+    // closure for updating the title background size and overall position
+    const updateTitle = () => {
+      titleBackground.rectWidth = title.width + 5;
+      titleBackground.rectHeight = title.height;
+      titleBackground.centerX = radioButtonPanel.centerX;
+      titleBackground.centerY = radioButtonPanel.top;
+      title.centerX = titleBackground.centerX;
+      title.centerY = titleBackground.centerY;
+    };
+
+    // do the initial update of the title
+    updateTitle();
+
+    // Listen for changes to the title text node's bounds and update the title when they occur.  There is no need to
+    // unlink this since the panel is permanent.
+    title.on( 'localBounds', updateTitle );
 
     this.mutate( options );
   }

@@ -37,9 +37,10 @@ define( require => {
 
   /**
    * @param {MultipleParticleModel} multipleParticleModel - model of the simulation
+   * @param {Tandem} tandem
    * @constructor
    */
-  function StatesScreenView( multipleParticleModel ) {
+  function StatesScreenView( multipleParticleModel, tandem ) {
 
     const self = this;
     ScreenView.call( this, SOMConstants.SCREEN_VIEW_OPTIONS );
@@ -99,7 +100,8 @@ define( require => {
       right: this.layoutBounds.right - CONTROL_PANEL_X_INSET,
       top: this.layoutBounds.top + CONTROL_PANEL_Y_INSET,
       minWidth: CONTROL_PANEL_WIDTH,
-      maxWidth: CONTROL_PANEL_WIDTH
+      maxWidth: CONTROL_PANEL_WIDTH,
+      tandem: tandem.createTandem( 'atomsAndMoleculesSelectionPanel' )
     } );
     this.addChild( atomsAndMoleculesSelectionPanel );
 
