@@ -109,7 +109,8 @@ define( require => {
     const solidLiquidGasPhaseControlNode = new StatesPhaseControlNode( multipleParticleModel, {
       right: atomsAndMoleculesSelectionPanel.right,
       top: atomsAndMoleculesSelectionPanel.bottom + CONTROL_PANEL_Y_INSET,
-      buttonWidth: CONTROL_PANEL_WIDTH
+      buttonWidth: CONTROL_PANEL_WIDTH,
+      tandem: tandem.createTandem( 'solidLiquidGasPhaseControlNode' )
     } );
     this.addChild( solidLiquidGasPhaseControlNode );
 
