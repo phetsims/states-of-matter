@@ -4,6 +4,7 @@
  * panel for selecting the atoms/molecules
  *
  * @author Siddhartha Chinthapally (Actual Concepts)
+ * @author John Blanco (PhET Interactive Simulations)
  */
 define( require => {
   'use strict';
@@ -58,11 +59,24 @@ define( require => {
     Node.call( this );
     const maxTextWidth = options.maxWidth * 0.75;
     const textOptions = { font: new PhetFont( 12 ), fill: '#FFFFFF', maxWidth: maxTextWidth };
+    const tandem = options.tandem;
 
-    const neonText = new Text( neonString, textOptions );
-    const argonText = new Text( argonString, textOptions );
-    const waterText = new Text( waterString, textOptions );
-    const oxygenText = new Text( diatomicOxygenString, textOptions );
+    const neonText = new Text(
+      neonString,
+      merge( { tandem: tandem.createTandem( 'neonText' ) }, textOptions )
+    );
+    const argonText = new Text(
+      argonString,
+      merge( { tandem: tandem.createTandem( 'argonText' ) }, textOptions )
+    );
+    const waterText = new Text(
+      waterString,
+      merge( { tandem: tandem.createTandem( 'waterText' ) }, textOptions )
+    );
+    const oxygenText = new Text(
+      diatomicOxygenString,
+      merge( { tandem: tandem.createTandem( 'oxygenText' ) }, textOptions )
+    );
     const title = new Text( atomsAndMoleculesString, {
       font: new PhetFont( 14 ),
       fill: SOMColorProfile.controlPanelTextProperty,
@@ -108,7 +122,7 @@ define( require => {
       deselectedContentOpacity: 1
     } );
 
-    SOMColorProfile.controlPanelBackgroundProperty.link( function( color ){
+    SOMColorProfile.controlPanelBackgroundProperty.link( function( color ) {
       radioButtonGroup.baseColor = color;
     } );
 
