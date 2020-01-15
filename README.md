@@ -41,6 +41,7 @@ git clone https://github.com/phetsims/states-of-matter.git
 git clone https://github.com/phetsims/sun.git
 git clone https://github.com/phetsims/tambo.git
 git clone https://github.com/phetsims/tandem.git
+git clone https://github.com/phetsims/utterance-queue.git
 ```
 (2) Start an http-server
 
