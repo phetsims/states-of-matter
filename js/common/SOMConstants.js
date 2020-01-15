@@ -18,6 +18,7 @@ define( require => {
   // constants (these are vars because other constants refer to them)
   const SOLID_TEMPERATURE = 0.15;
   const NEON_ATOM_EPSILON = 32.8; // epsilon/k-Boltzmann is in Kelvin.
+  const EPSILON_FOR_WATER = 200; // epsilon/k-Boltzmann is in Kelvin.
 
   const SOMConstants  = {
 
@@ -47,10 +48,10 @@ define( require => {
     VIEW_CONTAINER_WIDTH: 280,
 
     // Lennard-Jones potential interaction values for multi-atomic atoms.
+    EPSILON_FOR_WATER: EPSILON_FOR_WATER,
+    SIGMA_FOR_WATER: 444,             // In picometers.
     EPSILON_FOR_DIATOMIC_OXYGEN: 113, // Epsilon/k-Boltzmann is in Kelvin.
     SIGMA_FOR_DIATOMIC_OXYGEN: 365,   // In picometers.
-    EPSILON_FOR_WATER: 200,           // Epsilon/k-Boltzmann is in Kelvin.
-    SIGMA_FOR_WATER: 444,             // In picometers.
 
     // Max and min values for parameters of Lennard-Jones potential calculations.  These are used in places were non-
     // normalized LJ calculations are made, graphed, and otherwise used.
@@ -76,8 +77,9 @@ define( require => {
     HYDROGEN_COLOR: Element.H.color,
     ADJUSTABLE_ATTRACTION_COLOR: '#CC66CC',
 
-    // adjustable attraction min epsilon
+    // adjustable attraction min and max epsilon values, chosen empirically based on how the interaction looks
     MIN_ADJUSTABLE_EPSILON: ( 1.5 * NEON_ATOM_EPSILON ),
+    MAX_ADJUSTABLE_EPSILON: EPSILON_FOR_WATER * 1.7,
 
     // physical constants
     K_BOLTZMANN: 1.38E-23, // Boltzmann's constant.

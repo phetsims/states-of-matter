@@ -11,6 +11,7 @@ define( require => {
 
   // modules
   const BooleanRectangularStickyToggleButton = require( 'SUN/buttons/BooleanRectangularStickyToggleButton' );
+  const BooleanProperty = require( 'AXON/BooleanProperty' );
   const HBox = require( 'SCENERY/nodes/HBox' );
   const HStrut = require( 'SCENERY/nodes/HStrut' );
   const Image = require( 'SCENERY/nodes/Image' );
@@ -65,9 +66,15 @@ define( require => {
     const stateProperty = new Property( PhaseStateEnum.UNKNOWN );
 
     // boolean properties corresponding to each state
-    const solidSelectedProperty = new Property( false );
-    const liquidSelectedProperty = new Property( false );
-    const gasSelectedProperty = new Property( false );
+    const solidSelectedProperty = new BooleanProperty( false, {
+      tandem: options.tandem.createTandem( 'solidSelectedProperty' )
+    } );
+    const liquidSelectedProperty = new BooleanProperty( false, {
+      tandem: options.tandem.createTandem( 'liquidSelectedProperty' )
+    } );
+    const gasSelectedProperty = new BooleanProperty( false, {
+      tandem: options.tandem.createTandem( 'gasSelectedProperty' )
+    } );
 
     // convenience constant
     const tandem = options.tandem;

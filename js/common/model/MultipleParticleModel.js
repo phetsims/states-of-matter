@@ -107,7 +107,7 @@ define( require => {
   // Min a max values for adjustable epsilon.  Originally there was a wider allowable range, but the simulation did not
   // work so well, so the range below was arrived at empirically and seems to work reasonably well.
   const MIN_ADJUSTABLE_EPSILON = SOMConstants.MIN_ADJUSTABLE_EPSILON;
-  const MAX_ADJUSTABLE_EPSILON = SOMConstants.EPSILON_FOR_WATER * 1.7;
+  const MAX_ADJUSTABLE_EPSILON = SOMConstants.MAX_ADJUSTABLE_EPSILON;
 
   // Time value used to prevent molecule injections from being too close together so that they don't overlap after
   // injection and cause high initial velocities.
