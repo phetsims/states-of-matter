@@ -191,8 +191,7 @@ define( require => {
     Property.multilink(
       [ dualAtomModel.atomPairProperty, dualAtomModel.interactionStrengthProperty, dualAtomModel.atomDiameterProperty ],
       function( atomPair, interactionStrength, atomDiameter ) {
-        if ( atomPair === AtomType.ADJUSTABLE ) {
-          dualAtomModel.atomPairProperty.set( AtomPair.ADJUSTABLE );
+        if ( atomPair === AtomPair.ADJUSTABLE ) {
           dualAtomModel.setEpsilon( interactionStrength );
           dualAtomModel.setAdjustableAtomSigma( atomDiameter );
         }

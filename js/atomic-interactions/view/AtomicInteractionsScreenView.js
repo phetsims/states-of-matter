@@ -13,6 +13,7 @@ define( require => {
   const AtomicInteractionsControlPanel = require( 'STATES_OF_MATTER/atomic-interactions/view/AtomicInteractionsControlPanel' );
   const Bounds2 = require( 'DOT/Bounds2' );
   const ForcesControlPanel = require( 'STATES_OF_MATTER/atomic-interactions/view/ForcesControlPanel' );
+  const ForceDisplayMode = require( 'STATES_OF_MATTER/atomic-interactions/model/ForceDisplayMode' );
   const GrabbableParticleNode = require( 'STATES_OF_MATTER/atomic-interactions/view/GrabbableParticleNode' );
   const HandNode = require( 'STATES_OF_MATTER/atomic-interactions/view/HandNode' );
   const inherit = require( 'PHET_CORE/inherit' );
@@ -203,8 +204,8 @@ define( require => {
     this.pushPinNode = new PushPinNode();
     this.pushPinNode.scale( PUSH_PIN_WIDTH / this.pushPinNode.width );
 
-    // update the push pin position if the adjustable atom diamter changes
-    dualAtomModel.atomDiameterProperty.link( function( atomDiameter ) {
+    // update the push pin position if the adjustable atom diameter changes
+    dualAtomModel.atomDiameterProperty.link( function() {
       self.updatePushPinPosition();
     } );
 
@@ -231,10 +232,10 @@ define( require => {
 
     // update the visibility of the force arrows when the settings change
     dualAtomModel.forcesDisplayModeProperty.link( function( forces ) {
-      self.setShowAttractiveForces( forces === 'componentForce' );
-      self.setShowRepulsiveForces( forces === 'componentForce' );
-      self.setShowTotalForces( forces === 'totalForce' );
-      if ( !self.showAttractiveForces && !self.showTotalForces && forces !== 'hideForces' ) {
+      self.setShowAttractiveForces( forces === ForceDisplayMode.COMPONENTS );
+      self.setShowRepulsiveForces( forces === ForceDisplayMode.COMPONENTS );
+      self.setShowTotalForces( forces === ForceDisplayMode.TOTAL );
+      if ( !self.showAttractiveForces && !self.showTotalForces && forces !== ForceDisplayMode.HIDDEN ) {
         throw new Error( 'invalid forces: ' + forces );
       }
     } );

@@ -36,8 +36,10 @@ define( require => {
     };
 
     Screen.call( this,
-      function() { return new DualAtomModel(); },
-      function( model ) { return new AtomicInteractionsScreenView( model, enableHeterogeneousMolecules ); },
+      function() { return new DualAtomModel( tandem.createTandem( 'model' ) ); },
+      function( model ) {
+        return new AtomicInteractionsScreenView( model, enableHeterogeneousMolecules, tandem.createTandem( 'view' ) );
+      },
       options
     );
   }

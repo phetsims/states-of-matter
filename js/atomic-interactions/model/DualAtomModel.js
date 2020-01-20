@@ -13,10 +13,13 @@ define( require => {
   const AtomFactory = require( 'STATES_OF_MATTER/common/model/AtomFactory' );
   const AtomPair = require( 'STATES_OF_MATTER/atomic-interactions/model/AtomPair' );
   const AtomType = require( 'STATES_OF_MATTER/common/model/AtomType' );
+  const BooleanProperty = require( 'AXON/BooleanProperty' );
+  const EnumerationProperty = require( 'AXON/EnumerationProperty' );
+  const ForceDisplayMode = require( 'STATES_OF_MATTER/atomic-interactions/model/ForceDisplayMode' );
   const inherit = require( 'PHET_CORE/inherit' );
   const InteractionStrengthTable = require( 'STATES_OF_MATTER/common/model/InteractionStrengthTable' );
   const LjPotentialCalculator = require( 'STATES_OF_MATTER/common/model/LjPotentialCalculator' );
-  const Property = require( 'AXON/Property' );
+  const NumberProperty = require( 'AXON/NumberProperty' );
   const SigmaTable = require( 'STATES_OF_MATTER/common/model/SigmaTable' );
   const SimSpeed = require( 'STATES_OF_MATTER/common/model/SimSpeed' );
   const SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
@@ -31,9 +34,10 @@ define( require => {
   const MAX_TIME_STEP = 0.005; // in seconds
 
   /**
+   * @param {Tandem} tandem
    * @constructor
    */
-  function DualAtomModel() {
+  function DualAtomModel( tandem ) {
 
     const self = this;
 
@@ -41,16 +45,53 @@ define( require => {
     // observable model properties
     //-----------------------------------------------------------------------------------------------------------------
 
-    // @public, read-write
-    this.interactionStrengthProperty = new Property( 100 ); // Epsilon/k-Boltzmann is in Kelvin.
-    this.motionPausedProperty = new Property( false );
-    this.atomPairProperty = new Property( AtomPair.NEON_NEON );
-    this.isPlayingProperty = new Property( true );
-    this.simSpeedProperty = new Property( SimSpeed.NORMAL );
-    this.atomDiameterProperty = new Property( 300 );
-    this.forcesDisplayModeProperty = new Property( 'hideForces' );
-    this.forcesControlPanelExpandedProperty = new Property( false );
-    this.movementHintVisibleProperty = new Property( true );
+    // @public (read-write) - epsilon/k-Boltzmann is in Kelvin.
+    this.interactionStrengthProperty = new NumberProperty( 100, {
+      tandem: tandem.createTandem( 'interactionStrengthProperty' ),
+      phetioReadOnly: true
+    } );
+
+    // @public (read-write) - indicates when motion is paused due to user interaction with the movable atom
+    this.motionPausedProperty = new BooleanProperty( false, {
+      tandem: tandem.createTandem( 'motionPausedProperty' ),
+      phetioReadOnly: true
+    } );
+
+    // @public (read-write)
+    this.atomPairProperty = new EnumerationProperty( AtomPair, AtomPair.NEON_NEON, {
+      tandem: tandem.createTandem( 'atomPairProperty' )
+    } );
+
+    // @public (read-write) - paused or playing
+    this.isPlayingProperty = new BooleanProperty( true, {
+      tandem: tandem.createTandem( 'isPlayingProperty' )
+    } );
+
+    // @public (read-write) - sim at which the model is running
+    this.simSpeedProperty = new EnumerationProperty( SimSpeed, SimSpeed.NORMAL, {
+      tandem: tandem.createTandem( 'simSpeedProperty' )
+    } );
+
+    // @public (read-write)
+    this.atomDiameterProperty = new NumberProperty( 300, {
+      tandem: tandem.createTandem( 'atomDiameterProperty' ),
+      phetioReadOnly: true
+    } );
+
+    // @public (read-write)
+    this.forcesDisplayModeProperty = new EnumerationProperty( ForceDisplayMode, ForceDisplayMode.HIDDEN, {
+      tandem: tandem.createTandem( 'forcesDisplayModeProperty' )
+    } );
+
+    // @public (read-write)
+    this.forcesControlPanelExpandedProperty = new BooleanProperty( false, {
+      tandem: tandem.createTandem( 'forcesControlPanelExpandedProperty' )
+    } );
+
+    // @public (read-write)
+    this.movementHintVisibleProperty = new BooleanProperty( true, {
+      tandem: tandem.createTandem( 'movementHintVisibleProperty' )
+    } );
 
     //-----------------------------------------------------------------------------------------------------------------
     // other model attributes

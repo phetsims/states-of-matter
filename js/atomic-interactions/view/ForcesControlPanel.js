@@ -14,6 +14,7 @@ define( require => {
   const AquaRadioButton = require( 'SUN/AquaRadioButton' );
   const ArrowNode = require( 'SCENERY_PHET/ArrowNode' );
   const BracketNode = require( 'SCENERY_PHET/BracketNode' );
+  const ForceDisplayMode = require( 'STATES_OF_MATTER/atomic-interactions/model/ForceDisplayMode' );
   const HBox = require( 'SCENERY/nodes/HBox' );
   const HStrut = require( 'SCENERY/nodes/HStrut' );
   const inherit = require( 'PHET_CORE/inherit' );
@@ -176,13 +177,13 @@ define( require => {
     const totalForce = new HBox( { spacing: 2, children: [ totalForceItem ] } );
     const hideForce = new HBox( { spacing: 2, children: [ createConsistentlySpacedLabel( hideForcesText ) ] } );
 
-    const hideForcesRadio = new AquaRadioButton( forcesProperty, 'hideForces', hideForce, {
+    const hideForcesRadio = new AquaRadioButton( forcesProperty, ForceDisplayMode.HIDDEN, hideForce, {
       radius: RADIO_BUTTON_RADIUS
     } );
-    const totalForceRadio = new AquaRadioButton( forcesProperty, 'totalForce', totalForce, {
+    const totalForceRadio = new AquaRadioButton( forcesProperty, ForceDisplayMode.TOTAL, totalForce, {
       radius: RADIO_BUTTON_RADIUS
     } );
-    const componentForceRadio = new AquaRadioButton( forcesProperty, 'componentForce', componentForce, {
+    const componentForceRadio = new AquaRadioButton( forcesProperty, ForceDisplayMode.COMPONENTS, componentForce, {
       radius: RADIO_BUTTON_RADIUS
     } );
 

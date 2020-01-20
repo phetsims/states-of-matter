@@ -1,28 +1,23 @@
 // Copyright 2015-2019, University of Colorado Boulder
 
 /**
- * AtomPair enum
- * @author Chandrashekar Bemagoni  (Actual Concepts)
+ * AtomPair enumeration
+ * @author John Blanco (PhET Interactive Simulations)
  */
 define( require => {
   'use strict';
 
+  const Enumeration = require( 'PHET_CORE/Enumeration' );
   const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
-  const AtomPair = {
-    NEON_NEON: 'NEON_NEON',
-    ARGON_ARGON: 'ARGON_ARGON',
-    OXYGEN_OXYGEN: 'OXYGEN_OXYGEN',
-    NEON_ARGON: 'NEON_ARGON',
-    NEON_OXYGEN: 'NEON_OXYGEN',
-    ARGON_OXYGEN: 'ARGON_OXYGEN',
-    ADJUSTABLE: 'ADJUSTABLE'
-  };
-
-  // verify that enum is immutable, without the runtime penalty in production code
-  if ( assert ) { Object.freeze( AtomPair ); }
-
-  statesOfMatter.register( 'AtomPair', AtomPair );
-
-  return AtomPair;
+  const AtomPair = Enumeration.byKeys( [
+    'NEON_NEON',
+    'ARGON_ARGON',
+    'OXYGEN_OXYGEN',
+    'NEON_ARGON',
+    'NEON_OXYGEN',
+    'ARGON_OXYGEN',
+    'ADJUSTABLE'
+  ] );
+  return statesOfMatter.register( 'AtomPair', AtomPair );
 } );
