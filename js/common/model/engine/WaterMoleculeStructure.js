@@ -48,6 +48,4 @@ define( require => {
   statesOfMatter.register( 'WaterMoleculeStructure', WaterMoleculeStructure );
 
   return WaterMoleculeStructure;
-
 } );
-

@@ -37,5 +37,4 @@ define( require => {
   statesOfMatter.register( 'MonatomicAtomPositionUpdater', MonatomicAtomPositionUpdater );
 
   return MonatomicAtomPositionUpdater;
-
 } );

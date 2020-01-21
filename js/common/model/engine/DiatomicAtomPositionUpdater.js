@@ -55,5 +55,4 @@ define( require => {
   statesOfMatter.register( 'DiatomicAtomPositionUpdater', DiatomicAtomPositionUpdater );
 
   return DiatomicAtomPositionUpdater;
-
 } );
