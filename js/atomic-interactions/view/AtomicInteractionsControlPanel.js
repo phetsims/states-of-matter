@@ -28,6 +28,7 @@ define( require => {
   const SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
   const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   const SubstanceType = require( 'STATES_OF_MATTER/common/SubstanceType' );
+  const Tandem = require( 'TANDEM/Tandem' );
   const Text = require( 'SCENERY/nodes/Text' );
   const VBox = require( 'SCENERY/nodes/VBox' );
 
@@ -75,7 +76,8 @@ define( require => {
       buttonTextFill: enableHeterogeneousAtoms ? 'black' : 'white',
       lineWidth: 1,
       cornerRadius: SOMConstants.PANEL_CORNER_RADIUS,
-      minWidth: 0
+      minWidth: 0,
+      tandem: Tandem.REQUIRED
     }, options );
 
     Node.call( this );
@@ -139,20 +141,27 @@ define( require => {
         fill: options.buttonTextFill,
         maxWidth: NORMAL_TEXT_MAX_WIDTH
       } );
-      const pushpinImage = new Image( pushPinImg );
+      const pushpinImage = new Image( pushPinImg, {
+        tandem: options.tandem.createTandem( 'pushpinImage' )
+      } );
       pushpinImage.scale( 15 / pushpinImage.height );
       const maxWidthOfTitleText = 100; // empirically determined
       const pinnedNodeText = new HBox( {
         children: [
           pushpinImage,
-          new Text( pinnedString, { font: new PhetFont( 10 ), maxWidth: maxWidthOfTitleText } ),
+          new Text( pinnedString, {
+            font: new PhetFont( 10 ),
+            maxWidth: maxWidthOfTitleText,
+            tandem: options.tandem.createTandem( 'pinnedNodeText' )
+          } ),
           new HStrut( pushpinImage.width )
         ],
         spacing: 5
       } );
       titleText = [ pinnedNodeText, new Text( movingString, {
         font: new PhetFont( 10 ),
-        maxWidth: maxWidthOfTitleText
+        maxWidth: maxWidthOfTitleText,
+        tandem: options.tandem.createTandem( 'movingNodeText' )
       } ) ];
       maxLabelWidth = Math.max(
         neonAndArgon[ 0 ].width + neonAndArgon[ 1 ].width,
@@ -162,7 +171,7 @@ define( require => {
         neonAndOxygen[ 0 ].width + neonAndOxygen[ 1 ].width );
       maxLabelWidth = 2 * Math.max( titleText[ 0 ].width, titleText[ 1 ].width, maxLabelWidth / 2, sliderTrackWidth / 2 );
 
-      // function to create a label node from
+      // function to create a label node
       createLabelNode = function( atomNameTextNodes ) {
         const strutWidth1 = maxLabelWidth / 2 - atomNameTextNodes[ 0 ].width;
         const strutWidth2 = maxLabelWidth / 2 - atomNameTextNodes[ 1 ].width;

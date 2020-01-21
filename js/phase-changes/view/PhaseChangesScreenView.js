@@ -83,9 +83,6 @@ define( require => {
       modelViewTransform.modelToViewY( 0 )
     );
 
-    this.multipleParticleModel = multipleParticleModel;
-    this.modelTemperatureHistory = new ObservableArray( { allowDuplicates: true } );
-
     // create the particle container - it takes care of positioning itself
     this.particleContainerNode = new ParticleContainerNode( multipleParticleModel, modelViewTransform, true, true, tandem );
 

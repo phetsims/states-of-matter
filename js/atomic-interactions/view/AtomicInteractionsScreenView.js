@@ -50,9 +50,10 @@ define( require => {
   /**
    * @param {DualAtomModel} dualAtomModel of the simulation
    * @param {boolean} enableHeterogeneousAtoms
+   * @param {Tandem} tandem
    * @constructor
    */
-  function AtomicInteractionsScreenView( dualAtomModel, enableHeterogeneousAtoms ) {
+  function AtomicInteractionsScreenView( dualAtomModel, enableHeterogeneousAtoms, tandem ) {
 
     // due to some odd behavior, we need to turn on preventFit for this screen, see
     // https://github.com/phetsims/states-of-matter/issues/176
@@ -92,14 +93,16 @@ define( require => {
       stroke: panelStroke,
       panelTextFill: panelTextFill,
       maxWidth: PANEL_WIDTH,
-      minWidth: PANEL_WIDTH
+      minWidth: PANEL_WIDTH,
+      tandem: tandem.createTandem( 'atomicInteractionsControlPanel' )
     } );
 
     // @private interactive potential diagram
     this.interactiveInteractionPotentialDiagram = new InteractiveInteractionPotentialDiagram( dualAtomModel, true, {
       left: this.modelViewTransform.modelToViewX( 0 ) - 43, // empirically determined such left edge of graph is at
                                                             // center of fixed atom
-      top: atomicInteractionsControlPanel.top + 5 // additional offset empirically determined to look good
+      top: atomicInteractionsControlPanel.top + 5, // additional offset empirically determined to look good
+      tandem: tandem.createTandem( 'interactiveInteractionPotentialDiagram' )
     } );
     this.addChild( this.interactiveInteractionPotentialDiagram );
 
@@ -112,7 +115,8 @@ define( require => {
         dualAtomModel.resetMovableAtomPos();
       },
       left: this.layoutBounds.minX + 6 * INSET,
-      bottom: this.layoutBounds.bottom - 2 * INSET
+      bottom: this.layoutBounds.bottom - 2 * INSET,
+      tandem: tandem.createTandem( 'returnAtomButton' )
     } );
     this.addChild( this.returnAtomButton );
 
@@ -124,7 +128,8 @@ define( require => {
       },
       radius: SOMConstants.RESET_ALL_BUTTON_RADIUS,
       right: this.layoutBounds.maxX - SOMConstants.RESET_ALL_BUTTON_DISTANCE_FROM_SIDE,
-      bottom: this.layoutBounds.maxY - SOMConstants.RESET_ALL_BUTTON_DISTANCE_FROM_BOTTOM
+      bottom: this.layoutBounds.maxY - SOMConstants.RESET_ALL_BUTTON_DISTANCE_FROM_BOTTOM,
+      tandem: tandem.createTandem( 'resetAllButton' )
     } );
     this.addChild( resetAllButton );
 
@@ -141,7 +146,8 @@ define( require => {
         buttonAlign: forceControlPanelButtonAlign,
         showTitleWhenExpanded: !enableHeterogeneousAtoms,
         minWidth: PANEL_WIDTH,
-        maxWidth: PANEL_WIDTH
+        maxWidth: PANEL_WIDTH,
+        tandem: tandem.createTandem( 'forcesControlPanel' )
       }
     );
 
@@ -149,12 +155,18 @@ define( require => {
     atomicInteractionsControlPanel.right = resetAllButton.left - 20; // offset empirically determined
 
     // add control for play/pause/step
-    const playControl = new SOMPlayPauseStepControl(
+    const playPauseStepControl = new SOMPlayPauseStepControl(
       dualAtomModel.isPlayingProperty,
       dualAtomModel.stepInternal.bind( dualAtomModel ),
-      { centerX: this.layoutBounds.centerX + 27, bottom: this.layoutBounds.bottom - 14 } // empirically determined
+      {
+        // position empirically determined
+        centerX: this.layoutBounds.centerX + 27,
+        bottom: this.layoutBounds.bottom - 14,
+
+        tandem: tandem.createTandem( 'playPauseStepControl' )
+      }
     );
-    this.addChild( playControl );
+    this.addChild( playPauseStepControl );
 
     // add sim speed controls
     const speedSelectionButtonOptions = {
@@ -194,8 +206,9 @@ define( require => {
       align: 'left',
       spacing: radioButtonSpacing,
       children: [ slowMotionRadioBox, normalMotionRadioBox ],
-      right: playControl.left - 2 * INSET,
-      centerY: playControl.centerY
+      right: playPauseStepControl.left - 2 * INSET,
+      centerY: playPauseStepControl.centerY,
+      tandem: tandem.createTandem( 'speedControl' )
     } );
     this.addChild( speedControl );
 
