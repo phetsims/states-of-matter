@@ -99,7 +99,9 @@ define( require => {
           )
         );
         self.drawPotentialCurve();
-      }
+      },
+
+      tandem: options.tandem.createTandem( 'epsilonLineDragHandler' )
 
     } ) );
 
@@ -137,8 +139,9 @@ define( require => {
           )
         );
         self.drawPotentialCurve();
-      }
+      },
 
+      tandem: options.tandem.createTandem( 'epsilonResizeDragHandler' )
     } ) );
 
     this.interactionPotentialCanvasNode = new InteractionPotentialCanvasNode( this, false, {
@@ -187,7 +190,8 @@ define( require => {
         sideLength: 12,
         touchAreaXDilation: 15,
         touchAreaYDilation: 10
-      }
+      },
+      tandem: options.tandem.createTandem( 'accordionBox' )
     } );
     this.addChild( accordionBox );
 

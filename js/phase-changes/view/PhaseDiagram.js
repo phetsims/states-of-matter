@@ -283,7 +283,8 @@ define( require => {
         sideLength: 12,
         touchAreaXDilation: 15,
         touchAreaYDilation: 10
-      }
+      },
+      tandem: options.tandem.createTandem( 'accordionBox' )
     } );
     this.addChild( this.accordionBox );
 

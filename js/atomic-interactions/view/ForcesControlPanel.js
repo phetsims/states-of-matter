@@ -223,7 +223,8 @@ define( require => {
         touchAreaXDilation: 8,
         touchAreaYDilation: 3
       },
-      showTitleWhenExpanded: options.showTitleWhenExpanded
+      showTitleWhenExpanded: options.showTitleWhenExpanded,
+      tandem: options.tandem.createTandem( 'accordionBox' )
     } );
     this.addChild( accordionBox );
 
