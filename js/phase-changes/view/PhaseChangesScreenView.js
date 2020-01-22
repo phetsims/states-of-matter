@@ -108,7 +108,8 @@ define( require => {
     // add the thermometer node
     this.compositeThermometerNode = new CompositeThermometerNode( multipleParticleModel, modelViewTransform, {
       font: new PhetFont( 20 ),
-      fill: 'white'
+      fill: 'white',
+      tandem: tandem.createTandem( 'compositeThermometerNode' )
     } );
     this.addChild( this.compositeThermometerNode );
 

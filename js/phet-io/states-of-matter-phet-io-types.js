@@ -241,6 +241,17 @@ window.phet.phetio.phetioTypes = assert &&
       "supertype": "ObjectIO",
       "typeName": "BooleanIO"
     },
+    "ComboBoxIO": {
+      "documentation": "A combo box is composed of a push button and a listbox. The listbox contains items that represent choices. Pressing the button pops up the listbox. Selecting from an item in the listbox sets the value of an associated Property. The button shows the item that is currently selected.",
+      "events": [
+        "listBoxShown",
+        "listBoxHidden"
+      ],
+      "methodOrder": [],
+      "methods": {},
+      "supertype": "NodeIO",
+      "typeName": "ComboBoxIO"
+    },
     "DerivedPropertyIO<BooleanIO>": {
       "documentation": "Like PropertyIO, but not settable.  Instead it is derived from other DerivedPropertyIO or PropertyIO instances",
       "events": [
@@ -333,6 +344,14 @@ window.phet.phetio.phetioTypes = assert &&
       "supertype": "ObjectIO",
       "typeName": "EnumerationIO(COMPONENTS|TOTAL|HIDDEN)"
     },
+    "EnumerationIO(KELVIN|CELSIUS)": {
+      "documentation": "Possible values: KELVIN,CELSIUS.",
+      "events": [],
+      "methodOrder": [],
+      "methods": {},
+      "supertype": "ObjectIO",
+      "typeName": "EnumerationIO(KELVIN|CELSIUS)"
+    },
     "EnumerationIO(NEON_NEON|ARGON_ARGON|OXYGEN_OXYGEN|NEON_ARGON|NEON_OXYGEN|ARGON_OXYGEN|ADJUSTABLE)": {
       "documentation": "Possible values: NEON_NEON,ARGON_ARGON,OXYGEN_OXYGEN,NEON_ARGON,NEON_OXYGEN,ARGON_OXYGEN,ADJUSTABLE.",
       "events": [],
@@ -417,6 +436,19 @@ window.phet.phetio.phetioTypes = assert &&
       ],
       "supertype": "ObjectIO",
       "typeName": "FunctionIO(EnumerationIO(COMPONENTS|TOTAL|HIDDEN),NullableIO<EnumerationIO(COMPONENTS|TOTAL|HIDDEN)>)=>VoidIO"
+    },
+    "FunctionIO(EnumerationIO(KELVIN|CELSIUS),NullableIO<EnumerationIO(KELVIN|CELSIUS)>)=>VoidIO": {
+      "documentation": "Wrapper for the built-in JS function type.<br><strong>Arguments:</strong> EnumerationIO(KELVIN|CELSIUS), NullableIO<EnumerationIO(KELVIN|CELSIUS)><br><strong>Return Type:</strong> VoidIO",
+      "events": [],
+      "methodOrder": [],
+      "methods": {},
+      "parameterTypes": [
+        "EnumerationIO(KELVIN|CELSIUS)",
+        "NullableIO<EnumerationIO(KELVIN|CELSIUS)>",
+        "VoidIO"
+      ],
+      "supertype": "ObjectIO",
+      "typeName": "FunctionIO(EnumerationIO(KELVIN|CELSIUS),NullableIO<EnumerationIO(KELVIN|CELSIUS)>)=>VoidIO"
     },
     "FunctionIO(EnumerationIO(NEON_NEON|ARGON_ARGON|OXYGEN_OXYGEN|NEON_ARGON|NEON_OXYGEN|ARGON_OXYGEN|ADJUSTABLE),NullableIO<EnumerationIO(NEON_NEON|ARGON_ARGON|OXYGEN_OXYGEN|NEON_ARGON|NEON_OXYGEN|ARGON_OXYGEN|ADJUSTABLE)>)=>VoidIO": {
       "documentation": "Wrapper for the built-in JS function type.<br><strong>Arguments:</strong> EnumerationIO(NEON_NEON|ARGON_ARGON|OXYGEN_OXYGEN|NEON_ARGON|NEON_OXYGEN|ARGON_OXYGEN|ADJUSTABLE), NullableIO<EnumerationIO(NEON_NEON|ARGON_ARGON|OXYGEN_OXYGEN|NEON_ARGON|NEON_OXYGEN|ARGON_OXYGEN|ADJUSTABLE)><br><strong>Return Type:</strong> VoidIO",
@@ -610,6 +642,17 @@ window.phet.phetio.phetioTypes = assert &&
       ],
       "supertype": "ObjectIO",
       "typeName": "NullableIO<EnumerationIO(COMPONENTS|TOTAL|HIDDEN)>"
+    },
+    "NullableIO<EnumerationIO(KELVIN|CELSIUS)>": {
+      "documentation": "A wrapper to wrap another IOType, adding support for null.",
+      "events": [],
+      "methodOrder": [],
+      "methods": {},
+      "parameterTypes": [
+        "EnumerationIO(KELVIN|CELSIUS)"
+      ],
+      "supertype": "ObjectIO",
+      "typeName": "NullableIO<EnumerationIO(KELVIN|CELSIUS)>"
     },
     "NullableIO<EnumerationIO(NEON_NEON|ARGON_ARGON|OXYGEN_OXYGEN|NEON_ARGON|NEON_OXYGEN|ARGON_OXYGEN|ADJUSTABLE)>": {
       "documentation": "A wrapper to wrap another IOType, adding support for null.",
@@ -1115,6 +1158,50 @@ window.phet.phetio.phetioTypes = assert &&
       ],
       "supertype": "ObjectIO",
       "typeName": "PropertyIO<EnumerationIO(COMPONENTS|TOTAL|HIDDEN)>"
+    },
+    "PropertyIO<EnumerationIO(KELVIN|CELSIUS)>": {
+      "documentation": "Observable values that send out notifications when the value changes. This differs from the traditional listener pattern in that added listeners also receive a callback with the current value when the listeners are registered. This is a widely-used pattern in PhET-iO simulations.",
+      "events": [
+        "changed"
+      ],
+      "methodOrder": [
+        "link",
+        "lazyLink"
+      ],
+      "methods": {
+        "getValue": {
+          "documentation": "Gets the current value.",
+          "parameterTypes": [],
+          "returnType": "EnumerationIO(KELVIN|CELSIUS)"
+        },
+        "lazyLink": {
+          "documentation": "Adds a listener which will be called when the value changes. This method is like \"link\", but without the current-value callback on registration. The listener takes two arguments, the new value and the previous value.",
+          "parameterTypes": [
+            "FunctionIO(EnumerationIO(KELVIN|CELSIUS),NullableIO<EnumerationIO(KELVIN|CELSIUS)>)=>VoidIO"
+          ],
+          "returnType": "VoidIO"
+        },
+        "link": {
+          "documentation": "Adds a listener which will be called when the value changes. On registration, the listener is also called with the current value. The listener takes two arguments, the new value and the previous value.",
+          "parameterTypes": [
+            "FunctionIO(EnumerationIO(KELVIN|CELSIUS),NullableIO<EnumerationIO(KELVIN|CELSIUS)>)=>VoidIO"
+          ],
+          "returnType": "VoidIO"
+        },
+        "setValue": {
+          "documentation": "Sets the value of the Property. If the value differs from the previous value, listeners are notified with the new value.",
+          "invocableForReadOnlyElements": false,
+          "parameterTypes": [
+            "EnumerationIO(KELVIN|CELSIUS)"
+          ],
+          "returnType": "VoidIO"
+        }
+      },
+      "parameterTypes": [
+        "EnumerationIO(KELVIN|CELSIUS)"
+      ],
+      "supertype": "ObjectIO",
+      "typeName": "PropertyIO<EnumerationIO(KELVIN|CELSIUS)>"
     },
     "PropertyIO<EnumerationIO(NEON_NEON|ARGON_ARGON|OXYGEN_OXYGEN|NEON_ARGON|NEON_OXYGEN|ARGON_OXYGEN|ADJUSTABLE)>": {
       "documentation": "Observable values that send out notifications when the value changes. This differs from the traditional listener pattern in that added listeners also receive a callback with the current value when the listeners are registered. This is a widely-used pattern in PhET-iO simulations.",
