@@ -41,18 +41,24 @@ define( require => {
 
   /**
    * @param {MultipleParticleModel} multipleParticleModel - model of the simulation
+   * @param {Tandem} tandem
    * @constructor
    */
-  function DialGaugeNode( multipleParticleModel ) {
+  function DialGaugeNode( multipleParticleModel, tandem ) {
 
-    Node.call( this );
+    Node.call( this, { tandem: tandem } );
     this.elbowHeight = 0; // @private, set through accessor methods
 
     const gaugeNode = new GaugeNode(
       multipleParticleModel.pressureProperty,
       pressureString,
       new Range( 0, MAX_PRESSURE ),
-      { scale: 0.5, radius: 80, backgroundLineWidth: 3 }
+      {
+        scale: 0.5,
+        radius: 80,
+        backgroundLineWidth: 3,
+        tandem: tandem.createTandem( 'gaugeNode' )
+      }
     );
 
     // Add the textual readout display.

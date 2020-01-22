@@ -85,30 +85,51 @@ define( require => {
     } );
 
     // create objects that describe the pieces that make up an item in the control panel, conforms to the contract:
-    // { label: {Node}, icon: {Node} }
-    const neon = { label: neonText, icon: AtomAndMoleculeIconFactory.createIcon( SubstanceType.NEON ) };
-    const argon = { label: argonText, icon: AtomAndMoleculeIconFactory.createIcon( SubstanceType.ARGON ) };
-    const water = { label: waterText, icon: AtomAndMoleculeIconFactory.createIcon( SubstanceType.WATER ) };
-    const oxygen = { label: oxygenText, icon: AtomAndMoleculeIconFactory.createIcon( SubstanceType.DIATOMIC_OXYGEN ) };
+    // { label: {Node}, icon: {Node}, tandem: {Tandem} }
+    const neonSelectionNodeSpec = {
+      label: neonText,
+      icon: AtomAndMoleculeIconFactory.createIcon( SubstanceType.NEON )
+    };
+    const argonSelectionNodeSpec = {
+      label: argonText,
+      icon: AtomAndMoleculeIconFactory.createIcon( SubstanceType.ARGON )
+    };
+    const waterSelectionNodeSpec = {
+      label: waterText,
+      icon: AtomAndMoleculeIconFactory.createIcon( SubstanceType.WATER )
+    };
+    const oxygenSelectionNodeSpec = {
+      label: oxygenText,
+      icon: AtomAndMoleculeIconFactory.createIcon( SubstanceType.DIATOMIC_OXYGEN ),
+      tandem: tandem.createTandem( 'oxygenSelectionNode' )
+    };
 
     const selectorWidth = options.minWidth - 2 * options.xMargin;
 
-    // pad inserts a spacing node (HStrut) so that the text, space and image together occupy a certain fixed width.
-    const createLabelAndIconNode = function( labelAndIconSpec ) {
-      if ( labelAndIconSpec.icon ) {
-        const strutWidth = selectorWidth - labelAndIconSpec.label.width - labelAndIconSpec.icon.width;
-        return new HBox( { children: [ labelAndIconSpec.label, new HStrut( strutWidth ), labelAndIconSpec.icon ] } );
+    // function to create a node with text and an icon for selection a substance
+    const createSelectionNode = function( selectionNodeSpec ) {
+      if ( selectionNodeSpec.icon ) {
+        const strutWidth = selectorWidth - selectionNodeSpec.label.width - selectionNodeSpec.icon.width;
+        return new HBox( {
+          children: [ selectionNodeSpec.label, new HStrut( strutWidth ), selectionNodeSpec.icon ]
+        } );
       }
       else {
-        return new HBox( { children: [ labelAndIconSpec.label ] } );
+        return new HBox( {
+          children: [ selectionNodeSpec.label ]
+        } );
       }
     };
 
     const radioButtonContent = [
-      { value: SubstanceType.NEON, node: createLabelAndIconNode( neon ) },
-      { value: SubstanceType.ARGON, node: createLabelAndIconNode( argon ) },
-      { value: SubstanceType.DIATOMIC_OXYGEN, node: createLabelAndIconNode( oxygen ) },
-      { value: SubstanceType.WATER, node: createLabelAndIconNode( water ) }
+      { value: SubstanceType.NEON, node: createSelectionNode( neonSelectionNodeSpec ), tandemName: 'neonSelector' },
+      { value: SubstanceType.ARGON, node: createSelectionNode( argonSelectionNodeSpec ), tandemName: 'argonSelector' },
+      {
+        value: SubstanceType.DIATOMIC_OXYGEN,
+        node: createSelectionNode( oxygenSelectionNodeSpec ),
+        tandemName: 'oxygenSelector'
+      },
+      { value: SubstanceType.WATER, node: createSelectionNode( waterSelectionNodeSpec ), tandemName: 'waterSelector' }
     ];
 
     const radioButtonGroup = new RadioButtonGroup( substanceProperty, radioButtonContent, {
@@ -119,7 +140,8 @@ define( require => {
       selectedLineWidth: 1,
       selectedStroke: 'white',
       deselectedLineWidth: 0,
-      deselectedContentOpacity: 1
+      deselectedContentOpacity: 1,
+      tandem: options.tandem.createTandem( 'radioButtonGroup' )
     } );
 
     SOMColorProfile.controlPanelBackgroundProperty.link( function( color ) {

@@ -132,10 +132,11 @@ define( require => {
       containerLid.addChild( handleNode );
     }
 
+    let pressureMeter;
     if ( pressureGaugeEnabled ) {
 
       // Add the pressure meter.
-      var pressureMeter = new DialGaugeNode( multipleParticleModel );
+      pressureMeter = new DialGaugeNode( multipleParticleModel, tandem.createTandem( 'pressureMeter' ) );
       pressureMeter.right = this.particleAreaViewBounds.minX + this.particleAreaViewBounds.width * 0.2;
       postParticleLayer.addChild( pressureMeter );
     }

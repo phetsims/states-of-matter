@@ -14,10 +14,12 @@ define( require => {
   const ArrowNode = require( 'SCENERY_PHET/ArrowNode' );
   const Image = require( 'SCENERY/nodes/Image' );
   const inherit = require( 'PHET_CORE/inherit' );
+  const merge = require( 'PHET_CORE/merge' );
   const MultipleParticleModel = require( 'STATES_OF_MATTER/common/model/MultipleParticleModel' );
   const Node = require( 'SCENERY/nodes/Node' );
   const SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
   const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  const Tandem = require( 'TANDEM/Tandem' );
 
   // images
   const pointingHandImage = require( 'mipmap!STATES_OF_MATTER/pointing-hand.png' );
@@ -29,9 +31,14 @@ define( require => {
    *
    * @param {MultipleParticleModel} multipleParticleModel - model of the simulation
    * @param {ModelViewTransform2} modelViewTransform to convert between model and view co-ordinate frames
+   * @param {Object} [options]
    * @constructor
    */
   function PointingHandNode( multipleParticleModel, modelViewTransform, options ) {
+
+    options = merge( {
+      tandem: Tandem.REQUIRED
+    }, options );
 
     const self = this;
     Node.call( this );
@@ -94,7 +101,6 @@ define( require => {
         beingDragged = true;
         containerSizeAtDragStart = multipleParticleModel.particleContainerHeightProperty.get();
         updateHintVisibility();
-
       },
 
       drag: function( event ) {
@@ -115,7 +121,9 @@ define( require => {
         );
         beingDragged = false;
         updateHintVisibility();
-      }
+      },
+
+      tandem: options.tandem.createTandem( 'dragHandler' )
     } ) );
 
     // add the listener that will show and hide the hint
