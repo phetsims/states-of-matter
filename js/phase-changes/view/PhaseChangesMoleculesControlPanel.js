@@ -110,7 +110,8 @@ define( require => {
         majorTickLineWidth: 1,
         minorTickStroke: SOMColorProfile.controlPanelTextProperty,
         minorTickLineWidth: 1,
-        cursor: 'pointer'
+        cursor: 'pointer',
+        tandem: options.tandem.createTandem( 'interactionStrengthSlider' )
       } );
     interactionStrengthNode.addChild( interactionStrengthSlider );
     interactionStrengthSlider.addMajorTick( MultipleParticleModel.MAX_ADJUSTABLE_EPSILON, strongTitle );
@@ -151,19 +152,55 @@ define( require => {
     let radioButtonContent;
     if ( !isBasicVersion ) {
       radioButtonContent = [
-        { value: SubstanceType.NEON, node: createLabelAndIconNode( neonSelectorInfo ) },
-        { value: SubstanceType.ARGON, node: createLabelAndIconNode( argonSelectorInfo ) },
-        { value: SubstanceType.DIATOMIC_OXYGEN, node: createLabelAndIconNode( oxygenSelectorInfo ) },
-        { value: SubstanceType.WATER, node: createLabelAndIconNode( waterSelectorInfo ) }
+        {
+          value: SubstanceType.NEON,
+          node: createLabelAndIconNode( neonSelectorInfo ),
+          tandemName: 'neonSelector'
+        },
+        {
+          value: SubstanceType.ARGON,
+          node: createLabelAndIconNode( argonSelectorInfo ),
+          tandemName: 'argonSelector'
+        },
+        {
+          value: SubstanceType.DIATOMIC_OXYGEN,
+          node: createLabelAndIconNode( oxygenSelectorInfo ),
+          tandemName: 'oxygenSelector'
+        },
+        {
+          value: SubstanceType.WATER,
+          node: createLabelAndIconNode( waterSelectorInfo ),
+          tandemName: 'waterSelector'
+        }
       ];
     }
     else {
       radioButtonContent = [
-        { value: SubstanceType.NEON, node: createLabelAndIconNode( neonSelectorInfo ) },
-        { value: SubstanceType.ARGON, node: createLabelAndIconNode( argonSelectorInfo ) },
-        { value: SubstanceType.DIATOMIC_OXYGEN, node: createLabelAndIconNode( oxygenSelectorInfo ) },
-        { value: SubstanceType.WATER, node: createLabelAndIconNode( waterSelectorInfo ) },
-        { value: SubstanceType.ADJUSTABLE_ATOM, node: createLabelAndIconNode( adjustableAttractionSelectorInfo ) }
+        {
+          value: SubstanceType.NEON,
+          node: createLabelAndIconNode( neonSelectorInfo ),
+          tandemName: 'neonSelector'
+        },
+        {
+          value: SubstanceType.ARGON,
+          node: createLabelAndIconNode( argonSelectorInfo ),
+          tandemName: 'argonSelector'
+        },
+        {
+          value: SubstanceType.DIATOMIC_OXYGEN,
+          node: createLabelAndIconNode( oxygenSelectorInfo ),
+          tandemName: 'oxygenSelector'
+        },
+        {
+          value: SubstanceType.WATER,
+          node: createLabelAndIconNode( waterSelectorInfo ),
+          tandemName: 'waterSelector'
+        },
+        {
+          value: SubstanceType.ADJUSTABLE_ATOM,
+          node: createLabelAndIconNode( adjustableAttractionSelectorInfo ),
+          tandemName: 'adjustableAtomSelector'
+        }
       ];
     }
 
@@ -177,7 +214,8 @@ define( require => {
       selectedStroke: 'white',
       deselectedLineWidth: 0,
       deselectedContentOpacity: 1,
-      touchAreaYDilation: 0
+      touchAreaYDilation: 0,
+      tandem: options.tandem.createTandem( 'radioButtonGroup' )
     } );
 
     multipleParticleModel.interactionStrengthProperty.link( function( value ) {
