@@ -283,9 +283,13 @@ define( require => {
       };
 
       const radioButtonContent = [
-        { value: AtomPair.NEON_NEON, node: createLabelNode( neon ) },
-        { value: AtomPair.ARGON_ARGON, node: createLabelNode( argon ) },
-        { value: AtomPair.ADJUSTABLE, node: createLabelNode( adjustableAttraction ) }
+        { value: AtomPair.NEON_NEON, node: createLabelNode( neon ), tandemName: 'neonNeonSelector' },
+        { value: AtomPair.ARGON_ARGON, node: createLabelNode( argon ), tandemName: 'argonArgonSelector' },
+        {
+          value: AtomPair.ADJUSTABLE,
+          node: createLabelNode( adjustableAttraction ),
+          tandemName: 'adjustableAttractionSelector'
+        }
       ];
       radioButtonGroup = new RadioButtonGroup( dualAtomModel.atomPairProperty, radioButtonContent, {
         orientation: 'vertical',
@@ -295,7 +299,8 @@ define( require => {
         selectedLineWidth: 1,
         selectedStroke: 'white',
         deselectedLineWidth: 0,
-        deselectedContentOpacity: 1
+        deselectedContentOpacity: 1,
+        tandem: options.tandem.createTandem( 'radioButtonGroup' )
       } );
 
       const titleBackground = new Rectangle( 0, 0, titleText.label.width + 5, titleText.label.height, {
@@ -314,7 +319,7 @@ define( require => {
       maxWidth: SLIDER_TITLE_MAX_WIDTH
     } );
 
-    const sliderOptions = {
+    const commonSliderOptions = {
       trackSize: new Dimension2( sliderTrackWidth, 5 ),
       trackFill: 'white',
       thumbSize: new Dimension2( 14, 25 ),
@@ -337,7 +342,7 @@ define( require => {
     const atomDiameterSlider = new HSlider(
       dualAtomModel.atomDiameterProperty,
       new Range( SOMConstants.MIN_SIGMA, SOMConstants.MAX_SIGMA ),
-      sliderOptions
+      merge( { tandem: options.tandem.createTandem( 'atomDiameterSlider' ) }, commonSliderOptions )
     );
 
     const maxTickTextWidth = enableHeterogeneousAtoms ? 85 : 35;
@@ -366,7 +371,7 @@ define( require => {
     const interactionStrengthSlider = new HSlider(
       dualAtomModel.interactionStrengthProperty,
       new Range( SOMConstants.MIN_EPSILON, SOMConstants.MAX_EPSILON ),
-      sliderOptions
+      merge( { tandem: options.tandem.createTandem( 'interactionStrengthSlider' ) }, commonSliderOptions )
     );
     const weakText = new Text( weakString, tickTextOptions );
     const strongText = new Text( strongString, tickTextOptions );
