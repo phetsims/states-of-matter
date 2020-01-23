@@ -57,9 +57,10 @@ define( require => {
    * @param {number} sigma - Initial value of sigma, a.k.a. the atom diameter
    * @param {number} epsilon - Initial value of epsilon, a.k.a. the interaction strength
    * @param {boolean} wide - true if the widescreen version of the graph is needed, false if not.
+   * @param {Tandem} tandem
    * @constructor
    */
-  function InteractionPotentialDiagramNode( sigma, epsilon, wide ) {
+  function InteractionPotentialDiagramNode( sigma, epsilon, wide, tandem ) {
 
     Node.call( this );
     this.positionMarkerEnabled = false;
@@ -216,7 +217,14 @@ define( require => {
     this.drawPotentialCurve();
 
     if ( wide ) {
-      this.gridNode = new ZoomableGridNode( this, 0, 0, this.graphWidth, this.graphHeight );
+      this.gridNode = new ZoomableGridNode(
+        this,
+        0,
+        0,
+        this.graphWidth,
+        this.graphHeight,
+        tandem.createTandem( 'gridNode' )
+      );
       this.gridNode.x = this.graphXOrigin;
       this.gridNode.y = this.graphYOrigin - this.graphHeight;
       this.addChild( this.gridNode );

@@ -29,11 +29,12 @@ define( require => {
    * @param {number} offsetY
    * @param {number} width - width of the graph
    * @param {number} height - height of the graph
+   * @param {Tandem} tandem
    * @constructor
    */
-  function ZoomableGridNode( atomsView, offsetX, offsetY, width, height ) {
+  function ZoomableGridNode( atomsView, offsetX, offsetY, width, height, tandem ) {
 
-    Node.call( this );
+    Node.call( this, { tandem: tandem } );
     const self = this;
     atomsView.horizontalLineCount = MIN_LINES_HORIZONTAL;
 
@@ -67,7 +68,8 @@ define( require => {
       buttonAppearanceStrategy: RectangularButtonView.FlatAppearanceStrategy,
       touchAreaXDilation: 10,
       touchAreaYDilation: 8,
-      touchAreaYShift: -7
+      touchAreaYShift: -7,
+      tandem: tandem.createTandem( 'zoomInButton' )
     } );
     this.zoomInButton.enabled = false;
 
@@ -88,7 +90,8 @@ define( require => {
       in: false,
       touchAreaXDilation: 10,
       touchAreaYDilation: 8,
-      touchAreaYShift: 7
+      touchAreaYShift: 7,
+      tandem: tandem.createTandem( 'zoomOutButton' )
     } );
     this.zoomOutButton.enabled = true;
     this.addChild( this.zoomInButton );

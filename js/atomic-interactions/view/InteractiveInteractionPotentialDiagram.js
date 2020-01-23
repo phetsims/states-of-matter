@@ -19,6 +19,7 @@ define( require => {
   const inherit = require( 'PHET_CORE/inherit' );
   const InteractionPotentialCanvasNode = require( 'STATES_OF_MATTER/common/view/InteractionPotentialCanvasNode' );
   const InteractionPotentialDiagramNode = require( 'STATES_OF_MATTER/common/view/InteractionPotentialDiagramNode' );
+  const merge = require( 'PHET_CORE/merge' );
   const Property = require( 'AXON/Property' );
   const Rectangle = require( 'SCENERY/nodes/Rectangle' );
   const Shape = require( 'KITE/Shape' );
@@ -26,6 +27,7 @@ define( require => {
   const SOMColorProfile = require( 'STATES_OF_MATTER/common/view/SOMColorProfile' );
   const SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
   const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  const Tandem = require( 'TANDEM/Tandem' );
 
   // constants
   const RESIZE_HANDLE_SIZE_PROPORTION = 0.05;  // Size of handles as function of node width.
@@ -43,7 +45,15 @@ define( require => {
    */
   function InteractiveInteractionPotentialDiagram( dualAtomModel, wide, options ) {
 
-    InteractionPotentialDiagramNode.call( this, dualAtomModel.getSigma(), dualAtomModel.getEpsilon(), wide );
+    options = merge( { tandem: Tandem.REQUIRED }, options );
+
+    InteractionPotentialDiagramNode.call(
+      this,
+      dualAtomModel.getSigma(),
+      dualAtomModel.getEpsilon(),
+      wide,
+      options.tandem
+    );
     const self = this;
 
     // @private
@@ -57,7 +67,7 @@ define( require => {
     let startDragY;
     let endDragY;
 
-    function addEpsilonDragHandler( node ) {
+    function addEpsilonDragHandler( node, tandem ) {
       node.addInputListener( new SimpleDragHandler( {
 
         start: function( event ) {
@@ -75,7 +85,9 @@ define( require => {
 
         end: function() {
           dualAtomModel.setMotionPaused( false );
-        }
+        },
+
+        tandem: tandem
       } ) );
     }
 
@@ -92,7 +104,7 @@ define( require => {
     );
     this.epsilonLine.touchArea = this.epsilonLine.localBounds.dilatedXY( 8, 8 );
     this.epsilonLine.mouseArea = this.epsilonLine.localBounds.dilatedXY( 0, 4 );
-    addEpsilonDragHandler( this.epsilonLine );
+    addEpsilonDragHandler( this.epsilonLine, options.tandem.createTandem( 'epsilonLineDragHandler' ) );
     this.epsilonLineLayer.addChild( this.epsilonLine );
 
     // Add the arrow nodes that will allow the user to control the epsilon value.
@@ -119,7 +131,7 @@ define( require => {
     ) );
     this.ljPotentialGraph.addChild( this.epsilonResizeHandle );
     this.epsilonResizeHandle.touchArea = this.epsilonResizeHandle.localBounds.dilatedXY( 3, 10 );
-    addEpsilonDragHandler( this.epsilonResizeHandle );
+    addEpsilonDragHandler( this.epsilonResizeHandle, options.tandem.createTandem( 'epsilonLineDragHandler' ) );
 
     // add sigma arrow node
     this.sigmaResizeHandle = new ArrowNode( -RESIZE_HANDLE_SIZE_PROPORTION * this.widthOfGraph / 2, 0,
@@ -144,8 +156,8 @@ define( require => {
         const scaleFactor = self.GRAPH_X_RANGE / ( self.getGraphWidth() );
         const atomDiameter = dualAtomModel.getSigma() + ( d * scaleFactor );
         dualAtomModel.atomDiameterProperty.value = atomDiameter > SOMConstants.MIN_SIGMA ?
-                                                   (atomDiameter < SOMConstants.MAX_SIGMA ? atomDiameter :
-                                                    SOMConstants.MAX_SIGMA) : SOMConstants.MIN_SIGMA;
+                                                   ( atomDiameter < SOMConstants.MAX_SIGMA ? atomDiameter :
+                                                     SOMConstants.MAX_SIGMA ) : SOMConstants.MIN_SIGMA;
       },
 
       end: function() {

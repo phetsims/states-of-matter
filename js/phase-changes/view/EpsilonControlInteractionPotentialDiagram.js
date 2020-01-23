@@ -20,6 +20,7 @@ define( require => {
   const inherit = require( 'PHET_CORE/inherit' );
   const InteractionPotentialCanvasNode = require( 'STATES_OF_MATTER/common/view/InteractionPotentialCanvasNode' );
   const InteractionPotentialDiagramNode = require( 'STATES_OF_MATTER/common/view/InteractionPotentialDiagramNode' );
+  const merge = require( 'PHET_CORE/merge' );
   const Node = require( 'SCENERY/nodes/Node' );
   const PhetFont = require( 'SCENERY_PHET/PhetFont' );
   const Property = require( 'AXON/Property' );
@@ -29,6 +30,7 @@ define( require => {
   const SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
   const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   const SubstanceType = require( 'STATES_OF_MATTER/common/SubstanceType' );
+  const Tandem = require( 'TANDEM/Tandem' );
   const Text = require( 'SCENERY/nodes/Text' );
   const Utils = require( 'DOT/Utils' );
 
@@ -57,8 +59,10 @@ define( require => {
    */
   function EpsilonControlInteractionPotentialDiagram( sigma, epsilon, wide, multipleParticleModel, options ) {
 
+    options = merge( { tandem: Tandem.REQUIRED }, options );
+
     const self = this;
-    InteractionPotentialDiagramNode.call( this, sigma, epsilon, wide, true );
+    InteractionPotentialDiagramNode.call( this, sigma, epsilon, wide, true, options.tandem );
     this.multipleParticleModel = multipleParticleModel;
     const accordionContent = new Node();
 
