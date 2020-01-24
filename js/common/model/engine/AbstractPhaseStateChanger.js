@@ -190,7 +190,7 @@ define( require => {
       const temperatureSqrt = Math.sqrt( this.multipleParticleModel.temperatureSetPointProperty.get() );
       const numberOfMolecules = moleculeDataSet.getNumberOfMolecules();
 
-      for ( var i = 0; i < numberOfMolecules; i++ ) {
+      for ( let i = 0; i < numberOfMolecules; i++ ) {
 
         // Temporarily position the molecules at (0,0).
         moleculeCenterOfMassPositions[ i ].setXY( 0, 0 );
@@ -216,7 +216,7 @@ define( require => {
       let newPosY;
       const rangeX = this.multipleParticleModel.normalizedContainerWidth - ( 2 * this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE );
       const rangeY = this.multipleParticleModel.normalizedContainerHeight - ( 2 * this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE );
-      for ( i = 0; i < numberOfMolecules; i++ ) {
+      for ( let i = 0; i < numberOfMolecules; i++ ) {
         for ( let j = 0; j < MAX_PLACEMENT_ATTEMPTS; j++ ) {
 
           // Pick a random position.

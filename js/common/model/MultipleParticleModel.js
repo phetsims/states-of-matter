@@ -1,6 +1,5 @@
 // Copyright 2014-2020, University of Colorado Boulder
 
-
 /**
  * This is the main class for the model portion of the "States of Matter" simulation.  It maintains a set of data that
  * represents a normalized model in which all atoms are assumed to have a diameter of 1, since this allows for very
@@ -156,6 +155,7 @@ define( require => {
 
     // @public (read-write)
     this.temperatureSetPointProperty = new NumberProperty( INITIAL_TEMPERATURE, {
+      reentrant: true, // this was necessary for phet-io to be able to set temperture during state initialization
       tandem: tandem.createTandem( 'temperatureSetPointProperty' ),
       phetioReadOnly: true
     } );
@@ -195,10 +195,6 @@ define( require => {
     } );
 
     // @public (read-only)
-    // this.numberOfMoleculesRangeProperty = new Property( new Range( 0, SOMConstants.MAX_NUM_ATOMS ), {
-    //   tandem: tandem.createTandem( 'numberOfMoleculesRangeProperty' ),
-    //   phetioReadOnly: true
-    // } );
     this.numberOfMoleculesRangeProperty = new Property( new Range( 0, SOMConstants.MAX_NUM_ATOMS ) );
 
     this.resetEmitter = new Emitter(); // listen only, fires when a reset occurs
@@ -266,6 +262,52 @@ define( require => {
 
         for ( let i = 0; i < delta; i++ ) {
           self.injectMolecule();
+        }
+      }
+    } );
+
+    // Listen for phet-io-initiated changes to the temperature and handle as a special case.  This is done solely in
+    // support of setting state via phet-io.
+    this.temperatureSetPointProperty.lazyLink( targetTemperature => {
+
+      const isSettingState = _.hasIn( window, 'phet.phetIo.phetioEngine' ) &&
+                             phet.phetIo.phetioEngine.phetioStateEngine.isSettingState;
+
+      if ( isSettingState ) {
+
+        // Temperature is being set via phet-io.  Find the closest phase, set the temperature, and then run the model
+        // for a while to match.
+        let targetPhase;
+        const distanceFromGasTemperature = Math.abs( targetTemperature - SOMConstants.GAS_TEMPERATURE );
+        const distanceFromLiquidTemperature = Math.abs( targetTemperature - SOMConstants.LIQUID_TEMPERATURE );
+        const distanceFromSolidTemperature = Math.abs( targetTemperature - SOMConstants.SOLID_TEMPERATURE );
+
+        const minDistanceFromTargetTemperature = Math.min(
+          distanceFromGasTemperature,
+          distanceFromLiquidTemperature,
+          distanceFromSolidTemperature
+        );
+
+        // TODO: This doesn't quite work right because the setting of the phase also sets the temperature.  What is
+        // needed it a way to set the phase attributes without setting the temperature, which basically means breaking
+        // the process into two steps in the PhaseStateChanger type.  That should be the next step.  See
+        // https://github.com/phetsims/states-of-matter/issues/245.
+
+        if ( minDistanceFromTargetTemperature === distanceFromGasTemperature ) {
+          targetPhase = PhaseStateEnum.GAS;
+        }
+        else if ( minDistanceFromTargetTemperature === distanceFromLiquidTemperature ) {
+          targetPhase = PhaseStateEnum.LIQUID;
+        }
+        else {
+          targetPhase = PhaseStateEnum.SOLID;
+        }
+
+        this.phaseStateChanger.setPhase( targetPhase );
+
+        if ( minDistanceFromTargetTemperature > 0 ) {
+          console.log( 'step the model for a while...' );
+          console.log( 'minDistanceFromTargetTemperature = ' + minDistanceFromTargetTemperature );
         }
       }
     } );
