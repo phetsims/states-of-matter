@@ -176,36 +176,38 @@ define( require => {
     };
     const speedSelectionButtonRadius = 8;
     const slowText = new Text( slowMotionString, speedSelectionButtonOptions );
-    const slowMotionRadioBox = new AquaRadioButton( dualAtomModel.simSpeedProperty, SimSpeed.SLOW_MOTION, slowText, {
-      radius: speedSelectionButtonRadius
+    const slowMotionRadioButton = new AquaRadioButton( dualAtomModel.simSpeedProperty, SimSpeed.SLOW_MOTION, slowText, {
+      radius: speedSelectionButtonRadius,
+      tandem: tandem.createTandem( 'slowMotionRadioButton' )
     } );
     const normalText = new Text( normalString, speedSelectionButtonOptions );
-    const normalMotionRadioBox = new AquaRadioButton( dualAtomModel.simSpeedProperty, SimSpeed.NORMAL, normalText, {
-      radius: speedSelectionButtonRadius
+    const normalMotionRadioButton = new AquaRadioButton( dualAtomModel.simSpeedProperty, SimSpeed.NORMAL, normalText, {
+      radius: speedSelectionButtonRadius,
+      tandem: tandem.createTandem( 'normalMotionRadioButton' )
     } );
 
-    const speedControlMaxWidth = ( slowMotionRadioBox.width > normalMotionRadioBox.width ) ? slowMotionRadioBox.width : normalMotionRadioBox.width;
+    const speedControlMaxWidth = ( slowMotionRadioButton.width > normalMotionRadioButton.width ) ? slowMotionRadioButton.width : normalMotionRadioButton.width;
 
     const radioButtonSpacing = 4;
     const touchAreaYDilation = radioButtonSpacing / 2;
-    slowMotionRadioBox.touchArea = new Bounds2(
-      slowMotionRadioBox.localBounds.minX,
-      slowMotionRadioBox.localBounds.minY - touchAreaYDilation,
-      slowMotionRadioBox.localBounds.minX + speedControlMaxWidth,
-      slowMotionRadioBox.localBounds.maxY + touchAreaYDilation
+    slowMotionRadioButton.touchArea = new Bounds2(
+      slowMotionRadioButton.localBounds.minX,
+      slowMotionRadioButton.localBounds.minY - touchAreaYDilation,
+      slowMotionRadioButton.localBounds.minX + speedControlMaxWidth,
+      slowMotionRadioButton.localBounds.maxY + touchAreaYDilation
     );
 
-    normalMotionRadioBox.touchArea = new Bounds2(
-      normalMotionRadioBox.localBounds.minX,
-      normalMotionRadioBox.localBounds.minY - touchAreaYDilation,
-      ( normalMotionRadioBox.localBounds.minX + speedControlMaxWidth ),
-      normalMotionRadioBox.localBounds.maxY + touchAreaYDilation
+    normalMotionRadioButton.touchArea = new Bounds2(
+      normalMotionRadioButton.localBounds.minX,
+      normalMotionRadioButton.localBounds.minY - touchAreaYDilation,
+      ( normalMotionRadioButton.localBounds.minX + speedControlMaxWidth ),
+      normalMotionRadioButton.localBounds.maxY + touchAreaYDilation
     );
 
     const speedControl = new VBox( {
       align: 'left',
       spacing: radioButtonSpacing,
-      children: [ slowMotionRadioBox, normalMotionRadioBox ],
+      children: [ slowMotionRadioButton, normalMotionRadioButton ],
       right: playPauseStepControl.left - 2 * INSET,
       centerY: playPauseStepControl.centerY,
       tandem: tandem.createTandem( 'speedControl' )
@@ -233,6 +235,16 @@ define( require => {
     this.addChild( atomicInteractionsControlPanel );
     this.addChild( forcesControlPanel );
 
+    // Create a reusable node that looks like a cartoon hand and is used to indicate to the user that an atom can be
+    // moved.  This will be dynamically added and removed from the scene graph.
+    this.handNode = new HandNode(
+      this.dualAtomModel,
+      this.dualAtomModel.movableAtom,
+      this.modelViewTransform,
+      0,
+      tandem.createTandem( 'handNode' )
+    );
+
     // listen to the setting for atomPair and update the view when it changes
     dualAtomModel.atomPairProperty.link( function() {
       forcesControlPanel.top = atomicInteractionsControlPanel.bottom + INSET / 2;
@@ -253,10 +265,12 @@ define( require => {
       }
     } );
 
+    // monitor the atom diameter and trigger updates when changes occur
     dualAtomModel.atomDiameterProperty.link( function() {
       self.fixedParticleNode.handleParticleRadiusChanged();
       self.movableParticleNode.handleParticleRadiusChanged();
       self.updateMinimumXForMovableAtom();
+      self.updateHandPosition();
     } );
   }
 
@@ -355,12 +369,6 @@ define( require => {
 
       // Add the atom node for this guy.
       this.movableParticle = particle;
-      this.handNode = new HandNode(
-        this.dualAtomModel,
-        this.dualAtomModel.movableAtom,
-        this.modelViewTransform,
-        0
-      );
       this.movableParticleNode = new GrabbableParticleNode(
         this.dualAtomModel,
         particle,
@@ -380,6 +388,12 @@ define( require => {
 
       // Update the position marker to represent the new particle's position.
       this.updatePositionMarkerOnDiagram();
+
+      // Update the particle that the hand is controlling
+      this.handNode.setParticle( particle );
+
+      // Position the pointing hand hint.
+      this.updateHandPosition();
     },
 
     /**
@@ -398,10 +412,8 @@ define( require => {
       this.movableParticleNode = null;
 
       // Remove the hand node.
-      if ( this.handNode ) {
+      if ( this.movableParticleLayer.hasChild( this.handNode ) ) {
         this.movableParticleLayer.removeChild( this.handNode );
-        this.handNode.dispose();
-        this.handNode = null;
       }
     },
 
@@ -412,6 +424,7 @@ define( require => {
 
       this.updatePositionMarkerOnDiagram();
       this.updateForceVectors();
+      this.updateHandPosition();
 
       const scale = Math.min( window.innerWidth / this.layoutBounds.width, window.innerHeight / this.layoutBounds.height );
       let atomWindowPosition = scale * ( this.modelViewTransform.modelToViewX( this.dualAtomModel.movableAtom.getX() ) );
@@ -455,12 +468,22 @@ define( require => {
       }
     },
 
+    /**
+     * @private
+     */
     updatePushPinPosition: function() {
       const mvt = this.modelViewTransform;
       const pinnedAtomPosition = this.dualAtomModel.fixedAtom.positionProperty.value;
       const pinnedAtomRadius = this.dualAtomModel.fixedAtom.radius;
       this.pushPinNode.right = mvt.modelToViewX( pinnedAtomPosition.x - pinnedAtomRadius * 0.5 );
       this.pushPinNode.bottom = mvt.modelToViewY( pinnedAtomPosition.y - pinnedAtomRadius * 0.5 );
+    },
+
+    /**
+     * @private
+     */
+    updateHandPosition: function() {
+      this.handNode.left = this.modelViewTransform.modelToViewX( this.movableParticle.positionProperty.value.x );
     },
 
     /**

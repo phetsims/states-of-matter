@@ -28,19 +28,23 @@ define( require => {
    * @param {SOMAtom} particle - model of the atom that is draggable
    * @param {ModelViewTransform2} modelViewTransform to convert between model and view co-ordinates
    * @param {number} minX - grabbable particle min x position
+   * @param {Tandem} tandem
    * @constructor
    */
-  function HandNode( dualAtomModel, particle, modelViewTransform, minX ) {
+  function HandNode( dualAtomModel, particle, modelViewTransform, minX, tandem ) {
 
-    Node.call( this, { cursor: 'pointer' } );
+    Node.call( this, { cursor: 'pointer', tandem: tandem } );
     const self = this;
     this.minX = minX; // @private
+
+    // @private {SOMAtom} - particle that will be moved if the hand is dragged
+    this.particle = particle;
 
     // add the main image that represents the hand
     this.addChild( new Image( handImage, {
       minWidth: WIDTH,
       maxWidth: WIDTH,
-      y: modelViewTransform.modelToViewY( particle.positionProperty.get().y )
+      y: modelViewTransform.modelToViewY( this.particle.positionProperty.get().y )
     } ) );
 
     // control visibility
@@ -63,10 +67,10 @@ define( require => {
         endDragX = self.globalToParentPoint( event.pointer.point ).x;
         const d = endDragX - startDragX;
         startDragX = endDragX;        // Make sure we don't exceed the positional limits.
-        const newPosX = Math.max( modelViewTransform.modelToViewX( particle.getX() ) + d, self.minX );
+        const newPosX = Math.max( modelViewTransform.modelToViewX( self.particle.getX() ) + d, self.minX );
 
         // Move the particle based on the amount of mouse movement.
-        particle.setPosition( modelViewTransform.viewToModelX( newPosX ), particle.getY() );
+        self.particle.setPosition( modelViewTransform.viewToModelX( newPosX ), self.particle.getY() );
       },
 
       end: function() {
@@ -75,7 +79,9 @@ define( require => {
         // means.
         dualAtomModel.setMotionPaused( false );
         dualAtomModel.movementHintVisibleProperty.set( false );
-      }
+      },
+
+      tandem: tandem.createTandem( 'dragHandler' )
     } );
     this.addInputListener( inputListener );
 
@@ -101,6 +107,14 @@ define( require => {
     dispose: function() {
       this.disposeHandNode();
       Node.prototype.dispose.call( this );
+    },
+
+    /**
+     * @param {SOMAtom} particle
+     * @public
+     */
+    setParticle: function( particle ) {
+      this.particle = particle;
     },
 
     /**
