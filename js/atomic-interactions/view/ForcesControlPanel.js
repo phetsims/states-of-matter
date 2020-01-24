@@ -23,6 +23,7 @@ define( require => {
   const PhetFont = require( 'SCENERY_PHET/PhetFont' );
   const SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
   const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+  const Tandem = require( 'TANDEM/Tandem' );
   const Text = require( 'SCENERY/nodes/Text' );
   const VBox = require( 'SCENERY/nodes/VBox' );
   const VStrut = require( 'SCENERY/nodes/VStrut' );
@@ -60,7 +61,8 @@ define( require => {
       lineWidth: 1,
       showTitleWhenExpanded: true,
       minWidth: 0,
-      maxWidth: Number.POSITIVE_INFINITY
+      maxWidth: Number.POSITIVE_INFINITY,
+      tandem: Tandem.REQUIRED
     }, options );
 
     Node.call( this );
@@ -177,18 +179,21 @@ define( require => {
     const totalForce = new HBox( { spacing: 2, children: [ totalForceItem ] } );
     const hideForce = new HBox( { spacing: 2, children: [ createConsistentlySpacedLabel( hideForcesText ) ] } );
 
-    const hideForcesRadio = new AquaRadioButton( forcesProperty, ForceDisplayMode.HIDDEN, hideForce, {
-      radius: RADIO_BUTTON_RADIUS
+    const hideForcesRadioButton = new AquaRadioButton( forcesProperty, ForceDisplayMode.HIDDEN, hideForce, {
+      radius: RADIO_BUTTON_RADIUS,
+      tandem: options.tandem.createTandem( 'hideForcesRadioButton' )
     } );
-    const totalForceRadio = new AquaRadioButton( forcesProperty, ForceDisplayMode.TOTAL, totalForce, {
-      radius: RADIO_BUTTON_RADIUS
+    const totalForceRadioButton = new AquaRadioButton( forcesProperty, ForceDisplayMode.TOTAL, totalForce, {
+      radius: RADIO_BUTTON_RADIUS,
+      tandem: options.tandem.createTandem( 'totalForceRadioButton' )
     } );
-    const componentForceRadio = new AquaRadioButton( forcesProperty, ForceDisplayMode.COMPONENTS, componentForce, {
-      radius: RADIO_BUTTON_RADIUS
+    const componentForceRadioButton = new AquaRadioButton( forcesProperty, ForceDisplayMode.COMPONENTS, componentForce, {
+      radius: RADIO_BUTTON_RADIUS,
+      tandem: options.tandem.createTandem( 'componentForceRadioButton' )
     } );
 
     const radioButtonGroup = new VBox( {
-      children: [ hideForcesRadio, totalForceRadio, componentForceRadio ],
+      children: [ hideForcesRadioButton, totalForceRadioButton, componentForceRadioButton ],
       align: 'left',
       spacing: 3,
       left: 8 // indented a bit
@@ -198,8 +203,8 @@ define( require => {
     // expand the touch areas of the radio buttons so that they are easier to work with on touch-based devices
     const xDilation = 8;
     const yDilation = 1.5;
-    hideForcesRadio.touchArea = hideForcesRadio.localBounds.dilatedXY( xDilation, yDilation );
-    totalForceRadio.touchArea = totalForceRadio.localBounds.dilatedXY( xDilation, yDilation );
+    hideForcesRadioButton.touchArea = hideForcesRadioButton.localBounds.dilatedXY( xDilation, yDilation );
+    totalForceRadioButton.touchArea = totalForceRadioButton.localBounds.dilatedXY( xDilation, yDilation );
 
     // show white stroke around the force panel within SOM full version  else  show black stroke
     const accordionBox = new AccordionBox( accordionContent, {

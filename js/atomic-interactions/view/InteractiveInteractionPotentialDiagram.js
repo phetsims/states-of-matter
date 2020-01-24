@@ -131,7 +131,7 @@ define( require => {
     ) );
     this.ljPotentialGraph.addChild( this.epsilonResizeHandle );
     this.epsilonResizeHandle.touchArea = this.epsilonResizeHandle.localBounds.dilatedXY( 3, 10 );
-    addEpsilonDragHandler( this.epsilonResizeHandle, options.tandem.createTandem( 'epsilonLineDragHandler' ) );
+    addEpsilonDragHandler( this.epsilonResizeHandle, options.tandem.createTandem( 'epsilonResizeDragHandler' ) );
 
     // add sigma arrow node
     this.sigmaResizeHandle = new ArrowNode( -RESIZE_HANDLE_SIZE_PROPORTION * this.widthOfGraph / 2, 0,
@@ -162,7 +162,9 @@ define( require => {
 
       end: function() {
         dualAtomModel.setMotionPaused( false );
-      }
+      },
+
+      tandem: options.tandem.createTandem( 'sigmaResizeHandleDragHandler' )
     } ) );
 
     // Add the ability to grab and move the position marker. This node will need to be pickable so the user can grab it.
@@ -196,7 +198,9 @@ define( require => {
           // Let the model move the particle again.  Note that this happens
           // even if the motion was paused by some other means.
           dualAtomModel.setMotionPaused( false );
-        }
+        },
+
+      tandem: options.tandem.createTandem( 'positionMarkerDragHandler' )
       }
     ) );
 
