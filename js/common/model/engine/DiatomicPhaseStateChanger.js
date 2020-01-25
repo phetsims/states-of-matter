@@ -598,13 +598,10 @@ define( require => {
     },
 
     /**
-     * Set the phase to the solid state.
-     * @public
+     * Set the particle configuration for the solid phase.
+     * @protected
      */
-    setPhaseSolid: function() {
-
-      // Set the model temperature for this phase.
-      this.multipleParticleModel.setTemperature( SOMConstants.SOLID_TEMPERATURE );
+    setParticleConfigurationSolid: function() {
 
       // Place the molecules into a cube, a.k.a. a crystal.
       this.formCrystal(
@@ -618,10 +615,10 @@ define( require => {
     },
 
     /**
-     * Set the phase to the liquid state.
+     * Set the particle configuration for the liquid phase.
      * @protected
      */
-    setPhaseLiquid: function() {
+    setParticleConfigurationLiquid: function() {
 
       let dataSetToLoad;
 
@@ -633,9 +630,6 @@ define( require => {
 
       // load the previously saved state
       this.loadSavedState( dataSetToLoad );
-
-      // set the temperature
-      this.multipleParticleModel.setTemperature( SOMConstants.LIQUID_TEMPERATURE );
     }
   } );
 } );

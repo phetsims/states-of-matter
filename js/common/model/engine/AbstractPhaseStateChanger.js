@@ -25,6 +25,7 @@ define( require => {
   /**
    * @param { MultipleParticleModel } multipleParticleModel of the simulation
    * @constructor
+   * @public
    */
   function AbstractPhaseStateChanger( multipleParticleModel ) {
 
@@ -42,7 +43,8 @@ define( require => {
     /**
      * Set the phase based on the specified ID.  This often needs to be overridden in descendant classes to do more
      * specific activities.
-     * @param phaseID
+     * @param {PhaseStateEnum} phaseID
+     * @public
      */
     setPhase: function( phaseID ) {
       switch( phaseID ) {
@@ -58,6 +60,75 @@ define( require => {
         default:
           throw new Error( 'invalid phaseID: ' + phaseID );
       }
+    },
+
+    /**
+     * Set the positions and velocities of the particles without setting the model temperature.
+     * @param {PhaseStateEnum} phaseID
+     * @public
+     */
+    setParticleConfigurationForPhase: function( phaseID ) {
+      switch( phaseID ) {
+        case PhaseStateEnum.SOLID:
+          this.setParticleConfigurationSolid();
+          break;
+        case PhaseStateEnum.LIQUID:
+          this.setParticleConfigurationLiquid();
+          break;
+        case PhaseStateEnum.GAS:
+          this.setParticleConfigurationGas();
+          break;
+        default:
+          throw new Error( 'invalid phaseID: ' + phaseID );
+      }
+    },
+
+    /**
+     * Set the model temperature for the specified phase.
+     * @param {PhaseStateEnum} phaseID
+     * @public
+     */
+    setTemperatureForPhase: function( phaseID ) {
+      switch( phaseID ) {
+        case PhaseStateEnum.SOLID:
+          this.multipleParticleModel.setTemperature( SOMConstants.SOLID_TEMPERATURE );
+          break;
+        case PhaseStateEnum.LIQUID:
+          this.multipleParticleModel.setTemperature( SOMConstants.LIQUID_TEMPERATURE );
+          break;
+        case PhaseStateEnum.GAS:
+          this.multipleParticleModel.setTemperature( SOMConstants.GAS_TEMPERATURE );
+          break;
+        default:
+          throw new Error( 'invalid phaseID: ' + phaseID );
+      }
+    },
+
+    /**
+     * set the phase to solid
+     * @param {PhaseStateEnum} phaseID
+     */
+    setPhaseSolid: function() {
+      this.setParticleConfigurationSolid();
+      this.setTemperatureForPhase( PhaseStateEnum.SOLID );
+    },
+
+    /**
+     * set the phase to liquid
+     * @param {PhaseStateEnum} phaseID
+     */
+    setPhaseLiquid: function() {
+      this.setParticleConfigurationLiquid();
+      this.setTemperatureForPhase( PhaseStateEnum.LIQUID );
+    },
+
+    /**
+     * set the phase to gas
+     * @param {PhaseStateEnum} phaseID
+     */
+    setPhaseGas: function() {
+      this.setParticleConfigurationGas();
+      this.setTemperatureForPhase( PhaseStateEnum.GAS );
     },
 
     /**
@@ -169,14 +240,11 @@ define( require => {
     },
 
     /**
-     * Set the phase to gas.  This can be generalized more than the liquid and solid phases, hence it can be defined in
-     * the base class.
+     * Set the particle configuration for gas.  This can be generalized more than the liquid and solid phases, hence it
+     * can be defined in the base class.
      * @protected
      */
-    setPhaseGas: function() {
-
-      // Set the multipleParticleModel temperature for this phase.
-      this.multipleParticleModel.setTemperature( SOMConstants.GAS_TEMPERATURE );
+    setParticleConfigurationGas: function() {
 
       // Get references to the various elements of the data set.
       const moleculeDataSet = this.multipleParticleModel.moleculeDataSet;
@@ -190,7 +258,7 @@ define( require => {
       const temperatureSqrt = Math.sqrt( this.multipleParticleModel.temperatureSetPointProperty.get() );
       const numberOfMolecules = moleculeDataSet.getNumberOfMolecules();
 
-      for ( var i = 0; i < numberOfMolecules; i++ ) {
+      for ( let i = 0; i < numberOfMolecules; i++ ) {
 
         // Temporarily position the molecules at (0,0).
         moleculeCenterOfMassPositions[ i ].setXY( 0, 0 );
@@ -216,7 +284,7 @@ define( require => {
       let newPosY;
       const rangeX = this.multipleParticleModel.normalizedContainerWidth - ( 2 * this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE );
       const rangeY = this.multipleParticleModel.normalizedContainerHeight - ( 2 * this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE );
-      for ( i = 0; i < numberOfMolecules; i++ ) {
+      for ( let i = 0; i < numberOfMolecules; i++ ) {
         for ( let j = 0; j < MAX_PLACEMENT_ATTEMPTS; j++ ) {
 
           // Pick a random position.

@@ -1,6 +1,5 @@
 // Copyright 2014-2020, University of Colorado Boulder
 
-
 /**
  * This is the main class for the model portion of the "States of Matter" simulation.  It maintains a set of data that
  * represents a normalized model in which all atoms are assumed to have a diameter of 1, since this allows for very
@@ -195,10 +194,6 @@ define( require => {
     } );
 
     // @public (read-only)
-    // this.numberOfMoleculesRangeProperty = new Property( new Range( 0, SOMConstants.MAX_NUM_ATOMS ), {
-    //   tandem: tandem.createTandem( 'numberOfMoleculesRangeProperty' ),
-    //   phetioReadOnly: true
-    // } );
     this.numberOfMoleculesRangeProperty = new Property( new Range( 0, SOMConstants.MAX_NUM_ATOMS ) );
 
     this.resetEmitter = new Emitter(); // listen only, fires when a reset occurs
@@ -266,6 +261,59 @@ define( require => {
 
         for ( let i = 0; i < delta; i++ ) {
           self.injectMolecule();
+        }
+      }
+    } );
+
+    // Listen for phet-io-initiated changes to the temperature and handle as a special case.  This is done solely in
+    // support of setting state via phet-io.
+    this.temperatureSetPointProperty.lazyLink( targetTemperature => {
+
+      const isSettingState = _.hasIn( window, 'phet.phetIo.phetioEngine' ) &&
+                             phet.phetIo.phetioEngine.phetioStateEngine.isSettingState;
+
+      if ( isSettingState ) {
+
+        // Temperature is being set via phet-io.  Find the closest phase, set the temperature, and then run the model
+        // for a while to match.
+        let targetPhase;
+        const distanceFromGasTemperature = Math.abs( targetTemperature - SOMConstants.GAS_TEMPERATURE );
+        const distanceFromLiquidTemperature = Math.abs( targetTemperature - SOMConstants.LIQUID_TEMPERATURE );
+        const distanceFromSolidTemperature = Math.abs( targetTemperature - SOMConstants.SOLID_TEMPERATURE );
+
+        const minDistanceFromTargetTemperature = Math.min(
+          distanceFromGasTemperature,
+          distanceFromLiquidTemperature,
+          distanceFromSolidTemperature
+        );
+
+        if ( minDistanceFromTargetTemperature === distanceFromGasTemperature ) {
+          targetPhase = PhaseStateEnum.GAS;
+        }
+        else if ( minDistanceFromTargetTemperature === distanceFromLiquidTemperature ) {
+          targetPhase = PhaseStateEnum.LIQUID;
+        }
+        else {
+          targetPhase = PhaseStateEnum.SOLID;
+        }
+
+        this.phaseStateChanger.setParticleConfigurationForPhase( targetPhase );
+
+        // set the thermostats to the new temperature
+        if ( this.isoKineticThermostat !== null ) {
+          this.isoKineticThermostat.targetTemperature = targetTemperature;
+        }
+        if ( this.andersenThermostat !== null ) {
+          this.andersenThermostat.targetTemperature = targetTemperature;
+        }
+
+        if ( minDistanceFromTargetTemperature > 0 ) {
+
+          // Step the model a number of times to get it to the desired target temperature.  The number of steps was
+          // empirically determined.
+          for ( let i = 0; i < 100; i++ ) {
+            this.stepInternal( SOMConstants.NOMINAL_TIME_STEP );
+          }
         }
       }
     } );
