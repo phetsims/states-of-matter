@@ -2056,13 +2056,10 @@ define( require => {
     },
 
     /**
-     * Set the phase to the solid state.
+     * Set the particle configuration for the solid phase.
      * @protected
      */
-    setPhaseSolid: function() {
-
-      // Set the temperature in the model.
-      this.multipleParticleModel.setTemperature( SOMConstants.SOLID_TEMPERATURE );
+    setParticleConfigurationSolid: function() {
 
       // Place the molecules into a cube, a.k.a. a crystal.
       this.formCrystal(
@@ -2076,10 +2073,10 @@ define( require => {
     },
 
     /**
-     * Set the phase to the liquid state.
+     * Set the particle configuration for the liquid phase.
      * @protected
      */
-    setPhaseLiquid: function() {
+    setParticleConfigurationLiquid: function() {
       let dataSetToLoad;
       if ( this.multipleParticleModel.substanceProperty.get() === SubstanceType.NEON ) {
         dataSetToLoad = LIQUID_INITIAL_STATES.neon;
@@ -2092,7 +2089,6 @@ define( require => {
       }
       assert && assert( dataSetToLoad, 'unhandled substance: ' + this.multipleParticleModel.substanceProperty.get() );
       this.loadSavedState( dataSetToLoad );
-      this.multipleParticleModel.setTemperature( SOMConstants.LIQUID_TEMPERATURE );
     }
   } );
 } );

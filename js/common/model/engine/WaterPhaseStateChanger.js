@@ -680,7 +680,6 @@ define( require => {
 
   //================================================================
 
-
   statesOfMatter.register( 'WaterPhaseStateChanger', WaterPhaseStateChanger );
 
   return inherit( AbstractPhaseStateChanger, WaterPhaseStateChanger, {
@@ -704,10 +703,10 @@ define( require => {
     },
 
     /**
-     * Set the phase to the solid state.
+     * Set the particle configuration for the solid phase.
      * @protected
      */
-    setPhaseSolid: function() {
+    setParticleConfigurationSolid: function() {
 
       let dataSetToLoad;
 
@@ -722,16 +721,13 @@ define( require => {
 
       // prevent drift
       this.zeroOutCollectiveVelocity();
-
-      // set the multipleParticleModel temperature for this phase
-      this.multipleParticleModel.setTemperature( SOMConstants.SOLID_TEMPERATURE );
     },
 
     /**
-     * Set the phase to the liquid state.
+     * Set the particle configuration for the liquid phase.
      * @protected
      */
-    setPhaseLiquid: function() {
+    setParticleConfigurationLiquid: function() {
 
       let dataSetToLoad;
 
@@ -743,9 +739,6 @@ define( require => {
 
       // load the previously saved state
       this.loadSavedState( dataSetToLoad );
-
-      // set the temperature
-      this.multipleParticleModel.setTemperature( SOMConstants.LIQUID_TEMPERATURE );
     }
   } );
 } );

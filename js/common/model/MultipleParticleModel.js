@@ -155,7 +155,6 @@ define( require => {
 
     // @public (read-write)
     this.temperatureSetPointProperty = new NumberProperty( INITIAL_TEMPERATURE, {
-      reentrant: true, // this was necessary for phet-io to be able to set temperture during state initialization
       tandem: tandem.createTandem( 'temperatureSetPointProperty' ),
       phetioReadOnly: true
     } );
@@ -288,11 +287,6 @@ define( require => {
           distanceFromSolidTemperature
         );
 
-        // TODO: This doesn't quite work right because the setting of the phase also sets the temperature.  What is
-        // needed it a way to set the phase attributes without setting the temperature, which basically means breaking
-        // the process into two steps in the PhaseStateChanger type.  That should be the next step.  See
-        // https://github.com/phetsims/states-of-matter/issues/245.
-
         if ( minDistanceFromTargetTemperature === distanceFromGasTemperature ) {
           targetPhase = PhaseStateEnum.GAS;
         }
@@ -303,11 +297,23 @@ define( require => {
           targetPhase = PhaseStateEnum.SOLID;
         }
 
-        this.phaseStateChanger.setPhase( targetPhase );
+        this.phaseStateChanger.setParticleConfigurationForPhase( targetPhase );
+
+        // set the thermostats to the new temperature
+        if ( this.isoKineticThermostat !== null ) {
+          this.isoKineticThermostat.targetTemperature = targetTemperature;
+        }
+        if ( this.andersenThermostat !== null ) {
+          this.andersenThermostat.targetTemperature = targetTemperature;
+        }
 
         if ( minDistanceFromTargetTemperature > 0 ) {
-          console.log( 'step the model for a while...' );
-          console.log( 'minDistanceFromTargetTemperature = ' + minDistanceFromTargetTemperature );
+
+          // Step the model a number of times to get it to the desired target temperature.  The number of steps was
+          // empirically determined.
+          for ( let i = 0; i < 100; i++ ) {
+            this.stepInternal( SOMConstants.NOMINAL_TIME_STEP );
+          }
         }
       }
     } );
