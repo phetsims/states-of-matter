@@ -17,10 +17,12 @@ define( require => {
   const StatesScreen = require( 'STATES_OF_MATTER/states/StatesScreen' );
   const Tandem = require( 'TANDEM/Tandem' );
 
-
   // strings
   const interactionString = require( 'string!STATES_OF_MATTER/interaction' );
   const statesOfMatterTitleString = require( 'string!STATES_OF_MATTER/states-of-matter.title' );
+
+  // Eagerly create GlobalOptionsNode so it works smoothly with PhET-iO
+  const globalOptionsNode = new GlobalOptionsNode( Tandem.ROOT.createTandem( 'global' ).createTandem( 'view' ).createTandem( 'globalOptionsNode' ) );
 
   const simOptions = {
     credits: {
@@ -33,7 +35,7 @@ define( require => {
     },
 
     // Creates content for the Options dialog
-    createOptionsDialogContent: () => new GlobalOptionsNode( Tandem.ROOT.createTandem( 'globalOptionsNode' ) )
+    createOptionsDialogContent: () => globalOptionsNode
   };
 
   SimLauncher.launch( function() {
