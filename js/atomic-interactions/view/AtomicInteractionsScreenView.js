@@ -116,7 +116,8 @@ define( require => {
       },
       left: this.layoutBounds.minX + 6 * INSET,
       bottom: this.layoutBounds.bottom - 2 * INSET,
-      tandem: tandem.createTandem( 'returnAtomButton' )
+      tandem: tandem.createTandem( 'returnAtomButton' ),
+      visible: false
     } );
     this.addChild( this.returnAtomButton );
 
