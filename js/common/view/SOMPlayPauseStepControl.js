@@ -23,7 +23,7 @@ define( require => {
     /**
      * @param {Property.<boolean>} playingProperty
      * @param {function} stepFunction
-     * @param {Object} options
+     * @param {Object} [options]
      * @constructor
      */
     constructor( playingProperty, stepFunction, options ) {
