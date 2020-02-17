@@ -32,9 +32,9 @@ define( require => {
   const solidString = require( 'string!STATES_OF_MATTER/Solid' );
 
   // images
-  const gasIconImage = require( 'image!STATES_OF_MATTER/gas-icon.png' );
-  const liquidIconImage = require( 'image!STATES_OF_MATTER/liquid-icon.png' );
-  const solidIconImage = require( 'image!STATES_OF_MATTER/solid-icon.png' );
+  const gasIconImage = require( 'mipmap!STATES_OF_MATTER/gas-icon.png' );
+  const liquidIconImage = require( 'mipmap!STATES_OF_MATTER/liquid-icon.png' );
+  const solidIconImage = require( 'mipmap!STATES_OF_MATTER/solid-icon.png' );
 
   // constants
   const DEFAULT_BUTTON_WIDTH = 160;
