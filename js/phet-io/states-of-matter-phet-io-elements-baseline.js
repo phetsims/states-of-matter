@@ -5605,7 +5605,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "PropertyIO<ScreenIO>"
     },
     "statesOfMatter.general.soundManager.enabledProperty": {
-      "phetioDocumentation": "If this sim contains sound, then this Property will toggle whether sound is enabled ordisabled.",
+      "phetioDocumentation": "If the sim contains sound, then this Property will toggle whether sound is enabled or disabled.",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
