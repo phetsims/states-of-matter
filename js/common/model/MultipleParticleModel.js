@@ -1,7 +1,7 @@
 // Copyright 2014-2020, University of Colorado Boulder
 
 /**
- * This is the main class for the model portion of the "States of Matter" simulation.  It maintains a set of data that
+ * This is the main class for the model portion of the "States of Matter" simulation.  It maintains a sEet of data that
  * represents a normalized model in which all atoms are assumed to have a diameter of 1, since this allows for very
  * quick calculations, and also a set of data for particles that have the actual diameter of the particles being
  * simulated (e.g. Argon). Throughout the comments and in the variable naming, I've tried to use the terminology of
@@ -265,58 +265,60 @@ define( require => {
       }
     } );
 
-    // Listen for phet-io-initiated changes to the temperature and handle as a special case.  This is done solely in
-    // support of setting state via phet-io.
-    this.temperatureSetPointProperty.lazyLink( targetTemperature => {
+    if ( _.hasIn( window, 'phet.phetIo.phetioEngine' ) ) {
 
-      const isSettingState = _.hasIn( window, 'phet.phetIo.phetioEngine' ) &&
-                             phet.phetIo.phetioEngine.phetioStateEngine.isSettingState;
+      phet.phetIo.phetioEngine.phetioStateEngine.stateSetEmitter.addListener( () => {
 
-      if ( isSettingState ) {
+          // Temperature is being set via phet-io.  Find the closest phase, set the temperature, and then run the model
+          // for a while to match.
+          const targetTemperature = this.temperatureSetPointProperty.value;
+          let targetPhase;
+          const distanceFromGasTemperature = Math.abs( targetTemperature - SOMConstants.GAS_TEMPERATURE );
+          const distanceFromLiquidTemperature = Math.abs( targetTemperature - SOMConstants.LIQUID_TEMPERATURE );
+          const distanceFromSolidTemperature = Math.abs( targetTemperature - SOMConstants.SOLID_TEMPERATURE );
 
-        // Temperature is being set via phet-io.  Find the closest phase, set the temperature, and then run the model
-        // for a while to match.
-        let targetPhase;
-        const distanceFromGasTemperature = Math.abs( targetTemperature - SOMConstants.GAS_TEMPERATURE );
-        const distanceFromLiquidTemperature = Math.abs( targetTemperature - SOMConstants.LIQUID_TEMPERATURE );
-        const distanceFromSolidTemperature = Math.abs( targetTemperature - SOMConstants.SOLID_TEMPERATURE );
+          const minDistanceFromTargetTemperature = Math.min(
+            distanceFromGasTemperature,
+            distanceFromLiquidTemperature,
+            distanceFromSolidTemperature
+          );
 
-        const minDistanceFromTargetTemperature = Math.min(
-          distanceFromGasTemperature,
-          distanceFromLiquidTemperature,
-          distanceFromSolidTemperature
-        );
+          if ( minDistanceFromTargetTemperature === distanceFromGasTemperature ) {
+            targetPhase = PhaseStateEnum.GAS;
+          }
+          else if ( minDistanceFromTargetTemperature === distanceFromLiquidTemperature ) {
+            targetPhase = PhaseStateEnum.LIQUID;
+          }
+          else {
+            targetPhase = PhaseStateEnum.SOLID;
+          }
 
-        if ( minDistanceFromTargetTemperature === distanceFromGasTemperature ) {
-          targetPhase = PhaseStateEnum.GAS;
-        }
-        else if ( minDistanceFromTargetTemperature === distanceFromLiquidTemperature ) {
-          targetPhase = PhaseStateEnum.LIQUID;
-        }
-        else {
-          targetPhase = PhaseStateEnum.SOLID;
-        }
+          // Has the update for the change of substance occurred?
+          if ( this.substanceThatIThinkIAmDealingWith !== this.substanceProperty.value ) {
+            this.handleSubstanceChanged();
+          }
 
-        this.phaseStateChanger.setParticleConfigurationForPhase( targetPhase );
+          this.phaseStateChanger.setParticleConfigurationForPhase( targetPhase );
 
-        // set the thermostats to the new temperature
-        if ( this.isoKineticThermostat !== null ) {
-          this.isoKineticThermostat.targetTemperature = targetTemperature;
-        }
-        if ( this.andersenThermostat !== null ) {
-          this.andersenThermostat.targetTemperature = targetTemperature;
-        }
+          // set the thermostats to the new temperature
+          if ( this.isoKineticThermostat !== null ) {
+            this.isoKineticThermostat.targetTemperature = targetTemperature;
+          }
+          if ( this.andersenThermostat !== null ) {
+            this.andersenThermostat.targetTemperature = targetTemperature;
+          }
 
-        if ( minDistanceFromTargetTemperature > 0 ) {
+          if ( minDistanceFromTargetTemperature > 0 ) {
 
-          // Step the model a number of times to get it to the desired target temperature.  The number of steps was
-          // empirically determined.
-          for ( let i = 0; i < 100; i++ ) {
-            this.stepInternal( SOMConstants.NOMINAL_TIME_STEP );
+            // Step the model a number of times to get it to the desired target temperature.  The number of steps was
+            // empirically determined.
+            for ( let i = 0; i < 100; i++ ) {
+              this.stepInternal( SOMConstants.NOMINAL_TIME_STEP );
+            }
           }
         }
-      }
-    } );
+      );
+    }
   }
 
   statesOfMatter.register( 'MultipleParticleModel', MultipleParticleModel );

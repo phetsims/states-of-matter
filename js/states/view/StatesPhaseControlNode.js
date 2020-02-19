@@ -12,6 +12,7 @@ define( require => {
   // modules
   const BooleanRectangularStickyToggleButton = require( 'SUN/buttons/BooleanRectangularStickyToggleButton' );
   const BooleanProperty = require( 'AXON/BooleanProperty' );
+  const EnumerationProperty = require( 'AXON/EnumerationProperty' );
   const HBox = require( 'SCENERY/nodes/HBox' );
   const HStrut = require( 'SCENERY/nodes/HStrut' );
   const Image = require( 'SCENERY/nodes/Image' );
@@ -20,7 +21,6 @@ define( require => {
   const Node = require( 'SCENERY/nodes/Node' );
   const PhaseStateEnum = require( 'STATES_OF_MATTER/common/PhaseStateEnum' );
   const PhetFont = require( 'SCENERY_PHET/PhetFont' );
-  const Property = require( 'AXON/Property' );
   const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
   const Tandem = require( 'TANDEM/Tandem' );
   const Text = require( 'SCENERY/nodes/Text' );
@@ -63,7 +63,10 @@ define( require => {
     Node.call( this );
 
     // state of the atoms/molecules
-    const stateProperty = new Property( PhaseStateEnum.UNKNOWN );
+    const stateProperty = new EnumerationProperty( PhaseStateEnum, PhaseStateEnum.UNKNOWN, {
+      tandem: options.tandem.createTandem( 'stateProperty' ),
+      phetioReadOnly: true
+    } );
 
     // boolean properties corresponding to each state
     const solidSelectedProperty = new BooleanProperty( false, {

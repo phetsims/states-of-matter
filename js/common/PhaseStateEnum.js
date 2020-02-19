@@ -1,21 +1,14 @@
 // Copyright 2015-2019, University of Colorado Boulder
 
+/**
+ * enumeration of the various possible phases of matter
+ */
 define( require => {
   'use strict';
 
+  const Enumeration = require( 'PHET_CORE/Enumeration' );
   const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
-  const PhaseStateEnum = {
-    SOLID: 'SOLID',
-    LIQUID: 'LIQUID',
-    GAS: 'GAS',
-    UNKNOWN: 'UNKNOWN'
-  };
-
-  // verify that enum is immutable, without the runtime penalty in production code
-  if ( assert ) { Object.freeze( PhaseStateEnum ); }
-
-  statesOfMatter.register( 'PhaseStateEnum', PhaseStateEnum );
-
-  return PhaseStateEnum;
+  const PhaseStateEnum = Enumeration.byKeys( [ 'SOLID', 'LIQUID', 'GAS', 'UNKNOWN' ] );
+  return statesOfMatter.register( 'PhaseStateEnum', PhaseStateEnum );
 } );
