@@ -113,223 +113,220 @@ define( require => {
   const MOLECULE_INJECTION_HOLDOFF_TIME = 0.25; // seconds, empirically determined
   const MAX_MOLECULES_QUEUED_FOR_INJECTION = 3;
 
-  /**
-   * @param {Tandem} tandem
-   * @constructor
-   */
-  function MultipleParticleModel( tandem ) {
+  class MultipleParticleModel {
 
-    const self = this;
+    /**
+     * @param {Tandem} tandem
+     */
+    constructor( tandem ) {
 
-    //-----------------------------------------------------------------------------------------------------------------
-    // observable model properties
-    //-----------------------------------------------------------------------------------------------------------------
+      const self = this;
 
-    // @public (read-only)
-    this.particleContainerHeightProperty = new NumberProperty( PARTICLE_CONTAINER_INITIAL_HEIGHT, {
-      tandem: tandem.createTandem( 'particleContainerHeightProperty' ),
-      phetioReadOnly: true
-    } );
+      //-----------------------------------------------------------------------------------------------------------------
+      // observable model properties
+      //-----------------------------------------------------------------------------------------------------------------
 
-    // @public (read-write)
-    this.targetContainerHeightProperty = new NumberProperty( PARTICLE_CONTAINER_INITIAL_HEIGHT, {
-      tandem: tandem.createTandem( 'targetContainerHeightProperty' ),
-      range: new Range( MIN_ALLOWABLE_CONTAINER_HEIGHT, PARTICLE_CONTAINER_INITIAL_HEIGHT )
-    } );
+      // @public (read-only)
+      this.particleContainerHeightProperty = new NumberProperty( PARTICLE_CONTAINER_INITIAL_HEIGHT, {
+        tandem: tandem.createTandem( 'particleContainerHeightProperty' ),
+        phetioReadOnly: true
+      } );
 
-    // @public (read-only)
-    this.isExplodedProperty = new BooleanProperty( false, {
-      tandem: tandem.createTandem( 'isExplodedProperty' ),
-      phetioReadOnly: true
-    } );
+      // @public (read-write)
+      this.targetContainerHeightProperty = new NumberProperty( PARTICLE_CONTAINER_INITIAL_HEIGHT, {
+        tandem: tandem.createTandem( 'targetContainerHeightProperty' ),
+        range: new Range( MIN_ALLOWABLE_CONTAINER_HEIGHT, PARTICLE_CONTAINER_INITIAL_HEIGHT )
+      } );
 
-    // @public (read-write)
-    this.phaseDiagramExpandedProperty = new BooleanProperty( true, {
-      tandem: tandem.createTandem( 'phaseDiagramExpandedProperty' )
-    } );
+      // @public (read-only)
+      this.isExplodedProperty = new BooleanProperty( false, {
+        tandem: tandem.createTandem( 'isExplodedProperty' ),
+        phetioReadOnly: true
+      } );
 
-    // @public (read-write)
-    this.interactionPotentialDiagramExpandedProperty = new BooleanProperty( true, {
-      tandem: tandem.createTandem( 'interactionPotentialDiagramExpandedProperty' )
-    } );
+      // @public (read-write)
+      this.phaseDiagramExpandedProperty = new BooleanProperty( true, {
+        tandem: tandem.createTandem( 'phaseDiagramExpandedProperty' )
+      } );
 
-    // @public (read-write)
-    this.temperatureSetPointProperty = new NumberProperty( INITIAL_TEMPERATURE, {
-      tandem: tandem.createTandem( 'temperatureSetPointProperty' ),
-      phetioReadOnly: true
-    } );
+      // @public (read-write)
+      this.interactionPotentialDiagramExpandedProperty = new BooleanProperty( true, {
+        tandem: tandem.createTandem( 'interactionPotentialDiagramExpandedProperty' )
+      } );
 
-    // @public (read-only)
-    this.pressureProperty = new NumberProperty( 0, {
-      tandem: tandem.createTandem( 'pressureProperty' ),
-      phetioReadOnly: true
-    } );
+      // @public (read-write)
+      this.temperatureSetPointProperty = new NumberProperty( INITIAL_TEMPERATURE, {
+        tandem: tandem.createTandem( 'temperatureSetPointProperty' ),
+        phetioReadOnly: true
+      } );
 
-    // @public (read-write)
-    this.substanceProperty = new EnumerationProperty( SubstanceType, DEFAULT_SUBSTANCE, {
-      tandem: tandem.createTandem( 'substanceProperty' )
-    } );
+      // @public (read-only)
+      this.pressureProperty = new NumberProperty( 0, {
+        tandem: tandem.createTandem( 'pressureProperty' ),
+        phetioReadOnly: true
+      } );
 
-    // @public (read-write)
-    this.isPlayingProperty = new BooleanProperty( true, {
-      tandem: tandem.createTandem( 'isPlayingProperty' )
-    } );
+      // @public (read-write)
+      this.substanceProperty = new EnumerationProperty( SubstanceType, DEFAULT_SUBSTANCE, {
+        tandem: tandem.createTandem( 'substanceProperty' )
+      } );
 
-    // @public (read-write)
-    this.heatingCoolingAmountProperty = new NumberProperty( 0, {
-      tandem: tandem.createTandem( 'heatingCoolingAmountProperty' ),
-      range: new Range( -1, 1 )
-    } );
+      // @public (read-write)
+      this.isPlayingProperty = new BooleanProperty( true, {
+        tandem: tandem.createTandem( 'isPlayingProperty' )
+      } );
 
-    // @public (read-write)
-    this.interactionStrengthProperty = new NumberProperty( MAX_ADJUSTABLE_EPSILON, {
-      tandem: tandem.createTandem( 'interactionStrengthProperty' ),
-      range: new Range( MIN_ADJUSTABLE_EPSILON, MAX_ADJUSTABLE_EPSILON )
-    } );
+      // @public (read-write)
+      this.heatingCoolingAmountProperty = new NumberProperty( 0, {
+        tandem: tandem.createTandem( 'heatingCoolingAmountProperty' ),
+        range: new Range( -1, 1 )
+      } );
 
-    // @public (read-write)
-    this.numberOfMoleculesProperty = new NumberProperty( 0, {
-      tandem: tandem.createTandem( 'numberOfMoleculesProperty' ),
-      phetioReadOnly: true
-    } );
+      // @public (read-write)
+      this.interactionStrengthProperty = new NumberProperty( MAX_ADJUSTABLE_EPSILON, {
+        tandem: tandem.createTandem( 'interactionStrengthProperty' ),
+        range: new Range( MIN_ADJUSTABLE_EPSILON, MAX_ADJUSTABLE_EPSILON )
+      } );
 
-    // @public (read-only)
-    this.numberOfMoleculesRangeProperty = new Property( new Range( 0, SOMConstants.MAX_NUM_ATOMS ) );
+      // @public (read-write)
+      this.numberOfMoleculesProperty = new NumberProperty( 0, {
+        tandem: tandem.createTandem( 'numberOfMoleculesProperty' ),
+        phetioReadOnly: true
+      } );
 
-    this.resetEmitter = new Emitter(); // listen only, fires when a reset occurs
+      // @public (read-only)
+      this.numberOfMoleculesRangeProperty = new Property( new Range( 0, SOMConstants.MAX_NUM_ATOMS ) );
 
-    //-----------------------------------------------------------------------------------------------------------------
-    // other model attributes
-    //-----------------------------------------------------------------------------------------------------------------
+      this.resetEmitter = new Emitter(); // listen only, fires when a reset occurs
 
-    // @public, array containing references to the non-normalized particles
-    this.particles = new ObservableArray(); // @public, read-only
+      //-----------------------------------------------------------------------------------------------------------------
+      // other model attributes
+      //-----------------------------------------------------------------------------------------------------------------
 
-    // @public, data set containing information about the position, motion, and force for the normalized particles
-    this.moleculeDataSet = null;
+      // @public, array containing references to the non-normalized particles
+      this.particles = new ObservableArray(); // @public, read-only
 
-    // @public, various non-property attributes
-    this.normalizedContainerWidth = PARTICLE_CONTAINER_WIDTH / this.particleDiameter;
-    this.gravitationalAcceleration = NOMINAL_GRAVITATIONAL_ACCEL;
+      // @public, data set containing information about the position, motion, and force for the normalized particles
+      this.moleculeDataSet = null;
 
-    // @public, read-only, normalized version of the container height, changes as the lid position changes
-    this.normalizedContainerHeight = this.particleContainerHeightProperty.get() / this.particleDiameter;
+      // @public, various non-property attributes
+      this.normalizedContainerWidth = PARTICLE_CONTAINER_WIDTH / this.particleDiameter;
+      this.gravitationalAcceleration = NOMINAL_GRAVITATIONAL_ACCEL;
 
-    // @public, read-only, normalized version of the TOTAL container height regardless of the lid position, set once at init
-    this.normalizedTotalContainerHeight = this.particleContainerHeightProperty.get / this.particleDiameter;
+      // @public, read-only, normalized version of the container height, changes as the lid position changes
+      this.normalizedContainerHeight = this.particleContainerHeightProperty.get() / this.particleDiameter;
 
-    // @public, normalized velocity at which lid is moving in y direction
-    this.normalizedLidVelocityY = 0;
+      // @public, read-only, normalized version of the TOTAL container height regardless of the lid position, set once at init
+      this.normalizedTotalContainerHeight = this.particleContainerHeightProperty.get / this.particleDiameter;
 
-    // @private, various internal model variables
-    this.particleDiameter = 1;
-    this.minModelTemperature = null;
-    this.residualTime = 0;
-    this.numMoleculesAwaitingInjection = 0;
-    this.moleculeInjectionHoldoffTimer = 0;
-    this.injectionPointX = 0;
-    this.injectionPointY = 0;
-    this.heightChangeThisStep = 0;
-    this.particleInjectedThisStep = false;
+      // @public, normalized velocity at which lid is moving in y direction
+      this.normalizedLidVelocityY = 0;
 
-    // @private, strategy patterns that are applied to the data set
-    this.atomPositionUpdater = null;
-    this.moleculeForceAndMotionCalculator = null;
-    this.phaseStateChanger = null;
-    this.isoKineticThermostat = null;
-    this.andersenThermostat = null;
+      // @private, various internal model variables
+      this.particleDiameter = 1;
+      this.minModelTemperature = null;
+      this.residualTime = 0;
+      this.numMoleculesAwaitingInjection = 0;
+      this.moleculeInjectionHoldoffTimer = 0;
+      this.injectionPointX = 0;
+      this.injectionPointY = 0;
+      this.heightChangeThisStep = 0;
+      this.particleInjectedThisStep = false;
 
-    // moving average calculator that tracks the average difference between the calculated and target temperatures
-    this.averageTemperatureDifference = new MovingAverage( 10 );
+      // @private, strategy patterns that are applied to the data set
+      this.atomPositionUpdater = null;
+      this.moleculeForceAndMotionCalculator = null;
+      this.phaseStateChanger = null;
+      this.isoKineticThermostat = null;
+      this.andersenThermostat = null;
 
-    //-----------------------------------------------------------------------------------------------------------------
-    // other initialization
-    //-----------------------------------------------------------------------------------------------------------------
+      // moving average calculator that tracks the average difference between the calculated and target temperatures
+      this.averageTemperatureDifference = new MovingAverage( 10 );
 
-    // listen for changes to the substance being simulated and update the internals as needed
-    this.substanceProperty.link( function() {
-      self.handleSubstanceChanged();
-    } );
+      //-----------------------------------------------------------------------------------------------------------------
+      // other initialization
+      //-----------------------------------------------------------------------------------------------------------------
 
-    // listen for new molecules being added with the pump
-    this.numberOfMoleculesProperty.lazyLink( ( newValue, oldValue ) => {
-      const currentNumberOfMolecules = Math.floor( this.moleculeDataSet.numberOfAtoms / this.moleculeDataSet.atomsPerMolecule );
+      // listen for changes to the substance being simulated and update the internals as needed
+      this.substanceProperty.link( function() {
+        self.handleSubstanceChanged();
+      } );
 
-      // make sure that the pump doesn't release particles when the substance is changed, only when a molecule is added
-      if ( newValue !== currentNumberOfMolecules ) {
-        const delta = newValue - oldValue;
+      // listen for new molecules being added with the pump
+      this.numberOfMoleculesProperty.lazyLink( ( newValue, oldValue ) => {
+        const currentNumberOfMolecules = Math.floor( this.moleculeDataSet.numberOfAtoms / this.moleculeDataSet.atomsPerMolecule );
 
-        for ( let i = 0; i < delta; i++ ) {
-          self.injectMolecule();
+        // make sure that the pump doesn't release particles when the substance is changed, only when a molecule is added
+        if ( newValue !== currentNumberOfMolecules ) {
+          const delta = newValue - oldValue;
+
+          for ( let i = 0; i < delta; i++ ) {
+            self.injectMolecule();
+          }
         }
-      }
-    } );
+      } );
 
-    if ( _.hasIn( window, 'phet.phetIo.phetioEngine' ) ) {
+      if ( _.hasIn( window, 'phet.phetIo.phetioEngine' ) ) {
 
-      phet.phetIo.phetioEngine.phetioStateEngine.stateSetEmitter.addListener( () => {
+        phet.phetIo.phetioEngine.phetioStateEngine.stateSetEmitter.addListener( () => {
 
-          // Temperature is being set via phet-io.  Find the closest phase, set the temperature, and then run the model
-          // for a while to match.
-          const targetTemperature = this.temperatureSetPointProperty.value;
-          let targetPhase;
-          const distanceFromGasTemperature = Math.abs( targetTemperature - SOMConstants.GAS_TEMPERATURE );
-          const distanceFromLiquidTemperature = Math.abs( targetTemperature - SOMConstants.LIQUID_TEMPERATURE );
-          const distanceFromSolidTemperature = Math.abs( targetTemperature - SOMConstants.SOLID_TEMPERATURE );
+            // Temperature is being set via phet-io.  Find the closest phase, set the temperature, and then run the model
+            // for a while to match.
+            const targetTemperature = this.temperatureSetPointProperty.value;
+            let targetPhase;
+            const distanceFromGasTemperature = Math.abs( targetTemperature - SOMConstants.GAS_TEMPERATURE );
+            const distanceFromLiquidTemperature = Math.abs( targetTemperature - SOMConstants.LIQUID_TEMPERATURE );
+            const distanceFromSolidTemperature = Math.abs( targetTemperature - SOMConstants.SOLID_TEMPERATURE );
 
-          const minDistanceFromTargetTemperature = Math.min(
-            distanceFromGasTemperature,
-            distanceFromLiquidTemperature,
-            distanceFromSolidTemperature
-          );
+            const minDistanceFromTargetTemperature = Math.min(
+              distanceFromGasTemperature,
+              distanceFromLiquidTemperature,
+              distanceFromSolidTemperature
+            );
 
-          if ( minDistanceFromTargetTemperature === distanceFromGasTemperature ) {
-            targetPhase = PhaseStateEnum.GAS;
-          }
-          else if ( minDistanceFromTargetTemperature === distanceFromLiquidTemperature ) {
-            targetPhase = PhaseStateEnum.LIQUID;
-          }
-          else {
-            targetPhase = PhaseStateEnum.SOLID;
-          }
+            if ( minDistanceFromTargetTemperature === distanceFromGasTemperature ) {
+              targetPhase = PhaseStateEnum.GAS;
+            }
+            else if ( minDistanceFromTargetTemperature === distanceFromLiquidTemperature ) {
+              targetPhase = PhaseStateEnum.LIQUID;
+            }
+            else {
+              targetPhase = PhaseStateEnum.SOLID;
+            }
 
-          // Has the update for the change of substance occurred?
-          if ( this.substanceThatIThinkIAmDealingWith !== this.substanceProperty.value ) {
-            this.handleSubstanceChanged();
-          }
+            // Has the update for the change of substance occurred?
+            if ( this.substanceThatIThinkIAmDealingWith !== this.substanceProperty.value ) {
+              this.handleSubstanceChanged();
+            }
 
-          this.phaseStateChanger.setParticleConfigurationForPhase( targetPhase );
+            this.phaseStateChanger.setParticleConfigurationForPhase( targetPhase );
 
-          // set the thermostats to the new temperature
-          if ( this.isoKineticThermostat !== null ) {
-            this.isoKineticThermostat.targetTemperature = targetTemperature;
-          }
-          if ( this.andersenThermostat !== null ) {
-            this.andersenThermostat.targetTemperature = targetTemperature;
-          }
+            // set the thermostats to the new temperature
+            if ( this.isoKineticThermostat !== null ) {
+              this.isoKineticThermostat.targetTemperature = targetTemperature;
+            }
+            if ( this.andersenThermostat !== null ) {
+              this.andersenThermostat.targetTemperature = targetTemperature;
+            }
 
-          if ( minDistanceFromTargetTemperature > 0 ) {
+            if ( minDistanceFromTargetTemperature > 0 ) {
 
-            // Step the model a number of times to get it to the desired target temperature.  The number of steps was
-            // empirically determined.
-            for ( let i = 0; i < 100; i++ ) {
-              this.stepInternal( SOMConstants.NOMINAL_TIME_STEP );
+              // Step the model a number of times to get it to the desired target temperature.  The number of steps was
+              // empirically determined.
+              for ( let i = 0; i < 100; i++ ) {
+                this.stepInternal( SOMConstants.NOMINAL_TIME_STEP );
+              }
             }
           }
-        }
-      );
+        );
+      }
     }
-  }
-
-  statesOfMatter.register( 'MultipleParticleModel', MultipleParticleModel );
-
-  return inherit( Object, MultipleParticleModel, {
 
     /**
      * @param {number} newTemperature
      * @public
      */
-    setTemperature: function( newTemperature ) {
+    setTemperature( newTemperature ) {
 
       if ( newTemperature > MAX_TEMPERATURE ) {
         this.temperatureSetPointProperty.set( MAX_TEMPERATURE );
@@ -348,7 +345,7 @@ define( require => {
       if ( this.andersenThermostat !== null ) {
         this.andersenThermostat.targetTemperature = newTemperature;
       }
-    },
+    }
 
     /**
      * Get the current temperature in degrees Kelvin.  The calculations done are dependent on the type of molecule
@@ -357,7 +354,7 @@ define( require => {
      * @returns {number|null}
      * @public
      */
-    getTemperatureInKelvin: function() {
+    getTemperatureInKelvin() {
 
       if ( this.particles.length === 0 ) {
 
@@ -438,7 +435,7 @@ define( require => {
                               criticalPointInModelUnits;
       }
       return temperatureInKelvin;
-    },
+    }
 
     /**
      * Get the pressure value which is being calculated by the model and is not adjusted to represent any "real" units
@@ -446,16 +443,16 @@ define( require => {
      * @returns {number}
      * @public
      */
-    getModelPressure: function() {
+    getModelPressure() {
       return this.moleculeForceAndMotionCalculator.pressureProperty.get();
-    },
+    }
 
     /**
      * Set the substance to be simulated.
      * @param {SubstanceType} substance
      * @private
      */
-    handleSubstanceChanged: function() {
+    handleSubstanceChanged() {
 
       const substance = this.substanceProperty.get();
 
@@ -537,14 +534,14 @@ define( require => {
       this.numberOfMoleculesRangeProperty.set(
         new Range( 0, Utils.toFixedNumber( SOMConstants.MAX_NUM_ATOMS / atomsPerMolecule, 0 ) )
       );
-    },
+    }
 
     /**
      *  @private
      */
-    updatePressure: function() {
+    updatePressure() {
       this.pressureProperty.set( this.getPressureInAtmospheres() );
-    },
+    }
 
     /**
      * Sets the target height of the container.  The target height is set rather than the actual height because the
@@ -552,20 +549,20 @@ define( require => {
      * @param {number} desiredContainerHeight
      * @public
      */
-    setTargetParticleContainerHeight: function( desiredContainerHeight ) {
+    setTargetParticleContainerHeight( desiredContainerHeight ) {
       this.targetContainerHeightProperty.set( Utils.clamp(
         desiredContainerHeight,
         MIN_ALLOWABLE_CONTAINER_HEIGHT,
         PARTICLE_CONTAINER_INITIAL_HEIGHT
       ) );
-    },
+    }
 
     /**
      * Get the sigma value, which is one of the two parameters that describes the Lennard-Jones potential.
      * @returns {number}
      * @public
      */
-    getSigma: function() {
+    getSigma() {
       let sigma;
       switch( this.substanceProperty.get() ) {
         case SubstanceType.NEON:
@@ -588,14 +585,14 @@ define( require => {
       }
 
       return sigma;
-    },
+    }
 
     /**
      * Get the epsilon value, which is one of the two parameters that describes the Lennard-Jones potential.
      * @returns {number}
      * @public
      */
-    getEpsilon: function() {
+    getEpsilon() {
       let epsilon;
       switch( this.substanceProperty.get() ) {
         case SubstanceType.NEON:
@@ -618,13 +615,13 @@ define( require => {
       }
 
       return epsilon;
-    },
+    }
 
     /**
      * @override
      * @public
      */
-    reset: function() {
+    reset() {
 
       const substanceAtStartOfReset = this.substanceProperty.get();
 
@@ -655,21 +652,21 @@ define( require => {
       // other reset
       this.gravitationalAcceleration = NOMINAL_GRAVITATIONAL_ACCEL;
       this.resetEmitter.emit();
-    },
+    }
 
     /**
      * Set the phase of the particles in the simulation.
      * @param {number} phaseSate
      * @public
      */
-    setPhase: function( phaseSate ) {
+    setPhase( phaseSate ) {
       assert && assert(
         phaseSate === PhaseStateEnum.SOLID || phaseSate === PhaseStateEnum.LIQUID || phaseSate === PhaseStateEnum.GAS,
         'invalid phase state specified'
       );
       this.phaseStateChanger.setPhase( phaseSate );
       this.syncParticlePositions();
-    },
+    }
 
     /**
      * Sets the amount of heating or cooling that the system is undergoing.
@@ -677,31 +674,31 @@ define( require => {
      * undergoing, ranging from -1 to +1.
      * @public
      */
-    setHeatingCoolingAmount: function( normalizedHeatingCoolingAmount ) {
+    setHeatingCoolingAmount( normalizedHeatingCoolingAmount ) {
       assert && assert( ( normalizedHeatingCoolingAmount <= 1.0 ) && ( normalizedHeatingCoolingAmount >= -1.0 ) );
       this.heatingCoolingAmountProperty.set( normalizedHeatingCoolingAmount );
-    },
+    }
 
     /**
      * Inject a new molecule of the current type.  This method actually queues it for injection, actual injection
      * occurs during model steps.
      * @public
      */
-    injectMolecule: function() {
+    injectMolecule() {
 
       // only allow particle injection if the model is in a state that supports is
       this.numMoleculesAwaitingInjection = Math.min(
         this.numMoleculesAwaitingInjection + 1,
         MAX_MOLECULES_QUEUED_FOR_INJECTION
       );
-    },
+    }
 
     /**
      * Inject a new molecule of the current type into the model. This uses the current temperature to assign an initial
      * velocity.
      * @private
      */
-    injectMoleculeInternal: function() {
+    injectMoleculeInternal() {
 
       // Check if conditions are right for injection of molecules and, if not, don't do it.
       if ( !this.isPlayingProperty.get() ||
@@ -793,19 +790,19 @@ define( require => {
       this.syncParticlePositions();
 
       this.particleInjectedThisStep = true;
-    },
+    }
 
     /**
      *  @private
      */
-    removeAllParticles: function() {
+    removeAllParticles() {
 
       // Get rid of any existing particles from the model set.
       this.particles.clear();
 
       // Get rid of the normalized particles.
       this.moleculeDataSet = null;
-    },
+    }
 
     /**
      * Initialize the particles by calling the appropriate initialization routine, which will set their positions,
@@ -813,7 +810,7 @@ define( require => {
      * @param {number} phase - phase of atoms
      * @public
      */
-    initializeParticles: function( phase ) {
+    initializeParticles( phase ) {
 
       // Initialize the particles.
       switch( this.substanceProperty.get() ) {
@@ -838,19 +835,19 @@ define( require => {
 
       // This is needed in case we were switching from another molecule that was under pressure.
       this.updatePressure();
-    },
+    }
 
     /**
      * @private
      */
-    initializeModelParameters: function() {
+    initializeModelParameters() {
 
       // Initialize the system parameters.
       this.gravitationalAcceleration = NOMINAL_GRAVITATIONAL_ACCEL;
       this.heatingCoolingAmountProperty.reset();
       this.temperatureSetPointProperty.reset();
       this.isExplodedProperty.reset();
-    },
+    }
 
     /**
      * Reduce the upward motion of the particles.  This is generally done to reduce some behavior that is sometimes
@@ -858,21 +855,21 @@ define( require => {
      * @param {number} dt
      * @private
      */
-    dampUpwardMotion: function( dt ) {
+    dampUpwardMotion( dt ) {
 
       for ( let i = 0; i < this.moleculeDataSet.getNumberOfMolecules(); i++ ) {
         if ( this.moleculeDataSet.moleculeVelocities[ i ].y > 0 ) {
           this.moleculeDataSet.moleculeVelocities[ i ].y *= 1 - ( dt * 0.9 );
         }
       }
-    },
+    }
 
     /**
      * Reset both the normalized and non-normalized sizes of the container. Note that the particle diameter must be
      * valid before this will work properly.
      * @private
      */
-    resetContainerSize: function() {
+    resetContainerSize() {
 
       // Set the initial size of the container.
       this.particleContainerHeightProperty.reset();
@@ -880,13 +877,13 @@ define( require => {
       this.normalizedContainerWidth = PARTICLE_CONTAINER_WIDTH / this.particleDiameter;
       this.normalizedContainerHeight = this.particleContainerHeightProperty.get() / this.particleDiameter;
       this.normalizedTotalContainerHeight = this.particleContainerHeightProperty.get() / this.particleDiameter;
-    },
+    }
 
     /**
      * Step the model.
      * @public
      */
-    stepInternal: function( dt ) {
+    stepInternal( dt ) {
 
       this.particleInjectedThisStep = false;
 
@@ -1034,19 +1031,19 @@ define( require => {
         this.isoKineticThermostat.targetTemperature = this.temperatureSetPointProperty.get();
         this.andersenThermostat.targetTemperature = this.temperatureSetPointProperty.get();
       }
-    },
+    }
 
     /**
      * main step function
      * @param {number} dt
      * @public
      */
-    step: function( dt ) {
+    step( dt ) {
 
       if ( this.isPlayingProperty.get() ) {
         this.stepInternal( dt );
       }
-    },
+    }
 
     /**
      * Run the appropriate thermostat based on the settings and the state of the simulation.  This serves to either
@@ -1054,7 +1051,7 @@ define( require => {
      * particle motion if the user is heating or cooling the substance.
      * @private
      */
-    runThermostat: function() {
+    runThermostat() {
 
       if ( this.isExplodedProperty.get() ) {
 
@@ -1139,7 +1136,7 @@ define( require => {
       if ( !temperatureAdjustmentNeeded && !this.particleInjectedThisStep && !this.lidChangedParticleVelocity ) {
         this.averageTemperatureDifference.addValue( temperatureSetPoint - calculatedTemperature );
       }
-    },
+    }
 
     /**
      * Initialize the various model components to handle a simulation in which all the molecules are single atoms.
@@ -1147,7 +1144,7 @@ define( require => {
      * @param {number} phase
      * @private
      */
-    initializeDiatomic: function( substance, phase ) {
+    initializeDiatomic( substance, phase ) {
 
       // Verify that a valid molecule ID was provided.
       assert && assert( ( substance === SubstanceType.DIATOMIC_OXYGEN ) );
@@ -1193,7 +1190,7 @@ define( require => {
 
       // Initialize the particle positions according the to requested phase.
       this.setPhase( phase );
-    },
+    }
 
     /**
      * Initialize the various model components to handle a simulation in which each molecule consists of three atoms,
@@ -1202,7 +1199,7 @@ define( require => {
      * @param {number} phase
      * @private
      */
-    initializeTriatomic: function( substance, phase ) {
+    initializeTriatomic( substance, phase ) {
 
       // Only water is supported so far.
       assert && assert( ( substance === SubstanceType.WATER ) );
@@ -1249,13 +1246,13 @@ define( require => {
       }
       // Initialize the particle positions according the to requested phase.
       this.setPhase( phase );
-    },
+    }
 
     /**
      * @param {number} epsilon
      * @public
      */
-    setEpsilon: function( epsilon ) {
+    setEpsilon( epsilon ) {
       if ( this.substanceProperty.get() === SubstanceType.ADJUSTABLE_ATOM ) {
         if ( epsilon < MIN_ADJUSTABLE_EPSILON ) {
           epsilon = MIN_ADJUSTABLE_EPSILON;
@@ -1269,7 +1266,7 @@ define( require => {
       else {
         assert && assert( false, 'Error: Epsilon cannot be set when non-configurable molecule is in use.' );
       }
-    },
+    }
 
     /**
      * Initialize the various model components to handle a simulation in which all the molecules are single atoms.
@@ -1277,7 +1274,7 @@ define( require => {
      * @param {number} phase
      * @private
      */
-    initializeMonatomic: function( substance, phase ) {
+    initializeMonatomic( substance, phase ) {
 
       // Verify that a valid molecule ID was provided.
       assert && assert( substance === SubstanceType.ADJUSTABLE_ATOM ||
@@ -1347,13 +1344,13 @@ define( require => {
 
       // Initialize the particle positions according the to requested phase.
       this.setPhase( phase );
-    },
+    }
 
     /**
      * Set the positions of the non-normalized particles based on the positions of the normalized ones.
      * @private
      */
-    syncParticlePositions: function() {
+    syncParticlePositions() {
       assert && assert( this.moleculeDataSet.numberOfAtoms === this.particles.length,
         'Inconsistent number of normalized versus non-normalized particles' );
       const positionMultiplier = this.particleDiameter;
@@ -1366,7 +1363,7 @@ define( require => {
           atomPositions[ i ].y * positionMultiplier
         );
       }
-    },
+    }
 
     /**
      * Take the internal pressure value and convert it to atmospheres.  In the original Java version of this sim the
@@ -1377,16 +1374,16 @@ define( require => {
      * @returns {number}
      * @public
      */
-    getPressureInAtmospheres: function() {
+    getPressureInAtmospheres() {
       return 5 * this.getModelPressure(); // multiplier empirically determined
-    },
+    }
 
     /**
      * Return a phase value based on the current temperature.
      * @return{number}
      * @private
      */
-    mapTemperatureToPhase: function() {
+    mapTemperatureToPhase() {
       let phase;
       if ( this.temperatureSetPointProperty.get() < SOLID_TEMPERATURE + ( ( LIQUID_TEMPERATURE - SOLID_TEMPERATURE ) / 2 ) ) {
         phase = PhaseStateEnum.SOLID;
@@ -1399,7 +1396,7 @@ define( require => {
       }
 
       return phase;
-    },
+    }
 
     /**
      * Convert a value for epsilon that is in the real range of values into a scaled value that is suitable for use with
@@ -1407,42 +1404,42 @@ define( require => {
      * @param {number} epsilon
      * @private
      */
-    convertEpsilonToScaledEpsilon: function( epsilon ) {
+    convertEpsilonToScaledEpsilon( epsilon ) {
       // The following conversion of the target value for epsilon to a scaled value for the motion calculator object was
       // determined empirically such that the resulting behavior roughly matched that of the existing monatomic
       // molecules.
       return epsilon / ( SOMConstants.MAX_EPSILON / 2 );
-    },
+    }
 
     /**
      * @param {number} scaledEpsilon
      * @returns {number}
      * @private
      */
-    convertScaledEpsilonToEpsilon: function( scaledEpsilon ) {
+    convertScaledEpsilonToEpsilon( scaledEpsilon ) {
       return scaledEpsilon * SOMConstants.MAX_EPSILON / 2;
-    },
+    }
 
     /**
      * This method is used for an external entity to notify the model that it should explode.
      * @param {boolean} isExploded
      * @public
      */
-    setContainerExploded: function( isExploded ) {
+    setContainerExploded( isExploded ) {
       if ( this.isExplodedProperty.get() !== isExploded ) {
         this.isExplodedProperty.set( isExploded );
         if ( !isExploded ) {
           this.resetContainerSize();
         }
       }
-    },
+    }
 
     /**
      * Return the lid to the container.  It only makes sense to call this after the container has exploded, otherwise it
      * has no effect.
      * @public
      */
-    returnLid: function() {
+    returnLid() {
 
       // state checking
       assert && assert( this.isExplodedProperty.get(), 'attempt to return lid when container hadn\'t exploded' );
@@ -1489,22 +1486,23 @@ define( require => {
       if ( numParticlesOutsideContainer > 0 ) {
         this.phaseStateChanger.setPhase( PhaseStateEnum.GAS );
       }
-    },
-
-    getInitialParticleContainerHeight: function() {
-      return PARTICLE_CONTAINER_INITIAL_HEIGHT;
-    },
-
-    getParticleContainerWidth: function() {
-      return PARTICLE_CONTAINER_WIDTH;
     }
 
-  }, {
+    getInitialParticleContainerHeight() {
+      return PARTICLE_CONTAINER_INITIAL_HEIGHT;
+    }
 
-    // static constants
-    MAX_ADJUSTABLE_EPSILON: MAX_ADJUSTABLE_EPSILON,
-    PARTICLE_CONTAINER_WIDTH: PARTICLE_CONTAINER_WIDTH,
-    PARTICLE_CONTAINER_INITIAL_HEIGHT: PARTICLE_CONTAINER_INITIAL_HEIGHT,
-    PARTICLE_CONTAINER_MIN_HEIGHT: MIN_ALLOWABLE_CONTAINER_HEIGHT
-  } );
+    getParticleContainerWidth() {
+      return PARTICLE_CONTAINER_WIDTH;
+    }
+  }
+
+
+  // static constants
+  MultipleParticleModel.MAX_ADJUSTABLE_EPSILON = MAX_ADJUSTABLE_EPSILON;
+  MultipleParticleModel.PARTICLE_CONTAINER_WIDTH = PARTICLE_CONTAINER_WIDTH;
+  MultipleParticleModel.PARTICLE_CONTAINER_INITIAL_HEIGHT = PARTICLE_CONTAINER_INITIAL_HEIGHT;
+  MultipleParticleModel.MIN_ALLOWABLE_CONTAINER_HEIGHT = MIN_ALLOWABLE_CONTAINER_HEIGHT;
+
+  return statesOfMatter.register( 'MultipleParticleModel', MultipleParticleModel );
 } );
