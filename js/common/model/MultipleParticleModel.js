@@ -29,7 +29,6 @@ define( require => {
   const Emitter = require( 'AXON/Emitter' );
   const EnumerationProperty = require( 'AXON/EnumerationProperty' );
   const HydrogenAtom = require( 'STATES_OF_MATTER/common/model/particle/HydrogenAtom' );
-  const inherit = require( 'PHET_CORE/inherit' );
   const InteractionStrengthTable = require( 'STATES_OF_MATTER/common/model/InteractionStrengthTable' );
   const IsokineticThermostat = require( 'STATES_OF_MATTER/common/model/engine/kinetic/IsokineticThermostat' );
   const MoleculeForceAndMotionDataSet = require( 'STATES_OF_MATTER/common/model/MoleculeForceAndMotionDataSet' );
