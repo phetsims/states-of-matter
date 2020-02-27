@@ -3,12 +3,10 @@
 /**
  * enumeration of the various possible phases of matter
  */
-define( require => {
-  'use strict';
 
-  const Enumeration = require( 'PHET_CORE/Enumeration' );
-  const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+import Enumeration from '../../../phet-core/js/Enumeration.js';
+import statesOfMatter from '../statesOfMatter.js';
 
-  const PhaseStateEnum = Enumeration.byKeys( [ 'SOLID', 'LIQUID', 'GAS', 'UNKNOWN' ] );
-  return statesOfMatter.register( 'PhaseStateEnum', PhaseStateEnum );
-} );
+const PhaseStateEnum = Enumeration.byKeys( [ 'SOLID', 'LIQUID', 'GAS', 'UNKNOWN' ] );
+statesOfMatter.register( 'PhaseStateEnum', PhaseStateEnum );
+export default PhaseStateEnum;

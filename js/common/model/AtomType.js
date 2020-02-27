@@ -5,22 +5,18 @@
  *
  * @author Aaron Davis
  */
-define( require => {
-  'use strict';
 
-  const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+import statesOfMatter from '../../statesOfMatter.js';
 
-  // NOTE: enum pattern recommends using {} for each value, but strings are more convenient for debugging
-  const AtomType = Object.freeze( {
-    NEON: 'NEON',
-    ARGON: 'ARGON',
-    OXYGEN: 'OXYGEN',
-    HYDROGEN: 'HYDROGEN',
-    ADJUSTABLE: 'ADJUSTABLE'
-  } );
-
-  statesOfMatter.register( 'AtomType', AtomType );
-
-  return AtomType;
+// NOTE: enum pattern recommends using {} for each value, but strings are more convenient for debugging
+const AtomType = Object.freeze( {
+  NEON: 'NEON',
+  ARGON: 'ARGON',
+  OXYGEN: 'OXYGEN',
+  HYDROGEN: 'HYDROGEN',
+  ADJUSTABLE: 'ADJUSTABLE'
 } );
 
+statesOfMatter.register( 'AtomType', AtomType );
+
+export default AtomType;

@@ -4,20 +4,18 @@
  * AtomPair enumeration
  * @author John Blanco (PhET Interactive Simulations)
  */
-define( require => {
-  'use strict';
 
-  const Enumeration = require( 'PHET_CORE/Enumeration' );
-  const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+import Enumeration from '../../../../phet-core/js/Enumeration.js';
+import statesOfMatter from '../../statesOfMatter.js';
 
-  const AtomPair = Enumeration.byKeys( [
-    'NEON_NEON',
-    'ARGON_ARGON',
-    'OXYGEN_OXYGEN',
-    'NEON_ARGON',
-    'NEON_OXYGEN',
-    'ARGON_OXYGEN',
-    'ADJUSTABLE'
-  ] );
-  return statesOfMatter.register( 'AtomPair', AtomPair );
-} );
+const AtomPair = Enumeration.byKeys( [
+  'NEON_NEON',
+  'ARGON_ARGON',
+  'OXYGEN_OXYGEN',
+  'NEON_ARGON',
+  'NEON_OXYGEN',
+  'ARGON_OXYGEN',
+  'ADJUSTABLE'
+] );
+statesOfMatter.register( 'AtomPair', AtomPair );
+export default AtomPair;

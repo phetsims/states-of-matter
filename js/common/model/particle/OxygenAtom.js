@@ -6,45 +6,41 @@
  * @author John Blanco
  * @author Aaron Davis
  */
-define( require => {
-  'use strict';
 
-  // modules
-  const AtomType = require( 'STATES_OF_MATTER/common/model/AtomType' );
-  const Element = require( 'NITROGLYCERIN/Element' );
-  const inherit = require( 'PHET_CORE/inherit' );
-  const SOMAtom = require( 'STATES_OF_MATTER/common/model/particle/SOMAtom' );
-  const SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
-  const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+import Element from '../../../../../nitroglycerin/js/Element.js';
+import inherit from '../../../../../phet-core/js/inherit.js';
+import statesOfMatter from '../../../statesOfMatter.js';
+import SOMConstants from '../../SOMConstants.js';
+import AtomType from '../AtomType.js';
+import SOMAtom from './SOMAtom.js';
 
-  // constants
-  const RADIUS = Element.O.vanDerWaalsRadius;   // In picometers.
-  const MASS = Element.O.atomicWeight; // In atomic mass units.
+// constants
+const RADIUS = Element.O.vanDerWaalsRadius;   // In picometers.
+const MASS = Element.O.atomicWeight; // In atomic mass units.
 
-  /**
-   * @param {number} x - atom x position in picometers
-   * @param {number} y - atom y  position in picometers
-   * @constructor
-   */
-  function OxygenAtom( x, y ) {
-    SOMAtom.call( this, x, y, RADIUS, MASS, SOMConstants.OXYGEN_COLOR );
-  }
+/**
+ * @param {number} x - atom x position in picometers
+ * @param {number} y - atom y  position in picometers
+ * @constructor
+ */
+function OxygenAtom( x, y ) {
+  SOMAtom.call( this, x, y, RADIUS, MASS, SOMConstants.OXYGEN_COLOR );
+}
 
-  statesOfMatter.register( 'OxygenAtom', OxygenAtom );
+statesOfMatter.register( 'OxygenAtom', OxygenAtom );
 
-  return inherit( SOMAtom, OxygenAtom, {
+export default inherit( SOMAtom, OxygenAtom, {
 
-      /**
-       * @returns {string}
-       * @public
-       */
-      getType: function() {
-        return AtomType.OXYGEN;
-      }
-    },
+    /**
+     * @returns {string}
+     * @public
+     */
+    getType: function() {
+      return AtomType.OXYGEN;
+    }
+  },
 
-    // public static final
-    {
-      RADIUS: RADIUS
-    } );
-} );
+  // public static final
+  {
+    RADIUS: RADIUS
+  } );

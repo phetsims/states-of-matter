@@ -6,45 +6,42 @@
  * @author Aaron Davis
  * @author Siddhartha Chinthapally (Actual Concepts)
  */
-define( require => {
-  'use strict';
 
-  // modules
-  const inherit = require( 'PHET_CORE/inherit' );
-  const MultipleParticleModel = require( 'STATES_OF_MATTER/common/model/MultipleParticleModel' );
-  const Screen = require( 'JOIST/Screen' );
-  const SOMColorProfile = require( 'STATES_OF_MATTER/common/view/SOMColorProfile' );
-  const SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
-  const StatesIcon = require( 'STATES_OF_MATTER/states/StatesIcon' );
-  const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  const StatesScreenView = require( 'STATES_OF_MATTER/states/view/StatesScreenView' );
+import Screen from '../../../joist/js/Screen.js';
+import inherit from '../../../phet-core/js/inherit.js';
+import MultipleParticleModel from '../common/model/MultipleParticleModel.js';
+import SOMConstants from '../common/SOMConstants.js';
+import SOMColorProfile from '../common/view/SOMColorProfile.js';
+import statesOfMatterStrings from '../states-of-matter-strings.js';
+import statesOfMatter from '../statesOfMatter.js';
+import StatesIcon from './StatesIcon.js';
+import StatesScreenView from './view/StatesScreenView.js';
 
-  // strings
-  const statesString = require( 'string!STATES_OF_MATTER/states' );
+const statesString = statesOfMatterStrings.states;
 
-  /**
-   * @param {Tandem} tandem
-   * @constructor
-   */
-  function StatesScreen( tandem ) {
+/**
+ * @param {Tandem} tandem
+ * @constructor
+ */
+function StatesScreen( tandem ) {
 
-    const options = {
-      name: statesString,
-      backgroundColorProperty: SOMColorProfile.backgroundProperty,
-      homeScreenIcon: new StatesIcon( Screen.MINIMUM_HOME_SCREEN_ICON_SIZE ),
-      showUnselectedHomeScreenIconFrame: true,
-      maxDT: SOMConstants.MAX_DT,
-      tandem: tandem
-    };
+  const options = {
+    name: statesString,
+    backgroundColorProperty: SOMColorProfile.backgroundProperty,
+    homeScreenIcon: new StatesIcon( Screen.MINIMUM_HOME_SCREEN_ICON_SIZE ),
+    showUnselectedHomeScreenIconFrame: true,
+    maxDT: SOMConstants.MAX_DT,
+    tandem: tandem
+  };
 
-    Screen.call( this,
-      function() { return new MultipleParticleModel( tandem.createTandem( 'model' ) ); },
-      function( model ) { return new StatesScreenView( model, tandem.createTandem( 'view' ) ); },
-      options
-    );
-  }
+  Screen.call( this,
+    function() { return new MultipleParticleModel( tandem.createTandem( 'model' ) ); },
+    function( model ) { return new StatesScreenView( model, tandem.createTandem( 'view' ) ); },
+    options
+  );
+}
 
-  statesOfMatter.register( 'StatesScreen', StatesScreen );
+statesOfMatter.register( 'StatesScreen', StatesScreen );
 
-  return inherit( Screen, StatesScreen );
-} );
+inherit( Screen, StatesScreen );
+export default StatesScreen;

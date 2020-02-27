@@ -3,12 +3,10 @@
 /**
  * enumeration of the different substances that can be selected to be in the container
  */
-define( require => {
-  'use strict';
 
-  const Enumeration = require( 'PHET_CORE/Enumeration' );
-  const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+import Enumeration from '../../../phet-core/js/Enumeration.js';
+import statesOfMatter from '../statesOfMatter.js';
 
-  const SubstanceType = Enumeration.byKeys( [ 'NEON', 'ARGON', 'DIATOMIC_OXYGEN', 'WATER', 'ADJUSTABLE_ATOM' ] );
-  return statesOfMatter.register( 'SubstanceType', SubstanceType );
-} );
+const SubstanceType = Enumeration.byKeys( [ 'NEON', 'ARGON', 'DIATOMIC_OXYGEN', 'WATER', 'ADJUSTABLE_ATOM' ] );
+statesOfMatter.register( 'SubstanceType', SubstanceType );
+export default SubstanceType;

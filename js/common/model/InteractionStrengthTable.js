@@ -12,81 +12,77 @@
  * @author Aaron Davis
  * @author Chandrashekar Bemagoni (Actual Concepts)
  */
-define( require => {
-  'use strict';
 
-  // modules
-  const AtomType = require( 'STATES_OF_MATTER/common/model/AtomType' );
-  const ConfigurableStatesOfMatterAtom = require( 'STATES_OF_MATTER/common/model/particle/ConfigurableStatesOfMatterAtom' );
-  const SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
-  const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+import statesOfMatter from '../../statesOfMatter.js';
+import SOMConstants from '../SOMConstants.js';
+import AtomType from './AtomType.js';
+import ConfigurableStatesOfMatterAtom from './particle/ConfigurableStatesOfMatterAtom.js';
 
-  // static object (no constructor)
-  const InteractionStrengthTable = {
+// static object (no constructor)
+const InteractionStrengthTable = {
 
-    /**
-     * Get the interaction potential between two atoms.  Units are such that
-     * the value divided by k-boltzmann is in Kelvin.  This is apparently how
-     * it is generally done.  Note that this value is used as the "epsilon"
-     * parameter in Lennard-Jones potential calculations.
-     * @public
-     * @param {AtomType} atomType1
-     * @param {AtomType} atomType2
-     * @returns {number}
-     */
-    getInteractionPotential: function( atomType1, atomType2 ) {
-      if ( atomType1 === atomType2 ) {
-        // Heterogeneous pair of atoms.
-        if ( atomType1 === AtomType.NEON ) {
-          // Source: Hansen & McDouald, Theory of Simple Liquids, obtained from the web
-          return 35.8;
-        }
-        else if ( atomType1 === AtomType.ARGON ) {
-          // Source: F. Cuadros, I. Cachadina, and W. Ahamuda, Molc. Engineering, 6, 319 (1996), provided
-          // in the original spec for the SOM simulation.
-          return 111.84;
-        }
-        else if ( atomType1 === AtomType.OXYGEN ) {
-          //  "Hollywoded" value to be larger than other values, but not really as big as bonded oxygen
-          return 1000;
-        }
-        else if ( atomType1 === AtomType.ADJUSTABLE ) {
-          return ConfigurableStatesOfMatterAtom.DEFAULT_INTERACTION_POTENTIAL;
-        }
-        else {
-          assert && assert( false, 'Interaction potential not available for requested atom: ' + atomType1 );
-          return SOMConstants.MAX_EPSILON / 2;  // In the real world, default to an arbitrary value.
-        }
+  /**
+   * Get the interaction potential between two atoms.  Units are such that
+   * the value divided by k-boltzmann is in Kelvin.  This is apparently how
+   * it is generally done.  Note that this value is used as the "epsilon"
+   * parameter in Lennard-Jones potential calculations.
+   * @public
+   * @param {AtomType} atomType1
+   * @param {AtomType} atomType2
+   * @returns {number}
+   */
+  getInteractionPotential: function( atomType1, atomType2 ) {
+    if ( atomType1 === atomType2 ) {
+      // Heterogeneous pair of atoms.
+      if ( atomType1 === AtomType.NEON ) {
+        // Source: Hansen & McDouald, Theory of Simple Liquids, obtained from the web
+        return 35.8;
+      }
+      else if ( atomType1 === AtomType.ARGON ) {
+        // Source: F. Cuadros, I. Cachadina, and W. Ahamuda, Molc. Engineering, 6, 319 (1996), provided
+        // in the original spec for the SOM simulation.
+        return 111.84;
+      }
+      else if ( atomType1 === AtomType.OXYGEN ) {
+        //  "Hollywoded" value to be larger than other values, but not really as big as bonded oxygen
+        return 1000;
+      }
+      else if ( atomType1 === AtomType.ADJUSTABLE ) {
+        return ConfigurableStatesOfMatterAtom.DEFAULT_INTERACTION_POTENTIAL;
       }
       else {
-        if ( ( ( atomType1 === AtomType.NEON ) && ( atomType2 === AtomType.ARGON ) ) ||
-             ( atomType1 === AtomType.ARGON ) && ( atomType2 === AtomType.NEON ) ) {
-          // Source: Noah P, who got it from Robert Parsons.
-          return 59.5;
-        }
-        else if ( ( ( atomType1 === AtomType.NEON ) && ( atomType2 === AtomType.OXYGEN ) ) ||
-                  ( atomType1 === AtomType.OXYGEN ) && ( atomType2 === AtomType.NEON ) ) {
-          // Source: Noah P, who got it from Robert Parsons.
-          return 51;
-        }
-        else if ( ( ( atomType1 === AtomType.ARGON ) && ( atomType2 === AtomType.OXYGEN ) ) ||
-                  ( atomType1 === AtomType.OXYGEN ) && ( atomType2 === AtomType.ARGON ) ) {
-          // Source: Noah P, who got it from Robert Parsons.
-          return 85;
-        }
-        else if ( ( atomType1 === AtomType.ADJUSTABLE ) || ( atomType2 === AtomType.ADJUSTABLE ) ) {
-          // In this case, where one of the atoms is adjustable, we just use a default value.
-          return ( SOMConstants.MAX_EPSILON - SOMConstants.MIN_EPSILON ) / 2;
-        }
-        else {
-          assert && assert( false, 'Error: No data for this combination of molecules' );
-          return ( SOMConstants.MAX_EPSILON - SOMConstants.MIN_EPSILON ) / 2;
-        }
+        assert && assert( false, 'Interaction potential not available for requested atom: ' + atomType1 );
+        return SOMConstants.MAX_EPSILON / 2;  // In the real world, default to an arbitrary value.
       }
     }
-  };
+    else {
+      if ( ( ( atomType1 === AtomType.NEON ) && ( atomType2 === AtomType.ARGON ) ) ||
+           ( atomType1 === AtomType.ARGON ) && ( atomType2 === AtomType.NEON ) ) {
+        // Source: Noah P, who got it from Robert Parsons.
+        return 59.5;
+      }
+      else if ( ( ( atomType1 === AtomType.NEON ) && ( atomType2 === AtomType.OXYGEN ) ) ||
+                ( atomType1 === AtomType.OXYGEN ) && ( atomType2 === AtomType.NEON ) ) {
+        // Source: Noah P, who got it from Robert Parsons.
+        return 51;
+      }
+      else if ( ( ( atomType1 === AtomType.ARGON ) && ( atomType2 === AtomType.OXYGEN ) ) ||
+                ( atomType1 === AtomType.OXYGEN ) && ( atomType2 === AtomType.ARGON ) ) {
+        // Source: Noah P, who got it from Robert Parsons.
+        return 85;
+      }
+      else if ( ( atomType1 === AtomType.ADJUSTABLE ) || ( atomType2 === AtomType.ADJUSTABLE ) ) {
+        // In this case, where one of the atoms is adjustable, we just use a default value.
+        return ( SOMConstants.MAX_EPSILON - SOMConstants.MIN_EPSILON ) / 2;
+      }
+      else {
+        assert && assert( false, 'Error: No data for this combination of molecules' );
+        return ( SOMConstants.MAX_EPSILON - SOMConstants.MIN_EPSILON ) / 2;
+      }
+    }
+  }
+};
 
-  statesOfMatter.register( 'InteractionStrengthTable', InteractionStrengthTable );
+statesOfMatter.register( 'InteractionStrengthTable', InteractionStrengthTable );
 
-  return InteractionStrengthTable;
-} );
+export default InteractionStrengthTable;

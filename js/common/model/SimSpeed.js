@@ -5,15 +5,12 @@
  *
  * @author John Blanco
  */
-define( require => {
-  'use strict';
 
-  // modules
-  const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
-  const Enumeration = require( 'PHET_CORE/Enumeration' );
+import Enumeration from '../../../../phet-core/js/Enumeration.js';
+import statesOfMatter from '../../statesOfMatter.js';
 
-  // @public
-  const SimSpeed = Enumeration.byKeys( [ 'NORMAL', 'SLOW_MOTION' ] );
+// @public
+const SimSpeed = Enumeration.byKeys( [ 'NORMAL', 'SLOW_MOTION' ] );
 
-  return statesOfMatter.register( 'SimSpeed', SimSpeed );
-} );
+statesOfMatter.register( 'SimSpeed', SimSpeed );
+export default SimSpeed;

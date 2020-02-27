@@ -3,12 +3,10 @@
 /**
  * enumeration for the ways in which the forces can be depicted
  */
-define( require => {
-  'use strict';
 
-  const Enumeration = require( 'PHET_CORE/Enumeration' );
-  const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
+import Enumeration from '../../../../phet-core/js/Enumeration.js';
+import statesOfMatter from '../../statesOfMatter.js';
 
-  const ForceDisplayMode = Enumeration.byKeys( [ 'COMPONENTS', 'TOTAL', 'HIDDEN' ] );
-  return statesOfMatter.register( 'ForceDisplayMode', ForceDisplayMode );
-} );
+const ForceDisplayMode = Enumeration.byKeys( [ 'COMPONENTS', 'TOTAL', 'HIDDEN' ] );
+statesOfMatter.register( 'ForceDisplayMode', ForceDisplayMode );
+export default ForceDisplayMode;

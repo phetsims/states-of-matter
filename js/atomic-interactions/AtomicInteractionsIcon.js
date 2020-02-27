@@ -5,61 +5,58 @@
  *
  * @author John Blanco
  */
-define( require => {
-    'use strict';
 
-    // modules
-    const Circle = require( 'SCENERY/nodes/Circle' );
-    const Color = require( 'SCENERY/util/Color' );
-    const inherit = require( 'PHET_CORE/inherit' );
-    const Node = require( 'SCENERY/nodes/Node' );
-    const RadialGradient = require( 'SCENERY/util/RadialGradient' );
-    const Rectangle = require( 'SCENERY/nodes/Rectangle' );
-    const SOMConstants = require( 'STATES_OF_MATTER/common/SOMConstants' );
-    const statesOfMatter = require( 'STATES_OF_MATTER/statesOfMatter' );
 
-    // constants
-    const PARTICLE_COLOR = new Color( SOMConstants.ADJUSTABLE_ATTRACTION_COLOR );
+import inherit from '../../../phet-core/js/inherit.js';
+// modules
+import Circle from '../../../scenery/js/nodes/Circle.js';
+import Node from '../../../scenery/js/nodes/Node.js';
+import Rectangle from '../../../scenery/js/nodes/Rectangle.js';
+import Color from '../../../scenery/js/util/Color.js';
+import RadialGradient from '../../../scenery/js/util/RadialGradient.js';
+import SOMConstants from '../common/SOMConstants.js';
+import statesOfMatter from '../statesOfMatter.js';
 
-    /**
-     * {Dimension2} size
-     * @constructor
-     */
-    function AtomicInteractionsIcon( size ) {
-      Node.call( this );
+// constants
+const PARTICLE_COLOR = new Color( SOMConstants.ADJUSTABLE_ATTRACTION_COLOR );
 
-      // background
-      const backgroundRect = new Rectangle( 0, 0, size.width, size.height, 0, 0, {
-        fill: 'black'
-      } );
-      this.addChild( backgroundRect );
+/**
+ * {Dimension2} size
+ * @constructor
+ */
+function AtomicInteractionsIcon( size ) {
+  Node.call( this );
 
-      // create the two atoms under a parent node
-      const atomRadius = size.width * 0.2;
-      const gradient = new RadialGradient( 0, 0, 0, 0, 0, atomRadius )
-        .addColorStop( 0, PARTICLE_COLOR )
-        .addColorStop( 1, PARTICLE_COLOR.darkerColor( 0.5 ) );
+  // background
+  const backgroundRect = new Rectangle( 0, 0, size.width, size.height, 0, 0, {
+    fill: 'black'
+  } );
+  this.addChild( backgroundRect );
 
-      const atomsNode = new Node();
-      atomsNode.addChild( new Circle( atomRadius, {
-        fill: gradient,
-        opacity: 0.85,
-        centerX: -atomRadius * 0.7
-      } ) );
-      atomsNode.addChild( new Circle( atomRadius, {
-        fill: gradient,
-        opacity: 0.85,
-        centerX: atomRadius * 0.7
-      } ) );
+  // create the two atoms under a parent node
+  const atomRadius = size.width * 0.2;
+  const gradient = new RadialGradient( 0, 0, 0, 0, 0, atomRadius )
+    .addColorStop( 0, PARTICLE_COLOR )
+    .addColorStop( 1, PARTICLE_COLOR.darkerColor( 0.5 ) );
 
-      // position and add the two interacting atoms
-      atomsNode.centerX = backgroundRect.width / 2;
-      atomsNode.centerY = backgroundRect.height / 2;
-      this.addChild( atomsNode );
-    }
+  const atomsNode = new Node();
+  atomsNode.addChild( new Circle( atomRadius, {
+    fill: gradient,
+    opacity: 0.85,
+    centerX: -atomRadius * 0.7
+  } ) );
+  atomsNode.addChild( new Circle( atomRadius, {
+    fill: gradient,
+    opacity: 0.85,
+    centerX: atomRadius * 0.7
+  } ) );
 
-    statesOfMatter.register( 'AtomicInteractionsIcon', AtomicInteractionsIcon );
+  // position and add the two interacting atoms
+  atomsNode.centerX = backgroundRect.width / 2;
+  atomsNode.centerY = backgroundRect.height / 2;
+  this.addChild( atomsNode );
+}
 
-    return inherit( Node, AtomicInteractionsIcon );
-  }
-);
+statesOfMatter.register( 'AtomicInteractionsIcon', AtomicInteractionsIcon );
+
+export default inherit( Node, AtomicInteractionsIcon );
