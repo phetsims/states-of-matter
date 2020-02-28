@@ -1,4 +1,4 @@
-// Copyright 2015-2019, University of Colorado Boulder
+// Copyright 2015-2020, University of Colorado Boulder
 
 /**
  * This type draws the interaction potential curve on a canvas.  This is done instead of using the Path node because
