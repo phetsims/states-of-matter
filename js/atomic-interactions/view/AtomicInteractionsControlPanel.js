@@ -18,7 +18,7 @@ import Node from '../../../../scenery/js/nodes/Node.js';
 import Rectangle from '../../../../scenery/js/nodes/Rectangle.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import VBox from '../../../../scenery/js/nodes/VBox.js';
-import AquaRadioButton from '../../../../sun/js/AquaRadioButton.js';
+import AquaRadioButtonGroup from '../../../../sun/js/AquaRadioButtonGroup.js';
 import RadioButtonGroup from '../../../../sun/js/buttons/RadioButtonGroup.js';
 import HSlider from '../../../../sun/js/HSlider.js';
 import Panel from '../../../../sun/js/Panel.js';
@@ -84,14 +84,14 @@ function AtomicInteractionsControlPanel( dualAtomModel, enableHeterogeneousAtoms
 
   // white text within SOM full version, black text in Atomic Interactions
   // white stroke around the atoms & molecules panel within SOM full version, black stroke in Atomic Interactions
-  let neonAndNeon;
-  let argonAndArgon;
-  let oxygenAndOxygen;
-  let neonAndArgon;
-  let neonAndOxygen;
-  let argonAndOxygen;
+  let neonAndNeonLabelItems;
+  let argonAndArgonLabelItems;
+  let oxygenAndOxygenLabelItems;
+  let neonAndArgonLabelItems;
+  let neonAndOxygenLabelItems;
+  let argonAndOxygenLabelItems;
   let adjustableAttraction;
-  let radioButtonGroup;
+  let radioButtonsNode;
   let maxLabelWidth;
   let createLabelNode;
   let titleText;
@@ -107,31 +107,31 @@ function AtomicInteractionsControlPanel( dualAtomModel, enableHeterogeneousAtoms
 
   // allows user to select from a fixed list of heterogeneous and homogeneous combinations of atoms
   if ( enableHeterogeneousAtoms ) {
-    neonAndNeon = [
+    neonAndNeonLabelItems = [
       new Text( neonString, labelTextOptions ),
       new Text( neonString, labelTextOptions )
     ];
-    argonAndArgon = [
+    argonAndArgonLabelItems = [
       new Text( argonString, labelTextOptions ),
       new Text( argonString, labelTextOptions )
     ];
-    oxygenAndOxygen = [
+    oxygenAndOxygenLabelItems = [
       new Text( oxygenString, labelTextOptions ),
       new Text( oxygenString, labelTextOptions )
     ];
-    neonAndArgon = [
+    neonAndArgonLabelItems = [
       new Text( neonString, labelTextOptions ),
       new Text( argonString, labelTextOptions )
     ];
-    neonAndOxygen = [
+    neonAndOxygenLabelItems = [
       new Text( neonString, labelTextOptions ),
       new Text( oxygenString, labelTextOptions )
     ];
-    argonAndOxygen = [
+    argonAndOxygenLabelItems = [
       new Text( argonString, labelTextOptions ),
       new Text( oxygenString, labelTextOptions )
     ];
-    const customAttraction = new Text( customAttractionString, {
+    const customAttractionLabel = new Text( customAttractionString, {
       font: NORMAL_TEXT_FONT,
       fill: options.buttonTextFill,
       maxWidth: NORMAL_TEXT_MAX_WIDTH
@@ -159,11 +159,11 @@ function AtomicInteractionsControlPanel( dualAtomModel, enableHeterogeneousAtoms
       tandem: options.tandem.createTandem( 'movingNodeText' )
     } ) ];
     maxLabelWidth = Math.max(
-      neonAndArgon[ 0 ].width + neonAndArgon[ 1 ].width,
-      argonAndArgon[ 0 ].width + argonAndArgon[ 1 ].width,
-      oxygenAndOxygen[ 0 ].width + oxygenAndOxygen[ 1 ].width,
-      neonAndNeon[ 0 ].width + neonAndNeon[ 1 ].width,
-      neonAndOxygen[ 0 ].width + neonAndOxygen[ 1 ].width );
+      neonAndArgonLabelItems[ 0 ].width + neonAndArgonLabelItems[ 1 ].width,
+      argonAndArgonLabelItems[ 0 ].width + argonAndArgonLabelItems[ 1 ].width,
+      oxygenAndOxygenLabelItems[ 0 ].width + oxygenAndOxygenLabelItems[ 1 ].width,
+      neonAndNeonLabelItems[ 0 ].width + neonAndNeonLabelItems[ 1 ].width,
+      neonAndOxygenLabelItems[ 0 ].width + neonAndOxygenLabelItems[ 1 ].width );
     maxLabelWidth = 2 * Math.max( titleText[ 0 ].width, titleText[ 1 ].width, maxLabelWidth / 2, sliderTrackWidth / 2 );
 
     // function to create a label node
@@ -175,20 +175,54 @@ function AtomicInteractionsControlPanel( dualAtomModel, enableHeterogeneousAtoms
       } );
     };
 
-    const neonNeonRadio = new AquaRadioButton( dualAtomModel.atomPairProperty, AtomPair.NEON_NEON,
-      createLabelNode( neonAndNeon ), { radius: RADIO_BUTTON_RADIUS } );
-    const argonArgonRadio = new AquaRadioButton( dualAtomModel.atomPairProperty, AtomPair.ARGON_ARGON,
-      createLabelNode( argonAndArgon ), { radius: RADIO_BUTTON_RADIUS } );
-    const oxygenOxygenRadio = new AquaRadioButton( dualAtomModel.atomPairProperty, AtomPair.OXYGEN_OXYGEN,
-      createLabelNode( oxygenAndOxygen ), { radius: RADIO_BUTTON_RADIUS } );
-    const neonArgonRadio = new AquaRadioButton( dualAtomModel.atomPairProperty, AtomPair.NEON_ARGON,
-      createLabelNode( neonAndArgon ), { radius: RADIO_BUTTON_RADIUS } );
-    const neonOxygenRadio = new AquaRadioButton( dualAtomModel.atomPairProperty, AtomPair.NEON_OXYGEN,
-      createLabelNode( neonAndOxygen ), { radius: RADIO_BUTTON_RADIUS } );
-    const argonOxygenRadio = new AquaRadioButton( dualAtomModel.atomPairProperty, AtomPair.ARGON_OXYGEN,
-      createLabelNode( argonAndOxygen ), { radius: RADIO_BUTTON_RADIUS } );
-    const adjustableAttractionRadio = new AquaRadioButton( dualAtomModel.atomPairProperty, AtomPair.ADJUSTABLE,
-      new HBox( { children: [ customAttraction ] } ), { radius: RADIO_BUTTON_RADIUS } );
+    const aquaRadioButtonsGroup = new AquaRadioButtonGroup(
+      dualAtomModel.atomPairProperty,
+      [
+        {
+          node: createLabelNode( neonAndNeonLabelItems ),
+          value: AtomPair.NEON_NEON,
+          tandem: options.tandem.createTandem( 'neonAndNeon' )
+        },
+        {
+          node: createLabelNode( argonAndArgonLabelItems ),
+          value: AtomPair.ARGON_ARGON,
+          tandem: options.tandem.createTandem( 'argonAndArgon' )
+        },
+        {
+          node: createLabelNode( oxygenAndOxygenLabelItems ),
+          value: AtomPair.OXYGEN_OXYGEN,
+          tandem: options.tandem.createTandem( 'oxygenAndOxygen' )
+        },
+        {
+          node: createLabelNode( neonAndArgonLabelItems ),
+          value: AtomPair.NEON_ARGON,
+          tandem: options.tandem.createTandem( 'neonAndArgon' )
+        },
+        {
+          node: createLabelNode( neonAndOxygenLabelItems ),
+          value: AtomPair.NEON_OXYGEN,
+          tandem: options.tandem.createTandem( 'neonAndOxygen' )
+        },
+        {
+          node: createLabelNode( argonAndOxygenLabelItems ),
+          value: AtomPair.ARGON_OXYGEN,
+          tandem: options.tandem.createTandem( 'argonAndOxygen' )
+        },
+        {
+          node: customAttractionLabel,
+          value: AtomPair.ADJUSTABLE,
+          tandem: options.tandem.createTandem( 'adjustable' )
+        }
+      ],
+      {
+        spacing: 13,
+        radioButtonOptions: {
+          radius: RADIO_BUTTON_RADIUS
+        }
+      }
+    );
+
+    // create the title of the panel in such a way that it will align in a column with the atom selections
     const createTitle = function( labelNodePair ) {
       const strutWidth1 = RADIO_BUTTON_RADIUS;
       const strutWidth2 = ( maxLabelWidth / 2 - labelNodePair[ 0 ].width );
@@ -204,29 +238,14 @@ function AtomicInteractionsControlPanel( dualAtomModel, enableHeterogeneousAtoms
       } );
     };
     titleNode = createTitle( titleText );
-    const radioButtons = new VBox( {
-      children: [ neonNeonRadio, argonArgonRadio, oxygenOxygenRadio,
-        neonArgonRadio, neonOxygenRadio, argonOxygenRadio, adjustableAttractionRadio ],
-      align: 'left',
-      spacing: 13
-    } );
-    radioButtonGroup = new VBox( {
-      children: [ titleNode, radioButtons ],
+
+    // put the title and radio button group together into a single node
+    radioButtonsNode = new VBox( {
+      children: [ titleNode, aquaRadioButtonsGroup ],
       align: 'left',
       spacing: 5
     } );
     titleNode.align = self.width / 2;
-
-    // dilate the touch areas to make the buttons easier to work with on touch-based devices
-    const xDilation = 8;
-    const yDilation = 5;
-    neonNeonRadio.touchArea = neonNeonRadio.localBounds.dilatedXY( xDilation, yDilation );
-    argonArgonRadio.touchArea = argonArgonRadio.localBounds.dilatedXY( xDilation, yDilation );
-    oxygenOxygenRadio.touchArea = oxygenOxygenRadio.localBounds.dilatedXY( xDilation, yDilation );
-    neonArgonRadio.touchArea = neonArgonRadio.localBounds.dilatedXY( xDilation, yDilation );
-    neonOxygenRadio.touchArea = neonOxygenRadio.localBounds.dilatedXY( xDilation, yDilation );
-    argonOxygenRadio.touchArea = argonOxygenRadio.localBounds.dilatedXY( xDilation, yDilation );
-    adjustableAttractionRadio.touchArea = argonOxygenRadio.localBounds.dilatedXY( xDilation, yDilation );
   }
   else {
 
@@ -278,15 +297,23 @@ function AtomicInteractionsControlPanel( dualAtomModel, enableHeterogeneousAtoms
     };
 
     const radioButtonContent = [
-      { value: AtomPair.NEON_NEON, node: createLabelNode( neon ), tandemName: 'neonNeonSelector' },
-      { value: AtomPair.ARGON_ARGON, node: createLabelNode( argon ), tandemName: 'argonArgonSelector' },
+      {
+        value: AtomPair.NEON_NEON,
+        node: createLabelNode( neon ),
+        tandemName: 'neonNeonSelector'
+      },
+      {
+        value: AtomPair.ARGON_ARGON,
+        node: createLabelNode( argon ),
+        tandemName: 'argonArgonSelector'
+      },
       {
         value: AtomPair.ADJUSTABLE,
         node: createLabelNode( adjustableAttraction ),
         tandemName: 'adjustableAttractionSelector'
       }
     ];
-    radioButtonGroup = new RadioButtonGroup( dualAtomModel.atomPairProperty, radioButtonContent, {
+    radioButtonsNode = new RadioButtonGroup( dualAtomModel.atomPairProperty, radioButtonContent, {
       orientation: 'vertical',
       cornerRadius: 5,
       baseColor: 'black',
@@ -295,7 +322,7 @@ function AtomicInteractionsControlPanel( dualAtomModel, enableHeterogeneousAtoms
       selectedStroke: 'white',
       deselectedLineWidth: 0,
       deselectedContentOpacity: 1,
-      tandem: options.tandem.createTandem( 'radioButtonGroup' )
+      tandem: options.tandem.createTandem( 'radioButtonsNode' )
     } );
 
     const titleBackground = new Rectangle( 0, 0, titleText.label.width + 5, titleText.label.height, {
@@ -375,17 +402,17 @@ function AtomicInteractionsControlPanel( dualAtomModel, enableHeterogeneousAtoms
   const interactionStrength = new Node( { children: [ interactionStrengthTitle, interactionStrengthSlider ] } );
 
   const content = new VBox( {
-    align: 'left', children: [ radioButtonGroup ],
+    align: 'left', children: [ radioButtonsNode ],
     spacing: 5
   } );
   const verticalSpaceOffset = 7;
 
   // sliders and title adjustments
   atomDiameterSlider.top = atomDiameterTitle.bottom + verticalSpaceOffset;
-  atomDiameterSlider.centerX = radioButtonGroup.centerX;
+  atomDiameterSlider.centerX = radioButtonsNode.centerX;
   interactionStrengthTitle.top = atomDiameterSlider.bottom + verticalSpaceOffset;
   interactionStrengthSlider.top = interactionStrengthTitle.bottom + verticalSpaceOffset;
-  interactionStrengthSlider.centerX = radioButtonGroup.centerX;
+  interactionStrengthSlider.centerX = radioButtonsNode.centerX;
 
   const radioButtonPanel = new Panel( content, {
     stroke: options.stroke,
@@ -418,7 +445,7 @@ function AtomicInteractionsControlPanel( dualAtomModel, enableHeterogeneousAtoms
   // rectangle and on top rectangle added title node.
   if ( !enableHeterogeneousAtoms ) {
     this.addChild( titleNode );
-    titleNode.centerX = radioButtonGroup.centerX + 5;
+    titleNode.centerX = radioButtonsNode.centerX + 5;
   }
   this.mutate( options );
 }
