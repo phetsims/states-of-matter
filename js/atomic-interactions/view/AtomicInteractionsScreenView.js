@@ -154,9 +154,9 @@ function AtomicInteractionsScreenView( dualAtomModel, enableHeterogeneousAtoms, 
       font: new PhetFont( 14 ),
       maxWidth: MAX_TEXT_WIDTH
     },
-    playPauseOptions: { radius: 18 },
+    playPauseOptions: { radius: SOMConstants.PLAY_PAUSE_BUTTON_RADIUS },
     stepForwardOptions: {
-      radius: 12,
+      radius: SOMConstants.STEP_BUTTON_RADIUS,
       listener: () => {
         dualAtomModel.stepInternal( SOMConstants.NOMINAL_TIME_STEP * DualAtomModel.NORMAL_MOTION_TIME_MULTIPLIER );
       }

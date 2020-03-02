@@ -18,11 +18,11 @@ import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransfo
 import ResetAllButton from '../../../../scenery-phet/js/buttons/ResetAllButton.js';
 import HeaterCoolerNode from '../../../../scenery-phet/js/HeaterCoolerNode.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
+import TimeControlNode from '../../../../scenery-phet/js/TimeControlNode.js';
 import MultipleParticleModel from '../../common/model/MultipleParticleModel.js';
 import SOMConstants from '../../common/SOMConstants.js';
 import CompositeThermometerNode from '../../common/view/CompositeThermometerNode.js';
 import ParticleContainerNode from '../../common/view/ParticleContainerNode.js';
-import SOMPlayPauseStepControl from '../../common/view/SOMPlayPauseStepControl.js';
 import statesOfMatter from '../../statesOfMatter.js';
 import StatesMoleculesControlPanel from './StatesMoleculesControlPanel.js';
 import StatesPhaseControlNode from './StatesPhaseControlNode.js';
@@ -125,15 +125,23 @@ function StatesScreenView( multipleParticleModel, tandem ) {
   } );
   this.addChild( resetAllButton );
 
-  this.addChild( new SOMPlayPauseStepControl(
-    multipleParticleModel.isPlayingProperty,
-    multipleParticleModel.stepInternal.bind( multipleParticleModel ),
-    {
-      right: heaterCoolerNode.left - 50,
-      centerY: heaterCoolerNode.centerY,
-      tandem: tandem.createTandem( 'playPauseStepControl' )
-    }
-  ) );
+  // add the play/pause/step control
+  this.addChild( new TimeControlNode( multipleParticleModel.isPlayingProperty, {
+    playPauseOptions: { radius: SOMConstants.PLAY_PAUSE_BUTTON_RADIUS },
+    stepForwardOptions: {
+      radius: SOMConstants.STEP_BUTTON_RADIUS,
+      listener: () => {
+        multipleParticleModel.stepInternal( SOMConstants.NOMINAL_TIME_STEP );
+      }
+    },
+    playPauseStepXSpacing: 10,
+
+    // position empirically determined
+    right: heaterCoolerNode.left - 50,
+    centerY: heaterCoolerNode.centerY,
+
+    tandem: tandem.createTandem( 'timeControlNode' )
+  } ) );
 
   // @private
   this.particleContainerHeightPropertyChanged = false;

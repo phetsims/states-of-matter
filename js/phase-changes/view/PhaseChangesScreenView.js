@@ -21,13 +21,13 @@ import ResetAllButton from '../../../../scenery-phet/js/buttons/ResetAllButton.j
 import HeaterCoolerNode from '../../../../scenery-phet/js/HeaterCoolerNode.js';
 import MultiLineText from '../../../../scenery-phet/js/MultiLineText.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
+import TimeControlNode from '../../../../scenery-phet/js/TimeControlNode.js';
 import TextPushButton from '../../../../sun/js/buttons/TextPushButton.js';
 import MultipleParticleModel from '../../common/model/MultipleParticleModel.js';
 import SOMConstants from '../../common/SOMConstants.js';
 import SubstanceType from '../../common/SubstanceType.js';
 import CompositeThermometerNode from '../../common/view/CompositeThermometerNode.js';
 import ParticleContainerNode from '../../common/view/ParticleContainerNode.js';
-import SOMPlayPauseStepControl from '../../common/view/SOMPlayPauseStepControl.js';
 import statesOfMatterStrings from '../../states-of-matter-strings.js';
 import statesOfMatter from '../../statesOfMatter.js';
 import EpsilonControlInteractionPotentialDiagram from './EpsilonControlInteractionPotentialDiagram.js';
@@ -128,15 +128,22 @@ function PhaseChangesScreenView( multipleParticleModel, isInteractionDiagramEnab
   this.addChild( resetAllButton );
 
   // add play pause button and step button
-  this.addChild( new SOMPlayPauseStepControl(
-    multipleParticleModel.isPlayingProperty,
-    multipleParticleModel.stepInternal.bind( multipleParticleModel ),
-    {
-      right: heaterCoolerNode.left - 50,
-      centerY: heaterCoolerNode.centerY,
-      tandem: tandem.createTandem( 'playPauseControl' )
-    }
-  ) );
+  this.addChild( new TimeControlNode( multipleParticleModel.isPlayingProperty, {
+    playPauseOptions: { radius: SOMConstants.PLAY_PAUSE_BUTTON_RADIUS },
+    stepForwardOptions: {
+      radius: SOMConstants.STEP_BUTTON_RADIUS,
+      listener: () => {
+        multipleParticleModel.stepInternal( SOMConstants.NOMINAL_TIME_STEP );
+      }
+    },
+    playPauseStepXSpacing: 10,
+
+    // position empirically determined
+    right: heaterCoolerNode.left - 50,
+    centerY: heaterCoolerNode.centerY,
+
+    tandem: tandem.createTandem( 'timeControlNode' )
+  } ) );
 
   // Pump is located at the bottom left of the screen.
   const pumpPosition = new Vector2( 106, 466 );

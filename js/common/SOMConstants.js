@@ -92,7 +92,9 @@ const SOMConstants = {
   RESET_ALL_BUTTON_DISTANCE_FROM_SIDE: 15,
   RESET_ALL_BUTTON_DISTANCE_FROM_BOTTOM: 5,
   PANEL_CORNER_RADIUS: 6,
-  NOMINAL_TIME_STEP: 1 / 60 // seconds, the expected delta time (dt) value per model step, based on nominal browser frame rate
+  NOMINAL_TIME_STEP: 1 / 60, // seconds, the expected delta time (dt) value per model step, based on nominal browser frame rate
+  PLAY_PAUSE_BUTTON_RADIUS: 18,
+  STEP_BUTTON_RADIUS: 12
 };
 
 statesOfMatter.register( 'SOMConstants', SOMConstants );
