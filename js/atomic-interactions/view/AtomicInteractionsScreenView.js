@@ -6,7 +6,6 @@
  * @author John Blanco
  */
 
-import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import ScreenView from '../../../../joist/js/ScreenView.js';
 import inherit from '../../../../phet-core/js/inherit.js';
@@ -14,17 +13,14 @@ import merge from '../../../../phet-core/js/merge.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import ResetAllButton from '../../../../scenery-phet/js/buttons/ResetAllButton.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
+import TimeControlNode from '../../../../scenery-phet/js/TimeControlNode.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
-import Text from '../../../../scenery/js/nodes/Text.js';
-import VBox from '../../../../scenery/js/nodes/VBox.js';
-import AquaRadioButton from '../../../../sun/js/AquaRadioButton.js';
 import TextPushButton from '../../../../sun/js/buttons/TextPushButton.js';
-import SimSpeed from '../../common/model/SimSpeed.js';
 import SOMConstants from '../../common/SOMConstants.js';
 import SOMColorProfile from '../../common/view/SOMColorProfile.js';
-import SOMPlayPauseStepControl from '../../common/view/SOMPlayPauseStepControl.js';
 import statesOfMatterStrings from '../../states-of-matter-strings.js';
 import statesOfMatter from '../../statesOfMatter.js';
+import DualAtomModel from '../model/DualAtomModel.js';
 import ForceDisplayMode from '../model/ForceDisplayMode.js';
 import AtomicInteractionsControlPanel from './AtomicInteractionsControlPanel.js';
 import ForcesControlPanel from './ForcesControlPanel.js';
@@ -34,9 +30,7 @@ import InteractiveInteractionPotentialDiagram from './InteractiveInteractionPote
 import ParticleForceNode from './ParticleForceNode.js';
 import PushPinNode from './PushPinNode.js';
 
-const normalString = statesOfMatterStrings.normal;
 const returnAtomString = statesOfMatterStrings.returnAtom;
-const slowMotionString = statesOfMatterStrings.slowMotion;
 
 // Constant used to control size of push pin, empirically determined.
 const PUSH_PIN_WIDTH = 20;
@@ -153,64 +147,29 @@ function AtomicInteractionsScreenView( dualAtomModel, enableHeterogeneousAtoms, 
   atomicInteractionsControlPanel.right = resetAllButton.left - 20; // offset empirically determined
 
   // add control for play/pause/step
-  const playPauseStepControl = new SOMPlayPauseStepControl(
-    dualAtomModel.isPlayingProperty,
-    dualAtomModel.stepInternal.bind( dualAtomModel ),
-    {
-      // position empirically determined
-      centerX: this.layoutBounds.centerX + 27,
-      bottom: this.layoutBounds.bottom - 14,
+  const timeControlNode = new TimeControlNode( dualAtomModel.isPlayingProperty, {
+    isSlowMotionProperty: dualAtomModel.isSlowMotionProperty,
+    labelOptions: {
+      fill: SOMColorProfile.controlPanelTextProperty,
+      font: new PhetFont( 14 ),
+      maxWidth: MAX_TEXT_WIDTH
+    },
+    playPauseOptions: { radius: 18 },
+    stepForwardOptions: {
+      radius: 12,
+      listener: () => {
+        dualAtomModel.stepInternal( SOMConstants.NOMINAL_TIME_STEP * DualAtomModel.NORMAL_MOTION_TIME_MULTIPLIER );
+      }
+    },
+    playPauseStepXSpacing: 10,
 
-      tandem: tandem.createTandem( 'playPauseStepControl' )
-    }
-  );
-  this.addChild( playPauseStepControl );
+    // position empirically determined
+    centerX: this.layoutBounds.centerX + 27,
+    bottom: this.layoutBounds.bottom - 14,
 
-  // add sim speed controls
-  const speedSelectionButtonOptions = {
-    fill: SOMColorProfile.controlPanelTextProperty,
-    font: new PhetFont( 14 ),
-    maxWidth: MAX_TEXT_WIDTH
-  };
-  const speedSelectionButtonRadius = 8;
-  const slowText = new Text( slowMotionString, speedSelectionButtonOptions );
-  const slowMotionRadioButton = new AquaRadioButton( dualAtomModel.simSpeedProperty, SimSpeed.SLOW_MOTION, slowText, {
-    radius: speedSelectionButtonRadius,
-    tandem: tandem.createTandem( 'slowMotionRadioButton' )
+    tandem: tandem.createTandem( 'timeControlNode' )
   } );
-  const normalText = new Text( normalString, speedSelectionButtonOptions );
-  const normalMotionRadioButton = new AquaRadioButton( dualAtomModel.simSpeedProperty, SimSpeed.NORMAL, normalText, {
-    radius: speedSelectionButtonRadius,
-    tandem: tandem.createTandem( 'normalMotionRadioButton' )
-  } );
-
-  const speedControlMaxWidth = ( slowMotionRadioButton.width > normalMotionRadioButton.width ) ? slowMotionRadioButton.width : normalMotionRadioButton.width;
-
-  const radioButtonSpacing = 4;
-  const touchAreaYDilation = radioButtonSpacing / 2;
-  slowMotionRadioButton.touchArea = new Bounds2(
-    slowMotionRadioButton.localBounds.minX,
-    slowMotionRadioButton.localBounds.minY - touchAreaYDilation,
-    slowMotionRadioButton.localBounds.minX + speedControlMaxWidth,
-    slowMotionRadioButton.localBounds.maxY + touchAreaYDilation
-  );
-
-  normalMotionRadioButton.touchArea = new Bounds2(
-    normalMotionRadioButton.localBounds.minX,
-    normalMotionRadioButton.localBounds.minY - touchAreaYDilation,
-    ( normalMotionRadioButton.localBounds.minX + speedControlMaxWidth ),
-    normalMotionRadioButton.localBounds.maxY + touchAreaYDilation
-  );
-
-  const speedControl = new VBox( {
-    align: 'left',
-    spacing: radioButtonSpacing,
-    children: [ slowMotionRadioButton, normalMotionRadioButton ],
-    right: playPauseStepControl.left - 2 * INSET,
-    centerY: playPauseStepControl.centerY,
-    tandem: tandem.createTandem( 'speedControl' )
-  } );
-  this.addChild( speedControl );
+  this.addChild( timeControlNode );
 
   // Create the push pin node that will be used to convey the idea that the fixed atom is pinned to the canvas.  It
   // will be added to the scene graph when the particles appear.

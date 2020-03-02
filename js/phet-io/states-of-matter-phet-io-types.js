@@ -412,14 +412,6 @@ window.phet.phetio.phetioTypes = assert &&
       "supertype": "ObjectIO",
       "typeName": "EnumerationIO(NEON|ARGON|DIATOMIC_OXYGEN|WATER|ADJUSTABLE_ATOM)"
     },
-    "EnumerationIO(NORMAL|SLOW_MOTION)": {
-      "documentation": "Possible values: NORMAL,SLOW_MOTION.",
-      "events": [],
-      "methodOrder": [],
-      "methods": {},
-      "supertype": "ObjectIO",
-      "typeName": "EnumerationIO(NORMAL|SLOW_MOTION)"
-    },
     "EnumerationIO(SOLID|LIQUID|GAS|UNKNOWN)": {
       "documentation": "Possible values: SOLID,LIQUID,GAS,UNKNOWN.",
       "events": [],
@@ -527,19 +519,6 @@ window.phet.phetio.phetioTypes = assert &&
       ],
       "supertype": "ObjectIO",
       "typeName": "FunctionIO(EnumerationIO(NEON|ARGON|DIATOMIC_OXYGEN|WATER|ADJUSTABLE_ATOM),NullableIO<EnumerationIO(NEON|ARGON|DIATOMIC_OXYGEN|WATER|ADJUSTABLE_ATOM)>)=>VoidIO"
-    },
-    "FunctionIO(EnumerationIO(NORMAL|SLOW_MOTION),NullableIO<EnumerationIO(NORMAL|SLOW_MOTION)>)=>VoidIO": {
-      "documentation": "Wrapper for the built-in JS function type.<br><strong>Arguments:</strong> EnumerationIO(NORMAL|SLOW_MOTION), NullableIO<EnumerationIO(NORMAL|SLOW_MOTION)><br><strong>Return Type:</strong> VoidIO",
-      "events": [],
-      "methodOrder": [],
-      "methods": {},
-      "parameterTypes": [
-        "EnumerationIO(NORMAL|SLOW_MOTION)",
-        "NullableIO<EnumerationIO(NORMAL|SLOW_MOTION)>",
-        "VoidIO"
-      ],
-      "supertype": "ObjectIO",
-      "typeName": "FunctionIO(EnumerationIO(NORMAL|SLOW_MOTION),NullableIO<EnumerationIO(NORMAL|SLOW_MOTION)>)=>VoidIO"
     },
     "FunctionIO(EnumerationIO(SOLID|LIQUID|GAS|UNKNOWN),NullableIO<EnumerationIO(SOLID|LIQUID|GAS|UNKNOWN)>)=>VoidIO": {
       "documentation": "Wrapper for the built-in JS function type.<br><strong>Arguments:</strong> EnumerationIO(SOLID|LIQUID|GAS|UNKNOWN), NullableIO<EnumerationIO(SOLID|LIQUID|GAS|UNKNOWN)><br><strong>Return Type:</strong> VoidIO",
@@ -777,17 +756,6 @@ window.phet.phetio.phetioTypes = assert &&
       ],
       "supertype": "ObjectIO",
       "typeName": "NullableIO<EnumerationIO(NEON|ARGON|DIATOMIC_OXYGEN|WATER|ADJUSTABLE_ATOM)>"
-    },
-    "NullableIO<EnumerationIO(NORMAL|SLOW_MOTION)>": {
-      "documentation": "A wrapper to wrap another IOType, adding support for null.",
-      "events": [],
-      "methodOrder": [],
-      "methods": {},
-      "parameterTypes": [
-        "EnumerationIO(NORMAL|SLOW_MOTION)"
-      ],
-      "supertype": "ObjectIO",
-      "typeName": "NullableIO<EnumerationIO(NORMAL|SLOW_MOTION)>"
     },
     "NullableIO<EnumerationIO(SOLID|LIQUID|GAS|UNKNOWN)>": {
       "documentation": "A wrapper to wrap another IOType, adding support for null.",
@@ -1425,50 +1393,6 @@ window.phet.phetio.phetioTypes = assert &&
       ],
       "supertype": "ObjectIO",
       "typeName": "PropertyIO<EnumerationIO(NEON|ARGON|DIATOMIC_OXYGEN|WATER|ADJUSTABLE_ATOM)>"
-    },
-    "PropertyIO<EnumerationIO(NORMAL|SLOW_MOTION)>": {
-      "documentation": "Observable values that send out notifications when the value changes. This differs from the traditional listener pattern in that added listeners also receive a callback with the current value when the listeners are registered. This is a widely-used pattern in PhET-iO simulations.",
-      "events": [
-        "changed"
-      ],
-      "methodOrder": [
-        "link",
-        "lazyLink"
-      ],
-      "methods": {
-        "getValue": {
-          "documentation": "Gets the current value.",
-          "parameterTypes": [],
-          "returnType": "EnumerationIO(NORMAL|SLOW_MOTION)"
-        },
-        "lazyLink": {
-          "documentation": "Adds a listener which will be called when the value changes. This method is like \"link\", but without the current-value callback on registration. The listener takes two arguments, the new value and the previous value.",
-          "parameterTypes": [
-            "FunctionIO(EnumerationIO(NORMAL|SLOW_MOTION),NullableIO<EnumerationIO(NORMAL|SLOW_MOTION)>)=>VoidIO"
-          ],
-          "returnType": "VoidIO"
-        },
-        "link": {
-          "documentation": "Adds a listener which will be called when the value changes. On registration, the listener is also called with the current value. The listener takes two arguments, the new value and the previous value.",
-          "parameterTypes": [
-            "FunctionIO(EnumerationIO(NORMAL|SLOW_MOTION),NullableIO<EnumerationIO(NORMAL|SLOW_MOTION)>)=>VoidIO"
-          ],
-          "returnType": "VoidIO"
-        },
-        "setValue": {
-          "documentation": "Sets the value of the Property. If the value differs from the previous value, listeners are notified with the new value.",
-          "invocableForReadOnlyElements": false,
-          "parameterTypes": [
-            "EnumerationIO(NORMAL|SLOW_MOTION)"
-          ],
-          "returnType": "VoidIO"
-        }
-      },
-      "parameterTypes": [
-        "EnumerationIO(NORMAL|SLOW_MOTION)"
-      ],
-      "supertype": "ObjectIO",
-      "typeName": "PropertyIO<EnumerationIO(NORMAL|SLOW_MOTION)>"
     },
     "PropertyIO<EnumerationIO(SOLID|LIQUID|GAS|UNKNOWN)>": {
       "documentation": "Observable values that send out notifications when the value changes. This differs from the traditional listener pattern in that added listeners also receive a callback with the current value when the listeners are registered. This is a widely-used pattern in PhET-iO simulations.",

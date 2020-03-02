@@ -131,12 +131,6 @@
   "electronOverlap": {
     "value": "(electron overlap)"
   },
-  "normal": {
-    "value": "Normal"
-  },
-  "slowMotion": {
-    "value": "Slow Motion"
-  },
   "pinned": {
     "value": "Pinned"
   },
