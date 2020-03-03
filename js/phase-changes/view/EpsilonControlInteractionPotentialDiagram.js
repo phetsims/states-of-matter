@@ -149,12 +149,7 @@ function EpsilonControlInteractionPotentialDiagram( sigma, epsilon, wide, multip
     canvasBounds: new Bounds2( 0, 0, 125, this.graphHeight )
   } );
 
-  this.horizontalAxis.centerY -= 5;
-  this.verticalAxisLabel.centerY -= 5;
-  this.verticalAxis.centerY -= 5;
-  this.interactionPotentialCanvasNode.centerY -= 5;
-  this.ljPotentialGraph.centerY -= 5;
-
+  accordionContent.addChild( this.centerAxis );
   accordionContent.addChild( this.horizontalAxisLabel );
   accordionContent.addChild( this.horizontalAxis );
   accordionContent.addChild( this.verticalAxisLabel );

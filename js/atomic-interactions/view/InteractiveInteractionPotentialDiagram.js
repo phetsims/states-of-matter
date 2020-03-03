@@ -230,6 +230,7 @@ function InteractiveInteractionPotentialDiagram( dualAtomModel, wide, options ) 
   // Add children
   this.addChild( this.horizontalAxisLabel );
   this.addChild( this.verticalAxisLabel );
+  this.addChild( this.centerAxis );
   this.addChild( this.interactionPotentialCanvasNode );
   this.addChild( this.verticalAxis );
   this.addChild( this.horizontalAxis );

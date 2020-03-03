@@ -11,6 +11,7 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import inherit from '../../../../phet-core/js/inherit.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
+import Line from '../../../../scenery/js/nodes/Line.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import PositionMarker from '../../atomic-interactions/view/PositionMarker.js';
@@ -155,7 +156,7 @@ function InteractionPotentialDiagramNode( sigma, epsilon, wide, tandem ) {
   this.ljPotentialGraph.x = this.graphXOrigin;
   this.ljPotentialGraph.y = this.graphYOrigin - this.graphHeight;
 
-  // Create and add the horizontal axis line for the graph.
+  // Create the horizontal axis line for the graph.
   this.horizontalAxis = new ArrowNode( 0, 0, this.graphWidth + AXES_ARROW_HEAD_HEIGHT, 0, {
     fill: SOMColorProfile.controlPanelTextProperty,
     stroke: SOMColorProfile.controlPanelTextProperty,
@@ -181,7 +182,7 @@ function InteractionPotentialDiagramNode( sigma, epsilon, wide, tandem ) {
 
   this.setMolecular( false );
 
-  // Create and add the vertical axis line for the graph.
+  // Create the vertical axis line for the graph.
   this.verticalAxis = new ArrowNode( 0, 0, 0, -this.graphHeight - AXES_ARROW_HEAD_HEIGHT, {
     fill: SOMColorProfile.controlPanelTextProperty,
     stroke: SOMColorProfile.controlPanelTextProperty,
@@ -197,14 +198,24 @@ function InteractionPotentialDiagramNode( sigma, epsilon, wide, tandem ) {
     font: axisLabelFont
   } );
 
-  // restricted vertical  axis label
+  // Create the center axis line for the graph.
+  this.centerAxis = new Line( 0, 0, this.graphWidth, 0, {
+    lineWidth: 0.8,
+    stroke: '#A7A7A7',
+    x: this.graphXOrigin,
+    y: this.graphYOrigin - this.graphHeight / 2
+  } );
+
+  // restricted vertical axis label
   const verticalAxisHeight = wide ? this.verticalAxis.height - zoomButtonsHeight : this.verticalAxis.height;
   if ( this.verticalAxisLabel.width > verticalAxisHeight ) {
     this.verticalAxisLabel.scale( verticalAxisHeight / this.verticalAxisLabel.width );
   }
 
-  this.verticalAxisLabel.setTranslation( this.graphXOrigin / 2 - this.verticalAxisLabel.height / 2,
-    this.graphYOrigin );
+  this.verticalAxisLabel.setTranslation(
+    this.graphXOrigin / 2 - this.verticalAxisLabel.height / 2,
+    this.graphYOrigin
+  );
   this.verticalAxisLabel.setRotation( 3 * Math.PI / 2 );
 
   // Initializing here to reduce allocations
@@ -335,7 +346,7 @@ export default inherit( Node, InteractionPotentialDiagramNode, {
       this.horizontalAxisLabel.setText( distanceBetweenAtomsString );
     }
     this.horizontalAxisLabel.centerX = this.graphXOrigin + ( this.graphWidth / 2 );
-    this.horizontalAxisLabel.top = this.graphYOrigin;
+    this.horizontalAxisLabel.top = this.graphYOrigin + 5;
   },
 
   /**
