@@ -81,14 +81,12 @@ function PhaseChangesMoleculesControlPanel( multipleParticleModel, isBasicVersio
   const strongTitle = new Text( strongString, tickTextOptions );
 
   // add interaction strength slider and title
-  const interactionStrengthNode = new Node();
   const interactionTitle = new Text( interactionStrengthWithSymbolString, {
     font: new PhetFont( NORMAL_TEXT_FONT_SIZE ),
     fill: SOMColorProfile.controlPanelTextProperty,
     maxWidth: 140
   } );
 
-  interactionStrengthNode.addChild( interactionTitle );
   const interactionStrengthSlider = new HSlider(
     multipleParticleModel.interactionStrengthProperty,
     new Range( SOMConstants.MIN_ADJUSTABLE_EPSILON, MultipleParticleModel.MAX_ADJUSTABLE_EPSILON ), {
@@ -110,9 +108,14 @@ function PhaseChangesMoleculesControlPanel( multipleParticleModel, isBasicVersio
       cursor: 'pointer',
       tandem: options.tandem.createTandem( 'interactionStrengthSlider' )
     } );
-  interactionStrengthNode.addChild( interactionStrengthSlider );
   interactionStrengthSlider.addMajorTick( MultipleParticleModel.MAX_ADJUSTABLE_EPSILON, strongTitle );
   interactionStrengthSlider.addMajorTick( SOMConstants.MIN_ADJUSTABLE_EPSILON, weakTitle );
+
+  // put the title and slider together into a node
+  const interactionStrengthNode = new VBox( {
+    children: [ interactionTitle, interactionStrengthSlider ],
+    spacing: 5
+  } );
 
   const neonText = new Text( neonString, textOptions );
   const argonText = new Text( argonString, textOptions );
