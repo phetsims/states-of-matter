@@ -129,7 +129,10 @@ function PhaseChangesScreenView( multipleParticleModel, isInteractionDiagramEnab
 
   // add play pause button and step button
   this.addChild( new TimeControlNode( multipleParticleModel.isPlayingProperty, {
-    playPauseOptions: { radius: SOMConstants.PLAY_PAUSE_BUTTON_RADIUS },
+    playPauseOptions: {
+      radius: SOMConstants.PLAY_PAUSE_BUTTON_RADIUS,
+      scaleFactorWhenPaused: SOMConstants.PLAY_PAUSE_BUTTON_INCREASE_FACTOR
+    },
     stepForwardOptions: {
       radius: SOMConstants.STEP_BUTTON_RADIUS,
       listener: () => {

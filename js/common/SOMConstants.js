@@ -94,6 +94,7 @@ const SOMConstants = {
   PANEL_CORNER_RADIUS: 6,
   NOMINAL_TIME_STEP: 1 / 60, // seconds, the expected delta time (dt) value per model step, based on nominal browser frame rate
   PLAY_PAUSE_BUTTON_RADIUS: 18,
+  PLAY_PAUSE_BUTTON_INCREASE_FACTOR: 1.25,
   STEP_BUTTON_RADIUS: 12
 };
 
