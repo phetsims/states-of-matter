@@ -183,23 +183,24 @@ function ForcesControlPanel( forcesProperty, forceControlPanelExpandProperty, op
       {
         node: hideForce,
         value: ForceDisplayMode.HIDDEN,
-        tandem: options.tandem.createTandem( 'hideForce' )
+        tandemName: 'hideForce'
       },
       {
         node: totalForce,
         value: ForceDisplayMode.TOTAL,
-        tandem: options.tandem.createTandem( 'totalForce' )
+        tandemName: 'totalForce'
       },
       {
         node: componentForce,
         value: ForceDisplayMode.COMPONENTS,
-        tandem: options.tandem.createTandem( 'componentForce' )
+        tandemName: 'componentForce'
       }
     ],
     {
       radioButtonOptions: {
         radius: RADIO_BUTTON_RADIUS
-      }
+      },
+      tandem: options.tandem.createTandem( 'radioButtonGroup' )
     }
   );
 
