@@ -128,8 +128,7 @@ function StatesScreenView( multipleParticleModel, tandem ) {
   // add the play/pause/step control
   this.addChild( new TimeControlNode( multipleParticleModel.isPlayingProperty, {
     playPauseOptions: {
-      radius: SOMConstants.PLAY_PAUSE_BUTTON_RADIUS,
-      scaleFactorWhenPaused: SOMConstants.PLAY_PAUSE_BUTTON_INCREASE_FACTOR
+      radius: SOMConstants.PLAY_PAUSE_BUTTON_RADIUS
     },
     stepForwardOptions: {
       radius: SOMConstants.STEP_BUTTON_RADIUS,

@@ -155,8 +155,7 @@ function AtomicInteractionsScreenView( dualAtomModel, enableHeterogeneousAtoms, 
       maxWidth: MAX_TEXT_WIDTH
     },
     playPauseOptions: {
-      radius: SOMConstants.PLAY_PAUSE_BUTTON_RADIUS,
-      scaleFactorWhenPaused: SOMConstants.PLAY_PAUSE_BUTTON_INCREASE_FACTOR
+      radius: SOMConstants.PLAY_PAUSE_BUTTON_RADIUS
     },
     stepForwardOptions: {
       radius: SOMConstants.STEP_BUTTON_RADIUS,
