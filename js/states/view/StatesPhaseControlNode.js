@@ -109,9 +109,14 @@ function StatesPhaseControlNode( model, options ) {
 
   // Set the model state and update the button appearances when the user presses one of the buttons.
   stateProperty.link( function( state ) {
-    if ( state !== PhaseStateEnum.UNKNOWN ) {
+    if ( state !== PhaseStateEnum.UNKNOWN &&
+
+         // Only set the Phase if this comes directly from a user, not from a PhET-iO state setting. If from the state
+         // engine, then the phase will be set implicitly when the positions and velocities of the molecules are set.
+         !( _.hasIn( window, 'phet.phetIo.phetioEngine' ) && phet.phetIo.phetioEngine.phetioStateEngine.isSettingState ) ) {
       model.setPhase( state );
     }
+
     solidStateButton.baseColor = state === PhaseStateEnum.SOLID ? SELECTED_BUTTON_COLOR : DESELECTED_BUTTON_COLOR;
     solidStateButton.pickable = state !== PhaseStateEnum.SOLID;
     liquidStateButton.baseColor = state === PhaseStateEnum.LIQUID ? SELECTED_BUTTON_COLOR : DESELECTED_BUTTON_COLOR;

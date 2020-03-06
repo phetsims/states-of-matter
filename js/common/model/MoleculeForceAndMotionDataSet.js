@@ -42,6 +42,17 @@ function MoleculeForceAndMotionDataSet( atomsPerMolecule ) {
   this.nextMoleculeForces = new Array( maxNumMolecules );
   this.insideContainer = new Array( maxNumMolecules );
 
+  // Populate with null because PhET-iO cannot serialize undefined.
+  for ( let i = 0; i < SOMConstants.MAX_NUM_ATOMS; i++ ) {
+    this.atomPositions[ i ] = null;
+    if ( i < maxNumMolecules ) {
+      this.moleculeCenterOfMassPositions[ i ] = null;
+      this.moleculeVelocities[ i ] = null;
+      this.moleculeForces[ i ] = null;
+      this.nextMoleculeForces[ i ] = null;
+    }
+  }
+
   // @public Note that some of the following are not used in the monatomic case, but need to be here for compatibility.
   this.moleculeRotationAngles = new Array( maxNumMolecules );
   this.moleculeRotationRates = new Array( maxNumMolecules );

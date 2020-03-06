@@ -24,6 +24,7 @@ import Property from '../../../../axon/js/Property.js';
 import Range from '../../../../dot/js/Range.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
+import PhetioObject from '../../../../tandem/js/PhetioObject.js';
 import statesOfMatter from '../../statesOfMatter.js';
 import PhaseStateEnum from '../PhaseStateEnum.js';
 import SOMConstants from '../SOMConstants.js';
@@ -43,6 +44,7 @@ import WaterVerletAlgorithm from './engine/WaterVerletAlgorithm.js';
 import InteractionStrengthTable from './InteractionStrengthTable.js';
 import MoleculeForceAndMotionDataSet from './MoleculeForceAndMotionDataSet.js';
 import MovingAverage from './MovingAverage.js';
+import MultipleParticleModelIO from './MultipleParticleModelIO.js';
 import ArgonAtom from './particle/ArgonAtom.js';
 import ConfigurableStatesOfMatterAtom from './particle/ConfigurableStatesOfMatterAtom.js';
 import HydrogenAtom from './particle/HydrogenAtom.js';
@@ -109,14 +111,17 @@ const MAX_ADJUSTABLE_EPSILON = SOMConstants.MAX_ADJUSTABLE_EPSILON;
 const MOLECULE_INJECTION_HOLDOFF_TIME = 0.25; // seconds, empirically determined
 const MAX_MOLECULES_QUEUED_FOR_INJECTION = 3;
 
-class MultipleParticleModel {
+class MultipleParticleModel extends PhetioObject {
 
   /**
    * @param {Tandem} tandem
    */
   constructor( tandem ) {
 
-    const self = this;
+    super( {
+      tandem: tandem,
+      phetioType: MultipleParticleModelIO
+    } );
 
     //-----------------------------------------------------------------------------------------------------------------
     // observable model properties
@@ -244,8 +249,8 @@ class MultipleParticleModel {
     //-----------------------------------------------------------------------------------------------------------------
 
     // listen for changes to the substance being simulated and update the internals as needed
-    this.substanceProperty.link( function() {
-      self.handleSubstanceChanged();
+    this.substanceProperty.link( () => {
+      this.handleSubstanceChanged();
     } );
 
     // listen for new molecules being added with the pump
@@ -257,65 +262,20 @@ class MultipleParticleModel {
         const delta = newValue - oldValue;
 
         for ( let i = 0; i < delta; i++ ) {
-          self.injectMolecule();
+          this.injectMolecule();
         }
       }
     } );
 
-    if ( _.hasIn( window, 'phet.phetIo.phetioEngine' ) ) {
+    // step the model on state set to make sure that the molecules get positioned based on the data set values
+    // TODO: could we do just sync the particles instead?
+    _.hasIn( window, 'phet.phetIo.phetioEngine' ) && phet.phetIo.phetioEngine.phetioStateEngine.stateSetEmitter.addListener( () => {
 
-      phet.phetIo.phetioEngine.phetioStateEngine.stateSetEmitter.addListener( () => {
-
-          // Temperature is being set via phet-io.  Find the closest phase, set the temperature, and then run the model
-          // for a while to match.
-          const targetTemperature = this.temperatureSetPointProperty.value;
-          let targetPhase;
-          const distanceFromGasTemperature = Math.abs( targetTemperature - SOMConstants.GAS_TEMPERATURE );
-          const distanceFromLiquidTemperature = Math.abs( targetTemperature - SOMConstants.LIQUID_TEMPERATURE );
-          const distanceFromSolidTemperature = Math.abs( targetTemperature - SOMConstants.SOLID_TEMPERATURE );
-
-          const minDistanceFromTargetTemperature = Math.min(
-            distanceFromGasTemperature,
-            distanceFromLiquidTemperature,
-            distanceFromSolidTemperature
-          );
-
-          if ( minDistanceFromTargetTemperature === distanceFromGasTemperature ) {
-            targetPhase = PhaseStateEnum.GAS;
-          }
-          else if ( minDistanceFromTargetTemperature === distanceFromLiquidTemperature ) {
-            targetPhase = PhaseStateEnum.LIQUID;
-          }
-          else {
-            targetPhase = PhaseStateEnum.SOLID;
-          }
-
-          // Has the update for the change of substance occurred?
-          if ( this.substanceThatIThinkIAmDealingWith !== this.substanceProperty.value ) {
-            this.handleSubstanceChanged();
-          }
-
-          this.phaseStateChanger.setParticleConfigurationForPhase( targetPhase );
-
-          // set the thermostats to the new temperature
-          if ( this.isoKineticThermostat !== null ) {
-            this.isoKineticThermostat.targetTemperature = targetTemperature;
-          }
-          if ( this.andersenThermostat !== null ) {
-            this.andersenThermostat.targetTemperature = targetTemperature;
-          }
-
-          if ( minDistanceFromTargetTemperature > 0 ) {
-
-            // Step the model a number of times to get it to the desired target temperature.  The number of steps was
-            // empirically determined.
-            for ( let i = 0; i < 100; i++ ) {
-              this.stepInternal( SOMConstants.NOMINAL_TIME_STEP );
-            }
-          }
-        }
-      );
-    }
+      // Though we would like to have 0 here, the step function isn't set up that way, so make it the smallest number
+      // possible for this model.
+      // TODO: Is this really the smallest value?
+      this.stepInternal( MAX_PARTICLE_MOTION_TIME_STEP );
+    } );
   }
 
   /**
