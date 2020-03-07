@@ -64,7 +64,7 @@ function StatesPhaseControlNode( model, options ) {
     phetioReadOnly: true
   } );
 
-  // boolean properties corresponding to each state
+  // boolean properties corresponding to each state, one for each of the phase state selection buttons
   const solidSelectedProperty = new BooleanProperty( false, {
     tandem: options.tandem.createTandem( 'solidSelectedProperty' )
   } );
@@ -103,18 +103,22 @@ function StatesPhaseControlNode( model, options ) {
   } );
 
   // set the state when the buttons are pushed
-  solidSelectedProperty.link( function( selected ) { if ( selected ) { stateProperty.value = PhaseStateEnum.SOLID; } } );
-  liquidSelectedProperty.link( function( selected ) { if ( selected ) { stateProperty.value = PhaseStateEnum.LIQUID; } } );
-  gasSelectedProperty.link( function( selected ) { if ( selected ) { stateProperty.value = PhaseStateEnum.GAS; } } );
+  solidSelectedProperty.link( selected => { if ( selected ) { stateProperty.value = PhaseStateEnum.SOLID; } } );
+  liquidSelectedProperty.link( selected => { if ( selected ) { stateProperty.value = PhaseStateEnum.LIQUID; } } );
+  gasSelectedProperty.link( selected => { if ( selected ) { stateProperty.value = PhaseStateEnum.GAS; } } );
 
   // Set the model state and update the button appearances when the user presses one of the buttons.
   stateProperty.link( function( state ) {
-    if ( state !== PhaseStateEnum.UNKNOWN &&
+    if ( state !== PhaseStateEnum.UNKNOWN ) {
 
-         // Only set the Phase if this comes directly from a user, not from a PhET-iO state setting. If from the state
-         // engine, then the phase will be set implicitly when the positions and velocities of the molecules are set.
-         !( _.hasIn( window, 'phet.phetIo.phetioEngine' ) && phet.phetIo.phetioEngine.phetioStateEngine.isSettingState ) ) {
-      model.setPhase( state );
+      // Only set the phase in the model if this change comes directly from user interaction and not from PhET-iO state.
+      // If the change is from the state engine, then the phase will be set implicitly when the positions and velocities
+      // of the molecules are set.
+      if ( !( _.hasIn( window, 'phet.phetIo.phetioEngine' ) &&
+              phet.phetIo.phetioEngine.phetioStateEngine.isSettingStateProperty.value ) ) {
+
+        model.setPhase( state );
+      }
     }
 
     solidStateButton.baseColor = state === PhaseStateEnum.SOLID ? SELECTED_BUTTON_COLOR : DESELECTED_BUTTON_COLOR;
