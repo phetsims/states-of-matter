@@ -75,8 +75,8 @@ function PhaseChangesScreenView( multipleParticleModel, isInteractionDiagramEnab
   // figure out where in the view the particles will be when the container is not exploded
   const nominalParticleAreaViewBounds = new Bounds2(
     modelViewTransform.modelToViewX( 0 ),
-    modelViewTransform.modelToViewY( 0 ) + modelViewTransform.modelToViewDeltaY( multipleParticleModel.getInitialParticleContainerHeight() ),
-    modelViewTransform.modelToViewX( 0 ) + modelViewTransform.modelToViewDeltaX( multipleParticleModel.getParticleContainerWidth() ),
+    modelViewTransform.modelToViewY( 0 ) + modelViewTransform.modelToViewDeltaY( multipleParticleModel.getInitialContainerHeight() ),
+    modelViewTransform.modelToViewX( 0 ) + modelViewTransform.modelToViewDeltaX( multipleParticleModel.getContainerWidth() ),
     modelViewTransform.modelToViewY( 0 )
   );
 
@@ -267,7 +267,7 @@ function PhaseChangesScreenView( multipleParticleModel, isInteractionDiagramEnab
       self.compositeThermometerNode.setRotation( 0 );
       self.compositeThermometerNode.centerX = nominalParticleAreaViewBounds.minX + nominalParticleAreaViewBounds.width * 0.35;
       self.compositeThermometerNode.centerY = modelViewTransform.modelToViewY(
-        multipleParticleModel.particleContainerHeightProperty.get()
+        multipleParticleModel.containerHeightProperty.get()
       );
     }
     self.updatePhaseDiagram();
@@ -328,7 +328,7 @@ function PhaseChangesScreenView( multipleParticleModel, isInteractionDiagramEnab
   } );
 
   // Monitor the model for changes of the container size and adjust the view accordingly.
-  multipleParticleModel.particleContainerHeightProperty.link( function( containerHeight, previousContainerHeight ) {
+  multipleParticleModel.containerHeightProperty.link( function( containerHeight, previousContainerHeight ) {
 
     // move the thermometer with the lid
     self.compositeThermometerNode.centerX = nominalParticleAreaViewBounds.minX + nominalParticleAreaViewBounds.width * 0.35;
@@ -351,7 +351,7 @@ function PhaseChangesScreenView( multipleParticleModel, isInteractionDiagramEnab
     self.updatePhaseDiagram();
   } );
 
-  multipleParticleModel.particles.lengthProperty.link( function() {
+  multipleParticleModel.atoms.lengthProperty.link( function() {
     self.updatePhaseDiagram();
   } );
 }
@@ -373,7 +373,7 @@ export default inherit( ScreenView, PhaseChangesScreenView, {
   updatePhaseDiagram: function() {
 
     // If the container has exploded, don't bother showing the dot.
-    if ( this.multipleParticleModel.isExplodedProperty.get() || this.multipleParticleModel.particles.length === 0 ) {
+    if ( this.multipleParticleModel.isExplodedProperty.get() || this.multipleParticleModel.atoms.length === 0 ) {
       this.phaseDiagram.setStateMarkerVisible( false );
     }
     else {

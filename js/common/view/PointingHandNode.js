@@ -94,7 +94,7 @@ function PointingHandNode( multipleParticleModel, modelViewTransform, options ) 
     start: function( event ) {
       startY = self.globalToParentPoint( event.pointer.point ).y;
       beingDragged = true;
-      containerSizeAtDragStart = multipleParticleModel.particleContainerHeightProperty.get();
+      containerSizeAtDragStart = multipleParticleModel.containerHeightProperty.get();
       updateHintVisibility();
     },
 
@@ -102,7 +102,7 @@ function PointingHandNode( multipleParticleModel, modelViewTransform, options ) 
       endY = self.globalToParentPoint( event.pointer.point ).y;
 
       // Resize the container based on the amount that the node has moved.
-      multipleParticleModel.setTargetParticleContainerHeight(
+      multipleParticleModel.setTargetContainerHeight(
         containerSizeAtDragStart + modelViewTransform.viewToModelDeltaY( endY - startY )
       );
       updateHintVisibility();
@@ -111,8 +111,8 @@ function PointingHandNode( multipleParticleModel, modelViewTransform, options ) 
     end: function() {
 
       // Set the target size to the current size, which will stop any change in size that is currently underway.
-      multipleParticleModel.setTargetParticleContainerHeight(
-        multipleParticleModel.particleContainerHeightProperty.get()
+      multipleParticleModel.setTargetContainerHeight(
+        multipleParticleModel.containerHeightProperty.get()
       );
       beingDragged = false;
       updateHintVisibility();
@@ -141,7 +141,7 @@ function PointingHandNode( multipleParticleModel, modelViewTransform, options ) 
   this.touchArea = this.localBounds.dilatedXY( 10, 10 );
 
   // Add a listener to update the individual arrow visibility.
-  multipleParticleModel.particleContainerHeightProperty.link( function( particleContainerHeight ) {
+  multipleParticleModel.containerHeightProperty.link( function( particleContainerHeight ) {
     if ( particleContainerHeight === MultipleParticleModel.PARTICLE_CONTAINER_INITIAL_HEIGHT ) {
 
       // At the height limit, so only show the down arrow.

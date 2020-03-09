@@ -1,14 +1,14 @@
 // Copyright 2014-2020, University of Colorado Boulder
 
 /**
- * This is the main class for the model portion of the "States of Matter" simulation.  It maintains a sEet of data that
+ * This is the main class for the model portion of the "States of Matter" simulation.  It maintains a set of data that
  * represents a normalized model in which all atoms are assumed to have a diameter of 1, since this allows for very
- * quick calculations, and also a set of data for particles that have the actual diameter of the particles being
- * simulated (e.g. Argon). Throughout the comments and in the variable naming, I've tried to use the terminology of
- * "normalized data set" (or sometimes simply "normalized set") for the former and "model data set" for the latter.
- * When the simulation is running, the normalized data set is updated first, since that is where the hardcore
- * calculations are performed, and then the model data set is synchronized with the normalized data.  It is the model
- * data set that is monitored by the view components that actually display the molecule positions to the user.
+ * quick calculations, and also a set of data for atoms that have the actual diameter of the atoms being simulated (e.g.
+ * Argon). Throughout the comments and in the variable naming, I've tried to use the terminology of "normalized data
+ * set" (or sometimes simply "normalized set") for the former and "model data set" for the latter.  When the simulation
+ * is running, the normalized data set is updated first, since that is where the hardcore calculations are performed,
+ * and then the model data set is synchronized with the normalized data.  It is the model data set that is monitored by
+ * the view components that actually display the molecule positions to the user.
  *
  * @author John Blanco
  * @author Aaron Davis
@@ -52,8 +52,8 @@ import NeonAtom from './particle/NeonAtom.js';
 import OxygenAtom from './particle/OxygenAtom.js';
 
 // constants (general)
-const PARTICLE_CONTAINER_WIDTH = 10000; // essentially arbitrary
-const PARTICLE_CONTAINER_INITIAL_HEIGHT = 10000;  // essentially arbitrary
+const CONTAINER_WIDTH = 10000; // essentially arbitrary
+const CONTAINER_INITIAL_HEIGHT = 10000;  // essentially arbitrary
 const DEFAULT_SUBSTANCE = SubstanceType.NEON;
 const MAX_TEMPERATURE = 50.0;
 const MIN_TEMPERATURE = 0.00001;
@@ -84,7 +84,7 @@ const POST_EXPLOSION_CONTAINER_EXPANSION_RATE = 9000; // in model units per seco
 // Range for deciding if the temperature is near the current set point. The units are internal model units.
 const TEMPERATURE_CLOSENESS_RANGE = 0.15;
 
-// Values used for converting from model temperature to the temperature for a given particle.
+// Values used for converting from model temperature to the temperature for a given substance.
 const NEON_TRIPLE_POINT_IN_KELVIN = SOMConstants.NEON_TRIPLE_POINT_IN_KELVIN;
 const NEON_CRITICAL_POINT_IN_KELVIN = SOMConstants.NEON_CRITICAL_POINT_IN_KELVIN;
 const ARGON_TRIPLE_POINT_IN_KELVIN = SOMConstants.ARGON_TRIPLE_POINT_IN_KELVIN;
@@ -128,15 +128,15 @@ class MultipleParticleModel extends PhetioObject {
     //-----------------------------------------------------------------------------------------------------------------
 
     // @public (read-only)
-    this.particleContainerHeightProperty = new NumberProperty( PARTICLE_CONTAINER_INITIAL_HEIGHT, {
-      tandem: tandem.createTandem( 'particleContainerHeightProperty' ),
+    this.containerHeightProperty = new NumberProperty( CONTAINER_INITIAL_HEIGHT, {
+      tandem: tandem.createTandem( 'containerHeightProperty' ),
       phetioReadOnly: true
     } );
 
     // @public (read-write)
-    this.targetContainerHeightProperty = new NumberProperty( PARTICLE_CONTAINER_INITIAL_HEIGHT, {
+    this.targetContainerHeightProperty = new NumberProperty( CONTAINER_INITIAL_HEIGHT, {
       tandem: tandem.createTandem( 'targetContainerHeightProperty' ),
-      range: new Range( MIN_ALLOWABLE_CONTAINER_HEIGHT, PARTICLE_CONTAINER_INITIAL_HEIGHT )
+      range: new Range( MIN_ALLOWABLE_CONTAINER_HEIGHT, CONTAINER_INITIAL_HEIGHT )
     } );
 
     // @public (read-only)
@@ -189,7 +189,8 @@ class MultipleParticleModel extends PhetioObject {
       range: new Range( MIN_ADJUSTABLE_EPSILON, MAX_ADJUSTABLE_EPSILON )
     } );
 
-    // @public (read-write)
+    // @public (read-write) - the number of molecules that should be in the simulation.  This is used primarily for
+    // injecting new molecules, and when this number is increased, internal model state is adjusted to match.
     this.numberOfMoleculesProperty = new NumberProperty( 0, {
       tandem: tandem.createTandem( 'numberOfMoleculesProperty' ),
       phetioReadOnly: true
@@ -204,21 +205,21 @@ class MultipleParticleModel extends PhetioObject {
     // other model attributes
     //-----------------------------------------------------------------------------------------------------------------
 
-    // @public, array containing references to the non-normalized particles
-    this.particles = new ObservableArray(); // @public, read-only
+    // @public, array containing references to the non-normalized atoms
+    this.atoms = new ObservableArray(); // @public, read-only
 
-    // @public, data set containing information about the position, motion, and force for the normalized particles
+    // @public, data set containing information about the position, motion, and force for the normalized atoms
     this.moleculeDataSet = null;
 
     // @public, various non-property attributes
-    this.normalizedContainerWidth = PARTICLE_CONTAINER_WIDTH / this.particleDiameter;
+    this.normalizedContainerWidth = CONTAINER_WIDTH / this.particleDiameter;
     this.gravitationalAcceleration = NOMINAL_GRAVITATIONAL_ACCEL;
 
     // @public, read-only, normalized version of the container height, changes as the lid position changes
-    this.normalizedContainerHeight = this.particleContainerHeightProperty.get() / this.particleDiameter;
+    this.normalizedContainerHeight = this.containerHeightProperty.get() / this.particleDiameter;
 
     // @public, read-only, normalized version of the TOTAL container height regardless of the lid position, set once at init
-    this.normalizedTotalContainerHeight = this.particleContainerHeightProperty.get / this.particleDiameter;
+    this.normalizedTotalContainerHeight = this.containerHeightProperty.get / this.particleDiameter;
 
     // @public, normalized velocity at which lid is moving in y direction
     this.normalizedLidVelocityY = 0;
@@ -232,7 +233,7 @@ class MultipleParticleModel extends PhetioObject {
     this.injectionPointX = 0;
     this.injectionPointY = 0;
     this.heightChangeThisStep = 0;
-    this.particleInjectedThisStep = false;
+    this.moleculeInjectedThisStep = false;
 
     // @private, strategy patterns that are applied to the data set
     this.atomPositionUpdater = null;
@@ -254,12 +255,11 @@ class MultipleParticleModel extends PhetioObject {
     } );
 
     // listen for new molecules being added with the pump
-    this.numberOfMoleculesProperty.lazyLink( ( newValue, oldValue ) => {
+    this.numberOfMoleculesProperty.lazyLink( newValue => {
       const currentNumberOfMolecules = Math.floor( this.moleculeDataSet.numberOfAtoms / this.moleculeDataSet.atomsPerMolecule );
 
-      // make sure that the pump doesn't release particles when the substance is changed, only when a molecule is added
       if ( newValue !== currentNumberOfMolecules ) {
-        const delta = newValue - oldValue;
+        const delta = newValue - currentNumberOfMolecules;
 
         for ( let i = 0; i < delta; i++ ) {
           this.injectMolecule();
@@ -267,12 +267,12 @@ class MultipleParticleModel extends PhetioObject {
       }
     } );
 
-    // step the model on state set to make sure that the molecules get positioned based on the data set values
-    // TODO: could we do just sync the particles instead?
+    // perform any phet-io-specific state setting actions
     _.hasIn( window, 'phet.phetIo.phetioEngine' ) && phet.phetIo.phetioEngine.phetioStateEngine.stateSetEmitter.addListener( () => {
 
       // Though we would like to have 0 here, the step function isn't set up that way, so make it the smallest number
       // possible for this model.
+      // TODO: could we do just sync the atoms instead?
       // TODO: Is this really the smallest value?
       this.stepInternal( MAX_PARTICLE_MOTION_TIME_STEP );
     } );
@@ -306,15 +306,15 @@ class MultipleParticleModel extends PhetioObject {
   /**
    * Get the current temperature in degrees Kelvin.  The calculations done are dependent on the type of molecule
    * selected.  The values and ranges used in this method were derived from information provided by Paul Beale, dept
-   * of Physics, University of Colorado Boulder.  If no particles are in the container, this returns null.
+   * of Physics, University of Colorado Boulder.  If no atoms are in the container, this returns null.
    * @returns {number|null}
    * @public
    */
   getTemperatureInKelvin() {
 
-    if ( this.particles.length === 0 ) {
+    if ( this.atoms.length === 0 ) {
 
-      // temperature is reported as 0 if there are no particles
+      // temperature is reported as 0 if there are no atoms
       return null;
     }
 
@@ -421,12 +421,12 @@ class MultipleParticleModel extends PhetioObject {
       'unsupported substance'
     );
 
-    // Retain the current phase so that we can set the particles back to this phase once they have been created and
+    // Retain the current phase so that we can set the atoms back to this phase once they have been created and
     // initialized.
     const phase = this.mapTemperatureToPhase();
 
-    // Remove existing particles and reset the global model parameters.
-    this.removeAllParticles();
+    // Remove existing atoms and reset the global model parameters.
+    this.removeAllAtoms();
     this.initializeModelParameters();
 
     // Set the model parameters that are dependent upon the substance being simulated.
@@ -475,11 +475,11 @@ class MultipleParticleModel extends PhetioObject {
     this.resetContainerSize();
 
     // Adjust the injection point based on the new particle diameter.
-    this.injectionPointX = PARTICLE_CONTAINER_WIDTH / this.particleDiameter * INJECTION_POINT_HORIZ_PROPORTION;
-    this.injectionPointY = PARTICLE_CONTAINER_INITIAL_HEIGHT / this.particleDiameter * INJECTION_POINT_VERT_PROPORTION;
+    this.injectionPointX = CONTAINER_WIDTH / this.particleDiameter * INJECTION_POINT_HORIZ_PROPORTION;
+    this.injectionPointY = CONTAINER_INITIAL_HEIGHT / this.particleDiameter * INJECTION_POINT_VERT_PROPORTION;
 
-    // Add the particles and set their initial positions.
-    this.initializeParticles( phase );
+    // Add the atoms and set their initial positions.
+    this.initializeAtoms( phase );
 
     // Reset the moving average of temperature differences.
     this.averageTemperatureDifference.reset();
@@ -505,11 +505,11 @@ class MultipleParticleModel extends PhetioObject {
    * @param {number} desiredContainerHeight
    * @public
    */
-  setTargetParticleContainerHeight( desiredContainerHeight ) {
+  setTargetContainerHeight( desiredContainerHeight ) {
     this.targetContainerHeightProperty.set( Utils.clamp(
       desiredContainerHeight,
       MIN_ALLOWABLE_CONTAINER_HEIGHT,
-      PARTICLE_CONTAINER_INITIAL_HEIGHT
+      CONTAINER_INITIAL_HEIGHT
     ) );
   }
 
@@ -582,7 +582,7 @@ class MultipleParticleModel extends PhetioObject {
     const substanceAtStartOfReset = this.substanceProperty.get();
 
     // reset observable properties
-    this.particleContainerHeightProperty.reset();
+    this.containerHeightProperty.reset();
     this.targetContainerHeightProperty.reset();
     this.isExplodedProperty.reset();
     this.phaseDiagramExpandedProperty.reset();
@@ -600,9 +600,9 @@ class MultipleParticleModel extends PhetioObject {
 
     // if the substance wasn't changed during reset, so some additional work is necessary
     if ( substanceAtStartOfReset === this.substanceProperty.get() ) {
-      this.removeAllParticles();
+      this.removeAllAtoms();
       this.resetContainerSize();
-      this.initializeParticles( PhaseStateEnum.SOLID );
+      this.initializeAtoms( PhaseStateEnum.SOLID );
     }
 
     // other reset
@@ -611,7 +611,7 @@ class MultipleParticleModel extends PhetioObject {
   }
 
   /**
-   * Set the phase of the particles in the simulation.
+   * Set the phase of the molecules in the simulation.
    * @param {number} phaseSate
    * @public
    */
@@ -621,7 +621,7 @@ class MultipleParticleModel extends PhetioObject {
       'invalid phase state specified'
     );
     this.phaseStateChanger.setPhase( phaseSate );
-    this.syncParticlePositions();
+    this.syncAtomPositions();
   }
 
   /**
@@ -723,52 +723,52 @@ class MultipleParticleModel extends PhetioObject {
           particle = new NeonAtom( 0, 0 );
           break;
       }
-      this.particles.add( particle );
+      this.atoms.push( particle );
     }
     else if ( atomsPerMolecule === 2 ) {
 
       assert && assert( this.substanceProperty.get() === SubstanceType.DIATOMIC_OXYGEN );
 
-      // Add particles to model set.
-      this.particles.add( new OxygenAtom( 0, 0 ) );
-      this.particles.add( new OxygenAtom( 0, 0 ) );
+      // Add atoms to model set.
+      this.atoms.push( new OxygenAtom( 0, 0 ) );
+      this.atoms.push( new OxygenAtom( 0, 0 ) );
     }
     else if ( atomsPerMolecule === 3 ) {
 
       assert && assert( this.substanceProperty.get() === SubstanceType.WATER );
 
       // Add atoms to model set.
-      this.particles.add( new OxygenAtom( 0, 0 ) );
-      this.particles.add( new HydrogenAtom( 0, 0, true ) );
-      this.particles.add( new HydrogenAtom( 0, 0, phet.joist.random.nextDouble() > 0.5 ) );
+      this.atoms.push( new OxygenAtom( 0, 0 ) );
+      this.atoms.push( new HydrogenAtom( 0, 0, true ) );
+      this.atoms.push( new HydrogenAtom( 0, 0, phet.joist.random.nextDouble() > 0.5 ) );
     }
 
-    this.syncParticlePositions();
+    this.syncAtomPositions();
 
-    this.particleInjectedThisStep = true;
+    this.moleculeInjectedThisStep = true;
   }
 
   /**
    *  @private
    */
-  removeAllParticles() {
+  removeAllAtoms() {
 
-    // Get rid of any existing particles from the model set.
-    this.particles.clear();
+    // Get rid of any existing atoms from the model set.
+    this.atoms.clear();
 
-    // Get rid of the normalized particles.
+    // Get rid of the normalized atoms too.
     this.moleculeDataSet = null;
   }
 
   /**
-   * Initialize the particles by calling the appropriate initialization routine, which will set their positions,
-   * velocities, etc.
+   * Initialize the normalized and non-normalized data sets by calling the appropriate initialization routine, which
+   * will set positions, velocities, etc.
    * @param {number} phase - phase of atoms
    * @public
    */
-  initializeParticles( phase ) {
+  initializeAtoms( phase ) {
 
-    // Initialize the particles.
+    // Initialize the atoms.
     switch( this.substanceProperty.get() ) {
       case SubstanceType.DIATOMIC_OXYGEN:
         this.initializeDiatomic( this.substanceProperty.get(), phase );
@@ -806,8 +806,8 @@ class MultipleParticleModel extends PhetioObject {
   }
 
   /**
-   * Reduce the upward motion of the particles.  This is generally done to reduce some behavior that is sometimes
-   * seen where the particles float rapidly upwards after being heated.
+   * Reduce the upward motion of the molecules.  This is generally done to reduce some behavior that is sometimes seen
+   * where the molecules float rapidly upwards after being heated.
    * @param {number} dt
    * @private
    */
@@ -828,11 +828,11 @@ class MultipleParticleModel extends PhetioObject {
   resetContainerSize() {
 
     // Set the initial size of the container.
-    this.particleContainerHeightProperty.reset();
+    this.containerHeightProperty.reset();
     this.targetContainerHeightProperty.reset();
-    this.normalizedContainerWidth = PARTICLE_CONTAINER_WIDTH / this.particleDiameter;
-    this.normalizedContainerHeight = this.particleContainerHeightProperty.get() / this.particleDiameter;
-    this.normalizedTotalContainerHeight = this.particleContainerHeightProperty.get() / this.particleDiameter;
+    this.normalizedContainerWidth = CONTAINER_WIDTH / this.particleDiameter;
+    this.normalizedContainerHeight = this.containerHeightProperty.get() / this.particleDiameter;
+    this.normalizedTotalContainerHeight = this.containerHeightProperty.get() / this.particleDiameter;
   }
 
   /**
@@ -841,21 +841,21 @@ class MultipleParticleModel extends PhetioObject {
    */
   stepInternal( dt ) {
 
-    this.particleInjectedThisStep = false;
+    this.moleculeInjectedThisStep = false;
 
     if ( !this.isExplodedProperty.get() ) {
 
-      // Adjust the particle container height if needed.
-      if ( this.targetContainerHeightProperty.get() !== this.particleContainerHeightProperty.get() ) {
-        this.heightChangeThisStep = this.targetContainerHeightProperty.get() - this.particleContainerHeightProperty.get();
+      // Adjust the container height if needed.
+      if ( this.targetContainerHeightProperty.get() !== this.containerHeightProperty.get() ) {
+        this.heightChangeThisStep = this.targetContainerHeightProperty.get() - this.containerHeightProperty.get();
         if ( this.heightChangeThisStep > 0 ) {
 
           // the container is expanding, limit the change to the max allowed rate
           this.heightChangeThisStep = Math.min( this.heightChangeThisStep, MAX_CONTAINER_EXPAND_RATE * dt );
 
-          this.particleContainerHeightProperty.set( Math.min(
-            this.particleContainerHeightProperty.get() + this.heightChangeThisStep,
-            PARTICLE_CONTAINER_INITIAL_HEIGHT
+          this.containerHeightProperty.set( Math.min(
+            this.containerHeightProperty.get() + this.heightChangeThisStep,
+            CONTAINER_INITIAL_HEIGHT
           ) );
         }
         else {
@@ -863,12 +863,12 @@ class MultipleParticleModel extends PhetioObject {
           // the container is shrinking, limit the change to the max allowed rate
           this.heightChangeThisStep = Math.max( this.heightChangeThisStep, -MAX_CONTAINER_SHRINK_RATE * dt );
 
-          this.particleContainerHeightProperty.set( Math.max(
-            this.particleContainerHeightProperty.get() + this.heightChangeThisStep,
+          this.containerHeightProperty.set( Math.max(
+            this.containerHeightProperty.get() + this.heightChangeThisStep,
             MIN_ALLOWABLE_CONTAINER_HEIGHT
           ) );
         }
-        this.normalizedContainerHeight = this.particleContainerHeightProperty.get() / this.particleDiameter;
+        this.normalizedContainerHeight = this.containerHeightProperty.get() / this.particleDiameter;
         this.normalizedLidVelocityY = ( this.heightChangeThisStep / this.particleDiameter ) / dt;
       }
       else {
@@ -881,9 +881,9 @@ class MultipleParticleModel extends PhetioObject {
       // The lid is blowing off the container, so increase the container size until the lid should be well off the
       // screen.
       this.heightChangeThisStep = POST_EXPLOSION_CONTAINER_EXPANSION_RATE * dt;
-      if ( this.particleContainerHeightProperty.get() < PARTICLE_CONTAINER_INITIAL_HEIGHT * 3 ) {
-        this.particleContainerHeightProperty.set(
-          this.particleContainerHeightProperty.get() + POST_EXPLOSION_CONTAINER_EXPANSION_RATE * dt
+      if ( this.containerHeightProperty.get() < CONTAINER_INITIAL_HEIGHT * 3 ) {
+        this.containerHeightProperty.set(
+          this.containerHeightProperty.get() + POST_EXPLOSION_CONTAINER_EXPANSION_RATE * dt
         );
       }
     }
@@ -912,7 +912,7 @@ class MultipleParticleModel extends PhetioObject {
       this.residualTime -= particleMotionTimeStep;
     }
 
-    // Inject a new particle if there is one ready and it isn't too soon after a previous injection.  This is done
+    // Inject a new molecule if there is one ready and it isn't too soon after a previous injection.  This is done
     // before execution of the Verlet algorithm so that its velocity will be taken into account when the temperature
     // is calculated.
     if ( this.numMoleculesAwaitingInjection > 0 && this.moleculeInjectionHoldoffTimer === 0 ) {
@@ -924,14 +924,14 @@ class MultipleParticleModel extends PhetioObject {
       this.moleculeInjectionHoldoffTimer = Math.max( this.moleculeInjectionHoldoffTimer - dt, 0 );
     }
 
-    // Execute the Verlet algorithm, a.k.a. the "particle engine", in order to determine the new particle positions.
+    // Execute the Verlet algorithm, a.k.a. the "particle engine", in order to determine the new atom positions.
     for ( let i = 0; i < numParticleEngineSteps; i++ ) {
       this.moleculeForceAndMotionCalculator.updateForcesAndMotion( particleMotionTimeStep );
     }
 
-    // Sync up the positions of the normalized particles (the molecule data set) with the particles being monitored by
-    // the view (the model data set).
-    this.syncParticlePositions();
+    // Sync up the positions of the normalized molecules (the molecule data set) with the atoms being monitored by the
+    // view (the model data set).
+    this.syncAtomPositions();
 
     // run the thermostat to keep particle energies from getting out of hand
     this.runThermostat();
@@ -950,12 +950,12 @@ class MultipleParticleModel extends PhetioObject {
       if ( currentTemperature < APPROACHING_ABSOLUTE_ZERO_TEMPERATURE &&
            this.heatingCoolingAmountProperty.get() < 0 ) {
 
-        // The temperature adjusts more slowly as we begin to approach absolute zero so that all the particles have
+        // The temperature adjusts more slowly as we begin to approach absolute zero so that all the molecules have
         // time to reach the bottom of the container.  This is not linear - the rate of change slows as we get closer,
         // to zero degrees Kelvin, which is somewhat real world-ish.
         const adjustmentFactor = Math.pow(
           currentTemperature / APPROACHING_ABSOLUTE_ZERO_TEMPERATURE,
-          1.35 // exponent chosen empirically to be as small as possible and still get all particles to bottom before absolute zero
+          1.35 // exponent chosen empirically to be as small as possible and still get all molecules to bottom before absolute zero
         );
 
         newTemperature = currentTemperature +
@@ -978,7 +978,7 @@ class MultipleParticleModel extends PhetioObject {
            newTemperature > MIN_TEMPERATURE ) {
 
         // Absolute zero has been reached for this substance.  Set the temperature to the minimum allowed value to
-        // minimize motion in the particles.
+        // minimize motion in the molecules.
         newTemperature = MIN_TEMPERATURE;
       }
 
@@ -1011,7 +1011,7 @@ class MultipleParticleModel extends PhetioObject {
 
     if ( this.isExplodedProperty.get() ) {
 
-      // Don't bother to run any thermostat if the lid is blown off - just let those little particles run free!
+      // Don't bother to run any thermostat if the lid is blown off - just let those little molecules run free!
       return;
     }
 
@@ -1026,22 +1026,22 @@ class MultipleParticleModel extends PhetioObject {
       temperatureAdjustmentNeeded = true;
     }
 
-    if ( this.particleInjectedThisStep ) {
+    if ( this.moleculeInjectedThisStep ) {
 
-      // A particle was injected this step.  By design, only one can be injected in a single step, so we use the
-      // attributes of the most recently added particle to figure out how much the temperature set point should be
+      // A molecule was injected this step.  By design, only one can be injected in a single step, so we use the
+      // attributes of the most recently added molecule to figure out how much the temperature set point should be
       // adjusted. No thermostat is run on this step - it will kick in on the next step.
-      const numParticles = this.moleculeDataSet.getNumberOfMolecules();
-      const injectedParticleTemperature = ( 2 / 3 ) * this.moleculeDataSet.getMoleculeKineticEnergy( numParticles - 1 );
-      const newTemperature = temperatureSetPoint * ( numParticles - 1 ) / numParticles +
-                             injectedParticleTemperature / numParticles;
+      const numMolecules = this.moleculeDataSet.getNumberOfMolecules();
+      const injectedParticleTemperature = ( 2 / 3 ) * this.moleculeDataSet.getMoleculeKineticEnergy( numMolecules - 1 );
+      const newTemperature = temperatureSetPoint * ( numMolecules - 1 ) / numMolecules +
+                             injectedParticleTemperature / numMolecules;
       this.setTemperature( newTemperature );
     }
     else if ( this.moleculeForceAndMotionCalculator.lidChangedParticleVelocity ) {
 
-      // The velocity of one or more particles was changed through interaction with the lid.  Since this can change
-      // the total kinetic energy of the particles in the system, no thermostat is run.  Instead, the temperature is
-      // determined by looking at the kinetic energy of the particles, and that value is used to determine the new
+      // The velocity of one or more molecules was changed through interaction with the lid.  Since this can change
+      // the total kinetic energy of the molecules in the system, no thermostat is run.  Instead, the temperature is
+      // determined by looking at the kinetic energy of the molecules, and that value is used to determine the new
       // system temperature set point.  However, sometimes the calculation can return some unexpected results,
       // probably due to some of the energy being tied up in potential rather than kinetic energy, so there are some
       // constraints here. See https://github.com/phetsims/states-of-matter/issues/169 for more information.
@@ -1089,7 +1089,7 @@ class MultipleParticleModel extends PhetioObject {
 
     // Update the average difference between the set point and the calculated temperature, but only if nothing has
     // happened that may have affected the calculated value or the set point.
-    if ( !temperatureAdjustmentNeeded && !this.particleInjectedThisStep && !this.lidChangedParticleVelocity ) {
+    if ( !temperatureAdjustmentNeeded && !this.moleculeInjectedThisStep && !this.lidChangedParticleVelocity ) {
       this.averageTemperatureDifference.addValue( temperatureSetPoint - calculatedTemperature );
     }
   }
@@ -1108,7 +1108,7 @@ class MultipleParticleModel extends PhetioObject {
     // Determine the number of atoms/molecules to create.  This will be a cube (really a square, since it's 2D, but
     // you get the idea) that takes up a fixed amount of the bottom of the container, so the number of molecules that
     // can fit depends on the size of the individual atom.
-    let numberOfAtoms = Math.pow( Utils.roundSymmetric( PARTICLE_CONTAINER_WIDTH / ( ( OxygenAtom.RADIUS * 2.1 ) * 3 ) ), 2 );
+    let numberOfAtoms = Math.pow( Utils.roundSymmetric( CONTAINER_WIDTH / ( ( OxygenAtom.RADIUS * 2.1 ) * 3 ) ), 2 );
     if ( numberOfAtoms % 2 !== 0 ) {
       numberOfAtoms--;
     }
@@ -1140,11 +1140,11 @@ class MultipleParticleModel extends PhetioObject {
       this.moleculeDataSet.addMolecule( atomPositions, moleculeCenterOfMassPosition, moleculeVelocity, 0, true );
 
       // Add atoms to model set.
-      this.particles.push( new OxygenAtom( 0, 0 ) );
-      this.particles.push( new OxygenAtom( 0, 0 ) );
+      this.atoms.push( new OxygenAtom( 0, 0 ) );
+      this.atoms.push( new OxygenAtom( 0, 0 ) );
     }
 
-    // Initialize the particle positions according the to requested phase.
+    // Initialize the atom positions according the to requested phase.
     this.setPhase( phase );
   }
 
@@ -1164,7 +1164,7 @@ class MultipleParticleModel extends PhetioObject {
     // you get the idea) that takes up a fixed amount of the bottom of the container, so the number of molecules that
     // can fit depends on the size of the individual atom.
     const waterMoleculeDiameter = OxygenAtom.RADIUS * 2.1;
-    const moleculesAcrossBottom = Utils.roundSymmetric( PARTICLE_CONTAINER_WIDTH / ( waterMoleculeDiameter * 1.2 ) );
+    const moleculesAcrossBottom = Utils.roundSymmetric( CONTAINER_WIDTH / ( waterMoleculeDiameter * 1.2 ) );
     const numberOfMolecules = Math.pow( moleculesAcrossBottom / 3, 2 );
 
     // Create the normalized data set for the one-atom-per-molecule case.
@@ -1193,14 +1193,14 @@ class MultipleParticleModel extends PhetioObject {
       this.moleculeDataSet.addMolecule( atomPositions, moleculeCenterOfMassPosition, moleculeVelocity, 0, true );
 
       // Add atoms to model set.
-      this.particles.add( new OxygenAtom( 0, 0 ) );
-      this.particles.add( new HydrogenAtom( 0, 0, true ) );
+      this.atoms.push( new OxygenAtom( 0, 0 ) );
+      this.atoms.push( new HydrogenAtom( 0, 0, true ) );
 
-      // In order to look more varied, some of the hydrogen atoms are set up to render behing the oxygen atom and
+      // In order to look more varied, some of the hydrogen atoms are set up to render behind the oxygen atom and
       // some to render in front of it.
-      this.particles.add( new HydrogenAtom( 0, 0, ( i % 2 === 0 ) ) );
+      this.atoms.push( new HydrogenAtom( 0, 0, ( i % 2 === 0 ) ) );
     }
-    // Initialize the particle positions according the to requested phase.
+    // Initialize the atom positions according the to requested phase.
     this.setPhase( phase );
   }
 
@@ -1258,7 +1258,7 @@ class MultipleParticleModel extends PhetioObject {
 
     // Initialize the number of atoms assuming that the solid form, when made into a square, will consume about 1/3
     // the width of the container.
-    const numberOfAtoms = Math.pow( Utils.roundSymmetric( PARTICLE_CONTAINER_WIDTH / ( ( particleDiameter * 1.05 ) * 3 ) ), 2 );
+    const numberOfAtoms = Math.pow( Utils.roundSymmetric( CONTAINER_WIDTH / ( ( particleDiameter * 1.05 ) * 3 ) ), 2 );
 
     // Create the normalized data set for the one-atom-per-molecule case.
     this.moleculeDataSet = new MoleculeForceAndMotionDataSet( 1 );
@@ -1281,7 +1281,7 @@ class MultipleParticleModel extends PhetioObject {
       // Add the atom to the data set.
       this.moleculeDataSet.addMolecule( atomPositions, moleculeCenterOfMassPosition, moleculeVelocity, 0, true );
 
-      // Add particle to model set.
+      // Add atom to model set.
       var atom;
       if ( substance === SubstanceType.NEON ) {
         atom = new NeonAtom( 0, 0 );
@@ -1295,26 +1295,26 @@ class MultipleParticleModel extends PhetioObject {
       else {
         atom = new NeonAtom( 0, 0 );
       }
-      this.particles.push( atom );
+      this.atoms.push( atom );
     }
 
-    // Initialize the particle positions according the to requested phase.
+    // Initialize the atom positions according the to requested phase.
     this.setPhase( phase );
   }
 
   /**
-   * Set the positions of the non-normalized particles based on the positions of the normalized ones.
+   * Set the positions of the non-normalized molecules based on the positions of the normalized ones.
    * @private
    */
-  syncParticlePositions() {
-    assert && assert( this.moleculeDataSet.numberOfAtoms === this.particles.length,
-      'Inconsistent number of normalized versus non-normalized particles' );
+  syncAtomPositions() {
+    assert && assert( this.moleculeDataSet.numberOfAtoms === this.atoms.length,
+      'Inconsistent number of normalized versus non-normalized atoms' );
     const positionMultiplier = this.particleDiameter;
     const atomPositions = this.moleculeDataSet.atomPositions;
 
     // use a C-style loop for optimal performance
-    for ( let i = 0; i < this.particles.length; i++ ) {
-      this.particles.get( i ).setPosition(
+    for ( let i = 0; i < this.atoms.length; i++ ) {
+      this.atoms.get( i ).setPosition(
         atomPositions[ i ].x * positionMultiplier,
         atomPositions[ i ].y * positionMultiplier
       );
@@ -1404,60 +1404,62 @@ class MultipleParticleModel extends PhetioObject {
       return;
     }
 
-    // Remove any particles that are outside of the container.  We work with the normalized particles for this.
-    let numParticlesOutsideContainer = 0;
-    let firstOutsideParticleIndex;
+    // Remove any molecules that are outside of the container.  We work with the normalized molecules/atoms for this.
+    let numMoleculesOutsideContainer = 0;
+    let firstOutsideMoleculeIndex;
     do {
-      for ( firstOutsideParticleIndex = 0; firstOutsideParticleIndex < this.moleculeDataSet.getNumberOfMolecules();
-            firstOutsideParticleIndex++ ) {
-        const pos = this.moleculeDataSet.getMoleculeCenterOfMassPositions()[ firstOutsideParticleIndex ];
+      for ( firstOutsideMoleculeIndex = 0; firstOutsideMoleculeIndex < this.moleculeDataSet.getNumberOfMolecules();
+            firstOutsideMoleculeIndex++ ) {
+        const pos = this.moleculeDataSet.getMoleculeCenterOfMassPositions()[ firstOutsideMoleculeIndex ];
         if ( pos.x < 0 ||
              pos.x > this.normalizedContainerWidth ||
              pos.y < 0 ||
-             pos.y > PARTICLE_CONTAINER_INITIAL_HEIGHT / this.particleDiameter ) {
-          // This particle is outside of the container.
+             pos.y > CONTAINER_INITIAL_HEIGHT / this.particleDiameter ) {
+
+          // This molecule is outside of the container.
           break;
         }
       }
-      if ( firstOutsideParticleIndex < this.moleculeDataSet.getNumberOfMolecules() ) {
-        // Remove the particle that was found.
-        this.moleculeDataSet.removeMolecule( firstOutsideParticleIndex );
-        numParticlesOutsideContainer++;
-      }
-    } while ( firstOutsideParticleIndex !== this.moleculeDataSet.getNumberOfMolecules() );
+      if ( firstOutsideMoleculeIndex < this.moleculeDataSet.getNumberOfMolecules() ) {
 
-    // Remove enough of the non-normalized particles so that we have the same number as the normalized.  They don't
-    // have to be the same particles since the normalized and non-normalized particles are explicitly synced up
-    // during each model step.
-    for ( let i = 0; i < numParticlesOutsideContainer * this.moleculeDataSet.getAtomsPerMolecule(); i++ ) {
-      this.particles.pop();
+        // Remove the molecule that was found.
+        this.moleculeDataSet.removeMolecule( firstOutsideMoleculeIndex );
+        numMoleculesOutsideContainer++;
+      }
+    } while ( firstOutsideMoleculeIndex !== this.moleculeDataSet.getNumberOfMolecules() );
+
+    // Remove enough of the non-normalized molecules so that we have the same number as the normalized.  They don't
+    // have to be the same atoms since the normalized and non-normalized atoms are explicitly synced up during each
+    // model step.
+    for ( let i = 0; i < numMoleculesOutsideContainer * this.moleculeDataSet.getAtomsPerMolecule(); i++ ) {
+      this.atoms.pop();
     }
 
     // Set the container to be unexploded.
     this.setContainerExploded( false );
 
-    // Set the phase to be gas, since otherwise the extremely high kinetic energy of the particles causes an
-    // unreasonably high temperature for the particles that remain in the container. Doing this generally cools them
+    // Set the phase to be gas, since otherwise the extremely high kinetic energy of the molecules causes an
+    // unreasonably high temperature for the molecules that remain in the container. Doing this generally cools them
     // down into a more manageable state.
-    if ( numParticlesOutsideContainer > 0 ) {
+    if ( numMoleculesOutsideContainer > 0 ) {
       this.phaseStateChanger.setPhase( PhaseStateEnum.GAS );
     }
   }
 
-  getInitialParticleContainerHeight() {
-    return PARTICLE_CONTAINER_INITIAL_HEIGHT;
+  getInitialContainerHeight() {
+    return CONTAINER_INITIAL_HEIGHT;
   }
 
-  getParticleContainerWidth() {
-    return PARTICLE_CONTAINER_WIDTH;
+  getContainerWidth() {
+    return CONTAINER_WIDTH;
   }
 }
 
 
 // static constants
 MultipleParticleModel.MAX_ADJUSTABLE_EPSILON = MAX_ADJUSTABLE_EPSILON;
-MultipleParticleModel.PARTICLE_CONTAINER_WIDTH = PARTICLE_CONTAINER_WIDTH;
-MultipleParticleModel.PARTICLE_CONTAINER_INITIAL_HEIGHT = PARTICLE_CONTAINER_INITIAL_HEIGHT;
+MultipleParticleModel.PARTICLE_CONTAINER_WIDTH = CONTAINER_WIDTH;
+MultipleParticleModel.PARTICLE_CONTAINER_INITIAL_HEIGHT = CONTAINER_INITIAL_HEIGHT;
 MultipleParticleModel.MIN_ALLOWABLE_CONTAINER_HEIGHT = MIN_ALLOWABLE_CONTAINER_HEIGHT;
 
 statesOfMatter.register( 'MultipleParticleModel', MultipleParticleModel );

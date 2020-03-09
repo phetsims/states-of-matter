@@ -51,8 +51,8 @@ function ParticleContainerNode(
   // @private, view bounds for the particle area, everything is basically constructed and positioned based on this
   this.particleAreaViewBounds = new Bounds2(
     modelViewTransform.modelToViewX( 0 ),
-    modelViewTransform.modelToViewY( 0 ) + modelViewTransform.modelToViewDeltaY( multipleParticleModel.getInitialParticleContainerHeight() ),
-    modelViewTransform.modelToViewX( 0 ) + modelViewTransform.modelToViewDeltaX( multipleParticleModel.getParticleContainerWidth() ),
+    modelViewTransform.modelToViewY( 0 ) + modelViewTransform.modelToViewDeltaY( multipleParticleModel.getInitialContainerHeight() ),
+    modelViewTransform.modelToViewX( 0 ) + modelViewTransform.modelToViewDeltaX( multipleParticleModel.getContainerWidth() ),
     modelViewTransform.modelToViewY( 0 )
   );
 
@@ -64,7 +64,7 @@ function ParticleContainerNode(
   // add nodes for the various layers
   const preParticleLayer = new Node();
   this.addChild( preParticleLayer );
-  this.particlesCanvasNode = new ParticleImageCanvasNode( multipleParticleModel.particles, modelViewTransform, {
+  this.particlesCanvasNode = new ParticleImageCanvasNode( multipleParticleModel.atoms, modelViewTransform, {
     canvasBounds: SOMConstants.SCREEN_VIEW_OPTIONS.layoutBounds.dilated( 500, 500 ) // dilation amount empirically determined
   } );
   this.addChild( this.particlesCanvasNode );
@@ -72,7 +72,7 @@ function ParticleContainerNode(
   this.addChild( postParticleLayer );
 
   // set up variables used to create and position the various parts of the container
-  const containerWidthWithMargin = modelViewTransform.modelToViewDeltaX( multipleParticleModel.getParticleContainerWidth() ) +
+  const containerWidthWithMargin = modelViewTransform.modelToViewDeltaX( multipleParticleModel.getContainerWidth() ) +
                                    2 * CONTAINER_X_MARGIN;
   const topEllipseRadiusX = containerWidthWithMargin / 2;
   const topEllipseRadiusY = topEllipseRadiusX * PERSPECTIVE_TILT_FACTOR;
@@ -326,7 +326,7 @@ function ParticleContainerNode(
       return;
     }
 
-    const containerHeight = self.multipleParticleModel.particleContainerHeightProperty.get();
+    const containerHeight = self.multipleParticleModel.containerHeightProperty.get();
 
     if ( !self.multipleParticleModel.isExplodedProperty.get() ) {
       if ( pressureMeter.getRotation() !== 0 ) {
@@ -349,7 +349,7 @@ function ParticleContainerNode(
   }
 
   // Monitor the height of the container in the model and adjust the view when changes occur.
-  multipleParticleModel.particleContainerHeightProperty.link( function( containerHeight, oldContainerHeight ) {
+  multipleParticleModel.containerHeightProperty.link( function( containerHeight, oldContainerHeight ) {
 
     if ( oldContainerHeight ) {
       self.previousContainerViewSize = modelViewTransform.modelToViewDeltaY( oldContainerHeight );
@@ -381,9 +381,9 @@ function ParticleContainerNode(
 
       // return the lid to the top of the container
       containerLid.setRotation( 0 );
-      containerLid.centerX = modelViewTransform.modelToViewX( multipleParticleModel.getParticleContainerWidth() / 2 );
+      containerLid.centerX = modelViewTransform.modelToViewX( multipleParticleModel.getContainerWidth() / 2 );
       containerLid.centerY = modelViewTransform.modelToViewY(
-        multipleParticleModel.particleContainerHeightProperty.get()
+        multipleParticleModel.containerHeightProperty.get()
       );
 
       // return the pressure gauge to its original position

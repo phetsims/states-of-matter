@@ -54,8 +54,8 @@ function StatesScreenView( multipleParticleModel, tandem ) {
   // Figure out where in the view the interior of the particle container will be.
   const particleContainerViewBounds = new Bounds2(
     modelViewTransform.modelToViewX( 0 ),
-    modelViewTransform.modelToViewY( 0 ) + modelViewTransform.modelToViewDeltaY( multipleParticleModel.getInitialParticleContainerHeight() ),
-    modelViewTransform.modelToViewX( 0 ) + modelViewTransform.modelToViewDeltaX( multipleParticleModel.getParticleContainerWidth() ),
+    modelViewTransform.modelToViewY( 0 ) + modelViewTransform.modelToViewDeltaY( multipleParticleModel.getInitialContainerHeight() ),
+    modelViewTransform.modelToViewX( 0 ) + modelViewTransform.modelToViewDeltaX( multipleParticleModel.getContainerWidth() ),
     modelViewTransform.modelToViewY( 0 )
   );
 
@@ -82,7 +82,7 @@ function StatesScreenView( multipleParticleModel, tandem ) {
   // the thermometer node should be at the top left of the container
   const thermometerInitialCenterPosition = new Vector2(
     particleContainerViewBounds.minX + particleContainerViewBounds.width * 0.2,
-    modelViewTransform.modelToViewY( multipleParticleModel.particleContainerHeightProperty.value )
+    modelViewTransform.modelToViewY( multipleParticleModel.containerHeightProperty.value )
   );
 
   // @private thermometer node
@@ -147,7 +147,7 @@ function StatesScreenView( multipleParticleModel, tandem ) {
 
   // @private
   this.particleContainerHeightPropertyChanged = false;
-  multipleParticleModel.particleContainerHeightProperty.link( function( containerHeight, previousContainerHeight ) {
+  multipleParticleModel.containerHeightProperty.link( function( containerHeight, previousContainerHeight ) {
 
     // set or reset any rotation of the thermometer
     if ( multipleParticleModel.isExplodedProperty.get() ) {
