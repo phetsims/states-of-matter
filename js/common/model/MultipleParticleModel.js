@@ -270,6 +270,18 @@ class MultipleParticleModel extends PhetioObject {
     // perform any phet-io-specific state setting actions
     _.hasIn( window, 'phet.phetIo.phetioEngine' ) && phet.phetIo.phetioEngine.phetioStateEngine.stateSetEmitter.addListener( () => {
 
+      // Do we have the same number of non-normalized atoms as the newly set state indicates?
+      if ( this.moleculeDataSet.numberOfAtoms > this.atoms.length ) {
+
+        // Nope.  Add them.
+        this.addAtomsForCurrentSubstance(
+          ( this.moleculeDataSet.numberOfAtoms - this.atoms.length ) / this.moleculeDataSet.atomsPerMolecule
+        );
+      }
+
+      // prevent any additional molecule injection from occurring later
+      this.numMoleculesAwaitingInjection = 0;
+
       // Though we would like to have 0 here, the step function isn't set up that way, so make it the smallest number
       // possible for this model.
       // TODO: could we do just sync the atoms instead?
@@ -704,48 +716,52 @@ class MultipleParticleModel extends PhetioObject {
     // Position the atoms that comprise the molecules.
     this.atomPositionUpdater.updateAtomPositions( this.moleculeDataSet );
 
-    if ( atomsPerMolecule === 1 ) {
-
-      // Add particle to model set.
-      let particle;
-      switch( this.substanceProperty.get() ) {
-        case SubstanceType.ARGON:
-          particle = new ArgonAtom( 0, 0 );
-          break;
-        case SubstanceType.NEON:
-          particle = new NeonAtom( 0, 0 );
-          break;
-        case SubstanceType.ADJUSTABLE_ATOM:
-          particle = new ConfigurableStatesOfMatterAtom( 0, 0 );
-          break;
-        default:
-          // Use the default.
-          particle = new NeonAtom( 0, 0 );
-          break;
-      }
-      this.atoms.push( particle );
-    }
-    else if ( atomsPerMolecule === 2 ) {
-
-      assert && assert( this.substanceProperty.get() === SubstanceType.DIATOMIC_OXYGEN );
-
-      // Add atoms to model set.
-      this.atoms.push( new OxygenAtom( 0, 0 ) );
-      this.atoms.push( new OxygenAtom( 0, 0 ) );
-    }
-    else if ( atomsPerMolecule === 3 ) {
-
-      assert && assert( this.substanceProperty.get() === SubstanceType.WATER );
-
-      // Add atoms to model set.
-      this.atoms.push( new OxygenAtom( 0, 0 ) );
-      this.atoms.push( new HydrogenAtom( 0, 0, true ) );
-      this.atoms.push( new HydrogenAtom( 0, 0, phet.joist.random.nextDouble() > 0.5 ) );
-    }
+    // add the non-normalized atoms
+    this.addAtomsForCurrentSubstance( 1 );
 
     this.syncAtomPositions();
 
     this.moleculeInjectedThisStep = true;
+  }
+
+  /**
+   * add non-normalized atoms for the specified number of molecules of the current substance
+   * @param {number} numMolecules
+   */
+  addAtomsForCurrentSubstance( numMolecules ) {
+
+    _.times( numMolecules, () => {
+
+      switch( this.substanceProperty.value ) {
+
+        case SubstanceType.ARGON:
+          this.atoms.push( new ArgonAtom( 0, 0 ) );
+          break;
+
+        case SubstanceType.NEON:
+          this.atoms.push( new NeonAtom( 0, 0 ) );
+          break;
+
+        case SubstanceType.ADJUSTABLE_ATOM:
+          this.atoms.push( new ConfigurableStatesOfMatterAtom( 0, 0 ) );
+          break;
+
+        case SubstanceType.DIATOMIC_OXYGEN:
+          this.atoms.push( new OxygenAtom( 0, 0 ) );
+          this.atoms.push( new OxygenAtom( 0, 0 ) );
+          break;
+
+        case SubstanceType.WATER:
+          this.atoms.push( new OxygenAtom( 0, 0 ) );
+          this.atoms.push( new HydrogenAtom( 0, 0, true ) );
+          this.atoms.push( new HydrogenAtom( 0, 0, phet.joist.random.nextDouble() > 0.5 ) );
+          break;
+
+        default:
+          this.atoms.push( new NeonAtom( 0, 0 ) );
+          break;
+      }
+    } );
   }
 
   /**
@@ -1308,7 +1324,8 @@ class MultipleParticleModel extends PhetioObject {
    */
   syncAtomPositions() {
     assert && assert( this.moleculeDataSet.numberOfAtoms === this.atoms.length,
-      'Inconsistent number of normalized versus non-normalized atoms' );
+      'Inconsistent number of normalized versus non-normalized atoms' + ', ' +
+      this.moleculeDataSet.numberOfAtoms + ', ' + this.atoms.length );
     const positionMultiplier = this.particleDiameter;
     const atomPositions = this.moleculeDataSet.atomPositions;
 
