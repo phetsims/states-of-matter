@@ -64,7 +64,7 @@ function ParticleContainerNode(
   // add nodes for the various layers
   const preParticleLayer = new Node();
   this.addChild( preParticleLayer );
-  this.particlesCanvasNode = new ParticleImageCanvasNode( multipleParticleModel.atoms, modelViewTransform, {
+  this.particlesCanvasNode = new ParticleImageCanvasNode( multipleParticleModel.scaledAtoms, modelViewTransform, {
     canvasBounds: SOMConstants.SCREEN_VIEW_OPTIONS.layoutBounds.dilated( 500, 500 ) // dilation amount empirically determined
   } );
   this.addChild( this.particlesCanvasNode );

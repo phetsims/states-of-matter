@@ -24,11 +24,11 @@ import WaterMoleculeStructure from './engine/WaterMoleculeStructure.js';
  */
 function MoleculeForceAndMotionDataSet( atomsPerMolecule ) {
 
-  // @public Attributes that describe the data set as a whole.
+  // @public (read-only) - attributes that describe the data set as a whole
   this.numberOfAtoms = 0;
   this.numberOfMolecules = 0;
 
-  // @public Attributes that apply to all elements of the data set.
+  // @public (read-only) - attributes that apply to all elements of the data set
   this.atomsPerMolecule = atomsPerMolecule;
 
   // convenience variable

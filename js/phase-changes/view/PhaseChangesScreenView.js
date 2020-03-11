@@ -351,7 +351,7 @@ function PhaseChangesScreenView( multipleParticleModel, isInteractionDiagramEnab
     self.updatePhaseDiagram();
   } );
 
-  multipleParticleModel.atoms.lengthProperty.link( function() {
+  multipleParticleModel.scaledAtoms.lengthProperty.link( function() {
     self.updatePhaseDiagram();
   } );
 }
@@ -373,7 +373,7 @@ export default inherit( ScreenView, PhaseChangesScreenView, {
   updatePhaseDiagram: function() {
 
     // If the container has exploded, don't bother showing the dot.
-    if ( this.multipleParticleModel.isExplodedProperty.get() || this.multipleParticleModel.atoms.length === 0 ) {
+    if ( this.multipleParticleModel.isExplodedProperty.get() || this.multipleParticleModel.scaledAtoms.length === 0 ) {
       this.phaseDiagram.setStateMarkerVisible( false );
     }
     else {

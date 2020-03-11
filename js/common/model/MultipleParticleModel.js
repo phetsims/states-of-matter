@@ -205,8 +205,8 @@ class MultipleParticleModel extends PhetioObject {
     // other model attributes
     //-----------------------------------------------------------------------------------------------------------------
 
-    // @public, array containing references to the non-normalized atoms
-    this.atoms = new ObservableArray(); // @public, read-only
+    // @public (read-only) {ObservableArray<SOMAtom>} - array of scaled (i.e. non-normalized) atoms
+    this.scaledAtoms = new ObservableArray();
 
     // @public, data set containing information about the position, motion, and force for the normalized atoms
     this.moleculeDataSet = null;
@@ -270,23 +270,23 @@ class MultipleParticleModel extends PhetioObject {
     // perform any phet-io-specific state setting actions
     _.hasIn( window, 'phet.phetIo.phetioEngine' ) && phet.phetIo.phetioEngine.phetioStateEngine.stateSetEmitter.addListener( () => {
 
-      // Do we have the same number of non-normalized atoms as the newly set state indicates?
-      if ( this.moleculeDataSet.numberOfAtoms > this.atoms.length ) {
-
-        // Nope.  Add them.
-        this.addAtomsForCurrentSubstance(
-          ( this.moleculeDataSet.numberOfAtoms - this.atoms.length ) / this.moleculeDataSet.atomsPerMolecule
-        );
+      // make sure that we have the right number of scaled (i.e. non-normalized) atoms
+      const numberOfNormalizedMolecules = this.moleculeDataSet.numberOfMolecules;
+      const numberOfNonNormalizedMolecules = this.scaledAtoms.length / this.moleculeDataSet.atomsPerMolecule;
+      if ( numberOfNormalizedMolecules > numberOfNonNormalizedMolecules ) {
+        this.addAtomsForCurrentSubstance( numberOfNormalizedMolecules - numberOfNonNormalizedMolecules );
+      }
+      else if ( numberOfNonNormalizedMolecules > numberOfNormalizedMolecules ) {
+        _.times( ( numberOfNonNormalizedMolecules - numberOfNormalizedMolecules ) * this.moleculeDataSet.atomsPerMolecule, () => {
+          this.scaledAtoms.pop();
+        } );
       }
 
-      // prevent any additional molecule injection from occurring later
+      // clear the injection counter - all atoms and molecules should be accounted for at this point
       this.numMoleculesAwaitingInjection = 0;
 
-      // Though we would like to have 0 here, the step function isn't set up that way, so make it the smallest number
-      // possible for this model.
-      // TODO: could we do just sync the atoms instead?
-      // TODO: Is this really the smallest value?
-      this.stepInternal( MAX_PARTICLE_MOTION_TIME_STEP );
+      // synchronize the positions of the scaled atoms to the normalized data set
+      this.syncAtomPositions();
     } );
   }
 
@@ -324,7 +324,7 @@ class MultipleParticleModel extends PhetioObject {
    */
   getTemperatureInKelvin() {
 
-    if ( this.atoms.length === 0 ) {
+    if ( this.scaledAtoms.length === 0 ) {
 
       // temperature is reported as 0 if there are no atoms
       return null;
@@ -735,30 +735,30 @@ class MultipleParticleModel extends PhetioObject {
       switch( this.substanceProperty.value ) {
 
         case SubstanceType.ARGON:
-          this.atoms.push( new ArgonAtom( 0, 0 ) );
+          this.scaledAtoms.push( new ArgonAtom( 0, 0 ) );
           break;
 
         case SubstanceType.NEON:
-          this.atoms.push( new NeonAtom( 0, 0 ) );
+          this.scaledAtoms.push( new NeonAtom( 0, 0 ) );
           break;
 
         case SubstanceType.ADJUSTABLE_ATOM:
-          this.atoms.push( new ConfigurableStatesOfMatterAtom( 0, 0 ) );
+          this.scaledAtoms.push( new ConfigurableStatesOfMatterAtom( 0, 0 ) );
           break;
 
         case SubstanceType.DIATOMIC_OXYGEN:
-          this.atoms.push( new OxygenAtom( 0, 0 ) );
-          this.atoms.push( new OxygenAtom( 0, 0 ) );
+          this.scaledAtoms.push( new OxygenAtom( 0, 0 ) );
+          this.scaledAtoms.push( new OxygenAtom( 0, 0 ) );
           break;
 
         case SubstanceType.WATER:
-          this.atoms.push( new OxygenAtom( 0, 0 ) );
-          this.atoms.push( new HydrogenAtom( 0, 0, true ) );
-          this.atoms.push( new HydrogenAtom( 0, 0, phet.joist.random.nextDouble() > 0.5 ) );
+          this.scaledAtoms.push( new OxygenAtom( 0, 0 ) );
+          this.scaledAtoms.push( new HydrogenAtom( 0, 0, true ) );
+          this.scaledAtoms.push( new HydrogenAtom( 0, 0, phet.joist.random.nextDouble() > 0.5 ) );
           break;
 
         default:
-          this.atoms.push( new NeonAtom( 0, 0 ) );
+          this.scaledAtoms.push( new NeonAtom( 0, 0 ) );
           break;
       }
     } );
@@ -770,7 +770,7 @@ class MultipleParticleModel extends PhetioObject {
   removeAllAtoms() {
 
     // Get rid of any existing atoms from the model set.
-    this.atoms.clear();
+    this.scaledAtoms.clear();
 
     // Get rid of the normalized atoms too.
     this.moleculeDataSet = null;
@@ -1156,8 +1156,8 @@ class MultipleParticleModel extends PhetioObject {
       this.moleculeDataSet.addMolecule( atomPositions, moleculeCenterOfMassPosition, moleculeVelocity, 0, true );
 
       // Add atoms to model set.
-      this.atoms.push( new OxygenAtom( 0, 0 ) );
-      this.atoms.push( new OxygenAtom( 0, 0 ) );
+      this.scaledAtoms.push( new OxygenAtom( 0, 0 ) );
+      this.scaledAtoms.push( new OxygenAtom( 0, 0 ) );
     }
 
     // Initialize the atom positions according the to requested phase.
@@ -1209,12 +1209,12 @@ class MultipleParticleModel extends PhetioObject {
       this.moleculeDataSet.addMolecule( atomPositions, moleculeCenterOfMassPosition, moleculeVelocity, 0, true );
 
       // Add atoms to model set.
-      this.atoms.push( new OxygenAtom( 0, 0 ) );
-      this.atoms.push( new HydrogenAtom( 0, 0, true ) );
+      this.scaledAtoms.push( new OxygenAtom( 0, 0 ) );
+      this.scaledAtoms.push( new HydrogenAtom( 0, 0, true ) );
 
       // In order to look more varied, some of the hydrogen atoms are set up to render behind the oxygen atom and
       // some to render in front of it.
-      this.atoms.push( new HydrogenAtom( 0, 0, ( i % 2 === 0 ) ) );
+      this.scaledAtoms.push( new HydrogenAtom( 0, 0, ( i % 2 === 0 ) ) );
     }
     // Initialize the atom positions according the to requested phase.
     this.setPhase( phase );
@@ -1311,7 +1311,7 @@ class MultipleParticleModel extends PhetioObject {
       else {
         atom = new NeonAtom( 0, 0 );
       }
-      this.atoms.push( atom );
+      this.scaledAtoms.push( atom );
     }
 
     // Initialize the atom positions according the to requested phase.
@@ -1323,15 +1323,17 @@ class MultipleParticleModel extends PhetioObject {
    * @private
    */
   syncAtomPositions() {
-    assert && assert( this.moleculeDataSet.numberOfAtoms === this.atoms.length,
+
+    assert && assert( this.moleculeDataSet.numberOfAtoms === this.scaledAtoms.length,
       'Inconsistent number of normalized versus non-normalized atoms' + ', ' +
-      this.moleculeDataSet.numberOfAtoms + ', ' + this.atoms.length );
+      this.moleculeDataSet.numberOfAtoms + ', ' + this.scaledAtoms.length
+    );
     const positionMultiplier = this.particleDiameter;
     const atomPositions = this.moleculeDataSet.atomPositions;
 
     // use a C-style loop for optimal performance
-    for ( let i = 0; i < this.atoms.length; i++ ) {
-      this.atoms.get( i ).setPosition(
+    for ( let i = 0; i < this.scaledAtoms.length; i++ ) {
+      this.scaledAtoms.get( i ).setPosition(
         atomPositions[ i ].x * positionMultiplier,
         atomPositions[ i ].y * positionMultiplier
       );
@@ -1449,7 +1451,7 @@ class MultipleParticleModel extends PhetioObject {
     // have to be the same atoms since the normalized and non-normalized atoms are explicitly synced up during each
     // model step.
     for ( let i = 0; i < numMoleculesOutsideContainer * this.moleculeDataSet.getAtomsPerMolecule(); i++ ) {
-      this.atoms.pop();
+      this.scaledAtoms.pop();
     }
 
     // Set the container to be unexploded.
