@@ -35,7 +35,9 @@ const kelvinUnitsString = statesOfMatterStrings.kelvinUnits;
 const MAX_LENGTH_TEMPERATURE_TEXT = '99999 ' + celsiusUnitsString;
 const MAX_TEMPERATURE_TEXT_WIDTH = 35; // empirically determined
 const TEMPERATURE_READOUT_FONT = new PhetFont( 11 );
-const TEMPERATURE_UNITS = Enumeration.byKeys( [ 'KELVIN', 'CELSIUS' ] );
+
+// local enum
+const TemperatureUnits = Enumeration.byKeys( [ 'KELVIN', 'CELSIUS' ] );
 
 // clamping the red mercury display at 1000
 const MAX_TEMPERATURE_TO_CLAMP_RED_MERCURY = 1000;
@@ -98,14 +100,14 @@ function CompositeThermometerNode( multipleParticleModel, modelViewTransform, op
 
   // @private
   this.temperatureUnitsProperty = new EnumerationProperty(
-    TEMPERATURE_UNITS,
-    SOMQueryParameters.defaultCelsius ? TEMPERATURE_UNITS.CELSIUS : TEMPERATURE_UNITS.KELVIN,
+    TemperatureUnits,
+    SOMQueryParameters.defaultCelsius ? TemperatureUnits.CELSIUS : TemperatureUnits.KELVIN,
     { tandem: options.tandem.createTandem( 'temperatureUnitsProperty' ) }
   );
   const temperatureComboBox = new ComboBox(
     [
-      new ComboBoxItem( this.temperatureKelvinText, TEMPERATURE_UNITS.KELVIN ),
-      new ComboBoxItem( this.temperatureCelsiusText, TEMPERATURE_UNITS.CELSIUS )
+      new ComboBoxItem( this.temperatureKelvinText, TemperatureUnits.KELVIN ),
+      new ComboBoxItem( this.temperatureCelsiusText, TemperatureUnits.CELSIUS )
     ],
     this.temperatureUnitsProperty,
     this,
