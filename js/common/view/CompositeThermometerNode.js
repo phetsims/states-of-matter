@@ -78,6 +78,7 @@ function CompositeThermometerNode( multipleParticleModel, modelViewTransform, op
     majorTickLength: 8,
     minorTickLength: 4,
     bulbDiameter: 23,
+    glassThickness: 2.5,
     lineWidth: 1.4,
     tubeWidth: 13,
     tubeHeight: 65,
