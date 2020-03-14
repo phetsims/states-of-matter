@@ -18,8 +18,6 @@ import AtomType from '../AtomType.js';
 
 // constants
 
-// TODO - do we need epsilon values for these atoms?
-
 // map of atom types to the attributes needed in this sim, can't use constructor due to limitations in IE
 const MAP_ATOM_TYPE_TO_ATTRIBUTES = new Map(); // {key:AtomType, value:Object}
 MAP_ATOM_TYPE_TO_ATTRIBUTES.set(
@@ -27,7 +25,6 @@ MAP_ATOM_TYPE_TO_ATTRIBUTES.set(
   {
     radius: SOMConstants.NEON_RADIUS, // in picometers
     mass: Element.Ne.atomicWeight, // in atomic mass units,
-    epsilon: 32.8, // epsilon/k-Boltzmann is in Kelvin,
     color: SOMConstants.NEON_COLOR
   }
 );
@@ -36,7 +33,6 @@ MAP_ATOM_TYPE_TO_ATTRIBUTES.set(
   {
     radius: SOMConstants.ARGON_RADIUS, // in picometers
     mass: Element.Ar.atomicWeight, // in atomic mass units,
-    epsilon: NaN, // epsilon/k-Boltzmann is in Kelvin,
     color: SOMConstants.ARGON_COLOR
   }
 );
@@ -45,7 +41,6 @@ MAP_ATOM_TYPE_TO_ATTRIBUTES.set(
   {
     radius: SOMConstants.OXYGEN_RADIUS, // in picometers
     mass: Element.O.atomicWeight, // in atomic mass units,
-    epsilon: NaN, // epsilon/k-Boltzmann is in Kelvin,
     color: SOMConstants.OXYGEN_COLOR
   }
 );
@@ -54,7 +49,6 @@ MAP_ATOM_TYPE_TO_ATTRIBUTES.set(
   {
     radius: SOMConstants.HYDROGEN_RADIUS, // in picometers
     mass: Element.H.atomicWeight, // in atomic mass units,
-    epsilon: NaN, // epsilon/k-Boltzmann is in Kelvin,
     color: SOMConstants.HYDROGEN_COLOR
   }
 );
@@ -63,7 +57,6 @@ MAP_ATOM_TYPE_TO_ATTRIBUTES.set(
   {
     radius: SOMConstants.ADJUSTABLE_ATTRACTION_DEFAULT_RADIUS, // in picometers
     mass: 25, // in atomic mass units,
-    epsilon: SOMConstants.MAX_EPSILON / 2, // epsilon/k-Boltzmann is in Kelvin,
     color: SOMConstants.ADJUSTABLE_ATTRACTION_COLOR
   }
 );
@@ -104,7 +97,6 @@ class SOMAtom {
       this.radius = atomAttributes.radius;
       this.mass = atomAttributes.mass;
       this.color = atomAttributes.color;
-      this.epsilon = atomAttributes.epsilon;
       this.configurationChanged.emit();
     } );
   }
