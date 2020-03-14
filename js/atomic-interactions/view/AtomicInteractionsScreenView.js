@@ -261,7 +261,6 @@ class AtomicInteractionsScreenView extends ScreenView {
    */
   step() {
     this.handlePositionChanged();
-    this.movableParticleNode.step();
   }
 
   /**

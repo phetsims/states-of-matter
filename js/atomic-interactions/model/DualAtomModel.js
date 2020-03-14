@@ -103,7 +103,6 @@ class DualAtomModel {
     this.repulsiveForce = 0;
 
     // @private
-    this.settingBothAtomTypes = false;  // Flag used to prevent getting in disallowed state.
     this.ljPotentialCalculator = new LjPotentialCalculator( SOMConstants.MIN_SIGMA, SOMConstants.MIN_EPSILON );
     this.residualTime = 0; // accumulates dt values not yet applied to model
 
@@ -131,6 +130,9 @@ class DualAtomModel {
       this.resetMovableAtomPos();
       this.updateForces();
     } );
+
+    // update the forces acting on the atoms when the movable atom changes position
+    this.movableAtom.positionProperty.link( this.updateForces.bind( this ) );
 
     // Put the model into its initial state.
     this.reset();
@@ -303,25 +305,9 @@ class DualAtomModel {
       this.residualTime -= modelTimeStep;
     }
 
-    // Update the forces and motion of the atoms.
+    // update the motion of the movable atom
     for ( let i = 0; i < numInternalModelIterations; i++ ) {
-
-      // Execute the force calculation.
-      this.updateForces();
-
-      // Update the motion information.
       this.updateAtomMotion( modelTimeStep );
-    }
-  }
-
-  /**
-   * Called when the movable atom is moved
-   * @public
-   */
-  positionChanged() {
-    if ( this.motionPausedProperty.get() ) {
-      // The user must be moving the atom from the view. Update the forces correspondingly.
-      this.updateForces();
     }
   }
 
