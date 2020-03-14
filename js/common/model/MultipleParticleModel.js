@@ -48,7 +48,11 @@ import MultipleParticleModelIO from './MultipleParticleModelIO.js';
 import HydrogenAtom from './particle/HydrogenAtom.js';
 import SOMAtom from './particle/SOMAtom.js';
 
-// constants (general)
+//---------------------------------------------------------------------------------------------------------------------
+// constants
+//---------------------------------------------------------------------------------------------------------------------
+
+// general constants
 const CONTAINER_WIDTH = 10000; // essentially arbitrary
 const CONTAINER_INITIAL_HEIGHT = 10000;  // essentially arbitrary
 const DEFAULT_SUBSTANCE = SubstanceType.NEON;
@@ -107,6 +111,22 @@ const MAX_ADJUSTABLE_EPSILON = SOMConstants.MAX_ADJUSTABLE_EPSILON;
 // injection and cause high initial velocities.
 const MOLECULE_INJECTION_HOLDOFF_TIME = 0.25; // seconds, empirically determined
 const MAX_MOLECULES_QUEUED_FOR_INJECTION = 3;
+
+// constant table of the sigma values used in the LJ potential calculations for the various substances used in the sim
+// Note: Can't used Map constructor due to lack of support in IE
+const SIGMA_TABLE = new Map();
+SIGMA_TABLE.set( SubstanceType.NEON, SOMConstants.NEON_RADIUS * 2 );
+SIGMA_TABLE.set( SubstanceType.ARGON, SOMConstants.ARGON_RADIUS * 2 );
+SIGMA_TABLE.set( SubstanceType.DIATOMIC_OXYGEN, SOMConstants.SIGMA_FOR_DIATOMIC_OXYGEN );
+SIGMA_TABLE.set( SubstanceType.WATER, SOMConstants.SIGMA_FOR_WATER );
+SIGMA_TABLE.set( SubstanceType.ADJUSTABLE_ATOM, SOMConstants.ADJUSTABLE_ATTRACTION_DEFAULT_RADIUS * 2 );
+
+// constant table of the epsilon values used in the LJ potential calculations for the various substances used in the sim
+const EPSILON_TABLE = new Map();
+EPSILON_TABLE.set( SubstanceType.NEON, InteractionStrengthTable.getInteractionPotential( AtomType.NEON, AtomType.NEON ) );
+EPSILON_TABLE.set( SubstanceType.ARGON, InteractionStrengthTable.getInteractionPotential( AtomType.ARGON, AtomType.ARGON ) );
+EPSILON_TABLE.set( SubstanceType.DIATOMIC_OXYGEN, SOMConstants.EPSILON_FOR_DIATOMIC_OXYGEN );
+EPSILON_TABLE.set( SubstanceType.WATER, SOMConstants.EPSILON_FOR_WATER );
 
 class MultipleParticleModel extends PhetioObject {
 
@@ -528,28 +548,7 @@ class MultipleParticleModel extends PhetioObject {
    * @public
    */
   getSigma() {
-    let sigma;
-    switch( this.substanceProperty.get() ) {
-      case SubstanceType.NEON:
-        sigma = SOMConstants.NEON_RADIUS * 2;
-        break;
-      case SubstanceType.ARGON:
-        sigma = SOMConstants.ARGON_RADIUS * 2;
-        break;
-      case SubstanceType.DIATOMIC_OXYGEN:
-        sigma = SOMConstants.SIGMA_FOR_DIATOMIC_OXYGEN;
-        break;
-      case SubstanceType.WATER:
-        sigma = SOMConstants.SIGMA_FOR_WATER;
-        break;
-      case SubstanceType.ADJUSTABLE_ATOM:
-        sigma = SOMConstants.ADJUSTABLE_ATTRACTION_DEFAULT_RADIUS * 2;
-        break;
-      default:
-        throw( new Error( 'unsupported substance' ) ); // should never happen, debug if it does
-    }
-
-    return sigma;
+    return SIGMA_TABLE.get( this.substanceProperty.value );
   }
 
   /**
@@ -558,27 +557,14 @@ class MultipleParticleModel extends PhetioObject {
    * @public
    */
   getEpsilon() {
+    const substance = this.substanceProperty.value;
     let epsilon;
-    switch( this.substanceProperty.get() ) {
-      case SubstanceType.NEON:
-        epsilon = InteractionStrengthTable.getInteractionPotential( AtomType.NEON, AtomType.NEON );
-        break;
-      case SubstanceType.ARGON:
-        epsilon = InteractionStrengthTable.getInteractionPotential( AtomType.ARGON, AtomType.ARGON );
-        break;
-      case SubstanceType.DIATOMIC_OXYGEN:
-        epsilon = SOMConstants.EPSILON_FOR_DIATOMIC_OXYGEN;
-        break;
-      case SubstanceType.WATER:
-        epsilon = SOMConstants.EPSILON_FOR_WATER;
-        break;
-      case SubstanceType.ADJUSTABLE_ATOM:
-        epsilon = this.convertScaledEpsilonToEpsilon( this.moleculeForceAndMotionCalculator.getScaledEpsilon() );
-        break;
-      default:
-        throw( new Error( 'unsupported substance' ) ); // should never happen, debug if it does
+    if ( substance === SubstanceType.ADJUSTABLE_ATOM ) {
+      epsilon = this.convertScaledEpsilonToEpsilon( this.moleculeForceAndMotionCalculator.getScaledEpsilon() );
     }
-
+    else {
+      epsilon = EPSILON_TABLE.get( substance );
+    }
     return epsilon;
   }
 
