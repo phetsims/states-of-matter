@@ -23,19 +23,30 @@ class MotionAtom {
    * @param {AtomType} initialAtomType - initial type, aka element, for this atom
    * @param {number} initialXPosition - x position in the model, in picometers
    * @param {number} initialYPosition - y position in the model, in picometers
+   * @param {Tandem} tandem
    * @constructor
    */
-  constructor( initialAtomType, initialXPosition, initialYPosition ) {
+  constructor( initialAtomType, initialXPosition, initialYPosition, tandem ) {
 
     // @public {AtomType} - the type of atom being modeled, e.g. Argon, Neon, etc.
-    this.atomTypeProperty = new EnumerationProperty( AtomType, initialAtomType );
+    this.atomTypeProperty = new EnumerationProperty( AtomType, initialAtomType, {
+      tandem: tandem.createTandem( 'atomTypeProperty' )
+    } );
 
     // @private, accessed through getter and setter methods below, see those methods for details
-    this.positionProperty = new Vector2Property( new Vector2( initialXPosition, initialYPosition ) );
+    this.positionProperty = new Vector2Property( new Vector2( initialXPosition, initialYPosition ), {
+      tandem: tandem.createTandem( 'positionProperty' )
+    } );
 
-    // @private, accessed through the getter/setter methods below, this are not properties in order to improve performance
-    this.velocityProperty = new Vector2Property( Vector2.ZERO );
-    this.accelerationProperty = new Vector2Property( Vector2.ZERO );
+    // @private, accessed through the getter/setter methods below
+    this.velocityProperty = new Vector2Property( Vector2.ZERO, {
+      tandem: tandem.createTandem( 'velocityProperty' )
+    } );
+
+    // @private, accessed through the getter/setter methods below
+    this.accelerationProperty = new Vector2Property( Vector2.ZERO, {
+      tandem: tandem.createTandem( 'accelerationProperty' )
+    } );
 
     // @public {listen-only} - an emitter that indicates that the configuration of this atom have changed, done as an
     // emitter so that the view doesn't have to monitor a set of properties that all change at once
@@ -64,11 +75,7 @@ class MotionAtom {
    * @constructor
    */
   setPosition( x, y ) {
-
-    // use pools for better performance, this is why the methods need to be used instead of direct value setting
-    const previousPosition = this.positionProperty.value;
-    this.positionProperty.set( Vector2.createFromPool( x, y ) );
-    previousPosition.freeToPool();
+    this.positionProperty.set( new Vector2( x, y ) );
   }
 
   /**
@@ -161,6 +168,14 @@ class MotionAtom {
   setRadius( radius ) {
     this.radius = radius;
     this.configurationChanged.emit();
+  }
+
+  reset() {
+    this.atomTypeProperty.reset();
+    this.positionProperty.reset();
+    this.velocityProperty.reset();
+    this.accelerationProperty.reset();
+
   }
 }
 

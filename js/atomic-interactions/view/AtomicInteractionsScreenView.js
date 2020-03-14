@@ -234,7 +234,7 @@ class AtomicInteractionsScreenView extends ScreenView {
     } );
 
     // update the push pin position if the adjustable atom diameter changes
-    dualAtomModel.atomDiameterProperty.link( function() {
+    dualAtomModel.adjustableAtomDiameterProperty.link( function() {
       self.updatePushPinPosition();
     } );
 
@@ -249,7 +249,7 @@ class AtomicInteractionsScreenView extends ScreenView {
     } );
 
     // monitor the atom diameter and trigger updates when changes occur
-    dualAtomModel.atomDiameterProperty.link( function() {
+    dualAtomModel.adjustableAtomDiameterProperty.link( function() {
       self.updateMinimumXForMovableAtom();
       self.updateHandPosition();
     } );
@@ -370,16 +370,14 @@ class AtomicInteractionsScreenView extends ScreenView {
    * @public
    */
   updateMinimumXForMovableAtom() {
-    if ( this.movableParticle !== null && this.fixedParticle !== null ) {
 
-      // Use a minimum X value that is just a bit less than the sigma value, since the repulsive potential goes up
-      // rapidly with smaller values.
-      const minXInModel = this.dualAtomModel.getSigma() * 0.9;
-      this.interactiveInteractionPotentialDiagram.setMinXForAtom( minXInModel );
-      const minXInView = this.modelViewTransform.modelToViewX( minXInModel );
-      this.movableParticleNode.setMinX( minXInView );
-      this.handNode.setMinX( minXInView );
-    }
+    // Use a minimum X value that is just a bit less than the sigma value, since the repulsive potential goes up
+    // rapidly with smaller values.
+    const minXInModel = this.dualAtomModel.getSigma() * 0.9;
+    this.interactiveInteractionPotentialDiagram.setMinXForAtom( minXInModel );
+    const minXInView = this.modelViewTransform.modelToViewX( minXInModel );
+    this.movableParticleNode.setMinX( minXInView );
+    this.handNode.setMinX( minXInView );
   }
 
   /**

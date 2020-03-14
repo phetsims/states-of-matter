@@ -22,7 +22,6 @@ import ForceDisplayMode from './ForceDisplayMode.js';
 import MotionAtom from './MotionAtom.js';
 
 // constants
-const DEFAULT_ATOM_TYPE = AtomType.NEON;
 
 // using normal dt values results in motion that is a bit slow, these multipliers are used to adjust that
 const NORMAL_MOTION_TIME_MULTIPLIER = 2;
@@ -72,8 +71,8 @@ class DualAtomModel {
     } );
 
     // @public (read-write) - diameter of the adjustable atoms
-    this.atomDiameterProperty = new NumberProperty( 300, {
-      tandem: tandem.createTandem( 'atomDiameterProperty' ),
+    this.adjustableAtomDiameterProperty = new NumberProperty( 300, {
+      tandem: tandem.createTandem( 'adjustableAtomDiameterProperty' ),
       phetioReadOnly: true
     } );
 
@@ -97,8 +96,8 @@ class DualAtomModel {
     //-----------------------------------------------------------------------------------------------------------------
 
     // @public, read only
-    this.fixedAtom = new MotionAtom( AtomType.NEON, 0, 0 );
-    this.movableAtom = new MotionAtom( AtomType.NEON, 0, 0 );
+    this.fixedAtom = new MotionAtom( AtomType.NEON, 0, 0, tandem.createTandem( 'fixedAtom' ) );
+    this.movableAtom = new MotionAtom( AtomType.NEON, 0, 0, tandem.createTandem( 'movableAtom' ) );
     this.attractiveForce = 0;
     this.repulsiveForce = 0;
 
@@ -109,6 +108,11 @@ class DualAtomModel {
     //-----------------------------------------------------------------------------------------------------------------
     // other initialization
     //-----------------------------------------------------------------------------------------------------------------
+
+    // for phet-io
+    this.isPhetioSettingStateProperty = _.hasIn( window, 'phet.phetIo.phetioEngine' ) ?
+                                        phet.phetIo.phetioEngine.phetioStateEngine.isSettingStateProperty :
+                                        new BooleanProperty( false );
 
     // update the atom pair when the atom pair property is set
     this.atomPairProperty.link( atomPair => {
@@ -126,16 +130,16 @@ class DualAtomModel {
       }
 
       // reset other initial state variables
-      this.fixedAtom.setPosition( 0, 0 );
-      this.resetMovableAtomPos();
+      if ( !this.isPhetioSettingStateProperty.value ) {
+
+        // only reset position if this is not a phet-io state update, otherwise this overwrites particle position
+        this.resetMovableAtomPos();
+      }
       this.updateForces();
     } );
 
     // update the forces acting on the atoms when the movable atom changes position
     this.movableAtom.positionProperty.link( this.updateForces.bind( this ) );
-
-    // Put the model into its initial state.
-    this.reset();
   }
 
   /**
@@ -157,9 +161,13 @@ class DualAtomModel {
         sigma = SOMConstants.MIN_SIGMA;
       }
       this.ljPotentialCalculator.setSigma( sigma );
-      this.movableAtom.setPosition( this.ljPotentialCalculator.calculateMinimumForceDistance(), 0 );
       this.fixedAtom.setRadius( sigma / 2 );
       this.movableAtom.setRadius( sigma / 2 );
+
+      // move the atom to the minimum force distance from the fixed atom (but not if this is a phet-io state update)
+      if ( !this.isPhetioSettingStateProperty.value ) {
+        this.movableAtom.setPosition( this.ljPotentialCalculator.calculateMinimumForceDistance(), 0 );
+      }
     }
   }
 
@@ -226,22 +234,13 @@ class DualAtomModel {
     this.atomPairProperty.reset();
     this.isPlayingProperty.reset();
     this.isSlowMotionProperty.reset();
-    this.atomDiameterProperty.reset();
+    this.adjustableAtomDiameterProperty.reset();
     this.forcesDisplayModeProperty.reset();
     this.forcesControlPanelExpandedProperty.reset();
     this.movementHintVisibleProperty.reset();
-
-    // set the default atom types
-    if ( this.fixedAtom === null || this.fixedAtom.getType() !== DEFAULT_ATOM_TYPE ||
-         this.movableAtom === null || this.movableAtom.getType() !== DEFAULT_ATOM_TYPE ) {
-      this.setBothAtomTypes( DEFAULT_ATOM_TYPE );
-    }
-    else {
-      this.resetMovableAtomPos();
-    }
-
-    // make sure we are not paused
-    this.motionPausedProperty.set( false );
+    this.fixedAtom.reset();
+    this.movableAtom.reset();
+    this.resetMovableAtomPos();
   }
 
   /**
