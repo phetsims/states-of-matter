@@ -1,67 +1,23 @@
-// Copyright 2014-2020, University of Colorado Boulder
+// Copyright 2020, University of Colorado Boulder
 
 /**
- * model of an atom with the attributes needed by the States of Matter simulation
+ * MotionAtom is a model of an atom with Axon Property values that track position, velocity, and acceleration, as well
+ * as other attributes that needed by the Atomic Interactions screen.
  *
- * @author Aaron Davis
  * @author John Blanco
  */
 
-import Emitter from '../../../../../axon/js/Emitter.js';
-import EnumerationProperty from '../../../../../axon/js/EnumerationProperty.js';
-import Vector2 from '../../../../../dot/js/Vector2.js';
-import Vector2Property from '../../../../../dot/js/Vector2Property.js';
-import Element from '../../../../../nitroglycerin/js/Element.js';
-import statesOfMatter from '../../../statesOfMatter.js';
-import SOMConstants from '../../SOMConstants.js';
-import AtomType from '../AtomType.js';
+import Emitter from '../../../../axon/js/Emitter.js';
+import EnumerationProperty from '../../../../axon/js/EnumerationProperty.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
+import Vector2Property from '../../../../dot/js/Vector2Property.js';
+import statesOfMatter from '../../statesOfMatter.js';
+import SOMConstants from '../../common/SOMConstants.js';
+import AtomType from '../../common/model/AtomType.js';
 
 // constants
 
-// map of atom types to the attributes needed in this sim, can't use constructor due to limitations in IE
-const MAP_ATOM_TYPE_TO_ATTRIBUTES = new Map(); // {key:AtomType, value:Object}
-MAP_ATOM_TYPE_TO_ATTRIBUTES.set(
-  AtomType.NEON,
-  {
-    radius: SOMConstants.NEON_RADIUS, // in picometers
-    mass: Element.Ne.atomicWeight, // in atomic mass units,
-    color: SOMConstants.NEON_COLOR
-  }
-);
-MAP_ATOM_TYPE_TO_ATTRIBUTES.set(
-  AtomType.ARGON,
-  {
-    radius: SOMConstants.ARGON_RADIUS, // in picometers
-    mass: Element.Ar.atomicWeight, // in atomic mass units,
-    color: SOMConstants.ARGON_COLOR
-  }
-);
-MAP_ATOM_TYPE_TO_ATTRIBUTES.set(
-  AtomType.OXYGEN,
-  {
-    radius: SOMConstants.OXYGEN_RADIUS, // in picometers
-    mass: Element.O.atomicWeight, // in atomic mass units,
-    color: SOMConstants.OXYGEN_COLOR
-  }
-);
-MAP_ATOM_TYPE_TO_ATTRIBUTES.set(
-  AtomType.HYDROGEN,
-  {
-    radius: SOMConstants.HYDROGEN_RADIUS, // in picometers
-    mass: Element.H.atomicWeight, // in atomic mass units,
-    color: SOMConstants.HYDROGEN_COLOR
-  }
-);
-MAP_ATOM_TYPE_TO_ATTRIBUTES.set(
-  AtomType.ADJUSTABLE,
-  {
-    radius: SOMConstants.ADJUSTABLE_ATTRACTION_DEFAULT_RADIUS, // in picometers
-    mass: 25, // in atomic mass units,
-    color: SOMConstants.ADJUSTABLE_ATTRACTION_COLOR
-  }
-);
-
-class SOMAtom {
+class MotionAtom {
 
   /**
    * @param {AtomType} initialAtomType - initial type, aka element, for this atom
@@ -78,8 +34,8 @@ class SOMAtom {
     this.positionProperty = new Vector2Property( new Vector2( initialXPosition, initialYPosition ) );
 
     // @private, accessed through the getter/setter methods below, this are not properties in order to improve performance
-    this.velocity = new Vector2( 0, 0 );
-    this.acceleration = new Vector2( 0, 0 );
+    this.velocityProperty = new Vector2Property( Vector2.ZERO );
+    this.accelerationProperty = new Vector2Property( Vector2.ZERO );
 
     // @public {listen-only} - an emitter that indicates that the configuration of this atom have changed, done as an
     // emitter so that the view doesn't have to monitor a set of properties that all change at once
@@ -93,7 +49,7 @@ class SOMAtom {
 
     // update the attributes if and when the atom type changes
     this.atomTypeProperty.link( atomType => {
-      const atomAttributes = MAP_ATOM_TYPE_TO_ATTRIBUTES.get( atomType );
+      const atomAttributes = SOMConstants.MAP_ATOM_TYPE_TO_ATTRIBUTES.get( atomType );
       this.radius = atomAttributes.radius;
       this.mass = atomAttributes.mass;
       this.color = atomAttributes.color;
@@ -116,39 +72,11 @@ class SOMAtom {
   }
 
   /**
-   * @param other
-   * @returns {boolean}
-   * @public
-   */
-  equals( other ) {
-    if ( this === other ) {
-      return true;
-    }
-    if ( this.mass !== other.mass ) {
-      return false;
-    }
-    if ( this.radius !== other.radius ) {
-      return false;
-    }
-    if ( !this.velocity.equals( other.velocity ) ) {
-      return false;
-    }
-    if ( !this.positionProperty.equals( other.positionProperty ) ) {
-      return false;
-    }
-    else if ( !this.acceleration.equals( other.acceleration ) ) {
-      return false;
-    }
-
-    return true;
-  }
-
-  /**
    * @returns {number}
    * @public
    */
   getVy() {
-    return this.velocity.y;
+    return this.velocityProperty.value.y;
   }
 
   /**
@@ -156,7 +84,7 @@ class SOMAtom {
    * @public
    */
   setVy( vy ) {
-    this.velocity.setY( vy );
+    this.velocityProperty.set( new Vector2( this.velocityProperty.value.x, vy ) );
   }
 
   /**
@@ -164,14 +92,14 @@ class SOMAtom {
    * @public
    */
   getVx() {
-    return this.velocity.x;
+    return this.velocityProperty.value.x;
   }
 
   /**
    * @param {number} vx - atom velocity in x-direction
    */
   setVx( vx ) {
-    this.velocity.setX( vx );
+    this.velocityProperty.set( new Vector2( vx, this.velocityProperty.value.y ) );
   }
 
   /**
@@ -179,7 +107,7 @@ class SOMAtom {
    * @public
    */
   getAx() {
-    return this.acceleration.x;
+    return this.accelerationProperty.value.x;
   }
 
   /**
@@ -187,7 +115,7 @@ class SOMAtom {
    * @public
    */
   getAy() {
-    return this.acceleration.y;
+    return this.accelerationProperty.value.y;
   }
 
   /**
@@ -195,7 +123,7 @@ class SOMAtom {
    * @public
    */
   setAx( ax ) {
-    this.acceleration.setX( ax );
+    this.accelerationProperty.set( new Vector2( ax, this.accelerationProperty.value.y ) );
   }
 
   /**
@@ -203,7 +131,7 @@ class SOMAtom {
    * @public
    */
   setAy( ay ) {
-    this.acceleration.setY( ay );
+    this.accelerationProperty.set( new Vector2( this.accelerationProperty.value.x, ay ) );
   }
 
   /**
@@ -236,5 +164,5 @@ class SOMAtom {
   }
 }
 
-statesOfMatter.register( 'SOMAtom', SOMAtom );
-export default SOMAtom;
+statesOfMatter.register( 'MotionAtom', MotionAtom );
+export default MotionAtom;

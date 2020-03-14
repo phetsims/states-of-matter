@@ -46,7 +46,7 @@ import MoleculeForceAndMotionDataSet from './MoleculeForceAndMotionDataSet.js';
 import MovingAverage from './MovingAverage.js';
 import MultipleParticleModelIO from './MultipleParticleModelIO.js';
 import HydrogenAtom from './particle/HydrogenAtom.js';
-import SOMAtom from './particle/SOMAtom.js';
+import ScaledAtom from './particle/ScaledAtom.js';
 
 //---------------------------------------------------------------------------------------------------------------------
 // constants
@@ -222,7 +222,7 @@ class MultipleParticleModel extends PhetioObject {
     // other model attributes
     //-----------------------------------------------------------------------------------------------------------------
 
-    // @public (read-only) {ObservableArray<SOMAtom>} - array of scaled (i.e. non-normalized) atoms
+    // @public (read-only) {ObservableArray<ScaledAtom>} - array of scaled (i.e. non-normalized) atoms
     this.scaledAtoms = new ObservableArray();
 
     // @public, data set containing information about the position, motion, and force for the normalized atoms
@@ -718,30 +718,30 @@ class MultipleParticleModel extends PhetioObject {
       switch( this.substanceProperty.value ) {
 
         case SubstanceType.ARGON:
-          this.scaledAtoms.push( new SOMAtom( AtomType.ARGON, 0, 0 ) );
+          this.scaledAtoms.push( new ScaledAtom( AtomType.ARGON, 0, 0 ) );
           break;
 
         case SubstanceType.NEON:
-          this.scaledAtoms.push( new SOMAtom( AtomType.NEON, 0, 0 ) );
+          this.scaledAtoms.push( new ScaledAtom( AtomType.NEON, 0, 0 ) );
           break;
 
         case SubstanceType.ADJUSTABLE_ATOM:
-          this.scaledAtoms.push( new SOMAtom( AtomType.ADJUSTABLE, 0, 0 ) );
+          this.scaledAtoms.push( new ScaledAtom( AtomType.ADJUSTABLE, 0, 0 ) );
           break;
 
         case SubstanceType.DIATOMIC_OXYGEN:
-          this.scaledAtoms.push( new SOMAtom( AtomType.OXYGEN, 0, 0 ) );
-          this.scaledAtoms.push( new SOMAtom( AtomType.OXYGEN, 0, 0 ) );
+          this.scaledAtoms.push( new ScaledAtom( AtomType.OXYGEN, 0, 0 ) );
+          this.scaledAtoms.push( new ScaledAtom( AtomType.OXYGEN, 0, 0 ) );
           break;
 
         case SubstanceType.WATER:
-          this.scaledAtoms.push( new SOMAtom( AtomType.OXYGEN, 0, 0 ) );
+          this.scaledAtoms.push( new ScaledAtom( AtomType.OXYGEN, 0, 0 ) );
           this.scaledAtoms.push( new HydrogenAtom( 0, 0, true ) );
           this.scaledAtoms.push( new HydrogenAtom( 0, 0, phet.joist.random.nextDouble() > 0.5 ) );
           break;
 
         default:
-          this.scaledAtoms.push( new SOMAtom( AtomType.NEON, 0, 0 ) );
+          this.scaledAtoms.push( new ScaledAtom( AtomType.NEON, 0, 0 ) );
           break;
       }
     } );
@@ -1139,8 +1139,8 @@ class MultipleParticleModel extends PhetioObject {
       this.moleculeDataSet.addMolecule( atomPositions, moleculeCenterOfMassPosition, moleculeVelocity, 0, true );
 
       // Add atoms to model set.
-      this.scaledAtoms.push( new SOMAtom( AtomType.OXYGEN, 0, 0 ) );
-      this.scaledAtoms.push( new SOMAtom( AtomType.OXYGEN, 0, 0 ) );
+      this.scaledAtoms.push( new ScaledAtom( AtomType.OXYGEN, 0, 0 ) );
+      this.scaledAtoms.push( new ScaledAtom( AtomType.OXYGEN, 0, 0 ) );
     }
 
     // Initialize the atom positions according the to requested phase.
@@ -1192,7 +1192,7 @@ class MultipleParticleModel extends PhetioObject {
       this.moleculeDataSet.addMolecule( atomPositions, moleculeCenterOfMassPosition, moleculeVelocity, 0, true );
 
       // Add atoms to model set.
-      this.scaledAtoms.push( new SOMAtom( AtomType.OXYGEN, 0, 0 ) );
+      this.scaledAtoms.push( new ScaledAtom( AtomType.OXYGEN, 0, 0 ) );
       this.scaledAtoms.push( new HydrogenAtom( 0, 0, true ) );
 
       // In order to look more varied, some of the hydrogen atoms are set up to render behind the oxygen atom and
@@ -1283,16 +1283,16 @@ class MultipleParticleModel extends PhetioObject {
       // Add atom to model set.
       var atom;
       if ( substance === SubstanceType.NEON ) {
-        atom = new SOMAtom( AtomType.NEON, 0, 0 );
+        atom = new ScaledAtom( AtomType.NEON, 0, 0 );
       }
       else if ( substance === SubstanceType.ARGON ) {
-        atom = new SOMAtom( AtomType.ARGON, 0, 0 );
+        atom = new ScaledAtom( AtomType.ARGON, 0, 0 );
       }
       else if ( substance === SubstanceType.ADJUSTABLE_ATOM ) {
-        atom = new SOMAtom( AtomType.ADJUSTABLE, 0, 0 );
+        atom = new ScaledAtom( AtomType.ADJUSTABLE, 0, 0 );
       }
       else {
-        atom = new SOMAtom( AtomType.NEON, 0, 0 );
+        atom = new ScaledAtom( AtomType.NEON, 0, 0 );
       }
       this.scaledAtoms.push( atom );
     }

@@ -20,7 +20,7 @@ const MVT_SCALE = 0.25;
 const OVERLAP_ENLARGEMENT_FACTOR = 1.25;
 
 /**
- * @param {SOMAtom} particle  - The particle in the model that this node will represent in the view.
+ * @param {ScaledAtom} particle  - The particle in the model that this node will represent in the view.
  * @param {ModelViewTransform2} modelViewTransform to convert between model and view co-ordinates
  * The gradient is computationally intensive to create, so use only when needed.
  * @param {boolean} enableOverlap - true if the node should be larger than the actual particle, thus allowing particles

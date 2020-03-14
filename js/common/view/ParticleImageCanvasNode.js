@@ -130,8 +130,8 @@ export default inherit( CanvasNode, ParticleImageCanvasNode, {
       this.useStrokedParticles ? PARTICLE_IMAGE_CANVAS_LENGTH : 0,
       PARTICLE_IMAGE_CANVAS_LENGTH,
       PARTICLE_IMAGE_CANVAS_LENGTH,
-      this.modelViewTransform.modelToViewX( particle.positionProperty.value.x ) - particleViewRadius,
-      this.modelViewTransform.modelToViewY( particle.positionProperty.value.y ) - particleViewRadius,
+      this.modelViewTransform.modelToViewX( particle.getX() ) - particleViewRadius,
+      this.modelViewTransform.modelToViewY( particle.getY() ) - particleViewRadius,
       particleViewRadius * 2,
       particleViewRadius * 2
     );

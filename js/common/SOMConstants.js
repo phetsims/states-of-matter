@@ -12,11 +12,65 @@ import Bounds2 from '../../../dot/js/Bounds2.js';
 import Element from '../../../nitroglycerin/js/Element.js';
 import Color from '../../../scenery/js/util/Color.js';
 import statesOfMatter from '../statesOfMatter.js';
+import AtomType from './model/AtomType.js';
 
 // constants (these are vars because other constants refer to them)
 const SOLID_TEMPERATURE = 0.15;
 const NEON_ATOM_EPSILON = 32.8; // epsilon/k-Boltzmann is in Kelvin.
 const EPSILON_FOR_WATER = 200; // epsilon/k-Boltzmann is in Kelvin.
+const NEON_RADIUS = Element.Ne.vanDerWaalsRadius;
+const ARGON_RADIUS = Element.Ar.vanDerWaalsRadius;
+const OXYGEN_RADIUS = Element.O.vanDerWaalsRadius;
+const HYDROGEN_RADIUS = Element.H.vanDerWaalsRadius;
+const ADJUSTABLE_ATTRACTION_DEFAULT_RADIUS = 175;
+const OXYGEN_COLOR = new Color( Element.O.color );
+const NEON_COLOR = new Color( Element.Ne.color );
+const ARGON_COLOR = new Color( Element.Ar.color );
+const HYDROGEN_COLOR = new Color( Element.H.color );
+const ADJUSTABLE_ATTRACTION_COLOR = new Color( '#CC66CC' );
+
+// set up map of atom types to attributes, can't use constructor due to lack of support in IE
+const MAP_ATOM_TYPE_TO_ATTRIBUTES = new Map(); // {key:AtomType, value:Object}
+MAP_ATOM_TYPE_TO_ATTRIBUTES.set(
+  AtomType.NEON,
+  {
+    radius: NEON_RADIUS, // in picometers
+    mass: Element.Ne.atomicWeight, // in atomic mass units,
+    color: NEON_COLOR
+  }
+);
+MAP_ATOM_TYPE_TO_ATTRIBUTES.set(
+  AtomType.ARGON,
+  {
+    radius: ARGON_RADIUS, // in picometers
+    mass: Element.Ar.atomicWeight, // in atomic mass units,
+    color: ARGON_COLOR
+  }
+);
+MAP_ATOM_TYPE_TO_ATTRIBUTES.set(
+  AtomType.OXYGEN,
+  {
+    radius: OXYGEN_RADIUS, // in picometers
+    mass: Element.O.atomicWeight, // in atomic mass units,
+    color: OXYGEN_COLOR
+  }
+);
+MAP_ATOM_TYPE_TO_ATTRIBUTES.set(
+  AtomType.HYDROGEN,
+  {
+    radius: HYDROGEN_RADIUS, // in picometers
+    mass: Element.H.atomicWeight, // in atomic mass units,
+    color: HYDROGEN_COLOR
+  }
+);
+MAP_ATOM_TYPE_TO_ATTRIBUTES.set(
+  AtomType.ADJUSTABLE,
+  {
+    radius: ADJUSTABLE_ATTRACTION_DEFAULT_RADIUS, // in picometers
+    mass: 25, // in atomic mass units,
+    color: ADJUSTABLE_ATTRACTION_COLOR
+  }
+);
 
 const SOMConstants = {
 
@@ -69,18 +123,18 @@ const SOMConstants = {
   DIATOMIC_PARTICLE_DISTANCE: 0.9,  // In particle diameters.
 
   // atom colors
-  OXYGEN_COLOR: new Color( Element.O.color ),
-  NEON_COLOR: new Color( Element.Ne.color ),
-  ARGON_COLOR: new Color( Element.Ar.color ),
-  HYDROGEN_COLOR: new Color( Element.H.color ),
-  ADJUSTABLE_ATTRACTION_COLOR: new Color( '#CC66CC' ),
+  OXYGEN_COLOR: OXYGEN_COLOR,
+  NEON_COLOR: NEON_COLOR,
+  ARGON_COLOR: ARGON_COLOR,
+  HYDROGEN_COLOR: HYDROGEN_COLOR,
+  ADJUSTABLE_ATTRACTION_COLOR: ADJUSTABLE_ATTRACTION_COLOR,
 
   // atom radii, in picometers
-  OXYGEN_RADIUS: Element.O.vanDerWaalsRadius,
-  NEON_RADIUS: Element.Ne.vanDerWaalsRadius,
-  ARGON_RADIUS: Element.Ar.vanDerWaalsRadius,
-  HYDROGEN_RADIUS: Element.H.vanDerWaalsRadius,
-  ADJUSTABLE_ATTRACTION_DEFAULT_RADIUS: 175,
+  OXYGEN_RADIUS: OXYGEN_RADIUS,
+  NEON_RADIUS: NEON_RADIUS,
+  ARGON_RADIUS: ARGON_RADIUS,
+  HYDROGEN_RADIUS: HYDROGEN_RADIUS,
+  ADJUSTABLE_ATTRACTION_DEFAULT_RADIUS: ADJUSTABLE_ATTRACTION_DEFAULT_RADIUS,
 
   // adjustable attraction min and max epsilon values, chosen empirically based on how the interaction looks
   MIN_ADJUSTABLE_EPSILON: ( 1.5 * NEON_ATOM_EPSILON ),
@@ -94,6 +148,9 @@ const SOMConstants = {
   LIQUID_TEMPERATURE: 0.34,
   GAS_TEMPERATURE: 1.0,
   INITIAL_TEMPERATURE: SOLID_TEMPERATURE,
+
+  // map of atom types to the attributes needed in this sim, can't use constructor due to limitations in IE
+  MAP_ATOM_TYPE_TO_ATTRIBUTES: MAP_ATOM_TYPE_TO_ATTRIBUTES,
 
   // misc
   RESET_ALL_BUTTON_RADIUS: 17,

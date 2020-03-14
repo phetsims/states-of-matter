@@ -14,12 +14,12 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import AtomType from '../../common/model/AtomType.js';
 import InteractionStrengthTable from '../../common/model/InteractionStrengthTable.js';
 import LjPotentialCalculator from '../../common/model/LjPotentialCalculator.js';
-import SOMAtom from '../../common/model/particle/SOMAtom.js';
 import SigmaTable from '../../common/model/SigmaTable.js';
 import SOMConstants from '../../common/SOMConstants.js';
 import statesOfMatter from '../../statesOfMatter.js';
 import AtomPair from './AtomPair.js';
 import ForceDisplayMode from './ForceDisplayMode.js';
+import MotionAtom from './MotionAtom.js';
 
 // constants
 const DEFAULT_ATOM_TYPE = AtomType.NEON;
@@ -97,8 +97,8 @@ class DualAtomModel {
     //-----------------------------------------------------------------------------------------------------------------
 
     // @public, read only
-    this.fixedAtom = new SOMAtom( AtomType.NEON, 0, 0 );
-    this.movableAtom = new SOMAtom( AtomType.NEON, 0, 0 );
+    this.fixedAtom = new MotionAtom( AtomType.NEON, 0, 0 );
+    this.movableAtom = new MotionAtom( AtomType.NEON, 0, 0 );
     this.attractiveForce = 0;
     this.repulsiveForce = 0;
 

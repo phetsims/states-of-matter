@@ -15,7 +15,7 @@ import ParticleForceNode from './ParticleForceNode.js';
 
 /**
  * @param {DualAtomModel} dualAtomModel - model of the simulation
- * @param {SOMAtom} particle
+ * @param {ScaledAtom} particle
  * @param {ModelViewTransform2} modelViewTransform to convert between model and view co-ordinates
  * @param {boolean} enableOverlap - true if the node should be larger than the actual particle, thus allowing particles
  * @param {number} minX - grabbable particle  min x position

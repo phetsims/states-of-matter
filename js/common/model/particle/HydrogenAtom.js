@@ -9,9 +9,9 @@
 
 import statesOfMatter from '../../../statesOfMatter.js';
 import AtomType from '../AtomType.js';
-import SOMAtom from './SOMAtom.js';
+import ScaledAtom from './ScaledAtom.js';
 
-class HydrogenAtom extends SOMAtom {
+class HydrogenAtom extends ScaledAtom {
 
   /**
    * @param {number} x - atom x position in picometers
