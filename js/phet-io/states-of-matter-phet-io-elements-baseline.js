@@ -40,7 +40,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
-    "statesOfMatter.atomicInteractionsScreen.model.atomDiameterProperty": {
+    "statesOfMatter.atomicInteractionsScreen.model.adjustableAtomDiameterProperty": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -65,6 +65,58 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioState": true,
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<EnumerationIO(NEON_NEON|ARGON_ARGON|OXYGEN_OXYGEN|NEON_ARGON|NEON_OXYGEN|ARGON_OXYGEN|ADJUSTABLE)>"
+    },
+    "statesOfMatter.atomicInteractionsScreen.model.fixedAtom.accelerationProperty": {
+      "phetioDocumentation": "",
+      "phetioDynamicElement": false,
+      "phetioEventType": "MODEL",
+      "phetioFeatured": false,
+      "phetioHighFrequency": false,
+      "phetioIsArchetype": false,
+      "phetioPlayback": false,
+      "phetioReadOnly": false,
+      "phetioState": true,
+      "phetioStudioControl": true,
+      "phetioTypeName": "PropertyIO<Vector2IO>"
+    },
+    "statesOfMatter.atomicInteractionsScreen.model.fixedAtom.atomTypeProperty": {
+      "phetioDocumentation": "",
+      "phetioDynamicElement": false,
+      "phetioEventType": "MODEL",
+      "phetioFeatured": false,
+      "phetioHighFrequency": false,
+      "phetioIsArchetype": false,
+      "phetioPlayback": false,
+      "phetioReadOnly": false,
+      "phetioState": true,
+      "phetioStudioControl": true,
+      "phetioTypeName": "PropertyIO<EnumerationIO(NEON|ARGON|OXYGEN|HYDROGEN|ADJUSTABLE)>"
+    },
+    "statesOfMatter.atomicInteractionsScreen.model.fixedAtom.positionProperty": {
+      "phetioDocumentation": "",
+      "phetioDynamicElement": false,
+      "phetioEventType": "MODEL",
+      "phetioFeatured": false,
+      "phetioHighFrequency": false,
+      "phetioIsArchetype": false,
+      "phetioPlayback": false,
+      "phetioReadOnly": false,
+      "phetioState": true,
+      "phetioStudioControl": true,
+      "phetioTypeName": "PropertyIO<Vector2IO>"
+    },
+    "statesOfMatter.atomicInteractionsScreen.model.fixedAtom.velocityProperty": {
+      "phetioDocumentation": "",
+      "phetioDynamicElement": false,
+      "phetioEventType": "MODEL",
+      "phetioFeatured": false,
+      "phetioHighFrequency": false,
+      "phetioIsArchetype": false,
+      "phetioPlayback": false,
+      "phetioReadOnly": false,
+      "phetioState": true,
+      "phetioStudioControl": true,
+      "phetioTypeName": "PropertyIO<Vector2IO>"
     },
     "statesOfMatter.atomicInteractionsScreen.model.forcesControlPanelExpandedProperty": {
       "phetioDocumentation": "",
@@ -143,6 +195,58 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioState": true,
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
+    },
+    "statesOfMatter.atomicInteractionsScreen.model.movableAtom.accelerationProperty": {
+      "phetioDocumentation": "",
+      "phetioDynamicElement": false,
+      "phetioEventType": "MODEL",
+      "phetioFeatured": false,
+      "phetioHighFrequency": false,
+      "phetioIsArchetype": false,
+      "phetioPlayback": false,
+      "phetioReadOnly": false,
+      "phetioState": true,
+      "phetioStudioControl": true,
+      "phetioTypeName": "PropertyIO<Vector2IO>"
+    },
+    "statesOfMatter.atomicInteractionsScreen.model.movableAtom.atomTypeProperty": {
+      "phetioDocumentation": "",
+      "phetioDynamicElement": false,
+      "phetioEventType": "MODEL",
+      "phetioFeatured": false,
+      "phetioHighFrequency": false,
+      "phetioIsArchetype": false,
+      "phetioPlayback": false,
+      "phetioReadOnly": false,
+      "phetioState": true,
+      "phetioStudioControl": true,
+      "phetioTypeName": "PropertyIO<EnumerationIO(NEON|ARGON|OXYGEN|HYDROGEN|ADJUSTABLE)>"
+    },
+    "statesOfMatter.atomicInteractionsScreen.model.movableAtom.positionProperty": {
+      "phetioDocumentation": "",
+      "phetioDynamicElement": false,
+      "phetioEventType": "MODEL",
+      "phetioFeatured": false,
+      "phetioHighFrequency": false,
+      "phetioIsArchetype": false,
+      "phetioPlayback": false,
+      "phetioReadOnly": false,
+      "phetioState": true,
+      "phetioStudioControl": true,
+      "phetioTypeName": "PropertyIO<Vector2IO>"
+    },
+    "statesOfMatter.atomicInteractionsScreen.model.movableAtom.velocityProperty": {
+      "phetioDocumentation": "",
+      "phetioDynamicElement": false,
+      "phetioEventType": "MODEL",
+      "phetioFeatured": false,
+      "phetioHighFrequency": false,
+      "phetioIsArchetype": false,
+      "phetioPlayback": false,
+      "phetioReadOnly": false,
+      "phetioState": true,
+      "phetioStudioControl": true,
+      "phetioTypeName": "PropertyIO<Vector2IO>"
     },
     "statesOfMatter.atomicInteractionsScreen.model.movementHintVisibleProperty": {
       "phetioDocumentation": "",

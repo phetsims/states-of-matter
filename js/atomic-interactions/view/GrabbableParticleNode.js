@@ -15,7 +15,7 @@ import ParticleForceNode from './ParticleForceNode.js';
 
 /**
  * @param {DualAtomModel} dualAtomModel - model of the simulation
- * @param {SOMAtom} particle
+ * @param {ScaledAtom} particle
  * @param {ModelViewTransform2} modelViewTransform to convert between model and view co-ordinates
  * @param {boolean} enableOverlap - true if the node should be larger than the actual particle, thus allowing particles
  * @param {number} minX - grabbable particle  min x position
@@ -28,7 +28,6 @@ function GrabbableParticleNode( dualAtomModel, particle, modelViewTransform, ena
 
   // @private
   this.minX = minX;
-  this.dualAtomModel = dualAtomModel;
 
   // This node will need to be pickable so the user can grab it.
   this.setPickable( true );
@@ -73,18 +72,9 @@ function GrabbableParticleNode( dualAtomModel, particle, modelViewTransform, ena
 
   this.addInputListener( inputListener );
 
-  this.positionChanged = false;
-
-  function positionListener() {
-    self.positionChanged = true;
-  }
-
-  particle.positionProperty.link( positionListener );
-
   // dispose function
   this.disposeGrabbableParticleNode = function() {
     self.removeInputListener( inputListener );
-    particle.positionProperty.unlink( positionListener );
   };
 }
 
@@ -98,18 +88,6 @@ export default inherit( ParticleForceNode, GrabbableParticleNode, {
   dispose: function() {
     this.disposeGrabbableParticleNode();
     ParticleForceNode.prototype.dispose.call( this );
-  },
-
-  /**
-   * @public
-   */
-  step: function() {
-    if ( this.positionChanged ) {
-      if ( !this.dualAtomModel.isPlayingProperty.get() ) {
-        this.dualAtomModel.positionChanged();
-      }
-      this.positionChanged = false;
-    }
   },
 
   /**

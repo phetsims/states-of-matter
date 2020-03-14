@@ -20,7 +20,7 @@ const WIDTH = 80; // empirically determined to look good
 
 /**
  * @param {DualAtomModel} dualAtomModel - model of the atomic interactions screen
- * @param {SOMAtom} particle - model of the atom that is draggable
+ * @param {ScaledAtom} particle - model of the atom that is draggable
  * @param {ModelViewTransform2} modelViewTransform to convert between model and view co-ordinates
  * @param {number} minX - grabbable particle min x position
  * @param {Tandem} tandem
@@ -32,7 +32,7 @@ function HandNode( dualAtomModel, particle, modelViewTransform, minX, tandem ) {
   const self = this;
   this.minX = minX; // @private
 
-  // @private {SOMAtom} - particle that will be moved if the hand is dragged
+  // @private {ScaledAtom} - particle that will be moved if the hand is dragged
   this.particle = particle;
 
   // add the main image that represents the hand
@@ -105,7 +105,7 @@ export default inherit( Node, HandNode, {
   },
 
   /**
-   * @param {SOMAtom} particle
+   * @param {ScaledAtom} particle
    * @public
    */
   setParticle: function( particle ) {

@@ -152,8 +152,8 @@ function InteractiveInteractionPotentialDiagram( dualAtomModel, wide, options ) 
       startDragX = endDragX;
       const scaleFactor = self.GRAPH_X_RANGE / ( self.getGraphWidth() );
       const atomDiameter = dualAtomModel.getSigma() + ( d * scaleFactor );
-      dualAtomModel.atomDiameterProperty.value = atomDiameter > SOMConstants.MIN_SIGMA ?
-                                                 ( atomDiameter < SOMConstants.MAX_SIGMA ? atomDiameter :
+      dualAtomModel.adjustableAtomDiameterProperty.value = atomDiameter > SOMConstants.MIN_SIGMA ?
+                                                           ( atomDiameter < SOMConstants.MAX_SIGMA ? atomDiameter :
                                                    SOMConstants.MAX_SIGMA ) : SOMConstants.MIN_SIGMA;
     },
 
@@ -202,7 +202,7 @@ function InteractiveInteractionPotentialDiagram( dualAtomModel, wide, options ) 
   ) );
 
   Property.multilink(
-    [ dualAtomModel.atomPairProperty, dualAtomModel.interactionStrengthProperty, dualAtomModel.atomDiameterProperty ],
+    [ dualAtomModel.atomPairProperty, dualAtomModel.interactionStrengthProperty, dualAtomModel.adjustableAtomDiameterProperty ],
     function( atomPair, interactionStrength, atomDiameter ) {
       if ( atomPair === AtomPair.ADJUSTABLE ) {
         dualAtomModel.setEpsilon( interactionStrength );

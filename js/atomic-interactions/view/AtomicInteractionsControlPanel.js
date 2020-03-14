@@ -362,7 +362,7 @@ function AtomicInteractionsControlPanel( dualAtomModel, enableHeterogeneousAtoms
   };
 
   const atomDiameterSlider = new HSlider(
-    dualAtomModel.atomDiameterProperty,
+    dualAtomModel.adjustableAtomDiameterProperty,
     new Range( SOMConstants.MIN_SIGMA, SOMConstants.MAX_SIGMA ),
     merge( { tandem: options.tandem.createTandem( 'atomDiameterSlider' ) }, commonSliderOptions )
   );

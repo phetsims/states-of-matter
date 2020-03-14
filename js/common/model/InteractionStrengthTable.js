@@ -16,7 +16,9 @@
 import statesOfMatter from '../../statesOfMatter.js';
 import SOMConstants from '../SOMConstants.js';
 import AtomType from './AtomType.js';
-import ConfigurableStatesOfMatterAtom from './particle/ConfigurableStatesOfMatterAtom.js';
+
+// constants
+const DEFAULT_ADJUSTABLE_INTERACTION_POTENTIAL = SOMConstants.MAX_EPSILON / 2;
 
 // static object (no constructor)
 const InteractionStrengthTable = {
@@ -44,11 +46,11 @@ const InteractionStrengthTable = {
         return 111.84;
       }
       else if ( atomType1 === AtomType.OXYGEN ) {
-        //  "Hollywoded" value to be larger than other values, but not really as big as bonded oxygen
+        //  "Hollywooded" value to be larger than other values, but not really as big as bonded oxygen
         return 1000;
       }
       else if ( atomType1 === AtomType.ADJUSTABLE ) {
-        return ConfigurableStatesOfMatterAtom.DEFAULT_INTERACTION_POTENTIAL;
+        return DEFAULT_ADJUSTABLE_INTERACTION_POTENTIAL;
       }
       else {
         assert && assert( false, 'Interaction potential not available for requested atom: ' + atomType1 );
