@@ -10,6 +10,7 @@
 
 import Bounds2 from '../../../dot/js/Bounds2.js';
 import Element from '../../../nitroglycerin/js/Element.js';
+import Color from '../../../scenery/js/util/Color.js';
 import statesOfMatter from '../statesOfMatter.js';
 
 // constants (these are vars because other constants refer to them)
@@ -67,12 +68,19 @@ const SOMConstants = {
   // Distance between diatomic pairs.
   DIATOMIC_PARTICLE_DISTANCE: 0.9,  // In particle diameters.
 
-  // atoms colors
-  OXYGEN_COLOR: Element.O.color.toCSS(),
-  NEON_COLOR: Element.Ne.color,
-  ARGON_COLOR: Element.Ar.color,
-  HYDROGEN_COLOR: Element.H.color,
-  ADJUSTABLE_ATTRACTION_COLOR: '#CC66CC',
+  // atom colors
+  OXYGEN_COLOR: new Color( Element.O.color ),
+  NEON_COLOR: new Color( Element.Ne.color ),
+  ARGON_COLOR: new Color( Element.Ar.color ),
+  HYDROGEN_COLOR: new Color( Element.H.color ),
+  ADJUSTABLE_ATTRACTION_COLOR: new Color( '#CC66CC' ),
+
+  // atom radii, in picometers
+  OXYGEN_RADIUS: Element.O.vanDerWaalsRadius,
+  NEON_RADIUS: Element.Ne.vanDerWaalsRadius,
+  ARGON_RADIUS: Element.Ar.vanDerWaalsRadius,
+  HYDROGEN_RADIUS: Element.H.vanDerWaalsRadius,
+  ADJUSTABLE_ATTRACTION_DEFAULT_RADIUS: 175,
 
   // adjustable attraction min and max epsilon values, chosen empirically based on how the interaction looks
   MIN_ADJUSTABLE_EPSILON: ( 1.5 * NEON_ATOM_EPSILON ),

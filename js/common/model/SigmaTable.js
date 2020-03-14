@@ -12,10 +12,6 @@
 import statesOfMatter from '../../statesOfMatter.js';
 import SOMConstants from '../SOMConstants.js';
 import AtomType from './AtomType.js';
-import ArgonAtom from './particle/ArgonAtom.js';
-import ConfigurableStatesOfMatterAtom from './particle/ConfigurableStatesOfMatterAtom.js';
-import NeonAtom from './particle/NeonAtom.js';
-import OxygenAtom from './particle/OxygenAtom.js';
 
 // static object (no constructor)
 const SigmaTable = {
@@ -43,7 +39,7 @@ const SigmaTable = {
         return 200;
       }
       else if ( atomType1 === AtomType.ADJUSTABLE ) {
-        return ConfigurableStatesOfMatterAtom.DEFAULT_RADIUS * 2;
+        return SOMConstants.ADJUSTABLE_ATTRACTION_DEFAULT_RADIUS * 2;
       }
       else {
         assert && assert( false, 'Error: Interaction potential not available for requested atom: ' + atomType1 );
@@ -59,16 +55,16 @@ const SigmaTable = {
       else if ( ( ( atomType1 === AtomType.NEON ) && ( atomType2 === AtomType.OXYGEN ) ) ||
                 ( atomType1 === AtomType.OXYGEN ) && ( atomType2 === AtomType.NEON ) ) {
         // Don't have a value for this, Noah P says use average of the diameters.
-        return ( NeonAtom.RADIUS + OxygenAtom.RADIUS );
+        return ( SOMConstants.NEON_RADIUS + SOMConstants.OXYGEN_RADIUS );
       }
       else if ( ( ( atomType1 === AtomType.ARGON ) && ( atomType2 === AtomType.OXYGEN ) ) ||
                 ( atomType1 === AtomType.OXYGEN ) && ( atomType2 === AtomType.ARGON ) ) {
         // Don't have a value for this, Noah P says use average of the diameters.
-        return ( ArgonAtom.RADIUS + OxygenAtom.RADIUS );
+        return ( SOMConstants.ARGON_RADIUS + SOMConstants.OXYGEN_RADIUS );
       }
       else if ( ( atomType1 === AtomType.ADJUSTABLE ) || ( atomType2 === AtomType.ADJUSTABLE ) ) {
         // In this case, where one of the atoms is adjustable, we just use a default value.
-        return ConfigurableStatesOfMatterAtom.DEFAULT_RADIUS * 2;
+        return SOMConstants.ADJUSTABLE_ATTRACTION_DEFAULT_RADIUS * 2;
       }
       else {
         assert && assert( false, 'Error: sigma data not available for this combination of molecules: ' + atomType1 +

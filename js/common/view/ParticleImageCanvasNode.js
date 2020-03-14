@@ -10,11 +10,6 @@ import inherit from '../../../../phet-core/js/inherit.js';
 import CanvasNode from '../../../../scenery/js/nodes/CanvasNode.js';
 import statesOfMatter from '../../statesOfMatter.js';
 import AtomType from '../model/AtomType.js';
-import ArgonAtom from '../model/particle/ArgonAtom.js';
-import ConfigurableStatesOfMatterAtom from '../model/particle/ConfigurableStatesOfMatterAtom.js';
-import HydrogenAtom from '../model/particle/HydrogenAtom.js';
-import NeonAtom from '../model/particle/NeonAtom.js';
-import OxygenAtom from '../model/particle/OxygenAtom.js';
 import SOMConstants from '../SOMConstants.js';
 import SOMColorProfile from './SOMColorProfile.js';
 
@@ -23,19 +18,19 @@ const PARTICLE_IMAGE_CANVAS_LENGTH = 32; // amount of canvas used to create a pa
 
 // set up the association between atom types and the colors used to represent them
 const PARTICLE_COLOR_TABLE = {};
-PARTICLE_COLOR_TABLE[ AtomType.ARGON ] = SOMConstants.ARGON_COLOR;
-PARTICLE_COLOR_TABLE[ AtomType.NEON ] = SOMConstants.NEON_COLOR;
-PARTICLE_COLOR_TABLE[ AtomType.OXYGEN ] = SOMConstants.OXYGEN_COLOR;
-PARTICLE_COLOR_TABLE[ AtomType.HYDROGEN ] = SOMConstants.HYDROGEN_COLOR;
-PARTICLE_COLOR_TABLE[ AtomType.ADJUSTABLE ] = SOMConstants.ADJUSTABLE_ATTRACTION_COLOR;
+PARTICLE_COLOR_TABLE[ AtomType.ARGON ] = SOMConstants.ARGON_COLOR.toCSS();
+PARTICLE_COLOR_TABLE[ AtomType.NEON ] = SOMConstants.NEON_COLOR.toCSS();
+PARTICLE_COLOR_TABLE[ AtomType.OXYGEN ] = SOMConstants.OXYGEN_COLOR.toCSS();
+PARTICLE_COLOR_TABLE[ AtomType.HYDROGEN ] = SOMConstants.HYDROGEN_COLOR.toCSS();
+PARTICLE_COLOR_TABLE[ AtomType.ADJUSTABLE ] = SOMConstants.ADJUSTABLE_ATTRACTION_COLOR.toCSS();
 
 // set up the association between atom types and their radii in the model
 const PARTICLE_RADIUS_TABLE = {};
-PARTICLE_RADIUS_TABLE[ AtomType.ARGON ] = ArgonAtom.RADIUS;
-PARTICLE_RADIUS_TABLE[ AtomType.NEON ] = NeonAtom.RADIUS;
-PARTICLE_RADIUS_TABLE[ AtomType.OXYGEN ] = OxygenAtom.RADIUS;
-PARTICLE_RADIUS_TABLE[ AtomType.HYDROGEN ] = HydrogenAtom.RADIUS;
-PARTICLE_RADIUS_TABLE[ AtomType.ADJUSTABLE ] = ConfigurableStatesOfMatterAtom.DEFAULT_RADIUS;
+PARTICLE_RADIUS_TABLE[ AtomType.ARGON ] = SOMConstants.ARGON_RADIUS;
+PARTICLE_RADIUS_TABLE[ AtomType.NEON ] = SOMConstants.NEON_RADIUS;
+PARTICLE_RADIUS_TABLE[ AtomType.OXYGEN ] = SOMConstants.OXYGEN_RADIUS;
+PARTICLE_RADIUS_TABLE[ AtomType.HYDROGEN ] = SOMConstants.HYDROGEN_RADIUS;
+PARTICLE_RADIUS_TABLE[ AtomType.ADJUSTABLE ] = SOMConstants.ADJUSTABLE_ATTRACTION_DEFAULT_RADIUS;
 
 /**
  * @param {ObservableArray<Particle>} particles that need to be rendered on the canvas

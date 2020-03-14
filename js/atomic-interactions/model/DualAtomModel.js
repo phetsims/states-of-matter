@@ -11,11 +11,10 @@ import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import EnumerationProperty from '../../../../axon/js/EnumerationProperty.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import inherit from '../../../../phet-core/js/inherit.js';
-import AtomFactory from '../../common/model/AtomFactory.js';
 import AtomType from '../../common/model/AtomType.js';
 import InteractionStrengthTable from '../../common/model/InteractionStrengthTable.js';
 import LjPotentialCalculator from '../../common/model/LjPotentialCalculator.js';
+import SOMAtom from '../../common/model/particle/SOMAtom.js';
 import SigmaTable from '../../common/model/SigmaTable.js';
 import SOMConstants from '../../common/SOMConstants.js';
 import statesOfMatter from '../../statesOfMatter.js';
@@ -33,485 +32,346 @@ const SLOW_MOTION_TIME_MULTIPLIER = 0.5;
 // is conserved in all interaction cases.  See https://github.com/phetsims/states-of-matter/issues/53 for more info.
 const MAX_TIME_STEP = 0.005; // in seconds
 
-/**
- * @param {Tandem} tandem
- * @constructor
- */
-function DualAtomModel( tandem ) {
+class DualAtomModel {
 
-  const self = this;
+  /**
+   * @param {Tandem} tandem
+   * @constructor
+   */
+  constructor( tandem ) {
 
-  //-----------------------------------------------------------------------------------------------------------------
-  // observable model properties
-  //-----------------------------------------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------------------------------------
+    // observable model properties
+    //-----------------------------------------------------------------------------------------------------------------
 
-  // @public (read-write) - epsilon/k-Boltzmann is in Kelvin.
-  this.interactionStrengthProperty = new NumberProperty( 100, {
-    tandem: tandem.createTandem( 'interactionStrengthProperty' ),
-    phetioReadOnly: true
-  } );
+    // @public (read-write) - epsilon/k-Boltzmann is in Kelvin.
+    this.interactionStrengthProperty = new NumberProperty( 100, {
+      tandem: tandem.createTandem( 'interactionStrengthProperty' ),
+      phetioReadOnly: true
+    } );
 
-  // @public (read-write) - indicates when motion is paused due to user interaction with the movable atom
-  this.motionPausedProperty = new BooleanProperty( false, {
-    tandem: tandem.createTandem( 'motionPausedProperty' ),
-    phetioReadOnly: true
-  } );
+    // @public (read-write) - indicates when motion is paused due to user interaction with the movable atom
+    this.motionPausedProperty = new BooleanProperty( false, {
+      tandem: tandem.createTandem( 'motionPausedProperty' ),
+      phetioReadOnly: true
+    } );
 
-  // @public (read-write)
-  this.atomPairProperty = new EnumerationProperty( AtomPair, AtomPair.NEON_NEON, {
-    tandem: tandem.createTandem( 'atomPairProperty' )
-  } );
+    // @public (read-write)
+    this.atomPairProperty = new EnumerationProperty( AtomPair, AtomPair.NEON_NEON, {
+      tandem: tandem.createTandem( 'atomPairProperty' )
+    } );
 
-  // @public (read-write) - paused or playing
-  this.isPlayingProperty = new BooleanProperty( true, {
-    tandem: tandem.createTandem( 'isPlayingProperty' )
-  } );
+    // @public (read-write) - paused or playing
+    this.isPlayingProperty = new BooleanProperty( true, {
+      tandem: tandem.createTandem( 'isPlayingProperty' )
+    } );
 
-  // @public (read-write) - sim at which the model is running
-  this.isSlowMotionProperty = new BooleanProperty( false, {
-    tandem: tandem.createTandem( 'isSlowMotionProperty' )
-  } );
+    // @public (read-write) - sim at which the model is running
+    this.isSlowMotionProperty = new BooleanProperty( false, {
+      tandem: tandem.createTandem( 'isSlowMotionProperty' )
+    } );
 
-  // @public (read-write)
-  this.atomDiameterProperty = new NumberProperty( 300, {
-    tandem: tandem.createTandem( 'atomDiameterProperty' ),
-    phetioReadOnly: true
-  } );
+    // @public (read-write) - diameter of the adjustable atoms
+    this.atomDiameterProperty = new NumberProperty( 300, {
+      tandem: tandem.createTandem( 'atomDiameterProperty' ),
+      phetioReadOnly: true
+    } );
 
-  // @public (read-write)
-  this.forcesDisplayModeProperty = new EnumerationProperty( ForceDisplayMode, ForceDisplayMode.HIDDEN, {
-    tandem: tandem.createTandem( 'forcesDisplayModeProperty' )
-  } );
+    // @public (read-write)
+    this.forcesDisplayModeProperty = new EnumerationProperty( ForceDisplayMode, ForceDisplayMode.HIDDEN, {
+      tandem: tandem.createTandem( 'forcesDisplayModeProperty' )
+    } );
 
-  // @public (read-write)
-  this.forcesControlPanelExpandedProperty = new BooleanProperty( false, {
-    tandem: tandem.createTandem( 'forcesControlPanelExpandedProperty' )
-  } );
+    // @public (read-write)
+    this.forcesControlPanelExpandedProperty = new BooleanProperty( false, {
+      tandem: tandem.createTandem( 'forcesControlPanelExpandedProperty' )
+    } );
 
-  // @public (read-write)
-  this.movementHintVisibleProperty = new BooleanProperty( true, {
-    tandem: tandem.createTandem( 'movementHintVisibleProperty' )
-  } );
+    // @public (read-write)
+    this.movementHintVisibleProperty = new BooleanProperty( true, {
+      tandem: tandem.createTandem( 'movementHintVisibleProperty' )
+    } );
 
-  //-----------------------------------------------------------------------------------------------------------------
-  // other model attributes
-  //-----------------------------------------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------------------------------------
+    // other model attributes
+    //-----------------------------------------------------------------------------------------------------------------
 
-  // @public, read only
-  this.fixedAtom = null;
-  this.movableAtom = null;
-  this.attractiveForce = 0;
-  this.repulsiveForce = 0;
+    // @public, read only
+    this.fixedAtom = new SOMAtom( AtomType.NEON, 0, 0 );
+    this.movableAtom = new SOMAtom( AtomType.NEON, 0, 0 );
+    this.attractiveForce = 0;
+    this.repulsiveForce = 0;
 
-  // @private
-  this.settingBothAtomTypes = false;  // Flag used to prevent getting in disallowed state.
-  this.ljPotentialCalculator = new LjPotentialCalculator( SOMConstants.MIN_SIGMA, SOMConstants.MIN_EPSILON );
-  this.residualTime = 0; // accumulates dt values not yet applied to model
+    // @private
+    this.settingBothAtomTypes = false;  // Flag used to prevent getting in disallowed state.
+    this.ljPotentialCalculator = new LjPotentialCalculator( SOMConstants.MIN_SIGMA, SOMConstants.MIN_EPSILON );
+    this.residualTime = 0; // accumulates dt values not yet applied to model
 
-  //-----------------------------------------------------------------------------------------------------------------
-  // other initialization
-  //-----------------------------------------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------------------------------------
+    // other initialization
+    //-----------------------------------------------------------------------------------------------------------------
 
-  // update the atom pair when the atom pair property is set
-  this.atomPairProperty.link( function( atomPair ) {
-    switch( atomPair ) {
-      case AtomPair.NEON_NEON:
-        self.setBothAtomTypes( AtomType.NEON );
-        break;
+    // update the atom pair when the atom pair property is set
+    this.atomPairProperty.link( atomPair => {
+      this.fixedAtom.atomTypeProperty.set( atomPair.fixedAtomType );
+      this.movableAtom.atomTypeProperty.set( atomPair.movableAtomType );
+      this.ljPotentialCalculator.setSigma(
+        SigmaTable.getSigma( this.fixedAtom.getType(), this.movableAtom.getType() )
+      );
 
-      case AtomPair.ARGON_ARGON:
-        self.setBothAtomTypes( AtomType.ARGON );
-        break;
-
-      case AtomPair.OXYGEN_OXYGEN:
-        self.setBothAtomTypes( AtomType.OXYGEN );
-        break;
-
-      case AtomPair.NEON_ARGON:
-        self.settingBothAtomTypes = true;
-        self.setFixedAtomType( AtomType.NEON );
-        self.setMovableAtomType( AtomType.ARGON );
-        self.settingBothAtomTypes = false;
-        break;
-
-      case AtomPair.NEON_OXYGEN:
-        self.settingBothAtomTypes = true;
-        self.setFixedAtomType( AtomType.NEON );
-        self.setMovableAtomType( AtomType.OXYGEN );
-        self.settingBothAtomTypes = false;
-        break;
-
-      case AtomPair.ARGON_OXYGEN:
-        self.settingBothAtomTypes = true;
-        self.setFixedAtomType( AtomType.ARGON );
-        self.setMovableAtomType( AtomType.OXYGEN );
-        self.settingBothAtomTypes = false;
-        break;
-
-      case AtomPair.ADJUSTABLE:
-        self.setBothAtomTypes( AtomType.ADJUSTABLE );
-        break;
-
-      default:
-        throw new Error( 'invalid atomPair: ' + atomPair );
-    } //end of switch
-    self.updateForces();
-  } );
-
-  // Put the model into its initial state.
-  this.reset();
-}
-
-statesOfMatter.register( 'DualAtomModel', DualAtomModel );
-
-export default inherit(
-  Object,
-  DualAtomModel,
-  {
-
-    /**
-     * @param {AtomType} atomType
-     * @private
-     */
-    setFixedAtomType: function( atomType ) {
-
-      if ( this.fixedAtom === null || this.fixedAtom.getType() !== atomType ) {
-
-        // make sure that a legal configuration is being set
-        assert && assert( this.settingBothAtomTypes ||
-                          ( ( atomType === AtomType.ADJUSTABLE && this.movableAtom.getType() === AtomType.ADJUSTABLE ) ||
-                          ( atomType !== AtomType.ADJUSTABLE && this.movableAtom.getType() !== AtomType.ADJUSTABLE ) ),
-          'Error: Cannot set just one atom to be adjustable'
+      // update the value of epsilon
+      if ( this.movableAtom !== null ) {
+        this.ljPotentialCalculator.setEpsilon(
+          InteractionStrengthTable.getInteractionPotential( this.fixedAtom.getType(), this.movableAtom.getType() )
         );
-
-        this.ensureValidAtomType( atomType );
-
-        if ( this.fixedAtom !== null ) {
-          this.fixedAtom = null;
-        }
-
-        this.fixedAtom = AtomFactory.createAtom( atomType );
-
-        // Set the value for sigma used in the LJ potential calculations.
-        if ( this.movableAtom !== null ) {
-          this.ljPotentialCalculator.setSigma(
-            SigmaTable.getSigma( this.fixedAtom.getType(), this.movableAtom.getType() )
-          );
-        }
-
-        // If both atoms exist, set the value of epsilon.
-        if ( this.movableAtom !== null ) {
-          this.ljPotentialCalculator.setEpsilon(
-            InteractionStrengthTable.getInteractionPotential( this.fixedAtom.getType(), this.movableAtom.getType() )
-          );
-        }
-
-        this.fixedAtom.setPosition( 0, 0 );
-        this.resetMovableAtomPos();
-      }
-    },
-
-    /**
-     * @param {AtomType} atomType
-     * @private
-     */
-    setMovableAtomType: function( atomType ) {
-
-      if ( this.movableAtom === null || this.movableAtom.getType() !== atomType ) {
-
-        assert && assert( this.settingBothAtomTypes ||
-                          ( ( atomType === AtomType.ADJUSTABLE && this.fixedAtom.getType() === AtomType.ADJUSTABLE ) ||
-                          ( atomType !== AtomType.ADJUSTABLE && this.fixedAtom.getType() !== AtomType.ADJUSTABLE ) ),
-          'Error: Cannot set just one atom to be adjustable'
-        );
-
-        this.ensureValidAtomType( atomType );
-
-        if ( this.movableAtom !== null ) {
-          this.movableAtom = null;
-        }
-
-        this.movableAtom = AtomFactory.createAtom( atomType );
-
-        // Set the value for sigma used in the LJ potential calculations.
-        if ( this.movableAtom !== null ) {
-          this.ljPotentialCalculator.setSigma(
-            SigmaTable.getSigma( this.fixedAtom.getType(), this.movableAtom.getType() )
-          );
-        }
-
-        // If both atoms exist, set the value of epsilon.
-        if ( this.fixedAtom !== null ) {
-          this.ljPotentialCalculator.setEpsilon(
-            InteractionStrengthTable.getInteractionPotential( this.fixedAtom.getType(), this.movableAtom.getType() ) );
-        }
-        this.resetMovableAtomPos();
-      }
-    },
-
-    /**
-     * @param {AtomType} atomType
-     * @public
-     */
-    ensureValidAtomType: function( atomType ) {
-      // Verify that this is a supported value.
-      assert && assert( ( atomType === AtomType.NEON ) ||
-                        ( atomType === AtomType.ARGON ) ||
-                        ( atomType === AtomType.OXYGEN ) ||
-                        ( atomType === AtomType.ADJUSTABLE ),
-        'Error: Unsupported atom type.' );
-    },
-
-    /**
-     * @param {AtomType} atomType
-     * @private
-     */
-    setBothAtomTypes: function( atomType ) {
-      if ( this.fixedAtom === null || this.movableAtom === null || this.fixedAtom.getType() !== atomType ||
-           this.movableAtom.getType() !== atomType ) {
-        this.settingBothAtomTypes = true;
-        this.setFixedAtomType( atomType );
-        this.setMovableAtomType( atomType );
-        this.settingBothAtomTypes = false;
-      }
-    },
-
-    /**
-     * Set the sigma value, a.k.a. the Atomic Diameter Parameter, for the adjustable atom.  This is one of the two
-     * parameters that are used for calculating the Lennard-Jones potential. If an attempt is made to set this value
-     * when the adjustable atom is not selected, it is ignored.
-     * @param {number}sigma - distance parameter
-     * @public
-     */
-    setAdjustableAtomSigma: function( sigma ) {
-      if ( ( this.fixedAtom.getType() === AtomType.ADJUSTABLE ) &&
-           ( this.movableAtom.getType() === AtomType.ADJUSTABLE ) &&
-           ( sigma !== this.ljPotentialCalculator.getSigma() ) ) {
-
-        if ( sigma > SOMConstants.MAX_SIGMA ) {
-          sigma = SOMConstants.MAX_SIGMA;
-        }
-        else if ( sigma < SOMConstants.MIN_SIGMA ) {
-          sigma = SOMConstants.MIN_SIGMA;
-        }
-        this.ljPotentialCalculator.setSigma( sigma );
-        this.movableAtom.setPosition( this.ljPotentialCalculator.calculateMinimumForceDistance(), 0 );
-        this.fixedAtom.setRadius( sigma / 2 );
-        this.movableAtom.setRadius( sigma / 2 );
-      }
-    },
-
-    /**
-     * Get the value of the sigma parameter that is being used for the motion calculations.  If the atoms are the same,
-     * it will be the diameter of one atom.  If they are not, it will be a function of the diameters.
-     * @returns {number}
-     * @public
-     */
-    getSigma: function() {
-      return this.ljPotentialCalculator.getSigma();
-    },
-
-    /**
-     * Set the epsilon value, a.k.a. the Interaction Strength Parameter, which is one of the two parameters that
-     * describes the Lennard-Jones potential.
-     * @param {number}epsilon - interaction strength parameter
-     * @public
-     */
-    setEpsilon: function( epsilon ) {
-
-      if ( epsilon < SOMConstants.MIN_EPSILON ) {
-        epsilon = SOMConstants.MIN_EPSILON;
-      }
-      else if ( epsilon > SOMConstants.MAX_EPSILON ) {
-        epsilon = SOMConstants.MAX_EPSILON;
       }
 
-      if ( ( this.fixedAtom.getType() === AtomType.ADJUSTABLE ) &&
-           ( this.movableAtom.getType() === AtomType.ADJUSTABLE ) ) {
+      // reset other initial state variables
+      this.fixedAtom.setPosition( 0, 0 );
+      this.resetMovableAtomPos();
+      this.updateForces();
+    } );
 
-        this.ljPotentialCalculator.setEpsilon( epsilon );
+    // Put the model into its initial state.
+    this.reset();
+  }
+
+  /**
+   * Set the sigma value, a.k.a. the Atomic Diameter Parameter, for the adjustable atom.  This is one of the two
+   * parameters that are used for calculating the Lennard-Jones potential. If an attempt is made to set this value
+   * when the adjustable atom is not selected, it is ignored.
+   * @param {number}sigma - distance parameter
+   * @public
+   */
+  setAdjustableAtomSigma( sigma ) {
+    if ( ( this.fixedAtom.getType() === AtomType.ADJUSTABLE ) &&
+         ( this.movableAtom.getType() === AtomType.ADJUSTABLE ) &&
+         ( sigma !== this.ljPotentialCalculator.getSigma() ) ) {
+
+      if ( sigma > SOMConstants.MAX_SIGMA ) {
+        sigma = SOMConstants.MAX_SIGMA;
       }
-    },
+      else if ( sigma < SOMConstants.MIN_SIGMA ) {
+        sigma = SOMConstants.MIN_SIGMA;
+      }
+      this.ljPotentialCalculator.setSigma( sigma );
+      this.movableAtom.setPosition( this.ljPotentialCalculator.calculateMinimumForceDistance(), 0 );
+      this.fixedAtom.setRadius( sigma / 2 );
+      this.movableAtom.setRadius( sigma / 2 );
+    }
+  }
 
-    /**
-     * Get the epsilon value, a.k.a. the Interaction Strength Parameter, which is one of the two parameters that
-     * describes the Lennard-Jones potential.
-     * @returns {number}
-     * @public
-     */
-    getEpsilon: function() {
-      return this.ljPotentialCalculator.getEpsilon();
-    },
+  /**
+   * Get the value of the sigma parameter that is being used for the motion calculations.  If the atoms are the same,
+   * it will be the diameter of one atom.  If they are not, it will be a function of the diameters.
+   * @returns {number}
+   * @public
+   */
+  getSigma() {
+    return this.ljPotentialCalculator.getSigma();
+  }
 
-    /**
-     * @param {boolean} paused -  is to set particle motion
-     * @public
-     */
-    setMotionPaused: function( paused ) {
-      this.motionPausedProperty.set( paused );
-      this.movableAtom.setVx( 0 );
-    },
+  /**
+   * Set the epsilon value, a.k.a. the Interaction Strength Parameter, which is one of the two parameters that
+   * describes the Lennard-Jones potential.
+   * @param {number}epsilon - interaction strength parameter
+   * @public
+   */
+  setEpsilon( epsilon ) {
 
-    /**
-     * @override
-     * @public
-     */
-    reset: function() {
+    if ( epsilon < SOMConstants.MIN_EPSILON ) {
+      epsilon = SOMConstants.MIN_EPSILON;
+    }
+    else if ( epsilon > SOMConstants.MAX_EPSILON ) {
+      epsilon = SOMConstants.MAX_EPSILON;
+    }
 
-      // reset the observable properties
-      this.interactionStrengthProperty.reset();
-      this.motionPausedProperty.reset();
-      this.atomPairProperty.reset();
-      this.isPlayingProperty.reset();
-      this.isSlowMotionProperty.reset();
-      this.atomDiameterProperty.reset();
-      this.forcesDisplayModeProperty.reset();
-      this.forcesControlPanelExpandedProperty.reset();
-      this.movementHintVisibleProperty.reset();
+    if ( ( this.fixedAtom.getType() === AtomType.ADJUSTABLE ) &&
+         ( this.movableAtom.getType() === AtomType.ADJUSTABLE ) ) {
 
-      // set the default atom types
-      if ( this.fixedAtom === null || this.fixedAtom.getType() !== DEFAULT_ATOM_TYPE ||
-           this.movableAtom === null || this.movableAtom.getType() !== DEFAULT_ATOM_TYPE ) {
-        this.setBothAtomTypes( DEFAULT_ATOM_TYPE );
+      this.ljPotentialCalculator.setEpsilon( epsilon );
+    }
+  }
+
+  /**
+   * Get the epsilon value, a.k.a. the Interaction Strength Parameter, which is one of the two parameters that
+   * describes the Lennard-Jones potential.
+   * @returns {number}
+   * @public
+   */
+  getEpsilon() {
+    return this.ljPotentialCalculator.getEpsilon();
+  }
+
+  /**
+   * @param {boolean} paused -  is to set particle motion
+   * @public
+   */
+  setMotionPaused( paused ) {
+    this.motionPausedProperty.set( paused );
+    this.movableAtom.setVx( 0 );
+  }
+
+  /**
+   * @override
+   * @public
+   */
+  reset() {
+
+    // reset the observable properties
+    this.interactionStrengthProperty.reset();
+    this.motionPausedProperty.reset();
+    this.atomPairProperty.reset();
+    this.isPlayingProperty.reset();
+    this.isSlowMotionProperty.reset();
+    this.atomDiameterProperty.reset();
+    this.forcesDisplayModeProperty.reset();
+    this.forcesControlPanelExpandedProperty.reset();
+    this.movementHintVisibleProperty.reset();
+
+    // set the default atom types
+    if ( this.fixedAtom === null || this.fixedAtom.getType() !== DEFAULT_ATOM_TYPE ||
+         this.movableAtom === null || this.movableAtom.getType() !== DEFAULT_ATOM_TYPE ) {
+      this.setBothAtomTypes( DEFAULT_ATOM_TYPE );
+    }
+    else {
+      this.resetMovableAtomPos();
+    }
+
+    // make sure we are not paused
+    this.motionPausedProperty.set( false );
+  }
+
+  /**
+   * Put the movable atom back to the location where the force is minimized, and reset the velocity and
+   * acceleration to 0.
+   * @public
+   */
+  resetMovableAtomPos() {
+    this.movableAtom.setPosition( this.ljPotentialCalculator.calculateMinimumForceDistance(), 0 );
+    this.movableAtom.setVx( 0 );
+    this.movableAtom.setAx( 0 );
+  }
+
+  /**
+   * Called by the animation loop.
+   * @param {number} dt - time in seconds
+   * @public
+   */
+  step( dt ) {
+
+    // If dt is excessively large, ignore it - it probably means the user returned to the tab after the tab or the
+    // browser was hidden for a while.
+    if ( dt > 1.0 ) {
+      return;
+    }
+
+    if ( this.isPlayingProperty.get() ) {
+
+      // Using real world time for this results in the atoms moving a little slowly, so the time step is adjusted
+      // here.  The multipliers were empirically determined.
+      let adjustedTimeStep;
+      if ( this.isSlowMotionProperty.value ) {
+        adjustedTimeStep = dt * SLOW_MOTION_TIME_MULTIPLIER;
       }
       else {
-        this.resetMovableAtomPos();
+        adjustedTimeStep = dt * NORMAL_MOTION_TIME_MULTIPLIER;
       }
-
-      // make sure we are not paused
-      this.motionPausedProperty.set( false );
-    },
-
-    /**
-     * Put the movable atom back to the location where the force is minimized, and reset the velocity and
-     * acceleration to 0.
-     * @public
-     */
-    resetMovableAtomPos: function() {
-      if ( this.movableAtom !== null ) {
-        this.movableAtom.setPosition( this.ljPotentialCalculator.calculateMinimumForceDistance(), 0 );
-        this.movableAtom.setVx( 0 );
-        this.movableAtom.setAx( 0 );
-      }
-    },
-
-    /**
-     * Called by the animation loop.
-     * @param {number} dt - time in seconds
-     * @public
-     */
-    step: function( dt ) {
-
-      // If dt is excessively large, ignore it - it probably means the user returned to the tab after the tab or the
-      // browser was hidden for a while.
-      if ( dt > 1.0 ) {
-        return;
-      }
-
-      if ( this.isPlayingProperty.get() ) {
-
-        // Using real world time for this results in the atoms moving a little slowly, so the time step is adjusted
-        // here.  The multipliers were empirically determined.
-        let adjustedTimeStep;
-        if ( this.isSlowMotionProperty.value ) {
-          adjustedTimeStep = dt * SLOW_MOTION_TIME_MULTIPLIER;
-        }
-        else {
-          adjustedTimeStep = dt * NORMAL_MOTION_TIME_MULTIPLIER;
-        }
-        this.stepInternal( adjustedTimeStep );
-      }
-    },
-
-    /**
-     * @param {number} dt -- time in seconds
-     * @public
-     */
-    stepInternal: function( dt ) {
-
-      let numInternalModelIterations = 1;
-      let modelTimeStep = dt;
-
-      // if the time step is bigger than the max allowed, set up multiple iterations of the model
-      if ( dt > MAX_TIME_STEP ) {
-        numInternalModelIterations = dt / MAX_TIME_STEP;
-        this.residualTime += dt - ( numInternalModelIterations * MAX_TIME_STEP );
-        modelTimeStep = MAX_TIME_STEP;
-      }
-
-      // If residual time has accumulated enough, add an iteration.
-      if ( this.residualTime > modelTimeStep ) {
-        numInternalModelIterations++;
-        this.residualTime -= modelTimeStep;
-      }
-
-      // Update the forces and motion of the atoms.
-      for ( let i = 0; i < numInternalModelIterations; i++ ) {
-
-        // Execute the force calculation.
-        this.updateForces();
-
-        // Update the motion information.
-        this.updateAtomMotion( modelTimeStep );
-      }
-    },
-
-    /**
-     * Called when the movable atom is moved
-     * @public
-     */
-    positionChanged: function() {
-      if ( this.motionPausedProperty.get() ) {
-        // The user must be moving the atom from the view. Update the forces correspondingly.
-        this.updateForces();
-      }
-    },
-
-    /**
-     * @private
-     */
-    updateForces: function() {
-
-      let distance = this.movableAtom.getPositionReference().distance( Vector2.ZERO );
-
-      if ( distance < ( this.fixedAtom.getRadius() + this.movableAtom.getRadius() ) / 8 ) {
-
-        // The atoms are too close together, and calculating the force will cause unusable levels of speed later, so
-        // we limit it.
-        distance = ( this.fixedAtom.getRadius() + this.movableAtom.getRadius() ) / 8;
-      }
-
-      // Calculate the force.  The result should be in newtons.
-      this.attractiveForce = this.ljPotentialCalculator.calculateAttractiveLjForce( distance );
-      this.repulsiveForce = this.ljPotentialCalculator.calculateRepulsiveLjForce( distance );
-    },
-
-    /**
-     * Update the position, velocity, and acceleration of the dummy movable atom.
-     * @private
-     */
-    updateAtomMotion: function( dt ) {
-
-      const mass = this.movableAtom.getMass() * 1.6605402E-27;  // Convert mass to kilograms.
-      const acceleration = ( this.repulsiveForce - this.attractiveForce ) / mass;
-
-      // Update the acceleration for the movable atom.  We do this regardless of whether movement is paused so that
-      // the force vectors can be shown appropriately if the user moves the atoms.
-      this.movableAtom.setAx( acceleration );
-
-      if ( !this.motionPausedProperty.get() ) {
-
-        // Calculate tne new velocity.
-        const newVelocity = this.movableAtom.getVx() + ( acceleration * dt );
-
-        // Update the position and velocity of the atom.
-        this.movableAtom.setVx( newVelocity );
-        const xPos = this.movableAtom.getX() + ( this.movableAtom.getVx() * dt );
-        this.movableAtom.setPosition( xPos, 0 );
-      }
+      this.stepInternal( adjustedTimeStep );
     }
-  },
-  {
-    NORMAL_MOTION_TIME_MULTIPLIER: NORMAL_MOTION_TIME_MULTIPLIER
   }
-);
+
+  /**
+   * @param {number} dt -- time in seconds
+   * @public
+   */
+  stepInternal( dt ) {
+
+    let numInternalModelIterations = 1;
+    let modelTimeStep = dt;
+
+    // if the time step is bigger than the max allowed, set up multiple iterations of the model
+    if ( dt > MAX_TIME_STEP ) {
+      numInternalModelIterations = dt / MAX_TIME_STEP;
+      this.residualTime += dt - ( numInternalModelIterations * MAX_TIME_STEP );
+      modelTimeStep = MAX_TIME_STEP;
+    }
+
+    // If residual time has accumulated enough, add an iteration.
+    if ( this.residualTime > modelTimeStep ) {
+      numInternalModelIterations++;
+      this.residualTime -= modelTimeStep;
+    }
+
+    // Update the forces and motion of the atoms.
+    for ( let i = 0; i < numInternalModelIterations; i++ ) {
+
+      // Execute the force calculation.
+      this.updateForces();
+
+      // Update the motion information.
+      this.updateAtomMotion( modelTimeStep );
+    }
+  }
+
+  /**
+   * Called when the movable atom is moved
+   * @public
+   */
+  positionChanged() {
+    if ( this.motionPausedProperty.get() ) {
+      // The user must be moving the atom from the view. Update the forces correspondingly.
+      this.updateForces();
+    }
+  }
+
+  /**
+   * @private
+   */
+  updateForces() {
+
+    let distance = this.movableAtom.positionProperty.value.distance( Vector2.ZERO );
+
+    if ( distance < ( this.fixedAtom.radius + this.movableAtom.radius ) / 8 ) {
+
+      // The atoms are too close together, and calculating the force will cause unusable levels of speed later, so
+      // we limit it.
+      distance = ( this.fixedAtom.radius + this.movableAtom.radius ) / 8;
+    }
+
+    // Calculate the force.  The result should be in newtons.
+    this.attractiveForce = this.ljPotentialCalculator.calculateAttractiveLjForce( distance );
+    this.repulsiveForce = this.ljPotentialCalculator.calculateRepulsiveLjForce( distance );
+  }
+
+  /**
+   * Update the position, velocity, and acceleration of the dummy movable atom.
+   * @private
+   */
+  updateAtomMotion( dt ) {
+
+    const mass = this.movableAtom.mass * 1.6605402E-27;  // Convert mass to kilograms.
+    const acceleration = ( this.repulsiveForce - this.attractiveForce ) / mass;
+
+    // Update the acceleration for the movable atom.  We do this regardless of whether movement is paused so that
+    // the force vectors can be shown appropriately if the user moves the atoms.
+    this.movableAtom.setAx( acceleration );
+
+    if ( !this.motionPausedProperty.get() ) {
+
+      // Calculate tne new velocity.
+      const newVelocity = this.movableAtom.getVx() + ( acceleration * dt );
+
+      // Update the position and velocity of the atom.
+      this.movableAtom.setVx( newVelocity );
+      const xPos = this.movableAtom.getX() + ( this.movableAtom.getVx() * dt );
+      this.movableAtom.setPosition( xPos, 0 );
+    }
+  }
+}
+
+// static
+DualAtomModel.NORMAL_MOTION_TIME_MULTIPLIER = NORMAL_MOTION_TIME_MULTIPLIER;
+
+statesOfMatter.register( 'DualAtomModel', DualAtomModel );
+export default DualAtomModel;

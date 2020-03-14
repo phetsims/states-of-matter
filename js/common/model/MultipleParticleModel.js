@@ -45,11 +45,8 @@ import InteractionStrengthTable from './InteractionStrengthTable.js';
 import MoleculeForceAndMotionDataSet from './MoleculeForceAndMotionDataSet.js';
 import MovingAverage from './MovingAverage.js';
 import MultipleParticleModelIO from './MultipleParticleModelIO.js';
-import ArgonAtom from './particle/ArgonAtom.js';
-import ConfigurableStatesOfMatterAtom from './particle/ConfigurableStatesOfMatterAtom.js';
 import HydrogenAtom from './particle/HydrogenAtom.js';
-import NeonAtom from './particle/NeonAtom.js';
-import OxygenAtom from './particle/OxygenAtom.js';
+import SOMAtom from './particle/SOMAtom.js';
 
 // constants (general)
 const CONTAINER_WIDTH = 10000; // essentially arbitrary
@@ -445,19 +442,19 @@ class MultipleParticleModel extends PhetioObject {
     switch( substance ) {
 
       case SubstanceType.DIATOMIC_OXYGEN:
-        this.particleDiameter = OxygenAtom.RADIUS * 2;
+        this.particleDiameter = SOMConstants.OXYGEN_RADIUS * 2;
         this.minModelTemperature = 0.5 * SOMConstants.TRIPLE_POINT_DIATOMIC_MODEL_TEMPERATURE /
                                    O2_TRIPLE_POINT_IN_KELVIN;
         break;
 
       case SubstanceType.NEON:
-        this.particleDiameter = NeonAtom.RADIUS * 2;
+        this.particleDiameter = SOMConstants.NEON_RADIUS * 2;
         this.minModelTemperature = 0.5 * SOMConstants.TRIPLE_POINT_MONATOMIC_MODEL_TEMPERATURE /
                                    NEON_TRIPLE_POINT_IN_KELVIN;
         break;
 
       case SubstanceType.ARGON:
-        this.particleDiameter = ArgonAtom.RADIUS * 2;
+        this.particleDiameter = SOMConstants.ARGON_RADIUS * 2;
         this.minModelTemperature = 0.5 * SOMConstants.TRIPLE_POINT_MONATOMIC_MODEL_TEMPERATURE /
                                    ARGON_TRIPLE_POINT_IN_KELVIN;
         break;
@@ -467,13 +464,13 @@ class MultipleParticleModel extends PhetioObject {
         // Use a radius value that is artificially large, because the educators have requested that water look
         // "spaced out" so that users can see the crystal structure better, and so that the solid form will look
         // larger (since water expands when frozen).
-        this.particleDiameter = OxygenAtom.RADIUS * 2.9;
+        this.particleDiameter = SOMConstants.OXYGEN_RADIUS * 2.9;
         this.minModelTemperature = 0.5 * SOMConstants.TRIPLE_POINT_WATER_MODEL_TEMPERATURE /
                                    WATER_TRIPLE_POINT_IN_KELVIN;
         break;
 
       case SubstanceType.ADJUSTABLE_ATOM:
-        this.particleDiameter = ConfigurableStatesOfMatterAtom.DEFAULT_RADIUS * 2;
+        this.particleDiameter = SOMConstants.ADJUSTABLE_ATTRACTION_DEFAULT_RADIUS * 2;
         this.minModelTemperature = 0.5 * SOMConstants.TRIPLE_POINT_MONATOMIC_MODEL_TEMPERATURE /
                                    ADJUSTABLE_ATOM_TRIPLE_POINT_IN_KELVIN;
         break;
@@ -534,10 +531,10 @@ class MultipleParticleModel extends PhetioObject {
     let sigma;
     switch( this.substanceProperty.get() ) {
       case SubstanceType.NEON:
-        sigma = NeonAtom.RADIUS * 2;
+        sigma = SOMConstants.NEON_RADIUS * 2;
         break;
       case SubstanceType.ARGON:
-        sigma = ArgonAtom.RADIUS * 2;
+        sigma = SOMConstants.ARGON_RADIUS * 2;
         break;
       case SubstanceType.DIATOMIC_OXYGEN:
         sigma = SOMConstants.SIGMA_FOR_DIATOMIC_OXYGEN;
@@ -546,7 +543,7 @@ class MultipleParticleModel extends PhetioObject {
         sigma = SOMConstants.SIGMA_FOR_WATER;
         break;
       case SubstanceType.ADJUSTABLE_ATOM:
-        sigma = ConfigurableStatesOfMatterAtom.DEFAULT_RADIUS * 2;
+        sigma = SOMConstants.ADJUSTABLE_ATTRACTION_DEFAULT_RADIUS * 2;
         break;
       default:
         throw( new Error( 'unsupported substance' ) ); // should never happen, debug if it does
@@ -735,30 +732,30 @@ class MultipleParticleModel extends PhetioObject {
       switch( this.substanceProperty.value ) {
 
         case SubstanceType.ARGON:
-          this.scaledAtoms.push( new ArgonAtom( 0, 0 ) );
+          this.scaledAtoms.push( new SOMAtom( AtomType.ARGON, 0, 0 ) );
           break;
 
         case SubstanceType.NEON:
-          this.scaledAtoms.push( new NeonAtom( 0, 0 ) );
+          this.scaledAtoms.push( new SOMAtom( AtomType.NEON, 0, 0 ) );
           break;
 
         case SubstanceType.ADJUSTABLE_ATOM:
-          this.scaledAtoms.push( new ConfigurableStatesOfMatterAtom( 0, 0 ) );
+          this.scaledAtoms.push( new SOMAtom( AtomType.ADJUSTABLE, 0, 0 ) );
           break;
 
         case SubstanceType.DIATOMIC_OXYGEN:
-          this.scaledAtoms.push( new OxygenAtom( 0, 0 ) );
-          this.scaledAtoms.push( new OxygenAtom( 0, 0 ) );
+          this.scaledAtoms.push( new SOMAtom( AtomType.OXYGEN, 0, 0 ) );
+          this.scaledAtoms.push( new SOMAtom( AtomType.OXYGEN, 0, 0 ) );
           break;
 
         case SubstanceType.WATER:
-          this.scaledAtoms.push( new OxygenAtom( 0, 0 ) );
+          this.scaledAtoms.push( new SOMAtom( AtomType.OXYGEN, 0, 0 ) );
           this.scaledAtoms.push( new HydrogenAtom( 0, 0, true ) );
           this.scaledAtoms.push( new HydrogenAtom( 0, 0, phet.joist.random.nextDouble() > 0.5 ) );
           break;
 
         default:
-          this.scaledAtoms.push( new NeonAtom( 0, 0 ) );
+          this.scaledAtoms.push( new SOMAtom( AtomType.NEON, 0, 0 ) );
           break;
       }
     } );
@@ -1124,7 +1121,7 @@ class MultipleParticleModel extends PhetioObject {
     // Determine the number of atoms/molecules to create.  This will be a cube (really a square, since it's 2D, but
     // you get the idea) that takes up a fixed amount of the bottom of the container, so the number of molecules that
     // can fit depends on the size of the individual atom.
-    let numberOfAtoms = Math.pow( Utils.roundSymmetric( CONTAINER_WIDTH / ( ( OxygenAtom.RADIUS * 2.1 ) * 3 ) ), 2 );
+    let numberOfAtoms = Math.pow( Utils.roundSymmetric( CONTAINER_WIDTH / ( ( SOMConstants.OXYGEN_RADIUS * 2.1 ) * 3 ) ), 2 );
     if ( numberOfAtoms % 2 !== 0 ) {
       numberOfAtoms--;
     }
@@ -1156,8 +1153,8 @@ class MultipleParticleModel extends PhetioObject {
       this.moleculeDataSet.addMolecule( atomPositions, moleculeCenterOfMassPosition, moleculeVelocity, 0, true );
 
       // Add atoms to model set.
-      this.scaledAtoms.push( new OxygenAtom( 0, 0 ) );
-      this.scaledAtoms.push( new OxygenAtom( 0, 0 ) );
+      this.scaledAtoms.push( new SOMAtom( AtomType.OXYGEN, 0, 0 ) );
+      this.scaledAtoms.push( new SOMAtom( AtomType.OXYGEN, 0, 0 ) );
     }
 
     // Initialize the atom positions according the to requested phase.
@@ -1179,7 +1176,7 @@ class MultipleParticleModel extends PhetioObject {
     // Determine the number of atoms/molecules to create.  This will be a cube (really a square, since it's 2D, but
     // you get the idea) that takes up a fixed amount of the bottom of the container, so the number of molecules that
     // can fit depends on the size of the individual atom.
-    const waterMoleculeDiameter = OxygenAtom.RADIUS * 2.1;
+    const waterMoleculeDiameter = SOMConstants.OXYGEN_RADIUS * 2.1;
     const moleculesAcrossBottom = Utils.roundSymmetric( CONTAINER_WIDTH / ( waterMoleculeDiameter * 1.2 ) );
     const numberOfMolecules = Math.pow( moleculesAcrossBottom / 3, 2 );
 
@@ -1209,7 +1206,7 @@ class MultipleParticleModel extends PhetioObject {
       this.moleculeDataSet.addMolecule( atomPositions, moleculeCenterOfMassPosition, moleculeVelocity, 0, true );
 
       // Add atoms to model set.
-      this.scaledAtoms.push( new OxygenAtom( 0, 0 ) );
+      this.scaledAtoms.push( new SOMAtom( AtomType.OXYGEN, 0, 0 ) );
       this.scaledAtoms.push( new HydrogenAtom( 0, 0, true ) );
 
       // In order to look more varied, some of the hydrogen atoms are set up to render behind the oxygen atom and
@@ -1258,18 +1255,18 @@ class MultipleParticleModel extends PhetioObject {
     // can fit depends on the size of the individual.
     let particleDiameter;
     if ( substance === SubstanceType.NEON ) {
-      particleDiameter = NeonAtom.RADIUS * 2;
+      particleDiameter = SOMConstants.NEON_RADIUS * 2;
     }
     else if ( substance === SubstanceType.ARGON ) {
-      particleDiameter = ArgonAtom.RADIUS * 2;
+      particleDiameter = SOMConstants.ARGON_RADIUS * 2;
     }
     else if ( substance === SubstanceType.ADJUSTABLE_ATOM ) {
-      particleDiameter = ConfigurableStatesOfMatterAtom.DEFAULT_RADIUS * 2;
+      particleDiameter = SOMConstants.ADJUSTABLE_ATTRACTION_DEFAULT_RADIUS * 2;
     }
     else {
       // Force it to neon.
       substance = SubstanceType.NEON;
-      particleDiameter = NeonAtom.RADIUS * 2;
+      particleDiameter = SOMConstants.NEON_RADIUS * 2;
     }
 
     // Initialize the number of atoms assuming that the solid form, when made into a square, will consume about 1/3
@@ -1300,16 +1297,16 @@ class MultipleParticleModel extends PhetioObject {
       // Add atom to model set.
       var atom;
       if ( substance === SubstanceType.NEON ) {
-        atom = new NeonAtom( 0, 0 );
+        atom = new SOMAtom( AtomType.NEON, 0, 0 );
       }
       else if ( substance === SubstanceType.ARGON ) {
-        atom = new ArgonAtom( 0, 0 );
+        atom = new SOMAtom( AtomType.ARGON, 0, 0 );
       }
       else if ( substance === SubstanceType.ADJUSTABLE_ATOM ) {
-        atom = new ConfigurableStatesOfMatterAtom( 0, 0 );
+        atom = new SOMAtom( AtomType.ADJUSTABLE, 0, 0 );
       }
       else {
-        atom = new NeonAtom( 0, 0 );
+        atom = new SOMAtom( AtomType.NEON, 0, 0 );
       }
       this.scaledAtoms.push( atom );
     }

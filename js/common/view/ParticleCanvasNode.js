@@ -18,7 +18,6 @@
 import inherit from '../../../../phet-core/js/inherit.js';
 import CanvasNode from '../../../../scenery/js/nodes/CanvasNode.js';
 import statesOfMatter from '../../statesOfMatter.js';
-import HydrogenAtom from '../model/particle/HydrogenAtom.js';
 import SOMConstants from '../SOMConstants.js';
 import SOMColorProfile from './SOMColorProfile.js';
 
@@ -40,7 +39,7 @@ function ParticleCanvasNode( particles, modelViewTransform, options ) {
   CanvasNode.call( this, options );
 
   // pre-calculate a couple of values so that they don't need to be recalculated on each paint
-  this.hydrogenViewRadius = this.modelViewTransform.modelToViewDeltaX( HydrogenAtom.RADIUS );
+  this.hydrogenViewRadius = this.modelViewTransform.modelToViewDeltaX( SOMConstants.HYDROGEN_RADIUS );
 
   // initiate the first paint
   this.invalidatePaint();

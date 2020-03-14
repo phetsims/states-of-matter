@@ -6,17 +6,10 @@
  * @author Aaron Davis
  */
 
+import Enumeration from '../../../../phet-core/js/Enumeration.js';
 import statesOfMatter from '../../statesOfMatter.js';
 
-// NOTE: enum pattern recommends using {} for each value, but strings are more convenient for debugging
-const AtomType = Object.freeze( {
-  NEON: 'NEON',
-  ARGON: 'ARGON',
-  OXYGEN: 'OXYGEN',
-  HYDROGEN: 'HYDROGEN',
-  ADJUSTABLE: 'ADJUSTABLE'
-} );
+const AtomType = Enumeration.byKeys( [ 'NEON', 'ARGON', 'OXYGEN', 'HYDROGEN', 'ADJUSTABLE' ] );
 
 statesOfMatter.register( 'AtomType', AtomType );
-
 export default AtomType;
