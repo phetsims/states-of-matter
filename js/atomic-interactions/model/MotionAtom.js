@@ -1,4 +1,4 @@
-// Copyright 2020, University of Colorado Boulder
+// Copyright 2014-2020, University of Colorado Boulder
 
 /**
  * MotionAtom is a model of an atom with Axon Property values that track position, velocity, and acceleration, as well

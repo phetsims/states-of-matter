@@ -1,4 +1,4 @@
-// Copyright 2014-2020, University of Colorado Boulder
+// Copyright 2020, University of Colorado Boulder
 
 /**
  * ScaledAtom is a simple model of an atom with the attributes needed by the particle interaction simulation portion of
