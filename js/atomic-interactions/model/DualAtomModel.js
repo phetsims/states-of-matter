@@ -11,6 +11,7 @@ import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import EnumerationProperty from '../../../../axon/js/EnumerationProperty.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
+import TimeControlSpeed from '../../../../scenery-phet/js/TimeControlSpeed.js';
 import AtomType from '../../common/model/AtomType.js';
 import InteractionStrengthTable from '../../common/model/InteractionStrengthTable.js';
 import LjPotentialCalculator from '../../common/model/LjPotentialCalculator.js';
@@ -65,9 +66,9 @@ class DualAtomModel {
       tandem: tandem.createTandem( 'isPlayingProperty' )
     } );
 
-    // @public (read-write) - sim at which the model is running
-    this.isSlowMotionProperty = new BooleanProperty( false, {
-      tandem: tandem.createTandem( 'isSlowMotionProperty' )
+    // @public (read-write) - speed at which the model is running
+    this.timeControlSpeedProperty = new EnumerationProperty( TimeControlSpeed, TimeControlSpeed.NORMAL, {
+      tandem: tandem.createTandem( 'timeControlSpeedProperty' )
     } );
 
     // @public (read-write) - diameter of the adjustable atoms
@@ -232,8 +233,7 @@ class DualAtomModel {
     this.interactionStrengthProperty.reset();
     this.motionPausedProperty.reset();
     this.atomPairProperty.reset();
-    this.isPlayingProperty.reset();
-    this.isSlowMotionProperty.reset();
+    this.timeControlSpeedProperty.reset();
     this.adjustableAtomDiameterProperty.reset();
     this.forcesDisplayModeProperty.reset();
     this.forcesControlPanelExpandedProperty.reset();
@@ -272,7 +272,7 @@ class DualAtomModel {
       // Using real world time for this results in the atoms moving a little slowly, so the time step is adjusted
       // here.  The multipliers were empirically determined.
       let adjustedTimeStep;
-      if ( this.isSlowMotionProperty.value ) {
+      if ( this.timeControlSpeedProperty.value === TimeControlSpeed.SLOW ) {
         adjustedTimeStep = dt * SLOW_MOTION_TIME_MULTIPLIER;
       }
       else {

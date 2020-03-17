@@ -148,22 +148,30 @@ class AtomicInteractionsScreenView extends ScreenView {
 
     // add control for play/pause/step
     const timeControlNode = new TimeControlNode( dualAtomModel.isPlayingProperty, {
-      isSlowMotionProperty: dualAtomModel.isSlowMotionProperty,
-      labelOptions: {
-        fill: SOMColorProfile.controlPanelTextProperty,
-        font: new PhetFont( 14 ),
-        maxWidth: MAX_TEXT_WIDTH
+      timeControlSpeedProperty: dualAtomModel.timeControlSpeedProperty,
+
+      playPauseStepButtonOptions: {
+
+        playPauseButtonOptions: {
+          radius: SOMConstants.PLAY_PAUSE_BUTTON_RADIUS
+        },
+        stepForwardButtonOptions: {
+          radius: SOMConstants.STEP_BUTTON_RADIUS,
+          listener: () => {
+            dualAtomModel.stepInternal( SOMConstants.NOMINAL_TIME_STEP * DualAtomModel.NORMAL_MOTION_TIME_MULTIPLIER );
+          }
+        },
+        playPauseStepXSpacing: 10
       },
-      playPauseOptions: {
-        radius: SOMConstants.PLAY_PAUSE_BUTTON_RADIUS
-      },
-      stepForwardOptions: {
-        radius: SOMConstants.STEP_BUTTON_RADIUS,
-        listener: () => {
-          dualAtomModel.stepInternal( SOMConstants.NOMINAL_TIME_STEP * DualAtomModel.NORMAL_MOTION_TIME_MULTIPLIER );
+
+      speedRadioButtonGroupOnLeft: true,
+      speedRadioButtonGroupOptions: {
+        labelOptions: {
+          fill: SOMColorProfile.controlPanelTextProperty,
+          font: new PhetFont( 14 ),
+          maxWidth: MAX_TEXT_WIDTH
         }
       },
-      playPauseStepXSpacing: 10,
 
       // position empirically determined
       centerX: this.layoutBounds.centerX + 27,

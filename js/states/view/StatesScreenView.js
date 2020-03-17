@@ -127,16 +127,18 @@ function StatesScreenView( multipleParticleModel, tandem ) {
 
   // add the play/pause/step control
   this.addChild( new TimeControlNode( multipleParticleModel.isPlayingProperty, {
-    playPauseOptions: {
-      radius: SOMConstants.PLAY_PAUSE_BUTTON_RADIUS
+    playPauseStepButtonOptions: {
+      playPauseButtonOptions: {
+        radius: SOMConstants.PLAY_PAUSE_BUTTON_RADIUS
+      },
+      stepForwardButtonOptions: {
+        radius: SOMConstants.STEP_BUTTON_RADIUS,
+        listener: () => {
+          multipleParticleModel.stepInternal( SOMConstants.NOMINAL_TIME_STEP );
+        }
+      },
+      playPauseStepXSpacing: 10
     },
-    stepForwardOptions: {
-      radius: SOMConstants.STEP_BUTTON_RADIUS,
-      listener: () => {
-        multipleParticleModel.stepInternal( SOMConstants.NOMINAL_TIME_STEP );
-      }
-    },
-    playPauseStepXSpacing: 10,
 
     // position empirically determined
     right: heaterCoolerNode.left - 50,
