@@ -983,8 +983,8 @@ class MultipleParticleModel extends PhetioObject {
 
       // record the new set point
       this.temperatureSetPointProperty.set( newTemperature );
-      this.isoKineticThermostat.targetTemperature = this.temperatureSetPointProperty.get();
-      this.andersenThermostat.targetTemperature = this.temperatureSetPointProperty.get();
+      this.isoKineticThermostat.targetTemperature = newTemperature;
+      this.andersenThermostat.targetTemperature = newTemperature;
     }
   }
 

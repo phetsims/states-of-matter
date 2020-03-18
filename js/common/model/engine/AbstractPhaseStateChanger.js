@@ -106,8 +106,8 @@ export default inherit( Object, AbstractPhaseStateChanger, {
    * @param {PhaseStateEnum} phaseID
    */
   setPhaseSolid: function() {
-    this.setParticleConfigurationSolid();
     this.setTemperatureForPhase( PhaseStateEnum.SOLID );
+    this.setParticleConfigurationSolid();
   },
 
   /**
@@ -115,8 +115,8 @@ export default inherit( Object, AbstractPhaseStateChanger, {
    * @param {PhaseStateEnum} phaseID
    */
   setPhaseLiquid: function() {
-    this.setParticleConfigurationLiquid();
     this.setTemperatureForPhase( PhaseStateEnum.LIQUID );
+    this.setParticleConfigurationLiquid();
   },
 
   /**
@@ -124,8 +124,8 @@ export default inherit( Object, AbstractPhaseStateChanger, {
    * @param {PhaseStateEnum} phaseID
    */
   setPhaseGas: function() {
-    this.setParticleConfigurationGas();
     this.setTemperatureForPhase( PhaseStateEnum.GAS );
+    this.setParticleConfigurationGas();
   },
 
   /**
