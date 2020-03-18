@@ -24,7 +24,6 @@ import InteractionPotentialCanvasNode from '../../common/view/InteractionPotenti
 import InteractionPotentialDiagramNode from '../../common/view/InteractionPotentialDiagramNode.js';
 import SOMColorProfile from '../../common/view/SOMColorProfile.js';
 import statesOfMatter from '../../statesOfMatter.js';
-import AtomPair from '../model/AtomPair.js';
 
 // constants
 const RESIZE_HANDLE_SIZE_PROPORTION = 0.05;  // Size of handles as function of node width.
@@ -201,14 +200,14 @@ function InteractiveInteractionPotentialDiagram( dualAtomModel, wide, options ) 
     }
   ) );
 
+  // update the marker color when the movable atom changes
+  dualAtomModel.movableAtom.atomTypeProperty.link( () => {
+    self.positionMarker.changeColor( dualAtomModel.movableAtom.color );
+  } );
+
   Property.multilink(
     [ dualAtomModel.atomPairProperty, dualAtomModel.interactionStrengthProperty, dualAtomModel.adjustableAtomDiameterProperty ],
-    function( atomPair, interactionStrength, atomDiameter ) {
-      if ( atomPair === AtomPair.ADJUSTABLE ) {
-        dualAtomModel.setEpsilon( interactionStrength );
-        dualAtomModel.setAdjustableAtomSigma( atomDiameter );
-      }
-      self.positionMarker.changeColor( dualAtomModel.movableAtom.color );
+    () => {
       self.setLjPotentialParameters( dualAtomModel.getSigma(), dualAtomModel.getEpsilon() );
       self.updateInteractivityState();
       self.drawPotentialCurve();
