@@ -19,11 +19,12 @@ import ParticleForceNode from './ParticleForceNode.js';
  * @param {ModelViewTransform2} modelViewTransform to convert between model and view co-ordinates
  * @param {boolean} enableOverlap - true if the node should be larger than the actual particle, thus allowing particles
  * @param {number} minX - grabbable particle  min x position
+ * @param {Tandem} tandem - support for exporting instances from the sim
  * @constructor
  */
-function GrabbableParticleNode( dualAtomModel, particle, modelViewTransform, enableOverlap, minX ) {
+function GrabbableParticleNode( dualAtomModel, particle, modelViewTransform, enableOverlap, minX, tandem ) {
 
-  ParticleForceNode.call( this, particle, modelViewTransform, enableOverlap );
+  ParticleForceNode.call( this, particle, modelViewTransform, enableOverlap, tandem );
   const self = this;
 
   // @private
@@ -67,7 +68,9 @@ function GrabbableParticleNode( dualAtomModel, particle, modelViewTransform, ena
       // means.
       dualAtomModel.setMotionPaused( false );
       dualAtomModel.movementHintVisibleProperty.set( false );
-    }
+    },
+
+    tandem: tandem.createTandem( 'dragHandler' )
   } );
 
   this.addInputListener( inputListener );

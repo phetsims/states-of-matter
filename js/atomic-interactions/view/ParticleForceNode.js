@@ -30,14 +30,17 @@ const FORCE_ARROW_HEAD_LENGTH = 50;
  * @param {ModelViewTransform2} modelViewTransform to convert between model and view co-ordinates
  * The gradient is computationally intensive to create, so use only when needed.
  * @param {boolean} enableOverlap - true if the node should be larger than the actual particle, thus allowing particles
+ * @param {Tandem} tandem - support for exporting instances from the sim
  * @constructor
  */
-function ParticleForceNode( particle, modelViewTransform, enableOverlap ) {
+function ParticleForceNode( particle, modelViewTransform, enableOverlap, tandem ) {
 
-  ParticleNode.call( this, particle, modelViewTransform, enableOverlap );
+  ParticleNode.call( this, particle, modelViewTransform, enableOverlap, tandem );
 
+  // @private
   this.attractiveForce = 0;
   this.repulsiveForce = 0;
+
   const self = this;
   const commonForceArrowNodeOptions = {
     headHeight: FORCE_ARROW_HEAD_LENGTH,

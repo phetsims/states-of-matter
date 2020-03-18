@@ -24,12 +24,13 @@ const OVERLAP_ENLARGEMENT_FACTOR = 1.25;
  * @param {ModelViewTransform2} modelViewTransform to convert between model and view co-ordinates
  * The gradient is computationally intensive to create, so use only when needed.
  * @param {boolean} enableOverlap - true if the node should be larger than the actual particle, thus allowing particles
+ * @param {Tandem} tandem - support for exporting instances from the sim
  * @constructor
  */
-function ParticleNode( particle, modelViewTransform, enableOverlap ) {
+function ParticleNode( particle, modelViewTransform, enableOverlap, tandem ) {
   assert && assert( particle && modelViewTransform );
 
-  Node.call( this );
+  Node.call( this, { tandem: tandem } );
 
   // @private
   this.particle = particle;

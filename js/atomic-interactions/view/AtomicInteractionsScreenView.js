@@ -199,7 +199,12 @@ class AtomicInteractionsScreenView extends ScreenView {
     );
 
     // add the representation of the fixed particle
-    this.fixedParticleNode = new ParticleForceNode( dualAtomModel.fixedAtom, this.modelViewTransform, true );
+    this.fixedParticleNode = new ParticleForceNode(
+      dualAtomModel.fixedAtom,
+      this.modelViewTransform,
+      true,
+      tandem.createTandem( 'fixedParticleNode' )
+    );
     this.fixedParticleNode.setShowAttractiveForces( this.showAttractiveForces );
     this.fixedParticleNode.setShowRepulsiveForces( this.showRepulsiveForces );
     this.fixedParticleNode.setShowTotalForces( this.showTotalForces );
@@ -211,7 +216,9 @@ class AtomicInteractionsScreenView extends ScreenView {
       dualAtomModel.movableAtom,
       this.modelViewTransform,
       true,
-      0
+      0,
+      tandem.createTandem( 'movableParticleNode' )
+
     );
     this.movableParticleNode.setShowAttractiveForces( this.showAttractiveForces );
     this.movableParticleNode.setShowRepulsiveForces( this.showRepulsiveForces );
