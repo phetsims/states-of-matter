@@ -8,9 +8,7 @@
  * @author Siddhartha Chinthapally (Actual Concepts)
  */
 
-import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
-import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import ScreenView from '../../../../joist/js/ScreenView.js';
 import inherit from '../../../../phet-core/js/inherit.js';
@@ -64,20 +62,13 @@ function StatesScreenView( multipleParticleModel, tandem ) {
   this.addChild( this.particleContainerNode );
 
   // @private add heater/cooler node
-  const heaterCoolerNode = new HeaterCoolerNode( new NumberProperty( 0, {
-    range: new Range( -1, 1 ) // +1 for max heating, -1 for max cooling
-  } ), {
+  const heaterCoolerNode = new HeaterCoolerNode( multipleParticleModel.heatingCoolingAmountProperty, {
     scale: 0.79,
     centerX: particleContainerViewBounds.centerX,
     top: particleContainerViewBounds.bottom + 30, // distance from bottom of particle area empirically determined
     tandem: tandem.createTandem( 'heaterCoolerNode' )
   } );
   this.addChild( heaterCoolerNode );
-
-  // hook up the heater/cooler node to the model
-  heaterCoolerNode.heatCoolAmountProperty.link( function( heat ) {
-    multipleParticleModel.setHeatingCoolingAmount( heat );
-  } );
 
   // the thermometer node should be at the top left of the container
   const thermometerInitialCenterPosition = new Vector2(
