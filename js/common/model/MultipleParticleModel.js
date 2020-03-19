@@ -64,7 +64,6 @@ const INJECTED_MOLECULE_SPEED = 2.0; // in normalized model units per second, em
 const INJECTED_MOLECULE_ANGLE_SPREAD = Math.PI * 0.25; // in radians, empirically determined to look reasonable
 const INJECTION_POINT_HORIZ_PROPORTION = 0.00;
 const INJECTION_POINT_VERT_PROPORTION = 0.25;
-const MIN_ALLOWABLE_CONTAINER_HEIGHT = 1500; // empirically determined, almost all the way to the bottom
 
 // constants related to how time steps are handled
 const PARTICLE_SPEED_UP_FACTOR = 4; // empirically determined to make the particles move at a speed that looks reasonable
@@ -78,7 +77,6 @@ const INITIAL_TEMPERATURE = SOLID_TEMPERATURE;
 const APPROACHING_ABSOLUTE_ZERO_TEMPERATURE = SOLID_TEMPERATURE * 0.85;
 
 // parameters to control rates of change of the container size
-const MAX_CONTAINER_SHRINK_RATE = 1250; // in model units per second
 const MAX_CONTAINER_EXPAND_RATE = 1500; // in model units per second
 const POST_EXPLOSION_CONTAINER_EXPANSION_RATE = 9000; // in model units per second
 
@@ -143,12 +141,6 @@ class MultipleParticleModel extends PhetioObject {
     this.containerHeightProperty = new NumberProperty( CONTAINER_INITIAL_HEIGHT, {
       tandem: tandem.createTandem( 'containerHeightProperty' ),
       phetioReadOnly: true
-    } );
-
-    // @public (read-write)
-    this.targetContainerHeightProperty = new NumberProperty( CONTAINER_INITIAL_HEIGHT, {
-      tandem: tandem.createTandem( 'targetContainerHeightProperty' ),
-      range: new Range( MIN_ALLOWABLE_CONTAINER_HEIGHT, CONTAINER_INITIAL_HEIGHT )
     } );
 
     // @public (read-only)
@@ -510,20 +502,6 @@ class MultipleParticleModel extends PhetioObject {
   }
 
   /**
-   * Sets the target height of the container.  The target height is set rather than the actual height because the
-   * model limits the rate at which the height can changed.  The model will gradually move towards the target height.
-   * @param {number} desiredContainerHeight
-   * @public
-   */
-  setTargetContainerHeight( desiredContainerHeight ) {
-    this.targetContainerHeightProperty.set( Utils.clamp(
-      desiredContainerHeight,
-      MIN_ALLOWABLE_CONTAINER_HEIGHT,
-      CONTAINER_INITIAL_HEIGHT
-    ) );
-  }
-
-  /**
    * Get the sigma value, which is one of the two parameters that describes the Lennard-Jones potential.
    * @returns {number}
    * @public
@@ -558,7 +536,6 @@ class MultipleParticleModel extends PhetioObject {
 
     // reset observable properties
     this.containerHeightProperty.reset();
-    this.targetContainerHeightProperty.reset();
     this.isExplodedProperty.reset();
     this.temperatureSetPointProperty.reset();
     this.pressureProperty.reset();
@@ -805,7 +782,6 @@ class MultipleParticleModel extends PhetioObject {
 
     // Set the initial size of the container.
     this.containerHeightProperty.reset();
-    this.targetContainerHeightProperty.reset();
     this.normalizedContainerWidth = CONTAINER_WIDTH / this.particleDiameter;
     this.normalizedContainerHeight = this.containerHeightProperty.get() / this.particleDiameter;
     this.normalizedTotalContainerHeight = this.containerHeightProperty.get() / this.particleDiameter;
@@ -819,50 +795,8 @@ class MultipleParticleModel extends PhetioObject {
 
     this.moleculeInjectedThisStep = false;
 
-    if ( !this.isExplodedProperty.get() ) {
-
-      // Adjust the container height if needed.
-      if ( this.targetContainerHeightProperty.get() !== this.containerHeightProperty.get() ) {
-        this.heightChangeThisStep = this.targetContainerHeightProperty.get() - this.containerHeightProperty.get();
-        if ( this.heightChangeThisStep > 0 ) {
-
-          // the container is expanding, limit the change to the max allowed rate
-          this.heightChangeThisStep = Math.min( this.heightChangeThisStep, MAX_CONTAINER_EXPAND_RATE * dt );
-
-          this.containerHeightProperty.set( Math.min(
-            this.containerHeightProperty.get() + this.heightChangeThisStep,
-            CONTAINER_INITIAL_HEIGHT
-          ) );
-        }
-        else {
-
-          // the container is shrinking, limit the change to the max allowed rate
-          this.heightChangeThisStep = Math.max( this.heightChangeThisStep, -MAX_CONTAINER_SHRINK_RATE * dt );
-
-          this.containerHeightProperty.set( Math.max(
-            this.containerHeightProperty.get() + this.heightChangeThisStep,
-            MIN_ALLOWABLE_CONTAINER_HEIGHT
-          ) );
-        }
-        this.normalizedContainerHeight = this.containerHeightProperty.get() / this.particleDiameter;
-        this.normalizedLidVelocityY = ( this.heightChangeThisStep / this.particleDiameter ) / dt;
-      }
-      else {
-        this.heightChangeThisStep = 0;
-        this.normalizedLidVelocityY = 0;
-      }
-    }
-    else {
-
-      // The lid is blowing off the container, so increase the container size until the lid should be well off the
-      // screen.
-      this.heightChangeThisStep = POST_EXPLOSION_CONTAINER_EXPANSION_RATE * dt;
-      if ( this.containerHeightProperty.get() < CONTAINER_INITIAL_HEIGHT * 3 ) {
-        this.containerHeightProperty.set(
-          this.containerHeightProperty.get() + POST_EXPLOSION_CONTAINER_EXPANSION_RATE * dt
-        );
-      }
-    }
+    // update the size of the container, which can be affected by exploding or other external factors
+    this.updateContainerSize( dt );
 
     // Record the pressure to see if it changes.
     const pressureBeforeAlgorithm = this.getModelPressure();
@@ -962,6 +896,30 @@ class MultipleParticleModel extends PhetioObject {
       this.temperatureSetPointProperty.set( newTemperature );
       this.isoKineticThermostat.targetTemperature = newTemperature;
       this.andersenThermostat.targetTemperature = newTemperature;
+    }
+  }
+
+  /**
+   * @param {number} dt - time in seconds
+   * @protected
+   */
+  updateContainerSize( dt ) {
+
+    if ( this.isExplodedProperty.value ) {
+
+      // The lid is blowing off the container - increase the container size until the lid is well off the screen.
+      this.heightChangeThisStep = POST_EXPLOSION_CONTAINER_EXPANSION_RATE * dt;
+      if ( this.containerHeightProperty.get() < CONTAINER_INITIAL_HEIGHT * 3 ) {
+        this.containerHeightProperty.set(
+          this.containerHeightProperty.get() + POST_EXPLOSION_CONTAINER_EXPANSION_RATE * dt
+        );
+      }
+    }
+    else {
+
+      // no changes to the height in this step
+      this.heightChangeThisStep = 0;
+      this.normalizedLidVelocityY = 0;
     }
   }
 
@@ -1314,19 +1272,6 @@ class MultipleParticleModel extends PhetioObject {
   }
 
   /**
-   * Convert a value for epsilon that is in the real range of values into a scaled value that is suitable for use with
-   * the motion and force calculators.
-   * @param {number} epsilon
-   * @private
-   */
-  convertEpsilonToScaledEpsilon( epsilon ) {
-    // The following conversion of the target value for epsilon to a scaled value for the motion calculator object was
-    // determined empirically such that the resulting behavior roughly matched that of the existing monatomic
-    // molecules.
-    return epsilon / ( SOMConstants.MAX_EPSILON / 2 );
-  }
-
-  /**
    * @param {number} scaledEpsilon
    * @returns {number}
    * @private
@@ -1418,7 +1363,7 @@ class MultipleParticleModel extends PhetioObject {
 // static constants
 MultipleParticleModel.PARTICLE_CONTAINER_WIDTH = CONTAINER_WIDTH;
 MultipleParticleModel.PARTICLE_CONTAINER_INITIAL_HEIGHT = CONTAINER_INITIAL_HEIGHT;
-MultipleParticleModel.MIN_ALLOWABLE_CONTAINER_HEIGHT = MIN_ALLOWABLE_CONTAINER_HEIGHT;
+MultipleParticleModel.MAX_CONTAINER_EXPAND_RATE = MAX_CONTAINER_EXPAND_RATE;
 
 statesOfMatter.register( 'MultipleParticleModel', MultipleParticleModel );
 export default MultipleParticleModel;
