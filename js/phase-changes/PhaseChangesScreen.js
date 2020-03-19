@@ -9,12 +9,12 @@
 
 import Screen from '../../../joist/js/Screen.js';
 import inherit from '../../../phet-core/js/inherit.js';
-import MultipleParticleModel from '../common/model/MultipleParticleModel.js';
 import SOMConstants from '../common/SOMConstants.js';
 import SOMColorProfile from '../common/view/SOMColorProfile.js';
 import statesOfMatterStrings from '../states-of-matter-strings.js';
 import statesOfMatter from '../statesOfMatter.js';
 import PhaseChangesIcon from './PhaseChangesIcon.js';
+import PhaseChangesModel from './PhaseChangesModel.js';
 import PhaseChangesScreenView from './view/PhaseChangesScreenView.js';
 
 const phaseChangesString = statesOfMatterStrings.phaseChanges;
@@ -36,7 +36,7 @@ function PhaseChangesScreen( isInteractionDiagramEnabled, tandem ) {
   };
 
   Screen.call( this,
-    function() { return new MultipleParticleModel( tandem.createTandem( 'model' ) ); },
+    function() { return new PhaseChangesModel( tandem.createTandem( 'model' ) ); },
     function( model ) {
       return new PhaseChangesScreenView( model, isInteractionDiagramEnabled, tandem.createTandem( 'view' ) );
     },

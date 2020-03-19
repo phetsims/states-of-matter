@@ -21,13 +21,13 @@ import RadioButtonGroup from '../../../../sun/js/buttons/RadioButtonGroup.js';
 import HSlider from '../../../../sun/js/HSlider.js';
 import Panel from '../../../../sun/js/Panel.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
-import MultipleParticleModel from '../../common/model/MultipleParticleModel.js';
 import SOMConstants from '../../common/SOMConstants.js';
 import SubstanceType from '../../common/SubstanceType.js';
 import AtomAndMoleculeIconFactory from '../../common/view/AtomAndMoleculeIconFactory.js';
 import SOMColorProfile from '../../common/view/SOMColorProfile.js';
 import statesOfMatterStrings from '../../states-of-matter-strings.js';
 import statesOfMatter from '../../statesOfMatter.js';
+import PhaseChangesModel from '../PhaseChangesModel.js';
 
 const adjustableAttractionString = statesOfMatterStrings.adjustableAttraction;
 const argonString = statesOfMatterStrings.argon;
@@ -45,12 +45,12 @@ const TICK_TEXT_MAX_WIDTH = 40;
 const NORMAL_TEXT_FONT_SIZE = 12;
 
 /**
- * @param { MultipleParticleModel } multipleParticleModel - model of the simulation
+ * @param { PhaseChangesModel } phaseChangesModel - model of the simulation
  * @param {boolean} isBasicVersion
  * @param {Object} [options] options for various panel display properties
  * @constructor
  */
-function PhaseChangesMoleculesControlPanel( multipleParticleModel, isBasicVersion, options ) {
+function PhaseChangesMoleculesControlPanel( phaseChangesModel, isBasicVersion, options ) {
 
   options = merge( {
     xMargin: 5,
@@ -88,8 +88,8 @@ function PhaseChangesMoleculesControlPanel( multipleParticleModel, isBasicVersio
   } );
 
   const interactionStrengthSlider = new HSlider(
-    multipleParticleModel.interactionStrengthProperty,
-    new Range( SOMConstants.MIN_ADJUSTABLE_EPSILON, MultipleParticleModel.MAX_ADJUSTABLE_EPSILON ), {
+    phaseChangesModel.interactionStrengthProperty,
+    new Range( SOMConstants.MIN_ADJUSTABLE_EPSILON, PhaseChangesModel.MAX_ADJUSTABLE_EPSILON ), {
       trackFill: 'white',
       thumbSize: new Dimension2( 14, 25 ),
       majorTickLength: 15,
@@ -108,7 +108,7 @@ function PhaseChangesMoleculesControlPanel( multipleParticleModel, isBasicVersio
       cursor: 'pointer',
       tandem: options.tandem.createTandem( 'interactionStrengthSlider' )
     } );
-  interactionStrengthSlider.addMajorTick( MultipleParticleModel.MAX_ADJUSTABLE_EPSILON, strongTitle );
+  interactionStrengthSlider.addMajorTick( PhaseChangesModel.MAX_ADJUSTABLE_EPSILON, strongTitle );
   interactionStrengthSlider.addMajorTick( SOMConstants.MIN_ADJUSTABLE_EPSILON, weakTitle );
 
   // put the title and slider together into a node
@@ -204,7 +204,7 @@ function PhaseChangesMoleculesControlPanel( multipleParticleModel, isBasicVersio
     ];
   }
 
-  const radioButtonGroup = new RadioButtonGroup( multipleParticleModel.substanceProperty, radioButtonContent, {
+  const radioButtonGroup = new RadioButtonGroup( phaseChangesModel.substanceProperty, radioButtonContent, {
     orientation: 'vertical',
     spacing: 3,
     cornerRadius: 5,
@@ -218,9 +218,9 @@ function PhaseChangesMoleculesControlPanel( multipleParticleModel, isBasicVersio
     tandem: options.tandem.createTandem( 'radioButtonGroup' )
   } );
 
-  multipleParticleModel.interactionStrengthProperty.link( function( value ) {
-    if ( multipleParticleModel.substanceProperty.get() === SubstanceType.ADJUSTABLE_ATOM ) {
-      multipleParticleModel.setEpsilon( value );
+  phaseChangesModel.interactionStrengthProperty.link( function( value ) {
+    if ( phaseChangesModel.substanceProperty.get() === SubstanceType.ADJUSTABLE_ATOM ) {
+      phaseChangesModel.setEpsilon( value );
     }
   } );
   const content = new VBox( { spacing: 4, children: [ radioButtonGroup ] } );
@@ -240,7 +240,7 @@ function PhaseChangesMoleculesControlPanel( multipleParticleModel, isBasicVersio
   interactionStrengthNode.top = radioButtonGroup.bottom + INSET;
 
   // make any updates needed to the panel when the selected substance changes
-  multipleParticleModel.substanceProperty.link( function( value ) {
+  phaseChangesModel.substanceProperty.link( function( value ) {
 
     // add or remove the node for controlling interaction strength
     if ( value === SubstanceType.ADJUSTABLE_ATOM ) {

@@ -102,11 +102,6 @@ const WATER_CRITICAL_POINT_IN_KELVIN = SOMConstants.WATER_CRITICAL_POINT_IN_KELV
 const ADJUSTABLE_ATOM_TRIPLE_POINT_IN_KELVIN = 75;
 const ADJUSTABLE_ATOM_CRITICAL_POINT_IN_KELVIN = 140;
 
-// Min a max values for adjustable epsilon.  Originally there was a wider allowable range, but the simulation did not
-// work so well, so the range below was arrived at empirically and seems to work reasonably well.
-const MIN_ADJUSTABLE_EPSILON = SOMConstants.MIN_ADJUSTABLE_EPSILON;
-const MAX_ADJUSTABLE_EPSILON = SOMConstants.MAX_ADJUSTABLE_EPSILON;
-
 // Time value used to prevent molecule injections from being too close together so that they don't overlap after
 // injection and cause high initial velocities.
 const MOLECULE_INJECTION_HOLDOFF_TIME = 0.25; // seconds, empirically determined
@@ -163,16 +158,6 @@ class MultipleParticleModel extends PhetioObject {
     } );
 
     // @public (read-write)
-    this.phaseDiagramExpandedProperty = new BooleanProperty( true, {
-      tandem: tandem.createTandem( 'phaseDiagramExpandedProperty' )
-    } );
-
-    // @public (read-write)
-    this.interactionPotentialDiagramExpandedProperty = new BooleanProperty( true, {
-      tandem: tandem.createTandem( 'interactionPotentialDiagramExpandedProperty' )
-    } );
-
-    // @public (read-write)
     this.temperatureSetPointProperty = new NumberProperty( INITIAL_TEMPERATURE, {
       tandem: tandem.createTandem( 'temperatureSetPointProperty' ),
       phetioReadOnly: true
@@ -198,12 +183,6 @@ class MultipleParticleModel extends PhetioObject {
     this.heatingCoolingAmountProperty = new NumberProperty( 0, {
       tandem: tandem.createTandem( 'heatingCoolingAmountProperty' ),
       range: new Range( -1, 1 )
-    } );
-
-    // @public (read-write)
-    this.interactionStrengthProperty = new NumberProperty( MAX_ADJUSTABLE_EPSILON, {
-      tandem: tandem.createTandem( 'interactionStrengthProperty' ),
-      range: new Range( MIN_ADJUSTABLE_EPSILON, MAX_ADJUSTABLE_EPSILON )
     } );
 
     // @public (read-write) - the number of molecules that should be in the simulation.  This is used primarily for
@@ -254,10 +233,12 @@ class MultipleParticleModel extends PhetioObject {
 
     // @private, strategy patterns that are applied to the data set
     this.atomPositionUpdater = null;
-    this.moleculeForceAndMotionCalculator = null;
     this.phaseStateChanger = null;
     this.isoKineticThermostat = null;
     this.andersenThermostat = null;
+
+    // @protected
+    this.moleculeForceAndMotionCalculator = null;
 
     // moving average calculator that tracks the average difference between the calculated and target temperatures
     this.averageTemperatureDifference = new MovingAverage( 10 );
@@ -569,7 +550,6 @@ class MultipleParticleModel extends PhetioObject {
   }
 
   /**
-   * @override
    * @public
    */
   reset() {
@@ -580,12 +560,9 @@ class MultipleParticleModel extends PhetioObject {
     this.containerHeightProperty.reset();
     this.targetContainerHeightProperty.reset();
     this.isExplodedProperty.reset();
-    this.phaseDiagramExpandedProperty.reset();
-    this.interactionPotentialDiagramExpandedProperty.reset();
     this.temperatureSetPointProperty.reset();
     this.pressureProperty.reset();
     this.substanceProperty.reset();
-    this.interactionStrengthProperty.reset();
     this.isPlayingProperty.reset();
     this.heatingCoolingAmountProperty.reset();
 
@@ -1204,26 +1181,6 @@ class MultipleParticleModel extends PhetioObject {
   }
 
   /**
-   * @param {number} epsilon
-   * @public
-   */
-  setEpsilon( epsilon ) {
-    if ( this.substanceProperty.get() === SubstanceType.ADJUSTABLE_ATOM ) {
-      if ( epsilon < MIN_ADJUSTABLE_EPSILON ) {
-        epsilon = MIN_ADJUSTABLE_EPSILON;
-      }
-      else if ( epsilon > MAX_ADJUSTABLE_EPSILON ) {
-        epsilon = MAX_ADJUSTABLE_EPSILON;
-      }
-      this.moleculeForceAndMotionCalculator.setScaledEpsilon( this.convertEpsilonToScaledEpsilon( epsilon ) );
-
-    }
-    else {
-      assert && assert( false, 'Error: Epsilon cannot be set when non-configurable molecule is in use.' );
-    }
-  }
-
-  /**
    * Initialize the various model components to handle a simulation in which all the molecules are single atoms.
    * @param {SubstanceType} substance
    * @param {number} phase
@@ -1459,7 +1416,6 @@ class MultipleParticleModel extends PhetioObject {
 
 
 // static constants
-MultipleParticleModel.MAX_ADJUSTABLE_EPSILON = MAX_ADJUSTABLE_EPSILON;
 MultipleParticleModel.PARTICLE_CONTAINER_WIDTH = CONTAINER_WIDTH;
 MultipleParticleModel.PARTICLE_CONTAINER_INITIAL_HEIGHT = CONTAINER_INITIAL_HEIGHT;
 MultipleParticleModel.MIN_ALLOWABLE_CONTAINER_HEIGHT = MIN_ALLOWABLE_CONTAINER_HEIGHT;
