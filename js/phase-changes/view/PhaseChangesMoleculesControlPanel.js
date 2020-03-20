@@ -155,22 +155,22 @@ function PhaseChangesMoleculesControlPanel( phaseChangesModel, isBasicVersion, o
       {
         value: SubstanceType.NEON,
         node: createLabelAndIconNode( neonSelectorInfo ),
-        tandemName: 'neonSelector'
+        tandemName: 'neon'
       },
       {
         value: SubstanceType.ARGON,
         node: createLabelAndIconNode( argonSelectorInfo ),
-        tandemName: 'argonSelector'
+        tandemName: 'argon'
       },
       {
         value: SubstanceType.DIATOMIC_OXYGEN,
         node: createLabelAndIconNode( oxygenSelectorInfo ),
-        tandemName: 'oxygenSelector'
+        tandemName: 'oxygen'
       },
       {
         value: SubstanceType.WATER,
         node: createLabelAndIconNode( waterSelectorInfo ),
-        tandemName: 'waterSelector'
+        tandemName: 'water'
       }
     ];
   }
@@ -179,27 +179,27 @@ function PhaseChangesMoleculesControlPanel( phaseChangesModel, isBasicVersion, o
       {
         value: SubstanceType.NEON,
         node: createLabelAndIconNode( neonSelectorInfo ),
-        tandemName: 'neonSelector'
+        tandemName: 'neon'
       },
       {
         value: SubstanceType.ARGON,
         node: createLabelAndIconNode( argonSelectorInfo ),
-        tandemName: 'argonSelector'
+        tandemName: 'argon'
       },
       {
         value: SubstanceType.DIATOMIC_OXYGEN,
         node: createLabelAndIconNode( oxygenSelectorInfo ),
-        tandemName: 'oxygenSelector'
+        tandemName: 'oxygen'
       },
       {
         value: SubstanceType.WATER,
         node: createLabelAndIconNode( waterSelectorInfo ),
-        tandemName: 'waterSelector'
+        tandemName: 'water'
       },
       {
         value: SubstanceType.ADJUSTABLE_ATOM,
         node: createLabelAndIconNode( adjustableAttractionSelectorInfo ),
-        tandemName: 'adjustableAtomSelector'
+        tandemName: 'adjustableAtom'
       }
     ];
   }

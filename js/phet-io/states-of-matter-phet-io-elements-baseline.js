@@ -8464,7 +8464,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NodeIO"
     },
-    "statesOfMatter.phaseChangesScreen.view.phaseChangesMoleculesControlPanel.radioButtonGroup.adjustableAtomSelector": {
+    "statesOfMatter.phaseChangesScreen.view.phaseChangesMoleculesControlPanel.radioButtonGroup.adjustableAtom": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -8477,7 +8477,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NodeIO"
     },
-    "statesOfMatter.phaseChangesScreen.view.phaseChangesMoleculesControlPanel.radioButtonGroup.adjustableAtomSelector.enabledProperty": {
+    "statesOfMatter.phaseChangesScreen.view.phaseChangesMoleculesControlPanel.radioButtonGroup.adjustableAtom.enabledProperty": {
       "phetioDocumentation": "When disabled, the button is grayed out and cannot be pressed",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -8490,7 +8490,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
-    "statesOfMatter.phaseChangesScreen.view.phaseChangesMoleculesControlPanel.radioButtonGroup.adjustableAtomSelector.firedEmitter": {
+    "statesOfMatter.phaseChangesScreen.view.phaseChangesMoleculesControlPanel.radioButtonGroup.adjustableAtom.firedEmitter": {
       "phetioDocumentation": "Emits when the radio button is pressed No arguments.",
       "phetioDynamicElement": false,
       "phetioEventType": "USER",
@@ -8503,7 +8503,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "EmitterIO<>"
     },
-    "statesOfMatter.phaseChangesScreen.view.phaseChangesMoleculesControlPanel.radioButtonGroup.adjustableAtomSelector.opacityProperty": {
+    "statesOfMatter.phaseChangesScreen.view.phaseChangesMoleculesControlPanel.radioButtonGroup.adjustableAtom.opacityProperty": {
       "phetioDocumentation": "Opacity of the parent NodeIO, between 0 (invisible) and 1 (fully visible)",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -8516,7 +8516,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NumberPropertyIO"
     },
-    "statesOfMatter.phaseChangesScreen.view.phaseChangesMoleculesControlPanel.radioButtonGroup.adjustableAtomSelector.pickableProperty": {
+    "statesOfMatter.phaseChangesScreen.view.phaseChangesMoleculesControlPanel.radioButtonGroup.adjustableAtom.pickableProperty": {
       "phetioDocumentation": "Sets whether the node will be pickable (and hence interactive), see the NodeIO documentation for more details",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -8529,7 +8529,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
-    "statesOfMatter.phaseChangesScreen.view.phaseChangesMoleculesControlPanel.radioButtonGroup.adjustableAtomSelector.pressListener.pressAction": {
+    "statesOfMatter.phaseChangesScreen.view.phaseChangesMoleculesControlPanel.radioButtonGroup.adjustableAtom.pressListener.pressAction": {
       "phetioDocumentation": "Executes whenever a press occurs. The first argument when executing can be used to convey info about the SceneryEvent. The arguments are:<br/><ol><li>event: SceneryEventIO</li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "USER",
@@ -8542,7 +8542,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "ActionIO<SceneryEventIO>"
     },
-    "statesOfMatter.phaseChangesScreen.view.phaseChangesMoleculesControlPanel.radioButtonGroup.adjustableAtomSelector.pressListener.releaseAction": {
+    "statesOfMatter.phaseChangesScreen.view.phaseChangesMoleculesControlPanel.radioButtonGroup.adjustableAtom.pressListener.releaseAction": {
       "phetioDocumentation": "Executes whenever a release occurs. The arguments are:<br/><ol><li>event: NullableIO<SceneryEventIO></li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "USER",
@@ -8555,7 +8555,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "ActionIO<NullableIO<SceneryEventIO>>"
     },
-    "statesOfMatter.phaseChangesScreen.view.phaseChangesMoleculesControlPanel.radioButtonGroup.adjustableAtomSelector.visibleProperty": {
+    "statesOfMatter.phaseChangesScreen.view.phaseChangesMoleculesControlPanel.radioButtonGroup.adjustableAtom.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -8568,7 +8568,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
-    "statesOfMatter.phaseChangesScreen.view.phaseChangesMoleculesControlPanel.radioButtonGroup.argonSelector": {
+    "statesOfMatter.phaseChangesScreen.view.phaseChangesMoleculesControlPanel.radioButtonGroup.argon": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -8581,7 +8581,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NodeIO"
     },
-    "statesOfMatter.phaseChangesScreen.view.phaseChangesMoleculesControlPanel.radioButtonGroup.argonSelector.enabledProperty": {
+    "statesOfMatter.phaseChangesScreen.view.phaseChangesMoleculesControlPanel.radioButtonGroup.argon.enabledProperty": {
       "phetioDocumentation": "When disabled, the button is grayed out and cannot be pressed",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -8594,7 +8594,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
-    "statesOfMatter.phaseChangesScreen.view.phaseChangesMoleculesControlPanel.radioButtonGroup.argonSelector.firedEmitter": {
+    "statesOfMatter.phaseChangesScreen.view.phaseChangesMoleculesControlPanel.radioButtonGroup.argon.firedEmitter": {
       "phetioDocumentation": "Emits when the radio button is pressed No arguments.",
       "phetioDynamicElement": false,
       "phetioEventType": "USER",
@@ -8607,7 +8607,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "EmitterIO<>"
     },
-    "statesOfMatter.phaseChangesScreen.view.phaseChangesMoleculesControlPanel.radioButtonGroup.argonSelector.opacityProperty": {
+    "statesOfMatter.phaseChangesScreen.view.phaseChangesMoleculesControlPanel.radioButtonGroup.argon.opacityProperty": {
       "phetioDocumentation": "Opacity of the parent NodeIO, between 0 (invisible) and 1 (fully visible)",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -8620,7 +8620,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NumberPropertyIO"
     },
-    "statesOfMatter.phaseChangesScreen.view.phaseChangesMoleculesControlPanel.radioButtonGroup.argonSelector.pickableProperty": {
+    "statesOfMatter.phaseChangesScreen.view.phaseChangesMoleculesControlPanel.radioButtonGroup.argon.pickableProperty": {
       "phetioDocumentation": "Sets whether the node will be pickable (and hence interactive), see the NodeIO documentation for more details",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -8633,7 +8633,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
-    "statesOfMatter.phaseChangesScreen.view.phaseChangesMoleculesControlPanel.radioButtonGroup.argonSelector.pressListener.pressAction": {
+    "statesOfMatter.phaseChangesScreen.view.phaseChangesMoleculesControlPanel.radioButtonGroup.argon.pressListener.pressAction": {
       "phetioDocumentation": "Executes whenever a press occurs. The first argument when executing can be used to convey info about the SceneryEvent. The arguments are:<br/><ol><li>event: SceneryEventIO</li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "USER",
@@ -8646,7 +8646,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "ActionIO<SceneryEventIO>"
     },
-    "statesOfMatter.phaseChangesScreen.view.phaseChangesMoleculesControlPanel.radioButtonGroup.argonSelector.pressListener.releaseAction": {
+    "statesOfMatter.phaseChangesScreen.view.phaseChangesMoleculesControlPanel.radioButtonGroup.argon.pressListener.releaseAction": {
       "phetioDocumentation": "Executes whenever a release occurs. The arguments are:<br/><ol><li>event: NullableIO<SceneryEventIO></li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "USER",
@@ -8659,7 +8659,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "ActionIO<NullableIO<SceneryEventIO>>"
     },
-    "statesOfMatter.phaseChangesScreen.view.phaseChangesMoleculesControlPanel.radioButtonGroup.argonSelector.visibleProperty": {
+    "statesOfMatter.phaseChangesScreen.view.phaseChangesMoleculesControlPanel.radioButtonGroup.argon.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -8672,7 +8672,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
-    "statesOfMatter.phaseChangesScreen.view.phaseChangesMoleculesControlPanel.radioButtonGroup.neonSelector": {
+    "statesOfMatter.phaseChangesScreen.view.phaseChangesMoleculesControlPanel.radioButtonGroup.neon": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -8685,7 +8685,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NodeIO"
     },
-    "statesOfMatter.phaseChangesScreen.view.phaseChangesMoleculesControlPanel.radioButtonGroup.neonSelector.enabledProperty": {
+    "statesOfMatter.phaseChangesScreen.view.phaseChangesMoleculesControlPanel.radioButtonGroup.neon.enabledProperty": {
       "phetioDocumentation": "When disabled, the button is grayed out and cannot be pressed",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -8698,7 +8698,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
-    "statesOfMatter.phaseChangesScreen.view.phaseChangesMoleculesControlPanel.radioButtonGroup.neonSelector.firedEmitter": {
+    "statesOfMatter.phaseChangesScreen.view.phaseChangesMoleculesControlPanel.radioButtonGroup.neon.firedEmitter": {
       "phetioDocumentation": "Emits when the radio button is pressed No arguments.",
       "phetioDynamicElement": false,
       "phetioEventType": "USER",
@@ -8711,7 +8711,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "EmitterIO<>"
     },
-    "statesOfMatter.phaseChangesScreen.view.phaseChangesMoleculesControlPanel.radioButtonGroup.neonSelector.opacityProperty": {
+    "statesOfMatter.phaseChangesScreen.view.phaseChangesMoleculesControlPanel.radioButtonGroup.neon.opacityProperty": {
       "phetioDocumentation": "Opacity of the parent NodeIO, between 0 (invisible) and 1 (fully visible)",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -8724,7 +8724,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NumberPropertyIO"
     },
-    "statesOfMatter.phaseChangesScreen.view.phaseChangesMoleculesControlPanel.radioButtonGroup.neonSelector.pickableProperty": {
+    "statesOfMatter.phaseChangesScreen.view.phaseChangesMoleculesControlPanel.radioButtonGroup.neon.pickableProperty": {
       "phetioDocumentation": "Sets whether the node will be pickable (and hence interactive), see the NodeIO documentation for more details",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -8737,7 +8737,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
-    "statesOfMatter.phaseChangesScreen.view.phaseChangesMoleculesControlPanel.radioButtonGroup.neonSelector.pressListener.pressAction": {
+    "statesOfMatter.phaseChangesScreen.view.phaseChangesMoleculesControlPanel.radioButtonGroup.neon.pressListener.pressAction": {
       "phetioDocumentation": "Executes whenever a press occurs. The first argument when executing can be used to convey info about the SceneryEvent. The arguments are:<br/><ol><li>event: SceneryEventIO</li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "USER",
@@ -8750,7 +8750,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "ActionIO<SceneryEventIO>"
     },
-    "statesOfMatter.phaseChangesScreen.view.phaseChangesMoleculesControlPanel.radioButtonGroup.neonSelector.pressListener.releaseAction": {
+    "statesOfMatter.phaseChangesScreen.view.phaseChangesMoleculesControlPanel.radioButtonGroup.neon.pressListener.releaseAction": {
       "phetioDocumentation": "Executes whenever a release occurs. The arguments are:<br/><ol><li>event: NullableIO<SceneryEventIO></li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "USER",
@@ -8763,7 +8763,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "ActionIO<NullableIO<SceneryEventIO>>"
     },
-    "statesOfMatter.phaseChangesScreen.view.phaseChangesMoleculesControlPanel.radioButtonGroup.neonSelector.visibleProperty": {
+    "statesOfMatter.phaseChangesScreen.view.phaseChangesMoleculesControlPanel.radioButtonGroup.neon.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -8789,7 +8789,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NumberPropertyIO"
     },
-    "statesOfMatter.phaseChangesScreen.view.phaseChangesMoleculesControlPanel.radioButtonGroup.oxygenSelector": {
+    "statesOfMatter.phaseChangesScreen.view.phaseChangesMoleculesControlPanel.radioButtonGroup.oxygen": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -8802,7 +8802,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NodeIO"
     },
-    "statesOfMatter.phaseChangesScreen.view.phaseChangesMoleculesControlPanel.radioButtonGroup.oxygenSelector.enabledProperty": {
+    "statesOfMatter.phaseChangesScreen.view.phaseChangesMoleculesControlPanel.radioButtonGroup.oxygen.enabledProperty": {
       "phetioDocumentation": "When disabled, the button is grayed out and cannot be pressed",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -8815,7 +8815,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
-    "statesOfMatter.phaseChangesScreen.view.phaseChangesMoleculesControlPanel.radioButtonGroup.oxygenSelector.firedEmitter": {
+    "statesOfMatter.phaseChangesScreen.view.phaseChangesMoleculesControlPanel.radioButtonGroup.oxygen.firedEmitter": {
       "phetioDocumentation": "Emits when the radio button is pressed No arguments.",
       "phetioDynamicElement": false,
       "phetioEventType": "USER",
@@ -8828,7 +8828,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "EmitterIO<>"
     },
-    "statesOfMatter.phaseChangesScreen.view.phaseChangesMoleculesControlPanel.radioButtonGroup.oxygenSelector.opacityProperty": {
+    "statesOfMatter.phaseChangesScreen.view.phaseChangesMoleculesControlPanel.radioButtonGroup.oxygen.opacityProperty": {
       "phetioDocumentation": "Opacity of the parent NodeIO, between 0 (invisible) and 1 (fully visible)",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -8841,7 +8841,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NumberPropertyIO"
     },
-    "statesOfMatter.phaseChangesScreen.view.phaseChangesMoleculesControlPanel.radioButtonGroup.oxygenSelector.pickableProperty": {
+    "statesOfMatter.phaseChangesScreen.view.phaseChangesMoleculesControlPanel.radioButtonGroup.oxygen.pickableProperty": {
       "phetioDocumentation": "Sets whether the node will be pickable (and hence interactive), see the NodeIO documentation for more details",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -8854,7 +8854,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
-    "statesOfMatter.phaseChangesScreen.view.phaseChangesMoleculesControlPanel.radioButtonGroup.oxygenSelector.pressListener.pressAction": {
+    "statesOfMatter.phaseChangesScreen.view.phaseChangesMoleculesControlPanel.radioButtonGroup.oxygen.pressListener.pressAction": {
       "phetioDocumentation": "Executes whenever a press occurs. The first argument when executing can be used to convey info about the SceneryEvent. The arguments are:<br/><ol><li>event: SceneryEventIO</li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "USER",
@@ -8867,7 +8867,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "ActionIO<SceneryEventIO>"
     },
-    "statesOfMatter.phaseChangesScreen.view.phaseChangesMoleculesControlPanel.radioButtonGroup.oxygenSelector.pressListener.releaseAction": {
+    "statesOfMatter.phaseChangesScreen.view.phaseChangesMoleculesControlPanel.radioButtonGroup.oxygen.pressListener.releaseAction": {
       "phetioDocumentation": "Executes whenever a release occurs. The arguments are:<br/><ol><li>event: NullableIO<SceneryEventIO></li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "USER",
@@ -8880,7 +8880,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "ActionIO<NullableIO<SceneryEventIO>>"
     },
-    "statesOfMatter.phaseChangesScreen.view.phaseChangesMoleculesControlPanel.radioButtonGroup.oxygenSelector.visibleProperty": {
+    "statesOfMatter.phaseChangesScreen.view.phaseChangesMoleculesControlPanel.radioButtonGroup.oxygen.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -8932,7 +8932,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
-    "statesOfMatter.phaseChangesScreen.view.phaseChangesMoleculesControlPanel.radioButtonGroup.waterSelector": {
+    "statesOfMatter.phaseChangesScreen.view.phaseChangesMoleculesControlPanel.radioButtonGroup.water": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -8945,7 +8945,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NodeIO"
     },
-    "statesOfMatter.phaseChangesScreen.view.phaseChangesMoleculesControlPanel.radioButtonGroup.waterSelector.enabledProperty": {
+    "statesOfMatter.phaseChangesScreen.view.phaseChangesMoleculesControlPanel.radioButtonGroup.water.enabledProperty": {
       "phetioDocumentation": "When disabled, the button is grayed out and cannot be pressed",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -8958,7 +8958,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
-    "statesOfMatter.phaseChangesScreen.view.phaseChangesMoleculesControlPanel.radioButtonGroup.waterSelector.firedEmitter": {
+    "statesOfMatter.phaseChangesScreen.view.phaseChangesMoleculesControlPanel.radioButtonGroup.water.firedEmitter": {
       "phetioDocumentation": "Emits when the radio button is pressed No arguments.",
       "phetioDynamicElement": false,
       "phetioEventType": "USER",
@@ -8971,7 +8971,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "EmitterIO<>"
     },
-    "statesOfMatter.phaseChangesScreen.view.phaseChangesMoleculesControlPanel.radioButtonGroup.waterSelector.opacityProperty": {
+    "statesOfMatter.phaseChangesScreen.view.phaseChangesMoleculesControlPanel.radioButtonGroup.water.opacityProperty": {
       "phetioDocumentation": "Opacity of the parent NodeIO, between 0 (invisible) and 1 (fully visible)",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -8984,7 +8984,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NumberPropertyIO"
     },
-    "statesOfMatter.phaseChangesScreen.view.phaseChangesMoleculesControlPanel.radioButtonGroup.waterSelector.pickableProperty": {
+    "statesOfMatter.phaseChangesScreen.view.phaseChangesMoleculesControlPanel.radioButtonGroup.water.pickableProperty": {
       "phetioDocumentation": "Sets whether the node will be pickable (and hence interactive), see the NodeIO documentation for more details",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -8997,7 +8997,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
-    "statesOfMatter.phaseChangesScreen.view.phaseChangesMoleculesControlPanel.radioButtonGroup.waterSelector.pressListener.pressAction": {
+    "statesOfMatter.phaseChangesScreen.view.phaseChangesMoleculesControlPanel.radioButtonGroup.water.pressListener.pressAction": {
       "phetioDocumentation": "Executes whenever a press occurs. The first argument when executing can be used to convey info about the SceneryEvent. The arguments are:<br/><ol><li>event: SceneryEventIO</li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "USER",
@@ -9010,7 +9010,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "ActionIO<SceneryEventIO>"
     },
-    "statesOfMatter.phaseChangesScreen.view.phaseChangesMoleculesControlPanel.radioButtonGroup.waterSelector.pressListener.releaseAction": {
+    "statesOfMatter.phaseChangesScreen.view.phaseChangesMoleculesControlPanel.radioButtonGroup.water.pressListener.releaseAction": {
       "phetioDocumentation": "Executes whenever a release occurs. The arguments are:<br/><ol><li>event: NullableIO<SceneryEventIO></li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "USER",
@@ -9023,7 +9023,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "ActionIO<NullableIO<SceneryEventIO>>"
     },
-    "statesOfMatter.phaseChangesScreen.view.phaseChangesMoleculesControlPanel.radioButtonGroup.waterSelector.visibleProperty": {
+    "statesOfMatter.phaseChangesScreen.view.phaseChangesMoleculesControlPanel.radioButtonGroup.water.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -10778,7 +10778,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NodeIO"
     },
-    "statesOfMatter.statesScreen.view.atomsAndMoleculesSelectionPanel.radioButtonGroup.argonSelector": {
+    "statesOfMatter.statesScreen.view.atomsAndMoleculesSelectionPanel.radioButtonGroup.argon": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -10791,7 +10791,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NodeIO"
     },
-    "statesOfMatter.statesScreen.view.atomsAndMoleculesSelectionPanel.radioButtonGroup.argonSelector.enabledProperty": {
+    "statesOfMatter.statesScreen.view.atomsAndMoleculesSelectionPanel.radioButtonGroup.argon.enabledProperty": {
       "phetioDocumentation": "When disabled, the button is grayed out and cannot be pressed",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -10804,7 +10804,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
-    "statesOfMatter.statesScreen.view.atomsAndMoleculesSelectionPanel.radioButtonGroup.argonSelector.firedEmitter": {
+    "statesOfMatter.statesScreen.view.atomsAndMoleculesSelectionPanel.radioButtonGroup.argon.firedEmitter": {
       "phetioDocumentation": "Emits when the radio button is pressed No arguments.",
       "phetioDynamicElement": false,
       "phetioEventType": "USER",
@@ -10817,7 +10817,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "EmitterIO<>"
     },
-    "statesOfMatter.statesScreen.view.atomsAndMoleculesSelectionPanel.radioButtonGroup.argonSelector.opacityProperty": {
+    "statesOfMatter.statesScreen.view.atomsAndMoleculesSelectionPanel.radioButtonGroup.argon.opacityProperty": {
       "phetioDocumentation": "Opacity of the parent NodeIO, between 0 (invisible) and 1 (fully visible)",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -10830,7 +10830,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NumberPropertyIO"
     },
-    "statesOfMatter.statesScreen.view.atomsAndMoleculesSelectionPanel.radioButtonGroup.argonSelector.pickableProperty": {
+    "statesOfMatter.statesScreen.view.atomsAndMoleculesSelectionPanel.radioButtonGroup.argon.pickableProperty": {
       "phetioDocumentation": "Sets whether the node will be pickable (and hence interactive), see the NodeIO documentation for more details",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -10843,7 +10843,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
-    "statesOfMatter.statesScreen.view.atomsAndMoleculesSelectionPanel.radioButtonGroup.argonSelector.pressListener.pressAction": {
+    "statesOfMatter.statesScreen.view.atomsAndMoleculesSelectionPanel.radioButtonGroup.argon.pressListener.pressAction": {
       "phetioDocumentation": "Executes whenever a press occurs. The first argument when executing can be used to convey info about the SceneryEvent. The arguments are:<br/><ol><li>event: SceneryEventIO</li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "USER",
@@ -10856,7 +10856,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "ActionIO<SceneryEventIO>"
     },
-    "statesOfMatter.statesScreen.view.atomsAndMoleculesSelectionPanel.radioButtonGroup.argonSelector.pressListener.releaseAction": {
+    "statesOfMatter.statesScreen.view.atomsAndMoleculesSelectionPanel.radioButtonGroup.argon.pressListener.releaseAction": {
       "phetioDocumentation": "Executes whenever a release occurs. The arguments are:<br/><ol><li>event: NullableIO<SceneryEventIO></li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "USER",
@@ -10869,7 +10869,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "ActionIO<NullableIO<SceneryEventIO>>"
     },
-    "statesOfMatter.statesScreen.view.atomsAndMoleculesSelectionPanel.radioButtonGroup.argonSelector.visibleProperty": {
+    "statesOfMatter.statesScreen.view.atomsAndMoleculesSelectionPanel.radioButtonGroup.argon.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -10882,7 +10882,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
-    "statesOfMatter.statesScreen.view.atomsAndMoleculesSelectionPanel.radioButtonGroup.neonSelector": {
+    "statesOfMatter.statesScreen.view.atomsAndMoleculesSelectionPanel.radioButtonGroup.neon": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -10895,7 +10895,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NodeIO"
     },
-    "statesOfMatter.statesScreen.view.atomsAndMoleculesSelectionPanel.radioButtonGroup.neonSelector.enabledProperty": {
+    "statesOfMatter.statesScreen.view.atomsAndMoleculesSelectionPanel.radioButtonGroup.neon.enabledProperty": {
       "phetioDocumentation": "When disabled, the button is grayed out and cannot be pressed",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -10908,7 +10908,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
-    "statesOfMatter.statesScreen.view.atomsAndMoleculesSelectionPanel.radioButtonGroup.neonSelector.firedEmitter": {
+    "statesOfMatter.statesScreen.view.atomsAndMoleculesSelectionPanel.radioButtonGroup.neon.firedEmitter": {
       "phetioDocumentation": "Emits when the radio button is pressed No arguments.",
       "phetioDynamicElement": false,
       "phetioEventType": "USER",
@@ -10921,7 +10921,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "EmitterIO<>"
     },
-    "statesOfMatter.statesScreen.view.atomsAndMoleculesSelectionPanel.radioButtonGroup.neonSelector.opacityProperty": {
+    "statesOfMatter.statesScreen.view.atomsAndMoleculesSelectionPanel.radioButtonGroup.neon.opacityProperty": {
       "phetioDocumentation": "Opacity of the parent NodeIO, between 0 (invisible) and 1 (fully visible)",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -10934,7 +10934,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NumberPropertyIO"
     },
-    "statesOfMatter.statesScreen.view.atomsAndMoleculesSelectionPanel.radioButtonGroup.neonSelector.pickableProperty": {
+    "statesOfMatter.statesScreen.view.atomsAndMoleculesSelectionPanel.radioButtonGroup.neon.pickableProperty": {
       "phetioDocumentation": "Sets whether the node will be pickable (and hence interactive), see the NodeIO documentation for more details",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -10947,7 +10947,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
-    "statesOfMatter.statesScreen.view.atomsAndMoleculesSelectionPanel.radioButtonGroup.neonSelector.pressListener.pressAction": {
+    "statesOfMatter.statesScreen.view.atomsAndMoleculesSelectionPanel.radioButtonGroup.neon.pressListener.pressAction": {
       "phetioDocumentation": "Executes whenever a press occurs. The first argument when executing can be used to convey info about the SceneryEvent. The arguments are:<br/><ol><li>event: SceneryEventIO</li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "USER",
@@ -10960,7 +10960,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "ActionIO<SceneryEventIO>"
     },
-    "statesOfMatter.statesScreen.view.atomsAndMoleculesSelectionPanel.radioButtonGroup.neonSelector.pressListener.releaseAction": {
+    "statesOfMatter.statesScreen.view.atomsAndMoleculesSelectionPanel.radioButtonGroup.neon.pressListener.releaseAction": {
       "phetioDocumentation": "Executes whenever a release occurs. The arguments are:<br/><ol><li>event: NullableIO<SceneryEventIO></li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "USER",
@@ -10973,7 +10973,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "ActionIO<NullableIO<SceneryEventIO>>"
     },
-    "statesOfMatter.statesScreen.view.atomsAndMoleculesSelectionPanel.radioButtonGroup.neonSelector.visibleProperty": {
+    "statesOfMatter.statesScreen.view.atomsAndMoleculesSelectionPanel.radioButtonGroup.neon.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -10999,7 +10999,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NumberPropertyIO"
     },
-    "statesOfMatter.statesScreen.view.atomsAndMoleculesSelectionPanel.radioButtonGroup.oxygenSelector": {
+    "statesOfMatter.statesScreen.view.atomsAndMoleculesSelectionPanel.radioButtonGroup.oxygen": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -11012,7 +11012,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NodeIO"
     },
-    "statesOfMatter.statesScreen.view.atomsAndMoleculesSelectionPanel.radioButtonGroup.oxygenSelector.enabledProperty": {
+    "statesOfMatter.statesScreen.view.atomsAndMoleculesSelectionPanel.radioButtonGroup.oxygen.enabledProperty": {
       "phetioDocumentation": "When disabled, the button is grayed out and cannot be pressed",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -11025,7 +11025,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
-    "statesOfMatter.statesScreen.view.atomsAndMoleculesSelectionPanel.radioButtonGroup.oxygenSelector.firedEmitter": {
+    "statesOfMatter.statesScreen.view.atomsAndMoleculesSelectionPanel.radioButtonGroup.oxygen.firedEmitter": {
       "phetioDocumentation": "Emits when the radio button is pressed No arguments.",
       "phetioDynamicElement": false,
       "phetioEventType": "USER",
@@ -11038,7 +11038,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "EmitterIO<>"
     },
-    "statesOfMatter.statesScreen.view.atomsAndMoleculesSelectionPanel.radioButtonGroup.oxygenSelector.opacityProperty": {
+    "statesOfMatter.statesScreen.view.atomsAndMoleculesSelectionPanel.radioButtonGroup.oxygen.opacityProperty": {
       "phetioDocumentation": "Opacity of the parent NodeIO, between 0 (invisible) and 1 (fully visible)",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -11051,7 +11051,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NumberPropertyIO"
     },
-    "statesOfMatter.statesScreen.view.atomsAndMoleculesSelectionPanel.radioButtonGroup.oxygenSelector.pickableProperty": {
+    "statesOfMatter.statesScreen.view.atomsAndMoleculesSelectionPanel.radioButtonGroup.oxygen.pickableProperty": {
       "phetioDocumentation": "Sets whether the node will be pickable (and hence interactive), see the NodeIO documentation for more details",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -11064,7 +11064,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
-    "statesOfMatter.statesScreen.view.atomsAndMoleculesSelectionPanel.radioButtonGroup.oxygenSelector.pressListener.pressAction": {
+    "statesOfMatter.statesScreen.view.atomsAndMoleculesSelectionPanel.radioButtonGroup.oxygen.pressListener.pressAction": {
       "phetioDocumentation": "Executes whenever a press occurs. The first argument when executing can be used to convey info about the SceneryEvent. The arguments are:<br/><ol><li>event: SceneryEventIO</li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "USER",
@@ -11077,7 +11077,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "ActionIO<SceneryEventIO>"
     },
-    "statesOfMatter.statesScreen.view.atomsAndMoleculesSelectionPanel.radioButtonGroup.oxygenSelector.pressListener.releaseAction": {
+    "statesOfMatter.statesScreen.view.atomsAndMoleculesSelectionPanel.radioButtonGroup.oxygen.pressListener.releaseAction": {
       "phetioDocumentation": "Executes whenever a release occurs. The arguments are:<br/><ol><li>event: NullableIO<SceneryEventIO></li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "USER",
@@ -11090,7 +11090,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "ActionIO<NullableIO<SceneryEventIO>>"
     },
-    "statesOfMatter.statesScreen.view.atomsAndMoleculesSelectionPanel.radioButtonGroup.oxygenSelector.visibleProperty": {
+    "statesOfMatter.statesScreen.view.atomsAndMoleculesSelectionPanel.radioButtonGroup.oxygen.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -11142,7 +11142,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
-    "statesOfMatter.statesScreen.view.atomsAndMoleculesSelectionPanel.radioButtonGroup.waterSelector": {
+    "statesOfMatter.statesScreen.view.atomsAndMoleculesSelectionPanel.radioButtonGroup.water": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -11155,7 +11155,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NodeIO"
     },
-    "statesOfMatter.statesScreen.view.atomsAndMoleculesSelectionPanel.radioButtonGroup.waterSelector.enabledProperty": {
+    "statesOfMatter.statesScreen.view.atomsAndMoleculesSelectionPanel.radioButtonGroup.water.enabledProperty": {
       "phetioDocumentation": "When disabled, the button is grayed out and cannot be pressed",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -11168,7 +11168,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
-    "statesOfMatter.statesScreen.view.atomsAndMoleculesSelectionPanel.radioButtonGroup.waterSelector.firedEmitter": {
+    "statesOfMatter.statesScreen.view.atomsAndMoleculesSelectionPanel.radioButtonGroup.water.firedEmitter": {
       "phetioDocumentation": "Emits when the radio button is pressed No arguments.",
       "phetioDynamicElement": false,
       "phetioEventType": "USER",
@@ -11181,7 +11181,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "EmitterIO<>"
     },
-    "statesOfMatter.statesScreen.view.atomsAndMoleculesSelectionPanel.radioButtonGroup.waterSelector.opacityProperty": {
+    "statesOfMatter.statesScreen.view.atomsAndMoleculesSelectionPanel.radioButtonGroup.water.opacityProperty": {
       "phetioDocumentation": "Opacity of the parent NodeIO, between 0 (invisible) and 1 (fully visible)",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -11194,7 +11194,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NumberPropertyIO"
     },
-    "statesOfMatter.statesScreen.view.atomsAndMoleculesSelectionPanel.radioButtonGroup.waterSelector.pickableProperty": {
+    "statesOfMatter.statesScreen.view.atomsAndMoleculesSelectionPanel.radioButtonGroup.water.pickableProperty": {
       "phetioDocumentation": "Sets whether the node will be pickable (and hence interactive), see the NodeIO documentation for more details",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -11207,7 +11207,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
-    "statesOfMatter.statesScreen.view.atomsAndMoleculesSelectionPanel.radioButtonGroup.waterSelector.pressListener.pressAction": {
+    "statesOfMatter.statesScreen.view.atomsAndMoleculesSelectionPanel.radioButtonGroup.water.pressListener.pressAction": {
       "phetioDocumentation": "Executes whenever a press occurs. The first argument when executing can be used to convey info about the SceneryEvent. The arguments are:<br/><ol><li>event: SceneryEventIO</li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "USER",
@@ -11220,7 +11220,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "ActionIO<SceneryEventIO>"
     },
-    "statesOfMatter.statesScreen.view.atomsAndMoleculesSelectionPanel.radioButtonGroup.waterSelector.pressListener.releaseAction": {
+    "statesOfMatter.statesScreen.view.atomsAndMoleculesSelectionPanel.radioButtonGroup.water.pressListener.releaseAction": {
       "phetioDocumentation": "Executes whenever a release occurs. The arguments are:<br/><ol><li>event: NullableIO<SceneryEventIO></li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "USER",
@@ -11233,7 +11233,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "ActionIO<NullableIO<SceneryEventIO>>"
     },
-    "statesOfMatter.statesScreen.view.atomsAndMoleculesSelectionPanel.radioButtonGroup.waterSelector.visibleProperty": {
+    "statesOfMatter.statesScreen.view.atomsAndMoleculesSelectionPanel.radioButtonGroup.water.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",

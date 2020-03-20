@@ -119,14 +119,14 @@ function StatesMoleculesControlPanel( substanceProperty, options ) {
   };
 
   const radioButtonContent = [
-    { value: SubstanceType.NEON, node: createSelectionNode( neonSelectionNodeSpec ), tandemName: 'neonSelector' },
-    { value: SubstanceType.ARGON, node: createSelectionNode( argonSelectionNodeSpec ), tandemName: 'argonSelector' },
+    { value: SubstanceType.NEON, node: createSelectionNode( neonSelectionNodeSpec ), tandemName: 'neon' },
+    { value: SubstanceType.ARGON, node: createSelectionNode( argonSelectionNodeSpec ), tandemName: 'argon' },
     {
       value: SubstanceType.DIATOMIC_OXYGEN,
       node: createSelectionNode( oxygenSelectionNodeSpec ),
-      tandemName: 'oxygenSelector'
+      tandemName: 'oxygen'
     },
-    { value: SubstanceType.WATER, node: createSelectionNode( waterSelectionNodeSpec ), tandemName: 'waterSelector' }
+    { value: SubstanceType.WATER, node: createSelectionNode( waterSelectionNodeSpec ), tandemName: 'water' }
   ];
 
   const radioButtonGroup = new RadioButtonGroup( substanceProperty, radioButtonContent, {
