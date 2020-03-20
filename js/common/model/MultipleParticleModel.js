@@ -160,7 +160,8 @@ class MultipleParticleModel extends PhetioObject {
     // @public (read-write)
     this.temperatureSetPointProperty = new NumberProperty( INITIAL_TEMPERATURE, {
       tandem: tandem.createTandem( 'temperatureSetPointProperty' ),
-      phetioReadOnly: true
+      phetioReadOnly: true,
+      phetioDocumentation: "in internal model units, solid = 0.15, liquid = 0.34, gas = 1"
     } );
 
     // @public (read-only)

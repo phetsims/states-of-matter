@@ -6931,7 +6931,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "NumberPropertyIO"
     },
     "statesOfMatter.phaseChangesScreen.model.temperatureSetPointProperty": {
-      "phetioDocumentation": "",
+      "phetioDocumentation": "in internal model units, solid = 0.15, liquid = 0.34, gas = 1",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
@@ -10519,7 +10519,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "PropertyIO<EnumerationIO(NEON|ARGON|DIATOMIC_OXYGEN|WATER|ADJUSTABLE_ATOM)>"
     },
     "statesOfMatter.statesScreen.model.temperatureSetPointProperty": {
-      "phetioDocumentation": "",
+      "phetioDocumentation": "in internal model units, solid = 0.15, liquid = 0.34, gas = 1",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
