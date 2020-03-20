@@ -11,8 +11,6 @@ import Range from '../../../../dot/js/Range.js';
 import inherit from '../../../../phet-core/js/inherit.js';
 import merge from '../../../../phet-core/js/merge.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import HBox from '../../../../scenery/js/nodes/HBox.js';
-import HStrut from '../../../../scenery/js/nodes/HStrut.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import Rectangle from '../../../../scenery/js/nodes/Rectangle.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
@@ -25,6 +23,7 @@ import SOMConstants from '../../common/SOMConstants.js';
 import SubstanceType from '../../common/SubstanceType.js';
 import AtomAndMoleculeIconFactory from '../../common/view/AtomAndMoleculeIconFactory.js';
 import SOMColorProfile from '../../common/view/SOMColorProfile.js';
+import SubstanceSelectorNode from '../../common/view/SubstanceSelectorNode.js';
 import statesOfMatterStrings from '../../states-of-matter-strings.js';
 import statesOfMatter from '../../statesOfMatter.js';
 import PhaseChangesModel from '../PhaseChangesModel.js';
@@ -46,13 +45,13 @@ const NORMAL_TEXT_FONT_SIZE = 12;
 
 /**
  * @param { PhaseChangesModel } phaseChangesModel - model of the simulation
- * @param {boolean} isBasicVersion
  * @param {Object} [options] options for various panel display properties
  * @constructor
  */
-function PhaseChangesMoleculesControlPanel( phaseChangesModel, isBasicVersion, options ) {
+function PhaseChangesMoleculesControlPanel( phaseChangesModel, options ) {
 
   options = merge( {
+    showAdjustableAttraction: false,
     xMargin: 5,
     yMargin: 5,
     fill: SOMColorProfile.controlPanelBackgroundProperty,
@@ -156,65 +155,40 @@ function PhaseChangesMoleculesControlPanel( phaseChangesModel, isBasicVersion, o
     icon: AtomAndMoleculeIconFactory.createIcon( SubstanceType.ADJUSTABLE_ATOM )
   };
 
-  // function that creates the selector nodes, which have a label and an icon with a space between
-  function createLabelAndIconNode( labelAndIconSpec ) {
-    const strutWidth = selectorWidth - labelAndIconSpec.label.width - labelAndIconSpec.icon.width;
-    return new HBox( { children: [ labelAndIconSpec.label, new HStrut( strutWidth ), labelAndIconSpec.icon ] } );
-  }
+  const radioButtonContent = [
+    {
+      value: SubstanceType.NEON,
+      node: new SubstanceSelectorNode( neonSelectorInfo.label, neonSelectorInfo.icon, selectorWidth ),
+      tandemName: 'neon'
+    },
+    {
+      value: SubstanceType.ARGON,
+      node: new SubstanceSelectorNode( argonSelectorInfo.label, argonSelectorInfo.icon, selectorWidth ),
+      tandemName: 'argon'
+    },
+    {
+      value: SubstanceType.DIATOMIC_OXYGEN,
+      node: new SubstanceSelectorNode( oxygenSelectorInfo.label, oxygenSelectorInfo.icon, selectorWidth ),
+      tandemName: 'oxygen'
+    },
+    {
+      value: SubstanceType.WATER,
+      node: new SubstanceSelectorNode( waterSelectorInfo.label, waterSelectorInfo.icon, selectorWidth ),
+      tandemName: 'water'
+    }
+  ];
 
-  let radioButtonContent;
-  if ( !isBasicVersion ) {
-    radioButtonContent = [
-      {
-        value: SubstanceType.NEON,
-        node: createLabelAndIconNode( neonSelectorInfo ),
-        tandemName: 'neon'
-      },
-      {
-        value: SubstanceType.ARGON,
-        node: createLabelAndIconNode( argonSelectorInfo ),
-        tandemName: 'argon'
-      },
-      {
-        value: SubstanceType.DIATOMIC_OXYGEN,
-        node: createLabelAndIconNode( oxygenSelectorInfo ),
-        tandemName: 'oxygen'
-      },
-      {
-        value: SubstanceType.WATER,
-        node: createLabelAndIconNode( waterSelectorInfo ),
-        tandemName: 'water'
+  if ( options.showAdjustableAttraction ) {
+    radioButtonContent.push( {
+      value: SubstanceType.ADJUSTABLE_ATOM,
+      node: new SubstanceSelectorNode(
+        adjustableAttractionSelectorInfo.label,
+        adjustableAttractionSelectorInfo.icon,
+        selectorWidth
+      ),
+      tandemName: 'adjustableAtom'
       }
-    ];
-  }
-  else {
-    radioButtonContent = [
-      {
-        value: SubstanceType.NEON,
-        node: createLabelAndIconNode( neonSelectorInfo ),
-        tandemName: 'neon'
-      },
-      {
-        value: SubstanceType.ARGON,
-        node: createLabelAndIconNode( argonSelectorInfo ),
-        tandemName: 'argon'
-      },
-      {
-        value: SubstanceType.DIATOMIC_OXYGEN,
-        node: createLabelAndIconNode( oxygenSelectorInfo ),
-        tandemName: 'oxygen'
-      },
-      {
-        value: SubstanceType.WATER,
-        node: createLabelAndIconNode( waterSelectorInfo ),
-        tandemName: 'water'
-      },
-      {
-        value: SubstanceType.ADJUSTABLE_ATOM,
-        node: createLabelAndIconNode( adjustableAttractionSelectorInfo ),
-        tandemName: 'adjustableAtom'
-      }
-    ];
+    );
   }
 
   const radioButtonGroup = new RadioButtonGroup( phaseChangesModel.substanceProperty, radioButtonContent, {

@@ -51,16 +51,16 @@ const MAX_NUM_HISTORY_SAMPLES = 100;
 const CONTROL_PANEL_X_INSET = 15;
 
 /**
- * @param {MultipleParticleModel} multipleParticleModel - model of the simulation
+ * @param {PhaseChangesModel} model - model of the simulation
  * @param {boolean} isInteractionDiagramEnabled
  * @param {Tandem} tandem
  * @constructor
  */
-function PhaseChangesScreenView( multipleParticleModel, isInteractionDiagramEnabled, tandem ) {
+function PhaseChangesScreenView( model, isInteractionDiagramEnabled, tandem ) {
   const self = this;
 
   ScreenView.call( this, SOMConstants.SCREEN_VIEW_OPTIONS );
-  this.multipleParticleModel = multipleParticleModel;
+  this.multipleParticleModel = model;
   this.modelTemperatureHistory = new ObservableArray( { allowDuplicates: true } );
 
   // Create the model-view transform. The multipliers for the 2nd parameter can be used to adjust where the point
@@ -75,13 +75,13 @@ function PhaseChangesScreenView( multipleParticleModel, isInteractionDiagramEnab
   // figure out where in the view the particles will be when the container is not exploded
   const nominalParticleAreaViewBounds = new Bounds2(
     modelViewTransform.modelToViewX( 0 ),
-    modelViewTransform.modelToViewY( 0 ) + modelViewTransform.modelToViewDeltaY( multipleParticleModel.getInitialContainerHeight() ),
-    modelViewTransform.modelToViewX( 0 ) + modelViewTransform.modelToViewDeltaX( multipleParticleModel.getContainerWidth() ),
+    modelViewTransform.modelToViewY( 0 ) + modelViewTransform.modelToViewDeltaY( model.getInitialContainerHeight() ),
+    modelViewTransform.modelToViewX( 0 ) + modelViewTransform.modelToViewDeltaX( model.getContainerWidth() ),
     modelViewTransform.modelToViewY( 0 )
   );
 
   // create the particle container - it takes care of positioning itself
-  this.particleContainerNode = new ParticleContainerNode( multipleParticleModel, modelViewTransform, true, true, tandem );
+  this.particleContainerNode = new ParticleContainerNode( model, modelViewTransform, true, true, tandem );
 
   // add the particle container
   this.addChild( this.particleContainerNode );
@@ -99,11 +99,11 @@ function PhaseChangesScreenView( multipleParticleModel, isInteractionDiagramEnab
 
   // hook the heater/cooler node up to the model
   heaterCoolerNode.heatCoolAmountProperty.link( function( heat ) {
-    multipleParticleModel.setHeatingCoolingAmount( heat );
+    model.setHeatingCoolingAmount( heat );
   } );
 
   // add the thermometer node
-  this.compositeThermometerNode = new CompositeThermometerNode( multipleParticleModel, modelViewTransform, {
+  this.compositeThermometerNode = new CompositeThermometerNode( model, modelViewTransform, {
     font: new PhetFont( 20 ),
     fill: 'white',
     tandem: tandem.createTandem( 'compositeThermometerNode' )
@@ -115,9 +115,9 @@ function PhaseChangesScreenView( multipleParticleModel, isInteractionDiagramEnab
     listener: function() {
       self.modelTemperatureHistory.clear();
       self.compositeThermometerNode.reset();
-      multipleParticleModel.reset();
+      model.reset();
       // Reset phase diagram state in SOM basic version.
-      multipleParticleModel.phaseDiagramExpandedProperty.value = isInteractionDiagramEnabled;
+      model.phaseDiagramExpandedProperty.value = isInteractionDiagramEnabled;
       self.pumpNode.reset();
     },
     radius: SOMConstants.RESET_ALL_BUTTON_RADIUS,
@@ -128,7 +128,7 @@ function PhaseChangesScreenView( multipleParticleModel, isInteractionDiagramEnab
   this.addChild( resetAllButton );
 
   // add play pause button and step button
-  this.addChild( new TimeControlNode( multipleParticleModel.isPlayingProperty, {
+  this.addChild( new TimeControlNode( model.isPlayingProperty, {
     playPauseStepButtonOptions: {
       playPauseButtonOptions: {
         radius: SOMConstants.PLAY_PAUSE_BUTTON_RADIUS
@@ -136,7 +136,7 @@ function PhaseChangesScreenView( multipleParticleModel, isInteractionDiagramEnab
       stepForwardButtonOptions: {
         radius: SOMConstants.STEP_BUTTON_RADIUS,
         listener: () => {
-          multipleParticleModel.stepInternal( SOMConstants.NOMINAL_TIME_STEP );
+          model.stepInternal( SOMConstants.NOMINAL_TIME_STEP );
         }
       },
       playPauseStepXSpacing: 10
@@ -157,9 +157,9 @@ function PhaseChangesScreenView( multipleParticleModel, isInteractionDiagramEnab
 
   // add bicycle pump node
   this.pumpNode = new BicyclePumpNode(
-    multipleParticleModel.numberOfMoleculesProperty,
-    multipleParticleModel.numberOfMoleculesRangeProperty, {
-      enabledProperty: multipleParticleModel.isPlayingProperty,
+    model.numberOfMoleculesProperty,
+    model.numberOfMoleculesRangeProperty, {
+      enabledProperty: model.isPlayingProperty,
       translation: pumpPosition,
       hoseAttachmentOffset: hoseAttachmentPoint.minus( pumpPosition ),
       hoseCurviness: 1.5,
@@ -178,7 +178,7 @@ function PhaseChangesScreenView( multipleParticleModel, isInteractionDiagramEnab
     baseColor: 'yellow',
     maxWidth: 100,
     listener: function() {
-      multipleParticleModel.returnLid();
+      model.returnLid();
     },
     visible: false,
     xMargin: 10,
@@ -187,7 +187,7 @@ function PhaseChangesScreenView( multipleParticleModel, isInteractionDiagramEnab
     tandem: tandem.createTandem( 'returnLidButton' )
   } );
   this.addChild( this.returnLidButton );
-  multipleParticleModel.isExplodedProperty.linkAttribute( this.returnLidButton, 'visible' );
+  model.isExplodedProperty.linkAttribute( this.returnLidButton, 'visible' );
 
   // add interaction potential diagram
   if ( isInteractionDiagramEnabled ) {
@@ -195,7 +195,7 @@ function PhaseChangesScreenView( multipleParticleModel, isInteractionDiagramEnab
       SOMConstants.MAX_SIGMA,
       SOMConstants.MIN_EPSILON,
       false,
-      multipleParticleModel,
+      model,
       {
         maxWidth: PANEL_WIDTH,
         minWidth: PANEL_WIDTH,
@@ -208,9 +208,9 @@ function PhaseChangesScreenView( multipleParticleModel, isInteractionDiagramEnab
 
   // add the atom/molecule selection control panel
   const phaseChangesMoleculesControlPanel = new PhaseChangesMoleculesControlPanel(
-    multipleParticleModel,
-    isInteractionDiagramEnabled,
+    model,
     {
+      showAdjustableAttraction: isInteractionDiagramEnabled,
       right: this.layoutBounds.right - CONTROL_PANEL_X_INSET,
       top: 5,
       maxWidth: PANEL_WIDTH,
@@ -221,8 +221,8 @@ function PhaseChangesScreenView( multipleParticleModel, isInteractionDiagramEnab
   this.addChild( phaseChangesMoleculesControlPanel );
 
   // add phase diagram - in SOM basic version by default phase diagram should be closed.
-  multipleParticleModel.phaseDiagramExpandedProperty.value = isInteractionDiagramEnabled;
-  this.phaseDiagram = new PhaseDiagram( multipleParticleModel.phaseDiagramExpandedProperty, {
+  model.phaseDiagramExpandedProperty.value = isInteractionDiagramEnabled;
+  this.phaseDiagram = new PhaseDiagram( model.phaseDiagramExpandedProperty, {
     minWidth: PANEL_WIDTH,
     maxWidth: PANEL_WIDTH,
     right: phaseChangesMoleculesControlPanel.right,
@@ -239,7 +239,7 @@ function PhaseChangesScreenView( multipleParticleModel, isInteractionDiagramEnab
   this.offsetInSecondRegion = 0;
 
   // monitor the substance and update the mappings to triple and critical points when changes occur
-  multipleParticleModel.substanceProperty.link( function( substance ) {
+  model.substanceProperty.link( function( substance ) {
 
     if ( substance === SubstanceType.NEON ||
          substance === SubstanceType.ARGON ||
@@ -263,20 +263,20 @@ function PhaseChangesScreenView( multipleParticleModel, isInteractionDiagramEnab
   } );
 
   // handle explosions of the container
-  multipleParticleModel.isExplodedProperty.link( function( isExploded ) {
+  model.isExplodedProperty.link( function( isExploded ) {
     self.modelTemperatureHistory.clear();
     if ( !isExploded ) {
       self.compositeThermometerNode.setRotation( 0 );
       self.compositeThermometerNode.centerX = nominalParticleAreaViewBounds.minX + nominalParticleAreaViewBounds.width * 0.35;
       self.compositeThermometerNode.centerY = modelViewTransform.modelToViewY(
-        multipleParticleModel.containerHeightProperty.get()
+        model.containerHeightProperty.get()
       );
     }
     self.updatePhaseDiagram();
   } );
 
   // Hook up a function that updates several view attributes when the substance changes.
-  multipleParticleModel.substanceProperty.link( function( substance ) {
+  model.substanceProperty.link( function( substance ) {
     self.modelTemperatureHistory.clear();
     self.updatePhaseDiagram();
     self.phaseDiagram.setDepictingWater( substance === SubstanceType.WATER );
@@ -321,23 +321,23 @@ function PhaseChangesScreenView( multipleParticleModel, isInteractionDiagramEnab
   this.addChild( egg );
 
   let eggShown = false;
-  multipleParticleModel.isPlayingProperty.link( function( isPlaying ) {
-    egg.visible = !isPlaying && multipleParticleModel.isExplodedProperty.get() &&
-                  multipleParticleModel.substanceProperty.get() === SubstanceType.WATER && !eggShown;
+  model.isPlayingProperty.link( function( isPlaying ) {
+    egg.visible = !isPlaying && model.isExplodedProperty.get() &&
+                  model.substanceProperty.get() === SubstanceType.WATER && !eggShown;
     if ( egg.visible ) {
       eggShown = true;
     }
   } );
 
   // Monitor the model for changes of the container size and adjust the view accordingly.
-  multipleParticleModel.containerHeightProperty.link( function( containerHeight, previousContainerHeight ) {
+  model.containerHeightProperty.link( function( containerHeight, previousContainerHeight ) {
 
     // move the thermometer with the lid
     self.compositeThermometerNode.centerX = nominalParticleAreaViewBounds.minX + nominalParticleAreaViewBounds.width * 0.35;
     self.compositeThermometerNode.centerY = modelViewTransform.modelToViewY( containerHeight );
 
     // if the container has exploded, rotate the thermometer as it moves up
-    if ( multipleParticleModel.isExplodedProperty.get() ) {
+    if ( model.isExplodedProperty.get() ) {
       const containerHeightChange = previousContainerHeight - containerHeight;
       self.compositeThermometerNode.rotateAround(
         self.compositeThermometerNode.center,
@@ -348,12 +348,12 @@ function PhaseChangesScreenView( multipleParticleModel, isInteractionDiagramEnab
     self.updatePhaseDiagram();
   } );
 
-  multipleParticleModel.temperatureSetPointProperty.link( function() {
+  model.temperatureSetPointProperty.link( function() {
     self.modelTemperatureHistory.clear();
     self.updatePhaseDiagram();
   } );
 
-  multipleParticleModel.scaledAtoms.lengthProperty.link( function() {
+  model.scaledAtoms.lengthProperty.link( function() {
     self.updatePhaseDiagram();
   } );
 }
