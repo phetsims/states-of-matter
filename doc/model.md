@@ -19,3 +19,5 @@ phases of matter. The small number of particles shown and the simplicity of the 
 map accurately the exact phase to the correct regions of the phase diagram. However, we felt there would be some
 benefit to students being exposed to a simplified phase diagram. In the sim, the diagram marker remains on the
 coexistence line between liquid/gas or solid/gas (and is extrapolated into the critical region).
++ The model uses the Van der Waals radius in its depiction of the relative sizes of the various atoms.  Please see
+https://en.wikipedia.org/wiki/Van_der_Waals_radius.
