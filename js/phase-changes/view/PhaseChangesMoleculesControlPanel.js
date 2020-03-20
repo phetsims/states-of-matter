@@ -66,11 +66,6 @@ function PhaseChangesMoleculesControlPanel( phaseChangesModel, isBasicVersion, o
   const selectorWidth = options.minWidth - 2 * options.xMargin;
 
   Node.call( this );
-  const textOptions = {
-    font: new PhetFont( NORMAL_TEXT_FONT_SIZE ),
-    fill: '#FFFFFF',
-    maxWidth: selectorWidth * 0.75
-  };
   const tickTextOptions = {
     font: new PhetFont( NORMAL_TEXT_FONT_SIZE ),
     fill: SOMColorProfile.controlPanelTextProperty,
@@ -117,17 +112,35 @@ function PhaseChangesMoleculesControlPanel( phaseChangesModel, isBasicVersion, o
     spacing: 5
   } );
 
-  const neonText = new Text( neonString, textOptions );
-  const argonText = new Text( argonString, textOptions );
-  const waterText = new Text( waterString, textOptions );
-  const oxygenText = new Text( diatomicOxygenString, textOptions );
-  const adjustableAttractionText = new Text( adjustableAttractionString, textOptions );
-  const title = new Text( atomsAndMoleculesString, {
-    font: new PhetFont( 14 ),
-    fill: SOMColorProfile.controlPanelTextProperty,
-    maxWidth: options.minWidth * 0.85,
-    tandem: options.tandem.createTandem( 'title' )
-  } );
+  // pre-create the tandem for the radio button group so that the text nodes can be under it
+  const radioButtonGroupTandem = options.tandem.createTandem( 'radioButtonGroup' );
+
+  // text for the radio buttons
+  const textOptions = {
+    font: new PhetFont( NORMAL_TEXT_FONT_SIZE ),
+    fill: '#FFFFFF',
+    maxWidth: selectorWidth * 0.75
+  };
+  const neonText = new Text(
+    neonString,
+    merge( { tandem: radioButtonGroupTandem.createTandem( 'neonText' ) }, textOptions )
+  );
+  const argonText = new Text(
+    argonString,
+    merge( { tandem: radioButtonGroupTandem.createTandem( 'argonText' ) }, textOptions )
+  );
+  const waterText = new Text(
+    waterString,
+    merge( { tandem: radioButtonGroupTandem.createTandem( 'waterText' ) }, textOptions )
+  );
+  const oxygenText = new Text(
+    diatomicOxygenString,
+    merge( { tandem: radioButtonGroupTandem.createTandem( 'oxygenText' ) }, textOptions )
+  );
+  const adjustableAttractionText = new Text(
+    adjustableAttractionString,
+    merge( { tandem: radioButtonGroupTandem.createTandem( 'adjustableAttractionText' ) }, textOptions )
+  );
 
   // create objects that describe the pieces that make up a selector item in the control panel, conforms to the
   // contract: { label: {Node}, icon: {Node} (optional) }
@@ -215,7 +228,7 @@ function PhaseChangesMoleculesControlPanel( phaseChangesModel, isBasicVersion, o
     deselectedLineWidth: 0,
     deselectedContentOpacity: 1,
     touchAreaYDilation: 0,
-    tandem: options.tandem.createTandem( 'radioButtonGroup' )
+    tandem: radioButtonGroupTandem
   } );
 
   phaseChangesModel.interactionStrengthProperty.link( function( value ) {
@@ -249,6 +262,14 @@ function PhaseChangesMoleculesControlPanel( phaseChangesModel, isBasicVersion, o
     else if ( content.hasChild( interactionStrengthNode ) ) {
       content.removeChild( interactionStrengthNode );
     }
+  } );
+
+  // title for the panel
+  const title = new Text( atomsAndMoleculesString, {
+    font: new PhetFont( 14 ),
+    fill: SOMColorProfile.controlPanelTextProperty,
+    maxWidth: options.minWidth * 0.85,
+    tandem: options.tandem.createTandem( 'title' )
   } );
 
   // create the background for the title - initial size is arbitrary, it will be sized and positioned below

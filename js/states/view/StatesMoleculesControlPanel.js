@@ -56,30 +56,35 @@ function StatesMoleculesControlPanel( substanceProperty, options ) {
   Node.call( this );
   const maxTextWidth = options.maxWidth * 0.75;
   const textOptions = { font: new PhetFont( 12 ), fill: '#FFFFFF', maxWidth: maxTextWidth };
-  const tandem = options.tandem;
 
-  const neonText = new Text(
-    neonString,
-    merge( { tandem: tandem.createTandem( 'neonText' ) }, textOptions )
-  );
-  const argonText = new Text(
-    argonString,
-    merge( { tandem: tandem.createTandem( 'argonText' ) }, textOptions )
-  );
-  const waterText = new Text(
-    waterString,
-    merge( { tandem: tandem.createTandem( 'waterText' ) }, textOptions )
-  );
-  const oxygenText = new Text(
-    diatomicOxygenString,
-    merge( { tandem: tandem.createTandem( 'oxygenText' ) }, textOptions )
-  );
+  // title for the panel
   const title = new Text( atomsAndMoleculesString, {
     font: new PhetFont( 14 ),
     fill: SOMColorProfile.controlPanelTextProperty,
     maxWidth: maxTextWidth,
     tandem: options.tandem.createTandem( 'title' )
   } );
+
+  // pre-create the tandem for the radio button group so that the text nodes can be under it
+  const radioButtonGroupTandem = options.tandem.createTandem( 'radioButtonGroup' );
+
+  // text nodes that will be used on the radio buttons
+  const neonText = new Text(
+    neonString,
+    merge( { tandem: radioButtonGroupTandem.createTandem( 'neonText' ) }, textOptions )
+  );
+  const argonText = new Text(
+    argonString,
+    merge( { tandem: radioButtonGroupTandem.createTandem( 'argonText' ) }, textOptions )
+  );
+  const waterText = new Text(
+    waterString,
+    merge( { tandem: radioButtonGroupTandem.createTandem( 'waterText' ) }, textOptions )
+  );
+  const oxygenText = new Text(
+    diatomicOxygenString,
+    merge( { tandem: radioButtonGroupTandem.createTandem( 'oxygenText' ) }, textOptions )
+  );
 
   // create objects that describe the pieces that make up an item in the control panel, conforms to the contract:
   // { label: {Node}, icon: {Node}, tandem: {Tandem} }
@@ -97,13 +102,12 @@ function StatesMoleculesControlPanel( substanceProperty, options ) {
   };
   const oxygenSelectionNodeSpec = {
     label: oxygenText,
-    icon: AtomAndMoleculeIconFactory.createIcon( SubstanceType.DIATOMIC_OXYGEN ),
-    tandem: tandem.createTandem( 'oxygenSelectionNode' )
+    icon: AtomAndMoleculeIconFactory.createIcon( SubstanceType.DIATOMIC_OXYGEN )
   };
 
   const selectorWidth = options.minWidth - 2 * options.xMargin;
 
-  // function to create a node with text and an icon for selection a substance
+  // function to create a node with text and an icon for selecting a substance
   const createSelectionNode = function( selectionNodeSpec ) {
     if ( selectionNodeSpec.icon ) {
       const strutWidth = selectorWidth - selectionNodeSpec.label.width - selectionNodeSpec.icon.width;
@@ -138,7 +142,7 @@ function StatesMoleculesControlPanel( substanceProperty, options ) {
     selectedStroke: 'white',
     deselectedLineWidth: 0,
     deselectedContentOpacity: 1,
-    tandem: options.tandem.createTandem( 'radioButtonGroup' )
+    tandem: radioButtonGroupTandem
   } );
 
   SOMColorProfile.controlPanelBackgroundProperty.link( function( color ) {
