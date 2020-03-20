@@ -24,6 +24,7 @@ import Property from '../../../../axon/js/Property.js';
 import Range from '../../../../dot/js/Range.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
+import merge from '../../../../phet-core/js/merge.js';
 import PhetioObject from '../../../../tandem/js/PhetioObject.js';
 import statesOfMatter from '../../statesOfMatter.js';
 import PhaseStateEnum from '../PhaseStateEnum.js';
@@ -125,8 +126,15 @@ class MultipleParticleModel extends PhetioObject {
 
   /**
    * @param {Tandem} tandem
+   * @param {Object} [options]
    */
-  constructor( tandem ) {
+  constructor( tandem, options ) {
+
+    options = merge( {
+      validSubstances: SubstanceType.VALUES,
+      tandem: tandem,
+      phetioType: MultipleParticleModelIO
+    }, options );
 
     super( {
       tandem: tandem,
@@ -163,6 +171,7 @@ class MultipleParticleModel extends PhetioObject {
 
     // @public (read-write)
     this.substanceProperty = new EnumerationProperty( SubstanceType, DEFAULT_SUBSTANCE, {
+      validValues: options.validSubstances,
       tandem: tandem.createTandem( 'substanceProperty' )
     } );
 

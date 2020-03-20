@@ -11,6 +11,7 @@ import Screen from '../../../joist/js/Screen.js';
 import inherit from '../../../phet-core/js/inherit.js';
 import MultipleParticleModel from '../common/model/MultipleParticleModel.js';
 import SOMConstants from '../common/SOMConstants.js';
+import SubstanceType from '../common/SubstanceType.js';
 import SOMColorProfile from '../common/view/SOMColorProfile.js';
 import statesOfMatterStrings from '../states-of-matter-strings.js';
 import statesOfMatter from '../statesOfMatter.js';
@@ -34,8 +35,13 @@ function StatesScreen( tandem ) {
     tandem: tandem
   };
 
+  // remove the adjustable atom from the list of substances that are supported in this screen
+  const validSubstances = SubstanceType.VALUES.filter( substance => substance !== SubstanceType.ADJUSTABLE_ATOM );
+
   Screen.call( this,
-    function() { return new MultipleParticleModel( tandem.createTandem( 'model' ) ); },
+    function() {
+      return new MultipleParticleModel( tandem.createTandem( 'model' ), { validSubstances: validSubstances } );
+    },
     function( model ) { return new StatesScreenView( model, tandem.createTandem( 'view' ) ); },
     options
   );
