@@ -75,7 +75,7 @@ class AtomicInteractionsScreenView extends ScreenView {
     const panelStroke = enableHeterogeneousAtoms ? '#D1D2FF' : SOMColorProfile.controlPanelStrokeProperty;
     const panelTextFill = enableHeterogeneousAtoms ? 'black' : SOMColorProfile.controlPanelTextProperty;
     const forceControlPanelButtonAlign = enableHeterogeneousAtoms ? 'right' : 'left';
-    const atomicInteractionsControlPanel = new AtomicInteractionsControlPanel( dualAtomModel, enableHeterogeneousAtoms, {
+    const atomsControlPanel = new AtomicInteractionsControlPanel( dualAtomModel, enableHeterogeneousAtoms, {
       right: this.layoutBounds.maxX - INSET,
       top: this.layoutBounds.minY + INSET,
       tickTextColor: tickTextColor,
@@ -85,14 +85,14 @@ class AtomicInteractionsScreenView extends ScreenView {
       panelTextFill: panelTextFill,
       maxWidth: PANEL_WIDTH,
       minWidth: PANEL_WIDTH,
-      tandem: tandem.createTandem( 'atomicInteractionsControlPanel' )
+      tandem: tandem.createTandem( 'atomsControlPanel' )
     } );
 
     // @private interactive potential diagram
     this.interactiveInteractionPotentialDiagram = new InteractiveInteractionPotentialDiagram( dualAtomModel, true, {
       left: this.modelViewTransform.modelToViewX( 0 ) - 43, // empirically determined such left edge of graph is at
                                                             // center of fixed atom
-      top: atomicInteractionsControlPanel.top + 5, // additional offset empirically determined to look good
+      top: atomsControlPanel.top + 5, // additional offset empirically determined to look good
       tandem: tandem.createTandem( 'interactiveInteractionPotentialDiagram' )
     } );
     this.addChild( this.interactiveInteractionPotentialDiagram );
@@ -144,7 +144,7 @@ class AtomicInteractionsScreenView extends ScreenView {
     );
 
     // the control panels will overlap the reset all button if fully opened, so they must be a bit to the left
-    atomicInteractionsControlPanel.right = resetAllButton.left - 20; // offset empirically determined
+    atomsControlPanel.right = resetAllButton.left - 20; // offset empirically determined
 
     // add control for play/pause/step
     const timeControlNode = new TimeControlNode( dualAtomModel.isPlayingProperty, {
@@ -235,13 +235,13 @@ class AtomicInteractionsScreenView extends ScreenView {
     this.addChild( this.pushPinNode );
 
     // Add the control panels to the screen after the atoms so that the atoms with go behind them.
-    this.addChild( atomicInteractionsControlPanel );
+    this.addChild( atomsControlPanel );
     this.addChild( forcesControlPanel );
 
     // update various aspects of the appearance when the selected atom pair changes
     dualAtomModel.atomPairProperty.link( () => {
-      forcesControlPanel.top = atomicInteractionsControlPanel.bottom + INSET / 2;
-      forcesControlPanel.left = atomicInteractionsControlPanel.left;
+      forcesControlPanel.top = atomsControlPanel.bottom + INSET / 2;
+      forcesControlPanel.left = atomsControlPanel.left;
       this.updatePositionMarkerOnDiagram();
       this.updateMinimumXForMovableAtom();
       this.updatePushPinPosition();

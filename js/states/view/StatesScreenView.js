@@ -86,19 +86,19 @@ function StatesScreenView( multipleParticleModel, tandem ) {
   this.addChild( this.compositeThermometerNode );
 
   // selection panel for the atoms/molecules
-  const atomsAndMoleculesSelectionPanel = new StatesMoleculesControlPanel( multipleParticleModel.substanceProperty, {
+  const moleculesControlPanel = new StatesMoleculesControlPanel( multipleParticleModel.substanceProperty, {
     right: this.layoutBounds.right - CONTROL_PANEL_X_INSET,
     top: this.layoutBounds.top + CONTROL_PANEL_Y_INSET,
     minWidth: CONTROL_PANEL_WIDTH,
     maxWidth: CONTROL_PANEL_WIDTH,
-    tandem: tandem.createTandem( 'atomsAndMoleculesSelectionPanel' )
+    tandem: tandem.createTandem( 'moleculesControlPanel' )
   } );
-  this.addChild( atomsAndMoleculesSelectionPanel );
+  this.addChild( moleculesControlPanel );
 
   // phases control node
   const solidLiquidGasPhaseControlNode = new StatesPhaseControlNode( multipleParticleModel, {
-    right: atomsAndMoleculesSelectionPanel.right,
-    top: atomsAndMoleculesSelectionPanel.bottom + CONTROL_PANEL_Y_INSET,
+    right: moleculesControlPanel.right,
+    top: moleculesControlPanel.bottom + CONTROL_PANEL_Y_INSET,
     buttonWidth: CONTROL_PANEL_WIDTH,
     tandem: tandem.createTandem( 'solidLiquidGasPhaseControlNode' )
   } );
