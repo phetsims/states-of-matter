@@ -11,7 +11,6 @@ import inherit from '../../../../phet-core/js/inherit.js';
 import merge from '../../../../phet-core/js/merge.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import HBox from '../../../../scenery/js/nodes/HBox.js';
-import HStrut from '../../../../scenery/js/nodes/HStrut.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import Rectangle from '../../../../scenery/js/nodes/Rectangle.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
@@ -22,6 +21,7 @@ import SOMConstants from '../../common/SOMConstants.js';
 import SubstanceType from '../../common/SubstanceType.js';
 import AtomAndMoleculeIconFactory from '../../common/view/AtomAndMoleculeIconFactory.js';
 import SOMColorProfile from '../../common/view/SOMColorProfile.js';
+import SubstanceSelectorNode from '../../common/view/SubstanceSelectorNode.js';
 import statesOfMatterStrings from '../../states-of-matter-strings.js';
 import statesOfMatter from '../../statesOfMatter.js';
 
@@ -107,13 +107,10 @@ function StatesMoleculesControlPanel( substanceProperty, options ) {
 
   const selectorWidth = options.minWidth - 2 * options.xMargin;
 
-  // function to create a node with text and an icon for selecting a substance
+  // function to create the selector nodes that will go into the radio button group
   const createSelectionNode = function( selectionNodeSpec ) {
     if ( selectionNodeSpec.icon ) {
-      const strutWidth = selectorWidth - selectionNodeSpec.label.width - selectionNodeSpec.icon.width;
-      return new HBox( {
-        children: [ selectionNodeSpec.label, new HStrut( strutWidth ), selectionNodeSpec.icon ]
-      } );
+      return new SubstanceSelectorNode( selectionNodeSpec.label, selectionNodeSpec.icon, selectorWidth );
     }
     else {
       return new HBox( {
