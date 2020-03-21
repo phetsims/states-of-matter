@@ -149,7 +149,8 @@ class MultipleParticleModel extends PhetioObject {
     this.containerHeightProperty = new NumberProperty( CONTAINER_INITIAL_HEIGHT, {
       tandem: tandem.createTandem( 'containerHeightProperty' ),
       phetioReadOnly: true,
-      phetioDocumentation: 'The height of the particle container, in picometers.'
+      phetioDocumentation: 'The height of the particle container, in picometers.',
+      units: 'pm'
     } );
 
     // @public (read-only)

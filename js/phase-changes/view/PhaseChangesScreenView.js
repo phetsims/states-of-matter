@@ -198,7 +198,7 @@ function PhaseChangesScreenView( model, isInteractionDiagramEnabled, tandem ) {
   }
 
   // add the atom/molecule selection control panel
-  const phaseChangesMoleculesControlPanel = new PhaseChangesMoleculesControlPanel(
+  const moleculesControlPanel = new PhaseChangesMoleculesControlPanel(
     model,
     {
       showAdjustableAttraction: isInteractionDiagramEnabled,
@@ -206,18 +206,18 @@ function PhaseChangesScreenView( model, isInteractionDiagramEnabled, tandem ) {
       top: 5,
       maxWidth: PANEL_WIDTH,
       minWidth: PANEL_WIDTH,
-      tandem: tandem.createTandem( 'phaseChangesMoleculesControlPanel' )
+      tandem: tandem.createTandem( 'moleculesControlPanel' )
     }
   );
-  this.addChild( phaseChangesMoleculesControlPanel );
+  this.addChild( moleculesControlPanel );
 
   // add phase diagram - in SOM basic version by default phase diagram should be closed.
   model.phaseDiagramExpandedProperty.value = isInteractionDiagramEnabled;
   this.phaseDiagram = new PhaseDiagram( model.phaseDiagramExpandedProperty, {
     minWidth: PANEL_WIDTH,
     maxWidth: PANEL_WIDTH,
-    right: phaseChangesMoleculesControlPanel.right,
-    top: phaseChangesMoleculesControlPanel.top + INTER_PANEL_SPACING,
+    right: moleculesControlPanel.right,
+    top: moleculesControlPanel.top + INTER_PANEL_SPACING,
     tandem: tandem.createTandem( 'phaseDiagram' )
   } );
   this.addChild( this.phaseDiagram );
@@ -286,17 +286,17 @@ function PhaseChangesScreenView( model, isInteractionDiagramEnabled, tandem ) {
     if ( substance === SubstanceType.ADJUSTABLE_ATOM ) {
       self.phaseDiagram.visible = false;
       if ( isInteractionDiagramEnabled ) {
-        epsilonControlInteractionPotentialDiagram.top = phaseChangesMoleculesControlPanel.bottom + INTER_PANEL_SPACING;
+        epsilonControlInteractionPotentialDiagram.top = moleculesControlPanel.bottom + INTER_PANEL_SPACING;
       }
     }
     else {
       self.phaseDiagram.visible = true;
       if ( isInteractionDiagramEnabled ) {
-        epsilonControlInteractionPotentialDiagram.top = phaseChangesMoleculesControlPanel.bottom + INTER_PANEL_SPACING;
+        epsilonControlInteractionPotentialDiagram.top = moleculesControlPanel.bottom + INTER_PANEL_SPACING;
         self.phaseDiagram.top = epsilonControlInteractionPotentialDiagram.bottom + INTER_PANEL_SPACING;
       }
       else {
-        self.phaseDiagram.top = phaseChangesMoleculesControlPanel.bottom + INTER_PANEL_SPACING;
+        self.phaseDiagram.top = moleculesControlPanel.bottom + INTER_PANEL_SPACING;
       }
     }
   } );
