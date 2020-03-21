@@ -75,7 +75,8 @@ class DualAtomModel {
     // @public (read-write) - diameter of the adjustable atoms
     this.adjustableAtomDiameterProperty = new NumberProperty( 300, {
       tandem: tandem.createTandem( 'adjustableAtomDiameterProperty' ),
-      phetioReadOnly: true
+      phetioReadOnly: true,
+      phetioDocumentation: 'Diameter of the adjustable atom, in picometers'
     } );
 
     // @public (read-write)
