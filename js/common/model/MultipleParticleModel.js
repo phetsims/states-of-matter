@@ -28,6 +28,7 @@ import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import merge from '../../../../phet-core/js/merge.js';
 import PhetioObject from '../../../../tandem/js/PhetioObject.js';
+import NullableIO from '../../../../tandem/js/types/NullableIO.js';
 import NumberIO from '../../../../tandem/js/types/NumberIO.js';
 import statesOfMatter from '../../statesOfMatter.js';
 import PhaseStateEnum from '../PhaseStateEnum.js';
@@ -277,8 +278,7 @@ class MultipleParticleModel extends PhetioObject {
       [ this.temperatureSetPointProperty, this.substanceProperty ],
       () => this.getTemperatureInKelvin(), {
         units: 'K',
-        phetioType: DerivedPropertyIO( NumberIO ),
-        valueType: 'number',
+        phetioType: DerivedPropertyIO( NullableIO( NumberIO ) ),
         tandem: tandem.createTandem( 'temperatureInKelvinProperty' ),
         phetReadOnly: true
       }
@@ -337,14 +337,14 @@ class MultipleParticleModel extends PhetioObject {
    * selected.  The values and ranges used in this method were derived from information provided by Paul Beale, dept
    * of Physics, University of Colorado Boulder.  If no atoms are in the container, this returns null.
    * @returns {number|null}
-   * @public
+   * @private
    */
   getTemperatureInKelvin() {
 
     if ( this.scaledAtoms.length === 0 ) {
 
-      // temperature is reported as 0 if there are no atoms
-      return 0;
+      // temperature is reported as null if there are no atoms since the temperature is meaningless in that case
+      return null;
     }
 
     let temperatureInKelvin;

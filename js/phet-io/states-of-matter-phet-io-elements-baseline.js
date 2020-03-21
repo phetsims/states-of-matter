@@ -6941,7 +6941,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": true,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "DerivedPropertyIO<NumberIO>"
+      "phetioTypeName": "DerivedPropertyIO<NullableIO<NumberIO>>"
     },
     "statesOfMatter.phaseChangesScreen.model.temperatureSetPointProperty": {
       "phetioDocumentation": "In internal model units, solid = 0.15, liquid = 0.34, gas = 1.",
@@ -10867,7 +10867,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": true,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "DerivedPropertyIO<NumberIO>"
+      "phetioTypeName": "DerivedPropertyIO<NullableIO<NumberIO>>"
     },
     "statesOfMatter.statesScreen.model.temperatureSetPointProperty": {
       "phetioDocumentation": "In internal model units, solid = 0.15, liquid = 0.34, gas = 1.",
