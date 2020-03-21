@@ -6930,6 +6930,19 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NumberPropertyIO"
     },
+    "statesOfMatter.phaseChangesScreen.model.temperatureInKelvinProperty": {
+      "phetioDocumentation": "",
+      "phetioDynamicElement": false,
+      "phetioEventType": "MODEL",
+      "phetioFeatured": false,
+      "phetioHighFrequency": false,
+      "phetioIsArchetype": false,
+      "phetioPlayback": false,
+      "phetioReadOnly": true,
+      "phetioState": true,
+      "phetioStudioControl": true,
+      "phetioTypeName": "DerivedPropertyIO<NumberIO>"
+    },
     "statesOfMatter.phaseChangesScreen.model.temperatureSetPointProperty": {
       "phetioDocumentation": "In internal model units, solid = 0.15, liquid = 0.34, gas = 1.",
       "phetioDynamicElement": false,
@@ -7306,19 +7319,6 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioState": true,
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
-    },
-    "statesOfMatter.phaseChangesScreen.view.compositeThermometerNode.temperatureInKelvinProperty": {
-      "phetioDocumentation": "",
-      "phetioDynamicElement": false,
-      "phetioEventType": "MODEL",
-      "phetioFeatured": false,
-      "phetioHighFrequency": false,
-      "phetioIsArchetype": false,
-      "phetioPlayback": false,
-      "phetioReadOnly": true,
-      "phetioState": true,
-      "phetioStudioControl": true,
-      "phetioTypeName": "NumberPropertyIO"
     },
     "statesOfMatter.phaseChangesScreen.view.compositeThermometerNode.temperatureKelvinText": {
       "phetioDocumentation": "",
@@ -10856,6 +10856,19 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<EnumerationIO(NEON|ARGON|DIATOMIC_OXYGEN|WATER|ADJUSTABLE_ATOM)>"
     },
+    "statesOfMatter.statesScreen.model.temperatureInKelvinProperty": {
+      "phetioDocumentation": "",
+      "phetioDynamicElement": false,
+      "phetioEventType": "MODEL",
+      "phetioFeatured": false,
+      "phetioHighFrequency": false,
+      "phetioIsArchetype": false,
+      "phetioPlayback": false,
+      "phetioReadOnly": true,
+      "phetioState": true,
+      "phetioStudioControl": true,
+      "phetioTypeName": "DerivedPropertyIO<NumberIO>"
+    },
     "statesOfMatter.statesScreen.model.temperatureSetPointProperty": {
       "phetioDocumentation": "In internal model units, solid = 0.15, liquid = 0.34, gas = 1.",
       "phetioDynamicElement": false,
@@ -12090,19 +12103,6 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioState": true,
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
-    },
-    "statesOfMatter.statesScreen.view.compositeThermometerNode.temperatureInKelvinProperty": {
-      "phetioDocumentation": "",
-      "phetioDynamicElement": false,
-      "phetioEventType": "MODEL",
-      "phetioFeatured": false,
-      "phetioHighFrequency": false,
-      "phetioIsArchetype": false,
-      "phetioPlayback": false,
-      "phetioReadOnly": true,
-      "phetioState": true,
-      "phetioStudioControl": true,
-      "phetioTypeName": "NumberPropertyIO"
     },
     "statesOfMatter.statesScreen.view.compositeThermometerNode.temperatureKelvinText": {
       "phetioDocumentation": "",

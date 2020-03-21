@@ -9,8 +9,6 @@
  */
 
 import EnumerationProperty from '../../../../axon/js/EnumerationProperty.js';
-import NumberProperty from '../../../../axon/js/NumberProperty.js';
-import Property from '../../../../axon/js/Property.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Enumeration from '../../../../phet-core/js/Enumeration.js';
 import inherit from '../../../../phet-core/js/inherit.js';
@@ -61,29 +59,25 @@ function CompositeThermometerNode( multipleParticleModel, modelViewTransform, op
   this.multipleParticleModel = multipleParticleModel;
   this.modelViewTransform = modelViewTransform;
 
-  // @private property that will be used by the thermometerNode node to control how high the liquid is
-  this.temperatureInKelvinProperty = new NumberProperty(
-    multipleParticleModel.getTemperatureInKelvin(),
+  // add thermometer node
+  const thermometerNode = new ThermometerNode(
+    0,
+    MAX_TEMPERATURE_TO_CLAMP_RED_MERCURY,
+    multipleParticleModel.temperatureInKelvinProperty,
     {
-      tandem: options.tandem.createTandem( 'temperatureInKelvinProperty' ),
-      phetioReadOnly: true
+      outlineStroke: 'black',
+      backgroundFill: 'white',
+      tickSpacing: 8,
+      majorTickLength: 8,
+      minorTickLength: 4,
+      bulbDiameter: 23,
+      glassThickness: 2.5,
+      lineWidth: 1.4,
+      tubeWidth: 13,
+      tubeHeight: 65,
+      tandem: options.tandem.createTandem( 'thermometerNode' )
     }
   );
-
-  // add thermometer node
-  const thermometerNode = new ThermometerNode( 0, MAX_TEMPERATURE_TO_CLAMP_RED_MERCURY, this.temperatureInKelvinProperty, {
-    outlineStroke: 'black',
-    backgroundFill: 'white',
-    tickSpacing: 8,
-    majorTickLength: 8,
-    minorTickLength: 4,
-    bulbDiameter: 23,
-    glassThickness: 2.5,
-    lineWidth: 1.4,
-    tubeWidth: 13,
-    tubeHeight: 65,
-    tandem: options.tandem.createTandem( 'thermometerNode' )
-  } );
 
   // @private temperature nodes combo box
   this.temperatureKelvinText = new Text( '', {
@@ -137,28 +131,18 @@ function CompositeThermometerNode( multipleParticleModel, modelViewTransform, op
 
   this.addChild( panel );
 
-  // Define a function that will update the various properties and textual values.
-  function updateTemperatureValues() {
-    const tempInKelvin = self.multipleParticleModel.getTemperatureInKelvin();
-    if ( tempInKelvin !== null ) {
-      const tempInKelvinRounded = Utils.roundSymmetric( tempInKelvin );
-      self.temperatureKelvinText.setText( tempInKelvinRounded + ' ' + kelvinUnitsString );
-      self.temperatureCelsiusText.setText( Utils.roundSymmetric( tempInKelvin - 273.15 ) + ' ' + celsiusUnitsString );
-      self.temperatureInKelvinProperty.value = tempInKelvinRounded > MAX_TEMPERATURE_TO_CLAMP_RED_MERCURY ?
-                                               MAX_TEMPERATURE_TO_CLAMP_RED_MERCURY : tempInKelvinRounded;
+  // update the temperature readouts when the value changes in the model
+  multipleParticleModel.temperatureInKelvinProperty.link( temperatureInKelvin => {
+    if ( temperatureInKelvin !== null ) {
+      const temperatureInKelvinRounded = Utils.roundSymmetric( temperatureInKelvin );
+      self.temperatureKelvinText.setText( temperatureInKelvinRounded + ' ' + kelvinUnitsString );
+      self.temperatureCelsiusText.setText( Utils.roundSymmetric( temperatureInKelvin - 273.15 ) + ' ' + celsiusUnitsString );
     }
     else {
       self.temperatureKelvinText.setText( '--' );
       self.temperatureCelsiusText.setText( '--' );
-      self.temperatureInKelvinProperty.value = 0;
     }
-  }
-
-  // Call the update when any of several properties change value.
-  Property.multilink(
-    [ multipleParticleModel.temperatureSetPointProperty, multipleParticleModel.substanceProperty ],
-    updateTemperatureValues
-  );
+  } );
 
   this.mutate( options );
 }

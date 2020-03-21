@@ -16,6 +16,8 @@
  */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
+import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
+import DerivedPropertyIO from '../../../../axon/js/DerivedPropertyIO.js';
 import Emitter from '../../../../axon/js/Emitter.js';
 import EnumerationProperty from '../../../../axon/js/EnumerationProperty.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
@@ -26,6 +28,7 @@ import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import merge from '../../../../phet-core/js/merge.js';
 import PhetioObject from '../../../../tandem/js/PhetioObject.js';
+import NumberIO from '../../../../tandem/js/types/NumberIO.js';
 import statesOfMatter from '../../statesOfMatter.js';
 import PhaseStateEnum from '../PhaseStateEnum.js';
 import SOMConstants from '../SOMConstants.js';
@@ -269,6 +272,17 @@ class MultipleParticleModel extends PhetioObject {
       }
     } );
 
+    // @public (read-only) - the model temperature in Kelvin, derived from the temperature set point in model units
+    this.temperatureInKelvinProperty = new DerivedProperty(
+      [ this.temperatureSetPointProperty, this.substanceProperty ],
+      () => this.getTemperatureInKelvin(), {
+        phetioType: DerivedPropertyIO( NumberIO ),
+        valueType: 'number',
+        tandem: tandem.createTandem( 'temperatureInKelvinProperty' ),
+        phetReadOnly: true
+      }
+    );
+
     // perform any phet-io-specific state setting actions
     _.hasIn( window, 'phet.phetIo.phetioEngine' ) && phet.phetIo.phetioEngine.phetioStateEngine.stateSetEmitter.addListener( () => {
 
@@ -329,7 +343,7 @@ class MultipleParticleModel extends PhetioObject {
     if ( this.scaledAtoms.length === 0 ) {
 
       // temperature is reported as 0 if there are no atoms
-      return null;
+      return 0;
     }
 
     let temperatureInKelvin;
