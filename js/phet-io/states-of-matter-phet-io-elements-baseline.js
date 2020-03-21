@@ -105,6 +105,19 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<Vector2IO>"
     },
+    "statesOfMatter.atomicInteractionsScreen.model.fixedAtom.radiusProperty": {
+      "phetioDocumentation": "",
+      "phetioDynamicElement": false,
+      "phetioEventType": "MODEL",
+      "phetioFeatured": false,
+      "phetioHighFrequency": false,
+      "phetioIsArchetype": false,
+      "phetioPlayback": false,
+      "phetioReadOnly": false,
+      "phetioState": true,
+      "phetioStudioControl": true,
+      "phetioTypeName": "NumberPropertyIO"
+    },
     "statesOfMatter.atomicInteractionsScreen.model.fixedAtom.velocityProperty": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
@@ -221,6 +234,19 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioState": true,
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<Vector2IO>"
+    },
+    "statesOfMatter.atomicInteractionsScreen.model.movableAtom.radiusProperty": {
+      "phetioDocumentation": "",
+      "phetioDynamicElement": false,
+      "phetioEventType": "MODEL",
+      "phetioFeatured": false,
+      "phetioHighFrequency": false,
+      "phetioIsArchetype": false,
+      "phetioPlayback": false,
+      "phetioReadOnly": false,
+      "phetioState": true,
+      "phetioStudioControl": true,
+      "phetioTypeName": "NumberPropertyIO"
     },
     "statesOfMatter.atomicInteractionsScreen.model.movableAtom.velocityProperty": {
       "phetioDocumentation": "",

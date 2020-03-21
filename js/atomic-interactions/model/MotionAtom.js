@@ -9,13 +9,12 @@
 
 import Emitter from '../../../../axon/js/Emitter.js';
 import EnumerationProperty from '../../../../axon/js/EnumerationProperty.js';
+import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Vector2Property from '../../../../dot/js/Vector2Property.js';
 import statesOfMatter from '../../statesOfMatter.js';
 import SOMConstants from '../../common/SOMConstants.js';
 import AtomType from '../../common/model/AtomType.js';
-
-// constants
 
 class MotionAtom {
 
@@ -28,9 +27,17 @@ class MotionAtom {
    */
   constructor( initialAtomType, initialXPosition, initialYPosition, tandem ) {
 
-    // @public {AtomType} - the type of atom being modeled, e.g. Argon, Neon, etc.
+    // @public (read-write) {EnumerationProperty<AtomType>} - the type of atom being modeled, e.g. Argon, Neon, etc.
     this.atomTypeProperty = new EnumerationProperty( AtomType, initialAtomType, {
       tandem: tandem.createTandem( 'atomTypeProperty' )
+    } );
+
+    // get the default attributes associated with this atom
+    const initialAtomAttributes = SOMConstants.MAP_ATOM_TYPE_TO_ATTRIBUTES.get( initialAtomType );
+
+    // @public (read-write) {NumberProperty} - radius of this atom, should only be changed for adjustable atoms
+    this.radiusProperty = new NumberProperty( initialAtomAttributes.radius, {
+      tandem: tandem.createTandem( 'radiusProperty' )
     } );
 
     // @private, accessed through getter and setter methods below, see those methods for details
@@ -48,12 +55,11 @@ class MotionAtom {
       tandem: tandem.createTandem( 'accelerationProperty' )
     } );
 
-    // @public {listen-only} - an emitter that indicates that the configuration of this atom have changed, done as an
-    // emitter so that the view doesn't have to monitor a set of properties that all change at once
+    // @public {listen-only} - An emitter that indicates that the configuration of this atom have changed, done as an
+    // emitter so that the view doesn't have to separately monitor a set of properties that all change at once.
     this.configurationChanged = new Emitter();
 
     // @public {read-only} - attributes of the atom, changed as the atom type changes
-    this.radius = 0;
     this.mass = 0;
     this.color = null;
     this.epsilon = 0;
@@ -61,9 +67,19 @@ class MotionAtom {
     // update the attributes if and when the atom type changes
     this.atomTypeProperty.link( atomType => {
       const atomAttributes = SOMConstants.MAP_ATOM_TYPE_TO_ATTRIBUTES.get( atomType );
-      this.radius = atomAttributes.radius;
       this.mass = atomAttributes.mass;
       this.color = atomAttributes.color;
+
+      // Generally the radius is set here too, but not when this is an adjustable atom and state is being set via
+      // phet-io, because the radius needs to come from the atom diameter setting.
+      if ( !( _.hasIn( window, 'phet.phetIo.phetioEngine' ) &&
+              phet.phetIo.phetioEngine.phetioStateEngine.isSettingStateProperty.value &&
+              atomType === AtomType.ADJUSTABLE ) ) {
+
+        this.radiusProperty.set( atomAttributes.radius );
+      }
+
+      // signal that the configuration has changed
       this.configurationChanged.emit();
     } );
   }
@@ -159,15 +175,6 @@ class MotionAtom {
 
   getType() {
     return this.atomTypeProperty.value;
-  }
-
-  /**
-   * @param {number} radius - radius of the atom
-   * @public
-   */
-  setRadius( radius ) {
-    this.radius = radius;
-    this.configurationChanged.emit();
   }
 
   reset() {

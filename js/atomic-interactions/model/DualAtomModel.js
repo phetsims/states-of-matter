@@ -73,7 +73,7 @@ class DualAtomModel {
     } );
 
     // @public (read-write) - diameter of the adjustable atoms
-    this.adjustableAtomDiameterProperty = new NumberProperty( 300, {
+    this.adjustableAtomDiameterProperty = new NumberProperty( SOMConstants.ADJUSTABLE_ATTRACTION_DEFAULT_RADIUS * 2, {
       units: 'pm',
       tandem: tandem.createTandem( 'adjustableAtomDiameterProperty' ),
       phetioReadOnly: true,
@@ -127,11 +127,9 @@ class DualAtomModel {
       );
 
       // update the value of epsilon
-      if ( this.movableAtom !== null ) {
-        this.ljPotentialCalculator.setEpsilon(
-          InteractionStrengthTable.getInteractionPotential( this.fixedAtom.getType(), this.movableAtom.getType() )
-        );
-      }
+      this.ljPotentialCalculator.setEpsilon(
+        InteractionStrengthTable.getInteractionPotential( this.fixedAtom.getType(), this.movableAtom.getType() )
+      );
 
       // reset other initial state variables
       if ( !this.isPhetioSettingStateProperty.value ) {
@@ -176,8 +174,8 @@ class DualAtomModel {
         sigma = SOMConstants.MIN_SIGMA;
       }
       this.ljPotentialCalculator.setSigma( sigma );
-      this.fixedAtom.setRadius( sigma / 2 );
-      this.movableAtom.setRadius( sigma / 2 );
+      this.fixedAtom.radiusProperty.set( sigma / 2 );
+      this.movableAtom.radiusProperty.set( sigma / 2 );
 
       // move the atom to the minimum force distance from the fixed atom (but not if this is a phet-io state update)
       if ( !this.isPhetioSettingStateProperty.value ) {

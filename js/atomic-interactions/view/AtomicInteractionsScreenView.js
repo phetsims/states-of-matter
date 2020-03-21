@@ -366,9 +366,9 @@ class AtomicInteractionsScreenView extends ScreenView {
    * @private
    */
   updatePushPinPosition() {
-    const mvt = this.modelViewTransform;
     const pinnedAtomPosition = this.dualAtomModel.fixedAtom.positionProperty.value;
-    const pinnedAtomRadius = this.dualAtomModel.fixedAtom.radius;
+    const pinnedAtomRadius = this.dualAtomModel.fixedAtom.radiusProperty.value;
+    const mvt = this.modelViewTransform;
     this.pushPinNode.right = mvt.modelToViewX( pinnedAtomPosition.x - pinnedAtomRadius * 0.5 );
     this.pushPinNode.bottom = mvt.modelToViewY( pinnedAtomPosition.y - pinnedAtomRadius * 0.5 );
   }

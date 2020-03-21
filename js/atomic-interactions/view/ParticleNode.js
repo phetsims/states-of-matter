@@ -20,7 +20,7 @@ const MVT_SCALE = 0.25;
 const OVERLAP_ENLARGEMENT_FACTOR = 1.25;
 
 /**
- * @param {ScaledAtom} particle  - The particle in the model that this node will represent in the view.
+ * @param {MotionAtom} particle  - The particle in the model that this node will represent in the view.
  * @param {ModelViewTransform2} modelViewTransform to convert between model and view co-ordinates
  * The gradient is computationally intensive to create, so use only when needed.
  * @param {boolean} enableOverlap - true if the node should be larger than the actual particle, thus allowing particles
@@ -46,7 +46,7 @@ function ParticleNode( particle, modelViewTransform, enableOverlap, tandem ) {
   const updateAppearance = () => {
 
     // calculate the scaled radius of the circle
-    let radiusInView = particle.radius * MVT_SCALE;
+    let radiusInView = particle.radiusProperty.value * MVT_SCALE;
     if ( this.overlapEnabled ) {
 
       // Overlap is enabled, so make the shape slightly larger than the radius of the circle so that overlap will occur
@@ -55,9 +55,9 @@ function ParticleNode( particle, modelViewTransform, enableOverlap, tandem ) {
     }
 
     this.circle.setRadius( radiusInView );
-    this.circle.fill = this.createFill( particle.color, particle.radius );
+    this.circle.fill = this.createFill( particle.color, particle.radiusProperty.value );
   };
-  updateAppearance();
+  particle.radiusProperty.link( updateAppearance );
   particle.configurationChanged.addListener( updateAppearance );
 
   // Set ourself to be initially non-pickable so that we don't get mouse events.
