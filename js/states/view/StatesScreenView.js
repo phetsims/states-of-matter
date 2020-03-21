@@ -77,7 +77,7 @@ function StatesScreenView( multipleParticleModel, tandem ) {
   );
 
   // @private thermometer node
-  this.compositeThermometerNode = new CompositeThermometerNode( multipleParticleModel, modelViewTransform, {
+  this.compositeThermometerNode = new CompositeThermometerNode( multipleParticleModel, {
     font: new PhetFont( 20 ),
     fill: 'white',
     center: thermometerInitialCenterPosition,

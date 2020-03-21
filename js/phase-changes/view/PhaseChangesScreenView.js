@@ -94,7 +94,7 @@ function PhaseChangesScreenView( model, isInteractionDiagramEnabled, tandem ) {
   this.addChild( heaterCoolerNode );
 
   // add the thermometer node
-  this.compositeThermometerNode = new CompositeThermometerNode( model, modelViewTransform, {
+  this.compositeThermometerNode = new CompositeThermometerNode( model, {
     font: new PhetFont( 20 ),
     fill: 'white',
     tandem: tandem.createTandem( 'compositeThermometerNode' )

@@ -11,7 +11,6 @@
 import EnumerationProperty from '../../../../axon/js/EnumerationProperty.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Enumeration from '../../../../phet-core/js/Enumeration.js';
-import inherit from '../../../../phet-core/js/inherit.js';
 import merge from '../../../../phet-core/js/merge.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import ThermometerNode from '../../../../scenery-phet/js/ThermometerNode.js';
@@ -26,6 +25,7 @@ import statesOfMatterStrings from '../../states-of-matter-strings.js';
 import statesOfMatter from '../../statesOfMatter.js';
 import SOMQueryParameters from '../SOMQueryParameters.js';
 
+// strings
 const celsiusUnitsString = statesOfMatterStrings.celsiusUnits;
 const kelvinUnitsString = statesOfMatterStrings.kelvinUnits;
 
@@ -40,119 +40,115 @@ const TemperatureUnits = Enumeration.byKeys( [ 'KELVIN', 'CELSIUS' ] );
 // clamping the red mercury display at 1000
 const MAX_TEMPERATURE_TO_CLAMP_RED_MERCURY = 1000;
 
-/**
- * @param {MultipleParticleModel} multipleParticleModel - model of the simulation
- * @param {ModelViewTransform2} modelViewTransform The model view transform for transforming particle position.
- * @param {Object} [options] that can be passed on to the underlying node
- * @constructor
- */
-function CompositeThermometerNode( multipleParticleModel, modelViewTransform, options ) {
+class CompositeThermometerNode extends Node {
 
-  options = merge( {
-    tandem: Tandem.REQUIRED
-  }, options );
+  /**
+   * @param {MultipleParticleModel} multipleParticleModel - model of the simulation
+   * @param {Object} [options] that can be passed on to the underlying node
+   * @constructor
+   */
+  constructor( multipleParticleModel, options ) {
 
-  Node.call( this );
-  const self = this;
+    options = merge( {
+      tandem: Tandem.REQUIRED
+    }, options );
 
-  // @private
-  this.multipleParticleModel = multipleParticleModel;
-  this.modelViewTransform = modelViewTransform;
+    super();
 
-  // add thermometer node
-  const thermometerNode = new ThermometerNode(
-    0,
-    MAX_TEMPERATURE_TO_CLAMP_RED_MERCURY,
-    multipleParticleModel.temperatureInKelvinProperty,
-    {
-      outlineStroke: 'black',
-      backgroundFill: 'white',
-      tickSpacing: 8,
-      majorTickLength: 8,
-      minorTickLength: 4,
-      bulbDiameter: 23,
-      glassThickness: 2.5,
-      lineWidth: 1.4,
-      tubeWidth: 13,
-      tubeHeight: 65,
-      tandem: options.tandem.createTandem( 'thermometerNode' )
-    }
-  );
+    // add thermometer node
+    const thermometerNode = new ThermometerNode(
+      0,
+      MAX_TEMPERATURE_TO_CLAMP_RED_MERCURY,
+      multipleParticleModel.temperatureInKelvinProperty,
+      {
+        outlineStroke: 'black',
+        backgroundFill: 'white',
+        tickSpacing: 8,
+        majorTickLength: 8,
+        minorTickLength: 4,
+        bulbDiameter: 23,
+        glassThickness: 2.5,
+        lineWidth: 1.4,
+        tubeWidth: 13,
+        tubeHeight: 65,
+        tandem: options.tandem.createTandem( 'thermometerNode' )
+      }
+    );
 
-  // @private temperature nodes combo box
-  this.temperatureKelvinText = new Text( '', {
-    font: TEMPERATURE_READOUT_FONT,
-    maxWidth: MAX_TEMPERATURE_TEXT_WIDTH,
-    tandem: options.tandem.createTandem( 'temperatureKelvinText' ),
-    phetioReadOnly: true
-  } );
-  this.temperatureCelsiusText = new Text( MAX_LENGTH_TEMPERATURE_TEXT, {
-    font: TEMPERATURE_READOUT_FONT,
-    maxWidth: MAX_TEMPERATURE_TEXT_WIDTH,
-    tandem: options.tandem.createTandem( 'temperatureCelsiusText' ),
-    phetioReadOnly: true
-  } );
+    // @private temperature nodes combo box
+    const temperatureKelvinText = new Text( '', {
+      font: TEMPERATURE_READOUT_FONT,
+      maxWidth: MAX_TEMPERATURE_TEXT_WIDTH,
+      tandem: options.tandem.createTandem( 'temperatureKelvinText' ),
+      phetioReadOnly: true
+    } );
+    const temperatureCelsiusText = new Text( MAX_LENGTH_TEMPERATURE_TEXT, {
+      font: TEMPERATURE_READOUT_FONT,
+      maxWidth: MAX_TEMPERATURE_TEXT_WIDTH,
+      tandem: options.tandem.createTandem( 'temperatureCelsiusText' ),
+      phetioReadOnly: true
+    } );
 
-  // @private
-  this.temperatureUnitsProperty = new EnumerationProperty(
-    TemperatureUnits,
-    SOMQueryParameters.defaultCelsius ? TemperatureUnits.CELSIUS : TemperatureUnits.KELVIN,
-    { tandem: options.tandem.createTandem( 'temperatureUnitsProperty' ) }
-  );
-  const temperatureComboBox = new ComboBox(
-    [
-      new ComboBoxItem( this.temperatureKelvinText, TemperatureUnits.KELVIN ),
-      new ComboBoxItem( this.temperatureCelsiusText, TemperatureUnits.CELSIUS )
-    ],
-    this.temperatureUnitsProperty,
-    this,
-    {
-      xMargin: 6,
-      yMargin: 6,
-      cornerRadius: 5,
-      buttonLineWidth: 0.4,
-      tandem: options.tandem.createTandem( 'temperatureComboBox' )
-    }
-  );
+    // @private
+    this.temperatureUnitsProperty = new EnumerationProperty(
+      TemperatureUnits,
+      SOMQueryParameters.defaultCelsius ? TemperatureUnits.CELSIUS : TemperatureUnits.KELVIN,
+      { tandem: options.tandem.createTandem( 'temperatureUnitsProperty' ) }
+    );
+    const temperatureComboBox = new ComboBox(
+      [
+        new ComboBoxItem( temperatureKelvinText, TemperatureUnits.KELVIN ),
+        new ComboBoxItem( temperatureCelsiusText, TemperatureUnits.CELSIUS )
+      ],
+      this.temperatureUnitsProperty,
+      this,
+      {
+        xMargin: 6,
+        yMargin: 6,
+        cornerRadius: 5,
+        buttonLineWidth: 0.4,
+        align: 'right',
+        tandem: options.tandem.createTandem( 'temperatureComboBox' )
+      }
+    );
 
-  const contentNode = new VBox( {
-    spacing: 10,
-    children: [ temperatureComboBox, thermometerNode ]
-  } );
+    const contentNode = new VBox( {
+      spacing: 10,
+      children: [ temperatureComboBox, thermometerNode ]
+    } );
 
-  const panel = new Panel( contentNode, {
-    xMargin: 0,
-    yMargin: 0,
-    fill: null,
-    stroke: null,
-    lineWidth: 0,
-    resize: false
-  } );
+    const panel = new Panel( contentNode, {
+      xMargin: 0,
+      yMargin: 0,
+      fill: null,
+      stroke: null,
+      lineWidth: 0,
+      resize: false
+    } );
 
-  this.addChild( panel );
+    this.addChild( panel );
 
-  // update the temperature readouts when the value changes in the model
-  multipleParticleModel.temperatureInKelvinProperty.link( temperatureInKelvin => {
-    if ( temperatureInKelvin !== null ) {
-      const temperatureInKelvinRounded = Utils.roundSymmetric( temperatureInKelvin );
-      self.temperatureKelvinText.setText( temperatureInKelvinRounded + ' ' + kelvinUnitsString );
-      self.temperatureCelsiusText.setText( Utils.roundSymmetric( temperatureInKelvin - 273.15 ) + ' ' + celsiusUnitsString );
-    }
-    else {
-      self.temperatureKelvinText.setText( '--' );
-      self.temperatureCelsiusText.setText( '--' );
-    }
-  } );
+    // update the temperature readouts when the value changes in the model
+    multipleParticleModel.temperatureInKelvinProperty.link( temperatureInKelvin => {
+      if ( temperatureInKelvin !== null ) {
+        const temperatureInKelvinRounded = Utils.roundSymmetric( temperatureInKelvin );
+        temperatureKelvinText.setText( temperatureInKelvinRounded + ' ' + kelvinUnitsString );
+        temperatureCelsiusText.setText( Utils.roundSymmetric( temperatureInKelvin - 273.15 ) + ' ' + celsiusUnitsString );
+      }
+      else {
+        temperatureKelvinText.setText( '--' );
+        temperatureCelsiusText.setText( '--' );
+      }
+    } );
 
-  this.mutate( options );
+    this.mutate( options );
+  }
+
+  // @public
+  reset() {
+    this.temperatureUnitsProperty.reset();
+  }
 }
 
 statesOfMatter.register( 'CompositeThermometerNode', CompositeThermometerNode );
-
-export default inherit( Panel, CompositeThermometerNode, {
-
-  // @public
-  reset: function() {
-    this.temperatureUnitsProperty.reset();
-  }
-} );
+export default CompositeThermometerNode;
