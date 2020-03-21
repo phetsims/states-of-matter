@@ -8,10 +8,8 @@
  * @author John Blanco
  */
 
-import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import ObservableArray from '../../../../axon/js/ObservableArray.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
-import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import ScreenView from '../../../../joist/js/ScreenView.js';
 import inherit from '../../../../phet-core/js/inherit.js';
@@ -87,20 +85,13 @@ function PhaseChangesScreenView( model, isInteractionDiagramEnabled, tandem ) {
   this.addChild( this.particleContainerNode );
 
   // add heater/cooler node
-  const heaterCoolerNode = new HeaterCoolerNode( new NumberProperty( 0, {
-    range: new Range( -1, 1 ) // +1 for max heating, -1 for max cooling
-  } ), {
+  const heaterCoolerNode = new HeaterCoolerNode( model.heatingCoolingAmountProperty, {
     scale: 0.79,
     centerX: nominalParticleAreaViewBounds.centerX,
     top: nominalParticleAreaViewBounds.maxY + 30, // offset from container bottom empirically determined
     tandem: tandem.createTandem( 'heaterCoolerNode' )
   } );
   this.addChild( heaterCoolerNode );
-
-  // hook the heater/cooler node up to the model
-  heaterCoolerNode.heatCoolAmountProperty.link( function( heat ) {
-    model.setHeatingCoolingAmount( heat );
-  } );
 
   // add the thermometer node
   this.compositeThermometerNode = new CompositeThermometerNode( model, modelViewTransform, {
