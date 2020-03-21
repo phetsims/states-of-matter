@@ -79,13 +79,11 @@ class CompositeThermometerNode extends Node {
     const temperatureKelvinText = new Text( '', {
       font: TEMPERATURE_READOUT_FONT,
       maxWidth: MAX_TEMPERATURE_TEXT_WIDTH,
-      tandem: options.tandem.createTandem( 'temperatureKelvinText' ),
       phetioReadOnly: true
     } );
     const temperatureCelsiusText = new Text( MAX_LENGTH_TEMPERATURE_TEXT, {
       font: TEMPERATURE_READOUT_FONT,
       maxWidth: MAX_TEMPERATURE_TEXT_WIDTH,
-      tandem: options.tandem.createTandem( 'temperatureCelsiusText' ),
       phetioReadOnly: true
     } );
 
@@ -97,8 +95,8 @@ class CompositeThermometerNode extends Node {
     );
     const temperatureComboBox = new ComboBox(
       [
-        new ComboBoxItem( temperatureKelvinText, TemperatureUnits.KELVIN ),
-        new ComboBoxItem( temperatureCelsiusText, TemperatureUnits.CELSIUS )
+        new ComboBoxItem( temperatureKelvinText, TemperatureUnits.KELVIN, { tandemName: 'kelvin' } ),
+        new ComboBoxItem( temperatureCelsiusText, TemperatureUnits.CELSIUS, { tandemName: 'celsius' } )
       ],
       this.temperatureUnitsProperty,
       this,
