@@ -12,6 +12,7 @@ import Matrix3 from '../../../../dot/js/Matrix3.js';
 import Shape from '../../../../kite/js/Shape.js';
 import inherit from '../../../../phet-core/js/inherit.js';
 import HandleNode from '../../../../scenery-phet/js/HandleNode.js';
+import DragListener from '../../../../scenery/js/listeners/DragListener.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import Path from '../../../../scenery/js/nodes/Path.js';
 import LinearGradient from '../../../../scenery/js/util/LinearGradient.js';
@@ -120,13 +121,45 @@ function ParticleContainerNode(
       stroke: '#888888',
       fill: 'rgba( 200, 200, 200, 0.5 )',
       centerX: containerLid.width / 2,
-      centerY: 0
+      centerY: 0,
+      cursor: 'ns-resize'
     } );
     containerLid.addChild( handleAreaEllipse );
     const handleNode = new HandleNode( { scale: 0.28, attachmentFill: 'black', gripLineWidth: 4 } );
     handleNode.centerX = containerLid.width / 2;
     handleNode.bottom = handleAreaEllipse.centerY + 5; // position tweaked a bit to look better
     containerLid.addChild( handleNode );
+
+    // add a drag handler to the lid
+    let dragStartY;
+    let draggedToY;
+    let containerSizeAtDragStart;
+    handleAreaEllipse.addInputListener( new DragListener( {
+
+      start: event => {
+        dragStartY = this.globalToParentPoint( event.pointer.point ).y;
+        containerSizeAtDragStart = multipleParticleModel.containerHeightProperty.get();
+      },
+
+      drag: event => {
+        draggedToY = this.globalToParentPoint( event.pointer.point ).y;
+
+        // Resize the container based on the drag distance.
+        multipleParticleModel.setTargetContainerHeight(
+          containerSizeAtDragStart + modelViewTransform.viewToModelDeltaY( draggedToY - dragStartY )
+        );
+      },
+
+      end: () => {
+
+        // Set the target size to the current size, which will stop any change in size that is currently underway.
+        multipleParticleModel.setTargetContainerHeight(
+          multipleParticleModel.containerHeightProperty.get()
+        );
+      },
+
+      tandem: tandem.createTandem( 'lidDragListener' )
+    } ) );
   }
 
   let pressureMeter;
