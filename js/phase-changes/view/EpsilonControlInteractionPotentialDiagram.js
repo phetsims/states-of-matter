@@ -29,7 +29,7 @@ import SubstanceType from '../../common/SubstanceType.js';
 import InteractionPotentialCanvasNode from '../../common/view/InteractionPotentialCanvasNode.js';
 import InteractionPotentialDiagramNode from '../../common/view/InteractionPotentialDiagramNode.js';
 import SOMColorProfile from '../../common/view/SOMColorProfile.js';
-import statesOfMatterStrings from '../../states-of-matter-strings.js';
+import statesOfMatterStrings from '../../statesOfMatterStrings.js';
 import statesOfMatter from '../../statesOfMatter.js';
 
 const interactionPotentialString = statesOfMatterStrings.interactionPotential;

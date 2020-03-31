@@ -22,7 +22,7 @@ import AccordionBox from '../../../../sun/js/AccordionBox.js';
 import AquaRadioButtonGroup from '../../../../sun/js/AquaRadioButtonGroup.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import SOMConstants from '../../common/SOMConstants.js';
-import statesOfMatterStrings from '../../states-of-matter-strings.js';
+import statesOfMatterStrings from '../../statesOfMatterStrings.js';
 import statesOfMatter from '../../statesOfMatter.js';
 import ForceDisplayMode from '../model/ForceDisplayMode.js';
 

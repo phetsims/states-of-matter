@@ -16,7 +16,7 @@ import Node from '../../../../scenery/js/nodes/Node.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import PositionMarker from '../../atomic-interactions/view/PositionMarker.js';
 import ZoomableGridNode from '../../atomic-interactions/view/ZoomableGridNode.js';
-import statesOfMatterStrings from '../../states-of-matter-strings.js';
+import statesOfMatterStrings from '../../statesOfMatterStrings.js';
 import statesOfMatter from '../../statesOfMatter.js';
 import LjPotentialCalculator from '../model/LjPotentialCalculator.js';
 import SOMConstants from '../SOMConstants.js';

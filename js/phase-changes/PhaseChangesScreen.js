@@ -11,7 +11,7 @@ import Screen from '../../../joist/js/Screen.js';
 import inherit from '../../../phet-core/js/inherit.js';
 import SOMConstants from '../common/SOMConstants.js';
 import SOMColorProfile from '../common/view/SOMColorProfile.js';
-import statesOfMatterStrings from '../states-of-matter-strings.js';
+import statesOfMatterStrings from '../statesOfMatterStrings.js';
 import statesOfMatter from '../statesOfMatter.js';
 import PhaseChangesIcon from './PhaseChangesIcon.js';
 import PhaseChangesModel from './PhaseChangesModel.js';

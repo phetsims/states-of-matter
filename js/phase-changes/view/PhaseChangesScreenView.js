@@ -26,7 +26,7 @@ import SOMConstants from '../../common/SOMConstants.js';
 import SubstanceType from '../../common/SubstanceType.js';
 import CompositeThermometerNode from '../../common/view/CompositeThermometerNode.js';
 import ParticleContainerNode from '../../common/view/ParticleContainerNode.js';
-import statesOfMatterStrings from '../../states-of-matter-strings.js';
+import statesOfMatterStrings from '../../statesOfMatterStrings.js';
 import statesOfMatter from '../../statesOfMatter.js';
 import EpsilonControlInteractionPotentialDiagram from './EpsilonControlInteractionPotentialDiagram.js';
 import PhaseChangesMoleculesControlPanel from './PhaseChangesMoleculesControlPanel.js';

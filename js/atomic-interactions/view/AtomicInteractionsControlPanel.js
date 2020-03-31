@@ -27,7 +27,7 @@ import pushPinImg from '../../../images/push-pin_png.js';
 import SOMConstants from '../../common/SOMConstants.js';
 import SubstanceType from '../../common/SubstanceType.js';
 import AtomAndMoleculeIconFactory from '../../common/view/AtomAndMoleculeIconFactory.js';
-import statesOfMatterStrings from '../../states-of-matter-strings.js';
+import statesOfMatterStrings from '../../statesOfMatterStrings.js';
 import statesOfMatter from '../../statesOfMatter.js';
 import AtomPair from '../model/AtomPair.js';
 

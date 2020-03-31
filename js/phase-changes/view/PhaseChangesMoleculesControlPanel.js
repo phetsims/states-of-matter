@@ -24,7 +24,7 @@ import SubstanceType from '../../common/SubstanceType.js';
 import AtomAndMoleculeIconFactory from '../../common/view/AtomAndMoleculeIconFactory.js';
 import SOMColorProfile from '../../common/view/SOMColorProfile.js';
 import SubstanceSelectorNode from '../../common/view/SubstanceSelectorNode.js';
-import statesOfMatterStrings from '../../states-of-matter-strings.js';
+import statesOfMatterStrings from '../../statesOfMatterStrings.js';
 import statesOfMatter from '../../statesOfMatter.js';
 import PhaseChangesModel from '../PhaseChangesModel.js';
 

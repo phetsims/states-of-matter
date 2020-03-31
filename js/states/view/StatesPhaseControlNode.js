@@ -24,7 +24,7 @@ import gasIconImage from '../../../mipmaps/gas-icon_png.js';
 import liquidIconImage from '../../../mipmaps/liquid-icon_png.js';
 import solidIconImage from '../../../mipmaps/solid-icon_png.js';
 import PhaseStateEnum from '../../common/PhaseStateEnum.js';
-import statesOfMatterStrings from '../../states-of-matter-strings.js';
+import statesOfMatterStrings from '../../statesOfMatterStrings.js';
 import statesOfMatter from '../../statesOfMatter.js';
 
 const gasString = statesOfMatterStrings.Gas;

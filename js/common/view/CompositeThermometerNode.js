@@ -21,7 +21,7 @@ import ComboBox from '../../../../sun/js/ComboBox.js';
 import ComboBoxItem from '../../../../sun/js/ComboBoxItem.js';
 import Panel from '../../../../sun/js/Panel.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
-import statesOfMatterStrings from '../../states-of-matter-strings.js';
+import statesOfMatterStrings from '../../statesOfMatterStrings.js';
 import statesOfMatter from '../../statesOfMatter.js';
 import SOMQueryParameters from '../SOMQueryParameters.js';
 

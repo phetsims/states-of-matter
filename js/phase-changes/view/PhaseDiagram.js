@@ -19,7 +19,7 @@ import Text from '../../../../scenery/js/nodes/Text.js';
 import AccordionBox from '../../../../sun/js/AccordionBox.js';
 import SOMConstants from '../../common/SOMConstants.js';
 import SOMColorProfile from '../../common/view/SOMColorProfile.js';
-import statesOfMatterStrings from '../../states-of-matter-strings.js';
+import statesOfMatterStrings from '../../statesOfMatterStrings.js';
 import statesOfMatter from '../../statesOfMatter.js';
 
 const criticalPointString = statesOfMatterStrings.criticalPoint;
