@@ -6226,7 +6226,7 @@ window.phet.phetio.phetioElementsBaseline = assert &&
       "phetioReadOnly": false,
       "phetioState": true,
       "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO<ReferenceIO>"
+      "phetioTypeName": "PropertyIO<ScreenIO>"
     },
     "statesOfMatter.homeScreen.nameProperty": {
       "phetioDocumentation": "",
