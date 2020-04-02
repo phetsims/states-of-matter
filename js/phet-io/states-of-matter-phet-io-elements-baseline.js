@@ -9907,7 +9907,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
-    "statesOfMatter.phaseChangesScreen.view.pressureMeter": {
+    "statesOfMatter.phaseChangesScreen.view.pressureGaugeNode": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -9920,7 +9920,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NodeIO"
     },
-    "statesOfMatter.phaseChangesScreen.view.pressureMeter.gaugeNode": {
+    "statesOfMatter.phaseChangesScreen.view.pressureGaugeNode.gaugeNode": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -9933,7 +9933,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NodeIO"
     },
-    "statesOfMatter.phaseChangesScreen.view.pressureMeter.gaugeNode.foregroundNode": {
+    "statesOfMatter.phaseChangesScreen.view.pressureGaugeNode.gaugeNode.foregroundNode": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -9946,7 +9946,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NodeIO"
     },
-    "statesOfMatter.phaseChangesScreen.view.pressureMeter.gaugeNode.foregroundNode.opacityProperty": {
+    "statesOfMatter.phaseChangesScreen.view.pressureGaugeNode.gaugeNode.foregroundNode.opacityProperty": {
       "phetioDocumentation": "Opacity of the parent NodeIO, between 0 (invisible) and 1 (fully visible)",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -9959,7 +9959,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NumberPropertyIO"
     },
-    "statesOfMatter.phaseChangesScreen.view.pressureMeter.gaugeNode.foregroundNode.pickableProperty": {
+    "statesOfMatter.phaseChangesScreen.view.pressureGaugeNode.gaugeNode.foregroundNode.pickableProperty": {
       "phetioDocumentation": "Sets whether the node will be pickable (and hence interactive), see the NodeIO documentation for more details",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -9972,7 +9972,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
-    "statesOfMatter.phaseChangesScreen.view.pressureMeter.gaugeNode.foregroundNode.visibleProperty": {
+    "statesOfMatter.phaseChangesScreen.view.pressureGaugeNode.gaugeNode.foregroundNode.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -9985,7 +9985,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
-    "statesOfMatter.phaseChangesScreen.view.pressureMeter.gaugeNode.labelNode": {
+    "statesOfMatter.phaseChangesScreen.view.pressureGaugeNode.gaugeNode.labelNode": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -9998,7 +9998,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "TextIO"
     },
-    "statesOfMatter.phaseChangesScreen.view.pressureMeter.gaugeNode.labelNode.opacityProperty": {
+    "statesOfMatter.phaseChangesScreen.view.pressureGaugeNode.gaugeNode.labelNode.opacityProperty": {
       "phetioDocumentation": "Opacity of the parent NodeIO, between 0 (invisible) and 1 (fully visible)",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -10011,7 +10011,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NumberPropertyIO"
     },
-    "statesOfMatter.phaseChangesScreen.view.pressureMeter.gaugeNode.labelNode.pickableProperty": {
+    "statesOfMatter.phaseChangesScreen.view.pressureGaugeNode.gaugeNode.labelNode.pickableProperty": {
       "phetioDocumentation": "Sets whether the node will be pickable (and hence interactive), see the NodeIO documentation for more details",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -10024,7 +10024,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
-    "statesOfMatter.phaseChangesScreen.view.pressureMeter.gaugeNode.labelNode.textProperty": {
+    "statesOfMatter.phaseChangesScreen.view.pressureGaugeNode.gaugeNode.labelNode.textProperty": {
       "phetioDocumentation": "Property for the displayed text",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -10037,7 +10037,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<StringIO>"
     },
-    "statesOfMatter.phaseChangesScreen.view.pressureMeter.gaugeNode.labelNode.visibleProperty": {
+    "statesOfMatter.phaseChangesScreen.view.pressureGaugeNode.gaugeNode.labelNode.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -10050,7 +10050,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
-    "statesOfMatter.phaseChangesScreen.view.pressureMeter.gaugeNode.opacityProperty": {
+    "statesOfMatter.phaseChangesScreen.view.pressureGaugeNode.gaugeNode.opacityProperty": {
       "phetioDocumentation": "Opacity of the parent NodeIO, between 0 (invisible) and 1 (fully visible)",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -10063,7 +10063,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NumberPropertyIO"
     },
-    "statesOfMatter.phaseChangesScreen.view.pressureMeter.gaugeNode.pickableProperty": {
+    "statesOfMatter.phaseChangesScreen.view.pressureGaugeNode.gaugeNode.pickableProperty": {
       "phetioDocumentation": "Sets whether the node will be pickable (and hence interactive), see the NodeIO documentation for more details",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -10076,7 +10076,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
-    "statesOfMatter.phaseChangesScreen.view.pressureMeter.gaugeNode.visibleProperty": {
+    "statesOfMatter.phaseChangesScreen.view.pressureGaugeNode.gaugeNode.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -10089,7 +10089,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
-    "statesOfMatter.phaseChangesScreen.view.pressureMeter.opacityProperty": {
+    "statesOfMatter.phaseChangesScreen.view.pressureGaugeNode.opacityProperty": {
       "phetioDocumentation": "Opacity of the parent NodeIO, between 0 (invisible) and 1 (fully visible)",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -10102,7 +10102,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NumberPropertyIO"
     },
-    "statesOfMatter.phaseChangesScreen.view.pressureMeter.pickableProperty": {
+    "statesOfMatter.phaseChangesScreen.view.pressureGaugeNode.pickableProperty": {
       "phetioDocumentation": "Sets whether the node will be pickable (and hence interactive), see the NodeIO documentation for more details",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -10115,7 +10115,59 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
-    "statesOfMatter.phaseChangesScreen.view.pressureMeter.visibleProperty": {
+    "statesOfMatter.phaseChangesScreen.view.pressureGaugeNode.readoutNode": {
+      "phetioDocumentation": "",
+      "phetioDynamicElement": false,
+      "phetioEventType": "MODEL",
+      "phetioFeatured": false,
+      "phetioHighFrequency": false,
+      "phetioIsArchetype": false,
+      "phetioPlayback": false,
+      "phetioReadOnly": false,
+      "phetioState": false,
+      "phetioStudioControl": true,
+      "phetioTypeName": "NodeIO"
+    },
+    "statesOfMatter.phaseChangesScreen.view.pressureGaugeNode.readoutNode.opacityProperty": {
+      "phetioDocumentation": "Opacity of the parent NodeIO, between 0 (invisible) and 1 (fully visible)",
+      "phetioDynamicElement": false,
+      "phetioEventType": "MODEL",
+      "phetioFeatured": false,
+      "phetioHighFrequency": false,
+      "phetioIsArchetype": false,
+      "phetioPlayback": false,
+      "phetioReadOnly": false,
+      "phetioState": true,
+      "phetioStudioControl": true,
+      "phetioTypeName": "NumberPropertyIO"
+    },
+    "statesOfMatter.phaseChangesScreen.view.pressureGaugeNode.readoutNode.pickableProperty": {
+      "phetioDocumentation": "Sets whether the node will be pickable (and hence interactive), see the NodeIO documentation for more details",
+      "phetioDynamicElement": false,
+      "phetioEventType": "MODEL",
+      "phetioFeatured": false,
+      "phetioHighFrequency": false,
+      "phetioIsArchetype": false,
+      "phetioPlayback": false,
+      "phetioReadOnly": false,
+      "phetioState": true,
+      "phetioStudioControl": true,
+      "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
+    },
+    "statesOfMatter.phaseChangesScreen.view.pressureGaugeNode.readoutNode.visibleProperty": {
+      "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
+      "phetioDynamicElement": false,
+      "phetioEventType": "MODEL",
+      "phetioFeatured": false,
+      "phetioHighFrequency": false,
+      "phetioIsArchetype": false,
+      "phetioPlayback": false,
+      "phetioReadOnly": false,
+      "phetioState": true,
+      "phetioStudioControl": true,
+      "phetioTypeName": "PropertyIO<BooleanIO>"
+    },
+    "statesOfMatter.phaseChangesScreen.view.pressureGaugeNode.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",

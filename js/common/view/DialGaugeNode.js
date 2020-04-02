@@ -59,19 +59,22 @@ function DialGaugeNode( multipleParticleModel, tandem ) {
   );
 
   // Add the textual readout display.
-  const textualReadoutBackground = new Rectangle( 0, 0, 80, 15, 2, 2, {
+  const readoutNode = new Rectangle( 0, 0, 80, 15, 2, 2, {
     fill: 'white',
     stroke: 'black',
     centerX: gaugeNode.centerX,
-    top: gaugeNode.bottom - 15
+    top: gaugeNode.bottom - 15,
+    tandem: tandem.createTandem( 'readoutNode' )
   } );
 
-  const textualReadout = new Text( '', {
+  const readoutText = new Text( '0', {
     font: new PhetFont( 12 ),
     fill: 'black',
-    maxWidth: textualReadoutBackground.width * 0.9,
-    center: textualReadoutBackground.center
+    maxWidth: readoutNode.width * 0.9,
+    centerX: readoutNode.width / 2,
+    centerY: readoutNode.height / 2
   } );
+  readoutNode.addChild( readoutText );
 
   // To accurately reproduce the previous version (which consisted of a path stroked with lineWidth 10), we need to
   // include the stroke width effects (where it had a default lineCap of butt). We have a part that doesn't change
@@ -103,7 +106,7 @@ function DialGaugeNode( multipleParticleModel, tandem ) {
   connectorCollar.centerY = gaugeNode.centerY;
   connectorCollar.left = gaugeNode.right - 10;
   const dialComponentsNode = new Node( {
-      children: [ connector, connectorCollar, gaugeNode, textualReadoutBackground, textualReadout ]
+    children: [ connector, connectorCollar, gaugeNode, readoutNode ]
     }
   );
 
@@ -114,16 +117,16 @@ function DialGaugeNode( multipleParticleModel, tandem ) {
     const pressure = multipleParticleModel.pressureProperty.get();
     if ( pressure !== previousPressure ) {
       if ( pressure < MAX_PRESSURE ) {
-        textualReadout.setText( Utils.toFixed( pressure, 1 ) + ' ' + pressureUnitsInAtmString );
-        textualReadout.fill = 'black';
+        readoutText.setText( Utils.toFixed( pressure, 1 ) + ' ' + pressureUnitsInAtmString );
+        readoutText.fill = 'black';
       }
       else {
-        textualReadout.setText( pressureOverloadString );
-        textualReadout.fill = PhetColorScheme.RED_COLORBLIND;
+        readoutText.setText( pressureOverloadString );
+        readoutText.fill = PhetColorScheme.RED_COLORBLIND;
       }
       previousPressure = pressure;
     }
-    textualReadout.center = textualReadoutBackground.center;
+    readoutText.centerX = readoutNode.width / 2;
   }, PRESSURE_UPDATE_PERIOD );
 
   // position the connector

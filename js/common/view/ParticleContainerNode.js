@@ -24,7 +24,7 @@ import ParticleImageCanvasNode from './ParticleImageCanvasNode.js';
 import PointingHandNode from './PointingHandNode.js';
 
 // constants
-const PRESSURE_METER_ELBOW_OFFSET = 30;
+const PRESSURE_GAUGE_ELBOW_OFFSET = 30;
 const CONTAINER_X_MARGIN = 5; // additional size in x direction beyond nominal container width
 const PERSPECTIVE_TILT_FACTOR = 0.15; // can be varied to get more or less tilt, but only works in a fairly narrow range
 const CONTAINER_CUTOUT_X_MARGIN = 25;
@@ -162,13 +162,13 @@ function ParticleContainerNode(
     } ) );
   }
 
-  let pressureMeter;
+  let pressureGaugeNode;
   if ( pressureGaugeEnabled ) {
 
-    // Add the pressure meter.
-    pressureMeter = new DialGaugeNode( multipleParticleModel, tandem.createTandem( 'pressureMeter' ) );
-    pressureMeter.right = this.particleAreaViewBounds.minX + this.particleAreaViewBounds.width * 0.2;
-    postParticleLayer.addChild( pressureMeter );
+    // Add the pressure gauge.
+    pressureGaugeNode = new DialGaugeNode( multipleParticleModel, tandem.createTandem( 'pressureGaugeNode' ) );
+    pressureGaugeNode.right = this.particleAreaViewBounds.minX + this.particleAreaViewBounds.width * 0.2;
+    postParticleLayer.addChild( pressureGaugeNode );
   }
 
   // define a function to evaluate the bottom edge of the ellipse at the top, used for relative positioning
@@ -354,7 +354,7 @@ function ParticleContainerNode(
   // Define a function for updating the position and appearance of the pressure gauge.
   function updatePressureGaugePosition() {
 
-    if ( !pressureMeter ) {
+    if ( !pressureGaugeNode ) {
       // nothing to update, so bail out
       return;
     }
@@ -362,12 +362,12 @@ function ParticleContainerNode(
     const containerHeight = self.multipleParticleModel.containerHeightProperty.get();
 
     if ( !self.multipleParticleModel.isExplodedProperty.get() ) {
-      if ( pressureMeter.getRotation() !== 0 ) {
-        pressureMeter.setRotation( 0 );
+      if ( pressureGaugeNode.getRotation() !== 0 ) {
+        pressureGaugeNode.setRotation( 0 );
       }
-      pressureMeter.top = self.particleAreaViewBounds.top - 75; // empirical position adjustment to connect to lid
-      pressureMeter.setElbowHeight(
-        PRESSURE_METER_ELBOW_OFFSET + Math.abs( self.modelViewTransform.modelToViewDeltaY(
+      pressureGaugeNode.top = self.particleAreaViewBounds.top - 75; // empirical position adjustment to connect to lid
+      pressureGaugeNode.setElbowHeight(
+        PRESSURE_GAUGE_ELBOW_OFFSET + Math.abs( self.modelViewTransform.modelToViewDeltaY(
         MultipleParticleModel.PARTICLE_CONTAINER_INITIAL_HEIGHT - containerHeight
                                     ) )
       );
@@ -376,8 +376,8 @@ function ParticleContainerNode(
 
       // The container is exploding, so move the gauge up and spin it.
       const deltaHeight = self.modelViewTransform.modelToViewDeltaY( containerHeight ) - self.previousContainerViewSize;
-      pressureMeter.rotate( deltaHeight * 0.01 * Math.PI );
-      pressureMeter.centerY = pressureMeter.centerY + deltaHeight * 2;
+      pressureGaugeNode.rotate( deltaHeight * 0.01 * Math.PI );
+      pressureGaugeNode.centerY = pressureGaugeNode.centerY + deltaHeight * 2;
     }
   }
 
