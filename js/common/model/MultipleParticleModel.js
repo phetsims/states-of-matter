@@ -173,7 +173,8 @@ class MultipleParticleModel extends PhetioObject {
     // @public (read-only)
     this.pressureProperty = new NumberProperty( 0, {
       tandem: tandem.createTandem( 'pressureProperty' ),
-      phetioReadOnly: true
+      phetioReadOnly: true,
+      units: 'atm'
     } );
 
     // @public (read-write)
