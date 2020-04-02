@@ -264,7 +264,7 @@ class MultipleParticleModel extends PhetioObject {
     this.numberOfMoleculesProperty.lazyLink( newValue => {
       const currentNumberOfMolecules = Math.floor( this.moleculeDataSet.numberOfAtoms / this.moleculeDataSet.atomsPerMolecule );
 
-      if ( newValue !== currentNumberOfMolecules ) {
+      if ( newValue > currentNumberOfMolecules ) {
         const delta = newValue - currentNumberOfMolecules;
 
         for ( let i = 0; i < delta; i++ ) {
@@ -1105,6 +1105,8 @@ class MultipleParticleModel extends PhetioObject {
       this.scaledAtoms.push( new ScaledAtom( AtomType.OXYGEN, 0, 0 ) );
     }
 
+    this.numberOfMoleculesProperty.set( this.moleculeDataSet.numberOfMolecules );
+
     // Initialize the atom positions according the to requested phase.
     this.setPhase( phase );
   }
@@ -1161,6 +1163,9 @@ class MultipleParticleModel extends PhetioObject {
       // some to render in front of it.
       this.scaledAtoms.push( new HydrogenAtom( 0, 0, ( i % 2 === 0 ) ) );
     }
+
+    this.numberOfMoleculesProperty.set( this.moleculeDataSet.numberOfMolecules );
+
     // Initialize the atom positions according the to requested phase.
     this.setPhase( phase );
   }
@@ -1238,6 +1243,8 @@ class MultipleParticleModel extends PhetioObject {
       }
       this.scaledAtoms.push( atom );
     }
+
+    this.numberOfMoleculesProperty.set( this.moleculeDataSet.numberOfMolecules );
 
     // Initialize the atom positions according the to requested phase.
     this.setPhase( phase );
