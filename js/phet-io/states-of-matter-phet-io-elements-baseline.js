@@ -6905,7 +6905,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "statesOfMatter.phaseChangesScreen.model.interactionStrengthProperty": {
-      "phetioDocumentation": "",
+      "phetioDocumentation": "intermolecular potential for the \"Adjustable Attraction\" atoms",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
@@ -7449,6 +7449,19 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioState": true,
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
+    },
+    "statesOfMatter.phaseChangesScreen.view.compositeThermometerNode.temperatureInKelvinProperty": {
+      "phetioDocumentation": "",
+      "phetioDynamicElement": false,
+      "phetioEventType": "MODEL",
+      "phetioFeatured": false,
+      "phetioHighFrequency": false,
+      "phetioIsArchetype": false,
+      "phetioPlayback": false,
+      "phetioReadOnly": true,
+      "phetioState": true,
+      "phetioStudioControl": true,
+      "phetioTypeName": "LinkedElementIO"
     },
     "statesOfMatter.phaseChangesScreen.view.compositeThermometerNode.temperatureUnitsProperty": {
       "phetioDocumentation": "",
@@ -11401,6 +11414,19 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioState": true,
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
+    },
+    "statesOfMatter.statesScreen.view.compositeThermometerNode.temperatureInKelvinProperty": {
+      "phetioDocumentation": "",
+      "phetioDynamicElement": false,
+      "phetioEventType": "MODEL",
+      "phetioFeatured": false,
+      "phetioHighFrequency": false,
+      "phetioIsArchetype": false,
+      "phetioPlayback": false,
+      "phetioReadOnly": true,
+      "phetioState": true,
+      "phetioStudioControl": true,
+      "phetioTypeName": "LinkedElementIO"
     },
     "statesOfMatter.statesScreen.view.compositeThermometerNode.temperatureUnitsProperty": {
       "phetioDocumentation": "",
