@@ -140,6 +140,11 @@ class CompositeThermometerNode extends Node {
     } );
 
     this.mutate( options );
+
+    // Create a link to temperatureInKelvinProperty so it's easier to find in Studio.
+    this.addLinkedElement( multipleParticleModel.temperatureInKelvinProperty, {
+      tandem: options.tandem.createTandem( 'temperatureInKelvinProperty' )
+    } );
   }
 
   // @public
