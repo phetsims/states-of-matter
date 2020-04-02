@@ -72,8 +72,8 @@ class MotionAtom {
 
       // Generally the radius is set here too, but not when this is an adjustable atom and state is being set via
       // phet-io, because the radius needs to come from the atom diameter setting.
-      if ( !( _.hasIn( window, 'phet.phetIo.phetioEngine' ) &&
-              phet.phetIo.phetioEngine.phetioStateEngine.isSettingStateProperty.value &&
+      if ( !( _.hasIn( window, 'phet.phetio.phetioEngine' ) &&
+              phet.phetio.phetioEngine.phetioStateEngine.isSettingStateProperty.value &&
               atomType === AtomType.ADJUSTABLE ) ) {
 
         this.radiusProperty.set( atomAttributes.radius );

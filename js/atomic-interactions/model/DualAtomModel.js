@@ -114,8 +114,8 @@ class DualAtomModel {
     //-----------------------------------------------------------------------------------------------------------------
 
     // for phet-io
-    this.isPhetioSettingStateProperty = _.hasIn( window, 'phet.phetIo.phetioEngine' ) ?
-                                        phet.phetIo.phetioEngine.phetioStateEngine.isSettingStateProperty :
+    this.isPhetioSettingStateProperty = _.hasIn( window, 'phet.phetio.phetioEngine' ) ?
+                                        phet.phetio.phetioEngine.phetioStateEngine.isSettingStateProperty :
                                         new BooleanProperty( false );
 
     // update the atom pair when the atom pair property is set
