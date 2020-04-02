@@ -59,12 +59,13 @@ function DialGaugeNode( multipleParticleModel, tandem ) {
   );
 
   // Add the textual readout display.
+  const readoutNodeTandem = tandem.createTandem( 'readoutNode' );
   const readoutNode = new Rectangle( 0, 0, 80, 15, 2, 2, {
     fill: 'white',
     stroke: 'black',
     centerX: gaugeNode.centerX,
     top: gaugeNode.bottom - 15,
-    tandem: tandem.createTandem( 'readoutNode' )
+    tandem: readoutNodeTandem
   } );
 
   const readoutText = new Text( '0', {
@@ -75,6 +76,11 @@ function DialGaugeNode( multipleParticleModel, tandem ) {
     centerY: readoutNode.height / 2
   } );
   readoutNode.addChild( readoutText );
+
+  // Create a link to pressureProperty so it's easier to find in Studio.
+  this.addLinkedElement( multipleParticleModel.pressureProperty, {
+    tandem: readoutNodeTandem.createTandem( 'pressureProperty' )
+  } );
 
   // To accurately reproduce the previous version (which consisted of a path stroked with lineWidth 10), we need to
   // include the stroke width effects (where it had a default lineCap of butt). We have a part that doesn't change
