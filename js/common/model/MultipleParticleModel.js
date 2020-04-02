@@ -1375,6 +1375,10 @@ class MultipleParticleModel extends PhetioObject {
     if ( numMoleculesOutsideContainer > 0 ) {
       this.phaseStateChanger.setPhase( PhaseStateEnum.GAS );
     }
+
+    // Sync up the property that tracks the number of molecules - mostly for the purposes of injecting new molecules -
+    // with the new value.
+    this.numberOfMoleculesProperty.set( this.moleculeDataSet.numberOfMolecules );
   }
 
   getInitialContainerHeight() {
