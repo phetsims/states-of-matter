@@ -285,7 +285,7 @@ class MultipleParticleModel extends PhetioObject {
     );
 
     // perform any phet-io-specific state setting actions
-    _.hasIn( window, 'phet.phetIo.phetioEngine' ) && phet.phetIo.phetioEngine.phetioStateEngine.stateSetEmitter.addListener( () => {
+    _.hasIn( window, 'phet.phetio.phetioEngine' ) && phet.phetio.phetioEngine.phetioStateEngine.stateSetEmitter.addListener( () => {
 
       // make sure that we have the right number of scaled (i.e. non-normalized) atoms
       const numberOfNormalizedMolecules = this.moleculeDataSet.numberOfMolecules;
