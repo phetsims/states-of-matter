@@ -54,7 +54,7 @@ const POTENTIAL_LINE_COLOR = new Color( 'red' );
  * @param {Object} [options] that can be passed on to the underlying node
  * @constructor
  */
-function EpsilonControlInteractionPotentialDiagram( sigma, epsilon, wide, multipleParticleModel, options ) {
+function InteractionPotentialDiagramAccordionBox( sigma, epsilon, wide, multipleParticleModel, options ) {
 
   options = merge( { tandem: Tandem.REQUIRED }, options );
 
@@ -219,9 +219,9 @@ function EpsilonControlInteractionPotentialDiagram( sigma, epsilon, wide, multip
   this.mutate( options );
 }
 
-statesOfMatter.register( 'EpsilonControlInteractionPotentialDiagram', EpsilonControlInteractionPotentialDiagram );
+statesOfMatter.register( 'InteractionPotentialDiagramAccordionBox', InteractionPotentialDiagramAccordionBox );
 
-export default inherit( InteractionPotentialDiagramNode, EpsilonControlInteractionPotentialDiagram, {
+export default inherit( InteractionPotentialDiagramNode, InteractionPotentialDiagramAccordionBox, {
 
   /**
    *

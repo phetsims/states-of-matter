@@ -1,7 +1,7 @@
 // Copyright 2014-2020, University of Colorado Boulder
 
 /**
- * a phase diagram suitable for inclusion on the control panel of a PhET simulation
+ * a phase diagram in an accordion box
  *
  * @author John Blanco
  * @author Siddhartha Chinthapally (Actual Concepts)
@@ -21,6 +21,7 @@ import SOMConstants from '../../common/SOMConstants.js';
 import SOMColorProfile from '../../common/view/SOMColorProfile.js';
 import statesOfMatterStrings from '../../statesOfMatterStrings.js';
 import statesOfMatter from '../../statesOfMatter.js';
+import merge from '../../../../phet-core/js/merge.js';
 
 const criticalPointString = statesOfMatterStrings.criticalPoint;
 const gasString = statesOfMatterStrings.gas;
@@ -102,9 +103,8 @@ const DEFAULT_GAS_LABEL_LOCATION = new Vector2(
  * @param {Object} [options] that can be passed on to the underlying node
  * @constructor
  */
-function PhaseDiagram( expandedProperty, options ) {
+function PhaseDiagramAccordionBox( expandedProperty, options ) {
 
-  Node.call( this );
   const accordionContent = new Node();
 
   // @private gas area background
@@ -260,7 +260,7 @@ function PhaseDiagram( expandedProperty, options ) {
     maxWidth: horizontalAxis.width
   } );
 
-  this.accordionBox = new AccordionBox( accordionContent, {
+  AccordionBox.call( this, accordionContent, merge( {
     titleNode: titleNode,
     fill: SOMColorProfile.controlPanelBackgroundProperty,
     stroke: SOMColorProfile.controlPanelStrokeProperty,
@@ -282,20 +282,18 @@ function PhaseDiagram( expandedProperty, options ) {
       touchAreaYDilation: 10
     },
     tandem: options.tandem.createTandem( 'accordionBox' )
-  } );
-  this.addChild( this.accordionBox );
+  }, options ) );
 
   // Draw the initial phase diagram.
   this.drawPhaseDiagram();
 
   // Set the initial position of the current phase state marker.
   this.setStateMarkerPos( 0, 0 );
-  this.mutate( options );
 }
 
-statesOfMatter.register( 'PhaseDiagram', PhaseDiagram );
+statesOfMatter.register( 'PhaseDiagramAccordionBox', PhaseDiagramAccordionBox );
 
-export default inherit( Node, PhaseDiagram, {
+export default inherit( AccordionBox, PhaseDiagramAccordionBox, {
 
   /**
    * @public

@@ -28,9 +28,9 @@ import CompositeThermometerNode from '../../common/view/CompositeThermometerNode
 import ParticleContainerNode from '../../common/view/ParticleContainerNode.js';
 import statesOfMatterStrings from '../../statesOfMatterStrings.js';
 import statesOfMatter from '../../statesOfMatter.js';
-import EpsilonControlInteractionPotentialDiagram from './EpsilonControlInteractionPotentialDiagram.js';
+import InteractionPotentialDiagramAccordionBox from './InteractionPotentialDiagramAccordionBox.js';
 import PhaseChangesMoleculesControlPanel from './PhaseChangesMoleculesControlPanel.js';
-import PhaseDiagram from './PhaseDiagram.js';
+import PhaseDiagramAccordionBox from './PhaseDiagramAccordionBox.js';
 
 const returnLidString = statesOfMatterStrings.returnLid;
 
@@ -196,9 +196,9 @@ function PhaseChangesScreenView( model, isInteractionDiagramEnabled, tandem ) {
   model.isExplodedProperty.linkAttribute( this.returnLidButton, 'visible' );
 
   // add interaction potential diagram
-  let epsilonControlInteractionPotentialDiagram = null;
+  let interactionPotentialDiagramAccordionBox = null;
   if ( isInteractionDiagramEnabled ) {
-    epsilonControlInteractionPotentialDiagram = new EpsilonControlInteractionPotentialDiagram(
+    interactionPotentialDiagramAccordionBox = new InteractionPotentialDiagramAccordionBox(
       SOMConstants.MAX_SIGMA,
       SOMConstants.MIN_EPSILON,
       false,
@@ -207,10 +207,10 @@ function PhaseChangesScreenView( model, isInteractionDiagramEnabled, tandem ) {
         maxWidth: PANEL_WIDTH,
         minWidth: PANEL_WIDTH,
         right: this.layoutBounds.right - CONTROL_PANEL_X_INSET,
-        tandem: tandem.createTandem( 'epsilonControlInteractionPotentialDiagram' )
+        tandem: tandem.createTandem( 'interactionPotentialDiagramAccordionBox' )
       }
     );
-    this.addChild( epsilonControlInteractionPotentialDiagram );
+    this.addChild( interactionPotentialDiagramAccordionBox );
   }
 
   // add the atom/molecule selection control panel
@@ -229,14 +229,14 @@ function PhaseChangesScreenView( model, isInteractionDiagramEnabled, tandem ) {
 
   // add phase diagram - in SOM basic version by default phase diagram should be closed.
   model.phaseDiagramExpandedProperty.value = isInteractionDiagramEnabled;
-  this.phaseDiagram = new PhaseDiagram( model.phaseDiagramExpandedProperty, {
+  this.phaseDiagramAccordionBox = new PhaseDiagramAccordionBox( model.phaseDiagramExpandedProperty, {
     minWidth: PANEL_WIDTH,
     maxWidth: PANEL_WIDTH,
     right: moleculesControlPanel.right,
     top: moleculesControlPanel.top + INTER_PANEL_SPACING,
-    tandem: tandem.createTandem( 'phaseDiagram' )
+    tandem: tandem.createTandem( 'phaseDiagramAccordionBox' )
   } );
-  this.addChild( this.phaseDiagram );
+  this.addChild( this.phaseDiagramAccordionBox );
 
   // @private - variables used to map temperature on to the phase diagram
   this.triplePointTemperatureInModelUnits = 0;
@@ -286,33 +286,33 @@ function PhaseChangesScreenView( model, isInteractionDiagramEnabled, tandem ) {
   model.substanceProperty.link( function( substance ) {
     self.modelTemperatureHistory.clear();
     self.updatePhaseDiagram();
-    self.phaseDiagram.setDepictingWater( substance === SubstanceType.WATER );
+    self.phaseDiagramAccordionBox.setDepictingWater( substance === SubstanceType.WATER );
     if ( isInteractionDiagramEnabled ) {
       if ( substance === SubstanceType.ADJUSTABLE_ATOM ||
            substance === SubstanceType.DIATOMIC_OXYGEN ||
            substance === SubstanceType.WATER ) {
-        epsilonControlInteractionPotentialDiagram.setMolecular( true );
+        interactionPotentialDiagramAccordionBox.setMolecular( true );
       }
       else {
-        epsilonControlInteractionPotentialDiagram.setMolecular( false );
+        interactionPotentialDiagramAccordionBox.setMolecular( false );
       }
     }
 
     // don't show the phase diagram for adjustable attraction, since we need the space for other things
     if ( substance === SubstanceType.ADJUSTABLE_ATOM ) {
-      self.phaseDiagram.visible = false;
+      self.phaseDiagramAccordionBox.visible = false;
       if ( isInteractionDiagramEnabled ) {
-        epsilonControlInteractionPotentialDiagram.top = moleculesControlPanel.bottom + INTER_PANEL_SPACING;
+        interactionPotentialDiagramAccordionBox.top = moleculesControlPanel.bottom + INTER_PANEL_SPACING;
       }
     }
     else {
-      self.phaseDiagram.visible = true;
+      self.phaseDiagramAccordionBox.visible = true;
       if ( isInteractionDiagramEnabled ) {
-        epsilonControlInteractionPotentialDiagram.top = moleculesControlPanel.bottom + INTER_PANEL_SPACING;
-        self.phaseDiagram.top = epsilonControlInteractionPotentialDiagram.bottom + INTER_PANEL_SPACING;
+        interactionPotentialDiagramAccordionBox.top = moleculesControlPanel.bottom + INTER_PANEL_SPACING;
+        self.phaseDiagramAccordionBox.top = interactionPotentialDiagramAccordionBox.bottom + INTER_PANEL_SPACING;
       }
       else {
-        self.phaseDiagram.top = moleculesControlPanel.bottom + INTER_PANEL_SPACING;
+        self.phaseDiagramAccordionBox.top = moleculesControlPanel.bottom + INTER_PANEL_SPACING;
       }
     }
   } );
@@ -383,17 +383,17 @@ export default inherit( ScreenView, PhaseChangesScreenView, {
 
     // If the container has exploded, don't bother showing the dot.
     if ( this.multipleParticleModel.isExplodedProperty.get() || this.multipleParticleModel.scaledAtoms.length === 0 ) {
-      this.phaseDiagram.setStateMarkerVisible( false );
+      this.phaseDiagramAccordionBox.setStateMarkerVisible( false );
     }
     else {
-      this.phaseDiagram.setStateMarkerVisible( true );
+      this.phaseDiagramAccordionBox.setStateMarkerVisible( true );
       const movingAverageTemperature = this.updateMovingAverageTemperature(
         this.multipleParticleModel.temperatureSetPointProperty.get()
       );
       const modelPressure = this.multipleParticleModel.getModelPressure();
       const mappedTemperature = this.mapModelTemperatureToPhaseDiagramTemperature( movingAverageTemperature );
       const mappedPressure = this.mapModelTempAndPressureToPhaseDiagramPressure( modelPressure, movingAverageTemperature );
-      this.phaseDiagram.setStateMarkerPos( mappedTemperature, mappedPressure );
+      this.phaseDiagramAccordionBox.setStateMarkerPos( mappedTemperature, mappedPressure );
     }
   },
 
