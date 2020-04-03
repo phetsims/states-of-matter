@@ -46,7 +46,7 @@ function ParticleContainerNode(
   pressureGaugeEnabled,
   tandem ) {
 
-  Node.call( this, { preventFit: true } );
+  Node.call( this, { preventFit: true, tandem: tandem } );
   const self = this;
 
   // @private, view bounds for the particle area, everything is basically constructed and positioned based on this
@@ -125,7 +125,12 @@ function ParticleContainerNode(
       cursor: 'ns-resize'
     } );
     containerLid.addChild( handleAreaEllipse );
-    const handleNode = new HandleNode( { scale: 0.28, attachmentFill: 'black', gripLineWidth: 4 } );
+    const handleNode = new HandleNode( {
+      scale: 0.28,
+      attachmentFill: 'black',
+      gripLineWidth: 4,
+      tandem: tandem.createTandem( 'handleNode' )
+    } );
     handleNode.centerX = containerLid.width / 2;
     handleNode.bottom = handleAreaEllipse.centerY + 5; // position tweaked a bit to look better
     containerLid.addChild( handleNode );

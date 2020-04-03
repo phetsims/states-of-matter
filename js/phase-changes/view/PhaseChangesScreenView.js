@@ -79,7 +79,13 @@ function PhaseChangesScreenView( model, isInteractionDiagramEnabled, tandem ) {
   );
 
   // create the particle container - it takes care of positioning itself
-  this.particleContainerNode = new ParticleContainerNode( model, modelViewTransform, true, true, tandem );
+  this.particleContainerNode = new ParticleContainerNode(
+    model,
+    modelViewTransform,
+    true,
+    true,
+    tandem.createTandem( 'particleContainerNode' )
+  );
 
   // add the particle container
   this.addChild( this.particleContainerNode );

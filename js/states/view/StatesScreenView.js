@@ -8,6 +8,7 @@
  * @author Siddhartha Chinthapally (Actual Concepts)
  */
 
+import merge from '../../../../phet-core/js/merge.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import ScreenView from '../../../../joist/js/ScreenView.js';
@@ -38,7 +39,7 @@ const CONTROL_PANEL_WIDTH = 175; // empirically determined by looks
 function StatesScreenView( multipleParticleModel, tandem ) {
 
   const self = this;
-  ScreenView.call( this, SOMConstants.SCREEN_VIEW_OPTIONS );
+  ScreenView.call( this, merge( { tandem: tandem }, SOMConstants.SCREEN_VIEW_OPTIONS ) );
 
   // Create the model-view transform. The multipliers for the 2nd parameter can be used to adjust where the point
   // (0, 0) in the model, which is the lower left corner of the particle container, appears in the view.The final
@@ -58,7 +59,13 @@ function StatesScreenView( multipleParticleModel, tandem ) {
   );
 
   // @private particle container
-  this.particleContainerNode = new ParticleContainerNode( multipleParticleModel, modelViewTransform, false, false, tandem );
+  this.particleContainerNode = new ParticleContainerNode(
+    multipleParticleModel,
+    modelViewTransform,
+    false,
+    false,
+    tandem.createTandem( 'particleContainerNode' )
+  );
   this.addChild( this.particleContainerNode );
 
   // @private add heater/cooler node
