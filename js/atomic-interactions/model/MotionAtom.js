@@ -38,7 +38,9 @@ class MotionAtom {
 
     // @public (read-write) {NumberProperty} - radius of this atom, should only be changed for adjustable atoms
     this.radiusProperty = new NumberProperty( initialAtomAttributes.radius, {
-      tandem: tandem.createTandem( 'radiusProperty' )
+      units: 'pm',
+      tandem: tandem.createTandem( 'radiusProperty' ),
+      phetioReadOnly: true
     } );
 
     // @private, accessed through getter and setter methods below, see those methods for details
@@ -48,11 +50,13 @@ class MotionAtom {
 
     // @private, accessed through the getter/setter methods below
     this.velocityProperty = new Vector2Property( Vector2.ZERO, {
+      units: 'pm/s',
       tandem: tandem.createTandem( 'velocityProperty' )
     } );
 
     // @private, accessed through the getter/setter methods below
     this.accelerationProperty = new Vector2Property( Vector2.ZERO, {
+      units: 'pm/s^2',
       tandem: tandem.createTandem( 'accelerationProperty' )
     } );
 

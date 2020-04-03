@@ -233,7 +233,7 @@ class DualAtomModel {
   }
 
   /**
-   * @param {boolean} paused -  is to set particle motion
+   * @param {boolean} paused - is to set particle motion
    * @public
    */
   setMotionPaused( paused ) {
