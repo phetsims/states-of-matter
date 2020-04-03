@@ -59,7 +59,7 @@ function InteractionPotentialDiagramAccordionBox( sigma, epsilon, wide, multiple
     titleNode: titleNode,
     fill: SOMColorProfile.controlPanelBackgroundProperty,
     stroke: SOMColorProfile.controlPanelStrokeProperty,
-    expandedProperty: multipleParticleModel.interactionPotentialDiagramExpandedProperty,
+    expandedProperty: multipleParticleModel.interactionPotentialDiagramAccordionBoxExpandedProperty,
     contentAlign: 'center',
     titleAlignX: 'center',
     buttonAlign: 'left',

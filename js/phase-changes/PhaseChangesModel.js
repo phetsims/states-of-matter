@@ -34,13 +34,13 @@ class PhaseChangesModel extends MultipleParticleModel {
     super( tandem );
 
     // @public (read-write)
-    this.phaseDiagramExpandedProperty = new BooleanProperty( true, {
-      tandem: tandem.createTandem( 'phaseDiagramExpandedProperty' )
+    this.phaseDiagramAccordionBoxExpandedProperty = new BooleanProperty( true, {
+      tandem: tandem.createTandem( 'phaseDiagramAccordionBoxExpandedProperty' )
     } );
 
     // @public (read-write)
-    this.interactionPotentialDiagramExpandedProperty = new BooleanProperty( true, {
-      tandem: tandem.createTandem( 'interactionPotentialDiagramExpandedProperty' )
+    this.interactionPotentialDiagramAccordionBoxExpandedProperty = new BooleanProperty( true, {
+      tandem: tandem.createTandem( 'interactionPotentialDiagramAccordionBoxExpandedProperty' )
     } );
 
     // @public (read-write) - interaction strength of the adjustable attraction atoms
@@ -166,8 +166,8 @@ class PhaseChangesModel extends MultipleParticleModel {
     super.reset();
     this.targetContainerHeightProperty.reset();
     this.interactionStrengthProperty.reset();
-    this.phaseDiagramExpandedProperty.reset();
-    this.interactionPotentialDiagramExpandedProperty.reset();
+    this.phaseDiagramAccordionBoxExpandedProperty.reset();
+    this.interactionPotentialDiagramAccordionBoxExpandedProperty.reset();
   }
 }
 

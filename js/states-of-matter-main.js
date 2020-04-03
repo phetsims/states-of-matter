@@ -40,7 +40,7 @@ SimLauncher.launch( function() {
   const sim = new Sim( statesOfMatterTitleString, [
     new StatesScreen( Tandem.ROOT.createTandem( 'statesScreen' ) ),
     new PhaseChangesScreen( true, Tandem.ROOT.createTandem( 'phaseChangesScreen' ) ),
-    new AtomicInteractionsScreen( false, interactionString, Tandem.ROOT.createTandem( 'atomicInteractionsScreen' ) )
+    new AtomicInteractionsScreen( false, interactionString, Tandem.ROOT.createTandem( 'interactionsScreen' ) )
   ], simOptions );
   sim.start();
 } );

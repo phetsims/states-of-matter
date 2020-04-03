@@ -114,7 +114,7 @@ function PhaseChangesScreenView( model, isInteractionDiagramEnabled, tandem ) {
       self.compositeThermometerNode.reset();
       model.reset();
       // Reset phase diagram state in SOM basic version.
-      model.phaseDiagramExpandedProperty.value = isInteractionDiagramEnabled;
+      model.phaseDiagramAccordionBoxExpandedProperty.value = isInteractionDiagramEnabled;
       self.pumpNode.reset();
     },
     radius: SOMConstants.RESET_ALL_BUTTON_RADIUS,
@@ -228,8 +228,8 @@ function PhaseChangesScreenView( model, isInteractionDiagramEnabled, tandem ) {
   this.addChild( moleculesControlPanel );
 
   // add phase diagram - in SOM basic version by default phase diagram should be closed.
-  model.phaseDiagramExpandedProperty.value = isInteractionDiagramEnabled;
-  this.phaseDiagramAccordionBox = new PhaseDiagramAccordionBox( model.phaseDiagramExpandedProperty, {
+  model.phaseDiagramAccordionBoxExpandedProperty.value = isInteractionDiagramEnabled;
+  this.phaseDiagramAccordionBox = new PhaseDiagramAccordionBox( model.phaseDiagramAccordionBoxExpandedProperty, {
     minWidth: PANEL_WIDTH,
     maxWidth: PANEL_WIDTH,
     right: moleculesControlPanel.right,
