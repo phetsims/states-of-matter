@@ -7723,7 +7723,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
-    "statesOfMatter.phaseChangesScreen.view.epsilonControlInteractionPotentialDiagram.epsilonLineDragHandler": {
+    "statesOfMatter.phaseChangesScreen.view.epsilonControlInteractionPotentialDiagram.epsilonControls.epsilonLineDragHandler": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
       "phetioEventType": "USER",
@@ -7736,7 +7736,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "ObjectIO"
     },
-    "statesOfMatter.phaseChangesScreen.view.epsilonControlInteractionPotentialDiagram.epsilonLineDragHandler.dragAction": {
+    "statesOfMatter.phaseChangesScreen.view.epsilonControlInteractionPotentialDiagram.epsilonControls.epsilonLineDragHandler.dragAction": {
       "phetioDocumentation": "A function that executes. The arguments are:<br/><ol><li>point: Vector2IO - the position of the drag in view coordinates</li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -7749,7 +7749,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "ActionIO<Vector2IO>"
     },
-    "statesOfMatter.phaseChangesScreen.view.epsilonControlInteractionPotentialDiagram.epsilonLineDragHandler.dragEndAction": {
+    "statesOfMatter.phaseChangesScreen.view.epsilonControlInteractionPotentialDiagram.epsilonControls.epsilonLineDragHandler.dragEndAction": {
       "phetioDocumentation": "A function that executes. The arguments are:<br/><ol><li>point: Vector2IO - the position of the drag end in view coordinates</li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -7762,7 +7762,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "ActionIO<Vector2IO>"
     },
-    "statesOfMatter.phaseChangesScreen.view.epsilonControlInteractionPotentialDiagram.epsilonLineDragHandler.dragStartAction": {
+    "statesOfMatter.phaseChangesScreen.view.epsilonControlInteractionPotentialDiagram.epsilonControls.epsilonLineDragHandler.dragStartAction": {
       "phetioDocumentation": "A function that executes. The arguments are:<br/><ol><li>point: Vector2IO - the position of the drag start in view coordinates</li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -7775,7 +7775,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "ActionIO<Vector2IO>"
     },
-    "statesOfMatter.phaseChangesScreen.view.epsilonControlInteractionPotentialDiagram.epsilonLineDragHandler.isDraggingProperty": {
+    "statesOfMatter.phaseChangesScreen.view.epsilonControlInteractionPotentialDiagram.epsilonControls.epsilonLineDragHandler.isDraggingProperty": {
       "phetioDocumentation": "Indicates whether the object is dragging",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -7788,7 +7788,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
-    "statesOfMatter.phaseChangesScreen.view.epsilonControlInteractionPotentialDiagram.epsilonResizeDragHandler": {
+    "statesOfMatter.phaseChangesScreen.view.epsilonControlInteractionPotentialDiagram.epsilonControls.epsilonResizeDragHandler": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
       "phetioEventType": "USER",
@@ -7801,7 +7801,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "ObjectIO"
     },
-    "statesOfMatter.phaseChangesScreen.view.epsilonControlInteractionPotentialDiagram.epsilonResizeDragHandler.dragAction": {
+    "statesOfMatter.phaseChangesScreen.view.epsilonControlInteractionPotentialDiagram.epsilonControls.epsilonResizeDragHandler.dragAction": {
       "phetioDocumentation": "A function that executes. The arguments are:<br/><ol><li>point: Vector2IO - the position of the drag in view coordinates</li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -7814,7 +7814,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "ActionIO<Vector2IO>"
     },
-    "statesOfMatter.phaseChangesScreen.view.epsilonControlInteractionPotentialDiagram.epsilonResizeDragHandler.dragEndAction": {
+    "statesOfMatter.phaseChangesScreen.view.epsilonControlInteractionPotentialDiagram.epsilonControls.epsilonResizeDragHandler.dragEndAction": {
       "phetioDocumentation": "A function that executes. The arguments are:<br/><ol><li>point: Vector2IO - the position of the drag end in view coordinates</li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -7827,7 +7827,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "ActionIO<Vector2IO>"
     },
-    "statesOfMatter.phaseChangesScreen.view.epsilonControlInteractionPotentialDiagram.epsilonResizeDragHandler.dragStartAction": {
+    "statesOfMatter.phaseChangesScreen.view.epsilonControlInteractionPotentialDiagram.epsilonControls.epsilonResizeDragHandler.dragStartAction": {
       "phetioDocumentation": "A function that executes. The arguments are:<br/><ol><li>point: Vector2IO - the position of the drag start in view coordinates</li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -7840,7 +7840,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "ActionIO<Vector2IO>"
     },
-    "statesOfMatter.phaseChangesScreen.view.epsilonControlInteractionPotentialDiagram.epsilonResizeDragHandler.isDraggingProperty": {
+    "statesOfMatter.phaseChangesScreen.view.epsilonControlInteractionPotentialDiagram.epsilonControls.epsilonResizeDragHandler.isDraggingProperty": {
       "phetioDocumentation": "Indicates whether the object is dragging",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",

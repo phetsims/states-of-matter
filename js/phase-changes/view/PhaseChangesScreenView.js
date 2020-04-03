@@ -196,8 +196,9 @@ function PhaseChangesScreenView( model, isInteractionDiagramEnabled, tandem ) {
   model.isExplodedProperty.linkAttribute( this.returnLidButton, 'visible' );
 
   // add interaction potential diagram
+  let epsilonControlInteractionPotentialDiagram = null;
   if ( isInteractionDiagramEnabled ) {
-    var epsilonControlInteractionPotentialDiagram = new EpsilonControlInteractionPotentialDiagram(
+    epsilonControlInteractionPotentialDiagram = new EpsilonControlInteractionPotentialDiagram(
       SOMConstants.MAX_SIGMA,
       SOMConstants.MIN_EPSILON,
       false,

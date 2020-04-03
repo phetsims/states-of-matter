@@ -81,6 +81,12 @@ function EpsilonControlInteractionPotentialDiagram( sigma, epsilon, wide, multip
   ) );
   this.ljPotentialGraph.addChild( this.epsilonLine );
   this.epsilonLine.touchArea = this.epsilonLine.localBounds.dilatedXY( 20, 20 );
+
+  // Create a parent tandem for the drag handlers, requested by reviewers in
+  // https://github.com/phetsims/states-of-matter/issues/265.
+  const epsilonControlsTandem = options.tandem.createTandem( 'epsilonControls' );
+
+  // drag listener
   this.epsilonLine.addInputListener( new SimpleDragHandler( {
 
     start: function( event ) {
@@ -102,8 +108,7 @@ function EpsilonControlInteractionPotentialDiagram( sigma, epsilon, wide, multip
       self.drawPotentialCurve();
     },
 
-    tandem: options.tandem.createTandem( 'epsilonLineDragHandler' )
-
+    tandem: epsilonControlsTandem.createTandem( 'epsilonLineDragHandler' )
   } ) );
 
   // Add the arrow node that will allow the user to control the value of the epsilon parameter.
@@ -142,7 +147,7 @@ function EpsilonControlInteractionPotentialDiagram( sigma, epsilon, wide, multip
       self.drawPotentialCurve();
     },
 
-    tandem: options.tandem.createTandem( 'epsilonResizeDragHandler' )
+    tandem: epsilonControlsTandem.createTandem( 'epsilonResizeDragHandler' )
   } ) );
 
   this.interactionPotentialCanvasNode = new InteractionPotentialCanvasNode( this, false, {
