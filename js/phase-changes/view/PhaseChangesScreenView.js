@@ -181,7 +181,16 @@ function PhaseChangesScreenView( model, isInteractionDiagramEnabled, tandem ) {
     xMargin: 10,
     centerX: nominalParticleAreaViewBounds.minX - 150,
     centerY: nominalParticleAreaViewBounds.minY,
-    tandem: tandem.createTandem( 'returnLidButton' )
+
+    // phet-io
+    tandem: tandem.createTandem( 'returnLidButton' ),
+    phetioReadOnly: true,
+    phetioComponentOptions: {
+      opacityProperty: { phetioReadOnly: true },
+      pickableProperty: { phetioReadOnly: true },
+      visibleProperty: { phetioReadOnly: true }
+    },
+    enabledPropertyOptions: { phetioReadOnly: true }
   } );
   this.addChild( this.returnLidButton );
   model.isExplodedProperty.linkAttribute( this.returnLidButton, 'visible' );
