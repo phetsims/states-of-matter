@@ -33,7 +33,7 @@ function AtomicInteractionsScreen( enableHeterogeneousMolecules, screenTitle, ta
   };
 
   Screen.call( this,
-    function() { return new DualAtomModel( tandem.createTandem( 'model' ) ); },
+    function() { return new DualAtomModel( tandem.createTandem( 'model' ), enableHeterogeneousMolecules ); },
     function( model ) {
       return new AtomicInteractionsScreenView( model, enableHeterogeneousMolecules, tandem.createTandem( 'view' ) );
     },

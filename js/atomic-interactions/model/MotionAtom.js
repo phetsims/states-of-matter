@@ -29,7 +29,8 @@ class MotionAtom {
 
     // @public (read-write) {EnumerationProperty<AtomType>} - the type of atom being modeled, e.g. Argon, Neon, etc.
     this.atomTypeProperty = new EnumerationProperty( AtomType, initialAtomType, {
-      tandem: tandem.createTandem( 'atomTypeProperty' )
+      tandem: tandem.createTandem( 'atomTypeProperty' ),
+      phetioReadOnly: true
     } );
 
     // get the default attributes associated with this atom

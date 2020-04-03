@@ -182,44 +182,45 @@ function AtomicInteractionsControlPanel( dualAtomModel, enableHeterogeneousAtoms
         {
           node: createLabelNode( neonAndNeonLabelItems ),
           value: AtomPair.NEON_NEON,
-          tandem: options.tandem.createTandem( 'neonAndNeon' )
+          tandemName: 'neonAndNeon'
         },
         {
           node: createLabelNode( argonAndArgonLabelItems ),
           value: AtomPair.ARGON_ARGON,
-          tandem: options.tandem.createTandem( 'argonAndArgon' )
+          tandemName: 'argonAndArgon'
         },
         {
           node: createLabelNode( oxygenAndOxygenLabelItems ),
           value: AtomPair.OXYGEN_OXYGEN,
-          tandem: options.tandem.createTandem( 'oxygenAndOxygen' )
+          tandemName: 'oxygenAndOxygen'
         },
         {
           node: createLabelNode( neonAndArgonLabelItems ),
           value: AtomPair.NEON_ARGON,
-          tandem: options.tandem.createTandem( 'neonAndArgon' )
+          tandemName: 'neonAndArgon'
         },
         {
           node: createLabelNode( neonAndOxygenLabelItems ),
           value: AtomPair.NEON_OXYGEN,
-          tandem: options.tandem.createTandem( 'neonAndOxygen' )
+          tandemName: 'neonAndOxygen'
         },
         {
           node: createLabelNode( argonAndOxygenLabelItems ),
           value: AtomPair.ARGON_OXYGEN,
-          tandem: options.tandem.createTandem( 'argonAndOxygen' )
+          tandemName: 'argonAndOxygen'
         },
         {
           node: customAttractionLabel,
           value: AtomPair.ADJUSTABLE,
-          tandem: options.tandem.createTandem( 'adjustable' )
+          tandemName: 'adjustable'
         }
       ],
       {
         spacing: 13,
         radioButtonOptions: {
           radius: RADIO_BUTTON_RADIUS
-        }
+        },
+        tandem: options.tandem.createTandem( 'radioButtonGroup' )
       }
     );
 

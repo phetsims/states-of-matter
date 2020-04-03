@@ -33,13 +33,17 @@ const SLOW_MOTION_TIME_MULTIPLIER = 0.5;
 // is conserved in all interaction cases.  See https://github.com/phetsims/states-of-matter/issues/53 for more info.
 const MAX_TIME_STEP = 0.005; // in seconds
 
+// Valid values in reduced usage scenario
+const VALID_ATOM_PAIRS_FOR_REDUCED = [ AtomPair.NEON_NEON, AtomPair.ARGON_ARGON, AtomPair.ADJUSTABLE ];
+
 class DualAtomModel {
 
   /**
    * @param {Tandem} tandem
+   * @param {boolean} enableHeterogeneousMolecules
    * @constructor
    */
-  constructor( tandem ) {
+  constructor( tandem, enableHeterogeneousMolecules = true ) {
 
     //-----------------------------------------------------------------------------------------------------------------
     // observable model properties
@@ -60,6 +64,7 @@ class DualAtomModel {
 
     // @public (read-write)
     this.atomPairProperty = new EnumerationProperty( AtomPair, AtomPair.NEON_NEON, {
+      validValues: enableHeterogeneousMolecules ? AtomPair.VALUES : VALID_ATOM_PAIRS_FOR_REDUCED,
       tandem: tandem.createTandem( 'atomPairProperty' )
     } );
 
