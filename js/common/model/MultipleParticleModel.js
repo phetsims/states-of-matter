@@ -198,7 +198,8 @@ class MultipleParticleModel extends PhetioObject {
     // injecting new molecules, and when this number is increased, internal model state is adjusted to match.
     this.numberOfMoleculesProperty = new NumberProperty( 0, {
       tandem: tandem.createTandem( 'numberOfMoleculesProperty' ),
-      phetioReadOnly: true
+      phetioReadOnly: true,
+      phetioDocumentation: 'This value represents the number of particles being simulated, not the number or particles in the container.'
     } );
 
     // @public (read-only)

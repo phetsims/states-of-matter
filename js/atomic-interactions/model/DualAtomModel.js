@@ -48,7 +48,8 @@ class DualAtomModel {
     // @public (read-write) - epsilon/k-Boltzmann is in Kelvin.
     this.interactionStrengthProperty = new NumberProperty( 100, {
       tandem: tandem.createTandem( 'interactionStrengthProperty' ),
-      phetioReadOnly: true
+      phetioReadOnly: true,
+      phetioDocumentation: 'intermolecular potential for the "Adjustable Attraction" atoms - this is a parameter in the Lennard-Jones potential equation'
     } );
 
     // @public (read-write) - indicates when motion is paused due to user interaction with the movable atom

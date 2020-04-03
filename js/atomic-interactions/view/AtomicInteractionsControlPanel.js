@@ -18,6 +18,7 @@ import Node from '../../../../scenery/js/nodes/Node.js';
 import Rectangle from '../../../../scenery/js/nodes/Rectangle.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import VBox from '../../../../scenery/js/nodes/VBox.js';
+import Utils from '../../../../dot/js/Utils.js';
 import AquaRadioButtonGroup from '../../../../sun/js/AquaRadioButtonGroup.js';
 import RadioButtonGroup from '../../../../sun/js/buttons/RadioButtonGroup.js';
 import HSlider from '../../../../sun/js/HSlider.js';
@@ -353,6 +354,7 @@ function AtomicInteractionsControlPanel( dualAtomModel, enableHeterogeneousAtoms
     majorTickLength: 15,
     majorTickStroke: options.panelTextFill,
     trackStroke: options.panelTextFill,
+    constrainValue: value => Utils.roundToInterval( value, 5 ),
     startDrag: function() {
       dualAtomModel.setMotionPaused( true );
     },

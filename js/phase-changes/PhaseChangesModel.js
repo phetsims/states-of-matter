@@ -47,7 +47,7 @@ class PhaseChangesModel extends MultipleParticleModel {
     this.interactionStrengthProperty = new NumberProperty( MAX_ADJUSTABLE_EPSILON, {
       tandem: tandem.createTandem( 'interactionStrengthProperty' ),
       range: new Range( MIN_ADJUSTABLE_EPSILON, MAX_ADJUSTABLE_EPSILON ),
-      phetioDocumentation: 'intermolecular potential for the "Adjustable Attraction" atoms'
+      phetioDocumentation: 'intermolecular potential for the "Adjustable Attraction" atoms - this is a parameter in the Lennard-Jones potential equation'
     } );
 
     // @public (read-write)
