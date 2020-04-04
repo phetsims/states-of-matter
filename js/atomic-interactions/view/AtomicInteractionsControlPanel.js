@@ -340,7 +340,8 @@ function AtomicInteractionsControlPanel( dualAtomModel, enableHeterogeneousAtoms
   const atomDiameterTitle = new Text( atomDiameterString, {
     font: NORMAL_TEXT_FONT,
     fill: options.panelTextFill,
-    maxWidth: SLIDER_TITLE_MAX_WIDTH
+    maxWidth: SLIDER_TITLE_MAX_WIDTH,
+    tandem: options.tandem.createTandem( 'atomDiameterSliderTitle' )
   } );
 
   const commonSliderOptions = {
@@ -391,7 +392,8 @@ function AtomicInteractionsControlPanel( dualAtomModel, enableHeterogeneousAtoms
     font: NORMAL_TEXT_FONT,
     fill: options.panelTextFill,
     top: atomDiameterSlider.bottom + 5,
-    maxWidth: SLIDER_TITLE_MAX_WIDTH
+    maxWidth: SLIDER_TITLE_MAX_WIDTH,
+    tandem: options.tandem.createTandem( 'interactionStrengthSliderTitle' )
   } );
   const interactionStrengthSlider = new HSlider(
     dualAtomModel.interactionStrengthProperty,
