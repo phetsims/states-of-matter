@@ -2050,13 +2050,13 @@ window.phet.preloads.phetio.phetioTypes = assert &&
       "supertype": "ObjectIO",
       "typeName": "RangeIO"
     },
-    "ReferenceIO": {
-      "documentation": "Uses reference identity for toStateObject/fromStateObject and validates based on its parameter IO Type.",
+    "ReferenceIO<ObjectIO>": {
+      "documentation": "Uses reference identity for serializing and deserializing, and validates based on its parameter IO Type.",
       "events": [],
       "methodOrder": [],
       "methods": {},
       "supertype": "ObjectIO",
-      "typeName": "ReferenceIO"
+      "typeName": "ReferenceIO<ObjectIO>"
     },
     "RichTextIO": {
       "documentation": "The tandem IO type for the scenery RichText node",
@@ -2090,7 +2090,7 @@ window.phet.preloads.phetio.phetioTypes = assert &&
       "events": [],
       "methodOrder": [],
       "methods": {},
-      "supertype": "ReferenceIO",
+      "supertype": "ReferenceIO<ObjectIO>",
       "typeName": "ScreenIO"
     },
     "SliderIO": {
