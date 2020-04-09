@@ -11,6 +11,7 @@
 
 import ColorProfile from '../../../../scenery-phet/js/ColorProfile.js';
 import Color from '../../../../scenery/js/util/Color.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
 import statesOfMatter from '../../statesOfMatter.js';
 
 // constants
@@ -44,6 +45,8 @@ const SOMColorProfile = new ColorProfile( [ 'default', 'projector' ], {
   removePairGroup: {
     default: new Color( '#d00' )
   }
+}, {
+  tandem: Tandem.GLOBAL.createTandem( 'colorProfile' )
 } );
 
 statesOfMatter.register( 'SOMColorProfile', SOMColorProfile );
