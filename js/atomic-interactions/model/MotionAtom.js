@@ -45,6 +45,7 @@ class MotionAtom {
 
     // @private, accessed through getter and setter methods below, see those methods for details
     this.positionProperty = new Vector2Property( new Vector2( initialXPosition, initialYPosition ), {
+      units: 'pm',
       tandem: tandem.createTandem( 'positionProperty' )
     } );
 

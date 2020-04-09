@@ -57,10 +57,7 @@ class DualAtomModel {
     } );
 
     // @public (read-write) - indicates when motion is paused due to user interaction with the movable atom
-    this.motionPausedProperty = new BooleanProperty( false, {
-      tandem: tandem.createTandem( 'motionPausedProperty' ),
-      phetioReadOnly: true
-    } );
+    this.motionPausedProperty = new BooleanProperty( false );
 
     // @public (read-write)
     this.atomPairProperty = new EnumerationProperty( AtomPair, AtomPair.NEON_NEON, {
