@@ -35,11 +35,11 @@ class SubstanceSelectorNode extends HBox {
       spacer.setX2( newSpacerWidth );
       this.updateLayout();
     };
-    label.on( 'localBounds', updateSpacer );
+    label.localBoundsProperty.lazyLink( updateSpacer );
 
     // dispose function
     this.disposeSubstanceSelectorNode = () => {
-      label.off( 'localBounds', updateSpacer );
+      label.localBoundsProperty.unlink( updateSpacer );
     };
   }
 

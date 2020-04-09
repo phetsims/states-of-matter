@@ -265,7 +265,7 @@ function PhaseChangesMoleculesControlPanel( phaseChangesModel, options ) {
 
   // Listen for changes to the title text node's bounds and update the title when they occur.  There is no need to
   // unlink this since the panel is permanent.
-  title.on( 'localBounds', updateTitle );
+  title.localBoundsProperty.lazyLink( updateTitle );
 
   this.mutate( options );
 }
