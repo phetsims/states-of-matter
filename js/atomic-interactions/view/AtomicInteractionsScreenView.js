@@ -109,7 +109,14 @@ class AtomicInteractionsScreenView extends ScreenView {
       left: this.layoutBounds.minX + 6 * INSET,
       bottom: this.layoutBounds.bottom - 2 * INSET,
       tandem: tandem.createTandem( 'returnAtomButton' ),
-      visible: false
+      visible: false,
+      phetioReadOnly: true,
+      phetioComponentOptions: {
+        opacityProperty: { phetioReadOnly: true },
+        pickableProperty: { phetioReadOnly: true },
+        visibleProperty: { phetioReadOnly: true }
+      },
+      enabledPropertyOptions: { phetioReadOnly: true }
     } );
     this.addChild( this.returnAtomButton );
 
