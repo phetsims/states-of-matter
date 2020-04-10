@@ -5422,7 +5422,59 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NodeIO"
     },
-    "statesOfMatter.interactionsScreen.view.interactiveInteractionPotentialDiagram.epsilonLineDragHandler": {
+    "statesOfMatter.interactionsScreen.view.interactiveInteractionPotentialDiagram.epsilonControl.epsilonControlArrow": {
+      "phetioDocumentation": "",
+      "phetioDynamicElement": false,
+      "phetioEventType": "MODEL",
+      "phetioFeatured": false,
+      "phetioHighFrequency": false,
+      "phetioIsArchetype": false,
+      "phetioPlayback": false,
+      "phetioReadOnly": false,
+      "phetioState": false,
+      "phetioStudioControl": true,
+      "phetioTypeName": "NodeIO"
+    },
+    "statesOfMatter.interactionsScreen.view.interactiveInteractionPotentialDiagram.epsilonControl.epsilonControlArrow.opacityProperty": {
+      "phetioDocumentation": "Opacity of the parent NodeIO, between 0 (invisible) and 1 (fully visible)",
+      "phetioDynamicElement": false,
+      "phetioEventType": "MODEL",
+      "phetioFeatured": false,
+      "phetioHighFrequency": false,
+      "phetioIsArchetype": false,
+      "phetioPlayback": false,
+      "phetioReadOnly": false,
+      "phetioState": true,
+      "phetioStudioControl": true,
+      "phetioTypeName": "NumberPropertyIO"
+    },
+    "statesOfMatter.interactionsScreen.view.interactiveInteractionPotentialDiagram.epsilonControl.epsilonControlArrow.pickableProperty": {
+      "phetioDocumentation": "Sets whether the node will be pickable (and hence interactive), see the NodeIO documentation for more details",
+      "phetioDynamicElement": false,
+      "phetioEventType": "MODEL",
+      "phetioFeatured": false,
+      "phetioHighFrequency": false,
+      "phetioIsArchetype": false,
+      "phetioPlayback": false,
+      "phetioReadOnly": false,
+      "phetioState": true,
+      "phetioStudioControl": true,
+      "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
+    },
+    "statesOfMatter.interactionsScreen.view.interactiveInteractionPotentialDiagram.epsilonControl.epsilonControlArrow.visibleProperty": {
+      "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
+      "phetioDynamicElement": false,
+      "phetioEventType": "MODEL",
+      "phetioFeatured": false,
+      "phetioHighFrequency": false,
+      "phetioIsArchetype": false,
+      "phetioPlayback": false,
+      "phetioReadOnly": false,
+      "phetioState": true,
+      "phetioStudioControl": true,
+      "phetioTypeName": "PropertyIO<BooleanIO>"
+    },
+    "statesOfMatter.interactionsScreen.view.interactiveInteractionPotentialDiagram.epsilonControl.epsilonControlArrowDragHandler": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
       "phetioEventType": "USER",
@@ -5435,7 +5487,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "ObjectIO"
     },
-    "statesOfMatter.interactionsScreen.view.interactiveInteractionPotentialDiagram.epsilonLineDragHandler.dragAction": {
+    "statesOfMatter.interactionsScreen.view.interactiveInteractionPotentialDiagram.epsilonControl.epsilonControlArrowDragHandler.dragAction": {
       "phetioDocumentation": "A function that executes. The arguments are:<br/><ol><li>point: Vector2IO - the position of the drag in view coordinates</li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -5448,7 +5500,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "ActionIO<Vector2IO>"
     },
-    "statesOfMatter.interactionsScreen.view.interactiveInteractionPotentialDiagram.epsilonLineDragHandler.dragEndAction": {
+    "statesOfMatter.interactionsScreen.view.interactiveInteractionPotentialDiagram.epsilonControl.epsilonControlArrowDragHandler.dragEndAction": {
       "phetioDocumentation": "A function that executes. The arguments are:<br/><ol><li>point: Vector2IO - the position of the drag end in view coordinates</li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -5461,7 +5513,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "ActionIO<Vector2IO>"
     },
-    "statesOfMatter.interactionsScreen.view.interactiveInteractionPotentialDiagram.epsilonLineDragHandler.dragStartAction": {
+    "statesOfMatter.interactionsScreen.view.interactiveInteractionPotentialDiagram.epsilonControl.epsilonControlArrowDragHandler.dragStartAction": {
       "phetioDocumentation": "A function that executes. The arguments are:<br/><ol><li>point: Vector2IO - the position of the drag start in view coordinates</li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -5474,7 +5526,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "ActionIO<Vector2IO>"
     },
-    "statesOfMatter.interactionsScreen.view.interactiveInteractionPotentialDiagram.epsilonLineDragHandler.isDraggingProperty": {
+    "statesOfMatter.interactionsScreen.view.interactiveInteractionPotentialDiagram.epsilonControl.epsilonControlArrowDragHandler.isDraggingProperty": {
       "phetioDocumentation": "Indicates whether the object is dragging",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -5487,7 +5539,59 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
-    "statesOfMatter.interactionsScreen.view.interactiveInteractionPotentialDiagram.epsilonResizeDragHandler": {
+    "statesOfMatter.interactionsScreen.view.interactiveInteractionPotentialDiagram.epsilonControl.epsilonControlLine": {
+      "phetioDocumentation": "",
+      "phetioDynamicElement": false,
+      "phetioEventType": "MODEL",
+      "phetioFeatured": false,
+      "phetioHighFrequency": false,
+      "phetioIsArchetype": false,
+      "phetioPlayback": false,
+      "phetioReadOnly": false,
+      "phetioState": false,
+      "phetioStudioControl": true,
+      "phetioTypeName": "NodeIO"
+    },
+    "statesOfMatter.interactionsScreen.view.interactiveInteractionPotentialDiagram.epsilonControl.epsilonControlLine.opacityProperty": {
+      "phetioDocumentation": "Opacity of the parent NodeIO, between 0 (invisible) and 1 (fully visible)",
+      "phetioDynamicElement": false,
+      "phetioEventType": "MODEL",
+      "phetioFeatured": false,
+      "phetioHighFrequency": false,
+      "phetioIsArchetype": false,
+      "phetioPlayback": false,
+      "phetioReadOnly": false,
+      "phetioState": true,
+      "phetioStudioControl": true,
+      "phetioTypeName": "NumberPropertyIO"
+    },
+    "statesOfMatter.interactionsScreen.view.interactiveInteractionPotentialDiagram.epsilonControl.epsilonControlLine.pickableProperty": {
+      "phetioDocumentation": "Sets whether the node will be pickable (and hence interactive), see the NodeIO documentation for more details",
+      "phetioDynamicElement": false,
+      "phetioEventType": "MODEL",
+      "phetioFeatured": false,
+      "phetioHighFrequency": false,
+      "phetioIsArchetype": false,
+      "phetioPlayback": false,
+      "phetioReadOnly": false,
+      "phetioState": true,
+      "phetioStudioControl": true,
+      "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
+    },
+    "statesOfMatter.interactionsScreen.view.interactiveInteractionPotentialDiagram.epsilonControl.epsilonControlLine.visibleProperty": {
+      "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
+      "phetioDynamicElement": false,
+      "phetioEventType": "MODEL",
+      "phetioFeatured": false,
+      "phetioHighFrequency": false,
+      "phetioIsArchetype": false,
+      "phetioPlayback": false,
+      "phetioReadOnly": false,
+      "phetioState": true,
+      "phetioStudioControl": true,
+      "phetioTypeName": "PropertyIO<BooleanIO>"
+    },
+    "statesOfMatter.interactionsScreen.view.interactiveInteractionPotentialDiagram.epsilonControl.epsilonControlLineDragHandler": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
       "phetioEventType": "USER",
@@ -5500,7 +5604,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "ObjectIO"
     },
-    "statesOfMatter.interactionsScreen.view.interactiveInteractionPotentialDiagram.epsilonResizeDragHandler.dragAction": {
+    "statesOfMatter.interactionsScreen.view.interactiveInteractionPotentialDiagram.epsilonControl.epsilonControlLineDragHandler.dragAction": {
       "phetioDocumentation": "A function that executes. The arguments are:<br/><ol><li>point: Vector2IO - the position of the drag in view coordinates</li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -5513,7 +5617,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "ActionIO<Vector2IO>"
     },
-    "statesOfMatter.interactionsScreen.view.interactiveInteractionPotentialDiagram.epsilonResizeDragHandler.dragEndAction": {
+    "statesOfMatter.interactionsScreen.view.interactiveInteractionPotentialDiagram.epsilonControl.epsilonControlLineDragHandler.dragEndAction": {
       "phetioDocumentation": "A function that executes. The arguments are:<br/><ol><li>point: Vector2IO - the position of the drag end in view coordinates</li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -5526,7 +5630,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "ActionIO<Vector2IO>"
     },
-    "statesOfMatter.interactionsScreen.view.interactiveInteractionPotentialDiagram.epsilonResizeDragHandler.dragStartAction": {
+    "statesOfMatter.interactionsScreen.view.interactiveInteractionPotentialDiagram.epsilonControl.epsilonControlLineDragHandler.dragStartAction": {
       "phetioDocumentation": "A function that executes. The arguments are:<br/><ol><li>point: Vector2IO - the position of the drag start in view coordinates</li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -5539,7 +5643,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "ActionIO<Vector2IO>"
     },
-    "statesOfMatter.interactionsScreen.view.interactiveInteractionPotentialDiagram.epsilonResizeDragHandler.isDraggingProperty": {
+    "statesOfMatter.interactionsScreen.view.interactiveInteractionPotentialDiagram.epsilonControl.epsilonControlLineDragHandler.isDraggingProperty": {
       "phetioDocumentation": "Indicates whether the object is dragging",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",

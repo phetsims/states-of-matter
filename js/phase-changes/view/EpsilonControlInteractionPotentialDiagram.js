@@ -102,7 +102,7 @@ function EpsilonControlInteractionPotentialDiagram( sigma, epsilon, wide, multip
   } ) );
 
   // Add the arrow node that will allow the user to control the value of the epsilon parameter.
-  this.epsilonResizeHandle = new ArrowNode( 0, -RESIZE_HANDLE_SIZE_PROPORTION * this.widthOfGraph / 2, 0,
+  this.epsilonControlArrow = new ArrowNode( 0, -RESIZE_HANDLE_SIZE_PROPORTION * this.widthOfGraph / 2, 0,
     RESIZE_HANDLE_SIZE_PROPORTION * this.widthOfGraph / 2, {
       headHeight: 10,
       headWidth: 15,
@@ -113,17 +113,17 @@ function EpsilonControlInteractionPotentialDiagram( sigma, epsilon, wide, multip
       pickable: true,
       cursor: 'pointer'
     } );
-  this.epsilonResizeHandle.addInputListener( new FillHighlightListener( RESIZE_HANDLE_NORMAL_COLOR,
+  this.epsilonControlArrow.addInputListener( new FillHighlightListener( RESIZE_HANDLE_NORMAL_COLOR,
     RESIZE_HANDLE_HIGHLIGHTED_COLOR ) );
-  this.ljPotentialGraph.addChild( this.epsilonResizeHandle );
-  this.epsilonResizeHandle.addInputListener( new SimpleDragHandler( {
+  this.ljPotentialGraph.addChild( this.epsilonControlArrow );
+  this.epsilonControlArrow.addInputListener( new SimpleDragHandler( {
 
     start: function( event ) {
-      startDragY = self.epsilonResizeHandle.globalToParentPoint( event.pointer.point ).y;
+      startDragY = self.epsilonControlArrow.globalToParentPoint( event.pointer.point ).y;
     },
 
     drag: function( event ) {
-      endDragY = self.epsilonResizeHandle.globalToParentPoint( event.pointer.point ).y;
+      endDragY = self.epsilonControlArrow.globalToParentPoint( event.pointer.point ).y;
       const d = endDragY - startDragY;
       startDragY = endDragY;
       const scaleFactor = SOMConstants.MAX_EPSILON / ( self.getGraphHeight() / 2 );

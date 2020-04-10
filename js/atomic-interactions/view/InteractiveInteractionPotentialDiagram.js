@@ -90,20 +90,24 @@ function InteractiveInteractionPotentialDiagram( dualAtomModel, wide, options ) 
     } ) );
   }
 
+  // Parent node for the epsilon controller
+  const epsilonControlTandem = options.tandem.createTandem( 'epsilonControl' );
+
   // Add the line that will indicate and control the value of epsilon.
   const epsilonLineLength = EPSILON_HANDLE_OFFSET_PROPORTION * this.widthOfGraph * 1.2;
   this.epsilonLine = new Rectangle( -epsilonLineLength / 2, 0, epsilonLineLength, 1, {
     cursor: 'ns-resize',
     pickable: true,
     fill: EPSILON_LINE_COLOR,
-    stroke: EPSILON_LINE_COLOR
+    stroke: EPSILON_LINE_COLOR,
+    tandem: epsilonControlTandem.createTandem( 'epsilonControlLine' )
   } );
   this.epsilonLine.addInputListener(
     new FillHighlightListener( RESIZE_HANDLE_NORMAL_COLOR, RESIZE_HANDLE_HIGHLIGHTED_COLOR )
   );
   this.epsilonLine.touchArea = this.epsilonLine.localBounds.dilatedXY( 8, 8 );
   this.epsilonLine.mouseArea = this.epsilonLine.localBounds.dilatedXY( 0, 4 );
-  addEpsilonDragHandler( this.epsilonLine, options.tandem.createTandem( 'epsilonLineDragHandler' ) );
+  addEpsilonDragHandler( this.epsilonLine, epsilonControlTandem.createTandem( 'epsilonControlLineDragHandler' ) );
   this.epsilonLineLayer.addChild( this.epsilonLine );
 
   // Add the arrow nodes that will allow the user to control the epsilon value.
@@ -117,20 +121,20 @@ function InteractiveInteractionPotentialDiagram( dualAtomModel, wide, options ) 
     pickable: true,
     cursor: 'pointer'
   };
-  this.epsilonResizeHandle = new ArrowNode(
+  this.epsilonControlArrow = new ArrowNode(
     0,
     -RESIZE_HANDLE_SIZE_PROPORTION * this.widthOfGraph / 2,
     0,
     RESIZE_HANDLE_SIZE_PROPORTION * this.widthOfGraph,
-    arrowNodeOptions
+    merge( { tandem: epsilonControlTandem.createTandem( 'epsilonControlArrow' ) }, arrowNodeOptions )
   );
-  this.epsilonResizeHandle.addInputListener( new FillHighlightListener(
+  this.epsilonControlArrow.addInputListener( new FillHighlightListener(
     RESIZE_HANDLE_NORMAL_COLOR,
     RESIZE_HANDLE_HIGHLIGHTED_COLOR
   ) );
-  this.ljPotentialGraph.addChild( this.epsilonResizeHandle );
-  this.epsilonResizeHandle.touchArea = this.epsilonResizeHandle.localBounds.dilatedXY( 3, 10 );
-  addEpsilonDragHandler( this.epsilonResizeHandle, options.tandem.createTandem( 'epsilonResizeDragHandler' ) );
+  this.ljPotentialGraph.addChild( this.epsilonControlArrow );
+  this.epsilonControlArrow.touchArea = this.epsilonControlArrow.localBounds.dilatedXY( 3, 10 );
+  addEpsilonDragHandler( this.epsilonControlArrow, epsilonControlTandem.createTandem( 'epsilonControlArrowDragHandler' ) );
 
   // add sigma arrow node
   this.sigmaResizeHandle = new ArrowNode( -RESIZE_HANDLE_SIZE_PROPORTION * this.widthOfGraph / 2, 0,

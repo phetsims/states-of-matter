@@ -162,13 +162,13 @@ export default inherit( CanvasNode, InteractionPotentialCanvasNode, {
     this.interactionDiagram.setMarkerPosition( this.interactionDiagram.markerDistance );
 
     // Position the control handles if used.
-    if ( this.interactionDiagram.epsilonResizeHandle !== undefined ) {
+    if ( this.interactionDiagram.epsilonControlArrow !== undefined ) {
       const graphMin = this.interactionDiagram.getGraphMin();
       this.interactionDiagram.epsilonLine.setTranslation( graphMin.x, graphMin.y + EPSILON_LINE_WIDTH );
-      this.interactionDiagram.epsilonResizeHandle.setVisible( this.interactionDiagram.interactionEnabled );
+      this.interactionDiagram.epsilonControlArrow.setVisible( this.interactionDiagram.interactionEnabled );
       this.interactionDiagram.epsilonLine.setVisible( this.interactionDiagram.interactionEnabled );
-      this.interactionDiagram.epsilonResizeHandle.centerX = this.interactionDiagram.epsilonLine.right;
-      this.interactionDiagram.epsilonResizeHandle.centerY = this.interactionDiagram.epsilonLine.centerY;
+      this.interactionDiagram.epsilonControlArrow.centerX = this.interactionDiagram.epsilonLine.right;
+      this.interactionDiagram.epsilonControlArrow.centerY = this.interactionDiagram.epsilonLine.centerY;
     }
     if ( this.interactionDiagram.sigmaResizeHandle !== undefined ) {
       this.interactionDiagram.sigmaResizeHandle.centerX = sigmaHandleXPos;

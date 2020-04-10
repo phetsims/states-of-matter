@@ -142,7 +142,7 @@ function InteractionPotentialDiagramNode( sigma, epsilon, wide, options ) {
   } );
   this.ljPotentialGraph.addChild( this.sigmaArrow );
 
-  // Add the layer where the eplison line marker will go, this is done so we can achieve the desired layering.
+  // Add the layer where the epsilon line marker will go, this is done so we can achieve the desired layering.
   this.epsilonLineLayer = new Node(); // @protected
   this.ljPotentialGraph.addChild( this.epsilonLineLayer );
 
