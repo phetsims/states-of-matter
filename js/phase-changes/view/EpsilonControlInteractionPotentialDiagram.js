@@ -50,7 +50,7 @@ function EpsilonControlInteractionPotentialDiagram( sigma, epsilon, wide, multip
   options = merge( { tandem: Tandem.REQUIRED }, options );
 
   const self = this;
-  InteractionPotentialDiagramNode.call( this, sigma, epsilon, wide, true, options.tandem );
+  InteractionPotentialDiagramNode.call( this, sigma, epsilon, wide, true, { tandem: options.tandem } );
   this.multipleParticleModel = multipleParticleModel;
 
   // variables used to track dragging of controls related to epsilon value

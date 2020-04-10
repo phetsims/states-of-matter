@@ -55,10 +55,10 @@ const ZOOM_BUTTONS_HEIGHT = 72;
  * @param {number} sigma - Initial value of sigma, a.k.a. the atom diameter
  * @param {number} epsilon - Initial value of epsilon, a.k.a. the interaction strength
  * @param {boolean} wide - true if the widescreen version of the graph is needed, false if not.
- * @param {Tandem} tandem
+ * @param {Object} [options]
  * @constructor
  */
-function InteractionPotentialDiagramNode( sigma, epsilon, wide, tandem ) {
+function InteractionPotentialDiagramNode( sigma, epsilon, wide, options ) {
 
   Node.call( this );
   this.positionMarkerEnabled = false;
@@ -231,17 +231,22 @@ function InteractionPotentialDiagramNode( sigma, epsilon, wide, tandem ) {
       0,
       this.graphWidth,
       this.graphHeight,
-      tandem.createTandem( 'gridNode' )
+      {
+        addZoomButtons: options.zoomable,
+        tandem: options.tandem.createTandem( 'gridNode' )
+      }
     );
     this.gridNode.x = this.graphXOrigin;
     this.gridNode.y = this.graphYOrigin - this.graphHeight;
     this.addChild( this.gridNode );
 
     // adjusting zoom buttons  position on interaction diagram
-    this.gridNode.zoomInButton.right = this.verticalAxis.left - this.gridNode.zoomInButton.width;
-    this.gridNode.zoomOutButton.right = this.verticalAxis.left - this.gridNode.zoomInButton.width;
-    this.gridNode.zoomInButton.top = this.verticalAxis.top - AXES_ARROW_HEAD_HEIGHT / 2;
-    this.gridNode.zoomOutButton.top = this.gridNode.zoomInButton.bottom + 5;
+    if ( options.zoomable ) {
+      this.gridNode.zoomInButton.right = this.verticalAxis.left - this.gridNode.zoomInButton.width;
+      this.gridNode.zoomOutButton.right = this.verticalAxis.left - this.gridNode.zoomInButton.width;
+      this.gridNode.zoomInButton.top = this.verticalAxis.top - AXES_ARROW_HEAD_HEIGHT / 2;
+      this.gridNode.zoomOutButton.top = this.gridNode.zoomInButton.bottom + 5;
+    }
   }
 }
 

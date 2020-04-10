@@ -90,6 +90,7 @@ class AtomicInteractionsScreenView extends ScreenView {
 
     // @private interactive potential diagram
     this.interactiveInteractionPotentialDiagram = new InteractiveInteractionPotentialDiagram( dualAtomModel, true, {
+      zoomable: enableHeterogeneousAtoms,
       left: this.modelViewTransform.modelToViewX( 0 ) - 43, // empirically determined such left edge of graph is at
                                                             // center of fixed atom
       top: atomsControlPanel.top + 5, // additional offset empirically determined to look good

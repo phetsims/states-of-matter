@@ -48,7 +48,10 @@ function InteractiveInteractionPotentialDiagram( dualAtomModel, wide, options ) 
     dualAtomModel.getSigma(),
     dualAtomModel.getEpsilon(),
     wide,
-    options.tandem
+    {
+      zoomable: options.zoomable,
+      tandem: options.tandem
+    }
   );
   const self = this;
 

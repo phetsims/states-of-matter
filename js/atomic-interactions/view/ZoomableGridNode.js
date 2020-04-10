@@ -7,12 +7,14 @@
  * @author Siddhartha Chinthapally
  */
 
+import merge from '../../../../phet-core/js/merge.js';
 import Shape from '../../../../kite/js/Shape.js';
 import inherit from '../../../../phet-core/js/inherit.js';
 import ZoomButton from '../../../../scenery-phet/js/buttons/ZoomButton.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import Path from '../../../../scenery/js/nodes/Path.js';
 import RectangularButtonView from '../../../../sun/js/buttons/RectangularButtonView.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
 import statesOfMatter from '../../statesOfMatter.js';
 
 // constants
@@ -26,12 +28,17 @@ const ZOOM_INCREMENT = 2; // lines per zoom
  * @param {number} offsetY
  * @param {number} width - width of the graph
  * @param {number} height - height of the graph
- * @param {Tandem} tandem
+ * @param {Object} [options]
  * @constructor
  */
-function ZoomableGridNode( atomsView, offsetX, offsetY, width, height, tandem ) {
+function ZoomableGridNode( atomsView, offsetX, offsetY, width, height, options ) {
 
-  Node.call( this, { tandem: tandem } );
+  options = merge( {
+    addZoomButtons: true,
+    tandem: Tandem.REQUIRED
+  }, options );
+
+  Node.call( this, options );
   const self = this;
   atomsView.horizontalLineCount = MIN_LINES_HORIZONTAL;
 
@@ -49,50 +56,54 @@ function ZoomableGridNode( atomsView, offsetX, offsetY, width, height, tandem ) 
     opacity: 0.6
   } );
 
-  // @private zoom in button
-  this.zoomInButton = new ZoomButton( {
-    listener: function() {
-      atomsView.horizontalLineCount -= ZOOM_INCREMENT;
-      self.setHorizontalLines( offsetX, offsetY, width, height, atomsView.horizontalLineCount );
-      atomsView.verticalScalingFactor *= 3.33;
-      atomsView.drawPotentialCurve();
-    },
-    baseColor: '#FFD333',
-    radius: 8,
-    xMargin: 3,
-    yMargin: 3,
-    disabledBaseColor: '#EDEDED',
-    buttonAppearanceStrategy: RectangularButtonView.FlatAppearanceStrategy,
-    touchAreaXDilation: 10,
-    touchAreaYDilation: 8,
-    touchAreaYShift: -7,
-    tandem: tandem.createTandem( 'zoomInButton' )
-  } );
-  this.zoomInButton.enabled = false;
+  if ( options.addZoomButtons ) {
 
-  // @private zoom out button
-  this.zoomOutButton = new ZoomButton( {
-    listener: function() {
-      atomsView.horizontalLineCount += ZOOM_INCREMENT;
-      self.setHorizontalLines( offsetX, offsetY, width, height, atomsView.horizontalLineCount );
-      atomsView.verticalScalingFactor /= 3.33;
-      atomsView.drawPotentialCurve();
-    },
-    baseColor: '#FFD333',
-    radius: 8,
-    xMargin: 3,
-    yMargin: 3,
-    disabledBaseColor: '#EDEDED',
-    buttonAppearanceStrategy: RectangularButtonView.FlatAppearanceStrategy,
-    in: false,
-    touchAreaXDilation: 10,
-    touchAreaYDilation: 8,
-    touchAreaYShift: 7,
-    tandem: tandem.createTandem( 'zoomOutButton' )
-  } );
-  this.zoomOutButton.enabled = true;
-  this.addChild( this.zoomInButton );
-  this.addChild( this.zoomOutButton );
+    // @private zoom in button
+    this.zoomInButton = new ZoomButton( {
+      listener: function() {
+        atomsView.horizontalLineCount -= ZOOM_INCREMENT;
+        self.setHorizontalLines( offsetX, offsetY, width, height, atomsView.horizontalLineCount );
+        atomsView.verticalScalingFactor *= 3.33;
+        atomsView.drawPotentialCurve();
+      },
+      baseColor: '#FFD333',
+      radius: 8,
+      xMargin: 3,
+      yMargin: 3,
+      disabledBaseColor: '#EDEDED',
+      buttonAppearanceStrategy: RectangularButtonView.FlatAppearanceStrategy,
+      touchAreaXDilation: 10,
+      touchAreaYDilation: 8,
+      touchAreaYShift: -7,
+      tandem: options.tandem.createTandem( 'zoomInButton' )
+    } );
+    this.zoomInButton.enabled = false;
+
+    // @private zoom out button
+    this.zoomOutButton = new ZoomButton( {
+      listener: function() {
+        atomsView.horizontalLineCount += ZOOM_INCREMENT;
+        self.setHorizontalLines( offsetX, offsetY, width, height, atomsView.horizontalLineCount );
+        atomsView.verticalScalingFactor /= 3.33;
+        atomsView.drawPotentialCurve();
+      },
+      baseColor: '#FFD333',
+      radius: 8,
+      xMargin: 3,
+      yMargin: 3,
+      disabledBaseColor: '#EDEDED',
+      buttonAppearanceStrategy: RectangularButtonView.FlatAppearanceStrategy,
+      in: false,
+      touchAreaXDilation: 10,
+      touchAreaYDilation: 8,
+      touchAreaYShift: 7,
+      tandem: options.tandem.createTandem( 'zoomOutButton' )
+    } );
+    this.zoomOutButton.enabled = true;
+    this.addChild( this.zoomInButton );
+    this.addChild( this.zoomOutButton );
+  }
+
   this.addChild( this.horizontalLinesNode );
   this.addChild( this.verticalLinesNode );
 
@@ -164,7 +175,11 @@ export default inherit( Node, ZoomableGridNode, {
       horizontalLineShape.lineTo( line.x2, line.y2 );
     }
     this.horizontalLinesNode.setShape( horizontalLineShape );
-    this.zoomOutButton.enabled = ( horizontalLineCount < MAX_LINES_HORIZONTAL );
-    this.zoomInButton.enabled = ( horizontalLineCount > MIN_LINES_HORIZONTAL );
+    if ( this.zoomOutButton ) {
+      this.zoomOutButton.enabled = ( horizontalLineCount < MAX_LINES_HORIZONTAL );
+    }
+    if ( this.zoomInButton ) {
+      this.zoomInButton.enabled = ( horizontalLineCount > MIN_LINES_HORIZONTAL );
+    }
   }
 } );
