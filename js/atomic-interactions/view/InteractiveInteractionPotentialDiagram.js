@@ -136,11 +136,20 @@ function InteractiveInteractionPotentialDiagram( dualAtomModel, wide, options ) 
   this.epsilonControlArrow.touchArea = this.epsilonControlArrow.localBounds.dilatedXY( 3, 10 );
   addEpsilonDragHandler( this.epsilonControlArrow, epsilonControlTandem.createTandem( 'epsilonControlArrowDragHandler' ) );
 
+  // root tandem for sigma control
+  const sigmaControlTandem = options.tandem.createTandem( 'sigmaControl' );
+
   // add sigma arrow node
-  this.sigmaResizeHandle = new ArrowNode( -RESIZE_HANDLE_SIZE_PROPORTION * this.widthOfGraph / 2, 0,
-    RESIZE_HANDLE_SIZE_PROPORTION * this.widthOfGraph * 1.2, 0, arrowNodeOptions );
-  this.sigmaResizeHandle.addInputListener( new FillHighlightListener( RESIZE_HANDLE_NORMAL_COLOR,
-    RESIZE_HANDLE_HIGHLIGHTED_COLOR ) );
+  this.sigmaResizeHandle = new ArrowNode(
+    -RESIZE_HANDLE_SIZE_PROPORTION * this.widthOfGraph / 2,
+    0,
+    RESIZE_HANDLE_SIZE_PROPORTION * this.widthOfGraph * 1.2,
+    0,
+    merge( { tandem: sigmaControlTandem.createTandem( 'sigmaControlArrow' ) }, arrowNodeOptions )
+  );
+  this.sigmaResizeHandle.addInputListener(
+    new FillHighlightListener( RESIZE_HANDLE_NORMAL_COLOR, RESIZE_HANDLE_HIGHLIGHTED_COLOR )
+  );
   this.ljPotentialGraph.addChild( this.sigmaResizeHandle );
   this.sigmaResizeHandle.touchArea = this.sigmaResizeHandle.localBounds.dilatedXY( 10, 5 );
   let startDragX;
@@ -167,7 +176,7 @@ function InteractiveInteractionPotentialDiagram( dualAtomModel, wide, options ) 
       dualAtomModel.setMotionPaused( false );
     },
 
-    tandem: options.tandem.createTandem( 'sigmaResizeHandleDragHandler' )
+    tandem: sigmaControlTandem.createTandem( 'dragHandler' )
   } ) );
 
   // Add the ability to grab and move the position marker. This node will need to be pickable so the user can grab it.
@@ -203,7 +212,7 @@ function InteractiveInteractionPotentialDiagram( dualAtomModel, wide, options ) 
         dualAtomModel.setMotionPaused( false );
       },
 
-      tandem: options.tandem.createTandem( 'positionMarkerDragHandler' )
+    tandem: this.positionMarker.tandem.createTandem( 'positionMarkerDragHandler' )
     }
   ) );
 

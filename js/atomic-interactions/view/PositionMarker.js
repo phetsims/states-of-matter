@@ -17,6 +17,7 @@ import Circle from '../../../../scenery/js/nodes/Circle.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import RadialGradient from '../../../../scenery/js/util/RadialGradient.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
 import statesOfMatter from '../../statesOfMatter.js';
 
 /**
@@ -35,7 +36,8 @@ function PositionMarker( radius, color, options ) {
     haloAlpha: 0.5, // alpha channel of the halo, 0.0 - 1.0
     cursor: 'pointer',  // all manipulators are interactive
     lineWidth: 1,
-    stroke: mainColor.darkerColor()
+    stroke: mainColor.darkerColor(),
+    tandem: Tandem.REQUIRED
   }, options );
 
   // @private

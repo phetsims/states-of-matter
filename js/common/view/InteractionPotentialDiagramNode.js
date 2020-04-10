@@ -148,7 +148,9 @@ function InteractionPotentialDiagramNode( sigma, epsilon, wide, options ) {
 
   // Add the position marker.
   const markerDiameter = POSITION_MARKER_DIAMETER_PROPORTION * this.graphWidth;
-  this.positionMarker = new PositionMarker( markerDiameter / 2, 'rgb( 117, 217, 255 )' );
+  this.positionMarker = new PositionMarker( markerDiameter / 2, 'rgb( 117, 217, 255 )', {
+    tandem: options.tandem.createTandem( 'positionMarker' )
+  } );
   this.positionMarker.setVisible( this.positionMarkerEnabled );
   this.ljPotentialGraph.addChild( this.positionMarker );
 
