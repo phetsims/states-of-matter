@@ -46,7 +46,16 @@ const ICON_PADDING = 25; // empirically determined to put the icons in a good po
  * @param {Object} [options] for various panel display properties
  * @constructor
  */
-function ForcesControlPanel( forcesProperty, forceControlPanelExpandProperty, options ) {
+function ForcesAccordionBox( forcesProperty, forceControlPanelExpandProperty, options ) {
+
+  // convenience function for creating text with the attributes needed by this panel
+  function createText( string, width, fontSize ) {
+    const text = new Text( string, { font: new PhetFont( fontSize ), fill: options.textFill } );
+    if ( text.width > width ) {
+      text.scale( width / text.width );
+    }
+    return text;
+  }
 
   options = merge( {
     xMargin: 5,
@@ -60,6 +69,19 @@ function ForcesControlPanel( forcesProperty, forceControlPanelExpandProperty, op
     showTitleWhenExpanded: true,
     minWidth: 0,
     maxWidth: Number.POSITIVE_INFINITY,
+    expandedProperty: forceControlPanelExpandProperty,
+    contentAlign: 'left',
+    titleAlignX: 'left',
+    cornerRadius: SOMConstants.PANEL_CORNER_RADIUS,
+    contentYSpacing: 1,
+    contentXSpacing: 3,
+    contentXMargin: 10,
+    buttonYMargin: 4,
+    buttonXMargin: 10,
+    expandCollapseButtonOptions: {
+      touchAreaXDilation: 8,
+      touchAreaYDilation: 3
+    },
     tandem: Tandem.REQUIRED
   }, options );
 
@@ -85,14 +107,6 @@ function ForcesControlPanel( forcesProperty, forceControlPanelExpandProperty, op
   const repulsiveArrow = new ArrowNode( arrowStartX, arrowY, arrowEndX, arrowY, merge( {
     fill: '#FD17FF'
   }, arrowNodeOptions ) );
-
-  const createText = function( string, width, fontSize ) {
-    const text = new Text( string, { font: new PhetFont( fontSize ), fill: options.textFill } );
-    if ( text.width > width ) {
-      text.scale( width / text.width );
-    }
-    return text;
-  };
 
   const hideForcesText = { label: createText( hideForcesString, TEXT_LABEL_MAX_WIDTH * 0.65, 12 ) };
 
@@ -205,38 +219,12 @@ function ForcesControlPanel( forcesProperty, forceControlPanelExpandProperty, op
   );
 
   accordionContent.addChild( radioButtonGroup );
+  options.titleNode = createText( forcesString, TEXT_LABEL_MAX_WIDTH * 0.9, 14 );
 
-  // show white stroke around the force panel within SOM full version  else  show black stroke
-  const accordionBox = new AccordionBox( accordionContent, {
-    titleNode: createText( forcesString, TEXT_LABEL_MAX_WIDTH * 0.9, 14 ),
-    fill: options.fill,
-    stroke: options.stroke,
-    lineWidth: options.lineWidth,
-    expandedProperty: forceControlPanelExpandProperty,
-    contentAlign: 'left',
-    titleAlignX: 'left',
-    buttonAlign: options.buttonAlign,
-    cornerRadius: SOMConstants.PANEL_CORNER_RADIUS,
-    minWidth: options.minWidth,
-    maxWidth: options.maxWidth,
-    contentYSpacing: 1,
-    contentXSpacing: 3,
-    contentXMargin: 10,
-    buttonYMargin: 4,
-    buttonXMargin: 10,
-    expandCollapseButtonOptions: {
-      touchAreaXDilation: 8,
-      touchAreaYDilation: 3
-    },
-    showTitleWhenExpanded: options.showTitleWhenExpanded,
-    tandem: options.tandem.createTandem( 'accordionBox' )
-  } );
-  this.addChild( accordionBox );
-
-  this.mutate( options );
+  AccordionBox.call( this, accordionContent, options );
 }
 
-statesOfMatter.register( 'ForcesControlPanel', ForcesControlPanel );
+statesOfMatter.register( 'ForcesAccordionBox', ForcesAccordionBox );
 
-inherit( Node, ForcesControlPanel );
-export default ForcesControlPanel;
+inherit( AccordionBox, ForcesAccordionBox );
+export default ForcesAccordionBox;
