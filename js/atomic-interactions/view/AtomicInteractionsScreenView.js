@@ -22,7 +22,7 @@ import statesOfMatter from '../../statesOfMatter.js';
 import DualAtomModel from '../model/DualAtomModel.js';
 import ForceDisplayMode from '../model/ForceDisplayMode.js';
 import AtomicInteractionsControlPanel from './AtomicInteractionsControlPanel.js';
-import ForcesControlPanel from './ForcesControlPanel.js';
+import ForcesAccordionBox from './ForcesAccordionBox.js';
 import GrabbableParticleNode from './GrabbableParticleNode.js';
 import HandNode from './HandNode.js';
 import InteractiveInteractionPotentialDiagram from './InteractiveInteractionPotentialDiagram.js';
@@ -126,7 +126,7 @@ class AtomicInteractionsScreenView extends ScreenView {
     this.addChild( resetAllButton );
 
     // add force control
-    const forcesControlPanel = new ForcesControlPanel(
+    const forcesAccordionBox = new ForcesAccordionBox(
       dualAtomModel.forcesDisplayModeProperty,
       dualAtomModel.forcesControlPanelExpandedProperty,
       {
@@ -139,7 +139,7 @@ class AtomicInteractionsScreenView extends ScreenView {
         showTitleWhenExpanded: !enableHeterogeneousAtoms,
         minWidth: PANEL_WIDTH,
         maxWidth: PANEL_WIDTH,
-        tandem: tandem.createTandem( 'forcesControlPanel' )
+        tandem: tandem.createTandem( 'forcesAccordionBox' )
       }
     );
 
@@ -236,12 +236,12 @@ class AtomicInteractionsScreenView extends ScreenView {
 
     // Add the control panels to the screen after the atoms so that the atoms with go behind them.
     this.addChild( atomsControlPanel );
-    this.addChild( forcesControlPanel );
+    this.addChild( forcesAccordionBox );
 
     // update various aspects of the appearance when the selected atom pair changes
     dualAtomModel.atomPairProperty.link( () => {
-      forcesControlPanel.top = atomsControlPanel.bottom + INSET / 2;
-      forcesControlPanel.left = atomsControlPanel.left;
+      forcesAccordionBox.top = atomsControlPanel.bottom + INSET / 2;
+      forcesAccordionBox.left = atomsControlPanel.left;
       this.updatePositionMarkerOnDiagram();
       this.updateMinimumXForMovableAtom();
       this.updatePushPinPosition();
