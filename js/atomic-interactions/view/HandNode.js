@@ -80,12 +80,17 @@ function HandNode( dualAtomModel, particle, modelViewTransform, minX, tandem ) {
   } );
   this.addInputListener( inputListener );
 
-  // move the hint with the particle
   function positionListener( position ) {
     self.x = modelViewTransform.modelToViewX( position.x );
   }
 
+  // move the hint with the particle
   particle.positionProperty.link( positionListener );
+
+  // add a linked element in phet-io to the property that controls this node's visibility
+  this.addLinkedElement( dualAtomModel.movementHintVisibleProperty, {
+    tandem: tandem.createTandem( 'movementHintVisibleProperty' )
+  } );
 
   // dispose function
   this.disposeHandNode = function() {

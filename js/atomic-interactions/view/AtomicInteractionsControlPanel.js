@@ -52,6 +52,7 @@ const NORMAL_TEXT_FONT = new PhetFont( 12 );
 const RADIO_BUTTON_RADIUS = 6;
 const TITLE_TEXT_WIDTH = 130;
 const PANEL_X_MARGIN = 10;
+const SLIDER_VBOX_SPACING = 5;
 
 /**
  * @param {DualAtomModel} dualAtomModel - model of the simulation
@@ -336,12 +337,15 @@ function AtomicInteractionsControlPanel( dualAtomModel, enableHeterogeneousAtoms
     titleNode = new Node( { children: [ titleBackground, titleText.label ] } );
   }
 
+  // create the root tandem for the node that includes the atom diameter title and slider
+  const atomDiameterSliderTandem = options.tandem.createTandem( 'atomDiameterSlider' );
+
   // add atom diameter slider
   const atomDiameterTitle = new Text( atomDiameterString, {
     font: NORMAL_TEXT_FONT,
     fill: options.panelTextFill,
     maxWidth: SLIDER_TITLE_MAX_WIDTH,
-    tandem: options.tandem.createTandem( 'atomDiameterSliderTitle' )
+    tandem: atomDiameterSliderTandem.createTandem( 'title' )
   } );
 
   const commonSliderOptions = {
@@ -368,7 +372,7 @@ function AtomicInteractionsControlPanel( dualAtomModel, enableHeterogeneousAtoms
   const atomDiameterSlider = new HSlider(
     dualAtomModel.adjustableAtomDiameterProperty,
     new Range( SOMConstants.MIN_SIGMA, SOMConstants.MAX_SIGMA ),
-    merge( { tandem: options.tandem.createTandem( 'atomDiameterSlider' ) }, commonSliderOptions )
+    merge( { tandem: atomDiameterSliderTandem.createTandem( 'atomDiameterSlider' ) }, commonSliderOptions )
   );
 
   const maxTickTextWidth = enableHeterogeneousAtoms ? 85 : 35;
@@ -385,7 +389,15 @@ function AtomicInteractionsControlPanel( dualAtomModel, enableHeterogeneousAtoms
     atomDiameterSlider.addMajorTick( SOMConstants.MAX_SIGMA, largeText );
   }
 
-  const atomDiameter = new Node( { children: [ atomDiameterTitle, atomDiameterSlider ] } );
+  const atomDiameterSliderBox = new VBox( {
+    children: [ atomDiameterTitle, atomDiameterSlider ],
+    align: 'left',
+    spacing: SLIDER_VBOX_SPACING,
+    tandem: atomDiameterSliderTandem
+  } );
+
+  // create the root tandem for the node that includes the interaction title and slider
+  const interactionStrengthSliderTandem = options.tandem.createTandem( 'interactionStrengthSlider' );
 
   // add interaction strength slider
   const interactionStrengthTitle = new Text( interactionStrengthString, {
@@ -393,18 +405,23 @@ function AtomicInteractionsControlPanel( dualAtomModel, enableHeterogeneousAtoms
     fill: options.panelTextFill,
     top: atomDiameterSlider.bottom + 5,
     maxWidth: SLIDER_TITLE_MAX_WIDTH,
-    tandem: options.tandem.createTandem( 'interactionStrengthSliderTitle' )
+    tandem: interactionStrengthSliderTandem.createTandem( 'title' )
   } );
   const interactionStrengthSlider = new HSlider(
     dualAtomModel.interactionStrengthProperty,
     new Range( SOMConstants.MIN_EPSILON, SOMConstants.MAX_EPSILON ),
-    merge( { tandem: options.tandem.createTandem( 'interactionStrengthSlider' ) }, commonSliderOptions )
+    merge( { tandem: interactionStrengthSliderTandem.createTandem( 'slider' ) }, commonSliderOptions )
   );
   const weakText = new Text( weakString, tickTextOptions );
   const strongText = new Text( strongString, tickTextOptions );
   interactionStrengthSlider.addMajorTick( SOMConstants.MIN_EPSILON, weakText );
   interactionStrengthSlider.addMajorTick( SOMConstants.MAX_EPSILON, strongText );
-  const interactionStrength = new Node( { children: [ interactionStrengthTitle, interactionStrengthSlider ] } );
+  const interactionStrengthSliderBox = new VBox( {
+    children: [ interactionStrengthTitle, interactionStrengthSlider ],
+    spacing: SLIDER_VBOX_SPACING,
+    align: 'left',
+    tandem: interactionStrengthSliderTandem
+  } );
 
   const content = new VBox( {
     align: 'left', children: [ radioButtonsNode ],
@@ -433,15 +450,15 @@ function AtomicInteractionsControlPanel( dualAtomModel, enableHeterogeneousAtoms
   // hide or show the controls for handling the adjustable atom based on the atom pair setting
   dualAtomModel.atomPairProperty.link( function( atomPair ) {
     if ( atomPair === AtomPair.ADJUSTABLE ) {
-      content.addChild( atomDiameter );
-      content.addChild( interactionStrength );
+      content.addChild( atomDiameterSliderBox );
+      content.addChild( interactionStrengthSliderBox );
     }
     else {
-      if ( content.hasChild( atomDiameter ) ) {
-        content.removeChild( atomDiameter );
+      if ( content.hasChild( atomDiameterSliderBox ) ) {
+        content.removeChild( atomDiameterSliderBox );
       }
-      if ( content.hasChild( interactionStrength ) ) {
-        content.removeChild( interactionStrength );
+      if ( content.hasChild( interactionStrengthSliderBox ) ) {
+        content.removeChild( interactionStrengthSliderBox );
       }
     }
   } );
