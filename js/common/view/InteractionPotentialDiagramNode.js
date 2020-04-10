@@ -49,7 +49,7 @@ let GREEK_LETTER_FONT = new PhetFont( GREEK_LETTER_FONT_SIZE );
 let GREEK_LETTER_MAX_WIDTH;
 
 // zoom buttons height
-const zoomButtonsHeight = 72;
+const ZOOM_BUTTONS_HEIGHT = 72;
 
 /**
  * @param {number} sigma - Initial value of sigma, a.k.a. the atom diameter
@@ -207,7 +207,7 @@ function InteractionPotentialDiagramNode( sigma, epsilon, wide, tandem ) {
   } );
 
   // restricted vertical axis label
-  const verticalAxisHeight = wide ? this.verticalAxis.height - zoomButtonsHeight : this.verticalAxis.height;
+  const verticalAxisHeight = wide ? this.verticalAxis.height - ZOOM_BUTTONS_HEIGHT : this.verticalAxis.height;
   if ( this.verticalAxisLabel.width > verticalAxisHeight ) {
     this.verticalAxisLabel.scale( verticalAxisHeight / this.verticalAxisLabel.width );
   }

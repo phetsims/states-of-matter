@@ -89,8 +89,8 @@ class DualAtomModel {
     } );
 
     // @public (read-write)
-    this.forcesControlPanelExpandedProperty = new BooleanProperty( false, {
-      tandem: tandem.createTandem( 'forcesControlPanelExpandedProperty' )
+    this.forcesExpandedProperty = new BooleanProperty( false, {
+      tandem: tandem.createTandem( 'forcesExpandedProperty' )
     } );
 
     // @public (read-write)
@@ -251,7 +251,7 @@ class DualAtomModel {
     this.timeControlSpeedProperty.reset();
     this.adjustableAtomDiameterProperty.reset();
     this.forcesDisplayModeProperty.reset();
-    this.forcesControlPanelExpandedProperty.reset();
+    this.forcesExpandedProperty.reset();
     this.movementHintVisibleProperty.reset();
     this.fixedAtom.reset();
     this.movableAtom.reset();

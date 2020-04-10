@@ -128,7 +128,7 @@ class AtomicInteractionsScreenView extends ScreenView {
     // add force control
     const forcesAccordionBox = new ForcesAccordionBox(
       dualAtomModel.forcesDisplayModeProperty,
-      dualAtomModel.forcesControlPanelExpandedProperty,
+      dualAtomModel.forcesExpandedProperty,
       {
         tickTextColor: tickTextColor,
         textColor: textColor,

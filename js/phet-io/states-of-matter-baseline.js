@@ -3303,19 +3303,6 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<Vector2IO>"
     },
-    "statesOfMatter.interactionsScreen.model.forcesControlPanelExpandedProperty": {
-      "phetioDocumentation": "",
-      "phetioDynamicElement": false,
-      "phetioEventType": "MODEL",
-      "phetioFeatured": false,
-      "phetioHighFrequency": false,
-      "phetioIsArchetype": false,
-      "phetioPlayback": false,
-      "phetioReadOnly": false,
-      "phetioState": true,
-      "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO<BooleanIO>"
-    },
     "statesOfMatter.interactionsScreen.model.forcesDisplayModeProperty": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
@@ -3328,6 +3315,19 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioState": true,
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<EnumerationIO(COMPONENTS|TOTAL|HIDDEN)>"
+    },
+    "statesOfMatter.interactionsScreen.model.forcesExpandedProperty": {
+      "phetioDocumentation": "",
+      "phetioDynamicElement": false,
+      "phetioEventType": "MODEL",
+      "phetioFeatured": false,
+      "phetioHighFrequency": false,
+      "phetioIsArchetype": false,
+      "phetioPlayback": false,
+      "phetioReadOnly": false,
+      "phetioState": true,
+      "phetioStudioControl": true,
+      "phetioTypeName": "PropertyIO<BooleanIO>"
     },
     "statesOfMatter.interactionsScreen.model.interactionStrengthProperty": {
       "phetioDocumentation": "intermolecular potential for the \"Adjustable Attraction\" atoms - this is a parameter in the Lennard-Jones potential equation",
