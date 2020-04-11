@@ -30,13 +30,15 @@ function PositionMarker( radius, color, options ) {
   const self = this;
   const mainColor = Color.toColor( color );
   options = merge( {
-    mainColor: mainColor,
-    highlightColor: Color.WHITE,
-    shadowColor: mainColor.darkerColor(),
+    shadedSphereNodeOptions: {
+      mainColor: mainColor,
+      highlightColor: Color.WHITE,
+      shadowColor: mainColor.darkerColor(),
+      stroke: mainColor.darkerColor(),
+      lineWidth: 1
+    },
     haloAlpha: 0.5, // alpha channel of the halo, 0.0 - 1.0
     cursor: 'pointer',  // all manipulators are interactive
-    lineWidth: 1,
-    stroke: mainColor.darkerColor(),
     tandem: Tandem.REQUIRED
   }, options );
 
@@ -44,9 +46,12 @@ function PositionMarker( radius, color, options ) {
   this.radius = radius;
   this.haloNode = new Circle( 1.75 * radius,
     { fill: mainColor.withAlpha( options.haloAlpha ), pickable: false, visible: false } );
-  this.sphereNode = new ShadedSphereNode( 2 * radius, options );
+  this.sphereNode = new ShadedSphereNode( 2 * radius, options.shadedSphereNodeOptions );
 
-  Node.call( this, { children: [ this.haloNode, this.sphereNode ] } );
+  Node.call( this, {
+    children: [ this.haloNode, this.sphereNode ],
+    tandem: options.tandem
+  } );
 
   // halo visibility
   this.sphereNode.addInputListener( new ButtonListener( {

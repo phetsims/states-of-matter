@@ -212,7 +212,7 @@ function InteractiveInteractionPotentialDiagram( dualAtomModel, wide, options ) 
         dualAtomModel.setMotionPaused( false );
       },
 
-    tandem: this.positionMarker.tandem.createTandem( 'positionMarkerDragHandler' )
+    tandem: this.positionMarker.tandem.createTandem( 'dragHandler' )
     }
   ) );
 

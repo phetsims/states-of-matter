@@ -120,7 +120,7 @@ function InteractionPotentialDiagramNode( sigma, epsilon, wide, options ) {
   } );
 
   // For some of the string tests, a boundsMethod value of 'accurate' causes undefined bounds, so handle this here.
-  // TODO: Removve this code if the issue https://github.com/phetsims/scenery/issues/595 is addressed.
+  // TODO: Remove this code if the issue https://github.com/phetsims/scenery/issues/595 is addressed.
   if ( isNaN( this.epsilonLabel.width ) || isNaN( this.epsilonLabel.height ) ) {
     this.epsilonLabel.boundsMethod = 'hybrid';
   }

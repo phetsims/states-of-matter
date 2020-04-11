@@ -35,7 +35,13 @@ function InteractionPotentialDiagramAccordionBox( sigma, epsilon, wide, multiple
 
   options = merge( { tandem: Tandem.REQUIRED }, options );
 
-  this.diagram = new EpsilonControlInteractionPotentialDiagram( sigma, epsilon, wide, multipleParticleModel, options );
+  this.diagram = new EpsilonControlInteractionPotentialDiagram(
+    sigma,
+    epsilon,
+    wide,
+    multipleParticleModel,
+    { tandem: options.tandem.createTandem( 'diagram' ) }
+  );
 
   const accordionContent = new Node();
 
