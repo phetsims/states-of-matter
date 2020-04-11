@@ -7073,7 +7073,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NumberPropertyIO"
     },
-    "statesOfMatter.phaseChangesScreen.model.interactionPotentialDiagramAccordionBoxExpandedProperty": {
+    "statesOfMatter.phaseChangesScreen.model.interactionPotentialAccordionBoxExpandedProperty": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -8061,7 +8061,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
-    "statesOfMatter.phaseChangesScreen.view.interactionPotentialDiagramAccordionBox": {
+    "statesOfMatter.phaseChangesScreen.view.interactionPotentialAccordionBox": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
       "phetioEventType": "USER",
@@ -8074,7 +8074,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "AccordionBoxIO"
     },
-    "statesOfMatter.phaseChangesScreen.view.interactionPotentialDiagramAccordionBox.diagram.epsilonControls.epsilonLineDragHandler": {
+    "statesOfMatter.phaseChangesScreen.view.interactionPotentialAccordionBox.diagram.epsilonControls.epsilonLineDragHandler": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
       "phetioEventType": "USER",
@@ -8087,7 +8087,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "ObjectIO"
     },
-    "statesOfMatter.phaseChangesScreen.view.interactionPotentialDiagramAccordionBox.diagram.epsilonControls.epsilonLineDragHandler.dragAction": {
+    "statesOfMatter.phaseChangesScreen.view.interactionPotentialAccordionBox.diagram.epsilonControls.epsilonLineDragHandler.dragAction": {
       "phetioDocumentation": "A function that executes. The arguments are:<br/><ol><li>point: Vector2IO - the position of the drag in view coordinates</li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -8100,7 +8100,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "ActionIO<Vector2IO>"
     },
-    "statesOfMatter.phaseChangesScreen.view.interactionPotentialDiagramAccordionBox.diagram.epsilonControls.epsilonLineDragHandler.dragEndAction": {
+    "statesOfMatter.phaseChangesScreen.view.interactionPotentialAccordionBox.diagram.epsilonControls.epsilonLineDragHandler.dragEndAction": {
       "phetioDocumentation": "A function that executes. The arguments are:<br/><ol><li>point: Vector2IO - the position of the drag end in view coordinates</li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -8113,7 +8113,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "ActionIO<Vector2IO>"
     },
-    "statesOfMatter.phaseChangesScreen.view.interactionPotentialDiagramAccordionBox.diagram.epsilonControls.epsilonLineDragHandler.dragStartAction": {
+    "statesOfMatter.phaseChangesScreen.view.interactionPotentialAccordionBox.diagram.epsilonControls.epsilonLineDragHandler.dragStartAction": {
       "phetioDocumentation": "A function that executes. The arguments are:<br/><ol><li>point: Vector2IO - the position of the drag start in view coordinates</li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -8126,7 +8126,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "ActionIO<Vector2IO>"
     },
-    "statesOfMatter.phaseChangesScreen.view.interactionPotentialDiagramAccordionBox.diagram.epsilonControls.epsilonLineDragHandler.isDraggingProperty": {
+    "statesOfMatter.phaseChangesScreen.view.interactionPotentialAccordionBox.diagram.epsilonControls.epsilonLineDragHandler.isDraggingProperty": {
       "phetioDocumentation": "Indicates whether the object is dragging",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -8139,7 +8139,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
-    "statesOfMatter.phaseChangesScreen.view.interactionPotentialDiagramAccordionBox.diagram.epsilonControls.epsilonResizeDragHandler": {
+    "statesOfMatter.phaseChangesScreen.view.interactionPotentialAccordionBox.diagram.epsilonControls.epsilonResizeDragHandler": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
       "phetioEventType": "USER",
@@ -8152,7 +8152,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "ObjectIO"
     },
-    "statesOfMatter.phaseChangesScreen.view.interactionPotentialDiagramAccordionBox.diagram.epsilonControls.epsilonResizeDragHandler.dragAction": {
+    "statesOfMatter.phaseChangesScreen.view.interactionPotentialAccordionBox.diagram.epsilonControls.epsilonResizeDragHandler.dragAction": {
       "phetioDocumentation": "A function that executes. The arguments are:<br/><ol><li>point: Vector2IO - the position of the drag in view coordinates</li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -8165,7 +8165,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "ActionIO<Vector2IO>"
     },
-    "statesOfMatter.phaseChangesScreen.view.interactionPotentialDiagramAccordionBox.diagram.epsilonControls.epsilonResizeDragHandler.dragEndAction": {
+    "statesOfMatter.phaseChangesScreen.view.interactionPotentialAccordionBox.diagram.epsilonControls.epsilonResizeDragHandler.dragEndAction": {
       "phetioDocumentation": "A function that executes. The arguments are:<br/><ol><li>point: Vector2IO - the position of the drag end in view coordinates</li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -8178,7 +8178,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "ActionIO<Vector2IO>"
     },
-    "statesOfMatter.phaseChangesScreen.view.interactionPotentialDiagramAccordionBox.diagram.epsilonControls.epsilonResizeDragHandler.dragStartAction": {
+    "statesOfMatter.phaseChangesScreen.view.interactionPotentialAccordionBox.diagram.epsilonControls.epsilonResizeDragHandler.dragStartAction": {
       "phetioDocumentation": "A function that executes. The arguments are:<br/><ol><li>point: Vector2IO - the position of the drag start in view coordinates</li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -8191,7 +8191,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "ActionIO<Vector2IO>"
     },
-    "statesOfMatter.phaseChangesScreen.view.interactionPotentialDiagramAccordionBox.diagram.epsilonControls.epsilonResizeDragHandler.isDraggingProperty": {
+    "statesOfMatter.phaseChangesScreen.view.interactionPotentialAccordionBox.diagram.epsilonControls.epsilonResizeDragHandler.isDraggingProperty": {
       "phetioDocumentation": "Indicates whether the object is dragging",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -8204,7 +8204,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
-    "statesOfMatter.phaseChangesScreen.view.interactionPotentialDiagramAccordionBox.diagram.positionMarker": {
+    "statesOfMatter.phaseChangesScreen.view.interactionPotentialAccordionBox.diagram.positionMarker": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -8217,7 +8217,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NodeIO"
     },
-    "statesOfMatter.phaseChangesScreen.view.interactionPotentialDiagramAccordionBox.diagram.positionMarker.opacityProperty": {
+    "statesOfMatter.phaseChangesScreen.view.interactionPotentialAccordionBox.diagram.positionMarker.opacityProperty": {
       "phetioDocumentation": "Opacity of the parent NodeIO, between 0 (invisible) and 1 (fully visible)",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -8230,7 +8230,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NumberPropertyIO"
     },
-    "statesOfMatter.phaseChangesScreen.view.interactionPotentialDiagramAccordionBox.diagram.positionMarker.pickableProperty": {
+    "statesOfMatter.phaseChangesScreen.view.interactionPotentialAccordionBox.diagram.positionMarker.pickableProperty": {
       "phetioDocumentation": "Sets whether the node will be pickable (and hence interactive), see the NodeIO documentation for more details",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -8243,7 +8243,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
-    "statesOfMatter.phaseChangesScreen.view.interactionPotentialDiagramAccordionBox.diagram.positionMarker.visibleProperty": {
+    "statesOfMatter.phaseChangesScreen.view.interactionPotentialAccordionBox.diagram.positionMarker.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -8256,7 +8256,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
-    "statesOfMatter.phaseChangesScreen.view.interactionPotentialDiagramAccordionBox.expandCollapseButton": {
+    "statesOfMatter.phaseChangesScreen.view.interactionPotentialAccordionBox.expandCollapseButton": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -8269,7 +8269,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "ToggleButtonIO"
     },
-    "statesOfMatter.phaseChangesScreen.view.interactionPotentialDiagramAccordionBox.expandCollapseButton.enabledProperty": {
+    "statesOfMatter.phaseChangesScreen.view.interactionPotentialAccordionBox.expandCollapseButton.enabledProperty": {
       "phetioDocumentation": "When disabled, the button is grayed out and cannot be pressed",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -8282,7 +8282,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
-    "statesOfMatter.phaseChangesScreen.view.interactionPotentialDiagramAccordionBox.expandCollapseButton.opacityProperty": {
+    "statesOfMatter.phaseChangesScreen.view.interactionPotentialAccordionBox.expandCollapseButton.opacityProperty": {
       "phetioDocumentation": "Opacity of the parent NodeIO, between 0 (invisible) and 1 (fully visible)",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -8295,7 +8295,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NumberPropertyIO"
     },
-    "statesOfMatter.phaseChangesScreen.view.interactionPotentialDiagramAccordionBox.expandCollapseButton.pickableProperty": {
+    "statesOfMatter.phaseChangesScreen.view.interactionPotentialAccordionBox.expandCollapseButton.pickableProperty": {
       "phetioDocumentation": "Sets whether the node will be pickable (and hence interactive), see the NodeIO documentation for more details",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -8308,7 +8308,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
-    "statesOfMatter.phaseChangesScreen.view.interactionPotentialDiagramAccordionBox.expandCollapseButton.pressListener.pressAction": {
+    "statesOfMatter.phaseChangesScreen.view.interactionPotentialAccordionBox.expandCollapseButton.pressListener.pressAction": {
       "phetioDocumentation": "Executes whenever a press occurs. The first argument when executing can be used to convey info about the SceneryEvent. The arguments are:<br/><ol><li>event: SceneryEventIO</li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "USER",
@@ -8321,7 +8321,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "ActionIO<SceneryEventIO>"
     },
-    "statesOfMatter.phaseChangesScreen.view.interactionPotentialDiagramAccordionBox.expandCollapseButton.pressListener.releaseAction": {
+    "statesOfMatter.phaseChangesScreen.view.interactionPotentialAccordionBox.expandCollapseButton.pressListener.releaseAction": {
       "phetioDocumentation": "Executes whenever a release occurs. The arguments are:<br/><ol><li>event: NullableIO<SceneryEventIO></li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "USER",
@@ -8334,7 +8334,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "ActionIO<NullableIO<SceneryEventIO>>"
     },
-    "statesOfMatter.phaseChangesScreen.view.interactionPotentialDiagramAccordionBox.expandCollapseButton.property": {
+    "statesOfMatter.phaseChangesScreen.view.interactionPotentialAccordionBox.expandCollapseButton.property": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -8347,7 +8347,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "LinkedElementIO"
     },
-    "statesOfMatter.phaseChangesScreen.view.interactionPotentialDiagramAccordionBox.expandCollapseButton.toggledEmitter": {
+    "statesOfMatter.phaseChangesScreen.view.interactionPotentialAccordionBox.expandCollapseButton.toggledEmitter": {
       "phetioDocumentation": "Emits when the button is toggled No arguments.",
       "phetioDynamicElement": false,
       "phetioEventType": "USER",
@@ -8360,7 +8360,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "EmitterIO<>"
     },
-    "statesOfMatter.phaseChangesScreen.view.interactionPotentialDiagramAccordionBox.expandCollapseButton.visibleProperty": {
+    "statesOfMatter.phaseChangesScreen.view.interactionPotentialAccordionBox.expandCollapseButton.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -8373,7 +8373,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
-    "statesOfMatter.phaseChangesScreen.view.interactionPotentialDiagramAccordionBox.opacityProperty": {
+    "statesOfMatter.phaseChangesScreen.view.interactionPotentialAccordionBox.opacityProperty": {
       "phetioDocumentation": "Opacity of the parent NodeIO, between 0 (invisible) and 1 (fully visible)",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -8386,7 +8386,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NumberPropertyIO"
     },
-    "statesOfMatter.phaseChangesScreen.view.interactionPotentialDiagramAccordionBox.pickableProperty": {
+    "statesOfMatter.phaseChangesScreen.view.interactionPotentialAccordionBox.pickableProperty": {
       "phetioDocumentation": "Sets whether the node will be pickable (and hence interactive), see the NodeIO documentation for more details",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -8399,7 +8399,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
-    "statesOfMatter.phaseChangesScreen.view.interactionPotentialDiagramAccordionBox.visibleProperty": {
+    "statesOfMatter.phaseChangesScreen.view.interactionPotentialAccordionBox.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",

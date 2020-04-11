@@ -28,7 +28,7 @@ import CompositeThermometerNode from '../../common/view/CompositeThermometerNode
 import ParticleContainerNode from '../../common/view/ParticleContainerNode.js';
 import statesOfMatterStrings from '../../statesOfMatterStrings.js';
 import statesOfMatter from '../../statesOfMatter.js';
-import InteractionPotentialDiagramAccordionBox from './InteractionPotentialDiagramAccordionBox.js';
+import InteractionPotentialAccordionBox from './InteractionPotentialAccordionBox.js';
 import PhaseChangesMoleculesControlPanel from './PhaseChangesMoleculesControlPanel.js';
 import PhaseDiagramAccordionBox from './PhaseDiagramAccordionBox.js';
 
@@ -196,9 +196,9 @@ function PhaseChangesScreenView( model, isInteractionDiagramEnabled, tandem ) {
   model.isExplodedProperty.linkAttribute( this.returnLidButton, 'visible' );
 
   // add interaction potential diagram
-  let interactionPotentialDiagramAccordionBox = null;
+  let interactionPotentialAccordionBox = null;
   if ( isInteractionDiagramEnabled ) {
-    interactionPotentialDiagramAccordionBox = new InteractionPotentialDiagramAccordionBox(
+    interactionPotentialAccordionBox = new InteractionPotentialAccordionBox(
       SOMConstants.MAX_SIGMA,
       SOMConstants.MIN_EPSILON,
       false,
@@ -207,10 +207,10 @@ function PhaseChangesScreenView( model, isInteractionDiagramEnabled, tandem ) {
         maxWidth: PANEL_WIDTH,
         minWidth: PANEL_WIDTH,
         right: this.layoutBounds.right - CONTROL_PANEL_X_INSET,
-        tandem: tandem.createTandem( 'interactionPotentialDiagramAccordionBox' )
+        tandem: tandem.createTandem( 'interactionPotentialAccordionBox' )
       }
     );
-    this.addChild( interactionPotentialDiagramAccordionBox );
+    this.addChild( interactionPotentialAccordionBox );
   }
 
   // add the atom/molecule selection control panel
@@ -291,10 +291,10 @@ function PhaseChangesScreenView( model, isInteractionDiagramEnabled, tandem ) {
       if ( substance === SubstanceType.ADJUSTABLE_ATOM ||
            substance === SubstanceType.DIATOMIC_OXYGEN ||
            substance === SubstanceType.WATER ) {
-        interactionPotentialDiagramAccordionBox.setMolecular( true );
+        interactionPotentialAccordionBox.setMolecular( true );
       }
       else {
-        interactionPotentialDiagramAccordionBox.setMolecular( false );
+        interactionPotentialAccordionBox.setMolecular( false );
       }
     }
 
@@ -302,14 +302,14 @@ function PhaseChangesScreenView( model, isInteractionDiagramEnabled, tandem ) {
     if ( substance === SubstanceType.ADJUSTABLE_ATOM ) {
       self.phaseDiagramAccordionBox.visible = false;
       if ( isInteractionDiagramEnabled ) {
-        interactionPotentialDiagramAccordionBox.top = moleculesControlPanel.bottom + INTER_PANEL_SPACING;
+        interactionPotentialAccordionBox.top = moleculesControlPanel.bottom + INTER_PANEL_SPACING;
       }
     }
     else {
       self.phaseDiagramAccordionBox.visible = true;
       if ( isInteractionDiagramEnabled ) {
-        interactionPotentialDiagramAccordionBox.top = moleculesControlPanel.bottom + INTER_PANEL_SPACING;
-        self.phaseDiagramAccordionBox.top = interactionPotentialDiagramAccordionBox.bottom + INTER_PANEL_SPACING;
+        interactionPotentialAccordionBox.top = moleculesControlPanel.bottom + INTER_PANEL_SPACING;
+        self.phaseDiagramAccordionBox.top = interactionPotentialAccordionBox.bottom + INTER_PANEL_SPACING;
       }
       else {
         self.phaseDiagramAccordionBox.top = moleculesControlPanel.bottom + INTER_PANEL_SPACING;

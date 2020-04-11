@@ -31,7 +31,7 @@ const interactionPotentialString = statesOfMatterStrings.interactionPotential;
  * @param {Object} [options] that can be passed on to the underlying node
  * @constructor
  */
-function InteractionPotentialDiagramAccordionBox( sigma, epsilon, wide, multipleParticleModel, options ) {
+function InteractionPotentialAccordionBox( sigma, epsilon, wide, multipleParticleModel, options ) {
 
   options = merge( { tandem: Tandem.REQUIRED }, options );
 
@@ -65,7 +65,7 @@ function InteractionPotentialDiagramAccordionBox( sigma, epsilon, wide, multiple
     titleNode: titleNode,
     fill: SOMColorProfile.controlPanelBackgroundProperty,
     stroke: SOMColorProfile.controlPanelStrokeProperty,
-    expandedProperty: multipleParticleModel.interactionPotentialDiagramAccordionBoxExpandedProperty,
+    expandedProperty: multipleParticleModel.interactionPotentialAccordionBoxExpandedProperty,
     contentAlign: 'center',
     titleAlignX: 'center',
     buttonAlign: 'left',
@@ -86,8 +86,8 @@ function InteractionPotentialDiagramAccordionBox( sigma, epsilon, wide, multiple
   }, options ) );
 }
 
-statesOfMatter.register( 'InteractionPotentialDiagramAccordionBox', InteractionPotentialDiagramAccordionBox );
-export default inherit( AccordionBox, InteractionPotentialDiagramAccordionBox, {
+statesOfMatter.register( 'InteractionPotentialAccordionBox', InteractionPotentialAccordionBox );
+export default inherit( AccordionBox, InteractionPotentialAccordionBox, {
 
   // pass through to diagram
   setMolecular( molecular ) {
