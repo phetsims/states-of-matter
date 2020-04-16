@@ -443,7 +443,7 @@ function AtomicInteractionsControlPanel( dualAtomModel, enableHeterogeneousAtoms
     fill: options.fill,
     xMargin: PANEL_X_MARGIN,
     minWidth: options.minWidth,
-    align: 'left'
+    align: 'center'
   } );
   this.addChild( radioButtonPanel );
 
