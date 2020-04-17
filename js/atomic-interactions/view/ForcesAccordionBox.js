@@ -38,7 +38,7 @@ const vanderwaalsString = statesOfMatterStrings.vanderwaals;
 // constants
 const TEXT_LABEL_MAX_WIDTH = 175; // max width of text label in the panel
 const RADIO_BUTTON_RADIUS = 6;
-const ICON_PADDING = 25; // empirically determined to put the icons in a good position on the panel
+const ICON_PADDING = 35; // empirically determined to put the icons in a good position on the panel
 
 /**
  * @param {Property<string>} forcesProperty that determines which forces to display
