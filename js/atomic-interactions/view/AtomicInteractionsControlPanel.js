@@ -391,7 +391,7 @@ function AtomicInteractionsControlPanel( dualAtomModel, enableHeterogeneousAtoms
 
   const atomDiameterSliderBox = new VBox( {
     children: [ atomDiameterTitle, atomDiameterSlider ],
-    align: 'left',
+    align: 'center',
     spacing: SLIDER_VBOX_SPACING,
     tandem: atomDiameterSliderTandem
   } );
