@@ -11,6 +11,7 @@ import validate from '../../../../axon/js/validate.js';
 import ObjectIO from '../../../../tandem/js/types/ObjectIO.js';
 import statesOfMatter from '../../statesOfMatter.js';
 import MoleculeForceAndMotionDataSetIO from './MoleculeForceAndMotionDataSetIO.js';
+import MultipleParticleModel from './MultipleParticleModel.js';
 
 class MultipleParticleModelIO extends ObjectIO {
 
@@ -47,7 +48,7 @@ class MultipleParticleModelIO extends ObjectIO {
 }
 
 MultipleParticleModelIO.documentation = 'particle model';
-MultipleParticleModelIO.validator = { isValidValue: v => v instanceof phet.statesOfMatter.MultipleParticleModel };
+MultipleParticleModelIO.validator = { isValidValue: v => v instanceof MultipleParticleModel };
 MultipleParticleModelIO.typeName = 'MultipleParticleModelIO';
 ObjectIO.validateSubtype( MultipleParticleModelIO );
 
