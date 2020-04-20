@@ -205,7 +205,8 @@ class MultipleParticleModel extends PhetioObject {
     // @public (read-only)
     this.numberOfMoleculesRangeProperty = new Property( new Range( 0, SOMConstants.MAX_NUM_ATOMS ) );
 
-    this.resetEmitter = new Emitter(); // listen only, fires when a reset occurs
+    // @public (listen-only) - fires when a reset occurs
+    this.resetEmitter = new Emitter();
 
     //-----------------------------------------------------------------------------------------------------------------
     // other model attributes
