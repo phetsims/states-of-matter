@@ -82,7 +82,7 @@ function AtomicInteractionsControlPanel( dualAtomModel, enableHeterogeneousAtoms
   // This control panel width differs between SOM full version and the Atomic Interactions sim, so we are using
   // different max width values.  These were empirically determined.
   const SLIDER_TITLE_MAX_WIDTH = enableHeterogeneousAtoms ? 225 : 150;
-  const NORMAL_TEXT_MAX_WIDTH = enableHeterogeneousAtoms ? 200 : 120;
+  const NORMAL_TEXT_MAX_WIDTH = enableHeterogeneousAtoms ? 200 : 165;
 
   // white text within SOM full version, black text in Atomic Interactions
   // white stroke around the atoms & molecules panel within SOM full version, black stroke in Atomic Interactions
