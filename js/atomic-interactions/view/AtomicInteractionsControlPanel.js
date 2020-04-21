@@ -286,7 +286,7 @@ function AtomicInteractionsControlPanel( dualAtomModel, enableHeterogeneousAtoms
       return item.label.width + ( ( item.icon ) ? item.icon.width : 0 );
     } );
     maxLabelWidth = widestLabelAndIconSpec.label.width + ( ( widestLabelAndIconSpec.icon ) ? widestLabelAndIconSpec.icon.width : 0 );
-    maxLabelWidth = Math.max( maxLabelWidth, sliderTrackWidth );
+    maxLabelWidth = Math.max( maxLabelWidth, sliderTrackWidth, options.minWidth - 2 * PANEL_X_MARGIN );
 
     // pad inserts a spacing node (HStrut) so that the text, space and image together occupy a certain fixed width.
     createLabelNode = function( atomSelectorLabelSpec ) {
@@ -443,7 +443,7 @@ function AtomicInteractionsControlPanel( dualAtomModel, enableHeterogeneousAtoms
     fill: options.fill,
     xMargin: PANEL_X_MARGIN,
     minWidth: options.minWidth,
-    align: 'center'
+    align: 'left'
   } );
   this.addChild( radioButtonPanel );
 
