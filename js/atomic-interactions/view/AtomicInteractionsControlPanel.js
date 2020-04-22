@@ -82,7 +82,7 @@ function AtomicInteractionsControlPanel( dualAtomModel, enableHeterogeneousAtoms
   // This control panel width differs between SOM full version and the Atomic Interactions sim, so we are using
   // different max width values.  These were empirically determined.
   const SLIDER_TITLE_MAX_WIDTH = enableHeterogeneousAtoms ? 225 : 150;
-  const NORMAL_TEXT_MAX_WIDTH = enableHeterogeneousAtoms ? 200 : 120;
+  const NORMAL_TEXT_MAX_WIDTH = enableHeterogeneousAtoms ? 200 : 165;
 
   // white text within SOM full version, black text in Atomic Interactions
   // white stroke around the atoms & molecules panel within SOM full version, black stroke in Atomic Interactions
@@ -286,7 +286,7 @@ function AtomicInteractionsControlPanel( dualAtomModel, enableHeterogeneousAtoms
       return item.label.width + ( ( item.icon ) ? item.icon.width : 0 );
     } );
     maxLabelWidth = widestLabelAndIconSpec.label.width + ( ( widestLabelAndIconSpec.icon ) ? widestLabelAndIconSpec.icon.width : 0 );
-    maxLabelWidth = Math.max( maxLabelWidth, sliderTrackWidth );
+    maxLabelWidth = Math.max( maxLabelWidth, sliderTrackWidth, options.minWidth - 2 * PANEL_X_MARGIN );
 
     // pad inserts a spacing node (HStrut) so that the text, space and image together occupy a certain fixed width.
     createLabelNode = function( atomSelectorLabelSpec ) {
@@ -443,7 +443,7 @@ function AtomicInteractionsControlPanel( dualAtomModel, enableHeterogeneousAtoms
     fill: options.fill,
     xMargin: PANEL_X_MARGIN,
     minWidth: options.minWidth,
-    align: 'center'
+    align: 'left'
   } );
   this.addChild( radioButtonPanel );
 
