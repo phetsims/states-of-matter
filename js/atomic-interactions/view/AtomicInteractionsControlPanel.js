@@ -286,6 +286,7 @@ function AtomicInteractionsControlPanel( dualAtomModel, enableHeterogeneousAtoms
       return item.label.width + ( ( item.icon ) ? item.icon.width : 0 );
     } );
     maxLabelWidth = widestLabelAndIconSpec.label.width + ( ( widestLabelAndIconSpec.icon ) ? widestLabelAndIconSpec.icon.width : 0 );
+    //TODO: this last option below appears to be too large and is shrinking the buttons seemingly
     maxLabelWidth = Math.max( maxLabelWidth, sliderTrackWidth, options.minWidth - 2 * PANEL_X_MARGIN );
 
     // pad inserts a spacing node (HStrut) so that the text, space and image together occupy a certain fixed width.
@@ -419,12 +420,12 @@ function AtomicInteractionsControlPanel( dualAtomModel, enableHeterogeneousAtoms
   const interactionStrengthSliderBox = new VBox( {
     children: [ interactionStrengthTitle, interactionStrengthSlider ],
     spacing: SLIDER_VBOX_SPACING,
-    align: 'left',
+    align: 'center',
     tandem: interactionStrengthSliderTandem
   } );
 
   const content = new VBox( {
-    align: 'left', children: [ radioButtonsNode ],
+    align: 'center', children: [ radioButtonsNode ],
     spacing: 5
   } );
   const verticalSpaceOffset = 7;
