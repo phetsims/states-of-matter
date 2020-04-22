@@ -17,6 +17,7 @@ import PhaseChangesIcon from './PhaseChangesIcon.js';
 import PhaseChangesModel from './PhaseChangesModel.js';
 import PhaseChangesScreenView from './view/PhaseChangesScreenView.js';
 
+// constants
 const phaseChangesString = statesOfMatterStrings.phaseChanges;
 
 /**
@@ -29,7 +30,11 @@ function PhaseChangesScreen( isInteractionDiagramEnabled, tandem ) {
   const options = {
     name: phaseChangesString,
     backgroundColorProperty: SOMColorProfile.backgroundProperty,
-    homeScreenIcon: new PhaseChangesIcon( Screen.MINIMUM_HOME_SCREEN_ICON_SIZE ),
+    homeScreenIcon: new PhaseChangesIcon(),
+    navigationBarIcon: new PhaseChangesIcon( {
+      size: Screen.MINIMUM_NAVBAR_ICON_SIZE,
+      fill: SOMColorProfile.navigationBarIconBackgroundProperty
+    } ),
     showUnselectedHomeScreenIconFrame: true,
     maxDT: SOMConstants.MAX_DT,
     tandem: tandem

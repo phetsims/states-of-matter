@@ -33,6 +33,10 @@ const SOMColorProfile = new ColorProfile( [ 'default', 'projector' ], {
     default: GRAY,
     projector: 'black'
   },
+  navigationBarIconBackground: {
+    default: 'black',
+    projector: 'white'
+  },
   ljGraphAxesAndGridColor: {
     default: GRAY,
     projector: 'black'

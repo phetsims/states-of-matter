@@ -26,7 +26,11 @@ function AtomicInteractionsScreen( enableHeterogeneousMolecules, screenTitle, ta
   const options = {
     name: screenTitle,
     backgroundColorProperty: SOMColorProfile.backgroundProperty,
-    homeScreenIcon: new AtomicInteractionsIcon( Screen.MINIMUM_HOME_SCREEN_ICON_SIZE ),
+    homeScreenIcon: new AtomicInteractionsIcon(),
+    navigationBarIcon: new AtomicInteractionsIcon( {
+      size: Screen.MINIMUM_NAVBAR_ICON_SIZE,
+      fill: SOMColorProfile.navigationBarIconBackgroundProperty
+    } ),
     showUnselectedHomeScreenIconFrame: true,
     maxDT: SOMConstants.MAX_DT,
     tandem: tandem

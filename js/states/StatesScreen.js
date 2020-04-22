@@ -29,7 +29,11 @@ function StatesScreen( tandem ) {
   const options = {
     name: statesString,
     backgroundColorProperty: SOMColorProfile.backgroundProperty,
-    homeScreenIcon: new StatesIcon( Screen.MINIMUM_HOME_SCREEN_ICON_SIZE ),
+    homeScreenIcon: new StatesIcon(),
+    navigationBarIcon: new StatesIcon( {
+      size: Screen.MINIMUM_NAVBAR_ICON_SIZE,
+      fill: SOMColorProfile.navigationBarIconBackgroundProperty
+    } ),
     showUnselectedHomeScreenIconFrame: true,
     maxDT: SOMConstants.MAX_DT,
     tandem: tandem
