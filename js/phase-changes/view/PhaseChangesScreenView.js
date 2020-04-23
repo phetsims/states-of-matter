@@ -154,9 +154,9 @@ function PhaseChangesScreenView( model, isInteractionDiagramEnabled, tandem ) {
 
   // add bicycle pump node
   this.pumpNode = new BicyclePumpNode(
-    model.numberOfMoleculesProperty,
+    model.targetNumberOfMoleculesProperty,
     model.numberOfMoleculesRangeProperty, {
-      enabledProperty: model.isPlayingProperty,
+      enabledProperty: model.isInjectionAllowedProperty,
       translation: pumpPosition,
       hoseAttachmentOffset: hoseAttachmentPoint.minus( pumpPosition ),
       hoseCurviness: 1.5,

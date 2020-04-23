@@ -196,14 +196,30 @@ class MultipleParticleModel extends PhetioObject {
 
     // @public (read-write) - the number of molecules that should be in the simulation.  This is used primarily for
     // injecting new molecules, and when this number is increased, internal model state is adjusted to match.
-    this.numberOfMoleculesProperty = new NumberProperty( 0, {
-      tandem: tandem.createTandem( 'numberOfMoleculesProperty' ),
+    this.targetNumberOfMoleculesProperty = new NumberProperty( 0, {
+      tandem: tandem.createTandem( 'targetNumberOfMoleculesProperty' ),
       phetioReadOnly: true,
       phetioDocumentation: 'This value represents the number of particles being simulated, not the number or particles in the container.'
     } );
 
     // @public (read-only)
     this.numberOfMoleculesRangeProperty = new Property( new Range( 0, SOMConstants.MAX_NUM_ATOMS ) );
+
+    // @public (read-only) - indicates whether injection of additional molecules is allowed
+    this.isInjectionAllowedProperty = new DerivedProperty(
+      [
+        this.isPlayingProperty,
+        this.isExplodedProperty,
+        this.numberOfMoleculesRangeProperty,
+        this.containerHeightProperty
+      ],
+      ( isPlaying, isExploded, numberOfMoleculesRange, containerHeight ) => {
+        return isPlaying &&
+               !isExploded &&
+               ( containerHeight / this.particleDiameter ) > this.injectionPointY &&
+               this.targetNumberOfMoleculesProperty.value < numberOfMoleculesRange.max;
+      }
+    );
 
     // @public (listen-only) - fires when a reset occurs
     this.resetEmitter = new Emitter();
@@ -263,9 +279,11 @@ class MultipleParticleModel extends PhetioObject {
       this.handleSubstanceChanged();
     } );
 
-    // listen for new molecules being added with the pump
-    this.numberOfMoleculesProperty.lazyLink( newValue => {
-      const currentNumberOfMolecules = Math.floor( this.moleculeDataSet.numberOfAtoms / this.moleculeDataSet.atomsPerMolecule );
+    // listen for new molecules being added (generally from the pump)
+    this.targetNumberOfMoleculesProperty.lazyLink( newValue => {
+      const currentNumberOfMolecules = Math.floor(
+        this.moleculeDataSet.numberOfAtoms / this.moleculeDataSet.atomsPerMolecule
+      );
 
       if ( newValue > currentNumberOfMolecules ) {
         const delta = newValue - currentNumberOfMolecules;
@@ -506,7 +524,7 @@ class MultipleParticleModel extends PhetioObject {
     // dependent upon the particle diameter.
     this.resetContainerSize();
 
-    // Adjust the injection point based on the new particle diameter.
+    // Adjust the injection point based on the new particle diameter.  These are using the normalized coordinate values.
     this.injectionPointX = CONTAINER_WIDTH / this.particleDiameter * INJECTION_POINT_HORIZ_PROPORTION;
     this.injectionPointY = CONTAINER_INITIAL_HEIGHT / this.particleDiameter * INJECTION_POINT_VERT_PROPORTION;
 
@@ -518,7 +536,7 @@ class MultipleParticleModel extends PhetioObject {
 
     // Set the number of molecules and range for the current substance
     const atomsPerMolecule = this.moleculeDataSet.atomsPerMolecule;
-    this.numberOfMoleculesProperty.set( Math.floor( this.moleculeDataSet.numberOfAtoms / atomsPerMolecule ) );
+    this.targetNumberOfMoleculesProperty.set( Math.floor( this.moleculeDataSet.numberOfAtoms / atomsPerMolecule ) );
     this.numberOfMoleculesRangeProperty.set(
       new Range( 0, Utils.toFixedNumber( SOMConstants.MAX_NUM_ATOMS / atomsPerMolecule, 0 ) )
     );
@@ -616,16 +634,19 @@ class MultipleParticleModel extends PhetioObject {
 
   /**
    * Inject a new molecule of the current type.  This method actually queues it for injection, actual injection
-   * occurs during model steps.
+   * occurs during model steps.  Be aware that this silently ignores the injection request if the model is not in a
+   * state to support injection.
    * @public
    */
   injectMolecule() {
 
-    // only allow particle injection if the model is in a state that supports is
-    this.numMoleculesAwaitingInjection = Math.min(
-      this.numMoleculesAwaitingInjection + 1,
-      MAX_MOLECULES_QUEUED_FOR_INJECTION
-    );
+    // only allow particle injection if the model is in a state that supports it
+    if ( this.isInjectionAllowedProperty.value ) {
+      this.numMoleculesAwaitingInjection = Math.min(
+        this.numMoleculesAwaitingInjection + 1,
+        MAX_MOLECULES_QUEUED_FOR_INJECTION
+      );
+    }
   }
 
   /**
@@ -636,10 +657,8 @@ class MultipleParticleModel extends PhetioObject {
   injectMoleculeInternal() {
 
     // Check if conditions are right for injection of molecules and, if not, don't do it.
-    if ( !this.isPlayingProperty.get() ||
-         this.moleculeDataSet.getNumberOfRemainingSlots() <= 0 ||
-         this.normalizedContainerHeight < this.injectionPointY * 1.05 ||
-         this.isExplodedProperty.get() ) {
+    if ( !this.isInjectionAllowedProperty.value ||
+         this.moleculeDataSet.getNumberOfRemainingSlots() <= 0 ) {
 
       this.numMoleculesAwaitingInjection = 0;
       return;
@@ -1108,7 +1127,7 @@ class MultipleParticleModel extends PhetioObject {
       this.scaledAtoms.push( new ScaledAtom( AtomType.OXYGEN, 0, 0 ) );
     }
 
-    this.numberOfMoleculesProperty.set( this.moleculeDataSet.numberOfMolecules );
+    this.targetNumberOfMoleculesProperty.set( this.moleculeDataSet.numberOfMolecules );
 
     // Initialize the atom positions according the to requested phase.
     this.setPhase( phase );
@@ -1167,7 +1186,7 @@ class MultipleParticleModel extends PhetioObject {
       this.scaledAtoms.push( new HydrogenAtom( 0, 0, ( i % 2 === 0 ) ) );
     }
 
-    this.numberOfMoleculesProperty.set( this.moleculeDataSet.numberOfMolecules );
+    this.targetNumberOfMoleculesProperty.set( this.moleculeDataSet.numberOfMolecules );
 
     // Initialize the atom positions according the to requested phase.
     this.setPhase( phase );
@@ -1247,7 +1266,7 @@ class MultipleParticleModel extends PhetioObject {
       this.scaledAtoms.push( atom );
     }
 
-    this.numberOfMoleculesProperty.set( this.moleculeDataSet.numberOfMolecules );
+    this.targetNumberOfMoleculesProperty.set( this.moleculeDataSet.numberOfMolecules );
 
     // Initialize the atom positions according the to requested phase.
     this.setPhase( phase );
@@ -1388,7 +1407,7 @@ class MultipleParticleModel extends PhetioObject {
 
     // Sync up the property that tracks the number of molecules - mostly for the purposes of injecting new molecules -
     // with the new value.
-    this.numberOfMoleculesProperty.set( this.moleculeDataSet.numberOfMolecules );
+    this.targetNumberOfMoleculesProperty.set( this.moleculeDataSet.numberOfMolecules );
   }
 
   getInitialContainerHeight() {

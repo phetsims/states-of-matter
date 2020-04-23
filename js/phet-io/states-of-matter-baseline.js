@@ -7116,19 +7116,6 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
-    "statesOfMatter.phaseChangesScreen.model.numberOfMoleculesProperty": {
-      "phetioDocumentation": "This value represents the number of particles being simulated, not the number or particles in the container.",
-      "phetioDynamicElement": false,
-      "phetioEventType": "MODEL",
-      "phetioFeatured": false,
-      "phetioHighFrequency": false,
-      "phetioIsArchetype": false,
-      "phetioPlayback": false,
-      "phetioReadOnly": true,
-      "phetioState": true,
-      "phetioStudioControl": true,
-      "phetioTypeName": "NumberPropertyIO"
-    },
     "statesOfMatter.phaseChangesScreen.model.phaseDiagramAccordionBoxExpandedProperty": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
@@ -7177,6 +7164,19 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioIsArchetype": false,
       "phetioPlayback": false,
       "phetioReadOnly": false,
+      "phetioState": true,
+      "phetioStudioControl": true,
+      "phetioTypeName": "NumberPropertyIO"
+    },
+    "statesOfMatter.phaseChangesScreen.model.targetNumberOfMoleculesProperty": {
+      "phetioDocumentation": "This value represents the number of particles being simulated, not the number or particles in the container.",
+      "phetioDynamicElement": false,
+      "phetioEventType": "MODEL",
+      "phetioFeatured": false,
+      "phetioHighFrequency": false,
+      "phetioIsArchetype": false,
+      "phetioPlayback": false,
+      "phetioReadOnly": true,
       "phetioState": true,
       "phetioStudioControl": true,
       "phetioTypeName": "NumberPropertyIO"
@@ -11163,19 +11163,6 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
-    "statesOfMatter.statesScreen.model.numberOfMoleculesProperty": {
-      "phetioDocumentation": "This value represents the number of particles being simulated, not the number or particles in the container.",
-      "phetioDynamicElement": false,
-      "phetioEventType": "MODEL",
-      "phetioFeatured": false,
-      "phetioHighFrequency": false,
-      "phetioIsArchetype": false,
-      "phetioPlayback": false,
-      "phetioReadOnly": true,
-      "phetioState": true,
-      "phetioStudioControl": true,
-      "phetioTypeName": "NumberPropertyIO"
-    },
     "statesOfMatter.statesScreen.model.pressureProperty": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
@@ -11201,6 +11188,19 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioState": true,
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<EnumerationIO(NEON|ARGON|DIATOMIC_OXYGEN|WATER|ADJUSTABLE_ATOM)>"
+    },
+    "statesOfMatter.statesScreen.model.targetNumberOfMoleculesProperty": {
+      "phetioDocumentation": "This value represents the number of particles being simulated, not the number or particles in the container.",
+      "phetioDynamicElement": false,
+      "phetioEventType": "MODEL",
+      "phetioFeatured": false,
+      "phetioHighFrequency": false,
+      "phetioIsArchetype": false,
+      "phetioPlayback": false,
+      "phetioReadOnly": true,
+      "phetioState": true,
+      "phetioStudioControl": true,
+      "phetioTypeName": "NumberPropertyIO"
     },
     "statesOfMatter.statesScreen.model.temperatureInKelvinProperty": {
       "phetioDocumentation": "",
