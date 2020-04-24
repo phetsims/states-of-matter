@@ -21,6 +21,7 @@ import statesOfMatter from '../../statesOfMatter.js';
 import LjPotentialCalculator from '../model/LjPotentialCalculator.js';
 import SOMConstants from '../SOMConstants.js';
 import SOMColorProfile from './SOMColorProfile.js';
+import merge from '../../../../phet-core/js/merge.js';
 
 const distanceBetweenAtomsString = statesOfMatterStrings.distanceBetweenAtoms;
 const distanceBetweenMoleculesString = statesOfMatterStrings.distanceBetweenMolecules;
@@ -60,8 +61,13 @@ const ZOOM_BUTTONS_HEIGHT = 72;
  */
 function InteractionPotentialDiagramNode( sigma, epsilon, wide, options ) {
 
+  options = merge( {
+
+    // {boolean} - whether or not this diagram should have a position marker
+    includePositionMarker: false
+  }, options );
+
   Node.call( this );
-  this.positionMarkerEnabled = false;
   this.graphMin = new Vector2( 0, 0 );
   this.zeroCrossingPoint = new Vector2( 0, 0 );
   this.markerDistance = 0;
@@ -146,13 +152,14 @@ function InteractionPotentialDiagramNode( sigma, epsilon, wide, options ) {
   this.epsilonLineLayer = new Node(); // @protected
   this.ljPotentialGraph.addChild( this.epsilonLineLayer );
 
-  // Add the position marker.
-  const markerDiameter = POSITION_MARKER_DIAMETER_PROPORTION * this.graphWidth;
-  this.positionMarker = new PositionMarker( markerDiameter / 2, 'rgb( 117, 217, 255 )', {
-    tandem: options.tandem.createTandem( 'positionMarker' )
-  } );
-  this.positionMarker.setVisible( this.positionMarkerEnabled );
-  this.ljPotentialGraph.addChild( this.positionMarker );
+  // Add the position marker if included.
+  if ( options.includePositionMarker ) {
+    const markerDiameter = POSITION_MARKER_DIAMETER_PROPORTION * this.graphWidth;
+    this.positionMarker = new PositionMarker( markerDiameter / 2, 'rgb( 117, 217, 255 )', {
+      tandem: options.tandem.createTandem( 'positionMarker' )
+    } );
+    this.ljPotentialGraph.addChild( this.positionMarker );
+  }
 
   // now that the graph portion is built, position it correctly
   this.ljPotentialGraph.x = this.graphXOrigin;
@@ -313,25 +320,18 @@ export default inherit( Node, InteractionPotentialDiagramNode, {
   },
 
   /**
-   * @param {boolean} enabled - indicate to whether enable the position marker or not.
-   * @public
-   */
-  setMarkerEnabled: function( enabled ) {
-    this.positionMarkerEnabled = enabled;
-  },
-
-  /**
    * Set the position of the position marker.  Note that is is only possible to set the x axis position, which is
    * distance.  The y axis position is always on the LJ potential curve.
    * @param {number}distance - distance from the center of the interacting molecules.
    * @public
    */
   setMarkerPosition: function( distance ) {
+    assert && assert( this.positionMarker, 'position marker not enabled for this potential diagram node' );
     this.markerDistance = distance;
     const xPos = this.markerDistance * ( this.graphWidth / GRAPH_X_RANGE );
     const potential = this.calculateLennardJonesPotential( this.markerDistance );
     const yPos = ( ( this.graphHeight / 2 ) - ( potential * this.verticalScalingFactor ) );
-    if ( this.positionMarkerEnabled && xPos > 0 && xPos < this.graphWidth && yPos > 0 && yPos < this.graphHeight ) {
+    if ( xPos > 0 && xPos < this.graphWidth && yPos > 0 && yPos < this.graphHeight ) {
       this.positionMarker.setVisible( true );
       this.positionMarker.setTranslation( xPos, yPos );
     }

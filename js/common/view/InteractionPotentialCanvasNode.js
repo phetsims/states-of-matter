@@ -158,8 +158,10 @@ export default inherit( CanvasNode, InteractionPotentialCanvasNode, {
       this.interactionDiagram.graphHeight / 2 - this.interactionDiagram.sigmaLabel.height / 3
     );
 
-    // Update the position of the marker in case the curve has moved.
-    this.interactionDiagram.setMarkerPosition( this.interactionDiagram.markerDistance );
+    // If the interaction diagram includes a position marker, update its position in case the curve has moved.
+    if ( this.interactionDiagram.positionMarker ) {
+      this.interactionDiagram.setMarkerPosition( this.interactionDiagram.markerDistance );
+    }
 
     // Position the control handles if used.
     if ( this.interactionDiagram.epsilonControlArrow !== undefined ) {

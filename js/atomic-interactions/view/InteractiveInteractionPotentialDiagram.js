@@ -49,6 +49,7 @@ function InteractiveInteractionPotentialDiagram( dualAtomModel, wide, options ) 
     dualAtomModel.getEpsilon(),
     wide,
     {
+      includePositionMarker: true,
       zoomable: options.zoomable,
       tandem: options.tandem
     }
@@ -169,7 +170,7 @@ function InteractiveInteractionPotentialDiagram( dualAtomModel, wide, options ) 
       const atomDiameter = dualAtomModel.getSigma() + ( d * scaleFactor );
       dualAtomModel.adjustableAtomDiameterProperty.value = atomDiameter > SOMConstants.MIN_SIGMA ?
                                                            ( atomDiameter < SOMConstants.MAX_SIGMA ? atomDiameter :
-                                                   SOMConstants.MAX_SIGMA ) : SOMConstants.MIN_SIGMA;
+                                                             SOMConstants.MAX_SIGMA ) : SOMConstants.MIN_SIGMA;
     },
 
     end: function() {

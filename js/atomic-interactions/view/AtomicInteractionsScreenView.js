@@ -226,7 +226,6 @@ class AtomicInteractionsScreenView extends ScreenView {
       true,
       0,
       tandem.createTandem( 'movableParticleNode' )
-
     );
     this.movableParticleNode.setShowAttractiveForces( this.showAttractiveForces );
     this.movableParticleNode.setShowRepulsiveForces( this.showRepulsiveForces );
@@ -353,21 +352,8 @@ class AtomicInteractionsScreenView extends ScreenView {
    * @private
    */
   updatePositionMarkerOnDiagram() {
-
-    if ( ( this.fixedParticle !== null ) && ( this.movableParticle !== null ) ) {
-      const distance = this.fixedParticle.positionProperty.value.distance( this.movableParticle.positionProperty.value );
-
-      if ( distance > 0 ) {
-        this.interactiveInteractionPotentialDiagram.setMarkerEnabled( true );
-        this.interactiveInteractionPotentialDiagram.setMarkerPosition( distance );
-      }
-      else {
-        this.interactiveInteractionPotentialDiagram.setMarkerEnabled( false );
-      }
-    }
-    else {
-      this.interactiveInteractionPotentialDiagram.setMarkerEnabled( false );
-    }
+    const distance = this.fixedParticle.positionProperty.value.distance( this.movableParticle.positionProperty.value );
+    this.interactiveInteractionPotentialDiagram.setMarkerPosition( distance );
   }
 
   /**

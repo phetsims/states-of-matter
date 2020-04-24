@@ -7064,7 +7064,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NumberPropertyIO"
     },
-    "statesOfMatter.phaseChangesScreen.model.interactionPotentialAccordionBoxExpandedProperty": {
+    "statesOfMatter.phaseChangesScreen.model.interactionPotentialExpandedProperty": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -7116,7 +7116,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
-    "statesOfMatter.phaseChangesScreen.model.phaseDiagramAccordionBoxExpandedProperty": {
+    "statesOfMatter.phaseChangesScreen.model.phaseDiagramExpandedProperty": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -7169,7 +7169,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "NumberPropertyIO"
     },
     "statesOfMatter.phaseChangesScreen.model.targetNumberOfMoleculesProperty": {
-      "phetioDocumentation": "This value represents the number of particles being simulated, not the number or particles in the container.",
+      "phetioDocumentation": "This value represents the number of particles being simulated, not the number of particles in the container.",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
@@ -8189,58 +8189,6 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioPlayback": false,
       "phetioReadOnly": true,
       "phetioState": false,
-      "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO<BooleanIO>"
-    },
-    "statesOfMatter.phaseChangesScreen.view.interactionPotentialAccordionBox.diagram.positionMarker": {
-      "phetioDocumentation": "",
-      "phetioDynamicElement": false,
-      "phetioEventType": "MODEL",
-      "phetioFeatured": false,
-      "phetioHighFrequency": false,
-      "phetioIsArchetype": false,
-      "phetioPlayback": false,
-      "phetioReadOnly": false,
-      "phetioState": false,
-      "phetioStudioControl": true,
-      "phetioTypeName": "NodeIO"
-    },
-    "statesOfMatter.phaseChangesScreen.view.interactionPotentialAccordionBox.diagram.positionMarker.opacityProperty": {
-      "phetioDocumentation": "Opacity of the parent NodeIO, between 0 (invisible) and 1 (fully visible)",
-      "phetioDynamicElement": false,
-      "phetioEventType": "MODEL",
-      "phetioFeatured": false,
-      "phetioHighFrequency": false,
-      "phetioIsArchetype": false,
-      "phetioPlayback": false,
-      "phetioReadOnly": false,
-      "phetioState": true,
-      "phetioStudioControl": true,
-      "phetioTypeName": "NumberPropertyIO"
-    },
-    "statesOfMatter.phaseChangesScreen.view.interactionPotentialAccordionBox.diagram.positionMarker.pickableProperty": {
-      "phetioDocumentation": "Sets whether the node will be pickable (and hence interactive), see the NodeIO documentation for more details",
-      "phetioDynamicElement": false,
-      "phetioEventType": "MODEL",
-      "phetioFeatured": false,
-      "phetioHighFrequency": false,
-      "phetioIsArchetype": false,
-      "phetioPlayback": false,
-      "phetioReadOnly": false,
-      "phetioState": true,
-      "phetioStudioControl": true,
-      "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
-    },
-    "statesOfMatter.phaseChangesScreen.view.interactionPotentialAccordionBox.diagram.positionMarker.visibleProperty": {
-      "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
-      "phetioDynamicElement": false,
-      "phetioEventType": "MODEL",
-      "phetioFeatured": false,
-      "phetioHighFrequency": false,
-      "phetioIsArchetype": false,
-      "phetioPlayback": false,
-      "phetioReadOnly": false,
-      "phetioState": true,
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
@@ -11190,7 +11138,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioTypeName": "PropertyIO<EnumerationIO(NEON|ARGON|DIATOMIC_OXYGEN|WATER|ADJUSTABLE_ATOM)>"
     },
     "statesOfMatter.statesScreen.model.targetNumberOfMoleculesProperty": {
-      "phetioDocumentation": "This value represents the number of particles being simulated, not the number or particles in the container.",
+      "phetioDocumentation": "This value represents the number of particles being simulated, not the number of particles in the container.",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
       "phetioFeatured": false,
