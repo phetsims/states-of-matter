@@ -116,7 +116,6 @@ function InteractionPotentialDiagramNode( sigma, epsilon, wide, options ) {
     fill: SOMColorProfile.controlPanelTextProperty,
     lineWidth: 0.5
   } );
-  this.ljPotentialGraph.addChild( this.epsilonArrow );
 
   this.epsilonLabel = new Text( epsilonString, {
     font: GREEK_LETTER_FONT,
@@ -130,14 +129,18 @@ function InteractionPotentialDiagramNode( sigma, epsilon, wide, options ) {
   if ( isNaN( this.epsilonLabel.width ) || isNaN( this.epsilonLabel.height ) ) {
     this.epsilonLabel.boundsMethod = 'hybrid';
   }
-  this.ljPotentialGraph.addChild( this.epsilonLabel );
+
+  const epsilonGraphLabel = new Node( {
+    children: [ this.epsilonArrow, this.epsilonLabel ],
+    tandem: options.tandem.createTandem( 'epsilonGraphLabel' )
+  } );
+  this.ljPotentialGraph.addChild( epsilonGraphLabel );
 
   this.sigmaLabel = new Text( sigmaString, {
     font: GREEK_LETTER_FONT,
     fill: SOMColorProfile.controlPanelTextProperty,
     maxWidth: GREEK_LETTER_MAX_WIDTH
   } );
-  this.ljPotentialGraph.addChild( this.sigmaLabel );
   this.sigmaArrow = new ArrowNode( 0, 0, 0, 0, {
     headHeight: 8,
     headWidth: 8,
@@ -146,7 +149,12 @@ function InteractionPotentialDiagramNode( sigma, epsilon, wide, options ) {
     fill: SOMColorProfile.controlPanelTextProperty,
     lineWidth: 0.5
   } );
-  this.ljPotentialGraph.addChild( this.sigmaArrow );
+
+  const sigmaGraphLabel = new Node( {
+    children: [ this.sigmaArrow, this.sigmaLabel ],
+    tandem: options.tandem.createTandem( 'sigmaGraphLabel' )
+  } );
+  this.ljPotentialGraph.addChild( sigmaGraphLabel );
 
   // Add the layer where the epsilon line marker will go, this is done so we can achieve the desired layering.
   this.epsilonLineLayer = new Node(); // @protected
