@@ -103,12 +103,18 @@ function ParticleContainerNode( multipleParticleModel, modelViewTransform, optio
     centerY: this.particleAreaViewBounds.minY
   } ) );
 
+  // root of the lid node
+  const lidTandem = options.tandem.createTandem( 'lidNode' );
+  const lidNode = new Node( { tandem: lidTandem } );
+  postParticleLayer.addChild( lidNode );
+
   // create and add the node that will act as the elliptical background for the lid, other nodes may be added later
-  const containerLid = new Path( topEllipseShape, {
+  const lidEllipseNode = new Path( topEllipseShape, {
     fill: 'rgba( 126, 126, 126, 0.8 )',
-    centerX: this.particleAreaViewBounds.centerX
+    centerX: this.particleAreaViewBounds.centerX,
+    tandem: lidTandem.createTandem( 'lidEllipseNode' )
   } );
-  postParticleLayer.addChild( containerLid );
+  lidNode.addChild( lidEllipseNode );
 
   let pointingHandNode;
   if ( options.volumeControlEnabled ) {
@@ -116,9 +122,9 @@ function ParticleContainerNode( multipleParticleModel, modelViewTransform, optio
     // Add the pointing hand, the finger of which can push down on the top of the container.
     pointingHandNode = new PointingHandNode( multipleParticleModel, modelViewTransform, {
       centerX: this.particleAreaViewBounds.centerX + 30, // offset empirically determined
-      tandem: options.tandem.createTandem( 'pointingHandNode' )
+      tandem: lidTandem.createTandem( 'pointingHandNode' )
     } );
-    postParticleLayer.addChild( pointingHandNode );
+    lidNode.addChild( pointingHandNode );
 
     // Add the handle to the lid.
     const handleAreaEllipseShape = topEllipseShape.transformed( Matrix3.scale( 0.8 ) ); // scale empirically determined
@@ -126,20 +132,21 @@ function ParticleContainerNode( multipleParticleModel, modelViewTransform, optio
       lineWidth: 1,
       stroke: '#888888',
       fill: 'rgba( 200, 200, 200, 0.5 )',
-      centerX: containerLid.width / 2,
+      centerX: lidEllipseNode.width / 2,
       centerY: 0,
-      cursor: 'ns-resize'
+      cursor: 'ns-resize',
+      tandem: lidTandem.createTandem( 'handleAreaEllipse' )
     } );
-    containerLid.addChild( handleAreaEllipse );
+    lidEllipseNode.addChild( handleAreaEllipse );
     const handleNode = new HandleNode( {
       scale: 0.28,
       attachmentFill: 'black',
       gripLineWidth: 4,
-      tandem: options.tandem.createTandem( 'handleNode' )
+      tandem: lidTandem.createTandem( 'handleNode' )
     } );
-    handleNode.centerX = containerLid.width / 2;
+    handleNode.centerX = lidEllipseNode.width / 2;
     handleNode.bottom = handleAreaEllipse.centerY + 5; // position tweaked a bit to look better
-    containerLid.addChild( handleNode );
+    lidEllipseNode.addChild( handleNode );
 
     // add a drag handler to the lid
     let dragStartY;
@@ -169,7 +176,7 @@ function ParticleContainerNode( multipleParticleModel, modelViewTransform, optio
         );
       },
 
-      tandem: options.tandem.createTandem( 'lidDragListener' )
+      tandem: lidTandem.createTandem( 'lidDragListener' )
     } ) );
   }
 
@@ -366,7 +373,7 @@ function ParticleContainerNode( multipleParticleModel, modelViewTransform, optio
   this.compositeThermometerNode = new CompositeThermometerNode( multipleParticleModel, {
     font: new PhetFont( 20 ),
     fill: 'white',
-    centerX: containerLid.centerX + options.thermometerXOffsetFromCenter,
+    centerX: lidEllipseNode.centerX + options.thermometerXOffsetFromCenter,
     tandem: options.tandem.createTandem( 'compositeThermometerNode' )
   } );
   postParticleLayer.addChild( this.compositeThermometerNode );
@@ -410,7 +417,7 @@ function ParticleContainerNode( multipleParticleModel, modelViewTransform, optio
 
     const lidYPosition = modelViewTransform.modelToViewY( containerHeight );
 
-    containerLid.centerY = lidYPosition;
+    lidEllipseNode.centerY = lidYPosition;
     this.compositeThermometerNode.centerY = lidYPosition;
 
     if ( multipleParticleModel.isExplodedProperty.value ) {
@@ -418,7 +425,7 @@ function ParticleContainerNode( multipleParticleModel, modelViewTransform, optio
       // the container has exploded, so rotate the lid as it goes up so that it looks like it has been blown off.
       const deltaY = oldContainerHeight - containerHeight;
       const rotationAmount = deltaY * Math.PI * 0.00008; // multiplier empirically determined
-      containerLid.rotateAround( containerLid.center, rotationAmount );
+      lidEllipseNode.rotateAround( lidEllipseNode.center, rotationAmount );
 
       // rotate the thermometer too, but differently than the lid for a more chaotic look
       const containerHeightChange = oldContainerHeight - containerHeight;
@@ -441,16 +448,16 @@ function ParticleContainerNode( multipleParticleModel, modelViewTransform, optio
     if ( !isExploded && wasExploded ) {
 
       // return the lid to the top of the container
-      containerLid.setRotation( 0 );
-      containerLid.centerX = modelViewTransform.modelToViewX( multipleParticleModel.getContainerWidth() / 2 );
-      containerLid.centerY = modelViewTransform.modelToViewY(
+      lidEllipseNode.setRotation( 0 );
+      lidEllipseNode.centerX = modelViewTransform.modelToViewX( multipleParticleModel.getContainerWidth() / 2 );
+      lidEllipseNode.centerY = modelViewTransform.modelToViewY(
         multipleParticleModel.containerHeightProperty.get()
       );
 
       // return the thermometer node to its original position
       self.compositeThermometerNode.setRotation( 0 );
-      self.compositeThermometerNode.centerX = containerLid.centerX + options.thermometerXOffsetFromCenter;
-      self.compositeThermometerNode.centerY = containerLid.centerY;
+      self.compositeThermometerNode.centerX = lidEllipseNode.centerX + options.thermometerXOffsetFromCenter;
+      self.compositeThermometerNode.centerY = lidEllipseNode.centerY;
 
       // return the pressure gauge to its original position
       updatePressureGaugePosition();
