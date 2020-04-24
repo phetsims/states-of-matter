@@ -75,15 +75,18 @@ function PhaseChangesMoleculesControlPanel( phaseChangesModel, options ) {
   const strongTitle = new Text( strongString, tickTextOptions );
 
   // add interaction strength slider and title
+  const interactionStrengthSliderTandem = options.tandem.createTandem( 'interactionStrengthSlider' );
   const interactionTitle = new Text( interactionStrengthWithSymbolString, {
     font: new PhetFont( NORMAL_TEXT_FONT_SIZE ),
     fill: SOMColorProfile.controlPanelTextProperty,
-    maxWidth: 140
+    maxWidth: 140,
+    tandem: interactionStrengthSliderTandem.createTandem( 'title' )
   } );
 
   const interactionStrengthSlider = new HSlider(
     phaseChangesModel.interactionStrengthProperty,
-    new Range( SOMConstants.MIN_ADJUSTABLE_EPSILON, PhaseChangesModel.MAX_ADJUSTABLE_EPSILON ), {
+    new Range( SOMConstants.MIN_ADJUSTABLE_EPSILON, PhaseChangesModel.MAX_ADJUSTABLE_EPSILON ),
+    {
       trackFill: 'white',
       thumbSize: new Dimension2( 14, 25 ),
       majorTickLength: 15,
@@ -100,8 +103,9 @@ function PhaseChangesMoleculesControlPanel( phaseChangesModel, options ) {
       minorTickStroke: SOMColorProfile.controlPanelTextProperty,
       minorTickLineWidth: 1,
       cursor: 'pointer',
-      tandem: options.tandem.createTandem( 'interactionStrengthSlider' )
-    } );
+      tandem: interactionStrengthSliderTandem
+    }
+  );
   interactionStrengthSlider.addMajorTick( PhaseChangesModel.MAX_ADJUSTABLE_EPSILON, strongTitle );
   interactionStrengthSlider.addMajorTick( SOMConstants.MIN_ADJUSTABLE_EPSILON, weakTitle );
 
