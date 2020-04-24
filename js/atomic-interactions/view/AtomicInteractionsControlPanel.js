@@ -53,6 +53,7 @@ const RADIO_BUTTON_RADIUS = 6;
 const TITLE_TEXT_WIDTH = 130;
 const PANEL_X_MARGIN = 10;
 const SLIDER_VBOX_SPACING = 5;
+const HOMOGENEOUS_ATOM_ICON_MINIMUM_PADDING = 17;
 
 /**
  * @param {DualAtomModel} dualAtomModel - model of the simulation
@@ -286,13 +287,17 @@ function AtomicInteractionsControlPanel( dualAtomModel, enableHeterogeneousAtoms
       return item.label.width + ( ( item.icon ) ? item.icon.width : 0 );
     } );
     maxLabelWidth = widestLabelAndIconSpec.label.width + ( ( widestLabelAndIconSpec.icon ) ? widestLabelAndIconSpec.icon.width : 0 );
-    //TODO: this last option below appears to be too large and is shrinking the buttons seemingly
-    maxLabelWidth = Math.max( maxLabelWidth, sliderTrackWidth, options.minWidth - 2 * PANEL_X_MARGIN );
+    maxLabelWidth = Math.max(
+      maxLabelWidth,
+      sliderTrackWidth,
+      options.minWidth - 2 * PANEL_X_MARGIN - HOMOGENEOUS_ATOM_ICON_MINIMUM_PADDING
+    );
 
     // pad inserts a spacing node (HStrut) so that the text, space and image together occupy a certain fixed width.
     createLabelNode = function( atomSelectorLabelSpec ) {
       if ( atomSelectorLabelSpec.icon ) {
-        const strutWidth = maxLabelWidth - atomSelectorLabelSpec.label.width - atomSelectorLabelSpec.icon.width + 17;
+        const strutWidth = maxLabelWidth - atomSelectorLabelSpec.label.width - atomSelectorLabelSpec.icon.width
+          + HOMOGENEOUS_ATOM_ICON_MINIMUM_PADDING;
         return new HBox( { children: [ atomSelectorLabelSpec.label, new HStrut( strutWidth ), atomSelectorLabelSpec.icon ] } );
       }
       else {
