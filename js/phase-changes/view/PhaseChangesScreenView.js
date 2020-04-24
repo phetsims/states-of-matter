@@ -24,7 +24,6 @@ import TextPushButton from '../../../../sun/js/buttons/TextPushButton.js';
 import MultipleParticleModel from '../../common/model/MultipleParticleModel.js';
 import SOMConstants from '../../common/SOMConstants.js';
 import SubstanceType from '../../common/SubstanceType.js';
-import CompositeThermometerNode from '../../common/view/CompositeThermometerNode.js';
 import ParticleContainerNode from '../../common/view/ParticleContainerNode.js';
 import statesOfMatterStrings from '../../statesOfMatterStrings.js';
 import statesOfMatter from '../../statesOfMatter.js';
@@ -79,13 +78,14 @@ function PhaseChangesScreenView( model, isInteractionDiagramEnabled, tandem ) {
   );
 
   // create the particle container - it takes care of positioning itself
-  this.particleContainerNode = new ParticleContainerNode(
-    model,
-    modelViewTransform,
-    true,
-    true,
-    tandem.createTandem( 'particleContainerNode' )
-  );
+  this.particleContainerNode = new ParticleContainerNode( model, modelViewTransform, {
+    volumeControlEnabled: true,
+    pressureGaugeEnabled: true,
+    thermometerXOffsetFromCenter: modelViewTransform.modelToViewDeltaX(
+      -MultipleParticleModel.PARTICLE_CONTAINER_WIDTH * 0.15
+    ),
+    tandem: tandem.createTandem( 'particleContainerNode' )
+  } );
 
   // add the particle container
   this.addChild( this.particleContainerNode );
@@ -99,20 +99,13 @@ function PhaseChangesScreenView( model, isInteractionDiagramEnabled, tandem ) {
   } );
   this.addChild( heaterCoolerNode );
 
-  // add the thermometer node
-  this.compositeThermometerNode = new CompositeThermometerNode( model, {
-    font: new PhetFont( 20 ),
-    fill: 'white',
-    tandem: tandem.createTandem( 'compositeThermometerNode' )
-  } );
-  this.addChild( this.compositeThermometerNode );
-
   // add reset all button
   const resetAllButton = new ResetAllButton( {
-    listener: function() {
+    listener: () => {
       self.modelTemperatureHistory.clear();
-      self.compositeThermometerNode.reset();
       model.reset();
+      this.particleContainerNode.reset();
+
       // Reset phase diagram state in SOM basic version.
       model.phaseDiagramExpandedProperty.value = isInteractionDiagramEnabled;
       self.pumpNode.reset();
@@ -270,15 +263,8 @@ function PhaseChangesScreenView( model, isInteractionDiagramEnabled, tandem ) {
   } );
 
   // handle explosions of the container
-  model.isExplodedProperty.link( function( isExploded ) {
+  model.isExplodedProperty.link( () => {
     self.modelTemperatureHistory.clear();
-    if ( !isExploded ) {
-      self.compositeThermometerNode.setRotation( 0 );
-      self.compositeThermometerNode.centerX = nominalParticleAreaViewBounds.minX + nominalParticleAreaViewBounds.width * 0.35;
-      self.compositeThermometerNode.centerY = modelViewTransform.modelToViewY(
-        model.containerHeightProperty.get()
-      );
-    }
     self.updatePhaseDiagram();
   } );
 
@@ -338,20 +324,6 @@ function PhaseChangesScreenView( model, isInteractionDiagramEnabled, tandem ) {
 
   // Monitor the model for changes of the container size and adjust the view accordingly.
   model.containerHeightProperty.link( function( containerHeight, previousContainerHeight ) {
-
-    // move the thermometer with the lid
-    self.compositeThermometerNode.centerX = nominalParticleAreaViewBounds.minX + nominalParticleAreaViewBounds.width * 0.35;
-    self.compositeThermometerNode.centerY = modelViewTransform.modelToViewY( containerHeight );
-
-    // if the container has exploded, rotate the thermometer as it moves up
-    if ( model.isExplodedProperty.get() ) {
-      const containerHeightChange = previousContainerHeight - containerHeight;
-      self.compositeThermometerNode.rotateAround(
-        self.compositeThermometerNode.center,
-        containerHeightChange * 0.0001 * Math.PI );
-    }
-
-    // other updates
     self.updatePhaseDiagram();
   } );
 

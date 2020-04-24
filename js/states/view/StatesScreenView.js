@@ -16,11 +16,9 @@ import inherit from '../../../../phet-core/js/inherit.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import ResetAllButton from '../../../../scenery-phet/js/buttons/ResetAllButton.js';
 import HeaterCoolerNode from '../../../../scenery-phet/js/HeaterCoolerNode.js';
-import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import TimeControlNode from '../../../../scenery-phet/js/TimeControlNode.js';
 import MultipleParticleModel from '../../common/model/MultipleParticleModel.js';
 import SOMConstants from '../../common/SOMConstants.js';
-import CompositeThermometerNode from '../../common/view/CompositeThermometerNode.js';
 import ParticleContainerNode from '../../common/view/ParticleContainerNode.js';
 import statesOfMatter from '../../statesOfMatter.js';
 import StatesMoleculesControlPanel from './StatesMoleculesControlPanel.js';
@@ -38,7 +36,6 @@ const CONTROL_PANEL_WIDTH = 175; // empirically determined by looks
  */
 function StatesScreenView( multipleParticleModel, tandem ) {
 
-  const self = this;
   ScreenView.call( this, merge( { tandem: tandem }, SOMConstants.SCREEN_VIEW_OPTIONS ) );
 
   // Create the model-view transform. The multipliers for the 2nd parameter can be used to adjust where the point
@@ -59,13 +56,12 @@ function StatesScreenView( multipleParticleModel, tandem ) {
   );
 
   // @private particle container
-  this.particleContainerNode = new ParticleContainerNode(
-    multipleParticleModel,
-    modelViewTransform,
-    false,
-    false,
-    tandem.createTandem( 'particleContainerNode' )
-  );
+  this.particleContainerNode = new ParticleContainerNode( multipleParticleModel, modelViewTransform, {
+    thermometerXOffsetFromCenter: modelViewTransform.modelToViewDeltaX(
+      -MultipleParticleModel.PARTICLE_CONTAINER_WIDTH * 0.3
+    ),
+    tandem: tandem.createTandem( 'particleContainerNode' )
+  } );
   this.addChild( this.particleContainerNode );
 
   // @private add heater/cooler node
@@ -76,21 +72,6 @@ function StatesScreenView( multipleParticleModel, tandem ) {
     tandem: tandem.createTandem( 'heaterCoolerNode' )
   } );
   this.addChild( heaterCoolerNode );
-
-  // the thermometer node should be at the top left of the container
-  const thermometerInitialCenterPosition = new Vector2(
-    particleContainerViewBounds.minX + particleContainerViewBounds.width * 0.2,
-    modelViewTransform.modelToViewY( multipleParticleModel.containerHeightProperty.value )
-  );
-
-  // @private thermometer node
-  this.compositeThermometerNode = new CompositeThermometerNode( multipleParticleModel, {
-    font: new PhetFont( 20 ),
-    fill: 'white',
-    center: thermometerInitialCenterPosition,
-    tandem: tandem.createTandem( 'compositeThermometerNode' )
-  } );
-  this.addChild( this.compositeThermometerNode );
 
   // selection panel for the atoms/molecules
   const moleculesControlPanel = new StatesMoleculesControlPanel( multipleParticleModel.substanceProperty, {
@@ -112,9 +93,9 @@ function StatesScreenView( multipleParticleModel, tandem ) {
   this.addChild( solidLiquidGasPhaseControlNode );
 
   const resetAllButton = new ResetAllButton( {
-    listener: function() {
+    listener: () => {
       multipleParticleModel.reset();
-      self.compositeThermometerNode.reset();
+      this.particleContainerNode.reset();
     },
     radius: SOMConstants.RESET_ALL_BUTTON_RADIUS,
     right: this.layoutBounds.maxX - SOMConstants.RESET_ALL_BUTTON_DISTANCE_FROM_SIDE,
@@ -144,31 +125,6 @@ function StatesScreenView( multipleParticleModel, tandem ) {
 
     tandem: tandem.createTandem( 'timeControlNode' )
   } ) );
-
-  // @private
-  this.particleContainerHeightPropertyChanged = false;
-  multipleParticleModel.containerHeightProperty.link( function( containerHeight, previousContainerHeight ) {
-
-    // set or reset any rotation of the thermometer
-    if ( multipleParticleModel.isExplodedProperty.get() ) {
-
-      const containerHeightChange = previousContainerHeight - containerHeight;
-      self.compositeThermometerNode.rotateAround(
-        self.compositeThermometerNode.center,
-        containerHeightChange * 0.0001 * Math.PI
-      );
-      self.compositeThermometerNode.centerY = modelViewTransform.modelToViewY( containerHeight );
-    }
-    else if ( !self.compositeThermometerNode.center.equals( thermometerInitialCenterPosition ) ||
-              self.compositeThermometerNode.getRotation() !== 0 ) {
-
-      // restore the thermometer's initial position, since it can be moved due to an explosion
-      self.compositeThermometerNode.setRotation( 0 );
-      self.compositeThermometerNode.center = thermometerInitialCenterPosition;
-    }
-
-    self.particleContainerHeightPropertyChanged = true;
-  } );
 }
 
 statesOfMatter.register( 'StatesScreenView', StatesScreenView );

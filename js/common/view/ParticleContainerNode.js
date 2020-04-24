@@ -7,18 +7,22 @@
  * @author John Blanco
  */
 
+import merge from '../../../../phet-core/js/merge.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Matrix3 from '../../../../dot/js/Matrix3.js';
 import Shape from '../../../../kite/js/Shape.js';
 import inherit from '../../../../phet-core/js/inherit.js';
 import HandleNode from '../../../../scenery-phet/js/HandleNode.js';
+import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import DragListener from '../../../../scenery/js/listeners/DragListener.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import Path from '../../../../scenery/js/nodes/Path.js';
 import LinearGradient from '../../../../scenery/js/util/LinearGradient.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
 import statesOfMatter from '../../statesOfMatter.js';
 import MultipleParticleModel from '../model/MultipleParticleModel.js';
 import SOMConstants from '../SOMConstants.js';
+import CompositeThermometerNode from './CompositeThermometerNode.js';
 import DialGaugeNode from './DialGaugeNode.js';
 import ParticleImageCanvasNode from './ParticleImageCanvasNode.js';
 import PointingHandNode from './PointingHandNode.js';
@@ -34,19 +38,20 @@ const BEVEL_WIDTH = 9;
 /**
  * @param {MultipleParticleModel} multipleParticleModel - model of the simulation
  * @param {ModelViewTransform2} modelViewTransform
- * @param {boolean} volumeControlEnabled - set true to enable volume control by pushing the lid using a finger from above
- * @param {boolean} pressureGaugeEnabled - set true to show the pressure gauge
- * @param {Tandem} tandem
+ * @param {Object} [options]
  * @constructor
  */
-function ParticleContainerNode(
-  multipleParticleModel,
-  modelViewTransform,
-  volumeControlEnabled,
-  pressureGaugeEnabled,
-  tandem ) {
+function ParticleContainerNode( multipleParticleModel, modelViewTransform, options ) {
 
-  Node.call( this, { preventFit: true, tandem: tandem } );
+  options = merge( {
+    volumeControlEnabled: false,
+    pressureGaugeEnabled: false,
+    thermometerXOffsetFromCenter: 0,
+    preventFit: true, // improves performance
+    tandem: Tandem.REQUIRED
+  }, options );
+
+  Node.call( this, options );
   const self = this;
 
   // @private, view bounds for the particle area, everything is basically constructed and positioned based on this
@@ -105,12 +110,13 @@ function ParticleContainerNode(
   } );
   postParticleLayer.addChild( containerLid );
 
-  if ( volumeControlEnabled ) {
+  let pointingHandNode;
+  if ( options.volumeControlEnabled ) {
 
     // Add the pointing hand, the finger of which can push down on the top of the container.
-    var pointingHandNode = new PointingHandNode( multipleParticleModel, modelViewTransform, {
+    pointingHandNode = new PointingHandNode( multipleParticleModel, modelViewTransform, {
       centerX: this.particleAreaViewBounds.centerX + 30, // offset empirically determined
-      tandem: tandem.createTandem( 'pointingHandNode' )
+      tandem: options.tandem.createTandem( 'pointingHandNode' )
     } );
     postParticleLayer.addChild( pointingHandNode );
 
@@ -129,7 +135,7 @@ function ParticleContainerNode(
       scale: 0.28,
       attachmentFill: 'black',
       gripLineWidth: 4,
-      tandem: tandem.createTandem( 'handleNode' )
+      tandem: options.tandem.createTandem( 'handleNode' )
     } );
     handleNode.centerX = containerLid.width / 2;
     handleNode.bottom = handleAreaEllipse.centerY + 5; // position tweaked a bit to look better
@@ -163,15 +169,15 @@ function ParticleContainerNode(
         );
       },
 
-      tandem: tandem.createTandem( 'lidDragListener' )
+      tandem: options.tandem.createTandem( 'lidDragListener' )
     } ) );
   }
 
   let pressureGaugeNode;
-  if ( pressureGaugeEnabled ) {
+  if ( options.pressureGaugeEnabled ) {
 
     // Add the pressure gauge.
-    pressureGaugeNode = new DialGaugeNode( multipleParticleModel, tandem.createTandem( 'pressureGaugeNode' ) );
+    pressureGaugeNode = new DialGaugeNode( multipleParticleModel, options.tandem.createTandem( 'pressureGaugeNode' ) );
     pressureGaugeNode.right = this.particleAreaViewBounds.minX + this.particleAreaViewBounds.width * 0.2;
     postParticleLayer.addChild( pressureGaugeNode );
   }
@@ -356,6 +362,15 @@ function ParticleContainerNode(
   bevel.top = this.particleAreaViewBounds.minY + cutoutTopY;
   postParticleLayer.addChild( bevel );
 
+  // @private - the thermometer node, which needs to be above the container in the z-order
+  this.compositeThermometerNode = new CompositeThermometerNode( multipleParticleModel, {
+    font: new PhetFont( 20 ),
+    fill: 'white',
+    centerX: containerLid.centerX + options.thermometerXOffsetFromCenter,
+    tandem: options.tandem.createTandem( 'compositeThermometerNode' )
+  } );
+  postParticleLayer.addChild( this.compositeThermometerNode );
+
   // Define a function for updating the position and appearance of the pressure gauge.
   function updatePressureGaugePosition() {
 
@@ -387,7 +402,7 @@ function ParticleContainerNode(
   }
 
   // Monitor the height of the container in the model and adjust the view when changes occur.
-  multipleParticleModel.containerHeightProperty.link( function( containerHeight, oldContainerHeight ) {
+  multipleParticleModel.containerHeightProperty.link( ( containerHeight, oldContainerHeight ) => {
 
     if ( oldContainerHeight ) {
       self.previousContainerViewSize = modelViewTransform.modelToViewDeltaY( oldContainerHeight );
@@ -396,13 +411,21 @@ function ParticleContainerNode(
     const lidYPosition = modelViewTransform.modelToViewY( containerHeight );
 
     containerLid.centerY = lidYPosition;
+    this.compositeThermometerNode.centerY = lidYPosition;
 
-    if ( multipleParticleModel.isExplodedProperty.get() ) {
+    if ( multipleParticleModel.isExplodedProperty.value ) {
 
       // the container has exploded, so rotate the lid as it goes up so that it looks like it has been blown off.
       const deltaY = oldContainerHeight - containerHeight;
       const rotationAmount = deltaY * Math.PI * 0.00008; // multiplier empirically determined
       containerLid.rotateAround( containerLid.center, rotationAmount );
+
+      // rotate the thermometer too, but differently than the lid for a more chaotic look
+      const containerHeightChange = oldContainerHeight - containerHeight;
+      self.compositeThermometerNode.rotateAround(
+        self.compositeThermometerNode.center,
+        containerHeightChange * 0.0001 * Math.PI
+      );
     }
 
     // update the position of the pointing hand
@@ -424,6 +447,11 @@ function ParticleContainerNode(
         multipleParticleModel.containerHeightProperty.get()
       );
 
+      // return the thermometer node to its original position
+      self.compositeThermometerNode.setRotation( 0 );
+      self.compositeThermometerNode.centerX = containerLid.centerX + options.thermometerXOffsetFromCenter;
+      self.compositeThermometerNode.centerY = containerLid.centerY;
+
       // return the pressure gauge to its original position
       updatePressureGaugePosition();
     }
@@ -441,5 +469,12 @@ export default inherit( Node, ParticleContainerNode, {
    */
   step: function( dt ) {
     this.particlesCanvasNode.step( dt );
+  },
+
+  /**
+   * restore initial condition
+   */
+  reset: function() {
+    this.compositeThermometerNode.reset();
   }
 } );
