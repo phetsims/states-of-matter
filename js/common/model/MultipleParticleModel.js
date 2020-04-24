@@ -199,7 +199,7 @@ class MultipleParticleModel extends PhetioObject {
     this.targetNumberOfMoleculesProperty = new NumberProperty( 0, {
       tandem: tandem.createTandem( 'targetNumberOfMoleculesProperty' ),
       phetioReadOnly: true,
-      phetioDocumentation: 'This value represents the number of particles being simulated, not the number or particles in the container.'
+      phetioDocumentation: 'This value represents the number of particles being simulated, not the number of particles in the container.'
     } );
 
     // @public (read-only)
