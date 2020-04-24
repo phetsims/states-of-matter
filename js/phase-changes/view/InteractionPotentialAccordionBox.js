@@ -35,31 +35,31 @@ function InteractionPotentialAccordionBox( sigma, epsilon, wide, multipleParticl
 
   options = merge( { tandem: Tandem.REQUIRED }, options );
 
-  this.diagram = new EpsilonControlInteractionPotentialDiagram(
+  this.graph = new EpsilonControlInteractionPotentialDiagram(
     sigma,
     epsilon,
     wide,
     multipleParticleModel,
-    { tandem: options.tandem.createTandem( 'diagram' ) }
+    { tandem: options.tandem.createTandem( 'graph' ) }
   );
 
   const accordionContent = new Node();
 
-  accordionContent.addChild( this.diagram.centerAxis );
-  accordionContent.addChild( this.diagram.horizontalAxisLabel );
-  accordionContent.addChild( this.diagram.horizontalAxis );
-  accordionContent.addChild( this.diagram.verticalAxisLabel );
-  accordionContent.addChild( this.diagram.verticalAxis );
-  accordionContent.addChild( this.diagram.interactionPotentialCanvasNode );
-  accordionContent.addChild( this.diagram.ljPotentialGraph );
+  accordionContent.addChild( this.graph.centerAxis );
+  accordionContent.addChild( this.graph.horizontalAxisLabel );
+  accordionContent.addChild( this.graph.horizontalAxis );
+  accordionContent.addChild( this.graph.verticalAxisLabel );
+  accordionContent.addChild( this.graph.verticalAxis );
+  accordionContent.addChild( this.graph.interactionPotentialCanvasNode );
+  accordionContent.addChild( this.graph.ljPotentialGraph );
 
   const accordionContentHBox = new HBox( { children: [ accordionContent ] } );
   const titleNode = new Text( interactionPotentialString, {
     fill: SOMColorProfile.controlPanelTextProperty,
     font: new PhetFont( { size: 13 } )
   } );
-  if ( titleNode.width > this.diagram.horizontalAxis.width ) {
-    titleNode.scale( this.diagram.horizontalAxis.width / titleNode.width );
+  if ( titleNode.width > this.graph.horizontalAxis.width ) {
+    titleNode.scale( this.graph.horizontalAxis.width / titleNode.width );
   }
   AccordionBox.call( this, accordionContentHBox, merge( {
     titleNode: titleNode,
@@ -89,8 +89,8 @@ function InteractionPotentialAccordionBox( sigma, epsilon, wide, multipleParticl
 statesOfMatter.register( 'InteractionPotentialAccordionBox', InteractionPotentialAccordionBox );
 export default inherit( AccordionBox, InteractionPotentialAccordionBox, {
 
-  // pass through to diagram
+  // pass through to graph
   setMolecular( molecular ) {
-    this.diagram.setMolecular( molecular );
+    this.graph.setMolecular( molecular );
   }
 } );
