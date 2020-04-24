@@ -53,7 +53,6 @@ const RADIO_BUTTON_RADIUS = 6;
 const TITLE_TEXT_WIDTH = 130;
 const PANEL_X_MARGIN = 10;
 const SLIDER_VBOX_SPACING = 5;
-const HOMOGENEOUS_ATOM_ICON_MINIMUM_PADDING = 17;
 
 /**
  * @param {DualAtomModel} dualAtomModel - model of the simulation
@@ -95,7 +94,7 @@ function AtomicInteractionsControlPanel( dualAtomModel, enableHeterogeneousAtoms
   let argonAndOxygenLabelItems;
   let adjustableAttraction;
   let radioButtonsNode;
-  let maxLabelWidth;
+  let labelWidth;
   let createLabelNode;
   let titleText;
   let titleNode;
@@ -161,18 +160,18 @@ function AtomicInteractionsControlPanel( dualAtomModel, enableHeterogeneousAtoms
       maxWidth: maxWidthOfTitleText,
       tandem: options.tandem.createTandem( 'movingNodeText' )
     } ) ];
-    maxLabelWidth = Math.max(
+    labelWidth = Math.max(
       neonAndArgonLabelItems[ 0 ].width + neonAndArgonLabelItems[ 1 ].width,
       argonAndArgonLabelItems[ 0 ].width + argonAndArgonLabelItems[ 1 ].width,
       oxygenAndOxygenLabelItems[ 0 ].width + oxygenAndOxygenLabelItems[ 1 ].width,
       neonAndNeonLabelItems[ 0 ].width + neonAndNeonLabelItems[ 1 ].width,
       neonAndOxygenLabelItems[ 0 ].width + neonAndOxygenLabelItems[ 1 ].width );
-    maxLabelWidth = 2 * Math.max( titleText[ 0 ].width, titleText[ 1 ].width, maxLabelWidth / 2, sliderTrackWidth / 2 );
+    labelWidth = 2 * Math.max( titleText[ 0 ].width, titleText[ 1 ].width, labelWidth / 2, sliderTrackWidth / 2 );
 
     // function to create a label node
     createLabelNode = function( atomNameTextNodes ) {
-      const strutWidth1 = maxLabelWidth / 2 - atomNameTextNodes[ 0 ].width;
-      const strutWidth2 = maxLabelWidth / 2 - atomNameTextNodes[ 1 ].width;
+      const strutWidth1 = labelWidth / 2 - atomNameTextNodes[ 0 ].width;
+      const strutWidth2 = labelWidth / 2 - atomNameTextNodes[ 1 ].width;
       return new HBox( {
         children: [ atomNameTextNodes[ 0 ], new HStrut( strutWidth1 ), atomNameTextNodes[ 1 ], new HStrut( strutWidth2 ) ]
       } );
@@ -229,8 +228,8 @@ function AtomicInteractionsControlPanel( dualAtomModel, enableHeterogeneousAtoms
     // create the title of the panel in such a way that it will align in a column with the atom selections
     const createTitle = function( labelNodePair ) {
       const strutWidth1 = RADIO_BUTTON_RADIUS;
-      const strutWidth2 = ( maxLabelWidth / 2 - labelNodePair[ 0 ].width );
-      const strutWidth3 = ( maxLabelWidth / 2 - labelNodePair[ 1 ].width );
+      const strutWidth2 = ( labelWidth / 2 - labelNodePair[ 0 ].width );
+      const strutWidth3 = ( labelWidth / 2 - labelNodePair[ 1 ].width );
       return new HBox( {
         children: [
           new HStrut( strutWidth1 ),
@@ -282,22 +281,13 @@ function AtomicInteractionsControlPanel( dualAtomModel, enableHeterogeneousAtoms
       label: title
     };
 
-    // compute the maximum item width
-    const widestLabelAndIconSpec = _.maxBy( [ neon, argon, adjustableAttraction, titleText ], function( item ) {
-      return item.label.width + ( ( item.icon ) ? item.icon.width : 0 );
-    } );
-    maxLabelWidth = widestLabelAndIconSpec.label.width + ( ( widestLabelAndIconSpec.icon ) ? widestLabelAndIconSpec.icon.width : 0 );
-    maxLabelWidth = Math.max(
-      maxLabelWidth,
-      sliderTrackWidth,
-      options.minWidth - 2 * PANEL_X_MARGIN - HOMOGENEOUS_ATOM_ICON_MINIMUM_PADDING
-    );
+    // label should span panel
+    labelWidth = options.minWidth - 2 * PANEL_X_MARGIN;
 
     // pad inserts a spacing node (HStrut) so that the text, space and image together occupy a certain fixed width.
     createLabelNode = function( atomSelectorLabelSpec ) {
       if ( atomSelectorLabelSpec.icon ) {
-        const strutWidth = maxLabelWidth - atomSelectorLabelSpec.label.width - atomSelectorLabelSpec.icon.width
-          + HOMOGENEOUS_ATOM_ICON_MINIMUM_PADDING;
+        const strutWidth = labelWidth - atomSelectorLabelSpec.label.width - atomSelectorLabelSpec.icon.width;
         return new HBox( { children: [ atomSelectorLabelSpec.label, new HStrut( strutWidth ), atomSelectorLabelSpec.icon ] } );
       }
       else {
