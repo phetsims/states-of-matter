@@ -105,7 +105,12 @@ function ParticleContainerNode( multipleParticleModel, modelViewTransform, optio
 
   // root of the lid node
   const lidTandem = options.tandem.createTandem( 'lidNode' );
-  const lidNode = new Node( { tandem: lidTandem } );
+  const lidNode = new Node( {
+    tandem: lidTandem,
+    phetioComponentOptions: {
+      visibleProperty: { phetioReadOnly: true }
+    }
+  } );
   postParticleLayer.addChild( lidNode );
 
   // create and add the node that will act as the elliptical background for the lid, other nodes may be added later
