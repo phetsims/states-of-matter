@@ -190,7 +190,7 @@ function PhaseChangesMoleculesControlPanel( phaseChangesModel, options ) {
         adjustableAttractionSelectorInfo.icon,
         selectorWidth
       ),
-      tandemName: 'adjustableAtom'
+      tandemName: 'adjustableAttraction'
       }
     );
   }

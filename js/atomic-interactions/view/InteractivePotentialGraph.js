@@ -39,7 +39,7 @@ const POTENTIAL_LINE_COLOR = new Color( 'red' );
  * @param {Object} [options] that can be passed on to the underlying node
  * @constructor
  */
-function InteractiveInteractionPotentialDiagram( dualAtomModel, wide, options ) {
+function InteractivePotentialGraph( dualAtomModel, wide, options ) {
 
   options = merge( { tandem: Tandem.REQUIRED }, options );
 
@@ -271,9 +271,9 @@ function InteractiveInteractionPotentialDiagram( dualAtomModel, wide, options ) 
   this.mutate( options );
 }
 
-statesOfMatter.register( 'InteractiveInteractionPotentialDiagram', InteractiveInteractionPotentialDiagram );
+statesOfMatter.register( 'InteractivePotentialGraph', InteractivePotentialGraph );
 
-export default inherit( InteractionPotentialDiagramNode, InteractiveInteractionPotentialDiagram, {
+export default inherit( InteractionPotentialDiagramNode, InteractivePotentialGraph, {
 
   /**
    * This is an override of the method in the base class that draws the curve on the graph, and this override draws

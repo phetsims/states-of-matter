@@ -25,7 +25,7 @@ import AtomicInteractionsControlPanel from './AtomicInteractionsControlPanel.js'
 import ForcesAccordionBox from './ForcesAccordionBox.js';
 import GrabbableParticleNode from './GrabbableParticleNode.js';
 import HandNode from './HandNode.js';
-import InteractiveInteractionPotentialDiagram from './InteractiveInteractionPotentialDiagram.js';
+import InteractivePotentialGraph from './InteractivePotentialGraph.js';
 import ParticleForceNode from './ParticleForceNode.js';
 import PushPinNode from './PushPinNode.js';
 
@@ -89,14 +89,14 @@ class AtomicInteractionsScreenView extends ScreenView {
     } );
 
     // @private interactive potential diagram
-    this.interactiveInteractionPotentialDiagram = new InteractiveInteractionPotentialDiagram( dualAtomModel, true, {
+    this.interactivePotentialGraph = new InteractivePotentialGraph( dualAtomModel, true, {
       zoomable: enableHeterogeneousAtoms,
       left: this.modelViewTransform.modelToViewX( 0 ) - 43, // empirically determined such left edge of graph is at
                                                             // center of fixed atom
       top: atomsControlPanel.top + 5, // additional offset empirically determined to look good
-      tandem: tandem.createTandem( 'interactiveInteractionPotentialDiagram' )
+      tandem: tandem.createTandem( 'interactivePotentialGraph' )
     } );
-    this.addChild( this.interactiveInteractionPotentialDiagram );
+    this.addChild( this.interactivePotentialGraph );
 
     // @private button for returning the atom to the screen
     this.returnAtomButton = new TextPushButton( returnAtomString, {
@@ -124,7 +124,7 @@ class AtomicInteractionsScreenView extends ScreenView {
     const resetAllButton = new ResetAllButton( {
       listener: function() {
         dualAtomModel.reset();
-        self.interactiveInteractionPotentialDiagram.reset();
+        self.interactivePotentialGraph.reset();
       },
       radius: SOMConstants.RESET_ALL_BUTTON_RADIUS,
       right: this.layoutBounds.maxX - SOMConstants.RESET_ALL_BUTTON_DISTANCE_FROM_SIDE,
@@ -353,7 +353,7 @@ class AtomicInteractionsScreenView extends ScreenView {
    */
   updatePositionMarkerOnDiagram() {
     const distance = this.fixedParticle.positionProperty.value.distance( this.movableParticle.positionProperty.value );
-    this.interactiveInteractionPotentialDiagram.setMarkerPosition( distance );
+    this.interactivePotentialGraph.setMarkerPosition( distance );
   }
 
   /**
@@ -383,7 +383,7 @@ class AtomicInteractionsScreenView extends ScreenView {
     // Use a minimum X value that is just a bit less than the sigma value, since the repulsive potential goes up
     // rapidly with smaller values.
     const minXInModel = this.dualAtomModel.getSigma() * 0.9;
-    this.interactiveInteractionPotentialDiagram.setMinXForAtom( minXInModel );
+    this.interactivePotentialGraph.setMinXForAtom( minXInModel );
     const minXInView = this.modelViewTransform.modelToViewX( minXInModel );
     this.movableParticleNode.setMinX( minXInView );
     this.handNode.setMinX( minXInView );

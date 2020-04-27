@@ -4275,7 +4275,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
-    "statesOfMatter.interactionsScreen.view.atomsControlPanel.radioButtonsNode": {
+    "statesOfMatter.interactionsScreen.view.atomsControlPanel.radioButtonsGroup": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -4288,7 +4288,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NodeIO"
     },
-    "statesOfMatter.interactionsScreen.view.atomsControlPanel.radioButtonsNode.adjustableAttractionSelector": {
+    "statesOfMatter.interactionsScreen.view.atomsControlPanel.radioButtonsGroup.adjustableAttraction": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -4301,7 +4301,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NodeIO"
     },
-    "statesOfMatter.interactionsScreen.view.atomsControlPanel.radioButtonsNode.adjustableAttractionSelector.enabledProperty": {
+    "statesOfMatter.interactionsScreen.view.atomsControlPanel.radioButtonsGroup.adjustableAttraction.enabledProperty": {
       "phetioDocumentation": "When disabled, the button is grayed out and cannot be pressed",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -4314,7 +4314,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
-    "statesOfMatter.interactionsScreen.view.atomsControlPanel.radioButtonsNode.adjustableAttractionSelector.firedEmitter": {
+    "statesOfMatter.interactionsScreen.view.atomsControlPanel.radioButtonsGroup.adjustableAttraction.firedEmitter": {
       "phetioDocumentation": "Emits when the radio button is pressed No arguments.",
       "phetioDynamicElement": false,
       "phetioEventType": "USER",
@@ -4327,7 +4327,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "EmitterIO<>"
     },
-    "statesOfMatter.interactionsScreen.view.atomsControlPanel.radioButtonsNode.adjustableAttractionSelector.opacityProperty": {
+    "statesOfMatter.interactionsScreen.view.atomsControlPanel.radioButtonsGroup.adjustableAttraction.opacityProperty": {
       "phetioDocumentation": "Opacity of the parent NodeIO, between 0 (invisible) and 1 (fully visible)",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -4340,7 +4340,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NumberPropertyIO"
     },
-    "statesOfMatter.interactionsScreen.view.atomsControlPanel.radioButtonsNode.adjustableAttractionSelector.pickableProperty": {
+    "statesOfMatter.interactionsScreen.view.atomsControlPanel.radioButtonsGroup.adjustableAttraction.pickableProperty": {
       "phetioDocumentation": "Sets whether the node will be pickable (and hence interactive), see the NodeIO documentation for more details",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -4353,7 +4353,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
-    "statesOfMatter.interactionsScreen.view.atomsControlPanel.radioButtonsNode.adjustableAttractionSelector.pressListener.pressAction": {
+    "statesOfMatter.interactionsScreen.view.atomsControlPanel.radioButtonsGroup.adjustableAttraction.pressListener.pressAction": {
       "phetioDocumentation": "Executes whenever a press occurs. The first argument when executing can be used to convey info about the SceneryEvent. The arguments are:<br/><ol><li>event: SceneryEventIO</li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "USER",
@@ -4366,7 +4366,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "ActionIO<SceneryEventIO>"
     },
-    "statesOfMatter.interactionsScreen.view.atomsControlPanel.radioButtonsNode.adjustableAttractionSelector.pressListener.releaseAction": {
+    "statesOfMatter.interactionsScreen.view.atomsControlPanel.radioButtonsGroup.adjustableAttraction.pressListener.releaseAction": {
       "phetioDocumentation": "Executes whenever a release occurs. The arguments are:<br/><ol><li>event: NullableIO<SceneryEventIO></li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "USER",
@@ -4379,7 +4379,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "ActionIO<NullableIO<SceneryEventIO>>"
     },
-    "statesOfMatter.interactionsScreen.view.atomsControlPanel.radioButtonsNode.adjustableAttractionSelector.visibleProperty": {
+    "statesOfMatter.interactionsScreen.view.atomsControlPanel.radioButtonsGroup.adjustableAttraction.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -4392,7 +4392,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
-    "statesOfMatter.interactionsScreen.view.atomsControlPanel.radioButtonsNode.argonArgonSelector": {
+    "statesOfMatter.interactionsScreen.view.atomsControlPanel.radioButtonsGroup.argonArgon": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -4405,7 +4405,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NodeIO"
     },
-    "statesOfMatter.interactionsScreen.view.atomsControlPanel.radioButtonsNode.argonArgonSelector.enabledProperty": {
+    "statesOfMatter.interactionsScreen.view.atomsControlPanel.radioButtonsGroup.argonArgon.enabledProperty": {
       "phetioDocumentation": "When disabled, the button is grayed out and cannot be pressed",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -4418,7 +4418,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
-    "statesOfMatter.interactionsScreen.view.atomsControlPanel.radioButtonsNode.argonArgonSelector.firedEmitter": {
+    "statesOfMatter.interactionsScreen.view.atomsControlPanel.radioButtonsGroup.argonArgon.firedEmitter": {
       "phetioDocumentation": "Emits when the radio button is pressed No arguments.",
       "phetioDynamicElement": false,
       "phetioEventType": "USER",
@@ -4431,7 +4431,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "EmitterIO<>"
     },
-    "statesOfMatter.interactionsScreen.view.atomsControlPanel.radioButtonsNode.argonArgonSelector.opacityProperty": {
+    "statesOfMatter.interactionsScreen.view.atomsControlPanel.radioButtonsGroup.argonArgon.opacityProperty": {
       "phetioDocumentation": "Opacity of the parent NodeIO, between 0 (invisible) and 1 (fully visible)",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -4444,7 +4444,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NumberPropertyIO"
     },
-    "statesOfMatter.interactionsScreen.view.atomsControlPanel.radioButtonsNode.argonArgonSelector.pickableProperty": {
+    "statesOfMatter.interactionsScreen.view.atomsControlPanel.radioButtonsGroup.argonArgon.pickableProperty": {
       "phetioDocumentation": "Sets whether the node will be pickable (and hence interactive), see the NodeIO documentation for more details",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -4457,7 +4457,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
-    "statesOfMatter.interactionsScreen.view.atomsControlPanel.radioButtonsNode.argonArgonSelector.pressListener.pressAction": {
+    "statesOfMatter.interactionsScreen.view.atomsControlPanel.radioButtonsGroup.argonArgon.pressListener.pressAction": {
       "phetioDocumentation": "Executes whenever a press occurs. The first argument when executing can be used to convey info about the SceneryEvent. The arguments are:<br/><ol><li>event: SceneryEventIO</li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "USER",
@@ -4470,7 +4470,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "ActionIO<SceneryEventIO>"
     },
-    "statesOfMatter.interactionsScreen.view.atomsControlPanel.radioButtonsNode.argonArgonSelector.pressListener.releaseAction": {
+    "statesOfMatter.interactionsScreen.view.atomsControlPanel.radioButtonsGroup.argonArgon.pressListener.releaseAction": {
       "phetioDocumentation": "Executes whenever a release occurs. The arguments are:<br/><ol><li>event: NullableIO<SceneryEventIO></li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "USER",
@@ -4483,7 +4483,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "ActionIO<NullableIO<SceneryEventIO>>"
     },
-    "statesOfMatter.interactionsScreen.view.atomsControlPanel.radioButtonsNode.argonArgonSelector.visibleProperty": {
+    "statesOfMatter.interactionsScreen.view.atomsControlPanel.radioButtonsGroup.argonArgon.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -4496,7 +4496,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
-    "statesOfMatter.interactionsScreen.view.atomsControlPanel.radioButtonsNode.neonNeonSelector": {
+    "statesOfMatter.interactionsScreen.view.atomsControlPanel.radioButtonsGroup.neonNeon": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -4509,7 +4509,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NodeIO"
     },
-    "statesOfMatter.interactionsScreen.view.atomsControlPanel.radioButtonsNode.neonNeonSelector.enabledProperty": {
+    "statesOfMatter.interactionsScreen.view.atomsControlPanel.radioButtonsGroup.neonNeon.enabledProperty": {
       "phetioDocumentation": "When disabled, the button is grayed out and cannot be pressed",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -4522,7 +4522,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
-    "statesOfMatter.interactionsScreen.view.atomsControlPanel.radioButtonsNode.neonNeonSelector.firedEmitter": {
+    "statesOfMatter.interactionsScreen.view.atomsControlPanel.radioButtonsGroup.neonNeon.firedEmitter": {
       "phetioDocumentation": "Emits when the radio button is pressed No arguments.",
       "phetioDynamicElement": false,
       "phetioEventType": "USER",
@@ -4535,7 +4535,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "EmitterIO<>"
     },
-    "statesOfMatter.interactionsScreen.view.atomsControlPanel.radioButtonsNode.neonNeonSelector.opacityProperty": {
+    "statesOfMatter.interactionsScreen.view.atomsControlPanel.radioButtonsGroup.neonNeon.opacityProperty": {
       "phetioDocumentation": "Opacity of the parent NodeIO, between 0 (invisible) and 1 (fully visible)",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -4548,7 +4548,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NumberPropertyIO"
     },
-    "statesOfMatter.interactionsScreen.view.atomsControlPanel.radioButtonsNode.neonNeonSelector.pickableProperty": {
+    "statesOfMatter.interactionsScreen.view.atomsControlPanel.radioButtonsGroup.neonNeon.pickableProperty": {
       "phetioDocumentation": "Sets whether the node will be pickable (and hence interactive), see the NodeIO documentation for more details",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -4561,7 +4561,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
-    "statesOfMatter.interactionsScreen.view.atomsControlPanel.radioButtonsNode.neonNeonSelector.pressListener.pressAction": {
+    "statesOfMatter.interactionsScreen.view.atomsControlPanel.radioButtonsGroup.neonNeon.pressListener.pressAction": {
       "phetioDocumentation": "Executes whenever a press occurs. The first argument when executing can be used to convey info about the SceneryEvent. The arguments are:<br/><ol><li>event: SceneryEventIO</li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "USER",
@@ -4574,7 +4574,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "ActionIO<SceneryEventIO>"
     },
-    "statesOfMatter.interactionsScreen.view.atomsControlPanel.radioButtonsNode.neonNeonSelector.pressListener.releaseAction": {
+    "statesOfMatter.interactionsScreen.view.atomsControlPanel.radioButtonsGroup.neonNeon.pressListener.releaseAction": {
       "phetioDocumentation": "Executes whenever a release occurs. The arguments are:<br/><ol><li>event: NullableIO<SceneryEventIO></li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "USER",
@@ -4587,7 +4587,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "ActionIO<NullableIO<SceneryEventIO>>"
     },
-    "statesOfMatter.interactionsScreen.view.atomsControlPanel.radioButtonsNode.neonNeonSelector.visibleProperty": {
+    "statesOfMatter.interactionsScreen.view.atomsControlPanel.radioButtonsGroup.neonNeon.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -4600,7 +4600,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
-    "statesOfMatter.interactionsScreen.view.atomsControlPanel.radioButtonsNode.opacityProperty": {
+    "statesOfMatter.interactionsScreen.view.atomsControlPanel.radioButtonsGroup.opacityProperty": {
       "phetioDocumentation": "Opacity of the parent NodeIO, between 0 (invisible) and 1 (fully visible)",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -4613,7 +4613,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NumberPropertyIO"
     },
-    "statesOfMatter.interactionsScreen.view.atomsControlPanel.radioButtonsNode.pickableProperty": {
+    "statesOfMatter.interactionsScreen.view.atomsControlPanel.radioButtonsGroup.pickableProperty": {
       "phetioDocumentation": "Sets whether the node will be pickable (and hence interactive), see the NodeIO documentation for more details",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -4626,7 +4626,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
-    "statesOfMatter.interactionsScreen.view.atomsControlPanel.radioButtonsNode.property": {
+    "statesOfMatter.interactionsScreen.view.atomsControlPanel.radioButtonsGroup.property": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -4638,7 +4638,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "LinkedElementIO"
     },
-    "statesOfMatter.interactionsScreen.view.atomsControlPanel.radioButtonsNode.visibleProperty": {
+    "statesOfMatter.interactionsScreen.view.atomsControlPanel.radioButtonsGroup.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -5402,7 +5402,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
-    "statesOfMatter.interactionsScreen.view.interactiveInteractionPotentialDiagram": {
+    "statesOfMatter.interactionsScreen.view.interactivePotentialGraph": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -5415,7 +5415,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NodeIO"
     },
-    "statesOfMatter.interactionsScreen.view.interactiveInteractionPotentialDiagram.epsilonControl.epsilonControlArrow": {
+    "statesOfMatter.interactionsScreen.view.interactivePotentialGraph.epsilonControl.epsilonControlArrow": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -5428,7 +5428,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NodeIO"
     },
-    "statesOfMatter.interactionsScreen.view.interactiveInteractionPotentialDiagram.epsilonControl.epsilonControlArrow.opacityProperty": {
+    "statesOfMatter.interactionsScreen.view.interactivePotentialGraph.epsilonControl.epsilonControlArrow.opacityProperty": {
       "phetioDocumentation": "Opacity of the parent NodeIO, between 0 (invisible) and 1 (fully visible)",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -5441,7 +5441,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NumberPropertyIO"
     },
-    "statesOfMatter.interactionsScreen.view.interactiveInteractionPotentialDiagram.epsilonControl.epsilonControlArrow.pickableProperty": {
+    "statesOfMatter.interactionsScreen.view.interactivePotentialGraph.epsilonControl.epsilonControlArrow.pickableProperty": {
       "phetioDocumentation": "Sets whether the node will be pickable (and hence interactive), see the NodeIO documentation for more details",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -5454,7 +5454,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
-    "statesOfMatter.interactionsScreen.view.interactiveInteractionPotentialDiagram.epsilonControl.epsilonControlArrow.visibleProperty": {
+    "statesOfMatter.interactionsScreen.view.interactivePotentialGraph.epsilonControl.epsilonControlArrow.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -5467,7 +5467,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
-    "statesOfMatter.interactionsScreen.view.interactiveInteractionPotentialDiagram.epsilonControl.epsilonControlArrowDragHandler": {
+    "statesOfMatter.interactionsScreen.view.interactivePotentialGraph.epsilonControl.epsilonControlArrowDragHandler": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
       "phetioEventType": "USER",
@@ -5480,7 +5480,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "ObjectIO"
     },
-    "statesOfMatter.interactionsScreen.view.interactiveInteractionPotentialDiagram.epsilonControl.epsilonControlArrowDragHandler.dragAction": {
+    "statesOfMatter.interactionsScreen.view.interactivePotentialGraph.epsilonControl.epsilonControlArrowDragHandler.dragAction": {
       "phetioDocumentation": "A function that executes. The arguments are:<br/><ol><li>point: Vector2IO - the position of the drag in view coordinates</li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -5493,7 +5493,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "ActionIO<Vector2IO>"
     },
-    "statesOfMatter.interactionsScreen.view.interactiveInteractionPotentialDiagram.epsilonControl.epsilonControlArrowDragHandler.dragEndAction": {
+    "statesOfMatter.interactionsScreen.view.interactivePotentialGraph.epsilonControl.epsilonControlArrowDragHandler.dragEndAction": {
       "phetioDocumentation": "A function that executes. The arguments are:<br/><ol><li>point: Vector2IO - the position of the drag end in view coordinates</li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -5506,7 +5506,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "ActionIO<Vector2IO>"
     },
-    "statesOfMatter.interactionsScreen.view.interactiveInteractionPotentialDiagram.epsilonControl.epsilonControlArrowDragHandler.dragStartAction": {
+    "statesOfMatter.interactionsScreen.view.interactivePotentialGraph.epsilonControl.epsilonControlArrowDragHandler.dragStartAction": {
       "phetioDocumentation": "A function that executes. The arguments are:<br/><ol><li>point: Vector2IO - the position of the drag start in view coordinates</li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -5519,7 +5519,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "ActionIO<Vector2IO>"
     },
-    "statesOfMatter.interactionsScreen.view.interactiveInteractionPotentialDiagram.epsilonControl.epsilonControlArrowDragHandler.isDraggingProperty": {
+    "statesOfMatter.interactionsScreen.view.interactivePotentialGraph.epsilonControl.epsilonControlArrowDragHandler.isDraggingProperty": {
       "phetioDocumentation": "Indicates whether the object is dragging",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -5532,7 +5532,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
-    "statesOfMatter.interactionsScreen.view.interactiveInteractionPotentialDiagram.epsilonControl.epsilonControlLine": {
+    "statesOfMatter.interactionsScreen.view.interactivePotentialGraph.epsilonControl.epsilonControlLine": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -5545,7 +5545,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NodeIO"
     },
-    "statesOfMatter.interactionsScreen.view.interactiveInteractionPotentialDiagram.epsilonControl.epsilonControlLine.opacityProperty": {
+    "statesOfMatter.interactionsScreen.view.interactivePotentialGraph.epsilonControl.epsilonControlLine.opacityProperty": {
       "phetioDocumentation": "Opacity of the parent NodeIO, between 0 (invisible) and 1 (fully visible)",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -5558,7 +5558,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NumberPropertyIO"
     },
-    "statesOfMatter.interactionsScreen.view.interactiveInteractionPotentialDiagram.epsilonControl.epsilonControlLine.pickableProperty": {
+    "statesOfMatter.interactionsScreen.view.interactivePotentialGraph.epsilonControl.epsilonControlLine.pickableProperty": {
       "phetioDocumentation": "Sets whether the node will be pickable (and hence interactive), see the NodeIO documentation for more details",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -5571,7 +5571,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
-    "statesOfMatter.interactionsScreen.view.interactiveInteractionPotentialDiagram.epsilonControl.epsilonControlLine.visibleProperty": {
+    "statesOfMatter.interactionsScreen.view.interactivePotentialGraph.epsilonControl.epsilonControlLine.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -5584,7 +5584,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
-    "statesOfMatter.interactionsScreen.view.interactiveInteractionPotentialDiagram.epsilonControl.epsilonControlLineDragHandler": {
+    "statesOfMatter.interactionsScreen.view.interactivePotentialGraph.epsilonControl.epsilonControlLineDragHandler": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
       "phetioEventType": "USER",
@@ -5597,7 +5597,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "ObjectIO"
     },
-    "statesOfMatter.interactionsScreen.view.interactiveInteractionPotentialDiagram.epsilonControl.epsilonControlLineDragHandler.dragAction": {
+    "statesOfMatter.interactionsScreen.view.interactivePotentialGraph.epsilonControl.epsilonControlLineDragHandler.dragAction": {
       "phetioDocumentation": "A function that executes. The arguments are:<br/><ol><li>point: Vector2IO - the position of the drag in view coordinates</li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -5610,7 +5610,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "ActionIO<Vector2IO>"
     },
-    "statesOfMatter.interactionsScreen.view.interactiveInteractionPotentialDiagram.epsilonControl.epsilonControlLineDragHandler.dragEndAction": {
+    "statesOfMatter.interactionsScreen.view.interactivePotentialGraph.epsilonControl.epsilonControlLineDragHandler.dragEndAction": {
       "phetioDocumentation": "A function that executes. The arguments are:<br/><ol><li>point: Vector2IO - the position of the drag end in view coordinates</li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -5623,7 +5623,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "ActionIO<Vector2IO>"
     },
-    "statesOfMatter.interactionsScreen.view.interactiveInteractionPotentialDiagram.epsilonControl.epsilonControlLineDragHandler.dragStartAction": {
+    "statesOfMatter.interactionsScreen.view.interactivePotentialGraph.epsilonControl.epsilonControlLineDragHandler.dragStartAction": {
       "phetioDocumentation": "A function that executes. The arguments are:<br/><ol><li>point: Vector2IO - the position of the drag start in view coordinates</li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -5636,7 +5636,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "ActionIO<Vector2IO>"
     },
-    "statesOfMatter.interactionsScreen.view.interactiveInteractionPotentialDiagram.epsilonControl.epsilonControlLineDragHandler.isDraggingProperty": {
+    "statesOfMatter.interactionsScreen.view.interactivePotentialGraph.epsilonControl.epsilonControlLineDragHandler.isDraggingProperty": {
       "phetioDocumentation": "Indicates whether the object is dragging",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -5649,7 +5649,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
-    "statesOfMatter.interactionsScreen.view.interactiveInteractionPotentialDiagram.epsilonGraphLabel": {
+    "statesOfMatter.interactionsScreen.view.interactivePotentialGraph.epsilonGraphLabel": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -5662,7 +5662,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NodeIO"
     },
-    "statesOfMatter.interactionsScreen.view.interactiveInteractionPotentialDiagram.epsilonGraphLabel.opacityProperty": {
+    "statesOfMatter.interactionsScreen.view.interactivePotentialGraph.epsilonGraphLabel.opacityProperty": {
       "phetioDocumentation": "Opacity of the parent NodeIO, between 0 (invisible) and 1 (fully visible)",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -5675,7 +5675,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NumberPropertyIO"
     },
-    "statesOfMatter.interactionsScreen.view.interactiveInteractionPotentialDiagram.epsilonGraphLabel.pickableProperty": {
+    "statesOfMatter.interactionsScreen.view.interactivePotentialGraph.epsilonGraphLabel.pickableProperty": {
       "phetioDocumentation": "Sets whether the node will be pickable (and hence interactive), see the NodeIO documentation for more details",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -5688,7 +5688,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
-    "statesOfMatter.interactionsScreen.view.interactiveInteractionPotentialDiagram.epsilonGraphLabel.visibleProperty": {
+    "statesOfMatter.interactionsScreen.view.interactivePotentialGraph.epsilonGraphLabel.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -5701,7 +5701,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
-    "statesOfMatter.interactionsScreen.view.interactiveInteractionPotentialDiagram.gridNode": {
+    "statesOfMatter.interactionsScreen.view.interactivePotentialGraph.gridNode": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -5714,7 +5714,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NodeIO"
     },
-    "statesOfMatter.interactionsScreen.view.interactiveInteractionPotentialDiagram.gridNode.opacityProperty": {
+    "statesOfMatter.interactionsScreen.view.interactivePotentialGraph.gridNode.opacityProperty": {
       "phetioDocumentation": "Opacity of the parent NodeIO, between 0 (invisible) and 1 (fully visible)",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -5727,7 +5727,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NumberPropertyIO"
     },
-    "statesOfMatter.interactionsScreen.view.interactiveInteractionPotentialDiagram.gridNode.pickableProperty": {
+    "statesOfMatter.interactionsScreen.view.interactivePotentialGraph.gridNode.pickableProperty": {
       "phetioDocumentation": "Sets whether the node will be pickable (and hence interactive), see the NodeIO documentation for more details",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -5740,7 +5740,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
-    "statesOfMatter.interactionsScreen.view.interactiveInteractionPotentialDiagram.gridNode.visibleProperty": {
+    "statesOfMatter.interactionsScreen.view.interactivePotentialGraph.gridNode.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -5753,7 +5753,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
-    "statesOfMatter.interactionsScreen.view.interactiveInteractionPotentialDiagram.opacityProperty": {
+    "statesOfMatter.interactionsScreen.view.interactivePotentialGraph.opacityProperty": {
       "phetioDocumentation": "Opacity of the parent NodeIO, between 0 (invisible) and 1 (fully visible)",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -5766,7 +5766,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NumberPropertyIO"
     },
-    "statesOfMatter.interactionsScreen.view.interactiveInteractionPotentialDiagram.pickableProperty": {
+    "statesOfMatter.interactionsScreen.view.interactivePotentialGraph.pickableProperty": {
       "phetioDocumentation": "Sets whether the node will be pickable (and hence interactive), see the NodeIO documentation for more details",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -5779,7 +5779,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
-    "statesOfMatter.interactionsScreen.view.interactiveInteractionPotentialDiagram.positionMarker": {
+    "statesOfMatter.interactionsScreen.view.interactivePotentialGraph.positionMarker": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -5792,7 +5792,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NodeIO"
     },
-    "statesOfMatter.interactionsScreen.view.interactiveInteractionPotentialDiagram.positionMarker.dragHandler": {
+    "statesOfMatter.interactionsScreen.view.interactivePotentialGraph.positionMarker.dragHandler": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
       "phetioEventType": "USER",
@@ -5805,7 +5805,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "ObjectIO"
     },
-    "statesOfMatter.interactionsScreen.view.interactiveInteractionPotentialDiagram.positionMarker.dragHandler.dragAction": {
+    "statesOfMatter.interactionsScreen.view.interactivePotentialGraph.positionMarker.dragHandler.dragAction": {
       "phetioDocumentation": "A function that executes. The arguments are:<br/><ol><li>point: Vector2IO - the position of the drag in view coordinates</li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -5818,7 +5818,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "ActionIO<Vector2IO>"
     },
-    "statesOfMatter.interactionsScreen.view.interactiveInteractionPotentialDiagram.positionMarker.dragHandler.dragEndAction": {
+    "statesOfMatter.interactionsScreen.view.interactivePotentialGraph.positionMarker.dragHandler.dragEndAction": {
       "phetioDocumentation": "A function that executes. The arguments are:<br/><ol><li>point: Vector2IO - the position of the drag end in view coordinates</li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -5831,7 +5831,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "ActionIO<Vector2IO>"
     },
-    "statesOfMatter.interactionsScreen.view.interactiveInteractionPotentialDiagram.positionMarker.dragHandler.dragStartAction": {
+    "statesOfMatter.interactionsScreen.view.interactivePotentialGraph.positionMarker.dragHandler.dragStartAction": {
       "phetioDocumentation": "A function that executes. The arguments are:<br/><ol><li>point: Vector2IO - the position of the drag start in view coordinates</li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -5844,7 +5844,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "ActionIO<Vector2IO>"
     },
-    "statesOfMatter.interactionsScreen.view.interactiveInteractionPotentialDiagram.positionMarker.dragHandler.isDraggingProperty": {
+    "statesOfMatter.interactionsScreen.view.interactivePotentialGraph.positionMarker.dragHandler.isDraggingProperty": {
       "phetioDocumentation": "Indicates whether the object is dragging",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -5857,7 +5857,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
-    "statesOfMatter.interactionsScreen.view.interactiveInteractionPotentialDiagram.positionMarker.opacityProperty": {
+    "statesOfMatter.interactionsScreen.view.interactivePotentialGraph.positionMarker.opacityProperty": {
       "phetioDocumentation": "Opacity of the parent NodeIO, between 0 (invisible) and 1 (fully visible)",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -5870,7 +5870,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NumberPropertyIO"
     },
-    "statesOfMatter.interactionsScreen.view.interactiveInteractionPotentialDiagram.positionMarker.pickableProperty": {
+    "statesOfMatter.interactionsScreen.view.interactivePotentialGraph.positionMarker.pickableProperty": {
       "phetioDocumentation": "Sets whether the node will be pickable (and hence interactive), see the NodeIO documentation for more details",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -5883,7 +5883,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
-    "statesOfMatter.interactionsScreen.view.interactiveInteractionPotentialDiagram.positionMarker.visibleProperty": {
+    "statesOfMatter.interactionsScreen.view.interactivePotentialGraph.positionMarker.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -5896,7 +5896,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
-    "statesOfMatter.interactionsScreen.view.interactiveInteractionPotentialDiagram.sigmaControl.dragHandler": {
+    "statesOfMatter.interactionsScreen.view.interactivePotentialGraph.sigmaControl.dragHandler": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
       "phetioEventType": "USER",
@@ -5909,7 +5909,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "ObjectIO"
     },
-    "statesOfMatter.interactionsScreen.view.interactiveInteractionPotentialDiagram.sigmaControl.dragHandler.dragAction": {
+    "statesOfMatter.interactionsScreen.view.interactivePotentialGraph.sigmaControl.dragHandler.dragAction": {
       "phetioDocumentation": "A function that executes. The arguments are:<br/><ol><li>point: Vector2IO - the position of the drag in view coordinates</li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -5922,7 +5922,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "ActionIO<Vector2IO>"
     },
-    "statesOfMatter.interactionsScreen.view.interactiveInteractionPotentialDiagram.sigmaControl.dragHandler.dragEndAction": {
+    "statesOfMatter.interactionsScreen.view.interactivePotentialGraph.sigmaControl.dragHandler.dragEndAction": {
       "phetioDocumentation": "A function that executes. The arguments are:<br/><ol><li>point: Vector2IO - the position of the drag end in view coordinates</li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -5935,7 +5935,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "ActionIO<Vector2IO>"
     },
-    "statesOfMatter.interactionsScreen.view.interactiveInteractionPotentialDiagram.sigmaControl.dragHandler.dragStartAction": {
+    "statesOfMatter.interactionsScreen.view.interactivePotentialGraph.sigmaControl.dragHandler.dragStartAction": {
       "phetioDocumentation": "A function that executes. The arguments are:<br/><ol><li>point: Vector2IO - the position of the drag start in view coordinates</li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -5948,7 +5948,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "ActionIO<Vector2IO>"
     },
-    "statesOfMatter.interactionsScreen.view.interactiveInteractionPotentialDiagram.sigmaControl.dragHandler.isDraggingProperty": {
+    "statesOfMatter.interactionsScreen.view.interactivePotentialGraph.sigmaControl.dragHandler.isDraggingProperty": {
       "phetioDocumentation": "Indicates whether the object is dragging",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -5961,7 +5961,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
-    "statesOfMatter.interactionsScreen.view.interactiveInteractionPotentialDiagram.sigmaControl.sigmaControlArrow": {
+    "statesOfMatter.interactionsScreen.view.interactivePotentialGraph.sigmaControl.sigmaControlArrow": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -5974,7 +5974,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NodeIO"
     },
-    "statesOfMatter.interactionsScreen.view.interactiveInteractionPotentialDiagram.sigmaControl.sigmaControlArrow.opacityProperty": {
+    "statesOfMatter.interactionsScreen.view.interactivePotentialGraph.sigmaControl.sigmaControlArrow.opacityProperty": {
       "phetioDocumentation": "Opacity of the parent NodeIO, between 0 (invisible) and 1 (fully visible)",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -5987,7 +5987,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NumberPropertyIO"
     },
-    "statesOfMatter.interactionsScreen.view.interactiveInteractionPotentialDiagram.sigmaControl.sigmaControlArrow.pickableProperty": {
+    "statesOfMatter.interactionsScreen.view.interactivePotentialGraph.sigmaControl.sigmaControlArrow.pickableProperty": {
       "phetioDocumentation": "Sets whether the node will be pickable (and hence interactive), see the NodeIO documentation for more details",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -6000,7 +6000,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
-    "statesOfMatter.interactionsScreen.view.interactiveInteractionPotentialDiagram.sigmaControl.sigmaControlArrow.visibleProperty": {
+    "statesOfMatter.interactionsScreen.view.interactivePotentialGraph.sigmaControl.sigmaControlArrow.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -6013,7 +6013,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
-    "statesOfMatter.interactionsScreen.view.interactiveInteractionPotentialDiagram.sigmaGraphLabel": {
+    "statesOfMatter.interactionsScreen.view.interactivePotentialGraph.sigmaGraphLabel": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -6026,7 +6026,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NodeIO"
     },
-    "statesOfMatter.interactionsScreen.view.interactiveInteractionPotentialDiagram.sigmaGraphLabel.opacityProperty": {
+    "statesOfMatter.interactionsScreen.view.interactivePotentialGraph.sigmaGraphLabel.opacityProperty": {
       "phetioDocumentation": "Opacity of the parent NodeIO, between 0 (invisible) and 1 (fully visible)",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -6039,7 +6039,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NumberPropertyIO"
     },
-    "statesOfMatter.interactionsScreen.view.interactiveInteractionPotentialDiagram.sigmaGraphLabel.pickableProperty": {
+    "statesOfMatter.interactionsScreen.view.interactivePotentialGraph.sigmaGraphLabel.pickableProperty": {
       "phetioDocumentation": "Sets whether the node will be pickable (and hence interactive), see the NodeIO documentation for more details",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -6052,7 +6052,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
-    "statesOfMatter.interactionsScreen.view.interactiveInteractionPotentialDiagram.sigmaGraphLabel.visibleProperty": {
+    "statesOfMatter.interactionsScreen.view.interactivePotentialGraph.sigmaGraphLabel.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -6065,7 +6065,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
-    "statesOfMatter.interactionsScreen.view.interactiveInteractionPotentialDiagram.visibleProperty": {
+    "statesOfMatter.interactionsScreen.view.interactivePotentialGraph.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -8556,7 +8556,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NodeIO"
     },
-    "statesOfMatter.phaseChangesScreen.view.moleculesControlPanel.radioButtonGroup.adjustableAtom": {
+    "statesOfMatter.phaseChangesScreen.view.moleculesControlPanel.radioButtonGroup.adjustableAttraction": {
       "phetioDocumentation": "",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -8569,7 +8569,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NodeIO"
     },
-    "statesOfMatter.phaseChangesScreen.view.moleculesControlPanel.radioButtonGroup.adjustableAtom.enabledProperty": {
+    "statesOfMatter.phaseChangesScreen.view.moleculesControlPanel.radioButtonGroup.adjustableAttraction.enabledProperty": {
       "phetioDocumentation": "When disabled, the button is grayed out and cannot be pressed",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -8582,7 +8582,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<BooleanIO>"
     },
-    "statesOfMatter.phaseChangesScreen.view.moleculesControlPanel.radioButtonGroup.adjustableAtom.firedEmitter": {
+    "statesOfMatter.phaseChangesScreen.view.moleculesControlPanel.radioButtonGroup.adjustableAttraction.firedEmitter": {
       "phetioDocumentation": "Emits when the radio button is pressed No arguments.",
       "phetioDynamicElement": false,
       "phetioEventType": "USER",
@@ -8595,7 +8595,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "EmitterIO<>"
     },
-    "statesOfMatter.phaseChangesScreen.view.moleculesControlPanel.radioButtonGroup.adjustableAtom.opacityProperty": {
+    "statesOfMatter.phaseChangesScreen.view.moleculesControlPanel.radioButtonGroup.adjustableAttraction.opacityProperty": {
       "phetioDocumentation": "Opacity of the parent NodeIO, between 0 (invisible) and 1 (fully visible)",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -8608,7 +8608,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "NumberPropertyIO"
     },
-    "statesOfMatter.phaseChangesScreen.view.moleculesControlPanel.radioButtonGroup.adjustableAtom.pickableProperty": {
+    "statesOfMatter.phaseChangesScreen.view.moleculesControlPanel.radioButtonGroup.adjustableAttraction.pickableProperty": {
       "phetioDocumentation": "Sets whether the node will be pickable (and hence interactive), see the NodeIO documentation for more details",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
@@ -8621,7 +8621,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "PropertyIO<NullableIO<BooleanIO>>"
     },
-    "statesOfMatter.phaseChangesScreen.view.moleculesControlPanel.radioButtonGroup.adjustableAtom.pressListener.pressAction": {
+    "statesOfMatter.phaseChangesScreen.view.moleculesControlPanel.radioButtonGroup.adjustableAttraction.pressListener.pressAction": {
       "phetioDocumentation": "Executes whenever a press occurs. The first argument when executing can be used to convey info about the SceneryEvent. The arguments are:<br/><ol><li>event: SceneryEventIO</li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "USER",
@@ -8634,7 +8634,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "ActionIO<SceneryEventIO>"
     },
-    "statesOfMatter.phaseChangesScreen.view.moleculesControlPanel.radioButtonGroup.adjustableAtom.pressListener.releaseAction": {
+    "statesOfMatter.phaseChangesScreen.view.moleculesControlPanel.radioButtonGroup.adjustableAttraction.pressListener.releaseAction": {
       "phetioDocumentation": "Executes whenever a release occurs. The arguments are:<br/><ol><li>event: NullableIO<SceneryEventIO></li></ol>",
       "phetioDynamicElement": false,
       "phetioEventType": "USER",
@@ -8647,7 +8647,7 @@ window.phet.preloads.phetio.phetioElementsBaseline = assert &&
       "phetioStudioControl": true,
       "phetioTypeName": "ActionIO<NullableIO<SceneryEventIO>>"
     },
-    "statesOfMatter.phaseChangesScreen.view.moleculesControlPanel.radioButtonGroup.adjustableAtom.visibleProperty": {
+    "statesOfMatter.phaseChangesScreen.view.moleculesControlPanel.radioButtonGroup.adjustableAttraction.visibleProperty": {
       "phetioDocumentation": "Controls whether the Node will be visible (and interactive), see the NodeIO documentation for more details.",
       "phetioDynamicElement": false,
       "phetioEventType": "MODEL",
