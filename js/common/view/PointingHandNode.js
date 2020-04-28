@@ -11,7 +11,7 @@
 import inherit from '../../../../phet-core/js/inherit.js';
 import merge from '../../../../phet-core/js/merge.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
-import SimpleDragHandler from '../../../../scenery/js/input/SimpleDragHandler.js';
+import DragListener from '../../../../scenery/js/listeners/DragListener.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
@@ -87,18 +87,18 @@ function PointingHandNode( multipleParticleModel, modelViewTransform, options ) 
   let containerSizeAtDragStart;
 
   // add a listener to handle drag events
-  pointingHandImageNode.addInputListener( new SimpleDragHandler( {
+  pointingHandImageNode.addInputListener( new DragListener( {
 
     allowTouchSnag: true,
 
-    start: function( event ) {
+    start: event => {
       startY = self.globalToParentPoint( event.pointer.point ).y;
       beingDragged = true;
       containerSizeAtDragStart = multipleParticleModel.containerHeightProperty.get();
       updateHintVisibility();
     },
 
-    drag: function( event ) {
+    drag: event => {
       endY = self.globalToParentPoint( event.pointer.point ).y;
 
       // Resize the container based on the amount that the node has moved.
@@ -108,7 +108,7 @@ function PointingHandNode( multipleParticleModel, modelViewTransform, options ) 
       updateHintVisibility();
     },
 
-    end: function() {
+    end: event => {
 
       // Set the target size to the current size, which will stop any change in size that is currently underway.
       multipleParticleModel.setTargetContainerHeight(

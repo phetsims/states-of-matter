@@ -15,7 +15,7 @@ import inherit from '../../../../phet-core/js/inherit.js';
 import merge from '../../../../phet-core/js/merge.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import FillHighlightListener from '../../../../scenery-phet/js/input/FillHighlightListener.js';
-import SimpleDragHandler from '../../../../scenery/js/input/SimpleDragHandler.js';
+import DragListener from '../../../../scenery/js/listeners/DragListener.js';
 import Rectangle from '../../../../scenery/js/nodes/Rectangle.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
@@ -78,13 +78,13 @@ function EpsilonControlInteractionPotentialDiagram( sigma, epsilon, wide, multip
   this.controlLine.touchArea = this.controlLine.localBounds.dilatedXY( 20, 20 );
 
   // drag listener
-  this.controlLine.addInputListener( new SimpleDragHandler( {
+  this.controlLine.addInputListener( new DragListener( {
 
-    start: function( event ) {
+    start: event => {
       startDragY = self.controlLine.globalToParentPoint( event.pointer.point ).y;
     },
 
-    drag: function( event ) {
+    drag: event => {
       endDragY = self.controlLine.globalToParentPoint( event.pointer.point ).y;
       const d = endDragY - startDragY;
       startDragY = endDragY;
@@ -119,13 +119,13 @@ function EpsilonControlInteractionPotentialDiagram( sigma, epsilon, wide, multip
     new FillHighlightListener( RESIZE_HANDLE_NORMAL_COLOR, RESIZE_HANDLE_HIGHLIGHTED_COLOR )
   );
   this.ljPotentialGraph.addChild( this.controlArrow );
-  this.controlArrow.addInputListener( new SimpleDragHandler( {
+  this.controlArrow.addInputListener( new DragListener( {
 
-    start: function( event ) {
+    start: event => {
       startDragY = self.controlArrow.globalToParentPoint( event.pointer.point ).y;
     },
 
-    drag: function( event ) {
+    drag: event => {
       endDragY = self.controlArrow.globalToParentPoint( event.pointer.point ).y;
       const d = endDragY - startDragY;
       startDragY = endDragY;

@@ -10,7 +10,7 @@
 
 import inherit from '../../../../phet-core/js/inherit.js';
 import handImage from '../../../../scenery-phet/images/hand_png.js';
-import SimpleDragHandler from '../../../../scenery/js/input/SimpleDragHandler.js';
+import DragListener from '../../../../scenery/js/listeners/DragListener.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import statesOfMatter from '../../statesOfMatter.js';
@@ -48,16 +48,16 @@ function HandNode( dualAtomModel, particle, modelViewTransform, minX, tandem ) {
   // add the drag handler
   let startDragX;
   let endDragX;
-  const inputListener = new SimpleDragHandler( {
+  const inputListener = new DragListener( {
 
-    start: function( event ) {
+    start: event => {
 
       // Stop the model from moving the particle at the same time the user is moving it.
       dualAtomModel.setMotionPaused( true );
       startDragX = self.globalToParentPoint( event.pointer.point ).x;
     },
 
-    drag: function( event ) {
+    drag: event => {
 
       endDragX = self.globalToParentPoint( event.pointer.point ).x;
       const d = endDragX - startDragX;
@@ -68,7 +68,7 @@ function HandNode( dualAtomModel, particle, modelViewTransform, minX, tandem ) {
       self.particle.setPosition( modelViewTransform.viewToModelX( newPosX ), self.particle.getY() );
     },
 
-    end: function() {
+    end: event => {
 
       // Let the model move the particles again.  Note that this happens even if the motion was paused by some other
       // means.

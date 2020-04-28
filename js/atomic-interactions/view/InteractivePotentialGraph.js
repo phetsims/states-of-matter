@@ -14,7 +14,7 @@ import inherit from '../../../../phet-core/js/inherit.js';
 import merge from '../../../../phet-core/js/merge.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import FillHighlightListener from '../../../../scenery-phet/js/input/FillHighlightListener.js';
-import SimpleDragHandler from '../../../../scenery/js/input/SimpleDragHandler.js';
+import DragListener from '../../../../scenery/js/listeners/DragListener.js';
 import Rectangle from '../../../../scenery/js/nodes/Rectangle.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
@@ -68,14 +68,14 @@ function InteractivePotentialGraph( dualAtomModel, wide, options ) {
   let endDragY;
 
   function addEpsilonDragHandler( node, tandem ) {
-    node.addInputListener( new SimpleDragHandler( {
+    node.addInputListener( new DragListener( {
 
-      start: function( event ) {
+      start: event => {
         dualAtomModel.setMotionPaused( true );
         startDragY = node.globalToParentPoint( event.pointer.point ).y;
       },
 
-      drag: function( event ) {
+      drag: event => {
         endDragY = node.globalToParentPoint( event.pointer.point ).y;
         const d = endDragY - startDragY;
         startDragY = endDragY;
@@ -83,7 +83,7 @@ function InteractivePotentialGraph( dualAtomModel, wide, options ) {
         dualAtomModel.interactionStrengthProperty.value = dualAtomModel.getEpsilon() + ( d * scaleFactor );
       },
 
-      end: function() {
+      end: event => {
         dualAtomModel.setMotionPaused( false );
       },
 
@@ -96,20 +96,20 @@ function InteractivePotentialGraph( dualAtomModel, wide, options ) {
 
   // Add the line that will indicate and control the value of epsilon.
   const epsilonLineLength = EPSILON_HANDLE_OFFSET_PROPORTION * this.widthOfGraph * 1.2;
-  this.epsilonLine = new Rectangle( -epsilonLineLength / 2, 0, epsilonLineLength, 1, {
+  this.controlLine = new Rectangle( -epsilonLineLength / 2, 0, epsilonLineLength, 1, {
     cursor: 'ns-resize',
     pickable: true,
     fill: EPSILON_LINE_COLOR,
     stroke: EPSILON_LINE_COLOR,
     tandem: epsilonControlTandem.createTandem( 'epsilonControlLine' )
   } );
-  this.epsilonLine.addInputListener(
+  this.controlLine.addInputListener(
     new FillHighlightListener( RESIZE_HANDLE_NORMAL_COLOR, RESIZE_HANDLE_HIGHLIGHTED_COLOR )
   );
-  this.epsilonLine.touchArea = this.epsilonLine.localBounds.dilatedXY( 8, 8 );
-  this.epsilonLine.mouseArea = this.epsilonLine.localBounds.dilatedXY( 0, 4 );
-  addEpsilonDragHandler( this.epsilonLine, epsilonControlTandem.createTandem( 'epsilonControlLineDragHandler' ) );
-  this.epsilonLineLayer.addChild( this.epsilonLine );
+  this.controlLine.touchArea = this.controlLine.localBounds.dilatedXY( 8, 8 );
+  this.controlLine.mouseArea = this.controlLine.localBounds.dilatedXY( 0, 4 );
+  addEpsilonDragHandler( this.controlLine, epsilonControlTandem.createTandem( 'epsilonControlLineDragHandler' ) );
+  this.epsilonLineLayer.addChild( this.controlLine );
 
   // Add the arrow nodes that will allow the user to control the epsilon value.
   const arrowNodeOptions = {
@@ -122,20 +122,20 @@ function InteractivePotentialGraph( dualAtomModel, wide, options ) {
     pickable: true,
     cursor: 'pointer'
   };
-  this.epsilonControlArrow = new ArrowNode(
+  this.controlArrow = new ArrowNode(
     0,
     -RESIZE_HANDLE_SIZE_PROPORTION * this.widthOfGraph / 2,
     0,
     RESIZE_HANDLE_SIZE_PROPORTION * this.widthOfGraph,
-    merge( { tandem: epsilonControlTandem.createTandem( 'epsilonControlArrow' ) }, arrowNodeOptions )
+    merge( { tandem: epsilonControlTandem.createTandem( 'controlArrow' ) }, arrowNodeOptions )
   );
-  this.epsilonControlArrow.addInputListener( new FillHighlightListener(
+  this.controlArrow.addInputListener( new FillHighlightListener(
     RESIZE_HANDLE_NORMAL_COLOR,
     RESIZE_HANDLE_HIGHLIGHTED_COLOR
   ) );
-  this.ljPotentialGraph.addChild( this.epsilonControlArrow );
-  this.epsilonControlArrow.touchArea = this.epsilonControlArrow.localBounds.dilatedXY( 3, 10 );
-  addEpsilonDragHandler( this.epsilonControlArrow, epsilonControlTandem.createTandem( 'epsilonControlArrowDragHandler' ) );
+  this.ljPotentialGraph.addChild( this.controlArrow );
+  this.controlArrow.touchArea = this.controlArrow.localBounds.dilatedXY( 3, 10 );
+  addEpsilonDragHandler( this.controlArrow, epsilonControlTandem.createTandem( 'epsilonControlArrowDragHandler' ) );
 
   // root tandem for sigma control
   const sigmaControlTandem = options.tandem.createTandem( 'sigmaControl' );
@@ -155,14 +155,14 @@ function InteractivePotentialGraph( dualAtomModel, wide, options ) {
   this.sigmaResizeHandle.touchArea = this.sigmaResizeHandle.localBounds.dilatedXY( 10, 5 );
   let startDragX;
   let endDragX;
-  this.sigmaResizeHandle.addInputListener( new SimpleDragHandler( {
+  this.sigmaResizeHandle.addInputListener( new DragListener( {
 
-    start: function( event ) {
+    start: event => {
       dualAtomModel.setMotionPaused( true );
       startDragX = self.sigmaResizeHandle.globalToParentPoint( event.pointer.point ).x;
     },
 
-    drag: function( event ) {
+    drag: event => {
       endDragX = self.sigmaResizeHandle.globalToParentPoint( event.pointer.point ).x;
       const d = endDragX - startDragX;
       startDragX = endDragX;
@@ -173,7 +173,7 @@ function InteractivePotentialGraph( dualAtomModel, wide, options ) {
                                                              SOMConstants.MAX_SIGMA ) : SOMConstants.MIN_SIGMA;
     },
 
-    end: function() {
+    end: event => {
       dualAtomModel.setMotionPaused( false );
     },
 
@@ -183,16 +183,16 @@ function InteractivePotentialGraph( dualAtomModel, wide, options ) {
   // Add the ability to grab and move the position marker. This node will need to be pickable so the user can grab it.
   this.positionMarker.setPickable( true );
   this.positionMarker.touchArea = Shape.circle( 0, 0, 13 );
-  this.positionMarker.addInputListener( new SimpleDragHandler( {
+  this.positionMarker.addInputListener( new DragListener( {
       allowTouchSnag: true,
 
-      start: function( event ) {
+    start: event => {
         // Stop the particle from moving in the model.
         dualAtomModel.setMotionPaused( true );
         startDragX = self.positionMarker.globalToParentPoint( event.pointer.point ).x;
       },
 
-      drag: function( event ) {
+    drag: event => {
 
         // Make sure the movement hint is now hidden, since the user has figured out what to drag.
         dualAtomModel.movementHintVisibleProperty.set( false );
@@ -207,7 +207,7 @@ function InteractivePotentialGraph( dualAtomModel, wide, options ) {
         startDragX = endDragX;
       },
 
-      end: function() {
+    end: event => {
         // Let the model move the particle again.  Note that this happens
         // even if the motion was paused by some other means.
         dualAtomModel.setMotionPaused( false );

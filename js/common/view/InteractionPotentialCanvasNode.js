@@ -164,15 +164,15 @@ export default inherit( CanvasNode, InteractionPotentialCanvasNode, {
     }
 
     // Position the control handles if used.
-    if ( this.interactionDiagram.epsilonControlArrow !== undefined ) {
+    if ( this.interactionDiagram.controlArrow ) {
       const graphMin = this.interactionDiagram.getGraphMin();
-      this.interactionDiagram.epsilonLine.setTranslation( graphMin.x, graphMin.y + EPSILON_LINE_WIDTH );
-      this.interactionDiagram.epsilonControlArrow.setVisible( this.interactionDiagram.interactionEnabled );
-      this.interactionDiagram.epsilonLine.setVisible( this.interactionDiagram.interactionEnabled );
-      this.interactionDiagram.epsilonControlArrow.centerX = this.interactionDiagram.epsilonLine.right;
-      this.interactionDiagram.epsilonControlArrow.centerY = this.interactionDiagram.epsilonLine.centerY;
+      this.interactionDiagram.controlLine.setTranslation( graphMin.x, graphMin.y + EPSILON_LINE_WIDTH );
+      this.interactionDiagram.controlArrow.setVisible( this.interactionDiagram.interactionEnabled );
+      this.interactionDiagram.controlLine.setVisible( this.interactionDiagram.interactionEnabled );
+      this.interactionDiagram.controlArrow.centerX = this.interactionDiagram.controlLine.right;
+      this.interactionDiagram.controlArrow.centerY = this.interactionDiagram.controlLine.centerY;
     }
-    if ( this.interactionDiagram.sigmaResizeHandle !== undefined ) {
+    if ( this.interactionDiagram.sigmaResizeHandle ) {
       this.interactionDiagram.sigmaResizeHandle.centerX = sigmaHandleXPos;
       this.interactionDiagram.sigmaResizeHandle.centerY = sigmaHandleYPos;
       this.interactionDiagram.sigmaResizeHandle.setVisible( this.interactionDiagram.interactionEnabled );

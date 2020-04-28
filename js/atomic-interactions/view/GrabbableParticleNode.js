@@ -9,7 +9,7 @@
  */
 
 import inherit from '../../../../phet-core/js/inherit.js';
-import SimpleDragHandler from '../../../../scenery/js/input/SimpleDragHandler.js';
+import DragListener from '../../../../scenery/js/listeners/DragListener.js';
 import statesOfMatter from '../../statesOfMatter.js';
 import ParticleForceNode from './ParticleForceNode.js';
 
@@ -40,10 +40,10 @@ function GrabbableParticleNode( dualAtomModel, particle, modelViewTransform, ena
   let endDragX;
   let initialStartX = this.x;
 
-  const inputListener = new SimpleDragHandler( {
+  const inputListener = new DragListener( {
     allowTouchSnag: true,
 
-    start: function( event ) {
+    start: event => {
 
       // Stop the model from moving the particle at the same time the user is moving it.
       dualAtomModel.setMotionPaused( true );
@@ -51,7 +51,7 @@ function GrabbableParticleNode( dualAtomModel, particle, modelViewTransform, ena
       startDragX = self.globalToParentPoint( event.pointer.point ).x;
     },
 
-    drag: function( event ) {
+    drag: event => {
 
       endDragX = self.globalToParentPoint( event.pointer.point ).x;
       const d = endDragX - startDragX;
@@ -63,7 +63,8 @@ function GrabbableParticleNode( dualAtomModel, particle, modelViewTransform, ena
       self.particle.setPosition( modelViewTransform.viewToModelX( newPosX ), particle.positionProperty.value.y );
     },
 
-    end: function() {
+    end: event => {
+
       // Let the model move the particles again.  Note that this happens even if the motion was paused by some other
       // means.
       dualAtomModel.setMotionPaused( false );
