@@ -19,7 +19,7 @@ import SOMConstants from '../../common/SOMConstants.js';
 import SOMColorProfile from '../../common/view/SOMColorProfile.js';
 import statesOfMatterStrings from '../../statesOfMatterStrings.js';
 import statesOfMatter from '../../statesOfMatter.js';
-import EpsilonControlInteractionPotentialDiagram from './EpsilonControlInteractionPotentialDiagram.js';
+import EpsilonControlPotentialGraph from './EpsilonControlPotentialGraph.js';
 
 const interactionPotentialString = statesOfMatterStrings.interactionPotential;
 
@@ -35,7 +35,7 @@ function InteractionPotentialAccordionBox( sigma, epsilon, wide, multipleParticl
 
   options = merge( { tandem: Tandem.REQUIRED }, options );
 
-  this.graph = new EpsilonControlInteractionPotentialDiagram(
+  this.graph = new EpsilonControlPotentialGraph(
     sigma,
     epsilon,
     wide,

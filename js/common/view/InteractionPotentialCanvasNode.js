@@ -21,19 +21,19 @@ const SIGMA_HANDLE_OFFSET_PROPORTION = 0.08;  // Position of handle as function 
 const EPSILON_LINE_WIDTH = 1;
 
 /**
- * @param {InteractionPotentialDiagramNode} interactionDiagram
+ * @param {PotentialGraphNode} potentialGraphNode
  * @param {boolean} isLjGraphWider  - true for wider graph else narrow graph
  * @param {Object} [options] that can be passed on to the underlying node
  * @constructor
  */
-function InteractionPotentialCanvasNode( interactionDiagram, isLjGraphWider, options ) {
+function InteractionPotentialCanvasNode( potentialGraphNode, isLjGraphWider, options ) {
   CanvasNode.call( this, options );
-  this.interactionDiagram = interactionDiagram; // @private
+  this.potentialGraph = potentialGraphNode; // @private
   this.isLjGraphWider = isLjGraphWider; // @private
 
   // For efficiency, pre-allocate the array that represents the Y positions of the curve.  The X positions are the
   // index into the array.
-  this.curveYPositions = new Array( Utils.roundSymmetric( interactionDiagram.graphWidth ) );  // @private
+  this.curveYPositions = new Array( Utils.roundSymmetric( potentialGraphNode.graphWidth ) );  // @private
 }
 
 statesOfMatter.register( 'InteractionPotentialCanvasNode', InteractionPotentialCanvasNode );
@@ -52,21 +52,21 @@ export default inherit( CanvasNode, InteractionPotentialCanvasNode, {
 
       const yPos = this.curveYPositions[ i ];
 
-      if ( ( yPos > 0 ) && ( yPos < this.interactionDiagram.graphHeight ) ) {
+      if ( ( yPos > 0 ) && ( yPos < this.potentialGraph.graphHeight ) ) {
 
         // This point is on the graph, draw a line to it.
-        context.lineTo( i + this.interactionDiagram.graphXOrigin, yPos + AXES_ARROW_HEAD_HEIGHT );
+        context.lineTo( i + this.potentialGraph.graphXOrigin, yPos + AXES_ARROW_HEAD_HEIGHT );
       }
       else {
 
         // This line is off the graph - move to a good location from which to start or continue graphing.
         if ( yPos < 0 ) {
-          context.moveTo( i + 1 + this.interactionDiagram.graphXOrigin, AXES_ARROW_HEAD_HEIGHT );
+          context.moveTo( i + 1 + this.potentialGraph.graphXOrigin, AXES_ARROW_HEAD_HEIGHT );
         }
         else {
           context.lineTo(
-            i + this.interactionDiagram.graphXOrigin,
-            this.interactionDiagram.graphHeight + AXES_ARROW_HEAD_HEIGHT
+            i + this.potentialGraph.graphXOrigin,
+            this.potentialGraph.graphHeight + AXES_ARROW_HEAD_HEIGHT
           );
         }
       }
@@ -81,24 +81,24 @@ export default inherit( CanvasNode, InteractionPotentialCanvasNode, {
 
     // Calculate the points that comprise the curve and record several key values along the way the will be used to
     // position the various arrows and labels.
-    this.interactionDiagram.graphMin.setXY( 0, 0 );
-    this.interactionDiagram.zeroCrossingPoint.setXY( 0, 0 );
-    const sigmaHandleYPos = ( this.interactionDiagram.getGraphHeight() / 2 ) -
-                            2 * SIGMA_HANDLE_OFFSET_PROPORTION * this.interactionDiagram.heightOfGraph;
+    this.potentialGraph.graphMin.setXY( 0, 0 );
+    this.potentialGraph.zeroCrossingPoint.setXY( 0, 0 );
+    const sigmaHandleYPos = ( this.potentialGraph.getGraphHeight() / 2 ) -
+                            2 * SIGMA_HANDLE_OFFSET_PROPORTION * this.potentialGraph.heightOfGraph;
     let sigmaHandleXPos = 0;
-    const horizontalIndexMultiplier = this.interactionDiagram.GRAPH_X_RANGE / this.interactionDiagram.graphWidth;
+    const horizontalIndexMultiplier = this.potentialGraph.GRAPH_X_RANGE / this.potentialGraph.graphWidth;
     let previousPotential = Number.POSITIVE_INFINITY;
     let previousYPos = Number.NEGATIVE_INFINITY;
-    for ( let i = 1; i < this.interactionDiagram.graphWidth; i++ ) {
-      const potential = this.interactionDiagram.calculateLennardJonesPotential( i * horizontalIndexMultiplier );
-      const yPos = ( ( this.interactionDiagram.graphHeight / 2 ) - ( potential * this.interactionDiagram.verticalScalingFactor ) );
+    for ( let i = 1; i < this.potentialGraph.graphWidth; i++ ) {
+      const potential = this.potentialGraph.calculateLennardJonesPotential( i * horizontalIndexMultiplier );
+      const yPos = ( ( this.potentialGraph.graphHeight / 2 ) - ( potential * this.potentialGraph.verticalScalingFactor ) );
 
       // Record the data that will be used in the paintCanvas method to render the curve.
       this.curveYPositions[ i ] = yPos;
 
       // Record the position of the min Y value since the epsilon arrow needs to be positioned near this point.
-      if ( yPos > this.interactionDiagram.graphMin.y ) {
-        this.interactionDiagram.graphMin.setXY( i, yPos );
+      if ( yPos > this.potentialGraph.graphMin.y ) {
+        this.potentialGraph.graphMin.setXY( i, yPos );
       }
 
       // Record the point where the sigma resize handle should be positioned.
@@ -108,74 +108,74 @@ export default inherit( CanvasNode, InteractionPotentialCanvasNode, {
 
       // Record the zero crossing point since the sigma arrow will need to use it to set its size and position.
       if ( previousPotential > 0 && potential < 0 ) {
-        this.interactionDiagram.zeroCrossingPoint.setXY( i, this.interactionDiagram.graphHeight / 2 );
+        this.potentialGraph.zeroCrossingPoint.setXY( i, this.potentialGraph.graphHeight / 2 );
       }
       previousPotential = potential;
       previousYPos = yPos;
     }
 
     // Position the epsilon arrow, which is a vertical double-headed arrow between the bottom of the well and the x axis.
-    this.interactionDiagram.epsilonArrowStartPt.setXY(
-      this.interactionDiagram.graphMin.x,
-      this.interactionDiagram.graphHeight / 2
+    this.potentialGraph.epsilonArrowStartPt.setXY(
+      this.potentialGraph.graphMin.x,
+      this.potentialGraph.graphHeight / 2
     );
-    if ( this.interactionDiagram.epsilonArrowStartPt.distance( this.interactionDiagram.graphMin ) > 5 ) {
-      this.interactionDiagram.epsilonArrow.setVisible( true );
-      const doubleHead = this.interactionDiagram.graphMin.y <= this.interactionDiagram.graphHeight ||
-                         this.interactionDiagram.graphMin.y - 10 < this.interactionDiagram.graphHeight;
-      const tailY = this.interactionDiagram.graphMin.y > this.interactionDiagram.graphHeight ?
-                    this.interactionDiagram.graphHeight : this.interactionDiagram.graphMin.y;
-      this.interactionDiagram.epsilonArrowShape = new ArrowShape(
-        this.interactionDiagram.graphMin.x,
+    if ( this.potentialGraph.epsilonArrowStartPt.distance( this.potentialGraph.graphMin ) > 5 ) {
+      this.potentialGraph.epsilonArrow.setVisible( true );
+      const doubleHead = this.potentialGraph.graphMin.y <= this.potentialGraph.graphHeight ||
+                         this.potentialGraph.graphMin.y - 10 < this.potentialGraph.graphHeight;
+      const tailY = this.potentialGraph.graphMin.y > this.potentialGraph.graphHeight ?
+                    this.potentialGraph.graphHeight : this.potentialGraph.graphMin.y;
+      this.potentialGraph.epsilonArrowShape = new ArrowShape(
+        this.potentialGraph.graphMin.x,
         tailY,
-        this.interactionDiagram.epsilonArrowStartPt.x,
-        this.interactionDiagram.epsilonArrowStartPt.y,
+        this.potentialGraph.epsilonArrowStartPt.x,
+        this.potentialGraph.epsilonArrowStartPt.y,
         { doubleHead: doubleHead, headHeight: 5, headWidth: 6, tailWidth: 2 }
       );
-      this.interactionDiagram.epsilonArrow.setShape( this.interactionDiagram.epsilonArrowShape );
+      this.potentialGraph.epsilonArrow.setShape( this.potentialGraph.epsilonArrowShape );
     }
     else {
       // Don't show the arrow if there isn't enough space.
-      this.interactionDiagram.epsilonArrow.setVisible( false );
+      this.potentialGraph.epsilonArrow.setVisible( false );
     }
 
     // Position the epsilon label.
-    this.interactionDiagram.epsilonLabel.left = this.interactionDiagram.graphMin.x - 2;
-    this.interactionDiagram.epsilonLabel.bottom = this.interactionDiagram.graphHeight / 2 - 2;
+    this.potentialGraph.epsilonLabel.left = this.potentialGraph.graphMin.x - 2;
+    this.potentialGraph.epsilonLabel.bottom = this.potentialGraph.graphHeight / 2 - 2;
 
     // Position the arrow that depicts sigma, which is a horizontal double-headed arrow between the y axis and the
     // first point at which the potential crosses the x axis.
-    this.interactionDiagram.sigmaArrow.setTailAndTip(
+    this.potentialGraph.sigmaArrow.setTailAndTip(
       0,
-      this.interactionDiagram.graphHeight / 2,
-      this.interactionDiagram.zeroCrossingPoint.x,
-      this.interactionDiagram.zeroCrossingPoint.y
+      this.potentialGraph.graphHeight / 2,
+      this.potentialGraph.zeroCrossingPoint.x,
+      this.potentialGraph.zeroCrossingPoint.y
     );
 
     // Position the sigma label.
-    this.interactionDiagram.sigmaLabel.setTranslation(
-      this.interactionDiagram.zeroCrossingPoint.x / 2 - this.interactionDiagram.sigmaLabel.width / 2,
-      this.interactionDiagram.graphHeight / 2 - this.interactionDiagram.sigmaLabel.height / 3
+    this.potentialGraph.sigmaLabel.setTranslation(
+      this.potentialGraph.zeroCrossingPoint.x / 2 - this.potentialGraph.sigmaLabel.width / 2,
+      this.potentialGraph.graphHeight / 2 - this.potentialGraph.sigmaLabel.height / 3
     );
 
-    // If the interaction diagram includes a position marker, update its position in case the curve has moved.
-    if ( this.interactionDiagram.positionMarker ) {
-      this.interactionDiagram.setMarkerPosition( this.interactionDiagram.markerDistance );
+    // If the interaction potential graph includes a position marker, update its position in case the curve has moved.
+    if ( this.potentialGraph.positionMarker ) {
+      this.potentialGraph.setMarkerPosition( this.potentialGraph.markerDistance );
     }
 
     // Position the control handles if used.
-    if ( this.interactionDiagram.controlArrow ) {
-      const graphMin = this.interactionDiagram.getGraphMin();
-      this.interactionDiagram.controlLine.setTranslation( graphMin.x, graphMin.y + EPSILON_LINE_WIDTH );
-      this.interactionDiagram.controlArrow.setVisible( this.interactionDiagram.interactionEnabled );
-      this.interactionDiagram.controlLine.setVisible( this.interactionDiagram.interactionEnabled );
-      this.interactionDiagram.controlArrow.centerX = this.interactionDiagram.controlLine.right;
-      this.interactionDiagram.controlArrow.centerY = this.interactionDiagram.controlLine.centerY;
+    if ( this.potentialGraph.controlArrow ) {
+      const graphMin = this.potentialGraph.getGraphMin();
+      this.potentialGraph.controlLine.setTranslation( graphMin.x, graphMin.y + EPSILON_LINE_WIDTH );
+      this.potentialGraph.controlArrow.setVisible( this.potentialGraph.interactionEnabled );
+      this.potentialGraph.controlLine.setVisible( this.potentialGraph.interactionEnabled );
+      this.potentialGraph.controlArrow.centerX = this.potentialGraph.controlLine.right;
+      this.potentialGraph.controlArrow.centerY = this.potentialGraph.controlLine.centerY;
     }
-    if ( this.interactionDiagram.sigmaResizeHandle ) {
-      this.interactionDiagram.sigmaResizeHandle.centerX = sigmaHandleXPos;
-      this.interactionDiagram.sigmaResizeHandle.centerY = sigmaHandleYPos;
-      this.interactionDiagram.sigmaResizeHandle.setVisible( this.interactionDiagram.interactionEnabled );
+    if ( this.potentialGraph.sigmaResizeHandle ) {
+      this.potentialGraph.sigmaResizeHandle.centerX = sigmaHandleXPos;
+      this.potentialGraph.sigmaResizeHandle.centerY = sigmaHandleYPos;
+      this.potentialGraph.sigmaResizeHandle.setVisible( this.potentialGraph.interactionEnabled );
     }
 
     // indicate that this should be repainted during the next paint cycle

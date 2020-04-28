@@ -249,7 +249,7 @@ class AtomicInteractionsScreenView extends ScreenView {
     dualAtomModel.atomPairProperty.link( () => {
       forcesAccordionBox.top = atomsControlPanel.bottom + INSET / 2;
       forcesAccordionBox.left = atomsControlPanel.left;
-      this.updatePositionMarkerOnDiagram();
+      this.updatePositionMarkerOnGraph();
       this.updateMinimumXForMovableAtom();
       this.updatePushPinPosition();
       this.updateHandPosition();
@@ -323,7 +323,7 @@ class AtomicInteractionsScreenView extends ScreenView {
    */
   handlePositionChanged() {
 
-    this.updatePositionMarkerOnDiagram();
+    this.updatePositionMarkerOnGraph();
     this.updateForceVectors();
     this.updateHandPosition();
 
@@ -351,7 +351,7 @@ class AtomicInteractionsScreenView extends ScreenView {
    * being experienced between the two atoms in the model.
    * @private
    */
-  updatePositionMarkerOnDiagram() {
+  updatePositionMarkerOnGraph() {
     const distance = this.fixedParticle.positionProperty.value.distance( this.movableParticle.positionProperty.value );
     this.interactivePotentialGraph.setMarkerPosition( distance );
   }

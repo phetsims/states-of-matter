@@ -1,7 +1,7 @@
 // Copyright 2014-2020, University of Colorado Boulder
 
 /**
- * This class displays an interaction potential diagram.
+ * This class displays a graph that depicts and interaction potential.
  *
  * @author John Blanco
  * @author Siddhartha Chinthapally (Actual Concepts)
@@ -32,7 +32,7 @@ const sigmaString = statesOfMatterStrings.sigma;
 // Constant that controls the range of data that is graphed.
 const GRAPH_X_RANGE = 1300; // in picometers
 
-// constants that control the appearance of the diagram.
+// constants that control the appearance of the graph
 const NARROW_VERSION_WIDTH = 135;
 const WIDE_VERSION_WIDTH = 350;
 const AXIS_LINE_WIDTH = 2;
@@ -59,11 +59,11 @@ const ZOOM_BUTTONS_HEIGHT = 72;
  * @param {Object} [options]
  * @constructor
  */
-function InteractionPotentialDiagramNode( sigma, epsilon, wide, options ) {
+function PotentialGraphNode( sigma, epsilon, wide, options ) {
 
   options = merge( {
 
-    // {boolean} - whether or not this diagram should have a position marker
+    // {boolean} - whether or not this graph should have a position marker
     includePositionMarker: false
   }, options );
 
@@ -257,7 +257,7 @@ function InteractionPotentialDiagramNode( sigma, epsilon, wide, options ) {
     this.gridNode.y = this.graphYOrigin - this.graphHeight;
     this.addChild( this.gridNode );
 
-    // adjusting zoom buttons  position on interaction diagram
+    // zoom button positions
     if ( options.zoomable ) {
       this.gridNode.zoomInButton.right = this.verticalAxis.left - this.gridNode.zoomInButton.width;
       this.gridNode.zoomOutButton.right = this.verticalAxis.left - this.gridNode.zoomInButton.width;
@@ -267,9 +267,9 @@ function InteractionPotentialDiagramNode( sigma, epsilon, wide, options ) {
   }
 }
 
-statesOfMatter.register( 'InteractionPotentialDiagramNode', InteractionPotentialDiagramNode );
+statesOfMatter.register( 'PotentialGraphNode', PotentialGraphNode );
 
-export default inherit( Node, InteractionPotentialDiagramNode, {
+export default inherit( Node, PotentialGraphNode, {
 
   /**
    * Set the parameters that define the shape of the Lennard-Jones potential curve.
@@ -334,7 +334,7 @@ export default inherit( Node, InteractionPotentialDiagramNode, {
    * @public
    */
   setMarkerPosition: function( distance ) {
-    assert && assert( this.positionMarker, 'position marker not enabled for this potential diagram node' );
+    assert && assert( this.positionMarker, 'position marker not enabled for this potential graph node' );
     this.markerDistance = distance;
     const xPos = this.markerDistance * ( this.graphWidth / GRAPH_X_RANGE );
     const potential = this.calculateLennardJonesPotential( this.markerDistance );

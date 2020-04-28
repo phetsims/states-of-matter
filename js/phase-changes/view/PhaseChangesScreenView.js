@@ -49,11 +49,11 @@ const CONTROL_PANEL_X_INSET = 15;
 
 /**
  * @param {PhaseChangesModel} model - model of the simulation
- * @param {boolean} isInteractionDiagramEnabled
+ * @param {boolean} isPotentialGraphEnabled
  * @param {Tandem} tandem
  * @constructor
  */
-function PhaseChangesScreenView( model, isInteractionDiagramEnabled, tandem ) {
+function PhaseChangesScreenView( model, isPotentialGraphEnabled, tandem ) {
   const self = this;
 
   ScreenView.call( this, SOMConstants.SCREEN_VIEW_OPTIONS );
@@ -107,7 +107,7 @@ function PhaseChangesScreenView( model, isInteractionDiagramEnabled, tandem ) {
       this.particleContainerNode.reset();
 
       // Reset phase diagram state in SOM basic version.
-      model.phaseDiagramExpandedProperty.value = isInteractionDiagramEnabled;
+      model.phaseDiagramExpandedProperty.value = isPotentialGraphEnabled;
       self.pumpNode.reset();
     },
     radius: SOMConstants.RESET_ALL_BUTTON_RADIUS,
@@ -190,7 +190,7 @@ function PhaseChangesScreenView( model, isInteractionDiagramEnabled, tandem ) {
 
   // add interaction potential diagram
   let interactionPotentialAccordionBox = null;
-  if ( isInteractionDiagramEnabled ) {
+  if ( isPotentialGraphEnabled ) {
     interactionPotentialAccordionBox = new InteractionPotentialAccordionBox(
       SOMConstants.MAX_SIGMA,
       SOMConstants.MIN_EPSILON,
@@ -210,7 +210,7 @@ function PhaseChangesScreenView( model, isInteractionDiagramEnabled, tandem ) {
   const moleculesControlPanel = new PhaseChangesMoleculesControlPanel(
     model,
     {
-      showAdjustableAttraction: isInteractionDiagramEnabled,
+      showAdjustableAttraction: isPotentialGraphEnabled,
       right: this.layoutBounds.right - CONTROL_PANEL_X_INSET,
       top: 5,
       maxWidth: PANEL_WIDTH,
@@ -221,7 +221,7 @@ function PhaseChangesScreenView( model, isInteractionDiagramEnabled, tandem ) {
   this.addChild( moleculesControlPanel );
 
   // add phase diagram - in SOM basic version by default phase diagram should be closed.
-  model.phaseDiagramExpandedProperty.value = isInteractionDiagramEnabled;
+  model.phaseDiagramExpandedProperty.value = isPotentialGraphEnabled;
   this.phaseDiagramAccordionBox = new PhaseDiagramAccordionBox( model.phaseDiagramExpandedProperty, {
     minWidth: PANEL_WIDTH,
     maxWidth: PANEL_WIDTH,
@@ -273,7 +273,7 @@ function PhaseChangesScreenView( model, isInteractionDiagramEnabled, tandem ) {
     self.modelTemperatureHistory.clear();
     self.updatePhaseDiagram();
     self.phaseDiagramAccordionBox.setDepictingWater( substance === SubstanceType.WATER );
-    if ( isInteractionDiagramEnabled ) {
+    if ( isPotentialGraphEnabled ) {
       if ( substance === SubstanceType.ADJUSTABLE_ATOM ||
            substance === SubstanceType.DIATOMIC_OXYGEN ||
            substance === SubstanceType.WATER ) {
@@ -287,13 +287,13 @@ function PhaseChangesScreenView( model, isInteractionDiagramEnabled, tandem ) {
     // don't show the phase diagram for adjustable attraction, since we need the space for other things
     if ( substance === SubstanceType.ADJUSTABLE_ATOM ) {
       self.phaseDiagramAccordionBox.visible = false;
-      if ( isInteractionDiagramEnabled ) {
+      if ( isPotentialGraphEnabled ) {
         interactionPotentialAccordionBox.top = moleculesControlPanel.bottom + INTER_PANEL_SPACING;
       }
     }
     else {
       self.phaseDiagramAccordionBox.visible = true;
-      if ( isInteractionDiagramEnabled ) {
+      if ( isPotentialGraphEnabled ) {
         interactionPotentialAccordionBox.top = moleculesControlPanel.bottom + INTER_PANEL_SPACING;
         self.phaseDiagramAccordionBox.top = interactionPotentialAccordionBox.bottom + INTER_PANEL_SPACING;
       }

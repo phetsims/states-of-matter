@@ -21,11 +21,11 @@ import PhaseChangesScreenView from './view/PhaseChangesScreenView.js';
 const phaseChangesString = statesOfMatterStrings.phaseChanges;
 
 /**
- * @param {boolean} isInteractionDiagramEnabled
+ * @param {boolean} isPotentialGraphEnabled
  * @param {Tandem} tandem
  * @constructor
  */
-function PhaseChangesScreen( isInteractionDiagramEnabled, tandem ) {
+function PhaseChangesScreen( isPotentialGraphEnabled, tandem ) {
 
   const options = {
     name: phaseChangesString,
@@ -43,7 +43,7 @@ function PhaseChangesScreen( isInteractionDiagramEnabled, tandem ) {
   Screen.call( this,
     function() { return new PhaseChangesModel( tandem.createTandem( 'model' ) ); },
     function( model ) {
-      return new PhaseChangesScreenView( model, isInteractionDiagramEnabled, tandem.createTandem( 'view' ) );
+      return new PhaseChangesScreenView( model, isPotentialGraphEnabled, tandem.createTandem( 'view' ) );
     },
     options
   );

@@ -22,7 +22,7 @@ import Tandem from '../../../../tandem/js/Tandem.js';
 import SOMConstants from '../../common/SOMConstants.js';
 import SubstanceType from '../../common/SubstanceType.js';
 import InteractionPotentialCanvasNode from '../../common/view/InteractionPotentialCanvasNode.js';
-import InteractionPotentialDiagramNode from '../../common/view/InteractionPotentialDiagramNode.js';
+import PotentialGraphNode from '../../common/view/PotentialGraphNode.js';
 import statesOfMatter from '../../statesOfMatter.js';
 
 // Size of handles as function of node width.
@@ -45,12 +45,12 @@ const POTENTIAL_LINE_COLOR = new Color( 'red' );
  * @param {Object} [options] that can be passed on to the underlying node
  * @constructor
  */
-function EpsilonControlInteractionPotentialDiagram( sigma, epsilon, wide, multipleParticleModel, options ) {
+function EpsilonControlPotentialGraph( sigma, epsilon, wide, multipleParticleModel, options ) {
 
   options = merge( { tandem: Tandem.REQUIRED }, options );
 
   const self = this;
-  InteractionPotentialDiagramNode.call( this, sigma, epsilon, wide, { tandem: options.tandem } );
+  PotentialGraphNode.call( this, sigma, epsilon, wide, { tandem: options.tandem } );
   this.multipleParticleModel = multipleParticleModel;
 
   // Create a parent tandem for the epsilon parameter control subcomponents, requested by reviewers in
@@ -168,15 +168,13 @@ function EpsilonControlInteractionPotentialDiagram( sigma, epsilon, wide, multip
   );
 }
 
-statesOfMatter.register( 'EpsilonControlInteractionPotentialDiagram', EpsilonControlInteractionPotentialDiagram );
+statesOfMatter.register( 'EpsilonControlPotentialGraph', EpsilonControlPotentialGraph );
 
-export default inherit( InteractionPotentialDiagramNode, EpsilonControlInteractionPotentialDiagram, {
+export default inherit( PotentialGraphNode, EpsilonControlPotentialGraph, {
 
   /**
-   *
-   * This is an override of the method in the base class that draws the
-   * curve on the graph, and this override draws the controls that allow
-   * the user to interact with the graph.
+   * This is an override of the method in the base class that draws the curve on the graph, and this override draws the
+   * controls that allow the user to interact with the graph.
    * @private
    * @override
    */

@@ -21,7 +21,7 @@ import Tandem from '../../../../tandem/js/Tandem.js';
 import AtomType from '../../common/model/AtomType.js';
 import SOMConstants from '../../common/SOMConstants.js';
 import InteractionPotentialCanvasNode from '../../common/view/InteractionPotentialCanvasNode.js';
-import InteractionPotentialDiagramNode from '../../common/view/InteractionPotentialDiagramNode.js';
+import PotentialGraphNode from '../../common/view/PotentialGraphNode.js';
 import SOMColorProfile from '../../common/view/SOMColorProfile.js';
 import statesOfMatter from '../../statesOfMatter.js';
 
@@ -43,7 +43,7 @@ function InteractivePotentialGraph( dualAtomModel, wide, options ) {
 
   options = merge( { tandem: Tandem.REQUIRED }, options );
 
-  InteractionPotentialDiagramNode.call(
+  PotentialGraphNode.call(
     this,
     dualAtomModel.getSigma(),
     dualAtomModel.getEpsilon(),
@@ -273,7 +273,7 @@ function InteractivePotentialGraph( dualAtomModel, wide, options ) {
 
 statesOfMatter.register( 'InteractivePotentialGraph', InteractivePotentialGraph );
 
-export default inherit( InteractionPotentialDiagramNode, InteractivePotentialGraph, {
+export default inherit( PotentialGraphNode, InteractivePotentialGraph, {
 
   /**
    * This is an override of the method in the base class that draws the curve on the graph, and this override draws
@@ -309,7 +309,7 @@ export default inherit( InteractionPotentialDiagramNode, InteractivePotentialGra
    * @override
    */
   setMolecular: function( molecular ) {
-    InteractionPotentialDiagramNode.prototype.setMolecular.call( this );
+    PotentialGraphNode.prototype.setMolecular.call( this );
     // move the horizontal label down a little bit, otherwise adjustment arrow can overlap it
     this.horizontalAxisLabel.top += 8; // amount empirically determined
   }
