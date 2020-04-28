@@ -15,7 +15,7 @@ import merge from '../../../../phet-core/js/merge.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import FillHighlightListener from '../../../../scenery-phet/js/input/FillHighlightListener.js';
 import DragListener from '../../../../scenery/js/listeners/DragListener.js';
-import Rectangle from '../../../../scenery/js/nodes/Rectangle.js';
+import Line from '../../../../scenery/js/nodes/Line.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import AtomType from '../../common/model/AtomType.js';
@@ -67,7 +67,7 @@ function InteractivePotentialGraph( dualAtomModel, wide, options ) {
   let startDragY;
   let endDragY;
 
-  function addEpsilonDragHandler( node, tandem ) {
+  function addEpsilonDragListener( node, tandem ) {
     node.addInputListener( new DragListener( {
 
       start: event => {
@@ -91,25 +91,26 @@ function InteractivePotentialGraph( dualAtomModel, wide, options ) {
     } ) );
   }
 
-  // Parent node for the epsilon controller
+  // parent tandem for the epsilon controller
   const epsilonControlTandem = options.tandem.createTandem( 'epsilonControl' );
 
   // Add the line that will indicate and control the value of epsilon.
   const epsilonLineLength = EPSILON_HANDLE_OFFSET_PROPORTION * this.widthOfGraph * 1.2;
-  this.controlLine = new Rectangle( -epsilonLineLength / 2, 0, epsilonLineLength, 1, {
+  this.epsilonControls.line = new Line( -epsilonLineLength / 2, 0, epsilonLineLength, 0, {
     cursor: 'ns-resize',
     pickable: true,
     fill: EPSILON_LINE_COLOR,
     stroke: EPSILON_LINE_COLOR,
-    tandem: epsilonControlTandem.createTandem( 'epsilonControlLine' )
+    lineWidth: 2,
+    tandem: epsilonControlTandem.createTandem( 'line' )
   } );
-  this.controlLine.addInputListener(
+  this.epsilonControls.line.addInputListener(
     new FillHighlightListener( RESIZE_HANDLE_NORMAL_COLOR, RESIZE_HANDLE_HIGHLIGHTED_COLOR )
   );
-  this.controlLine.touchArea = this.controlLine.localBounds.dilatedXY( 8, 8 );
-  this.controlLine.mouseArea = this.controlLine.localBounds.dilatedXY( 0, 4 );
-  addEpsilonDragHandler( this.controlLine, epsilonControlTandem.createTandem( 'epsilonControlLineDragHandler' ) );
-  this.epsilonLineLayer.addChild( this.controlLine );
+  this.epsilonControls.line.touchArea = this.epsilonControls.line.localBounds.dilatedXY( 8, 8 );
+  this.epsilonControls.line.mouseArea = this.epsilonControls.line.localBounds.dilatedXY( 0, 4 );
+  addEpsilonDragListener( this.epsilonControls.line, this.epsilonControls.line.tandem.createTandem( 'dragListener' ) );
+  this.epsilonLineLayer.addChild( this.epsilonControls.line );
 
   // Add the arrow nodes that will allow the user to control the epsilon value.
   const arrowNodeOptions = {
@@ -122,51 +123,51 @@ function InteractivePotentialGraph( dualAtomModel, wide, options ) {
     pickable: true,
     cursor: 'pointer'
   };
-  this.controlArrow = new ArrowNode(
+  this.epsilonControls.arrow = new ArrowNode(
     0,
     -RESIZE_HANDLE_SIZE_PROPORTION * this.widthOfGraph / 2,
     0,
     RESIZE_HANDLE_SIZE_PROPORTION * this.widthOfGraph,
-    merge( { tandem: epsilonControlTandem.createTandem( 'controlArrow' ) }, arrowNodeOptions )
+    merge( { tandem: epsilonControlTandem.createTandem( 'arrow' ) }, arrowNodeOptions )
   );
-  this.controlArrow.addInputListener( new FillHighlightListener(
+  this.epsilonControls.arrow.addInputListener( new FillHighlightListener(
     RESIZE_HANDLE_NORMAL_COLOR,
     RESIZE_HANDLE_HIGHLIGHTED_COLOR
   ) );
-  this.ljPotentialGraph.addChild( this.controlArrow );
-  this.controlArrow.touchArea = this.controlArrow.localBounds.dilatedXY( 3, 10 );
-  addEpsilonDragHandler( this.controlArrow, epsilonControlTandem.createTandem( 'epsilonControlArrowDragHandler' ) );
+  this.ljPotentialGraph.addChild( this.epsilonControls.arrow );
+  this.epsilonControls.arrow.touchArea = this.epsilonControls.arrow.localBounds.dilatedXY( 3, 10 );
+  addEpsilonDragListener( this.epsilonControls.arrow, this.epsilonControls.arrow.tandem.createTandem( 'dragListener' ) );
 
   // root tandem for sigma control
   const sigmaControlTandem = options.tandem.createTandem( 'sigmaControl' );
 
   // add sigma arrow node
-  this.sigmaResizeHandle = new ArrowNode(
+  this.sigmaControls.arrow = new ArrowNode(
     -RESIZE_HANDLE_SIZE_PROPORTION * this.widthOfGraph / 2,
     0,
     RESIZE_HANDLE_SIZE_PROPORTION * this.widthOfGraph * 1.2,
     0,
-    merge( { tandem: sigmaControlTandem.createTandem( 'sigmaControlArrow' ) }, arrowNodeOptions )
+    merge( { tandem: sigmaControlTandem.createTandem( 'arrow' ) }, arrowNodeOptions )
   );
-  this.sigmaResizeHandle.addInputListener(
+  this.sigmaControls.arrow.addInputListener(
     new FillHighlightListener( RESIZE_HANDLE_NORMAL_COLOR, RESIZE_HANDLE_HIGHLIGHTED_COLOR )
   );
-  this.ljPotentialGraph.addChild( this.sigmaResizeHandle );
-  this.sigmaResizeHandle.touchArea = this.sigmaResizeHandle.localBounds.dilatedXY( 10, 5 );
+  this.ljPotentialGraph.addChild( this.sigmaControls.arrow );
+  this.sigmaControls.arrow.touchArea = this.sigmaControls.arrow.localBounds.dilatedXY( 10, 5 );
   let startDragX;
   let endDragX;
-  this.sigmaResizeHandle.addInputListener( new DragListener( {
+  this.sigmaControls.arrow.addInputListener( new DragListener( {
 
     start: event => {
       dualAtomModel.setMotionPaused( true );
-      startDragX = self.sigmaResizeHandle.globalToParentPoint( event.pointer.point ).x;
+      startDragX = this.sigmaControls.arrow.globalToParentPoint( event.pointer.point ).x;
     },
 
     drag: event => {
-      endDragX = self.sigmaResizeHandle.globalToParentPoint( event.pointer.point ).x;
+      endDragX = this.sigmaControls.arrow.globalToParentPoint( event.pointer.point ).x;
       const d = endDragX - startDragX;
       startDragX = endDragX;
-      const scaleFactor = self.GRAPH_X_RANGE / ( self.getGraphWidth() );
+      const scaleFactor = this.GRAPH_X_RANGE / ( this.getGraphWidth() );
       const atomDiameter = dualAtomModel.getSigma() + ( d * scaleFactor );
       dualAtomModel.adjustableAtomDiameterProperty.value = atomDiameter > SOMConstants.MIN_SIGMA ?
                                                            ( atomDiameter < SOMConstants.MAX_SIGMA ? atomDiameter :
@@ -177,7 +178,7 @@ function InteractivePotentialGraph( dualAtomModel, wide, options ) {
       dualAtomModel.setMotionPaused( false );
     },
 
-    tandem: sigmaControlTandem.createTandem( 'dragHandler' )
+    tandem: this.sigmaControls.arrow.tandem.createTandem( 'dragListener' )
   } ) );
 
   // Add the ability to grab and move the position marker. This node will need to be pickable so the user can grab it.
@@ -213,7 +214,7 @@ function InteractivePotentialGraph( dualAtomModel, wide, options ) {
         dualAtomModel.setMotionPaused( false );
       },
 
-    tandem: this.positionMarker.tandem.createTandem( 'dragHandler' )
+    tandem: this.positionMarker.tandem.createTandem( 'dragListener' )
     }
   ) );
 

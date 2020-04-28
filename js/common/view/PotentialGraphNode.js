@@ -238,6 +238,17 @@ function PotentialGraphNode( sigma, epsilon, wide, options ) {
   // Initializing here to reduce allocations
   this.epsilonArrowStartPt = new Vector2( 0, 0 );
 
+  // @protected - an object where specific controls can be added for interactivity.  See usages in subclasses.
+  this.epsilonControls = {
+    arrow: null,
+    line: null
+  };
+
+  // @protected - an object where a specific control can be added for interactivity.  See usages in subclasses.
+  this.sigmaControls = {
+    arrow: null
+  };
+
   // Draw the initial curve upon the graph.
   this.drawPotentialCurve();
 

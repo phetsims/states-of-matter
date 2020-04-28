@@ -118,7 +118,7 @@ function PointingHandNode( multipleParticleModel, modelViewTransform, options ) 
       updateHintVisibility();
     },
 
-    tandem: options.tandem.createTandem( 'dragHandler' )
+    tandem: options.tandem.createTandem( 'dragListener' )
   } ) );
 
   // add the listener that will show and hide the hint

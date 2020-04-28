@@ -164,18 +164,18 @@ export default inherit( CanvasNode, InteractionPotentialCanvasNode, {
     }
 
     // Position the control handles if used.
-    if ( this.potentialGraph.controlArrow ) {
+    if ( this.potentialGraph.epsilonControls.arrow ) {
       const graphMin = this.potentialGraph.getGraphMin();
-      this.potentialGraph.controlLine.setTranslation( graphMin.x, graphMin.y + EPSILON_LINE_WIDTH );
-      this.potentialGraph.controlArrow.setVisible( this.potentialGraph.interactionEnabled );
-      this.potentialGraph.controlLine.setVisible( this.potentialGraph.interactionEnabled );
-      this.potentialGraph.controlArrow.centerX = this.potentialGraph.controlLine.right;
-      this.potentialGraph.controlArrow.centerY = this.potentialGraph.controlLine.centerY;
+      this.potentialGraph.epsilonControls.line.setTranslation( graphMin.x, graphMin.y + EPSILON_LINE_WIDTH );
+      this.potentialGraph.epsilonControls.arrow.setVisible( this.potentialGraph.interactionEnabled );
+      this.potentialGraph.epsilonControls.line.setVisible( this.potentialGraph.interactionEnabled );
+      this.potentialGraph.epsilonControls.arrow.centerX = this.potentialGraph.epsilonControls.line.right;
+      this.potentialGraph.epsilonControls.arrow.centerY = this.potentialGraph.epsilonControls.line.centerY;
     }
-    if ( this.potentialGraph.sigmaResizeHandle ) {
-      this.potentialGraph.sigmaResizeHandle.centerX = sigmaHandleXPos;
-      this.potentialGraph.sigmaResizeHandle.centerY = sigmaHandleYPos;
-      this.potentialGraph.sigmaResizeHandle.setVisible( this.potentialGraph.interactionEnabled );
+    if ( this.potentialGraph.sigmaControls.arrow ) {
+      this.potentialGraph.sigmaControls.arrow.centerX = sigmaHandleXPos;
+      this.potentialGraph.sigmaControls.arrow.centerY = sigmaHandleYPos;
+      this.potentialGraph.sigmaControls.arrow.setVisible( this.potentialGraph.interactionEnabled );
     }
 
     // indicate that this should be repainted during the next paint cycle

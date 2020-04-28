@@ -55,7 +55,7 @@ function EpsilonControlPotentialGraph( sigma, epsilon, wide, multipleParticleMod
 
   // Create a parent tandem for the epsilon parameter control subcomponents, requested by reviewers in
   // https://github.com/phetsims/states-of-matter/issues/265.
-  const epsilonParameterTandem = options.tandem.createTandem( 'epsilonParameter' );
+  const epsilonControlTandem = options.tandem.createTandem( 'epsilonControl' );
 
   // variables used to track dragging of controls related to epsilon value
   let startDragY;
@@ -63,29 +63,29 @@ function EpsilonControlPotentialGraph( sigma, epsilon, wide, multipleParticleMod
 
   // Add the line that will indicate the value of epsilon.
   const controlLineLength = EPSILON_HANDLE_OFFSET_PROPORTION * this.widthOfGraph * 2.2;
-  this.controlLine = new Rectangle( -controlLineLength / 2, 0, controlLineLength, 1, {
+  this.epsilonControls.line = new Rectangle( -controlLineLength / 2, 0, controlLineLength, 1, {
     cursor: 'ns-resize',
     pickable: true,
     fill: EPSILON_LINE_COLOR,
     stroke: EPSILON_LINE_COLOR,
-    tandem: epsilonParameterTandem.createTandem( 'controlLine' )
+    tandem: epsilonControlTandem.createTandem( 'line' )
   } );
-  this.controlLine.addInputListener( new FillHighlightListener(
+  this.epsilonControls.line.addInputListener( new FillHighlightListener(
     RESIZE_HANDLE_NORMAL_COLOR,
     RESIZE_HANDLE_HIGHLIGHTED_COLOR
   ) );
-  this.ljPotentialGraph.addChild( this.controlLine );
-  this.controlLine.touchArea = this.controlLine.localBounds.dilatedXY( 20, 20 );
+  this.ljPotentialGraph.addChild( this.epsilonControls.line );
+  this.epsilonControls.line.touchArea = this.epsilonControls.line.localBounds.dilatedXY( 20, 20 );
 
   // drag listener
-  this.controlLine.addInputListener( new DragListener( {
+  this.epsilonControls.line.addInputListener( new DragListener( {
 
     start: event => {
-      startDragY = self.controlLine.globalToParentPoint( event.pointer.point ).y;
+      startDragY = self.epsilonControls.line.globalToParentPoint( event.pointer.point ).y;
     },
 
     drag: event => {
-      endDragY = self.controlLine.globalToParentPoint( event.pointer.point ).y;
+      endDragY = self.epsilonControls.line.globalToParentPoint( event.pointer.point ).y;
       const d = endDragY - startDragY;
       startDragY = endDragY;
       const scaleFactor = SOMConstants.MAX_EPSILON / ( self.getGraphHeight() / 2 );
@@ -99,11 +99,11 @@ function EpsilonControlPotentialGraph( sigma, epsilon, wide, multipleParticleMod
       self.drawPotentialCurve();
     },
 
-    tandem: this.controlLine.tandem.createTandem( 'dragListener' )
+    tandem: this.epsilonControls.line.tandem.createTandem( 'dragListener' )
   } ) );
 
   // Add the arrow node that will allow the user to control the value of the epsilon parameter.
-  this.controlArrow = new ArrowNode( 0, -RESIZE_HANDLE_SIZE_PROPORTION * this.widthOfGraph / 2, 0,
+  this.epsilonControls.arrow = new ArrowNode( 0, -RESIZE_HANDLE_SIZE_PROPORTION * this.widthOfGraph / 2, 0,
     RESIZE_HANDLE_SIZE_PROPORTION * this.widthOfGraph / 2, {
       headHeight: 10,
       headWidth: 15,
@@ -113,20 +113,20 @@ function EpsilonControlPotentialGraph( sigma, epsilon, wide, multipleParticleMod
       doubleHead: true,
       pickable: true,
       cursor: 'pointer',
-      tandem: epsilonParameterTandem.createTandem( 'controlArrow' )
+      tandem: epsilonControlTandem.createTandem( 'arrow' )
     } );
-  this.controlArrow.addInputListener(
+  this.epsilonControls.arrow.addInputListener(
     new FillHighlightListener( RESIZE_HANDLE_NORMAL_COLOR, RESIZE_HANDLE_HIGHLIGHTED_COLOR )
   );
-  this.ljPotentialGraph.addChild( this.controlArrow );
-  this.controlArrow.addInputListener( new DragListener( {
+  this.ljPotentialGraph.addChild( this.epsilonControls.arrow );
+  this.epsilonControls.arrow.addInputListener( new DragListener( {
 
     start: event => {
-      startDragY = self.controlArrow.globalToParentPoint( event.pointer.point ).y;
+      startDragY = self.epsilonControls.arrow.globalToParentPoint( event.pointer.point ).y;
     },
 
     drag: event => {
-      endDragY = self.controlArrow.globalToParentPoint( event.pointer.point ).y;
+      endDragY = self.epsilonControls.arrow.globalToParentPoint( event.pointer.point ).y;
       const d = endDragY - startDragY;
       startDragY = endDragY;
       const scaleFactor = SOMConstants.MAX_EPSILON / ( self.getGraphHeight() / 2 );
@@ -140,7 +140,7 @@ function EpsilonControlPotentialGraph( sigma, epsilon, wide, multipleParticleMod
       self.drawPotentialCurve();
     },
 
-    tandem: this.controlArrow.tandem.createTandem( 'dragListener' )
+    tandem: this.epsilonControls.arrow.tandem.createTandem( 'dragListener' )
   } ) );
 
   this.interactionPotentialCanvasNode = new InteractionPotentialCanvasNode( this, false, {

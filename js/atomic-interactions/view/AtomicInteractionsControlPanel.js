@@ -93,7 +93,7 @@ function AtomicInteractionsControlPanel( dualAtomModel, enableHeterogeneousAtoms
   let neonAndOxygenLabelItems;
   let argonAndOxygenLabelItems;
   let adjustableAttraction;
-  let radioButtonsGroup;
+  let radioButtonGroup;
   let labelWidth;
   let createLabelNode;
   let titleText;
@@ -243,7 +243,7 @@ function AtomicInteractionsControlPanel( dualAtomModel, enableHeterogeneousAtoms
     titleNode = createTitle( titleText );
 
     // put the title and radio button group together into a single node
-    radioButtonsGroup = new VBox( {
+    radioButtonGroup = new VBox( {
       children: [ titleNode, aquaRadioButtonsGroup ],
       align: 'left',
       spacing: 5
@@ -299,12 +299,12 @@ function AtomicInteractionsControlPanel( dualAtomModel, enableHeterogeneousAtoms
       {
         value: AtomPair.NEON_NEON,
         node: createLabelNode( neon ),
-        tandemName: 'neonNeon'
+        tandemName: 'neon'
       },
       {
         value: AtomPair.ARGON_ARGON,
         node: createLabelNode( argon ),
-        tandemName: 'argonArgon'
+        tandemName: 'argon'
       },
       {
         value: AtomPair.ADJUSTABLE,
@@ -312,7 +312,7 @@ function AtomicInteractionsControlPanel( dualAtomModel, enableHeterogeneousAtoms
         tandemName: 'adjustableAttraction'
       }
     ];
-    radioButtonsGroup = new RadioButtonGroup( dualAtomModel.atomPairProperty, radioButtonContent, {
+    radioButtonGroup = new RadioButtonGroup( dualAtomModel.atomPairProperty, radioButtonContent, {
       orientation: 'vertical',
       cornerRadius: 5,
       baseColor: 'black',
@@ -321,7 +321,7 @@ function AtomicInteractionsControlPanel( dualAtomModel, enableHeterogeneousAtoms
       selectedStroke: 'white',
       deselectedLineWidth: 0,
       deselectedContentOpacity: 1,
-      tandem: options.tandem.createTandem( 'radioButtonsGroup' )
+      tandem: options.tandem.createTandem( 'radioButtonGroup' )
     } );
 
     const titleBackground = new Rectangle( 0, 0, titleText.label.width + 5, titleText.label.height, {
@@ -420,17 +420,17 @@ function AtomicInteractionsControlPanel( dualAtomModel, enableHeterogeneousAtoms
   } );
 
   const content = new VBox( {
-    align: 'center', children: [ radioButtonsGroup ],
+    align: 'center', children: [ radioButtonGroup ],
     spacing: 5
   } );
   const verticalSpaceOffset = 7;
 
   // sliders and title adjustments
   atomDiameterSlider.top = atomDiameterTitle.bottom + verticalSpaceOffset;
-  atomDiameterSlider.centerX = radioButtonsGroup.centerX;
+  atomDiameterSlider.centerX = radioButtonGroup.centerX;
   interactionStrengthTitle.top = atomDiameterSlider.bottom + verticalSpaceOffset;
   interactionStrengthSlider.top = interactionStrengthTitle.bottom + verticalSpaceOffset;
-  interactionStrengthSlider.centerX = radioButtonsGroup.centerX;
+  interactionStrengthSlider.centerX = radioButtonGroup.centerX;
 
   const radioButtonPanel = new Panel( content, {
     stroke: options.stroke,
@@ -463,7 +463,7 @@ function AtomicInteractionsControlPanel( dualAtomModel, enableHeterogeneousAtoms
   // rectangle and on top rectangle added title node.
   if ( !enableHeterogeneousAtoms ) {
     this.addChild( titleNode );
-    titleNode.centerX = radioButtonsGroup.centerX + 5;
+    titleNode.centerX = radioButtonGroup.centerX + 5;
   }
   this.mutate( options );
 }

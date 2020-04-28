@@ -76,7 +76,7 @@ function HandNode( dualAtomModel, particle, modelViewTransform, minX, tandem ) {
       dualAtomModel.movementHintVisibleProperty.set( false );
     },
 
-    tandem: tandem.createTandem( 'dragHandler' )
+    tandem: tandem.createTandem( 'dragListener' )
   } );
   this.addInputListener( inputListener );
 

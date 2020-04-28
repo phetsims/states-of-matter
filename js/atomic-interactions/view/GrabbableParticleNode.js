@@ -71,7 +71,7 @@ function GrabbableParticleNode( dualAtomModel, particle, modelViewTransform, ena
       dualAtomModel.movementHintVisibleProperty.set( false );
     },
 
-    tandem: tandem.createTandem( 'dragHandler' )
+    tandem: tandem.createTandem( 'dragListener' )
   } );
 
   this.addInputListener( inputListener );
