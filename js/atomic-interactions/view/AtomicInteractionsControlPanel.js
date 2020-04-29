@@ -53,6 +53,7 @@ const RADIO_BUTTON_RADIUS = 6;
 const TITLE_TEXT_WIDTH = 130;
 const PANEL_X_MARGIN = 10;
 const SLIDER_VBOX_SPACING = 5;
+const  AQUA_RADIO_BUTTON_X_SPACING = 8; // only used for atomic-interactions
 
 /**
  * @param {DualAtomModel} dualAtomModel - model of the simulation
@@ -166,7 +167,11 @@ function AtomicInteractionsControlPanel( dualAtomModel, enableHeterogeneousAtoms
       oxygenAndOxygenLabelItems[ 0 ].width + oxygenAndOxygenLabelItems[ 1 ].width,
       neonAndNeonLabelItems[ 0 ].width + neonAndNeonLabelItems[ 1 ].width,
       neonAndOxygenLabelItems[ 0 ].width + neonAndOxygenLabelItems[ 1 ].width );
-    labelWidth = 2 * Math.max( titleText[ 0 ].width, titleText[ 1 ].width, labelWidth / 2, sliderTrackWidth / 2 );
+    labelWidth = Math.max(
+      titleText[ 0 ].width  * 2,
+      titleText[ 1 ].width * 2,
+      labelWidth, sliderTrackWidth,
+      options.minWidth - 2 * PANEL_X_MARGIN - 2 * RADIO_BUTTON_RADIUS - AQUA_RADIO_BUTTON_X_SPACING );
 
     // function to create a label node
     createLabelNode = function( atomNameTextNodes ) {
@@ -219,7 +224,8 @@ function AtomicInteractionsControlPanel( dualAtomModel, enableHeterogeneousAtoms
       {
         spacing: 13,
         radioButtonOptions: {
-          radius: RADIO_BUTTON_RADIUS
+          radius: RADIO_BUTTON_RADIUS,
+          xSpacing: AQUA_RADIO_BUTTON_X_SPACING
         },
         tandem: options.tandem.createTandem( 'radioButtonGroup' )
       }
