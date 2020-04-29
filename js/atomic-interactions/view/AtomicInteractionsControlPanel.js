@@ -287,8 +287,15 @@ function AtomicInteractionsControlPanel( dualAtomModel, enableHeterogeneousAtoms
       label: title
     };
 
-    // label should span panel
-    labelWidth = options.minWidth - 2 * PANEL_X_MARGIN;
+    // compute the maximum item width
+    const widestLabelAndIconSpec = _.maxBy( [ neon, argon, adjustableAttraction, titleText ], function( item ) {
+      return item.label.width + ( ( item.icon ) ? item.icon.width : 0 );
+    } );
+    labelWidth = widestLabelAndIconSpec.label.width + ( ( widestLabelAndIconSpec.icon ) ? widestLabelAndIconSpec.icon.width : 0 );
+    labelWidth = Math.max(
+      labelWidth,
+      sliderTrackWidth,
+      options.minWidth - 2 * PANEL_X_MARGIN );
 
     // pad inserts a spacing node (HStrut) so that the text, space and image together occupy a certain fixed width.
     createLabelNode = function( atomSelectorLabelSpec ) {
