@@ -557,7 +557,7 @@ const LIQUID_INITIAL_STATES = {
 
 statesOfMatter.register( 'DiatomicPhaseStateChanger', DiatomicPhaseStateChanger );
 
-export default inherit( AbstractPhaseStateChanger, DiatomicPhaseStateChanger, {
+inherit( AbstractPhaseStateChanger, DiatomicPhaseStateChanger, {
 
   /**
    * @param {number} phaseState - phase state (solid/liquid/gas) of the collection of molecules
@@ -629,3 +629,5 @@ export default inherit( AbstractPhaseStateChanger, DiatomicPhaseStateChanger, {
     this.loadSavedState( dataSetToLoad );
   }
 } );
+
+export default DiatomicPhaseStateChanger;

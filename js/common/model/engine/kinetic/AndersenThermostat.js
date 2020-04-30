@@ -55,7 +55,7 @@ function AndersenThermostat( moleculeDataSet, minTemperature ) {
 
 statesOfMatter.register( 'AndersenThermostat', AndersenThermostat );
 
-export default inherit( Object, AndersenThermostat, {
+inherit( Object, AndersenThermostat, {
 
   /**
    * @public
@@ -130,3 +130,5 @@ export default inherit( Object, AndersenThermostat, {
     this.totalVelocityChangePreviousStep.setXY( 0, 0 );
   }
 } );
+
+export default AndersenThermostat;

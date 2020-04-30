@@ -280,7 +280,7 @@ function PotentialGraphNode( sigma, epsilon, wide, options ) {
 
 statesOfMatter.register( 'PotentialGraphNode', PotentialGraphNode );
 
-export default inherit( Node, PotentialGraphNode, {
+inherit( Node, PotentialGraphNode, {
 
   /**
    * Set the parameters that define the shape of the Lennard-Jones potential curve.
@@ -395,3 +395,5 @@ export default inherit( Node, PotentialGraphNode, {
 
   GRAPH_X_RANGE: GRAPH_X_RANGE
 } );
+
+export default PotentialGraphNode;

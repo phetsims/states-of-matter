@@ -293,7 +293,7 @@ function PhaseDiagramAccordionBox( expandedProperty, options ) {
 
 statesOfMatter.register( 'PhaseDiagramAccordionBox', PhaseDiagramAccordionBox );
 
-export default inherit( AccordionBox, PhaseDiagramAccordionBox, {
+inherit( AccordionBox, PhaseDiagramAccordionBox, {
 
   /**
    * @public
@@ -449,3 +449,5 @@ export default inherit( AccordionBox, PhaseDiagramAccordionBox, {
   }
 
 } );
+
+export default PhaseDiagramAccordionBox;

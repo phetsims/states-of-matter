@@ -24,7 +24,7 @@ function DiatomicVerletAlgorithm( multipleParticleModel ) {
 
 statesOfMatter.register( 'DiatomicVerletAlgorithm', DiatomicVerletAlgorithm );
 
-export default inherit( AbstractVerletAlgorithm, DiatomicVerletAlgorithm, {
+inherit( AbstractVerletAlgorithm, DiatomicVerletAlgorithm, {
 
   /**
    * @override
@@ -147,3 +147,5 @@ export default inherit( AbstractVerletAlgorithm, DiatomicVerletAlgorithm, {
     }
   }
 } );
+
+export default DiatomicVerletAlgorithm;

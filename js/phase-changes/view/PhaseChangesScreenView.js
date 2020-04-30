@@ -339,7 +339,7 @@ function PhaseChangesScreenView( model, isPotentialGraphEnabled, tandem ) {
 
 statesOfMatter.register( 'PhaseChangesScreenView', PhaseChangesScreenView );
 
-export default inherit( ScreenView, PhaseChangesScreenView, {
+inherit( ScreenView, PhaseChangesScreenView, {
 
   // @public
   step: function( dt ) {
@@ -430,3 +430,5 @@ export default inherit( ScreenView, PhaseChangesScreenView, {
     return Math.min( mappedPressure, 1 );
   }
 } );
+
+export default PhaseChangesScreenView;

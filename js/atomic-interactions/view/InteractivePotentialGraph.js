@@ -274,7 +274,7 @@ function InteractivePotentialGraph( dualAtomModel, wide, options ) {
 
 statesOfMatter.register( 'InteractivePotentialGraph', InteractivePotentialGraph );
 
-export default inherit( PotentialGraphNode, InteractivePotentialGraph, {
+inherit( PotentialGraphNode, InteractivePotentialGraph, {
 
   /**
    * This is an override of the method in the base class that draws the curve on the graph, and this override draws
@@ -315,3 +315,5 @@ export default inherit( PotentialGraphNode, InteractivePotentialGraph, {
     this.horizontalAxisLabel.top += 8; // amount empirically determined
   }
 } );
+
+export default InteractivePotentialGraph;

@@ -54,7 +54,7 @@ function AbstractVerletAlgorithm( multipleParticleModel ) {
 
 statesOfMatter.register( 'AbstractVerletAlgorithm', AbstractVerletAlgorithm );
 
-export default inherit( Object, AbstractVerletAlgorithm, {
+inherit( Object, AbstractVerletAlgorithm, {
 
   /**
    * @returns {boolean}
@@ -302,3 +302,5 @@ export default inherit( Object, AbstractVerletAlgorithm, {
   // effects, such as changing how water crystalizes when it freezes.
   MIN_DISTANCE_SQUARED: 0.90
 } );
+
+export default AbstractVerletAlgorithm;

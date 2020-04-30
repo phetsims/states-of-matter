@@ -52,7 +52,7 @@ function ParticleCanvasNode( particles, modelViewTransform, options ) {
 
 statesOfMatter.register( 'ParticleCanvasNode', ParticleCanvasNode );
 
-export default inherit( CanvasNode, ParticleCanvasNode, {
+inherit( CanvasNode, ParticleCanvasNode, {
 
   /**
    * Paints the particles on the canvas node.
@@ -118,3 +118,5 @@ export default inherit( CanvasNode, ParticleCanvasNode, {
   }
 
 } );
+
+export default ParticleCanvasNode;

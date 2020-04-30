@@ -150,7 +150,7 @@ function DialGaugeNode( multipleParticleModel, tandem ) {
 
 statesOfMatter.register( 'DialGaugeNode', DialGaugeNode );
 
-export default inherit( Node, DialGaugeNode, {
+inherit( Node, DialGaugeNode, {
 
   /**
    * Set the height of the elbow.  Height is specified with respect to the vertical center of the node.
@@ -169,3 +169,5 @@ export default inherit( Node, DialGaugeNode, {
     this.connectorExtension.rectHeight = this.elbowHeight;
   }
 } );
+
+export default DialGaugeNode;

@@ -472,7 +472,7 @@ function ParticleContainerNode( multipleParticleModel, modelViewTransform, optio
 
 statesOfMatter.register( 'ParticleContainerNode', ParticleContainerNode );
 
-export default inherit( Node, ParticleContainerNode, {
+inherit( Node, ParticleContainerNode, {
 
   /**
    * step
@@ -490,3 +490,5 @@ export default inherit( Node, ParticleContainerNode, {
     this.compositeThermometerNode.reset();
   }
 } );
+
+export default ParticleContainerNode;

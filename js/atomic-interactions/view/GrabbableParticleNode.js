@@ -84,7 +84,7 @@ function GrabbableParticleNode( dualAtomModel, particle, modelViewTransform, ena
 
 statesOfMatter.register( 'GrabbableParticleNode', GrabbableParticleNode );
 
-export default inherit( ParticleForceNode, GrabbableParticleNode, {
+inherit( ParticleForceNode, GrabbableParticleNode, {
 
   /**
    * @public
@@ -110,3 +110,5 @@ export default inherit( ParticleForceNode, GrabbableParticleNode, {
     this.minX = minX;
   }
 } );
+
+export default GrabbableParticleNode;

@@ -87,7 +87,7 @@ function ParticleForceNode( particle, modelViewTransform, enableOverlap, tandem 
 
 statesOfMatter.register( 'ParticleForceNode', ParticleForceNode );
 
-export default inherit( ParticleNode, ParticleForceNode, {
+inherit( ParticleNode, ParticleForceNode, {
 
   /**
    * @public
@@ -159,3 +159,5 @@ export default inherit( ParticleNode, ParticleForceNode, {
     this.totalForceVectorNode.setTailAndTip( 0, 0, totalForceX, totalForceY );
   }
 } );
+
+export default ParticleForceNode;

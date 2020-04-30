@@ -679,7 +679,7 @@ const SOLID_INITIAL_STATES = {
 
 statesOfMatter.register( 'WaterPhaseStateChanger', WaterPhaseStateChanger );
 
-export default inherit( AbstractPhaseStateChanger, WaterPhaseStateChanger, {
+inherit( AbstractPhaseStateChanger, WaterPhaseStateChanger, {
 
   /**
    * @public
@@ -738,3 +738,5 @@ export default inherit( AbstractPhaseStateChanger, WaterPhaseStateChanger, {
     this.loadSavedState( dataSetToLoad );
   }
 } );
+
+export default WaterPhaseStateChanger;

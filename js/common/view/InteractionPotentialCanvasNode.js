@@ -38,7 +38,7 @@ function InteractionPotentialCanvasNode( potentialGraphNode, isLjGraphWider, opt
 
 statesOfMatter.register( 'InteractionPotentialCanvasNode', InteractionPotentialCanvasNode );
 
-export default inherit( CanvasNode, InteractionPotentialCanvasNode, {
+inherit( CanvasNode, InteractionPotentialCanvasNode, {
 
   /**
    * Paints the potential energy curve.
@@ -182,3 +182,5 @@ export default inherit( CanvasNode, InteractionPotentialCanvasNode, {
     this.invalidatePaint();
   }
 } );
+
+export default InteractionPotentialCanvasNode;

@@ -117,7 +117,7 @@ function ParticleImageCanvasNode( particles, modelViewTransform, options ) {
 
 statesOfMatter.register( 'ParticleImageCanvasNode', ParticleImageCanvasNode );
 
-export default inherit( CanvasNode, ParticleImageCanvasNode, {
+inherit( CanvasNode, ParticleImageCanvasNode, {
 
   /**
    * @private
@@ -175,3 +175,5 @@ export default inherit( CanvasNode, ParticleImageCanvasNode, {
   }
 
 } );
+
+export default ParticleImageCanvasNode;

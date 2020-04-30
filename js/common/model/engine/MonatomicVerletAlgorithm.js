@@ -29,7 +29,7 @@ function MonatomicVerletAlgorithm( multipleParticleModel ) {
 
 statesOfMatter.register( 'MonatomicVerletAlgorithm', MonatomicVerletAlgorithm );
 
-export default inherit( AbstractVerletAlgorithm, MonatomicVerletAlgorithm, {
+inherit( AbstractVerletAlgorithm, MonatomicVerletAlgorithm, {
 
   /**
    * @param {number} scaledEpsilon
@@ -148,3 +148,5 @@ export default inherit( AbstractVerletAlgorithm, MonatomicVerletAlgorithm, {
     }
   }
 } );
+
+export default MonatomicVerletAlgorithm;

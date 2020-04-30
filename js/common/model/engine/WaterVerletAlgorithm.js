@@ -44,7 +44,7 @@ function WaterVerletAlgorithm( multipleParticleModel ) {
 
 statesOfMatter.register( 'WaterVerletAlgorithm', WaterVerletAlgorithm );
 
-export default inherit( AbstractVerletAlgorithm, WaterVerletAlgorithm, {
+inherit( AbstractVerletAlgorithm, WaterVerletAlgorithm, {
 
   /**
    * @param moleculeDataSet
@@ -282,3 +282,5 @@ export default inherit( AbstractVerletAlgorithm, WaterVerletAlgorithm, {
     }
   }
 } );
+
+export default WaterVerletAlgorithm;

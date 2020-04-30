@@ -85,7 +85,7 @@ function MoleculeForceAndMotionDataSet( atomsPerMolecule ) {
 
 statesOfMatter.register( 'MoleculeForceAndMotionDataSet', MoleculeForceAndMotionDataSet );
 
-export default inherit( Object, MoleculeForceAndMotionDataSet, {
+inherit( Object, MoleculeForceAndMotionDataSet, {
 
   /**
    * get the total kinetic energy of the particles in this data set
@@ -409,3 +409,5 @@ export default inherit( Object, MoleculeForceAndMotionDataSet, {
   }
 
 } );
+
+export default MoleculeForceAndMotionDataSet;
