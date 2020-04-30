@@ -172,7 +172,6 @@ class AtomicInteractionsScreenView extends ScreenView {
         playPauseStepXSpacing: 10
       },
 
-      speedRadioButtonGroupOnLeft: true,
       speedRadioButtonGroupOptions: {
         labelOptions: {
           fill: SOMColorProfile.controlPanelTextProperty,
@@ -182,7 +181,7 @@ class AtomicInteractionsScreenView extends ScreenView {
       },
 
       // position empirically determined
-      centerX: this.layoutBounds.centerX + 27,
+      centerX: this.layoutBounds.centerX + 20,
       bottom: this.layoutBounds.bottom - 14,
 
       tandem: tandem.createTandem( 'timeControlNode' )
