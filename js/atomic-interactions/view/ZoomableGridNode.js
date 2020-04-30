@@ -145,7 +145,7 @@ function ZoomableGridNode( atomsView, offsetX, offsetY, width, height, options )
 
 statesOfMatter.register( 'ZoomableGridNode', ZoomableGridNode );
 
-export default inherit( Node, ZoomableGridNode, {
+inherit( Node, ZoomableGridNode, {
 
   /**
    * @param {number} offsetX
@@ -183,3 +183,5 @@ export default inherit( Node, ZoomableGridNode, {
     }
   }
 } );
+
+export default ZoomableGridNode;

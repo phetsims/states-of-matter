@@ -102,7 +102,7 @@ function HandNode( dualAtomModel, particle, modelViewTransform, minX, tandem ) {
 
 statesOfMatter.register( 'HandNode', HandNode );
 
-export default inherit( Node, HandNode, {
+inherit( Node, HandNode, {
 
   dispose: function() {
     this.disposeHandNode();
@@ -133,3 +133,5 @@ export default inherit( Node, HandNode, {
     this.minX = minX;
   }
 } );
+
+export default HandNode;

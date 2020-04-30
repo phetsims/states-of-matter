@@ -170,7 +170,7 @@ function EpsilonControlPotentialGraph( sigma, epsilon, wide, multipleParticleMod
 
 statesOfMatter.register( 'EpsilonControlPotentialGraph', EpsilonControlPotentialGraph );
 
-export default inherit( PotentialGraphNode, EpsilonControlPotentialGraph, {
+inherit( PotentialGraphNode, EpsilonControlPotentialGraph, {
 
   /**
    * This is an override of the method in the base class that draws the curve on the graph, and this override draws the
@@ -193,3 +193,5 @@ export default inherit( PotentialGraphNode, EpsilonControlPotentialGraph, {
     this.interactionEnabled = this.multipleParticleModel.substanceProperty.get() === SubstanceType.ADJUSTABLE_ATOM;
   }
 } );
+
+export default EpsilonControlPotentialGraph;

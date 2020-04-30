@@ -53,7 +53,7 @@ function IsokineticThermostat( moleculeDataSet, minTemperature ) {
 
 statesOfMatter.register( 'IsokineticThermostat', IsokineticThermostat );
 
-export default inherit( Object, IsokineticThermostat, {
+inherit( Object, IsokineticThermostat, {
 
   /**
    * @param {number} measuredTemperature - measured temperature of particles, in model units
@@ -155,3 +155,5 @@ export default inherit( Object, IsokineticThermostat, {
     this.accumulatedAverageVelocityChange.setXY( 0, 0 );
   }
 } );
+
+export default IsokineticThermostat;

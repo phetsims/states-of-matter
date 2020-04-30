@@ -68,7 +68,7 @@ function ParticleNode( particle, modelViewTransform, enableOverlap, tandem ) {
 
 statesOfMatter.register( 'ParticleNode', ParticleNode );
 
-export default inherit( Node, ParticleNode, {
+inherit( Node, ParticleNode, {
 
   /**
    * @public
@@ -102,3 +102,5 @@ export default inherit( Node, ParticleNode, {
       .addColorStop( 0.95, transparentDarkenedBasedColor );
   }
 } );
+
+export default ParticleNode;

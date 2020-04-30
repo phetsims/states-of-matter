@@ -67,7 +67,7 @@ function PositionMarker( radius, color, options ) {
 
 statesOfMatter.register( 'PositionMarker', PositionMarker );
 
-export default inherit( Node, PositionMarker, {
+inherit( Node, PositionMarker, {
 
   /**
    * @param color
@@ -86,3 +86,5 @@ export default inherit( Node, PositionMarker, {
     this.sphereNode.stroke = shadowColor;
   }
 } );
+
+export default PositionMarker;

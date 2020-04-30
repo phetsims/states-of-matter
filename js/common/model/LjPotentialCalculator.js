@@ -30,7 +30,7 @@ function LjPotentialCalculator( sigma, epsilon ) {
 
 statesOfMatter.register( 'LjPotentialCalculator', LjPotentialCalculator );
 
-export default inherit( Object, LjPotentialCalculator, {
+inherit( Object, LjPotentialCalculator, {
 
   /**
    * @returns {number}
@@ -118,3 +118,5 @@ export default inherit( Object, LjPotentialCalculator, {
     return this.calculateLjPotential( distance ) - this.calculateLjPotential( this.calculateMinimumForceDistance() );
   }
 } );
+
+export default LjPotentialCalculator;

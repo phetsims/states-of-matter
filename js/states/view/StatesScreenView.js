@@ -129,7 +129,7 @@ function StatesScreenView( multipleParticleModel, tandem ) {
 
 statesOfMatter.register( 'StatesScreenView', StatesScreenView );
 
-export default inherit( ScreenView, StatesScreenView, {
+inherit( ScreenView, StatesScreenView, {
 
   /**
    * @public
@@ -138,3 +138,5 @@ export default inherit( ScreenView, StatesScreenView, {
     this.particleContainerNode.step();
   }
 } );
+
+export default StatesScreenView;

@@ -87,10 +87,12 @@ function InteractionPotentialAccordionBox( sigma, epsilon, wide, multipleParticl
 }
 
 statesOfMatter.register( 'InteractionPotentialAccordionBox', InteractionPotentialAccordionBox );
-export default inherit( AccordionBox, InteractionPotentialAccordionBox, {
+inherit( AccordionBox, InteractionPotentialAccordionBox, {
 
   // pass through to graph
   setMolecular( molecular ) {
     this.graph.setMolecular( molecular );
   }
 } );
+
+export default InteractionPotentialAccordionBox;

@@ -2021,7 +2021,7 @@ const LIQUID_INITIAL_STATES = {
 
 };
 
-export default inherit( AbstractPhaseStateChanger, MonatomicPhaseStateChanger, {
+inherit( AbstractPhaseStateChanger, MonatomicPhaseStateChanger, {
 
   /**
    * @public
@@ -2088,3 +2088,5 @@ export default inherit( AbstractPhaseStateChanger, MonatomicPhaseStateChanger, {
     this.loadSavedState( dataSetToLoad );
   }
 } );
+
+export default MonatomicPhaseStateChanger;

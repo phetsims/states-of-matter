@@ -31,7 +31,7 @@ function TimeSpanDataQueue( length, maxTimeSpan ) {
 
 statesOfMatter.register( 'TimeSpanDataQueue', TimeSpanDataQueue );
 
-export default inherit( Object, TimeSpanDataQueue, {
+inherit( Object, TimeSpanDataQueue, {
 
   /**
    * add a new value with associated delta time - this automatically removes data values that go beyond the max time
@@ -81,3 +81,5 @@ export default inherit( Object, TimeSpanDataQueue, {
     this.timeSpan = 0;
   }
 } );
+
+export default TimeSpanDataQueue;

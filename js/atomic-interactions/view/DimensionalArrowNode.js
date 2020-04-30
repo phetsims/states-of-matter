@@ -47,7 +47,7 @@ function DimensionalArrowNode( tailX, tailY, tipX, tipY, options ) {
 
 statesOfMatter.register( 'DimensionalArrowNode', DimensionalArrowNode );
 
-export default inherit( Path, DimensionalArrowNode, {
+inherit( Path, DimensionalArrowNode, {
 
   /**
    * @param {number} tailX - tail X position
@@ -85,3 +85,5 @@ export default inherit( Path, DimensionalArrowNode, {
     } );
   }
 } );
+
+export default DimensionalArrowNode;

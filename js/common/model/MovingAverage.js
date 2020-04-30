@@ -31,7 +31,7 @@ function MovingAverage( size, options ) {
 
 statesOfMatter.register( 'MovingAverage', MovingAverage );
 
-export default inherit( Object, MovingAverage, {
+inherit( Object, MovingAverage, {
 
   addValue: function( newValue ) {
     const replacedValue = this.array[ this.currentIndex ];
@@ -50,3 +50,5 @@ export default inherit( Object, MovingAverage, {
     this.currentIndex = 0;
   }
 } );
+
+export default MovingAverage;

@@ -35,7 +35,7 @@ function AbstractPhaseStateChanger( multipleParticleModel ) {
 
 statesOfMatter.register( 'AbstractPhaseStateChanger', AbstractPhaseStateChanger );
 
-export default inherit( Object, AbstractPhaseStateChanger, {
+inherit( Object, AbstractPhaseStateChanger, {
 
   /**
    * Set the phase based on the specified ID.  This often needs to be overridden in descendant classes to do more
@@ -379,3 +379,5 @@ export default inherit( Object, AbstractPhaseStateChanger, {
   DISTANCE_BETWEEN_PARTICLES_IN_CRYSTAL: 0.12,  // In particle diameters.
   MAX_PLACEMENT_ATTEMPTS: 500 // For random placement of particles.
 } );
+
+export default AbstractPhaseStateChanger;
