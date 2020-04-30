@@ -357,16 +357,8 @@ function AtomicInteractionsControlPanel( dualAtomModel, enableHeterogeneousAtoms
     tandem: atomDiameterSliderTandem.createTandem( 'title' )
   } );
 
-  const commonSliderOptions = {
+  const commonSliderOptions = merge( SOMConstants.ADJUSTABLE_ATTRACTION_SLIDER_COMMON_OPTIONS, {
     trackSize: new Dimension2( sliderTrackWidth, 5 ),
-    trackFill: 'white',
-    thumbSize: new Dimension2( 14, 25 ),
-    thumbFill: '#A670DB',
-    thumbFillHighlighted: '#D966FF',
-    thumbCenterLineStroke: 'black',
-    thumbTouchAreaXDilation: 8,
-    thumbTouchAreaYDilation: 8,
-    majorTickLength: 15,
     majorTickStroke: options.panelTextFill,
     trackStroke: options.panelTextFill,
     constrainValue: value => Utils.roundToInterval( value, 5 ),
@@ -376,7 +368,7 @@ function AtomicInteractionsControlPanel( dualAtomModel, enableHeterogeneousAtoms
     endDrag: function() {
       dualAtomModel.setMotionPaused( false );
     }
-  };
+  } );
 
   const atomDiameterSlider = new HSlider(
     dualAtomModel.adjustableAtomDiameterProperty,
@@ -385,7 +377,11 @@ function AtomicInteractionsControlPanel( dualAtomModel, enableHeterogeneousAtoms
   );
 
   const maxTickTextWidth = enableHeterogeneousAtoms ? 85 : 35;
-  const tickTextOptions = { fill: options.panelTextFill, maxWidth: maxTickTextWidth };
+  const tickTextOptions = {
+    font: new PhetFont( 11 ),
+    fill: options.panelTextFill,
+    maxWidth: maxTickTextWidth
+  };
   const smallText = new Text( smallString, tickTextOptions );
   const largeText = new Text( largeString, tickTextOptions );
 

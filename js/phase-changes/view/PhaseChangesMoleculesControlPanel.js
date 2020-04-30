@@ -86,26 +86,10 @@ function PhaseChangesMoleculesControlPanel( phaseChangesModel, options ) {
   const interactionStrengthSlider = new HSlider(
     phaseChangesModel.interactionStrengthProperty,
     new Range( SOMConstants.MIN_ADJUSTABLE_EPSILON, PhaseChangesModel.MAX_ADJUSTABLE_EPSILON ),
-    {
-      trackFill: 'white',
-      thumbSize: new Dimension2( 14, 25 ),
-      majorTickLength: 15,
-      minorTickLength: 12,
+    merge( SOMConstants.ADJUSTABLE_ATTRACTION_SLIDER_COMMON_OPTIONS, {
       trackSize: new Dimension2( 110, 4 ),
-      trackStroke: SOMColorProfile.controlPanelTextProperty,
-      trackLineWidth: 1,
-      thumbLineWidth: 1,
-      thumbTouchAreaXDilation: 8,
-      thumbTouchAreaYDilation: 8,
-      tickLabelSpacing: 6,
-      majorTickStroke: SOMColorProfile.controlPanelTextProperty,
-      majorTickLineWidth: 1,
-      minorTickStroke: SOMColorProfile.controlPanelTextProperty,
-      minorTickLineWidth: 1,
-      cursor: 'pointer',
       tandem: interactionStrengthSliderTandem
-    }
-  );
+    } ) );
   interactionStrengthSlider.addMajorTick( PhaseChangesModel.MAX_ADJUSTABLE_EPSILON, strongTitle );
   interactionStrengthSlider.addMajorTick( SOMConstants.MIN_ADJUSTABLE_EPSILON, weakTitle );
 

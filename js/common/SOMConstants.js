@@ -1,18 +1,19 @@
 // Copyright 2014-2020, University of Colorado Boulder
 
 /**
- * This class is a collection of constants that configure global properties. If you change something here, it will
- * change *everywhere* in this simulation.
+ * This singleton is a collection of constants that are used in multiple places throughout the simulation.
  *
  * @author John Blanco
  * @author Aaron Davis
  */
 
 import Bounds2 from '../../../dot/js/Bounds2.js';
+import Dimension2 from '../../../dot/js/Dimension2.js';
 import Element from '../../../nitroglycerin/js/Element.js';
 import Color from '../../../scenery/js/util/Color.js';
 import statesOfMatter from '../statesOfMatter.js';
 import AtomType from './model/AtomType.js';
+import SOMColorProfile from './view/SOMColorProfile.js';
 
 // constants (these are vars because other constants refer to them)
 const SOLID_TEMPERATURE = 0.15;
@@ -151,6 +152,21 @@ const SOMConstants = {
 
   // map of atom types to the attributes needed in this sim, can't use constructor due to limitations in IE
   MAP_ATOM_TYPE_TO_ATTRIBUTES: MAP_ATOM_TYPE_TO_ATTRIBUTES,
+
+  // slider options that are common to the sliders that are used to control the attraction level between atoms
+  ADJUSTABLE_ATTRACTION_SLIDER_COMMON_OPTIONS: {
+    majorTickLength: 15,
+    majorTickStroke: SOMColorProfile.controlPanelTextProperty,
+    minorTickStroke: SOMColorProfile.controlPanelTextProperty,
+    thumbSize: new Dimension2( 14, 25 ),
+    thumbFill: new Color( '#A670DB' ),
+    thumbFillHighlighted: new Color( '#D966FF' ),
+    thumbCenterLineStroke: Color.BLACK,
+    thumbTouchAreaXDilation: 8,
+    thumbTouchAreaYDilation: 8,
+    trackFill: Color.WHITE,
+    trackStroke: SOMColorProfile.controlPanelTextProperty
+  },
 
   // misc
   RESET_ALL_BUTTON_RADIUS: 17,
