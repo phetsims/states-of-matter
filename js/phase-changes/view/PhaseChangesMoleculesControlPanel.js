@@ -86,7 +86,7 @@ function PhaseChangesMoleculesControlPanel( phaseChangesModel, options ) {
   const interactionStrengthSlider = new HSlider(
     phaseChangesModel.interactionStrengthProperty,
     new Range( SOMConstants.MIN_ADJUSTABLE_EPSILON, PhaseChangesModel.MAX_ADJUSTABLE_EPSILON ),
-    merge( SOMConstants.ADJUSTABLE_ATTRACTION_SLIDER_COMMON_OPTIONS, {
+    merge( {}, SOMConstants.ADJUSTABLE_ATTRACTION_SLIDER_COMMON_OPTIONS, {
       trackSize: new Dimension2( 110, 4 ),
       tandem: interactionStrengthSliderTandem
     } ) );

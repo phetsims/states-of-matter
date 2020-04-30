@@ -357,7 +357,7 @@ function AtomicInteractionsControlPanel( dualAtomModel, enableHeterogeneousAtoms
     tandem: atomDiameterSliderTandem.createTandem( 'title' )
   } );
 
-  const commonSliderOptions = merge( SOMConstants.ADJUSTABLE_ATTRACTION_SLIDER_COMMON_OPTIONS, {
+  const commonSliderOptions = merge( {}, SOMConstants.ADJUSTABLE_ATTRACTION_SLIDER_COMMON_OPTIONS, {
     trackSize: new Dimension2( sliderTrackWidth, 5 ),
     majorTickStroke: options.panelTextFill,
     trackStroke: options.panelTextFill,
