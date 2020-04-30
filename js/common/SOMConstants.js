@@ -10,6 +10,7 @@
 import Bounds2 from '../../../dot/js/Bounds2.js';
 import Dimension2 from '../../../dot/js/Dimension2.js';
 import Element from '../../../nitroglycerin/js/Element.js';
+import PhetFont from '../../../scenery-phet/js/PhetFont.js';
 import Color from '../../../scenery/js/util/Color.js';
 import statesOfMatter from '../statesOfMatter.js';
 import AtomType from './model/AtomType.js';
@@ -167,6 +168,7 @@ const SOMConstants = {
     trackFill: Color.WHITE,
     trackStroke: SOMColorProfile.controlPanelTextProperty
   },
+  SLIDER_TICK_TEXT_FONT: new PhetFont( 10 ),
 
   // misc
   RESET_ALL_BUTTON_RADIUS: 17,

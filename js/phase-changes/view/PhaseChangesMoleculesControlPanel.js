@@ -66,7 +66,7 @@ function PhaseChangesMoleculesControlPanel( phaseChangesModel, options ) {
 
   Node.call( this );
   const tickTextOptions = {
-    font: new PhetFont( NORMAL_TEXT_FONT_SIZE ),
+    font: SOMConstants.SLIDER_TICK_TEXT_FONT,
     fill: SOMColorProfile.controlPanelTextProperty,
     maxWidth: TICK_TEXT_MAX_WIDTH
   };

@@ -378,7 +378,7 @@ function AtomicInteractionsControlPanel( dualAtomModel, enableHeterogeneousAtoms
 
   const maxTickTextWidth = enableHeterogeneousAtoms ? 85 : 35;
   const tickTextOptions = {
-    font: new PhetFont( 11 ),
+    font: SOMConstants.SLIDER_TICK_TEXT_FONT,
     fill: options.panelTextFill,
     maxWidth: maxTickTextWidth
   };
