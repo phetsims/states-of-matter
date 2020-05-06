@@ -23,7 +23,9 @@ class MultipleParticleModelIO extends ObjectIO {
   static toStateObject( model ) {
     validate( model, this.validator );
     return {
-      moleculeDataSet: MoleculeForceAndMotionDataSetIO.toStateObject( model.moleculeDataSet )
+      private: { // to indicate that it is needed for state, but shouldn't be shown in Studio.
+        moleculeDataSet: MoleculeForceAndMotionDataSetIO.toStateObject( model.moleculeDataSet )
+      }
     };
   }
 
@@ -34,7 +36,7 @@ class MultipleParticleModelIO extends ObjectIO {
    */
   static fromStateObject( stateObject ) {
     return {
-      moleculeDataSet: MoleculeForceAndMotionDataSetIO.fromStateObject( stateObject.moleculeDataSet )
+      moleculeDataSet: MoleculeForceAndMotionDataSetIO.fromStateObject( stateObject.private.moleculeDataSet )
     };
   }
 
