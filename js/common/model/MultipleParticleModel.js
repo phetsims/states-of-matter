@@ -1,14 +1,18 @@
 // Copyright 2014-2020, University of Colorado Boulder
 
 /**
- * This is the main class for the model portion of the "States of Matter" simulation.  It maintains a set of data that
- * represents a normalized model in which all atoms are assumed to have a diameter of 1, since this allows for very
- * quick calculations, and also a set of data for atoms that have the actual diameter of the atoms being simulated (e.g.
- * Argon). Throughout the comments and in the variable naming, I've tried to use the terminology of "normalized data
- * set" (or sometimes simply "normalized set") for the former and "model data set" for the latter.  When the simulation
- * is running, the normalized data set is updated first, since that is where the hardcore calculations are performed,
- * and then the model data set is synchronized with the normalized data.  It is the model data set that is monitored by
- * the view components that actually display the molecule positions to the user.
+ * This is the main class for the model portion of the first two screens of the "States of Matter" simulation.  Its
+ * primary purpose is to simulate a set of molecules that are interacting with one another based on the attraction and
+ * repulsion that is described by the Lennard-Jones potential equation.
+ *
+ * Each instance of this class maintains a set of data that represents a normalized model in which all atoms that
+ * comprise each molecule - and often it is just one atom per molecule - are assumed to have a diameter of 1, since this
+ * allows for very quick calculations, and also a set of data for atoms that have the actual diameter of the atoms being
+ * simulated (e.g. Argon). Throughout the comments and in the variable naming the terms "normalized data set" (or
+ * sometimes simply "normalized set") and "model data set" are used for this date, respectively.  When the simulation is
+ * running, the normalized data set is updated first, since that is where the hardcore calculations are performed, and
+ * then the model data set is synchronized with the normalized data.  It is the model data set that is monitored by the
+ * view components that actually display the molecule positions to the user.
  *
  * @author John Blanco
  * @author Aaron Davis
@@ -149,6 +153,12 @@ class MultipleParticleModel extends PhetioObject {
     // observable model properties
     //-----------------------------------------------------------------------------------------------------------------
 
+    // @public (read-write)
+    this.substanceProperty = new EnumerationProperty( SubstanceType, DEFAULT_SUBSTANCE, {
+      validValues: options.validSubstances,
+      tandem: tandem.createTandem( 'substanceProperty' )
+    } );
+
     // @public (read-only)
     this.containerHeightProperty = new NumberProperty( CONTAINER_INITIAL_HEIGHT, {
       tandem: tandem.createTandem( 'containerHeightProperty' ),
@@ -175,12 +185,6 @@ class MultipleParticleModel extends PhetioObject {
       tandem: tandem.createTandem( 'pressureProperty' ),
       phetioReadOnly: true,
       units: 'atm'
-    } );
-
-    // @public (read-write)
-    this.substanceProperty = new EnumerationProperty( SubstanceType, DEFAULT_SUBSTANCE, {
-      validValues: options.validSubstances,
-      tandem: tandem.createTandem( 'substanceProperty' )
     } );
 
     // @public (read-write)
