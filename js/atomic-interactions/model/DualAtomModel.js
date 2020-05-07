@@ -116,11 +116,6 @@ class DualAtomModel {
     // other initialization
     //-----------------------------------------------------------------------------------------------------------------
 
-    // for phet-io
-    this.isPhetioSettingStateProperty = _.hasIn( window, 'phet.phetio.phetioEngine' ) ?
-                                        phet.phetio.phetioEngine.phetioStateEngine.isSettingStateProperty :
-                                        new BooleanProperty( false );
-
     // update the atom pair when the atom pair property is set
     this.atomPairProperty.link( atomPair => {
       this.fixedAtom.atomTypeProperty.set( atomPair.fixedAtomType );
@@ -135,7 +130,7 @@ class DualAtomModel {
       );
 
       // reset other initial state variables
-      if ( !this.isPhetioSettingStateProperty.value ) {
+      if ( !phet.joist.sim.isSettingPhetioStateProperty.value ) {
 
         // only reset position if this is not a phet-io state update, otherwise this overwrites particle position
         this.resetMovableAtomPos();
@@ -181,7 +176,7 @@ class DualAtomModel {
       this.movableAtom.radiusProperty.set( sigma / 2 );
 
       // move the atom to the minimum force distance from the fixed atom (but not if this is a phet-io state update)
-      if ( !this.isPhetioSettingStateProperty.value ) {
+      if ( !phet.joist.sim.isSettingPhetioStateProperty.value ) {
         this.movableAtom.setPosition( this.ljPotentialCalculator.calculateMinimumForceDistance(), 0 );
       }
     }

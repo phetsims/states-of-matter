@@ -479,9 +479,13 @@ class MultipleParticleModel extends PhetioObject {
     // initialized.
     const phase = this.mapTemperatureToPhase();
 
-    // Remove existing atoms and reset the global model parameters.
+    // remove all atoms
     this.removeAllAtoms();
-    this.initializeModelParameters();
+
+    // Reinitialize the model parameters, but not if this is a phet-io setState operation.
+    if ( !phet.joist.sim.isSettingPhetioStateProperty.value ) {
+      this.initializeModelParameters();
+    }
 
     // Set the model parameters that are dependent upon the substance being simulated.
     switch( substance ) {
@@ -524,11 +528,14 @@ class MultipleParticleModel extends PhetioObject {
         throw( new Error( 'unsupported substance' ) ); // should never happen, debug if it does
     }
 
-    // Reset the container size. This must be done after the diameter is initialized because the normalized size is
-    // dependent upon the particle diameter. This should also not be done during phet-io seState because it overwrites
-    // this.containerHeightProperty's value that came from the phet-io state.
+    // Update the container dimensions based on the new substance.  In most cases, the container size is reset at this
+    // point, but when the substance is being updated using phet-io the container size is *not* reset, since doing so
+    // may overwrite a size that was specifically set by the user.
     if ( !phet.joist.sim.isSettingPhetioStateProperty.value ) {
       this.resetContainerSize();
+    }
+    else {
+      this.updateNormalizedContainerDimensions();
     }
 
     // Adjust the injection point based on the new particle diameter.  These are using the normalized coordinate values.
@@ -835,12 +842,19 @@ class MultipleParticleModel extends PhetioObject {
    * @private
    */
   resetContainerSize() {
-
-    // Set the initial size of the container.
     this.containerHeightProperty.reset();
+    this.updateNormalizedContainerDimensions();
+  }
+
+  /**
+   * Update the normalized full-size container dimensions based on the current particle diameter.
+   * @private
+   */
+  updateNormalizedContainerDimensions() {
     this.normalizedContainerWidth = CONTAINER_WIDTH / this.particleDiameter;
-    this.normalizedContainerHeight = this.containerHeightProperty.get() / this.particleDiameter;
-    this.normalizedTotalContainerHeight = this.containerHeightProperty.get() / this.particleDiameter;
+    const nonNormalizedContainerSize = this.containerHeightProperty.value;
+    this.normalizedContainerHeight = nonNormalizedContainerSize / this.particleDiameter;
+    this.normalizedTotalContainerHeight = nonNormalizedContainerSize / this.particleDiameter;
   }
 
   /**

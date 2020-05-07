@@ -114,9 +114,7 @@ function StatesPhaseControlNode( model, options ) {
       // Only set the phase in the model if this change comes directly from user interaction and not from PhET-iO state.
       // If the change is from the state engine, then the phase will be set implicitly when the positions and velocities
       // of the molecules are set.
-      if ( !( _.hasIn( window, 'phet.phetio.phetioEngine' ) &&
-              phet.phetio.phetioEngine.phetioStateEngine.isSettingStateProperty.value ) ) {
-
+      if ( !phet.joist.sim.isSettingPhetioStateProperty.value ) {
         model.setPhase( state );
       }
     }
