@@ -525,8 +525,11 @@ class MultipleParticleModel extends PhetioObject {
     }
 
     // Reset the container size. This must be done after the diameter is initialized because the normalized size is
-    // dependent upon the particle diameter.
-    this.resetContainerSize();
+    // dependent upon the particle diameter. This should also not be done during phet-io seState because it overwrites
+    // this.containerHeightProperty's value that came from the phet-io state.
+    if ( !phet.joist.sim.isSettingPhetioStateProperty.value ) {
+      this.resetContainerSize();
+    }
 
     // Adjust the injection point based on the new particle diameter.  These are using the normalized coordinate values.
     this.injectionPointX = CONTAINER_WIDTH / this.particleDiameter * INJECTION_POINT_HORIZ_PROPORTION;
