@@ -40,22 +40,20 @@ const POTENTIAL_LINE_COLOR = new Color( 'red' );
 /**
  * @param {number} sigma - atom diameter
  * @param {number} epsilon - interaction strength
- * @param {boolean} wide - true if the wide screen version of the graph is needed, false if not.
  * @param {MultipleParticleModel} multipleParticleModel - model of the simulation
  * @param {Object} [options] that can be passed on to the underlying node
  * @constructor
  */
-function EpsilonControlPotentialGraph( sigma, epsilon, wide, multipleParticleModel, options ) {
+function EpsilonControlPotentialGraph( sigma, epsilon, multipleParticleModel, options ) {
 
   options = merge( { tandem: Tandem.REQUIRED }, options );
 
   const self = this;
-  PotentialGraphNode.call( this, sigma, epsilon, wide, { tandem: options.tandem } );
+  PotentialGraphNode.call( this, sigma, epsilon, {
+    allowInteraction: true,
+    tandem: options.tandem
+  } );
   this.multipleParticleModel = multipleParticleModel;
-
-  // Create a parent tandem for the epsilon parameter control subcomponents, requested by reviewers in
-  // https://github.com/phetsims/states-of-matter/issues/265.
-  const epsilonControlTandem = options.tandem.createTandem( 'epsilonControl' );
 
   // variables used to track dragging of controls related to epsilon value
   let startDragY;
@@ -68,13 +66,14 @@ function EpsilonControlPotentialGraph( sigma, epsilon, wide, multipleParticleMod
     pickable: true,
     fill: EPSILON_LINE_COLOR,
     stroke: EPSILON_LINE_COLOR,
-    tandem: epsilonControlTandem.createTandem( 'line' )
+    tandem: this.interactiveControlsLayer.tandem.createTandem( 'epsilonLine' ),
+    phetioReadOnly: true
   } );
   this.epsilonControls.line.addInputListener( new FillHighlightListener(
     RESIZE_HANDLE_NORMAL_COLOR,
     RESIZE_HANDLE_HIGHLIGHTED_COLOR
   ) );
-  this.ljPotentialGraph.addChild( this.epsilonControls.line );
+  this.interactiveControlsLayer.addChild( this.epsilonControls.line );
   this.epsilonControls.line.touchArea = this.epsilonControls.line.localBounds.dilatedXY( 20, 20 );
 
   // drag listener
@@ -113,12 +112,13 @@ function EpsilonControlPotentialGraph( sigma, epsilon, wide, multipleParticleMod
       doubleHead: true,
       pickable: true,
       cursor: 'pointer',
-      tandem: epsilonControlTandem.createTandem( 'arrow' )
+      tandem: this.interactiveControlsLayer.tandem.createTandem( 'epsilonArrow' ),
+      phetioReadOnly: true
     } );
   this.epsilonControls.arrow.addInputListener(
     new FillHighlightListener( RESIZE_HANDLE_NORMAL_COLOR, RESIZE_HANDLE_HIGHLIGHTED_COLOR )
   );
-  this.ljPotentialGraph.addChild( this.epsilonControls.arrow );
+  this.interactiveControlsLayer.addChild( this.epsilonControls.arrow );
   this.epsilonControls.arrow.addInputListener( new DragListener( {
 
     start: event => {
@@ -143,7 +143,7 @@ function EpsilonControlPotentialGraph( sigma, epsilon, wide, multipleParticleMod
     tandem: this.epsilonControls.arrow.tandem.createTandem( 'dragListener' )
   } ) );
 
-  this.interactionPotentialCanvasNode = new InteractionPotentialCanvasNode( this, false, {
+  this.interactionPotentialCanvasNode = new InteractionPotentialCanvasNode( this, {
     canvasBounds: new Bounds2( 0, 0, 125, this.graphHeight )
   } );
 

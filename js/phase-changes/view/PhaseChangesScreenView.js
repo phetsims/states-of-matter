@@ -194,7 +194,6 @@ function PhaseChangesScreenView( model, isPotentialGraphEnabled, tandem ) {
     interactionPotentialAccordionBox = new InteractionPotentialAccordionBox(
       SOMConstants.MAX_SIGMA,
       SOMConstants.MIN_EPSILON,
-      false,
       model,
       {
         maxWidth: PANEL_WIDTH,

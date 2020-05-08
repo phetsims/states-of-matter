@@ -89,7 +89,7 @@ class AtomicInteractionsScreenView extends ScreenView {
     } );
 
     // @private interactive potential diagram
-    this.interactivePotentialGraph = new InteractivePotentialGraph( dualAtomModel, true, {
+    this.interactivePotentialGraph = new InteractivePotentialGraph( dualAtomModel, {
       zoomable: enableHeterogeneousAtoms,
       left: this.modelViewTransform.modelToViewX( 0 ) - 43, // empirically determined such left edge of graph is at
                                                             // center of fixed atom

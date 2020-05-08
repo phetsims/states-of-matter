@@ -9,6 +9,7 @@
  */
 
 import Utils from '../../../../dot/js/Utils.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
 import inherit from '../../../../phet-core/js/inherit.js';
 import ArrowShape from '../../../../scenery-phet/js/ArrowShape.js';
 import CanvasNode from '../../../../scenery/js/nodes/CanvasNode.js';
@@ -22,18 +23,19 @@ const EPSILON_LINE_WIDTH = 1;
 
 /**
  * @param {PotentialGraphNode} potentialGraphNode
- * @param {boolean} isLjGraphWider  - true for wider graph else narrow graph
  * @param {Object} [options] that can be passed on to the underlying node
  * @constructor
  */
-function InteractionPotentialCanvasNode( potentialGraphNode, isLjGraphWider, options ) {
+function InteractionPotentialCanvasNode( potentialGraphNode, options ) {
   CanvasNode.call( this, options );
   this.potentialGraph = potentialGraphNode; // @private
-  this.isLjGraphWider = isLjGraphWider; // @private
 
-  // For efficiency, pre-allocate the array that represents the Y positions of the curve.  The X positions are the
-  // index into the array.
-  this.curveYPositions = new Array( Utils.roundSymmetric( potentialGraphNode.graphWidth ) );  // @private
+  // @private {number[]} - ror efficiency, pre-allocate the array that represents the Y positions of the curve.  The X
+  // positions are the indexes into the array.
+  this.curveYPositions = new Array( Utils.roundSymmetric( potentialGraphNode.graphWidth ) );
+
+  // @private {Vector2} - reusable vector for positioning the epsilon arrow
+  this.epsilonArrowStartPoint = new Vector2( 0, 0 );
 }
 
 statesOfMatter.register( 'InteractionPotentialCanvasNode', InteractionPotentialCanvasNode );
@@ -115,11 +117,11 @@ inherit( CanvasNode, InteractionPotentialCanvasNode, {
     }
 
     // Position the epsilon arrow, which is a vertical double-headed arrow between the bottom of the well and the x axis.
-    this.potentialGraph.epsilonArrowStartPt.setXY(
+    this.epsilonArrowStartPoint.setXY(
       this.potentialGraph.graphMin.x,
       this.potentialGraph.graphHeight / 2
     );
-    if ( this.potentialGraph.epsilonArrowStartPt.distance( this.potentialGraph.graphMin ) > 5 ) {
+    if ( this.epsilonArrowStartPoint.distance( this.potentialGraph.graphMin ) > 5 ) {
       this.potentialGraph.epsilonArrow.setVisible( true );
       const doubleHead = this.potentialGraph.graphMin.y <= this.potentialGraph.graphHeight ||
                          this.potentialGraph.graphMin.y - 10 < this.potentialGraph.graphHeight;
@@ -128,8 +130,8 @@ inherit( CanvasNode, InteractionPotentialCanvasNode, {
       this.potentialGraph.epsilonArrowShape = new ArrowShape(
         this.potentialGraph.graphMin.x,
         tailY,
-        this.potentialGraph.epsilonArrowStartPt.x,
-        this.potentialGraph.epsilonArrowStartPt.y,
+        this.epsilonArrowStartPoint.x,
+        this.epsilonArrowStartPoint.y,
         { doubleHead: doubleHead, headHeight: 5, headWidth: 6, tailWidth: 2 }
       );
       this.potentialGraph.epsilonArrow.setShape( this.potentialGraph.epsilonArrowShape );

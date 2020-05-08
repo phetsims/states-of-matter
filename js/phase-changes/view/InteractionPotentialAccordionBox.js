@@ -26,19 +26,17 @@ const interactionPotentialString = statesOfMatterStrings.interactionPotential;
 /**
  * @param {number} sigma - atom diameter
  * @param {number} epsilon - interaction strength
- * @param {boolean} wide - true if the wide screen version of the graph is needed, false if not.
  * @param {MultipleParticleModel} multipleParticleModel - model of the simulation
  * @param {Object} [options] that can be passed on to the underlying node
  * @constructor
  */
-function InteractionPotentialAccordionBox( sigma, epsilon, wide, multipleParticleModel, options ) {
+function InteractionPotentialAccordionBox( sigma, epsilon, multipleParticleModel, options ) {
 
   options = merge( { tandem: Tandem.REQUIRED }, options );
 
   this.graph = new EpsilonControlPotentialGraph(
     sigma,
     epsilon,
-    wide,
     multipleParticleModel,
     { tandem: options.tandem.createTandem( 'graph' ) }
   );

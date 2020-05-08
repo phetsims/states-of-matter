@@ -35,21 +35,23 @@ const POTENTIAL_LINE_COLOR = new Color( 'red' );
 
 /**
  * @param {DualAtomModel} dualAtomModel - model of the simulation
- * @param {boolean} wide - true if the wide screen version of the graph is needed, false if not
  * @param {Object} [options] that can be passed on to the underlying node
  * @constructor
  */
-function InteractivePotentialGraph( dualAtomModel, wide, options ) {
+function InteractivePotentialGraph( dualAtomModel, options ) {
 
-  options = merge( { tandem: Tandem.REQUIRED }, options );
+  options = merge( {
+    tandem: Tandem.REQUIRED
+  }, options );
 
   PotentialGraphNode.call(
     this,
     dualAtomModel.getSigma(),
     dualAtomModel.getEpsilon(),
-    wide,
     {
       includePositionMarker: true,
+      allowInteraction: true,
+      wide: true,
       zoomable: options.zoomable,
       tandem: options.tandem
     }
@@ -91,9 +93,6 @@ function InteractivePotentialGraph( dualAtomModel, wide, options ) {
     } ) );
   }
 
-  // parent tandem for the epsilon controller
-  const epsilonControlTandem = options.tandem.createTandem( 'epsilonControl' );
-
   // Add the line that will indicate and control the value of epsilon.
   const epsilonLineLength = EPSILON_HANDLE_OFFSET_PROPORTION * this.widthOfGraph * 1.2;
   this.epsilonControls.line = new Line( -epsilonLineLength / 2, 0, epsilonLineLength, 0, {
@@ -102,7 +101,8 @@ function InteractivePotentialGraph( dualAtomModel, wide, options ) {
     fill: EPSILON_LINE_COLOR,
     stroke: EPSILON_LINE_COLOR,
     lineWidth: 2,
-    tandem: epsilonControlTandem.createTandem( 'line' )
+    tandem: this.interactiveControlsLayer.tandem.createTandem( 'epsilonLine' ),
+    phetioReadOnly: true
   } );
   this.epsilonControls.line.addInputListener(
     new FillHighlightListener( RESIZE_HANDLE_NORMAL_COLOR, RESIZE_HANDLE_HIGHLIGHTED_COLOR )
@@ -110,7 +110,7 @@ function InteractivePotentialGraph( dualAtomModel, wide, options ) {
   this.epsilonControls.line.touchArea = this.epsilonControls.line.localBounds.dilatedXY( 8, 8 );
   this.epsilonControls.line.mouseArea = this.epsilonControls.line.localBounds.dilatedXY( 0, 4 );
   addEpsilonDragListener( this.epsilonControls.line, this.epsilonControls.line.tandem.createTandem( 'dragListener' ) );
-  this.epsilonLineLayer.addChild( this.epsilonControls.line );
+  this.interactiveControlsLayer.addChild( this.epsilonControls.line );
 
   // Add the arrow nodes that will allow the user to control the epsilon value.
   const arrowNodeOptions = {
@@ -121,25 +121,23 @@ function InteractivePotentialGraph( dualAtomModel, wide, options ) {
     stroke: 'black',
     doubleHead: true,
     pickable: true,
-    cursor: 'pointer'
+    cursor: 'pointer',
+    phetioReadOnly: true
   };
   this.epsilonControls.arrow = new ArrowNode(
     0,
     -RESIZE_HANDLE_SIZE_PROPORTION * this.widthOfGraph / 2,
     0,
     RESIZE_HANDLE_SIZE_PROPORTION * this.widthOfGraph,
-    merge( { tandem: epsilonControlTandem.createTandem( 'arrow' ) }, arrowNodeOptions )
+    merge( { tandem: this.interactiveControlsLayer.tandem.createTandem( 'epsilonArrow' ) }, arrowNodeOptions )
   );
   this.epsilonControls.arrow.addInputListener( new FillHighlightListener(
     RESIZE_HANDLE_NORMAL_COLOR,
     RESIZE_HANDLE_HIGHLIGHTED_COLOR
   ) );
-  this.ljPotentialGraph.addChild( this.epsilonControls.arrow );
+  this.interactiveControlsLayer.addChild( this.epsilonControls.arrow );
   this.epsilonControls.arrow.touchArea = this.epsilonControls.arrow.localBounds.dilatedXY( 3, 10 );
   addEpsilonDragListener( this.epsilonControls.arrow, this.epsilonControls.arrow.tandem.createTandem( 'dragListener' ) );
-
-  // root tandem for sigma control
-  const sigmaControlTandem = options.tandem.createTandem( 'sigmaControl' );
 
   // add sigma arrow node
   this.sigmaControls.arrow = new ArrowNode(
@@ -147,12 +145,12 @@ function InteractivePotentialGraph( dualAtomModel, wide, options ) {
     0,
     RESIZE_HANDLE_SIZE_PROPORTION * this.widthOfGraph * 1.2,
     0,
-    merge( { tandem: sigmaControlTandem.createTandem( 'arrow' ) }, arrowNodeOptions )
+    merge( { tandem: this.interactiveControlsLayer.tandem.createTandem( 'sigmaArrow' ) }, arrowNodeOptions )
   );
   this.sigmaControls.arrow.addInputListener(
     new FillHighlightListener( RESIZE_HANDLE_NORMAL_COLOR, RESIZE_HANDLE_HIGHLIGHTED_COLOR )
   );
-  this.ljPotentialGraph.addChild( this.sigmaControls.arrow );
+  this.interactiveControlsLayer.addChild( this.sigmaControls.arrow );
   this.sigmaControls.arrow.touchArea = this.sigmaControls.arrow.localBounds.dilatedXY( 10, 5 );
   let startDragX;
   let endDragX;
@@ -234,7 +232,6 @@ function InteractivePotentialGraph( dualAtomModel, wide, options ) {
 
   this.interactionPotentialCanvasNode = new InteractionPotentialCanvasNode(
     this,
-    true,
     { canvasBounds: new Bounds2( 0, 0, this.graphWidth, this.graphHeight ) }
   );
 

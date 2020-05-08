@@ -55,16 +55,22 @@ const ZOOM_BUTTONS_HEIGHT = 72;
 /**
  * @param {number} sigma - Initial value of sigma, a.k.a. the atom diameter
  * @param {number} epsilon - Initial value of epsilon, a.k.a. the interaction strength
- * @param {boolean} wide - true if the widescreen version of the graph is needed, false if not.
  * @param {Object} [options]
  * @constructor
  */
-function PotentialGraphNode( sigma, epsilon, wide, options ) {
+function PotentialGraphNode( sigma, epsilon, options ) {
 
   options = merge( {
 
-    // {boolean} - whether or not this graph should have a position marker
-    includePositionMarker: false
+    // {boolean} - true if the widescreen version of the graph is needed, false if not
+    wide: false,
+
+    // {boolean} - whether or not this graph instance should have a position marker
+    includePositionMarker: false,
+
+    // {boolean} - whether or not this graph instance should allow interactivity (see usage for more information)
+    allowInteraction: false
+
   }, options );
 
   Node.call( this );
@@ -76,7 +82,7 @@ function PotentialGraphNode( sigma, epsilon, wide, options ) {
   let axisLabelFont;
 
   // Set up for the normal or wide version of the graph.
-  if ( wide ) {
+  if ( options.wide ) {
     this.widthOfGraph = WIDE_VERSION_WIDTH;
     this.heightOfGraph = this.widthOfGraph * 0.75;
     GREEK_LETTER_FONT = new PhetFont( 22 );
@@ -156,9 +162,30 @@ function PotentialGraphNode( sigma, epsilon, wide, options ) {
   } );
   this.ljPotentialGraph.addChild( sigmaGraphLabel );
 
-  // Add the layer where the epsilon line marker will go, this is done so we can achieve the desired layering.
-  this.epsilonLineLayer = new Node(); // @protected
-  this.ljPotentialGraph.addChild( this.epsilonLineLayer );
+  // If enabled, add the layer where interactive controls can be placed and other infrastructure.  This does not provide
+  // any interactivity by itself, it merely creates support for interactive controls that can be added by subclasses.
+  if ( options.allowInteraction ) {
+
+    // @protected - layer where interactive controls can be added by subclasses
+    this.interactiveControlsLayer = new Node( {
+      tandem: options.tandem.createTandem( 'interactiveControls' ),
+      phetioDocumentation: 'Used for \'Adjustable Attraction\' only'
+    } );
+    this.ljPotentialGraph.addChild( this.interactiveControlsLayer );
+
+    // @protected - an object where specific controls can be added for controlling the epsilon parameter in the Lennard-
+    // Jones potential calculations, see usages in subclasses
+    this.epsilonControls = {
+      arrow: null,
+      line: null
+    };
+
+    // @protected - an object where a specific control can be added for controlling the sigma parameter in the Lennard-
+    // Jones potential calculations, see usages in subclasses.  See usages in subclasses.
+    this.sigmaControls = {
+      arrow: null
+    };
+  }
 
   // Add the position marker if included.
   if ( options.includePositionMarker ) {
@@ -189,7 +216,7 @@ function PotentialGraphNode( sigma, epsilon, wide, options ) {
     font: axisLabelFont
   } );
   if ( this.horizontalAxisLabel.width > this.horizontalAxis.width ) {
-    if ( wide ) {
+    if ( options.wide ) {
       this.horizontalAxisLabel.maxWidth = this.horizontalAxis.width;
     }
     else {
@@ -224,7 +251,7 @@ function PotentialGraphNode( sigma, epsilon, wide, options ) {
   } );
 
   // restricted vertical axis label
-  const verticalAxisHeight = wide ? this.verticalAxis.height - ZOOM_BUTTONS_HEIGHT : this.verticalAxis.height;
+  const verticalAxisHeight = options.wide ? this.verticalAxis.height - ZOOM_BUTTONS_HEIGHT : this.verticalAxis.height;
   if ( this.verticalAxisLabel.width > verticalAxisHeight ) {
     this.verticalAxisLabel.scale( verticalAxisHeight / this.verticalAxisLabel.width );
   }
@@ -235,24 +262,10 @@ function PotentialGraphNode( sigma, epsilon, wide, options ) {
   );
   this.verticalAxisLabel.setRotation( 3 * Math.PI / 2 );
 
-  // Initializing here to reduce allocations
-  this.epsilonArrowStartPt = new Vector2( 0, 0 );
-
-  // @protected - an object where specific controls can be added for interactivity.  See usages in subclasses.
-  this.epsilonControls = {
-    arrow: null,
-    line: null
-  };
-
-  // @protected - an object where a specific control can be added for interactivity.  See usages in subclasses.
-  this.sigmaControls = {
-    arrow: null
-  };
-
   // Draw the initial curve upon the graph.
   this.drawPotentialCurve();
 
-  if ( wide ) {
+  if ( options.wide ) {
     this.gridNode = new ZoomableGridNode(
       this,
       0,
