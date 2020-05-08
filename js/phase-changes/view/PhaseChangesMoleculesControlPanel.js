@@ -74,8 +74,10 @@ function PhaseChangesMoleculesControlPanel( phaseChangesModel, options ) {
   const weakTitle = new Text( weakString, tickTextOptions );
   const strongTitle = new Text( strongString, tickTextOptions );
 
-  // add interaction strength slider and title
+  // create the root tandem for the node that includes the interaction title and slider
   const interactionStrengthSliderTandem = options.tandem.createTandem( 'interactionStrengthSlider' );
+
+  // add interaction strength slider and title
   const interactionTitle = new Text( interactionStrengthWithSymbolString, {
     font: new PhetFont( NORMAL_TEXT_FONT_SIZE ),
     fill: SOMColorProfile.controlPanelTextProperty,
@@ -88,15 +90,17 @@ function PhaseChangesMoleculesControlPanel( phaseChangesModel, options ) {
     new Range( SOMConstants.MIN_ADJUSTABLE_EPSILON, PhaseChangesModel.MAX_ADJUSTABLE_EPSILON ),
     merge( {}, SOMConstants.ADJUSTABLE_ATTRACTION_SLIDER_COMMON_OPTIONS, {
       trackSize: new Dimension2( 110, 4 ),
-      tandem: interactionStrengthSliderTandem
+      tandem: interactionStrengthSliderTandem.createTandem( 'slider' )
     } ) );
   interactionStrengthSlider.addMajorTick( PhaseChangesModel.MAX_ADJUSTABLE_EPSILON, strongTitle );
   interactionStrengthSlider.addMajorTick( SOMConstants.MIN_ADJUSTABLE_EPSILON, weakTitle );
 
   // put the title and slider together into a node
-  const interactionStrengthNode = new VBox( {
+  const interactionStrengthSliderVbox = new VBox( {
     children: [ interactionTitle, interactionStrengthSlider ],
-    spacing: 5
+    spacing: 5,
+    tandem: interactionStrengthSliderTandem,
+    phetioDocumentation: 'Used for \'Adjustable Attraction\' only'
   } );
 
   // pre-create the tandem for the radio button group so that the text nodes can be under it
@@ -211,18 +215,18 @@ function PhaseChangesMoleculesControlPanel( phaseChangesModel, options ) {
   this.addChild( radioButtonPanel );
 
   // do some layout now that many of the pieces exist
-  interactionStrengthNode.centerX = radioButtonGroup.centerX;
-  interactionStrengthNode.top = radioButtonGroup.bottom + INSET;
+  interactionStrengthSliderVbox.centerX = radioButtonGroup.centerX;
+  interactionStrengthSliderVbox.top = radioButtonGroup.bottom + INSET;
 
   // make any updates needed to the panel when the selected substance changes
   phaseChangesModel.substanceProperty.link( function( value ) {
 
     // add or remove the node for controlling interaction strength
     if ( value === SubstanceType.ADJUSTABLE_ATOM ) {
-      content.addChild( interactionStrengthNode );
+      content.addChild( interactionStrengthSliderVbox );
     }
-    else if ( content.hasChild( interactionStrengthNode ) ) {
-      content.removeChild( interactionStrengthNode );
+    else if ( content.hasChild( interactionStrengthSliderVbox ) ) {
+      content.removeChild( interactionStrengthSliderVbox );
     }
   } );
 

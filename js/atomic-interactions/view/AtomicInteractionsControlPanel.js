@@ -373,7 +373,7 @@ function AtomicInteractionsControlPanel( dualAtomModel, enableHeterogeneousAtoms
   const atomDiameterSlider = new HSlider(
     dualAtomModel.adjustableAtomDiameterProperty,
     new Range( SOMConstants.MIN_SIGMA, SOMConstants.MAX_SIGMA ),
-    merge( { tandem: atomDiameterSliderTandem.createTandem( 'atomDiameterSlider' ) }, commonSliderOptions )
+    merge( { tandem: atomDiameterSliderTandem.createTandem( 'slider' ) }, commonSliderOptions )
   );
 
   const maxTickTextWidth = enableHeterogeneousAtoms ? 85 : 35;
@@ -398,7 +398,8 @@ function AtomicInteractionsControlPanel( dualAtomModel, enableHeterogeneousAtoms
     children: [ atomDiameterTitle, atomDiameterSlider ],
     align: 'center',
     spacing: SLIDER_VBOX_SPACING,
-    tandem: atomDiameterSliderTandem
+    tandem: atomDiameterSliderTandem,
+    phetioDocumentation: 'Used for \'Adjustable Attraction\' only'
   } );
 
   // create the root tandem for the node that includes the interaction title and slider
@@ -425,7 +426,8 @@ function AtomicInteractionsControlPanel( dualAtomModel, enableHeterogeneousAtoms
     children: [ interactionStrengthTitle, interactionStrengthSlider ],
     spacing: SLIDER_VBOX_SPACING,
     align: 'center',
-    tandem: interactionStrengthSliderTandem
+    tandem: interactionStrengthSliderTandem,
+    phetioDocumentation: 'Used for \'Adjustable Attraction\' only'
   } );
 
   const content = new VBox( {
