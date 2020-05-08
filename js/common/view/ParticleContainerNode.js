@@ -116,8 +116,7 @@ function ParticleContainerNode( multipleParticleModel, modelViewTransform, optio
   // create and add the node that will act as the elliptical background for the lid, other nodes may be added later
   const lidEllipseNode = new Path( topEllipseShape, {
     fill: 'rgba( 126, 126, 126, 0.8 )',
-    centerX: this.particleAreaViewBounds.centerX,
-    tandem: lidTandem.createTandem( 'lidEllipseNode' )
+    centerX: this.particleAreaViewBounds.centerX
   } );
   lidNode.addChild( lidEllipseNode );
 
@@ -139,8 +138,7 @@ function ParticleContainerNode( multipleParticleModel, modelViewTransform, optio
       fill: 'rgba( 200, 200, 200, 0.5 )',
       centerX: lidEllipseNode.width / 2,
       centerY: 0,
-      cursor: 'ns-resize',
-      tandem: lidTandem.createTandem( 'handleAreaEllipse' )
+      cursor: 'ns-resize'
     } );
     lidEllipseNode.addChild( handleAreaEllipse );
     const handleNode = new HandleNode( {
