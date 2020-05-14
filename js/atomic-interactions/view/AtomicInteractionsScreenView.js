@@ -17,8 +17,8 @@ import Node from '../../../../scenery/js/nodes/Node.js';
 import TextPushButton from '../../../../sun/js/buttons/TextPushButton.js';
 import SOMConstants from '../../common/SOMConstants.js';
 import SOMColorProfile from '../../common/view/SOMColorProfile.js';
-import statesOfMatterStrings from '../../statesOfMatterStrings.js';
 import statesOfMatter from '../../statesOfMatter.js';
+import statesOfMatterStrings from '../../statesOfMatterStrings.js';
 import DualAtomModel from '../model/DualAtomModel.js';
 import ForceDisplayMode from '../model/ForceDisplayMode.js';
 import AtomicInteractionsControlPanel from './AtomicInteractionsControlPanel.js';
@@ -156,7 +156,7 @@ class AtomicInteractionsScreenView extends ScreenView {
 
     // add control for play/pause/step
     const timeControlNode = new TimeControlNode( dualAtomModel.isPlayingProperty, {
-      timeControlSpeedProperty: dualAtomModel.timeSpeedProperty,
+      timeSpeedProperty: dualAtomModel.timeSpeedProperty,
 
       playPauseStepButtonOptions: {
 

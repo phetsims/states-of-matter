@@ -12,7 +12,7 @@ import EnumerationProperty from '../../../../axon/js/EnumerationProperty.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Property from '../../../../axon/js/Property.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import TimeControlSpeed from '../../../../scenery-phet/js/TimeControlSpeed.js';
+import TimeSpeed from '../../../../scenery-phet/js/TimeSpeed.js';
 import AtomType from '../../common/model/AtomType.js';
 import InteractionStrengthTable from '../../common/model/InteractionStrengthTable.js';
 import LjPotentialCalculator from '../../common/model/LjPotentialCalculator.js';
@@ -71,7 +71,7 @@ class DualAtomModel {
     } );
 
     // @public (read-write) - speed at which the model is running
-    this.timeSpeedProperty = new EnumerationProperty( TimeControlSpeed, TimeControlSpeed.NORMAL, {
+    this.timeSpeedProperty = new EnumerationProperty( TimeSpeed, TimeSpeed.NORMAL, {
       tandem: tandem.createTandem( 'timeSpeedProperty' )
     } );
 
@@ -282,7 +282,7 @@ class DualAtomModel {
       // Using real world time for this results in the atoms moving a little slowly, so the time step is adjusted
       // here.  The multipliers were empirically determined.
       let adjustedTimeStep;
-      if ( this.timeSpeedProperty.value === TimeControlSpeed.SLOW ) {
+      if ( this.timeSpeedProperty.value === TimeSpeed.SLOW ) {
         adjustedTimeStep = dt * SLOW_MOTION_TIME_MULTIPLIER;
       }
       else {
