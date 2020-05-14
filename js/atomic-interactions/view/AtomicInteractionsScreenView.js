@@ -156,7 +156,7 @@ class AtomicInteractionsScreenView extends ScreenView {
 
     // add control for play/pause/step
     const timeControlNode = new TimeControlNode( dualAtomModel.isPlayingProperty, {
-      timeControlSpeedProperty: dualAtomModel.timeControlSpeedProperty,
+      timeControlSpeedProperty: dualAtomModel.timeSpeedProperty,
 
       playPauseStepButtonOptions: {
 

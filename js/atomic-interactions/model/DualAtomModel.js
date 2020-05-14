@@ -71,8 +71,8 @@ class DualAtomModel {
     } );
 
     // @public (read-write) - speed at which the model is running
-    this.timeControlSpeedProperty = new EnumerationProperty( TimeControlSpeed, TimeControlSpeed.NORMAL, {
-      tandem: tandem.createTandem( 'timeControlSpeedProperty' )
+    this.timeSpeedProperty = new EnumerationProperty( TimeControlSpeed, TimeControlSpeed.NORMAL, {
+      tandem: tandem.createTandem( 'timeSpeedProperty' )
     } );
 
     // @public (read-write) - diameter of the adjustable atoms
@@ -243,7 +243,7 @@ class DualAtomModel {
     this.interactionStrengthProperty.reset();
     this.motionPausedProperty.reset();
     this.atomPairProperty.reset();
-    this.timeControlSpeedProperty.reset();
+    this.timeSpeedProperty.reset();
     this.adjustableAtomDiameterProperty.reset();
     this.forcesDisplayModeProperty.reset();
     this.forcesExpandedProperty.reset();
@@ -282,7 +282,7 @@ class DualAtomModel {
       // Using real world time for this results in the atoms moving a little slowly, so the time step is adjusted
       // here.  The multipliers were empirically determined.
       let adjustedTimeStep;
-      if ( this.timeControlSpeedProperty.value === TimeControlSpeed.SLOW ) {
+      if ( this.timeSpeedProperty.value === TimeControlSpeed.SLOW ) {
         adjustedTimeStep = dt * SLOW_MOTION_TIME_MULTIPLIER;
       }
       else {

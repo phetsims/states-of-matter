@@ -37,7 +37,7 @@ window.phet.preloads.phetio.phetioElementsOverrides =
   "statesOfMatter.interactionScreen.model.movementHintVisibleProperty": {
     "phetioFeatured": true
   },
-  "statesOfMatter.interactionScreen.model.timeControlSpeedProperty": {
+  "statesOfMatter.interactionScreen.model.timeSpeedProperty": {
     "phetioFeatured": true
   },
   "statesOfMatter.interactionScreen.view.atomsControlPanel.atomDiameterSlider.title.textProperty": {
