@@ -254,7 +254,7 @@ class DualAtomModel {
   }
 
   /**
-   * Put the movable atom back to the location where the force is minimized, and reset the velocity and
+   * Put the movable atom back to the position where the force is minimized, and reset the velocity and
    * acceleration to 0.
    * @public
    */

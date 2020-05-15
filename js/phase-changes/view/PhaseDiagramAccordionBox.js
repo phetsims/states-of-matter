@@ -45,7 +45,7 @@ const LIQUID_AND_GAS_LABEL_MAX_WIDTH = 35;
 const SOLID_LABEL_MAX_WIDTH = 30;  // has to be narrow enough to fit on the graph when modified for water
 const SMALLER_INNER_TEXT_WIDTH = 30;
 
-// constants that control the location of the origin for the graph.
+// constants that control the position of the origin for the graph.
 const X_ORIGIN_OFFSET = 0.10 * WIDTH;
 const Y_ORIGIN_OFFSET = 0.85 * HEIGHT;
 const X_USABLE_RANGE = WIDTH * HORIZ_AXIS_SIZE_PROPORTION - AXES_ARROW_HEAD_HEIGHT;
@@ -77,23 +77,23 @@ const DEFAULT_TRIPLE_POINT = new Vector2(
   X_ORIGIN_OFFSET + ( X_USABLE_RANGE * 0.35 ),
   Y_ORIGIN_OFFSET - ( Y_USABLE_RANGE * 0.2 )
 );
-const DEFAULT_CRITICAL_POINT = new Vector2(
+const DEFAULT_CRITICAL_POSITION = new Vector2(
   X_ORIGIN_OFFSET + ( X_USABLE_RANGE * 0.8 ),
   Y_ORIGIN_OFFSET - ( Y_USABLE_RANGE * 0.45 )
 );
-const DEFAULT_SOLID_LABEL_LOCATION = new Vector2(
+const DEFAULT_SOLID_LABEL_POSITION = new Vector2(
   X_ORIGIN_OFFSET + ( X_USABLE_RANGE * 0.195 ),
   Y_ORIGIN_OFFSET - ( Y_USABLE_RANGE * 0.9 )
 );
-const WATER_SOLID_LABEL_LOCATION = new Vector2(
+const WATER_SOLID_LABEL_POSITION = new Vector2(
   X_ORIGIN_OFFSET + ( X_USABLE_RANGE * 0.16 ),
   Y_ORIGIN_OFFSET - ( Y_USABLE_RANGE * 0.9 )
 );
-const DEFAULT_LIQUID_LABEL_LOCATION = new Vector2(
+const DEFAULT_LIQUID_LABEL_POSITION = new Vector2(
   X_ORIGIN_OFFSET + ( X_USABLE_RANGE * 0.65 ),
   Y_ORIGIN_OFFSET - ( Y_USABLE_RANGE * 0.9 )
 );
-const DEFAULT_GAS_LABEL_LOCATION = new Vector2(
+const DEFAULT_GAS_LABEL_POSITION = new Vector2(
   X_ORIGIN_OFFSET + ( X_USABLE_RANGE * 0.7 ),
   Y_ORIGIN_OFFSET - ( Y_USABLE_RANGE * 0.15 )
 );
@@ -304,7 +304,7 @@ inherit( AccordionBox, PhaseDiagramAccordionBox, {
     const topOfSolidLiquidLine = this.depictingWater ?
                                  TOP_OF_SOLID_LIQUID_LINE_FOR_WATER :
                                  DEFAULT_TOP_OF_SOLID_LIQUID_LINE;
-    const solidLabelCenter = this.depictingWater ? WATER_SOLID_LABEL_LOCATION : DEFAULT_SOLID_LABEL_LOCATION;
+    const solidLabelCenter = this.depictingWater ? WATER_SOLID_LABEL_POSITION : DEFAULT_SOLID_LABEL_POSITION;
 
     // Place the triple point marker.
     this.triplePoint.setTranslation( DEFAULT_TRIPLE_POINT.x, DEFAULT_TRIPLE_POINT.y );
@@ -342,18 +342,18 @@ inherit( AccordionBox, PhaseDiagramAccordionBox, {
     this.solidAreaBackground.setShape( solidBackground );
 
     // Place the critical point marker.
-    this.criticalPoint.setTranslation( DEFAULT_CRITICAL_POINT.x, DEFAULT_CRITICAL_POINT.y );
+    this.criticalPoint.setTranslation( DEFAULT_CRITICAL_POSITION.x, DEFAULT_CRITICAL_POSITION.y );
 
     // Add the curve that separates liquid and gas.
-    const controlCurveXPos = DEFAULT_TRIPLE_POINT.x + ( ( DEFAULT_CRITICAL_POINT.x - DEFAULT_TRIPLE_POINT.x ) / 2 );
+    const controlCurveXPos = DEFAULT_TRIPLE_POINT.x + ( ( DEFAULT_CRITICAL_POSITION.x - DEFAULT_TRIPLE_POINT.x ) / 2 );
     const controlCurveYPos = DEFAULT_TRIPLE_POINT.y;
     const liquidGasCurve = new Shape()
       .moveTo( DEFAULT_TRIPLE_POINT.x - 1, DEFAULT_TRIPLE_POINT.y )
       .quadraticCurveTo(
         controlCurveXPos,
         controlCurveYPos,
-        DEFAULT_CRITICAL_POINT.x,
-        DEFAULT_CRITICAL_POINT.y
+        DEFAULT_CRITICAL_POSITION.x,
+        DEFAULT_CRITICAL_POSITION.y
       );
     this.liquidGasLine.setShape( liquidGasCurve );
 
@@ -363,8 +363,8 @@ inherit( AccordionBox, PhaseDiagramAccordionBox, {
       .quadraticCurveTo(
         controlCurveXPos,
         controlCurveYPos,
-        DEFAULT_CRITICAL_POINT.x,
-        DEFAULT_CRITICAL_POINT.y
+        DEFAULT_CRITICAL_POSITION.x,
+        DEFAULT_CRITICAL_POSITION.y
       )
       .lineTo( X_ORIGIN_OFFSET + X_USABLE_RANGE, Y_ORIGIN_OFFSET - Y_USABLE_RANGE )
       .lineTo( topOfSolidLiquidLine.x, Y_ORIGIN_OFFSET - Y_USABLE_RANGE )
@@ -376,29 +376,29 @@ inherit( AccordionBox, PhaseDiagramAccordionBox, {
     const gasBackground = new Shape()
       .moveTo( X_ORIGIN_OFFSET, Y_ORIGIN_OFFSET )
       .lineToPoint( DEFAULT_TRIPLE_POINT )
-      .lineToPoint( DEFAULT_CRITICAL_POINT )
+      .lineToPoint( DEFAULT_CRITICAL_POSITION )
       .lineTo( X_ORIGIN_OFFSET + X_USABLE_RANGE, Y_ORIGIN_OFFSET )
       .lineTo( X_ORIGIN_OFFSET, Y_ORIGIN_OFFSET )
       .close();
     this.gasAreaBackground.setShape( gasBackground );
 
     const superCriticalBackground = new Shape()
-      .moveToPoint( DEFAULT_CRITICAL_POINT )
+      .moveToPoint( DEFAULT_CRITICAL_POSITION )
       .lineTo( X_ORIGIN_OFFSET + X_USABLE_RANGE, Y_ORIGIN_OFFSET )
       .lineTo( X_ORIGIN_OFFSET + X_USABLE_RANGE, Y_ORIGIN_OFFSET - Y_USABLE_RANGE )
-      .lineToPoint( DEFAULT_CRITICAL_POINT )
+      .lineToPoint( DEFAULT_CRITICAL_POSITION )
       .close();
 
     this.superCriticalAreaBackground.setShape( superCriticalBackground );
 
     // position the labels - some of the values were empirically determined for optimal layout
     this.solidLabel.center = solidLabelCenter;
-    this.liquidLabel.center = DEFAULT_LIQUID_LABEL_LOCATION;
-    this.gasLabel.center = DEFAULT_GAS_LABEL_LOCATION;
+    this.liquidLabel.center = DEFAULT_LIQUID_LABEL_POSITION;
+    this.gasLabel.center = DEFAULT_GAS_LABEL_POSITION;
     this.triplePointLabel.right = DEFAULT_TRIPLE_POINT.x - 7;
     this.triplePointLabel.bottom = DEFAULT_TRIPLE_POINT.y;
-    this.criticalPointLabel.right = DEFAULT_CRITICAL_POINT.x - 7;
-    this.criticalPointLabel.bottom = DEFAULT_CRITICAL_POINT.y;
+    this.criticalPointLabel.right = DEFAULT_CRITICAL_POSITION.x - 7;
+    this.criticalPointLabel.bottom = DEFAULT_CRITICAL_POSITION.y;
   },
 
   /**

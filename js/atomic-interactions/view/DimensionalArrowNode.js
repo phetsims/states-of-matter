@@ -34,9 +34,9 @@ function DimensionalArrowNode( tailX, tailY, tipX, tipY, options ) {
     lineWidth: 1
   }, options );
 
-  // @private arrowNode tip and tail locations
-  this.tailLocation = new Vector2( 0, 0 );
-  this.tipLocation = new Vector2( 0, 0 );
+  // @private arrowNode tip and tail positions
+  this.tailPosition = new Vector2( 0, 0 );
+  this.tipPosition = new Vector2( 0, 0 );
 
   // things you're likely to mess up, add more as needed
   assert && assert( options.headWidth > options.tailWidth );
@@ -57,17 +57,17 @@ inherit( Path, DimensionalArrowNode, {
    * @public
    */
   setTailAndTip: function( tailX, tailY, tipX, tipY ) {
-    this.tailLocation.setXY( tailX, tailY );
-    this.tipLocation.setXY( tipX, tipY );
+    this.tailPosition.setXY( tailX, tailY );
+    this.tipPosition.setXY( tipX, tipY );
     let tempHeadHeight;
     let tempHeadWidth;
     let tempTailWidth;
-    if ( this.tailLocation.distance( this.tipLocation ) !== 0 ) {
+    if ( this.tailPosition.distance( this.tipPosition ) !== 0 ) {
 
       tempHeadHeight = this.options.headHeight;
       tempHeadWidth = this.options.headWidth;
       tempTailWidth = this.options.tailWidth;
-      const length = this.tipLocation.distance( this.tailLocation );
+      const length = this.tipPosition.distance( this.tailPosition );
 
       const fractionalHeadHeight = 0.5;
       if ( length < this.options.headHeight / fractionalHeadHeight ) {

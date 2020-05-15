@@ -28,7 +28,7 @@ function AbstractPhaseStateChanger( multipleParticleModel ) {
 
   // @private
   this.multipleParticleModel = multipleParticleModel;
-  this.moleculeLocation = new Vector2( 0, 0 );
+  this.moleculePosition = new Vector2( 0, 0 );
   this.random = phet.joist.random;
   this.reusableVector = new Vector2( 0, 0 );
 }
@@ -129,13 +129,13 @@ inherit( Object, AbstractPhaseStateChanger, {
   },
 
   /**
-   * Do a linear search for a location that is suitably far away enough from all other molecules.  This is generally
-   * used when the attempt to place a molecule at a random location fails.  This is expensive in terms of
+   * Do a linear search for a position that is suitably far away enough from all other molecules.  This is generally
+   * used when the attempt to place a molecule at a random position fails.  This is expensive in terms of
    * computational power, and should thus be used sparingly.
    * @returns {Vector2}
    * @private
    */
-  findOpenMoleculeLocation: function() {
+  findOpenMoleculePosition: function() {
 
     let posX;
     let posY;
@@ -160,8 +160,8 @@ inherit( Object, AbstractPhaseStateChanger, {
         }
         if ( positionAvailable ) {
           // We found an open position.
-          this.moleculeLocation.setXY( posX, posY );
-          return this.moleculeLocation;
+          this.moleculePosition.setXY( posX, posY );
+          return this.moleculePosition;
         }
       }
     }
@@ -305,7 +305,7 @@ inherit( Object, AbstractPhaseStateChanger, {
         else if ( j === this.MAX_PLACEMENT_ATTEMPTS - 2 ) {
 
           // This is the second to last attempt, so try a linear search for a usable spot.
-          const openPoint = this.findOpenMoleculeLocation();
+          const openPoint = this.findOpenMoleculePosition();
           if ( openPoint !== null ) {
             moleculeCenterOfMassPositions[ i ].set( openPoint );
             break;

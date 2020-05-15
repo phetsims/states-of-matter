@@ -61,7 +61,7 @@ inherit( CanvasNode, InteractionPotentialCanvasNode, {
       }
       else {
 
-        // This line is off the graph - move to a good location from which to start or continue graphing.
+        // This line is off the graph - move to a good position from which to start or continue graphing.
         if ( yPos < 0 ) {
           context.moveTo( i + 1 + this.potentialGraph.graphXOrigin, AXES_ARROW_HEAD_HEIGHT );
         }

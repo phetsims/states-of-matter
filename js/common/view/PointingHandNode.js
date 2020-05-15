@@ -171,7 +171,7 @@ statesOfMatter.register( 'PointingHandNode', PointingHandNode );
 inherit( Node, PointingHandNode, {
 
   /**
-   * Set the position of this node such that the tip of the finger is at the provided Y location.  The x position
+   * Set the position of this node such that the tip of the finger is at the provided Y position.  The x position
    * remains unchanged.
    * @param {number} fingertipYPos
    * @public

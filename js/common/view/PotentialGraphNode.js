@@ -41,7 +41,7 @@ const AXES_ARROW_HEAD_HEIGHT = 4 * AXIS_LINE_WIDTH;
 // Size of pos marker wrt overall width.
 const POSITION_MARKER_DIAMETER_PROPORTION = 0.03;
 
-// constants that control the location and size of the graph.
+// constants that control the position and size of the graph.
 const VERT_AXIS_SIZE_PROPORTION = 0.85;
 
 // Font for the labels used on the axes and within the graph.
