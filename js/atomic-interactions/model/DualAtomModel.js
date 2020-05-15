@@ -72,6 +72,7 @@ class DualAtomModel {
 
     // @public (read-write) - speed at which the model is running
     this.timeSpeedProperty = new EnumerationProperty( TimeSpeed, TimeSpeed.NORMAL, {
+      validValues: [ TimeSpeed.NORMAL, TimeSpeed.SLOW ],
       tandem: tandem.createTandem( 'timeSpeedProperty' )
     } );
 
