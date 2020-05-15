@@ -112,7 +112,8 @@ class CompositeThermometerNode extends Node {
 
     const contentNode = new VBox( {
       spacing: 10,
-      children: [ temperatureComboBox, thermometerNode ]
+      children: [ temperatureComboBox, thermometerNode ],
+      resize: false
     } );
 
     const panel = new Panel( contentNode, {
