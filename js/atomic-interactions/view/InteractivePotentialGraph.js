@@ -2,7 +2,7 @@
 
 /**
  * This class extends the Interaction Potential diagram to allow the user to change the curve through direct interaction
- * with it.
+ * with both the sigma and epsilon parameter of the LJ potential.
  *
  * @author John Blanco
  */
@@ -16,6 +16,7 @@ import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import FillHighlightListener from '../../../../scenery-phet/js/input/FillHighlightListener.js';
 import DragListener from '../../../../scenery/js/listeners/DragListener.js';
 import Line from '../../../../scenery/js/nodes/Line.js';
+import Node from '../../../../scenery/js/nodes/Node.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import AtomType from '../../common/model/AtomType.js';
@@ -93,6 +94,10 @@ function InteractivePotentialGraph( dualAtomModel, options ) {
     } ) );
   }
 
+  // Add a parent node for the epsilon controls
+  const epsilonLayer = new Node( { tandem: this.interactiveControlsLayer.tandem.createTandem( 'epsilon' ) } );
+  this.interactiveControlsLayer.addChild( epsilonLayer );
+
   // Add the line that will indicate and control the value of epsilon.
   const epsilonLineLength = EPSILON_HANDLE_OFFSET_PROPORTION * this.widthOfGraph * 1.2;
   this.epsilonControls.line = new Line( -epsilonLineLength / 2, 0, epsilonLineLength, 0, {
@@ -101,7 +106,7 @@ function InteractivePotentialGraph( dualAtomModel, options ) {
     fill: EPSILON_LINE_COLOR,
     stroke: EPSILON_LINE_COLOR,
     lineWidth: 2,
-    tandem: this.interactiveControlsLayer.tandem.createTandem( 'epsilonLine' ),
+    tandem: epsilonLayer.tandem.createTandem( 'epsilonLine' ),
     phetioReadOnly: true
   } );
   this.epsilonControls.line.addInputListener(
@@ -110,7 +115,7 @@ function InteractivePotentialGraph( dualAtomModel, options ) {
   this.epsilonControls.line.touchArea = this.epsilonControls.line.localBounds.dilatedXY( 8, 8 );
   this.epsilonControls.line.mouseArea = this.epsilonControls.line.localBounds.dilatedXY( 0, 4 );
   addEpsilonDragListener( this.epsilonControls.line, this.epsilonControls.line.tandem.createTandem( 'dragListener' ) );
-  this.interactiveControlsLayer.addChild( this.epsilonControls.line );
+  epsilonLayer.addChild( this.epsilonControls.line );
 
   // Add the arrow nodes that will allow the user to control the epsilon value.
   const arrowNodeOptions = {
@@ -129,15 +134,19 @@ function InteractivePotentialGraph( dualAtomModel, options ) {
     -RESIZE_HANDLE_SIZE_PROPORTION * this.widthOfGraph / 2,
     0,
     RESIZE_HANDLE_SIZE_PROPORTION * this.widthOfGraph,
-    merge( { tandem: this.interactiveControlsLayer.tandem.createTandem( 'epsilonArrow' ) }, arrowNodeOptions )
+    merge( { tandem: epsilonLayer.tandem.createTandem( 'epsilonArrow' ) }, arrowNodeOptions )
   );
   this.epsilonControls.arrow.addInputListener( new FillHighlightListener(
     RESIZE_HANDLE_NORMAL_COLOR,
     RESIZE_HANDLE_HIGHLIGHTED_COLOR
   ) );
-  this.interactiveControlsLayer.addChild( this.epsilonControls.arrow );
+  epsilonLayer.addChild( this.epsilonControls.arrow );
   this.epsilonControls.arrow.touchArea = this.epsilonControls.arrow.localBounds.dilatedXY( 3, 10 );
   addEpsilonDragListener( this.epsilonControls.arrow, this.epsilonControls.arrow.tandem.createTandem( 'dragListener' ) );
+
+  // add a layer for the sigma controls (for consistency with the epsilon controls)
+  const sigmaLayer = new Node( { tandem: this.interactiveControlsLayer.tandem.createTandem( 'sigma' ) } );
+  this.interactiveControlsLayer.addChild( sigmaLayer );
 
   // add sigma arrow node
   this.sigmaControls.arrow = new ArrowNode(
@@ -145,12 +154,12 @@ function InteractivePotentialGraph( dualAtomModel, options ) {
     0,
     RESIZE_HANDLE_SIZE_PROPORTION * this.widthOfGraph * 1.2,
     0,
-    merge( { tandem: this.interactiveControlsLayer.tandem.createTandem( 'sigmaArrow' ) }, arrowNodeOptions )
+    merge( { tandem: sigmaLayer.tandem.createTandem( 'sigmaArrow' ) }, arrowNodeOptions )
   );
   this.sigmaControls.arrow.addInputListener(
     new FillHighlightListener( RESIZE_HANDLE_NORMAL_COLOR, RESIZE_HANDLE_HIGHLIGHTED_COLOR )
   );
-  this.interactiveControlsLayer.addChild( this.sigmaControls.arrow );
+  sigmaLayer.addChild( this.sigmaControls.arrow );
   this.sigmaControls.arrow.touchArea = this.sigmaControls.arrow.localBounds.dilatedXY( 10, 5 );
   let startDragX;
   let endDragX;
