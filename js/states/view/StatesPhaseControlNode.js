@@ -160,12 +160,12 @@ function createButtonContent( iconImage, string, buttonWidth ) {
   // Create the text node, limiting it to 1/2 of the button width.
   const label = new Text( string, { font: new PhetFont( 14 ), fill: 'black', maxWidth: buttonWidth / 2 } );
 
-  // create the left strut such that the icons will be centered around the same horizontal location
+  // create the left strut such that the icons will be centered around the same horizontal position
   const desiredIconHorizontalCenter = buttonWidth * 0.25; // multiplier is empirically determined
   const leftStrutWidth = Math.max( desiredIconHorizontalCenter - ( imageNode.width / 2 ), 0 );
   assert && assert( leftStrutWidth > 0, 'icon is too wide, either adjust it or adjust the icon position multiplier' );
 
-  // create the center strut such that the labels are centered around the same horizontal location
+  // create the center strut such that the labels are centered around the same horizontal position
   const desiredLabelHorizontalCenter = buttonWidth * 0.65;
   const centerStrutWidth = Math.max( desiredLabelHorizontalCenter - ( label.width / 2 ) - leftStrutWidth - imageNode.width, 0 );
   assert && assert( centerStrutWidth >= 0, 'label is too wide - was it scaled properly?' );
