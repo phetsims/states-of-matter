@@ -202,7 +202,10 @@ class AtomicInteractionsScreenView extends ScreenView {
       this.dualAtomModel.movableAtom,
       this.modelViewTransform,
       0,
-      tandem.createTandem( 'handNode' )
+      {
+        tandem: tandem.createTandem( 'handNode' ),
+        phetioComponentOptions: { visibleProperty: { phetioReadOnly: true } }
+      }
     );
 
     // add the representation of the fixed particle

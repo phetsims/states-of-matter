@@ -9,10 +9,12 @@
  */
 
 import inherit from '../../../../phet-core/js/inherit.js';
+import merge from '../../../../phet-core/js/merge.js';
 import handImage from '../../../../scenery-phet/images/hand_png.js';
 import DragListener from '../../../../scenery/js/listeners/DragListener.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
 import statesOfMatter from '../../statesOfMatter.js';
 
 // constants
@@ -23,12 +25,17 @@ const WIDTH = 80; // empirically determined to look good
  * @param {ScaledAtom} particle - model of the atom that is draggable
  * @param {ModelViewTransform2} modelViewTransform to convert between model and view co-ordinates
  * @param {number} minX - grabbable particle min x position
- * @param {Tandem} tandem
+ * @param {Object} [options]
  * @constructor
  */
-function HandNode( dualAtomModel, particle, modelViewTransform, minX, tandem ) {
+function HandNode( dualAtomModel, particle, modelViewTransform, minX, options ) {
 
-  Node.call( this, { cursor: 'pointer', tandem: tandem } );
+  options = merge( {
+    cursor: 'pointer',
+    tandem: Tandem.REQUIRED
+  }, options );
+
+  Node.call( this, options );
   const self = this;
   this.minX = minX; // @private
 
@@ -76,7 +83,7 @@ function HandNode( dualAtomModel, particle, modelViewTransform, minX, tandem ) {
       dualAtomModel.movementHintVisibleProperty.set( false );
     },
 
-    tandem: tandem.createTandem( 'dragListener' )
+    tandem: options.tandem.createTandem( 'dragListener' )
   } );
   this.addInputListener( inputListener );
 
@@ -89,7 +96,7 @@ function HandNode( dualAtomModel, particle, modelViewTransform, minX, tandem ) {
 
   // add a linked element in phet-io to the property that controls this node's visibility
   this.addLinkedElement( dualAtomModel.movementHintVisibleProperty, {
-    tandem: tandem.createTandem( 'movementHintVisibleProperty' )
+    tandem: options.tandem.createTandem( 'movementHintVisibleProperty' )
   } );
 
   // dispose function
