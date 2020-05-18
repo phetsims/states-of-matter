@@ -58,6 +58,12 @@ window.phet.preloads.phetio.phetioElementsOverrides =
   "statesOfMatter.interactionScreen.view.interactivePotentialGraph.epsilonGraphLabel.visibleProperty": {
     "phetioFeatured": true
   },
+  "statesOfMatter.interactionScreen.view.interactivePotentialGraph.interactiveControls.epsilon.visibleProperty": {
+    "phetioFeatured": true
+  },
+  "statesOfMatter.interactionScreen.view.interactivePotentialGraph.interactiveControls.sigma.visibleProperty": {
+    "phetioFeatured": true
+  },
   "statesOfMatter.interactionScreen.view.interactivePotentialGraph.interactiveControls.visibleProperty": {
     "phetioFeatured": true
   },
