@@ -6,6 +6,7 @@
  * @author Siddhartha Chinthapally (Actual Concepts)
  */
 
+import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import Range from '../../../../dot/js/Range.js';
 import inherit from '../../../../phet-core/js/inherit.js';
@@ -244,12 +245,20 @@ function PhaseChangesMoleculesControlPanel( phaseChangesModel, options ) {
 
   // closure for updating the title background size and overall position
   const updateTitle = () => {
-    titleBackground.rectWidth = title.width + 5;
-    titleBackground.rectHeight = title.height;
-    titleBackground.centerX = radioButtonPanel.centerX;
-    titleBackground.centerY = radioButtonPanel.top;
-    title.centerX = titleBackground.centerX;
-    title.centerY = titleBackground.centerY;
+    if ( radioButtonPanel.bounds.equals( Bounds2.NOTHING ) ) {
+      titleBackground.visible = false;
+      title.visible = false;
+    }
+    else {
+      titleBackground.rectWidth = title.width + 5;
+      titleBackground.rectHeight = title.height;
+      titleBackground.centerX = radioButtonPanel.centerX;
+      titleBackground.centerY = radioButtonPanel.top;
+      title.centerX = titleBackground.centerX;
+      title.centerY = titleBackground.centerY;
+      titleBackground.visible = true;
+      title.visible = true;
+    }
   };
 
   // do the initial update of the title
@@ -258,6 +267,9 @@ function PhaseChangesMoleculesControlPanel( phaseChangesModel, options ) {
   // Listen for changes to the title text node's bounds and update the title when they occur.  There is no need to
   // unlink this since the panel is permanent.
   title.localBoundsProperty.lazyLink( updateTitle );
+
+  // Listen for changes to the panel bounds and update the title.
+  radioButtonPanel.localBoundsProperty.link( updateTitle );
 
   this.mutate( options );
 }
