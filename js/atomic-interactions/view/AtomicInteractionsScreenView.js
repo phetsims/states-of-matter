@@ -88,11 +88,15 @@ class AtomicInteractionsScreenView extends ScreenView {
       tandem: tandem.createTandem( 'atomsControlPanel' )
     } );
 
+    // Set the x-offset of the graph so that the left axis will be directly above the center of the fixed atom, which
+    // should in turn make the position marker directly above the movable atom.  These values were empirically
+    // determined are are different based on whether the zoom buttons are present on the graph.
+    const graphXOffset = enableHeterogeneousAtoms ? -43 : -31;
+
     // @private interactive potential diagram
     this.interactivePotentialGraph = new InteractivePotentialGraph( dualAtomModel, {
       zoomable: enableHeterogeneousAtoms,
-      left: this.modelViewTransform.modelToViewX( 0 ) - 43, // empirically determined such left edge of graph is at
-                                                            // center of fixed atom
+      left: this.modelViewTransform.modelToViewX( 0 ) + graphXOffset,
       top: atomsControlPanel.top + 5, // additional offset empirically determined to look good
       tandem: tandem.createTandem( 'interactivePotentialGraph' )
     } );
