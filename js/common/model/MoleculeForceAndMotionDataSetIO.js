@@ -41,6 +41,7 @@ class MoleculeForceAndMotionDataSetIO extends ObjectIO {
       moleculeForces: ArrayIONullableIOVector2IO.toStateObject( moleculeForceAndMotionDataSet.moleculeForces ),
       nextMoleculeForces: ArrayIONullableIOVector2IO.toStateObject( moleculeForceAndMotionDataSet.nextMoleculeForces ),
       insideContainer: moleculeForceAndMotionDataSet.insideContainer,
+
       moleculeRotationAngles: moleculeForceAndMotionDataSet.moleculeRotationAngles,
       moleculeRotationRates: moleculeForceAndMotionDataSet.moleculeRotationRates,
       moleculeTorques: moleculeForceAndMotionDataSet.moleculeTorques,
