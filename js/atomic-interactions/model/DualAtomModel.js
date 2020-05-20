@@ -1,12 +1,5 @@
 // Copyright 2015-2020, University of Colorado Boulder
 
-/**
- * This is the model for two atoms interacting with a Lennard-Jones interaction potential.
- *
- * @author John Blanco
- * @author Siddhartha Chinthapally (Actual Concepts)
- */
-
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import EnumerationProperty from '../../../../axon/js/EnumerationProperty.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
@@ -23,9 +16,11 @@ import AtomPair from './AtomPair.js';
 import ForceDisplayMode from './ForceDisplayMode.js';
 import MotionAtom from './MotionAtom.js';
 
+//---------------------------------------------------------------------------------------------------------------------
 // constants
+//---------------------------------------------------------------------------------------------------------------------
 
-// using normal dt values results in motion that is a bit slow, these multipliers are used to adjust that
+// Using normal dt values results in motion that is a bit slow, these multipliers are used to adjust that.
 const NORMAL_MOTION_TIME_MULTIPLIER = 2;
 const SLOW_MOTION_TIME_MULTIPLIER = 0.5;
 
@@ -33,9 +28,18 @@ const SLOW_MOTION_TIME_MULTIPLIER = 0.5;
 // is conserved in all interaction cases.  See https://github.com/phetsims/states-of-matter/issues/53 for more info.
 const MAX_TIME_STEP = 0.005; // in seconds
 
-// Valid values in reduced usage scenario
+// valid values in reduced usage scenario
 const VALID_ATOM_PAIRS_FOR_REDUCED = [ AtomPair.NEON_NEON, AtomPair.ARGON_ARGON, AtomPair.ADJUSTABLE ];
 
+// threshold used for limiting force to zero to prevent jitter, empirically determined
+const MIN_FORCE_JITTER_THRESHOLD = 1e-30;
+
+/**
+ * model for two atoms interacting with a Lennard-Jones interaction potential
+ *
+ * @author John Blanco
+ * @author Siddhartha Chinthapally (Actual Concepts)
+ */
 class DualAtomModel {
 
   /**
@@ -178,7 +182,7 @@ class DualAtomModel {
 
       // move the atom to the minimum force distance from the fixed atom (but not if this is a phet-io state update)
       if ( !phet.joist.sim.isSettingPhetioStateProperty.value ) {
-        this.movableAtom.setPosition( this.ljPotentialCalculator.calculateMinimumForceDistance(), 0 );
+        this.movableAtom.setPosition( this.ljPotentialCalculator.getMinimumForceDistance(), 0 );
       }
     }
   }
@@ -260,7 +264,7 @@ class DualAtomModel {
    * @public
    */
   resetMovableAtomPos() {
-    this.movableAtom.setPosition( this.ljPotentialCalculator.calculateMinimumForceDistance(), 0 );
+    this.movableAtom.setPosition( this.ljPotentialCalculator.getMinimumForceDistance(), 0 );
     this.movableAtom.setVx( 0 );
     this.movableAtom.setAx( 0 );
   }
@@ -336,8 +340,21 @@ class DualAtomModel {
     }
 
     // Calculate the force.  The result should be in newtons.
-    this.attractiveForce = this.ljPotentialCalculator.calculateAttractiveLjForce( distance );
-    this.repulsiveForce = this.ljPotentialCalculator.calculateRepulsiveLjForce( distance );
+    this.attractiveForce = this.ljPotentialCalculator.getAttractiveLjForce( distance );
+    this.repulsiveForce = this.ljPotentialCalculator.getRepulsiveLjForce( distance );
+
+    // The movable atom can end up showing a tiny but non-zero velocity in phet-io when intended to be at the minimum
+    // potential threshold, so do some thresholding if this is the case, see
+    // https://github.com/phetsims/states-of-matter/issues/282.
+    if ( Math.abs( this.movableAtom.velocityProperty.value.x ) === 0 ) {
+      if ( Math.abs( distance - this.ljPotentialCalculator.getMinimumForceDistance() ) < this.movableAtom.radiusProperty.value ) {
+        const totalForceMagnitude = Math.abs( this.attractiveForce - this.repulsiveForce );
+        if ( totalForceMagnitude > 0 && totalForceMagnitude < MIN_FORCE_JITTER_THRESHOLD ) {
+          this.attractiveForce = 0;
+          this.repulsiveForce = 0;
+        }
+      }
+    }
   }
 
   /**

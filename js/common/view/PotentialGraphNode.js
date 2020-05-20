@@ -395,7 +395,7 @@ inherit( Node, PotentialGraphNode, {
    * @public
    */
   calculateLennardJonesPotential: function( radius ) {
-    return ( this.ljPotentialCalculator.calculateLjPotential( radius ) );
+    return ( this.ljPotentialCalculator.getLjPotential( radius ) );
   },
 
   /**
