@@ -283,6 +283,9 @@ class MultipleParticleModel extends PhetioObject {
       this.handleSubstanceChanged();
     } );
 
+    // listen for changes to the non-normalized container size and update the normalized dimensions
+    this.containerHeightProperty.link( this.updateNormalizedContainerDimensions.bind( this ) );
+
     // listen for new molecules being added (generally from the pump)
     this.targetNumberOfMoleculesProperty.lazyLink( newValue => {
       const currentNumberOfMolecules = Math.floor(
@@ -528,15 +531,14 @@ class MultipleParticleModel extends PhetioObject {
         throw( new Error( 'unsupported substance' ) ); // should never happen, debug if it does
     }
 
-    // Update the container dimensions based on the new substance.  In most cases, the container size is reset at this
-    // point, but when the substance is being updated using phet-io the container size is *not* reset, since doing so
-    // may overwrite a size that was specifically set by the user.
+    // In most cases, the container size is reset at this point, but when the substance is being updated using phet-io
+    // the container size is *not* reset, since doing so may overwrite a size that was specifically set by the user.
     if ( !phet.joist.sim.isSettingPhetioStateProperty.value ) {
-      this.resetContainerSize();
+      this.containerHeightProperty.reset();
     }
-    else {
-      this.updateNormalizedContainerDimensions();
-    }
+
+    // Make sure the normalized container dimensions are correct for the substance and the current non-normalize size.
+    this.updateNormalizedContainerDimensions();
 
     // Adjust the injection point based on the new particle diameter.  These are using the normalized coordinate values.
     this.injectionPointX = CONTAINER_WIDTH / this.particleDiameter * INJECTION_POINT_HORIZ_PROPORTION;
@@ -612,7 +614,7 @@ class MultipleParticleModel extends PhetioObject {
     // if the substance wasn't changed during reset, so some additional work is necessary
     if ( substanceAtStartOfReset === this.substanceProperty.get() ) {
       this.removeAllAtoms();
-      this.resetContainerSize();
+      this.containerHeightProperty.reset();
       this.initializeAtoms( PhaseStateEnum.SOLID );
     }
 
@@ -834,16 +836,6 @@ class MultipleParticleModel extends PhetioObject {
         this.moleculeDataSet.moleculeVelocities[ i ].y *= 1 - ( dt * 0.9 );
       }
     }
-  }
-
-  /**
-   * Reset both the normalized and non-normalized sizes of the container. Note that the particle diameter must be
-   * valid before this will work properly.
-   * @private
-   */
-  resetContainerSize() {
-    this.containerHeightProperty.reset();
-    this.updateNormalizedContainerDimensions();
   }
 
   /**
@@ -1366,7 +1358,7 @@ class MultipleParticleModel extends PhetioObject {
     if ( this.isExplodedProperty.get() !== isExploded ) {
       this.isExplodedProperty.set( isExploded );
       if ( !isExploded ) {
-        this.resetContainerSize();
+        this.containerHeightProperty.reset();
       }
     }
   }
