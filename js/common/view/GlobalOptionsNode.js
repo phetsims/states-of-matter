@@ -31,9 +31,24 @@ function GlobalOptionsNode( tandem ) {
     spacing: OptionsDialog.DEFAULT_SPACING,
     align: 'left'
   } );
+
+  // @private
+  this.disposeGlobalOptionsNode = () => {
+    projectorModeCheckbox.dispose();
+  };
 }
 
 statesOfMatter.register( 'GlobalOptionsNode', GlobalOptionsNode );
 
-inherit( VBox, GlobalOptionsNode );
+inherit( VBox, GlobalOptionsNode, {
+
+  /**
+   * @public
+   * @override
+   */
+  dispose: function() {
+    this.disposeGlobalOptionsNode();
+    VBox.prototype.dispose.call( this );
+  }
+} );
 export default GlobalOptionsNode;

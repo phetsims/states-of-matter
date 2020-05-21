@@ -20,9 +20,6 @@ const statesOfMatterTitleString = statesOfMatterStrings[ 'states-of-matter' ].ti
 
 simLauncher.launch( function() {
 
-  // Eagerly create GlobalOptionsNode so it works smoothly with PhET-iO
-  const globalOptionsNode = new GlobalOptionsNode( Tandem.ROOT.createTandem( 'global' ).createTandem( 'view' ).createTandem( 'globalOptionsNode' ) );
-
   const simOptions = {
     credits: {
       leadDesign: 'Paul Beale, Yuen-ying Carpenter, Sarah McKagan, Emily B. Moore, Noah Podolefsky,<br>Amy Rouinfar',
@@ -34,7 +31,7 @@ simLauncher.launch( function() {
     },
 
     // create content for the Options dialog
-    createOptionsDialogContent: () => globalOptionsNode
+    createOptionsDialogContent: tandem => new GlobalOptionsNode( tandem )
   };
 
   const sim = new Sim( statesOfMatterTitleString, [
