@@ -30,8 +30,11 @@ import Property from '../../../../axon/js/Property.js';
 import Range from '../../../../dot/js/Range.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
+import EnumerationIO from '../../../../phet-core/js/EnumerationIO.js';
 import merge from '../../../../phet-core/js/merge.js';
+import required from '../../../../phet-core/js/required.js';
 import PhetioObject from '../../../../tandem/js/PhetioObject.js';
+import BooleanIO from '../../../../tandem/js/types/BooleanIO.js';
 import NullableIO from '../../../../tandem/js/types/NullableIO.js';
 import NumberIO from '../../../../tandem/js/types/NumberIO.js';
 import statesOfMatter from '../../statesOfMatter.js';
@@ -52,6 +55,7 @@ import WaterPhaseStateChanger from './engine/WaterPhaseStateChanger.js';
 import WaterVerletAlgorithm from './engine/WaterVerletAlgorithm.js';
 import InteractionStrengthTable from './InteractionStrengthTable.js';
 import MoleculeForceAndMotionDataSet from './MoleculeForceAndMotionDataSet.js';
+import MoleculeForceAndMotionDataSetIO from './MoleculeForceAndMotionDataSetIO.js';
 import MovingAverage from './MovingAverage.js';
 import MultipleParticleModelIO from './MultipleParticleModelIO.js';
 import HydrogenAtom from './particle/HydrogenAtom.js';
@@ -156,12 +160,14 @@ class MultipleParticleModel extends PhetioObject {
     // @public (read-write)
     this.substanceProperty = new EnumerationProperty( SubstanceType, DEFAULT_SUBSTANCE, {
       validValues: options.validSubstances,
-      tandem: tandem.createTandem( 'substanceProperty' )
+      tandem: tandem.createTandem( 'substanceProperty' ),
+      phetioState: false
     } );
 
     // @public (read-only)
     this.containerHeightProperty = new NumberProperty( CONTAINER_INITIAL_HEIGHT, {
       tandem: tandem.createTandem( 'containerHeightProperty' ),
+      phetioState: false,
       phetioReadOnly: true,
       phetioDocumentation: 'The height of the particle container, in picometers.',
       units: 'pm'
@@ -170,6 +176,7 @@ class MultipleParticleModel extends PhetioObject {
     // @public (read-only)
     this.isExplodedProperty = new BooleanProperty( false, {
       tandem: tandem.createTandem( 'isExplodedProperty' ),
+      phetioState: false,
       phetioReadOnly: true
     } );
 
@@ -195,6 +202,7 @@ class MultipleParticleModel extends PhetioObject {
     // @public (read-write)
     this.heatingCoolingAmountProperty = new NumberProperty( 0, {
       tandem: tandem.createTandem( 'heatingCoolingAmountProperty' ),
+      phetioState: false,
       range: new Range( -1, 1 )
     } );
 
@@ -1429,6 +1437,57 @@ class MultipleParticleModel extends PhetioObject {
 
   getContainerWidth() {
     return CONTAINER_WIDTH;
+  }
+
+  /**
+   * serialize this instance for phet-io
+   * @returns {Object}
+   * @public - for phet-io support only
+   */
+  toStateObject() {
+    return {
+      private: { // to indicate that it is needed for state, but shouldn't be shown in Studio
+        substance: EnumerationIO( SubstanceType ).toStateObject( this.substanceProperty.value ),
+        isExploded: BooleanIO.toStateObject( this.isExplodedProperty.value ),
+        containerHeight: this.containerHeightProperty.value,
+        gravitationalAcceleration: this.gravitationalAcceleration,
+        normalizedLidVelocityY: this.normalizedLidVelocityY,
+        heatingCoolingAmount: this.heatingCoolingAmountProperty.value,
+        moleculeDataSet: MoleculeForceAndMotionDataSetIO.toStateObject( this.moleculeDataSet )
+      }
+    };
+  }
+
+  /**
+   * deserialize a MultipleParticleModel instance to an intermediate state that can be used by setValue
+   * @param {Object} stateObject - return value from toStateObject
+   * @returns {Object}
+   */
+  static fromStateObject( stateObject ) {
+    return {
+      substance: EnumerationIO( SubstanceType ).fromStateObject( stateObject.private.substance ),
+      isExploded: BooleanIO.fromStateObject( stateObject.private.isExploded ),
+      gravitationalAcceleration: stateObject.private.gravitationalAcceleration,
+      containerHeight: stateObject.private.containerHeight,
+      normalizedLidVelocityY: stateObject.private.normalizedLidVelocityY,
+      heatingCoolingAmount: stateObject.private.heatingCoolingAmount,
+      moleculeDataSet: MoleculeForceAndMotionDataSetIO.fromStateObject( stateObject.private.moleculeDataSet )
+    };
+  }
+
+  /**
+   * set the state of this instance for phet-io
+   * @param {Object} state
+   */
+  setValue( state ) {
+    required( state );
+    this.substanceProperty.set( state.substance );
+    this.isExplodedProperty.set( state.isExploded );
+    this.containerHeightProperty.set( state.containerHeight );
+    this.heatingCoolingAmountProperty.set( state.heatingCoolingAmount );
+    this.gravitationalAcceleration = state.gravitationalAcceleration;
+    this.normalizedLidVelocityY = state.normalizedLidVelocityY;
+    this.moleculeDataSet = state.moleculeDataSet;
   }
 }
 

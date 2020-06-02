@@ -56,6 +56,13 @@ class PhaseChangesModel extends MultipleParticleModel {
       range: new Range( MIN_ALLOWABLE_CONTAINER_HEIGHT, MultipleParticleModel.PARTICLE_CONTAINER_INITIAL_HEIGHT )
     } );
 
+    // reset the target container height in the event of an explosion
+    this.isExplodedProperty.lazyLink( isExploded => {
+      if ( isExploded ) {
+        this.targetContainerHeightProperty.reset();
+      }
+    } );
+
     // @private - This flag is used to avoid problems when the superconstructor calls the overrides in this subclass
     // before the subclass-specific properties have been added.
     this.phaseChangeModelConstructed = true;
@@ -146,17 +153,6 @@ class PhaseChangesModel extends MultipleParticleModel {
       this.normalizedContainerHeight = this.containerHeightProperty.get() / this.particleDiameter;
       this.normalizedLidVelocityY = ( this.heightChangeThisStep / this.particleDiameter ) / dt;
     }
-  }
-
-  /**
-   * @override
-   */
-  resetContainerSize() {
-
-    if ( this.phaseChangeModelConstructed ) {
-      this.targetContainerHeightProperty.reset();
-    }
-    super.resetContainerSize();
   }
 
   /**

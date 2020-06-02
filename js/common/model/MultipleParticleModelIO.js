@@ -1,51 +1,46 @@
 // Copyright 2020, University of Colorado Boulder
 
+import validate from '../../../../axon/js/validate.js';
+import ObjectIO from '../../../../tandem/js/types/ObjectIO.js';
+import statesOfMatter from '../../statesOfMatter.js';
+import MultipleParticleModel from './MultipleParticleModel.js';
+
 /**
- * IO type for MoleculeForceAndMotionDataSet
+ * IO type for MultipleParticleModel
  *
  * @author John Blanco (PhET Interactive Simulations)
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
-
-import validate from '../../../../axon/js/validate.js';
-import ObjectIO from '../../../../tandem/js/types/ObjectIO.js';
-import statesOfMatter from '../../statesOfMatter.js';
-import MoleculeForceAndMotionDataSetIO from './MoleculeForceAndMotionDataSetIO.js';
-import MultipleParticleModel from './MultipleParticleModel.js';
-
 class MultipleParticleModelIO extends ObjectIO {
 
   /**
-   * serialize components that aren't instrumented and so can't serialize themselves.
-   * @param {MultipleParticleModel} model
+   * serialized a MultipleParticleModel instance
+   * @param {MultipleParticleModel} multipleParticleModel
    * @returns {Object}
+   * @public
    */
-  static toStateObject( model ) {
-    validate( model, this.validator );
-    return {
-      private: { // to indicate that it is needed for state, but shouldn't be shown in Studio.
-        moleculeDataSet: MoleculeForceAndMotionDataSetIO.toStateObject( model.moleculeDataSet )
-      }
-    };
+  static toStateObject( multipleParticleModel ) {
+    validate( multipleParticleModel, this.validator );
+    return multipleParticleModel.toStateObject();
   }
 
   /**
    * Deserialize component parts into an intermediate object that can be set in setValue.
    * @param {Object} stateObject
-   * @returns {MoleculeForceAndMotionDataSet}
+   * @returns {Object}
    */
   static fromStateObject( stateObject ) {
-    return {
-      moleculeDataSet: MoleculeForceAndMotionDataSetIO.fromStateObject( stateObject.private.moleculeDataSet )
-    };
+    return MultipleParticleModel.fromStateObject( stateObject );
   }
 
   /**
-   * @param {MultipleParticleModel} model
-   * @param {Object} fromStateObject - see fromStateObject
+   * set the state of a MultipleParticleModel instance
+   * @param {MultipleParticleModel} multipleParticleModel
+   * @param {Object} state
+   * @public
    */
-  static setValue( model, fromStateObject ) {
-    model.moleculeDataSet = fromStateObject.moleculeDataSet;
+  static setValue( multipleParticleModel, state ) {
+    multipleParticleModel.setValue( state );
   }
 }
 

@@ -33,6 +33,7 @@ class MoleculeForceAndMotionDataSetIO extends ObjectIO {
       atomsPerMolecule: moleculeForceAndMotionDataSet.atomsPerMolecule,
       numberOfAtoms: moleculeForceAndMotionDataSet.numberOfAtoms,
       numberOfMolecules: moleculeForceAndMotionDataSet.numberOfMolecules,
+      moleculeMass: moleculeForceAndMotionDataSet.moleculeMass,
 
       // arrays
       atomPositions: ArrayIONullableIOVector2IO.toStateObject( moleculeForceAndMotionDataSet.atomPositions ),
@@ -41,13 +42,10 @@ class MoleculeForceAndMotionDataSetIO extends ObjectIO {
       moleculeForces: ArrayIONullableIOVector2IO.toStateObject( moleculeForceAndMotionDataSet.moleculeForces ),
       nextMoleculeForces: ArrayIONullableIOVector2IO.toStateObject( moleculeForceAndMotionDataSet.nextMoleculeForces ),
       insideContainer: moleculeForceAndMotionDataSet.insideContainer,
-
       moleculeRotationAngles: moleculeForceAndMotionDataSet.moleculeRotationAngles,
       moleculeRotationRates: moleculeForceAndMotionDataSet.moleculeRotationRates,
       moleculeTorques: moleculeForceAndMotionDataSet.moleculeTorques,
       nextMoleculeTorques: moleculeForceAndMotionDataSet.nextMoleculeTorques,
-
-      moleculeMass: moleculeForceAndMotionDataSet.moleculeMass,
       moleculeRotationalInertia: moleculeForceAndMotionDataSet.moleculeRotationalInertia
     };
   }
@@ -61,6 +59,8 @@ class MoleculeForceAndMotionDataSetIO extends ObjectIO {
     const newDataSet = new MoleculeForceAndMotionDataSet( stateObject.atomsPerMolecule );
     newDataSet.numberOfAtoms = stateObject.numberOfAtoms;
     newDataSet.numberOfMolecules = stateObject.numberOfMolecules;
+    newDataSet.moleculeMass = stateObject.moleculeMass;
+    newDataSet.moleculeRotationalInertia = stateObject.moleculeRotationalInertia;
 
     // arrays
     newDataSet.atomPositions = ArrayIONullableIOVector2IO.fromStateObject( stateObject.atomPositions );
@@ -73,9 +73,6 @@ class MoleculeForceAndMotionDataSetIO extends ObjectIO {
     newDataSet.moleculeRotationRates = stateObject.moleculeRotationRates;
     newDataSet.moleculeTorques = stateObject.moleculeTorques;
     newDataSet.nextMoleculeTorques = stateObject.nextMoleculeTorques;
-
-    newDataSet.moleculeMass = stateObject.moleculeMass;
-    newDataSet.moleculeRotationalInertia = stateObject.moleculeRotationalInertia;
 
     return newDataSet;
   }
