@@ -19,6 +19,7 @@ import HeaterCoolerNode from '../../../../scenery-phet/js/HeaterCoolerNode.js';
 import TimeControlNode from '../../../../scenery-phet/js/TimeControlNode.js';
 import MultipleParticleModel from '../../common/model/MultipleParticleModel.js';
 import SOMConstants from '../../common/SOMConstants.js';
+import SOMQueryParameters from '../../common/SOMQueryParameters.js';
 import ParticleContainerNode from '../../common/view/ParticleContainerNode.js';
 import statesOfMatter from '../../statesOfMatter.js';
 import StatesMoleculesControlPanel from './StatesMoleculesControlPanel.js';
@@ -69,7 +70,10 @@ function StatesScreenView( multipleParticleModel, tandem ) {
     scale: 0.79,
     centerX: particleContainerViewBounds.centerX,
     top: particleContainerViewBounds.bottom + 30, // distance from bottom of particle area empirically determined
-    tandem: tandem.createTandem( 'heaterCoolerNode' )
+    tandem: tandem.createTandem( 'heaterCoolerNode' ),
+    frontOptions: {
+      snapToZero: !SOMQueryParameters.stickyBurners
+    }
   } );
   this.addChild( heaterCoolerNode );
 

@@ -24,6 +24,7 @@ import TimeControlNode from '../../../../scenery-phet/js/TimeControlNode.js';
 import TextPushButton from '../../../../sun/js/buttons/TextPushButton.js';
 import MultipleParticleModel from '../../common/model/MultipleParticleModel.js';
 import SOMConstants from '../../common/SOMConstants.js';
+import SOMQueryParameters from '../../common/SOMQueryParameters.js';
 import SubstanceType from '../../common/SubstanceType.js';
 import ParticleContainerNode from '../../common/view/ParticleContainerNode.js';
 import statesOfMatter from '../../statesOfMatter.js';
@@ -96,7 +97,10 @@ function PhaseChangesScreenView( model, isPotentialGraphEnabled, tandem ) {
     scale: 0.79,
     centerX: nominalParticleAreaViewBounds.centerX,
     top: nominalParticleAreaViewBounds.maxY + 30, // offset from container bottom empirically determined
-    tandem: tandem.createTandem( 'heaterCoolerNode' )
+    tandem: tandem.createTandem( 'heaterCoolerNode' ),
+    frontOptions: {
+      snapToZero: !SOMQueryParameters.stickyBurners
+    }
   } );
   this.addChild( heaterCoolerNode );
 
