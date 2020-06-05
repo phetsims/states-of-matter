@@ -3,12 +3,13 @@
 /**
  * view for the Phase Changes screen
  *
- * @author Aaron Davis
- * @author Siddhartha Chinthapally (Actual Concepts)
  * @author John Blanco
+ * @author Siddhartha Chinthapally (Actual Concepts)
+ * @author Aaron Davis
  */
 
 import ObservableArray from '../../../../axon/js/ObservableArray.js';
+import Property from '../../../../axon/js/Property.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import ScreenView from '../../../../joist/js/ScreenView.js';
@@ -25,8 +26,8 @@ import MultipleParticleModel from '../../common/model/MultipleParticleModel.js';
 import SOMConstants from '../../common/SOMConstants.js';
 import SubstanceType from '../../common/SubstanceType.js';
 import ParticleContainerNode from '../../common/view/ParticleContainerNode.js';
-import statesOfMatterStrings from '../../statesOfMatterStrings.js';
 import statesOfMatter from '../../statesOfMatter.js';
+import statesOfMatterStrings from '../../statesOfMatterStrings.js';
 import InteractionPotentialAccordionBox from './InteractionPotentialAccordionBox.js';
 import PhaseChangesMoleculesControlPanel from './PhaseChangesMoleculesControlPanel.js';
 import PhaseDiagramAccordionBox from './PhaseDiagramAccordionBox.js';
@@ -99,6 +100,20 @@ function PhaseChangesScreenView( model, isPotentialGraphEnabled, tandem ) {
   } );
   this.addChild( heaterCoolerNode );
 
+  // control when the heater/cooler node is enabled for input
+  Property.multilink(
+    [ model.isPlayingProperty, model.isExplodedProperty ],
+    ( isPlaying, isExploded ) => {
+      if ( !isPlaying || isExploded ) {
+        heaterCoolerNode.interruptSubtreeInput(); // cancel interaction
+        heaterCoolerNode.slider.enabled = false;
+      }
+      else {
+        heaterCoolerNode.slider.enabled = true;
+      }
+    }
+  );
+
   // add reset all button
   const resetAllButton = new ResetAllButton( {
     listener: () => {
@@ -148,7 +163,8 @@ function PhaseChangesScreenView( model, isPotentialGraphEnabled, tandem ) {
   // add bicycle pump node
   this.pumpNode = new BicyclePumpNode(
     model.targetNumberOfMoleculesProperty,
-    model.numberOfMoleculesRangeProperty, {
+    model.numberOfMoleculesRangeProperty,
+    {
       enabledProperty: model.isInjectionAllowedProperty,
       translation: pumpPosition,
       hoseAttachmentOffset: hoseAttachmentPoint.minus( pumpPosition ),
@@ -159,7 +175,8 @@ function PhaseChangesScreenView( model, isPotentialGraphEnabled, tandem ) {
         numberOfParticlesPerPumpAction: 3
       },
       tandem: tandem.createTandem( 'pumpNode' )
-    } );
+    }
+  );
   this.addChild( this.pumpNode );
 
   // add return lid button

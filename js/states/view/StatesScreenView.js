@@ -64,7 +64,7 @@ function StatesScreenView( multipleParticleModel, tandem ) {
   } );
   this.addChild( this.particleContainerNode );
 
-  // @private add heater/cooler node
+  // @private - heater/cooler node
   const heaterCoolerNode = new HeaterCoolerNode( multipleParticleModel.heatingCoolingAmountProperty, {
     scale: 0.79,
     centerX: particleContainerViewBounds.centerX,
@@ -72,6 +72,14 @@ function StatesScreenView( multipleParticleModel, tandem ) {
     tandem: tandem.createTandem( 'heaterCoolerNode' )
   } );
   this.addChild( heaterCoolerNode );
+
+  // control when the heater/cooler node is enabled for input
+  multipleParticleModel.isPlayingProperty.lazyLink( isPlaying => {
+    if ( !isPlaying ) {
+      heaterCoolerNode.interruptSubtreeInput(); // cancel interaction
+    }
+    heaterCoolerNode.slider.enabled = isPlaying;
+  } );
 
   // selection panel for the atoms/molecules
   const moleculesControlPanel = new StatesMoleculesControlPanel( multipleParticleModel.substanceProperty, {
