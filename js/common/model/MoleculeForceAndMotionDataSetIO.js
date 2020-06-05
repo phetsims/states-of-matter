@@ -56,23 +56,29 @@ class MoleculeForceAndMotionDataSetIO extends ObjectIO {
    * @returns {MoleculeForceAndMotionDataSet}
    */
   static fromStateObject( stateObject ) {
+
     const newDataSet = new MoleculeForceAndMotionDataSet( stateObject.atomsPerMolecule );
+
     newDataSet.numberOfAtoms = stateObject.numberOfAtoms;
     newDataSet.numberOfMolecules = stateObject.numberOfMolecules;
     newDataSet.moleculeMass = stateObject.moleculeMass;
     newDataSet.moleculeRotationalInertia = stateObject.moleculeRotationalInertia;
 
     // arrays
-    newDataSet.atomPositions = ArrayIONullableIOVector2IO.fromStateObject( stateObject.atomPositions );
-    newDataSet.moleculeCenterOfMassPositions = ArrayIONullableIOVector2IO.fromStateObject( stateObject.moleculeCenterOfMassPositions );
-    newDataSet.moleculeVelocities = ArrayIONullableIOVector2IO.fromStateObject( stateObject.moleculeVelocities );
-    newDataSet.moleculeForces = ArrayIONullableIOVector2IO.fromStateObject( stateObject.moleculeForces );
-    newDataSet.nextMoleculeForces = ArrayIONullableIOVector2IO.fromStateObject( stateObject.nextMoleculeForces );
-    newDataSet.insideContainer = stateObject.insideContainer;
-    newDataSet.moleculeRotationAngles = stateObject.moleculeRotationAngles;
-    newDataSet.moleculeRotationRates = stateObject.moleculeRotationRates;
-    newDataSet.moleculeTorques = stateObject.moleculeTorques;
-    newDataSet.nextMoleculeTorques = stateObject.nextMoleculeTorques;
+    for ( let i = 0; i < newDataSet.numberOfAtoms; i++ ) {
+      newDataSet.atomPositions[ i ] = Vector2IO.fromStateObject( stateObject.atomPositions[ i ] );
+    }
+    for ( let i = 0; i < newDataSet.numberOfMolecules; i++ ) {
+      newDataSet.moleculeCenterOfMassPositions[ i ] = Vector2IO.fromStateObject( stateObject.moleculeCenterOfMassPositions[ i ] );
+      newDataSet.moleculeVelocities[ i ] = Vector2IO.fromStateObject( stateObject.moleculeVelocities[ i ] );
+      newDataSet.moleculeForces[ i ] = Vector2IO.fromStateObject( stateObject.moleculeForces[ i ] );
+      newDataSet.nextMoleculeForces[ i ] = Vector2IO.fromStateObject( stateObject.nextMoleculeForces[ i ] );
+      newDataSet.insideContainer[ i ] = stateObject.insideContainer[ i ];
+      newDataSet.moleculeRotationAngles[ i ] = stateObject.moleculeRotationAngles[ i ];
+      newDataSet.moleculeRotationRates[ i ] = stateObject.moleculeRotationRates[ i ];
+      newDataSet.moleculeTorques[ i ] = stateObject.moleculeTorques[ i ];
+      newDataSet.nextMoleculeTorques[ i ] = stateObject.nextMoleculeTorques[ i ];
+    }
 
     return newDataSet;
   }
