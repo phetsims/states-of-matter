@@ -18,6 +18,7 @@ class MultipleParticleModelIO extends ObjectIO {
    * @param {MultipleParticleModel} multipleParticleModel
    * @returns {Object}
    * @public
+   * @override
    */
   static toStateObject( multipleParticleModel ) {
     validate( multipleParticleModel, this.validator );
@@ -28,6 +29,7 @@ class MultipleParticleModelIO extends ObjectIO {
    * Deserialize component parts into an intermediate object that can be set in setValue.
    * @param {Object} stateObject
    * @returns {Object}
+   * @override
    */
   static fromStateObject( stateObject ) {
     return MultipleParticleModel.fromStateObject( stateObject );
@@ -38,6 +40,7 @@ class MultipleParticleModelIO extends ObjectIO {
    * @param {MultipleParticleModel} multipleParticleModel
    * @param {Object} state
    * @public
+   * @override
    */
   static setValue( multipleParticleModel, state ) {
     multipleParticleModel.setValue( state );

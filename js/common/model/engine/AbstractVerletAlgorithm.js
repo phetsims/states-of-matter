@@ -168,6 +168,7 @@ inherit( Object, AbstractVerletAlgorithm, {
             accumulatedPressure += Math.abs( moleculeVelocityY );
           }
           else {
+
             // This particle has left the container.
             moleculeDataSet.insideContainer[ i ] = false;
           }

@@ -42,7 +42,7 @@ function MoleculeForceAndMotionDataSet( atomsPerMolecule ) {
   this.nextMoleculeForces = new Array( maxNumMolecules );
   this.insideContainer = new Array( maxNumMolecules );
 
-  // Populate with null because PhET-iO cannot serialize undefined.
+  // Populate with null for vectors and false for booleans because PhET-iO cannot serialize undefined.
   for ( let i = 0; i < SOMConstants.MAX_NUM_ATOMS; i++ ) {
     this.atomPositions[ i ] = null;
     if ( i < maxNumMolecules ) {
@@ -50,14 +50,15 @@ function MoleculeForceAndMotionDataSet( atomsPerMolecule ) {
       this.moleculeVelocities[ i ] = null;
       this.moleculeForces[ i ] = null;
       this.nextMoleculeForces[ i ] = null;
+      this.insideContainer[ i ] = false;
     }
   }
 
-  // @public Note that some of the following are not used in the monatomic case, but need to be here for compatibility.
-  this.moleculeRotationAngles = new Array( maxNumMolecules );
-  this.moleculeRotationRates = new Array( maxNumMolecules );
-  this.moleculeTorques = new Array( maxNumMolecules );
-  this.nextMoleculeTorques = new Array( maxNumMolecules );
+  // @public - Note that some of the following are not used in the monatomic case, but need to be here for compatibility.
+  this.moleculeRotationAngles = new Float64Array( maxNumMolecules );
+  this.moleculeRotationRates = new Float64Array( maxNumMolecules );
+  this.moleculeTorques = new Float64Array( maxNumMolecules );
+  this.nextMoleculeTorques = new Float64Array( maxNumMolecules );
   for ( let i = 0; i < SOMConstants.MAX_NUM_ATOMS / this.atomsPerMolecule; i++ ) {
     this.moleculeRotationAngles [ i ] = 0;
     this.moleculeRotationRates[ i ] = 0;

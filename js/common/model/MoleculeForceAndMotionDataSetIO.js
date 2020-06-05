@@ -11,13 +11,17 @@
 import validate from '../../../../axon/js/validate.js';
 import Vector2IO from '../../../../dot/js/Vector2IO.js';
 import ArrayIO from '../../../../tandem/js/types/ArrayIO.js';
+import BooleanIO from '../../../../tandem/js/types/BooleanIO.js';
+import Float64ArrayIO from '../../../../tandem/js/types/Float64ArrayIO.js';
 import NullableIO from '../../../../tandem/js/types/NullableIO.js';
+import NumberIO from '../../../../tandem/js/types/NumberIO.js';
 import ObjectIO from '../../../../tandem/js/types/ObjectIO.js';
 import statesOfMatter from '../../statesOfMatter.js';
 import MoleculeForceAndMotionDataSet from './MoleculeForceAndMotionDataSet.js';
 
 // constants
 const ArrayIONullableIOVector2IO = ArrayIO( NullableIO( Vector2IO ) );
+const ArrayIOBooleanIO = ArrayIO( BooleanIO );
 
 class MoleculeForceAndMotionDataSetIO extends ObjectIO {
 
@@ -25,15 +29,17 @@ class MoleculeForceAndMotionDataSetIO extends ObjectIO {
    * Encodes a MoleculeForceAndMotionDataSet instance to a state.
    * @param {MoleculeForceAndMotionDataSet} moleculeForceAndMotionDataSet
    * @returns {Object}
+   * @override
    */
   static toStateObject( moleculeForceAndMotionDataSet ) {
     validate( moleculeForceAndMotionDataSet, this.validator );
 
     return {
-      atomsPerMolecule: moleculeForceAndMotionDataSet.atomsPerMolecule,
-      numberOfAtoms: moleculeForceAndMotionDataSet.numberOfAtoms,
-      numberOfMolecules: moleculeForceAndMotionDataSet.numberOfMolecules,
-      moleculeMass: moleculeForceAndMotionDataSet.moleculeMass,
+      atomsPerMolecule: NumberIO.toStateObject( moleculeForceAndMotionDataSet.atomsPerMolecule ),
+      numberOfAtoms: NumberIO.toStateObject( moleculeForceAndMotionDataSet.numberOfAtoms ),
+      numberOfMolecules: NumberIO.toStateObject( moleculeForceAndMotionDataSet.numberOfMolecules ),
+      moleculeMass: NumberIO.toStateObject( moleculeForceAndMotionDataSet.moleculeMass ),
+      moleculeRotationalInertia: NumberIO.toStateObject( moleculeForceAndMotionDataSet.moleculeRotationalInertia ),
 
       // arrays
       atomPositions: ArrayIONullableIOVector2IO.toStateObject( moleculeForceAndMotionDataSet.atomPositions ),
@@ -41,12 +47,11 @@ class MoleculeForceAndMotionDataSetIO extends ObjectIO {
       moleculeVelocities: ArrayIONullableIOVector2IO.toStateObject( moleculeForceAndMotionDataSet.moleculeVelocities ),
       moleculeForces: ArrayIONullableIOVector2IO.toStateObject( moleculeForceAndMotionDataSet.moleculeForces ),
       nextMoleculeForces: ArrayIONullableIOVector2IO.toStateObject( moleculeForceAndMotionDataSet.nextMoleculeForces ),
-      insideContainer: moleculeForceAndMotionDataSet.insideContainer,
-      moleculeRotationAngles: moleculeForceAndMotionDataSet.moleculeRotationAngles,
-      moleculeRotationRates: moleculeForceAndMotionDataSet.moleculeRotationRates,
-      moleculeTorques: moleculeForceAndMotionDataSet.moleculeTorques,
-      nextMoleculeTorques: moleculeForceAndMotionDataSet.nextMoleculeTorques,
-      moleculeRotationalInertia: moleculeForceAndMotionDataSet.moleculeRotationalInertia
+      insideContainer: ArrayIOBooleanIO.toStateObject( moleculeForceAndMotionDataSet.insideContainer ),
+      moleculeRotationAngles: Float64ArrayIO.toStateObject( moleculeForceAndMotionDataSet.moleculeRotationAngles ),
+      moleculeRotationRates: Float64ArrayIO.toStateObject( moleculeForceAndMotionDataSet.moleculeRotationRates ),
+      moleculeTorques: Float64ArrayIO.toStateObject( moleculeForceAndMotionDataSet.moleculeTorques ),
+      nextMoleculeTorques: Float64ArrayIO.toStateObject( moleculeForceAndMotionDataSet.nextMoleculeTorques )
     };
   }
 
@@ -54,31 +59,29 @@ class MoleculeForceAndMotionDataSetIO extends ObjectIO {
    * Decodes a state into a MoleculeForceAndMotionDataSet.
    * @param {Object} stateObject
    * @returns {MoleculeForceAndMotionDataSet}
+   * @override
    */
   static fromStateObject( stateObject ) {
 
     const newDataSet = new MoleculeForceAndMotionDataSet( stateObject.atomsPerMolecule );
 
-    newDataSet.numberOfAtoms = stateObject.numberOfAtoms;
-    newDataSet.numberOfMolecules = stateObject.numberOfMolecules;
-    newDataSet.moleculeMass = stateObject.moleculeMass;
-    newDataSet.moleculeRotationalInertia = stateObject.moleculeRotationalInertia;
+    // single values that pertain to the entire data set
+    newDataSet.numberOfAtoms = NumberIO.fromStateObject( stateObject.numberOfAtoms );
+    newDataSet.numberOfMolecules = NumberIO.fromStateObject( stateObject.numberOfMolecules );
+    newDataSet.moleculeMass = NumberIO.fromStateObject( stateObject.moleculeMass );
+    newDataSet.moleculeRotationalInertia = NumberIO.fromStateObject( stateObject.moleculeRotationalInertia );
+    newDataSet.atomsPerMolecule = NumberIO.fromStateObject( stateObject.atomsPerMolecule );
 
     // arrays
-    for ( let i = 0; i < newDataSet.numberOfAtoms; i++ ) {
-      newDataSet.atomPositions[ i ] = Vector2IO.fromStateObject( stateObject.atomPositions[ i ] );
-    }
-    for ( let i = 0; i < newDataSet.numberOfMolecules; i++ ) {
-      newDataSet.moleculeCenterOfMassPositions[ i ] = Vector2IO.fromStateObject( stateObject.moleculeCenterOfMassPositions[ i ] );
-      newDataSet.moleculeVelocities[ i ] = Vector2IO.fromStateObject( stateObject.moleculeVelocities[ i ] );
-      newDataSet.moleculeForces[ i ] = Vector2IO.fromStateObject( stateObject.moleculeForces[ i ] );
-      newDataSet.nextMoleculeForces[ i ] = Vector2IO.fromStateObject( stateObject.nextMoleculeForces[ i ] );
-      newDataSet.insideContainer[ i ] = stateObject.insideContainer[ i ];
-      newDataSet.moleculeRotationAngles[ i ] = stateObject.moleculeRotationAngles[ i ];
-      newDataSet.moleculeRotationRates[ i ] = stateObject.moleculeRotationRates[ i ];
-      newDataSet.moleculeTorques[ i ] = stateObject.moleculeTorques[ i ];
-      newDataSet.nextMoleculeTorques[ i ] = stateObject.nextMoleculeTorques[ i ];
-    }
+    newDataSet.atomPositions = ArrayIONullableIOVector2IO.fromStateObject( stateObject.atomPositions );
+    newDataSet.moleculeCenterOfMassPositions = ArrayIONullableIOVector2IO.fromStateObject( stateObject.moleculeCenterOfMassPositions );
+    newDataSet.moleculeVelocities = ArrayIONullableIOVector2IO.fromStateObject( stateObject.moleculeVelocities );
+    newDataSet.moleculeForces = ArrayIONullableIOVector2IO.fromStateObject( stateObject.moleculeForces );
+    newDataSet.nextMoleculeForces = ArrayIONullableIOVector2IO.fromStateObject( stateObject.nextMoleculeForces );
+    newDataSet.moleculeRotationAngles = Float64ArrayIO.fromStateObject( stateObject.moleculeRotationAngles );
+    newDataSet.moleculeRotationRates = Float64ArrayIO.fromStateObject( stateObject.moleculeRotationRates );
+    newDataSet.moleculeTorques = Float64ArrayIO.fromStateObject( stateObject.moleculeTorques );
+    newDataSet.insideContainer = ArrayIOBooleanIO.fromStateObject( stateObject.insideContainer );
 
     return newDataSet;
   }

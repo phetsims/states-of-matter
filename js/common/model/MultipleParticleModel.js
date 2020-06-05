@@ -853,9 +853,11 @@ class MultipleParticleModel extends PhetioObject {
    */
   updateNormalizedContainerDimensions() {
     this.normalizedContainerWidth = CONTAINER_WIDTH / this.particleDiameter;
-    const nonNormalizedContainerSize = this.containerHeightProperty.value;
-    this.normalizedContainerHeight = nonNormalizedContainerSize / this.particleDiameter;
-    this.normalizedTotalContainerHeight = nonNormalizedContainerSize / this.particleDiameter;
+
+    // The non-normalized height will keep increasing after the container explodes, so we need to limit it here.
+    const nonNormalizedContainerHeight = Math.min( this.containerHeightProperty.value, CONTAINER_INITIAL_HEIGHT );
+    this.normalizedContainerHeight = nonNormalizedContainerHeight / this.particleDiameter;
+    this.normalizedTotalContainerHeight = nonNormalizedContainerHeight / this.particleDiameter;
   }
 
   /**
