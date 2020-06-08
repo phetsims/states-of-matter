@@ -67,8 +67,8 @@ import ScaledAtom from './particle/ScaledAtom.js';
 //---------------------------------------------------------------------------------------------------------------------
 
 // general constants
-const CONTAINER_WIDTH = 10000; // essentially arbitrary
-const CONTAINER_INITIAL_HEIGHT = 10000;  // essentially arbitrary
+const CONTAINER_WIDTH = 10000; // in picometers
+const CONTAINER_INITIAL_HEIGHT = 10000;  // in picometers
 const DEFAULT_SUBSTANCE = SubstanceType.NEON;
 const MAX_TEMPERATURE = 50.0;
 const MIN_TEMPERATURE = 0.00001;
@@ -738,6 +738,7 @@ class MultipleParticleModel extends PhetioObject {
   /**
    * add non-normalized atoms for the specified number of molecules of the current substance
    * @param {number} numMolecules
+   * @private
    */
   addAtomsForCurrentSubstance( numMolecules ) {
 
@@ -1434,14 +1435,6 @@ class MultipleParticleModel extends PhetioObject {
     this.targetNumberOfMoleculesProperty.set( this.moleculeDataSet.numberOfMolecules );
   }
 
-  getInitialContainerHeight() {
-    return CONTAINER_INITIAL_HEIGHT;
-  }
-
-  getContainerWidth() {
-    return CONTAINER_WIDTH;
-  }
-
   /**
    * serialize this instance for phet-io
    * @returns {Object}
@@ -1465,6 +1458,7 @@ class MultipleParticleModel extends PhetioObject {
    * deserialize a MultipleParticleModel instance to an intermediate state that can be used by setValue
    * @param {Object} stateObject - return value from toStateObject
    * @returns {Object}
+   * @public
    */
   static fromStateObject( stateObject ) {
     return {
@@ -1481,6 +1475,7 @@ class MultipleParticleModel extends PhetioObject {
   /**
    * set the state of this instance for phet-io
    * @param {Object} state
+   * @public
    */
   setValue( state ) {
     required( state );

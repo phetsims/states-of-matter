@@ -43,6 +43,10 @@ class SubstanceSelectorNode extends HBox {
     };
   }
 
+  /**
+   * release all memory to avoid memory leaks
+   * @public
+   */
   dispose() {
     this.disposeSubstanceSelectorNode();
     super.dispose();

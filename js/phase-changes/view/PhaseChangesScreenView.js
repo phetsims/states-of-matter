@@ -74,8 +74,8 @@ function PhaseChangesScreenView( model, isPotentialGraphEnabled, tandem ) {
   // figure out where in the view the particles will be when the container is not exploded
   const nominalParticleAreaViewBounds = new Bounds2(
     modelViewTransform.modelToViewX( 0 ),
-    modelViewTransform.modelToViewY( 0 ) + modelViewTransform.modelToViewDeltaY( model.getInitialContainerHeight() ),
-    modelViewTransform.modelToViewX( 0 ) + modelViewTransform.modelToViewDeltaX( model.getContainerWidth() ),
+    modelViewTransform.modelToViewY( 0 ) + modelViewTransform.modelToViewDeltaY( MultipleParticleModel.PARTICLE_CONTAINER_INITIAL_HEIGHT ),
+    modelViewTransform.modelToViewX( 0 ) + modelViewTransform.modelToViewDeltaX( MultipleParticleModel.PARTICLE_CONTAINER_WIDTH ),
     modelViewTransform.modelToViewY( 0 )
   );
 

@@ -44,9 +44,9 @@ class ScaledAtom {
   }
 
   /**
-   * @public
    * @param {number} x - atom x position in picometers
    * @param {number} y - atom y position in picometers
+   * @public
    * @constructor
    */
   setPosition( x, y ) {
@@ -71,6 +71,10 @@ class ScaledAtom {
     return this.position.y;
   }
 
+  /**
+   * @returns {AtomType}
+   * @public
+   */
   getType() {
     return this.atomType;
   }

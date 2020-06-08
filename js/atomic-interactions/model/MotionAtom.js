@@ -123,6 +123,7 @@ class MotionAtom {
 
   /**
    * @param {number} vx - atom velocity in x-direction
+   * @public
    */
   setVx( vx ) {
     this.velocityProperty.set( new Vector2( vx, this.velocityProperty.value.y ) );
@@ -176,16 +177,22 @@ class MotionAtom {
     return this.positionProperty.value.y;
   }
 
+  /**
+   * @returns {AtomType}
+   * @public
+   */
   getType() {
     return this.atomTypeProperty.value;
   }
 
+  /**
+   * @public
+   */
   reset() {
     this.atomTypeProperty.reset();
     this.positionProperty.reset();
     this.velocityProperty.reset();
     this.accelerationProperty.reset();
-
   }
 }
 

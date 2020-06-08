@@ -29,6 +29,7 @@ class MultipleParticleModelIO extends ObjectIO {
    * Deserialize component parts into an intermediate object that can be set in setValue.
    * @param {Object} stateObject
    * @returns {Object}
+   * @public
    * @override
    */
   static fromStateObject( stateObject ) {

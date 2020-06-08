@@ -51,8 +51,8 @@ function StatesScreenView( multipleParticleModel, tandem ) {
   // Figure out where in the view the interior of the particle container will be.
   const particleContainerViewBounds = new Bounds2(
     modelViewTransform.modelToViewX( 0 ),
-    modelViewTransform.modelToViewY( 0 ) + modelViewTransform.modelToViewDeltaY( multipleParticleModel.getInitialContainerHeight() ),
-    modelViewTransform.modelToViewX( 0 ) + modelViewTransform.modelToViewDeltaX( multipleParticleModel.getContainerWidth() ),
+    modelViewTransform.modelToViewY( 0 ) + modelViewTransform.modelToViewDeltaY( MultipleParticleModel.PARTICLE_CONTAINER_INITIAL_HEIGHT ),
+    modelViewTransform.modelToViewX( 0 ) + modelViewTransform.modelToViewDeltaX( MultipleParticleModel.PARTICLE_CONTAINER_WIDTH ),
     modelViewTransform.modelToViewY( 0 )
   );
 

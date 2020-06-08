@@ -115,6 +115,7 @@ class PhaseChangesModel extends MultipleParticleModel {
   }
 
   /**
+   * @protected
    * @override
    */
   updateContainerSize( dt ) {

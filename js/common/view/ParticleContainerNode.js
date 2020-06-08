@@ -57,8 +57,8 @@ function ParticleContainerNode( multipleParticleModel, modelViewTransform, optio
   // @private, view bounds for the particle area, everything is basically constructed and positioned based on this
   this.particleAreaViewBounds = new Bounds2(
     modelViewTransform.modelToViewX( 0 ),
-    modelViewTransform.modelToViewY( 0 ) + modelViewTransform.modelToViewDeltaY( multipleParticleModel.getInitialContainerHeight() ),
-    modelViewTransform.modelToViewX( 0 ) + modelViewTransform.modelToViewDeltaX( multipleParticleModel.getContainerWidth() ),
+    modelViewTransform.modelToViewY( 0 ) + modelViewTransform.modelToViewDeltaY( MultipleParticleModel.PARTICLE_CONTAINER_INITIAL_HEIGHT ),
+    modelViewTransform.modelToViewX( 0 ) + modelViewTransform.modelToViewDeltaX( MultipleParticleModel.PARTICLE_CONTAINER_WIDTH ),
     modelViewTransform.modelToViewY( 0 )
   );
 
@@ -78,7 +78,7 @@ function ParticleContainerNode( multipleParticleModel, modelViewTransform, optio
   this.addChild( postParticleLayer );
 
   // set up variables used to create and position the various parts of the container
-  const containerWidthWithMargin = modelViewTransform.modelToViewDeltaX( multipleParticleModel.getContainerWidth() ) +
+  const containerWidthWithMargin = modelViewTransform.modelToViewDeltaX( MultipleParticleModel.PARTICLE_CONTAINER_WIDTH ) +
                                    2 * CONTAINER_X_MARGIN;
   const topEllipseRadiusX = containerWidthWithMargin / 2;
   const topEllipseRadiusY = topEllipseRadiusX * PERSPECTIVE_TILT_FACTOR;
@@ -452,10 +452,8 @@ function ParticleContainerNode( multipleParticleModel, modelViewTransform, optio
 
       // return the lid to the top of the container
       lidEllipseNode.setRotation( 0 );
-      lidEllipseNode.centerX = modelViewTransform.modelToViewX( multipleParticleModel.getContainerWidth() / 2 );
-      lidEllipseNode.centerY = modelViewTransform.modelToViewY(
-        multipleParticleModel.containerHeightProperty.get()
-      );
+      lidEllipseNode.centerX = modelViewTransform.modelToViewX( MultipleParticleModel.PARTICLE_CONTAINER_WIDTH / 2 );
+      lidEllipseNode.centerY = modelViewTransform.modelToViewY( multipleParticleModel.containerHeightProperty.get() );
 
       // return the thermometer node to its original position
       self.compositeThermometerNode.setRotation( 0 );

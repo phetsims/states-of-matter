@@ -29,6 +29,7 @@ class MoleculeForceAndMotionDataSetIO extends ObjectIO {
    * Encodes a MoleculeForceAndMotionDataSet instance to a state.
    * @param {MoleculeForceAndMotionDataSet} moleculeForceAndMotionDataSet
    * @returns {Object}
+   * @public
    * @override
    */
   static toStateObject( moleculeForceAndMotionDataSet ) {
@@ -59,6 +60,7 @@ class MoleculeForceAndMotionDataSetIO extends ObjectIO {
    * Decodes a state into a MoleculeForceAndMotionDataSet.
    * @param {Object} stateObject
    * @returns {MoleculeForceAndMotionDataSet}
+   * @public
    * @override
    */
   static fromStateObject( stateObject ) {
