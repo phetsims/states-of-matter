@@ -9,9 +9,11 @@
  */
 
 import EnumerationProperty from '../../../../axon/js/EnumerationProperty.js';
+import Range from '../../../../dot/js/Range.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Enumeration from '../../../../phet-core/js/Enumeration.js';
 import merge from '../../../../phet-core/js/merge.js';
+import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import ThermometerNode from '../../../../scenery-phet/js/ThermometerNode.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
@@ -21,17 +23,18 @@ import ComboBox from '../../../../sun/js/ComboBox.js';
 import ComboBoxItem from '../../../../sun/js/ComboBoxItem.js';
 import Panel from '../../../../sun/js/Panel.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
-import statesOfMatterStrings from '../../statesOfMatterStrings.js';
 import statesOfMatter from '../../statesOfMatter.js';
+import statesOfMatterStrings from '../../statesOfMatterStrings.js';
 import SOMQueryParameters from '../SOMQueryParameters.js';
 
 // strings
 const celsiusUnitsString = statesOfMatterStrings.celsiusUnits;
 const kelvinUnitsString = statesOfMatterStrings.kelvinUnits;
+const temperatureReadoutPattern = statesOfMatterStrings.temperatureReadoutPattern;
 
 // constants
-const MAX_LENGTH_TEMPERATURE_TEXT = '99999 ' + celsiusUnitsString;
-const MAX_TEMPERATURE_TEXT_WIDTH = 35; // empirically determined
+const KELVIN_TEMPERATURE_RANGE = new Range( 0, 5000 ); // this is an upper bound based on experimenting with the sim
+const MAX_TEMPERATURE_TEXT_WIDTH = 40; // empirically determined to look decent
 const TEMPERATURE_READOUT_FONT = new PhetFont( 11 );
 
 // local enum
@@ -75,13 +78,38 @@ class CompositeThermometerNode extends Node {
       }
     );
 
-    // @private temperature nodes combo box
-    const temperatureKelvinText = new Text( '', {
+    // Create the longest possible strings for the temperatures and use them to create the combo box items so that the
+    // combo box will be wide enough.
+    const minTemperatureCelsiusString = StringUtils.fillIn( temperatureReadoutPattern, {
+      value: kelvinToCelsius( KELVIN_TEMPERATURE_RANGE.min ),
+      units: celsiusUnitsString
+    } );
+    const maxTemperatureCelsiusString = StringUtils.fillIn( temperatureReadoutPattern, {
+      value: kelvinToCelsius( KELVIN_TEMPERATURE_RANGE.max ),
+      units: celsiusUnitsString
+    } );
+    const longestCelsiusString = minTemperatureCelsiusString.length > maxTemperatureCelsiusString.length ?
+                                 minTemperatureCelsiusString :
+                                 maxTemperatureCelsiusString;
+    const minTemperatureKelvinString = StringUtils.fillIn( temperatureReadoutPattern, {
+      value: KELVIN_TEMPERATURE_RANGE.min,
+      units: kelvinUnitsString
+    } );
+    const maxTemperatureKelvinString = StringUtils.fillIn( temperatureReadoutPattern, {
+      value: KELVIN_TEMPERATURE_RANGE.max,
+      units: kelvinUnitsString
+    } );
+    const longestKelvinString = minTemperatureKelvinString.length > maxTemperatureKelvinString.length ?
+                                minTemperatureKelvinString :
+                                maxTemperatureKelvinString;
+
+    // temperature text nodes
+    const temperatureKelvinText = new Text( longestKelvinString, {
       font: TEMPERATURE_READOUT_FONT,
       maxWidth: MAX_TEMPERATURE_TEXT_WIDTH,
       phetioReadOnly: true
     } );
-    const temperatureCelsiusText = new Text( MAX_LENGTH_TEMPERATURE_TEXT, {
+    const temperatureCelsiusText = new Text( longestCelsiusString, {
       font: TEMPERATURE_READOUT_FONT,
       maxWidth: MAX_TEMPERATURE_TEXT_WIDTH,
       phetioReadOnly: true
@@ -102,7 +130,7 @@ class CompositeThermometerNode extends Node {
       this,
       {
         xMargin: 6,
-        yMargin: 6,
+        yMargin: 4,
         cornerRadius: 5,
         buttonLineWidth: 0.4,
         align: 'right',
@@ -130,9 +158,14 @@ class CompositeThermometerNode extends Node {
     // update the temperature readouts when the value changes in the model
     multipleParticleModel.temperatureInKelvinProperty.link( temperatureInKelvin => {
       if ( temperatureInKelvin !== null ) {
-        const temperatureInKelvinRounded = Utils.roundSymmetric( temperatureInKelvin );
-        temperatureKelvinText.setText( temperatureInKelvinRounded + ' ' + kelvinUnitsString );
-        temperatureCelsiusText.setText( Utils.roundSymmetric( temperatureInKelvin - 273.15 ) + ' ' + celsiusUnitsString );
+        temperatureKelvinText.setText( StringUtils.fillIn( temperatureReadoutPattern, {
+          value: Utils.roundSymmetric( temperatureInKelvin ),
+          units: kelvinUnitsString
+        } ) );
+        temperatureCelsiusText.setText( StringUtils.fillIn( temperatureReadoutPattern, {
+          value: kelvinToCelsius( temperatureInKelvin ),
+          units: celsiusUnitsString
+        } ) );
       }
       else {
         temperatureKelvinText.setText( '--' );
@@ -153,6 +186,9 @@ class CompositeThermometerNode extends Node {
     this.temperatureUnitsProperty.reset();
   }
 }
+
+// helper function
+const kelvinToCelsius = temperatureInKelvin => Utils.roundSymmetric( temperatureInKelvin - 273.15 );
 
 statesOfMatter.register( 'CompositeThermometerNode', CompositeThermometerNode );
 export default CompositeThermometerNode;
