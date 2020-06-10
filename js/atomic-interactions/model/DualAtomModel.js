@@ -151,6 +151,7 @@ class DualAtomModel {
           this.setEpsilon( interactionStrength );
           this.setAdjustableAtomSigma( atomDiameter );
         }
+        this.updateForces();
       }
     );
 
@@ -276,16 +277,10 @@ class DualAtomModel {
    */
   step( dt ) {
 
-    // If dt is excessively large, ignore it - it probably means the user returned to the tab after the tab or the
-    // browser was hidden for a while.
-    if ( dt > 1.0 ) {
-      return;
-    }
-
     if ( this.isPlayingProperty.get() ) {
 
-      // Using real world time for this results in the atoms moving a little slowly, so the time step is adjusted
-      // here.  The multipliers were empirically determined.
+      // Using real world time for this results in the atoms moving a little slowly, so the time step is adjusted here.
+      // The multipliers were empirically determined.
       let adjustedTimeStep;
       if ( this.timeSpeedProperty.value === TimeSpeed.SLOW ) {
         adjustedTimeStep = dt * SLOW_MOTION_TIME_MULTIPLIER;
