@@ -8,9 +8,11 @@
  * @author Aaron Davis
  */
 
+import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import ObservableArray from '../../../../axon/js/ObservableArray.js';
 import Property from '../../../../axon/js/Property.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
+import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import ScreenView from '../../../../joist/js/ScreenView.js';
 import inherit from '../../../../phet-core/js/inherit.js';
@@ -164,12 +166,34 @@ function PhaseChangesScreenView( model, isPotentialGraphEnabled, tandem ) {
   // Hose attaches to the bottom left side of the container.
   const hoseAttachmentPoint = new Vector2( nominalParticleAreaViewBounds.left, nominalParticleAreaViewBounds.bottom - 70 );
 
+  // Create a derived property that will be used to control the enabled state of the bicycle pump node.
+  const bicyclePumpEnabledProperty = new DerivedProperty(
+    [
+      model.isPlayingProperty,
+      model.isExplodedProperty,
+      model.maxNumberOfMoleculesProperty,
+      model.targetNumberOfMoleculesProperty
+    ],
+    ( isPlaying, isExploded, maxNumberOfMoleculesProperty, targetNumberOfMolecules ) => {
+      return isPlaying &&
+             !isExploded &&
+             targetNumberOfMolecules < maxNumberOfMoleculesProperty;
+    }
+  );
+
+  // Create a range property that can be provided to the bicycle pump.
+  const numberOfMoleculesRangeProperty = new Property( new Range( 0, model.maxNumberOfMoleculesProperty.value ) );
+  model.maxNumberOfMoleculesProperty.lazyLink( maxNumberOfMolecules => {
+    numberOfMoleculesRangeProperty.set( new Range( 0, maxNumberOfMolecules ) );
+  } );
+
   // add bicycle pump node
   this.pumpNode = new BicyclePumpNode(
     model.targetNumberOfMoleculesProperty,
-    model.numberOfMoleculesRangeProperty,
+    numberOfMoleculesRangeProperty,
     {
-      enabledProperty: model.isInjectionAllowedProperty,
+      nodeEnabledProperty: bicyclePumpEnabledProperty,
+      injectionEnabledProperty: model.isInjectionAllowedProperty,
       translation: pumpPosition,
       hoseAttachmentOffset: hoseAttachmentPoint.minus( pumpPosition ),
       hoseCurviness: 1.5,

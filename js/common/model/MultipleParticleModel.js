@@ -26,7 +26,6 @@ import Emitter from '../../../../axon/js/Emitter.js';
 import EnumerationProperty from '../../../../axon/js/EnumerationProperty.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import ObservableArray from '../../../../axon/js/ObservableArray.js';
-import Property from '../../../../axon/js/Property.js';
 import Range from '../../../../dot/js/Range.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
@@ -216,21 +215,27 @@ class MultipleParticleModel extends PhetioObject {
     } );
 
     // @public (read-only)
-    this.numberOfMoleculesRangeProperty = new Property( new Range( 0, SOMConstants.MAX_NUM_ATOMS ) );
+    this.maxNumberOfMoleculesProperty = new NumberProperty( SOMConstants.MAX_NUM_ATOMS );
+
+    // @private {NumberProperty}
+    this.numMoleculesQueuedForInjectionProperty = new NumberProperty( 0 );
 
     // @public (read-only) - indicates whether injection of additional molecules is allowed
     this.isInjectionAllowedProperty = new DerivedProperty(
       [
         this.isPlayingProperty,
+        this.numMoleculesQueuedForInjectionProperty,
         this.isExplodedProperty,
-        this.numberOfMoleculesRangeProperty,
-        this.containerHeightProperty
+        this.maxNumberOfMoleculesProperty,
+        this.containerHeightProperty,
+        this.targetNumberOfMoleculesProperty
       ],
-      ( isPlaying, isExploded, numberOfMoleculesRange, containerHeight ) => {
+      ( isPlaying, numberOfMoleculesQueuedForInjection, isExploded, maxNumberOfMoleculesProperty, containerHeight, targetNumberOfMolecules ) => {
         return isPlaying &&
+               numberOfMoleculesQueuedForInjection < MAX_MOLECULES_QUEUED_FOR_INJECTION &&
                !isExploded &&
                ( containerHeight / this.particleDiameter ) > this.injectionPointY &&
-               this.targetNumberOfMoleculesProperty.value < numberOfMoleculesRange.max;
+               targetNumberOfMolecules < maxNumberOfMoleculesProperty;
       }
     );
 
@@ -264,7 +269,6 @@ class MultipleParticleModel extends PhetioObject {
     this.particleDiameter = 1;
     this.minModelTemperature = null;
     this.residualTime = 0;
-    this.numMoleculesAwaitingInjection = 0;
     this.moleculeInjectionHoldoffTimer = 0;
     this.injectionPointX = 0;
     this.injectionPointY = 0;
@@ -296,17 +300,22 @@ class MultipleParticleModel extends PhetioObject {
     this.containerHeightProperty.link( this.updateNormalizedContainerDimensions.bind( this ) );
 
     // listen for new molecules being added (generally from the pump)
-    this.targetNumberOfMoleculesProperty.lazyLink( newValue => {
+    this.targetNumberOfMoleculesProperty.lazyLink( targetNumberOfMolecules => {
+
+      assert && assert(
+        targetNumberOfMolecules <= this.maxNumberOfMoleculesProperty.value,
+        'target number of molecules set above max allowed'
+      );
+
       const currentNumberOfMolecules = Math.floor(
         this.moleculeDataSet.numberOfAtoms / this.moleculeDataSet.atomsPerMolecule
       );
 
-      if ( newValue > currentNumberOfMolecules ) {
-        const delta = newValue - currentNumberOfMolecules;
+      const numberOfMoleculesToAdd = targetNumberOfMolecules -
+                                     ( currentNumberOfMolecules + this.numMoleculesQueuedForInjectionProperty.value );
 
-        for ( let i = 0; i < delta; i++ ) {
-          this.injectMolecule();
-        }
+      for ( let i = 0; i < numberOfMoleculesToAdd; i++ ) {
+        this.queueMoleculeForInjection();
       }
     } );
 
@@ -337,7 +346,7 @@ class MultipleParticleModel extends PhetioObject {
       }
 
       // clear the injection counter - all atoms and molecules should be accounted for at this point
-      this.numMoleculesAwaitingInjection = 0;
+      this.numMoleculesQueuedForInjectionProperty.reset();
 
       // synchronize the positions of the scaled atoms to the normalized data set
       this.syncAtomPositions();
@@ -559,12 +568,10 @@ class MultipleParticleModel extends PhetioObject {
     // Reset the moving average of temperature differences.
     this.averageTemperatureDifference.reset();
 
-    // Set the number of molecules and range for the current substance
+    // Set the number of molecules and range for the current substance.
     const atomsPerMolecule = this.moleculeDataSet.atomsPerMolecule;
     this.targetNumberOfMoleculesProperty.set( Math.floor( this.moleculeDataSet.numberOfAtoms / atomsPerMolecule ) );
-    this.numberOfMoleculesRangeProperty.set(
-      new Range( 0, Utils.toFixedNumber( SOMConstants.MAX_NUM_ATOMS / atomsPerMolecule, 0 ) )
-    );
+    this.maxNumberOfMoleculesProperty.set( Math.floor( SOMConstants.MAX_NUM_ATOMS / atomsPerMolecule ) );
   }
 
   /**
@@ -661,17 +668,10 @@ class MultipleParticleModel extends PhetioObject {
    * Inject a new molecule of the current type.  This method actually queues it for injection, actual injection
    * occurs during model steps.  Be aware that this silently ignores the injection request if the model is not in a
    * state to support injection.
-   * @public
+   * @private
    */
-  injectMolecule() {
-
-    // only allow particle injection if the model is in a state that supports it
-    if ( this.isInjectionAllowedProperty.value ) {
-      this.numMoleculesAwaitingInjection = Math.min(
-        this.numMoleculesAwaitingInjection + 1,
-        MAX_MOLECULES_QUEUED_FOR_INJECTION
-      );
-    }
+  queueMoleculeForInjection() {
+    this.numMoleculesQueuedForInjectionProperty.set( this.numMoleculesQueuedForInjectionProperty.value + 1 );
   }
 
   /**
@@ -679,15 +679,17 @@ class MultipleParticleModel extends PhetioObject {
    * velocity.
    * @private
    */
-  injectMoleculeInternal() {
+  injectMolecule() {
 
-    // Check if conditions are right for injection of molecules and, if not, don't do it.
-    if ( !this.isInjectionAllowedProperty.value ||
-         this.moleculeDataSet.getNumberOfRemainingSlots() <= 0 ) {
+    assert && assert(
+      this.numMoleculesQueuedForInjectionProperty.value > 0,
+      'this method should not be called when nothing is queued for injection'
+    );
 
-      this.numMoleculesAwaitingInjection = 0;
-      return;
-    }
+    assert && assert(
+      this.moleculeDataSet.getNumberOfRemainingSlots() > 0,
+      'injection attempted when there is no room in the data set'
+    );
 
     // Choose an injection angle with some amount of randomness.
     const injectionAngle = ( phet.joist.random.nextDouble() - 0.5 ) * INJECTED_MOLECULE_ANGLE_SPREAD;
@@ -733,6 +735,8 @@ class MultipleParticleModel extends PhetioObject {
     this.syncAtomPositions();
 
     this.moleculeInjectedThisStep = true;
+
+    this.numMoleculesQueuedForInjectionProperty.set( this.numMoleculesQueuedForInjectionProperty.value - 1 );
   }
 
   /**
@@ -899,9 +903,8 @@ class MultipleParticleModel extends PhetioObject {
     // Inject a new molecule if there is one ready and it isn't too soon after a previous injection.  This is done
     // before execution of the Verlet algorithm so that its velocity will be taken into account when the temperature
     // is calculated.
-    if ( this.numMoleculesAwaitingInjection > 0 && this.moleculeInjectionHoldoffTimer === 0 ) {
-      this.injectMoleculeInternal();
-      this.numMoleculesAwaitingInjection--;
+    if ( this.numMoleculesQueuedForInjectionProperty.value > 0 && this.moleculeInjectionHoldoffTimer === 0 ) {
+      this.injectMolecule();
       this.moleculeInjectionHoldoffTimer = MOLECULE_INJECTION_HOLDOFF_TIME;
     }
     else if ( this.moleculeInjectionHoldoffTimer > 0 ) {
@@ -952,6 +955,7 @@ class MultipleParticleModel extends PhetioObject {
 
       // Prevent the substance from floating up too rapidly when heated.
       if ( currentTemperature < LIQUID_TEMPERATURE && this.heatingCoolingAmountProperty.get() > 0 ) {
+
         // This is necessary to prevent the substance from floating up when heated from absolute zero.
         this.dampUpwardMotion( dt );
       }
@@ -1244,6 +1248,7 @@ class MultipleParticleModel extends PhetioObject {
       particleDiameter = SOMConstants.ADJUSTABLE_ATTRACTION_DEFAULT_RADIUS * 2;
     }
     else {
+
       // Force it to neon.
       substance = SubstanceType.NEON;
       particleDiameter = SOMConstants.NEON_RADIUS * 2;
@@ -1385,6 +1390,7 @@ class MultipleParticleModel extends PhetioObject {
     // state checking
     assert && assert( this.isExplodedProperty.get(), 'attempt to return lid when container hadn\'t exploded' );
     if ( !this.isExplodedProperty.get() ) {
+
       // ignore request if container hasn't exploded
       return;
     }
@@ -1426,7 +1432,7 @@ class MultipleParticleModel extends PhetioObject {
     // Set the phase to be gas, since otherwise the extremely high kinetic energy of the molecules causes an
     // unreasonably high temperature for the molecules that remain in the container. Doing this generally cools them
     // down into a more manageable state.
-    if ( numMoleculesOutsideContainer > 0 ) {
+    if ( numMoleculesOutsideContainer > 0 && this.moleculeForceAndMotionCalculator.calculatedTemperature > GAS_TEMPERATURE ) {
       this.phaseStateChanger.setPhase( PhaseStateEnum.GAS );
     }
 
