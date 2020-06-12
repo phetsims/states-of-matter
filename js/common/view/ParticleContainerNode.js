@@ -174,14 +174,21 @@ function ParticleContainerNode( multipleParticleModel, modelViewTransform, optio
       end: () => {
 
         // Set the target size to the current size, which will stop any change in size that is currently underway.
-        multipleParticleModel.setTargetContainerHeight(
-          multipleParticleModel.containerHeightProperty.get()
-        );
+        if ( !multipleParticleModel.isExplodedProperty.value ) {
+          multipleParticleModel.setTargetContainerHeight( multipleParticleModel.containerHeightProperty.get() );
+        }
       },
 
       tandem: lidTandem.createTandem( 'lidDragListener' )
     } ) );
   }
+
+  // The particle container can explode while the lid is being dragged and, if that happens, cancel the interaction.
+  multipleParticleModel.isExplodedProperty.lazyLink( isExploded => {
+    if ( isExploded ) {
+      this.interruptSubtreeInput();
+    }
+  } );
 
   let pressureGaugeNode;
   if ( options.pressureGaugeEnabled ) {

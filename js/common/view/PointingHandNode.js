@@ -23,13 +23,12 @@ import MultipleParticleModel from '../model/MultipleParticleModel.js';
 const WIDTH = 150; // in screen coords
 
 /**
- *
- * @param {MultipleParticleModel} multipleParticleModel - model of the simulation
+ * @param {PhaseChangesModel} phaseChangesModel - model of the simulation
  * @param {ModelViewTransform2} modelViewTransform to convert between model and view co-ordinate frames
  * @param {Object} [options]
  * @constructor
  */
-function PointingHandNode( multipleParticleModel, modelViewTransform, options ) {
+function PointingHandNode( phaseChangesModel, modelViewTransform, options ) {
 
   options = merge( {
     tandem: Tandem.REQUIRED
@@ -94,7 +93,7 @@ function PointingHandNode( multipleParticleModel, modelViewTransform, options ) 
     start: event => {
       startY = self.globalToParentPoint( event.pointer.point ).y;
       beingDragged = true;
-      containerSizeAtDragStart = multipleParticleModel.containerHeightProperty.get();
+      containerSizeAtDragStart = phaseChangesModel.containerHeightProperty.get();
       updateHintVisibility();
     },
 
@@ -102,7 +101,7 @@ function PointingHandNode( multipleParticleModel, modelViewTransform, options ) 
       endY = self.globalToParentPoint( event.pointer.point ).y;
 
       // Resize the container based on the amount that the node has moved.
-      multipleParticleModel.setTargetContainerHeight(
+      phaseChangesModel.setTargetContainerHeight(
         containerSizeAtDragStart + modelViewTransform.viewToModelDeltaY( endY - startY )
       );
       updateHintVisibility();
@@ -111,15 +110,22 @@ function PointingHandNode( multipleParticleModel, modelViewTransform, options ) 
     end: event => {
 
       // Set the target size to the current size, which will stop any change in size that is currently underway.
-      multipleParticleModel.setTargetContainerHeight(
-        multipleParticleModel.containerHeightProperty.get()
-      );
+      if ( !phaseChangesModel.isExplodedProperty.value ) {
+        phaseChangesModel.setTargetContainerHeight( phaseChangesModel.containerHeightProperty.get() );
+      }
       beingDragged = false;
       updateHintVisibility();
     },
 
     tandem: options.tandem.createTandem( 'dragListener' )
   } ) );
+
+  // The particle container can explode while this is being dragged and, if that happens, cancel the interaction.
+  phaseChangesModel.isExplodedProperty.lazyLink( isExploded => {
+    if ( isExploded ) {
+      this.interruptSubtreeInput();
+    }
+  } );
 
   // add the listener that will show and hide the hint
   this.addInputListener( {
@@ -141,7 +147,7 @@ function PointingHandNode( multipleParticleModel, modelViewTransform, options ) 
   this.touchArea = this.localBounds.dilatedXY( 10, 10 );
 
   // Add a listener to update the individual arrow visibility.
-  multipleParticleModel.containerHeightProperty.link( function( particleContainerHeight ) {
+  phaseChangesModel.containerHeightProperty.link( function( particleContainerHeight ) {
     if ( particleContainerHeight === MultipleParticleModel.PARTICLE_CONTAINER_INITIAL_HEIGHT ) {
 
       // At the height limit, so only show the down arrow.
