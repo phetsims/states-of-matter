@@ -227,14 +227,12 @@ class MultipleParticleModel extends PhetioObject {
         this.numMoleculesQueuedForInjectionProperty,
         this.isExplodedProperty,
         this.maxNumberOfMoleculesProperty,
-        this.containerHeightProperty,
         this.targetNumberOfMoleculesProperty
       ],
-      ( isPlaying, numberOfMoleculesQueuedForInjection, isExploded, maxNumberOfMoleculesProperty, containerHeight, targetNumberOfMolecules ) => {
+      ( isPlaying, numberOfMoleculesQueuedForInjection, isExploded, maxNumberOfMoleculesProperty, targetNumberOfMolecules ) => {
         return isPlaying &&
                numberOfMoleculesQueuedForInjection < MAX_MOLECULES_QUEUED_FOR_INJECTION &&
                !isExploded &&
-               ( containerHeight / this.particleDiameter ) > this.injectionPointY &&
                targetNumberOfMolecules < maxNumberOfMoleculesProperty;
       }
     );
@@ -265,13 +263,14 @@ class MultipleParticleModel extends PhetioObject {
     // @public, normalized velocity at which lid is moving in y direction
     this.normalizedLidVelocityY = 0;
 
+    // @protected (read-only) {Vector2} - the location where new molecules are injected, in normalized coordinates
+    this.injectionPoint = Vector2.ZERO.copy();
+
     // @private, various internal model variables
     this.particleDiameter = 1;
     this.minModelTemperature = null;
     this.residualTime = 0;
     this.moleculeInjectionHoldoffTimer = 0;
-    this.injectionPointX = 0;
-    this.injectionPointY = 0;
     this.heightChangeThisStep = 0;
     this.moleculeInjectedThisStep = false;
 
@@ -559,8 +558,10 @@ class MultipleParticleModel extends PhetioObject {
     this.updateNormalizedContainerDimensions();
 
     // Adjust the injection point based on the new particle diameter.  These are using the normalized coordinate values.
-    this.injectionPointX = CONTAINER_WIDTH / this.particleDiameter * INJECTION_POINT_HORIZ_PROPORTION;
-    this.injectionPointY = CONTAINER_INITIAL_HEIGHT / this.particleDiameter * INJECTION_POINT_VERT_PROPORTION;
+    this.injectionPoint.setXY(
+      CONTAINER_WIDTH / this.particleDiameter * INJECTION_POINT_HORIZ_PROPORTION,
+      CONTAINER_INITIAL_HEIGHT / this.particleDiameter * INJECTION_POINT_VERT_PROPORTION
+    );
 
     // Add the atoms and set their initial positions.
     this.initializeAtoms( phase );
@@ -703,7 +704,7 @@ class MultipleParticleModel extends PhetioObject {
 
     // Set the position(s) of the atom(s).
     const atomsPerMolecule = this.moleculeDataSet.atomsPerMolecule;
-    const moleculeCenterOfMassPosition = new Vector2( this.injectionPointX, this.injectionPointY );
+    const moleculeCenterOfMassPosition = this.injectionPoint.copy();
     const moleculeVelocity = new Vector2( xVel, yVel );
     const atomPositions = [];
     for ( let i = 0; i < atomsPerMolecule; i++ ) {

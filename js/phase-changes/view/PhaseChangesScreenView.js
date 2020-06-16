@@ -171,12 +171,14 @@ function PhaseChangesScreenView( model, isPotentialGraphEnabled, tandem ) {
     [
       model.isPlayingProperty,
       model.isExplodedProperty,
+      model.lidAboveInjectionPointProperty,
       model.maxNumberOfMoleculesProperty,
       model.targetNumberOfMoleculesProperty
     ],
-    ( isPlaying, isExploded, maxNumberOfMoleculesProperty, targetNumberOfMolecules ) => {
+    ( isPlaying, isExploded, lidAboveInjectionPoint, maxNumberOfMoleculesProperty, targetNumberOfMolecules ) => {
       return isPlaying &&
              !isExploded &&
+             lidAboveInjectionPoint &&
              targetNumberOfMolecules < maxNumberOfMoleculesProperty;
     }
   );

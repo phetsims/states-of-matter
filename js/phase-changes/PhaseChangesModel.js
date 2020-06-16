@@ -5,6 +5,7 @@
  */
 
 import BooleanProperty from '../../../axon/js/BooleanProperty.js';
+import DerivedProperty from '../../../axon/js/DerivedProperty.js';
 import NumberProperty from '../../../axon/js/NumberProperty.js';
 import Range from '../../../dot/js/Range.js';
 import Utils from '../../../dot/js/Utils.js';
@@ -54,6 +55,14 @@ class PhaseChangesModel extends MultipleParticleModel {
     this.targetContainerHeightProperty = new NumberProperty( MultipleParticleModel.PARTICLE_CONTAINER_INITIAL_HEIGHT, {
       tandem: tandem.createTandem( 'targetContainerHeightProperty' ),
       range: new Range( MIN_ALLOWABLE_CONTAINER_HEIGHT, MultipleParticleModel.PARTICLE_CONTAINER_INITIAL_HEIGHT )
+    } );
+
+    // @public (read-only) - a derived property that indicates whether the lid is higher than the injection point
+    this.lidAboveInjectionPointProperty = new DerivedProperty( [ this.containerHeightProperty ], containerHeight => {
+
+      // This may appear a little suspect, but the model is designed such that the container height is always reset
+      // to its max when the particle diameter and injection change, so this can be trusted.
+      return ( containerHeight / this.particleDiameter ) > this.injectionPoint.y;
     } );
 
     // reset the target container height in the event of an explosion
