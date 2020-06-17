@@ -19,7 +19,6 @@ import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import ThermometerNode from '../../../../scenery-phet/js/ThermometerNode.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import VBox from '../../../../scenery/js/nodes/VBox.js';
-import Panel from '../../../../sun/js/Panel.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import statesOfMatter from '../../statesOfMatter.js';
 import statesOfMatterStrings from '../../statesOfMatterStrings.js';
@@ -88,7 +87,7 @@ class CompositeThermometerNode extends Node {
       { tandem: options.tandem.createTandem( 'temperatureUnitsProperty' ) }
     );
 
-    // Property that portrays the temperature in degrees Celsius
+    // Property that contains the temperature in degrees Celsius
     const temperatureInCelsiusProperty = new DerivedProperty(
       [ multipleParticleModel.temperatureInKelvinProperty ],
       temperatureInKelvin => temperatureInKelvin === null ? null : kelvinToCelsius( temperatureInKelvin )
@@ -130,24 +129,14 @@ class CompositeThermometerNode extends Node {
       }
     );
 
-    const contentNode = new VBox( {
+    this.addChild( new VBox( {
       spacing: 10,
       children: [ temperatureComboBoxDisplay, thermometerNode ],
       resize: false
-    } );
-
-    const panel = new Panel( contentNode, {
-      xMargin: 0,
-      yMargin: 0,
-      fill: null,
-      stroke: null,
-      lineWidth: 0,
-      resize: false
-    } );
-
-    this.addChild( panel );
+    } ) );
     this.addChild( comboBoxListParent );
 
+    // apply the options
     this.mutate( options );
 
     // Create a link to temperatureInKelvinProperty so it's easier to find in phet-io Studio.
