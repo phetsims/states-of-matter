@@ -1462,7 +1462,7 @@ class MultipleParticleModel extends PhetioObject {
   }
 
   /**
-   * deserialize a MultipleParticleModel instance to an intermediate state that can be used by setValue
+   * deserialize a MultipleParticleModel instance to an intermediate state that can be used by applyState
    * @param {Object} stateObject - return value from toStateObject
    * @returns {Object}
    * @public
@@ -1484,7 +1484,7 @@ class MultipleParticleModel extends PhetioObject {
    * @param {Object} state
    * @public
    */
-  setValue( state ) {
+  applyState( state ) {
     required( state );
     this.substanceProperty.set( state.substance );
     this.isExplodedProperty.set( state.isExploded );
