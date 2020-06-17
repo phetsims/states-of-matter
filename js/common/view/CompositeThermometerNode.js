@@ -94,7 +94,7 @@ class CompositeThermometerNode extends Node {
       temperatureInKelvin => temperatureInKelvin === null ? null : kelvinToCelsius( temperatureInKelvin )
     );
 
-    const items = [
+    const comboBoxDisplayItems = [
       {
         choice: TemperatureUnits.KELVIN,
         numberProperty: multipleParticleModel.temperatureInKelvinProperty,
@@ -109,17 +109,26 @@ class CompositeThermometerNode extends Node {
       }
     ];
 
-    const temperatureComboBoxDisplay = new ComboBoxDisplay( items, this.temperatureUnitsProperty, this, {
-      xMargin: 6,
-      yMargin: 4,
-      cornerRadius: 5,
-      buttonLineWidth: 0.4,
-      align: 'right',
-      numberDisplayOptions: {
-        textOptions: { font: TEMPERATURE_READOUT_FONT }
-      },
-      tandem: options.tandem.createTandem( 'temperatureComboBox' )
-    } );
+    // layer where the combo box list will go, added later to keep it on top of z-order
+    const comboBoxListParent = new Node();
+
+    // Create the combo box that will display the temperature in either Kelvin or Celsius.
+    const temperatureComboBoxDisplay = new ComboBoxDisplay(
+      comboBoxDisplayItems,
+      this.temperatureUnitsProperty,
+      comboBoxListParent,
+      {
+        xMargin: 6,
+        yMargin: 4,
+        cornerRadius: 5,
+        buttonLineWidth: 0.4,
+        align: 'right',
+        numberDisplayOptions: {
+          textOptions: { font: TEMPERATURE_READOUT_FONT }
+        },
+        tandem: options.tandem.createTandem( 'temperatureComboBox' )
+      }
+    );
 
     const contentNode = new VBox( {
       spacing: 10,
@@ -137,6 +146,7 @@ class CompositeThermometerNode extends Node {
     } );
 
     this.addChild( panel );
+    this.addChild( comboBoxListParent );
 
     this.mutate( options );
 
