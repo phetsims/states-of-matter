@@ -320,8 +320,9 @@ class MultipleParticleModel extends PhetioObject {
 
     // @public (read-only) - the model temperature in Kelvin, derived from the temperature set point in model units
     this.temperatureInKelvinProperty = new DerivedProperty(
-      [ this.temperatureSetPointProperty, this.substanceProperty ],
-      () => this.getTemperatureInKelvin(), {
+      [ this.temperatureSetPointProperty, this.substanceProperty, this.targetNumberOfMoleculesProperty ],
+      () => this.getTemperatureInKelvin(),
+      {
         units: 'K',
         phetioType: DerivedPropertyIO( NullableIO( NumberIO ) ),
         tandem: tandem.createTandem( 'temperatureInKelvinProperty' ),

@@ -8,19 +8,17 @@
  * @author John Blanco
  */
 
+import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import EnumerationProperty from '../../../../axon/js/EnumerationProperty.js';
 import Range from '../../../../dot/js/Range.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Enumeration from '../../../../phet-core/js/Enumeration.js';
 import merge from '../../../../phet-core/js/merge.js';
-import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
+import ComboBoxDisplay from '../../../../scenery-phet/js/ComboBoxDisplay.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import ThermometerNode from '../../../../scenery-phet/js/ThermometerNode.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
-import Text from '../../../../scenery/js/nodes/Text.js';
 import VBox from '../../../../scenery/js/nodes/VBox.js';
-import ComboBox from '../../../../sun/js/ComboBox.js';
-import ComboBoxItem from '../../../../sun/js/ComboBoxItem.js';
 import Panel from '../../../../sun/js/Panel.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import statesOfMatter from '../../statesOfMatter.js';
@@ -30,11 +28,16 @@ import SOMQueryParameters from '../SOMQueryParameters.js';
 // strings
 const celsiusUnitsString = statesOfMatterStrings.celsiusUnits;
 const kelvinUnitsString = statesOfMatterStrings.kelvinUnits;
-const temperatureReadoutPattern = statesOfMatterStrings.temperatureReadoutPattern;
+
+// helper function
+const kelvinToCelsius = temperatureInKelvin => Utils.roundSymmetric( temperatureInKelvin - 273.15 );
 
 // constants
 const KELVIN_TEMPERATURE_RANGE = new Range( 0, 5000 ); // this is an upper bound based on experimenting with the sim
-const MAX_TEMPERATURE_TEXT_WIDTH = 40; // empirically determined to look decent
+const CELSIUS_TEMPERATURE_RANGE = new Range(
+  kelvinToCelsius( KELVIN_TEMPERATURE_RANGE.min ),
+  kelvinToCelsius( KELVIN_TEMPERATURE_RANGE.max )
+);
 const TEMPERATURE_READOUT_FONT = new PhetFont( 11 );
 
 // local enum
@@ -78,69 +81,49 @@ class CompositeThermometerNode extends Node {
       }
     );
 
-    // Create the longest possible strings for the temperatures and use them to create the combo box items so that the
-    // combo box will be wide enough.
-    const minTemperatureCelsiusString = StringUtils.fillIn( temperatureReadoutPattern, {
-      value: kelvinToCelsius( KELVIN_TEMPERATURE_RANGE.min ),
-      units: celsiusUnitsString
-    } );
-    const maxTemperatureCelsiusString = StringUtils.fillIn( temperatureReadoutPattern, {
-      value: kelvinToCelsius( KELVIN_TEMPERATURE_RANGE.max ),
-      units: celsiusUnitsString
-    } );
-    const longestCelsiusString = minTemperatureCelsiusString.length > maxTemperatureCelsiusString.length ?
-                                 minTemperatureCelsiusString :
-                                 maxTemperatureCelsiusString;
-    const minTemperatureKelvinString = StringUtils.fillIn( temperatureReadoutPattern, {
-      value: KELVIN_TEMPERATURE_RANGE.min,
-      units: kelvinUnitsString
-    } );
-    const maxTemperatureKelvinString = StringUtils.fillIn( temperatureReadoutPattern, {
-      value: KELVIN_TEMPERATURE_RANGE.max,
-      units: kelvinUnitsString
-    } );
-    const longestKelvinString = minTemperatureKelvinString.length > maxTemperatureKelvinString.length ?
-                                minTemperatureKelvinString :
-                                maxTemperatureKelvinString;
-
-    // temperature text nodes
-    const temperatureKelvinText = new Text( longestKelvinString, {
-      font: TEMPERATURE_READOUT_FONT,
-      maxWidth: MAX_TEMPERATURE_TEXT_WIDTH,
-      phetioReadOnly: true
-    } );
-    const temperatureCelsiusText = new Text( longestCelsiusString, {
-      font: TEMPERATURE_READOUT_FONT,
-      maxWidth: MAX_TEMPERATURE_TEXT_WIDTH,
-      phetioReadOnly: true
-    } );
-
     // @private
     this.temperatureUnitsProperty = new EnumerationProperty(
       TemperatureUnits,
       SOMQueryParameters.defaultCelsius ? TemperatureUnits.CELSIUS : TemperatureUnits.KELVIN,
       { tandem: options.tandem.createTandem( 'temperatureUnitsProperty' ) }
     );
-    const temperatureComboBox = new ComboBox(
-      [
-        new ComboBoxItem( temperatureKelvinText, TemperatureUnits.KELVIN, { tandemName: 'kelvin' } ),
-        new ComboBoxItem( temperatureCelsiusText, TemperatureUnits.CELSIUS, { tandemName: 'celsius' } )
-      ],
-      this.temperatureUnitsProperty,
-      this,
-      {
-        xMargin: 6,
-        yMargin: 4,
-        cornerRadius: 5,
-        buttonLineWidth: 0.4,
-        align: 'right',
-        tandem: options.tandem.createTandem( 'temperatureComboBox' )
-      }
+
+    // Property that portrays the temperature in degrees Celsius
+    const temperatureInCelsiusProperty = new DerivedProperty(
+      [ multipleParticleModel.temperatureInKelvinProperty ],
+      temperatureInKelvin => temperatureInKelvin === null ? null : kelvinToCelsius( temperatureInKelvin )
     );
+
+    const items = [
+      {
+        choice: TemperatureUnits.KELVIN,
+        numberProperty: multipleParticleModel.temperatureInKelvinProperty,
+        range: KELVIN_TEMPERATURE_RANGE,
+        units: kelvinUnitsString
+      },
+      {
+        choice: TemperatureUnits.CELSIUS,
+        numberProperty: temperatureInCelsiusProperty,
+        range: CELSIUS_TEMPERATURE_RANGE,
+        units: celsiusUnitsString
+      }
+    ];
+
+    const temperatureComboBoxDisplay = new ComboBoxDisplay( items, this.temperatureUnitsProperty, this, {
+      xMargin: 6,
+      yMargin: 4,
+      cornerRadius: 5,
+      buttonLineWidth: 0.4,
+      align: 'right',
+      numberDisplayOptions: {
+        textOptions: { font: TEMPERATURE_READOUT_FONT }
+      },
+      tandem: options.tandem.createTandem( 'temperatureComboBox' )
+    } );
 
     const contentNode = new VBox( {
       spacing: 10,
-      children: [ temperatureComboBox, thermometerNode ],
+      children: [ temperatureComboBoxDisplay, thermometerNode ],
       resize: false
     } );
 
@@ -155,27 +138,9 @@ class CompositeThermometerNode extends Node {
 
     this.addChild( panel );
 
-    // update the temperature readouts when the value changes in the model
-    multipleParticleModel.temperatureInKelvinProperty.link( temperatureInKelvin => {
-      if ( temperatureInKelvin !== null ) {
-        temperatureKelvinText.setText( StringUtils.fillIn( temperatureReadoutPattern, {
-          value: Utils.roundSymmetric( temperatureInKelvin ),
-          units: kelvinUnitsString
-        } ) );
-        temperatureCelsiusText.setText( StringUtils.fillIn( temperatureReadoutPattern, {
-          value: kelvinToCelsius( temperatureInKelvin ),
-          units: celsiusUnitsString
-        } ) );
-      }
-      else {
-        temperatureKelvinText.setText( '--' );
-        temperatureCelsiusText.setText( '--' );
-      }
-    } );
-
     this.mutate( options );
 
-    // Create a link to temperatureInKelvinProperty so it's easier to find in Studio.
+    // Create a link to temperatureInKelvinProperty so it's easier to find in phet-io Studio.
     this.addLinkedElement( multipleParticleModel.temperatureInKelvinProperty, {
       tandem: options.tandem.createTandem( 'temperatureInKelvinProperty' )
     } );
@@ -186,9 +151,6 @@ class CompositeThermometerNode extends Node {
     this.temperatureUnitsProperty.reset();
   }
 }
-
-// helper function
-const kelvinToCelsius = temperatureInKelvin => Utils.roundSymmetric( temperatureInKelvin - 273.15 );
 
 statesOfMatter.register( 'CompositeThermometerNode', CompositeThermometerNode );
 export default CompositeThermometerNode;
