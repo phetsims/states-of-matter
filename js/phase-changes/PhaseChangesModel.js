@@ -65,11 +65,16 @@ class PhaseChangesModel extends MultipleParticleModel {
       return ( containerHeight / this.particleDiameter ) > this.injectionPoint.y;
     } );
 
-    // reset the target container height in the event of an explosion
+    // Reset the target container height in the event of an explosion.
     this.isExplodedProperty.lazyLink( isExploded => {
       if ( isExploded ) {
         this.targetContainerHeightProperty.reset();
       }
+    } );
+
+    // Reset the target container height when the substance changes.
+    this.substanceProperty.lazyLink( () => {
+      this.targetContainerHeightProperty.reset();
     } );
 
     // @private - This flag is used to avoid problems when the superconstructor calls the overrides in this subclass
