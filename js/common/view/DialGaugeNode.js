@@ -116,10 +116,11 @@ function DialGaugeNode( multipleParticleModel, tandem ) {
     }
   );
 
-  // Update the pressure readout at regular intervals.  This was done rather than listening to the pressure property
-  // because the readout changes too quickly in that case.
+  // Keep track of the previous pressure value so that we can determine when changes have occurred.
   let previousPressure = -1;
-  timer.setInterval( function() {
+
+  // closure to update the readout text
+  const updateReadoutText = () => {
     const pressure = multipleParticleModel.pressureProperty.get();
     if ( pressure !== previousPressure ) {
       if ( pressure < MAX_PRESSURE ) {
@@ -133,7 +134,22 @@ function DialGaugeNode( multipleParticleModel, tandem ) {
       previousPressure = pressure;
     }
     readoutText.centerX = readoutNode.width / 2;
-  }, PRESSURE_UPDATE_PERIOD );
+  };
+
+  // Do the initial update of the readout.
+  updateReadoutText();
+
+  // Update the pressure readout at regular intervals.  This was done rather than listening to the pressure property
+  // because the readout changes too quickly in that case.
+  timer.setInterval( updateReadoutText, PRESSURE_UPDATE_PERIOD );
+
+  // If state is being set via phet-io, then it is necessary to update the readout when  pressureProperty changes since
+  // the timer may not be running.
+  multipleParticleModel.pressureProperty.link( () => {
+    if ( phet.joist.sim.isSettingPhetioStateProperty.value ) {
+      updateReadoutText();
+    }
+  } );
 
   // position the connector
   connector.setTranslation(
