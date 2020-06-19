@@ -345,8 +345,11 @@ class DualAtomModel {
       if ( Math.abs( distance - this.ljPotentialCalculator.getMinimumForceDistance() ) < this.movableAtom.radiusProperty.value ) {
         const totalForceMagnitude = Math.abs( this.attractiveForce - this.repulsiveForce );
         if ( totalForceMagnitude > 0 && totalForceMagnitude < MIN_FORCE_JITTER_THRESHOLD ) {
-          this.attractiveForce = 0;
-          this.repulsiveForce = 0;
+
+          // Split the difference and make the attractive and repulsive forces equal.
+          const averageForce = ( this.attractiveForce + this.repulsiveForce ) / 2;
+          this.attractiveForce = averageForce;
+          this.repulsiveForce = averageForce;
         }
       }
     }
