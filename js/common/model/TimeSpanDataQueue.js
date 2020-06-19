@@ -14,7 +14,7 @@ function TimeSpanDataQueue( length, maxTimeSpan ) {
   this.length = length;
   this.maxTimeSpan = maxTimeSpan;
 
-  // allocate a fixed-size array so that subsequent allocations are not needed
+  // @private - array where entries are kept
   this.dataQueue = new Array( length );
 
   // initialize the data array with a set of reusable objects so that subsequent allocations are not needed
@@ -22,10 +22,12 @@ function TimeSpanDataQueue( length, maxTimeSpan ) {
     this.dataQueue[ i ] = { deltaTime: 0, value: null };
   }
 
-  // initialize the variables used to make this thing work
+  // @public (read-only) {number} - the total of all values currently in the queue
+  this.total = 0;
+
+  // @private - variables used to make this thing work
   this.head = 0;
   this.tail = 0;
-  this.total = 0;
   this.timeSpan = 0;
 }
 
@@ -38,6 +40,7 @@ inherit( Object, TimeSpanDataQueue, {
    * span, and also updates the total value and the current time span
    * @param value
    * @param dt
+   * @public
    */
   add: function( value, dt ) {
 
@@ -61,6 +64,7 @@ inherit( Object, TimeSpanDataQueue, {
     while ( this.timeSpan > this.maxTimeSpan ) {
       const nextTail = ( this.tail + 1 ) % this.length;
       if ( nextTail === nextHead ) {
+
         // nothing more can be removed, so bail
         assert && assert( false, 'time span exceeded, but nothing appears to be in the queue - probably a bug' );
         break;
@@ -73,6 +77,7 @@ inherit( Object, TimeSpanDataQueue, {
 
   /**
    * clear all data from the queue
+   * @public
    */
   clear: function() {
     this.head = 0;

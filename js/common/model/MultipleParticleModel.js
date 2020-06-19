@@ -503,10 +503,8 @@ class MultipleParticleModel extends PhetioObject {
     // remove all atoms
     this.removeAllAtoms();
 
-    // Reinitialize the model parameters, but not if this is a phet-io setState operation.
-    if ( !phet.joist.sim.isSettingPhetioStateProperty.value ) {
-      this.initializeModelParameters();
-    }
+    // Reinitialize the model parameters.
+    this.initializeModelParameters();
 
     // Set the model parameters that are dependent upon the substance being simulated.
     switch( substance ) {
@@ -549,11 +547,8 @@ class MultipleParticleModel extends PhetioObject {
         throw( new Error( 'unsupported substance' ) ); // should never happen, debug if it does
     }
 
-    // In most cases, the container size is reset at this point, but when the substance is being updated using phet-io
-    // the container size is *not* reset, since doing so may overwrite a size that was specifically set by the user.
-    if ( !phet.joist.sim.isSettingPhetioStateProperty.value ) {
-      this.containerHeightProperty.reset();
-    }
+    // Reset the container height.
+    this.containerHeightProperty.reset();
 
     // Make sure the normalized container dimensions are correct for the substance and the current non-normalize size.
     this.updateNormalizedContainerDimensions();
@@ -1457,7 +1452,8 @@ class MultipleParticleModel extends PhetioObject {
         gravitationalAcceleration: this.gravitationalAcceleration,
         normalizedLidVelocityY: this.normalizedLidVelocityY,
         heatingCoolingAmount: this.heatingCoolingAmountProperty.value,
-        moleculeDataSet: MoleculeForceAndMotionDataSetIO.toStateObject( this.moleculeDataSet )
+        moleculeDataSet: MoleculeForceAndMotionDataSetIO.toStateObject( this.moleculeDataSet ),
+        moleculeForcesAndMotionCalculatorPressure: this.moleculeForceAndMotionCalculator.pressureProperty.value
       }
     };
   }
@@ -1476,7 +1472,8 @@ class MultipleParticleModel extends PhetioObject {
       containerHeight: stateObject.private.containerHeight,
       normalizedLidVelocityY: stateObject.private.normalizedLidVelocityY,
       heatingCoolingAmount: stateObject.private.heatingCoolingAmount,
-      moleculeDataSet: MoleculeForceAndMotionDataSetIO.fromStateObject( stateObject.private.moleculeDataSet )
+      moleculeDataSet: MoleculeForceAndMotionDataSetIO.fromStateObject( stateObject.private.moleculeDataSet ),
+      moleculeForcesAndMotionCalculatorPressure: stateObject.private.moleculeForcesAndMotionCalculatorPressure
     };
   }
 
@@ -1494,9 +1491,9 @@ class MultipleParticleModel extends PhetioObject {
     this.gravitationalAcceleration = state.gravitationalAcceleration;
     this.normalizedLidVelocityY = state.normalizedLidVelocityY;
     this.moleculeDataSet = state.moleculeDataSet;
+    this.moleculeForceAndMotionCalculator.presetPressure( state.moleculeForcesAndMotionCalculatorPressure );
   }
 }
-
 
 // static constants
 MultipleParticleModel.PARTICLE_CONTAINER_WIDTH = CONTAINER_WIDTH;

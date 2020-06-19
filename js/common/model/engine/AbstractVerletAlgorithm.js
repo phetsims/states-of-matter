@@ -16,7 +16,8 @@ import TimeSpanDataQueue from '../TimeSpanDataQueue.js';
 // Constants that control the pressure calculation.  The size of the pressure accumulator assumes a max sim rate of
 // 1 / 60, which derives from the standard 60 FPS rate at which browsers currently run.  May need to go up someday.
 const PRESSURE_CALC_TIME_WINDOW = 12; // in seconds, empirically determined to be responsive but not jumpy
-const PRESSURE_ACCUMULATOR_LENGTH = Math.ceil( PRESSURE_CALC_TIME_WINDOW / ( 1 / 60 ) * 1.1 );
+const NOMINAL_DT = 1 / 60; // in seconds, assuming 60 fps
+const PRESSURE_ACCUMULATOR_LENGTH = Math.ceil( PRESSURE_CALC_TIME_WINDOW / NOMINAL_DT * 1.1 );
 
 // constants that control when the container explodes
 const EXPLOSION_PRESSURE = 41; // in model units, empirically determined
@@ -45,7 +46,7 @@ function AbstractVerletAlgorithm( multipleParticleModel ) {
   // during execution of the Verlet algorithm, must be cleared by the client.
   this.lidChangedParticleVelocity = false;
 
-  // @private, moving time window queue for tracking the pressure data
+  // @private {TimeSpanDataQueue}, moving time window queue for tracking the pressure data
   this.pressureAccumulatorQueue = new TimeSpanDataQueue( PRESSURE_ACCUMULATOR_LENGTH, PRESSURE_CALC_TIME_WINDOW );
 
   // @private, tracks time above the explosion threshold
@@ -290,6 +291,31 @@ inherit( Object, AbstractVerletAlgorithm, {
         this.timeAboveExplosionPressure = 0;
       }
     }
+  },
+
+  /**
+   * This method allows the caller to set an initial value for the pressure.  It was added in support of phet-io state
+   * setting so that the pressure calculation could be set to an initial value above zero that reflected the state
+   * extracted from another instance of the simulation.
+   * @param {number} pressure
+   */
+  presetPressure: function( pressure ) {
+
+    assert && assert(
+      phet.joist.sim.isSettingPhetioStateProperty.value,
+      'this method is intended for use during state setting only'
+    );
+
+    // get rid of any accumulated values
+    this.pressureAccumulatorQueue.clear();
+
+    // calculate the instantaneous sample value needed to make the overall pressure be the needed value
+    const pressureSampleInstantaneousValue = pressure * PRESSURE_CALC_TIME_WINDOW / PRESSURE_ACCUMULATOR_LENGTH;
+
+    // add the entries to the accumulator
+    _.times( PRESSURE_ACCUMULATOR_LENGTH, () => {
+      this.pressureAccumulatorQueue.add( pressureSampleInstantaneousValue, NOMINAL_DT );
+    } );
   },
 
   // static final
