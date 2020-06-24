@@ -8,17 +8,18 @@
 
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import Range from '../../../../dot/js/Range.js';
+import Utils from '../../../../dot/js/Utils.js';
 import inherit from '../../../../phet-core/js/inherit.js';
 import merge from '../../../../phet-core/js/merge.js';
+import BackgroundNode from '../../../../scenery-phet/js/BackgroundNode.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import HBox from '../../../../scenery/js/nodes/HBox.js';
 import HStrut from '../../../../scenery/js/nodes/HStrut.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
-import Rectangle from '../../../../scenery/js/nodes/Rectangle.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import VBox from '../../../../scenery/js/nodes/VBox.js';
-import Utils from '../../../../dot/js/Utils.js';
+import Color from '../../../../scenery/js/util/Color.js';
 import AquaRadioButtonGroup from '../../../../sun/js/AquaRadioButtonGroup.js';
 import RadioButtonGroup from '../../../../sun/js/buttons/RadioButtonGroup.js';
 import HSlider from '../../../../sun/js/HSlider.js';
@@ -28,8 +29,8 @@ import pushPinImg from '../../../images/push-pin_png.js';
 import SOMConstants from '../../common/SOMConstants.js';
 import SubstanceType from '../../common/SubstanceType.js';
 import AtomAndMoleculeIconFactory from '../../common/view/AtomAndMoleculeIconFactory.js';
-import statesOfMatterStrings from '../../statesOfMatterStrings.js';
 import statesOfMatter from '../../statesOfMatter.js';
+import statesOfMatterStrings from '../../statesOfMatterStrings.js';
 import AtomPair from '../model/AtomPair.js';
 
 const adjustableAttractionString = statesOfMatterStrings.adjustableAttraction;
@@ -258,11 +259,12 @@ function AtomicInteractionsControlPanel( dualAtomModel, enableHeterogeneousAtoms
   }
   else {
 
-    // allows the user to choose the type of atom when both are the same
+    // allows the user to choose the type of atom, both atoms will be the same type
     const title = new Text( atomsString, {
       font: new PhetFont( 14 ),
       fill: options.panelTextFill,
-      maxWidth: TITLE_TEXT_WIDTH
+      maxWidth: TITLE_TEXT_WIDTH,
+      tandem: options.tandem.createTandem( 'title' )
     } );
 
     // Set up objects that describe the pieces that make up a selector item in the control panel, conforms to the
@@ -337,13 +339,13 @@ function AtomicInteractionsControlPanel( dualAtomModel, enableHeterogeneousAtoms
       tandem: options.tandem.createTandem( 'radioButtonGroup' )
     } );
 
-    const titleBackground = new Rectangle( 0, 0, titleText.label.width + 5, titleText.label.height, {
-      fill: options.fill,
-      centerX: titleText.label.centerX,
-      centerY: titleText.label.centerY
+    titleNode = new BackgroundNode( titleText.label, {
+      yMargin: 1,
+      backgroundOptions: {
+        fill: Color.BLACK,
+        opacity: 1
+      }
     } );
-
-    titleNode = new Node( { children: [ titleBackground, titleText.label ] } );
   }
 
   // create the root tandem for the node that includes the atom diameter title and slider
@@ -470,11 +472,16 @@ function AtomicInteractionsControlPanel( dualAtomModel, enableHeterogeneousAtoms
     }
   } );
 
-  // Add the title node after radio button panel added in SOM full version.  Here around the panel we are drawing a
-  // rectangle and on top rectangle added title node.
+  // Add the title node after radio button panel is added in the SOM full version.  This title is at the top center of
+  // the panel.
   if ( !enableHeterogeneousAtoms ) {
     this.addChild( titleNode );
-    titleNode.centerX = radioButtonGroup.centerX + 5;
+
+    // Keep the title node centered if its bounds change (which can only be done through phet-io).
+    titleNode.boundsProperty.link( () => {
+      titleNode.centerX = radioButtonPanel.centerX;
+      titleNode.bottom = radioButtonPanel.top + 5; // empirically determined to overlap reasonably well
+    } );
   }
   this.mutate( options );
 }
