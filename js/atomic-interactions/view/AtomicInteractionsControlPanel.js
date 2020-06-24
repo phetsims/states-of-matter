@@ -414,7 +414,7 @@ function AtomicInteractionsControlPanel( dualAtomModel, enableHeterogeneousAtoms
     tandem: interactionStrengthSliderTandem.createTandem( 'title' )
   } );
   const interactionStrengthSlider = new HSlider(
-    dualAtomModel.interactionStrengthProperty,
+    dualAtomModel.adjustableAtomInteractionStrengthProperty,
     new Range( SOMConstants.MIN_EPSILON, SOMConstants.MAX_EPSILON ),
     merge( { tandem: interactionStrengthSliderTandem.createTandem( 'slider' ) }, commonSliderOptions )
   );

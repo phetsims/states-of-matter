@@ -292,8 +292,8 @@ class MultipleParticleModel extends PhetioObject {
     //-----------------------------------------------------------------------------------------------------------------
 
     // listen for changes to the substance being simulated and update the internals as needed
-    this.substanceProperty.link( () => {
-      this.handleSubstanceChanged();
+    this.substanceProperty.link( substance => {
+      this.handleSubstanceChanged( substance );
     } );
 
     // listen for changes to the non-normalized container size and update the normalized dimensions
@@ -480,13 +480,11 @@ class MultipleParticleModel extends PhetioObject {
   }
 
   /**
-   * Set the substance to be simulated.
+   * handler that sets up the various portions of the model to support the newly selected substance
    * @param {SubstanceType} substance
-   * @private
+   * @protected
    */
-  handleSubstanceChanged() {
-
-    const substance = this.substanceProperty.get();
+  handleSubstanceChanged( substance ) {
 
     assert && assert(
       substance === SubstanceType.DIATOMIC_OXYGEN ||

@@ -16,7 +16,7 @@ window.phet.preloads.phetio.phetioElementsOverrides =
   "statesOfMatter.interactionScreen.model.forcesExpandedProperty": {
     "phetioFeatured": true
   },
-  "statesOfMatter.interactionScreen.model.interactionStrengthProperty": {
+  "statesOfMatter.interactionScreen.model.adjustableAtomInteractionStrengthProperty": {
     "phetioFeatured": true
   },
   "statesOfMatter.interactionScreen.model.isPlayingProperty": {
@@ -91,7 +91,7 @@ window.phet.preloads.phetio.phetioElementsOverrides =
   "statesOfMatter.phaseChangesScreen.model.interactionPotentialExpandedProperty": {
     "phetioFeatured": true
   },
-  "statesOfMatter.phaseChangesScreen.model.interactionStrengthProperty": {
+  "statesOfMatter.phaseChangesScreen.model.adjustableAtomInteractionStrengthProperty": {
     "phetioFeatured": true
   },
   "statesOfMatter.phaseChangesScreen.model.isExplodedProperty": {

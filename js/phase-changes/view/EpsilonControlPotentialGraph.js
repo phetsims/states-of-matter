@@ -89,7 +89,7 @@ class EpsilonControlPotentialGraph extends PotentialGraphNode {
         const d = endDragY - startDragY;
         startDragY = endDragY;
         const scaleFactor = SOMConstants.MAX_EPSILON / ( this.getGraphHeight() / 2 );
-        phaseChangesModel.interactionStrengthProperty.set(
+        phaseChangesModel.adjustableAtomInteractionStrengthProperty.set(
           Utils.clamp(
             phaseChangesModel.getEpsilon() + ( d * scaleFactor ),
             SOMConstants.MIN_ADJUSTABLE_EPSILON,
@@ -131,7 +131,7 @@ class EpsilonControlPotentialGraph extends PotentialGraphNode {
         const d = endDragY - startDragY;
         startDragY = endDragY;
         const scaleFactor = SOMConstants.MAX_EPSILON / ( this.getGraphHeight() / 2 );
-        phaseChangesModel.interactionStrengthProperty.set(
+        phaseChangesModel.adjustableAtomInteractionStrengthProperty.set(
           Utils.clamp(
             phaseChangesModel.getEpsilon() + ( d * scaleFactor ),
             SOMConstants.MIN_ADJUSTABLE_EPSILON,
@@ -161,11 +161,8 @@ class EpsilonControlPotentialGraph extends PotentialGraphNode {
 
     // Update the graph when the substance or interaction strength changes.
     Property.multilink(
-      [ phaseChangesModel.substanceProperty, phaseChangesModel.interactionStrengthProperty ],
+      [ phaseChangesModel.substanceProperty, phaseChangesModel.adjustableAtomInteractionStrengthProperty ],
       ( substance, interactionStrength ) => {
-        if ( substance === SubstanceType.ADJUSTABLE_ATOM ) {
-          phaseChangesModel.setEpsilon( interactionStrength );
-        }
         updateInteractivityState();
         this.setLjPotentialParameters( phaseChangesModel.getSigma(), phaseChangesModel.getEpsilon() );
         this.drawPotentialCurve();

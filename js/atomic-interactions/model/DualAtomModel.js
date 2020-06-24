@@ -54,8 +54,8 @@ class DualAtomModel {
     //-----------------------------------------------------------------------------------------------------------------
 
     // @public (read-write) - epsilon/k-Boltzmann is in Kelvin.
-    this.interactionStrengthProperty = new NumberProperty( 100, {
-      tandem: tandem.createTandem( 'interactionStrengthProperty' ),
+    this.adjustableAtomInteractionStrengthProperty = new NumberProperty( 100, {
+      tandem: tandem.createTandem( 'adjustableAtomInteractionStrengthProperty' ),
       phetioReadOnly: true,
       phetioDocumentation: 'intermolecular potential for the "Adjustable Attraction" atoms - this is a parameter in the Lennard-Jones potential equation'
     } );
@@ -143,9 +143,9 @@ class DualAtomModel {
       this.updateForces();
     } );
 
-    // update the parameters the LJ potential parameters when the adjustable attraction atom is in use
+    // update the LJ potential parameters when the adjustable attraction atom is in use
     Property.multilink(
-      [ this.atomPairProperty, this.interactionStrengthProperty, this.adjustableAtomDiameterProperty ],
+      [ this.atomPairProperty, this.adjustableAtomInteractionStrengthProperty, this.adjustableAtomDiameterProperty ],
       ( atomPair, interactionStrength, atomDiameter ) => {
         if ( atomPair === AtomPair.ADJUSTABLE ) {
           this.setEpsilon( interactionStrength );
@@ -246,7 +246,7 @@ class DualAtomModel {
   reset() {
 
     // reset the observable properties
-    this.interactionStrengthProperty.reset();
+    this.adjustableAtomInteractionStrengthProperty.reset();
     this.motionPausedProperty.reset();
     this.atomPairProperty.reset();
     this.timeSpeedProperty.reset();

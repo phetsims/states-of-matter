@@ -45,8 +45,8 @@ class PhaseChangesModel extends MultipleParticleModel {
     } );
 
     // @public (read-write) - interaction strength of the adjustable attraction atoms
-    this.interactionStrengthProperty = new NumberProperty( MAX_ADJUSTABLE_EPSILON, {
-      tandem: tandem.createTandem( 'interactionStrengthProperty' ),
+    this.adjustableAtomInteractionStrengthProperty = new NumberProperty( MAX_ADJUSTABLE_EPSILON, {
+      tandem: tandem.createTandem( 'adjustableAtomInteractionStrengthProperty' ),
       range: new Range( MIN_ADJUSTABLE_EPSILON, MAX_ADJUSTABLE_EPSILON ),
       phetioDocumentation: 'intermolecular potential for the "Adjustable Attraction" atoms - this is a parameter in the Lennard-Jones potential equation'
     } );
@@ -94,10 +94,28 @@ class PhaseChangesModel extends MultipleParticleModel {
       else if ( epsilon > MAX_ADJUSTABLE_EPSILON ) {
         epsilon = MAX_ADJUSTABLE_EPSILON;
       }
-      this.moleculeForceAndMotionCalculator.setScaledEpsilon( this.convertEpsilonToScaledEpsilon( epsilon ) );
+      this.moleculeForceAndMotionCalculator.setScaledEpsilon(
+        PhaseChangesModel.convertEpsilonToScaledEpsilon( epsilon )
+      );
     }
     else {
       assert && assert( false, 'Error: Epsilon cannot be set when non-configurable molecule is in use.' );
+    }
+  }
+
+  /**
+   * handler that sets up the various portions of the model to support the newly selected substance
+   * @param {SubstanceType} substance
+   * @protected
+   * @override
+   */
+  handleSubstanceChanged( substance ) {
+    super.handleSubstanceChanged( substance );
+
+    // If the adjustable atom has been selected, set the epsilon value of the LJ potential to be based on the previously
+    // set interaction strength.
+    if ( substance === SubstanceType.ADJUSTABLE_ATOM ) {
+      this.setEpsilon( this.adjustableAtomInteractionStrengthProperty.value );
     }
   }
 
@@ -107,7 +125,8 @@ class PhaseChangesModel extends MultipleParticleModel {
    * @param {number} epsilon
    * @private
    */
-  convertEpsilonToScaledEpsilon( epsilon ) {
+  static convertEpsilonToScaledEpsilon( epsilon ) {
+
     // The following conversion of the target value for epsilon to a scaled value for the motion calculator object was
     // determined empirically such that the resulting behavior roughly matched that of the existing monatomic
     // molecules.
@@ -176,7 +195,7 @@ class PhaseChangesModel extends MultipleParticleModel {
   reset() {
     super.reset();
     this.targetContainerHeightProperty.reset();
-    this.interactionStrengthProperty.reset();
+    this.adjustableAtomInteractionStrengthProperty.reset();
     this.phaseDiagramExpandedProperty.reset();
     this.interactionPotentialExpandedProperty.reset();
   }

@@ -83,7 +83,7 @@ function InteractivePotentialGraph( dualAtomModel, options ) {
         const d = endDragY - startDragY;
         startDragY = endDragY;
         const scaleFactor = SOMConstants.MAX_EPSILON / ( self.getGraphHeight() / 2 );
-        dualAtomModel.interactionStrengthProperty.value = dualAtomModel.getEpsilon() + ( d * scaleFactor );
+        dualAtomModel.adjustableAtomInteractionStrengthProperty.value = dualAtomModel.getEpsilon() + ( d * scaleFactor );
       },
 
       end: event => {
@@ -231,7 +231,7 @@ function InteractivePotentialGraph( dualAtomModel, options ) {
   } );
 
   Property.multilink(
-    [ dualAtomModel.atomPairProperty, dualAtomModel.interactionStrengthProperty, dualAtomModel.adjustableAtomDiameterProperty ],
+    [ dualAtomModel.atomPairProperty, dualAtomModel.adjustableAtomInteractionStrengthProperty, dualAtomModel.adjustableAtomDiameterProperty ],
     () => {
       self.setLjPotentialParameters( dualAtomModel.getSigma(), dualAtomModel.getEpsilon() );
       self.updateInteractivityState();

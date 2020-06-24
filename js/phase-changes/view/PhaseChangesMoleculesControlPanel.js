@@ -87,7 +87,7 @@ function PhaseChangesMoleculesControlPanel( phaseChangesModel, options ) {
   } );
 
   const interactionStrengthSlider = new HSlider(
-    phaseChangesModel.interactionStrengthProperty,
+    phaseChangesModel.adjustableAtomInteractionStrengthProperty,
     new Range( SOMConstants.MIN_ADJUSTABLE_EPSILON, PhaseChangesModel.MAX_ADJUSTABLE_EPSILON ),
     merge( {}, SOMConstants.ADJUSTABLE_ATTRACTION_SLIDER_COMMON_OPTIONS, {
       trackSize: new Dimension2( 110, 4 ),
@@ -198,7 +198,7 @@ function PhaseChangesMoleculesControlPanel( phaseChangesModel, options ) {
     tandem: radioButtonGroupTandem
   } );
 
-  phaseChangesModel.interactionStrengthProperty.link( function( value ) {
+  phaseChangesModel.adjustableAtomInteractionStrengthProperty.link( function( value ) {
     if ( phaseChangesModel.substanceProperty.get() === SubstanceType.ADJUSTABLE_ATOM ) {
       phaseChangesModel.setEpsilon( value );
     }
