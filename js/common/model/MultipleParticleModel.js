@@ -53,7 +53,6 @@ import MonatomicVerletAlgorithm from './engine/MonatomicVerletAlgorithm.js';
 import WaterAtomPositionUpdater from './engine/WaterAtomPositionUpdater.js';
 import WaterPhaseStateChanger from './engine/WaterPhaseStateChanger.js';
 import WaterVerletAlgorithm from './engine/WaterVerletAlgorithm.js';
-import InteractionStrengthTable from './InteractionStrengthTable.js';
 import MoleculeForceAndMotionDataSet from './MoleculeForceAndMotionDataSet.js';
 import MoleculeForceAndMotionDataSetIO from './MoleculeForceAndMotionDataSetIO.js';
 import MovingAverage from './MovingAverage.js';
@@ -117,22 +116,6 @@ const ADJUSTABLE_ATOM_CRITICAL_POINT_IN_KELVIN = 140;
 // injection and cause high initial velocities.
 const MOLECULE_INJECTION_HOLDOFF_TIME = 0.25; // seconds, empirically determined
 const MAX_MOLECULES_QUEUED_FOR_INJECTION = 3;
-
-// constant table of the sigma values used in the LJ potential calculations for the various substances used in the sim
-// Note: Can't used Map constructor due to lack of support in IE
-const SIGMA_TABLE = new Map();
-SIGMA_TABLE.set( SubstanceType.NEON, SOMConstants.NEON_RADIUS * 2 );
-SIGMA_TABLE.set( SubstanceType.ARGON, SOMConstants.ARGON_RADIUS * 2 );
-SIGMA_TABLE.set( SubstanceType.DIATOMIC_OXYGEN, SOMConstants.SIGMA_FOR_DIATOMIC_OXYGEN );
-SIGMA_TABLE.set( SubstanceType.WATER, SOMConstants.SIGMA_FOR_WATER );
-SIGMA_TABLE.set( SubstanceType.ADJUSTABLE_ATOM, SOMConstants.ADJUSTABLE_ATTRACTION_DEFAULT_RADIUS * 2 );
-
-// constant table of the epsilon values used in the LJ potential calculations for the various substances used in the sim
-const EPSILON_TABLE = new Map();
-EPSILON_TABLE.set( SubstanceType.NEON, InteractionStrengthTable.getInteractionPotential( AtomType.NEON, AtomType.NEON ) );
-EPSILON_TABLE.set( SubstanceType.ARGON, InteractionStrengthTable.getInteractionPotential( AtomType.ARGON, AtomType.ARGON ) );
-EPSILON_TABLE.set( SubstanceType.DIATOMIC_OXYGEN, SOMConstants.EPSILON_FOR_DIATOMIC_OXYGEN );
-EPSILON_TABLE.set( SubstanceType.WATER, SOMConstants.EPSILON_FOR_WATER );
 
 class MultipleParticleModel extends PhetioObject {
 
@@ -575,32 +558,6 @@ class MultipleParticleModel extends PhetioObject {
    */
   updatePressure() {
     this.pressureProperty.set( this.getPressureInAtmospheres() );
-  }
-
-  /**
-   * Get the sigma value, which is one of the two parameters that describes the Lennard-Jones potential.
-   * @returns {number}
-   * @public
-   */
-  getSigma() {
-    return SIGMA_TABLE.get( this.substanceProperty.value );
-  }
-
-  /**
-   * Get the epsilon value, which is one of the two parameters that describes the Lennard-Jones potential.
-   * @returns {number}
-   * @public
-   */
-  getEpsilon() {
-    const substance = this.substanceProperty.value;
-    let epsilon;
-    if ( substance === SubstanceType.ADJUSTABLE_ATOM ) {
-      epsilon = this.convertScaledEpsilonToEpsilon( this.moleculeForceAndMotionCalculator.getScaledEpsilon() );
-    }
-    else {
-      epsilon = EPSILON_TABLE.get( substance );
-    }
-    return epsilon;
   }
 
   /**
@@ -1351,15 +1308,6 @@ class MultipleParticleModel extends PhetioObject {
     }
 
     return phase;
-  }
-
-  /**
-   * @param {number} scaledEpsilon
-   * @returns {number}
-   * @private
-   */
-  convertScaledEpsilonToEpsilon( scaledEpsilon ) {
-    return scaledEpsilon * SOMConstants.MAX_EPSILON / 2;
   }
 
   /**

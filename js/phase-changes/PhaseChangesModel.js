@@ -9,6 +9,8 @@ import DerivedProperty from '../../../axon/js/DerivedProperty.js';
 import NumberProperty from '../../../axon/js/NumberProperty.js';
 import Range from '../../../dot/js/Range.js';
 import Utils from '../../../dot/js/Utils.js';
+import AtomType from '../common/model/AtomType.js';
+import InteractionStrengthTable from '../common/model/InteractionStrengthTable.js';
 import MultipleParticleModel from '../common/model/MultipleParticleModel.js';
 import SOMConstants from '../common/SOMConstants.js';
 import SubstanceType from '../common/SubstanceType.js';
@@ -24,6 +26,22 @@ const MAX_CONTAINER_SHRINK_RATE = 1250; // in model units per second
 // work so well, so the range below was arrived at empirically and seems to work reasonably well.
 const MIN_ADJUSTABLE_EPSILON = SOMConstants.MIN_ADJUSTABLE_EPSILON;
 const MAX_ADJUSTABLE_EPSILON = SOMConstants.MAX_ADJUSTABLE_EPSILON;
+
+// constant table of the sigma values used in the LJ potential calculations for the various substances used in the sim
+// Note: Can't used Map constructor due to lack of support in IE
+const SIGMA_TABLE = new Map();
+SIGMA_TABLE.set( SubstanceType.NEON, SOMConstants.NEON_RADIUS * 2 );
+SIGMA_TABLE.set( SubstanceType.ARGON, SOMConstants.ARGON_RADIUS * 2 );
+SIGMA_TABLE.set( SubstanceType.DIATOMIC_OXYGEN, SOMConstants.SIGMA_FOR_DIATOMIC_OXYGEN );
+SIGMA_TABLE.set( SubstanceType.WATER, SOMConstants.SIGMA_FOR_WATER );
+SIGMA_TABLE.set( SubstanceType.ADJUSTABLE_ATOM, SOMConstants.ADJUSTABLE_ATTRACTION_DEFAULT_RADIUS * 2 );
+
+// constant table of the epsilon values used in the LJ potential calculations for the various substances used in the sim
+const EPSILON_TABLE = new Map();
+EPSILON_TABLE.set( SubstanceType.NEON, InteractionStrengthTable.getInteractionPotential( AtomType.NEON, AtomType.NEON ) );
+EPSILON_TABLE.set( SubstanceType.ARGON, InteractionStrengthTable.getInteractionPotential( AtomType.ARGON, AtomType.ARGON ) );
+EPSILON_TABLE.set( SubstanceType.DIATOMIC_OXYGEN, SOMConstants.EPSILON_FOR_DIATOMIC_OXYGEN );
+EPSILON_TABLE.set( SubstanceType.WATER, SOMConstants.EPSILON_FOR_WATER );
 
 class PhaseChangesModel extends MultipleParticleModel {
 
@@ -83,19 +101,39 @@ class PhaseChangesModel extends MultipleParticleModel {
   }
 
   /**
+   * Get the sigma value, which is one of the two parameters that describes the Lennard-Jones potential.
+   * @returns {number}
+   * @public
+   */
+  getSigma() {
+    return SIGMA_TABLE.get( this.substanceProperty.value );
+  }
+
+  /**
+   * Get the epsilon value, which is one of the two parameters that describes the Lennard-Jones potential.
+   * @returns {number}
+   * @public
+   */
+  getEpsilon() {
+    const substance = this.substanceProperty.value;
+    let epsilon;
+    if ( substance === SubstanceType.ADJUSTABLE_ATOM ) {
+      epsilon = this.adjustableAtomInteractionStrengthProperty.value;
+    }
+    else {
+      epsilon = EPSILON_TABLE.get( substance );
+    }
+    return epsilon;
+  }
+
+  /**
    * @param {number} epsilon
    * @public
    */
   setEpsilon( epsilon ) {
     if ( this.substanceProperty.get() === SubstanceType.ADJUSTABLE_ATOM ) {
-      if ( epsilon < MIN_ADJUSTABLE_EPSILON ) {
-        epsilon = MIN_ADJUSTABLE_EPSILON;
-      }
-      else if ( epsilon > MAX_ADJUSTABLE_EPSILON ) {
-        epsilon = MAX_ADJUSTABLE_EPSILON;
-      }
       this.moleculeForceAndMotionCalculator.setScaledEpsilon(
-        PhaseChangesModel.convertEpsilonToScaledEpsilon( epsilon )
+        convertEpsilonToScaledEpsilon( Utils.clamp( epsilon, MIN_ADJUSTABLE_EPSILON, MAX_ADJUSTABLE_EPSILON ) )
       );
     }
     else {
@@ -117,20 +155,6 @@ class PhaseChangesModel extends MultipleParticleModel {
     if ( substance === SubstanceType.ADJUSTABLE_ATOM ) {
       this.setEpsilon( this.adjustableAtomInteractionStrengthProperty.value );
     }
-  }
-
-  /**
-   * Convert a value for epsilon that is in the real range of values into a scaled value that is suitable for use with
-   * the motion and force calculators.
-   * @param {number} epsilon
-   * @private
-   */
-  static convertEpsilonToScaledEpsilon( epsilon ) {
-
-    // The following conversion of the target value for epsilon to a scaled value for the motion calculator object was
-    // determined empirically such that the resulting behavior roughly matched that of the existing monatomic
-    // molecules.
-    return epsilon / ( SOMConstants.MAX_EPSILON / 2 );
   }
 
   /**
@@ -201,9 +225,17 @@ class PhaseChangesModel extends MultipleParticleModel {
   }
 }
 
+// helper function
+function convertEpsilonToScaledEpsilon( epsilon ) {
+
+  // The following conversion of the target value for epsilon to a scaled value for the motion calculator object was
+  // determined empirically such that the resulting behavior roughly matched that of the existing monatomic
+  // molecules.
+  return epsilon / ( SOMConstants.MAX_EPSILON / 2 );
+}
+
 // static constants
 PhaseChangesModel.MAX_ADJUSTABLE_EPSILON = MAX_ADJUSTABLE_EPSILON;
-
 
 statesOfMatter.register( 'PhaseChangesModel', PhaseChangesModel );
 export default PhaseChangesModel;

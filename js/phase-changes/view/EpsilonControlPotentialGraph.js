@@ -148,22 +148,11 @@ class EpsilonControlPotentialGraph extends PotentialGraphNode {
       canvasBounds: new Bounds2( 0, 0, 125, this.graphHeight )
     } );
 
-    // closure for updating the interactivity state
-    const updateInteractivityState = () => {
-      this.interactionEnabled = phaseChangesModel.substanceProperty.get() === SubstanceType.ADJUSTABLE_ATOM;
-    };
-
-    // do the initial update of the interactivity state
-    updateInteractivityState();
-
-    this.setLjPotentialParameters( phaseChangesModel.getSigma(), phaseChangesModel.getEpsilon() );
-    this.drawPotentialCurve();
-
     // Update the graph when the substance or interaction strength changes.
     Property.multilink(
       [ phaseChangesModel.substanceProperty, phaseChangesModel.adjustableAtomInteractionStrengthProperty ],
-      ( substance, interactionStrength ) => {
-        updateInteractivityState();
+      substance => {
+        this.interactionEnabled = substance === SubstanceType.ADJUSTABLE_ATOM;
         this.setLjPotentialParameters( phaseChangesModel.getSigma(), phaseChangesModel.getEpsilon() );
         this.drawPotentialCurve();
       }
