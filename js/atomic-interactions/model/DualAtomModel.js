@@ -249,6 +249,7 @@ class DualAtomModel {
     this.adjustableAtomInteractionStrengthProperty.reset();
     this.motionPausedProperty.reset();
     this.atomPairProperty.reset();
+    this.isPlayingProperty.reset();
     this.timeSpeedProperty.reset();
     this.adjustableAtomDiameterProperty.reset();
     this.forcesDisplayModeProperty.reset();
