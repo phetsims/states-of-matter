@@ -331,23 +331,22 @@ function PhaseChangesScreenView( model, isPotentialGraphEnabled, tandem ) {
     }
 
     // don't show the phase diagram for adjustable attraction, since we need the space for other things
-    if ( substance === SubstanceType.ADJUSTABLE_ATOM ) {
-      self.phaseDiagramAccordionBox.visible = false;
+    self.phaseDiagramAccordionBox.visible = substance !== SubstanceType.ADJUSTABLE_ATOM;
+  } );
+
+  // Update layout based on the visibility and bounds of the various control panels and accordion boxes.
+  Property.multilink(
+    [ self.phaseDiagramAccordionBox.visibleProperty, moleculesControlPanel.boundsProperty ],
+    ( phaseDiagramVisible, moleculeControlPanelBounds ) => {
       if ( isPotentialGraphEnabled ) {
-        interactionPotentialAccordionBox.top = moleculesControlPanel.bottom + INTER_PANEL_SPACING;
-      }
-    }
-    else {
-      self.phaseDiagramAccordionBox.visible = true;
-      if ( isPotentialGraphEnabled ) {
-        interactionPotentialAccordionBox.top = moleculesControlPanel.bottom + INTER_PANEL_SPACING;
+        interactionPotentialAccordionBox.top = moleculeControlPanelBounds.bottom + INTER_PANEL_SPACING;
         self.phaseDiagramAccordionBox.top = interactionPotentialAccordionBox.bottom + INTER_PANEL_SPACING;
       }
       else {
-        self.phaseDiagramAccordionBox.top = moleculesControlPanel.bottom + INTER_PANEL_SPACING;
+        self.phaseDiagramAccordionBox.top = moleculeControlPanelBounds.bottom + INTER_PANEL_SPACING;
       }
     }
-  } );
+  );
 
   // Happy Easter
   const egg = new MultiLineText( 'Goodbye boiling water -\nyou will be mist!', {
