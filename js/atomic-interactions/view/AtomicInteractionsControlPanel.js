@@ -19,7 +19,6 @@ import Image from '../../../../scenery/js/nodes/Image.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import VBox from '../../../../scenery/js/nodes/VBox.js';
-import Color from '../../../../scenery/js/util/Color.js';
 import AquaRadioButtonGroup from '../../../../sun/js/AquaRadioButtonGroup.js';
 import RadioButtonGroup from '../../../../sun/js/buttons/RadioButtonGroup.js';
 import HSlider from '../../../../sun/js/HSlider.js';
@@ -29,6 +28,7 @@ import pushPinImg from '../../../images/push-pin_png.js';
 import SOMConstants from '../../common/SOMConstants.js';
 import SubstanceType from '../../common/SubstanceType.js';
 import AtomAndMoleculeIconFactory from '../../common/view/AtomAndMoleculeIconFactory.js';
+import SOMColorProfile from '../../common/view/SOMColorProfile.js';
 import statesOfMatter from '../../statesOfMatter.js';
 import statesOfMatterStrings from '../../statesOfMatterStrings.js';
 import AtomPair from '../model/AtomPair.js';
@@ -342,7 +342,7 @@ function AtomicInteractionsControlPanel( dualAtomModel, enableHeterogeneousAtoms
     titleNode = new BackgroundNode( titleText.label, {
       yMargin: 1,
       backgroundOptions: {
-        fill: Color.BLACK,
+        fill: SOMColorProfile.backgroundProperty,
         opacity: 1
       }
     } );
