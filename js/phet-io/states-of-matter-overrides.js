@@ -4,6 +4,9 @@ window.phet.preloads.phetio.phetioElementsOverrides =
   "statesOfMatter.interactionScreen.model.adjustableAtomDiameterProperty": {
     "phetioFeatured": true
   },
+  "statesOfMatter.interactionScreen.model.adjustableAtomInteractionStrengthProperty": {
+    "phetioFeatured": true
+  },
   "statesOfMatter.interactionScreen.model.atomPairProperty": {
     "phetioFeatured": true
   },
@@ -14,9 +17,6 @@ window.phet.preloads.phetio.phetioElementsOverrides =
     "phetioFeatured": true
   },
   "statesOfMatter.interactionScreen.model.forcesExpandedProperty": {
-    "phetioFeatured": true
-  },
-  "statesOfMatter.interactionScreen.model.adjustableAtomInteractionStrengthProperty": {
     "phetioFeatured": true
   },
   "statesOfMatter.interactionScreen.model.isPlayingProperty": {
@@ -52,6 +52,9 @@ window.phet.preloads.phetio.phetioElementsOverrides =
   "statesOfMatter.interactionScreen.view.atomsControlPanel.interactionStrengthSlider.visibleProperty": {
     "phetioFeatured": true
   },
+  "statesOfMatter.interactionScreen.view.atomsControlPanel.title.textProperty": {
+    "phetioFeatured": true
+  },
   "statesOfMatter.interactionScreen.view.atomsControlPanel.visibleProperty": {
     "phetioFeatured": true
   },
@@ -82,6 +85,9 @@ window.phet.preloads.phetio.phetioElementsOverrides =
   "statesOfMatter.interactionScreen.view.returnAtomButton.visibleProperty": {
     "phetioFeatured": false
   },
+  "statesOfMatter.phaseChangesScreen.model.adjustableAtomInteractionStrengthProperty": {
+    "phetioFeatured": true
+  },
   "statesOfMatter.phaseChangesScreen.model.containerHeightProperty": {
     "phetioFeatured": true
   },
@@ -89,9 +95,6 @@ window.phet.preloads.phetio.phetioElementsOverrides =
     "phetioFeatured": true
   },
   "statesOfMatter.phaseChangesScreen.model.interactionPotentialExpandedProperty": {
-    "phetioFeatured": true
-  },
-  "statesOfMatter.phaseChangesScreen.model.adjustableAtomInteractionStrengthProperty": {
     "phetioFeatured": true
   },
   "statesOfMatter.phaseChangesScreen.model.isExplodedProperty": {
