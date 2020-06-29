@@ -8,7 +8,7 @@
  * @author Aaron Davis
  */
 
-import Property from '../../../../../axon/js/Property.js';
+import NumberProperty from '../../../../../axon/js/NumberProperty.js';
 import inherit from '../../../../../phet-core/js/inherit.js';
 import statesOfMatter from '../../../statesOfMatter.js';
 import TimeSpanDataQueue from '../TimeSpanDataQueue.js';
@@ -31,7 +31,7 @@ function AbstractVerletAlgorithm( multipleParticleModel ) {
 
   this.multipleParticleModel = multipleParticleModel; // @protected, read only
 
-  this.pressureProperty = new Property( 0 ); // @public, read-only, in atm (atmospheres)
+  this.pressureProperty = new NumberProperty( 0 ); // @public, read-only, in atm (atmospheres)
 
   // @protected, read-write, used to set where particles bounce
   this.sideBounceInset = 1;
