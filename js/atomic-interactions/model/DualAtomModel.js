@@ -84,6 +84,7 @@ class DualAtomModel {
     this.adjustableAtomDiameterProperty = new NumberProperty( SOMConstants.ADJUSTABLE_ATTRACTION_DEFAULT_RADIUS * 2, {
       units: 'pm',
       tandem: tandem.createTandem( 'adjustableAtomDiameterProperty' ),
+      phetioFeatured: true,
       phetioReadOnly: true,
       phetioDocumentation: 'Diameter of the adjustable atom, in picometers'
     } );
