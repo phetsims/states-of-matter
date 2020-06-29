@@ -57,6 +57,7 @@ class DualAtomModel {
     this.adjustableAtomInteractionStrengthProperty = new NumberProperty( 100, {
       tandem: tandem.createTandem( 'adjustableAtomInteractionStrengthProperty' ),
       phetioReadOnly: true,
+      phetioFeatured: true,
       phetioDocumentation: 'intermolecular potential for the "Adjustable Attraction" atoms - this is a parameter in the Lennard-Jones potential equation'
     } );
 
