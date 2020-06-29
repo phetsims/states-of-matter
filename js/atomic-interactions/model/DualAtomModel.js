@@ -66,7 +66,8 @@ class DualAtomModel {
     // @public (read-write)
     this.atomPairProperty = new EnumerationProperty( AtomPair, AtomPair.NEON_NEON, {
       validValues: enableHeterogeneousMolecules ? AtomPair.VALUES : VALID_ATOM_PAIRS_FOR_REDUCED,
-      tandem: tandem.createTandem( 'atomPairProperty' )
+      tandem: tandem.createTandem( 'atomPairProperty' ),
+      phetioFeatured: true
     } );
 
     // @public (read-write) - paused or playing
