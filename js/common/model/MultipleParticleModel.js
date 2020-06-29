@@ -128,6 +128,8 @@ class MultipleParticleModel extends PhetioObject {
     options = merge( {
       validSubstances: SubstanceType.VALUES,
       tandem: tandem,
+
+      // REVIEW: This seems duplicated with a line below, can one of them be eliminated?
       phetioType: MultipleParticleModelIO
     }, options );
 
