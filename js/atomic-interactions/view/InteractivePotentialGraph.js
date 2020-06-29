@@ -194,13 +194,13 @@ function InteractivePotentialGraph( dualAtomModel, options ) {
   this.positionMarker.addInputListener( new DragListener( {
       allowTouchSnag: true,
 
-    start: event => {
+      start: event => {
         // Stop the particle from moving in the model.
         dualAtomModel.setMotionPaused( true );
         startDragX = self.positionMarker.globalToParentPoint( event.pointer.point ).x;
       },
 
-    drag: event => {
+      drag: event => {
 
         // Make sure the movement hint is now hidden, since the user has figured out what to drag.
         dualAtomModel.movementHintVisibleProperty.set( false );
@@ -215,13 +215,13 @@ function InteractivePotentialGraph( dualAtomModel, options ) {
         startDragX = endDragX;
       },
 
-    end: event => {
+      end: event => {
         // Let the model move the particle again.  Note that this happens
         // even if the motion was paused by some other means.
         dualAtomModel.setMotionPaused( false );
       },
 
-    tandem: this.positionMarker.tandem.createTandem( 'dragListener' )
+      tandem: this.positionMarker.tandem.createTandem( 'dragListener' )
     }
   ) );
 

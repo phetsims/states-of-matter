@@ -112,7 +112,7 @@ function DialGaugeNode( multipleParticleModel, tandem ) {
   connectorCollar.centerY = gaugeNode.centerY;
   connectorCollar.left = gaugeNode.right - 10;
   const dialComponentsNode = new Node( {
-    children: [ connector, connectorCollar, gaugeNode, readoutNode ]
+      children: [ connector, connectorCollar, gaugeNode, readoutNode ]
     }
   );
 

@@ -173,13 +173,13 @@ function PhaseChangesMoleculesControlPanel( phaseChangesModel, options ) {
 
   if ( options.showAdjustableAttraction ) {
     radioButtonContent.push( {
-      value: SubstanceType.ADJUSTABLE_ATOM,
-      node: new SubstanceSelectorNode(
-        adjustableAttractionSelectorInfo.label,
-        adjustableAttractionSelectorInfo.icon,
-        selectorWidth
-      ),
-      tandemName: 'adjustableAttraction'
+        value: SubstanceType.ADJUSTABLE_ATOM,
+        node: new SubstanceSelectorNode(
+          adjustableAttractionSelectorInfo.label,
+          adjustableAttractionSelectorInfo.icon,
+          selectorWidth
+        ),
+        tandemName: 'adjustableAttraction'
       }
     );
   }
