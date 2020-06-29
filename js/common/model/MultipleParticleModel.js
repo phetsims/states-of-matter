@@ -179,7 +179,8 @@ class MultipleParticleModel extends PhetioObject {
 
     // @public (read-write)
     this.isPlayingProperty = new BooleanProperty( true, {
-      tandem: tandem.createTandem( 'isPlayingProperty' )
+      tandem: tandem.createTandem( 'isPlayingProperty' ),
+      phetioFeatured: true
     } );
 
     // @public (read-write)
