@@ -92,7 +92,8 @@ class DualAtomModel {
 
     // @public (read-write)
     this.forcesDisplayModeProperty = new EnumerationProperty( ForceDisplayMode, ForceDisplayMode.HIDDEN, {
-      tandem: tandem.createTandem( 'forcesDisplayModeProperty' )
+      tandem: tandem.createTandem( 'forcesDisplayModeProperty' ),
+      phetioFeatured: true
     } );
 
     // @public (read-write)
