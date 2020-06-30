@@ -51,6 +51,8 @@ function ForcesAccordionBox( forcesProperty, forceControlPanelExpandProperty, op
   // convenience function for creating text with the attributes needed by this panel
   function createText( string, width, fontSize ) {
     const text = new Text( string, { font: new PhetFont( fontSize ), fill: options.textFill } );
+
+    // REVIEW: Can this be replaced by {maxWidth: ...} in the options?
     if ( text.width > width ) {
       text.scale( width / text.width );
     }
