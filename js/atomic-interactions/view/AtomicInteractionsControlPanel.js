@@ -157,6 +157,8 @@ function AtomicInteractionsControlPanel( dualAtomModel, enableHeterogeneousAtoms
       ],
       spacing: 5
     } );
+
+    // REVIEW: Variable name doesn't match tandem name
     titleText = [ pinnedNodeText, new Text( movingString, {
       font: new PhetFont( 10 ),
       maxWidth: maxWidthOfTitleText,
@@ -183,6 +185,7 @@ function AtomicInteractionsControlPanel( dualAtomModel, enableHeterogeneousAtoms
       } );
     };
 
+    // REVIEW: variable name doesn't match tandem name
     const aquaRadioButtonsGroup = new AquaRadioButtonGroup(
       dualAtomModel.atomPairProperty,
       [

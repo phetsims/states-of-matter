@@ -1,8 +1,8 @@
 // Copyright 2020, University of Colorado Boulder
 
 /**
- * IO type for MoleculeForceAndMotionDataSet, uses "data type" serialization where `fromStateObject will return of
- * new instance.
+ * IO type for MoleculeForceAndMotionDataSet, uses "data type" serialization where `fromStateObject returns a new
+ * instance.
  *
  * @author John Blanco (PhET Interactive Simulations)
  * @author Michael Kauzmann (PhET Interactive Simulations)
