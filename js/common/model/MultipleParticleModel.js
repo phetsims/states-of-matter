@@ -126,11 +126,7 @@ class MultipleParticleModel extends PhetioObject {
   constructor( tandem, options ) {
 
     options = merge( {
-      validSubstances: SubstanceType.VALUES,
-      tandem: tandem,
-
-      // REVIEW: This seems duplicated with a line below, can one of them be eliminated?
-      phetioType: MultipleParticleModelIO
+      validSubstances: SubstanceType.VALUES
     }, options );
 
     super( {
