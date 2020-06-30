@@ -11,87 +11,85 @@
  */
 
 import Vector2 from '../../../../dot/js/Vector2.js';
-import inherit from '../../../../phet-core/js/inherit.js';
 import statesOfMatter from '../../statesOfMatter.js';
 import SOMConstants from '../SOMConstants.js';
 import WaterMoleculeStructure from './engine/WaterMoleculeStructure.js';
 
-/**
- * This creates the data set with the capacity to hold the maximum number of atoms/molecules, but does not create the
- * individual data for them.  That must be done explicitly through other calls.
- * @param {number} atomsPerMolecule
- * @constructor
- */
-function MoleculeForceAndMotionDataSet( atomsPerMolecule ) {
+class MoleculeForceAndMotionDataSet {
 
-  // @public (read-only) - attributes that describe the data set as a whole
-  this.numberOfAtoms = 0;
-  this.numberOfMolecules = 0;
+  /**
+   * This creates the data set with the capacity to hold the maximum number of atoms/molecules, but does not create the
+   * individual data for them.  That must be done explicitly through other calls.
+   * @param {number} atomsPerMolecule
+   * @constructor
+   */
+  constructor( atomsPerMolecule ) {
 
-  // @public (read-only) - attributes that apply to all elements of the data set
-  this.atomsPerMolecule = atomsPerMolecule;
+    // @public (read-only) - attributes that describe the data set as a whole
+    this.numberOfAtoms = 0;
+    this.numberOfMolecules = 0;
 
-  // convenience variable
-  const maxNumMolecules = Math.floor( SOMConstants.MAX_NUM_ATOMS / atomsPerMolecule );
+    // @public (read-only) - attributes that apply to all elements of the data set
+    this.atomsPerMolecule = atomsPerMolecule;
 
-  // @public Attributes of the individual molecules and the atoms that comprise them.
-  this.atomPositions = new Array( SOMConstants.MAX_NUM_ATOMS );
-  this.moleculeCenterOfMassPositions = new Array( maxNumMolecules );
-  this.moleculeVelocities = new Array( maxNumMolecules );
-  this.moleculeForces = new Array( maxNumMolecules );
-  this.nextMoleculeForces = new Array( maxNumMolecules );
-  this.insideContainer = new Array( maxNumMolecules );
+    // convenience variable
+    const maxNumMolecules = Math.floor( SOMConstants.MAX_NUM_ATOMS / atomsPerMolecule );
 
-  // Populate with null for vectors and false for booleans because PhET-iO cannot serialize undefined.
-  for ( let i = 0; i < SOMConstants.MAX_NUM_ATOMS; i++ ) {
-    this.atomPositions[ i ] = null;
-    if ( i < maxNumMolecules ) {
-      this.moleculeCenterOfMassPositions[ i ] = null;
-      this.moleculeVelocities[ i ] = null;
-      this.moleculeForces[ i ] = null;
-      this.nextMoleculeForces[ i ] = null;
-      this.insideContainer[ i ] = false;
+    // @public Attributes of the individual molecules and the atoms that comprise them.
+    this.atomPositions = new Array( SOMConstants.MAX_NUM_ATOMS );
+    this.moleculeCenterOfMassPositions = new Array( maxNumMolecules );
+    this.moleculeVelocities = new Array( maxNumMolecules );
+    this.moleculeForces = new Array( maxNumMolecules );
+    this.nextMoleculeForces = new Array( maxNumMolecules );
+    this.insideContainer = new Array( maxNumMolecules );
+
+    // Populate with null for vectors and false for booleans because PhET-iO cannot serialize undefined.
+    for ( let i = 0; i < SOMConstants.MAX_NUM_ATOMS; i++ ) {
+      this.atomPositions[ i ] = null;
+      if ( i < maxNumMolecules ) {
+        this.moleculeCenterOfMassPositions[ i ] = null;
+        this.moleculeVelocities[ i ] = null;
+        this.moleculeForces[ i ] = null;
+        this.nextMoleculeForces[ i ] = null;
+        this.insideContainer[ i ] = false;
+      }
+    }
+
+    // @public - Note that some of the following are not used in the monatomic case, but need to be here for compatibility.
+    this.moleculeRotationAngles = new Float64Array( maxNumMolecules );
+    this.moleculeRotationRates = new Float64Array( maxNumMolecules );
+    this.moleculeTorques = new Float64Array( maxNumMolecules );
+    this.nextMoleculeTorques = new Float64Array( maxNumMolecules );
+    for ( let i = 0; i < SOMConstants.MAX_NUM_ATOMS / this.atomsPerMolecule; i++ ) {
+      this.moleculeRotationAngles [ i ] = 0;
+      this.moleculeRotationRates[ i ] = 0;
+      this.moleculeTorques[ i ] = 0;
+      this.nextMoleculeTorques [ i ] = 0;
+    }
+
+    // Set default values.
+    if ( atomsPerMolecule === 1 ) {
+      this.moleculeMass = 1;
+      this.moleculeRotationalInertia = 0;
+    }
+    else if ( atomsPerMolecule === 2 ) {
+      this.moleculeMass = 2; // Two molecules, assumed to be the same.
+      this.moleculeRotationalInertia = this.moleculeMass *
+                                       Math.pow( SOMConstants.DIATOMIC_PARTICLE_DISTANCE, 2 ) / 2;
+    }
+    else if ( atomsPerMolecule === 3 ) {
+      // NOTE: These settings only work for water, since that is the only supported triatomic molecule at the time of
+      // this writing (Nov 2008).  If other 3-atom molecules are added, this will need to be changed.
+      this.moleculeMass = 1.5; // Three molecules, one relatively heavy and two light
+      this.moleculeRotationalInertia = WaterMoleculeStructure.rotationalInertia;
     }
   }
 
-  // @public - Note that some of the following are not used in the monatomic case, but need to be here for compatibility.
-  this.moleculeRotationAngles = new Float64Array( maxNumMolecules );
-  this.moleculeRotationRates = new Float64Array( maxNumMolecules );
-  this.moleculeTorques = new Float64Array( maxNumMolecules );
-  this.nextMoleculeTorques = new Float64Array( maxNumMolecules );
-  for ( let i = 0; i < SOMConstants.MAX_NUM_ATOMS / this.atomsPerMolecule; i++ ) {
-    this.moleculeRotationAngles [ i ] = 0;
-    this.moleculeRotationRates[ i ] = 0;
-    this.moleculeTorques[ i ] = 0;
-    this.nextMoleculeTorques [ i ] = 0;
-  }
-
-  // Set default values.
-  if ( atomsPerMolecule === 1 ) {
-    this.moleculeMass = 1;
-    this.moleculeRotationalInertia = 0;
-  }
-  else if ( atomsPerMolecule === 2 ) {
-    this.moleculeMass = 2; // Two molecules, assumed to be the same.
-    this.moleculeRotationalInertia = this.moleculeMass *
-                                     Math.pow( SOMConstants.DIATOMIC_PARTICLE_DISTANCE, 2 ) / 2;
-  }
-  else if ( atomsPerMolecule === 3 ) {
-    // NOTE: These settings only work for water, since that is the only supported triatomic molecule at the time of
-    // this writing (Nov 2008).  If other 3-atom molecules are added, this will need to be changed.
-    this.moleculeMass = 1.5; // Three molecules, one relatively heavy and two light
-    this.moleculeRotationalInertia = WaterMoleculeStructure.rotationalInertia;
-  }
-}
-
-statesOfMatter.register( 'MoleculeForceAndMotionDataSet', MoleculeForceAndMotionDataSet );
-
-inherit( Object, MoleculeForceAndMotionDataSet, {
-
   /**
    * get the total kinetic energy of the particles in this data set
+   * @public
    */
-  getTotalKineticEnergy: function() {
+  getTotalKineticEnergy() {
 
     let translationalKineticEnergy = 0;
     let rotationalKineticEnergy = 0;
@@ -121,43 +119,48 @@ inherit( Object, MoleculeForceAndMotionDataSet, {
     }
 
     return translationalKineticEnergy + rotationalKineticEnergy;
-  },
+  }
 
-  getTemperature: function() {
+  /**
+   * @returns {number}
+   * @public
+   */
+  getTemperature() {
 
     // The formula for kinetic energy in an ideal gas is used here with Boltzmann's constant normalized, i.e. equal to 1.
     return ( 2 / 3 ) * this.getTotalKineticEnergy() / this.getNumberOfMolecules();
-  },
+  }
 
   /**
    * @returns {number}
    * @public
    */
-  getNumberOfMolecules: function() {
+  getNumberOfMolecules() {
     return this.numberOfAtoms / this.atomsPerMolecule;
-  },
+  }
 
   /**
    * @returns {number}
    * @public
    */
-  getMoleculeRotationalInertia: function() {
+  getMoleculeRotationalInertia() {
     return this.moleculeRotationalInertia;
-  },
+  }
 
   /**
    * @returns {number}
    * @public
    */
-  getMoleculeMass: function() {
+  getMoleculeMass() {
     return this.moleculeMass;
-  },
+  }
 
   /**
    * get the kinetic energy of the specified molecule
    * @param moleculeIndex
+   * @public
    */
-  getMoleculeKineticEnergy: function( moleculeIndex ) {
+  getMoleculeKineticEnergy( moleculeIndex ) {
     assert && assert( moleculeIndex >= 0 && moleculeIndex < this.numberOfMolecules );
     const translationalKineticEnergy = 0.5 * this.moleculeMass *
                                        ( Math.pow( this.moleculeVelocities[ moleculeIndex ].x, 2 ) +
@@ -165,121 +168,113 @@ inherit( Object, MoleculeForceAndMotionDataSet, {
     const rotationalKineticEnergy = 0.5 * this.moleculeRotationalInertia *
                                     Math.pow( this.moleculeRotationRates[ moleculeIndex ], 2 );
     return translationalKineticEnergy + rotationalKineticEnergy;
-  },
+  }
 
   /**
    * Returns a value indicating how many more molecules can be added.
    * @returns {number}
    * @public
    */
-  getNumberOfRemainingSlots: function() {
+  getNumberOfRemainingSlots() {
     return ( Math.floor( SOMConstants.MAX_NUM_ATOMS / this.atomsPerMolecule ) -
              ( this.numberOfAtoms / this.atomsPerMolecule ) );
-  },
+  }
 
   /**
    * @returns {number}
    * @public
    */
-  getAtomsPerMolecule: function() {
+  getAtomsPerMolecule() {
     return this.atomsPerMolecule;
-  },
+  }
 
   /**
    * @returns {Array}
    * @public
    */
-  getAtomPositions: function() {
+  getAtomPositions() {
     return this.atomPositions;
-  },
+  }
 
   /**
    * @returns {number|}
    * @public
    */
-  getNumberOfAtoms: function() {
+  getNumberOfAtoms() {
     return this.numberOfAtoms;
-  },
-
-  /**
-   * @returns {number}
-   * @public
-   */
-  getnumberOfMolecules: function() {
-    return this.numberOfMolecules;
-  },
+  }
 
   /**
    * @returns {Array}
    * @public
    */
-  getMoleculeCenterOfMassPositions: function() {
+  getMoleculeCenterOfMassPositions() {
     return this.moleculeCenterOfMassPositions;
-  },
+  }
 
   /**
    * @returns {Array}
    * @public
    */
-  getMoleculeVelocities: function() {
+  getMoleculeVelocities() {
     return this.moleculeVelocities;
-  },
+  }
 
   /**
    * @returns {Array}
    * @public
    */
-  getMoleculeForces: function() {
+  getMoleculeForces() {
     return this.moleculeForces;
-  },
+  }
 
   /**
    * @returns {Array}
    * @public
    */
-  getNextMoleculeForces: function() {
+  getNextMoleculeForces() {
     return this.nextMoleculeForces;
-  },
+  }
 
   /**
    * @returns {Array}
    * @public
    */
-  getMoleculeRotationAngles: function() {
+  getMoleculeRotationAngles() {
     return this.moleculeRotationAngles;
-  },
+  }
 
   /**
    * @param {[]}rotationAngles
    * @public
    */
-  setMoleculeRotationAngles: function( rotationAngles ) {
+  setMoleculeRotationAngles( rotationAngles ) {
     this.moleculeRotationAngles = rotationAngles;
-  },
+  }
 
   /**
    * @returns {Array}
    * @public
    */
-  getMoleculeRotationRates: function() {
+  getMoleculeRotationRates() {
     return this.moleculeRotationRates;
-  },
+  }
 
   /**
    * @returns {Array}
    * @public
    */
-  getMoleculeTorques: function() {
+  getMoleculeTorques() {
     return this.moleculeTorques;
-  },
+  }
 
   /**
    * @returns {Array}
    * @public
    */
-  getNextMoleculeTorques: function() {
+  getNextMoleculeTorques() {
     return this.nextMoleculeTorques;
-  },
+  }
 
   /**
    * Add a new molecule to the model.  The molecule must have been created and initialized before being added.
@@ -291,7 +286,7 @@ inherit( Object, MoleculeForceAndMotionDataSet, {
    * @returns {boolean} true if able to add, false if not.
    * @public
    */
-  addMolecule: function( atomPositions, moleculeCenterOfMassPosition, moleculeVelocity, moleculeRotationRate, insideContainer ) {
+  addMolecule( atomPositions, moleculeCenterOfMassPosition, moleculeVelocity, moleculeRotationRate, insideContainer ) {
 
     // error checking
     assert && assert( this.getNumberOfRemainingSlots() > 0, 'no space left in molecule data set' );
@@ -318,7 +313,7 @@ inherit( Object, MoleculeForceAndMotionDataSet, {
     this.numberOfMolecules++;
 
     return true;
-  },
+  }
 
   /**
    * Remove the molecule at the designated index.  This also removes all atoms and forces associated with the molecule
@@ -329,7 +324,7 @@ inherit( Object, MoleculeForceAndMotionDataSet, {
    * @param {number} moleculeIndex
    * @public
    */
-  removeMolecule: function( moleculeIndex ) {
+  removeMolecule( moleculeIndex ) {
 
     assert && assert( moleculeIndex < this.numberOfAtoms / this.atomsPerMolecule, 'molecule index out of range' );
 
@@ -359,7 +354,7 @@ inherit( Object, MoleculeForceAndMotionDataSet, {
     // Reduce the counts.
     this.numberOfAtoms -= this.atomsPerMolecule;
     this.numberOfMolecules--;
-  },
+  }
 
   /**
    * Dump this data set's information in a way that can then be incorporated into a phase state changer that needs to
@@ -371,7 +366,7 @@ inherit( Object, MoleculeForceAndMotionDataSet, {
    * necessary.
    * @public
    */
-  dump: function() {
+  dump() {
 
     let i;
     const numMolecules = this.numberOfMolecules;
@@ -380,7 +375,7 @@ inherit( Object, MoleculeForceAndMotionDataSet, {
     console.log( '[' );
     for ( i = 0; i < numMolecules; i++ ) {
       const comPos = this.moleculeCenterOfMassPositions[ i ];
-      console.log( '{', 'x: ', comPos.x.toFixed( 3 ), ', y: ', comPos.y.toFixed( 3 ), '},' );
+      console.log( '{', 'x: ', comPos.x.toFixed( 3 ), ', y: ', comPos.y.toFixed( 3 ), '}' );
     }
     console.log( '],' );
 
@@ -388,7 +383,7 @@ inherit( Object, MoleculeForceAndMotionDataSet, {
     console.log( '[' );
     for ( i = 0; i < numMolecules; i++ ) {
       const vel = this.moleculeVelocities[ i ];
-      console.log( '{', 'x: ', vel.x.toFixed( 3 ), ', y: ', vel.y.toFixed( 3 ), '},' );
+      console.log( '{', 'x: ', vel.x.toFixed( 3 ), ', y: ', vel.y.toFixed( 3 ), '}' );
     }
     console.log( '],' );
 
@@ -409,6 +404,7 @@ inherit( Object, MoleculeForceAndMotionDataSet, {
     console.log( '],' );
   }
 
-} );
+}
 
+statesOfMatter.register( 'MoleculeForceAndMotionDataSet', MoleculeForceAndMotionDataSet );
 export default MoleculeForceAndMotionDataSet;
