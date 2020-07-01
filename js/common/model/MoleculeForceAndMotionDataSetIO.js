@@ -89,6 +89,7 @@ class MoleculeForceAndMotionDataSetIO extends ObjectIO {
   }
 }
 
+// REVIEW: Is this documentation complete and correct?
 MoleculeForceAndMotionDataSetIO.documentation = 'particle data set';
 MoleculeForceAndMotionDataSetIO.validator = { valueType: MoleculeForceAndMotionDataSet };
 MoleculeForceAndMotionDataSetIO.typeName = 'MoleculeForceAndMotionDataSetIO';

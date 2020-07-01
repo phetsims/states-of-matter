@@ -48,6 +48,7 @@ class MultipleParticleModelIO extends ObjectIO {
   }
 }
 
+// REVIEW: Is this documentation complete and correct?
 MultipleParticleModelIO.documentation = 'particle model';
 MultipleParticleModelIO.validator = { isValidValue: v => v instanceof MultipleParticleModel };
 MultipleParticleModelIO.typeName = 'MultipleParticleModelIO';
