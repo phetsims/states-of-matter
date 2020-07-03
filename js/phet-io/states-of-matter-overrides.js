@@ -79,6 +79,9 @@ window.phet.preloads.phetio.phetioElementsOverrides =
   "statesOfMatter.phaseChangesScreen.model.isExplodedProperty": {
     "phetioFeatured": true
   },
+  "statesOfMatter.phaseChangesScreen.model.isPlayingProperty": {
+    "phetioFeatured": true
+  },
   "statesOfMatter.phaseChangesScreen.model.phaseDiagramExpandedProperty": {
     "phetioFeatured": true
   },

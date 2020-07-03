@@ -74,8 +74,7 @@ class DualAtomModel {
 
     // @public (read-write) - paused or playing
     this.isPlayingProperty = new BooleanProperty( true, {
-      tandem: tandem.createTandem( 'isPlayingProperty' ),
-      phetioFeatured: true
+      tandem: tandem.createTandem( 'isPlayingProperty' )
     } );
 
     // @public (read-write) - speed at which the model is running
