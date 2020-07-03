@@ -1,16 +1,25 @@
 /* eslint-disable */
 window.phet.preloads.phetio.phetioElementsOverrides =
 {
+  "statesOfMatter.interactionScreen.model.isPlayingProperty": {
+    "phetioFeatured": true
+  },
   "statesOfMatter.interactionScreen.model.movableAtom.accelerationProperty": {
     "phetioFeatured": true
   },
   "statesOfMatter.interactionScreen.model.movableAtom.positionProperty": {
     "phetioFeatured": true
   },
+  "statesOfMatter.interactionScreen.model.movableAtom.radiusProperty": {
+    "phetioFeatured": true
+  },
   "statesOfMatter.interactionScreen.model.movableAtom.velocityProperty": {
     "phetioFeatured": true
   },
   "statesOfMatter.interactionScreen.model.movementHintVisibleProperty": {
+    "phetioFeatured": true
+  },
+  "statesOfMatter.interactionScreen.model.timeSpeedProperty": {
     "phetioFeatured": true
   },
   "statesOfMatter.interactionScreen.view.atomsControlPanel.atomDiameterSlider.title.textProperty": {
@@ -167,6 +176,9 @@ window.phet.preloads.phetio.phetioElementsOverrides =
     "phetioFeatured": true
   },
   "statesOfMatter.statesScreen.model.isExplodedProperty": {
+    "phetioFeatured": true
+  },
+  "statesOfMatter.statesScreen.model.isPlayingProperty": {
     "phetioFeatured": true
   },
   "statesOfMatter.statesScreen.model.pressureProperty": {
