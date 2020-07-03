@@ -1,6 +1,9 @@
 /* eslint-disable */
 window.phet.preloads.phetio.phetioElementsOverrides =
 {
+  "statesOfMatter.interactionScreen.model.adjustableAtomDiameterProperty": {
+    "phetioFeatured": true
+  },
   "statesOfMatter.interactionScreen.model.adjustableAtomInteractionStrengthProperty": {
     "phetioFeatured": true
   },
