@@ -81,8 +81,7 @@ class DualAtomModel {
     // @public (read-write) - speed at which the model is running
     this.timeSpeedProperty = new EnumerationProperty( TimeSpeed, TimeSpeed.NORMAL, {
       validValues: [ TimeSpeed.NORMAL, TimeSpeed.SLOW ],
-      tandem: tandem.createTandem( 'timeSpeedProperty' ),
-      phetioFeatured: true
+      tandem: tandem.createTandem( 'timeSpeedProperty' )
     } );
 
     // @public (read-write) - diameter of the adjustable atoms
