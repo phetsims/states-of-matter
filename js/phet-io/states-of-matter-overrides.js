@@ -1,6 +1,9 @@
 /* eslint-disable */
 window.phet.preloads.phetio.phetioElementsOverrides =
 {
+  "statesOfMatter.interactionScreen.model.adjustableAtomInteractionStrengthProperty": {
+    "phetioFeatured": true
+  },
   "statesOfMatter.interactionScreen.model.isPlayingProperty": {
     "phetioFeatured": true
   },
@@ -66,6 +69,9 @@ window.phet.preloads.phetio.phetioElementsOverrides =
   },
   "statesOfMatter.interactionScreen.view.returnAtomButton.visibleProperty": {
     "phetioFeatured": false
+  },
+  "statesOfMatter.phaseChangesScreen.model.adjustableAtomInteractionStrengthProperty": {
+    "phetioFeatured": true
   },
   "statesOfMatter.phaseChangesScreen.model.containerHeightProperty": {
     "phetioFeatured": true
