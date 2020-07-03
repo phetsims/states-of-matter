@@ -99,8 +99,7 @@ class DualAtomModel {
 
     // @public (read-write)
     this.forcesExpandedProperty = new BooleanProperty( false, {
-      tandem: tandem.createTandem( 'forcesExpandedProperty' ),
-      phetioFeatured: true
+      tandem: tandem.createTandem( 'forcesExpandedProperty' )
     } );
 
     // @public (read-write)

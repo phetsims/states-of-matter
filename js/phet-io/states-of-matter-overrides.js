@@ -4,6 +4,9 @@ window.phet.preloads.phetio.phetioElementsOverrides =
   "statesOfMatter.interactionScreen.model.adjustableAtomInteractionStrengthProperty": {
     "phetioFeatured": true
   },
+  "statesOfMatter.interactionScreen.model.forcesExpandedProperty": {
+    "phetioFeatured": true
+  },
   "statesOfMatter.interactionScreen.model.isPlayingProperty": {
     "phetioFeatured": true
   },
