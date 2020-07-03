@@ -40,7 +40,6 @@ class MotionAtom {
     this.radiusProperty = new NumberProperty( initialAtomAttributes.radius, {
       units: 'pm',
       tandem: tandem.createTandem( 'radiusProperty' ),
-      phetioFeatured: true,
       phetioReadOnly: true
     } );
 
