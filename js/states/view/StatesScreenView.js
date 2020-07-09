@@ -8,6 +8,7 @@
  * @author Siddhartha Chinthapally (Actual Concepts)
  */
 
+import Property from '../../../../axon/js/Property.js';
 import merge from '../../../../phet-core/js/merge.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
@@ -78,12 +79,19 @@ function StatesScreenView( multipleParticleModel, tandem ) {
   this.addChild( heaterCoolerNode );
 
   // control when the heater/cooler node is enabled for input
-  multipleParticleModel.isPlayingProperty.lazyLink( isPlaying => {
-    if ( !isPlaying ) {
-      heaterCoolerNode.interruptSubtreeInput(); // cancel interaction
+  Property.multilink(
+    [ multipleParticleModel.isPlayingProperty, multipleParticleModel.isExplodedProperty ],
+    ( isPlaying, isExploded ) => {
+      if ( !isPlaying || isExploded ) {
+        heaterCoolerNode.interruptSubtreeInput(); // cancel interaction
+        heaterCoolerNode.heatCoolAmountProperty.set( 0 ); // force to zero in case snapToZero is off
+        heaterCoolerNode.slider.enabled = false;
+      }
+      else {
+        heaterCoolerNode.slider.enabled = true;
+      }
     }
-    heaterCoolerNode.slider.enabled = isPlaying;
-  } );
+  );
 
   // selection panel for the atoms/molecules
   const moleculesControlPanel = new StatesMoleculesControlPanel( multipleParticleModel.substanceProperty, {

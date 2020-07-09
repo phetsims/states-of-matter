@@ -112,6 +112,7 @@ function PhaseChangesScreenView( model, isPotentialGraphEnabled, tandem ) {
     ( isPlaying, isExploded ) => {
       if ( !isPlaying || isExploded ) {
         heaterCoolerNode.interruptSubtreeInput(); // cancel interaction
+        heaterCoolerNode.heatCoolAmountProperty.set( 0 ); // force to zero in case snapToZero is off
         heaterCoolerNode.slider.enabled = false;
       }
       else {

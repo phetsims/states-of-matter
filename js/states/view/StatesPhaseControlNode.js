@@ -24,13 +24,12 @@ import gasIconImage from '../../../mipmaps/gas-icon_png.js';
 import liquidIconImage from '../../../mipmaps/liquid-icon_png.js';
 import solidIconImage from '../../../mipmaps/solid-icon_png.js';
 import PhaseStateEnum from '../../common/PhaseStateEnum.js';
-import statesOfMatterStrings from '../../statesOfMatterStrings.js';
 import statesOfMatter from '../../statesOfMatter.js';
+import statesOfMatterStrings from '../../statesOfMatterStrings.js';
 
 const gasString = statesOfMatterStrings.Gas;
 const liquidString = statesOfMatterStrings.Liquid;
 const solidString = statesOfMatterStrings.Solid;
-
 
 // constants
 const DEFAULT_BUTTON_WIDTH = 160;
@@ -128,6 +127,13 @@ function StatesPhaseControlNode( model, options ) {
     solidSelectedProperty.value = state === PhaseStateEnum.SOLID;
     liquidSelectedProperty.value = state === PhaseStateEnum.LIQUID;
     gasSelectedProperty.value = state === PhaseStateEnum.GAS;
+  } );
+
+  // enable/disable the buttons based on the model state
+  model.isExplodedProperty.link( isExploded => {
+    solidStateButton.setEnabled( !isExploded );
+    liquidStateButton.setEnabled( !isExploded );
+    gasStateButton.setEnabled( !isExploded );
   } );
 
   // if the user changes the temperature, the phase state becomes undefined
