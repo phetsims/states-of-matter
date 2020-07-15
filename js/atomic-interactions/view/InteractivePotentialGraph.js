@@ -13,8 +13,8 @@ import Shape from '../../../../kite/js/Shape.js';
 import inherit from '../../../../phet-core/js/inherit.js';
 import merge from '../../../../phet-core/js/merge.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
-import FillHighlightListener from '../../../../scenery-phet/js/input/FillHighlightListener.js';
 import DragListener from '../../../../scenery/js/listeners/DragListener.js';
+import PressListener from '../../../../scenery/js/listeners/PressListener.js';
 import Line from '../../../../scenery/js/nodes/Line.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import Color from '../../../../scenery/js/util/Color.js';
@@ -109,13 +109,17 @@ function InteractivePotentialGraph( dualAtomModel, options ) {
     tandem: epsilonLayer.tandem.createTandem( 'epsilonLine' ),
     phetioReadOnly: true
   } );
-  this.epsilonControls.line.addInputListener(
-    new FillHighlightListener( RESIZE_HANDLE_NORMAL_COLOR, RESIZE_HANDLE_HIGHLIGHTED_COLOR )
-  );
   this.epsilonControls.line.touchArea = this.epsilonControls.line.localBounds.dilatedXY( 8, 8 );
   this.epsilonControls.line.mouseArea = this.epsilonControls.line.localBounds.dilatedXY( 0, 4 );
   addEpsilonDragListener( this.epsilonControls.line, this.epsilonControls.line.tandem.createTandem( 'dragListener' ) );
   epsilonLayer.addChild( this.epsilonControls.line );
+
+  // Highlight this control when the user is hovering over it and/or using it.
+  const epsilonLinePressListener = new PressListener( { attach: false } );
+  this.epsilonControls.line.addInputListener( epsilonLinePressListener );
+  epsilonLinePressListener.isHighlightedProperty.link( isHighlighted => {
+    this.epsilonControls.line.stroke = isHighlighted ? RESIZE_HANDLE_HIGHLIGHTED_COLOR : RESIZE_HANDLE_NORMAL_COLOR;
+  } );
 
   // Add the arrow nodes that will allow the user to control the epsilon value.
   const arrowNodeOptions = {
@@ -136,10 +140,11 @@ function InteractivePotentialGraph( dualAtomModel, options ) {
     RESIZE_HANDLE_SIZE_PROPORTION * this.widthOfGraph,
     merge( { tandem: epsilonLayer.tandem.createTandem( 'epsilonArrow' ) }, arrowNodeOptions )
   );
-  this.epsilonControls.arrow.addInputListener( new FillHighlightListener(
-    RESIZE_HANDLE_NORMAL_COLOR,
-    RESIZE_HANDLE_HIGHLIGHTED_COLOR
-  ) );
+  const epsilonArrowPressListener = new PressListener( { attach: false } );
+  this.epsilonControls.arrow.addInputListener( epsilonArrowPressListener );
+  epsilonArrowPressListener.isHighlightedProperty.link( isHighlighted => {
+    this.epsilonControls.arrow.fill = isHighlighted ? RESIZE_HANDLE_HIGHLIGHTED_COLOR : RESIZE_HANDLE_NORMAL_COLOR;
+  } );
   epsilonLayer.addChild( this.epsilonControls.arrow );
   this.epsilonControls.arrow.touchArea = this.epsilonControls.arrow.localBounds.dilatedXY( 3, 10 );
   addEpsilonDragListener( this.epsilonControls.arrow, this.epsilonControls.arrow.tandem.createTandem( 'dragListener' ) );
@@ -156,9 +161,12 @@ function InteractivePotentialGraph( dualAtomModel, options ) {
     0,
     merge( { tandem: sigmaLayer.tandem.createTandem( 'sigmaArrow' ) }, arrowNodeOptions )
   );
-  this.sigmaControls.arrow.addInputListener(
-    new FillHighlightListener( RESIZE_HANDLE_NORMAL_COLOR, RESIZE_HANDLE_HIGHLIGHTED_COLOR )
-  );
+  const sigmaArrowPressListener = new PressListener( { attach: false } );
+  this.sigmaControls.arrow.addInputListener( sigmaArrowPressListener );
+  sigmaArrowPressListener.isHighlightedProperty.link( isHighlighted => {
+    this.sigmaControls.arrow.fill = isHighlighted ? RESIZE_HANDLE_HIGHLIGHTED_COLOR : RESIZE_HANDLE_NORMAL_COLOR;
+  } );
+
   sigmaLayer.addChild( this.sigmaControls.arrow );
   this.sigmaControls.arrow.touchArea = this.sigmaControls.arrow.localBounds.dilatedXY( 10, 5 );
   let startDragX;
@@ -195,6 +203,7 @@ function InteractivePotentialGraph( dualAtomModel, options ) {
       allowTouchSnag: true,
 
       start: event => {
+
         // Stop the particle from moving in the model.
         dualAtomModel.setMotionPaused( true );
         startDragX = self.positionMarker.globalToParentPoint( event.pointer.point ).x;

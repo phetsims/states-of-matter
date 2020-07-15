@@ -13,8 +13,8 @@ import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Utils from '../../../../dot/js/Utils.js';
 import merge from '../../../../phet-core/js/merge.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
-import FillHighlightListener from '../../../../scenery-phet/js/input/FillHighlightListener.js';
 import DragListener from '../../../../scenery/js/listeners/DragListener.js';
+import PressListener from '../../../../scenery/js/listeners/PressListener.js';
 import Rectangle from '../../../../scenery/js/nodes/Rectangle.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
@@ -70,12 +70,15 @@ class EpsilonControlPotentialGraph extends PotentialGraphNode {
       tandem: this.interactiveControlsLayer.tandem.createTandem( 'epsilonLine' ),
       phetioReadOnly: true
     } );
-    this.epsilonControls.line.addInputListener( new FillHighlightListener(
-      RESIZE_HANDLE_NORMAL_COLOR,
-      RESIZE_HANDLE_HIGHLIGHTED_COLOR
-    ) );
     this.interactiveControlsLayer.addChild( this.epsilonControls.line );
     this.epsilonControls.line.touchArea = this.epsilonControls.line.localBounds.dilatedXY( 20, 20 );
+
+    // Highlight this control when the user is hovering over it and/or using it.
+    const epsilonLinePressListener = new PressListener( { attach: false } );
+    this.epsilonControls.line.addInputListener( epsilonLinePressListener );
+    epsilonLinePressListener.isHighlightedProperty.link( isHighlighted => {
+      this.epsilonControls.line.stroke = isHighlighted ? RESIZE_HANDLE_HIGHLIGHTED_COLOR : RESIZE_HANDLE_NORMAL_COLOR;
+    } );
 
     // drag listener
     this.epsilonControls.line.addInputListener( new DragListener( {
@@ -103,8 +106,12 @@ class EpsilonControlPotentialGraph extends PotentialGraphNode {
     } ) );
 
     // Add the arrow node that will allow the user to control the value of the epsilon parameter.
-    this.epsilonControls.arrow = new ArrowNode( 0, -RESIZE_HANDLE_SIZE_PROPORTION * this.widthOfGraph / 2, 0,
-      RESIZE_HANDLE_SIZE_PROPORTION * this.widthOfGraph / 2, {
+    this.epsilonControls.arrow = new ArrowNode(
+      0,
+      -RESIZE_HANDLE_SIZE_PROPORTION * this.widthOfGraph / 2,
+      0,
+      RESIZE_HANDLE_SIZE_PROPORTION * this.widthOfGraph / 2,
+      {
         headHeight: 10,
         headWidth: 15,
         tailWidth: 6,
@@ -115,9 +122,7 @@ class EpsilonControlPotentialGraph extends PotentialGraphNode {
         cursor: 'pointer',
         tandem: this.interactiveControlsLayer.tandem.createTandem( 'epsilonArrow' ),
         phetioReadOnly: true
-      } );
-    this.epsilonControls.arrow.addInputListener(
-      new FillHighlightListener( RESIZE_HANDLE_NORMAL_COLOR, RESIZE_HANDLE_HIGHLIGHTED_COLOR )
+      }
     );
     this.interactiveControlsLayer.addChild( this.epsilonControls.arrow );
     this.epsilonControls.arrow.addInputListener( new DragListener( {
@@ -143,6 +148,11 @@ class EpsilonControlPotentialGraph extends PotentialGraphNode {
 
       tandem: this.epsilonControls.arrow.tandem.createTandem( 'dragListener' )
     } ) );
+    const epsilonArrowPressListener = new PressListener( { attach: false } );
+    this.epsilonControls.arrow.addInputListener( epsilonArrowPressListener );
+    epsilonArrowPressListener.isHighlightedProperty.link( isHighlighted => {
+      this.epsilonControls.arrow.fill = isHighlighted ? RESIZE_HANDLE_HIGHLIGHTED_COLOR : RESIZE_HANDLE_NORMAL_COLOR;
+    } );
 
     this.interactionPotentialCanvasNode = new InteractionPotentialCanvasNode( this, {
       canvasBounds: new Bounds2( 0, 0, 125, this.graphHeight )

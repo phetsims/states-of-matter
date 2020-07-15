@@ -2,7 +2,7 @@
 
 /**
  * A pseudo-3D sphere with a halo that appears during interactions.  This was highly leveraged from Manipulator.js
- * in the Graphing Lins simulation.
+ * in the Graphing Lines simulation.
  *
  * @author Chris Malley (PixelZoom, Inc.)
  * @author Siddhartha Chinthapally (Actual Concepts)
@@ -12,7 +12,7 @@ import Shape from '../../../../kite/js/Shape.js';
 import inherit from '../../../../phet-core/js/inherit.js';
 import merge from '../../../../phet-core/js/merge.js';
 import ShadedSphereNode from '../../../../scenery-phet/js/ShadedSphereNode.js';
-import ButtonListener from '../../../../scenery/js/input/ButtonListener.js';
+import PressListener from '../../../../scenery/js/listeners/PressListener.js';
 import Circle from '../../../../scenery/js/nodes/Circle.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import Color from '../../../../scenery/js/util/Color.js';
@@ -27,7 +27,6 @@ import statesOfMatter from '../../statesOfMatter.js';
  * @constructor
  */
 function PositionMarker( radius, color, options ) {
-  const self = this;
   const mainColor = Color.toColor( color );
   options = merge( {
     shadedSphereNodeOptions: {
@@ -35,17 +34,21 @@ function PositionMarker( radius, color, options ) {
       highlightColor: Color.WHITE,
       shadowColor: mainColor.darkerColor(),
       stroke: mainColor.darkerColor(),
-      lineWidth: 1
+      lineWidth: 1,
+      cursor: 'pointer'
     },
     haloAlpha: 0.5, // alpha channel of the halo, 0.0 - 1.0
-    cursor: 'pointer',  // all manipulators are interactive
+    cursor: 'pointer',
     tandem: Tandem.REQUIRED
   }, options );
 
   // @private
   this.radius = radius;
-  this.haloNode = new Circle( 1.75 * radius,
-    { fill: mainColor.withAlpha( options.haloAlpha ), pickable: false, visible: false } );
+  this.haloNode = new Circle( 1.75 * radius, {
+    fill: mainColor.withAlpha( options.haloAlpha ),
+    pickable: false,
+    visible: false
+  } );
   this.sphereNode = new ShadedSphereNode( 2 * radius, options.shadedSphereNodeOptions );
 
   Node.call( this, {
@@ -54,12 +57,9 @@ function PositionMarker( radius, color, options ) {
   } );
 
   // halo visibility
-  this.sphereNode.addInputListener( new ButtonListener( {
-      up: function() { self.haloNode.visible = false; },
-      down: function() { self.haloNode.visible = true; },
-      over: function() { self.haloNode.visible = true; }
-    } )
-  );
+  const highlightPressListener = new PressListener( { attach: false } );
+  this.addInputListener( highlightPressListener );
+  this.haloNode.visibleProperty = highlightPressListener.isHighlightedProperty;
 
   // expand pointer areas
   this.mouseArea = this.touchArea = Shape.circle( 0, 0, 1.5 * radius );
