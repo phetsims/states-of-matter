@@ -482,7 +482,6 @@ function AtomicInteractionsControlPanel( dualAtomModel, enableHeterogeneousAtoms
 
     // Keep the title node centered if its bounds change (which can only be done through phet-io).
     titleNode.localBoundsProperty.link( () => {
-      console.log( 'gotcha' );
       titleNode.centerX = radioButtonPanel.centerX;
       titleNode.bottom = radioButtonPanel.top + 5; // empirically determined to overlap reasonably well
     } );
