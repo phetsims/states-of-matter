@@ -3,51 +3,48 @@
 /**
  * Arrow node for attractive, repulsive, and total forces.
  *
+ * @author John Blanco (PhET Interactive Simulations)
  * @author Chandrashekar Bemagoni (Actual Concepts)
  */
 
 import Vector2 from '../../../../dot/js/Vector2.js';
-import inherit from '../../../../phet-core/js/inherit.js';
 import merge from '../../../../phet-core/js/merge.js';
 import ArrowShape from '../../../../scenery-phet/js/ArrowShape.js';
 import Path from '../../../../scenery/js/nodes/Path.js';
 import statesOfMatter from '../../statesOfMatter.js';
 
-/*
- * @param {number} tailX - arrowNode tail X position
- * @param {number} tailY - arrowNode tail Y position
- * @param {number} tipX - arrowNode tip X position
- * @param {number} tipY - arrowNode tip Y position
- * @param {Object} [options] that can be passed on to the underlying node
- * @constructor
- */
-function DimensionalArrowNode( tailX, tailY, tipX, tipY, options ) {
+class DimensionalArrowNode extends Path {
 
-  // default options
-  options = merge( {
-    headHeight: 10,
-    headWidth: 10,
-    tailWidth: 5,
-    doubleHead: false, // true puts heads on both ends of the arrow, false puts a head at the tip
-    fill: 'black',
-    stroke: 'black',
-    lineWidth: 1
-  }, options );
+  /**
+   * @param {number} tailX - arrowNode tail X position
+   * @param {number} tailY - arrowNode tail Y position
+   * @param {number} tipX - arrowNode tip X position
+   * @param {number} tipY - arrowNode tip Y position
+   * @param {Object} [options] that can be passed on to the underlying node
+   */
+  constructor( tailX, tailY, tipX, tipY, options ) {
 
-  // @private arrowNode tip and tail positions
-  this.tailPosition = new Vector2( 0, 0 );
-  this.tipPosition = new Vector2( 0, 0 );
+    // default options
+    options = merge( {
+      headHeight: 10,
+      headWidth: 10,
+      tailWidth: 5,
+      doubleHead: false, // true puts heads on both ends of the arrow, false puts a head at the tip
+      fill: 'black',
+      stroke: 'black',
+      lineWidth: 1
+    }, options );
 
-  // things you're likely to mess up, add more as needed
-  assert && assert( options.headWidth > options.tailWidth );
+    // things you're likely to mess up, add more as needed
+    assert && assert( options.headWidth > options.tailWidth );
 
-  Path.call( this, new ArrowShape( tailX, tailY, tipX, tipY, options ), options );
-  this.options = options;
-}
+    super( new ArrowShape( tailX, tailY, tipX, tipY, options ), options );
 
-statesOfMatter.register( 'DimensionalArrowNode', DimensionalArrowNode );
-
-inherit( Path, DimensionalArrowNode, {
+    // @private arrowNode tip and tail positions, options
+    this.tailPosition = new Vector2( 0, 0 );
+    this.tipPosition = new Vector2( 0, 0 );
+    this.options = options;
+  }
 
   /**
    * @param {number} tailX - tail X position
@@ -56,7 +53,7 @@ inherit( Path, DimensionalArrowNode, {
    * @param {number} tipY - tip Y position
    * @public
    */
-  setTailAndTip: function( tailX, tailY, tipX, tipY ) {
+  setTailAndTip( tailX, tailY, tipX, tipY ) {
     this.tailPosition.setXY( tailX, tailY );
     this.tipPosition.setXY( tipX, tipY );
     let tempHeadHeight;
@@ -84,6 +81,7 @@ inherit( Path, DimensionalArrowNode, {
       tailWidth: tempTailWidth
     } );
   }
-} );
+}
 
+statesOfMatter.register( 'DimensionalArrowNode', DimensionalArrowNode );
 export default DimensionalArrowNode;

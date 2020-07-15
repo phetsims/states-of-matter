@@ -7,7 +7,6 @@
  */
 
 import Screen from '../../../joist/js/Screen.js';
-import inherit from '../../../phet-core/js/inherit.js';
 import SOMConstants from '../common/SOMConstants.js';
 import SOMColorProfile from '../common/view/SOMColorProfile.js';
 import statesOfMatter from '../statesOfMatter.js';
@@ -15,37 +14,37 @@ import AtomicInteractionsIcon from './AtomicInteractionsIcon.js';
 import DualAtomModel from './model/DualAtomModel.js';
 import AtomicInteractionsScreenView from './view/AtomicInteractionsScreenView.js';
 
-/**
- * @param {boolean} enableHeterogeneousMolecules
- * @param {string} screenTitle
- * @param {Tandem} tandem
- * @constructor
- */
-function AtomicInteractionsScreen( enableHeterogeneousMolecules, screenTitle, tandem ) {
+class AtomicInteractionsScreen extends Screen {
 
-  const options = {
-    name: screenTitle,
-    backgroundColorProperty: SOMColorProfile.backgroundProperty,
-    homeScreenIcon: new AtomicInteractionsIcon(),
-    navigationBarIcon: new AtomicInteractionsIcon( {
-      size: Screen.MINIMUM_NAVBAR_ICON_SIZE,
-      fill: SOMColorProfile.navigationBarIconBackgroundProperty
-    } ),
-    showUnselectedHomeScreenIconFrame: true,
-    maxDT: SOMConstants.MAX_DT,
-    tandem: tandem
-  };
+  /**
+   * @param {boolean} enableHeterogeneousMolecules
+   * @param {string} screenTitle
+   * @param {Tandem} tandem
+   */
+  constructor( enableHeterogeneousMolecules, screenTitle, tandem ) {
 
-  Screen.call( this,
-    function() { return new DualAtomModel( tandem.createTandem( 'model' ), enableHeterogeneousMolecules ); },
-    function( model ) {
-      return new AtomicInteractionsScreenView( model, enableHeterogeneousMolecules, tandem.createTandem( 'view' ) );
-    },
-    options
-  );
+    const options = {
+      name: screenTitle,
+      backgroundColorProperty: SOMColorProfile.backgroundProperty,
+      homeScreenIcon: new AtomicInteractionsIcon(),
+      navigationBarIcon: new AtomicInteractionsIcon( {
+        size: Screen.MINIMUM_NAVBAR_ICON_SIZE,
+        fill: SOMColorProfile.navigationBarIconBackgroundProperty
+      } ),
+      showUnselectedHomeScreenIconFrame: true,
+      maxDT: SOMConstants.MAX_DT,
+      tandem: tandem
+    };
+
+    super(
+      function() { return new DualAtomModel( tandem.createTandem( 'model' ), enableHeterogeneousMolecules ); },
+      function( model ) {
+        return new AtomicInteractionsScreenView( model, enableHeterogeneousMolecules, tandem.createTandem( 'view' ) );
+      },
+      options
+    );
+  }
 }
 
 statesOfMatter.register( 'AtomicInteractionsScreen', AtomicInteractionsScreen );
-
-inherit( Screen, AtomicInteractionsScreen );
 export default AtomicInteractionsScreen;

@@ -8,107 +8,103 @@
  * @author John Blanco
  */
 
-import inherit from '../../../../phet-core/js/inherit.js';
 import DragListener from '../../../../scenery/js/listeners/DragListener.js';
 import statesOfMatter from '../../statesOfMatter.js';
 import ParticleForceNode from './ParticleForceNode.js';
 
-/**
- * @param {DualAtomModel} dualAtomModel - model of the simulation
- * @param {ScaledAtom} particle
- * @param {ModelViewTransform2} modelViewTransform to convert between model and view co-ordinates
- * @param {boolean} enableOverlap - true if the node should be larger than the actual particle, thus allowing particles
- * @param {number} minX - grabbable particle  min x position
- * @param {Tandem} tandem - support for exporting instances from the sim
- * @constructor
- */
-function GrabbableParticleNode( dualAtomModel, particle, modelViewTransform, enableOverlap, minX, tandem ) {
+class GrabbableParticleNode extends ParticleForceNode {
 
-  ParticleForceNode.call( this, particle, modelViewTransform, enableOverlap, tandem );
-  const self = this;
+  /**
+   * @param {DualAtomModel} dualAtomModel - model of the simulation
+   * @param {ScaledAtom} particle
+   * @param {ModelViewTransform2} modelViewTransform to convert between model and view co-ordinates
+   * @param {boolean} enableOverlap - true if the node should be larger than the actual particle, thus allowing particles
+   * @param {number} minX - grabbable particle  min x position
+   * @param {Tandem} tandem - support for exporting instances from the sim
+   */
+  constructor( dualAtomModel, particle, modelViewTransform, enableOverlap, minX, tandem ) {
 
-  // @private
-  this.minX = minX;
+    super( particle, modelViewTransform, enableOverlap, tandem );
 
-  // This node will need to be pickable so the user can grab it.
-  this.setPickable( true );
+    // @private
+    this.minX = minX;
 
-  // Put a cursor handler into place.
-  this.cursor = 'pointer';
+    // This node will need to be pickable so the user can grab it.
+    this.setPickable( true );
 
-  let startDragX;
-  let endDragX;
-  let initialStartX = this.x;
+    // Put a cursor handler into place.
+    this.cursor = 'pointer';
 
-  const inputListener = new DragListener( {
-    allowTouchSnag: true,
+    let startDragX;
+    let endDragX;
+    let initialStartX = this.x;
 
-    start: event => {
+    const inputListener = new DragListener( {
+      allowTouchSnag: true,
 
-      // Stop the model from moving the particle at the same time the user is moving it.
-      dualAtomModel.setMotionPaused( true );
-      initialStartX = self.x;
-      startDragX = self.globalToParentPoint( event.pointer.point ).x;
-    },
+      start: event => {
 
-    drag: event => {
+        // Stop the model from moving the particle at the same time the user is moving it.
+        dualAtomModel.setMotionPaused( true );
+        initialStartX = this.x;
+        startDragX = this.globalToParentPoint( event.pointer.point ).x;
+      },
 
-      endDragX = self.globalToParentPoint( event.pointer.point ).x;
-      const d = endDragX - startDragX;
+      drag: event => {
 
-      // Make sure we don't exceed the positional limits.
-      const newPosX = Math.max( initialStartX + d, self.minX );
+        endDragX = this.globalToParentPoint( event.pointer.point ).x;
+        const d = endDragX - startDragX;
 
-      // Move the particle based on the amount of mouse movement.
-      self.particle.setPosition( modelViewTransform.viewToModelX( newPosX ), particle.positionProperty.value.y );
-    },
+        // Make sure we don't exceed the positional limits.
+        const newPosX = Math.max( initialStartX + d, this.minX );
 
-    end: event => {
+        // Move the particle based on the amount of mouse movement.
+        this.particle.setPosition( modelViewTransform.viewToModelX( newPosX ), particle.positionProperty.value.y );
+      },
 
-      // Let the model move the particles again.  Note that this happens even if the motion was paused by some other
-      // means.
-      dualAtomModel.setMotionPaused( false );
-      dualAtomModel.movementHintVisibleProperty.set( false );
-    },
+      end: event => {
 
-    tandem: tandem.createTandem( 'dragListener' )
-  } );
+        // Let the model move the particles again.  Note that this happens even if the motion was paused by some other
+        // means.
+        dualAtomModel.setMotionPaused( false );
+        dualAtomModel.movementHintVisibleProperty.set( false );
+      },
 
-  this.addInputListener( inputListener );
+      tandem: tandem.createTandem( 'dragListener' )
+    } );
 
-  // dispose function
-  this.disposeGrabbableParticleNode = function() {
-    self.removeInputListener( inputListener );
-  };
-}
+    this.addInputListener( inputListener );
 
-statesOfMatter.register( 'GrabbableParticleNode', GrabbableParticleNode );
-
-inherit( ParticleForceNode, GrabbableParticleNode, {
+    // dispose function
+    this.disposeGrabbableParticleNode = () => {
+      this.removeInputListener( inputListener );
+    };
+  }
 
   /**
    * @public
    */
-  dispose: function() {
+  dispose() {
     this.disposeGrabbableParticleNode();
     ParticleForceNode.prototype.dispose.call( this );
-  },
+  }
 
   /**
    * @returns {number}
    * @public
    */
-  getMinX: function() {
+  getMinX() {
     return this.minX;
-  },
+  }
 
   /**
    * @param {number} minX - min x position
    * @public
    */
-  setMinX: function( minX ) {
+  setMinX( minX ) {
     this.minX = minX;
   }
-} );
+}
 
+statesOfMatter.register( 'GrabbableParticleNode', GrabbableParticleNode );
 export default GrabbableParticleNode;

@@ -12,7 +12,6 @@ import timer from '../../../../axon/js/timer.js';
 import Range from '../../../../dot/js/Range.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Shape from '../../../../kite/js/Shape.js';
-import inherit from '../../../../phet-core/js/inherit.js';
 import GaugeNode from '../../../../scenery-phet/js/GaugeNode.js';
 import PhetColorScheme from '../../../../scenery-phet/js/PhetColorScheme.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
@@ -21,9 +20,10 @@ import Path from '../../../../scenery/js/nodes/Path.js';
 import Rectangle from '../../../../scenery/js/nodes/Rectangle.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import LinearGradient from '../../../../scenery/js/util/LinearGradient.js';
-import statesOfMatterStrings from '../../statesOfMatterStrings.js';
 import statesOfMatter from '../../statesOfMatter.js';
+import statesOfMatterStrings from '../../statesOfMatterStrings.js';
 
+// strings
 const pressureOverloadString = statesOfMatterStrings.pressureOverload;
 const pressureString = statesOfMatterStrings.pressure;
 const pressureUnitsInAtmString = statesOfMatterStrings.pressureUnitsInAtm;
@@ -36,154 +36,153 @@ const ELBOW_WIDTH = ( CONNECTOR_WIDTH_PROPORTION * 30 );
 const ELBOW_LENGTH = ( CONNECTOR_LENGTH_PROPORTION * 60 );
 const PRESSURE_UPDATE_PERIOD = 100; // in milliseconds
 
-/**
- * @param {MultipleParticleModel} multipleParticleModel - model of the simulation
- * @param {Tandem} tandem
- * @constructor
- */
-function DialGaugeNode( multipleParticleModel, tandem ) {
+class DialGaugeNode extends Node {
 
-  Node.call( this, { tandem: tandem } );
-  this.elbowHeight = 0; // @private, set through accessor methods
+  /**
+   * @param {MultipleParticleModel} multipleParticleModel - model of the simulation
+   * @param {Tandem} tandem
+   * @constructor
+   */
+  constructor( multipleParticleModel, tandem ) {
 
-  const gaugeNode = new GaugeNode(
-    multipleParticleModel.pressureProperty,
-    pressureString,
-    new Range( 0, MAX_PRESSURE ),
-    {
-      scale: 0.5,
-      radius: 80,
-      backgroundLineWidth: 3,
-      tandem: tandem.createTandem( 'gaugeNode' )
-    }
-  );
+    super( { tandem: tandem } );
+    this.elbowHeight = 0; // @private, set through accessor methods
 
-  // Add the textual readout display.
-  const readoutNodeTandem = tandem.createTandem( 'readoutNode' );
-  const readoutNode = new Rectangle( 0, 0, 80, 15, 2, 2, {
-    fill: 'white',
-    stroke: 'black',
-    centerX: gaugeNode.centerX,
-    top: gaugeNode.bottom - 15,
-    tandem: readoutNodeTandem
-  } );
-
-  const readoutText = new Text( '0', {
-    font: new PhetFont( 12 ),
-    fill: 'black',
-    maxWidth: readoutNode.width * 0.9,
-    centerX: readoutNode.width / 2,
-    centerY: readoutNode.height / 2
-  } );
-  readoutNode.addChild( readoutText );
-
-  // Create a link to pressureProperty so it's easier to find in Studio.
-  this.addLinkedElement( multipleParticleModel.pressureProperty, {
-    tandem: readoutNodeTandem.createTandem( 'pressureProperty' )
-  } );
-
-  // To accurately reproduce the previous version (which consisted of a path stroked with lineWidth 10), we need to
-  // include the stroke width effects (where it had a default lineCap of butt). We have a part that doesn't change
-  // shape (the connector) which includes the left part and the curve, and then an overlapping dynamic rectangle
-  // (the connectorExtension) whose height is adjusted to be the elbowHeight. This reduces the overhead significantly.
-  const halfStroke = 5;
-  const connector = new Path(
-    new Shape().moveTo( 0, -halfStroke )
-      .lineTo( ELBOW_LENGTH + ELBOW_WIDTH / 2, -halfStroke )
-      .quadraticCurveTo( ELBOW_LENGTH + ELBOW_WIDTH + halfStroke, -halfStroke, ELBOW_LENGTH + ELBOW_WIDTH + halfStroke, ELBOW_WIDTH / 2 )
-      .lineTo( ELBOW_LENGTH - halfStroke, ELBOW_WIDTH + halfStroke )
-      .lineTo( 0, ELBOW_WIDTH + halfStroke )
-      .close(),
-    { fill: '#ddd' }
-  );
-  this.connectorExtension = new Rectangle( ELBOW_LENGTH - halfStroke, ELBOW_WIDTH / 2, ELBOW_WIDTH + 2 * halfStroke, 0, {
-    fill: '#ddd'
-  } );
-  connector.addChild( this.connectorExtension );
-
-  const connectorCollar = new Rectangle( 0, 0, 30, 25, 2, 2, {
-    fill: new LinearGradient( 0, 0, 0, 25 )
-      .addColorStop( 0, 'rgb( 120, 120, 120 )' )
-      .addColorStop( 0.3, 'rgb( 220, 220, 220 )' )
-      .addColorStop( 0.5, 'rgb( 220, 220, 220 )' )
-      .addColorStop( 1, 'rgb( 100, 100, 100 )' )
-  } );
-
-  connectorCollar.centerY = gaugeNode.centerY;
-  connectorCollar.left = gaugeNode.right - 10;
-  const dialComponentsNode = new Node( {
-      children: [ connector, connectorCollar, gaugeNode, readoutNode ]
-    }
-  );
-
-  // Keep track of the previous pressure value so that we can determine when changes have occurred.
-  let previousPressure = -1;
-
-  // closure to update the readout text
-  const updateReadoutText = () => {
-    const pressure = multipleParticleModel.pressureProperty.get();
-    if ( pressure !== previousPressure ) {
-      if ( pressure < MAX_PRESSURE ) {
-        readoutText.setText( Utils.toFixed( pressure, 1 ) + ' ' + pressureUnitsInAtmString );
-        readoutText.fill = 'black';
+    const gaugeNode = new GaugeNode(
+      multipleParticleModel.pressureProperty,
+      pressureString,
+      new Range( 0, MAX_PRESSURE ),
+      {
+        scale: 0.5,
+        radius: 80,
+        backgroundLineWidth: 3,
+        tandem: tandem.createTandem( 'gaugeNode' )
       }
-      else {
-        readoutText.setText( pressureOverloadString );
-        readoutText.fill = PhetColorScheme.RED_COLORBLIND;
+    );
+
+    // Add the textual readout display.
+    const readoutNodeTandem = tandem.createTandem( 'readoutNode' );
+    const readoutNode = new Rectangle( 0, 0, 80, 15, 2, 2, {
+      fill: 'white',
+      stroke: 'black',
+      centerX: gaugeNode.centerX,
+      top: gaugeNode.bottom - 15,
+      tandem: readoutNodeTandem
+    } );
+
+    const readoutText = new Text( '0', {
+      font: new PhetFont( 12 ),
+      fill: 'black',
+      maxWidth: readoutNode.width * 0.9,
+      centerX: readoutNode.width / 2,
+      centerY: readoutNode.height / 2
+    } );
+    readoutNode.addChild( readoutText );
+
+    // Create a link to pressureProperty so it's easier to find in Studio.
+    this.addLinkedElement( multipleParticleModel.pressureProperty, {
+      tandem: readoutNodeTandem.createTandem( 'pressureProperty' )
+    } );
+
+    // To accurately reproduce the previous version (which consisted of a path stroked with lineWidth 10), we need to
+    // include the stroke width effects (where it had a default lineCap of butt). We have a part that doesn't change
+    // shape (the connector) which includes the left part and the curve, and then an overlapping dynamic rectangle
+    // (the connectorExtension) whose height is adjusted to be the elbowHeight. This reduces the overhead significantly.
+    const halfStroke = 5;
+    const connector = new Path(
+      new Shape().moveTo( 0, -halfStroke )
+        .lineTo( ELBOW_LENGTH + ELBOW_WIDTH / 2, -halfStroke )
+        .quadraticCurveTo( ELBOW_LENGTH + ELBOW_WIDTH + halfStroke, -halfStroke, ELBOW_LENGTH + ELBOW_WIDTH + halfStroke, ELBOW_WIDTH / 2 )
+        .lineTo( ELBOW_LENGTH - halfStroke, ELBOW_WIDTH + halfStroke )
+        .lineTo( 0, ELBOW_WIDTH + halfStroke )
+        .close(),
+      { fill: '#ddd' }
+    );
+    this.connectorExtension = new Rectangle( ELBOW_LENGTH - halfStroke, ELBOW_WIDTH / 2, ELBOW_WIDTH + 2 * halfStroke, 0, {
+      fill: '#ddd'
+    } );
+    connector.addChild( this.connectorExtension );
+
+    const connectorCollar = new Rectangle( 0, 0, 30, 25, 2, 2, {
+      fill: new LinearGradient( 0, 0, 0, 25 )
+        .addColorStop( 0, 'rgb( 120, 120, 120 )' )
+        .addColorStop( 0.3, 'rgb( 220, 220, 220 )' )
+        .addColorStop( 0.5, 'rgb( 220, 220, 220 )' )
+        .addColorStop( 1, 'rgb( 100, 100, 100 )' )
+    } );
+
+    connectorCollar.centerY = gaugeNode.centerY;
+    connectorCollar.left = gaugeNode.right - 10;
+    const dialComponentsNode = new Node( {
+        children: [ connector, connectorCollar, gaugeNode, readoutNode ]
       }
-      previousPressure = pressure;
-    }
-    readoutText.centerX = readoutNode.width / 2;
-  };
+    );
 
-  // Do the initial update of the readout.
-  updateReadoutText();
+    // Keep track of the previous pressure value so that we can determine when changes have occurred.
+    let previousPressure = -1;
 
-  // Update the pressure readout at regular intervals.  This was done rather than listening to the pressure property
-  // because the readout changes too quickly in that case.
-  timer.setInterval( updateReadoutText, PRESSURE_UPDATE_PERIOD );
+    // closure to update the readout text
+    const updateReadoutText = () => {
+      const pressure = multipleParticleModel.pressureProperty.get();
+      if ( pressure !== previousPressure ) {
+        if ( pressure < MAX_PRESSURE ) {
+          readoutText.setText( Utils.toFixed( pressure, 1 ) + ' ' + pressureUnitsInAtmString );
+          readoutText.fill = 'black';
+        }
+        else {
+          readoutText.setText( pressureOverloadString );
+          readoutText.fill = PhetColorScheme.RED_COLORBLIND;
+        }
+        previousPressure = pressure;
+      }
+      readoutText.centerX = readoutNode.width / 2;
+    };
 
-  // If state is being set via phet-io, then it is necessary to update the readout when  pressureProperty changes since
-  // the timer may not be running.
-  multipleParticleModel.pressureProperty.link( () => {
-    if ( phet.joist.sim.isSettingPhetioStateProperty.value ) {
-      updateReadoutText();
-    }
-  } );
+    // Do the initial update of the readout.
+    updateReadoutText();
 
-  // position the connector
-  connector.setTranslation(
-    connectorCollar.centerX + connectorCollar.width / 2,
-    connectorCollar.centerY - CONNECTOR_WIDTH_PROPORTION * 30 / 2
-  );
+    // Update the pressure readout at regular intervals.  This was done rather than listening to the pressure property
+    // because the readout changes too quickly in that case.
+    timer.setInterval( updateReadoutText, PRESSURE_UPDATE_PERIOD );
 
-  // Do the initial update of the connector.
-  this.updateConnector();
+    // If state is being set via phet-io, then it is necessary to update the readout when  pressureProperty changes since
+    // the timer may not be running.
+    multipleParticleModel.pressureProperty.link( () => {
+      if ( phet.joist.sim.isSettingPhetioStateProperty.value ) {
+        updateReadoutText();
+      }
+    } );
 
-  // Add the dial as a child of the main node.
-  this.addChild( dialComponentsNode );
-}
+    // position the connector
+    connector.setTranslation(
+      connectorCollar.centerX + connectorCollar.width / 2,
+      connectorCollar.centerY - CONNECTOR_WIDTH_PROPORTION * 30 / 2
+    );
 
-statesOfMatter.register( 'DialGaugeNode', DialGaugeNode );
+    // Do the initial update of the connector.
+    this.updateConnector();
 
-inherit( Node, DialGaugeNode, {
+    // Add the dial as a child of the main node.
+    this.addChild( dialComponentsNode );
+  }
 
   /**
    * Set the height of the elbow.  Height is specified with respect to the vertical center of the node.
    * @param {number} height
    * @public
    */
-  setElbowHeight: function( height ) {
+  setElbowHeight( height ) {
     this.elbowHeight = height;
     this.updateConnector();
-  },
+  }
 
   /**
    * @public
    */
-  updateConnector: function() {
+  updateConnector() {
     this.connectorExtension.rectHeight = this.elbowHeight;
   }
-} );
+}
 
+statesOfMatter.register( 'DialGaugeNode', DialGaugeNode );
 export default DialGaugeNode;
