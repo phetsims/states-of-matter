@@ -1,9 +1,10 @@
 // Copyright 2014-2020, University of Colorado Boulder
 
 /**
- * This class represents the bundle of data that represents the position, motion, and forces acting upon a set of
- * molecules.  The data is organized this way rather than as a set of objects (one object per molecule) for performance
- * reasons.
+ * This class defines a data set that is used to specify the positions, motions, and external forces for a collection of
+ * molecules.  The data is organized as several parallel arrays where the index of a molecule is used to obtain the
+ * various data values for that molecule.  This organizational approach was used to optimize performance of the
+ * algorithm that makes use of this data.
  *
  * @author John Blanco
  * @author Aaron Davis
@@ -394,7 +395,8 @@ class MoleculeForceAndMotionDataSet {
   }
 
   /**
-   * Decodes a state into a MoleculeForceAndMotionDataSet.
+   * Decodes a state into a MoleculeForceAndMotionDataSet.  This is using data type serialization (see the
+   * phet-io-instrumentation-guide for an explanation of what that means).
    * @param {Object} stateObject
    * @returns {MoleculeForceAndMotionDataSet}
    * @public

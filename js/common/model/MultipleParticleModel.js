@@ -232,17 +232,17 @@ class MultipleParticleModel extends PhetioObject {
     // @public, data set containing information about the position, motion, and force for the normalized atoms
     this.moleculeDataSet = null;
 
-    // @public, various non-property attributes
+    // @public (read-only) {number} - various non-property attributes
     this.normalizedContainerWidth = CONTAINER_WIDTH / this.particleDiameter;
     this.gravitationalAcceleration = NOMINAL_GRAVITATIONAL_ACCEL;
 
-    // @public, read-only, normalized version of the container height, changes as the lid position changes
+    // @public (read-only) {number} - normalized version of the container height, changes as the lid position changes
     this.normalizedContainerHeight = this.containerHeightProperty.get() / this.particleDiameter;
 
-    // @public, read-only, normalized version of the TOTAL container height regardless of the lid position, set once at init
+    // @public (read-only) {number} - normalized version of the TOTAL container height regardless of the lid position
     this.normalizedTotalContainerHeight = this.containerHeightProperty.get / this.particleDiameter;
 
-    // @public, normalized velocity at which lid is moving in y direction
+    // @protected - normalized velocity at which lid is moving in y direction
     this.normalizedLidVelocityY = 0;
 
     // @protected (read-only) {Vector2} - the location where new molecules are injected, in normalized coordinates
@@ -265,7 +265,7 @@ class MultipleParticleModel extends PhetioObject {
     // @protected
     this.moleculeForceAndMotionCalculator = null;
 
-    // moving average calculator that tracks the average difference between the calculated and target temperatures
+    // @private - moving average calculator that tracks the average difference between the calculated and target temperatures
     this.averageTemperatureDifference = new MovingAverage( 10 );
 
     //-----------------------------------------------------------------------------------------------------------------
@@ -1404,7 +1404,8 @@ class MultipleParticleModel extends PhetioObject {
   }
 
   /**
-   * deserialize a MultipleParticleModel instance to an intermediate state that can be used by applyState
+   * Deserialize a MultipleParticleModel instance to an intermediate state that can be used by applyState.  This is
+   * using reference type serialization (see the phet-io-instrumentation-guide for an explanation of what that means).
    * @param {Object} stateObject - return value from toStateObject
    * @returns {Object}
    * @public
