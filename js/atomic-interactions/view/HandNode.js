@@ -8,7 +8,6 @@
  * @author John Blanco
  */
 
-import inherit from '../../../../phet-core/js/inherit.js';
 import merge from '../../../../phet-core/js/merge.js';
 import handImage from '../../../../scenery-phet/images/hand_png.js';
 import DragListener from '../../../../scenery/js/listeners/DragListener.js';
@@ -20,125 +19,125 @@ import statesOfMatter from '../../statesOfMatter.js';
 // constants
 const WIDTH = 80; // empirically determined to look good
 
-/**
- * @param {DualAtomModel} dualAtomModel - model of the atomic interactions screen
- * @param {ScaledAtom} particle - model of the atom that is draggable
- * @param {ModelViewTransform2} modelViewTransform to convert between model and view co-ordinates
- * @param {number} minX - grabbable particle min x position
- * @param {Object} [options]
- * @constructor
- */
-function HandNode( dualAtomModel, particle, modelViewTransform, minX, options ) {
+class HandNode extends Node {
 
-  options = merge( {
-    cursor: 'pointer',
-    tandem: Tandem.REQUIRED
-  }, options );
+  /**
+   * @param {DualAtomModel} dualAtomModel - model of the atomic interactions screen
+   * @param {ScaledAtom} particle - model of the atom that is draggable
+   * @param {ModelViewTransform2} modelViewTransform to convert between model and view co-ordinates
+   * @param {number} minX - grabbable particle min x position
+   * @param {Object} [options]
+   */
+  constructor( dualAtomModel, particle, modelViewTransform, minX, options ) {
 
-  Node.call( this, options );
-  const self = this;
-  this.minX = minX; // @private
+    options = merge( {
+      cursor: 'pointer',
+      tandem: Tandem.REQUIRED
+    }, options );
 
-  // @private {ScaledAtom} - particle that will be moved if the hand is dragged
-  this.particle = particle;
+    super( options );
+    this.minX = minX; // @private
 
-  // add the main image that represents the hand
-  this.addChild( new Image( handImage, {
-    minWidth: WIDTH,
-    maxWidth: WIDTH,
-    y: modelViewTransform.modelToViewY( this.particle.positionProperty.get().y )
-  } ) );
+    // @private {ScaledAtom} - particle that will be moved if the hand is dragged
+    this.particle = particle;
 
-  // control visibility
-  const visibilityListener = dualAtomModel.movementHintVisibleProperty.linkAttribute( this, 'visible' );
+    // add the main image that represents the hand
+    this.addChild( new Image( handImage, {
+      minWidth: WIDTH,
+      maxWidth: WIDTH,
+      y: modelViewTransform.modelToViewY( this.particle.positionProperty.get().y )
+    } ) );
 
-  // add the drag handler
-  let startDragX;
-  let endDragX;
-  const inputListener = new DragListener( {
+    // control visibility
+    const visibilityListener = dualAtomModel.movementHintVisibleProperty.linkAttribute( this, 'visible' );
 
-    start: event => {
+    // add the drag handler
+    let startDragX;
+    let endDragX;
+    const inputListener = new DragListener( {
 
-      // Stop the model from moving the particle at the same time the user is moving it.
-      dualAtomModel.setMotionPaused( true );
-      startDragX = self.globalToParentPoint( event.pointer.point ).x;
-    },
+      start: event => {
 
-    drag: event => {
+        // Stop the model from moving the particle at the same time the user is moving it.
+        dualAtomModel.setMotionPaused( true );
+        startDragX = this.globalToParentPoint( event.pointer.point ).x;
+      },
 
-      endDragX = self.globalToParentPoint( event.pointer.point ).x;
-      const d = endDragX - startDragX;
-      startDragX = endDragX;        // Make sure we don't exceed the positional limits.
-      const newPosX = Math.max( modelViewTransform.modelToViewX( self.particle.getX() ) + d, self.minX );
+      drag: event => {
 
-      // Move the particle based on the amount of mouse movement.
-      self.particle.setPosition( modelViewTransform.viewToModelX( newPosX ), self.particle.getY() );
-    },
+        endDragX = this.globalToParentPoint( event.pointer.point ).x;
+        const d = endDragX - startDragX;
+        startDragX = endDragX;        // Make sure we don't exceed the positional limits.
+        const newPosX = Math.max( modelViewTransform.modelToViewX( this.particle.getX() ) + d, this.minX );
 
-    end: event => {
+        // Move the particle based on the amount of mouse movement.
+        this.particle.setPosition( modelViewTransform.viewToModelX( newPosX ), this.particle.getY() );
+      },
 
-      // Let the model move the particles again.  Note that this happens even if the motion was paused by some other
-      // means.
-      dualAtomModel.setMotionPaused( false );
-      dualAtomModel.movementHintVisibleProperty.set( false );
-    },
+      end: event => {
 
-    tandem: options.tandem.createTandem( 'dragListener' )
-  } );
-  this.addInputListener( inputListener );
+        // Let the model move the particles again.  Note that this happens even if the motion was paused by some other
+        // means.
+        dualAtomModel.setMotionPaused( false );
+        dualAtomModel.movementHintVisibleProperty.set( false );
+      },
 
-  function positionListener( position ) {
-    self.x = modelViewTransform.modelToViewX( position.x );
+      tandem: options.tandem.createTandem( 'dragListener' )
+    } );
+    this.addInputListener( inputListener );
+
+    const positionListener = position => {
+      this.x = modelViewTransform.modelToViewX( position.x );
+    };
+
+    // move the hint with the particle
+    particle.positionProperty.link( positionListener );
+
+    // add a linked element in phet-io to the property that controls this node's visibility
+    this.addLinkedElement( dualAtomModel.movementHintVisibleProperty, {
+      tandem: options.tandem.createTandem( 'movementHintVisibleProperty' )
+    } );
+
+    // dispose function
+    this.disposeHandNode = () => {
+      this.removeInputListener( inputListener );
+      particle.positionProperty.unlink( positionListener );
+      dualAtomModel.movementHintVisibleProperty.unlinkAttribute( visibilityListener );
+    };
   }
 
-  // move the hint with the particle
-  particle.positionProperty.link( positionListener );
-
-  // add a linked element in phet-io to the property that controls this node's visibility
-  this.addLinkedElement( dualAtomModel.movementHintVisibleProperty, {
-    tandem: options.tandem.createTandem( 'movementHintVisibleProperty' )
-  } );
-
-  // dispose function
-  this.disposeHandNode = function() {
-    self.removeInputListener( inputListener );
-    particle.positionProperty.unlink( positionListener );
-    dualAtomModel.movementHintVisibleProperty.unlinkAttribute( visibilityListener );
-  };
-}
-
-statesOfMatter.register( 'HandNode', HandNode );
-
-inherit( Node, HandNode, {
-
-  dispose: function() {
+  /**
+   * @public
+   */
+  dispose() {
     this.disposeHandNode();
     Node.prototype.dispose.call( this );
-  },
+  }
 
   /**
    * @param {ScaledAtom} particle
    * @public
    */
-  setParticle: function( particle ) {
+  setParticle( particle ) {
     this.particle = particle;
-  },
+  }
 
   /**
    * @returns {number}
    * @public
    */
-  getMinX: function() {
+  getMinX() {
     return this.minX;
-  },
+  }
 
   /**
    * @param {number} minX
    * @public
    */
-  setMinX: function( minX ) {
+  setMinX( minX ) {
     this.minX = minX;
   }
-} );
+}
 
+statesOfMatter.register( 'HandNode', HandNode );
 export default HandNode;

@@ -5,7 +5,6 @@
  * @author Siddhartha Chinthapally (Actual Concepts)
  */
 
-import inherit from '../../../../phet-core/js/inherit.js';
 import merge from '../../../../phet-core/js/merge.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import statesOfMatter from '../../statesOfMatter.js';
@@ -25,77 +24,74 @@ const FORCE_ARROW_TAIL_WIDTH = 30;
 const FORCE_ARROW_HEAD_WIDTH = 50;
 const FORCE_ARROW_HEAD_LENGTH = 50;
 
-/**
- * @param {Particle} particle - The particle in the model that this node will represent in the view.
- * @param {ModelViewTransform2} modelViewTransform to convert between model and view co-ordinates
- * The gradient is computationally intensive to create, so use only when needed.
- * @param {boolean} enableOverlap - true if the node should be larger than the actual particle, thus allowing particles
- * @param {Tandem} tandem - support for exporting instances from the sim
- * @constructor
- */
-function ParticleForceNode( particle, modelViewTransform, enableOverlap, tandem ) {
+class ParticleForceNode extends ParticleNode {
 
-  ParticleNode.call( this, particle, modelViewTransform, enableOverlap, tandem );
+  /**
+   * @param {Particle} particle - The particle in the model that this node will represent in the view.
+   * @param {ModelViewTransform2} modelViewTransform to convert between model and view co-ordinates
+   * The gradient is computationally intensive to create, so use only when needed.
+   * @param {boolean} enableOverlap - true if the node should be larger than the actual particle, thus allowing particles
+   * @param {Tandem} tandem - support for exporting instances from the sim
+   */
+  constructor( particle, modelViewTransform, enableOverlap, tandem ) {
 
-  // @private
-  this.attractiveForce = 0;
-  this.repulsiveForce = 0;
+    super( particle, modelViewTransform, enableOverlap, tandem );
 
-  const self = this;
-  const commonForceArrowNodeOptions = {
-    headHeight: FORCE_ARROW_HEAD_LENGTH,
-    headWidth: FORCE_ARROW_HEAD_WIDTH,
-    tailWidth: FORCE_ARROW_TAIL_WIDTH,
-    opacity: 0.7 // empirically determined
-  };
+    // @private
+    this.attractiveForce = 0;
+    this.repulsiveForce = 0;
 
-  // @private attractive force node
-  this.attractiveForceVectorNode = new DimensionalArrowNode( 0, 0, COMPONENT_FORCE_ARROW_REFERENCE_LENGTH, 0, merge( {
-    fill: ATTRACTIVE_FORCE_COLOR
-  }, commonForceArrowNodeOptions ) );
-  this.addChild( this.attractiveForceVectorNode );
-  this.attractiveForceVectorNode.setVisible( false );
+    const commonForceArrowNodeOptions = {
+      headHeight: FORCE_ARROW_HEAD_LENGTH,
+      headWidth: FORCE_ARROW_HEAD_WIDTH,
+      tailWidth: FORCE_ARROW_TAIL_WIDTH,
+      opacity: 0.7 // empirically determined
+    };
 
-  // @private repulsive force node
-  this.repulsiveForceVectorNode = new DimensionalArrowNode( 0, 0, COMPONENT_FORCE_ARROW_REFERENCE_LENGTH, 0, merge( {
-    fill: REPULSIVE_FORCE_COLOR
-  }, commonForceArrowNodeOptions ) );
-  this.addChild( this.repulsiveForceVectorNode );
-  this.repulsiveForceVectorNode.setVisible( false );
+    // @private attractive force node
+    this.attractiveForceVectorNode = new DimensionalArrowNode( 0, 0, COMPONENT_FORCE_ARROW_REFERENCE_LENGTH, 0, merge( {
+      fill: ATTRACTIVE_FORCE_COLOR
+    }, commonForceArrowNodeOptions ) );
+    this.addChild( this.attractiveForceVectorNode );
+    this.attractiveForceVectorNode.setVisible( false );
 
-  // @private total force node
-  this.totalForceVectorNode = new DimensionalArrowNode( 0, 0, TOTAL_FORCE_ARROW_REFERENCE_LENGTH, 0, merge( {
-    fill: TOTAL_FORCE_COLOR
-  }, commonForceArrowNodeOptions ) );
-  this.addChild( this.totalForceVectorNode );
-  this.totalForceVectorNode.setVisible( false );
+    // @private repulsive force node
+    this.repulsiveForceVectorNode = new DimensionalArrowNode( 0, 0, COMPONENT_FORCE_ARROW_REFERENCE_LENGTH, 0, merge( {
+      fill: REPULSIVE_FORCE_COLOR
+    }, commonForceArrowNodeOptions ) );
+    this.addChild( this.repulsiveForceVectorNode );
+    this.repulsiveForceVectorNode.setVisible( false );
 
-  function handlePositionChanged( position ) {
-    self.setTranslation(
-      modelViewTransform.modelToViewX( position.x ),
-      modelViewTransform.modelToViewY( position.y )
-    );
+    // @private total force node
+    this.totalForceVectorNode = new DimensionalArrowNode( 0, 0, TOTAL_FORCE_ARROW_REFERENCE_LENGTH, 0, merge( {
+      fill: TOTAL_FORCE_COLOR
+    }, commonForceArrowNodeOptions ) );
+    this.addChild( this.totalForceVectorNode );
+    this.totalForceVectorNode.setVisible( false );
+
+    const handlePositionChanged = position => {
+      this.setTranslation(
+        modelViewTransform.modelToViewX( position.x ),
+        modelViewTransform.modelToViewY( position.y )
+      );
+    };
+
+    particle.positionProperty.link( handlePositionChanged );
+
+    // dispose function
+    this.disposeParticleForceNode = () => {
+      particle.positionProperty.unlink( handlePositionChanged );
+    };
   }
 
-  particle.positionProperty.link( handlePositionChanged );
-
-  // dispose function
-  this.disposeParticleForceNode = function() {
-    particle.positionProperty.unlink( handlePositionChanged );
-  };
-}
-
-statesOfMatter.register( 'ParticleForceNode', ParticleForceNode );
-
-inherit( ParticleNode, ParticleForceNode, {
 
   /**
    * @public
    */
-  dispose: function() {
+  dispose() {
     this.disposeParticleForceNode();
     ParticleNode.prototype.dispose.call( this );
-  },
+  }
 
   /**
    * Set the levels of attractive and repulsive forces being experienced by the particle in the model so that they may
@@ -104,41 +100,41 @@ inherit( ParticleNode, ParticleForceNode, {
    * @param {number}repulsiveForce
    * @public
    */
-  setForces: function( attractiveForce, repulsiveForce ) {
+  setForces( attractiveForce, repulsiveForce ) {
     this.attractiveForce = attractiveForce;
     this.repulsiveForce = repulsiveForce;
     this.updateForceVectors();
-  },
+  }
 
   /**
    * @param {boolean} showAttractiveForces - true to show attractive force, false to hide
    * @public
    */
-  setShowAttractiveForces: function( showAttractiveForces ) {
+  setShowAttractiveForces( showAttractiveForces ) {
     this.attractiveForceVectorNode.setVisible( showAttractiveForces );
-  },
+  }
 
   /**
    * @param {boolean} showRepulsiveForces - true to show repulsive force, false to hide
    * @public
    */
-  setShowRepulsiveForces: function( showRepulsiveForces ) {
+  setShowRepulsiveForces( showRepulsiveForces ) {
     this.repulsiveForceVectorNode.setVisible( showRepulsiveForces );
-  },
+  }
 
   /**
    * @param {boolean} showTotalForce - true to show total force, false to hide
    * @public
    */
-  setShowTotalForces: function( showTotalForce ) {
+  setShowTotalForces( showTotalForce ) {
     this.totalForceVectorNode.setVisible( showTotalForce );
-  },
+  }
 
   /**
    * Update the force vectors to reflect the forces being experienced by the atom.
    * @private
    */
-  updateForceVectors: function() {
+  updateForceVectors() {
     const angle = 0;
     const attractiveY = this.attractiveForce * Math.sin( angle ) *
                         ( COMPONENT_FORCE_ARROW_REFERENCE_LENGTH / COMPONENT_FORCE_ARROW_REFERENCE_MAGNITUDE );
@@ -158,6 +154,7 @@ inherit( ParticleNode, ParticleForceNode, {
                         ( TOTAL_FORCE_ARROW_REFERENCE_LENGTH / TOTAL_FORCE_ARROW_REFERENCE_MAGNITUDE );
     this.totalForceVectorNode.setTailAndTip( 0, 0, totalForceX, totalForceY );
   }
-} );
+}
 
+statesOfMatter.register( 'ParticleForceNode', ParticleForceNode );
 export default ParticleForceNode;

@@ -1,14 +1,13 @@
 // Copyright 2015-2020, University of Colorado Boulder
 
 /**
- * View for Atom
+ * Scenery Node that represents a particle
  * @author Aaron Davis
  * @author Chandrashekar Bemagoni (Actual Concepts)
  * @author John Blanco
  */
 
 import Vector2 from '../../../../dot/js/Vector2.js';
-import inherit from '../../../../phet-core/js/inherit.js';
 import Circle from '../../../../scenery/js/nodes/Circle.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import Color from '../../../../scenery/js/util/Color.js';
@@ -19,74 +18,70 @@ import statesOfMatter from '../../statesOfMatter.js';
 const MVT_SCALE = 0.25;
 const OVERLAP_ENLARGEMENT_FACTOR = 1.25;
 
-/**
- * @param {MotionAtom} particle  - The particle in the model that this node will represent in the view.
- * @param {ModelViewTransform2} modelViewTransform to convert between model and view co-ordinates
- * The gradient is computationally intensive to create, so use only when needed.
- * @param {boolean} enableOverlap - true if the node should be larger than the actual particle, thus allowing particles
- * @param {Tandem} tandem - support for exporting instances from the sim
- * @constructor
- */
-function ParticleNode( particle, modelViewTransform, enableOverlap, tandem ) {
-  assert && assert( particle && modelViewTransform );
+class ParticleNode extends Node {
 
-  Node.call( this, { tandem: tandem } );
+  /**
+   * @param {MotionAtom} particle  - The particle in the model that this node will represent in the view.
+   * @param {ModelViewTransform2} modelViewTransform to convert between model and view co-ordinates
+   * The gradient is computationally intensive to create, so use only when needed.
+   * @param {boolean} enableOverlap - true if the node should be larger than the actual particle, thus allowing particles
+   * @param {Tandem} tandem - support for exporting instances from the sim
+   */
+  constructor( particle, modelViewTransform, enableOverlap, tandem ) {
+    assert && assert( particle && modelViewTransform );
 
-  // @private
-  this.particle = particle;
-  this.modelViewTransform = modelViewTransform;
-  this.overlapEnabled = enableOverlap;
-  this.position = new Vector2( 0, 0 );
+    super( { tandem: tandem } );
 
-  // @private - node that will represent this particle, initialized arbitrarily, updated below
-  this.circle = new Circle( 1 );
-  this.addChild( this.circle );
+    // @private
+    this.particle = particle;
+    this.modelViewTransform = modelViewTransform;
+    this.overlapEnabled = enableOverlap;
+    this.position = new Vector2( 0, 0 );
 
-  // update the appearance when the particle configuration changes
-  const updateAppearance = () => {
+    // @private - node that will represent this particle, initialized arbitrarily, updated below
+    this.circle = new Circle( 1 );
+    this.addChild( this.circle );
 
-    // calculate the scaled radius of the circle
-    let radiusInView = particle.radiusProperty.value * MVT_SCALE;
-    if ( this.overlapEnabled ) {
+    // update the appearance when the particle configuration changes
+    const updateAppearance = () => {
 
-      // Overlap is enabled, so make the shape slightly larger than the radius of the circle so that overlap will occur
-      // during inter-particle collisions.
-      radiusInView = radiusInView * OVERLAP_ENLARGEMENT_FACTOR;
-    }
+      // calculate the scaled radius of the circle
+      let radiusInView = particle.radiusProperty.value * MVT_SCALE;
+      if ( this.overlapEnabled ) {
 
-    this.circle.setRadius( radiusInView );
-    this.circle.fill = this.createFill( particle.color, particle.radiusProperty.value );
-  };
-  particle.radiusProperty.link( updateAppearance );
-  particle.configurationChanged.addListener( updateAppearance );
+        // Overlap is enabled, so make the shape slightly larger than the radius of the circle so that overlap will occur
+        // during inter-particle collisions.
+        radiusInView = radiusInView * OVERLAP_ENLARGEMENT_FACTOR;
+      }
 
-  // Set ourself to be initially non-pickable so that we don't get mouse events.
-  this.setPickable( false );
+      this.circle.setRadius( radiusInView );
+      this.circle.fill = this.createFill( particle.color, particle.radiusProperty.value );
+    };
+    particle.radiusProperty.link( updateAppearance );
+    particle.configurationChanged.addListener( updateAppearance );
 
-  this.updatePosition();
-}
+    // Set ourself to be initially non-pickable so that we don't get mouse events.
+    this.setPickable( false );
 
-statesOfMatter.register( 'ParticleNode', ParticleNode );
-
-inherit( Node, ParticleNode, {
+    this.updatePosition();
+  }
 
   /**
    * @public
    */
-  updatePosition: function() {
+  updatePosition() {
     if ( this.particle !== null ) {
       this.position = this.modelViewTransform.modelToViewPosition( this.particle.positionProperty.value );
       this.setTranslation( this.position );
     }
-  },
+  }
 
   /**
    * Create the gradient fill for this particle.
    * @returns {RadialGradient} - paint to use for this particle
    * @private
    */
-  createFill: function( baseColor, atomRadius ) {
-
+  createFill( baseColor, atomRadius ) {
     const darkenedBaseColor = baseColor.colorUtilsDarker( 0.5 );
     const transparentDarkenedBasedColor = new Color(
       darkenedBaseColor.getRed(),
@@ -101,6 +96,7 @@ inherit( Node, ParticleNode, {
       .addColorStop( 0, baseColor )
       .addColorStop( 0.95, transparentDarkenedBasedColor );
   }
-} );
+}
 
+statesOfMatter.register( 'ParticleNode', ParticleNode );
 export default ParticleNode;
