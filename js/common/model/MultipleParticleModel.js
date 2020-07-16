@@ -1404,40 +1404,21 @@ class MultipleParticleModel extends PhetioObject {
   }
 
   /**
-   * Deserialize a MultipleParticleModel instance to an intermediate state that can be used by applyState.  This is
-   * using reference type serialization (see the phet-io-instrumentation-guide for an explanation of what that means).
-   * @param {Object} stateObject - return value from toStateObject
-   * @returns {Object}
+   * Set the state of this instance for phet-io
+   * @param {Object} stateObject
    * @public
+   * @override
    */
-  static fromStateObject( stateObject ) {
-    return {
-      substance: EnumerationIO( SubstanceType ).fromStateObject( stateObject.private.substance ),
-      isExploded: BooleanIO.fromStateObject( stateObject.private.isExploded ),
-      gravitationalAcceleration: stateObject.private.gravitationalAcceleration,
-      containerHeight: stateObject.private.containerHeight,
-      normalizedLidVelocityY: stateObject.private.normalizedLidVelocityY,
-      heatingCoolingAmount: stateObject.private.heatingCoolingAmount,
-      moleculeDataSet: MoleculeForceAndMotionDataSetIO.fromStateObject( stateObject.private.moleculeDataSet ),
-      moleculeForcesAndMotionCalculatorPressure: stateObject.private.moleculeForcesAndMotionCalculatorPressure
-    };
-  }
-
-  /**
-   * set the state of this instance for phet-io
-   * @param {Object} state
-   * @public
-   */
-  applyState( state ) {
-    required( state );
-    this.substanceProperty.set( state.substance );
-    this.isExplodedProperty.set( state.isExploded );
-    this.containerHeightProperty.set( state.containerHeight );
-    this.heatingCoolingAmountProperty.set( state.heatingCoolingAmount );
-    this.gravitationalAcceleration = state.gravitationalAcceleration;
-    this.normalizedLidVelocityY = state.normalizedLidVelocityY;
-    this.moleculeDataSet = state.moleculeDataSet;
-    this.moleculeForceAndMotionCalculator.presetPressure( state.moleculeForcesAndMotionCalculatorPressure );
+  applyState( stateObject ) {
+    required( stateObject );
+    this.substanceProperty.set( EnumerationIO( SubstanceType ).fromStateObject( stateObject.private.substance ) );
+    this.isExplodedProperty.set( BooleanIO.fromStateObject( stateObject.private.isExploded ) );
+    this.containerHeightProperty.set( stateObject.private.containerHeight );
+    this.heatingCoolingAmountProperty.set( stateObject.private.heatingCoolingAmount );
+    this.gravitationalAcceleration = stateObject.private.gravitationalAcceleration;
+    this.normalizedLidVelocityY = stateObject.private.normalizedLidVelocityY;
+    this.moleculeDataSet = MoleculeForceAndMotionDataSetIO.fromStateObject( stateObject.private.moleculeDataSet );
+    this.moleculeForceAndMotionCalculator.presetPressure( stateObject.private.moleculeForcesAndMotionCalculatorPressure );
   }
 }
 
