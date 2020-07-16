@@ -10,7 +10,6 @@
  * @author Jonathan Olson
  */
 
-import inherit from '../../../../../phet-core/js/inherit.js';
 import statesOfMatter from '../../../statesOfMatter.js';
 import AbstractVerletAlgorithm from './AbstractVerletAlgorithm.js';
 import WaterAtomPositionUpdater from './WaterAtomPositionUpdater.js';
@@ -24,34 +23,31 @@ const MAX_REPULSIVE_SCALING_FACTOR_FOR_WATER = 5.25;
 const MAX_ROTATION_RATE = 16; // revolutions per second, empirically determined, see usage below
 const TEMPERATURE_BELOW_WHICH_GRAVITY_INCREASES = 0.10;
 
-/**
- * @param {MultipleParticleModel}  multipleParticleModel of the simulation
- * @constructor
- */
-function WaterVerletAlgorithm( multipleParticleModel ) {
-
-  this.positionUpdater = WaterAtomPositionUpdater;
-  AbstractVerletAlgorithm.call( this, multipleParticleModel );
-
-  // @private precomputed values to save time later
-  this.massInverse = 1 / multipleParticleModel.moleculeDataSet.getMoleculeMass();
-  this.inertiaInverse = 1 / multipleParticleModel.moleculeDataSet.getMoleculeRotationalInertia();
-
-  // @private pre-allocated arrays to avoid reallocation with each force and position update
-  this.normalCharges = new Array( 3 );
-  this.alteredCharges = new Array( 3 );
-}
-
-statesOfMatter.register( 'WaterVerletAlgorithm', WaterVerletAlgorithm );
-
-inherit( AbstractVerletAlgorithm, WaterVerletAlgorithm, {
+class WaterVerletAlgorithm extends AbstractVerletAlgorithm {
 
   /**
-   * @param moleculeDataSet
+   * @param {MultipleParticleModel} multipleParticleModel
+   */
+  constructor( multipleParticleModel ) {
+
+    super( multipleParticleModel );
+    this.positionUpdater = WaterAtomPositionUpdater;
+
+    // @private precomputed values to save time later
+    this.massInverse = 1 / multipleParticleModel.moleculeDataSet.getMoleculeMass();
+    this.inertiaInverse = 1 / multipleParticleModel.moleculeDataSet.getMoleculeRotationalInertia();
+
+    // @private pre-allocated arrays to avoid reallocation with each force and position update
+    this.normalCharges = new Array( 3 );
+    this.alteredCharges = new Array( 3 );
+  }
+
+  /**
+   * @param {MoleculeForceAndMotionDataSet} moleculeDataSet
    * @override
    * @protected
    */
-  initializeForces: function( moleculeDataSet ) {
+  initializeForces( moleculeDataSet ) {
     const temperatureSetPoint = this.multipleParticleModel.temperatureSetPointProperty.get();
     let accelerationDueToGravity = this.multipleParticleModel.gravitationalAcceleration;
     if ( temperatureSetPoint < TEMPERATURE_BELOW_WHICH_GRAVITY_INCREASES ) {
@@ -67,14 +63,14 @@ inherit( AbstractVerletAlgorithm, WaterVerletAlgorithm, {
       nextMoleculeForces[ i ].setXY( 0, accelerationDueToGravity );
       nextMoleculeTorques[ i ] = 0;
     }
-  },
+  }
 
   /**
    * @param moleculeDataSet
    * @override
    * @protected
    */
-  updateInteractionForces: function( moleculeDataSet ) {
+  updateInteractionForces( moleculeDataSet ) {
 
     const moleculeCenterOfMassPositions = moleculeDataSet.moleculeCenterOfMassPositions;
     const atomPositions = moleculeDataSet.atomPositions;
@@ -153,8 +149,8 @@ inherit( AbstractVerletAlgorithm, WaterVerletAlgorithm, {
         // Calculate Lennard-Jones potential between mass centers.
         let dx = m1x - m2x;
         let dy = m1y - m2y;
-        let distanceSquared = Math.max( dx * dx + dy * dy, this.MIN_DISTANCE_SQUARED );
-        if ( distanceSquared < this.PARTICLE_INTERACTION_DISTANCE_THRESH_SQRD ) {
+        let distanceSquared = Math.max( dx * dx + dy * dy, AbstractVerletAlgorithm.MIN_DISTANCE_SQUARED );
+        if ( distanceSquared < AbstractVerletAlgorithm.PARTICLE_INTERACTION_DISTANCE_THRESH_SQRD ) {
           // Select charges for the other molecule.
           var chargesB;
           if ( j % 2 === 0 ) {
@@ -207,7 +203,7 @@ inherit( AbstractVerletAlgorithm, WaterVerletAlgorithm, {
 
               dx = atomPosition1.x - atomPosition2.x;
               dy = atomPosition1.y - atomPosition2.y;
-              distanceSquared = Math.max( dx * dx + dy * dy, this.MIN_DISTANCE_SQUARED );
+              distanceSquared = Math.max( dx * dx + dy * dy, AbstractVerletAlgorithm.MIN_DISTANCE_SQUARED );
               r2inv = 1 / distanceSquared;
               forceScalar = chargeAii * chargesB[ jj ] * r2inv * r2inv;
               forceX = dx * forceScalar;
@@ -221,15 +217,15 @@ inherit( AbstractVerletAlgorithm, WaterVerletAlgorithm, {
         }
       }
     }
-  },
+  }
 
   /**
-   * @param moleculeDataSet
+   * @param {MoleculeForceAndMotionDataSet} moleculeDataSet
    * @param {number} timeStep
    * @override
    * @protected
    */
-  updateVelocitiesAndRotationRates: function( moleculeDataSet, timeStep ) {
+  updateVelocitiesAndRotationRates( moleculeDataSet, timeStep ) {
 
     const numberOfMolecules = moleculeDataSet.getNumberOfMolecules();
     const moleculeVelocities = moleculeDataSet.moleculeVelocities;
@@ -281,6 +277,7 @@ inherit( AbstractVerletAlgorithm, WaterVerletAlgorithm, {
       this.calculatedTemperature = this.multipleParticleModel.minModelTemperature;
     }
   }
-} );
+}
 
+statesOfMatter.register( 'WaterVerletAlgorithm', WaterVerletAlgorithm );
 export default WaterVerletAlgorithm;

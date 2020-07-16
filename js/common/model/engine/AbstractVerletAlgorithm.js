@@ -9,7 +9,6 @@
  */
 
 import NumberProperty from '../../../../../axon/js/NumberProperty.js';
-import inherit from '../../../../../phet-core/js/inherit.js';
 import statesOfMatter from '../../../statesOfMatter.js';
 import TimeSpanDataQueue from '../TimeSpanDataQueue.js';
 
@@ -23,39 +22,36 @@ const PRESSURE_ACCUMULATOR_LENGTH = Math.ceil( PRESSURE_CALC_TIME_WINDOW / NOMIN
 const EXPLOSION_PRESSURE = 41; // in model units, empirically determined
 const EXPLOSION_TIME = 1; // in seconds, time that the pressure must be above the threshold before explosion occurs
 
-/**
- * @param {MultipleParticleModel} multipleParticleModel of the simulation
- * @constructor
- */
-function AbstractVerletAlgorithm( multipleParticleModel ) {
+class AbstractVerletAlgorithm {
 
-  this.multipleParticleModel = multipleParticleModel; // @protected, read only
+  /**
+   * @param {MultipleParticleModel} multipleParticleModel
+   */
+  constructor( multipleParticleModel ) {
 
-  this.pressureProperty = new NumberProperty( 0 ); // @public, read-only, in atm (atmospheres)
+    this.multipleParticleModel = multipleParticleModel; // @protected, read only
 
-  // @protected, read-write, used to set where particles bounce
-  this.sideBounceInset = 1;
-  this.bottomBounceInset = 1;
-  this.topBounceInset = 1;
+    this.pressureProperty = new NumberProperty( 0 ); // @public, read-only, in atm (atmospheres)
 
-  // @protected
-  this.potentialEnergy = 0;
-  this.calculatedTemperature = 0;
+    // @protected, read-write, used to set where particles bounce
+    this.sideBounceInset = 1;
+    this.bottomBounceInset = 1;
+    this.topBounceInset = 1;
 
-  // @public, read-write, flag that indicates whether the lid affected the velocity of one or more particles, set
-  // during execution of the Verlet algorithm, must be cleared by the client.
-  this.lidChangedParticleVelocity = false;
+    // @protected
+    this.potentialEnergy = 0;
+    this.calculatedTemperature = 0;
 
-  // @private {TimeSpanDataQueue}, moving time window queue for tracking the pressure data
-  this.pressureAccumulatorQueue = new TimeSpanDataQueue( PRESSURE_ACCUMULATOR_LENGTH, PRESSURE_CALC_TIME_WINDOW );
+    // @public, read-write, flag that indicates whether the lid affected the velocity of one or more particles, set
+    // during execution of the Verlet algorithm, must be cleared by the client.
+    this.lidChangedParticleVelocity = false;
 
-  // @private, tracks time above the explosion threshold
-  this.timeAboveExplosionPressure = 0;
-}
+    // @private {TimeSpanDataQueue}, moving time window queue for tracking the pressure data
+    this.pressureAccumulatorQueue = new TimeSpanDataQueue( PRESSURE_ACCUMULATOR_LENGTH, PRESSURE_CALC_TIME_WINDOW );
 
-statesOfMatter.register( 'AbstractVerletAlgorithm', AbstractVerletAlgorithm );
-
-inherit( Object, AbstractVerletAlgorithm, {
+    // @private, tracks time above the explosion threshold
+    this.timeAboveExplosionPressure = 0;
+  }
 
   /**
    * @returns {boolean}
@@ -63,10 +59,10 @@ inherit( Object, AbstractVerletAlgorithm, {
    * @param {number} yPos
    * @protected
    */
-  isNormalizedPositionInContainer: function( xPos, yPos ) {
+  isNormalizedPositionInContainer( xPos, yPos ) {
     return xPos >= 0 && xPos <= this.multipleParticleModel.normalizedContainerWidth &&
            yPos >= 0 && yPos <= this.multipleParticleModel.normalizedTotalContainerHeight;
-  },
+  }
 
   /**
    * Update the center of mass positions and rotational angles for the molecules based upon their current velocities
@@ -75,7 +71,7 @@ inherit( Object, AbstractVerletAlgorithm, {
    * @param timeStep
    * @private
    */
-  updateMoleculePositions: function( moleculeDataSet, timeStep ) {
+  updateMoleculePositions( moleculeDataSet, timeStep ) {
 
     const moleculeCenterOfMassPositions = moleculeDataSet.getMoleculeCenterOfMassPositions();
     const moleculeVelocities = moleculeDataSet.getMoleculeVelocities();
@@ -189,14 +185,14 @@ inherit( Object, AbstractVerletAlgorithm, {
 
     // Update the pressure.
     this.updatePressure( accumulatedPressure, timeStep );
-  },
+  }
 
   /**
    * Update the motion of the particles and the forces that are acting upon them.  This is the heart of this class,
    * and it is here that the actual Verlet algorithm is contained.
    * @public
    */
-  updateForcesAndMotion: function( timeStep ) {
+  updateForcesAndMotion( timeStep ) {
 
     // Obtain references to the model data and parameters so that we can perform fast manipulations.
     const moleculeDataSet = this.multipleParticleModel.moleculeDataSet;
@@ -212,44 +208,59 @@ inherit( Object, AbstractVerletAlgorithm, {
 
     // Update the velocities and rotation rates based on the forces acting on the atoms/molecules.
     this.updateVelocitiesAndRotationRates( moleculeDataSet, timeStep );
-  },
+  }
 
-  // @protected
-  initializeForces: function( moleculeDataSet ) {
+  /**
+   * @param {MoleculeForceAndMotionDataSet} moleculeDataSet
+   * @protected
+   */
+  initializeForces( moleculeDataSet ) {
     assert && assert( false, 'abstract method, must be overridden in descendant classes' );
-  },
+  }
 
-  // @protected
-  updateInteractionForces: function( moleculeDataSet ) {
+  /**
+   * @param {MoleculeForceAndMotionDataSet} moleculeDataSet
+   * @protected
+   */
+  updateInteractionForces( moleculeDataSet ) {
     assert && assert( false, 'abstract method, must be overridden in descendant classes' );
-  },
+  }
 
-  // @protected
-  updateVelocitiesAndRotationRates: function( moleculeDataSet ) {
+  /**
+   * @param {MoleculeForceAndMotionDataSet} moleculeDataSet
+   * @protected
+   */
+  updateVelocitiesAndRotationRates( moleculeDataSet ) {
     assert && assert( false, 'abstract method, must be overridden in descendant classes' );
-  },
+  }
 
-  setScaledEpsilon: function() {
+  /**
+   * @param {number} scaledEpsilon
+   * @public
+   */
+  setScaledEpsilon( scaledEpsilon ) {
+
     // This should be implemented in descendant classes.
     assert && assert( false, 'Setting epsilon is not implemented for this class' );
-  },
+  }
 
   /**
    * @returns {number}
    * @public
    */
-  getScaledEpsilon: function() {
+  getScaledEpsilon() {
+
     // This should be implemented in descendant classes.
     assert && assert( false, 'Getting scaled epsilon is not implemented for this class' );
     return 0;
-  },
+  }
 
   /**
    * @param {number} pressureThisStep
    * @param {number} dt
    * @public
    */
-  updatePressure: function( pressureThisStep, dt ) {
+  updatePressure( pressureThisStep, dt ) {
 
     assert && assert( pressureThisStep >= 0, 'pressure value can\'t be negative' );
 
@@ -291,15 +302,16 @@ inherit( Object, AbstractVerletAlgorithm, {
         this.timeAboveExplosionPressure = 0;
       }
     }
-  },
+  }
 
   /**
    * This method allows the caller to set an initial value for the pressure.  It was added in support of phet-io state
    * setting so that the pressure calculation could be set to an initial value above zero that reflected the state
    * extracted from another instance of the simulation.
    * @param {number} pressure
+   * @public
    */
-  presetPressure: function( pressure ) {
+  presetPressure( pressure ) {
 
     assert && assert(
       phet.joist.sim.isSettingPhetioStateProperty.value,
@@ -316,18 +328,20 @@ inherit( Object, AbstractVerletAlgorithm, {
     _.times( PRESSURE_ACCUMULATOR_LENGTH, () => {
       this.pressureAccumulatorQueue.add( pressureSampleInstantaneousValue, NOMINAL_DT );
     } );
-  },
+  }
+}
 
-  // static final
-  PARTICLE_INTERACTION_DISTANCE_THRESH_SQRD: 6.25,
+// statics
 
-  // Constant used to limit the proximity of atoms when calculating the interaction potential.  This does NOT actually
-  // limit how close they can get to one another, just the value used in the LJ calculation.  Having such a limit
-  // helps to prevent getting huge potential value numbers and thus unmanageably high particle velocities.  It is in
-  // model units and is empirically determined such that the particles appear to interact well but don't go crazy when
-  // the container is compressed.  Take care when modifying it - such modifications can have somewhat unexpected side
-  // effects, such as changing how water crystalizes when it freezes.
-  MIN_DISTANCE_SQUARED: 0.90
-} );
+AbstractVerletAlgorithm.PARTICLE_INTERACTION_DISTANCE_THRESH_SQRD = 6.25;
 
+// Constant used to limit the proximity of atoms when calculating the interaction potential.  This does NOT actually
+// limit how close they can get to one another, just the value used in the LJ calculation.  Having such a limit
+// helps to prevent getting huge potential value numbers and thus unmanageably high particle velocities.  It is in
+// model units and is empirically determined such that the particles appear to interact well but don't go crazy when
+// the container is compressed.  Take care when modifying it - such modifications can have somewhat unexpected side
+// effects, such as changing how water crystalizes when it freezes.
+AbstractVerletAlgorithm.MIN_DISTANCE_SQUARED = 0.90;
+
+statesOfMatter.register( 'AbstractVerletAlgorithm', AbstractVerletAlgorithm );
 export default AbstractVerletAlgorithm;

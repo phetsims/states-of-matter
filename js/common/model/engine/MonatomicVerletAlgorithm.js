@@ -9,62 +9,59 @@
  */
 
 import Vector2 from '../../../../../dot/js/Vector2.js';
-import inherit from '../../../../../phet-core/js/inherit.js';
 import statesOfMatter from '../../../statesOfMatter.js';
 import AbstractVerletAlgorithm from './AbstractVerletAlgorithm.js';
 import MonatomicAtomPositionUpdater from './MonatomicAtomPositionUpdater.js';
 
-/**
- * @param {MultipleParticleModel} multipleParticleModel of the simulation
- * @constructor
- */
-function MonatomicVerletAlgorithm( multipleParticleModel ) {
-  AbstractVerletAlgorithm.call( this, multipleParticleModel );
+class MonatomicVerletAlgorithm extends AbstractVerletAlgorithm {
 
-  // @private
-  this.positionUpdater = MonatomicAtomPositionUpdater;
-  this.epsilon = 1; // controls the strength of particle interaction
-  this.velocityVector = new Vector2( 0, 0 ); // reusable vector to save allocations
-}
+  /**
+   * @param {MultipleParticleModel} multipleParticleModel of the simulation
+   */
+  constructor( multipleParticleModel ) {
+    super( multipleParticleModel );
 
-statesOfMatter.register( 'MonatomicVerletAlgorithm', MonatomicVerletAlgorithm );
-
-inherit( AbstractVerletAlgorithm, MonatomicVerletAlgorithm, {
+    // @private
+    this.positionUpdater = MonatomicAtomPositionUpdater;
+    this.epsilon = 1; // controls the strength of particle interaction
+    this.velocityVector = new Vector2( 0, 0 ); // reusable vector to save allocations
+  }
 
   /**
    * @param {number} scaledEpsilon
    * @public
    */
-  setScaledEpsilon: function( scaledEpsilon ) {
+  setScaledEpsilon( scaledEpsilon ) {
     this.epsilon = scaledEpsilon;
-  },
+  }
 
   /**
    * @returns {number}
    * @public
    */
-  getScaledEpsilon: function() {
+  getScaledEpsilon() {
     return this.epsilon;
-  },
+  }
 
   /**
-   * @param {MoleculeForcesAndMotionDataSet} moleculeDataSet
+   * @param {MoleculeForceAndMotionDataSet} moleculeDataSet
    * @override
    * @protected
    */
-  initializeForces: function( moleculeDataSet ) {
+  initializeForces( moleculeDataSet ) {
     const accelerationDueToGravity = this.multipleParticleModel.gravitationalAcceleration;
     const nextAtomForces = moleculeDataSet.nextMoleculeForces;
     for ( let i = 0; i < moleculeDataSet.getNumberOfMolecules(); i++ ) {
       nextAtomForces[ i ].setXY( 0, accelerationDueToGravity );
     }
-  },
+  }
 
   /**
-   * @param {MoleculeForcesAndMotionDataSet} moleculeDataSet
+   * @param {MoleculeForceAndMotionDataSet} moleculeDataSet
+   * @override
    * @private
    */
-  updateInteractionForces: function( moleculeDataSet ) {
+  updateInteractionForces( moleculeDataSet ) {
 
     const numberOfAtoms = moleculeDataSet.numberOfMolecules;
     const atomCenterOfMassPositions = moleculeDataSet.moleculeCenterOfMassPositions;
@@ -80,7 +77,7 @@ inherit( AbstractVerletAlgorithm, MonatomicVerletAlgorithm, {
 
         let dx = atomCenterOfMassPositionsIX - atomCenterOfMassPositions[ j ].x;
         let dy = atomCenterOfMassPositionsIY - atomCenterOfMassPositions[ j ].y;
-        let distanceSqrd = Math.max( dx * dx + dy * dy, this.MIN_DISTANCE_SQUARED );
+        let distanceSqrd = Math.max( dx * dx + dy * dy, AbstractVerletAlgorithm.MIN_DISTANCE_SQUARED );
 
         if ( distanceSqrd === 0 ) {
           // Handle the special case where the particles are right on top of each other by assigning an arbitrary
@@ -90,7 +87,7 @@ inherit( AbstractVerletAlgorithm, MonatomicVerletAlgorithm, {
           distanceSqrd = 2;
         }
 
-        if ( distanceSqrd < this.PARTICLE_INTERACTION_DISTANCE_THRESH_SQRD ) {
+        if ( distanceSqrd < AbstractVerletAlgorithm.PARTICLE_INTERACTION_DISTANCE_THRESH_SQRD ) {
           // This pair of particles is close enough to one another that we need to calculate their interaction forces.
           const r2inv = 1 / distanceSqrd;
           const r6inv = r2inv * r2inv * r2inv;
@@ -102,14 +99,15 @@ inherit( AbstractVerletAlgorithm, MonatomicVerletAlgorithm, {
         }
       }
     }
-  },
+  }
 
   /**
    * @param {MoleculeForcesAndMotionDataSet} moleculeDataSet
    * @param {number} timeStep
+   * @override
    * @protected
    */
-  updateVelocitiesAndRotationRates: function( moleculeDataSet, timeStep ) {
+  updateVelocitiesAndRotationRates( moleculeDataSet, timeStep ) {
 
     let atomVelocity;
     const numberOfAtoms = moleculeDataSet.numberOfAtoms;
@@ -147,6 +145,7 @@ inherit( AbstractVerletAlgorithm, MonatomicVerletAlgorithm, {
       this.calculatedTemperature = this.multipleParticleModel.minModelTemperature;
     }
   }
-} );
+}
 
+statesOfMatter.register( 'MonatomicVerletAlgorithm', MonatomicVerletAlgorithm );
 export default MonatomicVerletAlgorithm;

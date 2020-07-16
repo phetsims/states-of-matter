@@ -8,29 +8,25 @@
  * @author Siddhartha Chinthapally (Actual Concepts)
  */
 
-import inherit from '../../../../../phet-core/js/inherit.js';
 import statesOfMatter from '../../../statesOfMatter.js';
 import AbstractVerletAlgorithm from './AbstractVerletAlgorithm.js';
 import DiatomicAtomPositionUpdater from './DiatomicAtomPositionUpdater.js';
 
-/**
- * @param {MultipleParticleModel} multipleParticleModel - Model of a set of particles
- * @constructor
- */
-function DiatomicVerletAlgorithm( multipleParticleModel ) {
-  this.positionUpdater = DiatomicAtomPositionUpdater; // @private
-  AbstractVerletAlgorithm.call( this, multipleParticleModel );
-}
+class DiatomicVerletAlgorithm extends AbstractVerletAlgorithm {
 
-statesOfMatter.register( 'DiatomicVerletAlgorithm', DiatomicVerletAlgorithm );
-
-inherit( AbstractVerletAlgorithm, DiatomicVerletAlgorithm, {
+  /**
+   * @param {MultipleParticleModel} multipleParticleModel - Model of a set of particles
+   */
+  constructor( multipleParticleModel ) {
+    super( multipleParticleModel );
+    this.positionUpdater = DiatomicAtomPositionUpdater; // @private
+  }
 
   /**
    * @override
    * @protected
    */
-  initializeForces: function( moleculeDataSet ) {
+  initializeForces( moleculeDataSet ) {
     const accelerationDueToGravity = this.multipleParticleModel.gravitationalAcceleration;
     const nextMoleculeForces = moleculeDataSet.nextMoleculeForces;
     const nextMoleculeTorques = moleculeDataSet.nextMoleculeTorques;
@@ -38,14 +34,14 @@ inherit( AbstractVerletAlgorithm, DiatomicVerletAlgorithm, {
       nextMoleculeForces[ i ].setXY( 0, accelerationDueToGravity );
       nextMoleculeTorques[ i ] = 0;
     }
-  },
+  }
 
   /**
    * Update the forces acting on each molecule due to the other molecules in the data set.
    * @param moleculeDataSet
    * @private
    */
-  updateInteractionForces: function( moleculeDataSet ) {
+  updateInteractionForces( moleculeDataSet ) {
 
     const moleculeCenterOfMassPositions = moleculeDataSet.getMoleculeCenterOfMassPositions();
     const nextMoleculeForces = moleculeDataSet.getNextMoleculeForces();
@@ -70,9 +66,9 @@ inherit( AbstractVerletAlgorithm, DiatomicVerletAlgorithm, {
             const dx = atom1PosX - atom2PosX;
             const dy = atom1PosY - atom2PosY;
             let distanceSquared = dx * dx + dy * dy;
-            if ( distanceSquared < this.PARTICLE_INTERACTION_DISTANCE_THRESH_SQRD ) {
-              if ( distanceSquared < this.MIN_DISTANCE_SQUARED ) {
-                distanceSquared = this.MIN_DISTANCE_SQUARED;
+            if ( distanceSquared < AbstractVerletAlgorithm.PARTICLE_INTERACTION_DISTANCE_THRESH_SQRD ) {
+              if ( distanceSquared < AbstractVerletAlgorithm.MIN_DISTANCE_SQUARED ) {
+                distanceSquared = AbstractVerletAlgorithm.MIN_DISTANCE_SQUARED;
               }
               // Calculate the Lennard-Jones interaction forces.
               const r2inv = 1 / distanceSquared;
@@ -92,7 +88,7 @@ inherit( AbstractVerletAlgorithm, DiatomicVerletAlgorithm, {
         }
       }
     }
-  },
+  }
 
   /**
    * Update the translational and rotational velocities for the molecules, calculate the total energy, and record the
@@ -101,7 +97,7 @@ inherit( AbstractVerletAlgorithm, DiatomicVerletAlgorithm, {
    * @param timeStep
    * @private
    */
-  updateVelocitiesAndRotationRates: function( moleculeDataSet, timeStep ) {
+  updateVelocitiesAndRotationRates( moleculeDataSet, timeStep ) {
 
     // Obtain references to the model data and parameters so that we can perform fast manipulations.
     const moleculeVelocities = moleculeDataSet.getMoleculeVelocities();
@@ -146,6 +142,7 @@ inherit( AbstractVerletAlgorithm, DiatomicVerletAlgorithm, {
       this.calculatedTemperature = this.multipleParticleModel.minModelTemperature;
     }
   }
-} );
+}
 
+statesOfMatter.register( 'DiatomicVerletAlgorithm', DiatomicVerletAlgorithm );
 export default DiatomicVerletAlgorithm;
