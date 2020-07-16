@@ -9,7 +9,6 @@
  */
 
 import Vector2 from '../../../../../dot/js/Vector2.js';
-import inherit from '../../../../../phet-core/js/inherit.js';
 import statesOfMatter from '../../../statesOfMatter.js';
 import PhaseStateEnum from '../../PhaseStateEnum.js';
 import SOMConstants from '../../SOMConstants.js';
@@ -19,23 +18,20 @@ const MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE = 1.5;
 const MAX_PLACEMENT_ATTEMPTS = 500; // for random placement of particles
 const MIN_INITIAL_GAS_PARTICLE_DISTANCE = 1.1; // empirically determined
 
-/**
- * @param { MultipleParticleModel } multipleParticleModel of the simulation
- * @constructor
- * @public
- */
-function AbstractPhaseStateChanger( multipleParticleModel ) {
+class AbstractPhaseStateChanger {
 
-  // @private
-  this.multipleParticleModel = multipleParticleModel;
-  this.moleculePosition = new Vector2( 0, 0 );
-  this.random = phet.joist.random;
-  this.reusableVector = new Vector2( 0, 0 );
-}
+  /**
+   * @param { MultipleParticleModel } multipleParticleModel of the simulation
+   * @public
+   */
+  constructor( multipleParticleModel ) {
 
-statesOfMatter.register( 'AbstractPhaseStateChanger', AbstractPhaseStateChanger );
-
-inherit( Object, AbstractPhaseStateChanger, {
+    // @private
+    this.multipleParticleModel = multipleParticleModel;
+    this.moleculePosition = new Vector2( 0, 0 );
+    this.random = phet.joist.random;
+    this.reusableVector = new Vector2( 0, 0 );
+  }
 
   /**
    * Set the phase based on the specified ID.  This often needs to be overridden in descendant classes to do more
@@ -43,7 +39,7 @@ inherit( Object, AbstractPhaseStateChanger, {
    * @param {PhaseStateEnum} phaseID
    * @public
    */
-  setPhase: function( phaseID ) {
+  setPhase( phaseID ) {
     switch( phaseID ) {
       case PhaseStateEnum.SOLID:
         this.setPhaseSolid();
@@ -57,14 +53,14 @@ inherit( Object, AbstractPhaseStateChanger, {
       default:
         throw new Error( 'invalid phaseID: ' + phaseID );
     }
-  },
+  }
 
   /**
    * Set the positions and velocities of the particles without setting the model temperature.
    * @param {PhaseStateEnum} phaseID
    * @public
    */
-  setParticleConfigurationForPhase: function( phaseID ) {
+  setParticleConfigurationForPhase( phaseID ) {
     switch( phaseID ) {
       case PhaseStateEnum.SOLID:
         this.setParticleConfigurationSolid();
@@ -78,14 +74,14 @@ inherit( Object, AbstractPhaseStateChanger, {
       default:
         throw new Error( 'invalid phaseID: ' + phaseID );
     }
-  },
+  }
 
   /**
    * Set the model temperature for the specified phase.
    * @param {PhaseStateEnum} phaseID
    * @public
    */
-  setTemperatureForPhase: function( phaseID ) {
+  setTemperatureForPhase( phaseID ) {
     switch( phaseID ) {
       case PhaseStateEnum.SOLID:
         this.multipleParticleModel.setTemperature( SOMConstants.SOLID_TEMPERATURE );
@@ -99,34 +95,34 @@ inherit( Object, AbstractPhaseStateChanger, {
       default:
         throw new Error( 'invalid phaseID: ' + phaseID );
     }
-  },
+  }
 
   /**
    * set the phase to solid
-   * @param {PhaseStateEnum} phaseID
+   * @protected
    */
-  setPhaseSolid: function() {
+  setPhaseSolid() {
     this.setTemperatureForPhase( PhaseStateEnum.SOLID );
     this.setParticleConfigurationSolid();
-  },
+  }
 
   /**
    * set the phase to liquid
-   * @param {PhaseStateEnum} phaseID
+   * @protected
    */
-  setPhaseLiquid: function() {
+  setPhaseLiquid() {
     this.setTemperatureForPhase( PhaseStateEnum.LIQUID );
     this.setParticleConfigurationLiquid();
-  },
+  }
 
   /**
    * set the phase to gas
-   * @param {PhaseStateEnum} phaseID
+   * @protected
    */
-  setPhaseGas: function() {
+  setPhaseGas() {
     this.setTemperatureForPhase( PhaseStateEnum.GAS );
     this.setParticleConfigurationGas();
-  },
+  }
 
   /**
    * Do a linear search for a position that is suitably far away enough from all other molecules.  This is generally
@@ -135,7 +131,7 @@ inherit( Object, AbstractPhaseStateChanger, {
    * @returns {Vector2}
    * @private
    */
-  findOpenMoleculePosition: function() {
+  findOpenMoleculePosition() {
 
     let posX;
     let posY;
@@ -159,6 +155,7 @@ inherit( Object, AbstractPhaseStateChanger, {
           }
         }
         if ( positionAvailable ) {
+
           // We found an open position.
           this.moleculePosition.setXY( posX, posY );
           return this.moleculePosition;
@@ -168,7 +165,7 @@ inherit( Object, AbstractPhaseStateChanger, {
 
     // no open position found, return null
     return null;
-  },
+  }
 
   /**
    * form the molecules into a crystal, which is essentially a cube shape
@@ -178,8 +175,9 @@ inherit( Object, AbstractPhaseStateChanger, {
    * @param {number} alternateRowOffset
    * @param {number} bottomY
    * @param {boolean} randomizeRotationalAngle
+   * @protected
    */
-  formCrystal: function( moleculesPerLayer, xSpacing, ySpacing, alternateRowOffset, bottomY, randomizeRotationalAngle ) {
+  formCrystal( moleculesPerLayer, xSpacing, ySpacing, alternateRowOffset, bottomY, randomizeRotationalAngle ) {
 
     // Get references to the various elements of the data set.
     const moleculeDataSet = this.multipleParticleModel.moleculeDataSet;
@@ -234,14 +232,14 @@ inherit( Object, AbstractPhaseStateChanger, {
     }
 
     this.zeroOutCollectiveVelocity();
-  },
+  }
 
   /**
    * Set the particle configuration for gas.  This can be generalized more than the liquid and solid phases, hence it
    * can be defined in the base class.
    * @protected
    */
-  setParticleConfigurationGas: function() {
+  setParticleConfigurationGas() {
 
     // Get references to the various elements of the data set.
     const moleculeDataSet = this.multipleParticleModel.moleculeDataSet;
@@ -279,14 +277,14 @@ inherit( Object, AbstractPhaseStateChanger, {
     // they end up with a disproportionate amount of kinetic energy.
     let newPosX;
     let newPosY;
-    const rangeX = this.multipleParticleModel.normalizedContainerWidth - ( 2 * this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE );
-    const rangeY = this.multipleParticleModel.normalizedContainerHeight - ( 2 * this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE );
+    const rangeX = this.multipleParticleModel.normalizedContainerWidth - ( 2 * MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE );
+    const rangeY = this.multipleParticleModel.normalizedContainerHeight - ( 2 * MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE );
     for ( let i = 0; i < numberOfMolecules; i++ ) {
       for ( let j = 0; j < MAX_PLACEMENT_ATTEMPTS; j++ ) {
 
         // Pick a random position.
-        newPosX = this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE + ( this.random.nextDouble() * rangeX );
-        newPosY = this.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE + ( this.random.nextDouble() * rangeY );
+        newPosX = MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE + ( this.random.nextDouble() * rangeX );
+        newPosY = MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE + ( this.random.nextDouble() * rangeY );
         let positionAvailable = true;
 
         // See if this position is available.
@@ -296,13 +294,13 @@ inherit( Object, AbstractPhaseStateChanger, {
             break;
           }
         }
-        if ( positionAvailable || j === this.MAX_PLACEMENT_ATTEMPTS - 1 ) {
+        if ( positionAvailable || j === MAX_PLACEMENT_ATTEMPTS - 1 ) {
 
           // We found an open position or we've done all the searching we can.
           moleculeCenterOfMassPositions[ i ].setXY( newPosX, newPosY );
           break;
         }
-        else if ( j === this.MAX_PLACEMENT_ATTEMPTS - 2 ) {
+        else if ( j === MAX_PLACEMENT_ATTEMPTS - 2 ) {
 
           // This is the second to last attempt, so try a linear search for a usable spot.
           const openPoint = this.findOpenMoleculePosition();
@@ -313,13 +311,13 @@ inherit( Object, AbstractPhaseStateChanger, {
         }
       }
     }
-  },
+  }
 
   /**
    * zero out the collective velocity of the substance, generally used to help prevent drift after changing phase
    * @protected
    */
-  zeroOutCollectiveVelocity: function() {
+  zeroOutCollectiveVelocity() {
 
     const moleculeDataSet = this.multipleParticleModel.moleculeDataSet;
     const numberOfMolecules = moleculeDataSet.getNumberOfMolecules();
@@ -334,13 +332,13 @@ inherit( Object, AbstractPhaseStateChanger, {
     for ( i = 0; i < numberOfMolecules; i++ ) {
       moleculeVelocities[ i ].addXY( xAdjustment, yAdjustment );
     }
-  },
+  }
 
   /**
    * Load previously saved position and motion state, does NOT load forces state
    * @protected
    */
-  loadSavedState: function( savedState ) {
+  loadSavedState( savedState ) {
 
     assert && assert(
       this.multipleParticleModel.moleculeDataSet.numberOfMolecules === savedState.numberOfMolecules,
@@ -373,11 +371,13 @@ inherit( Object, AbstractPhaseStateChanger, {
       }
       moleculesInsideContainer[ i ] = true;
     }
-  },
+  }
+}
 
-  MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE: MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE,
-  DISTANCE_BETWEEN_PARTICLES_IN_CRYSTAL: 0.12,  // In particle diameters.
-  MAX_PLACEMENT_ATTEMPTS: 500 // For random placement of particles.
-} );
+// statics
+AbstractPhaseStateChanger.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE = MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE;
+AbstractPhaseStateChanger.DISTANCE_BETWEEN_PARTICLES_IN_CRYSTAL = 0.12; // in particle diameters
+AbstractPhaseStateChanger.MAX_PLACEMENT_ATTEMPTS = MAX_PLACEMENT_ATTEMPTS; // for random placement of particles
 
+statesOfMatter.register( 'AbstractPhaseStateChanger', AbstractPhaseStateChanger );
 export default AbstractPhaseStateChanger;

@@ -2,46 +2,54 @@
 
 /**
  * simple moving average calculator
+ *
+ * @author John Blanco (PhET Interactive Simulations)
  */
 
-import inherit from '../../../../phet-core/js/inherit.js';
 import merge from '../../../../phet-core/js/merge.js';
 import statesOfMatter from '../../statesOfMatter.js';
 
-/**
- * @constructor
- */
-function MovingAverage( size, options ) {
+class MovingAverage {
 
-  options = merge( {
-    initialValue: 0
-  }, options );
+  /**
+   * @param {number} size
+   * @param {Object} [options]
+   */
+  constructor( size, options ) {
 
-  // @public
-  this.size = size;
-  this.average = 0;
+    options = merge( {
+      initialValue: 0
+    }, options );
 
-  // @private
-  this.initialValue = options.initialValue;
-  this.array = new Array( size );
+    // @public
+    this.size = size;
+    this.average = 0;
 
-  // set up initial values
-  this.reset();
-}
+    // @private
+    this.initialValue = options.initialValue;
+    this.array = new Array( size );
 
-statesOfMatter.register( 'MovingAverage', MovingAverage );
+    // set up initial values
+    this.reset();
+  }
 
-inherit( Object, MovingAverage, {
-
-  addValue: function( newValue ) {
+  /**
+   * add a value to the moving average
+   * @param {number} newValue
+   * @public
+   */
+  addValue( newValue ) {
     const replacedValue = this.array[ this.currentIndex ];
     this.array[ this.currentIndex ] = newValue;
     this.currentIndex = ( this.currentIndex + 1 ) % this.size;
     this.total = ( this.total - replacedValue ) + newValue;
     this.average = this.total / this.size;
-  },
+  }
 
-  reset: function() {
+  /**
+   * @public
+   */
+  reset() {
     for ( let i = 0; i < this.size; i++ ) {
       this.array[ i ] = this.initialValue;
     }
@@ -49,6 +57,7 @@ inherit( Object, MovingAverage, {
     this.average = this.total / this.size;
     this.currentIndex = 0;
   }
-} );
+}
 
+statesOfMatter.register( 'MovingAverage', MovingAverage );
 export default MovingAverage;

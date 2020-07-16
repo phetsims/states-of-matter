@@ -8,7 +8,6 @@
  */
 
 import Utils from '../../../../../dot/js/Utils.js';
-import inherit from '../../../../../phet-core/js/inherit.js';
 import statesOfMatter from '../../../statesOfMatter.js';
 import SOMConstants from '../../SOMConstants.js';
 import SubstanceType from '../../SubstanceType.js';
@@ -18,17 +17,82 @@ import MonatomicAtomPositionUpdater from './MonatomicAtomPositionUpdater.js';
 // constants
 const MIN_INITIAL_INTER_PARTICLE_DISTANCE = 1.12; // empirically determined
 
-/**
- * @param {MultipleParticleModel} multipleParticleModel of the simulation
- * @constructor
- */
-function MonatomicPhaseStateChanger( multipleParticleModel ) {
-  AbstractPhaseStateChanger.call( this, multipleParticleModel );
-  this.positionUpdater = MonatomicAtomPositionUpdater;
-  this.random = phet.joist.random;
-}
+class MonatomicPhaseStateChanger extends AbstractPhaseStateChanger {
 
-statesOfMatter.register( 'MonatomicPhaseStateChanger', MonatomicPhaseStateChanger );
+  /**
+   * @param {MultipleParticleModel} multipleParticleModel
+   */
+  constructor( multipleParticleModel ) {
+    super( multipleParticleModel );
+    this.positionUpdater = MonatomicAtomPositionUpdater;
+    this.random = phet.joist.random;
+  }
+
+  /**
+   * @public
+   * @param {number} phaseID - state(solid/liquid/gas) of Molecule
+   */
+  setPhase( phaseID ) {
+
+    super.setPhase( phaseID );
+
+    const moleculeDataSet = this.multipleParticleModel.moleculeDataSet;
+
+    // set an offset based on the substance type so that it will be centered
+    let offset = 0;
+    if ( this.multipleParticleModel.substanceProperty.get() === SubstanceType.ARGON ) {
+      offset = 6;
+    }
+    else if ( this.multipleParticleModel.substanceProperty.get() === SubstanceType.ADJUSTABLE_ATOM ) {
+      offset = 4;
+    }
+
+    // Sync up the atom positions with the molecule positions.
+    this.positionUpdater.updateAtomPositions( moleculeDataSet, offset );
+
+    // Step the model a number of times in order to prevent the particles from looking too organized.  The number of
+    // steps was empirically determined.
+    for ( let i = 0; i < 5; i++ ) {
+      this.multipleParticleModel.stepInternal( SOMConstants.NOMINAL_TIME_STEP );
+    }
+  }
+
+  /**
+   * Set the particle configuration for the solid phase.
+   * @protected
+   */
+  setParticleConfigurationSolid() {
+
+    // Place the molecules into a cube, a.k.a. a crystal.
+    this.formCrystal(
+      Utils.roundSymmetric( Math.sqrt( this.multipleParticleModel.moleculeDataSet.getNumberOfMolecules() ) ),
+      MIN_INITIAL_INTER_PARTICLE_DISTANCE,
+      MIN_INITIAL_INTER_PARTICLE_DISTANCE * 0.866,
+      MIN_INITIAL_INTER_PARTICLE_DISTANCE / 2,
+      MIN_INITIAL_INTER_PARTICLE_DISTANCE,
+      false
+    );
+  }
+
+  /**
+   * Set the particle configuration for the liquid phase.
+   * @protected
+   */
+  setParticleConfigurationLiquid() {
+    let dataSetToLoad;
+    if ( this.multipleParticleModel.substanceProperty.get() === SubstanceType.NEON ) {
+      dataSetToLoad = LIQUID_INITIAL_STATES.neon;
+    }
+    else if ( this.multipleParticleModel.substanceProperty.get() === SubstanceType.ARGON ) {
+      dataSetToLoad = LIQUID_INITIAL_STATES.argon;
+    }
+    else if ( this.multipleParticleModel.substanceProperty.get() === SubstanceType.ADJUSTABLE_ATOM ) {
+      dataSetToLoad = LIQUID_INITIAL_STATES.adjustableAttraction;
+    }
+    assert && assert( dataSetToLoad, 'unhandled substance: ' + this.multipleParticleModel.substanceProperty.get() );
+    this.loadSavedState( dataSetToLoad );
+  }
+}
 
 // Initial positions for liquid phase, which is hard to create algorithmically.  These were created by setting the
 // appropriate temperature and iterating until a visually acceptable configuration was  emerged, then capturing a
@@ -2018,75 +2082,7 @@ const LIQUID_INITIAL_STATES = {
       }
     ]
   }
-
 };
 
-inherit( AbstractPhaseStateChanger, MonatomicPhaseStateChanger, {
-
-  /**
-   * @public
-   * @param {number} phaseID - state(solid/liquid/gas) of Molecule
-   */
-  setPhase: function( phaseID ) {
-
-    AbstractPhaseStateChanger.prototype.setPhase.call( this, phaseID );
-
-    const moleculeDataSet = this.multipleParticleModel.moleculeDataSet;
-
-    let offset = 0;
-    if ( this.multipleParticleModel.substanceProperty.get() === SubstanceType.ARGON ) {
-      offset = 6;
-    }
-
-    if ( this.multipleParticleModel.substanceProperty.get() === SubstanceType.ADJUSTABLE_ATOM ) {
-      offset = 4;
-    }
-
-    // Sync up the atom positions with the molecule positions.
-    this.positionUpdater.updateAtomPositions( moleculeDataSet, offset );
-
-    // Step the model a number of times in order to prevent the particles from looking too organized.  The number of
-    // steps was empirically determined.
-    for ( let i = 0; i < 5; i++ ) {
-      this.multipleParticleModel.stepInternal( SOMConstants.NOMINAL_TIME_STEP );
-    }
-  },
-
-  /**
-   * Set the particle configuration for the solid phase.
-   * @protected
-   */
-  setParticleConfigurationSolid: function() {
-
-    // Place the molecules into a cube, a.k.a. a crystal.
-    this.formCrystal(
-      Utils.roundSymmetric( Math.sqrt( this.multipleParticleModel.moleculeDataSet.getNumberOfMolecules() ) ),
-      MIN_INITIAL_INTER_PARTICLE_DISTANCE,
-      MIN_INITIAL_INTER_PARTICLE_DISTANCE * 0.866,
-      MIN_INITIAL_INTER_PARTICLE_DISTANCE / 2,
-      MIN_INITIAL_INTER_PARTICLE_DISTANCE,
-      false
-    );
-  },
-
-  /**
-   * Set the particle configuration for the liquid phase.
-   * @protected
-   */
-  setParticleConfigurationLiquid: function() {
-    let dataSetToLoad;
-    if ( this.multipleParticleModel.substanceProperty.get() === SubstanceType.NEON ) {
-      dataSetToLoad = LIQUID_INITIAL_STATES.neon;
-    }
-    else if ( this.multipleParticleModel.substanceProperty.get() === SubstanceType.ARGON ) {
-      dataSetToLoad = LIQUID_INITIAL_STATES.argon;
-    }
-    else if ( this.multipleParticleModel.substanceProperty.get() === SubstanceType.ADJUSTABLE_ATOM ) {
-      dataSetToLoad = LIQUID_INITIAL_STATES.adjustableAttraction;
-    }
-    assert && assert( dataSetToLoad, 'unhandled substance: ' + this.multipleParticleModel.substanceProperty.get() );
-    this.loadSavedState( dataSetToLoad );
-  }
-} );
-
+statesOfMatter.register( 'MonatomicPhaseStateChanger', MonatomicPhaseStateChanger );
 export default MonatomicPhaseStateChanger;

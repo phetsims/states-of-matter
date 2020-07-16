@@ -1,35 +1,92 @@
 // Copyright 2014-2020, University of Colorado Boulder
 
 /**
- * This class is used to change the phase state (i.e. solid, liquid, or gas)
- * for a set of water molecules.  It only works for water and would need to be
- * generalized to handle other triatomic molecules.
+ * This class is used to change the phase state (i.e. solid, liquid, or gas) for a set of water molecules.  It only
+ * works for water and would need to be generalized to handle other triatomic molecules.
  *
  * @author John Blanco
  * @author Siddhartha Chinthapally (Actual Concepts)
  */
 
-import inherit from '../../../../../phet-core/js/inherit.js';
 import statesOfMatter from '../../../statesOfMatter.js';
 import SOMConstants from '../../SOMConstants.js';
 import SubstanceType from '../../SubstanceType.js';
 import AbstractPhaseStateChanger from './AbstractPhaseStateChanger.js';
 import WaterAtomPositionUpdater from './WaterAtomPositionUpdater.js';
 
-/**
- * @param { MultipleParticleModel } multipleParticleModel - model of a set of particles
- * @constructor
- */
-function WaterPhaseStateChanger( multipleParticleModel ) {
+class WaterPhaseStateChanger extends AbstractPhaseStateChanger {
 
-  // Make sure this is not being used on an inappropriate data set.
-  assert && assert( multipleParticleModel.moleculeDataSet.getAtomsPerMolecule() === 3 );
+  /**
+   * @param { MultipleParticleModel } multipleParticleModel - model of a set of particles
+   */
+  constructor( multipleParticleModel ) {
 
-  AbstractPhaseStateChanger.call( this, multipleParticleModel );
+    // Make sure this is not being used on an inappropriate data set.
+    assert && assert( multipleParticleModel.moleculeDataSet.getAtomsPerMolecule() === 3 );
 
-  // @private
-  this.multipleParticleModel = multipleParticleModel;
-  this.positionUpdater = WaterAtomPositionUpdater; // @private
+    super( multipleParticleModel );
+
+    // @private
+    this.multipleParticleModel = multipleParticleModel;
+    this.positionUpdater = WaterAtomPositionUpdater; // @private
+  }
+
+  /**
+   * @public
+   * @param {PhaseStateEnum} phaseID - state(solid/liquid/gas) of Molecule
+   */
+  setPhase( phaseID ) {
+
+    AbstractPhaseStateChanger.prototype.setPhase.call( this, phaseID );
+
+    // Sync up the atom positions with the molecule positions.
+    this.positionUpdater.updateAtomPositions( this.multipleParticleModel.moleculeDataSet );
+
+    // Step the model a number of times in order to prevent the particles from looking too organized.  The number of
+    // steps was empirically determined.
+    for ( let i = 0; i < 5; i++ ) {
+      this.multipleParticleModel.stepInternal( SOMConstants.NOMINAL_TIME_STEP );
+    }
+  }
+
+  /**
+   * Set the particle configuration for the solid phase.
+   * @protected
+   */
+  setParticleConfigurationSolid() {
+
+    let dataSetToLoad;
+
+    // find the data for this substance
+    if ( this.multipleParticleModel.substanceProperty.get() === SubstanceType.WATER ) {
+      dataSetToLoad = SOLID_INITIAL_STATES.water;
+    }
+    assert && assert( dataSetToLoad, 'unhandled substance: ' + this.multipleParticleModel.substanceProperty.get() );
+
+    // load the previously saved state
+    this.loadSavedState( dataSetToLoad );
+
+    // prevent drift
+    this.zeroOutCollectiveVelocity();
+  }
+
+  /**
+   * Set the particle configuration for the liquid phase.
+   * @protected
+   */
+  setParticleConfigurationLiquid() {
+
+    let dataSetToLoad;
+
+    // find the data for this substance
+    if ( this.multipleParticleModel.substanceProperty.get() === SubstanceType.WATER ) {
+      dataSetToLoad = LIQUID_INITIAL_STATES.water;
+    }
+    assert && assert( dataSetToLoad, 'unhandled substance: ' + this.multipleParticleModel.substanceProperty.get() );
+
+    // load the previously saved state
+    this.loadSavedState( dataSetToLoad );
+  }
 }
 
 // Initial positions for liquid phase, which is hard to create algorithmically.  These were created by setting the
@@ -675,68 +732,5 @@ const SOLID_INITIAL_STATES = {
   }
 };
 
-//================================================================
-
 statesOfMatter.register( 'WaterPhaseStateChanger', WaterPhaseStateChanger );
-
-inherit( AbstractPhaseStateChanger, WaterPhaseStateChanger, {
-
-  /**
-   * @public
-   * @param {number} phaseID - state(solid/liquid/gas) of Molecule
-   */
-  setPhase: function( phaseID ) {
-
-    AbstractPhaseStateChanger.prototype.setPhase.call( this, phaseID );
-
-    // Sync up the atom positions with the molecule positions.
-    this.positionUpdater.updateAtomPositions( this.multipleParticleModel.moleculeDataSet );
-
-    // Step the model a number of times in order to prevent the particles from looking too organized.  The number of
-    // steps was empirically determined.
-    for ( let i = 0; i < 5; i++ ) {
-      this.multipleParticleModel.stepInternal( SOMConstants.NOMINAL_TIME_STEP );
-    }
-  },
-
-  /**
-   * Set the particle configuration for the solid phase.
-   * @protected
-   */
-  setParticleConfigurationSolid: function() {
-
-    let dataSetToLoad;
-
-    // find the data for this substance
-    if ( this.multipleParticleModel.substanceProperty.get() === SubstanceType.WATER ) {
-      dataSetToLoad = SOLID_INITIAL_STATES.water;
-    }
-    assert && assert( dataSetToLoad, 'unhandled substance: ' + this.multipleParticleModel.substanceProperty.get() );
-
-    // load the previously saved state
-    this.loadSavedState( dataSetToLoad );
-
-    // prevent drift
-    this.zeroOutCollectiveVelocity();
-  },
-
-  /**
-   * Set the particle configuration for the liquid phase.
-   * @protected
-   */
-  setParticleConfigurationLiquid: function() {
-
-    let dataSetToLoad;
-
-    // find the data for this substance
-    if ( this.multipleParticleModel.substanceProperty.get() === SubstanceType.WATER ) {
-      dataSetToLoad = LIQUID_INITIAL_STATES.water;
-    }
-    assert && assert( dataSetToLoad, 'unhandled substance: ' + this.multipleParticleModel.substanceProperty.get() );
-
-    // load the previously saved state
-    this.loadSavedState( dataSetToLoad );
-  }
-} );
-
 export default WaterPhaseStateChanger;

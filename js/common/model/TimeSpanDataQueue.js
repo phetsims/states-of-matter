@@ -1,48 +1,50 @@
 // Copyright 2016-2020, University of Colorado Boulder
 
+/**
+ * A queue that stores data values along with time change (dt) values and automatically removes data when it exceeds
+ * a maximum time span.
+ *
+ * @author John Blanco (PhET Interactive Simulations)
+ */
 
-import inherit from '../../../../phet-core/js/inherit.js';
 import statesOfMatter from '../../statesOfMatter.js';
 
-/**
- * {number} length - max number of entries in the queue
- * {number} maxTimeSpan - max span of time that can be stored, in seconds
- * @constructor
- */
-function TimeSpanDataQueue( length, maxTimeSpan ) {
-  assert && assert( length > 0, 'length must be positive' );
-  this.length = length;
-  this.maxTimeSpan = maxTimeSpan;
+class TimeSpanDataQueue {
 
-  // @private - array where entries are kept
-  this.dataQueue = new Array( length );
+  /**
+   * {number} length - max number of entries in the queue
+   * {number} maxTimeSpan - max span of time that can be stored, in seconds
+   */
+  constructor( length, maxTimeSpan ) {
+    assert && assert( length > 0, 'length must be positive' );
+    this.length = length;
+    this.maxTimeSpan = maxTimeSpan;
 
-  // initialize the data array with a set of reusable objects so that subsequent allocations are not needed
-  for ( let i = 0; i < length; i++ ) {
-    this.dataQueue[ i ] = { deltaTime: 0, value: null };
+    // @private - array where entries are kept
+    this.dataQueue = new Array( length );
+
+    // initialize the data array with a set of reusable objects so that subsequent allocations are not needed
+    for ( let i = 0; i < length; i++ ) {
+      this.dataQueue[ i ] = { deltaTime: 0, value: null };
+    }
+
+    // @public (read-only) {number} - the total of all values currently in the queue
+    this.total = 0;
+
+    // @private - variables used to make this thing work
+    this.head = 0;
+    this.tail = 0;
+    this.timeSpan = 0;
   }
-
-  // @public (read-only) {number} - the total of all values currently in the queue
-  this.total = 0;
-
-  // @private - variables used to make this thing work
-  this.head = 0;
-  this.tail = 0;
-  this.timeSpan = 0;
-}
-
-statesOfMatter.register( 'TimeSpanDataQueue', TimeSpanDataQueue );
-
-inherit( Object, TimeSpanDataQueue, {
 
   /**
    * add a new value with associated delta time - this automatically removes data values that go beyond the max time
    * span, and also updates the total value and the current time span
-   * @param value
-   * @param dt
+   * @param {number} value
+   * @param {number} dt
    * @public
    */
-  add: function( value, dt ) {
+  add( value, dt ) {
 
     assert && assert( dt < this.maxTimeSpan, 'dt value is greater than max time span' );
     const nextHead = ( this.head + 1 ) % this.length;
@@ -73,18 +75,19 @@ inherit( Object, TimeSpanDataQueue, {
       this.timeSpan -= this.dataQueue[ this.tail ].deltaTime;
       this.tail = nextTail;
     }
-  },
+  }
 
   /**
    * clear all data from the queue
    * @public
    */
-  clear: function() {
+  clear() {
     this.head = 0;
     this.tail = 0;
     this.total = 0;
     this.timeSpan = 0;
   }
-} );
+}
 
+statesOfMatter.register( 'TimeSpanDataQueue', TimeSpanDataQueue );
 export default TimeSpanDataQueue;

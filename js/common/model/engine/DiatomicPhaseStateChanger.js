@@ -9,7 +9,6 @@
  */
 
 import Utils from '../../../../../dot/js/Utils.js';
-import inherit from '../../../../../phet-core/js/inherit.js';
 import statesOfMatter from '../../../statesOfMatter.js';
 import PhaseStateEnum from '../../PhaseStateEnum.js';
 import SOMConstants from '../../SOMConstants.js';
@@ -20,24 +19,96 @@ import DiatomicAtomPositionUpdater from './DiatomicAtomPositionUpdater.js';
 // constants
 const MIN_INITIAL_DIAMETER_DISTANCE = 2.02;
 
-/**
- * @param {MultipleParticleModel} multipleParticleModel of the simulation
- * @constructor
- */
-function DiatomicPhaseStateChanger( multipleParticleModel ) {
+class DiatomicPhaseStateChanger extends AbstractPhaseStateChanger {
 
-  // Make sure this is not being used on an inappropriate data set.
-  assert && assert( multipleParticleModel.moleculeDataSet.getAtomsPerMolecule() === 2 );
+  /**
+   * @param {MultipleParticleModel} multipleParticleModel of the simulation
+   */
+  constructor( multipleParticleModel ) {
 
-  // initialization
-  this.positionUpdater = DiatomicAtomPositionUpdater; // @private
-  AbstractPhaseStateChanger.call( this, multipleParticleModel );
-  this.multipleParticleModel = multipleParticleModel; // @private
+    // Make sure this is not being used on an inappropriate data set.
+    assert && assert( multipleParticleModel.moleculeDataSet.getAtomsPerMolecule() === 2 );
+
+    // initialization
+    super( multipleParticleModel );
+    this.positionUpdater = DiatomicAtomPositionUpdater; // @private
+    this.multipleParticleModel = multipleParticleModel; // @private
+  }
+
+  /**
+   * @param {PhaseStateEnum} phaseState - phase state (solid/liquid/gas) of the collection of molecules
+   * @public
+   */
+  setPhase( phaseState ) {
+    let postChangeModelSteps = 0;
+    switch( phaseState ) {
+      case PhaseStateEnum.SOLID:
+        this.setPhaseSolid();
+        postChangeModelSteps = 0;
+        break;
+      case PhaseStateEnum.LIQUID:
+        this.setPhaseLiquid();
+        postChangeModelSteps = 20;
+        break;
+      case PhaseStateEnum.GAS:
+        this.setPhaseGas();
+        postChangeModelSteps = 0;
+        break;
+      default:
+        throw new Error( 'invalid phaseState: ' + phaseState );
+    }
+
+    const moleculeDataSet = this.multipleParticleModel.moleculeDataSet;
+
+    // Sync up the atom positions with the molecule positions.
+    this.positionUpdater.updateAtomPositions( moleculeDataSet );
+
+    // Step the model a number of times in order to prevent the particles from looking too organized.  The number of
+    // steps was empirically determined.
+    for ( let i = 0; i < postChangeModelSteps; i++ ) {
+      this.multipleParticleModel.stepInternal( SOMConstants.NOMINAL_TIME_STEP );
+    }
+  }
+
+  /**
+   * Set the particle configuration for the solid phase.
+   * @protected
+   */
+  setParticleConfigurationSolid() {
+
+    // Place the molecules into a cube, a.k.a. a crystal.
+    this.formCrystal(
+      Utils.roundSymmetric( Math.sqrt( this.multipleParticleModel.moleculeDataSet.getNumberOfMolecules() * 2 ) ) / 2,
+      MIN_INITIAL_DIAMETER_DISTANCE,
+      MIN_INITIAL_DIAMETER_DISTANCE * 0.5,
+      0.5,
+      1.4, // empirically determined to minimize bounce
+      false
+    );
+  }
+
+  /**
+   * Set the particle configuration for the liquid phase.
+   * @protected
+   */
+  setParticleConfigurationLiquid() {
+
+    let dataSetToLoad;
+
+    // find the data for this substance
+    if ( this.multipleParticleModel.substanceProperty.get() === SubstanceType.DIATOMIC_OXYGEN ) {
+      dataSetToLoad = LIQUID_INITIAL_STATES.oxygen;
+    }
+    assert && assert( dataSetToLoad, 'unhandled substance: ' + this.multipleParticleModel.substanceProperty.get() );
+
+    // load the previously saved state
+    this.loadSavedState( dataSetToLoad );
+  }
 }
 
 // Initial positions for liquid phase, which is hard to create algorithmically.  These were created by setting the
-// appropriate temperature and iterating until a visually acceptable configuration emerged, then capturing a
-// "snapshot" of the state.
+// appropriate temperature and iterating until a visually acceptable configuration emerged, then capturing a "snapshot"
+// of the state.
 const LIQUID_INITIAL_STATES = {
   oxygen: {
     numberOfMolecules: 50,
@@ -556,78 +627,4 @@ const LIQUID_INITIAL_STATES = {
 };
 
 statesOfMatter.register( 'DiatomicPhaseStateChanger', DiatomicPhaseStateChanger );
-
-inherit( AbstractPhaseStateChanger, DiatomicPhaseStateChanger, {
-
-  /**
-   * @param {number} phaseState - phase state (solid/liquid/gas) of the collection of molecules
-   * @public
-   */
-  setPhase: function( phaseState ) {
-    let postChangeModelSteps = 0;
-    switch( phaseState ) {
-      case PhaseStateEnum.SOLID:
-        this.setPhaseSolid();
-        postChangeModelSteps = 0;
-        break;
-      case PhaseStateEnum.LIQUID:
-        this.setPhaseLiquid();
-        postChangeModelSteps = 20;
-        break;
-      case PhaseStateEnum.GAS:
-        this.setPhaseGas();
-        postChangeModelSteps = 0;
-        break;
-      default:
-        throw new Error( 'invalid phaseState: ' + phaseState );
-    }
-
-    const moleculeDataSet = this.multipleParticleModel.moleculeDataSet;
-
-    // Sync up the atom positions with the molecule positions.
-    this.positionUpdater.updateAtomPositions( moleculeDataSet );
-
-    // Step the model a number of times in order to prevent the particles from looking too organized.  The number of
-    // steps was empirically determined.
-    for ( let i = 0; i < postChangeModelSteps; i++ ) {
-      this.multipleParticleModel.stepInternal( SOMConstants.NOMINAL_TIME_STEP );
-    }
-  },
-
-  /**
-   * Set the particle configuration for the solid phase.
-   * @protected
-   */
-  setParticleConfigurationSolid: function() {
-
-    // Place the molecules into a cube, a.k.a. a crystal.
-    this.formCrystal(
-      Utils.roundSymmetric( Math.sqrt( this.multipleParticleModel.moleculeDataSet.getNumberOfMolecules() * 2 ) ) / 2,
-      MIN_INITIAL_DIAMETER_DISTANCE,
-      MIN_INITIAL_DIAMETER_DISTANCE * 0.5,
-      0.5,
-      1.4, // empirically determined to minimize bounce
-      false
-    );
-  },
-
-  /**
-   * Set the particle configuration for the liquid phase.
-   * @protected
-   */
-  setParticleConfigurationLiquid: function() {
-
-    let dataSetToLoad;
-
-    // find the data for this substance
-    if ( this.multipleParticleModel.substanceProperty.get() === SubstanceType.DIATOMIC_OXYGEN ) {
-      dataSetToLoad = LIQUID_INITIAL_STATES.oxygen;
-    }
-    assert && assert( dataSetToLoad, 'unhandled substance: ' + this.multipleParticleModel.substanceProperty.get() );
-
-    // load the previously saved state
-    this.loadSavedState( dataSetToLoad );
-  }
-} );
-
 export default DiatomicPhaseStateChanger;
