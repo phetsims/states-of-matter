@@ -10,7 +10,6 @@
  */
 
 import Vector2 from '../../../../../../dot/js/Vector2.js';
-import inherit from '../../../../../../phet-core/js/inherit.js';
 import statesOfMatter from '../../../../statesOfMatter.js';
 import SOMConstants from '../../../SOMConstants.js';
 
@@ -19,47 +18,44 @@ const MIN_POST_ZERO_VELOCITY = 0.1; // min velocity when warming up from absolut
 const MIN_X_VEL_WHEN_FALLING = 1.0; // a velocity below which x should not be scaled when falling,  empirically determined
 const COMPENSATION_FACTOR = 0.9; // an empirically determined factor to help with drift compensation, see usage below
 
-/**
- * Constructor for the Isokinetic thermostat.
- * @param {MoleculeForceAndMotionDataSet} moleculeDataSet -  Data set on which operations will be performed.
- * @param {number} minTemperature - The temperature that should be considered absolute zero, below which motion should cease.
- * @constructor
- */
-function IsokineticThermostat( moleculeDataSet, minTemperature ) {
+class IsokineticThermostat {
 
-  this.moleculeDataSet = moleculeDataSet; // @private
+  /**
+   * Constructor for the Isokinetic thermostat.
+   * @param {MoleculeForceAndMotionDataSet} moleculeDataSet -  Data set on which operations will be performed.
+   * @param {number} minTemperature - The temperature that should be considered absolute zero, below which motion should cease.
+   */
+  constructor( moleculeDataSet, minTemperature ) {
 
-  // @public, target temperature in normalized model units
-  this.targetTemperature = SOMConstants.INITIAL_TEMPERATURE;
+    this.moleculeDataSet = moleculeDataSet; // @private
 
-  // @private, minimum temperature in normalized model units, below this is considered absolute 0
-  this.minModelTemperature = minTemperature;
+    // @public, target temperature in normalized model units
+    this.targetTemperature = SOMConstants.INITIAL_TEMPERATURE;
 
-  // @private, previous scale factor from temperature adjust calculation
-  this.previousTemperatureScaleFactor = 1;
+    // @private, minimum temperature in normalized model units, below this is considered absolute 0
+    this.minModelTemperature = minTemperature;
 
-  // @private, references to the various arrays within the data set so that the calculations can be performed as fast
-  // as is possible.
-  this.moleculeVelocities = moleculeDataSet.moleculeVelocities;
-  this.moleculeRotationRates = moleculeDataSet.moleculeRotationRates;
+    // @private, previous scale factor from temperature adjust calculation
+    this.previousTemperatureScaleFactor = 1;
 
-  // @private {Vector2} - reusable vector used for calculating velocity changes
-  this.previousParticleVelocity = new Vector2( 0, 0 );
+    // @private, references to the various arrays within the data set so that the calculations can be performed as fast
+    // as is possible.
+    this.moleculeVelocities = moleculeDataSet.moleculeVelocities;
+    this.moleculeRotationRates = moleculeDataSet.moleculeRotationRates;
 
-  // @private {Vector2} - used to correct for a collective drift that can occur, see usage for details
-  this.totalVelocityChangeThisStep = new Vector2( 0, 0 );
-  this.accumulatedAverageVelocityChange = new Vector2( 0, 0 );
-}
+    // @private {Vector2} - reusable vector used for calculating velocity changes
+    this.previousParticleVelocity = new Vector2( 0, 0 );
 
-statesOfMatter.register( 'IsokineticThermostat', IsokineticThermostat );
-
-inherit( Object, IsokineticThermostat, {
+    // @private {Vector2} - used to correct for a collective drift that can occur, see usage for details
+    this.totalVelocityChangeThisStep = new Vector2( 0, 0 );
+    this.accumulatedAverageVelocityChange = new Vector2( 0, 0 );
+  }
 
   /**
    * @param {number} measuredTemperature - measured temperature of particles, in model units
    * @public
    */
-  adjustTemperature: function( measuredTemperature ) {
+  adjustTemperature( measuredTemperature ) {
 
     let i;
     const numberOfParticles = this.moleculeDataSet.getNumberOfMolecules();
@@ -144,16 +140,17 @@ inherit( Object, IsokineticThermostat, {
       this.totalVelocityChangeThisStep.x / numberOfParticles,
       this.totalVelocityChangeThisStep.y / numberOfParticles
     );
-  },
+  }
 
   /**
    * clear the accumulated velocity bias, should be done when this thermostat starts being used for a number of steps
    * in a row
    * @public
    */
-  clearAccumulatedBias: function() {
+  clearAccumulatedBias() {
     this.accumulatedAverageVelocityChange.setXY( 0, 0 );
   }
-} );
+}
 
+statesOfMatter.register( 'IsokineticThermostat', IsokineticThermostat );
 export default IsokineticThermostat;

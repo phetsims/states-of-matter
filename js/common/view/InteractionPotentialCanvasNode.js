@@ -10,7 +10,6 @@
 
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import inherit from '../../../../phet-core/js/inherit.js';
 import ArrowShape from '../../../../scenery-phet/js/ArrowShape.js';
 import CanvasNode from '../../../../scenery/js/nodes/CanvasNode.js';
 import statesOfMatter from '../../statesOfMatter.js';
@@ -21,33 +20,31 @@ const AXES_ARROW_HEAD_HEIGHT = 8 * AXIS_LINE_WIDTH;
 const SIGMA_HANDLE_OFFSET_PROPORTION = 0.08;  // Position of handle as function of node width.
 const EPSILON_LINE_WIDTH = 1;
 
-/**
- * @param {PotentialGraphNode} potentialGraphNode
- * @param {Object} [options] that can be passed on to the underlying node
- * @constructor
- */
-function InteractionPotentialCanvasNode( potentialGraphNode, options ) {
-  CanvasNode.call( this, options );
-  this.potentialGraph = potentialGraphNode; // @private
+class InteractionPotentialCanvasNode extends CanvasNode {
 
-  // @private {number[]} - ror efficiency, pre-allocate the array that represents the Y positions of the curve.  The X
-  // positions are the indexes into the array.
-  this.curveYPositions = new Array( Utils.roundSymmetric( potentialGraphNode.graphWidth ) );
+  /**
+   * @param {PotentialGraphNode} potentialGraphNode
+   * @param {Object} [options] that can be passed on to the underlying node
+   * @constructor
+   */
+  constructor( potentialGraphNode, options ) {
+    super( options );
+    this.potentialGraph = potentialGraphNode; // @private
 
-  // @private {Vector2} - reusable vector for positioning the epsilon arrow
-  this.epsilonArrowStartPoint = new Vector2( 0, 0 );
-}
+    // @private {number[]} - ror efficiency, pre-allocate the array that represents the Y positions of the curve.  The X
+    // positions are the indexes into the array.
+    this.curveYPositions = new Array( Utils.roundSymmetric( potentialGraphNode.graphWidth ) );
 
-statesOfMatter.register( 'InteractionPotentialCanvasNode', InteractionPotentialCanvasNode );
-
-inherit( CanvasNode, InteractionPotentialCanvasNode, {
+    // @private {Vector2} - reusable vector for positioning the epsilon arrow
+    this.epsilonArrowStartPoint = new Vector2( 0, 0 );
+  }
 
   /**
    * Paints the potential energy curve.
    * @param {CanvasRenderingContext2D} context
    * @public
    */
-  paintCanvas: function( context ) {
+  paintCanvas( context ) {
     context.beginPath();
     context.moveTo( 0, 0 );
     for ( let i = 1; i < this.curveYPositions.length; i++ ) {
@@ -76,9 +73,13 @@ inherit( CanvasNode, InteractionPotentialCanvasNode, {
     context.strokeStyle = this.strokeColor;
     context.lineWidth = 2;
     context.stroke();
-  },
+  }
 
-  update: function( color ) {
+  /**
+   * @param {Color} color
+   * @public
+   */
+  update( color ) {
     this.strokeColor = color.toCSS();
 
     // Calculate the points that comprise the curve and record several key values along the way the will be used to
@@ -183,6 +184,7 @@ inherit( CanvasNode, InteractionPotentialCanvasNode, {
     // indicate that this should be repainted during the next paint cycle
     this.invalidatePaint();
   }
-} );
+}
 
+statesOfMatter.register( 'InteractionPotentialCanvasNode', InteractionPotentialCanvasNode );
 export default InteractionPotentialCanvasNode;

@@ -9,46 +9,44 @@
 
 import OptionsDialog from '../../../../joist/js/OptionsDialog.js';
 import ProjectorModeCheckbox from '../../../../joist/js/ProjectorModeCheckbox.js';
-import inherit from '../../../../phet-core/js/inherit.js';
 import VBox from '../../../../scenery/js/nodes/VBox.js';
 import statesOfMatter from '../../statesOfMatter.js';
 import SOMColorProfile from './SOMColorProfile.js';
 
-/**
- * @param {Tandem} tandem
- * @constructor
- */
-function GlobalOptionsNode( tandem ) {
+class GlobalOptionsNode extends VBox {
 
-  // add support for setting projector mode
-  const projectorModeCheckbox = new ProjectorModeCheckbox( SOMColorProfile, {
-    tandem: tandem.createTandem( 'projectorModeCheckbox' )
-  } );
+  /**
+   * @param {Tandem} tandem
+   */
+  constructor( tandem ) {
 
-  // VBox is used to make it easy to add additional options
-  VBox.call( this, {
-    children: [ projectorModeCheckbox ],
-    spacing: OptionsDialog.DEFAULT_SPACING,
-    align: 'left'
-  } );
+    // add support for setting projector mode
+    const projectorModeCheckbox = new ProjectorModeCheckbox( SOMColorProfile, {
+      tandem: tandem.createTandem( 'projectorModeCheckbox' )
+    } );
 
-  // @private
-  this.disposeGlobalOptionsNode = () => {
-    projectorModeCheckbox.dispose();
-  };
-}
+    // VBox is used to make it easy to add additional options
+    super( {
+      children: [projectorModeCheckbox],
+      spacing: OptionsDialog.DEFAULT_SPACING,
+      align: 'left'
+    } );
 
-statesOfMatter.register( 'GlobalOptionsNode', GlobalOptionsNode );
-
-inherit( VBox, GlobalOptionsNode, {
+    // @private
+    this.disposeGlobalOptionsNode = () => {
+      projectorModeCheckbox.dispose();
+    };
+  }
 
   /**
    * @public
    * @override
    */
-  dispose: function() {
+  dispose() {
     this.disposeGlobalOptionsNode();
     VBox.prototype.dispose.call( this );
   }
-} );
+}
+
+statesOfMatter.register( 'GlobalOptionsNode', GlobalOptionsNode );
 export default GlobalOptionsNode;

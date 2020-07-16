@@ -11,7 +11,6 @@
  */
 
 import Vector2 from '../../../../../../dot/js/Vector2.js';
-import inherit from '../../../../../../phet-core/js/inherit.js';
 import statesOfMatter from '../../../../statesOfMatter.js';
 import SOMConstants from '../../../SOMConstants.js';
 
@@ -19,54 +18,51 @@ import SOMConstants from '../../../SOMConstants.js';
 const PROPORTION_COMPENSATION_FACTOR = 0.25; // used for drift compensation, value empirically determined
 const INTEGRAL_COMPENSATION_FACTOR = 0.5; // used for drift compensation, value empirically determined
 
-/**
- * Constructor for the Andersen thermostat.
- * @param {MoleculeForceAndMotionDataSet} moleculeDataSet  - Data set on which operations will be performed.
- * @param {number} minTemperature  - The temperature that should be considered absolute zero, below which motion should cease
- * @constructor
- */
-function AndersenThermostat( moleculeDataSet, minTemperature ) {
+class AndersenThermostat {
 
-  // @public target temperature in normalized model units
-  this.targetTemperature = SOMConstants.INITIAL_TEMPERATURE;
+  /**
+   * Constructor for the Andersen thermostat.
+   * @param {MoleculeForceAndMotionDataSet} moleculeDataSet  - Data set on which operations will be performed.
+   * @param {number} minTemperature  - The temperature that should be considered absolute zero, below which motion should cease
+   */
+  constructor( moleculeDataSet, minTemperature ) {
 
-  // @public minimum temperature in normalized model units, below this is considered absolute 0;
-  this.minModelTemperature = minTemperature;
+    // @public target temperature in normalized model units
+    this.targetTemperature = SOMConstants.INITIAL_TEMPERATURE;
 
-  // @private reference to the molecule data set
-  this.moleculeDataSet = moleculeDataSet;
+    // @public minimum temperature in normalized model units, below this is considered absolute 0;
+    this.minModelTemperature = minTemperature;
 
-  // @private references to the various arrays within the data set, set up so that the calculations can be performed
-  // as fast as as possible
-  this.moleculeVelocities = moleculeDataSet.moleculeVelocities;
-  this.moleculeRotationRates = moleculeDataSet.moleculeRotationRates;
+    // @private reference to the molecule data set
+    this.moleculeDataSet = moleculeDataSet;
 
-  // @private - pseudo-random number generator
-  this.random = phet.joist.random;
+    // @private references to the various arrays within the data set, set up so that the calculations can be performed
+    // as fast as as possible
+    this.moleculeVelocities = moleculeDataSet.moleculeVelocities;
+    this.moleculeRotationRates = moleculeDataSet.moleculeRotationRates;
 
-  // @private {Vector2} - reusable vector used for calculating velocity changes
-  this.previousParticleVelocity = new Vector2( 0, 0 );
+    // @private - pseudo-random number generator
+    this.random = phet.joist.random;
 
-  // @private {Vector2} - vectors used to correct for a collective drift that can occur
-  this.totalVelocityChangePreviousStep = new Vector2( 0, 0 );
-  this.totalVelocityChangeThisStep = new Vector2( 0, 0 );
-  this.accumulatedAverageVelocityChange = new Vector2( 0, 0 );
-}
+    // @private {Vector2} - reusable vector used for calculating velocity changes
+    this.previousParticleVelocity = new Vector2( 0, 0 );
 
-statesOfMatter.register( 'AndersenThermostat', AndersenThermostat );
-
-inherit( Object, AndersenThermostat, {
+    // @private {Vector2} - vectors used to correct for a collective drift that can occur
+    this.totalVelocityChangePreviousStep = new Vector2( 0, 0 );
+    this.totalVelocityChangeThisStep = new Vector2( 0, 0 );
+    this.accumulatedAverageVelocityChange = new Vector2( 0, 0 );
+  }
 
   /**
    * @public
    */
-  adjustTemperature: function() {
+  adjustTemperature() {
 
-    // A Note to Future Maintainers: This code was originally provided by Paul Beale of the University of Colorado.
-    // For many years, it had separate gamma values the X and Y directions, but those values were always set to the
-    // same thing.  In early August of 2018, I (jbphet) refactored this to have a single gamma value in order to
-    // reduce the number of calculations done and thus improve performance.  If it's ever needed, separate values
-    // could be brought back for X and Y.
+    // A Note to Future Maintainers: This code was originally provided by Paul Beale of the University of Colorado and
+    // converted into Java, and then JavaScript, by @jbphet. For many years, it had separate gamma values the X and Y
+    // directions, but those values were always set to the same thing.  In early August of 2018, I (jbphet) refactored
+    // this to have a single gamma value in order to reduce the number of calculations done and thus improve
+    // performance.  If it's ever needed, separate values could be brought back for X and Y.
 
     let gamma;
     let temperature = this.targetTemperature;
@@ -118,17 +114,18 @@ inherit( Object, AndersenThermostat, {
       this.totalVelocityChangeThisStep.y / numMolecules
     );
     this.totalVelocityChangePreviousStep.set( this.totalVelocityChangeThisStep );
-  },
+  }
 
   /**
    * clear the accumulated velocity bias, should be done when this thermostat starts being used for a number of steps
    * in a row
    * @public
    */
-  clearAccumulatedBias: function() {
+  clearAccumulatedBias() {
     this.accumulatedAverageVelocityChange.setXY( 0, 0 );
     this.totalVelocityChangePreviousStep.setXY( 0, 0 );
   }
-} );
+}
 
+statesOfMatter.register( 'AndersenThermostat', AndersenThermostat );
 export default AndersenThermostat;
