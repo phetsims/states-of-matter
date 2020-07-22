@@ -23,7 +23,6 @@ class MotionAtom {
    * @param {number} initialXPosition - x position in the model, in picometers
    * @param {number} initialYPosition - y position in the model, in picometers
    * @param {Tandem} tandem
-   * @constructor
    */
   constructor( initialAtomType, initialXPosition, initialYPosition, tandem ) {
 
@@ -91,7 +90,6 @@ class MotionAtom {
    * @public
    * @param {number} x - atom x position in picometers
    * @param {number} y - atom y position in picometers
-   * @constructor
    */
   setPosition( x, y ) {
     this.positionProperty.set( new Vector2( x, y ) );

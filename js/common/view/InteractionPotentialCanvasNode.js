@@ -25,7 +25,6 @@ class InteractionPotentialCanvasNode extends CanvasNode {
   /**
    * @param {PotentialGraphNode} potentialGraphNode
    * @param {Object} [options] that can be passed on to the underlying node
-   * @constructor
    */
   constructor( potentialGraphNode, options ) {
     super( options );
@@ -89,7 +88,7 @@ class InteractionPotentialCanvasNode extends CanvasNode {
     const sigmaHandleYPos = ( this.potentialGraph.getGraphHeight() / 2 ) -
                             2 * SIGMA_HANDLE_OFFSET_PROPORTION * this.potentialGraph.heightOfGraph;
     let sigmaHandleXPos = 0;
-    const horizontalIndexMultiplier = this.potentialGraph.GRAPH_X_RANGE / this.potentialGraph.graphWidth;
+    const horizontalIndexMultiplier = this.potentialGraph.xRange / this.potentialGraph.graphWidth;
     let previousPotential = Number.POSITIVE_INFINITY;
     let previousYPos = Number.NEGATIVE_INFINITY;
     for ( let i = 1; i < this.potentialGraph.graphWidth; i++ ) {

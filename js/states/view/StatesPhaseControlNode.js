@@ -9,7 +9,6 @@
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import EnumerationProperty from '../../../../axon/js/EnumerationProperty.js';
-import inherit from '../../../../phet-core/js/inherit.js';
 import merge from '../../../../phet-core/js/merge.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import HBox from '../../../../scenery/js/nodes/HBox.js';
@@ -37,125 +36,127 @@ const ICON_HEIGHT = 25; // in screen coordinates, empirically determined
 const SELECTED_BUTTON_COLOR = '#a5a7ff';
 const DESELECTED_BUTTON_COLOR = '#F8D980';
 
-/**
- * @param {MultiParticleModel} model
- * @param {Object} [options] that can be passed on to the underlying node
- * @constructor
- */
-function StatesPhaseControlNode( model, options ) {
+class StatesPhaseControlNode extends Node {
 
-  options = merge( {
-    xMargin: 5,
-    yMargin: 8,
-    fill: '#C8C8C8',
-    stroke: 'gray',
-    lineWidth: 1,
-    cornerRadius: 5, // radius of the rounded corners on the background
-    buttonWidth: DEFAULT_BUTTON_WIDTH,
-    tandem: Tandem.REQUIRED
-  }, options );
+  /**
+   * @param {MultiParticleModel} model
+   * @param {Object} [options] that can be passed on to the underlying node
+   */
+  constructor( model, options ) {
 
-  Node.call( this );
+    options = merge( {
+      xMargin: 5,
+      yMargin: 8,
+      fill: '#C8C8C8',
+      stroke: 'gray',
+      lineWidth: 1,
+      cornerRadius: 5, // radius of the rounded corners on the background
+      buttonWidth: DEFAULT_BUTTON_WIDTH,
+      tandem: Tandem.REQUIRED
+    }, options );
 
-  // state of the atoms/molecules
-  const stateProperty = new EnumerationProperty( PhaseStateEnum, PhaseStateEnum.UNKNOWN, {
-    tandem: options.tandem.createTandem( 'stateProperty' ),
-    phetioReadOnly: true
-  } );
+    super();
 
-  // boolean properties corresponding to each state, one for each of the phase state selection buttons
-  const solidSelectedProperty = new BooleanProperty( false, {
-    tandem: options.tandem.createTandem( 'solidSelectedProperty' )
-  } );
-  const liquidSelectedProperty = new BooleanProperty( false, {
-    tandem: options.tandem.createTandem( 'liquidSelectedProperty' )
-  } );
-  const gasSelectedProperty = new BooleanProperty( false, {
-    tandem: options.tandem.createTandem( 'gasSelectedProperty' )
-  } );
+    // state of the atoms/molecules
+    const stateProperty = new EnumerationProperty( PhaseStateEnum, PhaseStateEnum.UNKNOWN, {
+      tandem: options.tandem.createTandem( 'stateProperty' ),
+      phetioReadOnly: true
+    } );
 
-  // convenience constant
-  const tandem = options.tandem;
+    // boolean properties corresponding to each state, one for each of the phase state selection buttons
+    const solidSelectedProperty = new BooleanProperty( false, {
+      tandem: options.tandem.createTandem( 'solidSelectedProperty' )
+    } );
+    const liquidSelectedProperty = new BooleanProperty( false, {
+      tandem: options.tandem.createTandem( 'liquidSelectedProperty' )
+    } );
+    const gasSelectedProperty = new BooleanProperty( false, {
+      tandem: options.tandem.createTandem( 'gasSelectedProperty' )
+    } );
 
-  // create solid state selection button
-  const solidStateButton = new BooleanRectangularStickyToggleButton( solidSelectedProperty, {
-    content: createButtonContent( solidIconImage, solidString, options.buttonWidth ),
-    maxWidth: options.buttonWidth,
-    minWidth: options.buttonWidth,
-    tandem: tandem.createTandem( 'solidStateButton' )
-  } );
+    // convenience constant
+    const tandem = options.tandem;
 
-  // create liquid state selection button
-  const liquidStateButton = new BooleanRectangularStickyToggleButton( liquidSelectedProperty, {
-    content: createButtonContent( liquidIconImage, liquidString, options.buttonWidth ),
-    maxWidth: options.buttonWidth,
-    minWidth: options.buttonWidth,
-    tandem: tandem.createTandem( 'liquidStateButton' )
-  } );
+    // create solid state selection button
+    const solidStateButton = new BooleanRectangularStickyToggleButton( solidSelectedProperty, {
+      content: createButtonContent( solidIconImage, solidString, options.buttonWidth ),
+      maxWidth: options.buttonWidth,
+      minWidth: options.buttonWidth,
+      tandem: tandem.createTandem( 'solidStateButton' )
+    } );
 
-  // create gas state selection button
-  const gasStateButton = new BooleanRectangularStickyToggleButton( gasSelectedProperty, {
-    content: createButtonContent( gasIconImage, gasString, options.buttonWidth ),
-    maxWidth: options.buttonWidth,
-    minWidth: options.buttonWidth,
-    tandem: tandem.createTandem( 'gasStateButton' )
-  } );
+    // create liquid state selection button
+    const liquidStateButton = new BooleanRectangularStickyToggleButton( liquidSelectedProperty, {
+      content: createButtonContent( liquidIconImage, liquidString, options.buttonWidth ),
+      maxWidth: options.buttonWidth,
+      minWidth: options.buttonWidth,
+      tandem: tandem.createTandem( 'liquidStateButton' )
+    } );
 
-  // set the state when the buttons are pushed
-  solidSelectedProperty.link( selected => { if ( selected ) { stateProperty.value = PhaseStateEnum.SOLID; } } );
-  liquidSelectedProperty.link( selected => { if ( selected ) { stateProperty.value = PhaseStateEnum.LIQUID; } } );
-  gasSelectedProperty.link( selected => { if ( selected ) { stateProperty.value = PhaseStateEnum.GAS; } } );
+    // create gas state selection button
+    const gasStateButton = new BooleanRectangularStickyToggleButton( gasSelectedProperty, {
+      content: createButtonContent( gasIconImage, gasString, options.buttonWidth ),
+      maxWidth: options.buttonWidth,
+      minWidth: options.buttonWidth,
+      tandem: tandem.createTandem( 'gasStateButton' )
+    } );
 
-  // Set the model state and update the button appearances when the user presses one of the buttons.
-  stateProperty.link( function( state ) {
-    if ( state !== PhaseStateEnum.UNKNOWN ) {
+    // set the state when the buttons are pushed
+    solidSelectedProperty.link( selected => { if ( selected ) { stateProperty.value = PhaseStateEnum.SOLID; } } );
+    liquidSelectedProperty.link( selected => { if ( selected ) { stateProperty.value = PhaseStateEnum.LIQUID; } } );
+    gasSelectedProperty.link( selected => { if ( selected ) { stateProperty.value = PhaseStateEnum.GAS; } } );
 
-      // Only set the phase in the model if this change comes directly from user interaction and not from PhET-iO state.
-      // If the change is from the state engine, then the phase will be set implicitly when the positions and velocities
-      // of the molecules are set.
-      if ( !phet.joist.sim.isSettingPhetioStateProperty.value ) {
-        model.setPhase( state );
+    // Set the model state and update the button appearances when the user presses one of the buttons.
+    stateProperty.link( state => {
+      if ( state !== PhaseStateEnum.UNKNOWN ) {
+
+        // Only set the phase in the model if this change comes directly from user interaction and not from PhET-iO state.
+        // If the change is from the state engine, then the phase will be set implicitly when the positions and velocities
+        // of the molecules are set.
+        if ( !phet.joist.sim.isSettingPhetioStateProperty.value ) {
+          model.setPhase( state );
+        }
       }
-    }
 
-    solidStateButton.baseColor = state === PhaseStateEnum.SOLID ? SELECTED_BUTTON_COLOR : DESELECTED_BUTTON_COLOR;
-    solidStateButton.pickable = state !== PhaseStateEnum.SOLID;
-    liquidStateButton.baseColor = state === PhaseStateEnum.LIQUID ? SELECTED_BUTTON_COLOR : DESELECTED_BUTTON_COLOR;
-    liquidStateButton.pickable = state !== PhaseStateEnum.LIQUID;
-    gasStateButton.baseColor = state === PhaseStateEnum.GAS ? SELECTED_BUTTON_COLOR : DESELECTED_BUTTON_COLOR;
-    gasStateButton.pickable = state !== PhaseStateEnum.GAS;
-    solidSelectedProperty.value = state === PhaseStateEnum.SOLID;
-    liquidSelectedProperty.value = state === PhaseStateEnum.LIQUID;
-    gasSelectedProperty.value = state === PhaseStateEnum.GAS;
-  } );
+      solidStateButton.baseColor = state === PhaseStateEnum.SOLID ? SELECTED_BUTTON_COLOR : DESELECTED_BUTTON_COLOR;
+      solidStateButton.pickable = state !== PhaseStateEnum.SOLID;
+      liquidStateButton.baseColor = state === PhaseStateEnum.LIQUID ? SELECTED_BUTTON_COLOR : DESELECTED_BUTTON_COLOR;
+      liquidStateButton.pickable = state !== PhaseStateEnum.LIQUID;
+      gasStateButton.baseColor = state === PhaseStateEnum.GAS ? SELECTED_BUTTON_COLOR : DESELECTED_BUTTON_COLOR;
+      gasStateButton.pickable = state !== PhaseStateEnum.GAS;
+      solidSelectedProperty.value = state === PhaseStateEnum.SOLID;
+      liquidSelectedProperty.value = state === PhaseStateEnum.LIQUID;
+      gasSelectedProperty.value = state === PhaseStateEnum.GAS;
+    } );
 
-  // enable/disable the buttons based on the model state
-  model.isExplodedProperty.link( isExploded => {
-    solidStateButton.setEnabled( !isExploded );
-    liquidStateButton.setEnabled( !isExploded );
-    gasStateButton.setEnabled( !isExploded );
-  } );
+    // enable/disable the buttons based on the model state
+    model.isExplodedProperty.link( isExploded => {
+      solidStateButton.setEnabled( !isExploded );
+      liquidStateButton.setEnabled( !isExploded );
+      gasStateButton.setEnabled( !isExploded );
+    } );
 
-  // if the user changes the temperature, the phase state becomes undefined
-  model.heatingCoolingAmountProperty.lazyLink( function() {
-    stateProperty.value = PhaseStateEnum.UNKNOWN;
-  } );
+    // if the user changes the temperature, the phase state becomes undefined
+    model.heatingCoolingAmountProperty.lazyLink( () => {
+      stateProperty.value = PhaseStateEnum.UNKNOWN;
+    } );
 
-  // if the model gets reset, set the local phase state value to be undefined until the user selects a phase
-  model.resetEmitter.addListener( function() { stateProperty.value = PhaseStateEnum.UNKNOWN; } );
+    // if the model gets reset, set the local phase state value to be undefined until the user selects a phase
+    model.resetEmitter.addListener( () => { stateProperty.value = PhaseStateEnum.UNKNOWN; } );
 
-  // put the buttons together in a single VBox
-  const buttons = new VBox( {
-    children: [ solidStateButton, liquidStateButton, gasStateButton ],
-    spacing: 10,
-    align: 'center'
-  } );
-  this.addChild( buttons );
-  this.mutate( options );
+    // put the buttons together in a single VBox
+    const buttons = new VBox( {
+      children: [solidStateButton, liquidStateButton, gasStateButton],
+      spacing: 10,
+      align: 'center'
+    } );
+    this.addChild( buttons );
+    this.mutate( options );
+  }
 }
 
 // helper function that puts icon and label together with some struts into an HBox for using as content node on button
-function createButtonContent( iconImage, string, buttonWidth ) {
+const createButtonContent = ( iconImage, string, buttonWidth ) => {
 
   assert && assert( iconImage && string, 'both icon and label must be defined' );
 
@@ -189,9 +190,7 @@ function createButtonContent( iconImage, string, buttonWidth ) {
     ],
     spacing: 0
   } );
-}
+};
 
 statesOfMatter.register( 'StatesPhaseControlNode', StatesPhaseControlNode );
-
-inherit( Node, StatesPhaseControlNode );
 export default StatesPhaseControlNode;

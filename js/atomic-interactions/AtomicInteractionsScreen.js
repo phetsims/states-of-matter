@@ -37,10 +37,8 @@ class AtomicInteractionsScreen extends Screen {
     };
 
     super(
-      function() { return new DualAtomModel( tandem.createTandem( 'model' ), enableHeterogeneousMolecules ); },
-      function( model ) {
-        return new AtomicInteractionsScreenView( model, enableHeterogeneousMolecules, tandem.createTandem( 'view' ) );
-      },
+      () => new DualAtomModel( tandem.createTandem( 'model' ), enableHeterogeneousMolecules ),
+      model => new AtomicInteractionsScreenView( model, enableHeterogeneousMolecules, tandem.createTandem( 'view' ) ),
       options
     );
   }

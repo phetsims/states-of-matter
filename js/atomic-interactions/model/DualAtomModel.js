@@ -29,7 +29,7 @@ const SLOW_MOTION_TIME_MULTIPLIER = 0.5;
 const MAX_TIME_STEP = 0.005; // in seconds
 
 // valid values in reduced usage scenario
-const VALID_ATOM_PAIRS_FOR_REDUCED = [ AtomPair.NEON_NEON, AtomPair.ARGON_ARGON, AtomPair.ADJUSTABLE ];
+const VALID_ATOM_PAIRS_FOR_REDUCED = [AtomPair.NEON_NEON, AtomPair.ARGON_ARGON, AtomPair.ADJUSTABLE];
 
 // threshold used for limiting force to zero to prevent jitter, empirically determined
 const MIN_FORCE_JITTER_THRESHOLD = 1e-30;
@@ -45,7 +45,6 @@ class DualAtomModel {
   /**
    * @param {Tandem} tandem
    * @param {boolean} enableHeterogeneousMolecules
-   * @constructor
    */
   constructor( tandem, enableHeterogeneousMolecules = true ) {
 
@@ -77,7 +76,7 @@ class DualAtomModel {
 
     // @public (read-write) - speed at which the model is running
     this.timeSpeedProperty = new EnumerationProperty( TimeSpeed, TimeSpeed.NORMAL, {
-      validValues: [ TimeSpeed.NORMAL, TimeSpeed.SLOW ],
+      validValues: [TimeSpeed.NORMAL, TimeSpeed.SLOW],
       tandem: tandem.createTandem( 'timeSpeedProperty' )
     } );
 
@@ -146,7 +145,7 @@ class DualAtomModel {
 
     // update the LJ potential parameters when the adjustable attraction atom is in use
     Property.multilink(
-      [ this.atomPairProperty, this.adjustableAtomInteractionStrengthProperty, this.adjustableAtomDiameterProperty ],
+      [this.atomPairProperty, this.adjustableAtomInteractionStrengthProperty, this.adjustableAtomDiameterProperty],
       ( atomPair, interactionStrength, atomDiameter ) => {
         if ( atomPair === AtomPair.ADJUSTABLE ) {
           this.setEpsilon( interactionStrength );

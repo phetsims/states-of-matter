@@ -86,7 +86,7 @@ class GrabbableParticleNode extends ParticleForceNode {
    */
   dispose() {
     this.disposeGrabbableParticleNode();
-    ParticleForceNode.prototype.dispose.call( this );
+    super.dispose();
   }
 
   /**

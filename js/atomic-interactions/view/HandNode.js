@@ -111,7 +111,7 @@ class HandNode extends Node {
    */
   dispose() {
     this.disposeHandNode();
-    Node.prototype.dispose.call( this );
+    super.dispose();
   }
 
   /**

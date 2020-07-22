@@ -6,7 +6,6 @@
  * @author John Blanco
  */
 
-import inherit from '../../../../phet-core/js/inherit.js';
 import CanvasNode from '../../../../scenery/js/nodes/CanvasNode.js';
 import statesOfMatter from '../../statesOfMatter.js';
 import AtomType from '../model/AtomType.js';
@@ -32,97 +31,93 @@ PARTICLE_RADIUS_TABLE[ AtomType.OXYGEN ] = SOMConstants.OXYGEN_RADIUS;
 PARTICLE_RADIUS_TABLE[ AtomType.HYDROGEN ] = SOMConstants.HYDROGEN_RADIUS;
 PARTICLE_RADIUS_TABLE[ AtomType.ADJUSTABLE ] = SOMConstants.ADJUSTABLE_ATTRACTION_DEFAULT_RADIUS;
 
-/**
- * @param {ObservableArray<Particle>} particles that need to be rendered on the canvas
- * @param {ModelViewTransform2} modelViewTransform to convert between model and view coordinate frames
- * @param {Object} [options] that can be passed on to the underlying node
- * @constructor
- */
-function ParticleImageCanvasNode( particles, modelViewTransform, options ) {
+class ParticleImageCanvasNode extends CanvasNode {
 
-  const self = this;
-  CanvasNode.call( this, options );
+  /**
+   * @param {ObservableArray<Particle>} particles that need to be rendered on the canvas
+   * @param {ModelViewTransform2} modelViewTransform to convert between model and view coordinate frames
+   * @param {Object} [options] that can be passed on to the underlying node
+   */
+  constructor( particles, modelViewTransform, options ) {
 
-  // @private
-  this.particles = particles;
-  this.modelViewTransform = modelViewTransform;
+    super( options );
 
-  // @private canvas where particle images will reside, one row with strokes and one row without
-  this.particleImageCanvas = document.createElement( 'canvas' );
-  this.particleImageCanvas.width = Object.getOwnPropertyNames( AtomType ).length * PARTICLE_IMAGE_CANVAS_LENGTH;
-  this.particleImageCanvas.height = PARTICLE_IMAGE_CANVAS_LENGTH * 2;
+    // @private
+    this.particles = particles;
+    this.modelViewTransform = modelViewTransform;
 
-  // @private create a map of particle types to position in the particle image canvas, will be populated below
-  this.mapAtomTypeToImageXPosition = {};
+    // @private canvas where particle images will reside, one row with strokes and one row without
+    this.particleImageCanvas = document.createElement( 'canvas' );
+    this.particleImageCanvas.width = Object.getOwnPropertyNames( AtomType ).length * PARTICLE_IMAGE_CANVAS_LENGTH;
+    this.particleImageCanvas.height = PARTICLE_IMAGE_CANVAS_LENGTH * 2;
 
-  // @private create a table of particle view radii so they don't have to keep being recalculated, populated below
-  this.particleRadii = {};
+    // @private create a map of particle types to position in the particle image canvas, will be populated below
+    this.mapAtomTypeToImageXPosition = {};
 
-  // Draw the particles on the canvas, top row is without black stroke, the bottom row is with black stroke (for
-  // projector mode).
-  const context = this.particleImageCanvas.getContext( '2d' );
-  let index = 0;
-  for ( const atomType in AtomType ) {
+    // @private create a table of particle view radii so they don't have to keep being recalculated, populated below
+    this.particleRadii = {};
 
-    if ( !AtomType.hasOwnProperty( atomType ) ) {
-      // skip prototype properties
-      continue;
+    // Draw the particles on the canvas, top row is without black stroke, the bottom row is with black stroke (for
+    // projector mode).
+    const context = this.particleImageCanvas.getContext( '2d' );
+    let index = 0;
+    for ( const atomType in AtomType ) {
+
+      if ( !AtomType.hasOwnProperty( atomType ) ) {
+        // skip prototype properties
+        continue;
+      }
+
+      // draw particle with stroke that matches the fill
+      context.strokeStyle = PARTICLE_COLOR_TABLE[ atomType ];
+      context.fillStyle = PARTICLE_COLOR_TABLE[ atomType ];
+      context.lineWidth = 1;
+      context.beginPath();
+      context.arc(
+        PARTICLE_IMAGE_CANVAS_LENGTH * index + PARTICLE_IMAGE_CANVAS_LENGTH / 2,
+        PARTICLE_IMAGE_CANVAS_LENGTH / 2,
+        PARTICLE_IMAGE_CANVAS_LENGTH / 2 * 0.95,
+        0,
+        Math.PI * 2
+      );
+      context.fill();
+      context.stroke();
+
+      // draw particle with dark stroke
+      context.strokeStyle = 'black';
+      context.beginPath();
+      context.arc(
+        PARTICLE_IMAGE_CANVAS_LENGTH * index + PARTICLE_IMAGE_CANVAS_LENGTH / 2,
+        PARTICLE_IMAGE_CANVAS_LENGTH * 1.5,
+        PARTICLE_IMAGE_CANVAS_LENGTH / 2 * 0.95,
+        0,
+        Math.PI * 2
+      );
+      context.fill();
+      context.stroke();
+
+      // populate the map for this atom type
+      this.mapAtomTypeToImageXPosition[ atomType ] = index * PARTICLE_IMAGE_CANVAS_LENGTH;
+
+      // set the radius for this atom type
+      this.particleRadii[ atomType ] = modelViewTransform.modelToViewDeltaX( PARTICLE_RADIUS_TABLE[ atomType ] );
+
+      index++;
     }
 
-    // draw particle with stroke that matches the fill
-    context.strokeStyle = PARTICLE_COLOR_TABLE[ atomType ];
-    context.fillStyle = PARTICLE_COLOR_TABLE[ atomType ];
-    context.lineWidth = 1;
-    context.beginPath();
-    context.arc(
-      PARTICLE_IMAGE_CANVAS_LENGTH * index + PARTICLE_IMAGE_CANVAS_LENGTH / 2,
-      PARTICLE_IMAGE_CANVAS_LENGTH / 2,
-      PARTICLE_IMAGE_CANVAS_LENGTH / 2 * 0.95,
-      0,
-      Math.PI * 2
-    );
-    context.fill();
-    context.stroke();
+    // initiate the first paint
+    this.invalidatePaint();
 
-    // draw particle with dark stroke
-    context.strokeStyle = 'black';
-    context.beginPath();
-    context.arc(
-      PARTICLE_IMAGE_CANVAS_LENGTH * index + PARTICLE_IMAGE_CANVAS_LENGTH / 2,
-      PARTICLE_IMAGE_CANVAS_LENGTH * 1.5,
-      PARTICLE_IMAGE_CANVAS_LENGTH / 2 * 0.95,
-      0,
-      Math.PI * 2
-    );
-    context.fill();
-    context.stroke();
-
-    // populate the map for this atom type
-    self.mapAtomTypeToImageXPosition[ atomType ] = index * PARTICLE_IMAGE_CANVAS_LENGTH;
-
-    // set the radius for this atom type
-    self.particleRadii[ atomType ] = modelViewTransform.modelToViewDeltaX( PARTICLE_RADIUS_TABLE[ atomType ] );
-
-    index++;
+    SOMColorProfile.particleStrokeProperty.link( color => {
+      this.useStrokedParticles = color.toCSS() !== 'rgb(255,255,255)';
+    } );
+    this.mutate( options );
   }
-
-  // initiate the first paint
-  this.invalidatePaint();
-
-  SOMColorProfile.particleStrokeProperty.link( function( color ) {
-    self.useStrokedParticles = color.toCSS() !== 'rgb(255,255,255)';
-  } );
-  this.mutate( options );
-}
-
-statesOfMatter.register( 'ParticleImageCanvasNode', ParticleImageCanvasNode );
-
-inherit( CanvasNode, ParticleImageCanvasNode, {
 
   /**
    * @private
    */
-  renderParticle: function( context, particle ) {
+  renderParticle( context, particle ) {
     const particleViewRadius = this.particleRadii[ particle.getType() ];
     context.drawImage(
       this.particleImageCanvas,
@@ -135,14 +130,14 @@ inherit( CanvasNode, ParticleImageCanvasNode, {
       particleViewRadius * 2,
       particleViewRadius * 2
     );
-  },
+  }
 
   /**
    * Paints the particles on the canvas node.
    * @param {CanvasRenderingContext2D} context
    * @public
    */
-  paintCanvas: function( context ) {
+  paintCanvas( context ) {
     let particle;
     let i;
 
@@ -165,15 +160,15 @@ inherit( CanvasNode, ParticleImageCanvasNode, {
         this.renderParticle( context, particle );
       }
     }
-  },
+  }
 
   /**
    * @public
    */
-  step: function() {
+  step() {
     this.invalidatePaint();
   }
+}
 
-} );
-
+statesOfMatter.register( 'ParticleImageCanvasNode', ParticleImageCanvasNode );
 export default ParticleImageCanvasNode;

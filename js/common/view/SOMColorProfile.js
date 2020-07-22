@@ -16,7 +16,7 @@ import statesOfMatter from '../../statesOfMatter.js';
 // constants
 const GRAY = new Color( 230, 230, 230 );
 
-const SOMColorProfile = new ColorProfile( [ 'default', 'projector' ], {
+const SOMColorProfile = new ColorProfile( ['default', 'projector'], {
   background: {
     default: 'black',
     projector: 'white'

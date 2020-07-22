@@ -32,7 +32,6 @@ class MoleculeForceAndMotionDataSet {
    * This creates the data set with the capacity to hold the maximum number of atoms/molecules, but does not create the
    * individual data for them.  That must be done explicitly through other calls.
    * @param {number} atomsPerMolecule
-   * @constructor
    */
   constructor( atomsPerMolecule ) {
 

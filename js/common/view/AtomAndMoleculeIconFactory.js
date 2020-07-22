@@ -14,7 +14,7 @@ import SubstanceType from '../SubstanceType.js';
 // define the object where all of the icons will be available
 const AtomAndMoleculeIconFactory = {
 
-  createIcon: function( type ) {
+  createIcon: type => {
     let icon;
     switch( type ) {
 
@@ -33,7 +33,7 @@ const AtomAndMoleculeIconFactory = {
       case SubstanceType.DIATOMIC_OXYGEN:
         var oxygen1 = new Circle( 5, { fill: SOMConstants.OXYGEN_COLOR } );
         var oxygen2 = new Circle( 5, { fill: SOMConstants.OXYGEN_COLOR, left: oxygen1.right - 4 } );
-        icon = new Node( { children: [ oxygen1, oxygen2 ] } );
+        icon = new Node( { children: [oxygen1, oxygen2] } );
         break;
 
       case SubstanceType.WATER:
@@ -46,7 +46,7 @@ const AtomAndMoleculeIconFactory = {
           fill: SOMConstants.HYDROGEN_COLOR,
           stroke: SOMConstants.HYDROGEN_COLOR, bottom: waterOxygen.top + 5, left: waterOxygen.right - 5
         } );
-        icon = new Node( { children: [ waterHydrogen2, waterOxygen, waterHydrogen1 ] } );
+        icon = new Node( { children: [waterHydrogen2, waterOxygen, waterHydrogen1] } );
         break;
 
       default:

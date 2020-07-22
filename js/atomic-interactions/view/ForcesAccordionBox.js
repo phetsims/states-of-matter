@@ -49,14 +49,12 @@ class ForcesAccordionBox extends AccordionBox {
   constructor( forcesProperty, forceControlPanelExpandProperty, options ) {
 
     // convenience function for creating text with the attributes needed by this panel
-    const createText = ( string, width, fontSize ) => {
-      const text = new Text( string, { font: new PhetFont( fontSize ), fill: options.textFill } );
-
-      // REVIEW: Can this be replaced by {maxWidth: ...} in the options?
-      if ( text.width > width ) {
-        text.scale( width / text.width );
-      }
-      return text;
+    const createTextNode = ( string, width, fontSize ) => {
+      return new Text( string, {
+        font: new PhetFont( fontSize ),
+        fill: options.textFill,
+        maxWidth: width
+      } );
     };
 
     options = merge( {
@@ -109,34 +107,34 @@ class ForcesAccordionBox extends AccordionBox {
       fill: '#FD17FF'
     }, arrowNodeOptions ) );
 
-    const hideForcesText = { label: createText( hideForcesString, TEXT_LABEL_MAX_WIDTH * 0.65, 12 ) };
+    const hideForcesText = { label: createTextNode( hideForcesString, TEXT_LABEL_MAX_WIDTH * 0.65, 12 ) };
 
     const totalForceText = {
-      label: createText( totalForceString, TEXT_LABEL_MAX_WIDTH * 0.65, 12 ),
+      label: createTextNode( totalForceString, TEXT_LABEL_MAX_WIDTH * 0.65, 12 ),
       icon: totalForceArrow
     };
 
     const attractiveText = {
-      label: createText( attractiveString, TEXT_LABEL_MAX_WIDTH * 0.6, 12 ),
+      label: createTextNode( attractiveString, TEXT_LABEL_MAX_WIDTH * 0.6, 12 ),
       icon: attractiveArrow
     };
 
     const vanderwaalsText = {
-      label: createText( vanderwaalsString, TEXT_LABEL_MAX_WIDTH * 0.8, 11 )
+      label: createTextNode( vanderwaalsString, TEXT_LABEL_MAX_WIDTH * 0.8, 11 )
     };
 
     const repulsiveText = {
-      label: createText( repulsiveString, TEXT_LABEL_MAX_WIDTH * 0.6, 12 ),
+      label: createTextNode( repulsiveString, TEXT_LABEL_MAX_WIDTH * 0.6, 12 ),
       icon: repulsiveArrow
     };
 
     const electronOverlapText = {
-      label: createText( electronOverlapString, TEXT_LABEL_MAX_WIDTH * 0.8, 11 )
+      label: createTextNode( electronOverlapString, TEXT_LABEL_MAX_WIDTH * 0.8, 11 )
     };
 
     // compute the maximum item width
-    const widestItem = _.maxBy( [ hideForcesText, totalForceText, attractiveText, vanderwaalsText, repulsiveText,
-      electronOverlapText ], item => {
+    const widestItem = _.maxBy( [hideForcesText, totalForceText, attractiveText, vanderwaalsText, repulsiveText,
+      electronOverlapText], item => {
       return item.label.width + ( ( item.icon ) ? item.icon.width + ICON_PADDING : 0 );
     } );
     const maxWidth = widestItem.label.width + ( ( widestItem.icon ) ? widestItem.icon.width + ICON_PADDING : 0 );
@@ -145,10 +143,10 @@ class ForcesAccordionBox extends AccordionBox {
     const createConsistentlySpacedLabel = labelSpec => {
       if ( labelSpec.icon ) {
         const strutWidth = maxWidth - labelSpec.label.width - labelSpec.icon.width;
-        return new HBox( { children: [ labelSpec.label, new HStrut( strutWidth ), labelSpec.icon ] } );
+        return new HBox( { children: [labelSpec.label, new HStrut( strutWidth ), labelSpec.icon] } );
       }
       else {
-        return new HBox( { children: [ labelSpec.label ] } );
+        return new HBox( { children: [labelSpec.label] } );
       }
     };
 
@@ -158,7 +156,7 @@ class ForcesAccordionBox extends AccordionBox {
         createConsistentlySpacedLabel( attractiveText ),
         createConsistentlySpacedLabel( vanderwaalsText ),
         createConsistentlySpacedLabel( repulsiveText ),
-        createConsistentlySpacedLabel( electronOverlapText ) ],
+        createConsistentlySpacedLabel( electronOverlapText )],
       align: 'left'
     } );
 
@@ -180,17 +178,17 @@ class ForcesAccordionBox extends AccordionBox {
     const bracketToTextSpacing = 2;
     const componentForce = new HBox( {
       spacing: bracketToTextSpacing,
-      children: [ bracket, componentForceText ]
+      children: [bracket, componentForceText]
     } );
     const totalForceStrutWidth = maxWidth - totalForceText.label.width - totalForceText.icon.width + bracket.width + bracketToTextSpacing;
     const totalForceItem = new HBox( {
-      children: [ totalForceText.label,
+      children: [totalForceText.label,
         new HStrut( totalForceStrutWidth ),
-        totalForceText.icon ]
+        totalForceText.icon]
     } );
 
-    const totalForce = new HBox( { spacing: 2, children: [ totalForceItem ] } );
-    const hideForce = new HBox( { spacing: 2, children: [ createConsistentlySpacedLabel( hideForcesText ) ] } );
+    const totalForce = new HBox( { spacing: 2, children: [totalForceItem] } );
+    const hideForce = new HBox( { spacing: 2, children: [createConsistentlySpacedLabel( hideForcesText )] } );
 
     const radioButtonGroup = new AquaRadioButtonGroup(
       forcesProperty,
@@ -220,7 +218,7 @@ class ForcesAccordionBox extends AccordionBox {
     );
 
     accordionContent.addChild( radioButtonGroup );
-    options.titleNode = createText( forcesString, TEXT_LABEL_MAX_WIDTH * 0.9, 14 );
+    options.titleNode = createTextNode( forcesString, TEXT_LABEL_MAX_WIDTH * 0.9, 14 );
 
     super( accordionContent, options );
   }
@@ -231,7 +229,7 @@ class ForcesAccordionBox extends AccordionBox {
    */
   dispose() {
     this.disposeGlobalOptionsNode();
-    VBox.prototype.dispose.call( this );
+    super.dispose();
   }
 }
 

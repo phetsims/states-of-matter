@@ -97,7 +97,7 @@ class AtomicInteractionsControlPanel extends Node {
     let radioButtonGroup;
     let labelWidth;
     let createLabelNode;
-    let titleText;
+    let labelNodes;
     let titleNode;
     const sliderTrackWidth = 140; // empirically determined
 
@@ -157,12 +157,12 @@ class AtomicInteractionsControlPanel extends Node {
         spacing: 5
       } );
 
-      // REVIEW: Variable name doesn't match tandem name
-      titleText = [ pinnedNodeText, new Text( movingString, {
+      const movingNodeText = new Text( movingString, {
         font: new PhetFont( 10 ),
         maxWidth: maxWidthOfTitleText,
         tandem: options.tandem.createTandem( 'movingNodeText' )
-      } ) ];
+      } );
+      labelNodes = [pinnedNodeText, movingNodeText];
       labelWidth = Math.max(
         neonAndArgonLabelItems[ 0 ].width + neonAndArgonLabelItems[ 1 ].width,
         argonAndArgonLabelItems[ 0 ].width + argonAndArgonLabelItems[ 1 ].width,
@@ -170,17 +170,17 @@ class AtomicInteractionsControlPanel extends Node {
         neonAndNeonLabelItems[ 0 ].width + neonAndNeonLabelItems[ 1 ].width,
         neonAndOxygenLabelItems[ 0 ].width + neonAndOxygenLabelItems[ 1 ].width );
       labelWidth = Math.max(
-        titleText[ 0 ].width * 2,
-        titleText[ 1 ].width * 2,
+        labelNodes[ 0 ].width * 2,
+        labelNodes[ 1 ].width * 2,
         labelWidth, sliderTrackWidth,
         options.minWidth - 2 * PANEL_X_MARGIN - 2 * RADIO_BUTTON_RADIUS - AQUA_RADIO_BUTTON_X_SPACING );
 
       // function to create a label node
-      createLabelNode = function( atomNameTextNodes ) {
+      const createLabelNode = atomNameTextNodes => {
         const strutWidth1 = labelWidth / 2 - atomNameTextNodes[ 0 ].width;
         const strutWidth2 = labelWidth / 2 - atomNameTextNodes[ 1 ].width;
         return new HBox( {
-          children: [ atomNameTextNodes[ 0 ], new HStrut( strutWidth1 ), atomNameTextNodes[ 1 ], new HStrut( strutWidth2 ) ]
+          children: [atomNameTextNodes[ 0 ], new HStrut( strutWidth1 ), atomNameTextNodes[ 1 ], new HStrut( strutWidth2 )]
         } );
       };
 
@@ -235,7 +235,7 @@ class AtomicInteractionsControlPanel extends Node {
       );
 
       // create the title of the panel in such a way that it will align in a column with the atom selections
-      const createTitle = function( labelNodePair ) {
+      const createTitle = labelNodePair => {
         const strutWidth1 = RADIO_BUTTON_RADIUS;
         const strutWidth2 = ( labelWidth / 2 - labelNodePair[ 0 ].width );
         const strutWidth3 = ( labelWidth / 2 - labelNodePair[ 1 ].width );
@@ -249,11 +249,11 @@ class AtomicInteractionsControlPanel extends Node {
           ]
         } );
       };
-      titleNode = createTitle( titleText );
+      titleNode = createTitle( labelNodes );
 
       // put the title and radio button group together into a single node
       radioButtonGroup = new VBox( {
-        children: [ titleNode, aquaRadioButtonsGroup ],
+        children: [titleNode, aquaRadioButtonsGroup],
         align: 'left',
         spacing: 5
       } );
@@ -287,14 +287,15 @@ class AtomicInteractionsControlPanel extends Node {
         } ),
         icon: AtomAndMoleculeIconFactory.createIcon( SubstanceType.ADJUSTABLE_ATOM )
       };
-      titleText = {
+      labelNodes = {
         label: title
       };
 
       // compute the maximum item width
-      const widestLabelAndIconSpec = _.maxBy( [ neon, argon, adjustableAttraction, titleText ], function( item ) {
-        return item.label.width + ( ( item.icon ) ? item.icon.width : 0 );
-      } );
+      const widestLabelAndIconSpec = _.maxBy(
+        [neon, argon, adjustableAttraction, labelNodes],
+        item => item.label.width + ( ( item.icon ) ? item.icon.width : 0 )
+      );
       labelWidth = widestLabelAndIconSpec.label.width + ( ( widestLabelAndIconSpec.icon ) ? widestLabelAndIconSpec.icon.width : 0 );
       labelWidth = Math.max(
         labelWidth,
@@ -302,13 +303,13 @@ class AtomicInteractionsControlPanel extends Node {
         options.minWidth - 2 * PANEL_X_MARGIN );
 
       // pad inserts a spacing node (HStrut) so that the text, space and image together occupy a certain fixed width.
-      createLabelNode = function( atomSelectorLabelSpec ) {
+      createLabelNode = atomSelectorLabelSpec => {
         if ( atomSelectorLabelSpec.icon ) {
           const strutWidth = labelWidth - atomSelectorLabelSpec.label.width - atomSelectorLabelSpec.icon.width;
-          return new HBox( { children: [ atomSelectorLabelSpec.label, new HStrut( strutWidth ), atomSelectorLabelSpec.icon ] } );
+          return new HBox( { children: [atomSelectorLabelSpec.label, new HStrut( strutWidth ), atomSelectorLabelSpec.icon] } );
         }
         else {
-          return new HBox( { children: [ atomSelectorLabelSpec.label ] } );
+          return new HBox( { children: [atomSelectorLabelSpec.label] } );
         }
       };
 
@@ -341,7 +342,7 @@ class AtomicInteractionsControlPanel extends Node {
         tandem: options.tandem.createTandem( 'radioButtonGroup' )
       } );
 
-      titleNode = new BackgroundNode( titleText.label, {
+      titleNode = new BackgroundNode( labelNodes.label, {
         yMargin: 1,
         backgroundOptions: {
           fill: SOMColorProfile.backgroundProperty,
@@ -366,10 +367,10 @@ class AtomicInteractionsControlPanel extends Node {
       majorTickStroke: options.panelTextFill,
       trackStroke: options.panelTextFill,
       constrainValue: value => Utils.roundToInterval( value, 5 ),
-      startDrag: function() {
+      startDrag: () => {
         dualAtomModel.setMotionPaused( true );
       },
-      endDrag: function() {
+      endDrag: () => {
         dualAtomModel.setMotionPaused( false );
       }
     } );
@@ -399,7 +400,7 @@ class AtomicInteractionsControlPanel extends Node {
     }
 
     const atomDiameterSliderBox = new VBox( {
-      children: [ atomDiameterTitle, atomDiameterSlider ],
+      children: [atomDiameterTitle, atomDiameterSlider],
       align: 'center',
       spacing: SLIDER_VBOX_SPACING,
       tandem: atomDiameterSliderTandem,
@@ -427,7 +428,7 @@ class AtomicInteractionsControlPanel extends Node {
     interactionStrengthSlider.addMajorTick( SOMConstants.MIN_EPSILON, weakText );
     interactionStrengthSlider.addMajorTick( SOMConstants.MAX_EPSILON, strongText );
     const interactionStrengthSliderBox = new VBox( {
-      children: [ interactionStrengthTitle, interactionStrengthSlider ],
+      children: [interactionStrengthTitle, interactionStrengthSlider],
       spacing: SLIDER_VBOX_SPACING,
       align: 'center',
       tandem: interactionStrengthSliderTandem,
@@ -435,7 +436,7 @@ class AtomicInteractionsControlPanel extends Node {
     } );
 
     const content = new VBox( {
-      align: 'center', children: [ radioButtonGroup ],
+      align: 'center', children: [radioButtonGroup],
       spacing: 5
     } );
     const verticalSpaceOffset = 7;
@@ -459,7 +460,7 @@ class AtomicInteractionsControlPanel extends Node {
     this.addChild( radioButtonPanel );
 
     // hide or show the controls for handling the adjustable atom based on the atom pair setting
-    dualAtomModel.atomPairProperty.link( function( atomPair ) {
+    dualAtomModel.atomPairProperty.link( atomPair => {
       if ( atomPair === AtomPair.ADJUSTABLE ) {
         content.addChild( atomDiameterSliderBox );
         content.addChild( interactionStrengthSliderBox );

@@ -180,7 +180,7 @@ class InteractivePotentialGraph extends PotentialGraphNode {
         endDragX = this.sigmaControls.arrow.globalToParentPoint( event.pointer.point ).x;
         const d = endDragX - startDragX;
         startDragX = endDragX;
-        const scaleFactor = this.GRAPH_X_RANGE / ( this.getGraphWidth() );
+        const scaleFactor = this.xRange / ( this.getGraphWidth() );
         const atomDiameter = dualAtomModel.getSigma() + ( d * scaleFactor );
         dualAtomModel.adjustableAtomDiameterProperty.value = atomDiameter > SOMConstants.MIN_SIGMA ?
                                                              ( atomDiameter < SOMConstants.MAX_SIGMA ? atomDiameter :
@@ -216,7 +216,7 @@ class InteractivePotentialGraph extends PotentialGraphNode {
           const atom = dualAtomModel.movableAtom;
           endDragX = this.positionMarker.globalToParentPoint( event.pointer.point ).x;
           const xDifference = endDragX - startDragX;
-          const scaleFactor = this.GRAPH_X_RANGE / ( this.getGraphWidth() );
+          const scaleFactor = this.xRange / ( this.getGraphWidth() );
           const newPosX = Math.max( atom.getX() + ( xDifference * scaleFactor ), this.minXForAtom );
           atom.setPosition( newPosX, atom.getY() );
           startDragX = endDragX;
@@ -238,7 +238,7 @@ class InteractivePotentialGraph extends PotentialGraphNode {
     } );
 
     Property.multilink(
-      [ dualAtomModel.atomPairProperty, dualAtomModel.adjustableAtomInteractionStrengthProperty, dualAtomModel.adjustableAtomDiameterProperty ],
+      [dualAtomModel.atomPairProperty, dualAtomModel.adjustableAtomInteractionStrengthProperty, dualAtomModel.adjustableAtomDiameterProperty],
       () => {
         this.setLjPotentialParameters( dualAtomModel.getSigma(), dualAtomModel.getEpsilon() );
         this.updateInteractivityState();

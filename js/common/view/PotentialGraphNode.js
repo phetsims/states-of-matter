@@ -8,7 +8,6 @@
  */
 
 import Vector2 from '../../../../dot/js/Vector2.js';
-import inherit from '../../../../phet-core/js/inherit.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import Line from '../../../../scenery/js/nodes/Line.js';
@@ -29,8 +28,8 @@ const epsilonString = statesOfMatterStrings.epsilon;
 const potentialEnergyString = statesOfMatterStrings.potentialEnergy;
 const sigmaString = statesOfMatterStrings.sigma;
 
-// Constant that controls the range of data that is graphed.
-const GRAPH_X_RANGE = 1300; // in picometers
+// constant that controls the range of data that is graphed
+const X_RANGE = 1300; // in picometers
 
 // constants that control the appearance of the graph
 const NARROW_VERSION_WIDTH = 135;
@@ -52,248 +51,248 @@ let GREEK_LETTER_MAX_WIDTH;
 // zoom buttons height
 const ZOOM_BUTTONS_HEIGHT = 72;
 
-/**
- * @param {number} sigma - Initial value of sigma, a.k.a. the atom diameter
- * @param {number} epsilon - Initial value of epsilon, a.k.a. the interaction strength
- * @param {Object} [options]
- * @constructor
- */
-function PotentialGraphNode( sigma, epsilon, options ) {
+class PotentialGraphNode extends Node {
 
-  options = merge( {
+  /**
+   * @param {number} sigma - Initial value of sigma, a.k.a. the atom diameter
+   * @param {number} epsilon - Initial value of epsilon, a.k.a. the interaction strength
+   * @param {Object} [options]
+   */
+  constructor( sigma, epsilon, options ) {
 
-    // {boolean} - true if the widescreen version of the graph is needed, false if not
-    wide: false,
+    options = merge( {
 
-    // {boolean} - whether or not this graph instance should have a position marker
-    includePositionMarker: false,
+      // {boolean} - true if the widescreen version of the graph is needed, false if not
+      wide: false,
 
-    // {boolean} - whether or not this graph instance should allow interactivity (see usage for more information)
-    allowInteraction: false
+      // {boolean} - whether or not this graph instance should have a position marker
+      includePositionMarker: false,
 
-  }, options );
+      // {boolean} - whether or not this graph instance should allow interactivity (see usage for more information)
+      allowInteraction: false
 
-  Node.call( this );
-  this.graphMin = new Vector2( 0, 0 );
-  this.zeroCrossingPoint = new Vector2( 0, 0 );
-  this.markerDistance = 0;
-  this.ljPotentialCalculator = new LjPotentialCalculator( sigma, epsilon );
+    }, options );
 
-  let axisLabelFont;
+    super();
 
-  // Set up for the normal or wide version of the graph.
-  if ( options.wide ) {
-    this.widthOfGraph = WIDE_VERSION_WIDTH;
-    this.heightOfGraph = this.widthOfGraph * 0.75;
-    GREEK_LETTER_FONT = new PhetFont( 22 );
-    axisLabelFont = new PhetFont( { size: 16, fill: SOMColorProfile.controlPanelTextProperty } );
-    GREEK_LETTER_MAX_WIDTH = 60;
-  }
-  else {
-    this.widthOfGraph = NARROW_VERSION_WIDTH;
-    this.heightOfGraph = this.widthOfGraph * 0.8;
-    axisLabelFont = new PhetFont( { size: 11, fill: SOMColorProfile.controlPanelTextProperty } );
-    GREEK_LETTER_FONT = new PhetFont( GREEK_LETTER_FONT_SIZE );
-    GREEK_LETTER_MAX_WIDTH = 17;
-  }
-  this.graphXOrigin = 0.05 * this.widthOfGraph;
-  this.graphYOrigin = 0.85 * this.heightOfGraph;
-  this.graphWidth = this.widthOfGraph - this.graphXOrigin - AXES_ARROW_HEAD_HEIGHT;
+    // @public (read-only)
+    this.graphMin = new Vector2( 0, 0 );
+    this.xRange = X_RANGE;
+    this.zeroCrossingPoint = new Vector2( 0, 0 );
+    this.markerDistance = 0;
+    this.ljPotentialCalculator = new LjPotentialCalculator( sigma, epsilon );
 
-  this.graphHeight = this.heightOfGraph * VERT_AXIS_SIZE_PROPORTION - AXES_ARROW_HEAD_HEIGHT;
+    let axisLabelFont;
 
-  // Layer where the graph elements are added.
-  this.ljPotentialGraph = new Node();
-
-  //  Using ~45% (1/2.2) of graph height instead of 50 % graph height as in the Java version.
-  // This is done to fix the point flickering at the bottom most point.
-  // see https://github.com/phetsims/states-of-matter/issues/63 and
-  // https://github.com/phetsims/states-of-matter/issues/25
-  this.verticalScalingFactor = ( this.graphHeight / 2.2 ) /
-                               ( SOMConstants.MAX_EPSILON * SOMConstants.K_BOLTZMANN );
-  this.horizontalLineCount = 5;
-
-  // Add the arrows and labels that will depict sigma and epsilon.
-  this.epsilonArrow = new ArrowNode( 0, 0, 0, 0, {
-    headHeight: 8,
-    headWidth: 20,
-    tailWidth: 9,
-    doubleHead: false,
-    fill: SOMColorProfile.controlPanelTextProperty,
-    lineWidth: 0.5
-  } );
-
-  this.epsilonLabel = new Text( epsilonString, {
-    font: GREEK_LETTER_FONT,
-    fill: SOMColorProfile.controlPanelTextProperty,
-    maxWidth: GREEK_LETTER_MAX_WIDTH,
-    boundsMethod: 'accurate' // This seems necessary for good graph layout, and doesn't seem to impact performance.
-  } );
-
-  // For some of the string tests, a boundsMethod value of 'accurate' causes undefined bounds, so handle this here.
-  // TODO: Remove this code if the issue https://github.com/phetsims/scenery/issues/595 is addressed.
-  if ( isNaN( this.epsilonLabel.width ) || isNaN( this.epsilonLabel.height ) ) {
-    this.epsilonLabel.boundsMethod = 'hybrid';
-  }
-
-  const epsilonGraphLabel = new Node( {
-    children: [ this.epsilonArrow, this.epsilonLabel ],
-    tandem: options.tandem.createTandem( 'epsilonGraphLabel' )
-  } );
-  this.ljPotentialGraph.addChild( epsilonGraphLabel );
-
-  this.sigmaLabel = new Text( sigmaString, {
-    font: GREEK_LETTER_FONT,
-    fill: SOMColorProfile.controlPanelTextProperty,
-    maxWidth: GREEK_LETTER_MAX_WIDTH
-  } );
-  this.sigmaArrow = new ArrowNode( 0, 0, 0, 0, {
-    headHeight: 8,
-    headWidth: 8,
-    tailWidth: 3,
-    doubleHead: true,
-    fill: SOMColorProfile.controlPanelTextProperty,
-    lineWidth: 0.5
-  } );
-
-  const sigmaGraphLabel = new Node( {
-    children: [ this.sigmaArrow, this.sigmaLabel ],
-    tandem: options.tandem.createTandem( 'sigmaGraphLabel' )
-  } );
-  this.ljPotentialGraph.addChild( sigmaGraphLabel );
-
-  // If enabled, add the layer where interactive controls can be placed and other infrastructure.  This does not provide
-  // any interactivity by itself, it merely creates support for interactive controls that can be added by subclasses.
-  if ( options.allowInteraction ) {
-
-    // @protected - layer where interactive controls can be added by subclasses
-    this.interactiveControlsLayer = new Node( {
-      tandem: options.tandem.createTandem( 'interactiveControls' ),
-      phetioDocumentation: 'Used for \'Adjustable Attraction\' only'
-    } );
-    this.ljPotentialGraph.addChild( this.interactiveControlsLayer );
-
-    // @protected - an object where specific controls can be added for controlling the epsilon parameter in the Lennard-
-    // Jones potential calculations, see usages in subclasses
-    this.epsilonControls = {
-      arrow: null,
-      line: null
-    };
-
-    // @protected - an object where a specific control can be added for controlling the sigma parameter in the Lennard-
-    // Jones potential calculations, see usages in subclasses.  See usages in subclasses.
-    this.sigmaControls = {
-      arrow: null
-    };
-  }
-
-  // Add the position marker if included.
-  if ( options.includePositionMarker ) {
-    const markerDiameter = POSITION_MARKER_DIAMETER_PROPORTION * this.graphWidth;
-    this.positionMarker = new PositionMarker( markerDiameter / 2, 'rgb( 117, 217, 255 )', {
-      tandem: options.tandem.createTandem( 'positionMarker' )
-    } );
-    this.ljPotentialGraph.addChild( this.positionMarker );
-  }
-
-  // now that the graph portion is built, position it correctly
-  this.ljPotentialGraph.x = this.graphXOrigin;
-  this.ljPotentialGraph.y = this.graphYOrigin - this.graphHeight;
-
-  // Create the horizontal axis line for the graph.
-  this.horizontalAxis = new ArrowNode( 0, 0, this.graphWidth + AXES_ARROW_HEAD_HEIGHT, 0, {
-    fill: SOMColorProfile.controlPanelTextProperty,
-    stroke: SOMColorProfile.controlPanelTextProperty,
-    headHeight: 8,
-    headWidth: 8,
-    tailWidth: 2,
-    x: this.graphXOrigin,
-    y: this.graphYOrigin
-  } );
-
-  this.horizontalAxisLabel = new Text( distanceBetweenAtomsString, {
-    fill: SOMColorProfile.controlPanelTextProperty,
-    font: axisLabelFont
-  } );
-  if ( this.horizontalAxisLabel.width > this.horizontalAxis.width ) {
+    // Set up for the normal or wide version of the graph.
     if ( options.wide ) {
-      this.horizontalAxisLabel.maxWidth = this.horizontalAxis.width;
+      this.widthOfGraph = WIDE_VERSION_WIDTH;
+      this.heightOfGraph = this.widthOfGraph * 0.75;
+      GREEK_LETTER_FONT = new PhetFont( 22 );
+      axisLabelFont = new PhetFont( { size: 16, fill: SOMColorProfile.controlPanelTextProperty } );
+      GREEK_LETTER_MAX_WIDTH = 60;
     }
     else {
-      this.horizontalAxisLabel.maxWidth = this.horizontalAxis.width + 30;
+      this.widthOfGraph = NARROW_VERSION_WIDTH;
+      this.heightOfGraph = this.widthOfGraph * 0.8;
+      axisLabelFont = new PhetFont( { size: 11, fill: SOMColorProfile.controlPanelTextProperty } );
+      GREEK_LETTER_FONT = new PhetFont( GREEK_LETTER_FONT_SIZE );
+      GREEK_LETTER_MAX_WIDTH = 17;
     }
-  }
+    this.graphXOrigin = 0.05 * this.widthOfGraph;
+    this.graphYOrigin = 0.85 * this.heightOfGraph;
+    this.graphWidth = this.widthOfGraph - this.graphXOrigin - AXES_ARROW_HEAD_HEIGHT;
 
-  this.setMolecular( false );
+    this.graphHeight = this.heightOfGraph * VERT_AXIS_SIZE_PROPORTION - AXES_ARROW_HEAD_HEIGHT;
 
-  // Create the vertical axis line for the graph.
-  this.verticalAxis = new ArrowNode( 0, 0, 0, -this.graphHeight - AXES_ARROW_HEAD_HEIGHT, {
-    fill: SOMColorProfile.controlPanelTextProperty,
-    stroke: SOMColorProfile.controlPanelTextProperty,
-    headHeight: 8,
-    headWidth: 8,
-    tailWidth: AXIS_LINE_WIDTH,
-    x: this.graphXOrigin,
-    y: this.graphYOrigin
-  } );
+    // Layer where the graph elements are added.
+    this.ljPotentialGraph = new Node();
 
-  this.verticalAxisLabel = new Text( potentialEnergyString, {
-    fill: SOMColorProfile.controlPanelTextProperty,
-    font: axisLabelFont
-  } );
+    //  Using ~45% (1/2.2) of graph height instead of 50 % graph height as in the Java version.
+    // This is done to fix the point flickering at the bottom most point.
+    // see https://github.com/phetsims/states-of-matter/issues/63 and
+    // https://github.com/phetsims/states-of-matter/issues/25
+    this.verticalScalingFactor = ( this.graphHeight / 2.2 ) /
+                                 ( SOMConstants.MAX_EPSILON * SOMConstants.K_BOLTZMANN );
+    this.horizontalLineCount = 5;
 
-  // Create the center axis line for the graph.
-  this.centerAxis = new Line( 0, 0, this.graphWidth, 0, {
-    lineWidth: 0.8,
-    stroke: '#A7A7A7',
-    x: this.graphXOrigin,
-    y: this.graphYOrigin - this.graphHeight / 2
-  } );
+    // Add the arrows and labels that will depict sigma and epsilon.
+    this.epsilonArrow = new ArrowNode( 0, 0, 0, 0, {
+      headHeight: 8,
+      headWidth: 20,
+      tailWidth: 9,
+      doubleHead: false,
+      fill: SOMColorProfile.controlPanelTextProperty,
+      lineWidth: 0.5
+    } );
 
-  // restricted vertical axis label
-  const verticalAxisHeight = options.wide ? this.verticalAxis.height - ZOOM_BUTTONS_HEIGHT : this.verticalAxis.height;
-  if ( this.verticalAxisLabel.width > verticalAxisHeight ) {
-    this.verticalAxisLabel.scale( verticalAxisHeight / this.verticalAxisLabel.width );
-  }
+    this.epsilonLabel = new Text( epsilonString, {
+      font: GREEK_LETTER_FONT,
+      fill: SOMColorProfile.controlPanelTextProperty,
+      maxWidth: GREEK_LETTER_MAX_WIDTH,
+      boundsMethod: 'accurate' // This seems necessary for good graph layout, and doesn't seem to impact performance.
+    } );
 
-  this.verticalAxisLabel.setTranslation(
-    this.graphXOrigin / 2 - this.verticalAxisLabel.height / 2,
-    this.graphYOrigin
-  );
-  this.verticalAxisLabel.setRotation( 3 * Math.PI / 2 );
+    // For some of the string tests, a boundsMethod value of 'accurate' causes undefined bounds, so handle this here.
+    // TODO: Remove this code if the issue https://github.com/phetsims/scenery/issues/595 is addressed.
+    if ( isNaN( this.epsilonLabel.width ) || isNaN( this.epsilonLabel.height ) ) {
+      this.epsilonLabel.boundsMethod = 'hybrid';
+    }
 
-  // Draw the initial curve upon the graph.
-  this.drawPotentialCurve();
+    const epsilonGraphLabel = new Node( {
+      children: [this.epsilonArrow, this.epsilonLabel],
+      tandem: options.tandem.createTandem( 'epsilonGraphLabel' )
+    } );
+    this.ljPotentialGraph.addChild( epsilonGraphLabel );
 
-  if ( options.wide ) {
-    this.gridNode = new ZoomableGridNode(
-      this,
-      0,
-      0,
-      this.graphWidth,
-      this.graphHeight,
-      {
-        addZoomButtons: options.zoomable,
-        tandem: options.tandem.createTandem( 'gridNode' )
+    this.sigmaLabel = new Text( sigmaString, {
+      font: GREEK_LETTER_FONT,
+      fill: SOMColorProfile.controlPanelTextProperty,
+      maxWidth: GREEK_LETTER_MAX_WIDTH
+    } );
+    this.sigmaArrow = new ArrowNode( 0, 0, 0, 0, {
+      headHeight: 8,
+      headWidth: 8,
+      tailWidth: 3,
+      doubleHead: true,
+      fill: SOMColorProfile.controlPanelTextProperty,
+      lineWidth: 0.5
+    } );
+
+    const sigmaGraphLabel = new Node( {
+      children: [this.sigmaArrow, this.sigmaLabel],
+      tandem: options.tandem.createTandem( 'sigmaGraphLabel' )
+    } );
+    this.ljPotentialGraph.addChild( sigmaGraphLabel );
+
+    // If enabled, add the layer where interactive controls can be placed and other infrastructure.  This does not provide
+    // any interactivity by itself, it merely creates support for interactive controls that can be added by subclasses.
+    if ( options.allowInteraction ) {
+
+      // @protected - layer where interactive controls can be added by subclasses
+      this.interactiveControlsLayer = new Node( {
+        tandem: options.tandem.createTandem( 'interactiveControls' ),
+        phetioDocumentation: 'Used for \'Adjustable Attraction\' only'
+      } );
+      this.ljPotentialGraph.addChild( this.interactiveControlsLayer );
+
+      // @protected - an object where specific controls can be added for controlling the epsilon parameter in the Lennard-
+      // Jones potential calculations, see usages in subclasses
+      this.epsilonControls = {
+        arrow: null,
+        line: null
+      };
+
+      // @protected - an object where a specific control can be added for controlling the sigma parameter in the Lennard-
+      // Jones potential calculations, see usages in subclasses.  See usages in subclasses.
+      this.sigmaControls = {
+        arrow: null
+      };
+    }
+
+    // Add the position marker if included.
+    if ( options.includePositionMarker ) {
+      const markerDiameter = POSITION_MARKER_DIAMETER_PROPORTION * this.graphWidth;
+      this.positionMarker = new PositionMarker( markerDiameter / 2, 'rgb( 117, 217, 255 )', {
+        tandem: options.tandem.createTandem( 'positionMarker' )
+      } );
+      this.ljPotentialGraph.addChild( this.positionMarker );
+    }
+
+    // now that the graph portion is built, position it correctly
+    this.ljPotentialGraph.x = this.graphXOrigin;
+    this.ljPotentialGraph.y = this.graphYOrigin - this.graphHeight;
+
+    // Create the horizontal axis line for the graph.
+    this.horizontalAxis = new ArrowNode( 0, 0, this.graphWidth + AXES_ARROW_HEAD_HEIGHT, 0, {
+      fill: SOMColorProfile.controlPanelTextProperty,
+      stroke: SOMColorProfile.controlPanelTextProperty,
+      headHeight: 8,
+      headWidth: 8,
+      tailWidth: 2,
+      x: this.graphXOrigin,
+      y: this.graphYOrigin
+    } );
+
+    this.horizontalAxisLabel = new Text( distanceBetweenAtomsString, {
+      fill: SOMColorProfile.controlPanelTextProperty,
+      font: axisLabelFont
+    } );
+    if ( this.horizontalAxisLabel.width > this.horizontalAxis.width ) {
+      if ( options.wide ) {
+        this.horizontalAxisLabel.maxWidth = this.horizontalAxis.width;
       }
-    );
-    this.gridNode.x = this.graphXOrigin;
-    this.gridNode.y = this.graphYOrigin - this.graphHeight;
-    this.addChild( this.gridNode );
+      else {
+        this.horizontalAxisLabel.maxWidth = this.horizontalAxis.width + 30;
+      }
+    }
 
-    // zoom button positions
-    if ( options.zoomable ) {
-      this.gridNode.zoomInButton.right = this.verticalAxis.left - this.gridNode.zoomInButton.width;
-      this.gridNode.zoomOutButton.right = this.verticalAxis.left - this.gridNode.zoomInButton.width;
-      this.gridNode.zoomInButton.top = this.verticalAxis.top - AXES_ARROW_HEAD_HEIGHT / 2;
-      this.gridNode.zoomOutButton.top = this.gridNode.zoomInButton.bottom + 5;
+    this.setMolecular( false );
+
+    // Create the vertical axis line for the graph.
+    this.verticalAxis = new ArrowNode( 0, 0, 0, -this.graphHeight - AXES_ARROW_HEAD_HEIGHT, {
+      fill: SOMColorProfile.controlPanelTextProperty,
+      stroke: SOMColorProfile.controlPanelTextProperty,
+      headHeight: 8,
+      headWidth: 8,
+      tailWidth: AXIS_LINE_WIDTH,
+      x: this.graphXOrigin,
+      y: this.graphYOrigin
+    } );
+
+    this.verticalAxisLabel = new Text( potentialEnergyString, {
+      fill: SOMColorProfile.controlPanelTextProperty,
+      font: axisLabelFont
+    } );
+
+    // Create the center axis line for the graph.
+    this.centerAxis = new Line( 0, 0, this.graphWidth, 0, {
+      lineWidth: 0.8,
+      stroke: '#A7A7A7',
+      x: this.graphXOrigin,
+      y: this.graphYOrigin - this.graphHeight / 2
+    } );
+
+    // restricted vertical axis label
+    const verticalAxisHeight = options.wide ? this.verticalAxis.height - ZOOM_BUTTONS_HEIGHT : this.verticalAxis.height;
+    if ( this.verticalAxisLabel.width > verticalAxisHeight ) {
+      this.verticalAxisLabel.scale( verticalAxisHeight / this.verticalAxisLabel.width );
+    }
+
+    this.verticalAxisLabel.setTranslation(
+      this.graphXOrigin / 2 - this.verticalAxisLabel.height / 2,
+      this.graphYOrigin
+    );
+    this.verticalAxisLabel.setRotation( 3 * Math.PI / 2 );
+
+    // Draw the initial curve upon the graph.
+    this.drawPotentialCurve();
+
+    if ( options.wide ) {
+      this.gridNode = new ZoomableGridNode(
+        this,
+        0,
+        0,
+        this.graphWidth,
+        this.graphHeight,
+        {
+          addZoomButtons: options.zoomable,
+          tandem: options.tandem.createTandem( 'gridNode' )
+        }
+      );
+      this.gridNode.x = this.graphXOrigin;
+      this.gridNode.y = this.graphYOrigin - this.graphHeight;
+      this.addChild( this.gridNode );
+
+      // zoom button positions
+      if ( options.zoomable ) {
+        this.gridNode.zoomInButton.right = this.verticalAxis.left - this.gridNode.zoomInButton.width;
+        this.gridNode.zoomOutButton.right = this.verticalAxis.left - this.gridNode.zoomInButton.width;
+        this.gridNode.zoomInButton.top = this.verticalAxis.top - AXES_ARROW_HEAD_HEIGHT / 2;
+        this.gridNode.zoomOutButton.top = this.gridNode.zoomInButton.bottom + 5;
+      }
     }
   }
-}
-
-statesOfMatter.register( 'PotentialGraphNode', PotentialGraphNode );
-
-inherit( Node, PotentialGraphNode, {
 
   /**
    * Set the parameters that define the shape of the Lennard-Jones potential curve.
@@ -301,55 +300,55 @@ inherit( Node, PotentialGraphNode, {
    * @param {number} epsilon - interaction strength
    * @public
    */
-  setLjPotentialParameters: function( sigma, epsilon ) {
+  setLjPotentialParameters( sigma, epsilon ) {
 
     // Update the Lennard-Jones force calculator.
     this.ljPotentialCalculator.setEpsilon( epsilon );
     this.ljPotentialCalculator.setSigma( sigma );
-  },
+  }
 
   /**
    * @public
    */
-  reset: function() {
+  reset() {
     this.verticalScalingFactor = ( this.graphHeight / 2.2 ) /
                                  ( SOMConstants.MAX_EPSILON * SOMConstants.K_BOLTZMANN );
     this.horizontalLineCount = 5;
     this.gridNode.setHorizontalLines( 0, 0, this.graphWidth, this.graphHeight, this.horizontalLineCount );
     this.drawPotentialCurve();
-  },
+  }
 
   /**
    * @returns {number}
    * @public
    */
-  getGraphHeight: function() {
+  getGraphHeight() {
     return this.graphHeight;
-  },
+  }
 
   /**
    * @returns {number}
    * @public
    */
-  getGraphWidth: function() {
+  getGraphWidth() {
     return this.graphWidth;
-  },
+  }
 
   /**
    * @returns {Vector2}
    * @public
    */
-  getZeroCrossingPoint: function() {
+  getZeroCrossingPoint() {
     return this.zeroCrossingPoint;
-  },
+  }
 
   /**
    * @returns {Vector2}
    * @public
    */
-  getGraphMin: function() {
+  getGraphMin() {
     return this.graphMin;
-  },
+  }
 
   /**
    * Set the position of the position marker.  Note that is is only possible to set the x axis position, which is
@@ -357,10 +356,10 @@ inherit( Node, PotentialGraphNode, {
    * @param {number}distance - distance from the center of the interacting molecules.
    * @public
    */
-  setMarkerPosition: function( distance ) {
+  setMarkerPosition( distance ) {
     assert && assert( this.positionMarker, 'position marker not enabled for this potential graph node' );
     this.markerDistance = distance;
-    const xPos = this.markerDistance * ( this.graphWidth / GRAPH_X_RANGE );
+    const xPos = this.markerDistance * ( this.graphWidth / this.xRange );
     const potential = this.calculateLennardJonesPotential( this.markerDistance );
     const yPos = ( ( this.graphHeight / 2 ) - ( potential * this.verticalScalingFactor ) );
     if ( xPos > 0 && xPos < this.graphWidth && yPos > 0 && yPos < this.graphHeight ) {
@@ -370,14 +369,14 @@ inherit( Node, PotentialGraphNode, {
     else {
       this.positionMarker.setVisible( false );
     }
-  },
+  }
 
   /**
    * Set whether the graph is showing the potential between individual atoms or multi-atom molecules.
    * @param {boolean} molecular - true if graph is portraying molecules, false for individual atoms.
    * @public
    */
-  setMolecular: function( molecular ) {
+  setMolecular( molecular ) {
     if ( molecular ) {
       this.horizontalAxisLabel.setText( distanceBetweenMoleculesString );
     }
@@ -386,7 +385,7 @@ inherit( Node, PotentialGraphNode, {
     }
     this.horizontalAxisLabel.centerX = this.graphXOrigin + ( this.graphWidth / 2 );
     this.horizontalAxisLabel.top = this.graphYOrigin + 5;
-  },
+  }
 
   /**
    * Calculate the Lennard-Jones potential for the given distance.
@@ -394,19 +393,19 @@ inherit( Node, PotentialGraphNode, {
    * @returns {number}
    * @public
    */
-  calculateLennardJonesPotential: function( radius ) {
+  calculateLennardJonesPotential( radius ) {
     return ( this.ljPotentialCalculator.getLjPotential( radius ) );
-  },
+  }
 
   /**
    * Draw the curve that reflects the Lennard-Jones potential based upon the current values for sigma and epsilon.
+   * @public
    */
-  drawPotentialCurve: function() {
+  drawPotentialCurve() {
     // must be overridden in descendant types, so assert if called here
     assert && assert( false, 'this function must be overridden in descendant classes' );
-  },
+  }
+}
 
-  GRAPH_X_RANGE: GRAPH_X_RANGE
-} );
-
+statesOfMatter.register( 'PotentialGraphNode', PotentialGraphNode );
 export default PotentialGraphNode;

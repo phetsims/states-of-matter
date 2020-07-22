@@ -8,7 +8,6 @@
  */
 
 import Screen from '../../../joist/js/Screen.js';
-import inherit from '../../../phet-core/js/inherit.js';
 import MultipleParticleModel from '../common/model/MultipleParticleModel.js';
 import SOMConstants from '../common/SOMConstants.js';
 import SubstanceType from '../common/SubstanceType.js';
@@ -20,38 +19,38 @@ import StatesScreenView from './view/StatesScreenView.js';
 
 const statesString = statesOfMatterStrings.states;
 
-/**
- * @param {Tandem} tandem
- * @constructor
- */
-function StatesScreen( tandem ) {
+class StatesScreen extends Screen {
 
-  const options = {
-    name: statesString,
-    backgroundColorProperty: SOMColorProfile.backgroundProperty,
-    homeScreenIcon: new StatesIcon(),
-    navigationBarIcon: new StatesIcon( {
-      size: Screen.MINIMUM_NAVBAR_ICON_SIZE,
-      fill: SOMColorProfile.navigationBarIconBackgroundProperty
-    } ),
-    showUnselectedHomeScreenIconFrame: true,
-    maxDT: SOMConstants.MAX_DT,
-    tandem: tandem
-  };
+  /**
+   * @param {Tandem} tandem
+   */
+  constructor( tandem ) {
 
-  // remove the adjustable atom from the list of substances that are supported in this screen
-  const validSubstances = SubstanceType.VALUES.filter( substance => substance !== SubstanceType.ADJUSTABLE_ATOM );
+    const options = {
+      name: statesString,
+      backgroundColorProperty: SOMColorProfile.backgroundProperty,
+      homeScreenIcon: new StatesIcon(),
+      navigationBarIcon: new StatesIcon( {
+        size: Screen.MINIMUM_NAVBAR_ICON_SIZE,
+        fill: SOMColorProfile.navigationBarIconBackgroundProperty
+      } ),
+      showUnselectedHomeScreenIconFrame: true,
+      maxDT: SOMConstants.MAX_DT,
+      tandem: tandem
+    };
 
-  Screen.call( this,
-    function() {
-      return new MultipleParticleModel( tandem.createTandem( 'model' ), { validSubstances: validSubstances } );
-    },
-    function( model ) { return new StatesScreenView( model, tandem.createTandem( 'view' ) ); },
-    options
-  );
+    // remove the adjustable atom from the list of substances that are supported in this screen
+    const validSubstances = SubstanceType.VALUES.filter( substance => substance !== SubstanceType.ADJUSTABLE_ATOM );
+
+    super(
+      () => {
+        return new MultipleParticleModel( tandem.createTandem( 'model' ), { validSubstances: validSubstances } );
+      },
+      model => new StatesScreenView( model, tandem.createTandem( 'view' ) ),
+      options
+    );
+  }
 }
 
 statesOfMatter.register( 'StatesScreen', StatesScreen );
-
-inherit( Screen, StatesScreen );
 export default StatesScreen;

@@ -8,7 +8,6 @@
  */
 
 import Bounds2 from '../../../../dot/js/Bounds2.js';
-import inherit from '../../../../phet-core/js/inherit.js';
 import merge from '../../../../phet-core/js/merge.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import HBox from '../../../../scenery/js/nodes/HBox.js';
@@ -35,166 +34,166 @@ const waterString = statesOfMatterStrings.water;
 // constants
 const DEFAULT_WIDTH = 160;
 
-/**
- * @param {Property<number>} substanceProperty that tracks the substance selected in the panel
- * @param {Object} [options] for various panel display properties
- * @constructor
- */
-function StatesMoleculesControlPanel( substanceProperty, options ) {
+class StatesMoleculesControlPanel extends Node {
 
-  options = merge( {
-    xMargin: 5,
-    yMargin: 8,
-    fill: SOMColorProfile.controlPanelBackgroundProperty,
-    stroke: SOMColorProfile.controlPanelStrokeProperty,
-    lineWidth: 1,
-    cornerRadius: SOMConstants.PANEL_CORNER_RADIUS,
-    maxWidth: DEFAULT_WIDTH,
-    minWidth: DEFAULT_WIDTH,
-    tandem: Tandem.REQUIRED
-  }, options );
+  /**
+   * @param {Property<number>} substanceProperty that tracks the substance selected in the panel
+   * @param {Object} [options] for various panel display properties
+   */
+  constructor( substanceProperty, options ) {
 
-  Node.call( this );
-  const maxTextWidth = options.maxWidth * 0.75;
-  const textOptions = { font: new PhetFont( 12 ), fill: '#FFFFFF', maxWidth: maxTextWidth };
+    options = merge( {
+      xMargin: 5,
+      yMargin: 8,
+      fill: SOMColorProfile.controlPanelBackgroundProperty,
+      stroke: SOMColorProfile.controlPanelStrokeProperty,
+      lineWidth: 1,
+      cornerRadius: SOMConstants.PANEL_CORNER_RADIUS,
+      maxWidth: DEFAULT_WIDTH,
+      minWidth: DEFAULT_WIDTH,
+      tandem: Tandem.REQUIRED
+    }, options );
 
-  // title for the panel
-  const title = new Text( atomsAndMoleculesString, {
-    font: new PhetFont( 14 ),
-    fill: SOMColorProfile.controlPanelTextProperty,
-    maxWidth: maxTextWidth,
-    tandem: options.tandem.createTandem( 'title' )
-  } );
+    super();
+    const maxTextWidth = options.maxWidth * 0.75;
+    const textOptions = { font: new PhetFont( 12 ), fill: '#FFFFFF', maxWidth: maxTextWidth };
 
-  // pre-create the tandem for the radio button group so that the text nodes can be under it
-  const radioButtonGroupTandem = options.tandem.createTandem( 'radioButtonGroup' );
+    // title for the panel
+    const title = new Text( atomsAndMoleculesString, {
+      font: new PhetFont( 14 ),
+      fill: SOMColorProfile.controlPanelTextProperty,
+      maxWidth: maxTextWidth,
+      tandem: options.tandem.createTandem( 'title' )
+    } );
 
-  // text nodes that will be used on the radio buttons
-  const neonText = new Text(
-    neonString,
-    merge( { tandem: radioButtonGroupTandem.createTandem( 'neonText' ) }, textOptions )
-  );
-  const argonText = new Text(
-    argonString,
-    merge( { tandem: radioButtonGroupTandem.createTandem( 'argonText' ) }, textOptions )
-  );
-  const waterText = new Text(
-    waterString,
-    merge( { tandem: radioButtonGroupTandem.createTandem( 'waterText' ) }, textOptions )
-  );
-  const oxygenText = new Text(
-    diatomicOxygenString,
-    merge( { tandem: radioButtonGroupTandem.createTandem( 'oxygenText' ) }, textOptions )
-  );
+    // pre-create the tandem for the radio button group so that the text nodes can be under it
+    const radioButtonGroupTandem = options.tandem.createTandem( 'radioButtonGroup' );
 
-  // create objects that describe the pieces that make up an item in the control panel, conforms to the contract:
-  // { label: {Node}, icon: {Node}, tandem: {Tandem} }
-  const neonSelectionNodeSpec = {
-    label: neonText,
-    icon: AtomAndMoleculeIconFactory.createIcon( SubstanceType.NEON )
-  };
-  const argonSelectionNodeSpec = {
-    label: argonText,
-    icon: AtomAndMoleculeIconFactory.createIcon( SubstanceType.ARGON )
-  };
-  const waterSelectionNodeSpec = {
-    label: waterText,
-    icon: AtomAndMoleculeIconFactory.createIcon( SubstanceType.WATER )
-  };
-  const oxygenSelectionNodeSpec = {
-    label: oxygenText,
-    icon: AtomAndMoleculeIconFactory.createIcon( SubstanceType.DIATOMIC_OXYGEN )
-  };
+    // text nodes that will be used on the radio buttons
+    const neonText = new Text(
+      neonString,
+      merge( { tandem: radioButtonGroupTandem.createTandem( 'neonText' ) }, textOptions )
+    );
+    const argonText = new Text(
+      argonString,
+      merge( { tandem: radioButtonGroupTandem.createTandem( 'argonText' ) }, textOptions )
+    );
+    const waterText = new Text(
+      waterString,
+      merge( { tandem: radioButtonGroupTandem.createTandem( 'waterText' ) }, textOptions )
+    );
+    const oxygenText = new Text(
+      diatomicOxygenString,
+      merge( { tandem: radioButtonGroupTandem.createTandem( 'oxygenText' ) }, textOptions )
+    );
 
-  const selectorWidth = options.minWidth - 2 * options.xMargin;
+    // create objects that describe the pieces that make up an item in the control panel, conforms to the contract:
+    // { label: {Node}, icon: {Node}, tandem: {Tandem} }
+    const neonSelectionNodeSpec = {
+      label: neonText,
+      icon: AtomAndMoleculeIconFactory.createIcon( SubstanceType.NEON )
+    };
+    const argonSelectionNodeSpec = {
+      label: argonText,
+      icon: AtomAndMoleculeIconFactory.createIcon( SubstanceType.ARGON )
+    };
+    const waterSelectionNodeSpec = {
+      label: waterText,
+      icon: AtomAndMoleculeIconFactory.createIcon( SubstanceType.WATER )
+    };
+    const oxygenSelectionNodeSpec = {
+      label: oxygenText,
+      icon: AtomAndMoleculeIconFactory.createIcon( SubstanceType.DIATOMIC_OXYGEN )
+    };
 
-  // function to create the selector nodes that will go into the radio button group
-  const createSelectionNode = function( selectionNodeSpec ) {
-    if ( selectionNodeSpec.icon ) {
-      return new SubstanceSelectorNode( selectionNodeSpec.label, selectionNodeSpec.icon, selectorWidth );
-    }
-    else {
-      return new HBox( {
-        children: [ selectionNodeSpec.label ]
-      } );
-    }
-  };
+    const selectorWidth = options.minWidth - 2 * options.xMargin;
 
-  const radioButtonContent = [
-    { value: SubstanceType.NEON, node: createSelectionNode( neonSelectionNodeSpec ), tandemName: 'neon' },
-    { value: SubstanceType.ARGON, node: createSelectionNode( argonSelectionNodeSpec ), tandemName: 'argon' },
-    {
-      value: SubstanceType.DIATOMIC_OXYGEN,
-      node: createSelectionNode( oxygenSelectionNodeSpec ),
-      tandemName: 'oxygen'
-    },
-    { value: SubstanceType.WATER, node: createSelectionNode( waterSelectionNodeSpec ), tandemName: 'water' }
-  ];
+    // function to create the selector nodes that will go into the radio button group
+    const createSelectionNode = selectionNodeSpec => {
+      if ( selectionNodeSpec.icon ) {
+        return new SubstanceSelectorNode( selectionNodeSpec.label, selectionNodeSpec.icon, selectorWidth );
+      }
+      else {
+        return new HBox( {
+          children: [selectionNodeSpec.label]
+        } );
+      }
+    };
 
-  const radioButtonGroup = new RadioButtonGroup( substanceProperty, radioButtonContent, {
-    orientation: 'vertical',
-    cornerRadius: 5,
-    baseColor: 'black',
-    disabledBaseColor: 'black',
-    selectedLineWidth: 1,
-    selectedStroke: 'white',
-    deselectedLineWidth: 0,
-    deselectedContentOpacity: 1,
-    tandem: radioButtonGroupTandem
-  } );
+    const radioButtonContent = [
+      { value: SubstanceType.NEON, node: createSelectionNode( neonSelectionNodeSpec ), tandemName: 'neon' },
+      { value: SubstanceType.ARGON, node: createSelectionNode( argonSelectionNodeSpec ), tandemName: 'argon' },
+      {
+        value: SubstanceType.DIATOMIC_OXYGEN,
+        node: createSelectionNode( oxygenSelectionNodeSpec ),
+        tandemName: 'oxygen'
+      },
+      { value: SubstanceType.WATER, node: createSelectionNode( waterSelectionNodeSpec ), tandemName: 'water' }
+    ];
 
-  SOMColorProfile.controlPanelBackgroundProperty.link( function( color ) {
-    radioButtonGroup.baseColor = color;
-  } );
+    const radioButtonGroup = new RadioButtonGroup( substanceProperty, radioButtonContent, {
+      orientation: 'vertical',
+      cornerRadius: 5,
+      baseColor: 'black',
+      disabledBaseColor: 'black',
+      selectedLineWidth: 1,
+      selectedStroke: 'white',
+      deselectedLineWidth: 0,
+      deselectedContentOpacity: 1,
+      tandem: radioButtonGroupTandem
+    } );
 
-  const radioButtonPanel = new Panel( radioButtonGroup, {
-    yMargin: 10,
-    stroke: options.stroke,
-    align: 'center',
-    lineWidth: options.lineWidth,
-    cornerRadius: options.cornerRadius,
-    fill: options.fill,
-    minWidth: options.minWidth,
-    maxWidth: options.maxWidth
-  } );
-  this.addChild( radioButtonPanel );
+    SOMColorProfile.controlPanelBackgroundProperty.link( color => {
+      radioButtonGroup.baseColor = color;
+    } );
 
-  // create the background for the title - initial size is arbitrary, it will be sized and positioned below
-  const titleBackground = new Rectangle( 0, 0, 1, 1, { fill: options.fill } );
-  this.addChild( new Node( { children: [ titleBackground, title ] } ) );
+    const radioButtonPanel = new Panel( radioButtonGroup, {
+      yMargin: 10,
+      stroke: options.stroke,
+      align: 'center',
+      lineWidth: options.lineWidth,
+      cornerRadius: options.cornerRadius,
+      fill: options.fill,
+      minWidth: options.minWidth,
+      maxWidth: options.maxWidth
+    } );
+    this.addChild( radioButtonPanel );
 
-  // closure for updating the title background size and overall position
-  const updateTitle = () => {
-    if ( radioButtonPanel.bounds.equals( Bounds2.NOTHING ) ) {
-      titleBackground.visible = false;
-      title.visible = false;
-    }
-    else {
-      titleBackground.rectWidth = title.width + 5;
-      titleBackground.rectHeight = title.height;
-      titleBackground.centerX = radioButtonPanel.centerX;
-      titleBackground.centerY = radioButtonPanel.top;
-      title.centerX = titleBackground.centerX;
-      title.centerY = titleBackground.centerY;
-      titleBackground.visible = true;
-      title.visible = true;
-    }
-  };
+    // create the background for the title - initial size is arbitrary, it will be sized and positioned below
+    const titleBackground = new Rectangle( 0, 0, 1, 1, { fill: options.fill } );
+    this.addChild( new Node( { children: [titleBackground, title] } ) );
 
-  // do the initial update of the title
-  updateTitle();
+    // closure for updating the title background size and overall position
+    const updateTitle = () => {
+      if ( radioButtonPanel.bounds.equals( Bounds2.NOTHING ) ) {
+        titleBackground.visible = false;
+        title.visible = false;
+      }
+      else {
+        titleBackground.rectWidth = title.width + 5;
+        titleBackground.rectHeight = title.height;
+        titleBackground.centerX = radioButtonPanel.centerX;
+        titleBackground.centerY = radioButtonPanel.top;
+        title.centerX = titleBackground.centerX;
+        title.centerY = titleBackground.centerY;
+        titleBackground.visible = true;
+        title.visible = true;
+      }
+    };
 
-  // Listen for changes to the title text node's bounds and update the title when they occur.  There is no need to
-  // unlink this since the panel is permanent.
-  title.localBoundsProperty.lazyLink( updateTitle );
+    // do the initial update of the title
+    updateTitle();
 
-  // Listen for changes to the panel bounds and update the title.
-  radioButtonPanel.localBoundsProperty.link( updateTitle );
+    // Listen for changes to the title text node's bounds and update the title when they occur.  There is no need to
+    // unlink this since the panel is permanent.
+    title.localBoundsProperty.lazyLink( updateTitle );
 
-  this.mutate( options );
+    // Listen for changes to the panel bounds and update the title.
+    radioButtonPanel.localBoundsProperty.link( updateTitle );
+
+    this.mutate( options );
+  }
 }
 
 statesOfMatter.register( 'StatesMoleculesControlPanel', StatesMoleculesControlPanel );
-
-inherit( Node, StatesMoleculesControlPanel );
 export default StatesMoleculesControlPanel;

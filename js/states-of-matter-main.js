@@ -18,7 +18,7 @@ import StatesScreen from './states/StatesScreen.js';
 const interactionString = statesOfMatterStrings.interaction;
 const statesOfMatterTitleString = statesOfMatterStrings[ 'states-of-matter' ].title;
 
-simLauncher.launch( function() {
+simLauncher.launch( () => {
 
   const simOptions = {
     credits: {

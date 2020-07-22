@@ -23,7 +23,7 @@ const WaterAtomPositionUpdater = {
    * @param {MoleculeForceAndMotionDataSet} moleculeDataSet
    * @param {number} timeStep
    */
-  updateAtomPositions: function( moleculeDataSet ) {
+  updateAtomPositions: moleculeDataSet => {
 
     // Make sure this is not being used on an inappropriate data set.
     assert && assert( moleculeDataSet.getAtomsPerMolecule() === 3 );

@@ -13,7 +13,6 @@ import merge from '../../../../phet-core/js/merge.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import ScreenView from '../../../../joist/js/ScreenView.js';
-import inherit from '../../../../phet-core/js/inherit.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import ResetAllButton from '../../../../scenery-phet/js/buttons/ResetAllButton.js';
 import HeaterCoolerNode from '../../../../scenery-phet/js/HeaterCoolerNode.js';
@@ -31,132 +30,131 @@ const CONTROL_PANEL_X_INSET = 15;
 const CONTROL_PANEL_Y_INSET = 10;
 const CONTROL_PANEL_WIDTH = 175; // empirically determined by looks
 
-/**
- * @param {MultipleParticleModel} multipleParticleModel - model of the simulation
- * @param {Tandem} tandem
- * @constructor
- */
-function StatesScreenView( multipleParticleModel, tandem ) {
+class StatesScreenView extends ScreenView {
 
-  ScreenView.call( this, merge( { tandem: tandem }, SOMConstants.SCREEN_VIEW_OPTIONS ) );
+  /**
+   * @param {MultipleParticleModel} multipleParticleModel - model of the simulation
+   * @param {Tandem} tandem
+   */
+  constructor( multipleParticleModel, tandem ) {
 
-  // Create the model-view transform. The multipliers for the 2nd parameter can be used to adjust where the point
-  // (0, 0) in the model, which is the lower left corner of the particle container, appears in the view.The final
-  // parameter is the scale, and can be changed to make the view more zoomed in or out.
-  const modelViewTransform = ModelViewTransform2.createSinglePointScaleInvertedYMapping(
-    new Vector2( 0, 0 ),
-    new Vector2( this.layoutBounds.width * 0.325, this.layoutBounds.height * 0.75 ),
-    SOMConstants.VIEW_CONTAINER_WIDTH / MultipleParticleModel.PARTICLE_CONTAINER_WIDTH
-  );
+    super( merge( { tandem: tandem }, SOMConstants.SCREEN_VIEW_OPTIONS ) );
 
-  // Figure out where in the view the interior of the particle container will be.
-  const particleContainerViewBounds = new Bounds2(
-    modelViewTransform.modelToViewX( 0 ),
-    modelViewTransform.modelToViewY( 0 ) + modelViewTransform.modelToViewDeltaY( MultipleParticleModel.PARTICLE_CONTAINER_INITIAL_HEIGHT ),
-    modelViewTransform.modelToViewX( 0 ) + modelViewTransform.modelToViewDeltaX( MultipleParticleModel.PARTICLE_CONTAINER_WIDTH ),
-    modelViewTransform.modelToViewY( 0 )
-  );
+    // Create the model-view transform. The multipliers for the 2nd parameter can be used to adjust where the point
+    // (0, 0) in the model, which is the lower left corner of the particle container, appears in the view.The final
+    // parameter is the scale, and can be changed to make the view more zoomed in or out.
+    const modelViewTransform = ModelViewTransform2.createSinglePointScaleInvertedYMapping(
+      new Vector2( 0, 0 ),
+      new Vector2( this.layoutBounds.width * 0.325, this.layoutBounds.height * 0.75 ),
+      SOMConstants.VIEW_CONTAINER_WIDTH / MultipleParticleModel.PARTICLE_CONTAINER_WIDTH
+    );
 
-  // @private particle container
-  this.particleContainerNode = new ParticleContainerNode( multipleParticleModel, modelViewTransform, {
-    thermometerXOffsetFromCenter: modelViewTransform.modelToViewDeltaX(
-      -MultipleParticleModel.PARTICLE_CONTAINER_WIDTH * 0.3
-    ),
-    tandem: tandem.createTandem( 'particleContainerNode' )
-  } );
-  this.addChild( this.particleContainerNode );
+    // Figure out where in the view the interior of the particle container will be.
+    const particleContainerViewBounds = new Bounds2(
+      modelViewTransform.modelToViewX( 0 ),
+      modelViewTransform.modelToViewY( 0 ) + modelViewTransform.modelToViewDeltaY( MultipleParticleModel.PARTICLE_CONTAINER_INITIAL_HEIGHT ),
+      modelViewTransform.modelToViewX( 0 ) + modelViewTransform.modelToViewDeltaX( MultipleParticleModel.PARTICLE_CONTAINER_WIDTH ),
+      modelViewTransform.modelToViewY( 0 )
+    );
 
-  // @private - heater/cooler node
-  const heaterCoolerNode = new HeaterCoolerNode( multipleParticleModel.heatingCoolingAmountProperty, {
-    scale: 0.79,
-    centerX: particleContainerViewBounds.centerX,
-    top: particleContainerViewBounds.bottom + 30, // distance from bottom of particle area empirically determined
-    tandem: tandem.createTandem( 'heaterCoolerNode' ),
-    frontOptions: {
-      snapToZero: !SOMQueryParameters.stickyBurners
-    }
-  } );
-  this.addChild( heaterCoolerNode );
+    // @private particle container
+    this.particleContainerNode = new ParticleContainerNode( multipleParticleModel, modelViewTransform, {
+      thermometerXOffsetFromCenter: modelViewTransform.modelToViewDeltaX(
+        -MultipleParticleModel.PARTICLE_CONTAINER_WIDTH * 0.3
+      ),
+      tandem: tandem.createTandem( 'particleContainerNode' )
+    } );
+    this.addChild( this.particleContainerNode );
 
-  // control when the heater/cooler node is enabled for input
-  Property.multilink(
-    [ multipleParticleModel.isPlayingProperty, multipleParticleModel.isExplodedProperty ],
-    ( isPlaying, isExploded ) => {
-      if ( !isPlaying || isExploded ) {
-        heaterCoolerNode.interruptSubtreeInput(); // cancel interaction
-        heaterCoolerNode.heatCoolAmountProperty.set( 0 ); // force to zero in case snapToZero is off
-        heaterCoolerNode.slider.enabled = false;
+    // @private - heater/cooler node
+    const heaterCoolerNode = new HeaterCoolerNode( multipleParticleModel.heatingCoolingAmountProperty, {
+      scale: 0.79,
+      centerX: particleContainerViewBounds.centerX,
+      top: particleContainerViewBounds.bottom + 30, // distance from bottom of particle area empirically determined
+      tandem: tandem.createTandem( 'heaterCoolerNode' ),
+      frontOptions: {
+        snapToZero: !SOMQueryParameters.stickyBurners
       }
-      else {
-        heaterCoolerNode.slider.enabled = true;
-      }
-    }
-  );
+    } );
+    this.addChild( heaterCoolerNode );
 
-  // selection panel for the atoms/molecules
-  const moleculesControlPanel = new StatesMoleculesControlPanel( multipleParticleModel.substanceProperty, {
-    right: this.layoutBounds.right - CONTROL_PANEL_X_INSET,
-    top: this.layoutBounds.top + CONTROL_PANEL_Y_INSET,
-    minWidth: CONTROL_PANEL_WIDTH,
-    maxWidth: CONTROL_PANEL_WIDTH,
-    tandem: tandem.createTandem( 'moleculesControlPanel' )
-  } );
-  this.addChild( moleculesControlPanel );
-
-  // phases control node
-  const solidLiquidGasPhaseControlNode = new StatesPhaseControlNode( multipleParticleModel, {
-    right: moleculesControlPanel.right,
-    top: moleculesControlPanel.bottom + CONTROL_PANEL_Y_INSET,
-    buttonWidth: CONTROL_PANEL_WIDTH,
-    tandem: tandem.createTandem( 'solidLiquidGasPhaseControlNode' )
-  } );
-  this.addChild( solidLiquidGasPhaseControlNode );
-
-  const resetAllButton = new ResetAllButton( {
-    listener: () => {
-      multipleParticleModel.reset();
-      this.particleContainerNode.reset();
-    },
-    radius: SOMConstants.RESET_ALL_BUTTON_RADIUS,
-    right: this.layoutBounds.maxX - SOMConstants.RESET_ALL_BUTTON_DISTANCE_FROM_SIDE,
-    bottom: this.layoutBounds.maxY - SOMConstants.RESET_ALL_BUTTON_DISTANCE_FROM_BOTTOM,
-    tandem: tandem.createTandem( 'resetAllButton' )
-  } );
-  this.addChild( resetAllButton );
-
-  // add the play/pause/step control
-  this.addChild( new TimeControlNode( multipleParticleModel.isPlayingProperty, {
-    playPauseStepButtonOptions: {
-      playPauseButtonOptions: {
-        radius: SOMConstants.PLAY_PAUSE_BUTTON_RADIUS
-      },
-      stepForwardButtonOptions: {
-        radius: SOMConstants.STEP_BUTTON_RADIUS,
-        listener: () => {
-          multipleParticleModel.stepInternal( SOMConstants.NOMINAL_TIME_STEP );
+    // control when the heater/cooler node is enabled for input
+    Property.multilink(
+      [multipleParticleModel.isPlayingProperty, multipleParticleModel.isExplodedProperty],
+      ( isPlaying, isExploded ) => {
+        if ( !isPlaying || isExploded ) {
+          heaterCoolerNode.interruptSubtreeInput(); // cancel interaction
+          heaterCoolerNode.heatCoolAmountProperty.set( 0 ); // force to zero in case snapToZero is off
+          heaterCoolerNode.slider.enabled = false;
         }
+        else {
+          heaterCoolerNode.slider.enabled = true;
+        }
+      }
+    );
+
+    // selection panel for the atoms/molecules
+    const moleculesControlPanel = new StatesMoleculesControlPanel( multipleParticleModel.substanceProperty, {
+      right: this.layoutBounds.right - CONTROL_PANEL_X_INSET,
+      top: this.layoutBounds.top + CONTROL_PANEL_Y_INSET,
+      minWidth: CONTROL_PANEL_WIDTH,
+      maxWidth: CONTROL_PANEL_WIDTH,
+      tandem: tandem.createTandem( 'moleculesControlPanel' )
+    } );
+    this.addChild( moleculesControlPanel );
+
+    // phases control node
+    const solidLiquidGasPhaseControlNode = new StatesPhaseControlNode( multipleParticleModel, {
+      right: moleculesControlPanel.right,
+      top: moleculesControlPanel.bottom + CONTROL_PANEL_Y_INSET,
+      buttonWidth: CONTROL_PANEL_WIDTH,
+      tandem: tandem.createTandem( 'solidLiquidGasPhaseControlNode' )
+    } );
+    this.addChild( solidLiquidGasPhaseControlNode );
+
+    const resetAllButton = new ResetAllButton( {
+      listener: () => {
+        multipleParticleModel.reset();
+        this.particleContainerNode.reset();
       },
-      playPauseStepXSpacing: 10
-    },
+      radius: SOMConstants.RESET_ALL_BUTTON_RADIUS,
+      right: this.layoutBounds.maxX - SOMConstants.RESET_ALL_BUTTON_DISTANCE_FROM_SIDE,
+      bottom: this.layoutBounds.maxY - SOMConstants.RESET_ALL_BUTTON_DISTANCE_FROM_BOTTOM,
+      tandem: tandem.createTandem( 'resetAllButton' )
+    } );
+    this.addChild( resetAllButton );
 
-    // position empirically determined
-    right: heaterCoolerNode.left - 50,
-    centerY: heaterCoolerNode.centerY,
+    // add the play/pause/step control
+    this.addChild( new TimeControlNode( multipleParticleModel.isPlayingProperty, {
+      playPauseStepButtonOptions: {
+        playPauseButtonOptions: {
+          radius: SOMConstants.PLAY_PAUSE_BUTTON_RADIUS
+        },
+        stepForwardButtonOptions: {
+          radius: SOMConstants.STEP_BUTTON_RADIUS,
+          listener: () => {
+            multipleParticleModel.stepInternal( SOMConstants.NOMINAL_TIME_STEP );
+          }
+        },
+        playPauseStepXSpacing: 10
+      },
 
-    tandem: tandem.createTandem( 'timeControlNode' )
-  } ) );
-}
+      // position empirically determined
+      right: heaterCoolerNode.left - 50,
+      centerY: heaterCoolerNode.centerY,
 
-statesOfMatter.register( 'StatesScreenView', StatesScreenView );
-
-inherit( ScreenView, StatesScreenView, {
+      tandem: tandem.createTandem( 'timeControlNode' )
+    } ) );
+  }
 
   /**
    * @public
+   * TODO: Why was there no DT when this was converted to ES6?
    */
-  step: function() {
-    this.particleContainerNode.step();
+  step( dt ) {
+    this.particleContainerNode.step( dt );
   }
-} );
+}
 
+statesOfMatter.register( 'StatesScreenView', StatesScreenView );
 export default StatesScreenView;

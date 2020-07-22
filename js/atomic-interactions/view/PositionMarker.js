@@ -51,7 +51,7 @@ class PositionMarker extends Node {
     const sphereNode = new ShadedSphereNode( 2 * radius, options.shadedSphereNodeOptions );
 
     super( {
-      children: [ haloNode, sphereNode ],
+      children: [haloNode, sphereNode],
       tandem: options.tandem
     } );
 

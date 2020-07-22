@@ -90,7 +90,7 @@ class ParticleForceNode extends ParticleNode {
    */
   dispose() {
     this.disposeParticleForceNode();
-    ParticleNode.prototype.dispose.call( this );
+    super.dispose();
   }
 
   /**

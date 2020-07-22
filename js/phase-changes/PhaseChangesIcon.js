@@ -26,9 +26,9 @@ const CUBE_WIDTH = 5; // particles
 const CUBE_HEIGHT = 5; // particles
 
 class PhaseChangesIcon extends ScreenIcon {
+
   /**
    * {Object} [options]
-   * @constructor
    */
   constructor( options ) {
 
@@ -55,8 +55,8 @@ class PhaseChangesIcon extends ScreenIcon {
     // particles on left side in solid form
     const cubeStartX = size.width * 0.15;
     const cubeStartY = size.height * 0.35;
-    _.times( CUBE_HEIGHT, function( row ) {
-      _.times( CUBE_WIDTH, function( column ) {
+    _.times( CUBE_HEIGHT, row => {
+      _.times( CUBE_WIDTH, column => {
         particlesAndArrowNode.addChild( new Circle( particleRadius, {
           fill: PARTICLE_COLOR,
           centerX: cubeStartX + column * particleRadius * 2.1 + ( row % 2 === 0 ? particleRadius * 1.05 : 0 ),
@@ -81,13 +81,13 @@ class PhaseChangesIcon extends ScreenIcon {
     const gasCloudNode = new Node();
     const gasCloudRadius = size.height * 0.3;
 
-    function createGasParticle( angle, radius ) {
+    const createGasParticle = ( angle, radius ) => {
       return new Circle( particleRadius, {
         fill: PARTICLE_COLOR,
         centerX: radius * Math.cos( angle ),
         centerY: radius * Math.sin( angle )
       } );
-    }
+    };
 
     // for the sake of getting this done quickly, the particles have simply been hand positioned
     gasCloudNode.addChild( createGasParticle( 0, 0 ) );
@@ -120,7 +120,7 @@ class PhaseChangesIcon extends ScreenIcon {
 
     // for faster rendering, turn the collection of particles and the arrow into an image node
     particlesAndArrowNode.toImage(
-      function( image ) { iconRootNode.addChild( new Image( image ) ); },
+      image => { iconRootNode.addChild( new Image( image ) ); },
       0,
       0,
       size.width,

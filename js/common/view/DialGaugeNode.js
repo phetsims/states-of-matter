@@ -41,7 +41,6 @@ class DialGaugeNode extends Node {
   /**
    * @param {MultipleParticleModel} multipleParticleModel - model of the simulation
    * @param {Tandem} tandem
-   * @constructor
    */
   constructor( multipleParticleModel, tandem ) {
 
@@ -114,7 +113,7 @@ class DialGaugeNode extends Node {
     connectorCollar.centerY = gaugeNode.centerY;
     connectorCollar.left = gaugeNode.right - 10;
     const dialComponentsNode = new Node( {
-        children: [ connector, connectorCollar, gaugeNode, readoutNode ]
+        children: [connector, connectorCollar, gaugeNode, readoutNode]
       }
     );
 

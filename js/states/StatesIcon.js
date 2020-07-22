@@ -22,7 +22,6 @@ class StatesIcon extends ScreenIcon {
 
   /**
    * {Object} [options]
-   * @constructor
    */
   constructor( options ) {
 
@@ -35,7 +34,7 @@ class StatesIcon extends ScreenIcon {
 
     // icons packed into a nice little box
     const iconsBox = new HBox( {
-      children: [ new Image( solidIconImage ), new Image( liquidIconImage ), new Image( gasIconImage ) ],
+      children: [new Image( solidIconImage ), new Image( liquidIconImage ), new Image( gasIconImage )],
       spacing: 20, // empirically determined
       maxWidth: options.size.width,
       centerX: options.size.width / 2,
@@ -44,7 +43,7 @@ class StatesIcon extends ScreenIcon {
 
     const iconRootNode = new Rectangle( 0, 0, options.size.width, options.size.height, 0, 0, {
       fill: Color.BLACK,
-      children: [ iconsBox ]
+      children: [iconsBox]
     } );
 
     super( iconRootNode, options );

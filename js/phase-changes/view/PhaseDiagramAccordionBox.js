@@ -3,13 +3,11 @@
 /**
  * a phase diagram in an accordion box
  *
- * @author John Blanco
  * @author Siddhartha Chinthapally (Actual Concepts)
  */
 
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Shape from '../../../../kite/js/Shape.js';
-import inherit from '../../../../phet-core/js/inherit.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import MultiLineText from '../../../../scenery-phet/js/MultiLineText.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
@@ -98,207 +96,200 @@ const DEFAULT_GAS_LABEL_POSITION = new Vector2(
   Y_ORIGIN_OFFSET - ( Y_USABLE_RANGE * 0.15 )
 );
 
-/**
- * @param {Property<boolean>} expandedProperty - is to expand the phase diagram
- * @param {Object} [options] that can be passed on to the underlying node
- * @constructor
- */
-function PhaseDiagramAccordionBox( expandedProperty, options ) {
+class PhaseDiagramAccordionBox extends AccordionBox {
 
-  const accordionContent = new Node();
+  /**
+   * @param {Property<boolean>} expandedProperty - is to expand the phase diagram
+   * @param {Object} [options] that can be passed on to the underlying node
+   */
+  constructor( expandedProperty, options ) {
 
-  // @private gas area background
-  this.gasAreaBackground = new Path( null, {
-    fill: '#FFBC00',
-    stroke: '#FFBC00'
-  } );
-  accordionContent.addChild( this.gasAreaBackground );
+    const accordionContent = new Node();
 
-  // @private super critical area background
-  this.superCriticalAreaBackground = new Path( null, {
-    fill: '#C3DF53'
-  } );
-  accordionContent.addChild( this.superCriticalAreaBackground );
+    // object where the components of the phase diagram are collected
+    const phaseDiagramComponents = {};
 
-  // @private liquid area background
-  this.liquidAreaBackground = new Path( null, {
-    fill: '#83FFB9'
-  } );
-  accordionContent.addChild( this.liquidAreaBackground );
+    phaseDiagramComponents.gasAreaBackground = new Path( null, {
+      fill: '#FFBC00',
+      stroke: '#FFBC00'
+    } );
+    accordionContent.addChild( phaseDiagramComponents.gasAreaBackground );
 
-  // @private solid area background
-  this.solidAreaBackground = new Path( null, {
-    fill: '#AB9CC4'
-  } );
-  accordionContent.addChild( this.solidAreaBackground );
+    phaseDiagramComponents.superCriticalAreaBackground = new Path( null, {
+      fill: '#C3DF53'
+    } );
+    accordionContent.addChild( phaseDiagramComponents.superCriticalAreaBackground );
 
-  // @private
-  this.solidLiquidLine = new Path( null, { lineWidth: 1, stroke: 'black' } );
-  accordionContent.addChild( this.solidLiquidLine );
+    phaseDiagramComponents.liquidAreaBackground = new Path( null, {
+      fill: '#83FFB9'
+    } );
+    accordionContent.addChild( phaseDiagramComponents.liquidAreaBackground );
 
-  // @private
-  this.solidGasLine = new Path( null, { lineWidth: 1, stroke: 'black' } );
-  accordionContent.addChild( this.solidGasLine );
+    phaseDiagramComponents.solidAreaBackground = new Path( null, {
+      fill: '#AB9CC4'
+    } );
+    accordionContent.addChild( phaseDiagramComponents.solidAreaBackground );
 
-  // @private
-  this.liquidGasLine = new Path( null, { lineWidth: 1, stroke: 'black' } );
-  accordionContent.addChild( this.liquidGasLine );
+    phaseDiagramComponents.solidLiquidLine = new Path( null, { lineWidth: 1, stroke: 'black' } );
+    accordionContent.addChild( phaseDiagramComponents.solidLiquidLine );
 
-  // @private
-  this.triplePoint = new Path( new Shape()
-    .ellipse( 0, 0, POINT_MARKER_DIAMETER, POINT_MARKER_DIAMETER ), { fill: 'black' } );
-  accordionContent.addChild( this.triplePoint );
+    phaseDiagramComponents.solidGasLine = new Path( null, { lineWidth: 1, stroke: 'black' } );
+    accordionContent.addChild( phaseDiagramComponents.solidGasLine );
 
-  // @private
-  this.criticalPoint = new Path( new Shape()
-    .ellipse( 0, 0, POINT_MARKER_DIAMETER, POINT_MARKER_DIAMETER ), { fill: 'black' } );
-  accordionContent.addChild( this.criticalPoint );
+    phaseDiagramComponents.liquidGasLine = new Path( null, { lineWidth: 1, stroke: 'black' } );
+    accordionContent.addChild( phaseDiagramComponents.liquidGasLine );
 
-  // @private
-  this.solidLabel = new Text( solidString, {
-    font: LARGER_INNER_FONT,
-    fill: 'black',
-    maxWidth: SOLID_LABEL_MAX_WIDTH
-  } );
-  accordionContent.addChild( this.solidLabel );
+    phaseDiagramComponents.triplePoint = new Path( new Shape()
+      .ellipse( 0, 0, POINT_MARKER_DIAMETER, POINT_MARKER_DIAMETER ), { fill: 'black' } );
+    accordionContent.addChild( phaseDiagramComponents.triplePoint );
 
-  // @private
-  this.liquidLabel = new Text( liquidString, {
-    font: LARGER_INNER_FONT,
-    fill: 'black',
-    maxWidth: LIQUID_AND_GAS_LABEL_MAX_WIDTH
-  } );
-  accordionContent.addChild( this.liquidLabel );
+    phaseDiagramComponents.criticalPoint = new Path( new Shape()
+      .ellipse( 0, 0, POINT_MARKER_DIAMETER, POINT_MARKER_DIAMETER ), { fill: 'black' } );
+    accordionContent.addChild( phaseDiagramComponents.criticalPoint );
 
-  // @private
-  this.gasLabel = new Text( gasString, {
-    font: LARGER_INNER_FONT,
-    fill: 'black',
-    maxWidth: LIQUID_AND_GAS_LABEL_MAX_WIDTH
-  } );
-  accordionContent.addChild( this.gasLabel );
+    phaseDiagramComponents.solidLabel = new Text( solidString, {
+      font: LARGER_INNER_FONT,
+      fill: 'black',
+      maxWidth: SOLID_LABEL_MAX_WIDTH
+    } );
+    accordionContent.addChild( phaseDiagramComponents.solidLabel );
 
-  // @private
-  this.triplePointLabel = new MultiLineText( triplePointString, {
-    font: SMALLER_INNER_FONT,
-    fill: 'black',
-    align: 'right'
-  } );
-  accordionContent.addChild( this.triplePointLabel );
-  if ( this.triplePointLabel.width > SMALLER_INNER_TEXT_WIDTH ) {
-    this.triplePointLabel.setScaleMagnitude( SMALLER_INNER_TEXT_WIDTH / this.triplePointLabel.width );
+    phaseDiagramComponents.liquidLabel = new Text( liquidString, {
+      font: LARGER_INNER_FONT,
+      fill: 'black',
+      maxWidth: LIQUID_AND_GAS_LABEL_MAX_WIDTH
+    } );
+    accordionContent.addChild( phaseDiagramComponents.liquidLabel );
+
+    phaseDiagramComponents.gasLabel = new Text( gasString, {
+      font: LARGER_INNER_FONT,
+      fill: 'black',
+      maxWidth: LIQUID_AND_GAS_LABEL_MAX_WIDTH
+    } );
+    accordionContent.addChild( phaseDiagramComponents.gasLabel );
+
+    phaseDiagramComponents.triplePointLabel = new MultiLineText( triplePointString, {
+      font: SMALLER_INNER_FONT,
+      fill: 'black',
+      align: 'right'
+    } );
+    accordionContent.addChild( phaseDiagramComponents.triplePointLabel );
+    if ( phaseDiagramComponents.triplePointLabel.width > SMALLER_INNER_TEXT_WIDTH ) {
+      phaseDiagramComponents.triplePointLabel.setScaleMagnitude(
+        SMALLER_INNER_TEXT_WIDTH / phaseDiagramComponents.triplePointLabel.width
+      );
+    }
+
+    phaseDiagramComponents.criticalPointLabel = new MultiLineText( criticalPointString, {
+      font: SMALLER_INNER_FONT,
+      fill: 'black',
+      align: 'right',
+      maxWidth: SMALLER_INNER_TEXT_WIDTH
+    } );
+    accordionContent.addChild( phaseDiagramComponents.criticalPointLabel );
+
+    const horizontalAxis = new ArrowNode(
+      X_ORIGIN_OFFSET,
+      Y_ORIGIN_OFFSET,
+      X_ORIGIN_OFFSET + ( HORIZ_AXIS_SIZE_PROPORTION * WIDTH ),
+      Y_ORIGIN_OFFSET,
+      {
+        fill: SOMColorProfile.controlPanelTextProperty,
+        stroke: SOMColorProfile.controlPanelTextProperty,
+        headHeight: 8,
+        headWidth: 8,
+        tailWidth: AXES_LINE_WIDTH
+      }
+    );
+    accordionContent.addChild( horizontalAxis );
+
+    const verticalAxis = new ArrowNode(
+      X_ORIGIN_OFFSET,
+      Y_ORIGIN_OFFSET,
+      X_ORIGIN_OFFSET,
+      Y_ORIGIN_OFFSET - Y_USABLE_RANGE - AXES_ARROW_HEAD_HEIGHT,
+      {
+        fill: SOMColorProfile.controlPanelTextProperty,
+        stroke: SOMColorProfile.controlPanelTextProperty,
+        headHeight: 8,
+        headWidth: 8,
+        tailWidth: AXES_LINE_WIDTH
+      }
+    );
+    accordionContent.addChild( verticalAxis );
+
+    // Create and add the labels for the axes.
+    const horizontalAxisLabel = new Text( temperatureString, {
+      font: AXIS_LABEL_FONT,
+      fill: SOMColorProfile.controlPanelTextProperty,
+      maxWidth: horizontalAxis.width
+    } );
+    horizontalAxisLabel.setTranslation( horizontalAxis.centerX - horizontalAxisLabel.width / 2, Y_ORIGIN_OFFSET + horizontalAxisLabel.height * 1.2 );
+    accordionContent.addChild( horizontalAxisLabel );
+
+    const verticalAxisLabel = new Text( pressureString, {
+      font: AXIS_LABEL_FONT,
+      fill: SOMColorProfile.controlPanelTextProperty,
+      maxWidth: verticalAxis.height
+    } );
+    verticalAxisLabel.setTranslation( X_ORIGIN_OFFSET - ( verticalAxisLabel.height / 1.5 ), verticalAxis.centerY + verticalAxisLabel.width / 2 );
+    verticalAxisLabel.setRotation( 3 * Math.PI / 2 );
+    accordionContent.addChild( verticalAxisLabel );
+
+    // Create and add the marker that shows the current phase state.
+    phaseDiagramComponents.currentStateMarker = new Path(
+      new Shape().ellipse( 0, 0, CURRENT_STATE_MARKER_DIAMETER, CURRENT_STATE_MARKER_DIAMETER ),
+      { fill: 'red' }
+    );
+    accordionContent.addChild( phaseDiagramComponents.currentStateMarker );
+
+    const titleNode = new Text( phaseDiagramString, {
+      fill: SOMColorProfile.controlPanelTextProperty,
+      font: new PhetFont( { size: 13 } ),
+      maxWidth: horizontalAxis.width
+    } );
+
+    super( accordionContent, merge( {
+      titleNode: titleNode,
+      fill: SOMColorProfile.controlPanelBackgroundProperty,
+      stroke: SOMColorProfile.controlPanelStrokeProperty,
+      expandedProperty: expandedProperty,
+      contentAlign: 'center',
+      titleAlignX: 'center',
+      buttonAlign: 'left',
+      cornerRadius: SOMConstants.PANEL_CORNER_RADIUS,
+      contentYSpacing: -15,
+      contentYMargin: 5,
+      contentXMargin: 5,
+      minWidth: options.minWidth,
+      maxWidth: options.maxWidth,
+      buttonYMargin: 4,
+      buttonXMargin: 5,
+      expandCollapseButtonOptions: {
+        sideLength: 12,
+        touchAreaXDilation: 15,
+        touchAreaYDilation: 10
+      },
+      tandem: options.tandem.createTandem( 'accordionBox' )
+    }, options ) );
+
+    // @private - flag that indicates whether water is being depicted, which alters aspects of the diagram
+    this.depictingWater = false;
+
+    // @private - components of the phase diagram, updated as changes occur in the model
+    this.phaseDiagramComponents = phaseDiagramComponents;
+
+    // Draw the initial phase diagram.
+    this.drawPhaseDiagram();
+
+    // Set the initial position of the current phase state marker.
+    this.setStateMarkerPos( 0, 0 );
   }
-
-  // @private
-  this.criticalPointLabel = new MultiLineText( criticalPointString, {
-    font: SMALLER_INNER_FONT,
-    fill: 'black',
-    align: 'right',
-    maxWidth: SMALLER_INNER_TEXT_WIDTH
-  } );
-  accordionContent.addChild( this.criticalPointLabel );
-
-  // @private - flag that indicates whether water is being depicted, which alters aspects of the diagram
-  this.depictingWater = false;
-
-  const horizontalAxis = new ArrowNode(
-    X_ORIGIN_OFFSET,
-    Y_ORIGIN_OFFSET,
-    X_ORIGIN_OFFSET + ( HORIZ_AXIS_SIZE_PROPORTION * WIDTH ),
-    Y_ORIGIN_OFFSET,
-    {
-      fill: SOMColorProfile.controlPanelTextProperty,
-      stroke: SOMColorProfile.controlPanelTextProperty,
-      headHeight: 8,
-      headWidth: 8,
-      tailWidth: AXES_LINE_WIDTH
-    }
-  );
-  accordionContent.addChild( horizontalAxis );
-
-  const verticalAxis = new ArrowNode(
-    X_ORIGIN_OFFSET,
-    Y_ORIGIN_OFFSET,
-    X_ORIGIN_OFFSET,
-    Y_ORIGIN_OFFSET - Y_USABLE_RANGE - AXES_ARROW_HEAD_HEIGHT,
-    {
-      fill: SOMColorProfile.controlPanelTextProperty,
-      stroke: SOMColorProfile.controlPanelTextProperty,
-      headHeight: 8,
-      headWidth: 8,
-      tailWidth: AXES_LINE_WIDTH
-    }
-  );
-  accordionContent.addChild( verticalAxis );
-
-  // Create and add the labels for the axes.
-  const horizontalAxisLabel = new Text( temperatureString, {
-    font: AXIS_LABEL_FONT,
-    fill: SOMColorProfile.controlPanelTextProperty,
-    maxWidth: horizontalAxis.width
-  } );
-  horizontalAxisLabel.setTranslation( horizontalAxis.centerX - horizontalAxisLabel.width / 2, Y_ORIGIN_OFFSET + horizontalAxisLabel.height * 1.2 );
-  accordionContent.addChild( horizontalAxisLabel );
-
-  const verticalAxisLabel = new Text( pressureString, {
-    font: AXIS_LABEL_FONT,
-    fill: SOMColorProfile.controlPanelTextProperty,
-    maxWidth: verticalAxis.height
-  } );
-  verticalAxisLabel.setTranslation( X_ORIGIN_OFFSET - ( verticalAxisLabel.height / 1.5 ), verticalAxis.centerY + verticalAxisLabel.width / 2 );
-  verticalAxisLabel.setRotation( 3 * Math.PI / 2 );
-  accordionContent.addChild( verticalAxisLabel );
-
-  // Create and add the marker that shows the current phase state.
-  this.currentStateMarker = new Path( new Shape()
-    .ellipse( 0, 0, CURRENT_STATE_MARKER_DIAMETER, CURRENT_STATE_MARKER_DIAMETER ), { fill: 'red' } );
-  accordionContent.addChild( this.currentStateMarker );
-
-  const titleNode = new Text( phaseDiagramString, {
-    fill: SOMColorProfile.controlPanelTextProperty,
-    font: new PhetFont( { size: 13 } ),
-    maxWidth: horizontalAxis.width
-  } );
-
-  AccordionBox.call( this, accordionContent, merge( {
-    titleNode: titleNode,
-    fill: SOMColorProfile.controlPanelBackgroundProperty,
-    stroke: SOMColorProfile.controlPanelStrokeProperty,
-    expandedProperty: expandedProperty,
-    contentAlign: 'center',
-    titleAlignX: 'center',
-    buttonAlign: 'left',
-    cornerRadius: SOMConstants.PANEL_CORNER_RADIUS,
-    contentYSpacing: -15,
-    contentYMargin: 5,
-    contentXMargin: 5,
-    minWidth: options.minWidth,
-    maxWidth: options.maxWidth,
-    buttonYMargin: 4,
-    buttonXMargin: 5,
-    expandCollapseButtonOptions: {
-      sideLength: 12,
-      touchAreaXDilation: 15,
-      touchAreaYDilation: 10
-    },
-    tandem: options.tandem.createTandem( 'accordionBox' )
-  }, options ) );
-
-  // Draw the initial phase diagram.
-  this.drawPhaseDiagram();
-
-  // Set the initial position of the current phase state marker.
-  this.setStateMarkerPos( 0, 0 );
-}
-
-statesOfMatter.register( 'PhaseDiagramAccordionBox', PhaseDiagramAccordionBox );
-
-inherit( AccordionBox, PhaseDiagramAccordionBox, {
 
   /**
    * @public
    */
-  drawPhaseDiagram: function() {
+  drawPhaseDiagram() {
 
     // Handle the variations due to water vs. non-water
     const topOfSolidLiquidLine = this.depictingWater ?
@@ -306,8 +297,11 @@ inherit( AccordionBox, PhaseDiagramAccordionBox, {
                                  DEFAULT_TOP_OF_SOLID_LIQUID_LINE;
     const solidLabelCenter = this.depictingWater ? WATER_SOLID_LABEL_POSITION : DEFAULT_SOLID_LABEL_POSITION;
 
+    // convenience variable
+    const diagramComponents = this.phaseDiagramComponents;
+
     // Place the triple point marker.
-    this.triplePoint.setTranslation( DEFAULT_TRIPLE_POINT.x, DEFAULT_TRIPLE_POINT.y );
+    diagramComponents.triplePoint.setTranslation( DEFAULT_TRIPLE_POINT.x, DEFAULT_TRIPLE_POINT.y );
 
     // Add the curve that separates the solid and gaseous regions.
     const solidGasCurve = new Shape()
@@ -318,13 +312,13 @@ inherit( AccordionBox, PhaseDiagramAccordionBox, {
         DEFAULT_TRIPLE_POINT.x,
         DEFAULT_TRIPLE_POINT.y
       );
-    this.solidGasLine.setShape( solidGasCurve );
+    diagramComponents.solidGasLine.setShape( solidGasCurve );
 
     // Add the line that separates solid and liquid.
     const solidLiquidLine = new Shape()
       .lineTo( DEFAULT_TRIPLE_POINT.x, DEFAULT_TRIPLE_POINT.y )
       .lineToPoint( topOfSolidLiquidLine );
-    this.solidLiquidLine.setShape( solidLiquidLine );
+    diagramComponents.solidLiquidLine.setShape( solidLiquidLine );
 
     // Update the shape of the background for the area that represents the solid phase.
     const solidBackground = new Shape()
@@ -339,10 +333,10 @@ inherit( AccordionBox, PhaseDiagramAccordionBox, {
       .lineTo( X_ORIGIN_OFFSET, Y_ORIGIN_OFFSET - Y_USABLE_RANGE )
       .lineTo( X_ORIGIN_OFFSET, Y_ORIGIN_OFFSET )
       .close();
-    this.solidAreaBackground.setShape( solidBackground );
+    diagramComponents.solidAreaBackground.setShape( solidBackground );
 
     // Place the critical point marker.
-    this.criticalPoint.setTranslation( DEFAULT_CRITICAL_POSITION.x, DEFAULT_CRITICAL_POSITION.y );
+    diagramComponents.criticalPoint.setTranslation( DEFAULT_CRITICAL_POSITION.x, DEFAULT_CRITICAL_POSITION.y );
 
     // Add the curve that separates liquid and gas.
     const controlCurveXPos = DEFAULT_TRIPLE_POINT.x + ( ( DEFAULT_CRITICAL_POSITION.x - DEFAULT_TRIPLE_POINT.x ) / 2 );
@@ -355,7 +349,7 @@ inherit( AccordionBox, PhaseDiagramAccordionBox, {
         DEFAULT_CRITICAL_POSITION.x,
         DEFAULT_CRITICAL_POSITION.y
       );
-    this.liquidGasLine.setShape( liquidGasCurve );
+    diagramComponents.liquidGasLine.setShape( liquidGasCurve );
 
     // liquid phase (it is expected that the solid shape overlays this one)
     const liquidBackground = new Shape()
@@ -370,7 +364,7 @@ inherit( AccordionBox, PhaseDiagramAccordionBox, {
       .lineTo( topOfSolidLiquidLine.x, Y_ORIGIN_OFFSET - Y_USABLE_RANGE )
       .lineTo( DEFAULT_TRIPLE_POINT.x, DEFAULT_TRIPLE_POINT.y )
       .close();
-    this.liquidAreaBackground.setShape( liquidBackground );
+    diagramComponents.liquidAreaBackground.setShape( liquidBackground );
 
     // gas phase
     const gasBackground = new Shape()
@@ -380,7 +374,7 @@ inherit( AccordionBox, PhaseDiagramAccordionBox, {
       .lineTo( X_ORIGIN_OFFSET + X_USABLE_RANGE, Y_ORIGIN_OFFSET )
       .lineTo( X_ORIGIN_OFFSET, Y_ORIGIN_OFFSET )
       .close();
-    this.gasAreaBackground.setShape( gasBackground );
+    diagramComponents.gasAreaBackground.setShape( gasBackground );
 
     const superCriticalBackground = new Shape()
       .moveToPoint( DEFAULT_CRITICAL_POSITION )
@@ -389,17 +383,17 @@ inherit( AccordionBox, PhaseDiagramAccordionBox, {
       .lineToPoint( DEFAULT_CRITICAL_POSITION )
       .close();
 
-    this.superCriticalAreaBackground.setShape( superCriticalBackground );
+    diagramComponents.superCriticalAreaBackground.setShape( superCriticalBackground );
 
     // position the labels - some of the values were empirically determined for optimal layout
-    this.solidLabel.center = solidLabelCenter;
-    this.liquidLabel.center = DEFAULT_LIQUID_LABEL_POSITION;
-    this.gasLabel.center = DEFAULT_GAS_LABEL_POSITION;
-    this.triplePointLabel.right = DEFAULT_TRIPLE_POINT.x - 7;
-    this.triplePointLabel.bottom = DEFAULT_TRIPLE_POINT.y;
-    this.criticalPointLabel.right = DEFAULT_CRITICAL_POSITION.x - 7;
-    this.criticalPointLabel.bottom = DEFAULT_CRITICAL_POSITION.y;
-  },
+    diagramComponents.solidLabel.center = solidLabelCenter;
+    diagramComponents.liquidLabel.center = DEFAULT_LIQUID_LABEL_POSITION;
+    diagramComponents.gasLabel.center = DEFAULT_GAS_LABEL_POSITION;
+    diagramComponents.triplePointLabel.right = DEFAULT_TRIPLE_POINT.x - 7;
+    diagramComponents.triplePointLabel.bottom = DEFAULT_TRIPLE_POINT.y;
+    diagramComponents.criticalPointLabel.right = DEFAULT_CRITICAL_POSITION.x - 7;
+    diagramComponents.criticalPointLabel.bottom = DEFAULT_CRITICAL_POSITION.y;
+  }
 
   /**
    * Set the normalized position for this marker.
@@ -407,7 +401,7 @@ inherit( AccordionBox, PhaseDiagramAccordionBox, {
    * @param normalizedPressure    - Pressure (Y position) value between 0 and 1 (inclusive).
    * @public
    */
-  setStateMarkerPos: function( normalizedTemperature, normalizedPressure ) {
+  setStateMarkerPos( normalizedTemperature, normalizedPressure ) {
 
     // parameter checking
     assert && assert( normalizedTemperature >= 0 && normalizedTemperature <= 1, 'temperature value out of range' );
@@ -422,18 +416,18 @@ inherit( AccordionBox, PhaseDiagramAccordionBox, {
     markerYPos = Math.max( markerYPos, Y_ORIGIN_OFFSET - Y_USABLE_RANGE - CURRENT_STATE_MARKER_DIAMETER );
 
     // set the position of the marker node
-    this.currentStateMarker.centerX = markerXPos;
-    this.currentStateMarker.centerY = markerYPos;
-  },
+    this.phaseDiagramComponents.currentStateMarker.centerX = markerXPos;
+    this.phaseDiagramComponents.currentStateMarker.centerY = markerYPos;
+  }
 
   /**
    * Set the visibility of the state marker.
    * @param {boolean} isVisible
    * @public
    */
-  setStateMarkerVisible: function( isVisible ) {
-    this.currentStateMarker.setVisible( isVisible );
-  },
+  setStateMarkerVisible( isVisible ) {
+    this.phaseDiagramComponents.currentStateMarker.setVisible( isVisible );
+  }
 
   /**
    * Set the phase diagram to be shaped such that it looks more like the phase diagram water, which is to say that the
@@ -443,11 +437,11 @@ inherit( AccordionBox, PhaseDiagramAccordionBox, {
    * @param {boolean} depictingWater
    * @public
    */
-  setDepictingWater: function( depictingWater ) {
+  setDepictingWater( depictingWater ) {
     this.depictingWater = depictingWater;
     this.drawPhaseDiagram();
   }
+}
 
-} );
-
+statesOfMatter.register( 'PhaseDiagramAccordionBox', PhaseDiagramAccordionBox );
 export default PhaseDiagramAccordionBox;

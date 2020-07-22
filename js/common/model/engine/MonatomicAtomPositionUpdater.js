@@ -16,7 +16,7 @@ const MonatomicAtomPositionUpdater = {
    * @param {MoleculeForceAndMotionDataSet} moleculeDataSet
    * @public
    */
-  updateAtomPositions: function( moleculeDataSet ) {
+  updateAtomPositions: moleculeDataSet => {
 
     // Make sure this is not being used on an inappropriate data set.
     assert && assert( moleculeDataSet.atomsPerMolecule === 1 );

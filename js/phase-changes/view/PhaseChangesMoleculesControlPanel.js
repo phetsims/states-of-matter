@@ -4,12 +4,12 @@
  * panel for selecting the atoms/molecules
  *
  * @author Siddhartha Chinthapally (Actual Concepts)
+ * @author John Blanco (PhET Interactive Simulations)
  */
 
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import Range from '../../../../dot/js/Range.js';
-import inherit from '../../../../phet-core/js/inherit.js';
 import merge from '../../../../phet-core/js/merge.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
@@ -29,6 +29,7 @@ import statesOfMatterStrings from '../../statesOfMatterStrings.js';
 import statesOfMatter from '../../statesOfMatter.js';
 import PhaseChangesModel from '../PhaseChangesModel.js';
 
+// strings
 const adjustableAttractionString = statesOfMatterStrings.adjustableAttraction;
 const argonString = statesOfMatterStrings.argon;
 const atomsAndMoleculesString = statesOfMatterStrings.AtomsAndMolecules;
@@ -44,237 +45,238 @@ const INSET = 10;
 const TICK_TEXT_MAX_WIDTH = 40;
 const NORMAL_TEXT_FONT_SIZE = 12;
 
-/**
- * @param { PhaseChangesModel } phaseChangesModel - model of the simulation
- * @param {Object} [options] options for various panel display properties
- * @constructor
- */
-function PhaseChangesMoleculesControlPanel( phaseChangesModel, options ) {
+class PhaseChangesMoleculesControlPanel extends Node {
 
-  options = merge( {
-    showAdjustableAttraction: false,
-    xMargin: 5,
-    yMargin: 5,
-    fill: SOMColorProfile.controlPanelBackgroundProperty,
-    stroke: SOMColorProfile.controlPanelStrokeProperty,
-    lineWidth: 1,
-    cornerRadius: SOMConstants.PANEL_CORNER_RADIUS,
-    minWidth: 120, // somewhat arbitrary, will generally be set by constructor
-    tandem: Tandem.REQUIRED
-  }, options );
+  /**
+   * @param { PhaseChangesModel } phaseChangesModel - model of the simulation
+   * @param {Object} [options] options for various panel display properties
+   */
+  constructor( phaseChangesModel, options ) {
 
-  const selectorWidth = options.minWidth - 2 * options.xMargin;
+    options = merge( {
+      showAdjustableAttraction: false,
+      xMargin: 5,
+      yMargin: 5,
+      fill: SOMColorProfile.controlPanelBackgroundProperty,
+      stroke: SOMColorProfile.controlPanelStrokeProperty,
+      lineWidth: 1,
+      cornerRadius: SOMConstants.PANEL_CORNER_RADIUS,
+      minWidth: 120, // somewhat arbitrary, will generally be set by constructor
+      tandem: Tandem.REQUIRED
+    }, options );
 
-  Node.call( this );
-  const tickTextOptions = {
-    font: SOMConstants.SLIDER_TICK_TEXT_FONT,
-    fill: SOMColorProfile.controlPanelTextProperty,
-    maxWidth: TICK_TEXT_MAX_WIDTH
-  };
+    const selectorWidth = options.minWidth - 2 * options.xMargin;
 
-  const weakTitle = new Text( weakString, tickTextOptions );
-  const strongTitle = new Text( strongString, tickTextOptions );
+    super();
 
-  // create the root tandem for the node that includes the interaction title and slider
-  const interactionStrengthSliderTandem = options.tandem.createTandem( 'interactionStrengthSlider' );
+    const tickTextOptions = {
+      font: SOMConstants.SLIDER_TICK_TEXT_FONT,
+      fill: SOMColorProfile.controlPanelTextProperty,
+      maxWidth: TICK_TEXT_MAX_WIDTH
+    };
 
-  // add interaction strength slider and title
-  const interactionTitle = new Text( interactionStrengthWithSymbolString, {
-    font: new PhetFont( NORMAL_TEXT_FONT_SIZE ),
-    fill: SOMColorProfile.controlPanelTextProperty,
-    maxWidth: 140,
-    tandem: interactionStrengthSliderTandem.createTandem( 'title' )
-  } );
+    const weakTitle = new Text( weakString, tickTextOptions );
+    const strongTitle = new Text( strongString, tickTextOptions );
 
-  const interactionStrengthSlider = new HSlider(
-    phaseChangesModel.adjustableAtomInteractionStrengthProperty,
-    new Range( SOMConstants.MIN_ADJUSTABLE_EPSILON, PhaseChangesModel.MAX_ADJUSTABLE_EPSILON ),
-    merge( {}, SOMConstants.ADJUSTABLE_ATTRACTION_SLIDER_COMMON_OPTIONS, {
-      trackSize: new Dimension2( 110, 4 ),
-      tandem: interactionStrengthSliderTandem.createTandem( 'slider' )
-    } ) );
-  interactionStrengthSlider.addMajorTick( PhaseChangesModel.MAX_ADJUSTABLE_EPSILON, strongTitle );
-  interactionStrengthSlider.addMajorTick( SOMConstants.MIN_ADJUSTABLE_EPSILON, weakTitle );
+    // create the root tandem for the node that includes the interaction title and slider
+    const interactionStrengthSliderTandem = options.tandem.createTandem( 'interactionStrengthSlider' );
 
-  // put the title and slider together into a node
-  const interactionStrengthSliderVbox = new VBox( {
-    children: [ interactionTitle, interactionStrengthSlider ],
-    spacing: 5,
-    tandem: interactionStrengthSliderTandem,
-    phetioDocumentation: 'Used for \'Adjustable Attraction\' only'
-  } );
+    // add interaction strength slider and title
+    const interactionTitle = new Text( interactionStrengthWithSymbolString, {
+      font: new PhetFont( NORMAL_TEXT_FONT_SIZE ),
+      fill: SOMColorProfile.controlPanelTextProperty,
+      maxWidth: 140,
+      tandem: interactionStrengthSliderTandem.createTandem( 'title' )
+    } );
 
-  // pre-create the tandem for the radio button group so that the text nodes can be under it
-  const radioButtonGroupTandem = options.tandem.createTandem( 'radioButtonGroup' );
+    const interactionStrengthSlider = new HSlider(
+      phaseChangesModel.adjustableAtomInteractionStrengthProperty,
+      new Range( SOMConstants.MIN_ADJUSTABLE_EPSILON, PhaseChangesModel.MAX_ADJUSTABLE_EPSILON ),
+      merge( {}, SOMConstants.ADJUSTABLE_ATTRACTION_SLIDER_COMMON_OPTIONS, {
+        trackSize: new Dimension2( 110, 4 ),
+        tandem: interactionStrengthSliderTandem.createTandem( 'slider' )
+      } ) );
+    interactionStrengthSlider.addMajorTick( PhaseChangesModel.MAX_ADJUSTABLE_EPSILON, strongTitle );
+    interactionStrengthSlider.addMajorTick( SOMConstants.MIN_ADJUSTABLE_EPSILON, weakTitle );
 
-  // text for the radio buttons
-  const textOptions = {
-    font: new PhetFont( NORMAL_TEXT_FONT_SIZE ),
-    fill: '#FFFFFF',
-    maxWidth: selectorWidth * 0.75
-  };
-  const neonText = new Text(
-    neonString,
-    merge( { tandem: radioButtonGroupTandem.createTandem( 'neonText' ) }, textOptions )
-  );
-  const argonText = new Text(
-    argonString,
-    merge( { tandem: radioButtonGroupTandem.createTandem( 'argonText' ) }, textOptions )
-  );
-  const waterText = new Text(
-    waterString,
-    merge( { tandem: radioButtonGroupTandem.createTandem( 'waterText' ) }, textOptions )
-  );
-  const oxygenText = new Text(
-    diatomicOxygenString,
-    merge( { tandem: radioButtonGroupTandem.createTandem( 'oxygenText' ) }, textOptions )
-  );
-  const adjustableAttractionText = new Text(
-    adjustableAttractionString,
-    merge( { tandem: radioButtonGroupTandem.createTandem( 'adjustableAttractionText' ) }, textOptions )
-  );
+    // put the title and slider together into a node
+    const interactionStrengthSliderVbox = new VBox( {
+      children: [interactionTitle, interactionStrengthSlider],
+      spacing: 5,
+      tandem: interactionStrengthSliderTandem,
+      phetioDocumentation: 'Used for \'Adjustable Attraction\' only'
+    } );
 
-  // create objects that describe the pieces that make up a selector item in the control panel, conforms to the
-  // contract: { label: {Node}, icon: {Node} (optional) }
-  const neonSelectorInfo = { label: neonText, icon: AtomAndMoleculeIconFactory.createIcon( SubstanceType.NEON ) };
-  const argonSelectorInfo = { label: argonText, icon: AtomAndMoleculeIconFactory.createIcon( SubstanceType.ARGON ) };
-  const waterSelectorInfo = { label: waterText, icon: AtomAndMoleculeIconFactory.createIcon( SubstanceType.WATER ) };
-  const oxygenSelectorInfo = {
-    label: oxygenText,
-    icon: AtomAndMoleculeIconFactory.createIcon( SubstanceType.DIATOMIC_OXYGEN )
-  };
-  const adjustableAttractionSelectorInfo = {
-    label: adjustableAttractionText,
-    icon: AtomAndMoleculeIconFactory.createIcon( SubstanceType.ADJUSTABLE_ATOM )
-  };
+    // pre-create the tandem for the radio button group so that the text nodes can be under it
+    const radioButtonGroupTandem = options.tandem.createTandem( 'radioButtonGroup' );
 
-  const radioButtonContent = [
-    {
-      value: SubstanceType.NEON,
-      node: new SubstanceSelectorNode( neonSelectorInfo.label, neonSelectorInfo.icon, selectorWidth ),
-      tandemName: 'neon'
-    },
-    {
-      value: SubstanceType.ARGON,
-      node: new SubstanceSelectorNode( argonSelectorInfo.label, argonSelectorInfo.icon, selectorWidth ),
-      tandemName: 'argon'
-    },
-    {
-      value: SubstanceType.DIATOMIC_OXYGEN,
-      node: new SubstanceSelectorNode( oxygenSelectorInfo.label, oxygenSelectorInfo.icon, selectorWidth ),
-      tandemName: 'oxygen'
-    },
-    {
-      value: SubstanceType.WATER,
-      node: new SubstanceSelectorNode( waterSelectorInfo.label, waterSelectorInfo.icon, selectorWidth ),
-      tandemName: 'water'
-    }
-  ];
-
-  if ( options.showAdjustableAttraction ) {
-    radioButtonContent.push( {
-        value: SubstanceType.ADJUSTABLE_ATOM,
-        node: new SubstanceSelectorNode(
-          adjustableAttractionSelectorInfo.label,
-          adjustableAttractionSelectorInfo.icon,
-          selectorWidth
-        ),
-        tandemName: 'adjustableAttraction'
-      }
+    // text for the radio buttons
+    const textOptions = {
+      font: new PhetFont( NORMAL_TEXT_FONT_SIZE ),
+      fill: '#FFFFFF',
+      maxWidth: selectorWidth * 0.75
+    };
+    const neonText = new Text(
+      neonString,
+      merge( { tandem: radioButtonGroupTandem.createTandem( 'neonText' ) }, textOptions )
     );
+    const argonText = new Text(
+      argonString,
+      merge( { tandem: radioButtonGroupTandem.createTandem( 'argonText' ) }, textOptions )
+    );
+    const waterText = new Text(
+      waterString,
+      merge( { tandem: radioButtonGroupTandem.createTandem( 'waterText' ) }, textOptions )
+    );
+    const oxygenText = new Text(
+      diatomicOxygenString,
+      merge( { tandem: radioButtonGroupTandem.createTandem( 'oxygenText' ) }, textOptions )
+    );
+    const adjustableAttractionText = new Text(
+      adjustableAttractionString,
+      merge( { tandem: radioButtonGroupTandem.createTandem( 'adjustableAttractionText' ) }, textOptions )
+    );
+
+    // create objects that describe the pieces that make up a selector item in the control panel, conforms to the
+    // contract: { label: {Node}, icon: {Node} (optional) }
+    const neonSelectorInfo = { label: neonText, icon: AtomAndMoleculeIconFactory.createIcon( SubstanceType.NEON ) };
+    const argonSelectorInfo = { label: argonText, icon: AtomAndMoleculeIconFactory.createIcon( SubstanceType.ARGON ) };
+    const waterSelectorInfo = { label: waterText, icon: AtomAndMoleculeIconFactory.createIcon( SubstanceType.WATER ) };
+    const oxygenSelectorInfo = {
+      label: oxygenText,
+      icon: AtomAndMoleculeIconFactory.createIcon( SubstanceType.DIATOMIC_OXYGEN )
+    };
+    const adjustableAttractionSelectorInfo = {
+      label: adjustableAttractionText,
+      icon: AtomAndMoleculeIconFactory.createIcon( SubstanceType.ADJUSTABLE_ATOM )
+    };
+
+    const radioButtonContent = [
+      {
+        value: SubstanceType.NEON,
+        node: new SubstanceSelectorNode( neonSelectorInfo.label, neonSelectorInfo.icon, selectorWidth ),
+        tandemName: 'neon'
+      },
+      {
+        value: SubstanceType.ARGON,
+        node: new SubstanceSelectorNode( argonSelectorInfo.label, argonSelectorInfo.icon, selectorWidth ),
+        tandemName: 'argon'
+      },
+      {
+        value: SubstanceType.DIATOMIC_OXYGEN,
+        node: new SubstanceSelectorNode( oxygenSelectorInfo.label, oxygenSelectorInfo.icon, selectorWidth ),
+        tandemName: 'oxygen'
+      },
+      {
+        value: SubstanceType.WATER,
+        node: new SubstanceSelectorNode( waterSelectorInfo.label, waterSelectorInfo.icon, selectorWidth ),
+        tandemName: 'water'
+      }
+    ];
+
+    if ( options.showAdjustableAttraction ) {
+      radioButtonContent.push( {
+          value: SubstanceType.ADJUSTABLE_ATOM,
+          node: new SubstanceSelectorNode(
+            adjustableAttractionSelectorInfo.label,
+            adjustableAttractionSelectorInfo.icon,
+            selectorWidth
+          ),
+          tandemName: 'adjustableAttraction'
+        }
+      );
+    }
+
+    const radioButtonGroup = new RadioButtonGroup( phaseChangesModel.substanceProperty, radioButtonContent, {
+      orientation: 'vertical',
+      spacing: 3,
+      cornerRadius: 5,
+      baseColor: 'black',
+      disabledBaseColor: 'black',
+      selectedLineWidth: 1,
+      selectedStroke: 'white',
+      deselectedLineWidth: 0,
+      deselectedContentOpacity: 1,
+      touchAreaYDilation: 0,
+      tandem: radioButtonGroupTandem
+    } );
+
+    phaseChangesModel.adjustableAtomInteractionStrengthProperty.link( value => {
+      if ( phaseChangesModel.substanceProperty.get() === SubstanceType.ADJUSTABLE_ATOM ) {
+        phaseChangesModel.setEpsilon( value );
+      }
+    } );
+    const content = new VBox( { spacing: 4, children: [radioButtonGroup] } );
+    const radioButtonPanel = new Panel( content, {
+      yMargin: 8,
+      stroke: options.stroke,
+      align: 'center',
+      fill: options.fill,
+      cornerRadius: options.cornerRadius,
+      minWidth: options.minWidth,
+      lineWidth: options.lineWidth
+    } );
+    this.addChild( radioButtonPanel );
+
+    // do some layout now that many of the pieces exist
+    interactionStrengthSliderVbox.centerX = radioButtonGroup.centerX;
+    interactionStrengthSliderVbox.top = radioButtonGroup.bottom + INSET;
+
+    // make any updates needed to the panel when the selected substance changes
+    phaseChangesModel.substanceProperty.link( value => {
+
+      // add or remove the node for controlling interaction strength
+      if ( value === SubstanceType.ADJUSTABLE_ATOM ) {
+        content.addChild( interactionStrengthSliderVbox );
+      }
+      else if ( content.hasChild( interactionStrengthSliderVbox ) ) {
+        content.removeChild( interactionStrengthSliderVbox );
+      }
+    } );
+
+    // title for the panel
+    const title = new Text( atomsAndMoleculesString, {
+      font: new PhetFont( 14 ),
+      fill: SOMColorProfile.controlPanelTextProperty,
+      maxWidth: options.minWidth * 0.85,
+      tandem: options.tandem.createTandem( 'title' )
+    } );
+
+    // create the background for the title - initial size is arbitrary, it will be sized and positioned below
+    const titleBackground = new Rectangle( 0, 0, 1, 1, { fill: options.fill } );
+    this.addChild( new Node( { children: [titleBackground, title] } ) );
+
+    // closure for updating the title background size and overall position
+    const updateTitle = () => {
+      if ( radioButtonPanel.bounds.equals( Bounds2.NOTHING ) ) {
+        titleBackground.visible = false;
+        title.visible = false;
+      }
+      else {
+        titleBackground.rectWidth = title.width + 5;
+        titleBackground.rectHeight = title.height;
+        titleBackground.centerX = radioButtonPanel.centerX;
+        titleBackground.centerY = radioButtonPanel.top;
+        title.centerX = titleBackground.centerX;
+        title.centerY = titleBackground.centerY;
+        titleBackground.visible = true;
+        title.visible = true;
+      }
+    };
+
+    // do the initial update of the title
+    updateTitle();
+
+    // Listen for changes to the title text node's bounds and update the title when they occur.  There is no need to
+    // unlink this since the panel is permanent.
+    title.localBoundsProperty.lazyLink( updateTitle );
+
+    // Listen for changes to the panel bounds and update the title.
+    radioButtonPanel.localBoundsProperty.link( updateTitle );
+
+    this.mutate( options );
   }
-
-  const radioButtonGroup = new RadioButtonGroup( phaseChangesModel.substanceProperty, radioButtonContent, {
-    orientation: 'vertical',
-    spacing: 3,
-    cornerRadius: 5,
-    baseColor: 'black',
-    disabledBaseColor: 'black',
-    selectedLineWidth: 1,
-    selectedStroke: 'white',
-    deselectedLineWidth: 0,
-    deselectedContentOpacity: 1,
-    touchAreaYDilation: 0,
-    tandem: radioButtonGroupTandem
-  } );
-
-  phaseChangesModel.adjustableAtomInteractionStrengthProperty.link( function( value ) {
-    if ( phaseChangesModel.substanceProperty.get() === SubstanceType.ADJUSTABLE_ATOM ) {
-      phaseChangesModel.setEpsilon( value );
-    }
-  } );
-  const content = new VBox( { spacing: 4, children: [ radioButtonGroup ] } );
-  const radioButtonPanel = new Panel( content, {
-    yMargin: 8,
-    stroke: options.stroke,
-    align: 'center',
-    fill: options.fill,
-    cornerRadius: options.cornerRadius,
-    minWidth: options.minWidth,
-    lineWidth: options.lineWidth
-  } );
-  this.addChild( radioButtonPanel );
-
-  // do some layout now that many of the pieces exist
-  interactionStrengthSliderVbox.centerX = radioButtonGroup.centerX;
-  interactionStrengthSliderVbox.top = radioButtonGroup.bottom + INSET;
-
-  // make any updates needed to the panel when the selected substance changes
-  phaseChangesModel.substanceProperty.link( function( value ) {
-
-    // add or remove the node for controlling interaction strength
-    if ( value === SubstanceType.ADJUSTABLE_ATOM ) {
-      content.addChild( interactionStrengthSliderVbox );
-    }
-    else if ( content.hasChild( interactionStrengthSliderVbox ) ) {
-      content.removeChild( interactionStrengthSliderVbox );
-    }
-  } );
-
-  // title for the panel
-  const title = new Text( atomsAndMoleculesString, {
-    font: new PhetFont( 14 ),
-    fill: SOMColorProfile.controlPanelTextProperty,
-    maxWidth: options.minWidth * 0.85,
-    tandem: options.tandem.createTandem( 'title' )
-  } );
-
-  // create the background for the title - initial size is arbitrary, it will be sized and positioned below
-  const titleBackground = new Rectangle( 0, 0, 1, 1, { fill: options.fill } );
-  this.addChild( new Node( { children: [ titleBackground, title ] } ) );
-
-  // closure for updating the title background size and overall position
-  const updateTitle = () => {
-    if ( radioButtonPanel.bounds.equals( Bounds2.NOTHING ) ) {
-      titleBackground.visible = false;
-      title.visible = false;
-    }
-    else {
-      titleBackground.rectWidth = title.width + 5;
-      titleBackground.rectHeight = title.height;
-      titleBackground.centerX = radioButtonPanel.centerX;
-      titleBackground.centerY = radioButtonPanel.top;
-      title.centerX = titleBackground.centerX;
-      title.centerY = titleBackground.centerY;
-      titleBackground.visible = true;
-      title.visible = true;
-    }
-  };
-
-  // do the initial update of the title
-  updateTitle();
-
-  // Listen for changes to the title text node's bounds and update the title when they occur.  There is no need to
-  // unlink this since the panel is permanent.
-  title.localBoundsProperty.lazyLink( updateTitle );
-
-  // Listen for changes to the panel bounds and update the title.
-  radioButtonPanel.localBoundsProperty.link( updateTitle );
-
-  this.mutate( options );
 }
 
 statesOfMatter.register( 'PhaseChangesMoleculesControlPanel', PhaseChangesMoleculesControlPanel );
-
-inherit( Node, PhaseChangesMoleculesControlPanel );
 export default PhaseChangesMoleculesControlPanel;

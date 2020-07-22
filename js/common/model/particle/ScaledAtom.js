@@ -20,7 +20,6 @@ class ScaledAtom {
    * @param {AtomType} atomType - initial type, aka element, for this atom
    * @param {number} initialXPosition - x position in the model, in picometers
    * @param {number} initialYPosition - y position in the model, in picometers
-   * @constructor
    */
   constructor( atomType, initialXPosition, initialYPosition ) {
 
@@ -47,7 +46,6 @@ class ScaledAtom {
    * @param {number} x - atom x position in picometers
    * @param {number} y - atom y position in picometers
    * @public
-   * @constructor
    */
   setPosition( x, y ) {
 

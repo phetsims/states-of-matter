@@ -48,8 +48,7 @@ class MultipleParticleModelIO extends ObjectIO {
   }
 }
 
-// REVIEW: Is this documentation complete and correct?
-MultipleParticleModelIO.documentation = 'particle model';
+MultipleParticleModelIO.documentation = 'multiple particle model that simulates interactions that lead to phase-like behavior';
 MultipleParticleModelIO.validator = { isValidValue: v => v instanceof MultipleParticleModel };
 MultipleParticleModelIO.typeName = 'MultipleParticleModelIO';
 ObjectIO.validateSubtype( MultipleParticleModelIO );

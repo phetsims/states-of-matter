@@ -23,7 +23,7 @@ const SigmaTable = {
    * @param {AtomType} atomType2
    * @returns {number}
    */
-  getSigma: function( atomType1, atomType2 ) {
+  getSigma: ( atomType1, atomType2 ) => {
     if ( atomType1 === atomType2 ) {
       // Heterogeneous pair of atoms.
       if ( atomType1 === AtomType.NEON ) {

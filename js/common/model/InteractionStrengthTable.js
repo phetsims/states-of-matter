@@ -33,7 +33,7 @@ const InteractionStrengthTable = {
    * @param {AtomType} atomType2
    * @returns {number}
    */
-  getInteractionPotential: function( atomType1, atomType2 ) {
+  getInteractionPotential: ( atomType1, atomType2 ) => {
     if ( atomType1 === atomType2 ) {
       // Heterogeneous pair of atoms.
       if ( atomType1 === AtomType.NEON ) {

@@ -17,7 +17,6 @@ class HydrogenAtom extends ScaledAtom {
    * @param {number} x - atom x position in picometers
    * @param {number} y - atom y position in picometers
    * @param {boolean} renderBelowOxygen - flag which says whether it has to be in the front or at the back of oxygen
-   * @constructor
    */
   constructor( x, y, renderBelowOxygen ) {
     super( AtomType.HYDROGEN, x, y );

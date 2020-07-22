@@ -24,7 +24,6 @@ const PARTICLE_COLOR = new Color( SOMConstants.ADJUSTABLE_ATTRACTION_COLOR );
 class AtomicInteractionsIcon extends ScreenIcon {
   /**
    * {Object} [options]
-   * @constructor
    */
   constructor( options ) {
 

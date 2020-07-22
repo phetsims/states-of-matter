@@ -160,7 +160,7 @@ class EpsilonControlPotentialGraph extends PotentialGraphNode {
 
     // Update the graph when the substance or interaction strength changes.
     Property.multilink(
-      [ phaseChangesModel.substanceProperty, phaseChangesModel.adjustableAtomInteractionStrengthProperty ],
+      [phaseChangesModel.substanceProperty, phaseChangesModel.adjustableAtomInteractionStrengthProperty],
       substance => {
         this.interactionEnabled = substance === SubstanceType.ADJUSTABLE_ATOM;
         this.setLjPotentialParameters( phaseChangesModel.getSigma(), phaseChangesModel.getEpsilon() );

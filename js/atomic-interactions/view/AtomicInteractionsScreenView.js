@@ -68,7 +68,6 @@ class AtomicInteractionsScreenView extends ScreenView {
     );
 
     // initialize local variables
-    const self = this;
     const tickTextColor = enableHeterogeneousAtoms ? 'black' : SOMColorProfile.controlPanelTextProperty;
     const textColor = enableHeterogeneousAtoms ? 'black' : SOMColorProfile.controlPanelTextProperty;
     const panelFill = enableHeterogeneousAtoms ? '#D1D2FF' : SOMColorProfile.controlPanelBackgroundProperty;
@@ -107,7 +106,7 @@ class AtomicInteractionsScreenView extends ScreenView {
       font: new PhetFont( 17 ),
       baseColor: '#61BEE3',
       maxWidth: MAX_TEXT_WIDTH,
-      listener: function() {
+      listener: () => {
         dualAtomModel.resetMovableAtomPos();
       },
       left: this.layoutBounds.minX + 6 * INSET,
@@ -126,9 +125,9 @@ class AtomicInteractionsScreenView extends ScreenView {
 
     // create and add the Reset All Button in the bottom right
     const resetAllButton = new ResetAllButton( {
-      listener: function() {
+      listener: () => {
         dualAtomModel.reset();
-        self.interactivePotentialGraph.reset();
+        this.interactivePotentialGraph.reset();
       },
       radius: SOMConstants.RESET_ALL_BUTTON_RADIUS,
       right: this.layoutBounds.maxX - SOMConstants.RESET_ALL_BUTTON_DISTANCE_FROM_SIDE,
@@ -262,24 +261,24 @@ class AtomicInteractionsScreenView extends ScreenView {
     } );
 
     // update the push pin position if the adjustable atom diameter changes
-    dualAtomModel.adjustableAtomDiameterProperty.link( function() {
-      self.updatePushPinPosition();
+    dualAtomModel.adjustableAtomDiameterProperty.link( () => {
+      this.updatePushPinPosition();
     } );
 
     // update the visibility of the force arrows when the settings change
-    dualAtomModel.forcesDisplayModeProperty.link( function( forces ) {
-      self.setShowAttractiveForces( forces === ForceDisplayMode.COMPONENTS );
-      self.setShowRepulsiveForces( forces === ForceDisplayMode.COMPONENTS );
-      self.setShowTotalForces( forces === ForceDisplayMode.TOTAL );
-      if ( !self.showAttractiveForces && !self.showTotalForces && forces !== ForceDisplayMode.HIDDEN ) {
+    dualAtomModel.forcesDisplayModeProperty.link( forces => {
+      this.setShowAttractiveForces( forces === ForceDisplayMode.COMPONENTS );
+      this.setShowRepulsiveForces( forces === ForceDisplayMode.COMPONENTS );
+      this.setShowTotalForces( forces === ForceDisplayMode.TOTAL );
+      if ( !this.showAttractiveForces && !this.showTotalForces && forces !== ForceDisplayMode.HIDDEN ) {
         throw new Error( 'invalid forces: ' + forces );
       }
     } );
 
     // monitor the atom diameter and trigger updates when changes occur
-    dualAtomModel.adjustableAtomDiameterProperty.link( function() {
-      self.updateMinimumXForMovableAtom();
-      self.updateHandPosition();
+    dualAtomModel.adjustableAtomDiameterProperty.link( () => {
+      this.updateMinimumXForMovableAtom();
+      this.updateHandPosition();
     } );
   }
 

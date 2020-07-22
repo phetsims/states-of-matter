@@ -39,7 +39,6 @@ class ZoomableGridNode extends Node {
     }, options );
 
     super( options );
-    const self = this;
     atomsView.horizontalLineCount = MIN_LINES_HORIZONTAL;
 
     // @private horizontal grid lines
@@ -60,9 +59,9 @@ class ZoomableGridNode extends Node {
 
       // @private zoom in button
       this.zoomInButton = new ZoomButton( {
-        listener: function() {
+        listener: () => {
           atomsView.horizontalLineCount -= ZOOM_INCREMENT;
-          self.setHorizontalLines( offsetX, offsetY, width, height, atomsView.horizontalLineCount );
+          this.setHorizontalLines( offsetX, offsetY, width, height, atomsView.horizontalLineCount );
           atomsView.verticalScalingFactor *= 3.33;
           atomsView.drawPotentialCurve();
         },
@@ -81,9 +80,9 @@ class ZoomableGridNode extends Node {
 
       // @private zoom out button
       this.zoomOutButton = new ZoomButton( {
-        listener: function() {
+        listener: () => {
           atomsView.horizontalLineCount += ZOOM_INCREMENT;
-          self.setHorizontalLines( offsetX, offsetY, width, height, atomsView.horizontalLineCount );
+          this.setHorizontalLines( offsetX, offsetY, width, height, atomsView.horizontalLineCount );
           atomsView.verticalScalingFactor /= 3.33;
           atomsView.drawPotentialCurve();
         },

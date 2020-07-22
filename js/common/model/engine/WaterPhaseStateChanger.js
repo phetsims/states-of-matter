@@ -37,7 +37,7 @@ class WaterPhaseStateChanger extends AbstractPhaseStateChanger {
    */
   setPhase( phaseID ) {
 
-    AbstractPhaseStateChanger.prototype.setPhase.call( this, phaseID );
+    super.setPhase( phaseID );
 
     // Sync up the atom positions with the molecule positions.
     this.positionUpdater.updateAtomPositions( this.multipleParticleModel.moleculeDataSet );
