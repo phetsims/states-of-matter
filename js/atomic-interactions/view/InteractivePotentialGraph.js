@@ -113,7 +113,7 @@ class InteractivePotentialGraph extends PotentialGraphNode {
     epsilonLayer.addChild( this.epsilonControls.line );
 
     // Highlight this control when the user is hovering over it and/or using it.
-    const epsilonLinePressListener = new PressListener( { attach: false } );
+    const epsilonLinePressListener = new PressListener( { attach: false, tandem: Tandem.OPT_OUT } );
     this.epsilonControls.line.addInputListener( epsilonLinePressListener );
     epsilonLinePressListener.isHighlightedProperty.link( isHighlighted => {
       this.epsilonControls.line.stroke = isHighlighted ? RESIZE_HANDLE_HIGHLIGHTED_COLOR : RESIZE_HANDLE_NORMAL_COLOR;
@@ -138,7 +138,7 @@ class InteractivePotentialGraph extends PotentialGraphNode {
       RESIZE_HANDLE_SIZE_PROPORTION * this.widthOfGraph,
       merge( { tandem: epsilonLayer.tandem.createTandem( 'epsilonArrow' ) }, arrowNodeOptions )
     );
-    const epsilonArrowPressListener = new PressListener( { attach: false } );
+    const epsilonArrowPressListener = new PressListener( { attach: false, tandem: Tandem.OPT_OUT } );
     this.epsilonControls.arrow.addInputListener( epsilonArrowPressListener );
     epsilonArrowPressListener.isHighlightedProperty.link( isHighlighted => {
       this.epsilonControls.arrow.fill = isHighlighted ? RESIZE_HANDLE_HIGHLIGHTED_COLOR : RESIZE_HANDLE_NORMAL_COLOR;
@@ -159,7 +159,7 @@ class InteractivePotentialGraph extends PotentialGraphNode {
       0,
       merge( { tandem: sigmaLayer.tandem.createTandem( 'sigmaArrow' ) }, arrowNodeOptions )
     );
-    const sigmaArrowPressListener = new PressListener( { attach: false } );
+    const sigmaArrowPressListener = new PressListener( { attach: false, tandem: Tandem.OPT_OUT } );
     this.sigmaControls.arrow.addInputListener( sigmaArrowPressListener );
     sigmaArrowPressListener.isHighlightedProperty.link( isHighlighted => {
       this.sigmaControls.arrow.fill = isHighlighted ? RESIZE_HANDLE_HIGHLIGHTED_COLOR : RESIZE_HANDLE_NORMAL_COLOR;
@@ -238,7 +238,7 @@ class InteractivePotentialGraph extends PotentialGraphNode {
     } );
 
     Property.multilink(
-      [dualAtomModel.atomPairProperty, dualAtomModel.adjustableAtomInteractionStrengthProperty, dualAtomModel.adjustableAtomDiameterProperty],
+      [ dualAtomModel.atomPairProperty, dualAtomModel.adjustableAtomInteractionStrengthProperty, dualAtomModel.adjustableAtomDiameterProperty ],
       () => {
         this.setLjPotentialParameters( dualAtomModel.getSigma(), dualAtomModel.getEpsilon() );
         this.updateInteractivityState();

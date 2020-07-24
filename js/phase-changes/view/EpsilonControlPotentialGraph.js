@@ -74,7 +74,7 @@ class EpsilonControlPotentialGraph extends PotentialGraphNode {
     this.epsilonControls.line.touchArea = this.epsilonControls.line.localBounds.dilatedXY( 20, 20 );
 
     // Highlight this control when the user is hovering over it and/or using it.
-    const epsilonLinePressListener = new PressListener( { attach: false } );
+    const epsilonLinePressListener = new PressListener( { attach: false, tandem: Tandem.OPT_OUT } );
     this.epsilonControls.line.addInputListener( epsilonLinePressListener );
     epsilonLinePressListener.isHighlightedProperty.link( isHighlighted => {
       this.epsilonControls.line.stroke = isHighlighted ? RESIZE_HANDLE_HIGHLIGHTED_COLOR : RESIZE_HANDLE_NORMAL_COLOR;
@@ -148,7 +148,7 @@ class EpsilonControlPotentialGraph extends PotentialGraphNode {
 
       tandem: this.epsilonControls.arrow.tandem.createTandem( 'dragListener' )
     } ) );
-    const epsilonArrowPressListener = new PressListener( { attach: false } );
+    const epsilonArrowPressListener = new PressListener( { attach: false, tandem: Tandem.OPT_OUT } );
     this.epsilonControls.arrow.addInputListener( epsilonArrowPressListener );
     epsilonArrowPressListener.isHighlightedProperty.link( isHighlighted => {
       this.epsilonControls.arrow.fill = isHighlighted ? RESIZE_HANDLE_HIGHLIGHTED_COLOR : RESIZE_HANDLE_NORMAL_COLOR;
@@ -160,7 +160,7 @@ class EpsilonControlPotentialGraph extends PotentialGraphNode {
 
     // Update the graph when the substance or interaction strength changes.
     Property.multilink(
-      [phaseChangesModel.substanceProperty, phaseChangesModel.adjustableAtomInteractionStrengthProperty],
+      [ phaseChangesModel.substanceProperty, phaseChangesModel.adjustableAtomInteractionStrengthProperty ],
       substance => {
         this.interactionEnabled = substance === SubstanceType.ADJUSTABLE_ATOM;
         this.setLjPotentialParameters( phaseChangesModel.getSigma(), phaseChangesModel.getEpsilon() );

@@ -51,7 +51,7 @@ class PositionMarker extends Node {
     const sphereNode = new ShadedSphereNode( 2 * radius, options.shadedSphereNodeOptions );
 
     super( {
-      children: [haloNode, sphereNode],
+      children: [ haloNode, sphereNode ],
       tandem: options.tandem
     } );
 
@@ -61,7 +61,7 @@ class PositionMarker extends Node {
     this.sphereNode = sphereNode;
 
     // halo visibility
-    const highlightPressListener = new PressListener( { attach: false } );
+    const highlightPressListener = new PressListener( { attach: false, tandem: options.tandem.createTandem( 'pressListener' ) } );
     this.addInputListener( highlightPressListener );
     this.haloNode.visibleProperty = highlightPressListener.isHighlightedProperty;
 
