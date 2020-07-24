@@ -94,7 +94,7 @@ class AtomicInteractionsControlPanel extends Node {
     let neonAndOxygenLabelItems;
     let argonAndOxygenLabelItems;
     let adjustableAttraction;
-    let radioButtonGroup;
+    let atomPairSelector;
     let labelWidth;
     let createLabelNode;
     let labelNodes;
@@ -184,8 +184,7 @@ class AtomicInteractionsControlPanel extends Node {
         } );
       };
 
-      // REVIEW: variable name doesn't match tandem name
-      const aquaRadioButtonsGroup = new AquaRadioButtonGroup(
+      const radioButtonGroup = new AquaRadioButtonGroup(
         dualAtomModel.atomPairProperty,
         [
           {
@@ -252,8 +251,8 @@ class AtomicInteractionsControlPanel extends Node {
       titleNode = createTitle( labelNodes );
 
       // put the title and radio button group together into a single node
-      radioButtonGroup = new VBox( {
-        children: [titleNode, aquaRadioButtonsGroup],
+      atomPairSelector = new VBox( {
+        children: [titleNode, radioButtonGroup],
         align: 'left',
         spacing: 5
       } );
@@ -330,7 +329,7 @@ class AtomicInteractionsControlPanel extends Node {
           tandemName: 'adjustableAttraction'
         }
       ];
-      radioButtonGroup = new RadioButtonGroup( dualAtomModel.atomPairProperty, radioButtonContent, {
+      const radioButtonGroup = new RadioButtonGroup( dualAtomModel.atomPairProperty, radioButtonContent, {
         orientation: 'vertical',
         cornerRadius: 5,
         baseColor: 'black',
@@ -341,6 +340,7 @@ class AtomicInteractionsControlPanel extends Node {
         deselectedContentOpacity: 1,
         tandem: options.tandem.createTandem( 'radioButtonGroup' )
       } );
+      atomPairSelector = radioButtonGroup;
 
       titleNode = new BackgroundNode( labelNodes.label, {
         yMargin: 1,
@@ -436,17 +436,17 @@ class AtomicInteractionsControlPanel extends Node {
     } );
 
     const content = new VBox( {
-      align: 'center', children: [radioButtonGroup],
+      align: 'center', children: [atomPairSelector],
       spacing: 5
     } );
     const verticalSpaceOffset = 7;
 
     // sliders and title adjustments
     atomDiameterSlider.top = atomDiameterTitle.bottom + verticalSpaceOffset;
-    atomDiameterSlider.centerX = radioButtonGroup.centerX;
+    atomDiameterSlider.centerX = atomPairSelector.centerX;
     interactionStrengthTitle.top = atomDiameterSlider.bottom + verticalSpaceOffset;
     interactionStrengthSlider.top = interactionStrengthTitle.bottom + verticalSpaceOffset;
-    interactionStrengthSlider.centerX = radioButtonGroup.centerX;
+    interactionStrengthSlider.centerX = atomPairSelector.centerX;
 
     const radioButtonPanel = new Panel( content, {
       stroke: options.stroke,
