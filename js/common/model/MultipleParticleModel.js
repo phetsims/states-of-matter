@@ -1424,14 +1424,10 @@ class MultipleParticleModel extends PhetioObject {
     this.normalizedLidVelocityY = stateObject.private.normalizedLidVelocityY;
 
     // Set the molecule data set.  This includes all the positions, velocities, etc. for the particles.
-    this.moleculeDataSet = MoleculeForceAndMotionDataSetIO.fromStateObject( stateObject.private.moleculeDataSet );
+    this.moleculeDataSet.setState( stateObject.private.moleculeDataSet );
 
     // Preset the pressure in the accumulator that tracks it so that it doesn't have to start from zero.
     this.moleculeForceAndMotionCalculator.presetPressure( stateObject.private.moleculeForcesAndMotionCalculatorPressure );
-
-    // The thermostats have their own references to the molecule data, so they need to be updated.
-    this.isoKineticThermostat.setDataSet( this.moleculeDataSet );
-    this.andersenThermostat.setDataSet( this.moleculeDataSet );
   }
 }
 

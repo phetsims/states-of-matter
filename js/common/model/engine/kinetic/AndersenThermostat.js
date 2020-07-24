@@ -124,21 +124,6 @@ class AndersenThermostat {
     this.accumulatedAverageVelocityChange.setXY( 0, 0 );
     this.totalVelocityChangePreviousStep.setXY( 0, 0 );
   }
-
-  /**
-   * Set a new data set to be used in subsequent calculations.
-   * !!!! This should only be used for phet-io !!!!
-   * @param {MoleculeForceAndMotionDataSet} moleculeDataSet
-   * @public
-   */
-  setDataSet( moleculeDataSet ) {
-    assert && assert(
-      phet.joist.sim.isSettingPhetioStateProperty.value,
-      'this method is intended to be used only in support of state setting via phet-io'
-    );
-    this.moleculeDataSet = moleculeDataSet;
-    this.clearAccumulatedBias();
-  }
 }
 
 statesOfMatter.register( 'AndersenThermostat', AndersenThermostat );

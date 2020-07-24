@@ -26,17 +26,6 @@ class MoleculeForceAndMotionDataSetIO extends ObjectIO {
     validate( moleculeForceAndMotionDataSet, this.validator );
     return moleculeForceAndMotionDataSet.toStateObject();
   }
-
-  /**
-   * Decodes a state into a MoleculeForceAndMotionDataSet.
-   * @param {Object} stateObject
-   * @returns {MoleculeForceAndMotionDataSet}
-   * @public
-   * @override
-   */
-  static fromStateObject( stateObject ) {
-    return MoleculeForceAndMotionDataSet.fromStateObject( stateObject );
-  }
 }
 
 MoleculeForceAndMotionDataSetIO.documentation = 'particle data set';
