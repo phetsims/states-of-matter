@@ -410,16 +410,30 @@ class MoleculeForceAndMotionDataSet {
     this.moleculeRotationalInertia = stateObject.moleculeRotationalInertia;
     this.atomsPerMolecule = stateObject.atomsPerMolecule;
 
-    // arrays
-    this.atomPositions = ArrayIONullableIOVector2IO.fromStateObject( stateObject.atomPositions );
-    this.moleculeCenterOfMassPositions = ArrayIONullableIOVector2IO.fromStateObject( stateObject.moleculeCenterOfMassPositions );
-    this.moleculeVelocities = ArrayIONullableIOVector2IO.fromStateObject( stateObject.moleculeVelocities );
-    this.moleculeForces = ArrayIONullableIOVector2IO.fromStateObject( stateObject.moleculeForces );
-    this.nextMoleculeForces = ArrayIONullableIOVector2IO.fromStateObject( stateObject.nextMoleculeForces );
-    this.moleculeRotationAngles = Float64ArrayIO.fromStateObject( stateObject.moleculeRotationAngles );
-    this.moleculeRotationRates = Float64ArrayIO.fromStateObject( stateObject.moleculeRotationRates );
-    this.moleculeTorques = Float64ArrayIO.fromStateObject( stateObject.moleculeTorques );
-    this.insideContainer = ArrayIOBooleanIO.fromStateObject( stateObject.insideContainer );
+    // arrays - copy the values rather than overwriting any references
+    const atomPositions = ArrayIONullableIOVector2IO.fromStateObject( stateObject.atomPositions );
+    for ( let i = 0; i < this.numberOfAtoms; i++ ) {
+      this.atomPositions[ i ] = atomPositions[ i ];
+    }
+
+    const moleculeCenterOfMassPositions = ArrayIONullableIOVector2IO.fromStateObject( stateObject.moleculeCenterOfMassPositions );
+    const moleculeVelocities = ArrayIONullableIOVector2IO.fromStateObject( stateObject.moleculeVelocities );
+    const moleculeForces = ArrayIONullableIOVector2IO.fromStateObject( stateObject.moleculeForces );
+    const nextMoleculeForces = ArrayIONullableIOVector2IO.fromStateObject( stateObject.nextMoleculeForces );
+    const moleculeRotationAngles = Float64ArrayIO.fromStateObject( stateObject.moleculeRotationAngles );
+    const moleculeRotationRates = Float64ArrayIO.fromStateObject( stateObject.moleculeRotationRates );
+    const moleculeTorques = Float64ArrayIO.fromStateObject( stateObject.moleculeTorques );
+    const insideContainer = ArrayIOBooleanIO.fromStateObject( stateObject.insideContainer );
+    for ( let i = 0; i < this.numberOfMolecules; i++ ) {
+      this.moleculeCenterOfMassPositions[ i ] = moleculeCenterOfMassPositions[ i ];
+      this.moleculeVelocities[ i ] = moleculeVelocities[ i ];
+      this.moleculeForces[ i ] = moleculeForces[ i ];
+      this.nextMoleculeForces[ i ] = nextMoleculeForces[ i ];
+      this.moleculeRotationAngles[ i ] = moleculeRotationAngles[ i ];
+      this.moleculeRotationRates[ i ] = moleculeRotationRates[ i ];
+      this.moleculeTorques[ i ] = moleculeTorques[ i ];
+      this.insideContainer[ i ] = insideContainer[ i ];
+    }
   }
 
   /**
