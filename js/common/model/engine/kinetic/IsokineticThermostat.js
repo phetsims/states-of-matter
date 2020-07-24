@@ -38,11 +38,6 @@ class IsokineticThermostat {
     // @private, previous scale factor from temperature adjust calculation
     this.previousTemperatureScaleFactor = 1;
 
-    // @private, references to the various arrays within the data set so that the calculations can be performed as fast
-    // as is possible.
-    this.moleculeVelocities = moleculeDataSet.moleculeVelocities;
-    this.moleculeRotationRates = moleculeDataSet.moleculeRotationRates;
-
     // @private {Vector2} - reusable vector used for calculating velocity changes
     this.previousParticleVelocity = new Vector2( 0, 0 );
 
@@ -75,6 +70,10 @@ class IsokineticThermostat {
     // Clear the vector the is used to sum velocity changes - it's only used in the 'normal' case.
     this.totalVelocityChangeThisStep.setXY( 0, 0 );
 
+    // local vars for convenience and performance
+    const moleculeVelocities = this.moleculeDataSet.moleculeVelocities;
+    const moleculeRotationRates = this.moleculeDataSet.moleculeRotationRates;
+
     if ( this.previousTemperatureScaleFactor !== 0 ||
          temperatureScaleFactor === 0 ||
          measuredTemperature > this.minModelTemperature ) {
@@ -82,7 +81,7 @@ class IsokineticThermostat {
       // This is the 'normal' case, where the scale factor is used to adjust the energy of the particles.
       for ( i = 0; i < numberOfParticles; i++ ) {
 
-        const moleculeVelocity = this.moleculeVelocities[ i ];
+        const moleculeVelocity = moleculeVelocities[ i ];
         this.previousParticleVelocity.set( moleculeVelocity );
 
         if ( moleculeVelocity.y < 0 ) {
@@ -108,7 +107,7 @@ class IsokineticThermostat {
         }
 
         // Scale the rotation rates (this has no effect in the monatomic case).
-        this.moleculeRotationRates[ i ] *= temperatureScaleFactor;
+        moleculeRotationRates[ i ] *= temperatureScaleFactor;
 
         // Track the total of all velocity changes - used to correct for drift
         this.totalVelocityChangeThisStep.addXY(
@@ -128,7 +127,7 @@ class IsokineticThermostat {
         if ( angle < 0 ) {
           angle += Math.PI;
         }
-        this.moleculeVelocities[ i ].setPolar( MIN_POST_ZERO_VELOCITY, angle );
+        moleculeVelocities[ i ].setPolar( MIN_POST_ZERO_VELOCITY, angle );
       }
     }
 
@@ -149,6 +148,21 @@ class IsokineticThermostat {
    */
   clearAccumulatedBias() {
     this.accumulatedAverageVelocityChange.setXY( 0, 0 );
+  }
+
+  /**
+   * Set a new data set to be used in subsequent calculations.
+   * !!!! This should only be used for phet-io !!!!
+   * @param {MoleculeForceAndMotionDataSet} moleculeDataSet
+   * @public
+   */
+  setDataSet( moleculeDataSet ) {
+    assert && assert(
+      phet.joist.sim.isSettingPhetioStateProperty.value,
+      'this method is intended to be used only in support of state setting via phet-io'
+    );
+    this.moleculeDataSet = moleculeDataSet;
+    this.clearAccumulatedBias();
   }
 }
 

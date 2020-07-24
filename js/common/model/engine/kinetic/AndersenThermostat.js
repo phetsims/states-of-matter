@@ -36,11 +36,6 @@ class AndersenThermostat {
     // @private reference to the molecule data set
     this.moleculeDataSet = moleculeDataSet;
 
-    // @private references to the various arrays within the data set, set up so that the calculations can be performed
-    // as fast as as possible
-    this.moleculeVelocities = moleculeDataSet.moleculeVelocities;
-    this.moleculeRotationRates = moleculeDataSet.moleculeRotationRates;
-
     // @private - pseudo-random number generator
     this.random = phet.joist.random;
 
@@ -94,16 +89,20 @@ class AndersenThermostat {
     const xCompensation = -this.totalVelocityChangePreviousStep.x / numMolecules * PROPORTION_COMPENSATION_FACTOR -
                           this.accumulatedAverageVelocityChange.x * INTEGRAL_COMPENSATION_FACTOR;
 
+    // local vars for convenience and performance
+    const moleculeVelocities = this.moleculeDataSet.moleculeVelocities;
+    const moleculeRotationRates = this.moleculeDataSet.moleculeRotationRates;
+
     for ( let i = 0; i < numMolecules; i++ ) {
-      const moleculeVelocity = this.moleculeVelocities[ i ];
+      const moleculeVelocity = moleculeVelocities[ i ];
       this.previousParticleVelocity.set( moleculeVelocity );
 
       // Calculate the new x and y velocity for this particle.
       const xVel = moleculeVelocity.x * gamma + this.random.nextGaussian() * velocityScalingFactor + xCompensation;
       const yVel = moleculeVelocity.y * gamma + this.random.nextGaussian() * velocityScalingFactor;
       moleculeVelocity.setXY( xVel, yVel );
-      this.moleculeRotationRates[ i ] = gamma * this.moleculeRotationRates[ i ] +
-                                        this.random.nextGaussian() * rotationScalingFactor;
+      moleculeRotationRates[ i ] = gamma * moleculeRotationRates[ i ] +
+                                   this.random.nextGaussian() * rotationScalingFactor;
       this.totalVelocityChangeThisStep.addXY(
         xVel - this.previousParticleVelocity.x,
         yVel - this.previousParticleVelocity.y
@@ -124,6 +123,21 @@ class AndersenThermostat {
   clearAccumulatedBias() {
     this.accumulatedAverageVelocityChange.setXY( 0, 0 );
     this.totalVelocityChangePreviousStep.setXY( 0, 0 );
+  }
+
+  /**
+   * Set a new data set to be used in subsequent calculations.
+   * !!!! This should only be used for phet-io !!!!
+   * @param {MoleculeForceAndMotionDataSet} moleculeDataSet
+   * @public
+   */
+  setDataSet( moleculeDataSet ) {
+    assert && assert(
+      phet.joist.sim.isSettingPhetioStateProperty.value,
+      'this method is intended to be used only in support of state setting via phet-io'
+    );
+    this.moleculeDataSet = moleculeDataSet;
+    this.clearAccumulatedBias();
   }
 }
 

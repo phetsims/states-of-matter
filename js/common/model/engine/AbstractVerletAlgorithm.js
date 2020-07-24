@@ -110,7 +110,7 @@ class AbstractVerletAlgorithm {
 
       if ( !moleculeDataSet.insideContainer[ i ] && this.isNormalizedPositionInContainer( xPos, yPos ) ) {
 
-        // The particle had left the container, but is now back inside, so update the status
+        // The particle had left the container, but is now back inside, so update the status.
         moleculeDataSet.insideContainer[ i ] = true;
       }
 
