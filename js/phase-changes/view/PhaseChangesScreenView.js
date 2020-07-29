@@ -19,9 +19,9 @@ import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransfo
 import BicyclePumpNode from '../../../../scenery-phet/js/BicyclePumpNode.js';
 import ResetAllButton from '../../../../scenery-phet/js/buttons/ResetAllButton.js';
 import HeaterCoolerNode from '../../../../scenery-phet/js/HeaterCoolerNode.js';
-import MultiLineText from '../../../../scenery-phet/js/MultiLineText.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import TimeControlNode from '../../../../scenery-phet/js/TimeControlNode.js';
+import RichText from '../../../../scenery/js/nodes/RichText.js';
 import TextPushButton from '../../../../sun/js/buttons/TextPushButton.js';
 import MultipleParticleModel from '../../common/model/MultipleParticleModel.js';
 import SOMConstants from '../../common/SOMConstants.js';
@@ -348,7 +348,7 @@ class PhaseChangesScreenView extends ScreenView {
     );
 
     // Happy Easter
-    const egg = new MultiLineText( 'Goodbye boiling water -\nyou will be mist!', {
+    const egg = new RichText( 'Goodbye boiling water -<br>you will be mist!', {
       fill: 'yellow',
       font: new PhetFont( 14 ),
       align: 'left',

@@ -81,10 +81,10 @@
     "value": "Temperature"
   },
   "triplePoint": {
-    "value": "triple\npoint"
+    "value": "triple<br>point"
   },
   "criticalPoint": {
-    "value": "critical\npoint"
+    "value": "critical<br>point"
   },
   "interactionStrengthWithSymbol": {
     "value": "Interaction Strength (ε)"

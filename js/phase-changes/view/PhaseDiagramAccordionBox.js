@@ -8,18 +8,18 @@
 
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Shape from '../../../../kite/js/Shape.js';
+import merge from '../../../../phet-core/js/merge.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
-import MultiLineText from '../../../../scenery-phet/js/MultiLineText.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import Path from '../../../../scenery/js/nodes/Path.js';
+import RichText from '../../../../scenery/js/nodes/RichText.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import AccordionBox from '../../../../sun/js/AccordionBox.js';
 import SOMConstants from '../../common/SOMConstants.js';
 import SOMColorProfile from '../../common/view/SOMColorProfile.js';
-import statesOfMatterStrings from '../../statesOfMatterStrings.js';
 import statesOfMatter from '../../statesOfMatter.js';
-import merge from '../../../../phet-core/js/merge.js';
+import statesOfMatterStrings from '../../statesOfMatterStrings.js';
 
 const criticalPointString = statesOfMatterStrings.criticalPoint;
 const gasString = statesOfMatterStrings.gas;
@@ -168,7 +168,7 @@ class PhaseDiagramAccordionBox extends AccordionBox {
     } );
     accordionContent.addChild( phaseDiagramComponents.gasLabel );
 
-    phaseDiagramComponents.triplePointLabel = new MultiLineText( triplePointString, {
+    phaseDiagramComponents.triplePointLabel = new RichText( triplePointString, {
       font: SMALLER_INNER_FONT,
       fill: 'black',
       align: 'right'
@@ -180,7 +180,7 @@ class PhaseDiagramAccordionBox extends AccordionBox {
       );
     }
 
-    phaseDiagramComponents.criticalPointLabel = new MultiLineText( criticalPointString, {
+    phaseDiagramComponents.criticalPointLabel = new RichText( criticalPointString, {
       font: SMALLER_INNER_FONT,
       fill: 'black',
       align: 'right',
