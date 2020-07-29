@@ -39,7 +39,8 @@ class TitledSlider extends VBox {
         tandem: tandem.createTandem( 'title' )
       },
       sliderOptions: {
-        trackSize: new Dimension2( 140, 5 ) // empirically determined for this sim
+        trackSize: new Dimension2( 140, 5 ), // empirically determined for this sim
+        tandem: tandem.createTandem( 'slider' )
       }
     }, options );
 
