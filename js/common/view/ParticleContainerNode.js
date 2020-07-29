@@ -103,9 +103,8 @@ class ParticleContainerNode extends Node {
     } ) );
 
     // root of the lid node
-    const lidTandem = options.tandem.createTandem( 'lidNode' );
     const lidNode = new Node( {
-      tandem: lidTandem,
+      tandem: options.tandem.createTandem( 'lidNode' ),
       phetioComponentOptions: {
         visibleProperty: { phetioReadOnly: true }
       }
@@ -125,7 +124,7 @@ class ParticleContainerNode extends Node {
       // Add the pointing hand, the finger of which can push down on the top of the container.
       pointingHandNode = new PointingHandNode( multipleParticleModel, modelViewTransform, {
         centerX: this.particleAreaViewBounds.centerX + 30, // offset empirically determined
-        tandem: lidTandem.createTandem( 'pointingHandNode' )
+        tandem: lidNode.tandem.createTandem( 'pointingHandNode' )
       } );
       lidNode.addChild( pointingHandNode );
 
@@ -144,7 +143,7 @@ class ParticleContainerNode extends Node {
         scale: 0.28,
         attachmentFill: 'black',
         gripLineWidth: 4,
-        tandem: lidTandem.createTandem( 'handleNode' )
+        tandem: lidNode.tandem.createTandem( 'handleNode' )
       } );
       handleNode.centerX = lidEllipseNode.width / 2;
       handleNode.bottom = handleAreaEllipse.centerY + 5; // position tweaked a bit to look better
@@ -178,7 +177,7 @@ class ParticleContainerNode extends Node {
           }
         },
 
-        tandem: lidTandem.createTandem( 'lidDragListener' )
+        tandem: lidNode.tandem.createTandem( 'lidDragListener' )
       } ) );
     }
 
