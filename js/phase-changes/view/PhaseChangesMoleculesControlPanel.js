@@ -17,7 +17,6 @@ import Rectangle from '../../../../scenery/js/nodes/Rectangle.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import VBox from '../../../../scenery/js/nodes/VBox.js';
 import RadioButtonGroup from '../../../../sun/js/buttons/RadioButtonGroup.js';
-import HSlider from '../../../../sun/js/HSlider.js';
 import Panel from '../../../../sun/js/Panel.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import SOMConstants from '../../common/SOMConstants.js';
@@ -25,8 +24,9 @@ import SubstanceType from '../../common/SubstanceType.js';
 import AtomAndMoleculeIconFactory from '../../common/view/AtomAndMoleculeIconFactory.js';
 import SOMColorProfile from '../../common/view/SOMColorProfile.js';
 import SubstanceSelectorNode from '../../common/view/SubstanceSelectorNode.js';
-import statesOfMatterStrings from '../../statesOfMatterStrings.js';
+import TitledSlider from '../../common/view/TitledSlider.js';
 import statesOfMatter from '../../statesOfMatter.js';
+import statesOfMatterStrings from '../../statesOfMatterStrings.js';
 import PhaseChangesModel from '../PhaseChangesModel.js';
 
 // strings
@@ -78,34 +78,27 @@ class PhaseChangesMoleculesControlPanel extends Node {
     const weakTitle = new Text( weakString, tickTextOptions );
     const strongTitle = new Text( strongString, tickTextOptions );
 
-    // create the root tandem for the node that includes the interaction title and slider
-    const interactionStrengthSliderTandem = options.tandem.createTandem( 'interactionStrengthSlider' );
-
-    // add interaction strength slider and title
-    const interactionTitle = new Text( interactionStrengthWithSymbolString, {
-      font: new PhetFont( NORMAL_TEXT_FONT_SIZE ),
-      fill: SOMColorProfile.controlPanelTextProperty,
-      maxWidth: 140,
-      tandem: interactionStrengthSliderTandem.createTandem( 'title' )
-    } );
-
-    const interactionStrengthSlider = new HSlider(
+    // slider (with a title) that can be used to control the interaction strength of the adjustable attraction atoms
+    const interactionStrengthSliderVbox = new TitledSlider(
       phaseChangesModel.adjustableAtomInteractionStrengthProperty,
       new Range( SOMConstants.MIN_ADJUSTABLE_EPSILON, PhaseChangesModel.MAX_ADJUSTABLE_EPSILON ),
-      merge( {}, SOMConstants.ADJUSTABLE_ATTRACTION_SLIDER_COMMON_OPTIONS, {
-        trackSize: new Dimension2( 110, 4 ),
-        tandem: interactionStrengthSliderTandem.createTandem( 'slider' )
-      } ) );
-    interactionStrengthSlider.addMajorTick( PhaseChangesModel.MAX_ADJUSTABLE_EPSILON, strongTitle );
-    interactionStrengthSlider.addMajorTick( SOMConstants.MIN_ADJUSTABLE_EPSILON, weakTitle );
-
-    // put the title and slider together into a node
-    const interactionStrengthSliderVbox = new VBox( {
-      children: [interactionTitle, interactionStrengthSlider],
-      spacing: 5,
-      tandem: interactionStrengthSliderTandem,
-      phetioDocumentation: 'Used for \'Adjustable Attraction\' only'
-    } );
+      interactionStrengthWithSymbolString,
+      options.tandem.createTandem( 'interactionStrengthSlider' ),
+      {
+        sliderOptions: merge(
+          {},
+          SOMConstants.ADJUSTABLE_ATTRACTION_SLIDER_COMMON_OPTIONS,
+          { trackSize: new Dimension2( 110, 4 ) }
+        ),
+        titleOptions: {
+          fill: SOMColorProfile.controlPanelTextProperty,
+          maxWidth: 140
+        },
+        phetioDocumentation: 'Used for \'Adjustable Attraction\' only'
+      }
+    );
+    interactionStrengthSliderVbox.slider.addMajorTick( PhaseChangesModel.MAX_ADJUSTABLE_EPSILON, strongTitle );
+    interactionStrengthSliderVbox.slider.addMajorTick( SOMConstants.MIN_ADJUSTABLE_EPSILON, weakTitle );
 
     // pre-create the tandem for the radio button group so that the text nodes can be under it
     const radioButtonGroupTandem = options.tandem.createTandem( 'radioButtonGroup' );
@@ -206,7 +199,7 @@ class PhaseChangesMoleculesControlPanel extends Node {
         phaseChangesModel.setEpsilon( value );
       }
     } );
-    const content = new VBox( { spacing: 4, children: [radioButtonGroup] } );
+    const content = new VBox( { spacing: 4, children: [ radioButtonGroup ] } );
     const radioButtonPanel = new Panel( content, {
       yMargin: 8,
       stroke: options.stroke,
@@ -244,7 +237,7 @@ class PhaseChangesMoleculesControlPanel extends Node {
 
     // create the background for the title - initial size is arbitrary, it will be sized and positioned below
     const titleBackground = new Rectangle( 0, 0, 1, 1, { fill: options.fill } );
-    this.addChild( new Node( { children: [titleBackground, title] } ) );
+    this.addChild( new Node( { children: [ titleBackground, title ] } ) );
 
     // closure for updating the title background size and overall position
     const updateTitle = () => {
