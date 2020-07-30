@@ -149,7 +149,6 @@ class StatesScreenView extends ScreenView {
 
   /**
    * @public
-   * TODO: Why was there no DT when this was converted to ES6?
    */
   step( dt ) {
     this.particleContainerNode.step( dt );

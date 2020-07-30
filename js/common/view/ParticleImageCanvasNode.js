@@ -163,9 +163,10 @@ class ParticleImageCanvasNode extends CanvasNode {
   }
 
   /**
+   * @param {number} dt
    * @public
    */
-  step() {
+  step( dt ) {
     this.invalidatePaint();
   }
 }
