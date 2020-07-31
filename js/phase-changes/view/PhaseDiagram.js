@@ -96,12 +96,9 @@ const DEFAULT_GAS_LABEL_POSITION = new Vector2(
 
 class PhaseDiagram extends Node {
 
-  /**
-   * @param {Object} [options] that can be passed on to the underlying node
-   */
-  constructor( options ) {
+  constructor() {
 
-    super( options );
+    super();
 
     // object where the components of the phase diagram are collected
     const phaseDiagramComponents = {};
@@ -246,6 +243,14 @@ class PhaseDiagram extends Node {
     // @private - components of the phase diagram, updated as changes occur in the model
     this.phaseDiagramComponents = phaseDiagramComponents;
 
+    // position the labels - some of the values were empirically determined for optimal layout
+    this.phaseDiagramComponents.liquidLabel.center = DEFAULT_LIQUID_LABEL_POSITION;
+    this.phaseDiagramComponents.gasLabel.center = DEFAULT_GAS_LABEL_POSITION;
+    this.phaseDiagramComponents.triplePointLabel.right = DEFAULT_TRIPLE_POINT.x - 7;
+    this.phaseDiagramComponents.triplePointLabel.bottom = DEFAULT_TRIPLE_POINT.y;
+    this.phaseDiagramComponents.criticalPointLabel.right = DEFAULT_CRITICAL_POSITION.x - 7;
+    this.phaseDiagramComponents.criticalPointLabel.bottom = DEFAULT_CRITICAL_POSITION.y;
+
     // Perform the initial drawing of the diagram.
     this.drawPhaseDiagram();
 
@@ -352,14 +357,8 @@ class PhaseDiagram extends Node {
 
     diagramComponents.superCriticalAreaBackground.setShape( superCriticalBackground );
 
-    // position the labels - some of the values were empirically determined for optimal layout
+    // reposition any labels the need it
     diagramComponents.solidLabel.center = solidLabelCenter;
-    diagramComponents.liquidLabel.center = DEFAULT_LIQUID_LABEL_POSITION;
-    diagramComponents.gasLabel.center = DEFAULT_GAS_LABEL_POSITION;
-    diagramComponents.triplePointLabel.right = DEFAULT_TRIPLE_POINT.x - 7;
-    diagramComponents.triplePointLabel.bottom = DEFAULT_TRIPLE_POINT.y;
-    diagramComponents.criticalPointLabel.right = DEFAULT_CRITICAL_POSITION.x - 7;
-    diagramComponents.criticalPointLabel.bottom = DEFAULT_CRITICAL_POSITION.y;
   }
 
   /**

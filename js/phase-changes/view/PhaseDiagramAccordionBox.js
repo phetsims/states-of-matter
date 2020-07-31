@@ -26,16 +26,7 @@ class PhaseDiagramAccordionBox extends AccordionBox {
    */
   constructor( expandedProperty, options ) {
 
-    const phaseDiagram = new PhaseDiagram( options );
-
-    const titleNode = new Text( phaseDiagramString, {
-      fill: SOMColorProfile.controlPanelTextProperty,
-      font: new PhetFont( { size: 13 } ),
-      maxWidth: options.maxWidth
-    } );
-
-    super( phaseDiagram, merge( {
-      titleNode: titleNode,
+    options = merge( {
       fill: SOMColorProfile.controlPanelBackgroundProperty,
       stroke: SOMColorProfile.controlPanelStrokeProperty,
       expandedProperty: expandedProperty,
@@ -46,17 +37,26 @@ class PhaseDiagramAccordionBox extends AccordionBox {
       contentYSpacing: -1,
       contentYMargin: 5,
       contentXMargin: 5,
-      minWidth: options.minWidth,
-      maxWidth: options.maxWidth,
       buttonYMargin: 4,
       buttonXMargin: 5,
+      maxWidth: 100,
       expandCollapseButtonOptions: {
         sideLength: 12,
         touchAreaXDilation: 15,
         touchAreaYDilation: 10
       },
       tandem: options.tandem.createTandem( 'accordionBox' )
-    }, options ) );
+    }, options );
+
+    const phaseDiagram = new PhaseDiagram();
+
+    const titleNode = new Text( phaseDiagramString, {
+      fill: SOMColorProfile.controlPanelTextProperty,
+      font: new PhetFont( { size: 13 } ),
+      maxWidth: options.maxWidth
+    } );
+
+    super( phaseDiagram, merge( options, { titleNode: titleNode } ) );
 
     // @private - make phase diagram available so that methods can access it
     this.phaseDiagram = phaseDiagram;
