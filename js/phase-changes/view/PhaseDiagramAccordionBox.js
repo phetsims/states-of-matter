@@ -63,13 +63,6 @@ class PhaseDiagramAccordionBox extends AccordionBox {
   }
 
   /**
-   * @public
-   */
-  drawPhaseDiagram() {
-    this.phaseDiagram.drawPhaseDiagram();
-  }
-
-  /**
    * Set the normalized position for this marker.
    * @param normalizedTemperature - Temperature (X position) value between 0 and 1 (inclusive).
    * @param normalizedPressure    - Pressure (Y position) value between 0 and 1 (inclusive).

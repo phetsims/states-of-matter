@@ -100,87 +100,87 @@ class PhaseDiagram extends Node {
 
     super();
 
-    // object where the components of the phase diagram are collected
-    const phaseDiagramComponents = {};
+    // @private - object where the components of the phase diagram are collected
+    const diagramComponents = {};
 
-    phaseDiagramComponents.gasAreaBackground = new Path( null, {
+    diagramComponents.gasAreaBackground = new Path( null, {
       fill: '#FFBC00',
       stroke: '#FFBC00'
     } );
-    this.addChild( phaseDiagramComponents.gasAreaBackground );
+    this.addChild( diagramComponents.gasAreaBackground );
 
-    phaseDiagramComponents.superCriticalAreaBackground = new Path( null, {
+    diagramComponents.superCriticalAreaBackground = new Path( null, {
       fill: '#C3DF53'
     } );
-    this.addChild( phaseDiagramComponents.superCriticalAreaBackground );
+    this.addChild( diagramComponents.superCriticalAreaBackground );
 
-    phaseDiagramComponents.liquidAreaBackground = new Path( null, {
+    diagramComponents.liquidAreaBackground = new Path( null, {
       fill: '#83FFB9'
     } );
-    this.addChild( phaseDiagramComponents.liquidAreaBackground );
+    this.addChild( diagramComponents.liquidAreaBackground );
 
-    phaseDiagramComponents.solidAreaBackground = new Path( null, {
+    diagramComponents.solidAreaBackground = new Path( null, {
       fill: '#AB9CC4'
     } );
-    this.addChild( phaseDiagramComponents.solidAreaBackground );
+    this.addChild( diagramComponents.solidAreaBackground );
 
-    phaseDiagramComponents.solidLiquidLine = new Path( null, { lineWidth: 1, stroke: 'black' } );
-    this.addChild( phaseDiagramComponents.solidLiquidLine );
+    diagramComponents.solidLiquidLine = new Path( null, { lineWidth: 1, stroke: 'black' } );
+    this.addChild( diagramComponents.solidLiquidLine );
 
-    phaseDiagramComponents.solidGasLine = new Path( null, { lineWidth: 1, stroke: 'black' } );
-    this.addChild( phaseDiagramComponents.solidGasLine );
+    diagramComponents.solidGasLine = new Path( null, { lineWidth: 1, stroke: 'black' } );
+    this.addChild( diagramComponents.solidGasLine );
 
-    phaseDiagramComponents.liquidGasLine = new Path( null, { lineWidth: 1, stroke: 'black' } );
-    this.addChild( phaseDiagramComponents.liquidGasLine );
+    diagramComponents.liquidGasLine = new Path( null, { lineWidth: 1, stroke: 'black' } );
+    this.addChild( diagramComponents.liquidGasLine );
 
-    phaseDiagramComponents.triplePoint = new Path( new Shape()
+    diagramComponents.triplePoint = new Path( new Shape()
       .ellipse( 0, 0, POINT_MARKER_DIAMETER, POINT_MARKER_DIAMETER ), { fill: 'black' } );
-    this.addChild( phaseDiagramComponents.triplePoint );
+    this.addChild( diagramComponents.triplePoint );
 
-    phaseDiagramComponents.criticalPoint = new Path( new Shape()
+    diagramComponents.criticalPoint = new Path( new Shape()
       .ellipse( 0, 0, POINT_MARKER_DIAMETER, POINT_MARKER_DIAMETER ), { fill: 'black' } );
-    this.addChild( phaseDiagramComponents.criticalPoint );
+    this.addChild( diagramComponents.criticalPoint );
 
-    phaseDiagramComponents.solidLabel = new Text( solidString, {
+    diagramComponents.solidLabel = new Text( solidString, {
       font: LARGER_INNER_FONT,
       fill: 'black',
       maxWidth: SOLID_LABEL_MAX_WIDTH
     } );
-    this.addChild( phaseDiagramComponents.solidLabel );
+    this.addChild( diagramComponents.solidLabel );
 
-    phaseDiagramComponents.liquidLabel = new Text( liquidString, {
+    const liquidLabel = new Text( liquidString, {
       font: LARGER_INNER_FONT,
       fill: 'black',
       maxWidth: LIQUID_AND_GAS_LABEL_MAX_WIDTH
     } );
-    this.addChild( phaseDiagramComponents.liquidLabel );
+    this.addChild( liquidLabel );
 
-    phaseDiagramComponents.gasLabel = new Text( gasString, {
+    const gasLabel = new Text( gasString, {
       font: LARGER_INNER_FONT,
       fill: 'black',
       maxWidth: LIQUID_AND_GAS_LABEL_MAX_WIDTH
     } );
-    this.addChild( phaseDiagramComponents.gasLabel );
+    this.addChild( gasLabel );
 
-    phaseDiagramComponents.triplePointLabel = new RichText( triplePointString, {
+    const triplePointLabel = new RichText( triplePointString, {
       font: SMALLER_INNER_FONT,
       fill: 'black',
       align: 'right'
     } );
-    this.addChild( phaseDiagramComponents.triplePointLabel );
-    if ( phaseDiagramComponents.triplePointLabel.width > SMALLER_INNER_TEXT_WIDTH ) {
-      phaseDiagramComponents.triplePointLabel.setScaleMagnitude(
-        SMALLER_INNER_TEXT_WIDTH / phaseDiagramComponents.triplePointLabel.width
+    this.addChild( triplePointLabel );
+    if ( triplePointLabel.width > SMALLER_INNER_TEXT_WIDTH ) {
+      triplePointLabel.setScaleMagnitude(
+        SMALLER_INNER_TEXT_WIDTH / triplePointLabel.width
       );
     }
 
-    phaseDiagramComponents.criticalPointLabel = new RichText( criticalPointString, {
+    const criticalPointLabel = new RichText( criticalPointString, {
       font: SMALLER_INNER_FONT,
       fill: 'black',
       align: 'right',
       maxWidth: SMALLER_INNER_TEXT_WIDTH
     } );
-    this.addChild( phaseDiagramComponents.criticalPointLabel );
+    this.addChild( criticalPointLabel );
 
     const horizontalAxis = new ArrowNode(
       X_ORIGIN_OFFSET,
@@ -231,37 +231,38 @@ class PhaseDiagram extends Node {
     this.addChild( verticalAxisLabel );
 
     // Create and add the marker that shows the current phase state.
-    phaseDiagramComponents.currentStateMarker = new Path(
+    diagramComponents.currentStateMarker = new Path(
       new Shape().ellipse( 0, 0, CURRENT_STATE_MARKER_DIAMETER, CURRENT_STATE_MARKER_DIAMETER ),
       { fill: 'red' }
     );
-    this.addChild( phaseDiagramComponents.currentStateMarker );
+    this.addChild( diagramComponents.currentStateMarker );
 
     // @private - flag that indicates whether water is being depicted, which alters aspects of the diagram
     this.depictingWater = false;
 
     // @private - components of the phase diagram, updated as changes occur in the model
-    this.phaseDiagramComponents = phaseDiagramComponents;
+    this.diagramComponents = diagramComponents;
 
     // position the labels - some of the values were empirically determined for optimal layout
-    this.phaseDiagramComponents.liquidLabel.center = DEFAULT_LIQUID_LABEL_POSITION;
-    this.phaseDiagramComponents.gasLabel.center = DEFAULT_GAS_LABEL_POSITION;
-    this.phaseDiagramComponents.triplePointLabel.right = DEFAULT_TRIPLE_POINT.x - 7;
-    this.phaseDiagramComponents.triplePointLabel.bottom = DEFAULT_TRIPLE_POINT.y;
-    this.phaseDiagramComponents.criticalPointLabel.right = DEFAULT_CRITICAL_POSITION.x - 7;
-    this.phaseDiagramComponents.criticalPointLabel.bottom = DEFAULT_CRITICAL_POSITION.y;
+    liquidLabel.center = DEFAULT_LIQUID_LABEL_POSITION;
+    gasLabel.center = DEFAULT_GAS_LABEL_POSITION;
+    triplePointLabel.right = DEFAULT_TRIPLE_POINT.x - 7;
+    triplePointLabel.bottom = DEFAULT_TRIPLE_POINT.y;
+    criticalPointLabel.right = DEFAULT_CRITICAL_POSITION.x - 7;
+    criticalPointLabel.bottom = DEFAULT_CRITICAL_POSITION.y;
 
     // Perform the initial drawing of the diagram.
-    this.drawPhaseDiagram();
+    this.updateBackground();
 
     // Set the initial position of the current phase state marker.
     this.setStateMarkerPos( 0, 0 );
   }
 
   /**
-   * @public
+   * Update the background of the phase diagram, i.e. the shapes and lines over which the marker is positioned.
+   * @private
    */
-  drawPhaseDiagram() {
+  updateBackground() {
 
     // Handle the variations due to water vs. non-water
     const topOfSolidLiquidLine = this.depictingWater ?
@@ -270,7 +271,7 @@ class PhaseDiagram extends Node {
     const solidLabelCenter = this.depictingWater ? WATER_SOLID_LABEL_POSITION : DEFAULT_SOLID_LABEL_POSITION;
 
     // convenience variable
-    const diagramComponents = this.phaseDiagramComponents;
+    const diagramComponents = this.diagramComponents;
 
     // Place the triple point marker.
     diagramComponents.triplePoint.setTranslation( DEFAULT_TRIPLE_POINT.x, DEFAULT_TRIPLE_POINT.y );
@@ -382,8 +383,8 @@ class PhaseDiagram extends Node {
     markerYPos = Math.max( markerYPos, Y_ORIGIN_OFFSET - Y_USABLE_RANGE - CURRENT_STATE_MARKER_DIAMETER );
 
     // set the position of the marker node
-    this.phaseDiagramComponents.currentStateMarker.centerX = markerXPos;
-    this.phaseDiagramComponents.currentStateMarker.centerY = markerYPos;
+    this.diagramComponents.currentStateMarker.centerX = markerXPos;
+    this.diagramComponents.currentStateMarker.centerY = markerYPos;
   }
 
   /**
@@ -392,7 +393,7 @@ class PhaseDiagram extends Node {
    * @public
    */
   setStateMarkerVisible( isVisible ) {
-    this.phaseDiagramComponents.currentStateMarker.setVisible( isVisible );
+    this.diagramComponents.currentStateMarker.setVisible( isVisible );
   }
 
   /**
@@ -405,7 +406,7 @@ class PhaseDiagram extends Node {
    */
   setDepictingWater( depictingWater ) {
     this.depictingWater = depictingWater;
-    this.drawPhaseDiagram();
+    this.updateBackground();
   }
 }
 
