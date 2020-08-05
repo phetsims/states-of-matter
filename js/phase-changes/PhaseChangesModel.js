@@ -148,6 +148,11 @@ class PhaseChangesModel extends MultipleParticleModel {
    * @override
    */
   handleSubstanceChanged( substance ) {
+
+    // reset the target container height whenever the substance changes
+    this.targetContainerHeightProperty && this.targetContainerHeightProperty.reset();
+
+    // base class does most of the heavy lifting on this
     super.handleSubstanceChanged( substance );
 
     // If the adjustable atom has been selected, set the epsilon value of the LJ potential to be based on the previously
