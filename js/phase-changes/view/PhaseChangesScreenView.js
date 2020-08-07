@@ -148,7 +148,7 @@ class PhaseChangesScreenView extends ScreenView {
         stepForwardButtonOptions: {
           radius: SOMConstants.STEP_BUTTON_RADIUS,
           listener: () => {
-            model.stepInternal( SOMConstants.NOMINAL_TIME_STEP );
+            model.stepInTime( SOMConstants.NOMINAL_TIME_STEP );
           }
         },
         playPauseStepXSpacing: 10
