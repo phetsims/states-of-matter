@@ -133,7 +133,7 @@ class StatesScreenView extends ScreenView {
         stepForwardButtonOptions: {
           radius: SOMConstants.STEP_BUTTON_RADIUS,
           listener: () => {
-            multipleParticleModel.stepInternal( SOMConstants.NOMINAL_TIME_STEP );
+            multipleParticleModel.stepInTime( SOMConstants.NOMINAL_TIME_STEP );
           }
         },
         playPauseStepXSpacing: 10

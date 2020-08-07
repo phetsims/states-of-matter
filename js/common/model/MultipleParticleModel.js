@@ -819,9 +819,10 @@ class MultipleParticleModel extends PhetioObject {
 
   /**
    * Step the model.
+   * @param {number} dt - delta time, in seconds
    * @public
    */
-  stepInternal( dt ) {
+  stepInTime( dt ) {
 
     this.moleculeInjectedThisStep = false;
 
@@ -954,13 +955,13 @@ class MultipleParticleModel extends PhetioObject {
   }
 
   /**
-   * main step function
+   * main step function, called by the PhET framework
    * @param {number} dt
    * @public
    */
   step( dt ) {
     if ( this.isPlayingProperty.get() ) {
-      this.stepInternal( dt );
+      this.stepInTime( dt );
     }
   }
 
@@ -1398,6 +1399,8 @@ class MultipleParticleModel extends PhetioObject {
         normalizedLidVelocityY: this.normalizedLidVelocityY,
         heatingCoolingAmount: this.heatingCoolingAmountProperty.value,
         moleculeDataSet: MoleculeForceAndMotionDataSetIO.toStateObject( this.moleculeDataSet ),
+        isoKineticThermostatState: this.isoKineticThermostat.toStateObject(),
+        andersenThermostatState: this.andersenThermostat.toStateObject(),
         moleculeForcesAndMotionCalculatorPressure: this.moleculeForceAndMotionCalculator.pressureProperty.value
       }
     };
@@ -1422,9 +1425,11 @@ class MultipleParticleModel extends PhetioObject {
     this.heatingCoolingAmountProperty.set( stateObject.private.heatingCoolingAmount );
     this.gravitationalAcceleration = stateObject.private.gravitationalAcceleration;
     this.normalizedLidVelocityY = stateObject.private.normalizedLidVelocityY;
+    this.isoKineticThermostat.setState( stateObject.private.isoKineticThermostatState ),
+      this.andersenThermostat.setState( stateObject.private.andersenThermostatState ),
 
-    // Set the molecule data set.  This includes all the positions, velocities, etc. for the particles.
-    this.moleculeDataSet.setState( stateObject.private.moleculeDataSet );
+      // Set the molecule data set.  This includes all the positions, velocities, etc. for the particles.
+      this.moleculeDataSet.setState( stateObject.private.moleculeDataSet );
 
     // Preset the pressure in the accumulator that tracks it so that it doesn't have to start from zero.
     this.moleculeForceAndMotionCalculator.presetPressure( stateObject.private.moleculeForcesAndMotionCalculatorPressure );

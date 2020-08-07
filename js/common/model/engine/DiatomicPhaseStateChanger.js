@@ -66,7 +66,7 @@ class DiatomicPhaseStateChanger extends AbstractPhaseStateChanger {
     // Step the model a number of times in order to prevent the particles from looking too organized.  The number of
     // steps was empirically determined.
     for ( let i = 0; i < postChangeModelSteps; i++ ) {
-      this.multipleParticleModel.stepInternal( SOMConstants.NOMINAL_TIME_STEP );
+      this.multipleParticleModel.stepInTime( SOMConstants.NOMINAL_TIME_STEP );
     }
   }
 

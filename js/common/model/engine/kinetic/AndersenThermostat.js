@@ -124,6 +124,45 @@ class AndersenThermostat {
     this.accumulatedAverageVelocityChange.setXY( 0, 0 );
     this.totalVelocityChangePreviousStep.setXY( 0, 0 );
   }
+
+  /**
+   * Get an object that describes the current state, used to restore state using setState, used only for phet-io.
+   * @public - for phet-io support only
+   * @returns {Object}
+   */
+  toStateObject() {
+
+    // Note: The moleculeDataSet is *not* included as part of the state because this is assumed to be a reference that
+    // is shared with the model, and the model is responsible for updating its state during deserialization.
+
+    return {
+      targetTemperature: this.targetTemperature,
+      minModelTemperature: this.minModelTemperature,
+      previousParticleVelocity: this.previousParticleVelocity.toStateObject(),
+      totalVelocityChangePreviousStep: this.totalVelocityChangePreviousStep.toStateObject(),
+      totalVelocityChangeThisStep: this.totalVelocityChangeThisStep.toStateObject(),
+      accumulatedAverageVelocityChange: this.accumulatedAverageVelocityChange.toStateObject()
+    };
+  }
+
+  /**
+   * Set the state of this instance for phet-io.  This is used for phet-io, but not directly by the PhetioStateEngine -
+   * it is instead called during explicit de-serialization.
+   * @param {Object} stateObject - returned from toStateObject
+   * @public
+   */
+  setState( stateObject ) {
+
+    // Note: The moleculeDataSet is *not* included as part of the state because this is assumed to be a reference that
+    // is shared with the model, and the model is responsible for updating its state during deserialization.
+
+    this.targetTemperature = stateObject.targetTemperature;
+    this.minModelTemperature = stateObject.minModelTemperature;
+    this.previousParticleVelocity.set( stateObject.previousParticleVelocity );
+    this.totalVelocityChangePreviousStep.set( stateObject.totalVelocityChangePreviousStep );
+    this.totalVelocityChangeThisStep.set( stateObject.totalVelocityChangeThisStep );
+    this.accumulatedAverageVelocityChange.set( stateObject.accumulatedAverageVelocityChange );
+  }
 }
 
 statesOfMatter.register( 'AndersenThermostat', AndersenThermostat );
