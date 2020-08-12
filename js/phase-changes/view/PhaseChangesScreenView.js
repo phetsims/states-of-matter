@@ -61,8 +61,11 @@ class PhaseChangesScreenView extends ScreenView {
   constructor( model, isPotentialGraphEnabled, tandem ) {
 
     super( SOMConstants.SCREEN_VIEW_OPTIONS );
+
+    // @private
     this.multipleParticleModel = model;
     this.modelTemperatureHistory = new ObservableArray( { allowDuplicates: true } );
+    this.displayPhaseDiagram = true; // see usages for explanation
 
     // Create the model-view transform. The multipliers for the 2nd parameter can be used to adjust where the point
     // (0, 0) in the model, which is the lower left corner of the particle container, appears in the view.The final
@@ -276,6 +279,18 @@ class PhaseChangesScreenView extends ScreenView {
     } );
     this.addChild( this.phaseDiagramAccordionBox );
 
+    // Handle a special case for phet-io where, if the user has specified that the phase diagram is invisible using
+    // state save & load, the diagram is not shown again when the substance changes.  See
+    // https://github.com/phetsims/states-of-matter/issues/332
+    this.phaseDiagramAccordionBox.visibleProperty.lazyLink( visible => {
+      if ( !visible && phet.joist.sim.isSettingPhetioStateProperty.value ) {
+        this.displayPhaseDiagram = false;
+      }
+      else {
+        this.displayPhaseDiagram = true;
+      }
+    } );
+
     // @private - variables used to map temperature on to the phase diagram
     this.triplePointTemperatureInModelUnits = 0;
     this.criticalPointTemperatureInModelUnits = 0;
@@ -330,7 +345,7 @@ class PhaseChangesScreenView extends ScreenView {
       }
 
       // don't show the phase diagram for adjustable attraction, since we need the space for other things
-      this.phaseDiagramAccordionBox.visible = substance !== SubstanceType.ADJUSTABLE_ATOM;
+      this.phaseDiagramAccordionBox.visible = this.displayPhaseDiagram && substance !== SubstanceType.ADJUSTABLE_ATOM;
     } );
 
     // Update layout based on the visibility and bounds of the various control panels and accordion boxes.
