@@ -142,8 +142,8 @@ class PointingHandNode extends Node {
     this.addChild( pointingHandImageNode );
     this.addChild( hintNode );
 
-    // Expand the touch area.
-    this.touchArea = this.localBounds.dilatedXY( 10, 10 );
+    // Expand the touch area (only on the image, since that's where the drag handler will be).
+    pointingHandImageNode.touchArea = pointingHandImageNode.localBounds.dilatedXY( 10, 10 );
 
     // Add a listener to update the individual arrow visibility.
     phaseChangesModel.containerHeightProperty.link( particleContainerHeight => {
