@@ -196,17 +196,17 @@ class ForcesAccordionBox extends AccordionBox {
         {
           node: hideForce,
           value: ForceDisplayMode.HIDDEN,
-          tandemName: 'hideForce'
+          tandemName: 'hideForceRadioButton'
         },
         {
           node: totalForce,
           value: ForceDisplayMode.TOTAL,
-          tandemName: 'totalForce'
+          tandemName: 'totalForceRadioButton'
         },
         {
           node: componentForce,
           value: ForceDisplayMode.COMPONENTS,
-          tandemName: 'componentForce'
+          tandemName: 'componentForceRadioButton'
         }
       ],
       {

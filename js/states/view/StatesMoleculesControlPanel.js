@@ -22,8 +22,8 @@ import SubstanceType from '../../common/SubstanceType.js';
 import AtomAndMoleculeIconFactory from '../../common/view/AtomAndMoleculeIconFactory.js';
 import SOMColorProfile from '../../common/view/SOMColorProfile.js';
 import SubstanceSelectorNode from '../../common/view/SubstanceSelectorNode.js';
-import statesOfMatterStrings from '../../statesOfMatterStrings.js';
 import statesOfMatter from '../../statesOfMatter.js';
+import statesOfMatterStrings from '../../statesOfMatterStrings.js';
 
 const argonString = statesOfMatterStrings.argon;
 const atomsAndMoleculesString = statesOfMatterStrings.AtomsAndMolecules;
@@ -121,14 +121,14 @@ class StatesMoleculesControlPanel extends Node {
     };
 
     const radioButtonContent = [
-      { value: SubstanceType.NEON, node: createSelectionNode( neonSelectionNodeSpec ), tandemName: 'neon' },
-      { value: SubstanceType.ARGON, node: createSelectionNode( argonSelectionNodeSpec ), tandemName: 'argon' },
+      { value: SubstanceType.NEON, node: createSelectionNode( neonSelectionNodeSpec ), tandemName: 'neonRadioButton' },
+      { value: SubstanceType.ARGON, node: createSelectionNode( argonSelectionNodeSpec ), tandemName: 'argonRadioButton' },
       {
         value: SubstanceType.DIATOMIC_OXYGEN,
         node: createSelectionNode( oxygenSelectionNodeSpec ),
-        tandemName: 'oxygen'
+        tandemName: 'oxygenRadioButton'
       },
-      { value: SubstanceType.WATER, node: createSelectionNode( waterSelectionNodeSpec ), tandemName: 'water' }
+      { value: SubstanceType.WATER, node: createSelectionNode( waterSelectionNodeSpec ), tandemName: 'waterRadioButton' }
     ];
 
     const radioButtonGroup = new RadioButtonGroup( substanceProperty, radioButtonContent, {
