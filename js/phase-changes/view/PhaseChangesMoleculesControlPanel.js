@@ -148,22 +148,22 @@ class PhaseChangesMoleculesControlPanel extends Node {
       {
         value: SubstanceType.NEON,
         node: new SubstanceSelectorNode( neonSelectorInfo.label, neonSelectorInfo.icon, selectorWidth ),
-        tandemName: 'neon'
+        tandemName: 'neonRadioButton'
       },
       {
         value: SubstanceType.ARGON,
         node: new SubstanceSelectorNode( argonSelectorInfo.label, argonSelectorInfo.icon, selectorWidth ),
-        tandemName: 'argon'
+        tandemName: 'argonRadioButton'
       },
       {
         value: SubstanceType.DIATOMIC_OXYGEN,
         node: new SubstanceSelectorNode( oxygenSelectorInfo.label, oxygenSelectorInfo.icon, selectorWidth ),
-        tandemName: 'oxygen'
+        tandemName: 'oxygenRadioButton'
       },
       {
         value: SubstanceType.WATER,
         node: new SubstanceSelectorNode( waterSelectorInfo.label, waterSelectorInfo.icon, selectorWidth ),
-        tandemName: 'water'
+        tandemName: 'waterRadioButton'
       }
     ];
 
@@ -175,7 +175,7 @@ class PhaseChangesMoleculesControlPanel extends Node {
             adjustableAttractionSelectorInfo.icon,
             selectorWidth
           ),
-          tandemName: 'adjustableAttraction'
+          tandemName: 'adjustableAttractionRadioButton'
         }
       );
     }

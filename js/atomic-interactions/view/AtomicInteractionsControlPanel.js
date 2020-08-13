@@ -189,37 +189,37 @@ class AtomicInteractionsControlPanel extends Node {
           {
             node: createLabelNode( neonAndNeonLabelItems ),
             value: AtomPair.NEON_NEON,
-            tandemName: 'neonAndNeon'
+            tandemName: 'neonAndNeonRadioButton'
           },
           {
             node: createLabelNode( argonAndArgonLabelItems ),
             value: AtomPair.ARGON_ARGON,
-            tandemName: 'argonAndArgon'
+            tandemName: 'argonAndArgonRadioButton'
           },
           {
             node: createLabelNode( oxygenAndOxygenLabelItems ),
             value: AtomPair.OXYGEN_OXYGEN,
-            tandemName: 'oxygenAndOxygen'
+            tandemName: 'oxygenAndOxygenRadioButton'
           },
           {
             node: createLabelNode( neonAndArgonLabelItems ),
             value: AtomPair.NEON_ARGON,
-            tandemName: 'neonAndArgon'
+            tandemName: 'neonAndArgonRadioButton'
           },
           {
             node: createLabelNode( neonAndOxygenLabelItems ),
             value: AtomPair.NEON_OXYGEN,
-            tandemName: 'neonAndOxygen'
+            tandemName: 'neonAndOxygenRadioButton'
           },
           {
             node: createLabelNode( argonAndOxygenLabelItems ),
             value: AtomPair.ARGON_OXYGEN,
-            tandemName: 'argonAndOxygen'
+            tandemName: 'argonAndOxygenRadioButton'
           },
           {
             node: customAttractionLabel,
             value: AtomPair.ADJUSTABLE,
-            tandemName: 'adjustable'
+            tandemName: 'adjustableRadioButton'
           }
         ],
         {
@@ -315,17 +315,17 @@ class AtomicInteractionsControlPanel extends Node {
         {
           value: AtomPair.NEON_NEON,
           node: createLabelNode( neon ),
-          tandemName: 'neon'
+          tandemName: 'neonRadioButton'
         },
         {
           value: AtomPair.ARGON_ARGON,
           node: createLabelNode( argon ),
-          tandemName: 'argon'
+          tandemName: 'argonRadioButton'
         },
         {
           value: AtomPair.ADJUSTABLE,
           node: createLabelNode( adjustableAttraction ),
-          tandemName: 'adjustableAttraction'
+          tandemName: 'adjustableAttractionRadioButton'
         }
       ];
       const radioButtonGroup = new RadioButtonGroup( dualAtomModel.atomPairProperty, radioButtonContent, {
