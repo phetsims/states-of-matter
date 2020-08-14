@@ -56,7 +56,7 @@ class PhaseDiagramAccordionBox extends AccordionBox {
     const titleNode = new Text( phaseDiagramString, {
       fill: SOMColorProfile.controlPanelTextProperty,
       font: new PhetFont( { size: 13 } ),
-      maxWidth: options.maxWidth
+      maxWidth: options.maxWidth * 0.75
     } );
 
     super( phaseDiagram, merge( options, { titleNode: titleNode } ) );

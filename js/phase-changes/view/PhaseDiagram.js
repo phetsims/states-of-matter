@@ -27,7 +27,7 @@ const solidString = statesOfMatterStrings.solid;
 const temperatureString = statesOfMatterStrings.temperature;
 const triplePointString = statesOfMatterStrings.triplePoint;
 
-// constants that control the size of the canvas, empirically determined to work well for the nees of the sim
+// constants that control the size of the canvas, empirically determined to work well for the needs of the sim
 const WIDTH = 148;
 const HEIGHT = ( WIDTH * 0.75 );
 
