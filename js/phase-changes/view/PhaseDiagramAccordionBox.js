@@ -45,7 +45,10 @@ class PhaseDiagramAccordionBox extends AccordionBox {
         touchAreaXDilation: 15,
         touchAreaYDilation: 10
       },
-      tandem: options.tandem.createTandem( 'accordionBox' )
+      tandem: options.tandem.createTandem( 'accordionBox' ),
+      phetioComponentOptions: {
+        visibleProperty: { phetioReadOnly: true }
+      }
     }, options );
 
     const phaseDiagram = new PhaseDiagram();
