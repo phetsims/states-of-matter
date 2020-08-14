@@ -6,6 +6,7 @@
  * @author Siddhartha Chinthapally (Actual Concepts)
  */
 
+import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import Range from '../../../../dot/js/Range.js';
 import Utils from '../../../../dot/js/Utils.js';
@@ -458,10 +459,14 @@ class AtomicInteractionsControlPanel extends Node {
         titleNode.centerX = radioButtonPanel.centerX;
         titleNode.bottom = radioButtonPanel.top + 5; // empirically determined to overlap reasonably well
       } );
+
+      // Hide the title if all items are removed from the radio button group (which can only be done through phet-io).
+      atomPairSelector.localBoundsProperty.link( localBounds => {
+        titleNode.visible = !localBounds.equals( Bounds2.NOTHING );
+      } );
     }
     this.mutate( options );
   }
-
 }
 
 statesOfMatter.register( 'AtomicInteractionsControlPanel', AtomicInteractionsControlPanel );
