@@ -21,6 +21,7 @@ import ResetAllButton from '../../../../scenery-phet/js/buttons/ResetAllButton.j
 import HeaterCoolerNode from '../../../../scenery-phet/js/HeaterCoolerNode.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import TimeControlNode from '../../../../scenery-phet/js/TimeControlNode.js';
+import Node from '../../../../scenery/js/nodes/Node.js';
 import RichText from '../../../../scenery/js/nodes/RichText.js';
 import TextPushButton from '../../../../sun/js/buttons/TextPushButton.js';
 import MultipleParticleModel from '../../common/model/MultipleParticleModel.js';
@@ -108,7 +109,7 @@ class PhaseChangesScreenView extends ScreenView {
 
     // control when the heater/cooler node is enabled for input
     Property.multilink(
-      [model.isPlayingProperty, model.isExplodedProperty],
+      [ model.isPlayingProperty, model.isExplodedProperty ],
       ( isPlaying, isExploded ) => {
         if ( !isPlaying || isExploded ) {
           heaterCoolerNode.interruptSubtreeInput(); // cancel interaction
@@ -265,6 +266,12 @@ class PhaseChangesScreenView extends ScreenView {
     );
     this.addChild( moleculesControlPanel );
 
+    // Add a container node that will hold the phase diagram accordion box.  This is done so that the overall visibility
+    // of the diagram box can be controlled using phet-io independently of the dynamic hide/show behavior implemented
+    // below.  See https://github.com/phetsims/states-of-matter/issues/332.
+    const phaseDiagramContainer = new Node( { tandem: tandem.createTandem( 'phaseDiagramContainer' ) } );
+    this.addChild( phaseDiagramContainer );
+
     // add phase diagram - in SOM basic version by default phase diagram should be closed.
     model.phaseDiagramExpandedProperty.value = isPotentialGraphEnabled;
     this.phaseDiagramAccordionBox = new PhaseDiagramAccordionBox( model.phaseDiagramExpandedProperty, {
@@ -272,9 +279,9 @@ class PhaseChangesScreenView extends ScreenView {
       maxWidth: PANEL_WIDTH,
       right: moleculesControlPanel.right,
       top: moleculesControlPanel.top + INTER_PANEL_SPACING,
-      tandem: tandem.createTandem( 'phaseDiagramAccordionBox' )
+      tandem: phaseDiagramContainer.tandem.createTandem( 'phaseDiagramAccordionBox' )
     } );
-    this.addChild( this.phaseDiagramAccordionBox );
+    phaseDiagramContainer.addChild( this.phaseDiagramAccordionBox );
 
     // @private - variables used to map temperature on to the phase diagram
     this.triplePointTemperatureInModelUnits = 0;
@@ -335,7 +342,7 @@ class PhaseChangesScreenView extends ScreenView {
 
     // Update layout based on the visibility and bounds of the various control panels and accordion boxes.
     Property.multilink(
-      [this.phaseDiagramAccordionBox.visibleProperty, moleculesControlPanel.boundsProperty],
+      [ this.phaseDiagramAccordionBox.visibleProperty, moleculesControlPanel.boundsProperty ],
       ( phaseDiagramVisible, moleculeControlPanelBounds ) => {
         if ( isPotentialGraphEnabled ) {
           interactionPotentialAccordionBox.top = moleculeControlPanelBounds.bottom + INTER_PANEL_SPACING;
