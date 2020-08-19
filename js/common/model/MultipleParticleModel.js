@@ -314,10 +314,10 @@ class MultipleParticleModel extends PhetioObject {
     );
 
     // perform any phet-io-specific state setting actions
-    Tandem.PHET_IO_ENABLED && phet.phetio.phetioEngine.phetioStateEngine.stateSetEmitter.addListener( ( state, isInScope ) => {
+    Tandem.PHET_IO_ENABLED && phet.phetio.phetioEngine.phetioStateEngine.stateSetEmitter.addListener( ( state, scopeTandem ) => {
 
       // State can be set on a subset of a PhET-iO sim (like a screen), so make sure that this callback applies to this instance.
-      if ( isInScope( this.tandem ) ) {
+      if ( this.tandem.hasAncestor( scopeTandem ) ) {
 
         // make sure that we have the right number of scaled (i.e. non-normalized) atoms
         const numberOfNormalizedMolecules = this.moleculeDataSet.numberOfMolecules;
