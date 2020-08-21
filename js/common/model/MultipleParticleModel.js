@@ -314,30 +314,34 @@ class MultipleParticleModel extends PhetioObject {
     );
 
     // perform any phet-io-specific state setting actions
-    Tandem.PHET_IO_ENABLED && phet.phetio.phetioEngine.phetioStateEngine.stateSetEmitter.addListener( ( state, scopeTandem ) => {
+    Tandem.PHET_IO_ENABLED && phet.phetio.phetioEngine.phetioStateEngine.stateSetEmitter.addListener(
+      ( state, scopeTandem ) => {
 
-      // State can be set on a subset of a PhET-iO sim (like a screen), so make sure that this callback applies to this instance.
-      if ( this.tandem.hasAncestor( scopeTandem ) ) {
+        // State can be set on a subset of a PhET-iO sim (like a screen), so make sure that this callback applies to
+        // this instance.
+        if ( this.tandem.hasAncestor( scopeTandem ) ) {
 
-        // make sure that we have the right number of scaled (i.e. non-normalized) atoms
-        const numberOfNormalizedMolecules = this.moleculeDataSet.numberOfMolecules;
-        const numberOfNonNormalizedMolecules = this.scaledAtoms.length / this.moleculeDataSet.atomsPerMolecule;
-        if ( numberOfNormalizedMolecules > numberOfNonNormalizedMolecules ) {
-          this.addAtomsForCurrentSubstance( numberOfNormalizedMolecules - numberOfNonNormalizedMolecules );
+          // make sure that we have the right number of scaled (i.e. non-normalized) atoms
+          const numberOfNormalizedMolecules = this.moleculeDataSet.numberOfMolecules;
+          const numberOfNonNormalizedMolecules = this.scaledAtoms.length / this.moleculeDataSet.atomsPerMolecule;
+          if ( numberOfNormalizedMolecules > numberOfNonNormalizedMolecules ) {
+            this.addAtomsForCurrentSubstance( numberOfNormalizedMolecules - numberOfNonNormalizedMolecules );
+          }
+          else if ( numberOfNonNormalizedMolecules > numberOfNormalizedMolecules ) {
+            _.times(
+              ( numberOfNonNormalizedMolecules - numberOfNormalizedMolecules ) * this.moleculeDataSet.atomsPerMolecule,
+              () => {this.scaledAtoms.pop();}
+            );
+          }
+
+          // clear the injection counter - all atoms and molecules should be accounted for at this point
+          this.numMoleculesQueuedForInjectionProperty.reset();
+
+          // synchronize the positions of the scaled atoms to the normalized data set
+          this.syncAtomPositions();
         }
-        else if ( numberOfNonNormalizedMolecules > numberOfNormalizedMolecules ) {
-          _.times( ( numberOfNonNormalizedMolecules - numberOfNormalizedMolecules ) * this.moleculeDataSet.atomsPerMolecule, () => {
-            this.scaledAtoms.pop();
-          } );
-        }
-
-        // clear the injection counter - all atoms and molecules should be accounted for at this point
-        this.numMoleculesQueuedForInjectionProperty.reset();
-
-        // synchronize the positions of the scaled atoms to the normalized data set
-        this.syncAtomPositions();
       }
-    } );
+    );
   }
 
   /**
