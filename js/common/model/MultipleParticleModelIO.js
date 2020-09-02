@@ -6,7 +6,7 @@ import statesOfMatter from '../../statesOfMatter.js';
 import MultipleParticleModel from './MultipleParticleModel.js';
 
 /**
- * IO type for MultipleParticleModel
+ * IO Type for MultipleParticleModel
  *
  * @author John Blanco (PhET Interactive Simulations)
  * @author Michael Kauzmann (PhET Interactive Simulations)
