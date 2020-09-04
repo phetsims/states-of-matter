@@ -1,5 +1,5 @@
 {
-  "comment": "# states-of-matter 1.2.0 Fri Aug 21 2020 11:50:59 GMT-0600 (Mountain Daylight Time)",
+  "comment": "# states-of-matter 1.2.0 Thu Sep 03 2020 16:35:13 GMT-0800 (Alaska Daylight Time)",
   "assert": {
     "sha": "1a41cef653bbed1025af5768bea958d7e3e0f8ae",
     "branch": "HEAD"
@@ -13,8 +13,8 @@
     "branch": "HEAD"
   },
   "chipper": {
-    "sha": "bd228a8a821dd775e61fd3c8de0a5f7fa21a5562",
-    "branch": "HEAD"
+    "sha": "e6ce866b280eced56768611ae4cb77e04183fddc",
+    "branch": "states-of-matter-1.2"
   },
   "dot": {
     "sha": "3aa05218545989fcd42fcf53c6c4e6982605a6f2",
@@ -73,7 +73,7 @@
     "branch": "HEAD"
   },
   "states-of-matter": {
-    "sha": "84b40d6b516bd0e905dcc5fd622f5ea3ce7761de",
+    "sha": "d381093a85ef22acd7387b5e1cb2d24b0729afb3",
     "branch": "1.2"
   },
   "studio": {
