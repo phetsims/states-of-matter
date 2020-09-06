@@ -31,7 +31,7 @@ class MoleculeForceAndMotionDataSetIO extends ObjectIO {
 MoleculeForceAndMotionDataSetIO.documentation = 'particle data set';
 MoleculeForceAndMotionDataSetIO.validator = { valueType: MoleculeForceAndMotionDataSet };
 MoleculeForceAndMotionDataSetIO.typeName = 'MoleculeForceAndMotionDataSetIO';
-ObjectIO.validateSubtype( MoleculeForceAndMotionDataSetIO );
+ObjectIO.validateIOType( MoleculeForceAndMotionDataSetIO );
 
 statesOfMatter.register( 'MoleculeForceAndMotionDataSetIO', MoleculeForceAndMotionDataSetIO );
 export default MoleculeForceAndMotionDataSetIO;
