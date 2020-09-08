@@ -1,5 +1,5 @@
 {
-  "comment": "# states-of-matter 1.2.1-rc.1 Thu Sep 03 2020 16:57:09 GMT-0800 (Alaska Daylight Time)",
+  "comment": "# states-of-matter 1.2.1 Tue Sep 08 2020 08:25:22 GMT-0800 (Alaska Daylight Time)",
   "assert": {
     "sha": "1a41cef653bbed1025af5768bea958d7e3e0f8ae",
     "branch": "HEAD"
@@ -73,7 +73,7 @@
     "branch": "HEAD"
   },
   "states-of-matter": {
-    "sha": "722a2f20720bf82e60e39f6efd13f43d2a4d2d34",
+    "sha": "d5561d11cecf4f7e731e6b3e32b72a2560402ccd",
     "branch": "1.2"
   },
   "studio": {
