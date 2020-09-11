@@ -8,7 +8,7 @@
  * @author Siddhartha Chinthapally (Actual Concepts)
  */
 
-import timer from '../../../../axon/js/timer.js';
+import stepTimer from '../../../../axon/js/stepTimer.js';
 import Range from '../../../../dot/js/Range.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Shape from '../../../../kite/js/Shape.js';
@@ -141,7 +141,7 @@ class DialGaugeNode extends Node {
 
     // Update the pressure readout at regular intervals.  This was done rather than listening to the pressure property
     // because the readout changes too quickly in that case.
-    timer.setInterval( updateReadoutText, PRESSURE_UPDATE_PERIOD );
+    stepTimer.setInterval( updateReadoutText, PRESSURE_UPDATE_PERIOD );
 
     // If state is being set via phet-io, then it is necessary to update the readout when  pressureProperty changes since
     // the timer may not be running.
