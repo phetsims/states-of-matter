@@ -21,7 +21,6 @@
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
-import DerivedPropertyIO from '../../../../axon/js/DerivedPropertyIO.js';
 import Emitter from '../../../../axon/js/Emitter.js';
 import EnumerationProperty from '../../../../axon/js/EnumerationProperty.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
@@ -307,7 +306,7 @@ class MultipleParticleModel extends PhetioObject {
       () => this.getTemperatureInKelvin(),
       {
         units: 'K',
-        phetioType: DerivedPropertyIO( NullableIO( NumberIO ) ),
+        phetioType: DerivedProperty.DerivedPropertyIO( NullableIO( NumberIO ) ),
         tandem: tandem.createTandem( 'temperatureInKelvinProperty' ),
         phetReadOnly: true
       }
