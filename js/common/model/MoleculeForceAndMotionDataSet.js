@@ -12,7 +12,6 @@
  */
 
 import Vector2 from '../../../../dot/js/Vector2.js';
-import Vector2IO from '../../../../dot/js/Vector2IO.js';
 import ArrayIO from '../../../../tandem/js/types/ArrayIO.js';
 import BooleanIO from '../../../../tandem/js/types/BooleanIO.js';
 import Float64ArrayIO from '../../../../tandem/js/types/Float64ArrayIO.js';
@@ -24,7 +23,7 @@ import WaterMoleculeStructure from './engine/WaterMoleculeStructure.js';
 import required from '../../../../phet-core/js/required.js';
 
 // constants
-const ArrayIONullableIOVector2IO = ArrayIO( NullableIO( Vector2IO ) );
+const ArrayIONullableIOVector2IO = ArrayIO( NullableIO( Vector2.Vector2IO ) );
 const ArrayIOBooleanIO = ArrayIO( BooleanIO );
 
 class MoleculeForceAndMotionDataSet {
