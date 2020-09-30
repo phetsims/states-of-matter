@@ -34,6 +34,7 @@ import required from '../../../../phet-core/js/required.js';
 import PhetioObject from '../../../../tandem/js/PhetioObject.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import BooleanIO from '../../../../tandem/js/types/BooleanIO.js';
+import IOType from '../../../../tandem/js/types/IOType.js';
 import NullableIO from '../../../../tandem/js/types/NullableIO.js';
 import NumberIO from '../../../../tandem/js/types/NumberIO.js';
 import statesOfMatter from '../../statesOfMatter.js';
@@ -54,7 +55,6 @@ import WaterPhaseStateChanger from './engine/WaterPhaseStateChanger.js';
 import WaterVerletAlgorithm from './engine/WaterVerletAlgorithm.js';
 import MoleculeForceAndMotionDataSet from './MoleculeForceAndMotionDataSet.js';
 import MovingAverage from './MovingAverage.js';
-import MultipleParticleModelIO from './MultipleParticleModelIO.js';
 import HydrogenAtom from './particle/HydrogenAtom.js';
 import ScaledAtom from './particle/ScaledAtom.js';
 
@@ -129,7 +129,7 @@ class MultipleParticleModel extends PhetioObject {
 
     super( {
       tandem: tandem,
-      phetioType: MultipleParticleModelIO
+      phetioType: MultipleParticleModel.MultipleParticleModelIO
     } );
 
     //-----------------------------------------------------------------------------------------------------------------
@@ -1446,6 +1446,13 @@ class MultipleParticleModel extends PhetioObject {
 MultipleParticleModel.PARTICLE_CONTAINER_WIDTH = CONTAINER_WIDTH;
 MultipleParticleModel.PARTICLE_CONTAINER_INITIAL_HEIGHT = CONTAINER_INITIAL_HEIGHT;
 MultipleParticleModel.MAX_CONTAINER_EXPAND_RATE = MAX_CONTAINER_EXPAND_RATE;
+
+MultipleParticleModel.MultipleParticleModelIO = new IOType( 'MultipleParticleModelIO', {
+  valueType: MultipleParticleModel,
+  documentation: 'multiple particle model that simulates interactions that lead to phase-like behavior',
+  toStateObject: multipleParticleModel => multipleParticleModel.toStateObject(),
+  applyState: ( multipleParticleModel, state ) => multipleParticleModel.applyState( state )
+} );
 
 statesOfMatter.register( 'MultipleParticleModel', MultipleParticleModel );
 export default MultipleParticleModel;
