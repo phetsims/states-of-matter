@@ -15,6 +15,7 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import ArrayIO from '../../../../tandem/js/types/ArrayIO.js';
 import BooleanIO from '../../../../tandem/js/types/BooleanIO.js';
 import Float64ArrayIO from '../../../../tandem/js/types/Float64ArrayIO.js';
+import IOType from '../../../../tandem/js/types/IOType.js';
 import NullableIO from '../../../../tandem/js/types/NullableIO.js';
 import NumberIO from '../../../../tandem/js/types/NumberIO.js';
 import statesOfMatter from '../../statesOfMatter.js';
@@ -482,8 +483,15 @@ class MoleculeForceAndMotionDataSet {
     }
     console.log( '],' );
   }
-
 }
+
+// IO Type for MoleculeForceAndMotionDataSet, uses "data type" serialization where `fromStateObject returns a new
+// instance.
+MoleculeForceAndMotionDataSet.MoleculeForceAndMotionDataSetIO = new IOType( 'MoleculeForceAndMotionDataSetIO', {
+  valueType: MoleculeForceAndMotionDataSet,
+  documentation: 'particle data set',
+  toStateObject: moleculeForceAndMotionDataSet => moleculeForceAndMotionDataSet.toStateObject()
+} );
 
 statesOfMatter.register( 'MoleculeForceAndMotionDataSet', MoleculeForceAndMotionDataSet );
 export default MoleculeForceAndMotionDataSet;

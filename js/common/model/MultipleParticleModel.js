@@ -53,7 +53,6 @@ import WaterAtomPositionUpdater from './engine/WaterAtomPositionUpdater.js';
 import WaterPhaseStateChanger from './engine/WaterPhaseStateChanger.js';
 import WaterVerletAlgorithm from './engine/WaterVerletAlgorithm.js';
 import MoleculeForceAndMotionDataSet from './MoleculeForceAndMotionDataSet.js';
-import MoleculeForceAndMotionDataSetIO from './MoleculeForceAndMotionDataSetIO.js';
 import MovingAverage from './MovingAverage.js';
 import MultipleParticleModelIO from './MultipleParticleModelIO.js';
 import HydrogenAtom from './particle/HydrogenAtom.js';
@@ -1405,7 +1404,7 @@ class MultipleParticleModel extends PhetioObject {
         gravitationalAcceleration: this.gravitationalAcceleration,
         normalizedLidVelocityY: this.normalizedLidVelocityY,
         heatingCoolingAmount: this.heatingCoolingAmountProperty.value,
-        moleculeDataSet: MoleculeForceAndMotionDataSetIO.toStateObject( this.moleculeDataSet ),
+        moleculeDataSet: MoleculeForceAndMotionDataSet.MoleculeForceAndMotionDataSetIO.toStateObject( this.moleculeDataSet ),
         isoKineticThermostatState: this.isoKineticThermostat.toStateObject(),
         andersenThermostatState: this.andersenThermostat.toStateObject(),
         moleculeForcesAndMotionCalculatorPressure: this.moleculeForceAndMotionCalculator.pressureProperty.value
