@@ -24,7 +24,7 @@ import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import Emitter from '../../../../axon/js/Emitter.js';
 import EnumerationProperty from '../../../../axon/js/EnumerationProperty.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
-import ObservableArray from '../../../../axon/js/ObservableArray.js';
+import createObservableArray from '../../../../axon/js/createObservableArray.js';
 import Range from '../../../../dot/js/Range.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
@@ -225,7 +225,7 @@ class MultipleParticleModel extends PhetioObject {
     //-----------------------------------------------------------------------------------------------------------------
 
     // @public (read-only) {ObservableArray<ScaledAtom>} - array of scaled (i.e. non-normalized) atoms
-    this.scaledAtoms = new ObservableArray();
+    this.scaledAtoms = createObservableArray();
 
     // @public {MoleculeForceAndMotionDataSet} - data set containing information about the position, motion, and force
     // for the normalized atoms

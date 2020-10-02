@@ -9,7 +9,7 @@
  */
 
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
-import ObservableArray from '../../../../axon/js/ObservableArray.js';
+import createObservableArray from '../../../../axon/js/createObservableArray.js';
 import Property from '../../../../axon/js/Property.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Range from '../../../../dot/js/Range.js';
@@ -65,7 +65,7 @@ class PhaseChangesScreenView extends ScreenView {
 
     // @private
     this.multipleParticleModel = model;
-    this.modelTemperatureHistory = new ObservableArray( { allowDuplicates: true } );
+    this.modelTemperatureHistory = createObservableArray( { allowDuplicates: true } );
 
     // Create the model-view transform. The multipliers for the 2nd parameter can be used to adjust where the point
     // (0, 0) in the model, which is the lower left corner of the particle container, appears in the view.The final
