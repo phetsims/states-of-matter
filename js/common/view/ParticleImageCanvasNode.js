@@ -34,7 +34,7 @@ PARTICLE_RADIUS_TABLE[ AtomType.ADJUSTABLE ] = SOMConstants.ADJUSTABLE_ATTRACTIO
 class ParticleImageCanvasNode extends CanvasNode {
 
   /**
-   * @param {ObservableArray<Particle>} particles that need to be rendered on the canvas
+   * @param {ObservableArrayDef<Particle>} particles that need to be rendered on the canvas
    * @param {ModelViewTransform2} modelViewTransform to convert between model and view coordinate frames
    * @param {Object} [options] that can be passed on to the underlying node
    */

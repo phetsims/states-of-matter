@@ -224,7 +224,7 @@ class MultipleParticleModel extends PhetioObject {
     // other model attributes
     //-----------------------------------------------------------------------------------------------------------------
 
-    // @public (read-only) {ObservableArray<ScaledAtom>} - array of scaled (i.e. non-normalized) atoms
+    // @public (read-only) {ObservableArrayDef<ScaledAtom>} - array of scaled (i.e. non-normalized) atoms
     this.scaledAtoms = createObservableArray();
 
     // @public {MoleculeForceAndMotionDataSet} - data set containing information about the position, motion, and force
