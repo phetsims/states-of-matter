@@ -8,8 +8,8 @@
  * @author Aaron Davis
  */
 
-import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import createObservableArray from '../../../../axon/js/createObservableArray.js';
+import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import Property from '../../../../axon/js/Property.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Range from '../../../../dot/js/Range.js';
@@ -227,10 +227,10 @@ class PhaseChangesScreenView extends ScreenView {
       // phet-io
       tandem: tandem.createTandem( 'returnLidButton' ),
       phetioReadOnly: true,
+      visiblePropertyOptions: { phetioReadOnly: true },
       phetioComponentOptions: {
         opacityProperty: { phetioReadOnly: true },
-        pickableProperty: { phetioReadOnly: true },
-        visibleProperty: { phetioReadOnly: true }
+        pickableProperty: { phetioReadOnly: true }
       },
       enabledPropertyOptions: { phetioReadOnly: true }
     } );

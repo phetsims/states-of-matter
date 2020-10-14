@@ -7,10 +7,10 @@
  * @author John Blanco
  */
 
-import merge from '../../../../phet-core/js/merge.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Matrix3 from '../../../../dot/js/Matrix3.js';
 import Shape from '../../../../kite/js/Shape.js';
+import merge from '../../../../phet-core/js/merge.js';
 import HandleNode from '../../../../scenery-phet/js/HandleNode.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import DragListener from '../../../../scenery/js/listeners/DragListener.js';
@@ -105,9 +105,7 @@ class ParticleContainerNode extends Node {
     // root of the lid node
     const lidNode = new Node( {
       tandem: options.tandem.createTandem( 'lidNode' ),
-      phetioComponentOptions: {
-        visibleProperty: { phetioReadOnly: true }
-      }
+      visiblePropertyOptions: { phetioReadOnly: true }
     } );
     postParticleLayer.addChild( lidNode );
 

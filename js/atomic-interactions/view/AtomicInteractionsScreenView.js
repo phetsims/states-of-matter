@@ -114,10 +114,10 @@ class AtomicInteractionsScreenView extends ScreenView {
       tandem: tandem.createTandem( 'returnAtomButton' ),
       visible: false,
       phetioReadOnly: true,
+      visiblePropertyOptions: { phetioReadOnly: true },
       phetioComponentOptions: {
         opacityProperty: { phetioReadOnly: true },
-        pickableProperty: { phetioReadOnly: true },
-        visibleProperty: { phetioReadOnly: true }
+        pickableProperty: { phetioReadOnly: true }
       },
       enabledPropertyOptions: { phetioReadOnly: true }
     } );
@@ -204,10 +204,9 @@ class AtomicInteractionsScreenView extends ScreenView {
       this.dualAtomModel,
       this.dualAtomModel.movableAtom,
       this.modelViewTransform,
-      0,
-      {
+      0, {
         tandem: tandem.createTandem( 'handNode' ),
-        phetioComponentOptions: { visibleProperty: { phetioReadOnly: true } }
+        visiblePropertyOptions: { phetioReadOnly: true }
       }
     );
 
