@@ -228,10 +228,6 @@ class PhaseChangesScreenView extends ScreenView {
       tandem: tandem.createTandem( 'returnLidButton' ),
       phetioReadOnly: true,
       visiblePropertyOptions: { phetioReadOnly: true },
-
-      // TODO: we likely don't need this, can we remove the pickableProperty? see https://github.com/phetsims/scenery/issues/1092
-      pickablePropertyInstrumented: true,
-      pickablePropertyOptions: { phetioReadOnly: true },
       enabledPropertyOptions: { phetioReadOnly: true }
     } );
     this.addChild( this.returnLidButton );
