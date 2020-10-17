@@ -105,6 +105,7 @@ class ParticleContainerNode extends Node {
     // root of the lid node
     const lidNode = new Node( {
       tandem: options.tandem.createTandem( 'lidNode' ),
+      pickablePropertyInstrumented: true,
       visiblePropertyOptions: { phetioReadOnly: true }
     } );
     postParticleLayer.addChild( lidNode );
