@@ -30,7 +30,10 @@ class ParticleNode extends Node {
   constructor( particle, modelViewTransform, enableOverlap, tandem ) {
     assert && assert( particle && modelViewTransform );
 
-    super( { tandem: tandem } );
+    super( {
+      tandem: tandem,
+      pickablePropertyInstrumented: true
+    } );
 
     // @private
     this.particle = particle;
