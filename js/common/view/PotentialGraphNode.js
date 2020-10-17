@@ -140,7 +140,7 @@ class PotentialGraphNode extends Node {
     }
 
     const epsilonGraphLabel = new Node( {
-      children: [this.epsilonArrow, this.epsilonLabel],
+      children: [ this.epsilonArrow, this.epsilonLabel ],
       tandem: options.tandem.createTandem( 'epsilonGraphLabel' )
     } );
     this.ljPotentialGraph.addChild( epsilonGraphLabel );
@@ -160,7 +160,7 @@ class PotentialGraphNode extends Node {
     } );
 
     const sigmaGraphLabel = new Node( {
-      children: [this.sigmaArrow, this.sigmaLabel],
+      children: [ this.sigmaArrow, this.sigmaLabel ],
       tandem: options.tandem.createTandem( 'sigmaGraphLabel' )
     } );
     this.ljPotentialGraph.addChild( sigmaGraphLabel );

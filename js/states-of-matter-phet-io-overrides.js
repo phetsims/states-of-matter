@@ -70,13 +70,7 @@ window.phet.preloads.phetio.phetioElementsOverrides =
     "statesOfMatter.interactionScreen.view.interactivePotentialGraph.interactiveControls.visibleProperty": {
       "phetioFeatured": true
     },
-    "statesOfMatter.interactionScreen.view.interactivePotentialGraph.positionMarker.pickableProperty": {
-      "phetioFeatured": true
-    },
     "statesOfMatter.interactionScreen.view.interactivePotentialGraph.sigmaGraphLabel.visibleProperty": {
-      "phetioFeatured": true
-    },
-    "statesOfMatter.interactionScreen.view.movableParticleNode.pickableProperty": {
       "phetioFeatured": true
     },
     "statesOfMatter.interactionScreen.view.returnAtomButton.enabledProperty": {
@@ -170,9 +164,6 @@ window.phet.preloads.phetio.phetioElementsOverrides =
       "phetioFeatured": true
     },
     "statesOfMatter.phaseChangesScreen.view.particleContainerNode.lidNode.handleNode.visibleProperty": {
-      "phetioFeatured": true
-    },
-    "statesOfMatter.phaseChangesScreen.view.particleContainerNode.lidNode.pickableProperty": {
       "phetioFeatured": true
     },
     "statesOfMatter.phaseChangesScreen.view.particleContainerNode.lidNode.pointingHandNode.visibleProperty": {
