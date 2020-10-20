@@ -20,11 +20,11 @@
  */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
+import createObservableArray from '../../../../axon/js/createObservableArray.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import Emitter from '../../../../axon/js/Emitter.js';
 import EnumerationProperty from '../../../../axon/js/EnumerationProperty.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
-import createObservableArray from '../../../../axon/js/createObservableArray.js';
 import Range from '../../../../dot/js/Range.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
@@ -32,7 +32,6 @@ import EnumerationIO from '../../../../phet-core/js/EnumerationIO.js';
 import merge from '../../../../phet-core/js/merge.js';
 import required from '../../../../phet-core/js/required.js';
 import PhetioObject from '../../../../tandem/js/PhetioObject.js';
-import Tandem from '../../../../tandem/js/Tandem.js';
 import BooleanIO from '../../../../tandem/js/types/BooleanIO.js';
 import IOType from '../../../../tandem/js/types/IOType.js';
 import NullableIO from '../../../../tandem/js/types/NullableIO.js';
@@ -308,36 +307,6 @@ class MultipleParticleModel extends PhetioObject {
         phetioType: DerivedProperty.DerivedPropertyIO( NullableIO( NumberIO ) ),
         tandem: tandem.createTandem( 'temperatureInKelvinProperty' ),
         phetReadOnly: true
-      }
-    );
-
-    // perform any phet-io-specific state setting actions
-    Tandem.PHET_IO_ENABLED && phet.phetio.phetioEngine.phetioStateEngine.stateSetEmitter.addListener(
-      ( state, scopeTandem ) => {
-
-        // State can be set on a subset of a PhET-iO sim (like a screen), so make sure that this callback applies to
-        // this instance.
-        if ( this.tandem.hasAncestor( scopeTandem ) ) {
-
-          // make sure that we have the right number of scaled (i.e. non-normalized) atoms
-          const numberOfNormalizedMolecules = this.moleculeDataSet.numberOfMolecules;
-          const numberOfNonNormalizedMolecules = this.scaledAtoms.length / this.moleculeDataSet.atomsPerMolecule;
-          if ( numberOfNormalizedMolecules > numberOfNonNormalizedMolecules ) {
-            this.addAtomsForCurrentSubstance( numberOfNormalizedMolecules - numberOfNonNormalizedMolecules );
-          }
-          else if ( numberOfNonNormalizedMolecules > numberOfNormalizedMolecules ) {
-            _.times(
-              ( numberOfNonNormalizedMolecules - numberOfNormalizedMolecules ) * this.moleculeDataSet.atomsPerMolecule,
-              () => {this.scaledAtoms.pop();}
-            );
-          }
-
-          // clear the injection counter - all atoms and molecules should be accounted for at this point
-          this.numMoleculesQueuedForInjectionProperty.reset();
-
-          // synchronize the positions of the scaled atoms to the normalized data set
-          this.syncAtomPositions();
-        }
       }
     );
   }
@@ -1431,14 +1400,33 @@ class MultipleParticleModel extends PhetioObject {
     this.heatingCoolingAmountProperty.set( stateObject.private.heatingCoolingAmount );
     this.gravitationalAcceleration = stateObject.private.gravitationalAcceleration;
     this.normalizedLidVelocityY = stateObject.private.normalizedLidVelocityY;
-    this.isoKineticThermostat.setState( stateObject.private.isoKineticThermostatState ),
-      this.andersenThermostat.setState( stateObject.private.andersenThermostatState ),
+    this.isoKineticThermostat.setState( stateObject.private.isoKineticThermostatState );
+    this.andersenThermostat.setState( stateObject.private.andersenThermostatState );
 
-      // Set the molecule data set.  This includes all the positions, velocities, etc. for the particles.
-      this.moleculeDataSet.setState( stateObject.private.moleculeDataSet );
+    // Set the molecule data set.  This includes all the positions, velocities, etc. for the particles.
+    this.moleculeDataSet.setState( stateObject.private.moleculeDataSet );
 
     // Preset the pressure in the accumulator that tracks it so that it doesn't have to start from zero.
     this.moleculeForceAndMotionCalculator.presetPressure( stateObject.private.moleculeForcesAndMotionCalculatorPressure );
+
+    // Make sure that we have the right number of scaled (i.e. non-normalized) atoms.
+    const numberOfNormalizedMolecules = this.moleculeDataSet.numberOfMolecules;
+    const numberOfNonNormalizedMolecules = this.scaledAtoms.length / this.moleculeDataSet.atomsPerMolecule;
+    if ( numberOfNormalizedMolecules > numberOfNonNormalizedMolecules ) {
+      this.addAtomsForCurrentSubstance( numberOfNormalizedMolecules - numberOfNonNormalizedMolecules );
+    }
+    else if ( numberOfNonNormalizedMolecules > numberOfNormalizedMolecules ) {
+      _.times(
+        ( numberOfNonNormalizedMolecules - numberOfNormalizedMolecules ) * this.moleculeDataSet.atomsPerMolecule,
+        () => {this.scaledAtoms.pop();}
+      );
+    }
+
+    // Clear the injection counter - all atoms and molecules should be accounted for at this point.
+    this.numMoleculesQueuedForInjectionProperty.reset();
+
+    // Synchronize the positions of the scaled atoms to the normalized data set.
+    this.syncAtomPositions();
   }
 }
 
