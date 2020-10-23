@@ -12,7 +12,7 @@ import merge from '../../../../phet-core/js/merge.js';
 import ZoomButton from '../../../../scenery-phet/js/buttons/ZoomButton.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import Path from '../../../../scenery/js/nodes/Path.js';
-import RectangularButtonView from '../../../../sun/js/buttons/RectangularButtonView.js';
+import RectangularButton from '../../../../sun/js/buttons/RectangularButton.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import statesOfMatter from '../../statesOfMatter.js';
 
@@ -70,7 +70,7 @@ class ZoomableGridNode extends Node {
         xMargin: 3,
         yMargin: 3,
         disabledBaseColor: '#EDEDED',
-        buttonAppearanceStrategy: RectangularButtonView.FlatAppearanceStrategy,
+        buttonAppearanceStrategy: RectangularButton.FlatAppearanceStrategy,
         touchAreaXDilation: 10,
         touchAreaYDilation: 8,
         touchAreaYShift: -7,
@@ -91,7 +91,7 @@ class ZoomableGridNode extends Node {
         xMargin: 3,
         yMargin: 3,
         disabledBaseColor: '#EDEDED',
-        buttonAppearanceStrategy: RectangularButtonView.FlatAppearanceStrategy,
+        buttonAppearanceStrategy: RectangularButton.FlatAppearanceStrategy,
         in: false,
         touchAreaXDilation: 10,
         touchAreaYDilation: 8,
