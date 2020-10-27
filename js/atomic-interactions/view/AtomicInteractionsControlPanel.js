@@ -20,7 +20,7 @@ import Node from '../../../../scenery/js/nodes/Node.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import VBox from '../../../../scenery/js/nodes/VBox.js';
 import AquaRadioButtonGroup from '../../../../sun/js/AquaRadioButtonGroup.js';
-import RadioButtonGroup from '../../../../sun/js/buttons/RadioButtonGroup.js';
+import RectangularRadioButtonGroup from '../../../../sun/js/buttons/RectangularRadioButtonGroup.js';
 import Panel from '../../../../sun/js/Panel.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import pushPinImg from '../../../images/push-pin_png.js';
@@ -329,7 +329,7 @@ class AtomicInteractionsControlPanel extends Node {
           tandemName: 'adjustableAttractionRadioButton'
         }
       ];
-      const radioButtonGroup = new RadioButtonGroup( dualAtomModel.atomPairProperty, radioButtonContent, {
+      const radioButtonGroup = new RectangularRadioButtonGroup( dualAtomModel.atomPairProperty, radioButtonContent, {
         orientation: 'vertical',
         cornerRadius: 5,
         baseColor: 'black',

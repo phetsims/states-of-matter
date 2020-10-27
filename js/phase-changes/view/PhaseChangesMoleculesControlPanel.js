@@ -16,7 +16,7 @@ import Node from '../../../../scenery/js/nodes/Node.js';
 import Rectangle from '../../../../scenery/js/nodes/Rectangle.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import VBox from '../../../../scenery/js/nodes/VBox.js';
-import RadioButtonGroup from '../../../../sun/js/buttons/RadioButtonGroup.js';
+import RectangularRadioButtonGroup from '../../../../sun/js/buttons/RectangularRadioButtonGroup.js';
 import Panel from '../../../../sun/js/Panel.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import SOMConstants from '../../common/SOMConstants.js';
@@ -180,7 +180,7 @@ class PhaseChangesMoleculesControlPanel extends Node {
       );
     }
 
-    const radioButtonGroup = new RadioButtonGroup( phaseChangesModel.substanceProperty, radioButtonContent, {
+    const radioButtonGroup = new RectangularRadioButtonGroup( phaseChangesModel.substanceProperty, radioButtonContent, {
       orientation: 'vertical',
       spacing: 3,
       cornerRadius: 5,

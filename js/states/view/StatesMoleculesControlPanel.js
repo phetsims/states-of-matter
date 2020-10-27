@@ -14,7 +14,7 @@ import HBox from '../../../../scenery/js/nodes/HBox.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import Rectangle from '../../../../scenery/js/nodes/Rectangle.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
-import RadioButtonGroup from '../../../../sun/js/buttons/RadioButtonGroup.js';
+import RectangularRadioButtonGroup from '../../../../sun/js/buttons/RectangularRadioButtonGroup.js';
 import Panel from '../../../../sun/js/Panel.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import SOMConstants from '../../common/SOMConstants.js';
@@ -131,7 +131,7 @@ class StatesMoleculesControlPanel extends Node {
       { value: SubstanceType.WATER, node: createSelectionNode( waterSelectionNodeSpec ), tandemName: 'waterRadioButton' }
     ];
 
-    const radioButtonGroup = new RadioButtonGroup( substanceProperty, radioButtonContent, {
+    const radioButtonGroup = new RectangularRadioButtonGroup( substanceProperty, radioButtonContent, {
       orientation: 'vertical',
       cornerRadius: 5,
       baseColor: 'black',
