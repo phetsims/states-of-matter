@@ -185,7 +185,6 @@ class PhaseChangesMoleculesControlPanel extends Node {
       spacing: 3,
       cornerRadius: 5,
       baseColor: 'black',
-      disabledBaseColor: 'black',
       selectedLineWidth: 1,
       selectedStroke: 'white',
       deselectedLineWidth: 0,

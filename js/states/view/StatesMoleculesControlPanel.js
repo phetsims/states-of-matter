@@ -135,7 +135,6 @@ class StatesMoleculesControlPanel extends Node {
       orientation: 'vertical',
       cornerRadius: 5,
       baseColor: 'black',
-      disabledBaseColor: 'black',
       selectedLineWidth: 1,
       selectedStroke: 'white',
       deselectedLineWidth: 0,
