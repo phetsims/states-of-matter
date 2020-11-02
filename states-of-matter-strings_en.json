@@ -154,8 +154,5 @@
   },
   "customAttraction": {
     "value": "Custom Attraction"
-  },
-  "temperatureReadoutPattern": {
-    "value": "{{value}} {{units}}"
   }
 }
