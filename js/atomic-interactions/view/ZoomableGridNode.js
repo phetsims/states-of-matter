@@ -66,7 +66,9 @@ class ZoomableGridNode extends Node {
           atomsView.drawPotentialCurve();
         },
         baseColor: '#FFD333',
-        magnifyingGlassRadius: 8,
+        magnifyingGlassOptions:{
+          glassRadius:8
+        },
         xMargin: 3,
         yMargin: 3,
         buttonAppearanceStrategy: ButtonNode.FlatAppearanceStrategy,
@@ -86,7 +88,9 @@ class ZoomableGridNode extends Node {
           atomsView.drawPotentialCurve();
         },
         baseColor: '#FFD333',
-        magnifyingGlassRadius: 8,
+        magnifyingGlassOptions:{
+          glassRadius:8
+        },
         xMargin: 3,
         yMargin: 3,
         buttonAppearanceStrategy: ButtonNode.FlatAppearanceStrategy,
