@@ -24,6 +24,7 @@ import InteractionPotentialCanvasNode from '../../common/view/InteractionPotenti
 import PotentialGraphNode from '../../common/view/PotentialGraphNode.js';
 import SOMColorProfile from '../../common/view/SOMColorProfile.js';
 import statesOfMatter from '../../statesOfMatter.js';
+import Utils from '../../../../dot/js/Utils.js';
 
 // constants
 const RESIZE_HANDLE_SIZE_PROPORTION = 0.05;  // Size of handles as function of node width.
@@ -65,23 +66,30 @@ class InteractivePotentialGraph extends PotentialGraphNode {
     this.interactionEnabled = false;
 
     // Create a convenience function for adding a drag handler that adjusts epsilon, this is done to avoid code duplication.
-    let startDragY;
-    let endDragY;
-
     const addEpsilonDragListener = ( node, tandem ) => {
+
+      let startDragY;
+      let startEpsilonValue;
+      let endDragY;
+
       node.addInputListener( new DragListener( {
 
         start: event => {
           dualAtomModel.setMotionPaused( true );
           startDragY = node.globalToParentPoint( event.pointer.point ).y;
+          startEpsilonValue = dualAtomModel.getEpsilon();
         },
 
         drag: event => {
           endDragY = node.globalToParentPoint( event.pointer.point ).y;
-          const d = endDragY - startDragY;
-          startDragY = endDragY;
+          const dy = endDragY - startDragY;
           const scaleFactor = SOMConstants.MAX_EPSILON / ( this.getGraphHeight() / 2 );
-          dualAtomModel.adjustableAtomInteractionStrengthProperty.value = dualAtomModel.getEpsilon() + ( d * scaleFactor );
+
+          dualAtomModel.adjustableAtomInteractionStrengthProperty.value = Utils.clamp(
+            startEpsilonValue + ( dy * scaleFactor ),
+            SOMConstants.MIN_EPSILON,
+            SOMConstants.MAX_EPSILON
+          );
         },
 
         end: event => {
@@ -167,27 +175,31 @@ class InteractivePotentialGraph extends PotentialGraphNode {
 
     sigmaLayer.addChild( this.sigmaControls.arrow );
     this.sigmaControls.arrow.touchArea = this.sigmaControls.arrow.localBounds.dilatedXY( 10, 5 );
+
+    // Add a drag listener for adjusting the sigma value, also known as the atom diameter.
     let startDragX;
     let endDragX;
+    let atomDiameterAtDragStart;
     this.sigmaControls.arrow.addInputListener( new DragListener( {
 
       start: event => {
         dualAtomModel.setMotionPaused( true );
         startDragX = this.sigmaControls.arrow.globalToParentPoint( event.pointer.point ).x;
+        atomDiameterAtDragStart = dualAtomModel.adjustableAtomDiameterProperty.value;
       },
 
       drag: event => {
         endDragX = this.sigmaControls.arrow.globalToParentPoint( event.pointer.point ).x;
-        const d = endDragX - startDragX;
-        startDragX = endDragX;
+        const dx = endDragX - startDragX;
         const scaleFactor = this.xRange / ( this.getGraphWidth() );
-        const atomDiameter = dualAtomModel.getSigma() + ( d * scaleFactor );
-        dualAtomModel.adjustableAtomDiameterProperty.value = atomDiameter > SOMConstants.MIN_SIGMA ?
-                                                             ( atomDiameter < SOMConstants.MAX_SIGMA ? atomDiameter :
-                                                               SOMConstants.MAX_SIGMA ) : SOMConstants.MIN_SIGMA;
+        dualAtomModel.adjustableAtomDiameterProperty.value = Utils.clamp(
+          atomDiameterAtDragStart + ( dx * scaleFactor ),
+          SOMConstants.MIN_SIGMA,
+          SOMConstants.MAX_SIGMA
+        );
       },
 
-      end: event => {
+      end: () => {
         dualAtomModel.setMotionPaused( false );
       },
 
