@@ -42,6 +42,7 @@ class ParticleForceNode extends ParticleNode {
     this.repulsiveForce = 0;
 
     const commonForceArrowNodeOptions = {
+      pickable: false,
       headHeight: FORCE_ARROW_HEAD_LENGTH,
       headWidth: FORCE_ARROW_HEAD_WIDTH,
       tailWidth: FORCE_ARROW_TAIL_WIDTH,
@@ -83,7 +84,6 @@ class ParticleForceNode extends ParticleNode {
       particle.positionProperty.unlink( handlePositionChanged );
     };
   }
-
 
   /**
    * @public
