@@ -9,6 +9,7 @@
  * @author Siddhartha Chinthapally (Actual Concepts)
  */
 
+import dotRandom from '../../../../../../dot/js/dotRandom.js';
 import Vector2 from '../../../../../../dot/js/Vector2.js';
 import statesOfMatter from '../../../../statesOfMatter.js';
 import SOMConstants from '../../../SOMConstants.js';
@@ -123,7 +124,7 @@ class IsokineticThermostat {
       // get stuck on the bottom of the container since they have no energy to scale.  Only linear kinetic energy is
       // adjusted here, since it is simpler and seems to work.
       for ( i = 0; i < numberOfParticles; i++ ) {
-        let angle = phet.joist.random.nextDouble() * Math.PI;
+        let angle = dotRandom.nextDouble() * Math.PI;
         if ( angle < 0 ) {
           angle += Math.PI;
         }

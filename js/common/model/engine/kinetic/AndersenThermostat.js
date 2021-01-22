@@ -10,6 +10,7 @@
  * @author Siddhartha Chinthapally (Actual Concepts)
  */
 
+import dotRandom from '../../../../../../dot/js/dotRandom.js';
 import Vector2 from '../../../../../../dot/js/Vector2.js';
 import statesOfMatter from '../../../../statesOfMatter.js';
 import SOMConstants from '../../../SOMConstants.js';
@@ -37,7 +38,7 @@ class AndersenThermostat {
     this.moleculeDataSet = moleculeDataSet;
 
     // @private - pseudo-random number generator
-    this.random = phet.joist.random;
+    this.random = dotRandom;
 
     // @private {Vector2} - reusable vector used for calculating velocity changes
     this.previousParticleVelocity = new Vector2( 0, 0 );

@@ -25,6 +25,7 @@ import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import Emitter from '../../../../axon/js/Emitter.js';
 import EnumerationProperty from '../../../../axon/js/EnumerationProperty.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
+import dotRandom from '../../../../dot/js/dotRandom.js';
 import Range from '../../../../dot/js/Range.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
@@ -619,14 +620,14 @@ class MultipleParticleModel extends PhetioObject {
     );
 
     // Choose an injection angle with some amount of randomness.
-    const injectionAngle = ( phet.joist.random.nextDouble() - 0.5 ) * INJECTED_MOLECULE_ANGLE_SPREAD;
+    const injectionAngle = ( dotRandom.nextDouble() - 0.5 ) * INJECTED_MOLECULE_ANGLE_SPREAD;
 
     // Set the molecule's velocity.
     const xVel = Math.cos( injectionAngle ) * INJECTED_MOLECULE_SPEED;
     const yVel = Math.sin( injectionAngle ) * INJECTED_MOLECULE_SPEED;
 
     // Set the rotational velocity to a random value within a range (will be ignored for single atom cases).
-    const moleculeRotationRate = ( phet.joist.random.nextDouble() - 0.5 ) * ( Math.PI / 4 );
+    const moleculeRotationRate = ( dotRandom.nextDouble() - 0.5 ) * ( Math.PI / 4 );
 
     // Set the position(s) of the atom(s).
     const atomsPerMolecule = this.moleculeDataSet.atomsPerMolecule;
@@ -650,7 +651,7 @@ class MultipleParticleModel extends PhetioObject {
 
       // randomize the rotational angle of multi-atom molecules
       this.moleculeDataSet.moleculeRotationAngles[ this.moleculeDataSet.getNumberOfMolecules() - 1 ] =
-        phet.joist.random.nextDouble() * 2 * Math.PI;
+        dotRandom.nextDouble() * 2 * Math.PI;
     }
 
     // Position the atoms that comprise the molecules.
@@ -697,7 +698,7 @@ class MultipleParticleModel extends PhetioObject {
         case SubstanceType.WATER:
           this.scaledAtoms.push( new ScaledAtom( AtomType.OXYGEN, 0, 0 ) );
           this.scaledAtoms.push( new HydrogenAtom( 0, 0, true ) );
-          this.scaledAtoms.push( new HydrogenAtom( 0, 0, phet.joist.random.nextDouble() > 0.5 ) );
+          this.scaledAtoms.push( new HydrogenAtom( 0, 0, dotRandom.nextDouble() > 0.5 ) );
           break;
 
         default:

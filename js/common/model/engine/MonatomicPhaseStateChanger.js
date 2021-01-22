@@ -7,6 +7,7 @@
  * @author Aaron Davis
  */
 
+import dotRandom from '../../../../../dot/js/dotRandom.js';
 import Utils from '../../../../../dot/js/Utils.js';
 import statesOfMatter from '../../../statesOfMatter.js';
 import SOMConstants from '../../SOMConstants.js';
@@ -25,7 +26,7 @@ class MonatomicPhaseStateChanger extends AbstractPhaseStateChanger {
   constructor( multipleParticleModel ) {
     super( multipleParticleModel );
     this.positionUpdater = MonatomicAtomPositionUpdater;
-    this.random = phet.joist.random;
+    this.random = dotRandom;
   }
 
   /**

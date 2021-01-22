@@ -8,6 +8,7 @@
  * @author Aaron Davis
  */
 
+import dotRandom from '../../../../../dot/js/dotRandom.js';
 import Vector2 from '../../../../../dot/js/Vector2.js';
 import statesOfMatter from '../../../statesOfMatter.js';
 import PhaseStateEnum from '../../PhaseStateEnum.js';
@@ -29,7 +30,7 @@ class AbstractPhaseStateChanger {
     // @private
     this.multipleParticleModel = multipleParticleModel;
     this.moleculePosition = new Vector2( 0, 0 );
-    this.random = phet.joist.random;
+    this.random = dotRandom;
     this.reusableVector = new Vector2( 0, 0 );
   }
 
