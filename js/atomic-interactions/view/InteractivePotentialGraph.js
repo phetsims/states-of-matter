@@ -189,7 +189,7 @@ class InteractivePotentialGraph extends PotentialGraphNode {
       drag: event => {
         currentDragX = this.sigmaControls.arrow.globalToParentPoint( event.pointer.point ).x;
         const dx = currentDragX - startDragX;
-        const scaleFactor = this.xRange / ( this.getGraphWidth() );
+        const scaleFactor = this.xRange / this.getGraphWidth();
         dualAtomModel.adjustableAtomDiameterProperty.value = Utils.clamp(
           atomDiameterAtDragStart + ( dx * scaleFactor ),
           SOMConstants.MIN_SIGMA,
@@ -207,6 +207,9 @@ class InteractivePotentialGraph extends PotentialGraphNode {
     // Add the ability to grab and move the position marker. This node will need to be pickable so the user can grab it.
     this.positionMarker.setPickable( true );
     this.positionMarker.touchArea = Shape.circle( 0, 0, 13 );
+    let positionMarkerStartDragX;
+    let positionMarkerCurrentDragX;
+    let atomStartXPosition;
     this.positionMarker.addInputListener( new DragListener( {
         allowTouchSnag: true,
 
@@ -214,7 +217,8 @@ class InteractivePotentialGraph extends PotentialGraphNode {
 
           // Stop the particle from moving in the model.
           dualAtomModel.setMotionPaused( true );
-          startDragX = this.positionMarker.globalToParentPoint( event.pointer.point ).x;
+          positionMarkerStartDragX = this.positionMarker.globalToParentPoint( event.pointer.point ).x;
+          atomStartXPosition = dualAtomModel.movableAtom.getX();
         },
 
         drag: event => {
@@ -224,17 +228,17 @@ class InteractivePotentialGraph extends PotentialGraphNode {
 
           // Move the movable atom based on this drag event.
           const atom = dualAtomModel.movableAtom;
-          currentDragX = this.positionMarker.globalToParentPoint( event.pointer.point ).x;
-          const xDifference = currentDragX - startDragX;
-          const scaleFactor = this.xRange / ( this.getGraphWidth() );
-          const newPosX = Math.max( atom.getX() + ( xDifference * scaleFactor ), this.minXForAtom );
+          positionMarkerCurrentDragX = this.positionMarker.globalToParentPoint( event.pointer.point ).x;
+          const xDifference = positionMarkerCurrentDragX - positionMarkerStartDragX;
+          const scaleFactor = this.xRange / this.getGraphWidth();
+          const newPosX = Math.max( atomStartXPosition + ( xDifference * scaleFactor ), this.minXForAtom );
           atom.setPosition( newPosX, atom.getY() );
-          startDragX = currentDragX;
         },
 
-        end: event => {
-          // Let the model move the particle again.  Note that this happens
-          // even if the motion was paused by some other means.
+        end: () => {
+
+          // Let the model move the particle again.  Note that this happens even if the motion was paused by some other
+          // means.
           dualAtomModel.setMotionPaused( false );
         },
 
