@@ -70,7 +70,7 @@ class InteractivePotentialGraph extends PotentialGraphNode {
 
       let startDragY;
       let startEpsilonValue;
-      let endDragY;
+      let currentDragY;
 
       node.addInputListener( new DragListener( {
 
@@ -81,18 +81,16 @@ class InteractivePotentialGraph extends PotentialGraphNode {
         },
 
         drag: event => {
-          endDragY = node.globalToParentPoint( event.pointer.point ).y;
-          const dy = endDragY - startDragY;
-          const scaleFactor = SOMConstants.MAX_EPSILON / ( this.getGraphHeight() / 2 );
-
+          currentDragY = node.globalToParentPoint( event.pointer.point ).y;
+          const dy = currentDragY - startDragY;
           dualAtomModel.adjustableAtomInteractionStrengthProperty.value = Utils.clamp(
-            startEpsilonValue + ( dy * scaleFactor ),
+            startEpsilonValue + ( dy / this.verticalScalingFactor / SOMConstants.K_BOLTZMANN ),
             SOMConstants.MIN_EPSILON,
             SOMConstants.MAX_EPSILON
           );
         },
 
-        end: event => {
+        end: () => {
           dualAtomModel.setMotionPaused( false );
         },
 
@@ -178,7 +176,7 @@ class InteractivePotentialGraph extends PotentialGraphNode {
 
     // Add a drag listener for adjusting the sigma value, also known as the atom diameter.
     let startDragX;
-    let endDragX;
+    let currentDragX;
     let atomDiameterAtDragStart;
     this.sigmaControls.arrow.addInputListener( new DragListener( {
 
@@ -189,8 +187,8 @@ class InteractivePotentialGraph extends PotentialGraphNode {
       },
 
       drag: event => {
-        endDragX = this.sigmaControls.arrow.globalToParentPoint( event.pointer.point ).x;
-        const dx = endDragX - startDragX;
+        currentDragX = this.sigmaControls.arrow.globalToParentPoint( event.pointer.point ).x;
+        const dx = currentDragX - startDragX;
         const scaleFactor = this.xRange / ( this.getGraphWidth() );
         dualAtomModel.adjustableAtomDiameterProperty.value = Utils.clamp(
           atomDiameterAtDragStart + ( dx * scaleFactor ),
@@ -226,12 +224,12 @@ class InteractivePotentialGraph extends PotentialGraphNode {
 
           // Move the movable atom based on this drag event.
           const atom = dualAtomModel.movableAtom;
-          endDragX = this.positionMarker.globalToParentPoint( event.pointer.point ).x;
-          const xDifference = endDragX - startDragX;
+          currentDragX = this.positionMarker.globalToParentPoint( event.pointer.point ).x;
+          const xDifference = currentDragX - startDragX;
           const scaleFactor = this.xRange / ( this.getGraphWidth() );
           const newPosX = Math.max( atom.getX() + ( xDifference * scaleFactor ), this.minXForAtom );
           atom.setPosition( newPosX, atom.getY() );
-          startDragX = endDragX;
+          startDragX = currentDragX;
         },
 
         end: event => {
