@@ -201,7 +201,8 @@ class AtomicInteractionsScreenView extends ScreenView {
       this.dualAtomModel,
       this.dualAtomModel.movableAtom,
       this.modelViewTransform,
-      0, {
+      0,
+      {
         tandem: tandem.createTandem( 'handNode' ),
         visiblePropertyOptions: { phetioReadOnly: true }
       }

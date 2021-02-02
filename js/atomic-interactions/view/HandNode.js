@@ -53,7 +53,8 @@ class HandNode extends Node {
 
     // add the drag handler
     let startDragX;
-    let endDragX;
+    let currentDragX;
+    let particleStartXPosition;
     const inputListener = new DragListener( {
 
       start: event => {
@@ -61,20 +62,23 @@ class HandNode extends Node {
         // Stop the model from moving the particle at the same time the user is moving it.
         dualAtomModel.setMotionPaused( true );
         startDragX = this.globalToParentPoint( event.pointer.point ).x;
+        particleStartXPosition = this.particle.getX();
       },
 
       drag: event => {
 
-        endDragX = this.globalToParentPoint( event.pointer.point ).x;
-        const d = endDragX - startDragX;
-        startDragX = endDragX;        // Make sure we don't exceed the positional limits.
-        const newPosX = Math.max( modelViewTransform.modelToViewX( this.particle.getX() ) + d, this.minX );
+        currentDragX = this.globalToParentPoint( event.pointer.point ).x;
+        const dx = currentDragX - startDragX;
+        const newXPosition = Math.max(
+          particleStartXPosition + modelViewTransform.viewToModelDeltaX( dx ),
+          modelViewTransform.viewToModelX( this.minX )
+        );
 
-        // Move the particle based on the amount of mouse movement.
-        this.particle.setPosition( modelViewTransform.viewToModelX( newPosX ), this.particle.getY() );
+        // Move the particle based on the amount of pointer movement.
+        this.particle.setPosition( newXPosition, this.particle.getY() );
       },
 
-      end: event => {
+      end: () => {
 
         // Let the model move the particles again.  Note that this happens even if the motion was paused by some other
         // means.
