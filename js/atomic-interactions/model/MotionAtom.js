@@ -26,7 +26,7 @@ class MotionAtom {
    */
   constructor( initialAtomType, initialXPosition, initialYPosition, tandem ) {
 
-    // @public (read-write) {EnumerationProperty<AtomType>} - the type of atom being modeled, e.g. Argon, Neon, etc.
+    // @public (read-write) {EnumerationProperty.<AtomType>} - the type of atom being modeled, e.g. Argon, Neon, etc.
     this.atomTypeProperty = new EnumerationProperty( AtomType, initialAtomType, {
       tandem: tandem.createTandem( 'atomTypeProperty' ),
       phetioReadOnly: true

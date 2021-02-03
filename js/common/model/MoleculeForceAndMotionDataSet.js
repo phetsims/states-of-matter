@@ -289,7 +289,7 @@ class MoleculeForceAndMotionDataSet {
 
   /**
    * Add a new molecule to the model.  The molecule must have been created and initialized before being added.
-   * @param {Array<Vector2>} atomPositions
+   * @param {Array.<Vector2>} atomPositions
    * @param {Vector2} moleculeCenterOfMassPosition
    * @param {Vector2} moleculeVelocity
    * @param {number} moleculeRotationRate
