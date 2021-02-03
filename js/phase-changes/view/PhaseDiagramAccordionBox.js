@@ -21,7 +21,7 @@ const phaseDiagramString = statesOfMatterStrings.phaseDiagram;
 class PhaseDiagramAccordionBox extends AccordionBox {
 
   /**
-   * @param {Property<boolean>} expandedProperty - is to expand the phase diagram
+   * @param {Property.<boolean>} expandedProperty - is to expand the phase diagram
    * @param {Object} [options] that can be passed on to the underlying node
    */
   constructor( expandedProperty, options ) {

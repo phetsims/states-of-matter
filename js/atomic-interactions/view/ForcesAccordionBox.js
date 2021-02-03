@@ -42,8 +42,8 @@ const ICON_PADDING = 35; // empirically determined to put the icons in a good po
 class ForcesAccordionBox extends AccordionBox {
 
   /**
-   * @param {Property<string>} forcesProperty that determines which forces to display
-   * @param {Property<boolean>} forceControlPanelExpandProperty -true to use force panel expand, false if not
+   * @param {Property.<string>} forcesProperty that determines which forces to display
+   * @param {Property.<boolean>} forceControlPanelExpandProperty -true to use force panel expand, false if not
    * @param {Object} [options] for various panel display properties
    */
   constructor( forcesProperty, forceControlPanelExpandProperty, options ) {

@@ -37,7 +37,7 @@ const DEFAULT_WIDTH = 160;
 class StatesMoleculesControlPanel extends Node {
 
   /**
-   * @param {Property<number>} substanceProperty that tracks the substance selected in the panel
+   * @param {Property.<number>} substanceProperty that tracks the substance selected in the panel
    * @param {Object} [options] for various panel display properties
    */
   constructor( substanceProperty, options ) {
