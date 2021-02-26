@@ -7,6 +7,6 @@
 import Enumeration from '../../../../phet-core/js/Enumeration.js';
 import statesOfMatter from '../../statesOfMatter.js';
 
-const ForceDisplayMode = Enumeration.byKeys( ['COMPONENTS', 'TOTAL', 'HIDDEN'] );
+const ForceDisplayMode = Enumeration.byKeys( [ 'COMPONENTS', 'TOTAL', 'HIDDEN' ] );
 statesOfMatter.register( 'ForceDisplayMode', ForceDisplayMode );
 export default ForceDisplayMode;

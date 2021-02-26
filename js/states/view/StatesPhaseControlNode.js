@@ -146,7 +146,7 @@ class StatesPhaseControlNode extends Node {
 
     // put the buttons together in a single VBox
     const buttons = new VBox( {
-      children: [solidStateButton, liquidStateButton, gasStateButton],
+      children: [ solidStateButton, liquidStateButton, gasStateButton ],
       spacing: 10,
       align: 'center'
     } );

@@ -66,7 +66,7 @@ class PointingHandNode extends Node {
     pointingHandImageNode.scale( WIDTH / pointingHandImageNode.width );
 
     const hintNode = new Node( {
-      children: [upArrowNode, downArrowNode],
+      children: [ upArrowNode, downArrowNode ],
       visible: false,
       top: pointingHandImageNode.bottom - 50, // adjusted a bit for better look
       left: pointingHandImageNode.right - 20 // adjusted a bit for better look

@@ -66,8 +66,8 @@ class ZoomableGridNode extends Node {
           atomsView.drawPotentialCurve();
         },
         baseColor: '#FFD333',
-        magnifyingGlassOptions:{
-          glassRadius:8
+        magnifyingGlassOptions: {
+          glassRadius: 8
         },
         xMargin: 3,
         yMargin: 3,
@@ -88,8 +88,8 @@ class ZoomableGridNode extends Node {
           atomsView.drawPotentialCurve();
         },
         baseColor: '#FFD333',
-        magnifyingGlassOptions:{
-          glassRadius:8
+        magnifyingGlassOptions: {
+          glassRadius: 8
         },
         xMargin: 3,
         yMargin: 3,

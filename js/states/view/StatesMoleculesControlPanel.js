@@ -115,7 +115,7 @@ class StatesMoleculesControlPanel extends Node {
       }
       else {
         return new HBox( {
-          children: [selectionNodeSpec.label]
+          children: [ selectionNodeSpec.label ]
         } );
       }
     };
@@ -160,7 +160,7 @@ class StatesMoleculesControlPanel extends Node {
 
     // create the background for the title - initial size is arbitrary, it will be sized and positioned below
     const titleBackground = new Rectangle( 0, 0, 1, 1, { fill: options.fill } );
-    this.addChild( new Node( { children: [titleBackground, title] } ) );
+    this.addChild( new Node( { children: [ titleBackground, title ] } ) );
 
     // closure for updating the title background size and overall position
     const updateTitle = () => {

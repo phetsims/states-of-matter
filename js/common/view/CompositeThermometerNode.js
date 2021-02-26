@@ -40,7 +40,7 @@ const CELSIUS_TEMPERATURE_RANGE = new Range(
 const TEMPERATURE_READOUT_FONT = new PhetFont( 11 );
 
 // local enum
-const TemperatureUnits = Enumeration.byKeys( ['KELVIN', 'CELSIUS'] );
+const TemperatureUnits = Enumeration.byKeys( [ 'KELVIN', 'CELSIUS' ] );
 
 // clamping the red mercury display at 1000
 const MAX_TEMPERATURE_TO_CLAMP_RED_MERCURY = 1000;
@@ -88,7 +88,7 @@ class CompositeThermometerNode extends Node {
 
     // Property that contains the temperature in degrees Celsius
     const temperatureInCelsiusProperty = new DerivedProperty(
-      [multipleParticleModel.temperatureInKelvinProperty],
+      [ multipleParticleModel.temperatureInKelvinProperty ],
       temperatureInKelvin => temperatureInKelvin === null ? null : kelvinToCelsius( temperatureInKelvin )
     );
 
@@ -130,7 +130,7 @@ class CompositeThermometerNode extends Node {
 
     this.addChild( new VBox( {
       spacing: 10,
-      children: [temperatureComboBoxDisplay, thermometerNode],
+      children: [ temperatureComboBoxDisplay, thermometerNode ],
       resize: false
     } ) );
     this.addChild( comboBoxListParent );

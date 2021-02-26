@@ -76,7 +76,7 @@ class PhaseChangesModel extends MultipleParticleModel {
     } );
 
     // @public (read-only) - a derived property that indicates whether the lid is higher than the injection point
-    this.lidAboveInjectionPointProperty = new DerivedProperty( [this.containerHeightProperty], containerHeight => {
+    this.lidAboveInjectionPointProperty = new DerivedProperty( [ this.containerHeightProperty ], containerHeight => {
 
       // This may appear a little suspect, but the model is designed such that the container height is always reset
       // to its max when the particle diameter and injection change, so this can be trusted.

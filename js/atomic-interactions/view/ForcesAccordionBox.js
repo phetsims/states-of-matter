@@ -133,8 +133,8 @@ class ForcesAccordionBox extends AccordionBox {
     };
 
     // compute the maximum item width
-    const widestItem = _.maxBy( [hideForcesText, totalForceText, attractiveText, vanderwaalsText, repulsiveText,
-      electronOverlapText], item => {
+    const widestItem = _.maxBy( [ hideForcesText, totalForceText, attractiveText, vanderwaalsText, repulsiveText,
+      electronOverlapText ], item => {
       return item.label.width + ( ( item.icon ) ? item.icon.width + ICON_PADDING : 0 );
     } );
     const maxWidth = widestItem.label.width + ( ( widestItem.icon ) ? widestItem.icon.width + ICON_PADDING : 0 );
@@ -143,10 +143,10 @@ class ForcesAccordionBox extends AccordionBox {
     const createConsistentlySpacedLabel = labelSpec => {
       if ( labelSpec.icon ) {
         const strutWidth = maxWidth - labelSpec.label.width - labelSpec.icon.width;
-        return new HBox( { children: [labelSpec.label, new HStrut( strutWidth ), labelSpec.icon] } );
+        return new HBox( { children: [ labelSpec.label, new HStrut( strutWidth ), labelSpec.icon ] } );
       }
       else {
-        return new HBox( { children: [labelSpec.label] } );
+        return new HBox( { children: [ labelSpec.label ] } );
       }
     };
 
@@ -156,7 +156,7 @@ class ForcesAccordionBox extends AccordionBox {
         createConsistentlySpacedLabel( attractiveText ),
         createConsistentlySpacedLabel( vanderwaalsText ),
         createConsistentlySpacedLabel( repulsiveText ),
-        createConsistentlySpacedLabel( electronOverlapText )],
+        createConsistentlySpacedLabel( electronOverlapText ) ],
       align: 'left'
     } );
 
@@ -178,17 +178,17 @@ class ForcesAccordionBox extends AccordionBox {
     const bracketToTextSpacing = 2;
     const componentForce = new HBox( {
       spacing: bracketToTextSpacing,
-      children: [bracket, componentForceText]
+      children: [ bracket, componentForceText ]
     } );
     const totalForceStrutWidth = maxWidth - totalForceText.label.width - totalForceText.icon.width + bracket.width + bracketToTextSpacing;
     const totalForceItem = new HBox( {
-      children: [totalForceText.label,
+      children: [ totalForceText.label,
         new HStrut( totalForceStrutWidth ),
-        totalForceText.icon]
+        totalForceText.icon ]
     } );
 
-    const totalForce = new HBox( { spacing: 2, children: [totalForceItem] } );
-    const hideForce = new HBox( { spacing: 2, children: [createConsistentlySpacedLabel( hideForcesText )] } );
+    const totalForce = new HBox( { spacing: 2, children: [ totalForceItem ] } );
+    const hideForce = new HBox( { spacing: 2, children: [ createConsistentlySpacedLabel( hideForcesText ) ] } );
 
     const radioButtonGroup = new AquaRadioButtonGroup(
       forcesProperty,

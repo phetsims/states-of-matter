@@ -27,7 +27,7 @@ class GlobalOptionsNode extends VBox {
 
     // VBox is used to make it easy to add additional options
     super( {
-      children: [projectorModeCheckbox],
+      children: [ projectorModeCheckbox ],
       spacing: OptionsDialog.DEFAULT_SPACING,
       align: 'left'
     } );

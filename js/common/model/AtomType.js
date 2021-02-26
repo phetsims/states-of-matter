@@ -9,7 +9,7 @@
 import Enumeration from '../../../../phet-core/js/Enumeration.js';
 import statesOfMatter from '../../statesOfMatter.js';
 
-const AtomType = Enumeration.byKeys( ['NEON', 'ARGON', 'OXYGEN', 'HYDROGEN', 'ADJUSTABLE'] );
+const AtomType = Enumeration.byKeys( [ 'NEON', 'ARGON', 'OXYGEN', 'HYDROGEN', 'ADJUSTABLE' ] );
 
 statesOfMatter.register( 'AtomType', AtomType );
 export default AtomType;

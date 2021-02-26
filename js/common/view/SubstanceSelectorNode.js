@@ -26,7 +26,7 @@ class SubstanceSelectorNode extends HBox {
       stroke: Color.TRANSPARENT // it can be helpful during debugging to changes this to a visible color
     } );
     super( {
-      children: [label, spacer, icon]
+      children: [ label, spacer, icon ]
     } );
 
     // resize the spacer if the label size changes

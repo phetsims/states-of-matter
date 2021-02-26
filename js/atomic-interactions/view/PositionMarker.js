@@ -53,7 +53,7 @@ class PositionMarker extends Node {
     super( {
       children: [ haloNode, sphereNode ],
       tandem: options.tandem,
-      pickablePropertyPhetioInstrumented:true
+      pickablePropertyPhetioInstrumented: true
     } );
 
     // @private

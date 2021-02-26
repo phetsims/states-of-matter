@@ -80,7 +80,7 @@ class StatesScreenView extends ScreenView {
 
     // control when the heater/cooler node is enabled for input
     Property.multilink(
-      [multipleParticleModel.isPlayingProperty, multipleParticleModel.isExplodedProperty],
+      [ multipleParticleModel.isPlayingProperty, multipleParticleModel.isExplodedProperty ],
       ( isPlaying, isExploded ) => {
         if ( !isPlaying || isExploded ) {
           heaterCoolerNode.interruptSubtreeInput(); // cancel interaction

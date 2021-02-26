@@ -51,7 +51,7 @@ class InteractionPotentialAccordionBox extends AccordionBox {
     accordionContent.addChild( graph.interactionPotentialCanvasNode );
     accordionContent.addChild( graph.ljPotentialGraph );
 
-    const accordionContentHBox = new HBox( { children: [accordionContent] } );
+    const accordionContentHBox = new HBox( { children: [ accordionContent ] } );
     const titleNode = new Text( interactionPotentialString, {
       fill: SOMColorProfile.controlPanelTextProperty,
       font: new PhetFont( { size: 13 } )
