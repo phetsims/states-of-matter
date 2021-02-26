@@ -72,10 +72,10 @@ class MoleculeForceAndMotionDataSet {
     this.moleculeTorques = new Float64Array( maxNumMolecules );
     this.nextMoleculeTorques = new Float64Array( maxNumMolecules );
     for ( let i = 0; i < SOMConstants.MAX_NUM_ATOMS / this.atomsPerMolecule; i++ ) {
-      this.moleculeRotationAngles [ i ] = 0;
+      this.moleculeRotationAngles[ i ] = 0;
       this.moleculeRotationRates[ i ] = 0;
       this.moleculeTorques[ i ] = 0;
-      this.nextMoleculeTorques [ i ] = 0;
+      this.nextMoleculeTorques[ i ] = 0;
     }
 
     // Set default values.
