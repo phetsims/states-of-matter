@@ -396,7 +396,7 @@ class MultipleParticleModel extends PhetioObject {
         break;
 
       default:
-        throw( new Error( 'unsupported substance' ) ); // should never happen, debug if it does
+        throw new Error( 'unsupported substance' ); // should never happen, debug if it does
     }
 
     if ( this.temperatureSetPointProperty.get() <= this.minModelTemperature ) {
@@ -501,7 +501,7 @@ class MultipleParticleModel extends PhetioObject {
         break;
 
       default:
-        throw( new Error( 'unsupported substance' ) ); // should never happen, debug if it does
+        throw new Error( 'unsupported substance' ); // should never happen, debug if it does
     }
 
     // Reset the container height.
@@ -746,7 +746,7 @@ class MultipleParticleModel extends PhetioObject {
         this.initializeTriatomic( this.substanceProperty.get(), phase );
         break;
       default:
-        throw( new Error( 'unsupported substance' ) ); // should never happen, debug if it does
+        throw new Error( 'unsupported substance' ); // should never happen, debug if it does
     }
 
     // This is needed in case we were switching from another molecule that was under pressure.
