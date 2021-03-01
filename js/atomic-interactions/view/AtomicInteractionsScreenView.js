@@ -48,7 +48,7 @@ class AtomicInteractionsScreenView extends ScreenView {
 
     // due to some odd behavior, we need to turn on preventFit for this screen, see
     // https://github.com/phetsims/states-of-matter/issues/176
-    const screenViewOptions = merge( { preventFit: true }, SOMConstants.SCREEN_VIEW_OPTIONS );
+    const screenViewOptions = merge( { preventFit: true, tandem: tandem }, SOMConstants.SCREEN_VIEW_OPTIONS );
 
     super( screenViewOptions );
 

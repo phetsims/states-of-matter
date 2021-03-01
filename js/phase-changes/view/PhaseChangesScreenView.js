@@ -15,6 +15,7 @@ import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import ScreenView from '../../../../joist/js/ScreenView.js';
+import merge from '../../../../phet-core/js/merge.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import BicyclePumpNode from '../../../../scenery-phet/js/BicyclePumpNode.js';
 import ResetAllButton from '../../../../scenery-phet/js/buttons/ResetAllButton.js';
@@ -61,7 +62,7 @@ class PhaseChangesScreenView extends ScreenView {
    */
   constructor( model, isPotentialGraphEnabled, tandem ) {
 
-    super( SOMConstants.SCREEN_VIEW_OPTIONS );
+    super( merge( { tandem: tandem }, SOMConstants.SCREEN_VIEW_OPTIONS ) );
 
     // @private
     this.multipleParticleModel = model;
