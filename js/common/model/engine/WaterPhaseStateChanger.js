@@ -61,7 +61,7 @@ class WaterPhaseStateChanger extends AbstractPhaseStateChanger {
     if ( this.multipleParticleModel.substanceProperty.get() === SubstanceType.WATER ) {
       dataSetToLoad = SOLID_INITIAL_STATES.water;
     }
-    assert && assert( dataSetToLoad, 'unhandled substance: ' + this.multipleParticleModel.substanceProperty.get() );
+    assert && assert( dataSetToLoad, `unhandled substance: ${this.multipleParticleModel.substanceProperty.get()}` );
 
     // load the previously saved state
     this.loadSavedState( dataSetToLoad );
@@ -82,7 +82,7 @@ class WaterPhaseStateChanger extends AbstractPhaseStateChanger {
     if ( this.multipleParticleModel.substanceProperty.get() === SubstanceType.WATER ) {
       dataSetToLoad = LIQUID_INITIAL_STATES.water;
     }
-    assert && assert( dataSetToLoad, 'unhandled substance: ' + this.multipleParticleModel.substanceProperty.get() );
+    assert && assert( dataSetToLoad, `unhandled substance: ${this.multipleParticleModel.substanceProperty.get()}` );
 
     // load the previously saved state
     this.loadSavedState( dataSetToLoad );

@@ -268,7 +268,7 @@ class AtomicInteractionsScreenView extends ScreenView {
       this.setShowRepulsiveForces( forces === ForceDisplayMode.COMPONENTS );
       this.setShowTotalForces( forces === ForceDisplayMode.TOTAL );
       if ( !this.showAttractiveForces && !this.showTotalForces && forces !== ForceDisplayMode.HIDDEN ) {
-        throw new Error( 'invalid forces: ' + forces );
+        throw new Error( `invalid forces: ${forces}` );
       }
     } );
 

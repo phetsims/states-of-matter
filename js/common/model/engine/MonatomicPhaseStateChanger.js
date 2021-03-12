@@ -90,7 +90,7 @@ class MonatomicPhaseStateChanger extends AbstractPhaseStateChanger {
     else if ( this.multipleParticleModel.substanceProperty.get() === SubstanceType.ADJUSTABLE_ATOM ) {
       dataSetToLoad = LIQUID_INITIAL_STATES.adjustableAttraction;
     }
-    assert && assert( dataSetToLoad, 'unhandled substance: ' + this.multipleParticleModel.substanceProperty.get() );
+    assert && assert( dataSetToLoad, `unhandled substance: ${this.multipleParticleModel.substanceProperty.get()}` );
     this.loadSavedState( dataSetToLoad );
   }
 }

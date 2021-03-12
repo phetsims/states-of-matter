@@ -124,7 +124,7 @@ class DialGaugeNode extends Node {
       const pressure = multipleParticleModel.pressureProperty.get();
       if ( pressure !== previousPressure ) {
         if ( pressure < MAX_PRESSURE ) {
-          readoutText.setText( Utils.toFixed( pressure, 1 ) + ' ' + pressureUnitsInAtmString );
+          readoutText.setText( `${Utils.toFixed( pressure, 1 )} ${pressureUnitsInAtmString}` );
           readoutText.fill = 'black';
         }
         else {

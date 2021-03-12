@@ -55,7 +55,7 @@ class DiatomicPhaseStateChanger extends AbstractPhaseStateChanger {
         postChangeModelSteps = 0;
         break;
       default:
-        throw new Error( 'invalid phaseState: ' + phaseState );
+        throw new Error( `invalid phaseState: ${phaseState}` );
     }
 
     const moleculeDataSet = this.multipleParticleModel.moleculeDataSet;
@@ -99,7 +99,7 @@ class DiatomicPhaseStateChanger extends AbstractPhaseStateChanger {
     if ( this.multipleParticleModel.substanceProperty.get() === SubstanceType.DIATOMIC_OXYGEN ) {
       dataSetToLoad = LIQUID_INITIAL_STATES.oxygen;
     }
-    assert && assert( dataSetToLoad, 'unhandled substance: ' + this.multipleParticleModel.substanceProperty.get() );
+    assert && assert( dataSetToLoad, `unhandled substance: ${this.multipleParticleModel.substanceProperty.get()}` );
 
     // load the previously saved state
     this.loadSavedState( dataSetToLoad );

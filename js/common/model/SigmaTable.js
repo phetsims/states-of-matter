@@ -42,7 +42,7 @@ const SigmaTable = {
         return SOMConstants.ADJUSTABLE_ATTRACTION_DEFAULT_RADIUS * 2;
       }
       else {
-        assert && assert( false, 'Error: Interaction potential not available for requested atom: ' + atomType1 );
+        assert && assert( false, `Error: Interaction potential not available for requested atom: ${atomType1}` );
         return SOMConstants.MAX_EPSILON / 2;
       }
     }
@@ -67,8 +67,8 @@ const SigmaTable = {
         return SOMConstants.ADJUSTABLE_ATTRACTION_DEFAULT_RADIUS * 2;
       }
       else {
-        assert && assert( false, 'Error: sigma data not available for this combination of molecules: ' + atomType1 +
-                                 ', ' + atomType2 );
+        assert && assert( false, `Error: sigma data not available for this combination of molecules: ${atomType1
+                                 }, ${atomType2}` );
         return ( SOMConstants.MAX_SIGMA - SOMConstants.MIN_SIGMA ) / 2;
       }
     }

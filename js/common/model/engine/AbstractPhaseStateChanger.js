@@ -52,7 +52,7 @@ class AbstractPhaseStateChanger {
         this.setPhaseGas();
         break;
       default:
-        throw new Error( 'invalid phaseID: ' + phaseID );
+        throw new Error( `invalid phaseID: ${phaseID}` );
     }
   }
 
@@ -73,7 +73,7 @@ class AbstractPhaseStateChanger {
         this.setParticleConfigurationGas();
         break;
       default:
-        throw new Error( 'invalid phaseID: ' + phaseID );
+        throw new Error( `invalid phaseID: ${phaseID}` );
     }
   }
 
@@ -94,7 +94,7 @@ class AbstractPhaseStateChanger {
         this.multipleParticleModel.setTemperature( SOMConstants.GAS_TEMPERATURE );
         break;
       default:
-        throw new Error( 'invalid phaseID: ' + phaseID );
+        throw new Error( `invalid phaseID: ${phaseID}` );
     }
   }
 

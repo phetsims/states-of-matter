@@ -53,7 +53,7 @@ const InteractionStrengthTable = {
         return DEFAULT_ADJUSTABLE_INTERACTION_POTENTIAL;
       }
       else {
-        assert && assert( false, 'Interaction potential not available for requested atom: ' + atomType1 );
+        assert && assert( false, `Interaction potential not available for requested atom: ${atomType1}` );
         return SOMConstants.MAX_EPSILON / 2;  // In the real world, default to an arbitrary value.
       }
     }
