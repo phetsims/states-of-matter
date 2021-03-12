@@ -132,7 +132,7 @@ class WaterVerletAlgorithm extends AbstractVerletAlgorithm {
 
       // Select which charges to use for this molecule.  This is part of the "hollywooding" to make the solid form
       // appear more crystalline.
-      var chargesA;
+      let chargesA;
       if ( i % 2 === 0 ) {
         chargesA = this.normalCharges;
       }
@@ -152,7 +152,7 @@ class WaterVerletAlgorithm extends AbstractVerletAlgorithm {
         let distanceSquared = Math.max( dx * dx + dy * dy, AbstractVerletAlgorithm.MIN_DISTANCE_SQUARED );
         if ( distanceSquared < AbstractVerletAlgorithm.PARTICLE_INTERACTION_DISTANCE_THRESH_SQRD ) {
           // Select charges for the other molecule.
-          var chargesB;
+          let chargesB;
           if ( j % 2 === 0 ) {
             chargesB = this.normalCharges;
           }

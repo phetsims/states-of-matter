@@ -118,7 +118,7 @@ class ZoomableGridNode extends Node {
     }
     const verticalLineShape = new Shape();
     let line;
-    for ( var i = 0; i < this.verticalLines.length; i++ ) {
+    for ( let i = 0; i < this.verticalLines.length; i++ ) {
       line = this.verticalLines[ i ];
       verticalLineShape.moveTo( line.x1, line.y1 );
       verticalLineShape.lineTo( line.x2, line.y2 );
@@ -136,7 +136,7 @@ class ZoomableGridNode extends Node {
       } );
     }
     const horizontalLineShape = new Shape();
-    for ( i = 0; i < this.horizontalLines.length; i++ ) {
+    for ( let i = 0; i < this.horizontalLines.length; i++ ) {
       line = this.horizontalLines[ i ];
       horizontalLineShape.moveTo( line.x1, line.y1 );
       horizontalLineShape.lineTo( line.x2, line.y2 );

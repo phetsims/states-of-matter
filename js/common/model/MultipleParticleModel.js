@@ -1208,7 +1208,7 @@ class MultipleParticleModel extends PhetioObject {
       this.moleculeDataSet.addMolecule( atomPositions, moleculeCenterOfMassPosition, moleculeVelocity, 0, true );
 
       // Add atom to model set.
-      var atom;
+      let atom;
       if ( substance === SubstanceType.NEON ) {
         atom = new ScaledAtom( AtomType.NEON, 0, 0 );
       }

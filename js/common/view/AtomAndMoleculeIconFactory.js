@@ -31,18 +31,18 @@ const AtomAndMoleculeIconFactory = {
         break;
 
       case SubstanceType.DIATOMIC_OXYGEN:
-        var oxygen1 = new Circle( 5, { fill: SOMConstants.OXYGEN_COLOR } );
-        var oxygen2 = new Circle( 5, { fill: SOMConstants.OXYGEN_COLOR, left: oxygen1.right - 4 } );
+        var oxygen1 = new Circle( 5, { fill: SOMConstants.OXYGEN_COLOR } ); // eslint-disable-line no-var
+        var oxygen2 = new Circle( 5, { fill: SOMConstants.OXYGEN_COLOR, left: oxygen1.right - 4 } ); // eslint-disable-line no-var
         icon = new Node( { children: [ oxygen1, oxygen2 ] } );
         break;
 
       case SubstanceType.WATER:
-        var waterOxygen = new Circle( 5, { fill: SOMConstants.OXYGEN_COLOR } );
-        var waterHydrogen1 = new Circle( 3, {
+        var waterOxygen = new Circle( 5, { fill: SOMConstants.OXYGEN_COLOR } ); // eslint-disable-line no-var
+        var waterHydrogen1 = new Circle( 3, { // eslint-disable-line no-var
           fill: SOMConstants.HYDROGEN_COLOR,
           stroke: SOMConstants.HYDROGEN_COLOR, bottom: waterOxygen.top + 5, right: waterOxygen.left + 5
         } );
-        var waterHydrogen2 = new Circle( 3, {
+        var waterHydrogen2 = new Circle( 3, { // eslint-disable-line no-var
           fill: SOMConstants.HYDROGEN_COLOR,
           stroke: SOMConstants.HYDROGEN_COLOR, bottom: waterOxygen.top + 5, left: waterOxygen.right - 5
         } );
