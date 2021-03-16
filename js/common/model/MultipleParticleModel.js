@@ -1238,7 +1238,7 @@ class MultipleParticleModel extends PhetioObject {
 
     assert && assert( this.moleculeDataSet.numberOfAtoms === this.scaledAtoms.length,
       `Inconsistent number of normalized versus non-normalized atoms, ${
-      this.moleculeDataSet.numberOfAtoms}, ${this.scaledAtoms.length}`
+        this.moleculeDataSet.numberOfAtoms}, ${this.scaledAtoms.length}`
     );
     const positionMultiplier = this.particleDiameter;
     const atomPositions = this.moleculeDataSet.atomPositions;

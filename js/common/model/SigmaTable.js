@@ -68,7 +68,7 @@ const SigmaTable = {
       }
       else {
         assert && assert( false, `Error: sigma data not available for this combination of molecules: ${atomType1
-                                 }, ${atomType2}` );
+        }, ${atomType2}` );
         return ( SOMConstants.MAX_SIGMA - SOMConstants.MIN_SIGMA ) / 2;
       }
     }
