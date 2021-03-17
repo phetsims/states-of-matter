@@ -32,7 +32,7 @@ class ParticleNode extends Node {
 
     super( {
       tandem: tandem,
-      pickablePropertyPhetioInstrumented: true
+      inputEnabledPropertyPhetioInstrumented: true
     } );
 
     // @private

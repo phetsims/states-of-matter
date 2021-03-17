@@ -115,7 +115,7 @@ class AtomicInteractionsScreenView extends ScreenView {
       visible: false,
       phetioReadOnly: true,
       visiblePropertyOptions: { phetioReadOnly: true },
-      pickablePropertyPhetioInstrumented: true,
+      inputEnabledPropertyPhetioInstrumented: true,
       enabledPropertyOptions: { phetioReadOnly: true }
     } );
     this.addChild( this.returnAtomButton );
