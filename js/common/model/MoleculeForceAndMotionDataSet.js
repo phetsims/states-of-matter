@@ -11,7 +11,9 @@
  * @author Siddhartha Chinthapally (Actual Concepts)
  */
 
+import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
+import required from '../../../../phet-core/js/required.js';
 import ArrayIO from '../../../../tandem/js/types/ArrayIO.js';
 import BooleanIO from '../../../../tandem/js/types/BooleanIO.js';
 import Float64ArrayIO from '../../../../tandem/js/types/Float64ArrayIO.js';
@@ -21,7 +23,6 @@ import NumberIO from '../../../../tandem/js/types/NumberIO.js';
 import statesOfMatter from '../../statesOfMatter.js';
 import SOMConstants from '../SOMConstants.js';
 import WaterMoleculeStructure from './engine/WaterMoleculeStructure.js';
-import required from '../../../../phet-core/js/required.js';
 
 // constants
 const ArrayIONullableIOVector2IO = ArrayIO( NullableIO( Vector2.Vector2IO ) );
@@ -455,7 +456,7 @@ class MoleculeForceAndMotionDataSet {
     console.log( '[' );
     for ( i = 0; i < numMolecules; i++ ) {
       const comPos = this.moleculeCenterOfMassPositions[ i ];
-      console.log( '{', 'x: ', comPos.x.toFixed( 3 ), ', y: ', comPos.y.toFixed( 3 ), '}' );
+      console.log( '{', 'x: ', Utils.toFixed( comPos.x, 3 ), ', y: ', Utils.toFixed( comPos.y, 3 ), '}' );
     }
     console.log( '],' );
 
@@ -463,7 +464,7 @@ class MoleculeForceAndMotionDataSet {
     console.log( '[' );
     for ( i = 0; i < numMolecules; i++ ) {
       const vel = this.moleculeVelocities[ i ];
-      console.log( '{', 'x: ', vel.x.toFixed( 3 ), ', y: ', vel.y.toFixed( 3 ), '}' );
+      console.log( '{', 'x: ', Utils.toFixed( vel.x, 3 ), ', y: ', Utils.toFixed( vel.y, 3 ), '}' );
     }
     console.log( '],' );
 
@@ -471,7 +472,7 @@ class MoleculeForceAndMotionDataSet {
     console.log( '[' );
     for ( i = 0; i < numMolecules; i++ ) {
       const angle = this.moleculeRotationAngles[ i ];
-      console.log( angle.toFixed( 3 ), ',' );
+      console.log( Utils.toFixed( angle, 3 ), ',' );
     }
     console.log( '],' );
 
@@ -479,7 +480,7 @@ class MoleculeForceAndMotionDataSet {
     console.log( '[' );
     for ( i = 0; i < numMolecules; i++ ) {
       const rate = this.moleculeRotationRates[ i ];
-      console.log( rate.toFixed( 3 ), ',' );
+      console.log( Utils.toFixed( rate, 3 ), ',' );
     }
     console.log( '],' );
   }
