@@ -291,10 +291,8 @@ class InteractivePotentialGraph extends PotentialGraphNode {
     this.epsilonLabel.fill = SOMColorProfile.ljGraphAxesAndGridColorProperty;
     this.sigmaLabel.fill = SOMColorProfile.ljGraphAxesAndGridColorProperty;
     this.epsilonArrow.stroke = SOMColorProfile.ljGraphAxesAndGridColorProperty;
-    this.gridNode.verticalLinesNode.stroke = SOMColorProfile.ljGraphAxesAndGridColorProperty;
     this.horizontalAxisLabel.fill = SOMColorProfile.ljGraphAxesAndGridColorProperty;
     this.verticalAxisLabel.fill = SOMColorProfile.ljGraphAxesAndGridColorProperty;
-    this.gridNode.horizontalLinesNode.stroke = SOMColorProfile.ljGraphAxesAndGridColorProperty;
 
     this.mutate( options );
   }

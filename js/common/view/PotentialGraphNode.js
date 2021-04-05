@@ -8,6 +8,7 @@
  */
 
 import Vector2 from '../../../../dot/js/Vector2.js';
+import merge from '../../../../phet-core/js/merge.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import Line from '../../../../scenery/js/nodes/Line.js';
@@ -15,12 +16,11 @@ import Node from '../../../../scenery/js/nodes/Node.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import PositionMarker from '../../atomic-interactions/view/PositionMarker.js';
 import ZoomableGridNode from '../../atomic-interactions/view/ZoomableGridNode.js';
-import statesOfMatterStrings from '../../statesOfMatterStrings.js';
 import statesOfMatter from '../../statesOfMatter.js';
+import statesOfMatterStrings from '../../statesOfMatterStrings.js';
 import LjPotentialCalculator from '../model/LjPotentialCalculator.js';
 import SOMConstants from '../SOMConstants.js';
 import SOMColorProfile from './SOMColorProfile.js';
-import merge from '../../../../phet-core/js/merge.js';
 
 const distanceBetweenAtomsString = statesOfMatterStrings.distanceBetweenAtoms;
 const distanceBetweenMoleculesString = statesOfMatterStrings.distanceBetweenMolecules;
@@ -283,14 +283,6 @@ class PotentialGraphNode extends Node {
       this.gridNode.x = this.graphXOrigin;
       this.gridNode.y = this.graphYOrigin - this.graphHeight;
       this.addChild( this.gridNode );
-
-      // zoom button positions
-      if ( options.zoomable ) {
-        this.gridNode.zoomInButton.right = this.verticalAxis.left - this.gridNode.zoomInButton.width;
-        this.gridNode.zoomOutButton.right = this.verticalAxis.left - this.gridNode.zoomInButton.width;
-        this.gridNode.zoomInButton.top = this.verticalAxis.top - AXES_ARROW_HEAD_HEIGHT / 2;
-        this.gridNode.zoomOutButton.top = this.gridNode.zoomInButton.bottom + 5;
-      }
     }
   }
 
@@ -314,8 +306,8 @@ class PotentialGraphNode extends Node {
     this.verticalScalingFactor = ( this.graphHeight / 2.2 ) /
                                  ( SOMConstants.MAX_EPSILON * SOMConstants.K_BOLTZMANN );
     this.horizontalLineCount = 5;
-    this.gridNode.setHorizontalLines( 0, 0, this.graphWidth, this.graphHeight, this.horizontalLineCount );
     this.drawPotentialCurve();
+    this.gridNode && this.gridNode.reset();
   }
 
   /**

@@ -7,19 +7,25 @@
  * @author Siddhartha Chinthapally
  */
 
+import NumberProperty from '../../../../axon/js/NumberProperty.js';
+import Range from '../../../../dot/js/Range.js';
 import Shape from '../../../../kite/js/Shape.js';
 import merge from '../../../../phet-core/js/merge.js';
-import ZoomButton from '../../../../scenery-phet/js/buttons/ZoomButton.js';
+import MagnifyingGlassZoomButtonGroup from '../../../../scenery-phet/js/MagnifyingGlassZoomButtonGroup.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import Path from '../../../../scenery/js/nodes/Path.js';
 import ButtonNode from '../../../../sun/js/buttons/ButtonNode.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
+import SOMColorProfile from '../../common/view/SOMColorProfile.js';
 import statesOfMatter from '../../statesOfMatter.js';
 
 // constants
-const MAX_LINES_HORIZONTAL = 9;
 const MIN_LINES_HORIZONTAL = 5;
-const ZOOM_INCREMENT = 2; // lines per zoom
+const GRID_LINES_OPTIONS = {
+  stroke: SOMColorProfile.ljGraphAxesAndGridColorProperty,
+  lineWidth: 0.8,
+  opacity: 0.6
+};
 
 class ZoomableGridNode extends Node {
 
@@ -38,110 +44,74 @@ class ZoomableGridNode extends Node {
       tandem: Tandem.REQUIRED
     }, options );
 
-    super( options );
     atomsView.horizontalLineCount = MIN_LINES_HORIZONTAL;
 
-    // @private horizontal grid lines
-    this.horizontalLinesNode = new Path( null, {
-      stroke: 'white',
-      lineWidth: 0.8,
-      opacity: 0.6
-    } );
+    super( options );
 
-    // @private vertical grid lines
-    this.verticalLinesNode = new Path( null, {
-      stroke: 'white',
-      lineWidth: 0.8,
-      opacity: 0.6
+    // @private horizontal grid lines
+    this.horizontalLinesNode = new Path( null, GRID_LINES_OPTIONS );
+
+    // vertical grid lines
+    const verticalLinesNode = new Path( null, GRID_LINES_OPTIONS );
+
+    // @private - zoom level, passed in to the zoom button group if zoom is enabled
+    this.zoomLevelProperty = new NumberProperty( 0, {
+      tandem: options.tandem.createTandem( 'zoomFactorProperty' ),
+      range: new Range( -2, 0 )
     } );
 
     if ( options.addZoomButtons ) {
 
-      // @private zoom in button
-      this.zoomInButton = new ZoomButton( {
-        listener: () => {
-          atomsView.horizontalLineCount -= ZOOM_INCREMENT;
-          this.setHorizontalLines( offsetX, offsetY, width, height, atomsView.horizontalLineCount );
-          atomsView.verticalScalingFactor *= 3.33;
-          atomsView.drawPotentialCurve();
-        },
-        baseColor: '#FFD333',
-        magnifyingGlassOptions: {
-          glassRadius: 8
-        },
-        xMargin: 3,
-        yMargin: 3,
-        buttonAppearanceStrategy: ButtonNode.FlatAppearanceStrategy,
-        touchAreaXDilation: 10,
-        touchAreaYDilation: 8,
-        touchAreaYShift: -7,
-        tandem: options.tandem.createTandem( 'zoomInButton' )
-      } );
-      this.zoomInButton.enabled = false;
+      // Create the zoom button group that will allow the user to zoom in and out on the vertical range of the grid.
+      const zoomButtonGroup = new MagnifyingGlassZoomButtonGroup( this.zoomLevelProperty, {
+        orientation: 'vertical',
+        spacing: 5,
 
-      // @private zoom out button
-      this.zoomOutButton = new ZoomButton( {
-        listener: () => {
-          atomsView.horizontalLineCount += ZOOM_INCREMENT;
-          this.setHorizontalLines( offsetX, offsetY, width, height, atomsView.horizontalLineCount );
-          atomsView.verticalScalingFactor /= 3.33;
-          atomsView.drawPotentialCurve();
-        },
-        baseColor: '#FFD333',
-        magnifyingGlassOptions: {
+        // Position the zoom buttons to the left and top of the grid.  The numerical values were empirically determined
+        // to match the design.
+        right: offsetX - 15,
+        top: offsetY - 5,
+
+        magnifyingGlassNodeOptions: {
           glassRadius: 8
         },
-        xMargin: 3,
-        yMargin: 3,
-        buttonAppearanceStrategy: ButtonNode.FlatAppearanceStrategy,
-        in: false,
-        touchAreaXDilation: 10,
+        buttonOptions: {
+          baseColor: '#FFD333',
+          buttonAppearanceStrategy: ButtonNode.FlatAppearanceStrategy,
+          xMargin: 3,
+          yMargin: 3
+        },
+        touchAreaXDilation: 8,
         touchAreaYDilation: 8,
-        touchAreaYShift: 7,
-        tandem: options.tandem.createTandem( 'zoomOutButton' )
+        tandem: options.tandem.createTandem( 'zoomButtonGroup' )
       } );
-      this.zoomOutButton.enabled = true;
-      this.addChild( this.zoomInButton );
-      this.addChild( this.zoomOutButton );
+      this.addChild( zoomButtonGroup );
+
+      // Keep a record of the default scaling factor so that we can use it for scaling up and down.
+      const nominalScalingFactor = atomsView.verticalScalingFactor;
+
+      // Update the vertical scale of the graph as well as the number of horizontal lines when the zoom level changes.
+      this.zoomLevelProperty.lazyLink( zoomFactor => {
+        atomsView.horizontalLineCount = MIN_LINES_HORIZONTAL - 2 * zoomFactor; // empirically determined to look decent
+        this.updateHorizontalLines( offsetX, offsetY, width, height, atomsView.horizontalLineCount );
+        atomsView.verticalScalingFactor = nominalScalingFactor * Math.pow( 3.33, zoomFactor );
+        atomsView.drawPotentialCurve();
+      } );
     }
 
-    this.addChild( this.horizontalLinesNode );
-    this.addChild( this.verticalLinesNode );
-
-    this.verticalLines = [];
+    // Add the vertical grid lines.
+    const verticalLineShape = new Shape();
     for ( let x = 0; x < 4; x++ ) {
       const viewX = x * ( width / 3 );
-      this.verticalLines.push( {
-        x1: viewX + offsetX, y1: offsetY,
-        x2: viewX + offsetX, y2: height + offsetY
-      } );
+      verticalLineShape.moveTo( viewX + offsetX, offsetY );
+      verticalLineShape.lineTo( viewX + offsetX, height + offsetY );
     }
-    const verticalLineShape = new Shape();
-    let line;
-    for ( let i = 0; i < this.verticalLines.length; i++ ) {
-      line = this.verticalLines[ i ];
-      verticalLineShape.moveTo( line.x1, line.y1 );
-      verticalLineShape.lineTo( line.x2, line.y2 );
-    }
-    this.verticalLinesNode.setShape( verticalLineShape );
+    verticalLinesNode.setShape( verticalLineShape );
+    this.addChild( verticalLinesNode );
 
-    this.horizontalLines = [];
-    for ( let y = 0; y < atomsView.horizontalLineCount; y++ ) {
-      const viewY = y * ( height / ( atomsView.horizontalLineCount - 1 ) );
-      this.horizontalLines.push( {
-        x1: offsetX,
-        y1: viewY + offsetY,
-        x2: width + offsetX,
-        y2: viewY + offsetY
-      } );
-    }
-    const horizontalLineShape = new Shape();
-    for ( let i = 0; i < this.horizontalLines.length; i++ ) {
-      line = this.horizontalLines[ i ];
-      horizontalLineShape.moveTo( line.x1, line.y1 );
-      horizontalLineShape.lineTo( line.x2, line.y2 );
-    }
-    this.horizontalLinesNode.setShape( horizontalLineShape );
+    // Add the horizontal grid lines.
+    this.updateHorizontalLines( offsetX, offsetY, width, height, atomsView.horizontalLineCount );
+    this.addChild( this.horizontalLinesNode );
   }
 
   /**
@@ -152,32 +122,22 @@ class ZoomableGridNode extends Node {
    * @param {number} horizontalLineCount -- number of horizontal lines
    * @public
    */
-  setHorizontalLines( offsetX, offsetY, width, height, horizontalLineCount ) {
-
-    this.horizontalLines = [];
+  updateHorizontalLines( offsetX, offsetY, width, height, horizontalLineCount ) {
+    const horizontalLineShape = new Shape();
     for ( let y = 0; y < horizontalLineCount; y++ ) {
       const viewY = y * ( height / ( horizontalLineCount - 1 ) );
-      this.horizontalLines.push( {
-        x1: offsetX,
-        y1: viewY + offsetY,
-        x2: width + offsetX,
-        y2: viewY + offsetY
-      } );
-    }
-    const horizontalLineShape = new Shape();
-    let line;
-    for ( let i = 0; i < this.horizontalLines.length; i++ ) {
-      line = this.horizontalLines[ i ];
-      horizontalLineShape.moveTo( line.x1, line.y1 );
-      horizontalLineShape.lineTo( line.x2, line.y2 );
+      horizontalLineShape.moveTo( offsetX, viewY + offsetY );
+      horizontalLineShape.lineTo( width + offsetX, viewY + offsetY );
     }
     this.horizontalLinesNode.setShape( horizontalLineShape );
-    if ( this.zoomOutButton ) {
-      this.zoomOutButton.enabled = ( horizontalLineCount < MAX_LINES_HORIZONTAL );
-    }
-    if ( this.zoomInButton ) {
-      this.zoomInButton.enabled = ( horizontalLineCount > MIN_LINES_HORIZONTAL );
-    }
+  }
+
+  /**
+   * restore initial state
+   * @public
+   */
+  reset() {
+    this.zoomLevelProperty.reset();
   }
 }
 
