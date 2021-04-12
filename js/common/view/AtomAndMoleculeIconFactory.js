@@ -31,15 +31,15 @@ const AtomAndMoleculeIconFactory = {
         break;
 
       case SubstanceType.DIATOMIC_OXYGEN: {
-        const oxygen1 = new Circle( 5, { fill: SOMConstants.OXYGEN_COLOR } ); // eslint-disable-line no-var
-        const oxygen2 = new Circle( 5, { fill: SOMConstants.OXYGEN_COLOR, left: oxygen1.right - 4 } ); // eslint-disable-line no-var
+        const oxygen1 = new Circle( 5, { fill: SOMConstants.OXYGEN_COLOR } );
+        const oxygen2 = new Circle( 5, { fill: SOMConstants.OXYGEN_COLOR, left: oxygen1.right - 4 } );
         icon = new Node( { children: [ oxygen1, oxygen2 ] } );
         break;
       }
 
       case SubstanceType.WATER: {
-        const waterOxygen = new Circle( 5, { fill: SOMConstants.OXYGEN_COLOR } ); // eslint-disable-line no-var
-        const waterHydrogen1 = new Circle( 3, { // eslint-disable-line no-var
+        const waterOxygen = new Circle( 5, { fill: SOMConstants.OXYGEN_COLOR } );
+        const waterHydrogen1 = new Circle( 3, {
           fill: SOMConstants.HYDROGEN_COLOR,
           stroke: SOMConstants.HYDROGEN_COLOR, bottom: waterOxygen.top + 5, right: waterOxygen.left + 5
         } );
