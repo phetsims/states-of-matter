@@ -30,24 +30,26 @@ const AtomAndMoleculeIconFactory = {
         icon = new Circle( 6, { fill: SOMConstants.ADJUSTABLE_ATTRACTION_COLOR } );
         break;
 
-      case SubstanceType.DIATOMIC_OXYGEN:
-        var oxygen1 = new Circle( 5, { fill: SOMConstants.OXYGEN_COLOR } ); // eslint-disable-line no-var
-        var oxygen2 = new Circle( 5, { fill: SOMConstants.OXYGEN_COLOR, left: oxygen1.right - 4 } ); // eslint-disable-line no-var
+      case SubstanceType.DIATOMIC_OXYGEN: {
+        const oxygen1 = new Circle( 5, { fill: SOMConstants.OXYGEN_COLOR } ); // eslint-disable-line no-var
+        const oxygen2 = new Circle( 5, { fill: SOMConstants.OXYGEN_COLOR, left: oxygen1.right - 4 } ); // eslint-disable-line no-var
         icon = new Node( { children: [ oxygen1, oxygen2 ] } );
         break;
+      }
 
-      case SubstanceType.WATER:
-        var waterOxygen = new Circle( 5, { fill: SOMConstants.OXYGEN_COLOR } ); // eslint-disable-line no-var
-        var waterHydrogen1 = new Circle( 3, { // eslint-disable-line no-var
+      case SubstanceType.WATER: {
+        const waterOxygen = new Circle( 5, { fill: SOMConstants.OXYGEN_COLOR } ); // eslint-disable-line no-var
+        const waterHydrogen1 = new Circle( 3, { // eslint-disable-line no-var
           fill: SOMConstants.HYDROGEN_COLOR,
           stroke: SOMConstants.HYDROGEN_COLOR, bottom: waterOxygen.top + 5, right: waterOxygen.left + 5
         } );
-        var waterHydrogen2 = new Circle( 3, { // eslint-disable-line no-var
+        const waterHydrogen2 = new Circle( 3, {
           fill: SOMConstants.HYDROGEN_COLOR,
           stroke: SOMConstants.HYDROGEN_COLOR, bottom: waterOxygen.top + 5, left: waterOxygen.right - 5
         } );
         icon = new Node( { children: [ waterHydrogen2, waterOxygen, waterHydrogen1 ] } );
         break;
+      }
 
       default:
         assert && assert( false, 'unknown substance, unable to create icon' );
