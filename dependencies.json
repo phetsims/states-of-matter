@@ -1,5 +1,5 @@
 {
-  "comment": "# states-of-matter 1.2.1 Thu Apr 22 2021 16:08:24 GMT-0600 (Mountain Daylight Time)",
+  "comment": "# states-of-matter 1.2.2-rc.1 Fri Apr 23 2021 15:42:58 GMT-0600 (Mountain Daylight Time)",
   "assert": {
     "sha": "1a41cef653bbed1025af5768bea958d7e3e0f8ae",
     "branch": "HEAD"
@@ -62,7 +62,7 @@
   },
   "scenery": {
     "sha": "1c0cc013cdd0269f4852cf26ef48df6f4acad975",
-    "branch": "states-of-matter-1.2"
+    "branch": "HEAD"
   },
   "scenery-phet": {
     "sha": "561fdfe616c8ddee6a34414858218ab4e696b0d3",
@@ -73,7 +73,7 @@
     "branch": "HEAD"
   },
   "states-of-matter": {
-    "sha": "0ceed1601173548f416acdf9dd909e88eb4aaa33",
+    "sha": "c22d8ff5aa6f99012a911da2af19247bcec04e33",
     "branch": "1.2"
   },
   "studio": {
