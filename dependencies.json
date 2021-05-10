@@ -1,5 +1,5 @@
 {
-  "comment": "# states-of-matter 1.2.2-rc.1 Fri Apr 23 2021 15:42:58 GMT-0600 (Mountain Daylight Time)",
+  "comment": "# states-of-matter 1.2.2-rc.1 Mon May 10 2021 12:25:14 GMT-0600 (Mountain Daylight Time)",
   "assert": {
     "sha": "1a41cef653bbed1025af5768bea958d7e3e0f8ae",
     "branch": "HEAD"
@@ -53,8 +53,8 @@
     "branch": "HEAD"
   },
   "phetmarks": {
-    "sha": "ebe1ab6075168b7274bc89b86f6ea4842c3c479b",
-    "branch": "HEAD"
+    "sha": "15e7a3c9283da997a427d9f1d20551ede5b7c9e0",
+    "branch": "states-of-matter-1.2"
   },
   "query-string-machine": {
     "sha": "98c27e38eb6ce672dd8908c5210a521f112ff906",
@@ -73,7 +73,7 @@
     "branch": "HEAD"
   },
   "states-of-matter": {
-    "sha": "c22d8ff5aa6f99012a911da2af19247bcec04e33",
+    "sha": "77b5d4f3983a62d2b68daebabe6203ac2a484537",
     "branch": "1.2"
   },
   "studio": {
