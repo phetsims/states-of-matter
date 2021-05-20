@@ -38,8 +38,8 @@ class TimeSpanDataQueue {
   }
 
   /**
-   * add a new value with associated delta time - this automatically removes data values that go beyond the max time
-   * span, and also updates the total value and the current time span
+   * Add a new value with associated delta time.  This automatically removes data values that go beyond the max time
+   * span, and also updates the total value and the current time span.
    * @param {number} value
    * @param {number} dt
    * @public
@@ -48,6 +48,37 @@ class TimeSpanDataQueue {
 
     assert && assert( dt < this.maxTimeSpan, 'dt value is greater than max time span' );
     const nextHead = ( this.head + 1 ) % this.length;
+
+    // TODO: The following 'if' clause and its contents are temporary debug output, see https://github.com/phetsims/states-of-matter/issues/354.
+    if ( nextHead === this.tail ) {
+      console.log( '=======' );
+      console.log( `this.length = ${this.length}` );
+      console.log( `this.maxTimeSpan = ${this.maxTimeSpan} seconds` );
+      console.log( `this.head = ${this.head}` );
+      console.log( `this.tail = ${this.tail}` );
+      console.log( 'data queue contents:' );
+      let totalContainedTime = 0;
+      let minDt = Number.POSITIVE_INFINITY;
+      let maxDt = Number.NEGATIVE_INFINITY;
+      _.times( this.length - 1, index => {
+        let indexToPrint = ( this.head - ( index + 1 ) ) % this.length;
+        if ( indexToPrint < 0 ) {
+          indexToPrint += this.length;
+        }
+        const dt = this.dataQueue[ indexToPrint ].deltaTime;
+        console.log( '-------' );
+        console.log( `  index: ${indexToPrint}` );
+        console.log( `  dt:    ${dt}` );
+        console.log( `  value: ${this.dataQueue[ indexToPrint ].value}` );
+        minDt = Math.min( minDt, dt );
+        maxDt = Math.max( maxDt, dt );
+        totalContainedTime += dt;
+      } );
+      console.log( '\n' );
+      console.log( `totalContainedTime = ${totalContainedTime}` );
+      console.log( `minDt = ${minDt}` );
+      console.log( `maxDt = ${maxDt}` );
+    }
     assert && assert( nextHead !== this.tail, 'no space left in moving time window' );
 
     // in non-debug mode ignore requests that would exceed the capacity
@@ -55,14 +86,14 @@ class TimeSpanDataQueue {
       return;
     }
 
-    // add the new data item to the queue
+    // Add the new data item to the queue.
     this.dataQueue[ this.head ].value = value;
     this.dataQueue[ this.head ].deltaTime = dt;
     this.timeSpan += dt;
     this.total += value;
     this.head = nextHead;
 
-    // remove the oldest data items until we are back within the maximum time span
+    // Remove the oldest data items until we are back within the maximum time span.
     while ( this.timeSpan > this.maxTimeSpan ) {
       const nextTail = ( this.tail + 1 ) % this.length;
       if ( nextTail === nextHead ) {
@@ -78,7 +109,7 @@ class TimeSpanDataQueue {
   }
 
   /**
-   * clear all data from the queue
+   * Clear all data from the queue.
    * @public
    */
   clear() {
