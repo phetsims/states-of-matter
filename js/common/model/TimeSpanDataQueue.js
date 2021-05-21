@@ -8,103 +8,82 @@
  */
 
 import statesOfMatter from '../../statesOfMatter.js';
+import SOMConstants from '../SOMConstants.js';
+
+// constants
+const MIN_EXPECTED_DT = SOMConstants.NOMINAL_TIME_STEP;
 
 class TimeSpanDataQueue {
 
   /**
-   * {number} length - max number of entries in the queue
    * {number} maxTimeSpan - max span of time that can be stored, in seconds
+   * {number} minExpectedDt - the minimum expected dt (delta time) value in seconds, used to allocate memory
    */
-  constructor( length, maxTimeSpan ) {
-    assert && assert( length > 0, 'length must be positive' );
-    this.length = length;
-    this.maxTimeSpan = maxTimeSpan;
+  constructor( maxTimeSpan, minExpectedDt = MIN_EXPECTED_DT ) {
 
-    // @private - array where entries are kept
-    this.dataQueue = new Array( length );
-
-    // initialize the data array with a set of reusable objects so that subsequent allocations are not needed
-    for ( let i = 0; i < length; i++ ) {
-      this.dataQueue[ i ] = { deltaTime: 0, value: null };
-    }
-
-    // @public (read-only) {number} - the total of all values currently in the queue
+    // @public (read-only) - the total of all values currently in the queue
     this.total = 0;
 
-    // @private - variables used to make this thing work
-    this.head = 0;
-    this.tail = 0;
+    // @private - the amount of time currently represent by the entries in the queue
     this.timeSpan = 0;
+
+    // @private
+    this.maxTimeSpan = maxTimeSpan;
+
+    // @private {DataQueueEntry[]} - data queue, which is an array where entries are kept that track times and values
+    this.dataQueue = [];
+
+    // The queue length is calculated based on the specified time span and the expected minimum dt value.  There is some
+    // margin built into this calculation.  This value is used to pre-allocate all of the memory which is expected to
+    // be needed, and thus optimize performance.
+    const maxExpectedDataQueueLength = Math.ceil( maxTimeSpan / minExpectedDt * 1.1 );
+
+    // @private {DataQueueEntry[]} - a pool of unused data queue entries, pre-allocated for performance
+    this.unusedDataQueueEntries = [];
+    for ( let i = 0; i < maxExpectedDataQueueLength; i++ ) {
+      this.unusedDataQueueEntries.push( new DataQueueEntry( 0, null ) );
+    }
   }
 
   /**
-   * Add a new value with associated delta time.  This automatically removes data values that go beyond the max time
-   * span, and also updates the total value and the current time span.
+   * Add a new value with associated dt (delta time).  This automatically removes data values that go beyond the max
+   * time span from the queue, and also updates the total value and the current time span.
    * @param {number} value
    * @param {number} dt
    * @public
    */
   add( value, dt ) {
 
-    assert && assert( dt < this.maxTimeSpan, 'dt value is greater than max time span' );
-    const nextHead = ( this.head + 1 ) % this.length;
-
-    // TODO: The following 'if' clause and its contents are temporary debug output, see https://github.com/phetsims/states-of-matter/issues/354.
-    if ( nextHead === this.tail ) {
-      console.log( '=======' );
-      console.log( `this.length = ${this.length}` );
-      console.log( `this.maxTimeSpan = ${this.maxTimeSpan} seconds` );
-      console.log( `this.head = ${this.head}` );
-      console.log( `this.tail = ${this.tail}` );
-      console.log( 'data queue contents:' );
-      let totalContainedTime = 0;
-      let minDt = Number.POSITIVE_INFINITY;
-      let maxDt = Number.NEGATIVE_INFINITY;
-      _.times( this.length - 1, index => {
-        let indexToPrint = ( this.head - ( index + 1 ) ) % this.length;
-        if ( indexToPrint < 0 ) {
-          indexToPrint += this.length;
-        }
-        const dt = this.dataQueue[ indexToPrint ].deltaTime;
-        console.log( '-------' );
-        console.log( `  index: ${indexToPrint}` );
-        console.log( `  dt:    ${dt}` );
-        console.log( `  value: ${this.dataQueue[ indexToPrint ].value}` );
-        minDt = Math.min( minDt, dt );
-        maxDt = Math.max( maxDt, dt );
-        totalContainedTime += dt;
-      } );
-      console.log( '\n' );
-      console.log( `totalContainedTime = ${totalContainedTime}` );
-      console.log( `minDt = ${minDt}` );
-      console.log( `maxDt = ${maxDt}` );
-    }
-    assert && assert( nextHead !== this.tail, 'no space left in moving time window' );
-
-    // in non-debug mode ignore requests that would exceed the capacity
-    if ( nextHead === this.tail ) {
-      return;
-    }
+    assert && assert( dt < this.maxTimeSpan, 'dt value is greater than max time span, this won\'t work' );
 
     // Add the new data item to the queue.
-    this.dataQueue[ this.head ].value = value;
-    this.dataQueue[ this.head ].deltaTime = dt;
+    let dataQueueEntry;
+    if ( this.unusedDataQueueEntries.length > 0 ) {
+      dataQueueEntry = this.unusedDataQueueEntries.pop();
+      dataQueueEntry.dt = dt;
+      dataQueueEntry.value = value;
+    }
+    else {
+
+      // The pool has run dry, allocate a new entry.  Ideally, this should never happen, because we try to pre-allocate
+      // everything needed, but it can occur in cases where the browser is running at a different frequency than the
+      // expected nominal rate.  See https://github.com/phetsims/states-of-matter/issues/354.
+      dataQueueEntry = new DataQueueEntry( dt, value );
+    }
+    this.dataQueue.push( dataQueueEntry );
     this.timeSpan += dt;
     this.total += value;
-    this.head = nextHead;
 
-    // Remove the oldest data items until we are back within the maximum time span.
+    // Check if the total time span represented by the items in the queue exceeds the max time and, if so, remove items.
     while ( this.timeSpan > this.maxTimeSpan ) {
-      const nextTail = ( this.tail + 1 ) % this.length;
-      if ( nextTail === nextHead ) {
+      assert && assert( this.dataQueue.length > 0, 'data queue is empty but max time is exceeded, there must ba a bug' );
+      const removedDataQueueEntry = this.dataQueue.shift();
+      this.timeSpan -= removedDataQueueEntry.dt;
+      this.total -= removedDataQueueEntry.value;
 
-        // nothing more can be removed, so bail
-        assert && assert( false, 'time span exceeded, but nothing appears to be in the queue - probably a bug' );
-        break;
-      }
-      this.total -= this.dataQueue[ this.tail ].value;
-      this.timeSpan -= this.dataQueue[ this.tail ].deltaTime;
-      this.tail = nextTail;
+      // Mark the removed entry as unused and return it to the pool.
+      removedDataQueueEntry.value = null;
+      this.unusedDataQueueEntries.push( removedDataQueueEntry );
     }
   }
 
@@ -113,10 +92,28 @@ class TimeSpanDataQueue {
    * @public
    */
   clear() {
-    this.head = 0;
-    this.tail = 0;
     this.total = 0;
     this.timeSpan = 0;
+    this.dataQueue.forEach( dataQueueItem => {
+      dataQueueItem.value = null;
+      this.unusedDataQueueEntries.push( dataQueueItem );
+    } );
+    this.dataQueue.length = 0;
+  }
+}
+
+/**
+ * simple inner class that defines the entries that go into the data queue
+ */
+class DataQueueEntry {
+
+  /**
+   * @param {number} dt - delta time, in seconds
+   * @param {number|null} value - the value for this entry, null if this entry is unused
+   */
+  constructor( dt, value ) {
+    this.dt = dt;
+    this.value = value;
   }
 }
 
