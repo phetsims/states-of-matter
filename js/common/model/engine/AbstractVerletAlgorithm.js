@@ -10,13 +10,12 @@
 
 import NumberProperty from '../../../../../axon/js/NumberProperty.js';
 import statesOfMatter from '../../../statesOfMatter.js';
+import SOMConstants from '../../SOMConstants.js';
 import TimeSpanDataQueue from '../TimeSpanDataQueue.js';
 
-// Constants that control the pressure calculation.  The size of the pressure accumulator assumes a max sim rate of
-// 1 / 60, which derives from the standard 60 FPS rate at which browsers currently run.  May need to go up someday.
+// Constants that control the pressure calculation.
 const PRESSURE_CALC_TIME_WINDOW = 12; // in seconds, empirically determined to be responsive but not jumpy
-const NOMINAL_DT = 1 / 60; // in seconds, assuming 60 fps
-const PRESSURE_ACCUMULATOR_LENGTH = Math.ceil( PRESSURE_CALC_TIME_WINDOW / NOMINAL_DT * 1.1 );
+const NOMINAL_DT = SOMConstants.NOMINAL_TIME_STEP; // in seconds
 
 // constants that control when the container explodes
 const EXPLOSION_PRESSURE = 41; // in model units, empirically determined
@@ -46,8 +45,8 @@ class AbstractVerletAlgorithm {
     // during execution of the Verlet algorithm, must be cleared by the client.
     this.lidChangedParticleVelocity = false;
 
-    // @private {TimeSpanDataQueue}, moving time window queue for tracking the pressure data
-    this.pressureAccumulatorQueue = new TimeSpanDataQueue( PRESSURE_ACCUMULATOR_LENGTH, PRESSURE_CALC_TIME_WINDOW );
+    // @private {TimeSpanDataQueue} - moving time window queue for tracking the pressure data
+    this.pressureAccumulatorQueue = new TimeSpanDataQueue( PRESSURE_CALC_TIME_WINDOW );
 
     // @private, tracks time above the explosion threshold
     this.timeAboveExplosionPressure = 0;
@@ -283,7 +282,9 @@ class AbstractVerletAlgorithm {
       this.pressureAccumulatorQueue.add( pressureThisStep, dt );
 
       // Get the pressure value, but make sure it doesn't go below zero, because we have seen instances of that due
-      // to floating point errors, see https://github.com/phetsims/states-of-matter/issues/240.
+      // to floating point errors, see https://github.com/phetsims/states-of-matter/issues/240.  We use the total
+      // time window in this calculation rather that the time span in the queue because it creates a nice ramp-up
+      // effect.
       const newPressure = Math.max( this.pressureAccumulatorQueue.total / PRESSURE_CALC_TIME_WINDOW, 0 );
 
       if ( newPressure > EXPLOSION_PRESSURE ) {
@@ -318,14 +319,17 @@ class AbstractVerletAlgorithm {
       'this method is intended for use during state setting only'
     );
 
-    // get rid of any accumulated values
+    // Get rid of any accumulated values.
     this.pressureAccumulatorQueue.clear();
 
-    // calculate the instantaneous sample value needed to make the overall pressure be the needed value
-    const pressureSampleInstantaneousValue = pressure * PRESSURE_CALC_TIME_WINDOW / PRESSURE_ACCUMULATOR_LENGTH;
+    // Calculate the number of "artificial" samples to insert into the time span queue.
+    const numberOfSamples = PRESSURE_CALC_TIME_WINDOW / NOMINAL_DT;
 
-    // add the entries to the accumulator
-    _.times( PRESSURE_ACCUMULATOR_LENGTH, () => {
+    // Calculate the instantaneous sample value needed to make the overall pressure be the needed value.
+    const pressureSampleInstantaneousValue = pressure * PRESSURE_CALC_TIME_WINDOW / numberOfSamples;
+
+    // Add the entries to the accumulator.
+    _.times( numberOfSamples, () => {
       this.pressureAccumulatorQueue.add( pressureSampleInstantaneousValue, NOMINAL_DT );
     } );
   }
