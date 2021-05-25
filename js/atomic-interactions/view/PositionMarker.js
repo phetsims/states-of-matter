@@ -1,4 +1,4 @@
-// Copyright 2015-2020, University of Colorado Boulder
+// Copyright 2015-2021, University of Colorado Boulder
 
 /**
  * A pseudo-3D sphere with a halo that appears during interactions.  This was highly leveraged from Manipulator.js

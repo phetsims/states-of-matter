@@ -1,4 +1,4 @@
-// Copyright 2020, University of Colorado Boulder
+// Copyright 2020-2021, University of Colorado Boulder
 
 /**
  * SubstanceSelectorNode is a node with a label on the left and an icon - generally something that represents and atom
