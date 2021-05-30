@@ -37,6 +37,7 @@ import BooleanIO from '../../../../tandem/js/types/BooleanIO.js';
 import IOType from '../../../../tandem/js/types/IOType.js';
 import NullableIO from '../../../../tandem/js/types/NullableIO.js';
 import NumberIO from '../../../../tandem/js/types/NumberIO.js';
+import ObjectLiteralIO from '../../../../tandem/js/types/ObjectLiteralIO.js';
 import statesOfMatter from '../../statesOfMatter.js';
 import PhaseStateEnum from '../PhaseStateEnum.js';
 import SOMConstants from '../SOMConstants.js';
@@ -1440,7 +1441,21 @@ MultipleParticleModel.MultipleParticleModelIO = new IOType( 'MultipleParticleMod
   valueType: MultipleParticleModel,
   documentation: 'multiple particle model that simulates interactions that lead to phase-like behavior',
   toStateObject: multipleParticleModel => multipleParticleModel.toStateObject(),
-  applyState: ( multipleParticleModel, state ) => multipleParticleModel.applyState( state )
+  applyState: ( multipleParticleModel, state ) => multipleParticleModel.applyState( state ),
+  stateSchema: {
+    private: {
+      substance: EnumerationIO( SubstanceType ),
+      isExploded: BooleanIO,
+      containerHeight: NumberIO,
+      gravitationalAcceleration: NumberIO,
+      normalizedLidVelocityY: NumberIO,
+      heatingCoolingAmount: NumberIO,
+      moleculeDataSet: MoleculeForceAndMotionDataSet.MoleculeForceAndMotionDataSetIO,
+      isoKineticThermostatState: ObjectLiteralIO, // TODO: https://github.com/phetsims/phet-io/issues/1774
+      andersenThermostatState: ObjectLiteralIO,
+      moleculeForcesAndMotionCalculatorPressure: NumberIO
+    }
+  }
 } );
 
 statesOfMatter.register( 'MultipleParticleModel', MultipleParticleModel );

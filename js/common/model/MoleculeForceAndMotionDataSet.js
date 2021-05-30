@@ -491,7 +491,26 @@ class MoleculeForceAndMotionDataSet {
 MoleculeForceAndMotionDataSet.MoleculeForceAndMotionDataSetIO = new IOType( 'MoleculeForceAndMotionDataSetIO', {
   valueType: MoleculeForceAndMotionDataSet,
   documentation: 'particle data set',
-  toStateObject: moleculeForceAndMotionDataSet => moleculeForceAndMotionDataSet.toStateObject()
+  toStateObject: moleculeForceAndMotionDataSet => moleculeForceAndMotionDataSet.toStateObject(),
+  stateSchema: {
+    atomsPerMolecule: NumberIO,
+    numberOfAtoms: NumberIO,
+    numberOfMolecules: NumberIO,
+    moleculeMass: NumberIO,
+    moleculeRotationalInertia: NumberIO,
+
+    // arrays
+    atomPositions: ArrayIONullableIOVector2IO,
+    moleculeCenterOfMassPositions: ArrayIONullableIOVector2IO,
+    moleculeVelocities: ArrayIONullableIOVector2IO,
+    moleculeForces: ArrayIONullableIOVector2IO,
+    nextMoleculeForces: ArrayIONullableIOVector2IO,
+    insideContainer: ArrayIOBooleanIO,
+    moleculeRotationAngles: Float64ArrayIO,
+    moleculeRotationRates: Float64ArrayIO,
+    moleculeTorques: Float64ArrayIO,
+    nextMoleculeTorques: Float64ArrayIO
+  }
 } );
 
 statesOfMatter.register( 'MoleculeForceAndMotionDataSet', MoleculeForceAndMotionDataSet );
