@@ -1451,7 +1451,7 @@ MultipleParticleModel.MultipleParticleModelIO = new IOType( 'MultipleParticleMod
       normalizedLidVelocityY: NumberIO,
       heatingCoolingAmount: NumberIO,
       moleculeDataSet: MoleculeForceAndMotionDataSet.MoleculeForceAndMotionDataSetIO,
-      isoKineticThermostatState: ObjectLiteralIO, // TODO: https://github.com/phetsims/phet-io/issues/1774
+      isoKineticThermostatState: ObjectLiteralIO, // TODO: Provide more specific types than ObjectLiteralIO, see https://github.com/phetsims/states-of-matter/issues/355
       andersenThermostatState: ObjectLiteralIO,
       moleculeForcesAndMotionCalculatorPressure: NumberIO
     }
