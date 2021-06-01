@@ -1394,22 +1394,22 @@ class MultipleParticleModel extends PhetioObject {
 
     // Setting the substance initializes a bunch of model parameters, so this is done first, then other items that may
     // have been affected are set.
-    this.substanceProperty.set( EnumerationIO( SubstanceType ).fromStateObject( stateObject.private.substance ) );
+    this.substanceProperty.set( EnumerationIO( SubstanceType ).fromStateObject( stateObject._private.substance ) );
 
     // Set properties that may have been updated by setting the substance.
-    this.isExplodedProperty.set( BooleanIO.fromStateObject( stateObject.private.isExploded ) );
-    this.containerHeightProperty.set( stateObject.private.containerHeight );
-    this.heatingCoolingAmountProperty.set( stateObject.private.heatingCoolingAmount );
-    this.gravitationalAcceleration = stateObject.private.gravitationalAcceleration;
-    this.normalizedLidVelocityY = stateObject.private.normalizedLidVelocityY;
-    this.isoKineticThermostat.setState( stateObject.private.isoKineticThermostatState );
-    this.andersenThermostat.setState( stateObject.private.andersenThermostatState );
+    this.isExplodedProperty.set( BooleanIO.fromStateObject( stateObject._private.isExploded ) );
+    this.containerHeightProperty.set( stateObject._private.containerHeight );
+    this.heatingCoolingAmountProperty.set( stateObject._private.heatingCoolingAmount );
+    this.gravitationalAcceleration = stateObject._private.gravitationalAcceleration;
+    this.normalizedLidVelocityY = stateObject._private.normalizedLidVelocityY;
+    this.isoKineticThermostat.setState( stateObject._private.isoKineticThermostatState );
+    this.andersenThermostat.setState( stateObject._private.andersenThermostatState );
 
     // Set the molecule data set.  This includes all the positions, velocities, etc. for the particles.
-    this.moleculeDataSet.setState( stateObject.private.moleculeDataSet );
+    this.moleculeDataSet.setState( stateObject._private.moleculeDataSet );
 
     // Preset the pressure in the accumulator that tracks it so that it doesn't have to start from zero.
-    this.moleculeForceAndMotionCalculator.presetPressure( stateObject.private.moleculeForcesAndMotionCalculatorPressure );
+    this.moleculeForceAndMotionCalculator.presetPressure( stateObject._private.moleculeForcesAndMotionCalculatorPressure );
 
     // Make sure that we have the right number of scaled (i.e. non-normalized) atoms.
     const numberOfNormalizedMolecules = this.moleculeDataSet.numberOfMolecules;
