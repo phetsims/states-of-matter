@@ -1368,7 +1368,7 @@ class MultipleParticleModel extends PhetioObject {
    */
   toStateObject() {
     return {
-      private: { // to indicate that it is needed for state, but shouldn't be shown in Studio
+      _private: { // to indicate that it is needed for state, but shouldn't be shown in Studio
         substance: EnumerationIO( SubstanceType ).toStateObject( this.substanceProperty.value ),
         isExploded: BooleanIO.toStateObject( this.isExplodedProperty.value ),
         containerHeight: this.containerHeightProperty.value,
@@ -1443,7 +1443,7 @@ MultipleParticleModel.MultipleParticleModelIO = new IOType( 'MultipleParticleMod
   toStateObject: multipleParticleModel => multipleParticleModel.toStateObject(),
   applyState: ( multipleParticleModel, state ) => multipleParticleModel.applyState( state ),
   stateSchema: {
-    private: {
+    _private: {
       substance: EnumerationIO( SubstanceType ),
       isExploded: BooleanIO,
       containerHeight: NumberIO,
