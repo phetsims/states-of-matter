@@ -12,6 +12,8 @@
 
 import dotRandom from '../../../../../../dot/js/dotRandom.js';
 import Vector2 from '../../../../../../dot/js/Vector2.js';
+import IOType from '../../../../../../tandem/js/types/IOType.js';
+import NumberIO from '../../../../../../tandem/js/types/NumberIO.js';
 import statesOfMatter from '../../../../statesOfMatter.js';
 import SOMConstants from '../../../SOMConstants.js';
 
@@ -165,6 +167,19 @@ class AndersenThermostat {
     this.accumulatedAverageVelocityChange.set( stateObject.accumulatedAverageVelocityChange );
   }
 }
+
+// @public
+AndersenThermostat.AndersenThermostatIO = new IOType( 'AndersenThermostatIO', {
+  valueType: AndersenThermostat,
+  stateSchema: {
+    targetTemperature: NumberIO,
+    minModelTemperature: NumberIO,
+    previousParticleVelocity: Vector2.Vector2IO,
+    totalVelocityChangePreviousStep: Vector2.Vector2IO,
+    totalVelocityChangeThisStep: Vector2.Vector2IO,
+    accumulatedAverageVelocityChange: Vector2.Vector2IO
+  }
+} );
 
 statesOfMatter.register( 'AndersenThermostat', AndersenThermostat );
 export default AndersenThermostat;

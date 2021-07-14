@@ -37,7 +37,6 @@ import BooleanIO from '../../../../tandem/js/types/BooleanIO.js';
 import IOType from '../../../../tandem/js/types/IOType.js';
 import NullableIO from '../../../../tandem/js/types/NullableIO.js';
 import NumberIO from '../../../../tandem/js/types/NumberIO.js';
-import ObjectLiteralIO from '../../../../tandem/js/types/ObjectLiteralIO.js';
 import statesOfMatter from '../../statesOfMatter.js';
 import PhaseStateEnum from '../PhaseStateEnum.js';
 import SOMConstants from '../SOMConstants.js';
@@ -1451,8 +1450,8 @@ MultipleParticleModel.MultipleParticleModelIO = new IOType( 'MultipleParticleMod
       normalizedLidVelocityY: NumberIO,
       heatingCoolingAmount: NumberIO,
       moleculeDataSet: MoleculeForceAndMotionDataSet.MoleculeForceAndMotionDataSetIO,
-      isoKineticThermostatState: ObjectLiteralIO, // TODO: Provide more specific types than ObjectLiteralIO, see https://github.com/phetsims/states-of-matter/issues/355
-      andersenThermostatState: ObjectLiteralIO,
+      isoKineticThermostatState: IsokineticThermostat.IsoKineticThermostatIO,
+      andersenThermostatState: AndersenThermostat.AndersenThermostatIO,
       moleculeForcesAndMotionCalculatorPressure: NumberIO
     }
   }
