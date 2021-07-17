@@ -10,7 +10,7 @@
     "grunt": "~1.4.0"
   },
   "phet": {
-    "colorProfile": true,
+    "colorProfiles": [ "default", "projector" ],
     "requirejsNamespace": "STATES_OF_MATTER",
     "phetLibs": [
       "nitroglycerin"
