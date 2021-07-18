@@ -3,7 +3,7 @@
 /**
  * Scenery node that shows the grid lines.  Highly leveraged from energy-skate-park's GridNode implementation.
  *
- * @author Sam Reid
+ * @author Sam Reid (PhET Interactive Simulations)
  * @author Siddhartha Chinthapally
  */
 
