@@ -9,46 +9,47 @@
  * @author Siddhartha Chinthapally (Actual Concepts)
  */
 
-import ColorProfile from '../../../../scenery-phet/js/ColorProfile.js';
 import Color from '../../../../scenery/js/util/Color.js';
+import ProfileColorProperty from '../../../../scenery/js/util/ProfileColorProperty.js';
 import statesOfMatter from '../../statesOfMatter.js';
 
 // constants
 const GRAY = new Color( 230, 230, 230 );
 
-const SOMColorProfile = new ColorProfile( [ 'default', 'projector' ], {
-  background: {
+const SOMColorProfile = {
+  backgroundProperty: new ProfileColorProperty( 'background', {
     default: 'black',
     projector: 'white'
-  },
-  controlPanelBackground: {
+  } ),
+  controlPanelBackgroundProperty: new ProfileColorProperty( 'controlPanelBackground', {
     default: 'black',
     projector: 'white'
-  },
-  controlPanelStroke: {
+  } ),
+  controlPanelStrokeProperty: new ProfileColorProperty( 'controlPanelStroke', {
     default: 'white',
     projector: 'black'
-  },
-  controlPanelText: {
+  } ),
+  controlPanelTextProperty: new ProfileColorProperty( 'controlPanelText', {
     default: GRAY,
     projector: 'black'
-  },
-  navigationBarIconBackground: {
+  } ),
+  navigationBarIconBackgroundProperty: new ProfileColorProperty( 'navigationBarIconBackground', {
     default: 'black',
     projector: 'white'
-  },
-  ljGraphAxesAndGridColor: {
+  } ),
+  ljGraphAxesAndGridColorProperty: new ProfileColorProperty( 'ljGraphAxesAndGridColor', {
     default: GRAY,
     projector: 'black'
-  },
-  particleStroke: {
+  } ),
+  particleStrokeProperty: new ProfileColorProperty( 'particleStroke', {
     default: 'white',
     projector: 'black'
-  },
-  removePairGroup: {
-    default: new Color( '#d00' )
-  }
-} );
+  } ),
+  removePairGroupProperty: new ProfileColorProperty( 'removePairGroup', {
+    default: new Color( '#d00' ),
+    projector: new Color( '#00d' ) // TODO: this was missing https://github.com/phetsims/scenery-phet/issues/515
+  } )
+};
 
 statesOfMatter.register( 'SOMColorProfile', SOMColorProfile );
 
