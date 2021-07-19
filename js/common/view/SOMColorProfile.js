@@ -46,8 +46,7 @@ const SOMColorProfile = {
     projector: 'black'
   } ),
   removePairGroupProperty: new ProfileColorProperty( 'removePairGroup', {
-    default: new Color( '#d00' ),
-    projector: new Color( '#00d' ) // TODO: this was missing https://github.com/phetsims/scenery-phet/issues/515
+    default: new Color( '#d00' )
   } )
 };
 
