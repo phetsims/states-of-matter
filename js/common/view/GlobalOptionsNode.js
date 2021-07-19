@@ -20,7 +20,7 @@ class GlobalOptionsNode extends VBox {
   constructor( tandem ) {
 
     // add support for setting projector mode
-    const projectorModeCheckbox = new ProjectorModeCheckbox( null, {
+    const projectorModeCheckbox = new ProjectorModeCheckbox( {
       tandem: tandem.createTandem( 'projectorModeCheckbox' )
     } );
 
