@@ -44,7 +44,7 @@ git clone https://github.com/phetsims/tandem.git
 git clone https://github.com/phetsims/twixt.git
 git clone https://github.com/phetsims/utterance-queue.git
 ```
-(2) Start an http-server
+(2) Start a http-server
 
 (3) Open `http://localhost/states-of-matter/states-of-matter_en.html` (You will probably need to modify this URL based on your HTTP port and relative path.)
 
