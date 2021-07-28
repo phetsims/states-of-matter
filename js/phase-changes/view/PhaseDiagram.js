@@ -15,7 +15,7 @@ import Node from '../../../../scenery/js/nodes/Node.js';
 import Path from '../../../../scenery/js/nodes/Path.js';
 import RichText from '../../../../scenery/js/nodes/RichText.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
-import SOMColorProfile from '../../common/view/SOMColorProfile.js';
+import SOMColors from '../../common/view/SOMColors.js';
 import statesOfMatter from '../../statesOfMatter.js';
 import statesOfMatterStrings from '../../statesOfMatterStrings.js';
 
@@ -188,8 +188,8 @@ class PhaseDiagram extends Node {
       X_ORIGIN_OFFSET + ( HORIZ_AXIS_SIZE_PROPORTION * WIDTH ),
       Y_ORIGIN_OFFSET,
       {
-        fill: SOMColorProfile.controlPanelTextProperty,
-        stroke: SOMColorProfile.controlPanelTextProperty,
+        fill: SOMColors.controlPanelTextProperty,
+        stroke: SOMColors.controlPanelTextProperty,
         headHeight: AXES_ARROW_HEAD_HEIGHT,
         headWidth: AXES_ARROW_HEAD_WIDTH,
         tailWidth: AXES_LINE_WIDTH
@@ -203,8 +203,8 @@ class PhaseDiagram extends Node {
       X_ORIGIN_OFFSET,
       Y_ORIGIN_OFFSET - Y_USABLE_RANGE - AXES_ARROW_HEAD_HEIGHT,
       {
-        fill: SOMColorProfile.controlPanelTextProperty,
-        stroke: SOMColorProfile.controlPanelTextProperty,
+        fill: SOMColors.controlPanelTextProperty,
+        stroke: SOMColors.controlPanelTextProperty,
         headHeight: AXES_ARROW_HEAD_HEIGHT,
         headWidth: AXES_ARROW_HEAD_WIDTH,
         tailWidth: AXES_LINE_WIDTH
@@ -215,7 +215,7 @@ class PhaseDiagram extends Node {
     // Create and add the labels for the axes.
     const horizontalAxisLabel = new Text( temperatureString, {
       font: AXIS_LABEL_FONT,
-      fill: SOMColorProfile.controlPanelTextProperty,
+      fill: SOMColors.controlPanelTextProperty,
       maxWidth: horizontalAxis.width
     } );
     horizontalAxisLabel.setTranslation( horizontalAxis.centerX - horizontalAxisLabel.width / 2, Y_ORIGIN_OFFSET + horizontalAxisLabel.height * 1.2 );
@@ -223,7 +223,7 @@ class PhaseDiagram extends Node {
 
     const verticalAxisLabel = new Text( pressureString, {
       font: AXIS_LABEL_FONT,
-      fill: SOMColorProfile.controlPanelTextProperty,
+      fill: SOMColors.controlPanelTextProperty,
       maxWidth: verticalAxis.height
     } );
     verticalAxisLabel.setTranslation( X_ORIGIN_OFFSET - ( verticalAxisLabel.height / 1.5 ), verticalAxis.centerY + verticalAxisLabel.width / 2 );

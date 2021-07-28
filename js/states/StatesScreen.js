@@ -11,7 +11,7 @@ import Screen from '../../../joist/js/Screen.js';
 import MultipleParticleModel from '../common/model/MultipleParticleModel.js';
 import SOMConstants from '../common/SOMConstants.js';
 import SubstanceType from '../common/SubstanceType.js';
-import SOMColorProfile from '../common/view/SOMColorProfile.js';
+import SOMColors from '../common/view/SOMColors.js';
 import statesOfMatterStrings from '../statesOfMatterStrings.js';
 import statesOfMatter from '../statesOfMatter.js';
 import StatesIcon from './StatesIcon.js';
@@ -28,11 +28,11 @@ class StatesScreen extends Screen {
 
     const options = {
       name: statesString,
-      backgroundColorProperty: SOMColorProfile.backgroundProperty,
+      backgroundColorProperty: SOMColors.backgroundProperty,
       homeScreenIcon: new StatesIcon(),
       navigationBarIcon: new StatesIcon( {
         size: Screen.MINIMUM_NAVBAR_ICON_SIZE,
-        fill: SOMColorProfile.navigationBarIconBackgroundProperty
+        fill: SOMColors.navigationBarIconBackgroundProperty
       } ),
       showUnselectedHomeScreenIconFrame: true,
       maxDT: SOMConstants.MAX_DT,

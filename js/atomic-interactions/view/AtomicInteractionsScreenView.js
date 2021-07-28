@@ -16,7 +16,7 @@ import TimeControlNode from '../../../../scenery-phet/js/TimeControlNode.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import TextPushButton from '../../../../sun/js/buttons/TextPushButton.js';
 import SOMConstants from '../../common/SOMConstants.js';
-import SOMColorProfile from '../../common/view/SOMColorProfile.js';
+import SOMColors from '../../common/view/SOMColors.js';
 import statesOfMatter from '../../statesOfMatter.js';
 import statesOfMatterStrings from '../../statesOfMatterStrings.js';
 import DualAtomModel from '../model/DualAtomModel.js';
@@ -68,11 +68,11 @@ class AtomicInteractionsScreenView extends ScreenView {
     );
 
     // initialize local variables
-    const tickTextColor = enableHeterogeneousAtoms ? 'black' : SOMColorProfile.controlPanelTextProperty;
-    const textColor = enableHeterogeneousAtoms ? 'black' : SOMColorProfile.controlPanelTextProperty;
-    const panelFill = enableHeterogeneousAtoms ? '#D1D2FF' : SOMColorProfile.controlPanelBackgroundProperty;
-    const panelStroke = enableHeterogeneousAtoms ? '#D1D2FF' : SOMColorProfile.controlPanelStrokeProperty;
-    const panelTextFill = enableHeterogeneousAtoms ? 'black' : SOMColorProfile.controlPanelTextProperty;
+    const tickTextColor = enableHeterogeneousAtoms ? 'black' : SOMColors.controlPanelTextProperty;
+    const textColor = enableHeterogeneousAtoms ? 'black' : SOMColors.controlPanelTextProperty;
+    const panelFill = enableHeterogeneousAtoms ? '#D1D2FF' : SOMColors.controlPanelBackgroundProperty;
+    const panelStroke = enableHeterogeneousAtoms ? '#D1D2FF' : SOMColors.controlPanelStrokeProperty;
+    const panelTextFill = enableHeterogeneousAtoms ? 'black' : SOMColors.controlPanelTextProperty;
     const forceControlPanelButtonAlign = enableHeterogeneousAtoms ? 'right' : 'left';
     const atomsControlPanel = new AtomicInteractionsControlPanel( dualAtomModel, enableHeterogeneousAtoms, {
       right: this.layoutBounds.maxX - INSET,
@@ -174,7 +174,7 @@ class AtomicInteractionsScreenView extends ScreenView {
 
       speedRadioButtonGroupOptions: {
         labelOptions: {
-          fill: SOMColorProfile.controlPanelTextProperty,
+          fill: SOMColors.controlPanelTextProperty,
           font: new PhetFont( 14 ),
           maxWidth: MAX_TEXT_WIDTH
         }

@@ -20,7 +20,7 @@ import statesOfMatter from '../../statesOfMatter.js';
 import statesOfMatterStrings from '../../statesOfMatterStrings.js';
 import LjPotentialCalculator from '../model/LjPotentialCalculator.js';
 import SOMConstants from '../SOMConstants.js';
-import SOMColorProfile from './SOMColorProfile.js';
+import SOMColors from './SOMColors.js';
 
 const distanceBetweenAtomsString = statesOfMatterStrings.distanceBetweenAtoms;
 const distanceBetweenMoleculesString = statesOfMatterStrings.distanceBetweenMolecules;
@@ -89,13 +89,13 @@ class PotentialGraphNode extends Node {
       this.widthOfGraph = WIDE_VERSION_WIDTH;
       this.heightOfGraph = this.widthOfGraph * 0.75;
       GREEK_LETTER_FONT = new PhetFont( 22 );
-      axisLabelFont = new PhetFont( { size: 16, fill: SOMColorProfile.controlPanelTextProperty } );
+      axisLabelFont = new PhetFont( { size: 16, fill: SOMColors.controlPanelTextProperty } );
       GREEK_LETTER_MAX_WIDTH = 60;
     }
     else {
       this.widthOfGraph = NARROW_VERSION_WIDTH;
       this.heightOfGraph = this.widthOfGraph * 0.8;
-      axisLabelFont = new PhetFont( { size: 11, fill: SOMColorProfile.controlPanelTextProperty } );
+      axisLabelFont = new PhetFont( { size: 11, fill: SOMColors.controlPanelTextProperty } );
       GREEK_LETTER_FONT = new PhetFont( GREEK_LETTER_FONT_SIZE );
       GREEK_LETTER_MAX_WIDTH = 17;
     }
@@ -122,13 +122,13 @@ class PotentialGraphNode extends Node {
       headWidth: 20,
       tailWidth: 9,
       doubleHead: false,
-      fill: SOMColorProfile.controlPanelTextProperty,
+      fill: SOMColors.controlPanelTextProperty,
       lineWidth: 0.5
     } );
 
     this.epsilonLabel = new Text( epsilonString, {
       font: GREEK_LETTER_FONT,
-      fill: SOMColorProfile.controlPanelTextProperty,
+      fill: SOMColors.controlPanelTextProperty,
       maxWidth: GREEK_LETTER_MAX_WIDTH,
       boundsMethod: 'accurate' // This seems necessary for good graph layout, and doesn't seem to impact performance.
     } );
@@ -147,7 +147,7 @@ class PotentialGraphNode extends Node {
 
     this.sigmaLabel = new Text( sigmaString, {
       font: GREEK_LETTER_FONT,
-      fill: SOMColorProfile.controlPanelTextProperty,
+      fill: SOMColors.controlPanelTextProperty,
       maxWidth: GREEK_LETTER_MAX_WIDTH
     } );
     this.sigmaArrow = new ArrowNode( 0, 0, 0, 0, {
@@ -155,7 +155,7 @@ class PotentialGraphNode extends Node {
       headWidth: 8,
       tailWidth: 3,
       doubleHead: true,
-      fill: SOMColorProfile.controlPanelTextProperty,
+      fill: SOMColors.controlPanelTextProperty,
       lineWidth: 0.5
     } );
 
@@ -205,8 +205,8 @@ class PotentialGraphNode extends Node {
 
     // Create the horizontal axis line for the graph.
     this.horizontalAxis = new ArrowNode( 0, 0, this.graphWidth + AXES_ARROW_HEAD_HEIGHT, 0, {
-      fill: SOMColorProfile.controlPanelTextProperty,
-      stroke: SOMColorProfile.controlPanelTextProperty,
+      fill: SOMColors.controlPanelTextProperty,
+      stroke: SOMColors.controlPanelTextProperty,
       headHeight: 8,
       headWidth: 8,
       tailWidth: 2,
@@ -215,7 +215,7 @@ class PotentialGraphNode extends Node {
     } );
 
     this.horizontalAxisLabel = new Text( distanceBetweenAtomsString, {
-      fill: SOMColorProfile.controlPanelTextProperty,
+      fill: SOMColors.controlPanelTextProperty,
       font: axisLabelFont
     } );
     if ( this.horizontalAxisLabel.width > this.horizontalAxis.width ) {
@@ -231,8 +231,8 @@ class PotentialGraphNode extends Node {
 
     // Create the vertical axis line for the graph.
     this.verticalAxis = new ArrowNode( 0, 0, 0, -this.graphHeight - AXES_ARROW_HEAD_HEIGHT, {
-      fill: SOMColorProfile.controlPanelTextProperty,
-      stroke: SOMColorProfile.controlPanelTextProperty,
+      fill: SOMColors.controlPanelTextProperty,
+      stroke: SOMColors.controlPanelTextProperty,
       headHeight: 8,
       headWidth: 8,
       tailWidth: AXIS_LINE_WIDTH,
@@ -241,7 +241,7 @@ class PotentialGraphNode extends Node {
     } );
 
     this.verticalAxisLabel = new Text( potentialEnergyString, {
-      fill: SOMColorProfile.controlPanelTextProperty,
+      fill: SOMColors.controlPanelTextProperty,
       font: axisLabelFont
     } );
 

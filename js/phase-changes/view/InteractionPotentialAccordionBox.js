@@ -15,7 +15,7 @@ import Text from '../../../../scenery/js/nodes/Text.js';
 import AccordionBox from '../../../../sun/js/AccordionBox.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import SOMConstants from '../../common/SOMConstants.js';
-import SOMColorProfile from '../../common/view/SOMColorProfile.js';
+import SOMColors from '../../common/view/SOMColors.js';
 import statesOfMatterStrings from '../../statesOfMatterStrings.js';
 import statesOfMatter from '../../statesOfMatter.js';
 import EpsilonControlPotentialGraph from './EpsilonControlPotentialGraph.js';
@@ -53,7 +53,7 @@ class InteractionPotentialAccordionBox extends AccordionBox {
 
     const accordionContentHBox = new HBox( { children: [ accordionContent ] } );
     const titleNode = new Text( interactionPotentialString, {
-      fill: SOMColorProfile.controlPanelTextProperty,
+      fill: SOMColors.controlPanelTextProperty,
       font: new PhetFont( { size: 13 } )
     } );
     if ( titleNode.width > graph.horizontalAxis.width ) {
@@ -61,8 +61,8 @@ class InteractionPotentialAccordionBox extends AccordionBox {
     }
     super( accordionContentHBox, merge( {
       titleNode: titleNode,
-      fill: SOMColorProfile.controlPanelBackgroundProperty,
-      stroke: SOMColorProfile.controlPanelStrokeProperty,
+      fill: SOMColors.controlPanelBackgroundProperty,
+      stroke: SOMColors.controlPanelStrokeProperty,
       expandedProperty: multipleParticleModel.interactionPotentialExpandedProperty,
       contentAlign: 'center',
       titleAlignX: 'center',

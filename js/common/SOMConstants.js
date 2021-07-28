@@ -14,7 +14,7 @@ import PhetFont from '../../../scenery-phet/js/PhetFont.js';
 import Color from '../../../scenery/js/util/Color.js';
 import statesOfMatter from '../statesOfMatter.js';
 import AtomType from './model/AtomType.js';
-import SOMColorProfile from './view/SOMColorProfile.js';
+import SOMColors from './view/SOMColors.js';
 
 // constants (these are vars because other constants refer to them)
 const SOLID_TEMPERATURE = 0.15;
@@ -157,8 +157,8 @@ const SOMConstants = {
   // slider options that are common to the sliders that are used to control the attraction level between atoms
   ADJUSTABLE_ATTRACTION_SLIDER_COMMON_OPTIONS: {
     majorTickLength: 15,
-    majorTickStroke: SOMColorProfile.controlPanelTextProperty,
-    minorTickStroke: SOMColorProfile.controlPanelTextProperty,
+    majorTickStroke: SOMColors.controlPanelTextProperty,
+    minorTickStroke: SOMColors.controlPanelTextProperty,
     thumbSize: new Dimension2( 14, 25 ),
     thumbFill: new Color( '#A670DB' ),
     thumbFillHighlighted: new Color( '#D966FF' ),
@@ -166,7 +166,7 @@ const SOMConstants = {
     thumbTouchAreaXDilation: 8,
     thumbTouchAreaYDilation: 8,
     trackFill: Color.WHITE,
-    trackStroke: SOMColorProfile.controlPanelTextProperty
+    trackStroke: SOMColors.controlPanelTextProperty
   },
   SLIDER_TICK_TEXT_FONT: new PhetFont( 10 ),
 

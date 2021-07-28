@@ -22,7 +22,7 @@ import AtomType from '../../common/model/AtomType.js';
 import SOMConstants from '../../common/SOMConstants.js';
 import InteractionPotentialCanvasNode from '../../common/view/InteractionPotentialCanvasNode.js';
 import PotentialGraphNode from '../../common/view/PotentialGraphNode.js';
-import SOMColorProfile from '../../common/view/SOMColorProfile.js';
+import SOMColors from '../../common/view/SOMColors.js';
 import statesOfMatter from '../../statesOfMatter.js';
 import Utils from '../../../../dot/js/Utils.js';
 
@@ -281,18 +281,18 @@ class InteractivePotentialGraph extends PotentialGraphNode {
     this.addChild( this.ljPotentialGraph );
 
     // applying color scheme to lj graph elements
-    this.verticalAxis.fill = SOMColorProfile.ljGraphAxesAndGridColorProperty;
-    this.horizontalAxis.fill = SOMColorProfile.ljGraphAxesAndGridColorProperty;
-    this.verticalAxis.stroke = SOMColorProfile.ljGraphAxesAndGridColorProperty;
-    this.horizontalAxis.stroke = SOMColorProfile.ljGraphAxesAndGridColorProperty;
-    this.epsilonArrow.fill = SOMColorProfile.ljGraphAxesAndGridColorProperty;
-    this.epsilonArrow.fill = SOMColorProfile.ljGraphAxesAndGridColorProperty;
-    this.sigmaArrow.fill = SOMColorProfile.ljGraphAxesAndGridColorProperty;
-    this.epsilonLabel.fill = SOMColorProfile.ljGraphAxesAndGridColorProperty;
-    this.sigmaLabel.fill = SOMColorProfile.ljGraphAxesAndGridColorProperty;
-    this.epsilonArrow.stroke = SOMColorProfile.ljGraphAxesAndGridColorProperty;
-    this.horizontalAxisLabel.fill = SOMColorProfile.ljGraphAxesAndGridColorProperty;
-    this.verticalAxisLabel.fill = SOMColorProfile.ljGraphAxesAndGridColorProperty;
+    this.verticalAxis.fill = SOMColors.ljGraphAxesAndGridColorProperty;
+    this.horizontalAxis.fill = SOMColors.ljGraphAxesAndGridColorProperty;
+    this.verticalAxis.stroke = SOMColors.ljGraphAxesAndGridColorProperty;
+    this.horizontalAxis.stroke = SOMColors.ljGraphAxesAndGridColorProperty;
+    this.epsilonArrow.fill = SOMColors.ljGraphAxesAndGridColorProperty;
+    this.epsilonArrow.fill = SOMColors.ljGraphAxesAndGridColorProperty;
+    this.sigmaArrow.fill = SOMColors.ljGraphAxesAndGridColorProperty;
+    this.epsilonLabel.fill = SOMColors.ljGraphAxesAndGridColorProperty;
+    this.sigmaLabel.fill = SOMColors.ljGraphAxesAndGridColorProperty;
+    this.epsilonArrow.stroke = SOMColors.ljGraphAxesAndGridColorProperty;
+    this.horizontalAxisLabel.fill = SOMColors.ljGraphAxesAndGridColorProperty;
+    this.verticalAxisLabel.fill = SOMColors.ljGraphAxesAndGridColorProperty;
 
     this.mutate( options );
   }

@@ -8,7 +8,7 @@
 
 import Screen from '../../../joist/js/Screen.js';
 import SOMConstants from '../common/SOMConstants.js';
-import SOMColorProfile from '../common/view/SOMColorProfile.js';
+import SOMColors from '../common/view/SOMColors.js';
 import statesOfMatter from '../statesOfMatter.js';
 import AtomicInteractionsIcon from './AtomicInteractionsIcon.js';
 import DualAtomModel from './model/DualAtomModel.js';
@@ -25,11 +25,11 @@ class AtomicInteractionsScreen extends Screen {
 
     const options = {
       name: screenTitle,
-      backgroundColorProperty: SOMColorProfile.backgroundProperty,
+      backgroundColorProperty: SOMColors.backgroundProperty,
       homeScreenIcon: new AtomicInteractionsIcon(),
       navigationBarIcon: new AtomicInteractionsIcon( {
         size: Screen.MINIMUM_NAVBAR_ICON_SIZE,
-        fill: SOMColorProfile.navigationBarIconBackgroundProperty
+        fill: SOMColors.navigationBarIconBackgroundProperty
       } ),
       showUnselectedHomeScreenIconFrame: true,
       maxDT: SOMConstants.MAX_DT,

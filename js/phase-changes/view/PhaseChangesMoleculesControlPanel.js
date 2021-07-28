@@ -22,7 +22,7 @@ import Tandem from '../../../../tandem/js/Tandem.js';
 import SOMConstants from '../../common/SOMConstants.js';
 import SubstanceType from '../../common/SubstanceType.js';
 import AtomAndMoleculeIconFactory from '../../common/view/AtomAndMoleculeIconFactory.js';
-import SOMColorProfile from '../../common/view/SOMColorProfile.js';
+import SOMColors from '../../common/view/SOMColors.js';
 import SubstanceSelectorNode from '../../common/view/SubstanceSelectorNode.js';
 import TitledSlider from '../../common/view/TitledSlider.js';
 import statesOfMatter from '../../statesOfMatter.js';
@@ -57,8 +57,8 @@ class PhaseChangesMoleculesControlPanel extends Node {
       showAdjustableAttraction: false,
       xMargin: 5,
       yMargin: 5,
-      fill: SOMColorProfile.controlPanelBackgroundProperty,
-      stroke: SOMColorProfile.controlPanelStrokeProperty,
+      fill: SOMColors.controlPanelBackgroundProperty,
+      stroke: SOMColors.controlPanelStrokeProperty,
       lineWidth: 1,
       cornerRadius: SOMConstants.PANEL_CORNER_RADIUS,
       minWidth: 120, // somewhat arbitrary, will generally be set by constructor
@@ -71,7 +71,7 @@ class PhaseChangesMoleculesControlPanel extends Node {
 
     const tickTextOptions = {
       font: SOMConstants.SLIDER_TICK_TEXT_FONT,
-      fill: SOMColorProfile.controlPanelTextProperty,
+      fill: SOMColors.controlPanelTextProperty,
       maxWidth: TICK_TEXT_MAX_WIDTH
     };
 
@@ -91,7 +91,7 @@ class PhaseChangesMoleculesControlPanel extends Node {
           { trackSize: new Dimension2( 110, 4 ) }
         ),
         titleOptions: {
-          fill: SOMColorProfile.controlPanelTextProperty,
+          fill: SOMColors.controlPanelTextProperty,
           maxWidth: 140
         },
         phetioDocumentation: 'Used for \'Adjustable Attraction\' only'
@@ -229,7 +229,7 @@ class PhaseChangesMoleculesControlPanel extends Node {
     // title for the panel
     const title = new Text( atomsAndMoleculesString, {
       font: new PhetFont( 14 ),
-      fill: SOMColorProfile.controlPanelTextProperty,
+      fill: SOMColors.controlPanelTextProperty,
       maxWidth: options.minWidth * 0.85,
       tandem: options.tandem.createTandem( 'title' )
     } );

@@ -27,7 +27,7 @@ import pushPinImg from '../../../images/push-pin_png.js';
 import SOMConstants from '../../common/SOMConstants.js';
 import SubstanceType from '../../common/SubstanceType.js';
 import AtomAndMoleculeIconFactory from '../../common/view/AtomAndMoleculeIconFactory.js';
-import SOMColorProfile from '../../common/view/SOMColorProfile.js';
+import SOMColors from '../../common/view/SOMColors.js';
 import TitledSlider from '../../common/view/TitledSlider.js';
 import statesOfMatter from '../../statesOfMatter.js';
 import statesOfMatterStrings from '../../statesOfMatterStrings.js';
@@ -344,7 +344,7 @@ class AtomicInteractionsControlPanel extends Node {
       titleNode = new BackgroundNode( labelNodes.label, {
         yMargin: 1,
         backgroundOptions: {
-          fill: SOMColorProfile.backgroundProperty,
+          fill: SOMColors.backgroundProperty,
           opacity: 1
         }
       } );

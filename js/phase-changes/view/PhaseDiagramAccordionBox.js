@@ -11,7 +11,7 @@ import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import AccordionBox from '../../../../sun/js/AccordionBox.js';
 import SOMConstants from '../../common/SOMConstants.js';
-import SOMColorProfile from '../../common/view/SOMColorProfile.js';
+import SOMColors from '../../common/view/SOMColors.js';
 import statesOfMatter from '../../statesOfMatter.js';
 import statesOfMatterStrings from '../../statesOfMatterStrings.js';
 import PhaseDiagram from './PhaseDiagram.js';
@@ -27,8 +27,8 @@ class PhaseDiagramAccordionBox extends AccordionBox {
   constructor( expandedProperty, options ) {
 
     options = merge( {
-      fill: SOMColorProfile.controlPanelBackgroundProperty,
-      stroke: SOMColorProfile.controlPanelStrokeProperty,
+      fill: SOMColors.controlPanelBackgroundProperty,
+      stroke: SOMColors.controlPanelStrokeProperty,
       expandedProperty: expandedProperty,
       contentAlign: 'center',
       titleAlignX: 'center',
@@ -52,7 +52,7 @@ class PhaseDiagramAccordionBox extends AccordionBox {
     const phaseDiagram = new PhaseDiagram();
 
     const titleNode = new Text( phaseDiagramString, {
-      fill: SOMColorProfile.controlPanelTextProperty,
+      fill: SOMColors.controlPanelTextProperty,
       font: new PhetFont( { size: 13 } ),
       maxWidth: options.maxWidth * 0.75
     } );

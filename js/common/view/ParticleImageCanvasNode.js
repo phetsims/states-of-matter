@@ -10,7 +10,7 @@ import CanvasNode from '../../../../scenery/js/nodes/CanvasNode.js';
 import statesOfMatter from '../../statesOfMatter.js';
 import AtomType from '../model/AtomType.js';
 import SOMConstants from '../SOMConstants.js';
-import SOMColorProfile from './SOMColorProfile.js';
+import SOMColors from './SOMColors.js';
 
 // constants
 const PARTICLE_IMAGE_CANVAS_LENGTH = 32; // amount of canvas used to create a particle image, will be squared 
@@ -108,7 +108,7 @@ class ParticleImageCanvasNode extends CanvasNode {
     // initiate the first paint
     this.invalidatePaint();
 
-    SOMColorProfile.particleStrokeProperty.link( color => {
+    SOMColors.particleStrokeProperty.link( color => {
       this.useStrokedParticles = color.toCSS() !== 'rgb(255,255,255)';
     } );
     this.mutate( options );

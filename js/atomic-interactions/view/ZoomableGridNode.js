@@ -16,13 +16,13 @@ import Node from '../../../../scenery/js/nodes/Node.js';
 import Path from '../../../../scenery/js/nodes/Path.js';
 import ButtonNode from '../../../../sun/js/buttons/ButtonNode.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
-import SOMColorProfile from '../../common/view/SOMColorProfile.js';
+import SOMColors from '../../common/view/SOMColors.js';
 import statesOfMatter from '../../statesOfMatter.js';
 
 // constants
 const MIN_LINES_HORIZONTAL = 5;
 const GRID_LINES_OPTIONS = {
-  stroke: SOMColorProfile.ljGraphAxesAndGridColorProperty,
+  stroke: SOMColors.ljGraphAxesAndGridColorProperty,
   lineWidth: 0.8,
   opacity: 0.6
 };

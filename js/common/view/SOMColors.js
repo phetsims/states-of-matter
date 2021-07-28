@@ -16,7 +16,7 @@ import statesOfMatter from '../../statesOfMatter.js';
 // constants
 const GRAY = new Color( 230, 230, 230 );
 
-const SOMColorProfile = {
+const SOMColors = {
   backgroundProperty: new ProfileColorProperty( 'background', {
     default: 'black',
     projector: 'white'
@@ -50,6 +50,6 @@ const SOMColorProfile = {
   } )
 };
 
-statesOfMatter.register( 'SOMColorProfile', SOMColorProfile );
+statesOfMatter.register( 'SOMColors', SOMColors );
 
-export default SOMColorProfile;
+export default SOMColors;
