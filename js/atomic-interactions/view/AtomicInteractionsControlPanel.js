@@ -343,7 +343,7 @@ class AtomicInteractionsControlPanel extends Node {
 
       titleNode = new BackgroundNode( labelNodes.label, {
         yMargin: 1,
-        backgroundOptions: {
+        rectangleOptions: {
           fill: SOMColors.backgroundProperty,
           opacity: 1
         }
