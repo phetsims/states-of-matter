@@ -17,35 +17,35 @@ import statesOfMatter from '../../statesOfMatter.js';
 const GRAY = new Color( 230, 230, 230 );
 
 const SOMColors = {
-  backgroundProperty: new ProfileColorProperty( 'background', {
+  backgroundProperty: new ProfileColorProperty( statesOfMatter, 'background', {
     default: 'black',
     projector: 'white'
   } ),
-  controlPanelBackgroundProperty: new ProfileColorProperty( 'controlPanelBackground', {
+  controlPanelBackgroundProperty: new ProfileColorProperty( statesOfMatter, 'controlPanelBackground', {
     default: 'black',
     projector: 'white'
   } ),
-  controlPanelStrokeProperty: new ProfileColorProperty( 'controlPanelStroke', {
+  controlPanelStrokeProperty: new ProfileColorProperty( statesOfMatter, 'controlPanelStroke', {
     default: 'white',
     projector: 'black'
   } ),
-  controlPanelTextProperty: new ProfileColorProperty( 'controlPanelText', {
+  controlPanelTextProperty: new ProfileColorProperty( statesOfMatter, 'controlPanelText', {
     default: GRAY,
     projector: 'black'
   } ),
-  navigationBarIconBackgroundProperty: new ProfileColorProperty( 'navigationBarIconBackground', {
+  navigationBarIconBackgroundProperty: new ProfileColorProperty( statesOfMatter, 'navigationBarIconBackground', {
     default: 'black',
     projector: 'white'
   } ),
-  ljGraphAxesAndGridColorProperty: new ProfileColorProperty( 'ljGraphAxesAndGridColor', {
+  ljGraphAxesAndGridColorProperty: new ProfileColorProperty( statesOfMatter, 'ljGraphAxesAndGridColor', {
     default: GRAY,
     projector: 'black'
   } ),
-  particleStrokeProperty: new ProfileColorProperty( 'particleStroke', {
+  particleStrokeProperty: new ProfileColorProperty( statesOfMatter, 'particleStroke', {
     default: 'white',
     projector: 'black'
   } ),
-  removePairGroupProperty: new ProfileColorProperty( 'removePairGroup', {
+  removePairGroupProperty: new ProfileColorProperty( statesOfMatter, 'removePairGroup', {
     default: new Color( '#d00' )
   } )
 };
