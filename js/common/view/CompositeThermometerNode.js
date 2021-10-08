@@ -95,12 +95,14 @@ class CompositeThermometerNode extends Node {
     const comboBoxDisplayItems = [
       {
         choice: TemperatureUnits.KELVIN,
+        tandemName: `${TemperatureUnits.KELVIN.toString().toLowerCase()}Item`,
         numberProperty: multipleParticleModel.temperatureInKelvinProperty,
         range: KELVIN_TEMPERATURE_RANGE,
         units: kelvinUnitsString
       },
       {
         choice: TemperatureUnits.CELSIUS,
+        tandemName: `${TemperatureUnits.CELSIUS.toString().toLowerCase()}Item`,
         numberProperty: temperatureInCelsiusProperty,
         range: CELSIUS_TEMPERATURE_RANGE,
         units: celsiusUnitsString
