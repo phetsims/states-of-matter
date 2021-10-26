@@ -31,7 +31,10 @@ simLauncher.launch( () => {
     },
 
     // create content for the Options dialog
-    createOptionsDialogContent: tandem => new GlobalOptionsNode( tandem )
+    createOptionsDialogContent: tandem => new GlobalOptionsNode( tandem ),
+
+    // phet-io options
+    phetioDesigned: true
   };
 
   const sim = new Sim( statesOfMatterTitleString, [
