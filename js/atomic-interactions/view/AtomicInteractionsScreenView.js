@@ -329,14 +329,18 @@ class AtomicInteractionsScreenView extends ScreenView {
     this.updateForceVectors();
     this.updateHandPosition();
 
-    const scale = Math.min( window.innerWidth / this.layoutBounds.width, window.innerHeight / this.layoutBounds.height );
+    const simDimensions = phet.joist.sim.dimensionProperty.value;
+    const width = simDimensions.width;
+    const height = simDimensions.height;
+
+    const scale = Math.min( width / this.layoutBounds.width, height / this.layoutBounds.height );
     let atomWindowPosition = scale * ( this.modelViewTransform.modelToViewX( this.dualAtomModel.movableAtom.getX() ) );
 
     // account for the view centering
-    if ( scale === window.innerHeight / this.layoutBounds.height ) {
-      atomWindowPosition += ( window.innerWidth - this.layoutBounds.width * scale ) / 2 - 50;
+    if ( scale === height / this.layoutBounds.height ) {
+      atomWindowPosition += ( width - this.layoutBounds.width * scale ) / 2 - 50;
     }
-    if ( atomWindowPosition > window.innerWidth ) {
+    if ( atomWindowPosition > width ) {
       if ( !this.returnAtomButton.isVisible() ) {
         // The particle is off the canvas and the button is not yet shown, so show it.
         this.returnAtomButton.setVisible( true );
