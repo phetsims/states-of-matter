@@ -5,7 +5,7 @@
       "path": "../nitroglycerin"
     },
     {
-      "path": "../joist"
+      "path": "../joist/tsconfig-module.json"
     }
   ],
   "include": [
