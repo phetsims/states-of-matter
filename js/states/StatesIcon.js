@@ -8,10 +8,10 @@
 
 import Screen from '../../../joist/js/Screen.js';
 import ScreenIcon from '../../../joist/js/ScreenIcon.js';
-import HBox from '../../../scenery/js/nodes/HBox.js';
-import Image from '../../../scenery/js/nodes/Image.js';
-import Rectangle from '../../../scenery/js/nodes/Rectangle.js';
-import Color from '../../../scenery/js/util/Color.js';
+import { HBox } from '../../../scenery/js/imports.js';
+import { Image } from '../../../scenery/js/imports.js';
+import { Rectangle } from '../../../scenery/js/imports.js';
+import { Color } from '../../../scenery/js/imports.js';
 import gasIconImage from '../../mipmaps/gas-icon_png.js';
 import liquidIconImage from '../../mipmaps/liquid-icon_png.js';
 import solidIconImage from '../../mipmaps/solid-icon_png.js';

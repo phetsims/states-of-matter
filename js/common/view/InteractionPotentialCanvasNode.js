@@ -11,7 +11,7 @@
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import ArrowShape from '../../../../scenery-phet/js/ArrowShape.js';
-import CanvasNode from '../../../../scenery/js/nodes/CanvasNode.js';
+import { CanvasNode } from '../../../../scenery/js/imports.js';
 import statesOfMatter from '../../statesOfMatter.js';
 
 // constants

@@ -8,7 +8,7 @@
  * @author John Blanco
  */
 
-import DragListener from '../../../../scenery/js/listeners/DragListener.js';
+import { DragListener } from '../../../../scenery/js/imports.js';
 import statesOfMatter from '../../statesOfMatter.js';
 import ParticleForceNode from './ParticleForceNode.js';
 

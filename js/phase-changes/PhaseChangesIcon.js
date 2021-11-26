@@ -12,10 +12,10 @@ import Screen from '../../../joist/js/Screen.js';
 import ScreenIcon from '../../../joist/js/ScreenIcon.js';
 import merge from '../../../phet-core/js/merge.js';
 import ArrowNode from '../../../scenery-phet/js/ArrowNode.js';
-import Circle from '../../../scenery/js/nodes/Circle.js';
-import Node from '../../../scenery/js/nodes/Node.js';
-import Rectangle from '../../../scenery/js/nodes/Rectangle.js';
-import Color from '../../../scenery/js/util/Color.js';
+import { Circle } from '../../../scenery/js/imports.js';
+import { Node } from '../../../scenery/js/imports.js';
+import { Rectangle } from '../../../scenery/js/imports.js';
+import { Color } from '../../../scenery/js/imports.js';
 import SOMConstants from '../common/SOMConstants.js';
 import statesOfMatter from '../statesOfMatter.js';
 

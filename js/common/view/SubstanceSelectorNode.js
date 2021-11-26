@@ -5,9 +5,9 @@
  * or molecule - on the right.  It maintains its initial width if the width of the label changes.
  */
 
-import HBox from '../../../../scenery/js/nodes/HBox.js';
-import Line from '../../../../scenery/js/nodes/Line.js';
-import Color from '../../../../scenery/js/util/Color.js';
+import { HBox } from '../../../../scenery/js/imports.js';
+import { Line } from '../../../../scenery/js/imports.js';
+import { Color } from '../../../../scenery/js/imports.js';
 import statesOfMatter from '../../statesOfMatter.js';
 
 class SubstanceSelectorNode extends HBox {
