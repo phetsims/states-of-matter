@@ -4,9 +4,9 @@
  * enumeration of the various possible phases of matter
  */
 
-import Enumeration from '../../../phet-core/js/Enumeration.js';
+import EnumerationDeprecated from '../../../phet-core/js/EnumerationDeprecated.js';
 import statesOfMatter from '../statesOfMatter.js';
 
-const PhaseStateEnum = Enumeration.byKeys( [ 'SOLID', 'LIQUID', 'GAS', 'UNKNOWN' ] );
+const PhaseStateEnum = EnumerationDeprecated.byKeys( [ 'SOLID', 'LIQUID', 'GAS', 'UNKNOWN' ] );
 statesOfMatter.register( 'PhaseStateEnum', PhaseStateEnum );
 export default PhaseStateEnum;

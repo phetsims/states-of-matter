@@ -5,11 +5,11 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import Enumeration from '../../../../phet-core/js/Enumeration.js';
+import EnumerationDeprecated from '../../../../phet-core/js/EnumerationDeprecated.js';
 import AtomType from '../../common/model/AtomType.js';
 import statesOfMatter from '../../statesOfMatter.js';
 
-const AtomPair = Enumeration.byMap( {
+const AtomPair = EnumerationDeprecated.byMap( {
     NEON_NEON: { fixedAtomType: AtomType.NEON, movableAtomType: AtomType.NEON },
     ARGON_ARGON: { fixedAtomType: AtomType.ARGON, movableAtomType: AtomType.ARGON },
     OXYGEN_OXYGEN: { fixedAtomType: AtomType.OXYGEN, movableAtomType: AtomType.OXYGEN },

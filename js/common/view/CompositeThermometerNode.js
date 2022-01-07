@@ -12,7 +12,7 @@ import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import EnumerationProperty from '../../../../axon/js/EnumerationProperty.js';
 import Range from '../../../../dot/js/Range.js';
 import Utils from '../../../../dot/js/Utils.js';
-import Enumeration from '../../../../phet-core/js/Enumeration.js';
+import EnumerationDeprecated from '../../../../phet-core/js/EnumerationDeprecated.js';
 import merge from '../../../../phet-core/js/merge.js';
 import ComboBoxDisplay from '../../../../scenery-phet/js/ComboBoxDisplay.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
@@ -40,7 +40,7 @@ const CELSIUS_TEMPERATURE_RANGE = new Range(
 const TEMPERATURE_READOUT_FONT = new PhetFont( 11 );
 
 // local enum
-const TemperatureUnits = Enumeration.byKeys( [ 'KELVIN', 'CELSIUS' ] );
+const TemperatureUnits = EnumerationDeprecated.byKeys( [ 'KELVIN', 'CELSIUS' ] );
 
 // clamping the red mercury display at 1000
 const MAX_TEMPERATURE_TO_CLAMP_RED_MERCURY = 1000;

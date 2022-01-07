@@ -6,10 +6,10 @@
  * @author Aaron Davis
  */
 
-import Enumeration from '../../../../phet-core/js/Enumeration.js';
+import EnumerationDeprecated from '../../../../phet-core/js/EnumerationDeprecated.js';
 import statesOfMatter from '../../statesOfMatter.js';
 
-const AtomType = Enumeration.byKeys( [ 'NEON', 'ARGON', 'OXYGEN', 'HYDROGEN', 'ADJUSTABLE' ] );
+const AtomType = EnumerationDeprecated.byKeys( [ 'NEON', 'ARGON', 'OXYGEN', 'HYDROGEN', 'ADJUSTABLE' ] );
 
 statesOfMatter.register( 'AtomType', AtomType );
 export default AtomType;

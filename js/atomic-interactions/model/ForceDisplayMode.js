@@ -4,9 +4,9 @@
  * enumeration for the ways in which the forces can be depicted
  */
 
-import Enumeration from '../../../../phet-core/js/Enumeration.js';
+import EnumerationDeprecated from '../../../../phet-core/js/EnumerationDeprecated.js';
 import statesOfMatter from '../../statesOfMatter.js';
 
-const ForceDisplayMode = Enumeration.byKeys( [ 'COMPONENTS', 'TOTAL', 'HIDDEN' ] );
+const ForceDisplayMode = EnumerationDeprecated.byKeys( [ 'COMPONENTS', 'TOTAL', 'HIDDEN' ] );
 statesOfMatter.register( 'ForceDisplayMode', ForceDisplayMode );
 export default ForceDisplayMode;
