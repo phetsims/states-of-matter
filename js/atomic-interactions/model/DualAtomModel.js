@@ -1,7 +1,7 @@
 // Copyright 2015-2021, University of Colorado Boulder
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
-import EnumerationProperty from '../../../../axon/js/EnumerationProperty.js';
+import EnumerationDeprecatedProperty from '../../../../axon/js/EnumerationDeprecatedProperty.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Property from '../../../../axon/js/Property.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
@@ -64,7 +64,7 @@ class DualAtomModel {
     this.motionPausedProperty = new BooleanProperty( false );
 
     // @public (read-write)
-    this.atomPairProperty = new EnumerationProperty( AtomPair, AtomPair.NEON_NEON, {
+    this.atomPairProperty = new EnumerationDeprecatedProperty( AtomPair, AtomPair.NEON_NEON, {
       validValues: enableHeterogeneousMolecules ? AtomPair.VALUES : VALID_ATOM_PAIRS_FOR_REDUCED,
       tandem: tandem.createTandem( 'atomPairProperty' )
     } );
@@ -75,7 +75,7 @@ class DualAtomModel {
     } );
 
     // @public (read-write) - speed at which the model is running
-    this.timeSpeedProperty = new EnumerationProperty( TimeSpeed, TimeSpeed.NORMAL, {
+    this.timeSpeedProperty = new EnumerationDeprecatedProperty( TimeSpeed, TimeSpeed.NORMAL, {
       validValues: [ TimeSpeed.NORMAL, TimeSpeed.SLOW ],
       tandem: tandem.createTandem( 'timeSpeedProperty' )
     } );
@@ -89,7 +89,7 @@ class DualAtomModel {
     } );
 
     // @public (read-write)
-    this.forcesDisplayModeProperty = new EnumerationProperty( ForceDisplayMode, ForceDisplayMode.HIDDEN, {
+    this.forcesDisplayModeProperty = new EnumerationDeprecatedProperty( ForceDisplayMode, ForceDisplayMode.HIDDEN, {
       tandem: tandem.createTandem( 'forcesDisplayModeProperty' )
     } );
 

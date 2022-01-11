@@ -8,7 +8,7 @@
  */
 
 import Emitter from '../../../../axon/js/Emitter.js';
-import EnumerationProperty from '../../../../axon/js/EnumerationProperty.js';
+import EnumerationDeprecatedProperty from '../../../../axon/js/EnumerationDeprecatedProperty.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Vector2Property from '../../../../dot/js/Vector2Property.js';
@@ -26,8 +26,8 @@ class MotionAtom {
    */
   constructor( initialAtomType, initialXPosition, initialYPosition, tandem ) {
 
-    // @public (read-write) {EnumerationProperty.<AtomType>} - the type of atom being modeled, e.g. Argon, Neon, etc.
-    this.atomTypeProperty = new EnumerationProperty( AtomType, initialAtomType, {
+    // @public (read-write) {EnumerationDeprecatedProperty.<AtomType>} - the type of atom being modeled, e.g. Argon, Neon, etc.
+    this.atomTypeProperty = new EnumerationDeprecatedProperty( AtomType, initialAtomType, {
       tandem: tandem.createTandem( 'atomTypeProperty' ),
       phetioReadOnly: true
     } );

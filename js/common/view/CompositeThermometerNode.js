@@ -9,7 +9,7 @@
  */
 
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
-import EnumerationProperty from '../../../../axon/js/EnumerationProperty.js';
+import EnumerationDeprecatedProperty from '../../../../axon/js/EnumerationDeprecatedProperty.js';
 import Range from '../../../../dot/js/Range.js';
 import Utils from '../../../../dot/js/Utils.js';
 import EnumerationDeprecated from '../../../../phet-core/js/EnumerationDeprecated.js';
@@ -80,7 +80,7 @@ class CompositeThermometerNode extends Node {
     );
 
     // @private
-    this.temperatureUnitsProperty = new EnumerationProperty(
+    this.temperatureUnitsProperty = new EnumerationDeprecatedProperty(
       TemperatureUnits,
       SOMQueryParameters.defaultCelsius ? TemperatureUnits.CELSIUS : TemperatureUnits.KELVIN,
       { tandem: options.tandem.createTandem( 'temperatureUnitsProperty' ) }

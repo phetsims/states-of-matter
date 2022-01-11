@@ -23,7 +23,7 @@ import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import createObservableArray from '../../../../axon/js/createObservableArray.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import Emitter from '../../../../axon/js/Emitter.js';
-import EnumerationProperty from '../../../../axon/js/EnumerationProperty.js';
+import EnumerationDeprecatedProperty from '../../../../axon/js/EnumerationDeprecatedProperty.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
 import Range from '../../../../dot/js/Range.js';
@@ -137,7 +137,7 @@ class MultipleParticleModel extends PhetioObject {
     //-----------------------------------------------------------------------------------------------------------------
 
     // @public (read-write)
-    this.substanceProperty = new EnumerationProperty( SubstanceType, DEFAULT_SUBSTANCE, {
+    this.substanceProperty = new EnumerationDeprecatedProperty( SubstanceType, DEFAULT_SUBSTANCE, {
       validValues: options.validSubstances,
       tandem: tandem.createTandem( 'substanceProperty' ),
       phetioState: false

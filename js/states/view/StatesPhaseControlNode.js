@@ -8,7 +8,7 @@
  */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
-import EnumerationProperty from '../../../../axon/js/EnumerationProperty.js';
+import EnumerationDeprecatedProperty from '../../../../axon/js/EnumerationDeprecatedProperty.js';
 import merge from '../../../../phet-core/js/merge.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import { HBox } from '../../../../scenery/js/imports.js';
@@ -58,7 +58,7 @@ class StatesPhaseControlNode extends Node {
     super();
 
     // state of the atoms/molecules
-    const stateProperty = new EnumerationProperty( PhaseStateEnum, PhaseStateEnum.UNKNOWN, {
+    const stateProperty = new EnumerationDeprecatedProperty( PhaseStateEnum, PhaseStateEnum.UNKNOWN, {
       tandem: options.tandem.createTandem( 'stateProperty' ),
       phetioReadOnly: true
     } );
