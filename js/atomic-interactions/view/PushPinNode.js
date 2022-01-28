@@ -8,7 +8,7 @@
 
 import { Image } from '../../../../scenery/js/imports.js';
 import { Node } from '../../../../scenery/js/imports.js';
-import pushPinImg from '../../../images/push-pin_png.js';
+import pushPin_png from '../../../images/pushPin_png.js';
 import statesOfMatter from '../../statesOfMatter.js';
 
 class PushPinNode extends Node {
@@ -16,7 +16,7 @@ class PushPinNode extends Node {
   constructor() {
     super();
     this.setPickable( false );
-    const imageNode = new Image( pushPinImg );
+    const imageNode = new Image( pushPin_png );
     this.addChild( imageNode, { scale: 0.3 } ); // scale empirically determined
   }
 }

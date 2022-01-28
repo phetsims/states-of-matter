@@ -19,9 +19,9 @@ import { Text } from '../../../../scenery/js/imports.js';
 import { VBox } from '../../../../scenery/js/imports.js';
 import BooleanRectangularStickyToggleButton from '../../../../sun/js/buttons/BooleanRectangularStickyToggleButton.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
-import gasIconImage from '../../../mipmaps/gas-icon_png.js';
-import liquidIconImage from '../../../mipmaps/liquid-icon_png.js';
-import solidIconImage from '../../../mipmaps/solid-icon_png.js';
+import gasIcon_png from '../../../mipmaps/gasIcon_png.js';
+import liquidIcon_png from '../../../mipmaps/liquidIcon_png.js';
+import solidIcon_png from '../../../mipmaps/solidIcon_png.js';
 import PhaseStateEnum from '../../common/PhaseStateEnum.js';
 import statesOfMatter from '../../statesOfMatter.js';
 import statesOfMatterStrings from '../../statesOfMatterStrings.js';
@@ -79,7 +79,7 @@ class StatesPhaseControlNode extends Node {
 
     // create solid state selection button
     const solidStateButton = new BooleanRectangularStickyToggleButton( solidSelectedProperty, {
-      content: createButtonContent( solidIconImage, solidString, options.buttonWidth ),
+      content: createButtonContent( solidIcon_png, solidString, options.buttonWidth ),
       maxWidth: options.buttonWidth,
       minWidth: options.buttonWidth,
       tandem: tandem.createTandem( 'solidStateButton' )
@@ -87,7 +87,7 @@ class StatesPhaseControlNode extends Node {
 
     // create liquid state selection button
     const liquidStateButton = new BooleanRectangularStickyToggleButton( liquidSelectedProperty, {
-      content: createButtonContent( liquidIconImage, liquidString, options.buttonWidth ),
+      content: createButtonContent( liquidIcon_png, liquidString, options.buttonWidth ),
       maxWidth: options.buttonWidth,
       minWidth: options.buttonWidth,
       tandem: tandem.createTandem( 'liquidStateButton' )
@@ -95,7 +95,7 @@ class StatesPhaseControlNode extends Node {
 
     // create gas state selection button
     const gasStateButton = new BooleanRectangularStickyToggleButton( gasSelectedProperty, {
-      content: createButtonContent( gasIconImage, gasString, options.buttonWidth ),
+      content: createButtonContent( gasIcon_png, gasString, options.buttonWidth ),
       maxWidth: options.buttonWidth,
       minWidth: options.buttonWidth,
       tandem: tandem.createTandem( 'gasStateButton' )

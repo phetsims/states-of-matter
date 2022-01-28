@@ -12,9 +12,9 @@ import { HBox } from '../../../scenery/js/imports.js';
 import { Image } from '../../../scenery/js/imports.js';
 import { Rectangle } from '../../../scenery/js/imports.js';
 import { Color } from '../../../scenery/js/imports.js';
-import gasIconImage from '../../mipmaps/gas-icon_png.js';
-import liquidIconImage from '../../mipmaps/liquid-icon_png.js';
-import solidIconImage from '../../mipmaps/solid-icon_png.js';
+import gasIcon_png from '../../mipmaps/gasIcon_png.js';
+import liquidIcon_png from '../../mipmaps/liquidIcon_png.js';
+import solidIcon_png from '../../mipmaps/solidIcon_png.js';
 import statesOfMatter from '../statesOfMatter.js';
 import merge from '../../../phet-core/js/merge.js';
 
@@ -34,7 +34,7 @@ class StatesIcon extends ScreenIcon {
 
     // icons packed into a nice little box
     const iconsBox = new HBox( {
-      children: [ new Image( solidIconImage ), new Image( liquidIconImage ), new Image( gasIconImage ) ],
+      children: [ new Image( solidIcon_png ), new Image( liquidIcon_png ), new Image( gasIcon_png ) ],
       spacing: 20, // empirically determined
       maxWidth: options.size.width,
       centerX: options.size.width / 2,

@@ -14,7 +14,7 @@ import { DragListener } from '../../../../scenery/js/imports.js';
 import { Image } from '../../../../scenery/js/imports.js';
 import { Node } from '../../../../scenery/js/imports.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
-import pointingHandImage from '../../../mipmaps/pointing-hand_png.js';
+import pointingHand_png from '../../../mipmaps/pointingHand_png.js';
 import statesOfMatter from '../../statesOfMatter.js';
 import MultipleParticleModel from '../model/MultipleParticleModel.js';
 
@@ -59,7 +59,7 @@ class PointingHandNode extends Node {
     } );
 
     // Load and scale the image.  Scale was empirically determined.
-    const pointingHandImageNode = new Image( pointingHandImage, {
+    const pointingHandImageNode = new Image( pointingHand_png, {
       cursor: 'ns-resize',
       pickable: true
     } );

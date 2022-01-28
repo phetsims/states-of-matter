@@ -23,7 +23,7 @@ import AquaRadioButtonGroup from '../../../../sun/js/AquaRadioButtonGroup.js';
 import RectangularRadioButtonGroup from '../../../../sun/js/buttons/RectangularRadioButtonGroup.js';
 import Panel from '../../../../sun/js/Panel.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
-import pushPinImg from '../../../images/push-pin_png.js';
+import pushPin_png from '../../../images/pushPin_png.js';
 import SOMConstants from '../../common/SOMConstants.js';
 import SubstanceType from '../../common/SubstanceType.js';
 import AtomAndMoleculeIconFactory from '../../common/view/AtomAndMoleculeIconFactory.js';
@@ -139,7 +139,7 @@ class AtomicInteractionsControlPanel extends Node {
         fill: options.buttonTextFill,
         maxWidth: NORMAL_TEXT_MAX_WIDTH
       } );
-      const pushpinImage = new Image( pushPinImg, {
+      const pushpinImage = new Image( pushPin_png, {
         tandem: options.tandem.createTandem( 'pushpinImage' )
       } );
       pushpinImage.scale( 15 / pushpinImage.height );

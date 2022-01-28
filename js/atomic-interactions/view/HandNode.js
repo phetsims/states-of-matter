@@ -9,7 +9,7 @@
  */
 
 import merge from '../../../../phet-core/js/merge.js';
-import handImage from '../../../../scenery-phet/images/hand_png.js';
+import hand_png from '../../../../scenery-phet/images/hand_png.js';
 import { DragListener } from '../../../../scenery/js/imports.js';
 import { Image } from '../../../../scenery/js/imports.js';
 import { Node } from '../../../../scenery/js/imports.js';
@@ -42,7 +42,7 @@ class HandNode extends Node {
     this.particle = particle;
 
     // add the main image that represents the hand
-    this.addChild( new Image( handImage, {
+    this.addChild( new Image( hand_png, {
       minWidth: WIDTH,
       maxWidth: WIDTH,
       y: modelViewTransform.modelToViewY( this.particle.positionProperty.get().y )

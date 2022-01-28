@@ -1,5 +1,5 @@
 {
-  "gas-icon.png": {
+  "gasIcon.png": {
     "text": [
       "Copyright 2002-2015 University of Colorado Boulder"
     ],
@@ -7,7 +7,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": ""
   },
-  "liquid-icon.png": {
+  "liquidIcon.png": {
     "text": [
       "Copyright 2002-2015 University of Colorado Boulder"
     ],
@@ -15,7 +15,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "Created by Mariah Hermsmeyer for use by PhET"
   },
-  "pointing-hand.png": {
+  "pointingHand.png": {
     "text": [
       "Copyright 2002-2015 University of Colorado Boulder"
     ],
@@ -23,7 +23,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": ""
   },
-  "solid-icon.png": {
+  "solidIcon.png": {
     "text": [
       "Copyright 2002-2015 University of Colorado Boulder"
     ],
