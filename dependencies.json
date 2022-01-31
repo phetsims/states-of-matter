@@ -1,5 +1,5 @@
 {
-  "comment": "# states-of-matter 1.2.5-rc.1 Wed Jan 26 2022 13:59:45 GMT-0700 (Mountain Standard Time)",
+  "comment": "# states-of-matter 1.2.5 Mon Jan 31 2022 12:12:54 GMT-0700 (Mountain Standard Time)",
   "assert": {
     "sha": "1a41cef653bbed1025af5768bea958d7e3e0f8ae",
     "branch": "HEAD"
@@ -73,7 +73,7 @@
     "branch": "HEAD"
   },
   "states-of-matter": {
-    "sha": "84a8b74d26507e3e7652ee2988b79ebfdb8f3027",
+    "sha": "eeb26f3db38b295768e7bc462d75ff5e220c92fd",
     "branch": "1.2"
   },
   "studio": {
