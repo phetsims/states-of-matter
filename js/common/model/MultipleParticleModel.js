@@ -182,8 +182,7 @@ class MultipleParticleModel extends PhetioObject {
     this.heatingCoolingAmountProperty = new NumberProperty( 0, {
       tandem: tandem.createTandem( 'heatingCoolingAmountProperty' ),
       phetioState: false,
-      range: new Range( -1, 1 ),
-      phetioStudioControl: false
+      range: new Range( -1, 1 )
     } );
 
     // @public (read-write) - the number of molecules that should be in the simulation.  This is used primarily for
