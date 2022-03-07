@@ -62,7 +62,7 @@ class GrabbableParticleNode extends ParticleForceNode {
         this.particle.setPosition( modelViewTransform.viewToModelX( newPosX ), particle.positionProperty.value.y );
       },
 
-      end: event => {
+      end: () => {
 
         // Let the model move the particles again.  Note that this happens even if the motion was paused by some other
         // means.

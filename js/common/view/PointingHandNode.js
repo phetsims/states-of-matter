@@ -106,7 +106,7 @@ class PointingHandNode extends Node {
         updateHintVisibility();
       },
 
-      end: event => {
+      end: () => {
 
         // Set the target size to the current size, which will stop any change in size that is currently underway.
         if ( !phaseChangesModel.isExplodedProperty.value ) {
