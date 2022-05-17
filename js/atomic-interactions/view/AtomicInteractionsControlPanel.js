@@ -256,7 +256,8 @@ class AtomicInteractionsControlPanel extends Node {
         align: 'left',
         spacing: 5
       } );
-      titleNode.align = this.width / 2;
+
+      titleNode.align = 'center';
     }
     else {
 
