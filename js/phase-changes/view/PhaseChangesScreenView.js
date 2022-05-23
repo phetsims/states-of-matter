@@ -10,6 +10,7 @@
 
 import createObservableArray from '../../../../axon/js/createObservableArray.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
+import Multilink from '../../../../axon/js/Multilink.js';
 import Property from '../../../../axon/js/Property.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Range from '../../../../dot/js/Range.js';
@@ -111,7 +112,7 @@ class PhaseChangesScreenView extends ScreenView {
     this.addChild( heaterCoolerNode );
 
     // control when the heater/cooler node is enabled for input
-    Property.multilink(
+    Multilink.multilink(
       [ model.isPlayingProperty, model.isExplodedProperty ],
       ( isPlaying, isExploded ) => {
         if ( !isPlaying || isExploded ) {
@@ -340,7 +341,7 @@ class PhaseChangesScreenView extends ScreenView {
     } );
 
     // Update layout based on the visibility and bounds of the various control panels and accordion boxes.
-    Property.multilink(
+    Multilink.multilink(
       [ this.phaseDiagramAccordionBox.visibleProperty, moleculesControlPanel.boundsProperty ],
       ( phaseDiagramVisible, moleculeControlPanelBounds ) => {
         if ( isPotentialGraphEnabled ) {

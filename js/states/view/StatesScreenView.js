@@ -8,7 +8,7 @@
  * @author Siddhartha Chinthapally (Actual Concepts)
  */
 
-import Property from '../../../../axon/js/Property.js';
+import Multilink from '../../../../axon/js/Multilink.js';
 import merge from '../../../../phet-core/js/merge.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
@@ -79,7 +79,7 @@ class StatesScreenView extends ScreenView {
     this.addChild( heaterCoolerNode );
 
     // control when the heater/cooler node is enabled for input
-    Property.multilink(
+    Multilink.multilink(
       [ multipleParticleModel.isPlayingProperty, multipleParticleModel.isExplodedProperty ],
       ( isPlaying, isExploded ) => {
         if ( !isPlaying || isExploded ) {

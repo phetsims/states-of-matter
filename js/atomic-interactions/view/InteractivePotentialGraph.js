@@ -7,7 +7,7 @@
  * @author John Blanco
  */
 
-import Property from '../../../../axon/js/Property.js';
+import Multilink from '../../../../axon/js/Multilink.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import { Shape } from '../../../../kite/js/imports.js';
 import merge from '../../../../phet-core/js/merge.js';
@@ -251,7 +251,7 @@ class InteractivePotentialGraph extends PotentialGraphNode {
       this.positionMarker.changeColor( dualAtomModel.movableAtom.color );
     } );
 
-    Property.multilink(
+    Multilink.multilink(
       [ dualAtomModel.atomPairProperty, dualAtomModel.adjustableAtomInteractionStrengthProperty, dualAtomModel.adjustableAtomDiameterProperty ],
       () => {
         this.setLjPotentialParameters( dualAtomModel.getSigma(), dualAtomModel.getEpsilon() );

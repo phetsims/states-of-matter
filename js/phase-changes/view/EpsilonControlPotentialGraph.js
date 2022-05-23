@@ -8,7 +8,7 @@
  * @author Siddhartha Chinthapally (Actual Concepts)
  */
 
-import Property from '../../../../axon/js/Property.js';
+import Multilink from '../../../../axon/js/Multilink.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Utils from '../../../../dot/js/Utils.js';
 import merge from '../../../../phet-core/js/merge.js';
@@ -159,7 +159,7 @@ class EpsilonControlPotentialGraph extends PotentialGraphNode {
     } );
 
     // Update the graph when the substance or interaction strength changes.
-    Property.multilink(
+    Multilink.multilink(
       [ phaseChangesModel.substanceProperty, phaseChangesModel.adjustableAtomInteractionStrengthProperty ],
       substance => {
         this.interactionEnabled = substance === SubstanceType.ADJUSTABLE_ATOM;

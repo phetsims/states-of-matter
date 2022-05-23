@@ -4,7 +4,7 @@ import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import EnumerationDeprecatedProperty from '../../../../axon/js/EnumerationDeprecatedProperty.js';
 import EnumerationProperty from '../../../../axon/js/EnumerationProperty.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
-import Property from '../../../../axon/js/Property.js';
+import Multilink from '../../../../axon/js/Multilink.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import TimeSpeed from '../../../../scenery-phet/js/TimeSpeed.js';
 import AtomType from '../../common/model/AtomType.js';
@@ -145,7 +145,7 @@ class DualAtomModel {
     } );
 
     // update the LJ potential parameters when the adjustable attraction atom is in use
-    Property.multilink(
+    Multilink.multilink(
       [ this.atomPairProperty, this.adjustableAtomInteractionStrengthProperty, this.adjustableAtomDiameterProperty ],
       ( atomPair, interactionStrength, atomDiameter ) => {
         if ( atomPair === AtomPair.ADJUSTABLE ) {
