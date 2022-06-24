@@ -60,24 +60,19 @@ class CompositeThermometerNode extends Node {
     super();
 
     // add thermometer node
-    const thermometerNode = new ThermometerNode(
-      0,
-      MAX_TEMPERATURE_TO_CLAMP_RED_MERCURY,
-      multipleParticleModel.temperatureInKelvinProperty,
-      {
-        outlineStroke: 'black',
-        backgroundFill: 'white',
-        tickSpacing: 8,
-        majorTickLength: 8,
-        minorTickLength: 4,
-        bulbDiameter: 23,
-        glassThickness: 2.5,
-        lineWidth: 1.4,
-        tubeWidth: 13,
-        tubeHeight: 65,
-        tandem: options.tandem.createTandem( 'thermometerNode' )
-      }
-    );
+    const thermometerNode = new ThermometerNode( multipleParticleModel.temperatureInKelvinProperty, 0, MAX_TEMPERATURE_TO_CLAMP_RED_MERCURY, {
+      outlineStroke: 'black',
+      backgroundFill: 'white',
+      tickSpacing: 8,
+      majorTickLength: 8,
+      minorTickLength: 4,
+      bulbDiameter: 23,
+      glassThickness: 2.5,
+      lineWidth: 1.4,
+      tubeWidth: 13,
+      tubeHeight: 65,
+      tandem: options.tandem.createTandem( 'thermometerNode' )
+    } );
 
     // @private
     this.temperatureUnitsProperty = new EnumerationDeprecatedProperty(
