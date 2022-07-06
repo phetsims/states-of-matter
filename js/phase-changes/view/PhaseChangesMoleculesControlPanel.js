@@ -183,13 +183,15 @@ class PhaseChangesMoleculesControlPanel extends Node {
     const radioButtonGroup = new RectangularRadioButtonGroup( phaseChangesModel.substanceProperty, radioButtonContent, {
       orientation: 'vertical',
       spacing: 3,
-      cornerRadius: 5,
-      baseColor: 'black',
-      selectedLineWidth: 1,
-      selectedStroke: 'white',
-      deselectedLineWidth: 0,
-      deselectedContentOpacity: 1,
       touchAreaYDilation: 0,
+      radioButtonOptions: {
+        cornerRadius: 5,
+        baseColor: 'black',
+        selectedLineWidth: 1,
+        selectedStroke: 'white',
+        deselectedLineWidth: 0,
+        deselectedContentOpacity: 1
+      },
       tandem: radioButtonGroupTandem
     } );
 

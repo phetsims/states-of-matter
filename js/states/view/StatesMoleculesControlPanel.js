@@ -133,12 +133,14 @@ class StatesMoleculesControlPanel extends Node {
 
     const radioButtonGroup = new RectangularRadioButtonGroup( substanceProperty, radioButtonContent, {
       orientation: 'vertical',
-      cornerRadius: 5,
-      baseColor: 'black',
-      selectedLineWidth: 1,
-      selectedStroke: 'white',
-      deselectedLineWidth: 0,
-      deselectedContentOpacity: 1,
+      radioButtonOptions: {
+        cornerRadius: 5,
+        baseColor: 'black',
+        selectedLineWidth: 1,
+        selectedStroke: 'white',
+        deselectedLineWidth: 0,
+        deselectedContentOpacity: 1
+      },
       tandem: radioButtonGroupTandem
     } );
 
