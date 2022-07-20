@@ -5,8 +5,7 @@
  * atoms and molecules.
  */
 
-import { Circle } from '../../../../scenery/js/imports.js';
-import { Node } from '../../../../scenery/js/imports.js';
+import { Circle, Node } from '../../../../scenery/js/imports.js';
 import statesOfMatter from '../../statesOfMatter.js';
 import SOMConstants from '../SOMConstants.js';
 import SubstanceType from '../SubstanceType.js';

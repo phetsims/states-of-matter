@@ -10,11 +10,7 @@
 import Screen from '../../../joist/js/Screen.js';
 import ScreenIcon from '../../../joist/js/ScreenIcon.js';
 import merge from '../../../phet-core/js/merge.js';
-import { Circle } from '../../../scenery/js/imports.js';
-import { Node } from '../../../scenery/js/imports.js';
-import { Rectangle } from '../../../scenery/js/imports.js';
-import { Color } from '../../../scenery/js/imports.js';
-import { RadialGradient } from '../../../scenery/js/imports.js';
+import { Circle, Color, Node, RadialGradient, Rectangle } from '../../../scenery/js/imports.js';
 import SOMConstants from '../common/SOMConstants.js';
 import statesOfMatter from '../statesOfMatter.js';
 

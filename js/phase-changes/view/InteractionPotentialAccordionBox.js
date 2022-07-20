@@ -9,15 +9,13 @@
 
 import merge from '../../../../phet-core/js/merge.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import { HBox } from '../../../../scenery/js/imports.js';
-import { Node } from '../../../../scenery/js/imports.js';
-import { Text } from '../../../../scenery/js/imports.js';
+import { HBox, Node, Text } from '../../../../scenery/js/imports.js';
 import AccordionBox from '../../../../sun/js/AccordionBox.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import SOMConstants from '../../common/SOMConstants.js';
 import SOMColors from '../../common/view/SOMColors.js';
-import statesOfMatterStrings from '../../statesOfMatterStrings.js';
 import statesOfMatter from '../../statesOfMatter.js';
+import statesOfMatterStrings from '../../statesOfMatterStrings.js';
 import EpsilonControlPotentialGraph from './EpsilonControlPotentialGraph.js';
 
 const interactionPotentialString = statesOfMatterStrings.interactionPotential;

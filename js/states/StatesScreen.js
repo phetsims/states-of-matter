@@ -12,8 +12,8 @@ import MultipleParticleModel from '../common/model/MultipleParticleModel.js';
 import SOMConstants from '../common/SOMConstants.js';
 import SubstanceType from '../common/SubstanceType.js';
 import SOMColors from '../common/view/SOMColors.js';
-import statesOfMatterStrings from '../statesOfMatterStrings.js';
 import statesOfMatter from '../statesOfMatter.js';
+import statesOfMatterStrings from '../statesOfMatterStrings.js';
 import StatesIcon from './StatesIcon.js';
 import StatesScreenView from './view/StatesScreenView.js';
 

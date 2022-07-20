@@ -15,11 +15,7 @@ import { Shape } from '../../../../kite/js/imports.js';
 import GaugeNode from '../../../../scenery-phet/js/GaugeNode.js';
 import PhetColorScheme from '../../../../scenery-phet/js/PhetColorScheme.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import { Node } from '../../../../scenery/js/imports.js';
-import { Path } from '../../../../scenery/js/imports.js';
-import { Rectangle } from '../../../../scenery/js/imports.js';
-import { Text } from '../../../../scenery/js/imports.js';
-import { LinearGradient } from '../../../../scenery/js/imports.js';
+import { LinearGradient, Node, Path, Rectangle, Text } from '../../../../scenery/js/imports.js';
 import statesOfMatter from '../../statesOfMatter.js';
 import statesOfMatterStrings from '../../statesOfMatterStrings.js';
 

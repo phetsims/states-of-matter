@@ -23,8 +23,7 @@ import ResetAllButton from '../../../../scenery-phet/js/buttons/ResetAllButton.j
 import HeaterCoolerNode from '../../../../scenery-phet/js/HeaterCoolerNode.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import TimeControlNode from '../../../../scenery-phet/js/TimeControlNode.js';
-import { Node } from '../../../../scenery/js/imports.js';
-import { RichText } from '../../../../scenery/js/imports.js';
+import { Node, RichText } from '../../../../scenery/js/imports.js';
 import TextPushButton from '../../../../sun/js/buttons/TextPushButton.js';
 import MultipleParticleModel from '../../common/model/MultipleParticleModel.js';
 import SOMConstants from '../../common/SOMConstants.js';

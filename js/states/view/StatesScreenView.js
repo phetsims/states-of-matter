@@ -9,10 +9,10 @@
  */
 
 import Multilink from '../../../../axon/js/Multilink.js';
-import merge from '../../../../phet-core/js/merge.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import ScreenView from '../../../../joist/js/ScreenView.js';
+import merge from '../../../../phet-core/js/merge.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import ResetAllButton from '../../../../scenery-phet/js/buttons/ResetAllButton.js';
 import HeaterCoolerNode from '../../../../scenery-phet/js/HeaterCoolerNode.js';

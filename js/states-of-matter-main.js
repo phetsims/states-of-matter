@@ -12,8 +12,8 @@ import Tandem from '../../tandem/js/Tandem.js';
 import AtomicInteractionsScreen from './atomic-interactions/AtomicInteractionsScreen.js';
 import GlobalOptionsNode from './common/view/GlobalOptionsNode.js';
 import PhaseChangesScreen from './phase-changes/PhaseChangesScreen.js';
-import statesOfMatterStrings from './statesOfMatterStrings.js';
 import StatesScreen from './states/StatesScreen.js';
+import statesOfMatterStrings from './statesOfMatterStrings.js';
 
 const interactionString = statesOfMatterStrings.interaction;
 const statesOfMatterTitleString = statesOfMatterStrings[ 'states-of-matter' ].title;

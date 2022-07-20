@@ -9,14 +9,11 @@
 
 import Multilink from '../../../../axon/js/Multilink.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
+import Utils from '../../../../dot/js/Utils.js';
 import { Shape } from '../../../../kite/js/imports.js';
 import merge from '../../../../phet-core/js/merge.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
-import { DragListener } from '../../../../scenery/js/imports.js';
-import { PressListener } from '../../../../scenery/js/imports.js';
-import { Line } from '../../../../scenery/js/imports.js';
-import { Node } from '../../../../scenery/js/imports.js';
-import { Color } from '../../../../scenery/js/imports.js';
+import { Color, DragListener, Line, Node, PressListener } from '../../../../scenery/js/imports.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import AtomType from '../../common/model/AtomType.js';
 import SOMConstants from '../../common/SOMConstants.js';
@@ -24,7 +21,6 @@ import InteractionPotentialCanvasNode from '../../common/view/InteractionPotenti
 import PotentialGraphNode from '../../common/view/PotentialGraphNode.js';
 import SOMColors from '../../common/view/SOMColors.js';
 import statesOfMatter from '../../statesOfMatter.js';
-import Utils from '../../../../dot/js/Utils.js';
 
 // constants
 const RESIZE_HANDLE_SIZE_PROPORTION = 0.05;  // Size of handles as function of node width.

@@ -12,9 +12,9 @@ import EnumerationDeprecatedProperty from '../../../../axon/js/EnumerationDeprec
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Vector2Property from '../../../../dot/js/Vector2Property.js';
-import statesOfMatter from '../../statesOfMatter.js';
-import SOMConstants from '../../common/SOMConstants.js';
 import AtomType from '../../common/model/AtomType.js';
+import SOMConstants from '../../common/SOMConstants.js';
+import statesOfMatter from '../../statesOfMatter.js';
 
 class MotionAtom {
 
