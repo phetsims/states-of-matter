@@ -133,10 +133,12 @@ class StatesMoleculesControlPanel extends Node {
       radioButtonOptions: {
         cornerRadius: 5,
         baseColor: 'black',
-        selectedLineWidth: 1,
-        selectedStroke: 'white',
-        deselectedLineWidth: 0,
-        deselectedContentOpacity: 1
+        buttonAppearanceStrategyOptions: {
+          selectedLineWidth: 1,
+          selectedStroke: 'white',
+          deselectedLineWidth: 0,
+          deselectedContentOpacity: 1
+        }
       },
       tandem: radioButtonGroupTandem
     } );
