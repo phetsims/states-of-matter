@@ -304,7 +304,7 @@ class MultipleParticleModel extends PhetioObject {
       () => this.getTemperatureInKelvin(),
       {
         units: 'K',
-        phetioType: DerivedProperty.DerivedPropertyIO( NullableIO( NumberIO ) ),
+        phetioValueType: NullableIO( NumberIO ),
         tandem: tandem.createTandem( 'temperatureInKelvinProperty' ),
         phetReadOnly: true
       }
