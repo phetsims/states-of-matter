@@ -223,7 +223,6 @@ class ForcesAccordionBox extends AccordionBox {
    * @override
    */
   dispose() {
-    this.disposeGlobalOptionsNode();
     super.dispose();
   }
 }
