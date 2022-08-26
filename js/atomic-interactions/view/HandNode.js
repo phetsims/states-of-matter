@@ -47,7 +47,8 @@ class HandNode extends Node {
     } ) );
 
     // control visibility
-    const visibilityListener = dualAtomModel.movementHintVisibleProperty.linkAttribute( this, 'visible' );
+    const visibilityListener = visible => {this.visible = visible;};
+    dualAtomModel.movementHintVisibleProperty.link( visibilityListener );
 
     // add the drag handler
     let startDragX;
@@ -104,7 +105,7 @@ class HandNode extends Node {
     this.disposeHandNode = () => {
       this.removeInputListener( inputListener );
       particle.positionProperty.unlink( positionListener );
-      dualAtomModel.movementHintVisibleProperty.unlinkAttribute( visibilityListener );
+      dualAtomModel.movementHintVisibleProperty.unlink( visibilityListener );
     };
   }
 
