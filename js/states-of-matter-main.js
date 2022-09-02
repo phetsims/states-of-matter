@@ -16,7 +16,7 @@ import StatesScreen from './states/StatesScreen.js';
 import statesOfMatterStrings from './statesOfMatterStrings.js';
 
 const interactionString = statesOfMatterStrings.interaction;
-const statesOfMatterTitleString = statesOfMatterStrings[ 'states-of-matter' ].title;
+const statesOfMatterTitleStringProperty = statesOfMatterStrings[ 'states-of-matter' ].titleStringProperty;
 
 simLauncher.launch( () => {
 
@@ -40,7 +40,7 @@ simLauncher.launch( () => {
     phetioDesigned: true
   };
 
-  const sim = new Sim( statesOfMatterTitleString, [
+  const sim = new Sim( statesOfMatterTitleStringProperty, [
     new StatesScreen( Tandem.ROOT.createTandem( 'statesScreen' ) ),
     new PhaseChangesScreen( true, Tandem.ROOT.createTandem( 'phaseChangesScreen' ) ),
     new AtomicInteractionsScreen( false, interactionString, Tandem.ROOT.createTandem( 'interactionScreen' ) )
