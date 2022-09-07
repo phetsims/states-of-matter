@@ -20,12 +20,12 @@ import ThermometerNode from '../../../../scenery-phet/js/ThermometerNode.js';
 import { Node, VBox } from '../../../../scenery/js/imports.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import statesOfMatter from '../../statesOfMatter.js';
-import statesOfMatterStrings from '../../statesOfMatterStrings.js';
+import StatesOfMatterStrings from '../../StatesOfMatterStrings.js';
 import SOMQueryParameters from '../SOMQueryParameters.js';
 
 // strings
-const celsiusUnitsString = statesOfMatterStrings.celsiusUnits;
-const kelvinUnitsString = statesOfMatterStrings.kelvinUnits;
+const celsiusUnitsString = StatesOfMatterStrings.celsiusUnits;
+const kelvinUnitsString = StatesOfMatterStrings.kelvinUnits;
 
 // helper function
 const kelvinToCelsius = temperatureInKelvin => Utils.roundSymmetric( temperatureInKelvin - 273.15 );

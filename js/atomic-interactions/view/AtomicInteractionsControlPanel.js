@@ -25,23 +25,23 @@ import AtomAndMoleculeIconFactory from '../../common/view/AtomAndMoleculeIconFac
 import SOMColors from '../../common/view/SOMColors.js';
 import TitledSlider from '../../common/view/TitledSlider.js';
 import statesOfMatter from '../../statesOfMatter.js';
-import statesOfMatterStrings from '../../statesOfMatterStrings.js';
+import StatesOfMatterStrings from '../../StatesOfMatterStrings.js';
 import AtomPair from '../model/AtomPair.js';
 
-const adjustableAttractionString = statesOfMatterStrings.adjustableAttraction;
-const argonString = statesOfMatterStrings.argon;
-const atomDiameterString = statesOfMatterStrings.atomDiameter;
-const atomsString = statesOfMatterStrings.Atoms;
-const customAttractionString = statesOfMatterStrings.customAttraction;
-const interactionStrengthString = statesOfMatterStrings.interactionStrength;
-const largeString = statesOfMatterStrings.large;
-const movingString = statesOfMatterStrings.moving;
-const neonString = statesOfMatterStrings.neon;
-const oxygenString = statesOfMatterStrings.oxygen;
-const pinnedString = statesOfMatterStrings.pinned;
-const smallString = statesOfMatterStrings.small;
-const strongString = statesOfMatterStrings.strong;
-const weakString = statesOfMatterStrings.weak;
+const adjustableAttractionString = StatesOfMatterStrings.adjustableAttraction;
+const argonString = StatesOfMatterStrings.argon;
+const atomDiameterString = StatesOfMatterStrings.atomDiameter;
+const atomsString = StatesOfMatterStrings.Atoms;
+const customAttractionString = StatesOfMatterStrings.customAttraction;
+const interactionStrengthString = StatesOfMatterStrings.interactionStrength;
+const largeString = StatesOfMatterStrings.large;
+const movingString = StatesOfMatterStrings.moving;
+const neonString = StatesOfMatterStrings.neon;
+const oxygenString = StatesOfMatterStrings.oxygen;
+const pinnedString = StatesOfMatterStrings.pinned;
+const smallString = StatesOfMatterStrings.small;
+const strongString = StatesOfMatterStrings.strong;
+const weakString = StatesOfMatterStrings.weak;
 
 // constants
 const NORMAL_TEXT_FONT = new PhetFont( 12 );

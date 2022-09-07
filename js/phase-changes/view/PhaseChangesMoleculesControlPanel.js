@@ -23,19 +23,19 @@ import SOMColors from '../../common/view/SOMColors.js';
 import SubstanceSelectorNode from '../../common/view/SubstanceSelectorNode.js';
 import TitledSlider from '../../common/view/TitledSlider.js';
 import statesOfMatter from '../../statesOfMatter.js';
-import statesOfMatterStrings from '../../statesOfMatterStrings.js';
+import StatesOfMatterStrings from '../../StatesOfMatterStrings.js';
 import PhaseChangesModel from '../PhaseChangesModel.js';
 
 // strings
-const adjustableAttractionString = statesOfMatterStrings.adjustableAttraction;
-const argonString = statesOfMatterStrings.argon;
-const atomsAndMoleculesString = statesOfMatterStrings.AtomsAndMolecules;
-const diatomicOxygenString = statesOfMatterStrings.diatomicOxygen;
-const interactionStrengthWithSymbolString = statesOfMatterStrings.interactionStrengthWithSymbol;
-const neonString = statesOfMatterStrings.neon;
-const strongString = statesOfMatterStrings.strong;
-const waterString = statesOfMatterStrings.water;
-const weakString = statesOfMatterStrings.weak;
+const adjustableAttractionString = StatesOfMatterStrings.adjustableAttraction;
+const argonString = StatesOfMatterStrings.argon;
+const atomsAndMoleculesString = StatesOfMatterStrings.AtomsAndMolecules;
+const diatomicOxygenString = StatesOfMatterStrings.diatomicOxygen;
+const interactionStrengthWithSymbolString = StatesOfMatterStrings.interactionStrengthWithSymbol;
+const neonString = StatesOfMatterStrings.neon;
+const strongString = StatesOfMatterStrings.strong;
+const waterString = StatesOfMatterStrings.water;
+const weakString = StatesOfMatterStrings.weak;
 
 // constants
 const INSET = 10;

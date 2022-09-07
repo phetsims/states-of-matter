@@ -17,17 +17,17 @@ import AquaRadioButtonGroup from '../../../../sun/js/AquaRadioButtonGroup.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import SOMConstants from '../../common/SOMConstants.js';
 import statesOfMatter from '../../statesOfMatter.js';
-import statesOfMatterStrings from '../../statesOfMatterStrings.js';
+import StatesOfMatterStrings from '../../StatesOfMatterStrings.js';
 import ForceDisplayMode from '../model/ForceDisplayMode.js';
 
 //strings
-const attractiveString = statesOfMatterStrings.attractive;
-const electronOverlapString = statesOfMatterStrings.electronOverlap;
-const forcesString = statesOfMatterStrings.forces;
-const hideForcesString = statesOfMatterStrings.hideForces;
-const repulsiveString = statesOfMatterStrings.repulsive;
-const totalForceString = statesOfMatterStrings.totalForce;
-const vanderwaalsString = statesOfMatterStrings.vanderwaals;
+const attractiveString = StatesOfMatterStrings.attractive;
+const electronOverlapString = StatesOfMatterStrings.electronOverlap;
+const forcesString = StatesOfMatterStrings.forces;
+const hideForcesString = StatesOfMatterStrings.hideForces;
+const repulsiveString = StatesOfMatterStrings.repulsive;
+const totalForceString = StatesOfMatterStrings.totalForce;
+const vanderwaalsString = StatesOfMatterStrings.vanderwaals;
 
 // constants
 const TEXT_LABEL_MAX_WIDTH = 175; // max width of text label in the panel

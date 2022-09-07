@@ -19,11 +19,11 @@ import liquidIcon_png from '../../../mipmaps/liquidIcon_png.js';
 import solidIcon_png from '../../../mipmaps/solidIcon_png.js';
 import PhaseStateEnum from '../../common/PhaseStateEnum.js';
 import statesOfMatter from '../../statesOfMatter.js';
-import statesOfMatterStrings from '../../statesOfMatterStrings.js';
+import StatesOfMatterStrings from '../../StatesOfMatterStrings.js';
 
-const gasString = statesOfMatterStrings.Gas;
-const liquidString = statesOfMatterStrings.Liquid;
-const solidString = statesOfMatterStrings.Solid;
+const gasString = StatesOfMatterStrings.Gas;
+const liquidString = StatesOfMatterStrings.Liquid;
+const solidString = StatesOfMatterStrings.Solid;
 
 // constants
 const DEFAULT_BUTTON_WIDTH = 160;

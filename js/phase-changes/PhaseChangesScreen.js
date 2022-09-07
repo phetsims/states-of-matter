@@ -11,13 +11,13 @@ import Screen from '../../../joist/js/Screen.js';
 import SOMConstants from '../common/SOMConstants.js';
 import SOMColors from '../common/view/SOMColors.js';
 import statesOfMatter from '../statesOfMatter.js';
-import statesOfMatterStrings from '../statesOfMatterStrings.js';
+import StatesOfMatterStrings from '../StatesOfMatterStrings.js';
 import PhaseChangesIcon from './PhaseChangesIcon.js';
 import PhaseChangesModel from './PhaseChangesModel.js';
 import PhaseChangesScreenView from './view/PhaseChangesScreenView.js';
 
 // constants
-const phaseChangesString = statesOfMatterStrings.phaseChanges;
+const phaseChangesString = StatesOfMatterStrings.phaseChanges;
 
 class PhaseChangesScreen extends Screen {
 

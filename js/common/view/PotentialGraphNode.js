@@ -15,16 +15,16 @@ import { Line, Node, Text } from '../../../../scenery/js/imports.js';
 import PositionMarker from '../../atomic-interactions/view/PositionMarker.js';
 import ZoomableGridNode from '../../atomic-interactions/view/ZoomableGridNode.js';
 import statesOfMatter from '../../statesOfMatter.js';
-import statesOfMatterStrings from '../../statesOfMatterStrings.js';
+import StatesOfMatterStrings from '../../StatesOfMatterStrings.js';
 import LjPotentialCalculator from '../model/LjPotentialCalculator.js';
 import SOMConstants from '../SOMConstants.js';
 import SOMColors from './SOMColors.js';
 
-const distanceBetweenAtomsString = statesOfMatterStrings.distanceBetweenAtoms;
-const distanceBetweenMoleculesString = statesOfMatterStrings.distanceBetweenMolecules;
-const epsilonString = statesOfMatterStrings.epsilon;
-const potentialEnergyString = statesOfMatterStrings.potentialEnergy;
-const sigmaString = statesOfMatterStrings.sigma;
+const distanceBetweenAtomsString = StatesOfMatterStrings.distanceBetweenAtoms;
+const distanceBetweenMoleculesString = StatesOfMatterStrings.distanceBetweenMolecules;
+const epsilonString = StatesOfMatterStrings.epsilon;
+const potentialEnergyString = StatesOfMatterStrings.potentialEnergy;
+const sigmaString = StatesOfMatterStrings.sigma;
 
 // constant that controls the range of data that is graphed
 const X_RANGE = 1300; // in picometers

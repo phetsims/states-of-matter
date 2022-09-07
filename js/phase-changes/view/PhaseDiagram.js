@@ -14,15 +14,15 @@ import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import { Node, Path, RichText, Text } from '../../../../scenery/js/imports.js';
 import SOMColors from '../../common/view/SOMColors.js';
 import statesOfMatter from '../../statesOfMatter.js';
-import statesOfMatterStrings from '../../statesOfMatterStrings.js';
+import StatesOfMatterStrings from '../../StatesOfMatterStrings.js';
 
-const criticalPointString = statesOfMatterStrings.criticalPoint;
-const gasString = statesOfMatterStrings.gas;
-const liquidString = statesOfMatterStrings.liquid;
-const pressureString = statesOfMatterStrings.pressure;
-const solidString = statesOfMatterStrings.solid;
-const temperatureString = statesOfMatterStrings.temperature;
-const triplePointString = statesOfMatterStrings.triplePoint;
+const criticalPointString = StatesOfMatterStrings.criticalPoint;
+const gasString = StatesOfMatterStrings.gas;
+const liquidString = StatesOfMatterStrings.liquid;
+const pressureString = StatesOfMatterStrings.pressure;
+const solidString = StatesOfMatterStrings.solid;
+const temperatureString = StatesOfMatterStrings.temperature;
+const triplePointString = StatesOfMatterStrings.triplePoint;
 
 // constants that control the size of the canvas, empirically determined to work well for the needs of the sim
 const WIDTH = 148;

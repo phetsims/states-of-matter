@@ -17,12 +17,12 @@ import PhetColorScheme from '../../../../scenery-phet/js/PhetColorScheme.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import { LinearGradient, Node, Path, Rectangle, Text } from '../../../../scenery/js/imports.js';
 import statesOfMatter from '../../statesOfMatter.js';
-import statesOfMatterStrings from '../../statesOfMatterStrings.js';
+import StatesOfMatterStrings from '../../StatesOfMatterStrings.js';
 
 // strings
-const pressureOverloadString = statesOfMatterStrings.pressureOverload;
-const pressureString = statesOfMatterStrings.pressure;
-const pressureUnitsInAtmString = statesOfMatterStrings.pressureUnitsInAtm;
+const pressureOverloadString = StatesOfMatterStrings.pressureOverload;
+const pressureString = StatesOfMatterStrings.pressure;
+const pressureUnitsInAtmString = StatesOfMatterStrings.pressureUnitsInAtm;
 
 // constants
 const CONNECTOR_LENGTH_PROPORTION = 1; // Length of non-elbowed connector wrt overall diameter.

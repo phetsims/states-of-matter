@@ -31,13 +31,13 @@ import SOMQueryParameters from '../../common/SOMQueryParameters.js';
 import SubstanceType from '../../common/SubstanceType.js';
 import ParticleContainerNode from '../../common/view/ParticleContainerNode.js';
 import statesOfMatter from '../../statesOfMatter.js';
-import statesOfMatterStrings from '../../statesOfMatterStrings.js';
+import StatesOfMatterStrings from '../../StatesOfMatterStrings.js';
 import InteractionPotentialAccordionBox from './InteractionPotentialAccordionBox.js';
 import PhaseChangesMoleculesControlPanel from './PhaseChangesMoleculesControlPanel.js';
 import PhaseDiagramAccordionBox from './PhaseDiagramAccordionBox.js';
 
 // strings
-const returnLidString = statesOfMatterStrings.returnLid;
+const returnLidString = StatesOfMatterStrings.returnLid;
 
 // constants
 const PANEL_WIDTH = 170; // empirically determined to be wide enough for all contents using English strings with some margin

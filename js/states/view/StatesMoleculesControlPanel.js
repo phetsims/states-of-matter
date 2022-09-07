@@ -20,13 +20,13 @@ import AtomAndMoleculeIconFactory from '../../common/view/AtomAndMoleculeIconFac
 import SOMColors from '../../common/view/SOMColors.js';
 import SubstanceSelectorNode from '../../common/view/SubstanceSelectorNode.js';
 import statesOfMatter from '../../statesOfMatter.js';
-import statesOfMatterStrings from '../../statesOfMatterStrings.js';
+import StatesOfMatterStrings from '../../StatesOfMatterStrings.js';
 
-const argonString = statesOfMatterStrings.argon;
-const atomsAndMoleculesString = statesOfMatterStrings.AtomsAndMolecules;
-const diatomicOxygenString = statesOfMatterStrings.diatomicOxygen;
-const neonString = statesOfMatterStrings.neon;
-const waterString = statesOfMatterStrings.water;
+const argonString = StatesOfMatterStrings.argon;
+const atomsAndMoleculesString = StatesOfMatterStrings.AtomsAndMolecules;
+const diatomicOxygenString = StatesOfMatterStrings.diatomicOxygen;
+const neonString = StatesOfMatterStrings.neon;
+const waterString = StatesOfMatterStrings.water;
 
 // constants
 const DEFAULT_WIDTH = 160;

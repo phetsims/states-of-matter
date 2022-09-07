@@ -18,7 +18,7 @@ import TextPushButton from '../../../../sun/js/buttons/TextPushButton.js';
 import SOMConstants from '../../common/SOMConstants.js';
 import SOMColors from '../../common/view/SOMColors.js';
 import statesOfMatter from '../../statesOfMatter.js';
-import statesOfMatterStrings from '../../statesOfMatterStrings.js';
+import StatesOfMatterStrings from '../../StatesOfMatterStrings.js';
 import DualAtomModel from '../model/DualAtomModel.js';
 import ForceDisplayMode from '../model/ForceDisplayMode.js';
 import AtomicInteractionsControlPanel from './AtomicInteractionsControlPanel.js';
@@ -29,7 +29,7 @@ import InteractivePotentialGraph from './InteractivePotentialGraph.js';
 import ParticleForceNode from './ParticleForceNode.js';
 import PushPinNode from './PushPinNode.js';
 
-const returnAtomString = statesOfMatterStrings.returnAtom;
+const returnAtomString = StatesOfMatterStrings.returnAtom;
 
 // Constant used to control size of push pin, empirically determined.
 const PUSH_PIN_WIDTH = 20;

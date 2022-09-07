@@ -13,10 +13,10 @@ import Tandem from '../../tandem/js/Tandem.js';
 import AtomicInteractionsScreen from './atomic-interactions/AtomicInteractionsScreen.js';
 import PhaseChangesScreen from './phase-changes/PhaseChangesScreen.js';
 import StatesScreen from './states/StatesScreen.js';
-import statesOfMatterStrings from './statesOfMatterStrings.js';
+import StatesOfMatterStrings from './StatesOfMatterStrings.js';
 
-const interactionString = statesOfMatterStrings.interaction;
-const statesOfMatterTitleStringProperty = statesOfMatterStrings[ 'states-of-matter' ].titleStringProperty;
+const interactionString = StatesOfMatterStrings.interaction;
+const statesOfMatterTitleStringProperty = StatesOfMatterStrings[ 'states-of-matter' ].titleStringProperty;
 
 simLauncher.launch( () => {
 

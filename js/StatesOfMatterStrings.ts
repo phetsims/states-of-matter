@@ -117,8 +117,8 @@ type StringsType = {
   'customAttractionStringProperty': TReadOnlyProperty<string>;
 };
 
-const statesOfMatterStrings = getStringModule( 'STATES_OF_MATTER' ) as StringsType;
+const StatesOfMatterStrings = getStringModule( 'STATES_OF_MATTER' ) as StringsType;
 
-statesOfMatter.register( 'statesOfMatterStrings', statesOfMatterStrings );
+statesOfMatter.register( 'StatesOfMatterStrings', StatesOfMatterStrings );
 
-export default statesOfMatterStrings;
+export default StatesOfMatterStrings;

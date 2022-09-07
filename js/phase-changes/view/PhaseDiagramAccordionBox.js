@@ -13,10 +13,10 @@ import AccordionBox from '../../../../sun/js/AccordionBox.js';
 import SOMConstants from '../../common/SOMConstants.js';
 import SOMColors from '../../common/view/SOMColors.js';
 import statesOfMatter from '../../statesOfMatter.js';
-import statesOfMatterStrings from '../../statesOfMatterStrings.js';
+import StatesOfMatterStrings from '../../StatesOfMatterStrings.js';
 import PhaseDiagram from './PhaseDiagram.js';
 
-const phaseDiagramString = statesOfMatterStrings.phaseDiagram;
+const phaseDiagramString = StatesOfMatterStrings.phaseDiagram;
 
 class PhaseDiagramAccordionBox extends AccordionBox {
 
