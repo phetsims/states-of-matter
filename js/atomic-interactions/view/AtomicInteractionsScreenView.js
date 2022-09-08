@@ -1,4 +1,4 @@
-// Copyright 2015-2021, University of Colorado Boulder
+// Copyright 2015-2022, University of Colorado Boulder
 
 /**
  * Main view for the "Atomic Interactions" sim and for the "Interactions" screen in the States of Matter simulation.
