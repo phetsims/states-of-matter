@@ -130,9 +130,6 @@ window.phet.preloads.phetio.phetioElementsOverrides =
     "statesOfMatter.phaseChangesScreen.view.moleculesControlPanel.interactionStrengthSlider.title.textProperty": {
       "phetioFeatured": true
     },
-    "statesOfMatter.phaseChangesScreen.view.moleculesControlPanel.interactionStrengthSlider.title.visibleProperty": {
-      "phetioFeatured": true
-    },
     "statesOfMatter.phaseChangesScreen.view.moleculesControlPanel.interactionStrengthSlider.visibleProperty": {
       "phetioFeatured": true
     },
@@ -170,9 +167,6 @@ window.phet.preloads.phetio.phetioElementsOverrides =
       "phetioFeatured": true
     },
     "statesOfMatter.phaseChangesScreen.view.particleContainerNode.pressureGaugeNode.gaugeNode.labelNode.textProperty": {
-      "phetioFeatured": true
-    },
-    "statesOfMatter.phaseChangesScreen.view.particleContainerNode.pressureGaugeNode.gaugeNode.labelNode.visibleProperty": {
       "phetioFeatured": true
     },
     "statesOfMatter.phaseChangesScreen.view.particleContainerNode.pressureGaugeNode.readoutNode.visibleProperty": {
