@@ -40,19 +40,19 @@ window.phet.preloads.phetio.phetioElementsOverrides =
     "statesOfMatter.interactionScreen.model.timeSpeedProperty": {
       "phetioFeatured": true
     },
-    "statesOfMatter.interactionScreen.view.atomsControlPanel.atomDiameterSlider.title.textProperty": {
+    "statesOfMatter.interactionScreen.view.atomsControlPanel.atomDiameterSlider.titleText.textProperty": {
       "phetioFeatured": true
     },
     "statesOfMatter.interactionScreen.view.atomsControlPanel.atomDiameterSlider.visibleProperty": {
       "phetioFeatured": true
     },
-    "statesOfMatter.interactionScreen.view.atomsControlPanel.interactionStrengthSlider.title.textProperty": {
+    "statesOfMatter.interactionScreen.view.atomsControlPanel.interactionStrengthSlider.titleText.textProperty": {
       "phetioFeatured": true
     },
     "statesOfMatter.interactionScreen.view.atomsControlPanel.interactionStrengthSlider.visibleProperty": {
       "phetioFeatured": true
     },
-    "statesOfMatter.interactionScreen.view.atomsControlPanel.title.textProperty": {
+    "statesOfMatter.interactionScreen.view.atomsControlPanel.titleText.textProperty": {
       "phetioFeatured": true
     },
     "statesOfMatter.interactionScreen.view.atomsControlPanel.visibleProperty": {
@@ -127,7 +127,7 @@ window.phet.preloads.phetio.phetioElementsOverrides =
     "statesOfMatter.phaseChangesScreen.view.interactionPotentialAccordionBox.graph.sigmaGraphLabel.visibleProperty": {
       "phetioFeatured": true
     },
-    "statesOfMatter.phaseChangesScreen.view.moleculesControlPanel.interactionStrengthSlider.title.textProperty": {
+    "statesOfMatter.phaseChangesScreen.view.moleculesControlPanel.interactionStrengthSlider.titleText.textProperty": {
       "phetioFeatured": true
     },
     "statesOfMatter.phaseChangesScreen.view.moleculesControlPanel.interactionStrengthSlider.visibleProperty": {
@@ -148,7 +148,7 @@ window.phet.preloads.phetio.phetioElementsOverrides =
     "statesOfMatter.phaseChangesScreen.view.moleculesControlPanel.radioButtonGroup.waterText.textProperty": {
       "phetioFeatured": true
     },
-    "statesOfMatter.phaseChangesScreen.view.moleculesControlPanel.title.textProperty": {
+    "statesOfMatter.phaseChangesScreen.view.moleculesControlPanel.titleText.textProperty": {
       "phetioFeatured": true
     },
     "statesOfMatter.phaseChangesScreen.view.moleculesControlPanel.visibleProperty": {
@@ -166,7 +166,7 @@ window.phet.preloads.phetio.phetioElementsOverrides =
     "statesOfMatter.phaseChangesScreen.view.particleContainerNode.lidNode.pointingHandNode.visibleProperty": {
       "phetioFeatured": true
     },
-    "statesOfMatter.phaseChangesScreen.view.particleContainerNode.pressureGaugeNode.gaugeNode.labelNode.textProperty": {
+    "statesOfMatter.phaseChangesScreen.view.particleContainerNode.pressureGaugeNode.gaugeNode.labelText.textProperty": {
       "phetioFeatured": true
     },
     "statesOfMatter.phaseChangesScreen.view.particleContainerNode.pressureGaugeNode.readoutNode.visibleProperty": {
@@ -226,7 +226,7 @@ window.phet.preloads.phetio.phetioElementsOverrides =
     "statesOfMatter.statesScreen.view.moleculesControlPanel.radioButtonGroup.waterText.textProperty": {
       "phetioFeatured": true
     },
-    "statesOfMatter.statesScreen.view.moleculesControlPanel.title.textProperty": {
+    "statesOfMatter.statesScreen.view.moleculesControlPanel.titleText.textProperty": {
       "phetioFeatured": true
     },
     "statesOfMatter.statesScreen.view.moleculesControlPanel.visibleProperty": {

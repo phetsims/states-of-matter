@@ -257,11 +257,11 @@ class AtomicInteractionsControlPanel extends Node {
     else {
 
       // allows the user to choose the type of atom, both atoms will be the same type
-      const title = new Text( atomsString, {
+      const titleText = new Text( atomsString, {
         font: new PhetFont( 14 ),
         fill: options.panelTextFill,
         maxWidth: TITLE_TEXT_WIDTH,
-        tandem: options.tandem.createTandem( 'title' )
+        tandem: options.tandem.createTandem( 'titleText' )
       } );
 
       // Set up objects that describe the pieces that make up a selector item in the control panel, conforms to the
@@ -283,7 +283,7 @@ class AtomicInteractionsControlPanel extends Node {
         icon: AtomAndMoleculeIconFactory.createIcon( SubstanceType.ADJUSTABLE_ATOM )
       };
       labelNodes = {
-        label: title
+        label: titleText
       };
 
       // compute the maximum item width

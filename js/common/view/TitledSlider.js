@@ -34,7 +34,7 @@ class TitledSlider extends VBox {
       titleOptions: {
         font: DEFAULT_TITLE_FONT,
         fill: Color.BLACK,
-        tandem: tandem.createTandem( 'title' )
+        tandem: tandem.createTandem( 'titleText' )
       },
       sliderOptions: {
         trackSize: new Dimension2( 140, 5 ), // empirically determined for this sim

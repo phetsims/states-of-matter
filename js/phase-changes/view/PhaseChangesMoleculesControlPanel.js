@@ -228,32 +228,32 @@ class PhaseChangesMoleculesControlPanel extends Node {
     } );
 
     // title for the panel
-    const title = new Text( atomsAndMoleculesString, {
+    const titleText = new Text( atomsAndMoleculesString, {
       font: new PhetFont( 14 ),
       fill: SOMColors.controlPanelTextProperty,
       maxWidth: options.minWidth * 0.85,
-      tandem: options.tandem.createTandem( 'title' )
+      tandem: options.tandem.createTandem( 'titleText' )
     } );
 
     // create the background for the title - initial size is arbitrary, it will be sized and positioned below
     const titleBackground = new Rectangle( 0, 0, 1, 1, { fill: options.fill } );
-    this.addChild( new Node( { children: [ titleBackground, title ] } ) );
+    this.addChild( new Node( { children: [ titleBackground, titleText ] } ) );
 
     // closure for updating the title background size and overall position
     const updateTitle = () => {
       if ( radioButtonPanel.bounds.equals( Bounds2.NOTHING ) ) {
         titleBackground.visible = false;
-        title.visible = false;
+        titleText.visible = false;
       }
       else {
-        titleBackground.rectWidth = title.width + 5;
-        titleBackground.rectHeight = title.height;
+        titleBackground.rectWidth = titleText.width + 5;
+        titleBackground.rectHeight = titleText.height;
         titleBackground.centerX = radioButtonPanel.centerX;
         titleBackground.centerY = radioButtonPanel.top;
-        title.centerX = titleBackground.centerX;
-        title.centerY = titleBackground.centerY;
+        titleText.centerX = titleBackground.centerX;
+        titleText.centerY = titleBackground.centerY;
         titleBackground.visible = true;
-        title.visible = true;
+        titleText.visible = true;
       }
     };
 
@@ -262,7 +262,7 @@ class PhaseChangesMoleculesControlPanel extends Node {
 
     // Listen for changes to the title text node's bounds and update the title when they occur.  There is no need to
     // unlink this since the panel is permanent.
-    title.localBoundsProperty.lazyLink( updateTitle );
+    titleText.localBoundsProperty.lazyLink( updateTitle );
 
     // Listen for changes to the panel bounds and update the title.
     radioButtonPanel.localBoundsProperty.link( updateTitle );
