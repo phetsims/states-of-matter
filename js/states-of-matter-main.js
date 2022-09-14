@@ -15,7 +15,7 @@ import PhaseChangesScreen from './phase-changes/PhaseChangesScreen.js';
 import StatesScreen from './states/StatesScreen.js';
 import StatesOfMatterStrings from './StatesOfMatterStrings.js';
 
-const interactionString = StatesOfMatterStrings.interaction;
+const interactionStringProperty = StatesOfMatterStrings.interactionStringProperty;
 const statesOfMatterTitleStringProperty = StatesOfMatterStrings[ 'states-of-matter' ].titleStringProperty;
 
 simLauncher.launch( () => {
@@ -43,7 +43,7 @@ simLauncher.launch( () => {
   const sim = new Sim( statesOfMatterTitleStringProperty, [
     new StatesScreen( Tandem.ROOT.createTandem( 'statesScreen' ) ),
     new PhaseChangesScreen( true, Tandem.ROOT.createTandem( 'phaseChangesScreen' ) ),
-    new AtomicInteractionsScreen( false, interactionString, Tandem.ROOT.createTandem( 'interactionScreen' ) )
+    new AtomicInteractionsScreen( false, interactionStringProperty, Tandem.ROOT.createTandem( 'interactionScreen' ) )
   ], simOptions );
   sim.start();
 } );

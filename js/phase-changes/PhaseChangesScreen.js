@@ -16,9 +16,6 @@ import PhaseChangesIcon from './PhaseChangesIcon.js';
 import PhaseChangesModel from './PhaseChangesModel.js';
 import PhaseChangesScreenView from './view/PhaseChangesScreenView.js';
 
-// constants
-const phaseChangesString = StatesOfMatterStrings.phaseChanges;
-
 class PhaseChangesScreen extends Screen {
 
   /**
@@ -28,7 +25,7 @@ class PhaseChangesScreen extends Screen {
   constructor( isPotentialGraphEnabled, tandem ) {
 
     const options = {
-      name: phaseChangesString,
+      name: StatesOfMatterStrings.phaseChangesStringProperty,
       backgroundColorProperty: SOMColors.backgroundProperty,
       homeScreenIcon: new PhaseChangesIcon(),
       navigationBarIcon: new PhaseChangesIcon( {

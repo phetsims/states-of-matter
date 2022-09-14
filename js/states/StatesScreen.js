@@ -17,8 +17,6 @@ import StatesOfMatterStrings from '../StatesOfMatterStrings.js';
 import StatesIcon from './StatesIcon.js';
 import StatesScreenView from './view/StatesScreenView.js';
 
-const statesString = StatesOfMatterStrings.states;
-
 class StatesScreen extends Screen {
 
   /**
@@ -27,7 +25,7 @@ class StatesScreen extends Screen {
   constructor( tandem ) {
 
     const options = {
-      name: statesString,
+      name: StatesOfMatterStrings.statesStringProperty,
       backgroundColorProperty: SOMColors.backgroundProperty,
       homeScreenIcon: new StatesIcon(),
       navigationBarIcon: new StatesIcon( {
