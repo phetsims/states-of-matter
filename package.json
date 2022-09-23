@@ -22,9 +22,6 @@
       "adapted-from-phet"
     ],
     "simulation": true,
-    "phet-io": {
-      "compareDesignedAPIChanges": true
-    },
     "supportsOutputJS": true
   },
   "eslintConfig": {
