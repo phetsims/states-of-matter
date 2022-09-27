@@ -171,10 +171,6 @@ class ForcesAccordionBox extends AccordionBox {
     } );
 
     const bracketToTextSpacing = 2;
-    const componentForce = new HBox( {
-      spacing: bracketToTextSpacing,
-      children: [ bracket, componentForceText ]
-    } );
     const totalForceStrutWidth = maxWidth - totalForceText.label.width - totalForceText.icon.width + bracket.width + bracketToTextSpacing;
     const totalForceItem = new HBox( {
       children: [ totalForceText.label,
@@ -182,24 +178,24 @@ class ForcesAccordionBox extends AccordionBox {
         totalForceText.icon ]
     } );
 
-    const totalForce = new HBox( { spacing: 2, children: [ totalForceItem ] } );
-    const hideForce = new HBox( { spacing: 2, children: [ createConsistentlySpacedLabel( hideForcesText ) ] } );
-
     const radioButtonGroup = new AquaRadioButtonGroup(
       forcesProperty,
       [
         {
-          node: hideForce,
+          createNode: tandem => new HBox( { spacing: 2, children: [ createConsistentlySpacedLabel( hideForcesText ) ] } ),
           value: ForceDisplayMode.HIDDEN,
           tandemName: 'hideForceRadioButton'
         },
         {
-          node: totalForce,
+          createNode: tandem => new HBox( { spacing: 2, children: [ totalForceItem ] } ),
           value: ForceDisplayMode.TOTAL,
           tandemName: 'totalForceRadioButton'
         },
         {
-          node: componentForce,
+          createNode: tandem => new HBox( {
+            spacing: bracketToTextSpacing,
+            children: [ bracket, componentForceText ]
+          } ),
           value: ForceDisplayMode.COMPONENTS,
           tandemName: 'componentForceRadioButton'
         }
