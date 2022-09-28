@@ -183,37 +183,37 @@ class AtomicInteractionsControlPanel extends Node {
         dualAtomModel.atomPairProperty,
         [
           {
-            node: createLabelNode( neonAndNeonLabelItems ),
+            createNode: tandem => createLabelNode( neonAndNeonLabelItems ),
             value: AtomPair.NEON_NEON,
             tandemName: 'neonAndNeonRadioButton'
           },
           {
-            node: createLabelNode( argonAndArgonLabelItems ),
+            createNode: tandem => createLabelNode( argonAndArgonLabelItems ),
             value: AtomPair.ARGON_ARGON,
             tandemName: 'argonAndArgonRadioButton'
           },
           {
-            node: createLabelNode( oxygenAndOxygenLabelItems ),
+            createNode: tandem => createLabelNode( oxygenAndOxygenLabelItems ),
             value: AtomPair.OXYGEN_OXYGEN,
             tandemName: 'oxygenAndOxygenRadioButton'
           },
           {
-            node: createLabelNode( neonAndArgonLabelItems ),
+            createNode: tandem => createLabelNode( neonAndArgonLabelItems ),
             value: AtomPair.NEON_ARGON,
             tandemName: 'neonAndArgonRadioButton'
           },
           {
-            node: createLabelNode( neonAndOxygenLabelItems ),
+            createNode: tandem => createLabelNode( neonAndOxygenLabelItems ),
             value: AtomPair.NEON_OXYGEN,
             tandemName: 'neonAndOxygenRadioButton'
           },
           {
-            node: createLabelNode( argonAndOxygenLabelItems ),
+            createNode: tandem => createLabelNode( argonAndOxygenLabelItems ),
             value: AtomPair.ARGON_OXYGEN,
             tandemName: 'argonAndOxygenRadioButton'
           },
           {
-            node: customAttractionLabel,
+            createNode: tandem => customAttractionLabel,
             value: AtomPair.ADJUSTABLE,
             tandemName: 'adjustableRadioButton'
           }
