@@ -311,17 +311,17 @@ class AtomicInteractionsControlPanel extends Node {
       const radioButtonContent = [
         {
           value: AtomPair.NEON_NEON,
-          node: createLabelNode( neon ),
+          createNode: tandem => createLabelNode( neon ),
           tandemName: 'neonRadioButton'
         },
         {
           value: AtomPair.ARGON_ARGON,
-          node: createLabelNode( argon ),
+          createNode: tandem => createLabelNode( argon ),
           tandemName: 'argonRadioButton'
         },
         {
           value: AtomPair.ADJUSTABLE,
-          node: createLabelNode( adjustableAttraction ),
+          createNode: tandem => createLabelNode( adjustableAttraction ),
           tandemName: 'adjustableAttractionRadioButton'
         }
       ];
