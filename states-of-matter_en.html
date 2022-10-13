@@ -32,10 +32,6 @@
         "grunt": "~1.5.3"
       },
       "phet": {
-        "colorProfiles": [
-          "default",
-          "projector"
-        ],
         "requirejsNamespace": "STATES_OF_MATTER",
         "phetLibs": [
           "nitroglycerin"
@@ -47,10 +43,13 @@
           "adapted-from-phet"
         ],
         "simulation": true,
-        "phet-io": {
-          "compareDesignedAPIChanges": true
-        },
-        "supportsOutputJS": true
+        "supportsOutputJS": true,
+        "simFeatures": {
+          "colorProfiles": [
+            "default",
+            "projector"
+          ]
+        }
       },
       "eslintConfig": {
         "extends": "../chipper/eslint/sim_eslintrc.js"
