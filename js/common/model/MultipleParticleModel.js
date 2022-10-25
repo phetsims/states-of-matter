@@ -1368,7 +1368,7 @@ class MultipleParticleModel extends PhetioObject {
     return {
       _private: { // to indicate that it is needed for state, but shouldn't be shown in Studio
         substance: EnumerationIO( SubstanceType ).toStateObject( this.substanceProperty.value ),
-        isExploded: BooleanIO.toStateObject( this.isExplodedProperty.value ),
+        isExploded: this.isExplodedProperty.value,
         containerHeight: this.containerHeightProperty.value,
         gravitationalAcceleration: this.gravitationalAcceleration,
         normalizedLidVelocityY: this.normalizedLidVelocityY,
@@ -1395,7 +1395,7 @@ class MultipleParticleModel extends PhetioObject {
     this.substanceProperty.set( EnumerationIO( SubstanceType ).fromStateObject( stateObject._private.substance ) );
 
     // Set properties that may have been updated by setting the substance.
-    this.isExplodedProperty.set( BooleanIO.fromStateObject( stateObject._private.isExploded ) );
+    this.isExplodedProperty.set( stateObject._private.isExploded );
     this.containerHeightProperty.set( stateObject._private.containerHeight );
     this.heatingCoolingAmountProperty.set( stateObject._private.heatingCoolingAmount );
     this.gravitationalAcceleration = stateObject._private.gravitationalAcceleration;

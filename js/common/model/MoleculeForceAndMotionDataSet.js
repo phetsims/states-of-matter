@@ -375,11 +375,11 @@ class MoleculeForceAndMotionDataSet {
    */
   toStateObject() {
     return {
-      atomsPerMolecule: NumberIO.toStateObject( this.atomsPerMolecule ),
-      numberOfAtoms: NumberIO.toStateObject( this.numberOfAtoms ),
-      numberOfMolecules: NumberIO.toStateObject( this.numberOfMolecules ),
-      moleculeMass: NumberIO.toStateObject( this.moleculeMass ),
-      moleculeRotationalInertia: NumberIO.toStateObject( this.moleculeRotationalInertia ),
+      atomsPerMolecule: this.atomsPerMolecule,
+      numberOfAtoms: this.numberOfAtoms,
+      numberOfMolecules: this.numberOfMolecules,
+      moleculeMass: this.moleculeMass,
+      moleculeRotationalInertia: this.moleculeRotationalInertia,
 
       // arrays
       atomPositions: ArrayIONullableIOVector2IO.toStateObject( this.atomPositions ),
