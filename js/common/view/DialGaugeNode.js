@@ -21,7 +21,7 @@ import StatesOfMatterStrings from '../../StatesOfMatterStrings.js';
 
 // strings
 const pressureOverloadString = StatesOfMatterStrings.pressureOverload;
-const pressureString = StatesOfMatterStrings.pressure;
+const pressureStringProperty = StatesOfMatterStrings.pressureStringProperty;
 const pressureUnitsInAtmString = StatesOfMatterStrings.pressureUnitsInAtm;
 
 // constants
@@ -45,7 +45,7 @@ class DialGaugeNode extends Node {
 
     const gaugeNode = new GaugeNode(
       multipleParticleModel.pressureProperty,
-      pressureString,
+      pressureStringProperty,
       new Range( 0, MAX_PRESSURE ),
       {
         scale: 0.5,
