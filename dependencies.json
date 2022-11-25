@@ -33,7 +33,7 @@
     "branch": "HEAD"
   },
   "phet-core": {
-    "sha": "6144cb330e52b20cadda567aa3dcb592f668ff17",
+    "sha": "16722a4711543b2e8df0d6919704c7322637ff98",
     "branch": "HEAD"
   },
   "phet-io": {
@@ -73,7 +73,7 @@
     "branch": "HEAD"
   },
   "states-of-matter": {
-    "sha": "9a20bdecf8b1444c16cfe02d14c5ea378c5027d3",
+    "sha": "d056f2608d34333253223cd0e2b5b6025c877e00",
     "branch": "1.2"
   },
   "studio": {
