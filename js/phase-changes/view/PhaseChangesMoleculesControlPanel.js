@@ -144,22 +144,22 @@ class PhaseChangesMoleculesControlPanel extends Node {
     const radioButtonContent = [
       {
         value: SubstanceType.NEON,
-        createNode: tandem => new SubstanceSelectorNode( neonSelectorInfo.label, neonSelectorInfo.icon, selectorWidth ),
+        createNode: () => new SubstanceSelectorNode( neonSelectorInfo.label, neonSelectorInfo.icon, selectorWidth ),
         tandemName: 'neonRadioButton'
       },
       {
         value: SubstanceType.ARGON,
-        createNode: tandem => new SubstanceSelectorNode( argonSelectorInfo.label, argonSelectorInfo.icon, selectorWidth ),
+        createNode: () => new SubstanceSelectorNode( argonSelectorInfo.label, argonSelectorInfo.icon, selectorWidth ),
         tandemName: 'argonRadioButton'
       },
       {
         value: SubstanceType.DIATOMIC_OXYGEN,
-        createNode: tandem => new SubstanceSelectorNode( oxygenSelectorInfo.label, oxygenSelectorInfo.icon, selectorWidth ),
+        createNode: () => new SubstanceSelectorNode( oxygenSelectorInfo.label, oxygenSelectorInfo.icon, selectorWidth ),
         tandemName: 'oxygenRadioButton'
       },
       {
         value: SubstanceType.WATER,
-        createNode: tandem => new SubstanceSelectorNode( waterSelectorInfo.label, waterSelectorInfo.icon, selectorWidth ),
+        createNode: () => new SubstanceSelectorNode( waterSelectorInfo.label, waterSelectorInfo.icon, selectorWidth ),
         tandemName: 'waterRadioButton'
       }
     ];
@@ -167,7 +167,7 @@ class PhaseChangesMoleculesControlPanel extends Node {
     if ( options.showAdjustableAttraction ) {
       radioButtonContent.push( {
           value: SubstanceType.ADJUSTABLE_ATOM,
-          createNode: tandem => new SubstanceSelectorNode(
+          createNode: () => new SubstanceSelectorNode(
             adjustableAttractionSelectorInfo.label,
             adjustableAttractionSelectorInfo.icon,
             selectorWidth

@@ -183,37 +183,37 @@ class AtomicInteractionsControlPanel extends Node {
         dualAtomModel.atomPairProperty,
         [
           {
-            createNode: tandem => createLabelNode( neonAndNeonLabelItems ),
+            createNode: () => createLabelNode( neonAndNeonLabelItems ),
             value: AtomPair.NEON_NEON,
             tandemName: 'neonAndNeonRadioButton'
           },
           {
-            createNode: tandem => createLabelNode( argonAndArgonLabelItems ),
+            createNode: () => createLabelNode( argonAndArgonLabelItems ),
             value: AtomPair.ARGON_ARGON,
             tandemName: 'argonAndArgonRadioButton'
           },
           {
-            createNode: tandem => createLabelNode( oxygenAndOxygenLabelItems ),
+            createNode: () => createLabelNode( oxygenAndOxygenLabelItems ),
             value: AtomPair.OXYGEN_OXYGEN,
             tandemName: 'oxygenAndOxygenRadioButton'
           },
           {
-            createNode: tandem => createLabelNode( neonAndArgonLabelItems ),
+            createNode: () => createLabelNode( neonAndArgonLabelItems ),
             value: AtomPair.NEON_ARGON,
             tandemName: 'neonAndArgonRadioButton'
           },
           {
-            createNode: tandem => createLabelNode( neonAndOxygenLabelItems ),
+            createNode: () => createLabelNode( neonAndOxygenLabelItems ),
             value: AtomPair.NEON_OXYGEN,
             tandemName: 'neonAndOxygenRadioButton'
           },
           {
-            createNode: tandem => createLabelNode( argonAndOxygenLabelItems ),
+            createNode: () => createLabelNode( argonAndOxygenLabelItems ),
             value: AtomPair.ARGON_OXYGEN,
             tandemName: 'argonAndOxygenRadioButton'
           },
           {
-            createNode: tandem => customAttractionLabel,
+            createNode: () => customAttractionLabel,
             value: AtomPair.ADJUSTABLE,
             tandemName: 'adjustableRadioButton'
           }
@@ -311,17 +311,17 @@ class AtomicInteractionsControlPanel extends Node {
       const radioButtonContent = [
         {
           value: AtomPair.NEON_NEON,
-          createNode: tandem => createLabelNode( neon ),
+          createNode: () => createLabelNode( neon ),
           tandemName: 'neonRadioButton'
         },
         {
           value: AtomPair.ARGON_ARGON,
-          createNode: tandem => createLabelNode( argon ),
+          createNode: () => createLabelNode( argon ),
           tandemName: 'argonRadioButton'
         },
         {
           value: AtomPair.ADJUSTABLE,
-          createNode: tandem => createLabelNode( adjustableAttraction ),
+          createNode: () => createLabelNode( adjustableAttraction ),
           tandemName: 'adjustableAttractionRadioButton'
         }
       ];

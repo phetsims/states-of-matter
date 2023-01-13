@@ -182,17 +182,17 @@ class ForcesAccordionBox extends AccordionBox {
       forcesProperty,
       [
         {
-          createNode: tandem => new HBox( { spacing: 2, children: [ createConsistentlySpacedLabel( hideForcesText ) ] } ),
+          createNode: () => new HBox( { spacing: 2, children: [ createConsistentlySpacedLabel( hideForcesText ) ] } ),
           value: ForceDisplayMode.HIDDEN,
           tandemName: 'hideForceRadioButton'
         },
         {
-          createNode: tandem => new HBox( { spacing: 2, children: [ totalForceItem ] } ),
+          createNode: () => new HBox( { spacing: 2, children: [ totalForceItem ] } ),
           value: ForceDisplayMode.TOTAL,
           tandemName: 'totalForceRadioButton'
         },
         {
-          createNode: tandem => new HBox( {
+          createNode: () => new HBox( {
             spacing: bracketToTextSpacing,
             children: [ bracket, componentForceText ]
           } ),

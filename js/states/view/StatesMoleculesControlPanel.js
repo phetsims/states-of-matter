@@ -118,14 +118,14 @@ class StatesMoleculesControlPanel extends Node {
     };
 
     const radioButtonContent = [
-      { value: SubstanceType.NEON, createNode: tandem => createSelectionNode( neonSelectionNodeSpec ), tandemName: 'neonRadioButton' },
-      { value: SubstanceType.ARGON, createNode: tandem => createSelectionNode( argonSelectionNodeSpec ), tandemName: 'argonRadioButton' },
+      { value: SubstanceType.NEON, createNode: () => createSelectionNode( neonSelectionNodeSpec ), tandemName: 'neonRadioButton' },
+      { value: SubstanceType.ARGON, createNode: () => createSelectionNode( argonSelectionNodeSpec ), tandemName: 'argonRadioButton' },
       {
         value: SubstanceType.DIATOMIC_OXYGEN,
-        createNode: tandem => createSelectionNode( oxygenSelectionNodeSpec ),
+        createNode: () => createSelectionNode( oxygenSelectionNodeSpec ),
         tandemName: 'oxygenRadioButton'
       },
-      { value: SubstanceType.WATER, createNode: tandem => createSelectionNode( waterSelectionNodeSpec ), tandemName: 'waterRadioButton' }
+      { value: SubstanceType.WATER, createNode: () => createSelectionNode( waterSelectionNodeSpec ), tandemName: 'waterRadioButton' }
     ];
 
     const radioButtonGroup = new RectangularRadioButtonGroup( substanceProperty, radioButtonContent, {
