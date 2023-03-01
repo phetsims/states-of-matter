@@ -368,10 +368,10 @@ class PotentialGraphNode extends Node {
    */
   setMolecular( molecular ) {
     if ( molecular ) {
-      this.horizontalAxisLabel.setText( distanceBetweenMoleculesString );
+      this.horizontalAxisLabel.setString( distanceBetweenMoleculesString );
     }
     else {
-      this.horizontalAxisLabel.setText( distanceBetweenAtomsString );
+      this.horizontalAxisLabel.setString( distanceBetweenAtomsString );
     }
     this.horizontalAxisLabel.centerX = this.graphXOrigin + ( this.graphWidth / 2 );
     this.horizontalAxisLabel.top = this.graphYOrigin + 5;
