@@ -18,11 +18,13 @@ class AtomicInteractionsScreen extends Screen {
 
   /**
    * @param {boolean} enableHeterogeneousMolecules
+   * @param {string} screenTitle
    * @param {Tandem} tandem
    */
-  constructor( enableHeterogeneousMolecules, tandem ) {
+  constructor( enableHeterogeneousMolecules, screenTitle, tandem ) {
 
     const options = {
+      name: screenTitle,
       backgroundColorProperty: SOMColors.backgroundProperty,
       homeScreenIcon: new AtomicInteractionsIcon(),
       navigationBarIcon: new AtomicInteractionsIcon( {
