@@ -1366,18 +1366,16 @@ class MultipleParticleModel extends PhetioObject {
    */
   toStateObject() {
     return {
-      _private: { // to indicate that it is needed for state, but shouldn't be shown in Studio
-        substance: EnumerationIO( SubstanceType ).toStateObject( this.substanceProperty.value ),
-        isExploded: this.isExplodedProperty.value,
-        containerHeight: this.containerHeightProperty.value,
-        gravitationalAcceleration: this.gravitationalAcceleration,
-        normalizedLidVelocityY: this.normalizedLidVelocityY,
-        heatingCoolingAmount: this.heatingCoolingAmountProperty.value,
-        moleculeDataSet: MoleculeForceAndMotionDataSet.MoleculeForceAndMotionDataSetIO.toStateObject( this.moleculeDataSet ),
-        isoKineticThermostatState: this.isoKineticThermostat.toStateObject(),
-        andersenThermostatState: this.andersenThermostat.toStateObject(),
-        moleculeForcesAndMotionCalculatorPressure: this.moleculeForceAndMotionCalculator.pressureProperty.value
-      }
+      _substance: EnumerationIO( SubstanceType ).toStateObject( this.substanceProperty.value ),
+      _isExploded: this.isExplodedProperty.value,
+      _containerHeight: this.containerHeightProperty.value,
+      _gravitationalAcceleration: this.gravitationalAcceleration,
+      _normalizedLidVelocityY: this.normalizedLidVelocityY,
+      _heatingCoolingAmount: this.heatingCoolingAmountProperty.value,
+      _moleculeDataSet: MoleculeForceAndMotionDataSet.MoleculeForceAndMotionDataSetIO.toStateObject( this.moleculeDataSet ),
+      _isoKineticThermostatState: this.isoKineticThermostat.toStateObject(),
+      _andersenThermostatState: this.andersenThermostat.toStateObject(),
+      _moleculeForcesAndMotionCalculatorPressure: this.moleculeForceAndMotionCalculator.pressureProperty.value
     };
   }
 
@@ -1392,22 +1390,22 @@ class MultipleParticleModel extends PhetioObject {
 
     // Setting the substance initializes a bunch of model parameters, so this is done first, then other items that may
     // have been affected are set.
-    this.substanceProperty.set( EnumerationIO( SubstanceType ).fromStateObject( stateObject._private.substance ) );
+    this.substanceProperty.set( EnumerationIO( SubstanceType ).fromStateObject( stateObject._substance ) );
 
     // Set properties that may have been updated by setting the substance.
-    this.isExplodedProperty.set( stateObject._private.isExploded );
-    this.containerHeightProperty.set( stateObject._private.containerHeight );
-    this.heatingCoolingAmountProperty.set( stateObject._private.heatingCoolingAmount );
-    this.gravitationalAcceleration = stateObject._private.gravitationalAcceleration;
-    this.normalizedLidVelocityY = stateObject._private.normalizedLidVelocityY;
-    this.isoKineticThermostat.setState( stateObject._private.isoKineticThermostatState );
-    this.andersenThermostat.setState( stateObject._private.andersenThermostatState );
+    this.isExplodedProperty.set( stateObject._isExploded );
+    this.containerHeightProperty.set( stateObject._containerHeight );
+    this.heatingCoolingAmountProperty.set( stateObject._heatingCoolingAmount );
+    this.gravitationalAcceleration = stateObject._gravitationalAcceleration;
+    this.normalizedLidVelocityY = stateObject._normalizedLidVelocityY;
+    this.isoKineticThermostat.setState( stateObject._isoKineticThermostatState );
+    this.andersenThermostat.setState( stateObject._andersenThermostatState );
 
     // Set the molecule data set.  This includes all the positions, velocities, etc. for the particles.
-    this.moleculeDataSet.setState( stateObject._private.moleculeDataSet );
+    this.moleculeDataSet.setState( stateObject._moleculeDataSet );
 
     // Preset the pressure in the accumulator that tracks it so that it doesn't have to start from zero.
-    this.moleculeForceAndMotionCalculator.presetPressure( stateObject._private.moleculeForcesAndMotionCalculatorPressure );
+    this.moleculeForceAndMotionCalculator.presetPressure( stateObject._moleculeForcesAndMotionCalculatorPressure );
 
     // Make sure that we have the right number of scaled (i.e. non-normalized) atoms.
     const numberOfNormalizedMolecules = this.moleculeDataSet.numberOfMolecules;
@@ -1441,18 +1439,16 @@ MultipleParticleModel.MultipleParticleModelIO = new IOType( 'MultipleParticleMod
   toStateObject: multipleParticleModel => multipleParticleModel.toStateObject(),
   applyState: ( multipleParticleModel, state ) => multipleParticleModel.applyState( state ),
   stateSchema: {
-    _private: {
-      substance: EnumerationIO( SubstanceType ),
-      isExploded: BooleanIO,
-      containerHeight: NumberIO,
-      gravitationalAcceleration: NumberIO,
-      normalizedLidVelocityY: NumberIO,
-      heatingCoolingAmount: NumberIO,
-      moleculeDataSet: MoleculeForceAndMotionDataSet.MoleculeForceAndMotionDataSetIO,
-      isoKineticThermostatState: IsokineticThermostat.IsoKineticThermostatIO,
-      andersenThermostatState: AndersenThermostat.AndersenThermostatIO,
-      moleculeForcesAndMotionCalculatorPressure: NumberIO
-    }
+    _substance: EnumerationIO( SubstanceType ),
+    _isExploded: BooleanIO,
+    _containerHeight: NumberIO,
+    _gravitationalAcceleration: NumberIO,
+    _normalizedLidVelocityY: NumberIO,
+    _heatingCoolingAmount: NumberIO,
+    _moleculeDataSet: MoleculeForceAndMotionDataSet.MoleculeForceAndMotionDataSetIO,
+    _isoKineticThermostatState: IsokineticThermostat.IsoKineticThermostatIO,
+    _andersenThermostatState: AndersenThermostat.AndersenThermostatIO,
+    _moleculeForcesAndMotionCalculatorPressure: NumberIO
   }
 } );
 
