@@ -24,7 +24,12 @@
     "simulation": true,
     "phet-io": {
       "validation": true
-    }
+    },
+    "screenNameKeys": [
+      "STATES_OF_MATTER/states",
+      "STATES_OF_MATTER/phaseChanges",
+      "STATES_OF_MATTER/interaction"
+    ]
   },
   "eslintConfig": {
     "extends": "../chipper/eslint/sim_eslintrc.js"
