@@ -13,6 +13,7 @@ import merge from '../../../../phet-core/js/merge.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import { HBox, HStrut, Image, Node, Text, VBox } from '../../../../scenery/js/imports.js';
 import BooleanRectangularStickyToggleButton from '../../../../sun/js/buttons/BooleanRectangularStickyToggleButton.js';
+import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import gasIcon_png from '../../../mipmaps/gasIcon_png.js';
 import liquidIcon_png from '../../../mipmaps/liquidIcon_png.js';
@@ -108,7 +109,7 @@ class StatesPhaseControlNode extends Node {
         // Only set the phase in the model if this change comes directly from user interaction and not from PhET-iO state.
         // If the change is from the state engine, then the phase will be set implicitly when the positions and velocities
         // of the molecules are set.
-        if ( !phet.joist.sim.isSettingPhetioStateProperty.value ) {
+        if ( !isSettingPhetioStateProperty.value ) {
           model.setPhase( state );
         }
       }

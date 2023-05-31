@@ -12,6 +12,7 @@ import EnumerationDeprecatedProperty from '../../../../axon/js/EnumerationDeprec
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Vector2Property from '../../../../dot/js/Vector2Property.js';
+import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import AtomType from '../../common/model/AtomType.js';
 import SOMConstants from '../../common/SOMConstants.js';
 import statesOfMatter from '../../statesOfMatter.js';
@@ -77,7 +78,7 @@ class MotionAtom {
 
       // Generally the radius is set here too, but not when this is an adjustable atom and state is being set via
       // phet-io, because the radius needs to come from the atom diameter setting.
-      if ( !( phet.joist.sim.isSettingPhetioStateProperty.value && atomType === AtomType.ADJUSTABLE ) ) {
+      if ( !( isSettingPhetioStateProperty.value && atomType === AtomType.ADJUSTABLE ) ) {
         this.radiusProperty.set( atomAttributes.radius );
       }
 

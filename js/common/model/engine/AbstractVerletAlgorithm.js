@@ -9,6 +9,7 @@
  */
 
 import NumberProperty from '../../../../../axon/js/NumberProperty.js';
+import isSettingPhetioStateProperty from '../../../../../tandem/js/isSettingPhetioStateProperty.js';
 import statesOfMatter from '../../../statesOfMatter.js';
 import SOMConstants from '../../SOMConstants.js';
 import TimeSpanDataQueue from '../TimeSpanDataQueue.js';
@@ -314,8 +315,7 @@ class AbstractVerletAlgorithm {
    */
   presetPressure( pressure ) {
 
-    assert && assert(
-      phet.joist.sim.isSettingPhetioStateProperty.value,
+    assert && assert( isSettingPhetioStateProperty.value,
       'this method is intended for use during state setting only'
     );
 

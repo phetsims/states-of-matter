@@ -16,6 +16,7 @@ import GaugeNode from '../../../../scenery-phet/js/GaugeNode.js';
 import PhetColorScheme from '../../../../scenery-phet/js/PhetColorScheme.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import { LinearGradient, Node, Path, Rectangle, Text } from '../../../../scenery/js/imports.js';
+import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import statesOfMatter from '../../statesOfMatter.js';
 import StatesOfMatterStrings from '../../StatesOfMatterStrings.js';
 
@@ -142,7 +143,7 @@ class DialGaugeNode extends Node {
     // If state is being set via phet-io, then it is necessary to update the readout when  pressureProperty changes since
     // the timer may not be running.
     multipleParticleModel.pressureProperty.link( () => {
-      if ( phet.joist.sim.isSettingPhetioStateProperty.value ) {
+      if ( isSettingPhetioStateProperty.value ) {
         updateReadoutText();
       }
     } );

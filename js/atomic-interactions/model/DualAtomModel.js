@@ -7,6 +7,7 @@ import Multilink from '../../../../axon/js/Multilink.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import TimeSpeed from '../../../../scenery-phet/js/TimeSpeed.js';
+import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import AtomType from '../../common/model/AtomType.js';
 import InteractionStrengthTable from '../../common/model/InteractionStrengthTable.js';
 import LjPotentialCalculator from '../../common/model/LjPotentialCalculator.js';
@@ -136,7 +137,7 @@ class DualAtomModel {
       );
 
       // reset other initial state variables
-      if ( !phet.joist.sim.isSettingPhetioStateProperty.value ) {
+      if ( !isSettingPhetioStateProperty.value ) {
 
         // only reset position if this is not a phet-io state update, otherwise this overwrites particle position
         this.resetMovableAtomPos();
@@ -183,7 +184,7 @@ class DualAtomModel {
       this.movableAtom.radiusProperty.set( sigma / 2 );
 
       // move the atom to the minimum force distance from the fixed atom (but not if this is a phet-io state update)
-      if ( !phet.joist.sim.isSettingPhetioStateProperty.value ) {
+      if ( !isSettingPhetioStateProperty.value ) {
         this.movableAtom.setPosition( this.ljPotentialCalculator.getMinimumForceDistance(), 0 );
       }
     }
