@@ -76,7 +76,7 @@ class DialGaugeNode extends Node {
 
     // Create a link to pressureProperty so it's easier to find in Studio.
     this.addLinkedElement( multipleParticleModel.pressureProperty, {
-      tandem: readoutNode.tandem.createTandem( 'pressureProperty' )
+      tandemName: 'pressureProperty'
     } );
 
     // To accurately reproduce the previous version (which consisted of a path stroked with lineWidth 10), we need to

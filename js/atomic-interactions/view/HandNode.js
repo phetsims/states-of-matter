@@ -98,7 +98,7 @@ class HandNode extends Node {
 
     // add a linked element in phet-io to the property that controls this node's visibility
     this.addLinkedElement( dualAtomModel.movementHintVisibleProperty, {
-      tandem: options.tandem.createTandem( 'movementHintVisibleProperty' )
+      tandemName: 'movementHintVisibleProperty'
     } );
 
     // dispose function

@@ -131,7 +131,7 @@ class CompositeThermometerNode extends Node {
 
     // Create a link to temperatureInKelvinProperty so it's easier to find in phet-io Studio.
     this.addLinkedElement( multipleParticleModel.temperatureInKelvinProperty, {
-      tandem: options.tandem.createTandem( 'temperatureInKelvinProperty' )
+      tandemName: 'temperatureInKelvinProperty'
     } );
   }
 
