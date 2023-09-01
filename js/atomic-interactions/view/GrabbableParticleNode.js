@@ -39,7 +39,7 @@ class GrabbableParticleNode extends ParticleForceNode {
     let endDragX;
     let initialStartX = this.x;
 
-    const inputListener = new DragListener( {
+    const dragListener = new DragListener( {
       allowTouchSnag: true,
 
       start: event => {
@@ -73,11 +73,11 @@ class GrabbableParticleNode extends ParticleForceNode {
       tandem: tandem.createTandem( 'dragListener' )
     } );
 
-    this.addInputListener( inputListener );
+    this.addInputListener( dragListener );
 
     // dispose function
     this.disposeGrabbableParticleNode = () => {
-      this.removeInputListener( inputListener );
+      this.removeInputListener( dragListener );
     };
   }
 
