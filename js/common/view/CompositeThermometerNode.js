@@ -107,7 +107,7 @@ class CompositeThermometerNode extends Node {
     const comboBoxListParent = new Node();
 
     // Create the combo box that will display the temperature in either Kelvin or Celsius.
-    const temperatureComboBoxDisplay = new ComboBoxDisplay( this.temperatureUnitsProperty, comboBoxDisplayItems, comboBoxListParent, {
+    const temperatureComboBox = new ComboBoxDisplay( this.temperatureUnitsProperty, comboBoxDisplayItems, comboBoxListParent, {
       xMargin: 6,
       yMargin: 4,
       cornerRadius: 5,
@@ -121,7 +121,7 @@ class CompositeThermometerNode extends Node {
 
     this.addChild( new VBox( {
       spacing: 10,
-      children: [ temperatureComboBoxDisplay, thermometerNode ],
+      children: [ temperatureComboBox, thermometerNode ],
       resize: false
     } ) );
     this.addChild( comboBoxListParent );

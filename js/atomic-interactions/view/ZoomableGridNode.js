@@ -54,6 +54,7 @@ class ZoomableGridNode extends Node {
     const verticalLinesNode = new Path( null, GRID_LINES_OPTIONS );
 
     // @private - zoom level, passed in to the zoom button group if zoom is enabled
+    // eslint-disable-next-line tandem-name-should-match
     this.zoomLevelProperty = new NumberProperty( 0, {
       tandem: options.tandem.createTandem( 'zoomFactorProperty' ),
       range: new Range( -2, 0 )

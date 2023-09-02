@@ -168,6 +168,7 @@ class PotentialGraphNode extends Node {
     if ( options.allowInteraction ) {
 
       // @protected - layer where interactive controls can be added by subclasses
+      // eslint-disable-next-line tandem-name-should-match
       this.interactiveControlsLayer = new Node( {
         tandem: options.tandem.createTandem( 'interactiveControls' ),
         phetioDocumentation: 'Used for \'Adjustable Attraction\' only'

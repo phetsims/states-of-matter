@@ -54,7 +54,7 @@ class HandNode extends Node {
     let startDragX;
     let currentDragX;
     let particleStartXPosition;
-    const inputListener = new DragListener( {
+    const dragListener = new DragListener( {
 
       start: event => {
 
@@ -87,7 +87,7 @@ class HandNode extends Node {
 
       tandem: options.tandem.createTandem( 'dragListener' )
     } );
-    this.addInputListener( inputListener );
+    this.addInputListener( dragListener );
 
     const positionListener = position => {
       this.x = modelViewTransform.modelToViewX( position.x );
@@ -103,7 +103,7 @@ class HandNode extends Node {
 
     // dispose function
     this.disposeHandNode = () => {
-      this.removeInputListener( inputListener );
+      this.removeInputListener( dragListener );
       particle.positionProperty.unlink( positionListener );
       dualAtomModel.movementHintVisibleProperty.unlink( visibilityListener );
     };

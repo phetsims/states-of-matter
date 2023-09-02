@@ -58,9 +58,9 @@ class PositionMarker extends Node {
     this.sphereNode = sphereNode;
 
     // halo visibility
-    const highlightPressListener = new PressListener( { attach: false, tandem: options.tandem.createTandem( 'pressListener' ) } );
-    this.addInputListener( highlightPressListener );
-    this.haloNode.visibleProperty = highlightPressListener.isHighlightedProperty;
+    const pressListener = new PressListener( { attach: false, tandem: options.tandem.createTandem( 'pressListener' ) } );
+    this.addInputListener( pressListener );
+    this.haloNode.visibleProperty = pressListener.isHighlightedProperty;
 
     // expand pointer areas
     this.mouseArea = this.touchArea = Shape.circle( 0, 0, 1.5 * radius );
