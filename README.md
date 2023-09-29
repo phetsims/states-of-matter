@@ -8,8 +8,8 @@ published version,
 
 ### Try it!
 
-<a href="https://phet.colorado.edu/sims/html/states-of-matter/latest/states-of-matter_en.html" target="_blank">Click
-here to run "States of Matter".</a>
+<a href="https://phet.colorado.edu/sims/html/states-of-matter/latest/states-of-matter_en.html" target="_blank">Click here to
+run "States of Matter".</a>
 
 <a href="https://phet.colorado.edu/sims/html/states-of-matter/latest/states-of-matter_en.html" target="_blank">
 <img src="https://raw.githubusercontent.com/phetsims/states-of-matter/main/assets/states-of-matter-screenshot.png" alt="Screenshot" style="width: 400px;"/>
@@ -69,8 +69,8 @@ new or changed files.
 
 (4) In a new terminal/command prompt, start an http-server
 
-(5) Open in the browser: `http://localhost/states-of-matter/states-of-matter_en.html` (You will probably need to modify
-this URL based on your HTTP port and relative path.)
+(5) Open in the browser: `http://localhost/states-of-matter/states-of-matter_en.html` (You will probably need to modify this
+URL based on your HTTP port and relative path.)
 
 #### Optional: Build the simulation into a single file
 
@@ -81,8 +81,8 @@ like `>> WARNING404: Skipping potentially non-public dependency`, which indicate
 being included in the build.
 
 (3) Open in the
-browser: `http://localhost/states-of-matter/build/adapted-from-phet/states-of-matter_en_adapted-from-phet.html` (You
-will probably need to modify this URL based on your HTTP port and relative path.)
+browser: `http://localhost/states-of-matter/build/adapted-from-phet/states-of-matter_en_adapted-from-phet.html` (You will
+probably need to modify this URL based on your HTTP port and relative path.)
 
 ### Get Involved
 
