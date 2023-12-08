@@ -176,8 +176,10 @@ class AbstractVerletAlgorithm {
       moleculeCenterOfMassPositions[ i ].setXY( xPos, yPos );
 
       // set new rotation (does nothing in the monatomic case)
-      moleculeRotationAngles[ i ] += ( timeStep * moleculeRotationRates[ i ] ) +
-                                     ( timeStepSqrHalf * moleculeTorques[ i ] * inertiaInverse );
+      const newAngle = ( timeStep * moleculeRotationRates[ i ] ) +
+                       ( timeStepSqrHalf * moleculeTorques[ i ] * inertiaInverse );
+      assert && assert( !isNaN( newAngle ), 'no NaNs allowed' );
+      moleculeRotationAngles[ i ] += newAngle;
     }
 
     // Now that the molecule position information has been updated, update the positions of the individual atoms.
