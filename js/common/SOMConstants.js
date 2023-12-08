@@ -78,6 +78,9 @@ const SOMConstants = {
 
   MAX_DT: 0.320, // seconds, max time step (delta time), this is 20x the nominal step 0f 16ms
 
+  // A PhET wide decision was made to not update custom layout bounds even if they do not match the
+  // default layout bounds in ScreenView. Do not change these bounds as changes could break or disturb
+  // any phet-io instrumention. https://github.com/phetsims/phet-io/issues/1939
   SCREEN_VIEW_OPTIONS: { layoutBounds: new Bounds2( 0, 0, 834, 504 ) },
 
   TRIPLE_POINT_MONATOMIC_MODEL_TEMPERATURE: 0.26, // empirically determined
