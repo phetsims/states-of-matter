@@ -175,7 +175,7 @@ class AbstractVerletAlgorithm {
       // set new position
       moleculeCenterOfMassPositions[ i ].setXY( xPos, yPos );
 
-      // set new rotation (does nothing in the monatomic case)
+      // set new rotation (has no effect in the monatomic case)
       const newAngle = ( timeStep * moleculeRotationRates[ i ] ) +
                        ( timeStepSqrHalf * moleculeTorques[ i ] * inertiaInverse );
       assert && assert( !isNaN( newAngle ), 'no NaNs allowed' );

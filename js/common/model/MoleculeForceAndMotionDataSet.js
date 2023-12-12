@@ -82,7 +82,10 @@ class MoleculeForceAndMotionDataSet {
     // Set default values.
     if ( atomsPerMolecule === 1 ) {
       this.moleculeMass = 1;
-      this.moleculeRotationalInertia = 0;
+
+      // The value used for the rotational inertia here is not physically correct, but doesn't matter, since rotation
+      // of single atoms is not portrayed in this sim.  The value of 1 is used to make motion calculations fast.
+      this.moleculeRotationalInertia = 1;
     }
     else if ( atomsPerMolecule === 2 ) {
       this.moleculeMass = 2; // Two molecules, assumed to be the same.
@@ -209,7 +212,7 @@ class MoleculeForceAndMotionDataSet {
   }
 
   /**
-   * @returns {number|}
+   * @returns {number}
    * @public
    */
   getNumberOfAtoms() {
