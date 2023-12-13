@@ -427,6 +427,7 @@ class MoleculeForceAndMotionDataSet {
     const moleculeRotationAngles = Float64ArrayIO.fromStateObject( stateObject.moleculeRotationAngles );
     const moleculeRotationRates = Float64ArrayIO.fromStateObject( stateObject.moleculeRotationRates );
     const moleculeTorques = Float64ArrayIO.fromStateObject( stateObject.moleculeTorques );
+    const nextMoleculeTorques = Float64ArrayIO.fromStateObject( stateObject.nextMoleculeTorques );
     const insideContainer = ArrayIOBooleanIO.fromStateObject( stateObject.insideContainer );
     for ( let i = 0; i < this.numberOfMolecules; i++ ) {
       this.moleculeCenterOfMassPositions[ i ] = moleculeCenterOfMassPositions[ i ];
@@ -436,6 +437,7 @@ class MoleculeForceAndMotionDataSet {
       this.moleculeRotationAngles[ i ] = moleculeRotationAngles[ i ];
       this.moleculeRotationRates[ i ] = moleculeRotationRates[ i ];
       this.moleculeTorques[ i ] = moleculeTorques[ i ];
+      this.nextMoleculeTorques[ i ] = nextMoleculeTorques[ i ];
       this.insideContainer[ i ] = insideContainer[ i ];
     }
   }
