@@ -491,7 +491,7 @@ class MoleculeForceAndMotionDataSet {
   }
 }
 
-// IO Type for MoleculeForceAndMotionDataSet, uses "data type" serialization where `fromStateObject returns a new
+// PhET-iO Type for MoleculeForceAndMotionDataSet, uses "data type" serialization where `fromStateObject returns a new
 // instance.
 MoleculeForceAndMotionDataSet.MoleculeForceAndMotionDataSetIO = new IOType( 'MoleculeForceAndMotionDataSetIO', {
   valueType: MoleculeForceAndMotionDataSet,
