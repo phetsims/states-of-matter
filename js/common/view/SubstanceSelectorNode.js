@@ -3,6 +3,8 @@
 /**
  * SubstanceSelectorNode is a node with a label on the left and an icon - generally something that represents and atom
  * or molecule - on the right.  It maintains its initial width if the width of the label changes.
+ *
+ * @author John Blanco (PhET Interactive Simulations)
  */
 
 import { Color, HBox, Line } from '../../../../scenery/js/imports.js';

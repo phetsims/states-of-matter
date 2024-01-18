@@ -3,6 +3,8 @@
 /**
  * Icons, in the form of Scenery nodes, that are used in multiple places in the simulation to represent the various
  * atoms and molecules.
+ *
+ * @author John Blanco (PhET Interactive Simulations)
  */
 
 import { Circle, Node } from '../../../../scenery/js/imports.js';

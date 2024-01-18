@@ -2,6 +2,8 @@
 
 /**
  * PhaseChangesModel is a multiple particle model that adds some additional items specific to the "PhaseChanges" screen.
+ *
+ * @author John Blanco (PhET Interactive Simulations)
  */
 
 import BooleanProperty from '../../../axon/js/BooleanProperty.js';

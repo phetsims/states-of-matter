@@ -2,6 +2,8 @@
 
 /**
  * enumeration of the various possible phases of matter
+ *
+ * @author John Blanco (PhET Interactive Simulations)
  */
 
 import EnumerationDeprecated from '../../../phet-core/js/EnumerationDeprecated.js';

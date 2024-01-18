@@ -2,6 +2,8 @@
 
 /**
  * enumeration for the ways in which the forces can be depicted
+ *
+ * @author John Blanco (PhET Interactive Simulations)
  */
 
 import EnumerationDeprecated from '../../../../phet-core/js/EnumerationDeprecated.js';

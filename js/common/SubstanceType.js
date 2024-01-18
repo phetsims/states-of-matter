@@ -2,6 +2,8 @@
 
 /**
  * enumeration of the different substances that can be selected to be in the container
+ *
+ * @author John Blanco (PhET Interactive Simulations)
  */
 
 import EnumerationDeprecated from '../../../phet-core/js/EnumerationDeprecated.js';
