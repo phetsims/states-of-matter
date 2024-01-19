@@ -1,4 +1,4 @@
-// Copyright 2016-2022, University of Colorado Boulder
+// Copyright 2016-2024, University of Colorado Boulder
 
 /**
  * enumeration of the different substances that can be selected to be in the container
