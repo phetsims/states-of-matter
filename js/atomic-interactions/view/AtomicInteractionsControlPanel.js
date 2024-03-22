@@ -470,4 +470,3 @@ class AtomicInteractionsControlPanel extends Node {
 
 statesOfMatter.register( 'AtomicInteractionsControlPanel', AtomicInteractionsControlPanel );
 export default AtomicInteractionsControlPanel;
-
