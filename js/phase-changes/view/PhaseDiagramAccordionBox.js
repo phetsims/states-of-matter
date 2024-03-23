@@ -1,4 +1,4 @@
-// Copyright 2014-2022, University of Colorado Boulder
+// Copyright 2014-2024, University of Colorado Boulder
 
 /**
  * a phase diagram in an accordion box
