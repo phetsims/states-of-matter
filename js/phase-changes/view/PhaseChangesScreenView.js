@@ -206,9 +206,7 @@ class PhaseChangesScreenView extends ScreenView {
         hoseCurviness: 1.5,
         handleTouchAreaXDilation: 100,
         handleTouchAreaYDilation: 100,
-        dragListenerOptions: {
-          numberOfParticlesPerPumpAction: 3
-        },
+        numberOfParticlesPerPumpAction: 3,
         tandem: tandem.createTandem( 'pumpNode' )
       }
     );
