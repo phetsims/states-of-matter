@@ -74,7 +74,7 @@ class DialGaugeNode extends Node {
     } );
     readoutNode.addChild( readoutText );
 
-    // Create a link to pressureProperty so it's easier to find in Studio.
+    // Create a link to pressureKilopascalsProperty so it's easier to find in Studio.
     this.addLinkedElement( multipleParticleModel.pressureProperty, {
       tandemName: 'pressureProperty'
     } );
@@ -140,7 +140,7 @@ class DialGaugeNode extends Node {
     // because the readout changes too quickly in that case.
     stepTimer.setInterval( updateReadoutText, PRESSURE_UPDATE_PERIOD );
 
-    // If state is being set via phet-io, then it is necessary to update the readout when  pressureProperty changes since
+    // If state is being set via phet-io, then it is necessary to update the readout when  pressureKilopascalsProperty changes since
     // the timer may not be running.
     multipleParticleModel.pressureProperty.link( () => {
       if ( isSettingPhetioStateProperty.value ) {
