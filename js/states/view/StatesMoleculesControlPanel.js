@@ -112,7 +112,8 @@ class StatesMoleculesControlPanel extends Node {
       }
       else {
         return new HBox( {
-          children: [ selectionNodeSpec.label ]
+          children: [ selectionNodeSpec.label ],
+          sizable: false
         } );
       }
     };
