@@ -34,10 +34,7 @@ simLauncher.launch( () => {
       visualOptions: {
         supportsProjectorMode: true
       }
-    } ),
-
-    // phet-io options
-    phetioDesigned: true
+    } )
   };
 
   const sim = new Sim( statesOfMatterTitleStringProperty, [
