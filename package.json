@@ -44,7 +44,7 @@
         ],
         "parserOptions": {
           "project": [
-            "../states-of-matter/tsconfig.json"
+            "../chipper/tsconfig/eslint-all/tsconfig.json"
           ]
         }
       }
