@@ -55,7 +55,7 @@ class ZoomableGridNode extends Node {
 
     // @private - zoom level, passed in to the zoom button group if zoom is enabled
     // TODO: Disable line below should be removed, see https://github.com/phetsims/phet-io/issues/1959
-    // eslint-disable-next-line tandem-name-should-match
+    // eslint-disable-next-line phet/tandem-name-should-match
     this.zoomLevelProperty = new NumberProperty( 0, {
       tandem: options.tandem.createTandem( 'zoomFactorProperty' ),
       range: new Range( -2, 0 )
