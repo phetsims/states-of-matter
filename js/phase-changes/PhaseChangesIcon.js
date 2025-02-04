@@ -12,7 +12,7 @@ import Screen from '../../../joist/js/Screen.js';
 import ScreenIcon from '../../../joist/js/ScreenIcon.js';
 import merge from '../../../phet-core/js/merge.js';
 import ArrowNode from '../../../scenery-phet/js/ArrowNode.js';
-import { Circle, Color, Node, Rectangle } from '../../../scenery/js/imports.js';
+import { Circle, Color, Node, rasterized, Rectangle } from '../../../scenery/js/imports.js';
 import SOMConstants from '../common/SOMConstants.js';
 import statesOfMatter from '../statesOfMatter.js';
 
@@ -115,7 +115,7 @@ class PhaseChangesIcon extends ScreenIcon {
     particlesAndArrowNode.addChild( gasCloudNode );
 
     // for faster rendering, turn the collection of particles and the arrow into an image node
-    iconRootNode.addChild( particlesAndArrowNode.rasterized() );
+    iconRootNode.addChild( rasterized( particlesAndArrowNode ) );
 
     super( iconRootNode, options );
   }
