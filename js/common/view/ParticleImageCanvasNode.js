@@ -6,7 +6,7 @@
  * @author John Blanco
  */
 
-import { CanvasNode } from '../../../../scenery/js/imports.js';
+import CanvasNode from '../../../../scenery/js/nodes/CanvasNode.js';
 import statesOfMatter from '../../statesOfMatter.js';
 import AtomType from '../model/AtomType.js';
 import SOMConstants from '../SOMConstants.js';

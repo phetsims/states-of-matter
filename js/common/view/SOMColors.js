@@ -9,7 +9,8 @@
  * @author Siddhartha Chinthapally (Actual Concepts)
  */
 
-import { Color, ProfileColorProperty } from '../../../../scenery/js/imports.js';
+import Color from '../../../../scenery/js/util/Color.js';
+import ProfileColorProperty from '../../../../scenery/js/util/ProfileColorProperty.js';
 import statesOfMatter from '../../statesOfMatter.js';
 
 // constants

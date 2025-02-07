@@ -9,7 +9,10 @@
 import Screen from '../../../joist/js/Screen.js';
 import ScreenIcon from '../../../joist/js/ScreenIcon.js';
 import merge from '../../../phet-core/js/merge.js';
-import { Color, HBox, Image, Rectangle } from '../../../scenery/js/imports.js';
+import HBox from '../../../scenery/js/layout/nodes/HBox.js';
+import Image from '../../../scenery/js/nodes/Image.js';
+import Rectangle from '../../../scenery/js/nodes/Rectangle.js';
+import Color from '../../../scenery/js/util/Color.js';
 import gasIcon_png from '../../mipmaps/gasIcon_png.js';
 import liquidIcon_png from '../../mipmaps/liquidIcon_png.js';
 import solidIcon_png from '../../mipmaps/solidIcon_png.js';

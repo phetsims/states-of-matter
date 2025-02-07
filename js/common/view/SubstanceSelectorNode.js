@@ -7,7 +7,9 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import { Color, HBox, Line } from '../../../../scenery/js/imports.js';
+import HBox from '../../../../scenery/js/layout/nodes/HBox.js';
+import Line from '../../../../scenery/js/nodes/Line.js';
+import Color from '../../../../scenery/js/util/Color.js';
 import statesOfMatter from '../../statesOfMatter.js';
 
 class SubstanceSelectorNode extends HBox {
