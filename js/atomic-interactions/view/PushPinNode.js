@@ -6,7 +6,8 @@
  * @author Siddhartha Chinthapally (Actual Concepts)
  */
 
-import { Image, Node } from '../../../../scenery/js/imports.js';
+import Image from '../../../../scenery/js/nodes/Image.js';
+import Node from '../../../../scenery/js/nodes/Node.js';
 import pushPin_png from '../../../images/pushPin_png.js';
 import statesOfMatter from '../../statesOfMatter.js';
 

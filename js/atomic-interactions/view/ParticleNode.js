@@ -8,7 +8,10 @@
  */
 
 import Vector2 from '../../../../dot/js/Vector2.js';
-import { Circle, Color, Node, RadialGradient } from '../../../../scenery/js/imports.js';
+import Circle from '../../../../scenery/js/nodes/Circle.js';
+import Node from '../../../../scenery/js/nodes/Node.js';
+import Color from '../../../../scenery/js/util/Color.js';
+import RadialGradient from '../../../../scenery/js/util/RadialGradient.js';
 import statesOfMatter from '../../statesOfMatter.js';
 
 // constants

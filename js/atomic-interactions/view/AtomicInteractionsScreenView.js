@@ -13,7 +13,7 @@ import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransfo
 import ResetAllButton from '../../../../scenery-phet/js/buttons/ResetAllButton.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import TimeControlNode from '../../../../scenery-phet/js/TimeControlNode.js';
-import { Node } from '../../../../scenery/js/imports.js';
+import Node from '../../../../scenery/js/nodes/Node.js';
 import TextPushButton from '../../../../sun/js/buttons/TextPushButton.js';
 import SOMConstants from '../../common/SOMConstants.js';
 import SOMColors from '../../common/view/SOMColors.js';

@@ -8,10 +8,14 @@
  * @author Siddhartha Chinthapally (Actual Concepts)
  */
 
-import { Shape } from '../../../../kite/js/imports.js';
+import Shape from '../../../../kite/js/Shape.js';
 import merge from '../../../../phet-core/js/merge.js';
 import ShadedSphereNode from '../../../../scenery-phet/js/ShadedSphereNode.js';
-import { Circle, Color, Node, PressListener, RadialGradient } from '../../../../scenery/js/imports.js';
+import PressListener from '../../../../scenery/js/listeners/PressListener.js';
+import Circle from '../../../../scenery/js/nodes/Circle.js';
+import Node from '../../../../scenery/js/nodes/Node.js';
+import Color from '../../../../scenery/js/util/Color.js';
+import RadialGradient from '../../../../scenery/js/util/RadialGradient.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import statesOfMatter from '../../statesOfMatter.js';
 

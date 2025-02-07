@@ -9,10 +9,11 @@
 
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Range from '../../../../dot/js/Range.js';
-import { Shape } from '../../../../kite/js/imports.js';
+import Shape from '../../../../kite/js/Shape.js';
 import merge from '../../../../phet-core/js/merge.js';
 import MagnifyingGlassZoomButtonGroup from '../../../../scenery-phet/js/MagnifyingGlassZoomButtonGroup.js';
-import { Node, Path } from '../../../../scenery/js/imports.js';
+import Node from '../../../../scenery/js/nodes/Node.js';
+import Path from '../../../../scenery/js/nodes/Path.js';
 import ButtonNode from '../../../../sun/js/buttons/ButtonNode.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import SOMColors from '../../common/view/SOMColors.js';

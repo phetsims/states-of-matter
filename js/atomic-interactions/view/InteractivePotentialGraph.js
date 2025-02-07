@@ -10,10 +10,14 @@
 import Multilink from '../../../../axon/js/Multilink.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Utils from '../../../../dot/js/Utils.js';
-import { Shape } from '../../../../kite/js/imports.js';
+import Shape from '../../../../kite/js/Shape.js';
 import merge from '../../../../phet-core/js/merge.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
-import { Color, DragListener, Line, Node, PressListener } from '../../../../scenery/js/imports.js';
+import DragListener from '../../../../scenery/js/listeners/DragListener.js';
+import PressListener from '../../../../scenery/js/listeners/PressListener.js';
+import Line from '../../../../scenery/js/nodes/Line.js';
+import Node from '../../../../scenery/js/nodes/Node.js';
+import Color from '../../../../scenery/js/util/Color.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import AtomType from '../../common/model/AtomType.js';
 import SOMConstants from '../../common/SOMConstants.js';

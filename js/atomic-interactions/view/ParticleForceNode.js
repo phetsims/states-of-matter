@@ -6,7 +6,7 @@
  */
 
 import merge from '../../../../phet-core/js/merge.js';
-import { Color } from '../../../../scenery/js/imports.js';
+import Color from '../../../../scenery/js/util/Color.js';
 import statesOfMatter from '../../statesOfMatter.js';
 import DimensionalArrowNode from './DimensionalArrowNode.js';
 import ParticleNode from './ParticleNode.js';
