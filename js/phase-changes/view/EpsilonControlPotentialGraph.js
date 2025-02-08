@@ -1,4 +1,4 @@
-// Copyright 2014-2022, University of Colorado Boulder
+// Copyright 2014-2025, University of Colorado Boulder
 
 /**
  * This class extends the interaction potential diagram to allow the user to adjust the interaction strength parameter

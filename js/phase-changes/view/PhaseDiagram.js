@@ -1,4 +1,4 @@
-// Copyright 2014-2022, University of Colorado Boulder
+// Copyright 2014-2025, University of Colorado Boulder
 
 /**
  * A phase diagram that is specific to the needs of the States of Matter simulation.  This is not very general.

@@ -1,4 +1,4 @@
-// Copyright 2015-2021, University of Colorado Boulder
+// Copyright 2015-2025, University of Colorado Boulder
 
 /**
  * this type adds the ability to display force arrows to a particle node

@@ -1,4 +1,4 @@
-// Copyright 2014-2023, University of Colorado Boulder
+// Copyright 2014-2025, University of Colorado Boulder
 
 /**
  * This class defines a node that has a liquid thermometer and a numerical readout that can display the temperature in
