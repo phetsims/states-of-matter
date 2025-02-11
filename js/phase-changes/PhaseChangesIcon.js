@@ -16,7 +16,7 @@ import Circle from '../../../scenery/js/nodes/Circle.js';
 import Node from '../../../scenery/js/nodes/Node.js';
 import Rectangle from '../../../scenery/js/nodes/Rectangle.js';
 import Color from '../../../scenery/js/util/Color.js';
-import { rasterized } from '../../../scenery/js/util/rasterized.js';
+import { rasterizeNode } from '../../../scenery/js/util/rasterizeNode.js';
 import SOMConstants from '../common/SOMConstants.js';
 import statesOfMatter from '../statesOfMatter.js';
 
@@ -119,7 +119,7 @@ class PhaseChangesIcon extends ScreenIcon {
     particlesAndArrowNode.addChild( gasCloudNode );
 
     // for faster rendering, turn the collection of particles and the arrow into an image node
-    iconRootNode.addChild( rasterized( particlesAndArrowNode ) );
+    iconRootNode.addChild( rasterizeNode( particlesAndArrowNode ) );
 
     super( iconRootNode, options );
   }
