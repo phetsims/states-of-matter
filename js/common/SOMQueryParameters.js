@@ -6,6 +6,7 @@
  * @author John Blanco
  */
 
+import { QueryStringMachine } from '../../../query-string-machine/js/QueryStringMachineModule.js';
 import statesOfMatter from '../statesOfMatter.js';
 
 const SOMQueryParameters = QueryStringMachine.getAll( {
