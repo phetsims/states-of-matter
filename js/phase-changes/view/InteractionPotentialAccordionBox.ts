@@ -28,6 +28,8 @@ const interactionPotentialString = StatesOfMatterStrings.interactionPotential;
 
 class InteractionPotentialAccordionBox extends AccordionBox {
 
+  public readonly graph: EpsilonControlPotentialGraph;
+
   /**
    * @param sigma - atom diameter
    * @param epsilon - interaction strength
@@ -87,7 +89,6 @@ class InteractionPotentialAccordionBox extends AccordionBox {
       }
     }, options ) );
 
-    // @public {EpsilonControlPotentialGraph}
     this.graph = graph;
   }
 

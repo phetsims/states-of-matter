@@ -28,6 +28,16 @@ const TEMPERATURE_BELOW_WHICH_GRAVITY_INCREASES = 0.10;
 
 class WaterVerletAlgorithm extends AbstractVerletAlgorithm {
 
+  private readonly positionUpdater: typeof WaterAtomPositionUpdater;
+
+  // Precomputed values to save time later
+  private readonly massInverse: number;
+  private readonly inertiaInverse: number;
+
+  // Pre-allocated arrays to avoid reallocation with each force and position update
+  private readonly normalCharges: number[];
+  private readonly alteredCharges: number[];
+
   /**
    * @param {MultipleParticleModel} multipleParticleModel
    */
@@ -36,11 +46,9 @@ class WaterVerletAlgorithm extends AbstractVerletAlgorithm {
     super( multipleParticleModel );
     this.positionUpdater = WaterAtomPositionUpdater;
 
-    // @private precomputed values to save time later
     this.massInverse = 1 / multipleParticleModel.moleculeDataSet.getMoleculeMass();
     this.inertiaInverse = 1 / multipleParticleModel.moleculeDataSet.getMoleculeRotationalInertia();
 
-    // @private pre-allocated arrays to avoid reallocation with each force and position update
     this.normalCharges = new Array( 3 );
     this.alteredCharges = new Array( 3 );
   }

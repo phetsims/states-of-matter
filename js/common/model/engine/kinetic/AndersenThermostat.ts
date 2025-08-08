@@ -27,6 +27,26 @@ const INTEGRAL_COMPENSATION_FACTOR = 0.5; // used for drift compensation, value 
 
 class AndersenThermostat {
 
+  // target temperature in normalized model units
+  public targetTemperature: number;
+
+  // minimum temperature in normalized model units, below this is considered absolute 0;
+  public minModelTemperature: number;
+
+  // reference to the molecule data set
+  private readonly moleculeDataSet: MoleculeForceAndMotionDataSet;
+
+  // pseudo-random number generator
+  private readonly random: typeof dotRandom;
+
+  // reusable vector used for calculating velocity changes
+  private readonly previousParticleVelocity: Vector2;
+
+  // vectors used to correct for a collective drift that can occur
+  private readonly totalVelocityChangePreviousStep: Vector2;
+  private readonly totalVelocityChangeThisStep: Vector2;
+  private readonly accumulatedAverageVelocityChange: Vector2;
+
   /**
    * Constructor for the Andersen thermostat.
    * @param moleculeDataSet - Data set on which operations will be performed.
@@ -34,22 +54,16 @@ class AndersenThermostat {
    */
   constructor( moleculeDataSet: MoleculeForceAndMotionDataSet, minTemperature: number ) {
 
-    // @public target temperature in normalized model units
     this.targetTemperature = SOMConstants.INITIAL_TEMPERATURE;
 
-    // @public minimum temperature in normalized model units, below this is considered absolute 0;
     this.minModelTemperature = minTemperature;
 
-    // @private reference to the molecule data set
     this.moleculeDataSet = moleculeDataSet;
 
-    // @private - pseudo-random number generator
     this.random = dotRandom;
 
-    // @private {Vector2} - reusable vector used for calculating velocity changes
     this.previousParticleVelocity = new Vector2( 0, 0 );
 
-    // @private {Vector2} - vectors used to correct for a collective drift that can occur
     this.totalVelocityChangePreviousStep = new Vector2( 0, 0 );
     this.totalVelocityChangeThisStep = new Vector2( 0, 0 );
     this.accumulatedAverageVelocityChange = new Vector2( 0, 0 );

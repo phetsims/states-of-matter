@@ -56,6 +56,49 @@ const ZOOM_BUTTONS_HEIGHT = 72;
 
 class PotentialGraphNode extends Node {
 
+  public readonly graphMin: Vector2;
+  public readonly xRange: number;
+  public readonly zeroCrossingPoint: Vector2;
+  public markerDistance: number;
+  public readonly ljPotentialCalculator: LjPotentialCalculator;
+  private readonly widthOfGraph: number;
+  private readonly heightOfGraph: number;
+  private readonly graphXOrigin: number;
+  private readonly graphYOrigin: number;
+  public readonly graphWidth: number;
+  public readonly graphHeight: number;
+  private readonly ljPotentialGraph: Node;
+  public verticalScalingFactor: number;
+  public horizontalLineCount: number;
+  private readonly epsilonArrow: ArrowNode;
+  private readonly epsilonLabel: Text;
+  private readonly sigmaLabel: Text;
+  private readonly sigmaArrow: ArrowNode;
+  
+  // Layer where interactive controls can be added by subclasses
+  protected readonly interactiveControlsLayer?: Node;
+  
+  // An object where specific controls can be added for controlling the epsilon parameter in the Lennard-
+  // Jones potential calculations, see usages in subclasses
+  protected readonly epsilonControls?: {
+    arrow: null | any;
+    line: null | any;
+  };
+  
+  // An object where a specific control can be added for controlling the sigma parameter in the Lennard-
+  // Jones potential calculations, see usages in subclasses. See usages in subclasses.
+  protected readonly sigmaControls?: {
+    arrow: null | any;
+  };
+  
+  private readonly positionMarker?: PositionMarker;
+  private readonly horizontalAxis: ArrowNode;
+  private readonly horizontalAxisLabel: Text;
+  private readonly verticalAxis: ArrowNode;
+  private readonly verticalAxisLabel: Text;
+  private readonly centerAxis: Line;
+  private readonly gridNode?: ZoomableGridNode;
+
   /**
    * @param sigma - Initial value of sigma, a.k.a. the atom diameter
    * @param epsilon - Initial value of epsilon, a.k.a. the interaction strength
@@ -77,7 +120,6 @@ class PotentialGraphNode extends Node {
 
     super();
 
-    // @public (read-only)
     this.graphMin = new Vector2( 0, 0 );
     this.xRange = X_RANGE;
     this.zeroCrossingPoint = new Vector2( 0, 0 );
@@ -171,22 +213,17 @@ class PotentialGraphNode extends Node {
     // any interactivity by itself, it merely creates support for interactive controls that can be added by subclasses.
     if ( options.allowInteraction ) {
 
-      // @protected - layer where interactive controls can be added by subclasses
       this.interactiveControlsLayer = new Node( {
         tandem: options.tandem.createTandem( 'interactiveControls' ),
         phetioDocumentation: 'Used for \'Adjustable Attraction\' only'
       } );
       this.ljPotentialGraph.addChild( this.interactiveControlsLayer );
 
-      // @protected - an object where specific controls can be added for controlling the epsilon parameter in the Lennard-
-      // Jones potential calculations, see usages in subclasses
       this.epsilonControls = {
         arrow: null,
         line: null
       };
 
-      // @protected - an object where a specific control can be added for controlling the sigma parameter in the Lennard-
-      // Jones potential calculations, see usages in subclasses.  See usages in subclasses.
       this.sigmaControls = {
         arrow: null
       };

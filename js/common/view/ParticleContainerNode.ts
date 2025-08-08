@@ -40,6 +40,17 @@ const BEVEL_WIDTH = 9;
 
 class ParticleContainerNode extends Node {
 
+  // view bounds for the particle area, everything is basically constructed and positioned based on this
+  private readonly particleAreaViewBounds: Bounds2;
+
+  private readonly multipleParticleModel: MultipleParticleModel;
+  private readonly modelViewTransform: ModelViewTransform2;
+  private previousContainerViewSize: number;
+  private readonly particlesCanvasNode: ParticleImageCanvasNode;
+
+  // the thermometer node, which needs to be above the container in the z-order
+  private readonly compositeThermometerNode: CompositeThermometerNode;
+
   /**
    * @param multipleParticleModel - model of the simulation
    * @param modelViewTransform
@@ -57,7 +68,6 @@ class ParticleContainerNode extends Node {
 
     super( options );
 
-    // @private, view bounds for the particle area, everything is basically constructed and positioned based on this
     this.particleAreaViewBounds = new Bounds2(
       modelViewTransform.modelToViewX( 0 ),
       modelViewTransform.modelToViewY( 0 ) + modelViewTransform.modelToViewDeltaY( MultipleParticleModel.PARTICLE_CONTAINER_INITIAL_HEIGHT ),
@@ -65,7 +75,6 @@ class ParticleContainerNode extends Node {
       modelViewTransform.modelToViewY( 0 )
     );
 
-    // @private
     this.multipleParticleModel = multipleParticleModel;
     this.modelViewTransform = modelViewTransform;
     this.previousContainerViewSize = this.particleAreaViewBounds.height;
@@ -380,7 +389,6 @@ class ParticleContainerNode extends Node {
     bevel.top = this.particleAreaViewBounds.minY + cutoutTopY;
     postParticleLayer.addChild( bevel );
 
-    // @private - the thermometer node, which needs to be above the container in the z-order
     this.compositeThermometerNode = new CompositeThermometerNode( multipleParticleModel, {
       font: new PhetFont( 20 ),
       fill: 'white',

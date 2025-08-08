@@ -36,6 +36,9 @@ const CONTROL_PANEL_WIDTH = 175; // empirically determined by looks
 
 class StatesScreenView extends ScreenView {
 
+  // particle container
+  private readonly particleContainerNode: ParticleContainerNode;
+
   /**
    * @param multipleParticleModel - model of the simulation
    * @param tandem
@@ -61,7 +64,6 @@ class StatesScreenView extends ScreenView {
       modelViewTransform.modelToViewY( 0 )
     );
 
-    // @private particle container
     this.particleContainerNode = new ParticleContainerNode( multipleParticleModel, modelViewTransform, {
       thermometerXOffsetFromCenter: modelViewTransform.modelToViewDeltaX(
         -MultipleParticleModel.PARTICLE_CONTAINER_WIDTH * 0.3

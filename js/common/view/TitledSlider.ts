@@ -26,6 +26,9 @@ const DEFAULT_TITLE_FONT = new PhetFont( 12 );
 
 class TitledSlider extends VBox {
 
+  // Accessible so that tick marks and titles can be manipulated after creation
+  public readonly slider: HSlider;
+
   /**
    * @param valueProperty - value property that will be controlled by the slider
    * @param range - range for the value property
@@ -56,7 +59,6 @@ class TitledSlider extends VBox {
       children: [ title, slider ]
     } ) );
 
-    // @public (read-only) - accessible so that tick marks and titles can be manipulated after creation
     this.slider = slider;
   }
 }

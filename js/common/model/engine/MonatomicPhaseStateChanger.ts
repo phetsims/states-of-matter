@@ -24,6 +24,9 @@ const MIN_INITIAL_INTER_PARTICLE_DISTANCE = 1.12; // empirically determined
 
 class MonatomicPhaseStateChanger extends AbstractPhaseStateChanger {
 
+  private readonly positionUpdater: typeof MonatomicAtomPositionUpdater;
+  private readonly random: typeof dotRandom;
+
   constructor( multipleParticleModel: MultipleParticleModel ) {
     super( multipleParticleModel );
     this.positionUpdater = MonatomicAtomPositionUpdater;

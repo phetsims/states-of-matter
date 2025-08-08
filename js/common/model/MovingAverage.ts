@@ -14,17 +14,22 @@ import statesOfMatter from '../../statesOfMatter.js';
 
 class MovingAverage {
 
-  constructor( size: number, options?: Object ) {
+  public size: number;
+  public average: number;
+  private initialValue: number;
+  private array: number[];
+  private currentIndex: number;
+  private total: number;
+
+  constructor( size: number, options?: { initialValue?: number } ) {
 
     options = merge( {
       initialValue: 0
     }, options );
 
-    // @public
     this.size = size;
     this.average = 0;
 
-    // @private
     this.initialValue = options.initialValue;
     this.array = new Array( size );
 

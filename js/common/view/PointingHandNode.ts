@@ -28,6 +28,9 @@ const WIDTH = 150; // in screen coords
 
 class PointingHandNode extends Node {
 
+  // The distance from the fingertip to the bottom of the node, used for positioning
+  private fingertipToBottomDistanceY: number;
+
   /**
    * @param phaseChangesModel - model of the simulation
    * @param modelViewTransform to convert between model and view co-ordinate frames

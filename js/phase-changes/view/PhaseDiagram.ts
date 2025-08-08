@@ -99,12 +99,41 @@ const DEFAULT_GAS_LABEL_POSITION = new Vector2(
 
 class PhaseDiagram extends Node {
 
+  // Object where the components of the phase diagram are collected
+  private readonly diagramComponents: {
+    gasAreaBackground: Path;
+    superCriticalAreaBackground: Path;
+    liquidAreaBackground: Path;
+    solidAreaBackground: Path;
+    solidLiquidLine: Path;
+    solidGasLine: Path;
+    liquidGasLine: Path;
+    triplePoint: Path;
+    criticalPoint: Path;
+    solidLabel: Text;
+    currentStateMarker: Path;
+  };
+
+  // Flag that indicates whether water is being depicted, which alters aspects of the diagram
+  private depictingWater: boolean;
+
   public constructor() {
 
     super();
 
-    // @private - object where the components of the phase diagram are collected
-    const diagramComponents = {};
+    const diagramComponents: {
+      gasAreaBackground?: Path;
+      superCriticalAreaBackground?: Path;
+      liquidAreaBackground?: Path;
+      solidAreaBackground?: Path;
+      solidLiquidLine?: Path;
+      solidGasLine?: Path;
+      liquidGasLine?: Path;
+      triplePoint?: Path;
+      criticalPoint?: Path;
+      solidLabel?: Text;
+      currentStateMarker?: Path;
+    } = {};
 
     diagramComponents.gasAreaBackground = new Path( null, {
       fill: '#FFBC00',
@@ -240,11 +269,20 @@ class PhaseDiagram extends Node {
     );
     this.addChild( diagramComponents.currentStateMarker );
 
-    // @private - flag that indicates whether water is being depicted, which alters aspects of the diagram
     this.depictingWater = false;
-
-    // @private - components of the phase diagram, updated as changes occur in the model
-    this.diagramComponents = diagramComponents;
+    this.diagramComponents = diagramComponents as {
+      gasAreaBackground: Path;
+      superCriticalAreaBackground: Path;
+      liquidAreaBackground: Path;
+      solidAreaBackground: Path;
+      solidLiquidLine: Path;
+      solidGasLine: Path;
+      liquidGasLine: Path;
+      triplePoint: Path;
+      criticalPoint: Path;
+      solidLabel: Text;
+      currentStateMarker: Path;
+    };
 
     // position the labels - some of the values were empirically determined for optimal layout
     liquidLabel.center = DEFAULT_LIQUID_LABEL_POSITION;

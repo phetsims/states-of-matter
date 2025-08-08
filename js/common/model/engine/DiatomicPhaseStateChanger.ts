@@ -25,6 +25,9 @@ const MIN_INITIAL_DIAMETER_DISTANCE = 2.02;
 
 class DiatomicPhaseStateChanger extends AbstractPhaseStateChanger {
 
+  private readonly positionUpdater: typeof DiatomicAtomPositionUpdater;
+  private readonly multipleParticleModel: MultipleParticleModel;
+
   public constructor( multipleParticleModel: MultipleParticleModel ) {
 
     // Make sure this is not being used on an inappropriate data set.
@@ -32,8 +35,8 @@ class DiatomicPhaseStateChanger extends AbstractPhaseStateChanger {
 
     // initialization
     super( multipleParticleModel );
-    this.positionUpdater = DiatomicAtomPositionUpdater; // @private
-    this.multipleParticleModel = multipleParticleModel; // @private
+    this.positionUpdater = DiatomicAtomPositionUpdater;
+    this.multipleParticleModel = multipleParticleModel;
   }
 
   /**

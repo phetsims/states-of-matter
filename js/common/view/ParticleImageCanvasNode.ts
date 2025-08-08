@@ -39,6 +39,16 @@ PARTICLE_RADIUS_TABLE[ AtomType.ADJUSTABLE ] = SOMConstants.ADJUSTABLE_ATTRACTIO
 
 class ParticleImageCanvasNode extends CanvasNode {
 
+  private readonly particles: ObservableArray<ScaledAtom>;
+  private readonly modelViewTransform: ModelViewTransform2;
+  // canvas where particle images will reside, one row with strokes and one row without
+  private readonly particleImageCanvas: HTMLCanvasElement;
+  // create a map of particle types to position in the particle image canvas, will be populated below
+  private readonly mapAtomTypeToImageXPosition: Record<string, number>;
+  // create a table of particle view radii so they don't have to keep being recalculated, populated below
+  private readonly particleRadii: Record<string, number>;
+  private useStrokedParticles: boolean;
+
   /**
    * @param particles - that need to be rendered on the canvas
    * @param modelViewTransform - to convert between model and view coordinate frames
@@ -48,19 +58,15 @@ class ParticleImageCanvasNode extends CanvasNode {
 
     super( options );
 
-    // @private
     this.particles = particles;
     this.modelViewTransform = modelViewTransform;
 
-    // @private canvas where particle images will reside, one row with strokes and one row without
     this.particleImageCanvas = document.createElement( 'canvas' );
     this.particleImageCanvas.width = Object.getOwnPropertyNames( AtomType ).length * PARTICLE_IMAGE_CANVAS_LENGTH;
     this.particleImageCanvas.height = PARTICLE_IMAGE_CANVAS_LENGTH * 2;
 
-    // @private create a map of particle types to position in the particle image canvas, will be populated below
     this.mapAtomTypeToImageXPosition = {};
 
-    // @private create a table of particle view radii so they don't have to keep being recalculated, populated below
     this.particleRadii = {};
 
     // Draw the particles on the canvas, top row is without black stroke, the bottom row is with black stroke (for

@@ -29,29 +29,49 @@ const EXPLOSION_TIME = 1; // in seconds, time that the pressure must be above th
 
 class AbstractVerletAlgorithm {
 
+  protected readonly multipleParticleModel: MultipleParticleModel;
+
+  // In atm (atmospheres)
+  public readonly pressureProperty: NumberProperty;
+
+  // Used to set where particles bounce
+  protected sideBounceInset: number;
+  protected bottomBounceInset: number;
+  protected topBounceInset: number;
+
+  protected potentialEnergy: number;
+  protected calculatedTemperature: number;
+
+  // Flag that indicates whether the lid affected the velocity of one or more particles, set
+  // during execution of the Verlet algorithm, must be cleared by the client.
+  public lidChangedParticleVelocity: boolean;
+
+  // Moving time window queue for tracking the pressure data
+  private readonly pressureAccumulatorQueue: TimeSpanDataQueue;
+
+  // Tracks time above the explosion threshold
+  private timeAboveExplosionPressure: number;
+
+  // Abstract property that must be implemented by subclasses
+  protected abstract positionUpdater: any;
+
   constructor( multipleParticleModel: MultipleParticleModel ) {
 
-    this.multipleParticleModel = multipleParticleModel; // @protected, read only
+    this.multipleParticleModel = multipleParticleModel;
 
-    this.pressureProperty = new NumberProperty( 0 ); // @public, read-only, in atm (atmospheres)
+    this.pressureProperty = new NumberProperty( 0 );
 
-    // @protected, read-write, used to set where particles bounce
     this.sideBounceInset = 1;
     this.bottomBounceInset = 1;
     this.topBounceInset = 1;
 
-    // @protected
     this.potentialEnergy = 0;
     this.calculatedTemperature = 0;
 
-    // @public, read-write, flag that indicates whether the lid affected the velocity of one or more particles, set
-    // during execution of the Verlet algorithm, must be cleared by the client.
     this.lidChangedParticleVelocity = false;
 
-    // @private {TimeSpanDataQueue} - moving time window queue for tracking the pressure data
     this.pressureAccumulatorQueue = new TimeSpanDataQueue( PRESSURE_CALC_TIME_WINDOW );
 
-    // @private, tracks time above the explosion threshold
     this.timeAboveExplosionPressure = 0;
   }
 

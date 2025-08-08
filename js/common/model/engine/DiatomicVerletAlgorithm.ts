@@ -19,12 +19,14 @@ import MoleculeForceAndMotionDataSet from '../MoleculeForceAndMotionDataSet.js';
 
 class DiatomicVerletAlgorithm extends AbstractVerletAlgorithm {
 
+  private readonly positionUpdater: typeof DiatomicAtomPositionUpdater;
+
   /**
    * @param multipleParticleModel - Model of a set of particles
    */
   constructor( multipleParticleModel: MultipleParticleModel ) {
     super( multipleParticleModel );
-    this.positionUpdater = DiatomicAtomPositionUpdater; // @private
+    this.positionUpdater = DiatomicAtomPositionUpdater;
   }
 
   protected override initializeForces( moleculeDataSet: MoleculeForceAndMotionDataSet ) {

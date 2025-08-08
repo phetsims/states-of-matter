@@ -51,6 +51,8 @@ const MAX_TEMPERATURE_TO_CLAMP_RED_MERCURY = 1000;
 
 class CompositeThermometerNode extends Node {
 
+  private readonly temperatureUnitsProperty: EnumerationDeprecatedProperty<typeof TemperatureUnits>;
+
   /**
    * @param multipleParticleModel - model of the simulation
    * @param [options] that can be passed on to the underlying node
@@ -78,7 +80,6 @@ class CompositeThermometerNode extends Node {
       tandem: options.tandem.createTandem( 'thermometerNode' )
     } );
 
-    // @private
     this.temperatureUnitsProperty = new EnumerationDeprecatedProperty(
       TemperatureUnits,
       SOMQueryParameters.defaultCelsius ? TemperatureUnits.CELSIUS : TemperatureUnits.KELVIN,

@@ -27,6 +27,24 @@ const COMPENSATION_FACTOR = 0.9; // an empirically determined factor to help wit
 
 class IsokineticThermostat {
 
+  private readonly moleculeDataSet: MoleculeForceAndMotionDataSet;
+
+  // Target temperature in normalized model units
+  public targetTemperature: number;
+
+  // Minimum temperature in normalized model units, below this is considered absolute 0
+  private minModelTemperature: number;
+
+  // Previous scale factor from temperature adjust calculation
+  private previousTemperatureScaleFactor: number;
+
+  // Reusable vector used for calculating velocity changes
+  private readonly previousParticleVelocity: Vector2;
+
+  // Used to correct for a collective drift that can occur, see usage for details
+  private readonly totalVelocityChangeThisStep: Vector2;
+  private readonly accumulatedAverageVelocityChange: Vector2;
+
   /**
    * Constructor for the Isokinetic thermostat.
    * @param moleculeDataSet - Data set on which operations will be performed.
@@ -34,21 +52,16 @@ class IsokineticThermostat {
    */
   constructor( moleculeDataSet: MoleculeForceAndMotionDataSet, minTemperature: number ) {
 
-    this.moleculeDataSet = moleculeDataSet; // @private
+    this.moleculeDataSet = moleculeDataSet;
 
-    // @public, target temperature in normalized model units
     this.targetTemperature = SOMConstants.INITIAL_TEMPERATURE;
 
-    // @private, minimum temperature in normalized model units, below this is considered absolute 0
     this.minModelTemperature = minTemperature;
 
-    // @private, previous scale factor from temperature adjust calculation
     this.previousTemperatureScaleFactor = 1;
 
-    // @private {Vector2} - reusable vector used for calculating velocity changes
     this.previousParticleVelocity = new Vector2( 0, 0 );
 
-    // @private {Vector2} - used to correct for a collective drift that can occur, see usage for details
     this.totalVelocityChangeThisStep = new Vector2( 0, 0 );
     this.accumulatedAverageVelocityChange = new Vector2( 0, 0 );
   }

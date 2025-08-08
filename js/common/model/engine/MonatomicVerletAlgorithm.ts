@@ -20,16 +20,19 @@ import MonatomicAtomPositionUpdater from './MonatomicAtomPositionUpdater.js';
 
 class MonatomicVerletAlgorithm extends AbstractVerletAlgorithm {
 
+  private positionUpdater: typeof MonatomicAtomPositionUpdater;
+  private epsilon: number; // controls the strength of particle interaction
+  private velocityVector: Vector2; // reusable vector to save allocations
+
   /**
    * @param multipleParticleModel of the simulation
    */
   public constructor( multipleParticleModel: MultipleParticleModel ) {
     super( multipleParticleModel );
 
-    // @private
     this.positionUpdater = MonatomicAtomPositionUpdater;
-    this.epsilon = 1; // controls the strength of particle interaction
-    this.velocityVector = new Vector2( 0, 0 ); // reusable vector to save allocations
+    this.epsilon = 1;
+    this.velocityVector = new Vector2( 0, 0 );
   }
 
   public setScaledEpsilon( scaledEpsilon: number ): void {

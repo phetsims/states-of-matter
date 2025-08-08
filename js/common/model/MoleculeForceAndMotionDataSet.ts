@@ -33,23 +33,45 @@ const ArrayIOBooleanIO = ArrayIO( BooleanIO );
 
 class MoleculeForceAndMotionDataSet {
 
+  // Attributes that describe the data set as a whole
+  public numberOfAtoms: number;
+  public numberOfMolecules: number;
+
+  // Attributes that apply to all elements of the data set
+  public readonly atomsPerMolecule: number;
+
+  // Attributes of the individual molecules and the atoms that comprise them
+  public atomPositions: Array<Vector2 | null>;
+  public moleculeCenterOfMassPositions: Array<Vector2 | null>;
+  public moleculeVelocities: Array<Vector2 | null>;
+  public moleculeForces: Array<Vector2 | null>;
+  public nextMoleculeForces: Array<Vector2 | null>;
+  public insideContainer: Array<boolean>;
+
+  // Note that some of the following are not used in the monatomic case, but need to be here for compatibility
+  public moleculeRotationAngles: Float64Array;
+  public moleculeRotationRates: Float64Array;
+  public moleculeTorques: Float64Array;
+  public nextMoleculeTorques: Float64Array;
+
+  // Molecule properties
+  private moleculeMass: number;
+  private moleculeRotationalInertia: number;
+
   /**
    * This creates the data set with the capacity to hold the maximum number of atoms/molecules, but does not create the
    * individual data for them.  That must be done explicitly through other calls.
    */
   public constructor( atomsPerMolecule: number ) {
 
-    // @public (read-only) - attributes that describe the data set as a whole
     this.numberOfAtoms = 0;
     this.numberOfMolecules = 0;
 
-    // @public (read-only) - attributes that apply to all elements of the data set
     this.atomsPerMolecule = atomsPerMolecule;
 
     // convenience variable
     const maxNumMolecules = Math.floor( SOMConstants.MAX_NUM_ATOMS / atomsPerMolecule );
 
-    // @public Attributes of the individual molecules and the atoms that comprise them.
     this.atomPositions = new Array( SOMConstants.MAX_NUM_ATOMS );
     this.moleculeCenterOfMassPositions = new Array( maxNumMolecules );
     this.moleculeVelocities = new Array( maxNumMolecules );
@@ -69,7 +91,6 @@ class MoleculeForceAndMotionDataSet {
       }
     }
 
-    // @public - Note that some of the following are not used in the monatomic case, but need to be here for compatibility.
     this.moleculeRotationAngles = new Float64Array( maxNumMolecules );
     this.moleculeRotationRates = new Float64Array( maxNumMolecules );
     this.moleculeTorques = new Float64Array( maxNumMolecules );

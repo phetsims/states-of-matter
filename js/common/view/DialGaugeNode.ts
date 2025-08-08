@@ -44,6 +44,10 @@ const PRESSURE_UPDATE_PERIOD = 100; // in milliseconds
 
 class DialGaugeNode extends Node {
 
+  // Set through accessor methods
+  private elbowHeight: number;
+  private connectorExtension: Rectangle;
+
   /**
    * @param multipleParticleModel - model of the simulation
    * @param tandem
@@ -51,7 +55,7 @@ class DialGaugeNode extends Node {
   public constructor( multipleParticleModel: MultipleParticleModel, tandem: Tandem ) {
 
     super( { tandem: tandem } );
-    this.elbowHeight = 0; // @private, set through accessor methods
+    this.elbowHeight = 0;
 
     const gaugeNode = new GaugeNode(
       multipleParticleModel.pressureProperty,

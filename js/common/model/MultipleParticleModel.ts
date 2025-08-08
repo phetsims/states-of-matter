@@ -121,6 +121,46 @@ const MAX_MOLECULES_QUEUED_FOR_INJECTION = 3;
 
 class MultipleParticleModel extends PhetioObject {
 
+  // observable model properties
+  public readonly substanceProperty: EnumerationDeprecatedProperty<SubstanceType>;
+  public readonly containerHeightProperty: NumberProperty;
+  public readonly isExplodedProperty: BooleanProperty;
+  public readonly temperatureSetPointProperty: NumberProperty;
+  public readonly pressureProperty: NumberProperty;
+  public readonly isPlayingProperty: BooleanProperty;
+  public readonly heatingCoolingAmountProperty: NumberProperty;
+  public readonly targetNumberOfMoleculesProperty: NumberProperty;
+  public readonly maxNumberOfMoleculesProperty: NumberProperty;
+  private readonly numMoleculesQueuedForInjectionProperty: NumberProperty;
+  public readonly isInjectionAllowedProperty: DerivedProperty<boolean>;
+  public readonly resetEmitter: Emitter;
+  public readonly temperatureInKelvinProperty: DerivedProperty<number | null>;
+
+  // other model attributes
+  public readonly scaledAtoms: ReturnType<typeof createObservableArray>;
+  public moleculeDataSet: MoleculeForceAndMotionDataSet | null;
+  public readonly normalizedContainerWidth: number;
+  public gravitationalAcceleration: number;
+  public readonly normalizedContainerHeight: number;
+  public readonly normalizedTotalContainerHeight: number;
+  protected normalizedLidVelocityY: number;
+  protected readonly injectionPoint: Vector2;
+
+  // internal model variables
+  private particleDiameter: number;
+  private minModelTemperature: number | null;
+  private residualTime: number;
+  private moleculeInjectionHoldoffTimer: number;
+  private heightChangeThisStep: number;
+  private moleculeInjectedThisStep: boolean;
+  private atomPositionUpdater: any | null;
+  private phaseStateChanger: any | null;
+  private isoKineticThermostat: IsokineticThermostat | null;
+  private andersenThermostat: AndersenThermostat | null;
+  protected moleculeForceAndMotionCalculator: any | null;
+  private averageTemperatureDifference: MovingAverage;
+  private thermostatRunPreviousStep: any | null;
+
   public constructor( tandem: Tandem, options?: { validSubstances?: SubstanceType[] } ) {
 
     options = merge( {
@@ -132,18 +172,12 @@ class MultipleParticleModel extends PhetioObject {
       phetioType: MultipleParticleModel.MultipleParticleModelIO
     } );
 
-    //-----------------------------------------------------------------------------------------------------------------
-    // observable model properties
-    //-----------------------------------------------------------------------------------------------------------------
-
-    // @public (read-write)
     this.substanceProperty = new EnumerationDeprecatedProperty( SubstanceType, DEFAULT_SUBSTANCE, {
       validValues: options.validSubstances,
       tandem: tandem.createTandem( 'substanceProperty' ),
       phetioState: false
     } );
 
-    // @public (read-only)
     this.containerHeightProperty = new NumberProperty( CONTAINER_INITIAL_HEIGHT, {
       tandem: tandem.createTandem( 'containerHeightProperty' ),
       phetioState: false,
@@ -152,40 +186,35 @@ class MultipleParticleModel extends PhetioObject {
       units: 'pm'
     } );
 
-    // @public (read-only)
     this.isExplodedProperty = new BooleanProperty( false, {
       tandem: tandem.createTandem( 'isExplodedProperty' ),
       phetioState: false,
       phetioReadOnly: true
     } );
 
-    // @public (read-write)
     this.temperatureSetPointProperty = new NumberProperty( INITIAL_TEMPERATURE, {
       tandem: tandem.createTandem( 'temperatureSetPointProperty' ),
       phetioReadOnly: true,
       phetioDocumentation: 'In internal model units, solid = 0.15, liquid = 0.34, gas = 1.'
     } );
 
-    // @public (read-only)
     this.pressureProperty = new NumberProperty( 0, {
       tandem: tandem.createTandem( 'pressureProperty' ),
       phetioReadOnly: true,
       units: 'atm'
     } );
 
-    // @public (read-write)
     this.isPlayingProperty = new BooleanProperty( true, {
       tandem: tandem.createTandem( 'isPlayingProperty' )
     } );
 
-    // @public (read-write)
     this.heatingCoolingAmountProperty = new NumberProperty( 0, {
       tandem: tandem.createTandem( 'heatingCoolingAmountProperty' ),
       phetioState: false,
       range: new Range( -1, 1 )
     } );
 
-    // @public (read-write) - the number of molecules that should be in the simulation.  This is used primarily for
+    // The number of molecules that should be in the simulation.  This is used primarily for
     // injecting new molecules, and when this number is increased, internal model state is adjusted to match.
     this.targetNumberOfMoleculesProperty = new NumberProperty( 0, {
       tandem: tandem.createTandem( 'targetNumberOfMoleculesProperty' ),
@@ -193,13 +222,11 @@ class MultipleParticleModel extends PhetioObject {
       phetioDocumentation: 'This value represents the number of particles being simulated, not the number of particles in the container.'
     } );
 
-    // @public (read-only)
     this.maxNumberOfMoleculesProperty = new NumberProperty( SOMConstants.MAX_NUM_ATOMS );
 
-    // @private {NumberProperty}
     this.numMoleculesQueuedForInjectionProperty = new NumberProperty( 0 );
 
-    // @public (read-only) - indicates whether injection of additional molecules is allowed
+    // Indicates whether injection of additional molecules is allowed
     this.isInjectionAllowedProperty = new DerivedProperty(
       [
         this.isPlayingProperty,
@@ -216,61 +243,56 @@ class MultipleParticleModel extends PhetioObject {
       }
     );
 
-    // @public (listen-only) - fires when a reset occurs
+    // Fires when a reset occurs
     this.resetEmitter = new Emitter();
 
-    //-----------------------------------------------------------------------------------------------------------------
-    // other model attributes
-    //-----------------------------------------------------------------------------------------------------------------
-
-    // @public (read-only) {ObservableArrayDef.<ScaledAtom>} - array of scaled (i.e. non-normalized) atoms
+    // Array of scaled (i.e. non-normalized) atoms
     this.scaledAtoms = createObservableArray();
 
-    // @public {MoleculeForceAndMotionDataSet} - data set containing information about the position, motion, and force
-    // for the normalized atoms
+    // Data set containing information about the position, motion, and force for the normalized atoms
     this.moleculeDataSet = null;
 
-    // @public (read-only) {number} - various non-property attributes
+    // Initialize particle diameter first since it's needed for other calculations
+    this.particleDiameter = 1;
+
+    // Various non-property attributes
     this.normalizedContainerWidth = CONTAINER_WIDTH / this.particleDiameter;
     this.gravitationalAcceleration = NOMINAL_GRAVITATIONAL_ACCEL;
 
-    // @public (read-only) {number} - normalized version of the container height, changes as the lid position changes
+    // Normalized version of the container height, changes as the lid position changes
     this.normalizedContainerHeight = this.containerHeightProperty.get() / this.particleDiameter;
 
-    // @public (read-only) {number} - normalized version of the TOTAL container height regardless of the lid position
-    this.normalizedTotalContainerHeight = this.containerHeightProperty.get / this.particleDiameter;
+    // Normalized version of the TOTAL container height regardless of the lid position
+    this.normalizedTotalContainerHeight = this.containerHeightProperty.get() / this.particleDiameter;
 
-    // @protected - normalized velocity at which lid is moving in y direction
+    // Normalized velocity at which lid is moving in y direction
     this.normalizedLidVelocityY = 0;
 
-    // @protected (read-only) {Vector2} - the location where new molecules are injected, in normalized coordinates
+    // The location where new molecules are injected, in normalized coordinates
     this.injectionPoint = Vector2.ZERO.copy();
 
-    // @private, various internal model variables
-    this.particleDiameter = 1;
+    // Various internal model variables
     this.minModelTemperature = null;
     this.residualTime = 0;
     this.moleculeInjectionHoldoffTimer = 0;
     this.heightChangeThisStep = 0;
     this.moleculeInjectedThisStep = false;
 
-    // @private, strategy patterns that are applied to the data set
+    // Strategy patterns that are applied to the data set
     this.atomPositionUpdater = null;
     this.phaseStateChanger = null;
     this.isoKineticThermostat = null;
     this.andersenThermostat = null;
 
-    // @protected
     this.moleculeForceAndMotionCalculator = null;
 
-    // @private - moving average calculator that tracks the average difference between the calculated and target temperatures
+    // Moving average calculator that tracks the average difference between the calculated and target temperatures
     this.averageTemperatureDifference = new MovingAverage( 10 );
 
-    //-----------------------------------------------------------------------------------------------------------------
-    // other initialization
-    //-----------------------------------------------------------------------------------------------------------------
+    // Track which thermostat was run in the previous step
+    this.thermostatRunPreviousStep = null;
 
-    // listen for changes to the substance being simulated and update the internals as needed
+    // Other initialization - listen for changes to the substance being simulated and update the internals as needed
     this.substanceProperty.link( substance => {
       this.handleSubstanceChanged( substance );
     } );
@@ -298,7 +320,7 @@ class MultipleParticleModel extends PhetioObject {
       }
     } );
 
-    // @public (read-only) - the model temperature in Kelvin, derived from the temperature set point in model units
+    // The model temperature in Kelvin, derived from the temperature set point in model units
     this.temperatureInKelvinProperty = new DerivedProperty(
       [ this.temperatureSetPointProperty, this.substanceProperty, this.targetNumberOfMoleculesProperty ],
       () => this.getTemperatureInKelvin(),
@@ -985,7 +1007,7 @@ class MultipleParticleModel extends PhetioObject {
 
     // Note that there will be some circumstances in which no thermostat is run.  This is intentional.
 
-    // @private - keep track of which thermostat was run since this is used in some cases to reset thermostat state
+    // Keep track of which thermostat was run since this is used in some cases to reset thermostat state
     this.thermostatRunPreviousStep = thermostatRunThisStep;
 
     // Update the average difference between the set point and the calculated temperature, but only if nothing has

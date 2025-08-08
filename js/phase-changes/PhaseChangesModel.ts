@@ -51,34 +51,43 @@ EPSILON_TABLE.set( SubstanceType.WATER, SOMConstants.EPSILON_FOR_WATER );
 
 class PhaseChangesModel extends MultipleParticleModel {
 
+  public phaseDiagramExpandedProperty: BooleanProperty;
+  public interactionPotentialExpandedProperty: BooleanProperty;
+
+  // interaction strength of the adjustable attraction atoms
+  public adjustableAtomInteractionStrengthProperty: NumberProperty;
+  public targetContainerHeightProperty: NumberProperty;
+
+  // a derived property that indicates whether the lid is higher than the injection point
+  public readonly lidAboveInjectionPointProperty: DerivedProperty<boolean>;
+
+  // This flag is used to avoid problems when the superconstructor calls the overrides in this subclass
+  // before the subclass-specific properties have been added.
+  private phaseChangeModelConstructed: boolean;
+
   public constructor( tandem: Tandem ) {
 
     super( tandem );
 
-    // @public (read-write)
     this.phaseDiagramExpandedProperty = new BooleanProperty( true, {
       tandem: tandem.createTandem( 'phaseDiagramExpandedProperty' )
     } );
 
-    // @public (read-write)
     this.interactionPotentialExpandedProperty = new BooleanProperty( true, {
       tandem: tandem.createTandem( 'interactionPotentialExpandedProperty' )
     } );
 
-    // @public (read-write) - interaction strength of the adjustable attraction atoms
     this.adjustableAtomInteractionStrengthProperty = new NumberProperty( MAX_ADJUSTABLE_EPSILON, {
       tandem: tandem.createTandem( 'adjustableAtomInteractionStrengthProperty' ),
       range: new Range( MIN_ADJUSTABLE_EPSILON, MAX_ADJUSTABLE_EPSILON ),
       phetioDocumentation: 'intermolecular potential for the "Adjustable Attraction" atoms - this is a parameter in the Lennard-Jones potential equation'
     } );
 
-    // @public (read-write)
     this.targetContainerHeightProperty = new NumberProperty( MultipleParticleModel.PARTICLE_CONTAINER_INITIAL_HEIGHT, {
       tandem: tandem.createTandem( 'targetContainerHeightProperty' ),
       range: new Range( MIN_ALLOWABLE_CONTAINER_HEIGHT, MultipleParticleModel.PARTICLE_CONTAINER_INITIAL_HEIGHT )
     } );
 
-    // @public (read-only) - a derived property that indicates whether the lid is higher than the injection point
     this.lidAboveInjectionPointProperty = new DerivedProperty( [ this.containerHeightProperty ], containerHeight => {
 
       // This may appear a little suspect, but the model is designed such that the container height is always reset
@@ -98,8 +107,6 @@ class PhaseChangesModel extends MultipleParticleModel {
       this.targetContainerHeightProperty.reset();
     } );
 
-    // @private - This flag is used to avoid problems when the superconstructor calls the overrides in this subclass
-    // before the subclass-specific properties have been added.
     this.phaseChangeModelConstructed = true;
   }
 

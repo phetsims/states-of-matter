@@ -20,6 +20,18 @@ import AtomType from '../AtomType.js';
 
 class ScaledAtom {
 
+  // The type of atom being modeled, e.g. Argon, Neon, etc.
+  public atomType: AtomType;
+
+  // Accessed through getter and setter methods below, see those methods for details
+  private position: Vector2;
+
+  // Attributes of the atom, changed as the atom type changes
+  public readonly radius: number;
+  public readonly mass: number;
+  public readonly color: any;
+  public readonly epsilon: number;
+
   /**
    * @param atomType - initial type, aka element, for this atom
    * @param initialXPosition - x position in the model, in picometers
@@ -27,13 +39,10 @@ class ScaledAtom {
    */
   constructor( atomType: AtomType, initialXPosition: number, initialYPosition: number ) {
 
-    // @public {AtomType} - the type of atom being modeled, e.g. Argon, Neon, etc.
     this.atomType = atomType;
 
-    // @private, accessed through getter and setter methods below, see those methods for details
     this.position = new Vector2( initialXPosition, initialYPosition );
 
-    // @public {read-only} - attributes of the atom, changed as the atom type changes
     this.radius = 0;
     this.mass = 0;
     this.color = null;

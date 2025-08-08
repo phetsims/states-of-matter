@@ -27,19 +27,27 @@ const EPSILON_LINE_WIDTH = 1;
 
 class InteractionPotentialCanvasNode extends CanvasNode {
 
+  private readonly potentialGraph: PotentialGraphNode;
+
+  // For efficiency, pre-allocate the array that represents the Y positions of the curve.  The X
+  // positions are the indexes into the array.
+  private readonly curveYPositions: number[];
+
+  // Reusable vector for positioning the epsilon arrow
+  private readonly epsilonArrowStartPoint: Vector2;
+
+  private strokeColor: string;
+
   /**
    * @param potentialGraphNode
    * @param options - that can be passed on to the underlying node
    */
   public constructor( potentialGraphNode: PotentialGraphNode, options?: Object ) {
     super( options );
-    this.potentialGraph = potentialGraphNode; // @private
+    this.potentialGraph = potentialGraphNode;
 
-    // @private {number[]} - ror efficiency, pre-allocate the array that represents the Y positions of the curve.  The X
-    // positions are the indexes into the array.
     this.curveYPositions = new Array( Utils.roundSymmetric( potentialGraphNode.graphWidth ) );
 
-    // @private {Vector2} - reusable vector for positioning the epsilon arrow
     this.epsilonArrowStartPoint = new Vector2( 0, 0 );
   }
 

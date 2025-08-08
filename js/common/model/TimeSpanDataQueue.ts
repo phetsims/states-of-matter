@@ -18,22 +18,32 @@ const MIN_EXPECTED_DT = SOMConstants.NOMINAL_TIME_STEP;
 
 class TimeSpanDataQueue {
 
+  // The total of all values currently in the queue
+  public total: number;
+
+  // The amount of time currently represent by the entries in the queue
+  private timeSpan: number;
+
+  private maxTimeSpan: number;
+
+  // Data queue, which is an array where entries are kept that track times and values
+  private dataQueue: DataQueueEntry[];
+
+  // A pool of unused data queue entries, pre-allocated for performance
+  private unusedDataQueueEntries: DataQueueEntry[];
+
   /**
    * @param maxTimeSpan - max span of time that can be stored, in seconds
    * @param minExpectedDt - the minimum expected dt (delta time) value in seconds, used to allocate memory
    */
   public constructor( maxTimeSpan: number, minExpectedDt: number = MIN_EXPECTED_DT ) {
 
-    // @public (read-only) - the total of all values currently in the queue
     this.total = 0;
 
-    // @private - the amount of time currently represent by the entries in the queue
     this.timeSpan = 0;
 
-    // @private
     this.maxTimeSpan = maxTimeSpan;
 
-    // @private {DataQueueEntry[]} - data queue, which is an array where entries are kept that track times and values
     this.dataQueue = [];
 
     // The queue length is calculated based on the specified time span and the expected minimum dt value.  There is some
@@ -41,7 +51,6 @@ class TimeSpanDataQueue {
     // be needed, and thus optimize performance.
     const maxExpectedDataQueueLength = Math.ceil( maxTimeSpan / minExpectedDt * 1.1 );
 
-    // @private {DataQueueEntry[]} - a pool of unused data queue entries, pre-allocated for performance
     this.unusedDataQueueEntries = [];
     for ( let i = 0; i < maxExpectedDataQueueLength; i++ ) {
       this.unusedDataQueueEntries.push( new DataQueueEntry( 0, null ) );
@@ -105,6 +114,12 @@ class TimeSpanDataQueue {
  * simple inner class that defines the entries that go into the data queue
  */
 class DataQueueEntry {
+
+  // Delta time, in seconds
+  public dt: number;
+
+  // The value for this entry, null if this entry is unused
+  public value: number | null;
 
   /**
    * @param dt - delta time, in seconds

@@ -25,12 +25,16 @@ const MIN_INITIAL_GAS_PARTICLE_DISTANCE = 1.1; // empirically determined
 
 class AbstractPhaseStateChanger {
 
+  private readonly multipleParticleModel: MultipleParticleModel;
+  private readonly moleculePosition: Vector2;
+  private readonly random: typeof dotRandom;
+  private readonly reusableVector: Vector2;
+
   /**
    * @param multipleParticleModel of the simulation
    */
   public constructor( multipleParticleModel: MultipleParticleModel ) {
 
-    // @private
     this.multipleParticleModel = multipleParticleModel;
     this.moleculePosition = new Vector2( 0, 0 );
     this.random = dotRandom;

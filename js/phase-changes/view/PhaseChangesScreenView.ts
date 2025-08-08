@@ -11,7 +11,7 @@
  * @author Aaron Davis
  */
 
-import createObservableArray from '../../../../axon/js/createObservableArray.js';
+import createObservableArray, { ObservableArray } from '../../../../axon/js/createObservableArray.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import Property from '../../../../axon/js/Property.js';
@@ -61,6 +61,18 @@ const CONTROL_PANEL_X_INSET = 15;
 
 class PhaseChangesScreenView extends ScreenView {
 
+  private readonly multipleParticleModel: PhaseChangesModel;
+  private readonly modelTemperatureHistory: ObservableArray<number>;
+  private readonly particleContainerNode: ParticleContainerNode;
+  private readonly pumpNode: BicyclePumpNode;
+  private readonly returnLidButton: TextPushButton;
+  private readonly phaseDiagramAccordionBox: PhaseDiagramAccordionBox;
+  private triplePointTemperatureInModelUnits: number;
+  private criticalPointTemperatureInModelUnits: number;
+  private slopeInFirstRegion: number;
+  private slopeInSecondRegion: number;
+  private offsetInSecondRegion: number;
+
   /**
    * @param model - model of the simulation
    * @param isPotentialGraphEnabled
@@ -70,7 +82,6 @@ class PhaseChangesScreenView extends ScreenView {
 
     super( merge( { tandem: tandem }, SOMConstants.SCREEN_VIEW_OPTIONS ) );
 
-    // @private
     this.multipleParticleModel = model;
     this.modelTemperatureHistory = createObservableArray( { allowDuplicates: true } );
 
@@ -286,7 +297,7 @@ class PhaseChangesScreenView extends ScreenView {
     } );
     phaseDiagramContainer.addChild( this.phaseDiagramAccordionBox );
 
-    // @private - variables used to map temperature on to the phase diagram
+    // variables used to map temperature on to the phase diagram
     this.triplePointTemperatureInModelUnits = 0;
     this.criticalPointTemperatureInModelUnits = 0;
     this.slopeInFirstRegion = 0;

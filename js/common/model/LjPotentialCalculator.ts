@@ -16,13 +16,22 @@ import SOMConstants from '../SOMConstants.js';
  */
 class LjPotentialCalculator {
 
+  // Molecular diameter in picometers.
+  private sigma: number;
+
+  // Interaction strength, epsilon/k-boltzmann is in Kelvin.
+  private epsilon: number;
+
+  // Epsilon multiplied by k-boltzmann.
+  private epsilonForCalcs: number;
+
   constructor( sigma: number, epsilon: number ) {
 
     assert && assert( sigma > 0, 'sigma must be greater than 0' );
 
-    this.sigma = sigma;  // Molecular diameter in picometers.
-    this.epsilon = epsilon; // Interaction strength, epsilon/k-boltzmann is in Kelvin.
-    this.epsilonForCalcs = this.epsilon * SOMConstants.K_BOLTZMANN;  // Epsilon multiplied by k-boltzmann.
+    this.sigma = sigma;
+    this.epsilon = epsilon;
+    this.epsilonForCalcs = this.epsilon * SOMConstants.K_BOLTZMANN;
   }
 
   public getSigma(): number {

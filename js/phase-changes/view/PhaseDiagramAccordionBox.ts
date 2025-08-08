@@ -24,6 +24,9 @@ const phaseDiagramString = StatesOfMatterStrings.phaseDiagram;
 
 class PhaseDiagramAccordionBox extends AccordionBox {
 
+  // Make phase diagram available so that methods can access it
+  private readonly phaseDiagram: PhaseDiagram;
+
   /**
    * @param expandedProperty - is to expand the phase diagram
    * @param options that can be passed on to the underlying node
@@ -63,7 +66,6 @@ class PhaseDiagramAccordionBox extends AccordionBox {
 
     super( phaseDiagram, merge( options, { titleNode: titleNode } ) );
 
-    // @private - make phase diagram available so that methods can access it
     this.phaseDiagram = phaseDiagram;
   }
 

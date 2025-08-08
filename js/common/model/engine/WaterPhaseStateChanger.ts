@@ -14,10 +14,14 @@
 import statesOfMatter from '../../../statesOfMatter.js';
 import SOMConstants from '../../SOMConstants.js';
 import SubstanceType from '../../SubstanceType.js';
+import MultipleParticleModel from '../MultipleParticleModel.js';
 import AbstractPhaseStateChanger from './AbstractPhaseStateChanger.js';
 import WaterAtomPositionUpdater from './WaterAtomPositionUpdater.js';
 
 class WaterPhaseStateChanger extends AbstractPhaseStateChanger {
+
+  private readonly multipleParticleModel: MultipleParticleModel;
+  private readonly positionUpdater: typeof WaterAtomPositionUpdater;
 
   /**
    * @param { MultipleParticleModel } multipleParticleModel - model of a set of particles
@@ -29,9 +33,8 @@ class WaterPhaseStateChanger extends AbstractPhaseStateChanger {
 
     super( multipleParticleModel );
 
-    // @private
     this.multipleParticleModel = multipleParticleModel;
-    this.positionUpdater = WaterAtomPositionUpdater; // @private
+    this.positionUpdater = WaterAtomPositionUpdater;
   }
 
   /**

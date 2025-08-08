@@ -42,6 +42,12 @@ const POTENTIAL_LINE_COLOR = new Color( 'red' );
 
 class EpsilonControlPotentialGraph extends PotentialGraphNode {
 
+  // Flag that signifies if interaction is enabled
+  public interactionEnabled: boolean;
+
+  // Canvas node for rendering the interaction potential
+  private interactionPotentialCanvasNode: InteractionPotentialCanvasNode;
+
   /**
    * @param sigma - atom diameter
    * @param epsilon - interaction strength
@@ -57,7 +63,6 @@ class EpsilonControlPotentialGraph extends PotentialGraphNode {
       tandem: options.tandem
     } );
 
-    // @public, read-only - flag that signifies if interaction is enabled,
     this.interactionEnabled = false;
 
     // variables used to track dragging of controls related to epsilon value
