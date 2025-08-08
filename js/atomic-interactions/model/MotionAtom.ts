@@ -1,8 +1,5 @@
 // Copyright 2014-2023, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * MotionAtom is a model of an atom with Axon Property values that track position, velocity, and acceleration, as well
  * as other attributes that needed by the Atomic Interactions screen.
@@ -15,26 +12,26 @@ import EnumerationDeprecatedProperty from '../../../../axon/js/EnumerationDeprec
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Vector2Property from '../../../../dot/js/Vector2Property.js';
+import Color from '../../../../scenery/js/util/Color.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import AtomType from '../../common/model/AtomType.js';
 import SOMConstants from '../../common/SOMConstants.js';
 import statesOfMatter from '../../statesOfMatter.js';
-import { Color } from '../../../../scenery/js/imports.js';
 
 class MotionAtom {
 
   // The type of atom being modeled, e.g. Argon, Neon, etc.
-  public readonly atomTypeProperty: EnumerationDeprecatedProperty<AtomType>;
+  public readonly atomTypeProperty: EnumerationDeprecatedProperty;
 
   // Radius of this atom, should only be changed for adjustable atoms
   public readonly radiusProperty: NumberProperty;
 
   // Accessed through getter and setter methods below, see those methods for details
-  private readonly positionProperty: Vector2Property;
+  public readonly positionProperty: Vector2Property;
 
   // Accessed through the getter/setter methods below
-  private readonly velocityProperty: Vector2Property;
+  public readonly velocityProperty: Vector2Property;
 
   // Accessed through the getter/setter methods below
   private readonly accelerationProperty: Vector2Property;
@@ -54,7 +51,7 @@ class MotionAtom {
    * @param initialYPosition - y position in the model, in picometers
    * @param tandem
    */
-  public constructor( initialAtomType: AtomType, initialXPosition: number, initialYPosition: number, tandem: Tandem ) {
+  public constructor( initialAtomType: typeof AtomType, initialXPosition: number, initialYPosition: number, tandem: Tandem ) {
 
     this.atomTypeProperty = new EnumerationDeprecatedProperty( AtomType, initialAtomType, {
       tandem: tandem.createTandem( 'atomTypeProperty' ),
@@ -168,7 +165,7 @@ class MotionAtom {
     return this.positionProperty.value.y;
   }
 
-  public getType(): AtomType {
+  public getType(): typeof AtomType {
     return this.atomTypeProperty.value;
   }
 

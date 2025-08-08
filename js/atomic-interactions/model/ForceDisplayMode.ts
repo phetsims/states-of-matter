@@ -1,7 +1,5 @@
 // Copyright 2020-2024, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
 
 /**
  * enumeration for the ways in which the forces can be depicted
@@ -10,8 +8,9 @@
  */
 
 import EnumerationDeprecated from '../../../../phet-core/js/EnumerationDeprecated.js';
+import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import statesOfMatter from '../../statesOfMatter.js';
 
-const ForceDisplayMode = EnumerationDeprecated.byKeys( [ 'COMPONENTS', 'TOTAL', 'HIDDEN' ] );
+const ForceDisplayMode = EnumerationDeprecated.byKeys( [ 'COMPONENTS', 'TOTAL', 'HIDDEN' ] ) as IntentionalAny;
 statesOfMatter.register( 'ForceDisplayMode', ForceDisplayMode );
 export default ForceDisplayMode;

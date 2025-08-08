@@ -51,7 +51,7 @@ const MAX_TEMPERATURE_TO_CLAMP_RED_MERCURY = 1000;
 
 class CompositeThermometerNode extends Node {
 
-  private readonly temperatureUnitsProperty: EnumerationDeprecatedProperty<typeof TemperatureUnits>;
+  private readonly temperatureUnitsProperty: EnumerationDeprecatedProperty;
 
   /**
    * @param multipleParticleModel - model of the simulation

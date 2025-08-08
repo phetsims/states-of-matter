@@ -122,7 +122,7 @@ const MAX_MOLECULES_QUEUED_FOR_INJECTION = 3;
 class MultipleParticleModel extends PhetioObject {
 
   // observable model properties
-  public readonly substanceProperty: EnumerationDeprecatedProperty<SubstanceType>;
+  public readonly substanceProperty: EnumerationDeprecatedProperty;
   public readonly containerHeightProperty: NumberProperty;
   public readonly isExplodedProperty: BooleanProperty;
   public readonly temperatureSetPointProperty: NumberProperty;

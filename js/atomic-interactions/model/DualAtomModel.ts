@@ -1,7 +1,11 @@
 // Copyright 2015-2024, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
+/**
+ * model for two atoms interacting with a Lennard-Jones interaction potential
+ *
+ * @author John Blanco
+ * @author Siddhartha Chinthapally (Actual Concepts)
+ */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import EnumerationDeprecatedProperty from '../../../../axon/js/EnumerationDeprecatedProperty.js';
@@ -40,12 +44,6 @@ const VALID_ATOM_PAIRS_FOR_REDUCED = [ AtomPair.NEON_NEON, AtomPair.ARGON_ARGON,
 // threshold used for limiting force to zero to prevent jitter, empirically determined
 const MIN_FORCE_JITTER_THRESHOLD = 1e-30;
 
-/**
- * model for two atoms interacting with a Lennard-Jones interaction potential
- *
- * @author John Blanco
- * @author Siddhartha Chinthapally (Actual Concepts)
- */
 class DualAtomModel {
 
   //-----------------------------------------------------------------------------------------------------------------
@@ -58,7 +56,7 @@ class DualAtomModel {
   // indicates when motion is paused due to user interaction with the movable atom
   public motionPausedProperty: BooleanProperty;
 
-  public atomPairProperty: EnumerationDeprecatedProperty<AtomPair>;
+  public atomPairProperty: EnumerationDeprecatedProperty;
 
   // paused or playing
   public isPlayingProperty: BooleanProperty;
@@ -69,7 +67,7 @@ class DualAtomModel {
   // diameter of the adjustable atoms
   public readonly adjustableAtomDiameterProperty: NumberProperty;
 
-  public forcesDisplayModeProperty: EnumerationDeprecatedProperty<ForceDisplayMode>;
+  public forcesDisplayModeProperty: EnumerationDeprecatedProperty;
 
   public forcesExpandedProperty: BooleanProperty;
 
@@ -88,7 +86,7 @@ class DualAtomModel {
   private ljPotentialCalculator: LjPotentialCalculator;
   private residualTime: number; // accumulates dt values not yet applied to model
 
-  public constructor( tandem: Tandem, enableHeterogeneousMolecules: boolean = true ) {
+  public constructor( tandem: Tandem, enableHeterogeneousMolecules = true ) {
 
     this.adjustableAtomInteractionStrengthProperty = new NumberProperty( 100, {
       tandem: tandem.createTandem( 'adjustableAtomInteractionStrengthProperty' ),
@@ -334,10 +332,12 @@ class DualAtomModel {
 
     let distance = this.movableAtom.positionProperty.value.distance( Vector2.ZERO );
 
+    // @ts-expect-error
     if ( distance < ( this.fixedAtom.radius + this.movableAtom.radius ) / 8 ) {
 
       // The atoms are too close together, and calculating the force will cause unusable levels of speed later, so
       // we limit it.
+      // @ts-expect-error
       distance = ( this.fixedAtom.radius + this.movableAtom.radius ) / 8;
     }
 
@@ -385,10 +385,9 @@ class DualAtomModel {
       this.movableAtom.setPosition( xPos, 0 );
     }
   }
-}
 
-// static
-DualAtomModel.NORMAL_MOTION_TIME_MULTIPLIER = NORMAL_MOTION_TIME_MULTIPLIER;
+  public static readonly NORMAL_MOTION_TIME_MULTIPLIER = NORMAL_MOTION_TIME_MULTIPLIER;
+}
 
 statesOfMatter.register( 'DualAtomModel', DualAtomModel );
 export default DualAtomModel;

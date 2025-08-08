@@ -1,14 +1,12 @@
 // Copyright 2015-2022, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * AtomPair enumeration
  * @author John Blanco (PhET Interactive Simulations)
  */
 
 import EnumerationDeprecated from '../../../../phet-core/js/EnumerationDeprecated.js';
+import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import AtomType from '../../common/model/AtomType.js';
 import statesOfMatter from '../../statesOfMatter.js';
 
@@ -21,7 +19,7 @@ const AtomPair = EnumerationDeprecated.byMap( {
     ARGON_OXYGEN: { fixedAtomType: AtomType.ARGON, movableAtomType: AtomType.OXYGEN },
     ADJUSTABLE: { fixedAtomType: AtomType.ADJUSTABLE, movableAtomType: AtomType.ADJUSTABLE }
   }
-);
+) as IntentionalAny;
 
 statesOfMatter.register( 'AtomPair', AtomPair );
 export default AtomPair;
