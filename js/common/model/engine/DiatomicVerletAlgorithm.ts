@@ -14,22 +14,20 @@
 import statesOfMatter from '../../../statesOfMatter.js';
 import AbstractVerletAlgorithm from './AbstractVerletAlgorithm.js';
 import DiatomicAtomPositionUpdater from './DiatomicAtomPositionUpdater.js';
+import MultipleParticleModel from '../MultipleParticleModel.js';
+import MoleculeForceAndMotionDataSet from '../MoleculeForceAndMotionDataSet.js';
 
 class DiatomicVerletAlgorithm extends AbstractVerletAlgorithm {
 
   /**
-   * @param {MultipleParticleModel} multipleParticleModel - Model of a set of particles
+   * @param multipleParticleModel - Model of a set of particles
    */
-  constructor( multipleParticleModel ) {
+  constructor( multipleParticleModel: MultipleParticleModel ) {
     super( multipleParticleModel );
     this.positionUpdater = DiatomicAtomPositionUpdater; // @private
   }
 
-  /**
-   * @override
-   * @protected
-   */
-  initializeForces( moleculeDataSet ) {
+  protected override initializeForces( moleculeDataSet: MoleculeForceAndMotionDataSet ) {
     const accelerationDueToGravity = this.multipleParticleModel.gravitationalAcceleration;
     const nextMoleculeForces = moleculeDataSet.nextMoleculeForces;
     const nextMoleculeTorques = moleculeDataSet.nextMoleculeTorques;
@@ -41,10 +39,8 @@ class DiatomicVerletAlgorithm extends AbstractVerletAlgorithm {
 
   /**
    * Update the forces acting on each molecule due to the other molecules in the data set.
-   * @param moleculeDataSet
-   * @private
    */
-  updateInteractionForces( moleculeDataSet ) {
+  protected updateInteractionForces( moleculeDataSet: MoleculeForceAndMotionDataSet ) {
 
     const moleculeCenterOfMassPositions = moleculeDataSet.getMoleculeCenterOfMassPositions();
     const nextMoleculeForces = moleculeDataSet.getNextMoleculeForces();
@@ -96,11 +92,8 @@ class DiatomicVerletAlgorithm extends AbstractVerletAlgorithm {
   /**
    * Update the translational and rotational velocities for the molecules, calculate the total energy, and record the
    * temperature value for the system.
-   * @param moleculeDataSet
-   * @param timeStep
-   * @private
    */
-  updateVelocitiesAndRotationRates( moleculeDataSet, timeStep ) {
+  protected updateVelocitiesAndRotationRates( moleculeDataSet: MoleculeForceAndMotionDataSet, timeStep: number ) {
 
     // Obtain references to the model data and parameters so that we can perform fast manipulations.
     const moleculeVelocities = moleculeDataSet.getMoleculeVelocities();

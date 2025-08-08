@@ -15,6 +15,7 @@ import Utils from '../../../../../dot/js/Utils.js';
 import statesOfMatter from '../../../statesOfMatter.js';
 import SOMConstants from '../../SOMConstants.js';
 import SubstanceType from '../../SubstanceType.js';
+import MultipleParticleModel from '../MultipleParticleModel.js';
 import AbstractPhaseStateChanger from './AbstractPhaseStateChanger.js';
 import MonatomicAtomPositionUpdater from './MonatomicAtomPositionUpdater.js';
 
@@ -23,20 +24,16 @@ const MIN_INITIAL_INTER_PARTICLE_DISTANCE = 1.12; // empirically determined
 
 class MonatomicPhaseStateChanger extends AbstractPhaseStateChanger {
 
-  /**
-   * @param {MultipleParticleModel} multipleParticleModel
-   */
-  constructor( multipleParticleModel ) {
+  constructor( multipleParticleModel: MultipleParticleModel ) {
     super( multipleParticleModel );
     this.positionUpdater = MonatomicAtomPositionUpdater;
     this.random = dotRandom;
   }
 
   /**
-   * @public
-   * @param {number} phaseID - state(solid/liquid/gas) of Molecule
+   * @param phaseID - state(solid/liquid/gas) of Molecule
    */
-  setPhase( phaseID ) {
+  public override setPhase( phaseID: number ): void {
 
     super.setPhase( phaseID );
 
@@ -63,9 +60,8 @@ class MonatomicPhaseStateChanger extends AbstractPhaseStateChanger {
 
   /**
    * Set the particle configuration for the solid phase.
-   * @protected
    */
-  setParticleConfigurationSolid() {
+  protected setParticleConfigurationSolid(): void {
 
     // Place the molecules into a cube, a.k.a. a crystal.
     this.formCrystal(
@@ -80,9 +76,8 @@ class MonatomicPhaseStateChanger extends AbstractPhaseStateChanger {
 
   /**
    * Set the particle configuration for the liquid phase.
-   * @protected
    */
-  setParticleConfigurationLiquid() {
+  protected setParticleConfigurationLiquid(): void {
     let dataSetToLoad;
     if ( this.multipleParticleModel.substanceProperty.get() === SubstanceType.NEON ) {
       dataSetToLoad = LIQUID_INITIAL_STATES.neon;

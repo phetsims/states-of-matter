@@ -11,15 +11,12 @@
  */
 
 import statesOfMatter from '../../../statesOfMatter.js';
+import MoleculeForceAndMotionDataSet from '../MoleculeForceAndMotionDataSet.js';
 
 // static object (no constructor)
 const MonatomicAtomPositionUpdater = {
 
-  /**
-   * @param {MoleculeForceAndMotionDataSet} moleculeDataSet
-   * @public
-   */
-  updateAtomPositions: moleculeDataSet => {
+  updateAtomPositions: ( moleculeDataSet: MoleculeForceAndMotionDataSet ): void => {
 
     // Make sure this is not being used on an inappropriate data set.
     assert && assert( moleculeDataSet.atomsPerMolecule === 1 );

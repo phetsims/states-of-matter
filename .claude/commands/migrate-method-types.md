@@ -49,3 +49,4 @@ Migrate all method signatures + constructor signatures in the file @$ARGUMENTS f
 6. DO NOT change any runtime behavior - only type annotations, comments, and imports
 7. Think carefully to figure out the imports. See if the type is already imported, or if you need to import it. If you need to import it, carefully compute the import path based on the current file's location.
 8. Visit the constructors as well, but JSDOC and signature ONLY.
+9. Move `@override` jsdoc to the typescript keyword like `public override myMethod(...)`
