@@ -16,6 +16,7 @@ import Vector2 from '../../../../../dot/js/Vector2.js';
 import statesOfMatter from '../../../statesOfMatter.js';
 import PhaseStateEnum from '../../PhaseStateEnum.js';
 import SOMConstants from '../../SOMConstants.js';
+import MultipleParticleModel from '../MultipleParticleModel.js';
 
 // constants
 const MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE = 1.5;
@@ -25,10 +26,9 @@ const MIN_INITIAL_GAS_PARTICLE_DISTANCE = 1.1; // empirically determined
 class AbstractPhaseStateChanger {
 
   /**
-   * @param { MultipleParticleModel } multipleParticleModel of the simulation
-   * @public
+   * @param multipleParticleModel of the simulation
    */
-  constructor( multipleParticleModel ) {
+  public constructor( multipleParticleModel: MultipleParticleModel ) {
 
     // @private
     this.multipleParticleModel = multipleParticleModel;
@@ -40,10 +40,8 @@ class AbstractPhaseStateChanger {
   /**
    * Set the phase based on the specified ID.  This often needs to be overridden in descendant classes to do more
    * specific activities.
-   * @param {PhaseStateEnum} phaseID
-   * @public
    */
-  setPhase( phaseID ) {
+  public setPhase( phaseID: PhaseStateEnum ) {
     switch( phaseID ) {
       case PhaseStateEnum.SOLID:
         this.setPhaseSolid();
@@ -61,10 +59,8 @@ class AbstractPhaseStateChanger {
 
   /**
    * Set the positions and velocities of the particles without setting the model temperature.
-   * @param {PhaseStateEnum} phaseID
-   * @public
    */
-  setParticleConfigurationForPhase( phaseID ) {
+  public setParticleConfigurationForPhase( phaseID: PhaseStateEnum ) {
     switch( phaseID ) {
       case PhaseStateEnum.SOLID:
         this.setParticleConfigurationSolid();
@@ -82,10 +78,8 @@ class AbstractPhaseStateChanger {
 
   /**
    * Set the model temperature for the specified phase.
-   * @param {PhaseStateEnum} phaseID
-   * @public
    */
-  setTemperatureForPhase( phaseID ) {
+  public setTemperatureForPhase( phaseID: PhaseStateEnum ) {
     switch( phaseID ) {
       case PhaseStateEnum.SOLID:
         this.multipleParticleModel.setTemperature( SOMConstants.SOLID_TEMPERATURE );
@@ -103,27 +97,24 @@ class AbstractPhaseStateChanger {
 
   /**
    * set the phase to solid
-   * @protected
    */
-  setPhaseSolid() {
+  protected setPhaseSolid() {
     this.setTemperatureForPhase( PhaseStateEnum.SOLID );
     this.setParticleConfigurationSolid();
   }
 
   /**
    * set the phase to liquid
-   * @protected
    */
-  setPhaseLiquid() {
+  protected setPhaseLiquid() {
     this.setTemperatureForPhase( PhaseStateEnum.LIQUID );
     this.setParticleConfigurationLiquid();
   }
 
   /**
    * set the phase to gas
-   * @protected
    */
-  setPhaseGas() {
+  protected setPhaseGas() {
     this.setTemperatureForPhase( PhaseStateEnum.GAS );
     this.setParticleConfigurationGas();
   }
@@ -132,10 +123,8 @@ class AbstractPhaseStateChanger {
    * Do a linear search for a position that is suitably far away enough from all other molecules.  This is generally
    * used when the attempt to place a molecule at a random position fails.  This is expensive in terms of
    * computational power, and should thus be used sparingly.
-   * @returns {Vector2}
-   * @private
    */
-  findOpenMoleculePosition() {
+  private findOpenMoleculePosition(): Vector2 | null {
 
     let posX;
     let posY;
@@ -173,15 +162,8 @@ class AbstractPhaseStateChanger {
 
   /**
    * form the molecules into a crystal, which is essentially a cube shape
-   * @param {number} moleculesPerLayer
-   * @param {number} xSpacing
-   * @param {number} ySpacing
-   * @param {number} alternateRowOffset
-   * @param {number} bottomY
-   * @param {boolean} randomizeRotationalAngle
-   * @protected
    */
-  formCrystal( moleculesPerLayer, xSpacing, ySpacing, alternateRowOffset, bottomY, randomizeRotationalAngle ) {
+  protected formCrystal( moleculesPerLayer: number, xSpacing: number, ySpacing: number, alternateRowOffset: number, bottomY: number, randomizeRotationalAngle: boolean ) {
 
     // Get references to the various elements of the data set.
     const moleculeDataSet = this.multipleParticleModel.moleculeDataSet;
@@ -241,9 +223,8 @@ class AbstractPhaseStateChanger {
   /**
    * Set the particle configuration for gas.  This can be generalized more than the liquid and solid phases, hence it
    * can be defined in the base class.
-   * @protected
    */
-  setParticleConfigurationGas() {
+  protected setParticleConfigurationGas() {
 
     // Get references to the various elements of the data set.
     const moleculeDataSet = this.multipleParticleModel.moleculeDataSet;
@@ -319,9 +300,8 @@ class AbstractPhaseStateChanger {
 
   /**
    * zero out the collective velocity of the substance, generally used to help prevent drift after changing phase
-   * @protected
    */
-  zeroOutCollectiveVelocity() {
+  protected zeroOutCollectiveVelocity() {
 
     const moleculeDataSet = this.multipleParticleModel.moleculeDataSet;
     const numberOfMolecules = moleculeDataSet.getNumberOfMolecules();
@@ -340,9 +320,8 @@ class AbstractPhaseStateChanger {
 
   /**
    * Load previously saved position and motion state, does NOT load forces state
-   * @protected
    */
-  loadSavedState( savedState ) {
+  protected loadSavedState( savedState: any ) {
 
     assert && assert(
       this.multipleParticleModel.moleculeDataSet.numberOfMolecules === savedState.numberOfMolecules,

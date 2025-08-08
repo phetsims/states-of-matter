@@ -19,6 +19,7 @@ import IOType from '../../../../../../tandem/js/types/IOType.js';
 import NumberIO from '../../../../../../tandem/js/types/NumberIO.js';
 import statesOfMatter from '../../../../statesOfMatter.js';
 import SOMConstants from '../../../SOMConstants.js';
+import MoleculeForceAndMotionDataSet from '../../MoleculeForceAndMotionDataSet.js';
 
 // constants
 const PROPORTION_COMPENSATION_FACTOR = 0.25; // used for drift compensation, value empirically determined
@@ -28,10 +29,10 @@ class AndersenThermostat {
 
   /**
    * Constructor for the Andersen thermostat.
-   * @param {MoleculeForceAndMotionDataSet} moleculeDataSet  - Data set on which operations will be performed.
-   * @param {number} minTemperature  - The temperature that should be considered absolute zero, below which motion should cease
+   * @param moleculeDataSet - Data set on which operations will be performed.
+   * @param minTemperature - The temperature that should be considered absolute zero, below which motion should cease
    */
-  constructor( moleculeDataSet, minTemperature ) {
+  constructor( moleculeDataSet: MoleculeForceAndMotionDataSet, minTemperature: number ) {
 
     // @public target temperature in normalized model units
     this.targetTemperature = SOMConstants.INITIAL_TEMPERATURE;
@@ -54,10 +55,7 @@ class AndersenThermostat {
     this.accumulatedAverageVelocityChange = new Vector2( 0, 0 );
   }
 
-  /**
-   * @public
-   */
-  adjustTemperature() {
+  public adjustTemperature() {
 
     // A Note to Future Maintainers: This code was originally provided by Paul Beale of the University of Colorado and
     // converted into Java, and then JavaScript, by @jbphet. For many years, it had separate gamma values the X and Y
@@ -124,19 +122,17 @@ class AndersenThermostat {
   /**
    * clear the accumulated velocity bias, should be done when this thermostat starts being used for a number of steps
    * in a row
-   * @public
    */
-  clearAccumulatedBias() {
+  public clearAccumulatedBias() {
     this.accumulatedAverageVelocityChange.setXY( 0, 0 );
     this.totalVelocityChangePreviousStep.setXY( 0, 0 );
   }
 
   /**
    * Get an object that describes the current state, used to restore state using setState, used only for phet-io.
-   * @public - for phet-io support only
-   * @returns {Object}
+   * for phet-io support only
    */
-  toStateObject() {
+  public toStateObject(): Object {
 
     // Note: The moleculeDataSet is *not* included as part of the state because this is assumed to be a reference that
     // is shared with the model, and the model is responsible for updating its state during deserialization.
@@ -154,10 +150,9 @@ class AndersenThermostat {
   /**
    * Set the state of this instance for phet-io.  This is used for phet-io, but not directly by the PhetioStateEngine -
    * it is instead called during explicit de-serialization.
-   * @param {Object} stateObject - returned from toStateObject
-   * @public
+   * @param stateObject - returned from toStateObject
    */
-  setState( stateObject ) {
+  public setState( stateObject: Object ) {
 
     // Note: The moleculeDataSet is *not* included as part of the state because this is assumed to be a reference that
     // is shared with the model, and the model is responsible for updating its state during deserialization.

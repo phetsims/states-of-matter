@@ -18,6 +18,7 @@ import IOType from '../../../../../../tandem/js/types/IOType.js';
 import NumberIO from '../../../../../../tandem/js/types/NumberIO.js';
 import statesOfMatter from '../../../../statesOfMatter.js';
 import SOMConstants from '../../../SOMConstants.js';
+import MoleculeForceAndMotionDataSet from '../../MoleculeForceAndMotionDataSet.js';
 
 // constants
 const MIN_POST_ZERO_VELOCITY = 0.1; // min velocity when warming up from absolute zero, empirically determined
@@ -28,10 +29,10 @@ class IsokineticThermostat {
 
   /**
    * Constructor for the Isokinetic thermostat.
-   * @param {MoleculeForceAndMotionDataSet} moleculeDataSet -  Data set on which operations will be performed.
-   * @param {number} minTemperature - The temperature that should be considered absolute zero, below which motion should cease.
+   * @param moleculeDataSet - Data set on which operations will be performed.
+   * @param minTemperature - The temperature that should be considered absolute zero, below which motion should cease.
    */
-  constructor( moleculeDataSet, minTemperature ) {
+  constructor( moleculeDataSet: MoleculeForceAndMotionDataSet, minTemperature: number ) {
 
     this.moleculeDataSet = moleculeDataSet; // @private
 
@@ -53,10 +54,9 @@ class IsokineticThermostat {
   }
 
   /**
-   * @param {number} measuredTemperature - measured temperature of particles, in model units
-   * @public
+   * @param measuredTemperature - measured temperature of particles, in model units
    */
-  adjustTemperature( measuredTemperature ) {
+  public adjustTemperature( measuredTemperature: number ) {
 
     let i;
     const numberOfParticles = this.moleculeDataSet.getNumberOfMolecules();
@@ -150,18 +150,16 @@ class IsokineticThermostat {
   /**
    * clear the accumulated velocity bias, should be done when this thermostat starts being used for a number of steps
    * in a row
-   * @public
    */
-  clearAccumulatedBias() {
+  public clearAccumulatedBias() {
     this.accumulatedAverageVelocityChange.setXY( 0, 0 );
   }
 
   /**
    * Get an object that describes the current state, used to restore state using setState, used only for phet-io.
-   * @public - for phet-io support only
-   * @returns {Object}
+   * for phet-io support only
    */
-  toStateObject() {
+  public toStateObject(): Object {
 
     // Note: The moleculeDataSet is *not* included as part of the state because this is assumed to be a reference that
     // is shared with the model, and the model is responsible for updating its state during deserialization.
@@ -179,10 +177,9 @@ class IsokineticThermostat {
   /**
    * Set the state of this instance for phet-io.  This is used for phet-io, but not directly by the PhetioStateEngine -
    * it is instead called during explicit de-serialization.
-   * @param {Object} stateObject - returned from toStateObject
-   * @public
+   * @param stateObject - returned from toStateObject
    */
-  setState( stateObject ) {
+  public setState( stateObject: Object ) {
 
     // Note: The moleculeDataSet is *not* included as part of the state because this is assumed to be a reference that
     // is shared with the model, and the model is responsible for updating its state during deserialization.

@@ -16,6 +16,8 @@ import isSettingPhetioStateProperty from '../../../../../tandem/js/isSettingPhet
 import statesOfMatter from '../../../statesOfMatter.js';
 import SOMConstants from '../../SOMConstants.js';
 import TimeSpanDataQueue from '../TimeSpanDataQueue.js';
+import MultipleParticleModel from '../MultipleParticleModel.js';
+import MoleculeForceAndMotionDataSet from '../MoleculeForceAndMotionDataSet.js';
 
 // Constants that control the pressure calculation.
 const PRESSURE_CALC_TIME_WINDOW = 12; // in seconds, empirically determined to be responsive but not jumpy
@@ -27,10 +29,7 @@ const EXPLOSION_TIME = 1; // in seconds, time that the pressure must be above th
 
 class AbstractVerletAlgorithm {
 
-  /**
-   * @param {MultipleParticleModel} multipleParticleModel
-   */
-  constructor( multipleParticleModel ) {
+  constructor( multipleParticleModel: MultipleParticleModel ) {
 
     this.multipleParticleModel = multipleParticleModel; // @protected, read only
 
@@ -56,13 +55,7 @@ class AbstractVerletAlgorithm {
     this.timeAboveExplosionPressure = 0;
   }
 
-  /**
-   * @returns {boolean}
-   * @param {number} xPos
-   * @param {number} yPos
-   * @protected
-   */
-  isNormalizedPositionInContainer( xPos, yPos ) {
+  protected isNormalizedPositionInContainer( xPos: number, yPos: number ): boolean {
     return xPos >= 0 && xPos <= this.multipleParticleModel.normalizedContainerWidth &&
            yPos >= 0 && yPos <= this.multipleParticleModel.normalizedTotalContainerHeight;
   }
@@ -70,11 +63,8 @@ class AbstractVerletAlgorithm {
   /**
    * Update the center of mass positions and rotational angles for the molecules based upon their current velocities
    * and rotation rates and the forces acting upon them, and handle any interactions with the wall, such as bouncing.
-   * @param moleculeDataSet
-   * @param timeStep
-   * @private
    */
-  updateMoleculePositions( moleculeDataSet, timeStep ) {
+  private updateMoleculePositions( moleculeDataSet: MoleculeForceAndMotionDataSet, timeStep: number ) {
 
     const moleculeCenterOfMassPositions = moleculeDataSet.getMoleculeCenterOfMassPositions();
     const moleculeVelocities = moleculeDataSet.getMoleculeVelocities();
@@ -195,9 +185,8 @@ class AbstractVerletAlgorithm {
   /**
    * Update the motion of the particles and the forces that are acting upon them.  This is the heart of this class,
    * and it is here that the actual Verlet algorithm is contained.
-   * @public
    */
-  updateForcesAndMotion( timeStep ) {
+  public updateForcesAndMotion( timeStep: number ) {
 
     // Obtain references to the model data and parameters so that we can perform fast manipulations.
     const moleculeDataSet = this.multipleParticleModel.moleculeDataSet;
@@ -215,57 +204,32 @@ class AbstractVerletAlgorithm {
     this.updateVelocitiesAndRotationRates( moleculeDataSet, timeStep );
   }
 
-  /**
-   * @param {MoleculeForceAndMotionDataSet} moleculeDataSet
-   * @protected
-   */
-  initializeForces( moleculeDataSet ) {
+  protected initializeForces( moleculeDataSet: MoleculeForceAndMotionDataSet ) {
     assert && assert( false, 'abstract method, must be overridden in descendant classes' );
   }
 
-  /**
-   * @param {MoleculeForceAndMotionDataSet} moleculeDataSet
-   * @protected
-   */
-  updateInteractionForces( moleculeDataSet ) {
+  protected updateInteractionForces( moleculeDataSet: MoleculeForceAndMotionDataSet ) {
     assert && assert( false, 'abstract method, must be overridden in descendant classes' );
   }
 
-  /**
-   * @param {MoleculeForceAndMotionDataSet} moleculeDataSet
-   * @protected
-   */
-  updateVelocitiesAndRotationRates( moleculeDataSet ) {
+  protected updateVelocitiesAndRotationRates( moleculeDataSet: MoleculeForceAndMotionDataSet ) {
     assert && assert( false, 'abstract method, must be overridden in descendant classes' );
   }
 
-  /**
-   * @param {number} scaledEpsilon
-   * @public
-   */
-  setScaledEpsilon( scaledEpsilon ) {
+  public setScaledEpsilon( scaledEpsilon: number ) {
 
     // This should be implemented in descendant classes.
     assert && assert( false, 'Setting epsilon is not implemented for this class' );
   }
 
-  /**
-   * @returns {number}
-   * @public
-   */
-  getScaledEpsilon() {
+  public getScaledEpsilon(): number {
 
     // This should be implemented in descendant classes.
     assert && assert( false, 'Getting scaled epsilon is not implemented for this class' );
     return 0;
   }
 
-  /**
-   * @param {number} pressureThisStep
-   * @param {number} dt
-   * @public
-   */
-  updatePressure( pressureThisStep, dt ) {
+  public updatePressure( pressureThisStep: number, dt: number ) {
 
     assert && assert( pressureThisStep >= 0, 'pressure value can\'t be negative' );
 
@@ -315,10 +279,8 @@ class AbstractVerletAlgorithm {
    * This method allows the caller to set an initial value for the pressure.  It was added in support of phet-io state
    * setting so that the pressure calculation could be set to an initial value above zero that reflected the state
    * extracted from another instance of the simulation.
-   * @param {number} pressure
-   * @public
    */
-  presetPressure( pressure ) {
+  public presetPressure( pressure: number ) {
 
     assert && assert( isSettingPhetioStateProperty.value,
       'this method is intended for use during state setting only'
