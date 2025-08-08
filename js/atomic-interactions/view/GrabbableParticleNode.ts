@@ -17,6 +17,9 @@ import ParticleForceNode from './ParticleForceNode.js';
 
 class GrabbableParticleNode extends ParticleForceNode {
 
+  private minX: number;
+  private disposeGrabbableParticleNode: () => void;
+
   /**
    * @param {DualAtomModel} dualAtomModel - model of the simulation
    * @param {ScaledAtom} particle
@@ -29,7 +32,6 @@ class GrabbableParticleNode extends ParticleForceNode {
 
     super( particle, modelViewTransform, enableOverlap, tandem );
 
-    // @private
     this.minX = minX;
 
     // This node will need to be pickable so the user can grab it.

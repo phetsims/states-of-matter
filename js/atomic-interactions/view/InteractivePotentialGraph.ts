@@ -40,6 +40,11 @@ const POTENTIAL_LINE_COLOR = new Color( 'red' );
 
 class InteractivePotentialGraph extends PotentialGraphNode {
 
+  private readonly dualAtomModel: DualAtomModel;
+  private minXForAtom: number;
+  public interactionEnabled: boolean;
+  private interactionPotentialCanvasNode: InteractionPotentialCanvasNode;
+
   /**
    * @param dualAtomModel - model of the simulation
    * @param options that can be passed on to the underlying node
@@ -62,11 +67,9 @@ class InteractivePotentialGraph extends PotentialGraphNode {
       }
     );
 
-    // @private
     this.dualAtomModel = dualAtomModel;
     this.minXForAtom = Number.NEGATIVE_INFINITY;
 
-    // @public, read-only
     this.interactionEnabled = false;
 
     // Create a convenience function for adding a drag handler that adjusts epsilon, this is done to avoid code duplication.

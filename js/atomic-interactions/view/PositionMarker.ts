@@ -24,6 +24,10 @@ import statesOfMatter from '../../statesOfMatter.js';
 
 class PositionMarker extends Node {
 
+  private readonly radius: number;
+  private readonly haloNode: Circle;
+  private readonly sphereNode: ShadedSphereNode;
+
   /**
    * @param radius - radius of the sphere
    * @param color - base color used to shade the sphere
@@ -45,7 +49,6 @@ class PositionMarker extends Node {
       tandem: Tandem.REQUIRED
     }, options );
 
-    // @private
     const haloNode = new Circle( 1.75 * radius, {
       fill: mainColor.withAlpha( options.haloAlpha ),
       pickable: false,
@@ -59,7 +62,6 @@ class PositionMarker extends Node {
       phetioInputEnabledPropertyInstrumented: true
     } );
 
-    // @private
     this.radius = radius;
     this.haloNode = haloNode;
     this.sphereNode = sphereNode;

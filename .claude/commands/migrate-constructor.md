@@ -59,8 +59,9 @@ class MotionAtom {
 5. DO NOT change any runtime behavior - only type annotations, comments, and imports. Work in 100% type space and code comments/documentation.
 6. Think carefully to figure out the imports. See if the type is already imported, or if you need to import it. If you need to import it, carefully compute the import path based on the current file's location.
 8. Think about the file to understand if a declaration should be readonly. If you are uncertain, err on the side of readonly.
+9. Think about the file to understand if a declaration should be public, protected, or private. If you are uncertain, err on the side of private.
 
-7. If the file has:
+8. If the file has:
 ```
 /* eslint-disable */
 // @ts-nocheck

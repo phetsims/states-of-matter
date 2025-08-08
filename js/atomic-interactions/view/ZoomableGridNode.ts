@@ -32,6 +32,12 @@ const GRID_LINES_OPTIONS = {
 
 class ZoomableGridNode extends Node {
 
+  // horizontal grid lines
+  private horizontalLinesNode: Path;
+
+  // zoom level, passed in to the zoom button group if zoom is enabled
+  private zoomLevelProperty: NumberProperty;
+
   /**
    * @param atomsView
    * @param offsetX
@@ -51,13 +57,11 @@ class ZoomableGridNode extends Node {
 
     super( options );
 
-    // @private horizontal grid lines
     this.horizontalLinesNode = new Path( null, GRID_LINES_OPTIONS );
 
     // vertical grid lines
     const verticalLinesNode = new Path( null, GRID_LINES_OPTIONS );
 
-    // @private - zoom level, passed in to the zoom button group if zoom is enabled
     this.zoomLevelProperty = new NumberProperty( 0, {
       tandem: options.tandem.createTandem( 'zoomFactorProperty' ),
       range: new Range( -2, 0 )

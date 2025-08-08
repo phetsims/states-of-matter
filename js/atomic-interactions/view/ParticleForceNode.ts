@@ -32,6 +32,21 @@ const FORCE_ARROW_HEAD_LENGTH = 50;
 
 class ParticleForceNode extends ParticleNode {
 
+  private attractiveForce: number;
+  private repulsiveForce: number;
+
+  // attractive force node
+  private readonly attractiveForceVectorNode: DimensionalArrowNode;
+
+  // repulsive force node
+  private readonly repulsiveForceVectorNode: DimensionalArrowNode;
+
+  // total force node
+  private readonly totalForceVectorNode: DimensionalArrowNode;
+
+  // dispose function
+  private readonly disposeParticleForceNode: () => void;
+
   /**
    * @param particle - The particle in the model that this node will represent in the view.
    * @param modelViewTransform to convert between model and view co-ordinates
@@ -43,7 +58,6 @@ class ParticleForceNode extends ParticleNode {
 
     super( particle, modelViewTransform, enableOverlap, tandem );
 
-    // @private
     this.attractiveForce = 0;
     this.repulsiveForce = 0;
 
@@ -55,21 +69,18 @@ class ParticleForceNode extends ParticleNode {
       opacity: 0.7 // empirically determined
     };
 
-    // @private attractive force node
     this.attractiveForceVectorNode = new DimensionalArrowNode( 0, 0, COMPONENT_FORCE_ARROW_REFERENCE_LENGTH, 0, merge( {
       fill: ATTRACTIVE_FORCE_COLOR
     }, commonForceArrowNodeOptions ) );
     this.addChild( this.attractiveForceVectorNode );
     this.attractiveForceVectorNode.setVisible( false );
 
-    // @private repulsive force node
     this.repulsiveForceVectorNode = new DimensionalArrowNode( 0, 0, COMPONENT_FORCE_ARROW_REFERENCE_LENGTH, 0, merge( {
       fill: REPULSIVE_FORCE_COLOR
     }, commonForceArrowNodeOptions ) );
     this.addChild( this.repulsiveForceVectorNode );
     this.repulsiveForceVectorNode.setVisible( false );
 
-    // @private total force node
     this.totalForceVectorNode = new DimensionalArrowNode( 0, 0, TOTAL_FORCE_ARROW_REFERENCE_LENGTH, 0, merge( {
       fill: TOTAL_FORCE_COLOR
     }, commonForceArrowNodeOptions ) );
@@ -85,7 +96,6 @@ class ParticleForceNode extends ParticleNode {
 
     particle.positionProperty.link( handlePositionChanged );
 
-    // dispose function
     this.disposeParticleForceNode = () => {
       particle.positionProperty.unlink( handlePositionChanged );
     };

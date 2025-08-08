@@ -27,6 +27,13 @@ const WIDTH = 80; // empirically determined to look good
 
 class HandNode extends Node {
 
+  private minX: number;
+
+  // particle that will be moved if the hand is dragged
+  private particle: ScaledAtom;
+
+  private disposeHandNode: () => void;
+
   /**
    * @param dualAtomModel - model of the atomic interactions screen
    * @param particle - model of the atom that is draggable
@@ -42,9 +49,8 @@ class HandNode extends Node {
     }, options );
 
     super( options );
-    this.minX = minX; // @private
+    this.minX = minX;
 
-    // @private {ScaledAtom} - particle that will be moved if the hand is dragged
     this.particle = particle;
 
     // add the main image that represents the hand

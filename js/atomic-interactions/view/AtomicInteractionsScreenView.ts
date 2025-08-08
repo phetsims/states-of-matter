@@ -25,6 +25,7 @@ import statesOfMatter from '../../statesOfMatter.js';
 import StatesOfMatterStrings from '../../StatesOfMatterStrings.js';
 import DualAtomModel from '../model/DualAtomModel.js';
 import ForceDisplayMode from '../model/ForceDisplayMode.js';
+import MotionAtom from '../model/MotionAtom.js';
 import AtomicInteractionsControlPanel from './AtomicInteractionsControlPanel.js';
 import ForcesAccordionBox from './ForcesAccordionBox.js';
 import GrabbableParticleNode from './GrabbableParticleNode.js';
@@ -43,6 +44,30 @@ const PANEL_WIDTH = 209; // empirically determined to work well for English and 
 
 class AtomicInteractionsScreenView extends ScreenView {
 
+  // vars needed to do the job
+  private readonly dualAtomModel: DualAtomModel;
+  private readonly movableParticle: MotionAtom;
+  private readonly fixedParticle: MotionAtom;
+  private showAttractiveForces: boolean;
+  private showRepulsiveForces: boolean;
+  private showTotalForces: boolean;
+
+  // set up the model-view transform
+  private readonly modelViewTransform: ModelViewTransform2;
+
+  // interactive potential diagram
+  private readonly interactivePotentialGraph: InteractivePotentialGraph;
+
+  // button for returning the atom to the screen
+  private readonly returnAtomButton: TextPushButton;
+
+  public readonly fixedParticleLayer: Node;
+  public readonly movableParticleLayer: Node;
+  public readonly handNode: HandNode;
+  public readonly fixedParticleNode: ParticleForceNode;
+  public readonly movableParticleNode: GrabbableParticleNode;
+  public readonly pushPinNode: PushPinNode;
+
   /**
    * @param dualAtomModel - of the simulation
    * @param enableHeterogeneousAtoms
@@ -56,7 +81,6 @@ class AtomicInteractionsScreenView extends ScreenView {
 
     super( screenViewOptions );
 
-    // @private, vars needed to do the job
     this.dualAtomModel = dualAtomModel;
     this.movableParticle = dualAtomModel.movableAtom;
     this.fixedParticle = dualAtomModel.fixedAtom;
@@ -64,7 +88,6 @@ class AtomicInteractionsScreenView extends ScreenView {
     this.showRepulsiveForces = false;
     this.showTotalForces = false;
 
-    // set up the model-view transform, @private
     this.modelViewTransform = ModelViewTransform2.createSinglePointScaleMapping(
       new Vector2( 0, 0 ),
       new Vector2( 145, 360 ),
@@ -96,7 +119,6 @@ class AtomicInteractionsScreenView extends ScreenView {
     // determined are are different based on whether the zoom buttons are present on the graph.
     const graphXOffset = enableHeterogeneousAtoms ? -43 : -31;
 
-    // @private interactive potential diagram
     this.interactivePotentialGraph = new InteractivePotentialGraph( dualAtomModel, {
       zoomable: enableHeterogeneousAtoms,
       left: this.modelViewTransform.modelToViewX( 0 ) + graphXOffset,
@@ -105,7 +127,6 @@ class AtomicInteractionsScreenView extends ScreenView {
     } );
     this.addChild( this.interactivePotentialGraph );
 
-    // @private button for returning the atom to the screen
     this.returnAtomButton = new TextPushButton( returnAtomString, {
       font: new PhetFont( 17 ),
       baseColor: '#61BEE3',

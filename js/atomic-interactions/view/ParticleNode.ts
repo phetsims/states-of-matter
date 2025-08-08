@@ -26,6 +26,13 @@ const OVERLAP_ENLARGEMENT_FACTOR = 1.25;
 
 class ParticleNode extends Node {
 
+  private readonly particle: MotionAtom;
+  private readonly modelViewTransform: ModelViewTransform2;
+  private readonly overlapEnabled: boolean;
+  private position: Vector2;
+  // node that will represent this particle, initialized arbitrarily, updated below
+  private readonly circle: Circle;
+
   /**
    * @param particle - The particle in the model that this node will represent in the view.
    * @param modelViewTransform - to convert between model and view co-ordinates
@@ -41,13 +48,11 @@ class ParticleNode extends Node {
       phetioInputEnabledPropertyInstrumented: true
     } );
 
-    // @private
     this.particle = particle;
     this.modelViewTransform = modelViewTransform;
     this.overlapEnabled = enableOverlap;
     this.position = new Vector2( 0, 0 );
 
-    // @private - node that will represent this particle, initialized arbitrarily, updated below
     this.circle = new Circle( 1 );
     this.addChild( this.circle );
 

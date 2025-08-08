@@ -20,8 +20,33 @@ import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioS
 import AtomType from '../../common/model/AtomType.js';
 import SOMConstants from '../../common/SOMConstants.js';
 import statesOfMatter from '../../statesOfMatter.js';
+import { Color } from '../../../../scenery/js/imports.js';
 
 class MotionAtom {
+
+  // The type of atom being modeled, e.g. Argon, Neon, etc.
+  public readonly atomTypeProperty: EnumerationDeprecatedProperty<AtomType>;
+
+  // Radius of this atom, should only be changed for adjustable atoms
+  public readonly radiusProperty: NumberProperty;
+
+  // Accessed through getter and setter methods below, see those methods for details
+  private readonly positionProperty: Vector2Property;
+
+  // Accessed through the getter/setter methods below
+  private readonly velocityProperty: Vector2Property;
+
+  // Accessed through the getter/setter methods below
+  private readonly accelerationProperty: Vector2Property;
+
+  // An emitter that indicates that the configuration of this atom have changed, done as an
+  // emitter so that the view doesn't have to separately monitor a set of properties that all change at once.
+  public readonly configurationChanged: Emitter;
+
+  // Attributes of the atom, changed as the atom type changes
+  public mass: number;
+  public color: Color | null;
+  public epsilon: number;
 
   /**
    * @param initialAtomType - initial type, aka element, for this atom
@@ -31,7 +56,6 @@ class MotionAtom {
    */
   public constructor( initialAtomType: AtomType, initialXPosition: number, initialYPosition: number, tandem: Tandem ) {
 
-    // @public (read-write) {EnumerationDeprecatedProperty.<AtomType>} - the type of atom being modeled, e.g. Argon, Neon, etc.
     this.atomTypeProperty = new EnumerationDeprecatedProperty( AtomType, initialAtomType, {
       tandem: tandem.createTandem( 'atomTypeProperty' ),
       phetioReadOnly: true
@@ -40,36 +64,29 @@ class MotionAtom {
     // get the default attributes associated with this atom
     const initialAtomAttributes = SOMConstants.MAP_ATOM_TYPE_TO_ATTRIBUTES.get( initialAtomType );
 
-    // @public (read-write) {NumberProperty} - radius of this atom, should only be changed for adjustable atoms
     this.radiusProperty = new NumberProperty( initialAtomAttributes.radius, {
       units: 'pm',
       tandem: tandem.createTandem( 'radiusProperty' ),
       phetioReadOnly: true
     } );
 
-    // @private, accessed through getter and setter methods below, see those methods for details
     this.positionProperty = new Vector2Property( new Vector2( initialXPosition, initialYPosition ), {
       units: 'pm',
       tandem: tandem.createTandem( 'positionProperty' )
     } );
 
-    // @private, accessed through the getter/setter methods below
     this.velocityProperty = new Vector2Property( Vector2.ZERO, {
       units: 'pm/s',
       tandem: tandem.createTandem( 'velocityProperty' )
     } );
 
-    // @private, accessed through the getter/setter methods below
     this.accelerationProperty = new Vector2Property( Vector2.ZERO, {
       units: 'pm/s^2',
       tandem: tandem.createTandem( 'accelerationProperty' )
     } );
 
-    // @public {listen-only} - An emitter that indicates that the configuration of this atom have changed, done as an
-    // emitter so that the view doesn't have to separately monitor a set of properties that all change at once.
     this.configurationChanged = new Emitter();
 
-    // @public {read-only} - attributes of the atom, changed as the atom type changes
     this.mass = 0;
     this.color = null;
     this.epsilon = 0;

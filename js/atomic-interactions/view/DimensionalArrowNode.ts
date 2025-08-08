@@ -18,6 +18,15 @@ import statesOfMatter from '../../statesOfMatter.js';
 
 class DimensionalArrowNode extends Path {
 
+  // arrowNode tail position
+  private tailPosition: Vector2;
+
+  // arrowNode tip position
+  private tipPosition: Vector2;
+
+  // options
+  private options: any;
+
   /**
    * @param tailX - arrowNode tail X position
    * @param tailY - arrowNode tail Y position
@@ -43,7 +52,6 @@ class DimensionalArrowNode extends Path {
 
     super( new ArrowShape( tailX, tailY, tipX, tipY, options ), options );
 
-    // @private arrowNode tip and tail positions, options
     this.tailPosition = new Vector2( 0, 0 );
     this.tipPosition = new Vector2( 0, 0 );
     this.options = options;

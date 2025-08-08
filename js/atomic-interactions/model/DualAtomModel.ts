@@ -48,13 +48,48 @@ const MIN_FORCE_JITTER_THRESHOLD = 1e-30;
  */
 class DualAtomModel {
 
+  //-----------------------------------------------------------------------------------------------------------------
+  // observable model properties
+  //-----------------------------------------------------------------------------------------------------------------
+
+  // epsilon/k-Boltzmann is in Kelvin.
+  public readonly adjustableAtomInteractionStrengthProperty: NumberProperty;
+
+  // indicates when motion is paused due to user interaction with the movable atom
+  public motionPausedProperty: BooleanProperty;
+
+  public atomPairProperty: EnumerationDeprecatedProperty<AtomPair>;
+
+  // paused or playing
+  public isPlayingProperty: BooleanProperty;
+
+  // speed at which the model is running
+  public timeSpeedProperty: EnumerationProperty<TimeSpeed>;
+
+  // diameter of the adjustable atoms
+  public readonly adjustableAtomDiameterProperty: NumberProperty;
+
+  public forcesDisplayModeProperty: EnumerationDeprecatedProperty<ForceDisplayMode>;
+
+  public forcesExpandedProperty: BooleanProperty;
+
+  public movementHintVisibleProperty: BooleanProperty;
+
+  //-----------------------------------------------------------------------------------------------------------------
+  // other model attributes
+  //-----------------------------------------------------------------------------------------------------------------
+
+  // read only
+  public readonly fixedAtom: MotionAtom;
+  public readonly movableAtom: MotionAtom;
+  public attractiveForce: number;
+  public repulsiveForce: number;
+
+  private ljPotentialCalculator: LjPotentialCalculator;
+  private residualTime: number; // accumulates dt values not yet applied to model
+
   public constructor( tandem: Tandem, enableHeterogeneousMolecules: boolean = true ) {
 
-    //-----------------------------------------------------------------------------------------------------------------
-    // observable model properties
-    //-----------------------------------------------------------------------------------------------------------------
-
-    // @public (read-write) - epsilon/k-Boltzmann is in Kelvin.
     this.adjustableAtomInteractionStrengthProperty = new NumberProperty( 100, {
       tandem: tandem.createTandem( 'adjustableAtomInteractionStrengthProperty' ),
       phetioReadOnly: true,
@@ -62,27 +97,22 @@ class DualAtomModel {
       phetioDocumentation: 'intermolecular potential for the "Adjustable Attraction" atoms - this is a parameter in the Lennard-Jones potential equation'
     } );
 
-    // @public (read-write) - indicates when motion is paused due to user interaction with the movable atom
     this.motionPausedProperty = new BooleanProperty( false );
 
-    // @public (read-write)
     this.atomPairProperty = new EnumerationDeprecatedProperty( AtomPair, AtomPair.NEON_NEON, {
       validValues: enableHeterogeneousMolecules ? AtomPair.VALUES : VALID_ATOM_PAIRS_FOR_REDUCED,
       tandem: tandem.createTandem( 'atomPairProperty' )
     } );
 
-    // @public (read-write) - paused or playing
     this.isPlayingProperty = new BooleanProperty( true, {
       tandem: tandem.createTandem( 'isPlayingProperty' )
     } );
 
-    // @public (read-write) - speed at which the model is running
     this.timeSpeedProperty = new EnumerationProperty( TimeSpeed.NORMAL, {
       validValues: [ TimeSpeed.NORMAL, TimeSpeed.SLOW ],
       tandem: tandem.createTandem( 'timeSpeedProperty' )
     } );
 
-    // @public (read-write) - diameter of the adjustable atoms
     this.adjustableAtomDiameterProperty = new NumberProperty( SOMConstants.ADJUSTABLE_ATTRACTION_DEFAULT_RADIUS * 2, {
       units: 'pm',
       tandem: tandem.createTandem( 'adjustableAtomDiameterProperty' ),
@@ -90,34 +120,25 @@ class DualAtomModel {
       phetioDocumentation: 'Diameter of the adjustable atom, in picometers'
     } );
 
-    // @public (read-write)
     this.forcesDisplayModeProperty = new EnumerationDeprecatedProperty( ForceDisplayMode, ForceDisplayMode.HIDDEN, {
       tandem: tandem.createTandem( 'forcesDisplayModeProperty' )
     } );
 
-    // @public (read-write)
     this.forcesExpandedProperty = new BooleanProperty( false, {
       tandem: tandem.createTandem( 'forcesExpandedProperty' )
     } );
 
-    // @public (read-write)
     this.movementHintVisibleProperty = new BooleanProperty( true, {
       tandem: tandem.createTandem( 'movementHintVisibleProperty' )
     } );
 
-    //-----------------------------------------------------------------------------------------------------------------
-    // other model attributes
-    //-----------------------------------------------------------------------------------------------------------------
-
-    // @public, read only
     this.fixedAtom = new MotionAtom( AtomType.NEON, 0, 0, tandem.createTandem( 'fixedAtom' ) );
     this.movableAtom = new MotionAtom( AtomType.NEON, 0, 0, tandem.createTandem( 'movableAtom' ) );
     this.attractiveForce = 0;
     this.repulsiveForce = 0;
 
-    // @private
     this.ljPotentialCalculator = new LjPotentialCalculator( SOMConstants.MIN_SIGMA, SOMConstants.MIN_EPSILON );
-    this.residualTime = 0; // accumulates dt values not yet applied to model
+    this.residualTime = 0;
 
     //-----------------------------------------------------------------------------------------------------------------
     // other initialization
