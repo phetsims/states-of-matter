@@ -19,10 +19,10 @@ const MIN_EXPECTED_DT = SOMConstants.NOMINAL_TIME_STEP;
 class TimeSpanDataQueue {
 
   /**
-   * {number} maxTimeSpan - max span of time that can be stored, in seconds
-   * {number} minExpectedDt - the minimum expected dt (delta time) value in seconds, used to allocate memory
+   * @param maxTimeSpan - max span of time that can be stored, in seconds
+   * @param minExpectedDt - the minimum expected dt (delta time) value in seconds, used to allocate memory
    */
-  constructor( maxTimeSpan, minExpectedDt = MIN_EXPECTED_DT ) {
+  constructor( maxTimeSpan: number, minExpectedDt: number = MIN_EXPECTED_DT ) {
 
     // @public (read-only) - the total of all values currently in the queue
     this.total = 0;
@@ -51,11 +51,8 @@ class TimeSpanDataQueue {
   /**
    * Add a new value with associated dt (delta time).  This automatically removes data values that go beyond the max
    * time span from the queue, and also updates the total value and the current time span.
-   * @param {number} value
-   * @param {number} dt
-   * @public
    */
-  add( value, dt ) {
+  public add( value: number, dt: number ) {
 
     assert && assert( dt < this.maxTimeSpan, 'dt value is greater than max time span, this won\'t work' );
 
@@ -92,9 +89,8 @@ class TimeSpanDataQueue {
 
   /**
    * Clear all data from the queue.
-   * @public
    */
-  clear() {
+  public clear() {
     this.total = 0;
     this.timeSpan = 0;
     this.dataQueue.forEach( dataQueueItem => {
@@ -111,10 +107,10 @@ class TimeSpanDataQueue {
 class DataQueueEntry {
 
   /**
-   * @param {number} dt - delta time, in seconds
-   * @param {number|null} value - the value for this entry, null if this entry is unused
+   * @param dt - delta time, in seconds
+   * @param value - the value for this entry, null if this entry is unused
    */
-  constructor( dt, value ) {
+  constructor( dt: number, value: number | null ) {
     this.dt = dt;
     this.value = value;
   }

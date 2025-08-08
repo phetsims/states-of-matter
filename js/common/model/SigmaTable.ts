@@ -21,12 +21,8 @@ const SigmaTable = {
 
   /**
    * Get the value of sigma, in picometers, for the atom types specified.
-   * @public
-   * @param {AtomType} atomType1
-   * @param {AtomType} atomType2
-   * @returns {number}
    */
-  getSigma: ( atomType1, atomType2 ) => {
+  getSigma: ( atomType1: AtomType, atomType2: AtomType ): number => {
     if ( atomType1 === atomType2 ) {
       // Heterogeneous pair of atoms.
       if ( atomType1 === AtomType.NEON ) {

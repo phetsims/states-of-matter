@@ -4,7 +4,7 @@ argument-hint: <file-path>
 description: Migrate TypeScript method signatures from JSDoc to TypeScript syntax
 ---
 
-Migrate all method signatures in the file @$ARGUMENTS from JSDoc type annotations to TypeScript syntax following these rules:
+Migrate all method signatures + constructor signatures in the file @$ARGUMENTS from JSDoc type annotations to TypeScript syntax following these rules:
 
 1. Convert JSDoc method signatures to TypeScript:
    - Move type annotations from `@param {Type}` to TypeScript parameter types
@@ -48,3 +48,4 @@ Migrate all method signatures in the file @$ARGUMENTS from JSDoc type annotation
 5. Apply to all methods in the file (static and instance methods)
 6. DO NOT change any runtime behavior - only type annotations, comments, and imports
 7. Think carefully to figure out the imports. See if the type is already imported, or if you need to import it. If you need to import it, carefully compute the import path based on the current file's location.
+8. Visit the constructors as well, but JSDOC and signature ONLY.

@@ -14,11 +14,7 @@ import statesOfMatter from '../../statesOfMatter.js';
 
 class MovingAverage {
 
-  /**
-   * @param {number} size
-   * @param {Object} [options]
-   */
-  constructor( size, options ) {
+  constructor( size: number, options?: Object ) {
 
     options = merge( {
       initialValue: 0
@@ -38,10 +34,8 @@ class MovingAverage {
 
   /**
    * add a value to the moving average
-   * @param {number} newValue
-   * @public
    */
-  addValue( newValue ) {
+  public addValue( newValue: number ) {
     const replacedValue = this.array[ this.currentIndex ];
     this.array[ this.currentIndex ] = newValue;
     this.currentIndex = ( this.currentIndex + 1 ) % this.size;
@@ -49,10 +43,7 @@ class MovingAverage {
     this.average = this.total / this.size;
   }
 
-  /**
-   * @public
-   */
-  reset() {
+  public reset() {
     for ( let i = 0; i < this.size; i++ ) {
       this.array[ i ] = this.initialValue;
     }
