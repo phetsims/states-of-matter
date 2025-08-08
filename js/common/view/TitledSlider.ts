@@ -9,6 +9,8 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
+import NumberProperty from '../../../../axon/js/NumberProperty.js';
+import Range from '../../../../dot/js/Range.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import merge from '../../../../phet-core/js/merge.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
@@ -16,6 +18,7 @@ import VBox from '../../../../scenery/js/layout/nodes/VBox.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import HSlider from '../../../../sun/js/HSlider.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
 import statesOfMatter from '../../statesOfMatter.js';
 
 // constants
@@ -24,13 +27,11 @@ const DEFAULT_TITLE_FONT = new PhetFont( 12 );
 class TitledSlider extends VBox {
 
   /**
-   * @param {NumberProperty} valueProperty - value property that will be controlled by the slider
-   * @param {Range} range - range for the value property
-   * @param {string} titleText - the text string that will be used to create the title
-   * @param {Tandem} tandem
-   * @param [options]
+   * @param valueProperty - value property that will be controlled by the slider
+   * @param range - range for the value property
+   * @param titleText - the text string that will be used to create the title
    */
-  constructor( valueProperty, range, titleText, tandem, options ) {
+  public constructor( valueProperty: NumberProperty, range: Range, titleText: string, tandem: Tandem, options?: any ) {
 
     options = merge( {
       spacing: 5,

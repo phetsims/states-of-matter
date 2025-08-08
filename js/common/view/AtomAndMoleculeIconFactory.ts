@@ -19,7 +19,7 @@ import SubstanceType from '../SubstanceType.js';
 // define the object where all of the icons will be available
 const AtomAndMoleculeIconFactory = {
 
-  createIcon: type => {
+  createIcon: ( type: SubstanceType ): Node => {
     let icon;
     switch( type ) {
 

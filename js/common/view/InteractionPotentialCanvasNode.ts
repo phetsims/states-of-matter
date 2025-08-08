@@ -16,6 +16,8 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import ArrowShape from '../../../../scenery-phet/js/ArrowShape.js';
 import CanvasNode from '../../../../scenery/js/nodes/CanvasNode.js';
 import statesOfMatter from '../../statesOfMatter.js';
+import PotentialGraphNode from './PotentialGraphNode.js';
+import Color from '../../../../scenery/js/util/Color.js';
 
 // constants
 const AXIS_LINE_WIDTH = 1;
@@ -26,10 +28,10 @@ const EPSILON_LINE_WIDTH = 1;
 class InteractionPotentialCanvasNode extends CanvasNode {
 
   /**
-   * @param {PotentialGraphNode} potentialGraphNode
-   * @param {Object} [options] that can be passed on to the underlying node
+   * @param potentialGraphNode
+   * @param options - that can be passed on to the underlying node
    */
-  constructor( potentialGraphNode, options ) {
+  public constructor( potentialGraphNode: PotentialGraphNode, options?: Object ) {
     super( options );
     this.potentialGraph = potentialGraphNode; // @private
 
@@ -43,10 +45,9 @@ class InteractionPotentialCanvasNode extends CanvasNode {
 
   /**
    * Paints the potential energy curve.
-   * @param {CanvasRenderingContext2D} context
-   * @public
+   * @param context
    */
-  paintCanvas( context ) {
+  public paintCanvas( context: CanvasRenderingContext2D ): void {
     context.beginPath();
     context.moveTo( 0, 0 );
     for ( let i = 1; i < this.curveYPositions.length; i++ ) {
@@ -78,10 +79,9 @@ class InteractionPotentialCanvasNode extends CanvasNode {
   }
 
   /**
-   * @param {Color} color
-   * @public
+   * @param color
    */
-  update( color ) {
+  public update( color: Color ): void {
     this.strokeColor = color.toCSS();
 
     // Calculate the points that comprise the curve and record several key values along the way the will be used to

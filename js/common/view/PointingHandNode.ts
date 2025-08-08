@@ -12,6 +12,7 @@
  */
 
 import merge from '../../../../phet-core/js/merge.js';
+import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import DragListener from '../../../../scenery/js/listeners/DragListener.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
@@ -19,6 +20,7 @@ import Node from '../../../../scenery/js/nodes/Node.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import pointingHand_png from '../../../mipmaps/pointingHand_png.js';
 import statesOfMatter from '../../statesOfMatter.js';
+import PhaseChangesModel from '../../phase-changes/model/PhaseChangesModel.js';
 import MultipleParticleModel from '../model/MultipleParticleModel.js';
 
 // constants
@@ -27,11 +29,10 @@ const WIDTH = 150; // in screen coords
 class PointingHandNode extends Node {
 
   /**
-   * @param {PhaseChangesModel} phaseChangesModel - model of the simulation
-   * @param {ModelViewTransform2} modelViewTransform to convert between model and view co-ordinate frames
-   * @param {Object} [options]
+   * @param phaseChangesModel - model of the simulation
+   * @param modelViewTransform to convert between model and view co-ordinate frames
    */
-  constructor( phaseChangesModel, modelViewTransform, options ) {
+  public constructor( phaseChangesModel: PhaseChangesModel, modelViewTransform: ModelViewTransform2, options?: Object ) {
 
     options = merge( {
       tandem: Tandem.REQUIRED
@@ -177,10 +178,8 @@ class PointingHandNode extends Node {
   /**
    * Set the position of this node such that the tip of the finger is at the provided Y position.  The x position
    * remains unchanged.
-   * @param {number} fingertipYPos
-   * @public
    */
-  setFingertipYPosition( fingertipYPos ) {
+  public setFingertipYPosition( fingertipYPos: number ): void {
     this.bottom = fingertipYPos + this.fingertipToBottomDistanceY;
   }
 }

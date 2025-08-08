@@ -24,6 +24,7 @@ import VBox from '../../../../scenery/js/layout/nodes/VBox.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import statesOfMatter from '../../statesOfMatter.js';
+import MultipleParticleModel from '../model/MultipleParticleModel.js';
 import StatesOfMatterStrings from '../../StatesOfMatterStrings.js';
 import SOMQueryParameters from '../SOMQueryParameters.js';
 
@@ -51,10 +52,10 @@ const MAX_TEMPERATURE_TO_CLAMP_RED_MERCURY = 1000;
 class CompositeThermometerNode extends Node {
 
   /**
-   * @param {MultipleParticleModel} multipleParticleModel - model of the simulation
-   * @param {Object} [options] that can be passed on to the underlying node
+   * @param multipleParticleModel - model of the simulation
+   * @param [options] that can be passed on to the underlying node
    */
-  constructor( multipleParticleModel, options ) {
+  public constructor( multipleParticleModel: MultipleParticleModel, options?: any ) {
 
     options = merge( {
       tandem: Tandem.REQUIRED
@@ -139,8 +140,7 @@ class CompositeThermometerNode extends Node {
     } );
   }
 
-  // @public
-  reset() {
+  public reset(): void {
     this.temperatureUnitsProperty.reset();
   }
 }

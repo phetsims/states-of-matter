@@ -10,8 +10,11 @@
  */
 
 import CanvasNode from '../../../../scenery/js/nodes/CanvasNode.js';
+import type { ObservableArray } from '../../../../axon/js/createObservableArray.js';
+import type ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import statesOfMatter from '../../statesOfMatter.js';
 import AtomType from '../model/AtomType.js';
+import type ScaledAtom from '../model/particle/ScaledAtom.js';
 import SOMConstants from '../SOMConstants.js';
 import SOMColors from './SOMColors.js';
 
@@ -37,11 +40,11 @@ PARTICLE_RADIUS_TABLE[ AtomType.ADJUSTABLE ] = SOMConstants.ADJUSTABLE_ATTRACTIO
 class ParticleImageCanvasNode extends CanvasNode {
 
   /**
-   * @param {ObservableArrayDef.<Particle>} particles that need to be rendered on the canvas
-   * @param {ModelViewTransform2} modelViewTransform to convert between model and view coordinate frames
-   * @param {Object} [options] that can be passed on to the underlying node
+   * @param particles - that need to be rendered on the canvas
+   * @param modelViewTransform - to convert between model and view coordinate frames
+   * @param options - that can be passed on to the underlying node
    */
-  constructor( particles, modelViewTransform, options ) {
+  public constructor( particles: ObservableArray<ScaledAtom>, modelViewTransform: ModelViewTransform2, options?: object ) {
 
     super( options );
 
@@ -117,10 +120,7 @@ class ParticleImageCanvasNode extends CanvasNode {
     this.mutate( options );
   }
 
-  /**
-   * @private
-   */
-  renderParticle( context, particle ) {
+  private renderParticle( context: CanvasRenderingContext2D, particle: ScaledAtom ): void {
     const particleViewRadius = this.particleRadii[ particle.getType() ];
     context.drawImage(
       this.particleImageCanvas,
@@ -137,10 +137,8 @@ class ParticleImageCanvasNode extends CanvasNode {
 
   /**
    * Paints the particles on the canvas node.
-   * @param {CanvasRenderingContext2D} context
-   * @public
    */
-  paintCanvas( context ) {
+  public paintCanvas( context: CanvasRenderingContext2D ): void {
     let particle;
     let i;
 
@@ -165,11 +163,7 @@ class ParticleImageCanvasNode extends CanvasNode {
     }
   }
 
-  /**
-   * @param {number} dt
-   * @public
-   */
-  step( dt ) {
+  public step( dt: number ): void {
     this.invalidatePaint();
   }
 }

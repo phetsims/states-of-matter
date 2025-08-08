@@ -57,11 +57,10 @@ const ZOOM_BUTTONS_HEIGHT = 72;
 class PotentialGraphNode extends Node {
 
   /**
-   * @param {number} sigma - Initial value of sigma, a.k.a. the atom diameter
-   * @param {number} epsilon - Initial value of epsilon, a.k.a. the interaction strength
-   * @param {Object} [options]
+   * @param sigma - Initial value of sigma, a.k.a. the atom diameter
+   * @param epsilon - Initial value of epsilon, a.k.a. the interaction strength
    */
-  constructor( sigma, epsilon, options ) {
+  public constructor( sigma: number, epsilon: number, options?: any ) {
 
     options = merge( {
 
@@ -291,21 +290,17 @@ class PotentialGraphNode extends Node {
 
   /**
    * Set the parameters that define the shape of the Lennard-Jones potential curve.
-   * @param{number} sigma -  atom diameter
-   * @param {number} epsilon - interaction strength
-   * @public
+   * @param sigma -  atom diameter
+   * @param epsilon - interaction strength
    */
-  setLjPotentialParameters( sigma, epsilon ) {
+  public setLjPotentialParameters( sigma: number, epsilon: number ): void {
 
     // Update the Lennard-Jones force calculator.
     this.ljPotentialCalculator.setEpsilon( epsilon );
     this.ljPotentialCalculator.setSigma( sigma );
   }
 
-  /**
-   * @public
-   */
-  reset() {
+  public reset(): void {
     this.verticalScalingFactor = ( this.graphHeight / 2.2 ) /
                                  ( SOMConstants.MAX_EPSILON * SOMConstants.K_BOLTZMANN );
     this.horizontalLineCount = 5;
@@ -313,45 +308,28 @@ class PotentialGraphNode extends Node {
     this.gridNode && this.gridNode.reset();
   }
 
-  /**
-   * @returns {number}
-   * @public
-   */
-  getGraphHeight() {
+  public getGraphHeight(): number {
     return this.graphHeight;
   }
 
-  /**
-   * @returns {number}
-   * @public
-   */
-  getGraphWidth() {
+  public getGraphWidth(): number {
     return this.graphWidth;
   }
 
-  /**
-   * @returns {Vector2}
-   * @public
-   */
-  getZeroCrossingPoint() {
+  public getZeroCrossingPoint(): Vector2 {
     return this.zeroCrossingPoint;
   }
 
-  /**
-   * @returns {Vector2}
-   * @public
-   */
-  getGraphMin() {
+  public getGraphMin(): Vector2 {
     return this.graphMin;
   }
 
   /**
    * Set the position of the position marker.  Note that is is only possible to set the x axis position, which is
    * distance.  The y axis position is always on the LJ potential curve.
-   * @param {number}distance - distance from the center of the interacting molecules.
-   * @public
+   * @param distance - distance from the center of the interacting molecules.
    */
-  setMarkerPosition( distance ) {
+  public setMarkerPosition( distance: number ): void {
     assert && assert( this.positionMarker, 'position marker not enabled for this potential graph node' );
     this.markerDistance = distance;
     const xPos = this.markerDistance * ( this.graphWidth / this.xRange );
@@ -368,10 +346,9 @@ class PotentialGraphNode extends Node {
 
   /**
    * Set whether the graph is showing the potential between individual atoms or multi-atom molecules.
-   * @param {boolean} molecular - true if graph is portraying molecules, false for individual atoms.
-   * @public
+   * @param molecular - true if graph is portraying molecules, false for individual atoms.
    */
-  setMolecular( molecular ) {
+  public setMolecular( molecular: boolean ): void {
     if ( molecular ) {
       this.horizontalAxisLabel.setString( distanceBetweenMoleculesString );
     }
@@ -384,19 +361,17 @@ class PotentialGraphNode extends Node {
 
   /**
    * Calculate the Lennard-Jones potential for the given distance.
-   * @param {number} radius
+   * @param radius
    * @returns {number}
-   * @public
    */
-  calculateLennardJonesPotential( radius ) {
+  public calculateLennardJonesPotential( radius: number ): number {
     return ( this.ljPotentialCalculator.getLjPotential( radius ) );
   }
 
   /**
    * Draw the curve that reflects the Lennard-Jones potential based upon the current values for sigma and epsilon.
-   * @public
    */
-  drawPotentialCurve() {
+  public drawPotentialCurve(): void {
     // must be overridden in descendant types, so assert if called here
     assert && assert( false, 'this function must be overridden in descendant classes' );
   }

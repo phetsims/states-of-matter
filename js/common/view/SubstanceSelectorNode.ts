@@ -12,17 +12,18 @@
 
 import HBox from '../../../../scenery/js/layout/nodes/HBox.js';
 import Line from '../../../../scenery/js/nodes/Line.js';
+import { Node } from '../../../../scenery/js/imports.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import statesOfMatter from '../../statesOfMatter.js';
 
 class SubstanceSelectorNode extends HBox {
 
+  private readonly disposeSubstanceSelectorNode: () => void;
+
   /**
-   * @param {Node} label
-   * @param {Node} icon
-   * @param {number} width - width of this selector in screen coordinates
+   * @param width - width of this selector in screen coordinates
    */
-  constructor( label, icon, width ) {
+  public constructor( label: Node, icon: Node, width: number ) {
 
     // set up the initial horizontal box
     const initialSpacerWidth = width - label.width - icon.width;
@@ -51,9 +52,8 @@ class SubstanceSelectorNode extends HBox {
 
   /**
    * release all memory to avoid memory leaks
-   * @public
    */
-  dispose() {
+  public dispose(): void {
     this.disposeSubstanceSelectorNode();
     super.dispose();
   }

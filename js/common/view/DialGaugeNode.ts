@@ -24,8 +24,10 @@ import Rectangle from '../../../../scenery/js/nodes/Rectangle.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import LinearGradient from '../../../../scenery/js/util/LinearGradient.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
 import statesOfMatter from '../../statesOfMatter.js';
 import StatesOfMatterStrings from '../../StatesOfMatterStrings.js';
+import MultipleParticleModel from '../model/MultipleParticleModel.js';
 
 // strings
 const pressureOverloadString = StatesOfMatterStrings.pressureOverload;
@@ -43,10 +45,10 @@ const PRESSURE_UPDATE_PERIOD = 100; // in milliseconds
 class DialGaugeNode extends Node {
 
   /**
-   * @param {MultipleParticleModel} multipleParticleModel - model of the simulation
-   * @param {Tandem} tandem
+   * @param multipleParticleModel - model of the simulation
+   * @param tandem
    */
-  constructor( multipleParticleModel, tandem ) {
+  public constructor( multipleParticleModel: MultipleParticleModel, tandem: Tandem ) {
 
     super( { tandem: tandem } );
     this.elbowHeight = 0; // @private, set through accessor methods
@@ -170,18 +172,14 @@ class DialGaugeNode extends Node {
 
   /**
    * Set the height of the elbow.  Height is specified with respect to the vertical center of the node.
-   * @param {number} height
-   * @public
+   * @param height
    */
-  setElbowHeight( height ) {
+  public setElbowHeight( height: number ): void {
     this.elbowHeight = height;
     this.updateConnector();
   }
 
-  /**
-   * @public
-   */
-  updateConnector() {
+  public updateConnector(): void {
     this.connectorExtension.rectHeight = this.elbowHeight;
   }
 }

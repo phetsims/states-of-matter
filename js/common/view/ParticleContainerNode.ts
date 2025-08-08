@@ -12,6 +12,7 @@
 
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Matrix3 from '../../../../dot/js/Matrix3.js';
+import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import Shape from '../../../../kite/js/Shape.js';
 import merge from '../../../../phet-core/js/merge.js';
 import HandleNode from '../../../../scenery-phet/js/HandleNode.js';
@@ -40,11 +41,11 @@ const BEVEL_WIDTH = 9;
 class ParticleContainerNode extends Node {
 
   /**
-   * @param {MultipleParticleModel} multipleParticleModel - model of the simulation
-   * @param {ModelViewTransform2} modelViewTransform
-   * @param {Object} [options]
+   * @param multipleParticleModel - model of the simulation
+   * @param modelViewTransform
+   * @param [options]
    */
-  constructor( multipleParticleModel, modelViewTransform, options ) {
+  public constructor( multipleParticleModel: MultipleParticleModel, modelViewTransform: ModelViewTransform2, options?: Object ) {
 
     options = merge( {
       volumeControlEnabled: false,
@@ -475,18 +476,16 @@ class ParticleContainerNode extends Node {
 
   /**
    * step
-   * @param {number} dt - delta time
-   * @public
+   * @param dt - delta time
    */
-  step( dt ) {
+  public step( dt: number ): void {
     this.particlesCanvasNode.step( dt );
   }
 
   /**
    * restore initial condition
-   * @public
    */
-  reset() {
+  public reset(): void {
     this.compositeThermometerNode.reset();
   }
 }
