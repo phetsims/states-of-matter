@@ -16,14 +16,16 @@ import ScaledAtom from './ScaledAtom.js';
 
 class HydrogenAtom extends ScaledAtom {
 
+  public readonly renderBelowOxygen: boolean;
+
   /**
-   * @param {number} x - atom x position in picometers
-   * @param {number} y - atom y position in picometers
-   * @param {boolean} renderBelowOxygen - flag which says whether it has to be in the front or at the back of oxygen
+   * @param x - atom x position in picometers
+   * @param y - atom y position in picometers
+   * @param renderBelowOxygen - flag which says whether it has to be in the front or at the back of oxygen
    */
-  constructor( x, y, renderBelowOxygen ) {
+  constructor( x: number, y: number, renderBelowOxygen: boolean ) {
     super( AtomType.HYDROGEN, x, y );
-    this.renderBelowOxygen = renderBelowOxygen; // @public, read-only
+    this.renderBelowOxygen = renderBelowOxygen;
   }
 }
 

@@ -13,15 +13,17 @@
 
 import Vector2 from '../../../../../dot/js/Vector2.js';
 import statesOfMatter from '../../../statesOfMatter.js';
+import MoleculeForceAndMotionDataSet from '../MoleculeForceAndMotionDataSet.js';
+import MultipleParticleModel from '../MultipleParticleModel.js';
 import AbstractVerletAlgorithm from './AbstractVerletAlgorithm.js';
 import MonatomicAtomPositionUpdater from './MonatomicAtomPositionUpdater.js';
 
 class MonatomicVerletAlgorithm extends AbstractVerletAlgorithm {
 
   /**
-   * @param {MultipleParticleModel} multipleParticleModel of the simulation
+   * @param multipleParticleModel of the simulation
    */
-  constructor( multipleParticleModel ) {
+  public constructor( multipleParticleModel: MultipleParticleModel ) {
     super( multipleParticleModel );
 
     // @private
@@ -30,28 +32,15 @@ class MonatomicVerletAlgorithm extends AbstractVerletAlgorithm {
     this.velocityVector = new Vector2( 0, 0 ); // reusable vector to save allocations
   }
 
-  /**
-   * @param {number} scaledEpsilon
-   * @public
-   */
-  setScaledEpsilon( scaledEpsilon ) {
+  public setScaledEpsilon( scaledEpsilon: number ): void {
     this.epsilon = scaledEpsilon;
   }
 
-  /**
-   * @returns {number}
-   * @public
-   */
-  getScaledEpsilon() {
+  public getScaledEpsilon(): number {
     return this.epsilon;
   }
 
-  /**
-   * @param {MoleculeForceAndMotionDataSet} moleculeDataSet
-   * @override
-   * @protected
-   */
-  initializeForces( moleculeDataSet ) {
+  protected override initializeForces( moleculeDataSet: MoleculeForceAndMotionDataSet ): void {
     const accelerationDueToGravity = this.multipleParticleModel.gravitationalAcceleration;
     const nextAtomForces = moleculeDataSet.nextMoleculeForces;
     for ( let i = 0; i < moleculeDataSet.getNumberOfMolecules(); i++ ) {
@@ -59,12 +48,7 @@ class MonatomicVerletAlgorithm extends AbstractVerletAlgorithm {
     }
   }
 
-  /**
-   * @param {MoleculeForceAndMotionDataSet} moleculeDataSet
-   * @override
-   * @private
-   */
-  updateInteractionForces( moleculeDataSet ) {
+  private override updateInteractionForces( moleculeDataSet: MoleculeForceAndMotionDataSet ): void {
 
     const numberOfAtoms = moleculeDataSet.numberOfMolecules;
     const atomCenterOfMassPositions = moleculeDataSet.moleculeCenterOfMassPositions;
@@ -104,13 +88,7 @@ class MonatomicVerletAlgorithm extends AbstractVerletAlgorithm {
     }
   }
 
-  /**
-   * @param {MoleculeForcesAndMotionDataSet} moleculeDataSet
-   * @param {number} timeStep
-   * @override
-   * @protected
-   */
-  updateVelocitiesAndRotationRates( moleculeDataSet, timeStep ) {
+  protected override updateVelocitiesAndRotationRates( moleculeDataSet: MoleculeForceAndMotionDataSet, timeStep: number ): void {
 
     let atomVelocity;
     const numberOfAtoms = moleculeDataSet.numberOfAtoms;

@@ -16,15 +16,16 @@
 import Vector2 from '../../../../../dot/js/Vector2.js';
 import statesOfMatter from '../../../statesOfMatter.js';
 import SOMConstants from '../../SOMConstants.js';
+import AtomType from '../AtomType.js';
 
 class ScaledAtom {
 
   /**
-   * @param {AtomType} atomType - initial type, aka element, for this atom
-   * @param {number} initialXPosition - x position in the model, in picometers
-   * @param {number} initialYPosition - y position in the model, in picometers
+   * @param atomType - initial type, aka element, for this atom
+   * @param initialXPosition - x position in the model, in picometers
+   * @param initialYPosition - y position in the model, in picometers
    */
-  constructor( atomType, initialXPosition, initialYPosition ) {
+  constructor( atomType: AtomType, initialXPosition: number, initialYPosition: number ) {
 
     // @public {AtomType} - the type of atom being modeled, e.g. Argon, Neon, etc.
     this.atomType = atomType;
@@ -46,37 +47,24 @@ class ScaledAtom {
   }
 
   /**
-   * @param {number} x - atom x position in picometers
-   * @param {number} y - atom y position in picometers
-   * @public
+   * @param x - atom x position in picometers
+   * @param y - atom y position in picometers
    */
-  setPosition( x, y ) {
+  public setPosition( x: number, y: number ): void {
 
     // use pools for better performance, this is why the methods need to be used instead of direct value setting
     this.position.setXY( x, y );
   }
 
-  /**
-   * @returns {number}
-   * @public
-   */
-  getX() {
+  public getX(): number {
     return this.position.x;
   }
 
-  /**
-   * @returns {number}
-   * @public
-   */
-  getY() {
+  public getY(): number {
     return this.position.y;
   }
 
-  /**
-   * @returns {AtomType}
-   * @public
-   */
-  getType() {
+  public getType(): AtomType {
     return this.atomType;
   }
 }

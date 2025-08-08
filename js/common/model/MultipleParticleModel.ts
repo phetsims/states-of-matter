@@ -40,6 +40,7 @@ import EnumerationIO from '../../../../tandem/js/types/EnumerationIO.js';
 import IOType from '../../../../tandem/js/types/IOType.js';
 import NullableIO from '../../../../tandem/js/types/NullableIO.js';
 import NumberIO from '../../../../tandem/js/types/NumberIO.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
 import statesOfMatter from '../../statesOfMatter.js';
 import PhaseStateEnum from '../PhaseStateEnum.js';
 import SOMConstants from '../SOMConstants.js';
@@ -120,11 +121,7 @@ const MAX_MOLECULES_QUEUED_FOR_INJECTION = 3;
 
 class MultipleParticleModel extends PhetioObject {
 
-  /**
-   * @param {Tandem} tandem
-   * @param {Object} [options]
-   */
-  constructor( tandem, options ) {
+  public constructor( tandem: Tandem, options?: { validSubstances?: SubstanceType[] } ) {
 
     options = merge( {
       validSubstances: SubstanceType.VALUES
@@ -314,11 +311,7 @@ class MultipleParticleModel extends PhetioObject {
     );
   }
 
-  /**
-   * @param {number} newTemperature
-   * @public
-   */
-  setTemperature( newTemperature ) {
+  public setTemperature( newTemperature: number ): void {
 
     if ( newTemperature > MAX_TEMPERATURE ) {
       this.temperatureSetPointProperty.set( MAX_TEMPERATURE );
@@ -343,10 +336,8 @@ class MultipleParticleModel extends PhetioObject {
    * Get the current temperature in degrees Kelvin.  The calculations done are dependent on the type of molecule
    * selected.  The values and ranges used in this method were derived from information provided by Paul Beale, dept
    * of Physics, University of Colorado Boulder.  If no atoms are in the container, this returns null.
-   * @returns {number|null}
-   * @private
    */
-  getTemperatureInKelvin() {
+  private getTemperatureInKelvin(): number | null {
 
     if ( this.scaledAtoms.length === 0 ) {
 
@@ -432,19 +423,15 @@ class MultipleParticleModel extends PhetioObject {
   /**
    * Get the pressure value which is being calculated by the model and is not adjusted to represent any "real" units
    * (such as atmospheres).
-   * @returns {number}
-   * @public
    */
-  getModelPressure() {
+  public getModelPressure(): number {
     return this.moleculeForceAndMotionCalculator.pressureProperty.get();
   }
 
   /**
    * handler that sets up the various portions of the model to support the newly selected substance
-   * @param {SubstanceType} substance
-   * @protected
    */
-  handleSubstanceChanged( substance ) {
+  protected handleSubstanceChanged( substance: SubstanceType ): void {
 
     assert && assert(
       substance === SubstanceType.DIATOMIC_OXYGEN ||
@@ -530,17 +517,11 @@ class MultipleParticleModel extends PhetioObject {
     this.maxNumberOfMoleculesProperty.set( Math.floor( SOMConstants.MAX_NUM_ATOMS / atomsPerMolecule ) );
   }
 
-  /**
-   *  @private
-   */
-  updatePressure() {
+  private updatePressure(): void {
     this.pressureProperty.set( this.getPressureInAtmospheres() );
   }
 
-  /**
-   * @public
-   */
-  reset() {
+  public reset(): void {
 
     const substanceAtStartOfReset = this.substanceProperty.get();
 
@@ -571,10 +552,8 @@ class MultipleParticleModel extends PhetioObject {
 
   /**
    * Set the phase of the molecules in the simulation.
-   * @param {number} phaseSate
-   * @public
    */
-  setPhase( phaseSate ) {
+  public setPhase( phaseSate: number ): void {
     assert && assert(
       phaseSate === PhaseStateEnum.SOLID || phaseSate === PhaseStateEnum.LIQUID || phaseSate === PhaseStateEnum.GAS,
       'invalid phase state specified'
@@ -585,11 +564,10 @@ class MultipleParticleModel extends PhetioObject {
 
   /**
    * Sets the amount of heating or cooling that the system is undergoing.
-   * @param {number} normalizedHeatingCoolingAmount - Normalized amount of heating or cooling that the system is
+   * @param normalizedHeatingCoolingAmount - Normalized amount of heating or cooling that the system is
    * undergoing, ranging from -1 to +1.
-   * @public
    */
-  setHeatingCoolingAmount( normalizedHeatingCoolingAmount ) {
+  public setHeatingCoolingAmount( normalizedHeatingCoolingAmount: number ): void {
     assert && assert( ( normalizedHeatingCoolingAmount <= 1.0 ) && ( normalizedHeatingCoolingAmount >= -1.0 ) );
     this.heatingCoolingAmountProperty.set( normalizedHeatingCoolingAmount );
   }
@@ -598,18 +576,16 @@ class MultipleParticleModel extends PhetioObject {
    * Inject a new molecule of the current type.  This method actually queues it for injection, actual injection
    * occurs during model steps.  Be aware that this silently ignores the injection request if the model is not in a
    * state to support injection.
-   * @private
    */
-  queueMoleculeForInjection() {
+  private queueMoleculeForInjection(): void {
     this.numMoleculesQueuedForInjectionProperty.set( this.numMoleculesQueuedForInjectionProperty.value + 1 );
   }
 
   /**
    * Inject a new molecule of the current type into the model. This uses the current temperature to assign an initial
    * velocity.
-   * @private
    */
-  injectMolecule() {
+  private injectMolecule(): void {
 
     assert && assert(
       this.numMoleculesQueuedForInjectionProperty.value > 0,
@@ -671,10 +647,8 @@ class MultipleParticleModel extends PhetioObject {
 
   /**
    * add non-normalized atoms for the specified number of molecules of the current substance
-   * @param {number} numMolecules
-   * @private
    */
-  addAtomsForCurrentSubstance( numMolecules ) {
+  private addAtomsForCurrentSubstance( numMolecules: number ): void {
 
     _.times( numMolecules, () => {
 
@@ -710,10 +684,7 @@ class MultipleParticleModel extends PhetioObject {
     } );
   }
 
-  /**
-   *  @private
-   */
-  removeAllAtoms() {
+  private removeAllAtoms(): void {
 
     // Get rid of any existing atoms from the model set.
     this.scaledAtoms.clear();
@@ -725,10 +696,9 @@ class MultipleParticleModel extends PhetioObject {
   /**
    * Initialize the normalized and non-normalized data sets by calling the appropriate initialization routine, which
    * will set positions, velocities, etc.
-   * @param {number} phase - phase of atoms
-   * @public
+   * @param phase - phase of atoms
    */
-  initializeAtoms( phase ) {
+  public initializeAtoms( phase: number ): void {
 
     // Initialize the atoms.
     switch( this.substanceProperty.get() ) {
@@ -755,10 +725,7 @@ class MultipleParticleModel extends PhetioObject {
     this.updatePressure();
   }
 
-  /**
-   * @private
-   */
-  initializeModelParameters() {
+  private initializeModelParameters(): void {
 
     // Initialize the system parameters.
     this.gravitationalAcceleration = NOMINAL_GRAVITATIONAL_ACCEL;
@@ -770,10 +737,8 @@ class MultipleParticleModel extends PhetioObject {
   /**
    * Reduce the upward motion of the molecules.  This is generally done to reduce some behavior that is sometimes seen
    * where the molecules float rapidly upwards after being heated.
-   * @param {number} dt
-   * @private
    */
-  dampUpwardMotion( dt ) {
+  private dampUpwardMotion( dt: number ): void {
 
     for ( let i = 0; i < this.moleculeDataSet.getNumberOfMolecules(); i++ ) {
       if ( this.moleculeDataSet.moleculeVelocities[ i ].y > 0 ) {
@@ -784,9 +749,8 @@ class MultipleParticleModel extends PhetioObject {
 
   /**
    * Update the normalized full-size container dimensions based on the current particle diameter.
-   * @private
    */
-  updateNormalizedContainerDimensions() {
+  private updateNormalizedContainerDimensions(): void {
     this.normalizedContainerWidth = CONTAINER_WIDTH / this.particleDiameter;
 
     // The non-normalized height will keep increasing after the container explodes, so we need to limit it here.
@@ -797,10 +761,9 @@ class MultipleParticleModel extends PhetioObject {
 
   /**
    * Step the model.
-   * @param {number} dt - delta time, in seconds
-   * @public
+   * @param dt - delta time, in seconds
    */
-  stepInTime( dt ) {
+  public stepInTime( dt: number ): void {
 
     this.moleculeInjectedThisStep = false;
 
@@ -909,10 +872,9 @@ class MultipleParticleModel extends PhetioObject {
   }
 
   /**
-   * @param {number} dt - time in seconds
-   * @protected
+   * @param dt - time in seconds
    */
-  updateContainerSize( dt ) {
+  protected updateContainerSize( dt: number ): void {
 
     if ( this.isExplodedProperty.value ) {
 
@@ -934,10 +896,8 @@ class MultipleParticleModel extends PhetioObject {
 
   /**
    * main step function, called by the PhET framework
-   * @param {number} dt
-   * @public
    */
-  step( dt ) {
+  public step( dt: number ): void {
     if ( this.isPlayingProperty.get() ) {
       this.stepInTime( dt );
     }
@@ -947,9 +907,8 @@ class MultipleParticleModel extends PhetioObject {
    * Run the appropriate thermostat based on the settings and the state of the simulation.  This serves to either
    * maintain the particle motions in a range that corresponds to a steady temperature or to increase or decrease the
    * particle motion if the user is heating or cooling the substance.
-   * @private
    */
-  runThermostat() {
+  private runThermostat(): void {
 
     if ( this.isExplodedProperty.get() ) {
 
@@ -1038,11 +997,8 @@ class MultipleParticleModel extends PhetioObject {
 
   /**
    * Initialize the various model components to handle a simulation in which all the molecules are single atoms.
-   * @param {number} substance
-   * @param {number} phase
-   * @private
    */
-  initializeDiatomic( substance, phase ) {
+  private initializeDiatomic( substance: number, phase: number ): void {
 
     // Verify that a valid molecule ID was provided.
     assert && assert( ( substance === SubstanceType.DIATOMIC_OXYGEN ) );
@@ -1095,11 +1051,8 @@ class MultipleParticleModel extends PhetioObject {
   /**
    * Initialize the various model components to handle a simulation in which each molecule consists of three atoms,
    * e.g. water.
-   * @param {number} substance
-   * @param {number} phase
-   * @private
    */
-  initializeTriatomic( substance, phase ) {
+  private initializeTriatomic( substance: number, phase: number ): void {
 
     // Only water is supported so far.
     assert && assert( ( substance === SubstanceType.WATER ) );
@@ -1153,11 +1106,8 @@ class MultipleParticleModel extends PhetioObject {
 
   /**
    * Initialize the various model components to handle a simulation in which all the molecules are single atoms.
-   * @param {SubstanceType} substance
-   * @param {number} phase
-   * @private
    */
-  initializeMonatomic( substance, phase ) {
+  private initializeMonatomic( substance: SubstanceType, phase: number ): void {
 
     // Verify that a valid molecule ID was provided.
     assert && assert( substance === SubstanceType.ADJUSTABLE_ATOM ||
@@ -1234,9 +1184,8 @@ class MultipleParticleModel extends PhetioObject {
 
   /**
    * Set the positions of the non-normalized molecules based on the positions of the normalized ones.
-   * @private
    */
-  syncAtomPositions() {
+  private syncAtomPositions(): void {
 
     assert && assert( this.moleculeDataSet.numberOfAtoms === this.scaledAtoms.length,
       `Inconsistent number of normalized versus non-normalized atoms, ${
@@ -1260,19 +1209,15 @@ class MultipleParticleModel extends PhetioObject {
    * was problematic, since it would cause the container to explode at different pressure readings.  A single
    * multiplier is now used, which is perhaps less realistic, but works better in practice.  Please see
    * https://github.com/phetsims/states-of-matter/issues/124 for more information.
-   * @returns {number}
-   * @public
    */
-  getPressureInAtmospheres() {
+  public getPressureInAtmospheres(): number {
     return 5 * this.getModelPressure(); // multiplier empirically determined
   }
 
   /**
    * Return a phase value based on the current temperature.
-   * @return{number}
-   * @private
    */
-  mapTemperatureToPhase() {
+  private mapTemperatureToPhase(): number {
     let phase;
     if ( this.temperatureSetPointProperty.get() < SOLID_TEMPERATURE + ( ( LIQUID_TEMPERATURE - SOLID_TEMPERATURE ) / 2 ) ) {
       phase = PhaseStateEnum.SOLID;
@@ -1289,10 +1234,8 @@ class MultipleParticleModel extends PhetioObject {
 
   /**
    * This method is used for an external entity to notify the model that it should explode.
-   * @param {boolean} isExploded
-   * @public
    */
-  setContainerExploded( isExploded ) {
+  public setContainerExploded( isExploded: boolean ): void {
     if ( this.isExplodedProperty.get() !== isExploded ) {
       this.isExplodedProperty.set( isExploded );
       if ( !isExploded ) {
@@ -1304,9 +1247,8 @@ class MultipleParticleModel extends PhetioObject {
   /**
    * Return the lid to the container.  It only makes sense to call this after the container has exploded, otherwise it
    * has no effect.
-   * @public
    */
-  returnLid() {
+  public returnLid(): void {
 
     // state checking
     assert && assert( this.isExplodedProperty.get(), 'attempt to return lid when container hadn\'t exploded' );
@@ -1364,10 +1306,9 @@ class MultipleParticleModel extends PhetioObject {
 
   /**
    * serialize this instance for phet-io
-   * @returns {Object}
    * @public - for phet-io support only
    */
-  toStateObject() {
+  public toStateObject(): Object {
     return {
       _substance: EnumerationIO( SubstanceType ).toStateObject( this.substanceProperty.value ),
       _isExploded: this.isExplodedProperty.value,
@@ -1384,11 +1325,8 @@ class MultipleParticleModel extends PhetioObject {
 
   /**
    * Set the state of this instance for phet-io
-   * @param {Object} stateObject
-   * @public
-   * @override
    */
-  applyState( stateObject ) {
+  public override applyState( stateObject: Object ): void {
     required( stateObject );
 
     // Setting the substance initializes a bunch of model parameters, so this is done first, then other items that may

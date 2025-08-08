@@ -31,12 +31,8 @@ const InteractionStrengthTable = {
    * the value divided by k-boltzmann is in Kelvin.  This is apparently how
    * it is generally done.  Note that this value is used as the "epsilon"
    * parameter in Lennard-Jones potential calculations.
-   * @public
-   * @param {AtomType} atomType1
-   * @param {AtomType} atomType2
-   * @returns {number}
    */
-  getInteractionPotential: ( atomType1, atomType2 ) => {
+  getInteractionPotential: ( atomType1: AtomType, atomType2: AtomType ): number => {
     if ( atomType1 === atomType2 ) {
       // Heterogeneous pair of atoms.
       if ( atomType1 === AtomType.NEON ) {

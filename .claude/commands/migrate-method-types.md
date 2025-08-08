@@ -50,3 +50,19 @@ Migrate all method signatures + constructor signatures in the file @$ARGUMENTS f
 7. Think carefully to figure out the imports. See if the type is already imported, or if you need to import it. If you need to import it, carefully compute the import path based on the current file's location.
 8. Visit the constructors as well, but JSDOC and signature ONLY.
 9. Move `@override` jsdoc to the typescript keyword like `public override myMethod(...)`
+10. `constructor` should be made public, i.e. `public constructor(...)`
+11. If the resultant JSDoc is blank, like
+```
+  /**
+   */
+```
+
+Then remove it entirely.
+
+12. If the file has:
+```
+/* eslint-disable */
+// @ts-nocheck
+```
+
+LEAVE IT INTACT. Do not change. Keep it.

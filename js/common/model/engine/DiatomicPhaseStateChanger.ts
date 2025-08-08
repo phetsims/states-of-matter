@@ -16,6 +16,7 @@ import statesOfMatter from '../../../statesOfMatter.js';
 import PhaseStateEnum from '../../PhaseStateEnum.js';
 import SOMConstants from '../../SOMConstants.js';
 import SubstanceType from '../../SubstanceType.js';
+import MultipleParticleModel from '../MultipleParticleModel.js';
 import AbstractPhaseStateChanger from './AbstractPhaseStateChanger.js';
 import DiatomicAtomPositionUpdater from './DiatomicAtomPositionUpdater.js';
 
@@ -24,10 +25,7 @@ const MIN_INITIAL_DIAMETER_DISTANCE = 2.02;
 
 class DiatomicPhaseStateChanger extends AbstractPhaseStateChanger {
 
-  /**
-   * @param {MultipleParticleModel} multipleParticleModel of the simulation
-   */
-  constructor( multipleParticleModel ) {
+  public constructor( multipleParticleModel: MultipleParticleModel ) {
 
     // Make sure this is not being used on an inappropriate data set.
     assert && assert( multipleParticleModel.moleculeDataSet.getAtomsPerMolecule() === 2 );
@@ -39,10 +37,9 @@ class DiatomicPhaseStateChanger extends AbstractPhaseStateChanger {
   }
 
   /**
-   * @param {PhaseStateEnum} phaseState - phase state (solid/liquid/gas) of the collection of molecules
-   * @public
+   * @param phaseState - phase state (solid/liquid/gas) of the collection of molecules
    */
-  setPhase( phaseState ) {
+  public setPhase( phaseState: PhaseStateEnum ): void {
     let postChangeModelSteps = 0;
     switch( phaseState ) {
       case PhaseStateEnum.SOLID:
@@ -75,9 +72,8 @@ class DiatomicPhaseStateChanger extends AbstractPhaseStateChanger {
 
   /**
    * Set the particle configuration for the solid phase.
-   * @protected
    */
-  setParticleConfigurationSolid() {
+  protected setParticleConfigurationSolid(): void {
 
     // Place the molecules into a cube, a.k.a. a crystal.
     this.formCrystal(
@@ -92,9 +88,8 @@ class DiatomicPhaseStateChanger extends AbstractPhaseStateChanger {
 
   /**
    * Set the particle configuration for the liquid phase.
-   * @protected
    */
-  setParticleConfigurationLiquid() {
+  protected setParticleConfigurationLiquid(): void {
 
     let dataSetToLoad;
 

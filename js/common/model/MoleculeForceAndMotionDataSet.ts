@@ -36,9 +36,8 @@ class MoleculeForceAndMotionDataSet {
   /**
    * This creates the data set with the capacity to hold the maximum number of atoms/molecules, but does not create the
    * individual data for them.  That must be done explicitly through other calls.
-   * @param {number} atomsPerMolecule
    */
-  constructor( atomsPerMolecule ) {
+  public constructor( atomsPerMolecule: number ) {
 
     // @public (read-only) - attributes that describe the data set as a whole
     this.numberOfAtoms = 0;
@@ -105,9 +104,8 @@ class MoleculeForceAndMotionDataSet {
 
   /**
    * get the total kinetic energy of the particles in this data set
-   * @public
    */
-  getTotalKineticEnergy() {
+  public getTotalKineticEnergy(): number {
 
     let translationalKineticEnergy = 0;
     let rotationalKineticEnergy = 0;
@@ -139,46 +137,28 @@ class MoleculeForceAndMotionDataSet {
     return translationalKineticEnergy + rotationalKineticEnergy;
   }
 
-  /**
-   * @returns {number}
-   * @public
-   */
-  getTemperature() {
+  public getTemperature(): number {
 
     // The formula for kinetic energy in an ideal gas is used here with Boltzmann's constant normalized, i.e. equal to 1.
     return ( 2 / 3 ) * this.getTotalKineticEnergy() / this.getNumberOfMolecules();
   }
 
-  /**
-   * @returns {number}
-   * @public
-   */
-  getNumberOfMolecules() {
+  public getNumberOfMolecules(): number {
     return this.numberOfAtoms / this.atomsPerMolecule;
   }
 
-  /**
-   * @returns {number}
-   * @public
-   */
-  getMoleculeRotationalInertia() {
+  public getMoleculeRotationalInertia(): number {
     return this.moleculeRotationalInertia;
   }
 
-  /**
-   * @returns {number}
-   * @public
-   */
-  getMoleculeMass() {
+  public getMoleculeMass(): number {
     return this.moleculeMass;
   }
 
   /**
    * get the kinetic energy of the specified molecule
-   * @param moleculeIndex
-   * @public
    */
-  getMoleculeKineticEnergy( moleculeIndex ) {
+  public getMoleculeKineticEnergy( moleculeIndex: number ): number {
     assert && assert( moleculeIndex >= 0 && moleculeIndex < this.numberOfMolecules );
     const translationalKineticEnergy = 0.5 * this.moleculeMass *
                                        ( Math.pow( this.moleculeVelocities[ moleculeIndex ].x, 2 ) +
@@ -190,121 +170,65 @@ class MoleculeForceAndMotionDataSet {
 
   /**
    * Returns a value indicating how many more molecules can be added.
-   * @returns {number}
-   * @public
    */
-  getNumberOfRemainingSlots() {
+  public getNumberOfRemainingSlots(): number {
     return ( Math.floor( SOMConstants.MAX_NUM_ATOMS / this.atomsPerMolecule ) -
              ( this.numberOfAtoms / this.atomsPerMolecule ) );
   }
 
-  /**
-   * @returns {number}
-   * @public
-   */
-  getAtomsPerMolecule() {
+  public getAtomsPerMolecule(): number {
     return this.atomsPerMolecule;
   }
 
-  /**
-   * @returns {Array}
-   * @public
-   */
-  getAtomPositions() {
+  public getAtomPositions(): Array<Vector2 | null> {
     return this.atomPositions;
   }
 
-  /**
-   * @returns {number}
-   * @public
-   */
-  getNumberOfAtoms() {
+  public getNumberOfAtoms(): number {
     return this.numberOfAtoms;
   }
 
-  /**
-   * @returns {Array}
-   * @public
-   */
-  getMoleculeCenterOfMassPositions() {
+  public getMoleculeCenterOfMassPositions(): Array<Vector2 | null> {
     return this.moleculeCenterOfMassPositions;
   }
 
-  /**
-   * @returns {Array}
-   * @public
-   */
-  getMoleculeVelocities() {
+  public getMoleculeVelocities(): Array<Vector2 | null> {
     return this.moleculeVelocities;
   }
 
-  /**
-   * @returns {Array}
-   * @public
-   */
-  getMoleculeForces() {
+  public getMoleculeForces(): Array<Vector2 | null> {
     return this.moleculeForces;
   }
 
-  /**
-   * @returns {Array}
-   * @public
-   */
-  getNextMoleculeForces() {
+  public getNextMoleculeForces(): Array<Vector2 | null> {
     return this.nextMoleculeForces;
   }
 
-  /**
-   * @returns {Array}
-   * @public
-   */
-  getMoleculeRotationAngles() {
+  public getMoleculeRotationAngles(): Float64Array {
     return this.moleculeRotationAngles;
   }
 
-  /**
-   * @param {[]}rotationAngles
-   * @public
-   */
-  setMoleculeRotationAngles( rotationAngles ) {
+  public setMoleculeRotationAngles( rotationAngles: Float64Array ): void {
     this.moleculeRotationAngles = rotationAngles;
   }
 
-  /**
-   * @returns {Array}
-   * @public
-   */
-  getMoleculeRotationRates() {
+  public getMoleculeRotationRates(): Float64Array {
     return this.moleculeRotationRates;
   }
 
-  /**
-   * @returns {Array}
-   * @public
-   */
-  getMoleculeTorques() {
+  public getMoleculeTorques(): Float64Array {
     return this.moleculeTorques;
   }
 
-  /**
-   * @returns {Array}
-   * @public
-   */
-  getNextMoleculeTorques() {
+  public getNextMoleculeTorques(): Float64Array {
     return this.nextMoleculeTorques;
   }
 
   /**
    * Add a new molecule to the model.  The molecule must have been created and initialized before being added.
-   * @param {Array.<Vector2>} atomPositions
-   * @param {Vector2} moleculeCenterOfMassPosition
-   * @param {Vector2} moleculeVelocity
-   * @param {number} moleculeRotationRate
-   * @param {boolean} insideContainer
-   * @returns {boolean} true if able to add, false if not.
-   * @public
+   * @returns true if able to add, false if not.
    */
-  addMolecule( atomPositions, moleculeCenterOfMassPosition, moleculeVelocity, moleculeRotationRate, insideContainer ) {
+  public addMolecule( atomPositions: Array<Vector2>, moleculeCenterOfMassPosition: Vector2, moleculeVelocity: Vector2, moleculeRotationRate: number, insideContainer: boolean ): boolean {
 
     // error checking
     assert && assert( this.getNumberOfRemainingSlots() > 0, 'no space left in molecule data set' );
@@ -339,10 +263,8 @@ class MoleculeForceAndMotionDataSet {
    * <p/>
    * This is fairly compute intensive, and should be used sparingly.  This was originally created to support the
    * feature where the lid is returned and any molecules outside of the container disappear.
-   * @param {number} moleculeIndex
-   * @public
    */
-  removeMolecule( moleculeIndex ) {
+  public removeMolecule( moleculeIndex: number ): void {
 
     assert && assert( moleculeIndex < this.numberOfAtoms / this.atomsPerMolecule, 'molecule index out of range' );
 
@@ -376,10 +298,9 @@ class MoleculeForceAndMotionDataSet {
 
   /**
    * serialize this instance for phet-io
-   * @returns {Object}
-   * @public - for phet-io support only
+   * for phet-io support only
    */
-  toStateObject() {
+  public toStateObject(): Object {
     return {
       atomsPerMolecule: this.atomsPerMolecule,
       numberOfAtoms: this.numberOfAtoms,
@@ -404,10 +325,9 @@ class MoleculeForceAndMotionDataSet {
   /**
    * Set the state of this instance for phet-io.  This is used for phet-io, but not directly by the PhetioStateEngine -
    * it is instead called during explicit de-serialization.
-   * @param {Object} stateObject - returned from toStateObject
-   * @public
+   * @param stateObject - returned from toStateObject
    */
-  setState( stateObject ) {
+  public setState( stateObject: Object ): void {
     required( stateObject );
 
     // single values that pertain to the entire data set
@@ -453,9 +373,8 @@ class MoleculeForceAndMotionDataSet {
    * where the substance is in the desired position, call this from the command line, and then incorporate the output
    * into the appropriate phase state changer object (e.g. WaterPhaseStateChanger).  Some hand-tweaking is generally
    * necessary.
-   * @public
    */
-  dump() {
+  public dump(): void {
 
     let i;
     const numMolecules = this.numberOfMolecules;

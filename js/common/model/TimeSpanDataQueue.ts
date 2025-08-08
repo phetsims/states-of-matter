@@ -22,7 +22,7 @@ class TimeSpanDataQueue {
    * @param maxTimeSpan - max span of time that can be stored, in seconds
    * @param minExpectedDt - the minimum expected dt (delta time) value in seconds, used to allocate memory
    */
-  constructor( maxTimeSpan: number, minExpectedDt: number = MIN_EXPECTED_DT ) {
+  public constructor( maxTimeSpan: number, minExpectedDt: number = MIN_EXPECTED_DT ) {
 
     // @public (read-only) - the total of all values currently in the queue
     this.total = 0;
