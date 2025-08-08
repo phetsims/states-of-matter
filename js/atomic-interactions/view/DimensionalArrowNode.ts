@@ -11,10 +11,19 @@
  */
 
 import Vector2 from '../../../../dot/js/Vector2.js';
-import merge from '../../../../phet-core/js/merge.js';
+import optionize from '../../../../phet-core/js/optionize.js';
 import ArrowShape from '../../../../scenery-phet/js/ArrowShape.js';
-import Path from '../../../../scenery/js/nodes/Path.js';
+import Path, { PathOptions } from '../../../../scenery/js/nodes/Path.js';
 import statesOfMatter from '../../statesOfMatter.js';
+
+type SelfOptions = {
+  headHeight?: number;
+  headWidth?: number;
+  tailWidth?: number;
+  doubleHead?: boolean; // true puts heads on both ends of the arrow, false puts a head at the tip
+};
+
+type DimensionalArrowNodeOptions = SelfOptions & PathOptions;
 
 class DimensionalArrowNode extends Path {
 
@@ -32,12 +41,12 @@ class DimensionalArrowNode extends Path {
    * @param tailY - arrowNode tail Y position
    * @param tipX - arrowNode tip X position
    * @param tipY - arrowNode tip Y position
-   * @param options - that can be passed on to the underlying node
+   * @param providedOptions - that can be passed on to the underlying node
    */
-  public constructor( tailX: number, tailY: number, tipX: number, tipY: number, options?: Object ) {
+  public constructor( tailX: number, tailY: number, tipX: number, tipY: number, providedOptions?: DimensionalArrowNodeOptions ) {
 
     // default options
-    options = merge( {
+    const options = optionize<DimensionalArrowNodeOptions, SelfOptions, PathOptions>()( {
       headHeight: 10,
       headWidth: 10,
       tailWidth: 5,
@@ -45,7 +54,7 @@ class DimensionalArrowNode extends Path {
       fill: 'black',
       stroke: 'black',
       lineWidth: 1
-    }, options );
+    }, providedOptions );
 
     // things you're likely to mess up, add more as needed
     assert && assert( options.headWidth > options.tailWidth );

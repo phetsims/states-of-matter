@@ -14,12 +14,13 @@ import Multilink from '../../../../axon/js/Multilink.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Shape from '../../../../kite/js/Shape.js';
+import optionize, { type EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import merge from '../../../../phet-core/js/merge.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import DragListener from '../../../../scenery/js/listeners/DragListener.js';
 import PressListener from '../../../../scenery/js/listeners/PressListener.js';
 import Line from '../../../../scenery/js/nodes/Line.js';
-import Node from '../../../../scenery/js/nodes/Node.js';
+import Node, { NodeOptions } from '../../../../scenery/js/nodes/Node.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import AtomType from '../../common/model/AtomType.js';
@@ -38,6 +39,11 @@ const RESIZE_HANDLE_HIGHLIGHTED_COLOR = new Color( 153, 255, 0 );
 const EPSILON_LINE_COLOR = RESIZE_HANDLE_NORMAL_COLOR;
 const POTENTIAL_LINE_COLOR = new Color( 'red' );
 
+// Since PotentialGraphNode doesn't export its options type, we'll use NodeOptions from its grandparent
+type SelfOptions = EmptySelfOptions;
+
+type InteractivePotentialGraphOptions = SelfOptions & NodeOptions;
+
 class InteractivePotentialGraph extends PotentialGraphNode {
 
   private readonly dualAtomModel: DualAtomModel;
@@ -47,13 +53,13 @@ class InteractivePotentialGraph extends PotentialGraphNode {
 
   /**
    * @param dualAtomModel - model of the simulation
-   * @param options that can be passed on to the underlying node
+   * @param providedOptions that can be passed on to the underlying node
    */
-  public constructor( dualAtomModel: DualAtomModel, options?: Record<string, any> ) {
+  public constructor( dualAtomModel: DualAtomModel, providedOptions?: InteractivePotentialGraphOptions ) {
 
-    options = merge( {
+    const options = optionize<InteractivePotentialGraphOptions, SelfOptions, NodeOptions>()( {
       tandem: Tandem.REQUIRED
-    }, options );
+    }, providedOptions );
 
     super(
       dualAtomModel.getSigma(),

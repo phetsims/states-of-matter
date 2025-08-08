@@ -9,8 +9,14 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import merge from '../../../../phet-core/js/merge.js';
+import optionize from '../../../../phet-core/js/optionize.js';
 import statesOfMatter from '../../statesOfMatter.js';
+
+type SelfOptions = {
+  initialValue?: number;
+};
+
+type MovingAverageOptions = SelfOptions;
 
 class MovingAverage {
 
@@ -21,11 +27,11 @@ class MovingAverage {
   private currentIndex: number;
   private total: number;
 
-  constructor( size: number, options?: { initialValue?: number } ) {
+  constructor( size: number, providedOptions?: MovingAverageOptions ) {
 
-    options = merge( {
+    const options = optionize<MovingAverageOptions, SelfOptions>()( {
       initialValue: 0
-    }, options );
+    }, providedOptions );
 
     this.size = size;
     this.average = 0;

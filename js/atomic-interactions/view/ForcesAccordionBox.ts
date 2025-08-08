@@ -11,6 +11,7 @@
  */
 
 import Property from '../../../../axon/js/Property.js';
+import optionize from '../../../../phet-core/js/optionize.js';
 import merge from '../../../../phet-core/js/merge.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import BracketNode from '../../../../scenery-phet/js/BracketNode.js';
@@ -21,7 +22,7 @@ import HStrut from '../../../../scenery/js/nodes/HStrut.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import VStrut from '../../../../scenery/js/nodes/VStrut.js';
-import AccordionBox from '../../../../sun/js/AccordionBox.js';
+import AccordionBox, { AccordionBoxOptions } from '../../../../sun/js/AccordionBox.js';
 import AquaRadioButtonGroup from '../../../../sun/js/AquaRadioButtonGroup.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import SOMConstants from '../../common/SOMConstants.js';
@@ -43,25 +44,23 @@ const TEXT_LABEL_MAX_WIDTH = 175; // max width of text label in the panel
 const RADIO_BUTTON_RADIUS = 6;
 const ICON_PADDING = 35; // empirically determined to put the icons in a good position on the panel
 
+type SelfOptions = {
+  tickTextColor?: string;
+  textFill?: string;
+};
+
+type ForcesAccordionBoxOptions = SelfOptions & AccordionBoxOptions;
+
 class ForcesAccordionBox extends AccordionBox {
 
   /**
    * @param forcesProperty that determines which forces to display
    * @param forceControlPanelExpandProperty -true to use force panel expand, false if not
-   * @param options for various panel display properties
+   * @param providedOptions for various panel display properties
    */
-  public constructor( forcesProperty: Property<string>, forceControlPanelExpandProperty: Property<boolean>, options?: Object ) {
+  public constructor( forcesProperty: Property<string>, forceControlPanelExpandProperty: Property<boolean>, providedOptions?: ForcesAccordionBoxOptions ) {
 
-    // convenience function for creating text with the attributes needed by this panel
-    const createTextNode = ( string, width, fontSize ) => {
-      return new Text( string, {
-        font: new PhetFont( fontSize ),
-        fill: options.textFill,
-        maxWidth: width
-      } );
-    };
-
-    options = merge( {
+    const options = optionize<ForcesAccordionBoxOptions, SelfOptions, AccordionBoxOptions>()( {
       xMargin: 5,
       yMargin: 8,
       fill: 'black',
@@ -87,7 +86,16 @@ class ForcesAccordionBox extends AccordionBox {
         touchAreaYDilation: 3
       },
       tandem: Tandem.REQUIRED
-    }, options );
+    }, providedOptions );
+
+    // convenience function for creating text with the attributes needed by this panel
+    const createTextNode = ( string, width, fontSize ) => {
+      return new Text( string, {
+        font: new PhetFont( fontSize ),
+        fill: options.textFill,
+        maxWidth: width
+      } );
+    };
 
     const accordionContent = new Node();
     const arrowEndX = 20;

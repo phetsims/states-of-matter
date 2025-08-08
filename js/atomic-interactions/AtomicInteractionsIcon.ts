@@ -12,7 +12,7 @@
 // modules
 import Screen from '../../../joist/js/Screen.js';
 import ScreenIcon, { ScreenIconOptions } from '../../../joist/js/ScreenIcon.js';
-import merge from '../../../phet-core/js/merge.js';
+import optionize, { EmptySelfOptions } from '../../../phet-core/js/optionize.js';
 import Circle from '../../../scenery/js/nodes/Circle.js';
 import Node from '../../../scenery/js/nodes/Node.js';
 import Rectangle from '../../../scenery/js/nodes/Rectangle.js';
@@ -24,15 +24,19 @@ import statesOfMatter from '../statesOfMatter.js';
 // constants
 const PARTICLE_COLOR = new Color( SOMConstants.ADJUSTABLE_ATTRACTION_COLOR );
 
-class AtomicInteractionsIcon extends ScreenIcon {
-  public constructor( options?: ScreenIconOptions ) {
+type SelfOptions = EmptySelfOptions;
 
-    options = merge( {
+type AtomicInteractionsIconOptions = SelfOptions & ScreenIconOptions;
+
+class AtomicInteractionsIcon extends ScreenIcon {
+  public constructor( providedOptions?: AtomicInteractionsIconOptions ) {
+
+    const options = optionize<AtomicInteractionsIconOptions, SelfOptions, ScreenIconOptions>()( {
       size: Screen.MINIMUM_HOME_SCREEN_ICON_SIZE,
       maxIconWidthProportion: 0.9,
       maxIconHeightProportion: 0.9,
       fill: Color.BLACK
-    }, options );
+    }, providedOptions );
 
     // convenience var
     const size = options.size;

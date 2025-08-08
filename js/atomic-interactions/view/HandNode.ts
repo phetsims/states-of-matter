@@ -11,11 +11,11 @@
  * @author John Blanco
  */
 
-import merge from '../../../../phet-core/js/merge.js';
+import optionize, { type EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import hand_png from '../../../../scenery-phet/images/hand_png.js';
 import DragListener from '../../../../scenery/js/listeners/DragListener.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
-import Node from '../../../../scenery/js/nodes/Node.js';
+import Node, { type NodeOptions } from '../../../../scenery/js/nodes/Node.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import statesOfMatter from '../../statesOfMatter.js';
 import DualAtomModel from '../model/DualAtomModel.js';
@@ -24,6 +24,10 @@ import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransfo
 
 // constants
 const WIDTH = 80; // empirically determined to look good
+
+type SelfOptions = EmptySelfOptions;
+
+type HandNodeOptions = SelfOptions & NodeOptions;
 
 class HandNode extends Node {
 
@@ -39,14 +43,14 @@ class HandNode extends Node {
    * @param particle - model of the atom that is draggable
    * @param modelViewTransform to convert between model and view co-ordinates
    * @param minX - grabbable particle min x position
-   * @param [options]
+   * @param [providedOptions]
    */
-  public constructor( dualAtomModel: DualAtomModel, particle: ScaledAtom, modelViewTransform: ModelViewTransform2, minX: number, options?: Object ) {
+  public constructor( dualAtomModel: DualAtomModel, particle: ScaledAtom, modelViewTransform: ModelViewTransform2, minX: number, providedOptions?: HandNodeOptions ) {
 
-    options = merge( {
+    const options = optionize<HandNodeOptions, SelfOptions, NodeOptions>()( {
       cursor: 'pointer',
       tandem: Tandem.REQUIRED
-    }, options );
+    }, providedOptions );
 
     super( options );
     this.minX = minX;

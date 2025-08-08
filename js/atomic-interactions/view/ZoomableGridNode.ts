@@ -13,9 +13,9 @@
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Range from '../../../../dot/js/Range.js';
 import Shape from '../../../../kite/js/Shape.js';
-import merge from '../../../../phet-core/js/merge.js';
+import optionize from '../../../../phet-core/js/optionize.js';
 import MagnifyingGlassZoomButtonGroup from '../../../../scenery-phet/js/MagnifyingGlassZoomButtonGroup.js';
-import Node from '../../../../scenery/js/nodes/Node.js';
+import Node, { NodeOptions } from '../../../../scenery/js/nodes/Node.js';
 import Path from '../../../../scenery/js/nodes/Path.js';
 import ButtonNode from '../../../../sun/js/buttons/ButtonNode.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
@@ -29,6 +29,12 @@ const GRID_LINES_OPTIONS = {
   lineWidth: 0.8,
   opacity: 0.6
 };
+
+type SelfOptions = {
+  addZoomButtons?: boolean;
+};
+
+type ZoomableGridNodeOptions = SelfOptions & NodeOptions;
 
 class ZoomableGridNode extends Node {
 
@@ -44,14 +50,14 @@ class ZoomableGridNode extends Node {
    * @param offsetY
    * @param width - width of the graph
    * @param height - height of the graph
-   * @param options
+   * @param providedOptions
    */
-  public constructor( atomsView: any, offsetX: number, offsetY: number, width: number, height: number, options?: Object ) {
+  public constructor( atomsView: any, offsetX: number, offsetY: number, width: number, height: number, providedOptions?: ZoomableGridNodeOptions ) {
 
-    options = merge( {
+    const options = optionize<ZoomableGridNodeOptions, SelfOptions, NodeOptions>()( {
       addZoomButtons: true,
       tandem: Tandem.REQUIRED
-    }, options );
+    }, providedOptions );
 
     atomsView.horizontalLineCount = MIN_LINES_HORIZONTAL;
 

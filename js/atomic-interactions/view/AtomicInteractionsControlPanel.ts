@@ -14,13 +14,14 @@ import Dimension2 from '../../../../dot/js/Dimension2.js';
 import Range from '../../../../dot/js/Range.js';
 import Utils from '../../../../dot/js/Utils.js';
 import merge from '../../../../phet-core/js/merge.js';
+import optionize, { type EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import BackgroundNode from '../../../../scenery-phet/js/BackgroundNode.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import HBox from '../../../../scenery/js/layout/nodes/HBox.js';
 import VBox from '../../../../scenery/js/layout/nodes/VBox.js';
 import HStrut from '../../../../scenery/js/nodes/HStrut.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
-import Node from '../../../../scenery/js/nodes/Node.js';
+import Node, { type NodeOptions } from '../../../../scenery/js/nodes/Node.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import AquaRadioButtonGroup from '../../../../sun/js/AquaRadioButtonGroup.js';
 import RectangularRadioButtonGroup from '../../../../sun/js/buttons/RectangularRadioButtonGroup.js';
@@ -59,16 +60,20 @@ const TITLE_TEXT_WIDTH = 130;
 const PANEL_X_MARGIN = 10;
 const AQUA_RADIO_BUTTON_X_SPACING = 8; // only used for atomic-interactions
 
+type SelfOptions = EmptySelfOptions;
+
+type AtomicInteractionsControlPanelOptions = SelfOptions & NodeOptions;
+
 class AtomicInteractionsControlPanel extends Node {
 
   /**
    * @param dualAtomModel - model of the simulation
    * @param enableHeterogeneousAtoms - flag for enabling heterogeneous atom combinations
-   * @param [options] that can be passed on to the underlying node
+   * @param [providedOptions] that can be passed on to the underlying node
    */
-  public constructor( dualAtomModel: DualAtomModel, enableHeterogeneousAtoms: boolean, options?: Object ) {
+  public constructor( dualAtomModel: DualAtomModel, enableHeterogeneousAtoms: boolean, providedOptions?: AtomicInteractionsControlPanelOptions ) {
 
-    options = merge( {
+    const options = optionize<AtomicInteractionsControlPanelOptions, SelfOptions, NodeOptions>()( {
       xMargin: 5,
       yMargin: 8,
       fill: 'black',
@@ -80,7 +85,7 @@ class AtomicInteractionsControlPanel extends Node {
       cornerRadius: SOMConstants.PANEL_CORNER_RADIUS,
       minWidth: 0,
       tandem: Tandem.REQUIRED
-    }, options );
+    }, providedOptions );
 
     super();
 

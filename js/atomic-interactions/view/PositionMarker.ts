@@ -12,15 +12,22 @@
  */
 
 import Shape from '../../../../kite/js/Shape.js';
-import merge from '../../../../phet-core/js/merge.js';
-import ShadedSphereNode from '../../../../scenery-phet/js/ShadedSphereNode.js';
+import optionize from '../../../../phet-core/js/optionize.js';
+import ShadedSphereNode, { ShadedSphereNodeOptions } from '../../../../scenery-phet/js/ShadedSphereNode.js';
 import PressListener from '../../../../scenery/js/listeners/PressListener.js';
 import Circle from '../../../../scenery/js/nodes/Circle.js';
-import Node from '../../../../scenery/js/nodes/Node.js';
+import Node, { NodeOptions } from '../../../../scenery/js/nodes/Node.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import RadialGradient from '../../../../scenery/js/util/RadialGradient.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import statesOfMatter from '../../statesOfMatter.js';
+
+type SelfOptions = {
+  shadedSphereNodeOptions?: ShadedSphereNodeOptions;
+  haloAlpha?: number; // alpha channel of the halo, 0.0 - 1.0
+};
+
+type PositionMarkerOptions = SelfOptions & NodeOptions;
 
 class PositionMarker extends Node {
 
@@ -31,11 +38,11 @@ class PositionMarker extends Node {
   /**
    * @param radius - radius of the sphere
    * @param color - base color used to shade the sphere
-   * @param options
+   * @param providedOptions
    */
-  public constructor( radius: number, color: Color | string, options?: object ) {
+  public constructor( radius: number, color: Color | string, providedOptions?: PositionMarkerOptions ) {
     const mainColor = Color.toColor( color );
-    options = merge( {
+    const options = optionize<PositionMarkerOptions, SelfOptions, NodeOptions>()( {
       shadedSphereNodeOptions: {
         mainColor: mainColor,
         highlightColor: Color.WHITE,
@@ -47,7 +54,7 @@ class PositionMarker extends Node {
       haloAlpha: 0.5, // alpha channel of the halo, 0.0 - 1.0
       cursor: 'pointer',
       tandem: Tandem.REQUIRED
-    }, options );
+    }, providedOptions );
 
     const haloNode = new Circle( 1.75 * radius, {
       fill: mainColor.withAlpha( options.haloAlpha ),

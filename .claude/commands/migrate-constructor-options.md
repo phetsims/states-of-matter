@@ -69,7 +69,8 @@ export default class PencilButton extends RectangularPushButton {
 6. If there are no new options introduced for the constructor at hand, then use `type SelfOptions = EmptySelfOptions`. You can get EmptySelfOptions from `import optionize, { type EmptySelfOptions } from '../../phet-core/js/optionize.js';`
 7. NOTE: The implementation of `optionize` is identical to `merge`, so you can be confident the behavior is the same. These changes are solely for type space.
 8. If the parent doesn't export its own options type, you can jump to the grandparent class for its options type.
-9. If the file has:
+9. If `merge` is used elsewhere in the file, do not remove the import!
+10. If the file has:
 ```
 /* eslint-disable */
 // @ts-nocheck
