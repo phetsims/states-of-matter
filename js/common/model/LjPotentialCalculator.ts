@@ -1,5 +1,8 @@
 // Copyright 2014-2020, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 import statesOfMatter from '../../statesOfMatter.js';
 import SOMConstants from '../SOMConstants.js';
 

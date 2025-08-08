@@ -1,5 +1,8 @@
 // Copyright 2019-2020, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 /**
  * simple moving average calculator
  *

@@ -1,5 +1,8 @@
 // Copyright 2014-2024, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 /**
  * This class defines a data set that is used to specify the positions, motions, and external forces for a collection of
  * molecules.  The data is organized as several parallel arrays where the index of a molecule is used to obtain the

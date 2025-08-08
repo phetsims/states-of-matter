@@ -1,5 +1,8 @@
 // Copyright 2020-2025, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 /**
  * SubstanceSelectorNode is a node with a label on the left and an icon - generally something that represents and atom
  * or molecule - on the right.  It maintains its initial width if the width of the label changes.

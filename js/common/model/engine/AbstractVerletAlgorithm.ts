@@ -1,5 +1,8 @@
 // Copyright 2014-2023, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 /**
  * This is an abstract base class for classes that implement the Verlet algorithm for simulating molecular interactions
  * based on the Lennard-Jones potential.

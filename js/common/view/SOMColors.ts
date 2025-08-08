@@ -1,5 +1,8 @@
 // Copyright 2016-2025, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 /**
  * An object that contains the colors used for various major components of the States of Matter simulation.  This
  * is used to support different color schemes, such as a default that looks good on a laptop or tablet, and a

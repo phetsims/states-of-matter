@@ -1,5 +1,8 @@
 // Copyright 2016-2025, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 /**
  * Query parameters supported by this simulation.
  *

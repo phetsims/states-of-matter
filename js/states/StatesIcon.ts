@@ -1,5 +1,8 @@
 // Copyright 2015-2025, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 /**
  * Programmatically generated icon for the 'States' screen.
  *

@@ -1,5 +1,8 @@
 // Copyright 2014-2021, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 /**
  * Model for an isokinetic thermostat that controls the kinetic energy of a set of particles such that they remain at
  * a certain temperature.

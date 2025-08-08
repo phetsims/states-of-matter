@@ -1,5 +1,8 @@
 // Copyright 2014-2021, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 /**
  * This class provides the interaction strength value between a number of
  * different pairs of atoms.  To do them all would be too much, so this is a

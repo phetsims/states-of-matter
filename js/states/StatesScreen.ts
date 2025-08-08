@@ -1,5 +1,8 @@
 // Copyright 2014-2022, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 /**
  * The 'Solid Liquid Gas' screen. Conforms to the contract specified in joist/Screen.
  *

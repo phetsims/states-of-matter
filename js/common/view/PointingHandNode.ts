@@ -1,5 +1,8 @@
 // Copyright 2014-2025, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 /**
  * This class represents a node that looks like a hand with an extended finger, and is generally used to push down on
  * things.

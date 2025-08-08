@@ -1,5 +1,8 @@
 // Copyright 2015-2025, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 /**
  * This class displays a control panel for controlling the display of attractive, repulsive, and total force.
  *

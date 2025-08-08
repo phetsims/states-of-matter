@@ -1,5 +1,8 @@
 // Copyright 2014-2025, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 /**
  * This class is the "view" for the particle container.
  *

@@ -1,5 +1,8 @@
 // Copyright 2020, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 /**
  * ScaledAtom is a simple model of an atom with the attributes needed by the particle interaction simulation portion of
  * the States of Matter simulation.  It is "scaled" in the sense that it has position and radius values that are set to

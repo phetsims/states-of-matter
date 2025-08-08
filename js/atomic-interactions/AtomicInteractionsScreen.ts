@@ -1,5 +1,8 @@
 // Copyright 2015-2024, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 /**
  * The 'Atomic Interaction' screen. Conforms to the contract specified in joist/Screen.
  * @author John Blanco

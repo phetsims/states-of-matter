@@ -1,5 +1,8 @@
 // Copyright 2014-2025, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 /**
  * A phase diagram that is specific to the needs of the States of Matter simulation.  This is not very general.
  *

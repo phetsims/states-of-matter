@@ -1,5 +1,8 @@
 // Copyright 2014-2025, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 /**
  * This class defines a node that has a liquid thermometer and a numerical readout that can display the temperature in
  * degrees Kelvin or degrees Celsius.

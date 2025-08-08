@@ -1,5 +1,8 @@
 // Copyright 2014-2020, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 /**
  * Implementation of the Verlet algorithm for simulating molecular interaction based on the Lennard-Jones potential.
  * This is the diatomic (i.e. two atoms per molecule) version.

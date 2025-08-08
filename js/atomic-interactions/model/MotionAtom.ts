@@ -1,5 +1,8 @@
 // Copyright 2014-2023, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 /**
  * MotionAtom is a model of an atom with Axon Property values that track position, velocity, and acceleration, as well
  * as other attributes that needed by the Atomic Interactions screen.

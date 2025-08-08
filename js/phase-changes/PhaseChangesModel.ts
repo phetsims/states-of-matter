@@ -1,5 +1,8 @@
 // Copyright 2020-2024, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 /**
  * PhaseChangesModel is a multiple particle model that adds some additional items specific to the "PhaseChanges" screen.
  *

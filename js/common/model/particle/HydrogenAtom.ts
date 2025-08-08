@@ -1,5 +1,8 @@
 // Copyright 2014-2020, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 /**
  * The class represents a single atom of hydrogen in the model.
  *

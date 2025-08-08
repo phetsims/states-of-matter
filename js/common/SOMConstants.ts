@@ -1,5 +1,8 @@
 // Copyright 2014-2025, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 /**
  * This singleton is a collection of constants that are used in multiple places throughout the simulation.
  *

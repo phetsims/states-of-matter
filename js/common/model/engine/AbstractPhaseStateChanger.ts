@@ -1,5 +1,8 @@
 // Copyright 2014-2024, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 /**
  * This is the base class for the objects that directly change the state of the molecules within the multi-particle
  * simulation.

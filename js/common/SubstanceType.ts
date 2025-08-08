@@ -1,5 +1,8 @@
 // Copyright 2016-2024, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 /**
  * enumeration of the different substances that can be selected to be in the container
  *

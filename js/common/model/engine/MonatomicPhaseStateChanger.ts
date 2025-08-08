@@ -1,5 +1,8 @@
 // Copyright 2014-2021, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 /**
  * This class is used to change the phase state (i.e. solid, liquid, or gas) for a set of atoms.
  *

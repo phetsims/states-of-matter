@@ -1,5 +1,8 @@
 // Copyright 2014-2023, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 /**
  * This is the main class for the model portion of the first two screens of the "States of Matter" simulation.  Its
  * primary purpose is to simulate a set of molecules that are interacting with one another based on the attraction and

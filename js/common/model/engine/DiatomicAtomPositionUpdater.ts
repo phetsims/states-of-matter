@@ -1,5 +1,8 @@
 // Copyright 2014-2020, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 /**
  * This class updates the positions of atoms in a diatomic data set (i.e. where each molecule is made up of two
  * molecules).  IMPORTANT: This class assumes that the two atoms that comprise each molecule are the same, e.g. O2

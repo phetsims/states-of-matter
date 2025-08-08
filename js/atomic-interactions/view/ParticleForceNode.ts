@@ -1,5 +1,8 @@
 // Copyright 2015-2025, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 /**
  * this type adds the ability to display force arrows to a particle node
  * @author Siddhartha Chinthapally (Actual Concepts)

@@ -1,5 +1,8 @@
 // Copyright 2014-2020, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 /**
  * This object updates the positions of atoms in a monatomic data set, i.e. where each molecule is just a single atom.
  *

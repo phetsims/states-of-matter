@@ -1,5 +1,8 @@
 // Copyright 2015-2025, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 /**
  * This extension of the ParticleNode class allows users to grab the node and move it, thus changing the position
  * within the underlying model.

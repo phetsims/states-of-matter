@@ -1,5 +1,8 @@
 // Copyright 2014-2025, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 /**
  * This class extends the interaction potential diagram to allow the user to adjust the interaction strength parameter
  * (i.e. epsilon) through direct interaction with the graph.

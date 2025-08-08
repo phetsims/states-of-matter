@@ -1,5 +1,8 @@
 // Copyright 2017-2025, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 /**
  * Icons, in the form of Scenery nodes, that are used in multiple places in the simulation to represent the various
  * atoms and molecules.

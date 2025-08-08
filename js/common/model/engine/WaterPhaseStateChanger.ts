@@ -1,5 +1,8 @@
 // Copyright 2014-2021, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 /**
  * This class is used to change the phase state (i.e. solid, liquid, or gas) for a set of water molecules.  It only
  * works for water and would need to be generalized to handle other triatomic molecules.

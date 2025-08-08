@@ -1,5 +1,8 @@
 // Copyright 2014-2020, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 /**
  * This class updates the positions of atoms in a water molecule based on the position and rotation information for the
  * molecule.

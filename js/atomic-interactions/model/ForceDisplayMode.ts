@@ -1,5 +1,8 @@
 // Copyright 2020-2024, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 /**
  * enumeration for the ways in which the forces can be depicted
  *

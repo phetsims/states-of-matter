@@ -1,5 +1,8 @@
 // Copyright 2015-2025, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 /**
  * This class extends the Interaction Potential diagram to allow the user to change the curve through direct interaction
  * with both the sigma and epsilon parameter of the LJ potential.

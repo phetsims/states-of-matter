@@ -1,5 +1,8 @@
 // Copyright 2015-2025, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 /**
  * Scenery node that shows the grid lines.  Highly leveraged from energy-skate-park's GridNode implementation.
  *
@@ -55,8 +58,6 @@ class ZoomableGridNode extends Node {
     const verticalLinesNode = new Path( null, GRID_LINES_OPTIONS );
 
     // @private - zoom level, passed in to the zoom button group if zoom is enabled
-    // TODO: Disable line below should be removed, see https://github.com/phetsims/phet-io/issues/1959
-    // eslint-disable-next-line phet/tandem-name-should-match
     this.zoomLevelProperty = new NumberProperty( 0, {
       tandem: options.tandem.createTandem( 'zoomFactorProperty' ),
       range: new Range( -2, 0 )

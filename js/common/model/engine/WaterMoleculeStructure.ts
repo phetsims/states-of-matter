@@ -1,5 +1,8 @@
 // Copyright 2014-2020, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 /**
  * This object provides information about the structure of a water molecule,
  * i.e. the spatial and angular relationships between the atoms that comprise

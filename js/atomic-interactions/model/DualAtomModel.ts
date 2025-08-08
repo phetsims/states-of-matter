@@ -1,5 +1,8 @@
 // Copyright 2015-2024, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import EnumerationDeprecatedProperty from '../../../../axon/js/EnumerationDeprecatedProperty.js';
 import EnumerationProperty from '../../../../axon/js/EnumerationProperty.js';

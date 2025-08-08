@@ -1,5 +1,8 @@
 // Copyright 2016-2025, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 /**
  * A particle layer rendered on canvas that uses images rather than calling context.arc for improved performance.
  *

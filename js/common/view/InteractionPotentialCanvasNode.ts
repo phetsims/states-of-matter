@@ -1,5 +1,8 @@
 // Copyright 2015-2025, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 /**
  * This type draws the interaction potential curve on a canvas.  This is done instead of using the Path node because
  * the curve requires numerous points and is therefore costly to render using a Path node.

@@ -1,5 +1,8 @@
 // Copyright 2014-2021, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 /**
  * Model for an Andersen Thermostat, which adjusts the velocity of all atoms/molecules in the system by the same amount
  * in order to get the overall system temperature to the desired set point.  There is a short Wikipedia entry for this

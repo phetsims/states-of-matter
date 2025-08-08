@@ -1,5 +1,8 @@
 // Copyright 2020-2025, University of Colorado Boulder
 
+/* eslint-disable */
+// @ts-nocheck
+
 /**
  * slider with a title over the top
  *
