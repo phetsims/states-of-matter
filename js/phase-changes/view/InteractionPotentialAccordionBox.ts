@@ -17,6 +17,7 @@ import Node from '../../../../scenery/js/nodes/Node.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import AccordionBox from '../../../../sun/js/AccordionBox.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
+import MultipleParticleModel from '../../common/model/MultipleParticleModel.js';
 import SOMConstants from '../../common/SOMConstants.js';
 import SOMColors from '../../common/view/SOMColors.js';
 import statesOfMatter from '../../statesOfMatter.js';
@@ -28,12 +29,12 @@ const interactionPotentialString = StatesOfMatterStrings.interactionPotential;
 class InteractionPotentialAccordionBox extends AccordionBox {
 
   /**
-   * @param {number} sigma - atom diameter
-   * @param {number} epsilon - interaction strength
-   * @param {MultipleParticleModel} multipleParticleModel - model of the simulation
-   * @param {Object} [options] that can be passed on to the underlying node
+   * @param sigma - atom diameter
+   * @param epsilon - interaction strength
+   * @param multipleParticleModel - model of the simulation
+   * @param options - that can be passed on to the underlying node
    */
-  constructor( sigma, epsilon, multipleParticleModel, options ) {
+  public constructor( sigma: number, epsilon: number, multipleParticleModel: MultipleParticleModel, options?: Object ) {
 
     options = merge( { tandem: Tandem.REQUIRED }, options );
 
@@ -92,9 +93,8 @@ class InteractionPotentialAccordionBox extends AccordionBox {
 
   /**
    * pass through to graph
-   * @public
    */
-  setMolecular( molecular ) {
+  public setMolecular( molecular: boolean ): void {
     this.graph.setMolecular( molecular );
   }
 }

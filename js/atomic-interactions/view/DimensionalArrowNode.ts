@@ -19,13 +19,13 @@ import statesOfMatter from '../../statesOfMatter.js';
 class DimensionalArrowNode extends Path {
 
   /**
-   * @param {number} tailX - arrowNode tail X position
-   * @param {number} tailY - arrowNode tail Y position
-   * @param {number} tipX - arrowNode tip X position
-   * @param {number} tipY - arrowNode tip Y position
-   * @param {Object} [options] that can be passed on to the underlying node
+   * @param tailX - arrowNode tail X position
+   * @param tailY - arrowNode tail Y position
+   * @param tipX - arrowNode tip X position
+   * @param tipY - arrowNode tip Y position
+   * @param options - that can be passed on to the underlying node
    */
-  constructor( tailX, tailY, tipX, tipY, options ) {
+  public constructor( tailX: number, tailY: number, tipX: number, tipY: number, options?: Object ) {
 
     // default options
     options = merge( {
@@ -50,13 +50,12 @@ class DimensionalArrowNode extends Path {
   }
 
   /**
-   * @param {number} tailX - tail X position
-   * @param {number} tailY - tail Y position
-   * @param {number} tipX - tip X position
-   * @param {number} tipY - tip Y position
-   * @public
+   * @param tailX - tail X position
+   * @param tailY - tail Y position
+   * @param tipX - tip X position
+   * @param tipY - tip Y position
    */
-  setTailAndTip( tailX, tailY, tipX, tipY ) {
+  public setTailAndTip( tailX: number, tailY: number, tipX: number, tipY: number ): void {
     this.tailPosition.setXY( tailX, tailY );
     this.tipPosition.setXY( tipX, tipY );
     let tempHeadHeight;

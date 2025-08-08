@@ -11,6 +11,7 @@ import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import TimeSpeed from '../../../../scenery-phet/js/TimeSpeed.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
 import AtomType from '../../common/model/AtomType.js';
 import InteractionStrengthTable from '../../common/model/InteractionStrengthTable.js';
 import LjPotentialCalculator from '../../common/model/LjPotentialCalculator.js';
@@ -47,11 +48,7 @@ const MIN_FORCE_JITTER_THRESHOLD = 1e-30;
  */
 class DualAtomModel {
 
-  /**
-   * @param {Tandem} tandem
-   * @param {boolean} enableHeterogeneousMolecules
-   */
-  constructor( tandem, enableHeterogeneousMolecules = true ) {
+  public constructor( tandem: Tandem, enableHeterogeneousMolecules: boolean = true ) {
 
     //-----------------------------------------------------------------------------------------------------------------
     // observable model properties
@@ -168,10 +165,9 @@ class DualAtomModel {
    * Set the sigma value, a.k.a. the Atomic Diameter Parameter, for the adjustable atom.  This is one of the two
    * parameters that are used for calculating the Lennard-Jones potential. If an attempt is made to set this value
    * when the adjustable atom is not selected, it is ignored.
-   * @param {number}sigma - distance parameter
-   * @public
+   * @param sigma - distance parameter
    */
-  setAdjustableAtomSigma( sigma ) {
+  public setAdjustableAtomSigma( sigma: number ): void {
     if ( ( this.fixedAtom.getType() === AtomType.ADJUSTABLE ) &&
          ( this.movableAtom.getType() === AtomType.ADJUSTABLE ) &&
          ( sigma !== this.ljPotentialCalculator.getSigma() ) ) {
@@ -196,20 +192,17 @@ class DualAtomModel {
   /**
    * Get the value of the sigma parameter that is being used for the motion calculations.  If the atoms are the same,
    * it will be the diameter of one atom.  If they are not, it will be a function of the diameters.
-   * @returns {number}
-   * @public
    */
-  getSigma() {
+  public getSigma(): number {
     return this.ljPotentialCalculator.getSigma();
   }
 
   /**
    * Set the epsilon value, a.k.a. the Interaction Strength Parameter, which is one of the two parameters that
    * describes the Lennard-Jones potential.
-   * @param {number}epsilon - interaction strength parameter
-   * @public
+   * @param epsilon - interaction strength parameter
    */
-  setEpsilon( epsilon ) {
+  public setEpsilon( epsilon: number ): void {
 
     if ( epsilon < SOMConstants.MIN_EPSILON ) {
       epsilon = SOMConstants.MIN_EPSILON;
@@ -228,27 +221,20 @@ class DualAtomModel {
   /**
    * Get the epsilon value, a.k.a. the Interaction Strength Parameter, which is one of the two parameters that
    * describes the Lennard-Jones potential.
-   * @returns {number}
-   * @public
    */
-  getEpsilon() {
+  public getEpsilon(): number {
     return this.ljPotentialCalculator.getEpsilon();
   }
 
   /**
-   * @param {boolean} paused - is to set particle motion
-   * @public
+   * @param paused - is to set particle motion
    */
-  setMotionPaused( paused ) {
+  public setMotionPaused( paused: boolean ): void {
     this.motionPausedProperty.set( paused );
     this.movableAtom.setVx( 0 );
   }
 
-  /**
-   * @override
-   * @public
-   */
-  reset() {
+  public reset(): void {
 
     // reset the observable properties
     this.adjustableAtomInteractionStrengthProperty.reset();
@@ -268,9 +254,8 @@ class DualAtomModel {
   /**
    * Put the movable atom back to the position where the force is minimized, and reset the velocity and
    * acceleration to 0.
-   * @public
    */
-  resetMovableAtomPos() {
+  public resetMovableAtomPos(): void {
     this.movableAtom.setPosition( this.ljPotentialCalculator.getMinimumForceDistance(), 0 );
     this.movableAtom.setVx( 0 );
     this.movableAtom.setAx( 0 );
@@ -278,10 +263,9 @@ class DualAtomModel {
 
   /**
    * Called by the animation loop.
-   * @param {number} dt - time in seconds
-   * @public
+   * @param dt - time in seconds
    */
-  step( dt ) {
+  public step( dt: number ): void {
 
     if ( this.isPlayingProperty.get() ) {
 
@@ -299,10 +283,9 @@ class DualAtomModel {
   }
 
   /**
-   * @param {number} dt -- time in seconds
-   * @public
+   * @param dt -- time in seconds
    */
-  stepInternal( dt ) {
+  public stepInternal( dt: number ): void {
 
     let numInternalModelIterations = 1;
     let modelTimeStep = dt;
@@ -326,10 +309,7 @@ class DualAtomModel {
     }
   }
 
-  /**
-   * @private
-   */
-  updateForces() {
+  private updateForces(): void {
 
     let distance = this.movableAtom.positionProperty.value.distance( Vector2.ZERO );
 
@@ -363,9 +343,8 @@ class DualAtomModel {
 
   /**
    * Update the position, velocity, and acceleration of the dummy movable atom.
-   * @private
    */
-  updateAtomMotion( dt ) {
+  private updateAtomMotion( dt: number ): void {
 
     const mass = this.movableAtom.mass * 1.6605402E-27;  // Convert mass to kilograms.
     const acceleration = ( this.repulsiveForce - this.attractiveForce ) / mass;

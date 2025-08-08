@@ -11,6 +11,7 @@
 
 import merge from '../../../../phet-core/js/merge.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
+import Property from '../../../../axon/js/Property.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import AccordionBox from '../../../../sun/js/AccordionBox.js';
 import SOMConstants from '../../common/SOMConstants.js';
@@ -24,10 +25,10 @@ const phaseDiagramString = StatesOfMatterStrings.phaseDiagram;
 class PhaseDiagramAccordionBox extends AccordionBox {
 
   /**
-   * @param {Property.<boolean>} expandedProperty - is to expand the phase diagram
-   * @param {Object} [options] that can be passed on to the underlying node
+   * @param expandedProperty - is to expand the phase diagram
+   * @param options that can be passed on to the underlying node
    */
-  constructor( expandedProperty, options ) {
+  public constructor( expandedProperty: Property<boolean>, options?: Object ) {
 
     options = merge( {
       fill: SOMColors.controlPanelBackgroundProperty,
@@ -70,18 +71,15 @@ class PhaseDiagramAccordionBox extends AccordionBox {
    * Set the normalized position for this marker.
    * @param normalizedTemperature - Temperature (X position) value between 0 and 1 (inclusive).
    * @param normalizedPressure    - Pressure (Y position) value between 0 and 1 (inclusive).
-   * @public
    */
-  setStateMarkerPos( normalizedTemperature, normalizedPressure ) {
+  public setStateMarkerPos( normalizedTemperature: number, normalizedPressure: number ): void {
     this.phaseDiagram.setStateMarkerPos( normalizedTemperature, normalizedPressure );
   }
 
   /**
    * Set the visibility of the state marker.
-   * @param {boolean} isVisible
-   * @public
    */
-  setStateMarkerVisible( isVisible ) {
+  public setStateMarkerVisible( isVisible: boolean ): void {
     this.phaseDiagram.setStateMarkerVisible( isVisible );
   }
 
@@ -90,10 +88,8 @@ class PhaseDiagramAccordionBox extends AccordionBox {
    * solid-liquid line leans to the left rather than to the right.  Note that this is a very non-general approach - it
    * would be more general to allow the various points in the graph (e.g. triple point, critical point) to be
    * positioned anywhere, but currently it isn't worth the extra effort to do so.  Feel free if it is ever needed.
-   * @param {boolean} depictingWater
-   * @public
    */
-  setDepictingWater( depictingWater ) {
+  public setDepictingWater( depictingWater: boolean ): void {
     this.phaseDiagram.setDepictingWater( depictingWater );
   }
 }

@@ -15,6 +15,7 @@ import EnumerationDeprecatedProperty from '../../../../axon/js/EnumerationDeprec
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Vector2Property from '../../../../dot/js/Vector2Property.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import AtomType from '../../common/model/AtomType.js';
 import SOMConstants from '../../common/SOMConstants.js';
@@ -23,12 +24,12 @@ import statesOfMatter from '../../statesOfMatter.js';
 class MotionAtom {
 
   /**
-   * @param {AtomType} initialAtomType - initial type, aka element, for this atom
-   * @param {number} initialXPosition - x position in the model, in picometers
-   * @param {number} initialYPosition - y position in the model, in picometers
-   * @param {Tandem} tandem
+   * @param initialAtomType - initial type, aka element, for this atom
+   * @param initialXPosition - x position in the model, in picometers
+   * @param initialYPosition - y position in the model, in picometers
+   * @param tandem
    */
-  constructor( initialAtomType, initialXPosition, initialYPosition, tandem ) {
+  public constructor( initialAtomType: AtomType, initialXPosition: number, initialYPosition: number, tandem: Tandem ) {
 
     // @public (read-write) {EnumerationDeprecatedProperty.<AtomType>} - the type of atom being modeled, e.g. Argon, Neon, etc.
     this.atomTypeProperty = new EnumerationDeprecatedProperty( AtomType, initialAtomType, {
@@ -91,106 +92,70 @@ class MotionAtom {
   }
 
   /**
-   * @public
-   * @param {number} x - atom x position in picometers
-   * @param {number} y - atom y position in picometers
+   * @param x - atom x position in picometers
+   * @param y - atom y position in picometers
    */
-  setPosition( x, y ) {
+  public setPosition( x: number, y: number ): void {
     this.positionProperty.set( new Vector2( x, y ) );
   }
 
-  /**
-   * @returns {number}
-   * @public
-   */
-  getVy() {
+  public getVy(): number {
     return this.velocityProperty.value.y;
   }
 
   /**
-   * @param {number} vy - atom velocity in y-direction
-   * @public
+   * @param vy - atom velocity in y-direction
    */
-  setVy( vy ) {
+  public setVy( vy: number ): void {
     this.velocityProperty.set( new Vector2( this.velocityProperty.value.x, vy ) );
   }
 
-  /**
-   * @returns {number}
-   * @public
-   */
-  getVx() {
+  public getVx(): number {
     return this.velocityProperty.value.x;
   }
 
   /**
-   * @param {number} vx - atom velocity in x-direction
-   * @public
+   * @param vx - atom velocity in x-direction
    */
-  setVx( vx ) {
+  public setVx( vx: number ): void {
     this.velocityProperty.set( new Vector2( vx, this.velocityProperty.value.y ) );
   }
 
-  /**
-   * @returns {number}
-   * @public
-   */
-  getAx() {
+  public getAx(): number {
     return this.accelerationProperty.value.x;
   }
 
-  /**
-   * @returns {number}
-   * @public
-   */
-  getAy() {
+  public getAy(): number {
     return this.accelerationProperty.value.y;
   }
 
   /**
-   * @param {number} ax - atom acceleration in x-direction
-   * @public
+   * @param ax - atom acceleration in x-direction
    */
-  setAx( ax ) {
+  public setAx( ax: number ): void {
     this.accelerationProperty.set( new Vector2( ax, this.accelerationProperty.value.y ) );
   }
 
   /**
-   * @param {number} ay - atom acceleration in y-direction
-   * @public
+   * @param ay - atom acceleration in y-direction
    */
-  setAy( ay ) {
+  public setAy( ay: number ): void {
     this.accelerationProperty.set( new Vector2( this.accelerationProperty.value.x, ay ) );
   }
 
-  /**
-   * @returns {number}
-   * @public
-   */
-  getX() {
+  public getX(): number {
     return this.positionProperty.value.x;
   }
 
-  /**
-   * @returns {number}
-   * @public
-   */
-  getY() {
+  public getY(): number {
     return this.positionProperty.value.y;
   }
 
-  /**
-   * @returns {AtomType}
-   * @public
-   */
-  getType() {
+  public getType(): AtomType {
     return this.atomTypeProperty.value;
   }
 
-  /**
-   * @public
-   */
-  reset() {
+  public reset(): void {
     this.atomTypeProperty.reset();
     this.positionProperty.reset();
     this.velocityProperty.reset();

@@ -26,6 +26,7 @@ import SubstanceType from '../../common/SubstanceType.js';
 import InteractionPotentialCanvasNode from '../../common/view/InteractionPotentialCanvasNode.js';
 import PotentialGraphNode from '../../common/view/PotentialGraphNode.js';
 import statesOfMatter from '../../statesOfMatter.js';
+import PhaseChangesModel from '../PhaseChangesModel.js';
 
 // Size of handles as function of node width.
 const RESIZE_HANDLE_SIZE_PROPORTION = 0.18;
@@ -42,12 +43,12 @@ const POTENTIAL_LINE_COLOR = new Color( 'red' );
 class EpsilonControlPotentialGraph extends PotentialGraphNode {
 
   /**
-   * @param {number} sigma - atom diameter
-   * @param {number} epsilon - interaction strength
-   * @param {PhaseChangesModel} phaseChangesModel - model of the simulation
-   * @param {Object} [options] that can be passed on to the underlying node
+   * @param sigma - atom diameter
+   * @param epsilon - interaction strength
+   * @param phaseChangesModel - model of the simulation
+   * @param [options] that can be passed on to the underlying node
    */
-  constructor( sigma, epsilon, phaseChangesModel, options ) {
+  public constructor( sigma: number, epsilon: number, phaseChangesModel: PhaseChangesModel, options?: Object ) {
 
     options = merge( { tandem: Tandem.REQUIRED }, options );
 
@@ -175,10 +176,8 @@ class EpsilonControlPotentialGraph extends PotentialGraphNode {
   /**
    * This is an override of the method in the base class that draws the curve on the graph, and this override draws the
    * controls that allow the user to interact with the graph.
-   * @private
-   * @override
    */
-  drawPotentialCurve() {
+  private override drawPotentialCurve(): void {
 
     // draw potential curve
     if ( this.interactionPotentialCanvasNode !== undefined ) {

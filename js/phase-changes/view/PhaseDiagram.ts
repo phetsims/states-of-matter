@@ -99,7 +99,7 @@ const DEFAULT_GAS_LABEL_POSITION = new Vector2(
 
 class PhaseDiagram extends Node {
 
-  constructor() {
+  public constructor() {
 
     super();
 
@@ -263,9 +263,8 @@ class PhaseDiagram extends Node {
 
   /**
    * Update the background of the phase diagram, i.e. the shapes and lines over which the marker is positioned.
-   * @private
    */
-  updateBackground() {
+  private updateBackground(): void {
 
     // Handle the variations due to water vs. non-water
     const topOfSolidLiquidLine = this.depictingWater ?
@@ -368,10 +367,9 @@ class PhaseDiagram extends Node {
   /**
    * Set the normalized position for this marker.
    * @param normalizedTemperature - Temperature (X position) value between 0 and 1 (inclusive).
-   * @param normalizedPressure    - Pressure (Y position) value between 0 and 1 (inclusive).
-   * @public
+   * @param normalizedPressure - Pressure (Y position) value between 0 and 1 (inclusive).
    */
-  setStateMarkerPos( normalizedTemperature, normalizedPressure ) {
+  public setStateMarkerPos( normalizedTemperature: number, normalizedPressure: number ): void {
 
     // parameter checking
     assert && assert( normalizedTemperature >= 0 && normalizedTemperature <= 1, 'temperature value out of range' );
@@ -392,10 +390,8 @@ class PhaseDiagram extends Node {
 
   /**
    * Set the visibility of the state marker.
-   * @param {boolean} isVisible
-   * @public
    */
-  setStateMarkerVisible( isVisible ) {
+  public setStateMarkerVisible( isVisible: boolean ): void {
     this.diagramComponents.currentStateMarker.setVisible( isVisible );
   }
 
@@ -404,10 +400,8 @@ class PhaseDiagram extends Node {
    * solid-liquid line leans to the left rather than to the right.  Note that this is a very non-general approach - it
    * would be more general to allow the various points in the graph (e.g. triple point, critical point) to be
    * positioned anywhere, but currently it isn't worth the extra effort to do so.  Feel free if it is ever needed.
-   * @param {boolean} depictingWater
-   * @public
    */
-  setDepictingWater( depictingWater ) {
+  public setDepictingWater( depictingWater: boolean ): void {
     this.depictingWater = depictingWater;
     this.updateBackground();
   }

@@ -10,7 +10,7 @@
  */
 
 import Screen from '../../../joist/js/Screen.js';
-import ScreenIcon from '../../../joist/js/ScreenIcon.js';
+import ScreenIcon, { ScreenIconOptions } from '../../../joist/js/ScreenIcon.js';
 import merge from '../../../phet-core/js/merge.js';
 import HBox from '../../../scenery/js/layout/nodes/HBox.js';
 import Image from '../../../scenery/js/nodes/Image.js';
@@ -23,10 +23,7 @@ import statesOfMatter from '../statesOfMatter.js';
 
 class StatesIcon extends ScreenIcon {
 
-  /**
-   * {Object} [options]
-   */
-  constructor( options ) {
+  public constructor( options?: ScreenIconOptions ) {
 
     options = merge( {
       size: Screen.MINIMUM_HOME_SCREEN_ICON_SIZE,

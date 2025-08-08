@@ -18,6 +18,9 @@ import Image from '../../../../scenery/js/nodes/Image.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import statesOfMatter from '../../statesOfMatter.js';
+import DualAtomModel from '../model/DualAtomModel.js';
+import ScaledAtom from '../../common/model/particle/ScaledAtom.js';
+import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 
 // constants
 const WIDTH = 80; // empirically determined to look good
@@ -25,13 +28,13 @@ const WIDTH = 80; // empirically determined to look good
 class HandNode extends Node {
 
   /**
-   * @param {DualAtomModel} dualAtomModel - model of the atomic interactions screen
-   * @param {ScaledAtom} particle - model of the atom that is draggable
-   * @param {ModelViewTransform2} modelViewTransform to convert between model and view co-ordinates
-   * @param {number} minX - grabbable particle min x position
-   * @param {Object} [options]
+   * @param dualAtomModel - model of the atomic interactions screen
+   * @param particle - model of the atom that is draggable
+   * @param modelViewTransform to convert between model and view co-ordinates
+   * @param minX - grabbable particle min x position
+   * @param [options]
    */
-  constructor( dualAtomModel, particle, modelViewTransform, minX, options ) {
+  public constructor( dualAtomModel: DualAtomModel, particle: ScaledAtom, modelViewTransform: ModelViewTransform2, minX: number, options?: Object ) {
 
     options = merge( {
       cursor: 'pointer',
@@ -114,35 +117,26 @@ class HandNode extends Node {
     };
   }
 
-  /**
-   * @public
-   */
-  dispose() {
+  public dispose(): void {
     this.disposeHandNode();
     super.dispose();
   }
 
   /**
-   * @param {ScaledAtom} particle
-   * @public
+   * @param particle
    */
-  setParticle( particle ) {
+  public setParticle( particle: ScaledAtom ): void {
     this.particle = particle;
   }
 
-  /**
-   * @returns {number}
-   * @public
-   */
-  getMinX() {
+  public getMinX(): number {
     return this.minX;
   }
 
   /**
-   * @param {number} minX
-   * @public
+   * @param minX
    */
-  setMinX( minX ) {
+  public setMinX( minX: number ): void {
     this.minX = minX;
   }
 }

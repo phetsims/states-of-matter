@@ -10,6 +10,7 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
+import { Property } from '../../../../axon/js/imports.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import merge from '../../../../phet-core/js/merge.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
@@ -40,10 +41,10 @@ const DEFAULT_WIDTH = 160;
 class StatesMoleculesControlPanel extends Node {
 
   /**
-   * @param {Property.<number>} substanceProperty that tracks the substance selected in the panel
-   * @param {Object} [options] for various panel display properties
+   * @param substanceProperty - that tracks the substance selected in the panel
+   * @param options - for various panel display properties
    */
-  constructor( substanceProperty, options ) {
+  public constructor( substanceProperty: Property<number>, options?: Object ) {
 
     options = merge( {
       xMargin: 5,

@@ -20,6 +20,7 @@ import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransfo
 import ResetAllButton from '../../../../scenery-phet/js/buttons/ResetAllButton.js';
 import HeaterCoolerNode from '../../../../scenery-phet/js/HeaterCoolerNode.js';
 import TimeControlNode from '../../../../scenery-phet/js/TimeControlNode.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
 import MultipleParticleModel from '../../common/model/MultipleParticleModel.js';
 import SOMConstants from '../../common/SOMConstants.js';
 import SOMQueryParameters from '../../common/SOMQueryParameters.js';
@@ -36,10 +37,10 @@ const CONTROL_PANEL_WIDTH = 175; // empirically determined by looks
 class StatesScreenView extends ScreenView {
 
   /**
-   * @param {MultipleParticleModel} multipleParticleModel - model of the simulation
-   * @param {Tandem} tandem
+   * @param multipleParticleModel - model of the simulation
+   * @param tandem
    */
-  constructor( multipleParticleModel, tandem ) {
+  public constructor( multipleParticleModel: MultipleParticleModel, tandem: Tandem ) {
 
     super( merge( { tandem: tandem }, SOMConstants.SCREEN_VIEW_OPTIONS ) );
 
@@ -150,10 +151,7 @@ class StatesScreenView extends ScreenView {
     } ) );
   }
 
-  /**
-   * @public
-   */
-  step( dt ) {
+  public step( dt: number ): void {
     this.particleContainerNode.step( dt );
   }
 }

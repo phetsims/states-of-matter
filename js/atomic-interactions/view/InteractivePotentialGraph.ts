@@ -28,6 +28,7 @@ import InteractionPotentialCanvasNode from '../../common/view/InteractionPotenti
 import PotentialGraphNode from '../../common/view/PotentialGraphNode.js';
 import SOMColors from '../../common/view/SOMColors.js';
 import statesOfMatter from '../../statesOfMatter.js';
+import DualAtomModel from '../model/DualAtomModel.js';
 
 // constants
 const RESIZE_HANDLE_SIZE_PROPORTION = 0.05;  // Size of handles as function of node width.
@@ -40,10 +41,10 @@ const POTENTIAL_LINE_COLOR = new Color( 'red' );
 class InteractivePotentialGraph extends PotentialGraphNode {
 
   /**
-   * @param {DualAtomModel} dualAtomModel - model of the simulation
-   * @param {Object} [options] that can be passed on to the underlying node
+   * @param dualAtomModel - model of the simulation
+   * @param options that can be passed on to the underlying node
    */
-  constructor( dualAtomModel, options ) {
+  public constructor( dualAtomModel: DualAtomModel, options?: Record<string, any> ) {
 
     options = merge( {
       tandem: Tandem.REQUIRED
@@ -304,10 +305,8 @@ class InteractivePotentialGraph extends PotentialGraphNode {
   /**
    * This is an override of the method in the base class that draws the curve on the graph, and this override draws
    * the controls that allow the user to interact with the graph.
-   * @override
-   * @protected
    */
-  drawPotentialCurve() {
+  protected override drawPotentialCurve(): void {
 
     //  draw potential curve
     if ( this.interactionPotentialCanvasNode !== undefined ) {
@@ -317,25 +316,16 @@ class InteractivePotentialGraph extends PotentialGraphNode {
 
   /**
    * Set the lowest allowed X position to which the movable atom can be set.
-   * @param {number} minXForAtom
-   * @public
    */
-  setMinXForAtom( minXForAtom ) {
+  public setMinXForAtom( minXForAtom: number ): void {
     this.minXForAtom = minXForAtom;
   }
 
-  /**
-   * @private
-   */
-  updateInteractivityState() {
+  private updateInteractivityState(): void {
     this.interactionEnabled = ( this.dualAtomModel.fixedAtom.getType() === AtomType.ADJUSTABLE );
   }
 
-  /**
-   * @override
-   * @public
-   */
-  setMolecular( molecular ) {
+  public override setMolecular( molecular: boolean ): void {
     super.setMolecular( molecular );
 
     // Move the horizontal label down a little bit from where the superclass puts it, otherwise adjustment arrow can

@@ -9,8 +9,11 @@
  */
 
 import merge from '../../../../phet-core/js/merge.js';
+import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import Color from '../../../../scenery/js/util/Color.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
 import statesOfMatter from '../../statesOfMatter.js';
+import MotionAtom from '../model/MotionAtom.js';
 import DimensionalArrowNode from './DimensionalArrowNode.js';
 import ParticleNode from './ParticleNode.js';
 
@@ -30,13 +33,13 @@ const FORCE_ARROW_HEAD_LENGTH = 50;
 class ParticleForceNode extends ParticleNode {
 
   /**
-   * @param {Particle} particle - The particle in the model that this node will represent in the view.
-   * @param {ModelViewTransform2} modelViewTransform to convert between model and view co-ordinates
+   * @param particle - The particle in the model that this node will represent in the view.
+   * @param modelViewTransform to convert between model and view co-ordinates
    * The gradient is computationally intensive to create, so use only when needed.
-   * @param {boolean} enableOverlap - true if the node should be larger than the actual particle, thus allowing particles
-   * @param {Tandem} tandem - support for exporting instances from the sim
+   * @param enableOverlap - true if the node should be larger than the actual particle, thus allowing particles
+   * @param tandem - support for exporting instances from the sim
    */
-  constructor( particle, modelViewTransform, enableOverlap, tandem ) {
+  public constructor( particle: MotionAtom, modelViewTransform: ModelViewTransform2, enableOverlap: boolean, tandem: Tandem ) {
 
     super( particle, modelViewTransform, enableOverlap, tandem );
 
@@ -88,10 +91,7 @@ class ParticleForceNode extends ParticleNode {
     };
   }
 
-  /**
-   * @public
-   */
-  dispose() {
+  public dispose(): void {
     this.disposeParticleForceNode();
     super.dispose();
   }
@@ -99,45 +99,38 @@ class ParticleForceNode extends ParticleNode {
   /**
    * Set the levels of attractive and repulsive forces being experienced by the particle in the model so that they may
    * be represented as force vectors.
-   * @param {number}attractiveForce
-   * @param {number}repulsiveForce
-   * @public
    */
-  setForces( attractiveForce, repulsiveForce ) {
+  public setForces( attractiveForce: number, repulsiveForce: number ): void {
     this.attractiveForce = attractiveForce;
     this.repulsiveForce = repulsiveForce;
     this.updateForceVectors();
   }
 
   /**
-   * @param {boolean} showAttractiveForces - true to show attractive force, false to hide
-   * @public
+   * @param showAttractiveForces - true to show attractive force, false to hide
    */
-  setShowAttractiveForces( showAttractiveForces ) {
+  public setShowAttractiveForces( showAttractiveForces: boolean ): void {
     this.attractiveForceVectorNode.setVisible( showAttractiveForces );
   }
 
   /**
-   * @param {boolean} showRepulsiveForces - true to show repulsive force, false to hide
-   * @public
+   * @param showRepulsiveForces - true to show repulsive force, false to hide
    */
-  setShowRepulsiveForces( showRepulsiveForces ) {
+  public setShowRepulsiveForces( showRepulsiveForces: boolean ): void {
     this.repulsiveForceVectorNode.setVisible( showRepulsiveForces );
   }
 
   /**
-   * @param {boolean} showTotalForce - true to show total force, false to hide
-   * @public
+   * @param showTotalForce - true to show total force, false to hide
    */
-  setShowTotalForces( showTotalForce ) {
+  public setShowTotalForces( showTotalForce: boolean ): void {
     this.totalForceVectorNode.setVisible( showTotalForce );
   }
 
   /**
    * Update the force vectors to reflect the forces being experienced by the atom.
-   * @private
    */
-  updateForceVectors() {
+  private updateForceVectors(): void {
     const angle = 0;
     const attractiveY = this.attractiveForce * Math.sin( angle ) *
                         ( COMPONENT_FORCE_ARROW_REFERENCE_LENGTH / COMPONENT_FORCE_ARROW_REFERENCE_MAGNITUDE );

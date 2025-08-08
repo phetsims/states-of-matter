@@ -20,6 +20,7 @@ import Node from '../../../../scenery/js/nodes/Node.js';
 import TextPushButton from '../../../../sun/js/buttons/TextPushButton.js';
 import SOMConstants from '../../common/SOMConstants.js';
 import SOMColors from '../../common/view/SOMColors.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
 import statesOfMatter from '../../statesOfMatter.js';
 import StatesOfMatterStrings from '../../StatesOfMatterStrings.js';
 import DualAtomModel from '../model/DualAtomModel.js';
@@ -43,11 +44,11 @@ const PANEL_WIDTH = 209; // empirically determined to work well for English and 
 class AtomicInteractionsScreenView extends ScreenView {
 
   /**
-   * @param {DualAtomModel} dualAtomModel of the simulation
-   * @param {boolean} enableHeterogeneousAtoms
-   * @param {Tandem} tandem
+   * @param dualAtomModel - of the simulation
+   * @param enableHeterogeneousAtoms
+   * @param tandem
    */
-  constructor( dualAtomModel, enableHeterogeneousAtoms, tandem ) {
+  public constructor( dualAtomModel: DualAtomModel, enableHeterogeneousAtoms: boolean, tandem: Tandem ) {
 
     // due to some odd behavior, we need to turn on preventFit for this screen, see
     // https://github.com/phetsims/states-of-matter/issues/176
@@ -284,18 +285,16 @@ class AtomicInteractionsScreenView extends ScreenView {
 
   /**
    * Called by the animation loop.
-   * @public
    */
-  step() {
+  public step(): void {
     this.handlePositionChanged();
   }
 
   /**
    * Turn on/off the displaying of the force arrows that represent the attractive force.
-   * @param {boolean} showForces
-   * @public
+   * @param showForces
    */
-  setShowAttractiveForces( showForces ) {
+  public setShowAttractiveForces( showForces: boolean ): void {
     this.movableParticleNode.setShowAttractiveForces( showForces );
     this.fixedParticleNode.setShowAttractiveForces( showForces );
     this.showAttractiveForces = showForces;
@@ -303,10 +302,9 @@ class AtomicInteractionsScreenView extends ScreenView {
 
   /**
    * Turn on/off the displaying of the force arrows that represent the repulsive force.
-   * @param {boolean} showForces
-   * @public
+   * @param showForces
    */
-  setShowRepulsiveForces( showForces ) {
+  public setShowRepulsiveForces( showForces: boolean ): void {
     this.movableParticleNode.setShowRepulsiveForces( showForces );
     this.fixedParticleNode.setShowRepulsiveForces( showForces );
     this.showRepulsiveForces = showForces;
@@ -314,19 +312,15 @@ class AtomicInteractionsScreenView extends ScreenView {
 
   /**
    * Turn on/off the displaying of the force arrows that represent the total force, i.e. attractive plus repulsive.
-   * @param {boolean} showForces
-   * @public
+   * @param showForces
    */
-  setShowTotalForces( showForces ) {
+  public setShowTotalForces( showForces: boolean ): void {
     this.movableParticleNode.setShowTotalForces( showForces );
     this.fixedParticleNode.setShowTotalForces( showForces );
     this.showTotalForces = showForces;
   }
 
-  /**
-   * @private
-   */
-  handlePositionChanged() {
+  private handlePositionChanged(): void {
 
     this.updatePositionMarkerOnGraph();
     this.updateForceVectors();
@@ -358,17 +352,13 @@ class AtomicInteractionsScreenView extends ScreenView {
   /**
    * Update the position marker on the Lennard-Jones potential diagram. This will indicate the amount of potential
    * being experienced between the two atoms in the model.
-   * @private
    */
-  updatePositionMarkerOnGraph() {
+  private updatePositionMarkerOnGraph(): void {
     const distance = this.fixedParticle.positionProperty.value.distance( this.movableParticle.positionProperty.value );
     this.interactivePotentialGraph.setMarkerPosition( distance );
   }
 
-  /**
-   * @private
-   */
-  updatePushPinPosition() {
+  private updatePushPinPosition(): void {
     const pinnedAtomPosition = this.dualAtomModel.fixedAtom.positionProperty.value;
     const pinnedAtomRadius = this.dualAtomModel.fixedAtom.radiusProperty.value;
     const mvt = this.modelViewTransform;
@@ -376,18 +366,14 @@ class AtomicInteractionsScreenView extends ScreenView {
     this.pushPinNode.bottom = mvt.modelToViewY( pinnedAtomPosition.y - pinnedAtomRadius * 0.5 );
   }
 
-  /**
-   * @private
-   */
-  updateHandPosition() {
+  private updateHandPosition(): void {
     this.handNode.left = this.modelViewTransform.modelToViewX( this.movableParticle.positionProperty.value.x );
   }
 
   /**
    * Update the minimum X value allowed for the movable atom.  This prevents too much overlap between the atoms.
-   * @public
    */
-  updateMinimumXForMovableAtom() {
+  public updateMinimumXForMovableAtom(): void {
 
     // Use a minimum X value that is just a bit less than the sigma value, since the repulsive potential goes up
     // rapidly with smaller values.
@@ -398,10 +384,7 @@ class AtomicInteractionsScreenView extends ScreenView {
     this.handNode.setMinX( minXInView );
   }
 
-  /**
-   * @private
-   */
-  updateForceVectors() {
+  private updateForceVectors(): void {
     if ( ( this.fixedParticle !== null ) && ( this.movableParticle !== null ) ) {
       this.fixedParticleNode.setForces( this.dualAtomModel.attractiveForce, -this.dualAtomModel.repulsiveForce );
       this.movableParticleNode.setForces( -this.dualAtomModel.attractiveForce, this.dualAtomModel.repulsiveForce );

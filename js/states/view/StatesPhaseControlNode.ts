@@ -18,7 +18,7 @@ import HBox from '../../../../scenery/js/layout/nodes/HBox.js';
 import VBox from '../../../../scenery/js/layout/nodes/VBox.js';
 import HStrut from '../../../../scenery/js/nodes/HStrut.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
-import Node from '../../../../scenery/js/nodes/Node.js';
+import Node, { NodeOptions } from '../../../../scenery/js/nodes/Node.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import BooleanRectangularStickyToggleButton from '../../../../sun/js/buttons/BooleanRectangularStickyToggleButton.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
@@ -26,6 +26,7 @@ import Tandem from '../../../../tandem/js/Tandem.js';
 import gasIcon_png from '../../../mipmaps/gasIcon_png.js';
 import liquidIcon_png from '../../../mipmaps/liquidIcon_png.js';
 import solidIcon_png from '../../../mipmaps/solidIcon_png.js';
+import MultipleParticleModel from '../../common/model/MultipleParticleModel.js';
 import PhaseStateEnum from '../../common/PhaseStateEnum.js';
 import statesOfMatter from '../../statesOfMatter.js';
 import StatesOfMatterStrings from '../../StatesOfMatterStrings.js';
@@ -43,10 +44,10 @@ const DESELECTED_BUTTON_COLOR = '#F8D980';
 class StatesPhaseControlNode extends Node {
 
   /**
-   * @param {MultiParticleModel} model
-   * @param {Object} [options] that can be passed on to the underlying node
+   * @param model
+   * @param options - that can be passed on to the underlying node
    */
-  constructor( model, options ) {
+  public constructor( model: MultipleParticleModel, options?: NodeOptions ) {
 
     options = merge( {
       xMargin: 5,

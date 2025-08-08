@@ -11,6 +11,7 @@
  */
 
 import Screen from '../../../joist/js/Screen.js';
+import Tandem from '../../../tandem/js/Tandem.js';
 import SOMConstants from '../common/SOMConstants.js';
 import SOMColors from '../common/view/SOMColors.js';
 import statesOfMatter from '../statesOfMatter.js';
@@ -21,11 +22,7 @@ import PhaseChangesScreenView from './view/PhaseChangesScreenView.js';
 
 class PhaseChangesScreen extends Screen {
 
-  /**
-   * @param {boolean} isPotentialGraphEnabled
-   * @param {Tandem} tandem
-   */
-  constructor( isPotentialGraphEnabled, tandem ) {
+  public constructor( isPotentialGraphEnabled: boolean, tandem: Tandem ) {
 
     const options = {
       name: StatesOfMatterStrings.phaseChangesStringProperty,

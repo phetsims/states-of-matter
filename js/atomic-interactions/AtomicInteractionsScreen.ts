@@ -10,6 +10,7 @@
  */
 
 import Screen from '../../../joist/js/Screen.js';
+import Tandem from '../../../tandem/js/Tandem.js';
 import SOMConstants from '../common/SOMConstants.js';
 import SOMColors from '../common/view/SOMColors.js';
 import statesOfMatter from '../statesOfMatter.js';
@@ -19,12 +20,7 @@ import AtomicInteractionsScreenView from './view/AtomicInteractionsScreenView.js
 
 class AtomicInteractionsScreen extends Screen {
 
-  /**
-   * @param {boolean} enableHeterogeneousMolecules
-   * @param {string} screenTitle
-   * @param {Tandem} tandem
-   */
-  constructor( enableHeterogeneousMolecules, screenTitle, tandem ) {
+  public constructor( enableHeterogeneousMolecules: boolean, screenTitle: string, tandem: Tandem ) {
 
     const options = {
       name: screenTitle,

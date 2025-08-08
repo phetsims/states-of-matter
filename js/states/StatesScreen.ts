@@ -11,6 +11,7 @@
  */
 
 import Screen from '../../../joist/js/Screen.js';
+import Tandem from '../../../tandem/js/Tandem.js';
 import MultipleParticleModel from '../common/model/MultipleParticleModel.js';
 import SOMConstants from '../common/SOMConstants.js';
 import SubstanceType from '../common/SubstanceType.js';
@@ -22,10 +23,7 @@ import StatesScreenView from './view/StatesScreenView.js';
 
 class StatesScreen extends Screen {
 
-  /**
-   * @param {Tandem} tandem
-   */
-  constructor( tandem ) {
+  public constructor( tandem: Tandem ) {
 
     const options = {
       name: StatesOfMatterStrings.statesStringProperty,

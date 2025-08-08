@@ -35,6 +35,7 @@ import TitledSlider from '../../common/view/TitledSlider.js';
 import statesOfMatter from '../../statesOfMatter.js';
 import StatesOfMatterStrings from '../../StatesOfMatterStrings.js';
 import AtomPair from '../model/AtomPair.js';
+import DualAtomModel from '../model/DualAtomModel.js';
 
 const adjustableAttractionString = StatesOfMatterStrings.adjustableAttraction;
 const argonString = StatesOfMatterStrings.argon;
@@ -61,11 +62,11 @@ const AQUA_RADIO_BUTTON_X_SPACING = 8; // only used for atomic-interactions
 class AtomicInteractionsControlPanel extends Node {
 
   /**
-   * @param {DualAtomModel} dualAtomModel - model of the simulation
-   * @param {boolean} enableHeterogeneousAtoms - flag for enabling heterogeneous atom combinations
-   * @param {Object} [options] that can be passed on to the underlying node
+   * @param dualAtomModel - model of the simulation
+   * @param enableHeterogeneousAtoms - flag for enabling heterogeneous atom combinations
+   * @param [options] that can be passed on to the underlying node
    */
-  constructor( dualAtomModel, enableHeterogeneousAtoms, options ) {
+  public constructor( dualAtomModel: DualAtomModel, enableHeterogeneousAtoms: boolean, options?: Object ) {
 
     options = merge( {
       xMargin: 5,

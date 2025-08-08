@@ -39,6 +39,8 @@ import StatesOfMatterStrings from '../../StatesOfMatterStrings.js';
 import InteractionPotentialAccordionBox from './InteractionPotentialAccordionBox.js';
 import PhaseChangesMoleculesControlPanel from './PhaseChangesMoleculesControlPanel.js';
 import PhaseDiagramAccordionBox from './PhaseDiagramAccordionBox.js';
+import PhaseChangesModel from '../PhaseChangesModel.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
 
 // strings
 const returnLidString = StatesOfMatterStrings.returnLid;
@@ -60,11 +62,11 @@ const CONTROL_PANEL_X_INSET = 15;
 class PhaseChangesScreenView extends ScreenView {
 
   /**
-   * @param {PhaseChangesModel} model - model of the simulation
-   * @param {boolean} isPotentialGraphEnabled
-   * @param {Tandem} tandem
+   * @param model - model of the simulation
+   * @param isPotentialGraphEnabled
+   * @param tandem
    */
-  constructor( model, isPotentialGraphEnabled, tandem ) {
+  public constructor( model: PhaseChangesModel, isPotentialGraphEnabled: boolean, tandem: Tandem ) {
 
     super( merge( { tandem: tandem }, SOMConstants.SCREEN_VIEW_OPTIONS ) );
 
@@ -389,17 +391,15 @@ class PhaseChangesScreenView extends ScreenView {
     } );
   }
 
-  // @public
-  step( dt ) {
+  public step( dt: number ): void {
     this.particleContainerNode.step( dt );
   }
 
   /**
    * Update the position of the marker on the phase diagram based on the temperature and pressure values within the
    * model.
-   * @private
    */
-  updatePhaseDiagram() {
+  private updatePhaseDiagram(): void {
 
     // If the container has exploded, don't bother showing the dot.
     if ( this.multipleParticleModel.isExplodedProperty.get() || this.multipleParticleModel.scaledAtoms.length === 0 ) {
@@ -419,11 +419,9 @@ class PhaseChangesScreenView extends ScreenView {
 
   /**
    * Update and returns the moving average taking into account the new temperature value.
-   * @param {number} newTemperatureValue
-   * @returns {number}
-   * @private
+   * @param newTemperatureValue
    */
-  updateMovingAverageTemperature( newTemperatureValue ) {
+  private updateMovingAverageTemperature( newTemperatureValue: number ): number {
     if ( this.modelTemperatureHistory.length === MAX_NUM_HISTORY_SAMPLES ) {
       this.modelTemperatureHistory.shift();
     }
@@ -437,11 +435,9 @@ class PhaseChangesScreenView extends ScreenView {
 
   /**
    * Map the model temperature to phase diagram temperature based on the phase chart shape.
-   * @param {number} modelTemperature
-   * @returns {number}
-   * @private
+   * @param modelTemperature
    */
-  mapModelTemperatureToPhaseDiagramTemperature( modelTemperature ) {
+  private mapModelTemperatureToPhaseDiagramTemperature( modelTemperature: number ): number {
 
     let mappedTemperature;
     if ( modelTemperature < this.triplePointTemperatureInModelUnits ) {
@@ -457,12 +453,10 @@ class PhaseChangesScreenView extends ScreenView {
   /**
    * Map the model temperature and pressure to a normalized pressure value suitable for use in setting the marker
    * position on the phase chart.
-   * @param {number} modelPressure
-   * @param {number} modelTemperature
-   * @returns {number}
-   * @private
+   * @param modelPressure
+   * @param modelTemperature
    */
-  mapModelTempAndPressureToPhaseDiagramPressure( modelPressure, modelTemperature ) {
+  private mapModelTempAndPressureToPhaseDiagramPressure( modelPressure: number, modelTemperature: number ): number {
 
     // This method is a total tweak fest.  All values and equations are made to map to the phase diagram, and are NOT
     // based on any real-world equations that define phases of matter.

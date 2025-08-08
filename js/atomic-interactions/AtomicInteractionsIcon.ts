@@ -11,7 +11,7 @@
 
 // modules
 import Screen from '../../../joist/js/Screen.js';
-import ScreenIcon from '../../../joist/js/ScreenIcon.js';
+import ScreenIcon, { ScreenIconOptions } from '../../../joist/js/ScreenIcon.js';
 import merge from '../../../phet-core/js/merge.js';
 import Circle from '../../../scenery/js/nodes/Circle.js';
 import Node from '../../../scenery/js/nodes/Node.js';
@@ -25,10 +25,7 @@ import statesOfMatter from '../statesOfMatter.js';
 const PARTICLE_COLOR = new Color( SOMConstants.ADJUSTABLE_ATTRACTION_COLOR );
 
 class AtomicInteractionsIcon extends ScreenIcon {
-  /**
-   * {Object} [options]
-   */
-  constructor( options ) {
+  public constructor( options?: ScreenIconOptions ) {
 
     options = merge( {
       size: Screen.MINIMUM_HOME_SCREEN_ICON_SIZE,

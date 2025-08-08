@@ -30,10 +30,7 @@ const CUBE_HEIGHT = 5; // particles
 
 class PhaseChangesIcon extends ScreenIcon {
 
-  /**
-   * {Object} [options]
-   */
-  constructor( options ) {
+  public constructor( options?: Object ) {
 
     options = merge( {
       size: Screen.MINIMUM_HOME_SCREEN_ICON_SIZE,

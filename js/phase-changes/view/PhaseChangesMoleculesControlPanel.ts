@@ -51,10 +51,10 @@ const NORMAL_TEXT_FONT_SIZE = 12;
 class PhaseChangesMoleculesControlPanel extends Node {
 
   /**
-   * @param { PhaseChangesModel } phaseChangesModel - model of the simulation
-   * @param {Object} [options] options for various panel display properties
+   * @param phaseChangesModel - model of the simulation
+   * @param options - options for various panel display properties
    */
-  constructor( phaseChangesModel, options ) {
+  public constructor( phaseChangesModel: PhaseChangesModel, options?: Object ) {
 
     options = merge( {
       showAdjustableAttraction: false,

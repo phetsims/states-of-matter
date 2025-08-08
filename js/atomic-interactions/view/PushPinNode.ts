@@ -16,7 +16,7 @@ import statesOfMatter from '../../statesOfMatter.js';
 
 class PushPinNode extends Node {
 
-  constructor() {
+  public constructor() {
     super();
     this.setPickable( false );
     const imageNode = new Image( pushPin_png );

@@ -34,13 +34,13 @@ class ZoomableGridNode extends Node {
 
   /**
    * @param atomsView
-   * @param {number} offsetX
-   * @param {number} offsetY
-   * @param {number} width - width of the graph
-   * @param {number} height - height of the graph
-   * @param {Object} [options]
+   * @param offsetX
+   * @param offsetY
+   * @param width - width of the graph
+   * @param height - height of the graph
+   * @param options
    */
-  constructor( atomsView, offsetX, offsetY, width, height, options ) {
+  public constructor( atomsView: any, offsetX: number, offsetY: number, width: number, height: number, options?: Object ) {
 
     options = merge( {
       addZoomButtons: true,
@@ -118,14 +118,13 @@ class ZoomableGridNode extends Node {
   }
 
   /**
-   * @param {number} offsetX
-   * @param {number} offsetY
-   * @param {number} width -- width of the grid
-   * @param {number} height -- height of the grid
-   * @param {number} horizontalLineCount -- number of horizontal lines
-   * @public
+   * @param offsetX
+   * @param offsetY
+   * @param width -- width of the grid
+   * @param height -- height of the grid
+   * @param horizontalLineCount -- number of horizontal lines
    */
-  updateHorizontalLines( offsetX, offsetY, width, height, horizontalLineCount ) {
+  public updateHorizontalLines( offsetX: number, offsetY: number, width: number, height: number, horizontalLineCount: number ): void {
     const horizontalLineShape = new Shape();
     for ( let y = 0; y < horizontalLineCount; y++ ) {
       const viewY = y * ( height / ( horizontalLineCount - 1 ) );
@@ -137,9 +136,8 @@ class ZoomableGridNode extends Node {
 
   /**
    * restore initial state
-   * @public
    */
-  reset() {
+  public reset(): void {
     this.zoomLevelProperty.reset();
   }
 }

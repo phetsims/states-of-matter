@@ -10,6 +10,7 @@
  * @author Siddhartha Chinthapally (Actual Concepts)
  */
 
+import Property from '../../../../axon/js/Property.js';
 import merge from '../../../../phet-core/js/merge.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import BracketNode from '../../../../scenery-phet/js/BracketNode.js';
@@ -45,11 +46,11 @@ const ICON_PADDING = 35; // empirically determined to put the icons in a good po
 class ForcesAccordionBox extends AccordionBox {
 
   /**
-   * @param {Property.<string>} forcesProperty that determines which forces to display
-   * @param {Property.<boolean>} forceControlPanelExpandProperty -true to use force panel expand, false if not
-   * @param {Object} [options] for various panel display properties
+   * @param forcesProperty that determines which forces to display
+   * @param forceControlPanelExpandProperty -true to use force panel expand, false if not
+   * @param options for various panel display properties
    */
-  constructor( forcesProperty, forceControlPanelExpandProperty, options ) {
+  public constructor( forcesProperty: Property<string>, forceControlPanelExpandProperty: Property<boolean>, options?: Object ) {
 
     // convenience function for creating text with the attributes needed by this panel
     const createTextNode = ( string, width, fontSize ) => {
@@ -222,11 +223,7 @@ class ForcesAccordionBox extends AccordionBox {
     super( accordionContent, options );
   }
 
-  /**
-   * @public
-   * @override
-   */
-  dispose() {
+  public override dispose(): void {
     super.dispose();
   }
 }

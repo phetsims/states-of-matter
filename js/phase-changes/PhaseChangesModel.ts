@@ -20,6 +20,7 @@ import MultipleParticleModel from '../common/model/MultipleParticleModel.js';
 import SOMConstants from '../common/SOMConstants.js';
 import SubstanceType from '../common/SubstanceType.js';
 import statesOfMatter from '../statesOfMatter.js';
+import Tandem from '../../../tandem/js/Tandem.js';
 
 // --------------------------------------------------------------------------------------------------------------------
 // constants
@@ -50,10 +51,7 @@ EPSILON_TABLE.set( SubstanceType.WATER, SOMConstants.EPSILON_FOR_WATER );
 
 class PhaseChangesModel extends MultipleParticleModel {
 
-  /**
-   * @param {Tandem} tandem
-   */
-  constructor( tandem ) {
+  public constructor( tandem: Tandem ) {
 
     super( tandem );
 
@@ -107,19 +105,15 @@ class PhaseChangesModel extends MultipleParticleModel {
 
   /**
    * Get the sigma value, which is one of the two parameters that describes the Lennard-Jones potential.
-   * @returns {number}
-   * @public
    */
-  getSigma() {
+  public getSigma(): number {
     return SIGMA_TABLE.get( this.substanceProperty.value );
   }
 
   /**
    * Get the epsilon value, which is one of the two parameters that describes the Lennard-Jones potential.
-   * @returns {number}
-   * @public
    */
-  getEpsilon() {
+  public getEpsilon(): number {
     const substance = this.substanceProperty.value;
     let epsilon;
     if ( substance === SubstanceType.ADJUSTABLE_ATOM ) {
@@ -131,11 +125,7 @@ class PhaseChangesModel extends MultipleParticleModel {
     return epsilon;
   }
 
-  /**
-   * @param {number} epsilon
-   * @public
-   */
-  setEpsilon( epsilon ) {
+  public setEpsilon( epsilon: number ): void {
     if ( this.substanceProperty.get() === SubstanceType.ADJUSTABLE_ATOM ) {
       this.moleculeForceAndMotionCalculator.setScaledEpsilon(
         convertEpsilonToScaledEpsilon( Utils.clamp( epsilon, MIN_ADJUSTABLE_EPSILON, MAX_ADJUSTABLE_EPSILON ) )
@@ -148,11 +138,8 @@ class PhaseChangesModel extends MultipleParticleModel {
 
   /**
    * handler that sets up the various portions of the model to support the newly selected substance
-   * @param {SubstanceType} substance
-   * @protected
-   * @override
    */
-  handleSubstanceChanged( substance ) {
+  protected override handleSubstanceChanged( substance: SubstanceType ): void {
 
     // reset the target container height whenever the substance changes
     this.targetContainerHeightProperty && this.targetContainerHeightProperty.reset();
@@ -170,10 +157,8 @@ class PhaseChangesModel extends MultipleParticleModel {
   /**
    * Sets the target height of the container.  The target height is set rather than the actual height because the
    * model limits the rate at which the height can changed.  The model will gradually move towards the target height.
-   * @param {number} desiredContainerHeight
-   * @public
    */
-  setTargetContainerHeight( desiredContainerHeight ) {
+  public setTargetContainerHeight( desiredContainerHeight: number ): void {
     this.targetContainerHeightProperty.set( Utils.clamp(
       desiredContainerHeight,
       MIN_ALLOWABLE_CONTAINER_HEIGHT,
@@ -181,11 +166,7 @@ class PhaseChangesModel extends MultipleParticleModel {
     ) );
   }
 
-  /**
-   * @protected
-   * @override
-   */
-  updateContainerSize( dt ) {
+  protected override updateContainerSize( dt: number ): void {
 
     if ( !this.phaseChangeModelConstructed ||
          this.isExplodedProperty.value ||
@@ -223,10 +204,7 @@ class PhaseChangesModel extends MultipleParticleModel {
     }
   }
 
-  /**
-   * @public
-   */
-  reset() {
+  public reset(): void {
     super.reset();
     this.targetContainerHeightProperty.reset();
     this.adjustableAtomInteractionStrengthProperty.reset();

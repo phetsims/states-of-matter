@@ -25,11 +25,11 @@ import statesOfMatter from '../../statesOfMatter.js';
 class PositionMarker extends Node {
 
   /**
-   * @param {number} radius radius of the sphere
-   * @param {Color|String} color base color used to shade the sphere
-   * @param {Object} [options]
+   * @param radius - radius of the sphere
+   * @param color - base color used to shade the sphere
+   * @param options
    */
-  constructor( radius, color, options ) {
+  public constructor( radius: number, color: Color | string, options?: object ) {
     const mainColor = Color.toColor( color );
     options = merge( {
       shadedSphereNodeOptions: {
@@ -73,11 +73,7 @@ class PositionMarker extends Node {
     this.mouseArea = this.touchArea = Shape.circle( 0, 0, 1.5 * radius );
   }
 
-  /**
-   * @param color
-   * @public
-   */
-  changeColor( color ) {
+  public changeColor( color: Color | string ): void {
     this.haloNode.fill = Color.toColor( color ).withAlpha( 0.5 );
     const mainColor = Color.toColor( color );
     const highlightColor = Color.WHITE;
