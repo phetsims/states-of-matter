@@ -61,7 +61,7 @@ class PhaseChangesModel extends MultipleParticleModel {
 
   // This flag is used to avoid problems when the superconstructor calls the overrides in this subclass
   // before the subclass-specific properties have been added.
-  private phaseChangeModelConstructed: boolean;
+  private readonly phaseChangeModelConstructed: boolean;
 
   public constructor( tandem: Tandem ) {
 

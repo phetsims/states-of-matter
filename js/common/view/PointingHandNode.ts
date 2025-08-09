@@ -30,7 +30,7 @@ type PointingHandNodeOptions = SelfOptions & NodeOptions;
 class PointingHandNode extends Node {
 
   // The distance from the fingertip to the bottom of the node, used for positioning
-  private fingertipToBottomDistanceY: number;
+  private readonly fingertipToBottomDistanceY: number;
 
   /**
    * @param phaseChangesModel - model of the simulation

@@ -47,7 +47,7 @@ class InteractivePotentialGraph extends PotentialGraphNode {
   private readonly dualAtomModel: DualAtomModel;
   private minXForAtom: number;
   public interactionEnabled: boolean;
-  private interactionPotentialCanvasNode: InteractionPotentialCanvasNode;
+  private readonly interactionPotentialCanvasNode: InteractionPotentialCanvasNode;
 
   /**
    * @param dualAtomModel - model of the simulation

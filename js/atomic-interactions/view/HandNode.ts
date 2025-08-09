@@ -34,7 +34,7 @@ class HandNode extends Node {
   // particle that will be moved if the hand is dragged
   private particle: ScaledAtom;
 
-  private disposeHandNode: () => void;
+  private readonly disposeHandNode: () => void;
 
   /**
    * @param dualAtomModel - model of the atomic interactions screen
