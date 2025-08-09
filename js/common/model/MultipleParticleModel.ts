@@ -136,24 +136,44 @@ class MultipleParticleModel extends PhetioObject {
   public readonly pressureProperty: NumberProperty;
   public readonly isPlayingProperty: BooleanProperty;
   public readonly heatingCoolingAmountProperty: NumberProperty;
+
+  // The number of molecules that should be in the simulation.  This is used primarily for
+  // injecting new molecules, and when this number is increased, internal model state is adjusted to match.
   public readonly targetNumberOfMoleculesProperty: NumberProperty;
   public readonly maxNumberOfMoleculesProperty: NumberProperty;
   private readonly numMoleculesQueuedForInjectionProperty: NumberProperty;
+
+  // Indicates whether injection of additional molecules is allowed
   public readonly isInjectionAllowedProperty: TReadOnlyProperty<boolean>;
+
+  // Fires when a reset occurs
   public readonly resetEmitter: Emitter;
   public readonly temperatureInKelvinProperty: ReadOnlyProperty<number | null>;
 
   // other model attributes
+
+  // Array of scaled (i.e. non-normalized) atoms
   public readonly scaledAtoms: ReturnType<typeof createObservableArray>;
+
+  // Data set containing information about the position, motion, and force for the normalized atoms
   public moleculeDataSet: MoleculeForceAndMotionDataSet | null;
   public normalizedContainerWidth: number;
   public gravitationalAcceleration: number;
+
+  // Normalized version of the container height, changes as the lid position changes
   public normalizedContainerHeight: number;
+
+  // Normalized version of the TOTAL container height regardless of the lid position
   public normalizedTotalContainerHeight: number;
+
+  // Normalized velocity at which lid is moving in y direction
   public normalizedLidVelocityY: number;
+
+  // The location where new molecules are injected, in normalized coordinates
   protected readonly injectionPoint: Vector2;
 
   // internal model variables
+  // Initialize particle diameter first since it's needed for other calculations
   public particleDiameter: number;
   public minModelTemperature: number | null;
   private residualTime: number;
@@ -165,7 +185,11 @@ class MultipleParticleModel extends PhetioObject {
   private isoKineticThermostat: IsokineticThermostat | null;
   private andersenThermostat: AndersenThermostat | null;
   protected moleculeForceAndMotionCalculator: AbstractVerletAlgorithm | null;
+
+  // Moving average calculator that tracks the average difference between the calculated and target temperatures
   private averageTemperatureDifference: MovingAverage;
+
+  // Track which thermostat was run in the previous step
   private thermostatRunPreviousStep: IsokineticThermostat | AndersenThermostat | null;
 
   public constructor( tandem: Tandem, providedOptions?: MultipleParticleModelOptions ) {
@@ -220,8 +244,6 @@ class MultipleParticleModel extends PhetioObject {
       range: new Range( -1, 1 )
     } );
 
-    // The number of molecules that should be in the simulation.  This is used primarily for
-    // injecting new molecules, and when this number is increased, internal model state is adjusted to match.
     this.targetNumberOfMoleculesProperty = new NumberProperty( 0, {
       tandem: tandem.createTandem( 'targetNumberOfMoleculesProperty' ),
       phetioReadOnly: true,
@@ -232,7 +254,6 @@ class MultipleParticleModel extends PhetioObject {
 
     this.numMoleculesQueuedForInjectionProperty = new NumberProperty( 0 );
 
-    // Indicates whether injection of additional molecules is allowed
     this.isInjectionAllowedProperty = new DerivedProperty(
       [
         this.isPlayingProperty,
@@ -249,42 +270,31 @@ class MultipleParticleModel extends PhetioObject {
       }
     );
 
-    // Fires when a reset occurs
     this.resetEmitter = new Emitter();
 
-    // Array of scaled (i.e. non-normalized) atoms
     this.scaledAtoms = createObservableArray();
 
-    // Data set containing information about the position, motion, and force for the normalized atoms
     this.moleculeDataSet = null;
 
-    // Initialize particle diameter first since it's needed for other calculations
     this.particleDiameter = 1;
 
-    // Various non-property attributes
     this.normalizedContainerWidth = CONTAINER_WIDTH / this.particleDiameter;
     this.gravitationalAcceleration = NOMINAL_GRAVITATIONAL_ACCEL;
 
-    // Normalized version of the container height, changes as the lid position changes
     this.normalizedContainerHeight = this.containerHeightProperty.get() / this.particleDiameter;
 
-    // Normalized version of the TOTAL container height regardless of the lid position
     this.normalizedTotalContainerHeight = this.containerHeightProperty.get() / this.particleDiameter;
 
-    // Normalized velocity at which lid is moving in y direction
     this.normalizedLidVelocityY = 0;
 
-    // The location where new molecules are injected, in normalized coordinates
     this.injectionPoint = Vector2.ZERO.copy();
 
-    // Various internal model variables
     this.minModelTemperature = null;
     this.residualTime = 0;
     this.moleculeInjectionHoldoffTimer = 0;
     this.heightChangeThisStep = 0;
     this.moleculeInjectedThisStep = false;
 
-    // Strategy patterns that are applied to the data set
     this.atomPositionUpdater = null;
     this.phaseStateChanger = null;
     this.isoKineticThermostat = null;
@@ -292,10 +302,8 @@ class MultipleParticleModel extends PhetioObject {
 
     this.moleculeForceAndMotionCalculator = null;
 
-    // Moving average calculator that tracks the average difference between the calculated and target temperatures
     this.averageTemperatureDifference = new MovingAverage( 10 );
 
-    // Track which thermostat was run in the previous step
     this.thermostatRunPreviousStep = null;
 
     // Other initialization - listen for changes to the substance being simulated and update the internals as needed

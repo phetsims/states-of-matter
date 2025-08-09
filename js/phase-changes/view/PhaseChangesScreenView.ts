@@ -60,10 +60,14 @@ class PhaseChangesScreenView extends ScreenView {
 
   private readonly multipleParticleModel: PhaseChangesModel;
   private readonly modelTemperatureHistory: ObservableArray<number>;
+
+  // create the particle container - it takes care of positioning itself
   private readonly particleContainerNode: ParticleContainerNode;
   private readonly pumpNode: BicyclePumpNode;
   private readonly returnLidButton: TextPushButton;
   private readonly phaseDiagramAccordionBox: PhaseDiagramAccordionBox;
+
+  // variables used to map temperature on to the phase diagram
   private triplePointTemperatureInModelUnits: number;
   private criticalPointTemperatureInModelUnits: number;
   private slopeInFirstRegion: number;
@@ -101,7 +105,6 @@ class PhaseChangesScreenView extends ScreenView {
       modelViewTransform.modelToViewY( 0 )
     );
 
-    // create the particle container - it takes care of positioning itself
     this.particleContainerNode = new ParticleContainerNode( model, modelViewTransform, {
       volumeControlEnabled: true,
       pressureGaugeEnabled: true,
@@ -210,7 +213,6 @@ class PhaseChangesScreenView extends ScreenView {
       numberOfMoleculesRangeProperty.set( new Range( 0, maxNumberOfMolecules ) );
     } );
 
-    // add bicycle pump node
     this.pumpNode = new BicyclePumpNode(
       model.targetNumberOfMoleculesProperty,
       numberOfMoleculesRangeProperty, {
@@ -299,7 +301,6 @@ class PhaseChangesScreenView extends ScreenView {
     } );
     phaseDiagramContainer.addChild( this.phaseDiagramAccordionBox );
 
-    // variables used to map temperature on to the phase diagram
     this.triplePointTemperatureInModelUnits = 0;
     this.criticalPointTemperatureInModelUnits = 0;
     this.slopeInFirstRegion = 0;
