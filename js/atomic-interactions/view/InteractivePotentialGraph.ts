@@ -1,8 +1,5 @@
 // Copyright 2015-2025, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * This class extends the Interaction Potential diagram to allow the user to change the curve through direct interaction
  * with both the sigma and epsilon parameter of the LJ potential.
@@ -14,8 +11,8 @@ import Multilink from '../../../../axon/js/Multilink.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Shape from '../../../../kite/js/Shape.js';
-import optionize, { type EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import merge from '../../../../phet-core/js/merge.js';
+import optionize, { type EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import DragListener from '../../../../scenery/js/listeners/DragListener.js';
 import PressListener from '../../../../scenery/js/listeners/PressListener.js';
@@ -44,6 +41,7 @@ type SelfOptions = EmptySelfOptions;
 
 type InteractivePotentialGraphOptions = SelfOptions & NodeOptions;
 
+// @ts-expect-error
 class InteractivePotentialGraph extends PotentialGraphNode {
 
   private readonly dualAtomModel: DualAtomModel;
@@ -68,6 +66,8 @@ class InteractivePotentialGraph extends PotentialGraphNode {
         includePositionMarker: true,
         allowInteraction: true,
         wide: true,
+
+        // @ts-expect-error
         zoomable: options.zoomable,
         tandem: options.tandem
       }
@@ -79,10 +79,10 @@ class InteractivePotentialGraph extends PotentialGraphNode {
     this.interactionEnabled = false;
 
     // Create a convenience function for adding a drag handler that adjusts epsilon, this is done to avoid code duplication.
-    const addEpsilonDragListener = ( node, tandem ) => {
+    const addEpsilonDragListener = ( node: Node, tandem: Tandem ) => {
 
-      let startDragY;
-      let startEpsilonValue;
+      let startDragY: number;
+      let startEpsilonValue: number;
       let currentDragY;
 
       node.addInputListener( new DragListener( {
@@ -112,12 +112,12 @@ class InteractivePotentialGraph extends PotentialGraphNode {
     };
 
     // Add a parent node for the epsilon controls
-    const epsilonLayer = new Node( { tandem: this.interactiveControlsLayer.tandem.createTandem( 'epsilon' ) } );
-    this.interactiveControlsLayer.addChild( epsilonLayer );
+    const epsilonLayer = new Node( { tandem: this.interactiveControlsLayer!.tandem.createTandem( 'epsilon' ) } );
+    this.interactiveControlsLayer!.addChild( epsilonLayer );
 
     // Add the line that will indicate and control the value of epsilon.
     const epsilonLineLength = EPSILON_HANDLE_OFFSET_PROPORTION * this.widthOfGraph * 1.2;
-    this.epsilonControls.line = new Line( -epsilonLineLength / 2, 0, epsilonLineLength, 0, {
+    this.epsilonControls!.line = new Line( -epsilonLineLength / 2, 0, epsilonLineLength, 0, {
       cursor: 'ns-resize',
       pickable: true,
       fill: EPSILON_LINE_COLOR,
@@ -126,16 +126,16 @@ class InteractivePotentialGraph extends PotentialGraphNode {
       tandem: epsilonLayer.tandem.createTandem( 'epsilonLine' ),
       phetioReadOnly: true
     } );
-    this.epsilonControls.line.touchArea = this.epsilonControls.line.localBounds.dilatedXY( 8, 8 );
-    this.epsilonControls.line.mouseArea = this.epsilonControls.line.localBounds.dilatedXY( 0, 4 );
-    addEpsilonDragListener( this.epsilonControls.line, this.epsilonControls.line.tandem.createTandem( 'dragListener' ) );
-    epsilonLayer.addChild( this.epsilonControls.line );
+    this.epsilonControls!.line.touchArea = this.epsilonControls!.line.localBounds.dilatedXY( 8, 8 );
+    this.epsilonControls!.line.mouseArea = this.epsilonControls!.line.localBounds.dilatedXY( 0, 4 );
+    addEpsilonDragListener( this.epsilonControls!.line, this.epsilonControls!.line.tandem.createTandem( 'dragListener' ) );
+    epsilonLayer.addChild( this.epsilonControls!.line );
 
     // Highlight this control when the user is hovering over it and/or using it.
     const epsilonLinePressListener = new PressListener( { attach: false, tandem: Tandem.OPT_OUT } );
-    this.epsilonControls.line.addInputListener( epsilonLinePressListener );
+    this.epsilonControls!.line.addInputListener( epsilonLinePressListener );
     epsilonLinePressListener.isHighlightedProperty.link( isHighlighted => {
-      this.epsilonControls.line.stroke = isHighlighted ? RESIZE_HANDLE_HIGHLIGHTED_COLOR : RESIZE_HANDLE_NORMAL_COLOR;
+      this.epsilonControls!.line.stroke = isHighlighted ? RESIZE_HANDLE_HIGHLIGHTED_COLOR : RESIZE_HANDLE_NORMAL_COLOR;
     } );
 
     // Add the arrow nodes that will allow the user to control the epsilon value.
@@ -150,7 +150,7 @@ class InteractivePotentialGraph extends PotentialGraphNode {
       cursor: 'pointer',
       phetioReadOnly: true
     };
-    this.epsilonControls.arrow = new ArrowNode(
+    this.epsilonControls!.arrow = new ArrowNode(
       0,
       -RESIZE_HANDLE_SIZE_PROPORTION * this.widthOfGraph / 2,
       0,
@@ -158,20 +158,20 @@ class InteractivePotentialGraph extends PotentialGraphNode {
       merge( { tandem: epsilonLayer.tandem.createTandem( 'epsilonArrow' ) }, arrowNodeOptions )
     );
     const epsilonArrowPressListener = new PressListener( { attach: false, tandem: Tandem.OPT_OUT } );
-    this.epsilonControls.arrow.addInputListener( epsilonArrowPressListener );
+    this.epsilonControls!.arrow.addInputListener( epsilonArrowPressListener );
     epsilonArrowPressListener.isHighlightedProperty.link( isHighlighted => {
-      this.epsilonControls.arrow.fill = isHighlighted ? RESIZE_HANDLE_HIGHLIGHTED_COLOR : RESIZE_HANDLE_NORMAL_COLOR;
+      this.epsilonControls!.arrow.fill = isHighlighted ? RESIZE_HANDLE_HIGHLIGHTED_COLOR : RESIZE_HANDLE_NORMAL_COLOR;
     } );
-    epsilonLayer.addChild( this.epsilonControls.arrow );
-    this.epsilonControls.arrow.touchArea = this.epsilonControls.arrow.localBounds.dilatedXY( 3, 10 );
-    addEpsilonDragListener( this.epsilonControls.arrow, this.epsilonControls.arrow.tandem.createTandem( 'dragListener' ) );
+    epsilonLayer.addChild( this.epsilonControls!.arrow );
+    this.epsilonControls!.arrow.touchArea = this.epsilonControls!.arrow.localBounds.dilatedXY( 3, 10 );
+    addEpsilonDragListener( this.epsilonControls!.arrow, this.epsilonControls!.arrow.tandem.createTandem( 'dragListener' ) );
 
     // add a layer for the sigma controls (for consistency with the epsilon controls)
-    const sigmaLayer = new Node( { tandem: this.interactiveControlsLayer.tandem.createTandem( 'sigma' ) } );
-    this.interactiveControlsLayer.addChild( sigmaLayer );
+    const sigmaLayer = new Node( { tandem: this.interactiveControlsLayer!.tandem.createTandem( 'sigma' ) } );
+    this.interactiveControlsLayer!.addChild( sigmaLayer );
 
     // add sigma arrow node
-    this.sigmaControls.arrow = new ArrowNode(
+    this.sigmaControls!.arrow = new ArrowNode(
       -RESIZE_HANDLE_SIZE_PROPORTION * this.widthOfGraph / 2,
       0,
       RESIZE_HANDLE_SIZE_PROPORTION * this.widthOfGraph * 1.2,
@@ -179,28 +179,28 @@ class InteractivePotentialGraph extends PotentialGraphNode {
       merge( { tandem: sigmaLayer.tandem.createTandem( 'sigmaArrow' ) }, arrowNodeOptions )
     );
     const sigmaArrowPressListener = new PressListener( { attach: false, tandem: Tandem.OPT_OUT } );
-    this.sigmaControls.arrow.addInputListener( sigmaArrowPressListener );
+    this.sigmaControls!.arrow.addInputListener( sigmaArrowPressListener );
     sigmaArrowPressListener.isHighlightedProperty.link( isHighlighted => {
-      this.sigmaControls.arrow.fill = isHighlighted ? RESIZE_HANDLE_HIGHLIGHTED_COLOR : RESIZE_HANDLE_NORMAL_COLOR;
+      this.sigmaControls!.arrow.fill = isHighlighted ? RESIZE_HANDLE_HIGHLIGHTED_COLOR : RESIZE_HANDLE_NORMAL_COLOR;
     } );
 
-    sigmaLayer.addChild( this.sigmaControls.arrow );
-    this.sigmaControls.arrow.touchArea = this.sigmaControls.arrow.localBounds.dilatedXY( 10, 5 );
+    sigmaLayer.addChild( this.sigmaControls!.arrow );
+    this.sigmaControls!.arrow.touchArea = this.sigmaControls!.arrow.localBounds.dilatedXY( 10, 5 );
 
     // Add a drag listener for adjusting the sigma value, also known as the atom diameter.
-    let startDragX;
+    let startDragX: number;
     let currentDragX;
-    let atomDiameterAtDragStart;
-    this.sigmaControls.arrow.addInputListener( new DragListener( {
+    let atomDiameterAtDragStart: number;
+    this.sigmaControls!.arrow.addInputListener( new DragListener( {
 
       start: event => {
         dualAtomModel.setMotionPaused( true );
-        startDragX = this.sigmaControls.arrow.globalToParentPoint( event.pointer.point ).x;
+        startDragX = this.sigmaControls!.arrow.globalToParentPoint( event.pointer.point ).x;
         atomDiameterAtDragStart = dualAtomModel.adjustableAtomDiameterProperty.value;
       },
 
       drag: event => {
-        currentDragX = this.sigmaControls.arrow.globalToParentPoint( event.pointer.point ).x;
+        currentDragX = this.sigmaControls!.arrow.globalToParentPoint( event.pointer.point ).x;
         const dx = currentDragX - startDragX;
         const scaleFactor = this.xRange / this.getGraphWidth();
         dualAtomModel.adjustableAtomDiameterProperty.value = Utils.clamp(
@@ -214,23 +214,23 @@ class InteractivePotentialGraph extends PotentialGraphNode {
         dualAtomModel.setMotionPaused( false );
       },
 
-      tandem: this.sigmaControls.arrow.tandem.createTandem( 'dragListener' )
+      tandem: this.sigmaControls!.arrow.tandem.createTandem( 'dragListener' )
     } ) );
 
     // Add the ability to grab and move the position marker. This node will need to be pickable so the user can grab it.
-    this.positionMarker.setPickable( true );
-    this.positionMarker.touchArea = Shape.circle( 0, 0, 13 );
-    let positionMarkerStartDragX;
+    this.positionMarker!.setPickable( true );
+    this.positionMarker!.touchArea = Shape.circle( 0, 0, 13 );
+    let positionMarkerStartDragX: number;
     let positionMarkerCurrentDragX;
-    let atomStartXPosition;
-    this.positionMarker.addInputListener( new DragListener( {
+    let atomStartXPosition: number;
+    this.positionMarker!.addInputListener( new DragListener( {
         allowTouchSnag: true,
 
         start: event => {
 
           // Stop the particle from moving in the model.
           dualAtomModel.setMotionPaused( true );
-          positionMarkerStartDragX = this.positionMarker.globalToParentPoint( event.pointer.point ).x;
+          positionMarkerStartDragX = this.positionMarker!.globalToParentPoint( event.pointer.point ).x;
           atomStartXPosition = dualAtomModel.movableAtom.getX();
         },
 
@@ -241,7 +241,7 @@ class InteractivePotentialGraph extends PotentialGraphNode {
 
           // Move the movable atom based on this drag event.
           const atom = dualAtomModel.movableAtom;
-          positionMarkerCurrentDragX = this.positionMarker.globalToParentPoint( event.pointer.point ).x;
+          positionMarkerCurrentDragX = this.positionMarker!.globalToParentPoint( event.pointer.point ).x;
           const xDifference = positionMarkerCurrentDragX - positionMarkerStartDragX;
           const scaleFactor = this.xRange / this.getGraphWidth();
           const newPosX = Math.max( atomStartXPosition + ( xDifference * scaleFactor ), this.minXForAtom );
@@ -255,13 +255,15 @@ class InteractivePotentialGraph extends PotentialGraphNode {
           dualAtomModel.setMotionPaused( false );
         },
 
-        tandem: this.positionMarker.tandem.createTandem( 'dragListener' )
+        tandem: this.positionMarker!.tandem.createTandem( 'dragListener' )
       }
     ) );
 
     // update the marker color when the movable atom changes
     dualAtomModel.movableAtom.atomTypeProperty.link( () => {
-      this.positionMarker.changeColor( dualAtomModel.movableAtom.color );
+
+      // @ts-expect-error
+      this.positionMarker!.changeColor( dualAtomModel.movableAtom.color );
     } );
 
     Multilink.multilink(
@@ -274,6 +276,7 @@ class InteractivePotentialGraph extends PotentialGraphNode {
     );
 
     this.interactionPotentialCanvasNode = new InteractionPotentialCanvasNode(
+      // @ts-expect-error
       this,
       { canvasBounds: new Bounds2( 0, 0, this.graphWidth, this.graphHeight ) }
     );

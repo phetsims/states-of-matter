@@ -1,8 +1,5 @@
 // Copyright 2014-2025, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * This class is the "view" for the particle container.
  *
@@ -12,9 +9,9 @@
 
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Matrix3 from '../../../../dot/js/Matrix3.js';
-import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import Shape from '../../../../kite/js/Shape.js';
-import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
+import optionize from '../../../../phet-core/js/optionize.js';
+import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import HandleNode from '../../../../scenery-phet/js/HandleNode.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import DragListener from '../../../../scenery/js/listeners/DragListener.js';
@@ -90,8 +87,10 @@ class ParticleContainerNode extends Node {
     // add nodes for the various layers
     const preParticleLayer = new Node();
     this.addChild( preParticleLayer );
+
+    // @ts-expect-error
     this.particlesCanvasNode = new ParticleImageCanvasNode( multipleParticleModel.scaledAtoms, modelViewTransform, {
-      canvasBounds: SOMConstants.SCREEN_VIEW_OPTIONS.layoutBounds.dilated( 500, 500 ) // dilation amount empirically determined
+      canvasBounds: SOMConstants.SCREEN_VIEW_OPTIONS.layoutBounds.dilated( 500 ) // dilation amount empirically determined
     } );
     this.addChild( this.particlesCanvasNode );
     const postParticleLayer = new Node();
@@ -138,10 +137,11 @@ class ParticleContainerNode extends Node {
     } );
     lidNode.addChild( lidEllipseNode );
 
-    let pointingHandNode;
+    let pointingHandNode: Node;
     if ( options.volumeControlEnabled ) {
 
       // Add the pointing hand, the finger of which can push down on the top of the container.
+      // @ts-expect-error
       pointingHandNode = new PointingHandNode( multipleParticleModel, modelViewTransform, {
         centerX: this.particleAreaViewBounds.centerX + 30, // offset empirically determined
         tandem: lidNode.tandem.createTandem( 'pointingHandNode' )
@@ -170,9 +170,9 @@ class ParticleContainerNode extends Node {
       lidEllipseNode.addChild( handleNode );
 
       // add a drag handler to the lid
-      let dragStartY;
+      let dragStartY: number;
       let draggedToY;
-      let containerSizeAtDragStart;
+      let containerSizeAtDragStart: number;
       handleAreaEllipse.addInputListener( new DragListener( {
 
         start: event => {
@@ -184,6 +184,7 @@ class ParticleContainerNode extends Node {
           draggedToY = this.globalToParentPoint( event.pointer.point ).y;
 
           // Resize the container based on the drag distance.
+          // @ts-expect-error
           multipleParticleModel.setTargetContainerHeight(
             containerSizeAtDragStart + modelViewTransform.viewToModelDeltaY( draggedToY - dragStartY )
           );
@@ -193,6 +194,7 @@ class ParticleContainerNode extends Node {
 
           // Set the target size to the current size, which will stop any change in size that is currently underway.
           if ( !multipleParticleModel.isExplodedProperty.value ) {
+            // @ts-expect-error
             multipleParticleModel.setTargetContainerHeight( multipleParticleModel.containerHeightProperty.get() );
           }
         },
@@ -208,7 +210,7 @@ class ParticleContainerNode extends Node {
       }
     } );
 
-    let pressureGaugeNode;
+    let pressureGaugeNode: DialGaugeNode;
     if ( options.pressureGaugeEnabled ) {
 
       // Add the pressure gauge.
@@ -218,7 +220,7 @@ class ParticleContainerNode extends Node {
     }
 
     // define a function to evaluate the bottom edge of the ellipse at the top, used for relative positioning
-    const getEllipseLowerEdgeYPos = distanceFromLeftEdge => {
+    const getEllipseLowerEdgeYPos = ( distanceFromLeftEdge: number ) => {
       const x = distanceFromLeftEdge - topEllipseRadiusX;
       return topEllipseRadiusY * Math.sqrt( 1 - Math.pow( x, 2 ) / ( Math.pow( topEllipseRadiusX, 2 ) ) );
     };
@@ -398,6 +400,7 @@ class ParticleContainerNode extends Node {
     postParticleLayer.addChild( bevel );
 
     this.compositeThermometerNode = new CompositeThermometerNode( multipleParticleModel, {
+      // @ts-expect-error
       font: new PhetFont( 20 ),
       fill: 'white',
       centerX: lidEllipseNode.centerX + options.thermometerXOffsetFromCenter,
@@ -422,7 +425,7 @@ class ParticleContainerNode extends Node {
         pressureGaugeNode.top = this.particleAreaViewBounds.top - 75; // empirical position adjustment to connect to lid
         pressureGaugeNode.setElbowHeight(
           PRESSURE_GAUGE_ELBOW_OFFSET + Math.abs( this.modelViewTransform.modelToViewDeltaY(
-          MultipleParticleModel.PARTICLE_CONTAINER_INITIAL_HEIGHT - containerHeight
+                                        MultipleParticleModel.PARTICLE_CONTAINER_INITIAL_HEIGHT - containerHeight
                                       ) )
         );
       }
@@ -450,12 +453,12 @@ class ParticleContainerNode extends Node {
       if ( multipleParticleModel.isExplodedProperty.value ) {
 
         // the container has exploded, so rotate the lid as it goes up so that it looks like it has been blown off.
-        const deltaY = oldContainerHeight - containerHeight;
+        const deltaY = oldContainerHeight! - containerHeight;
         const rotationAmount = deltaY * Math.PI * 0.00008; // multiplier empirically determined
         lidEllipseNode.rotateAround( lidEllipseNode.center, rotationAmount );
 
         // rotate the thermometer too, but differently than the lid for a more chaotic look
-        const containerHeightChange = oldContainerHeight - containerHeight;
+        const containerHeightChange = oldContainerHeight! - containerHeight;
         this.compositeThermometerNode.rotateAround(
           this.compositeThermometerNode.center,
           containerHeightChange * 0.0001 * Math.PI
@@ -463,6 +466,7 @@ class ParticleContainerNode extends Node {
       }
 
       // update the position of the pointing hand
+      // @ts-expect-error
       pointingHandNode && pointingHandNode.setFingertipYPosition( lidYPosition );
 
       // update the pressure gauge position (if present)
