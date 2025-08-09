@@ -1,8 +1,5 @@
 // Copyright 2014-2022, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * View for the states screen
  *
@@ -72,7 +69,7 @@ class StatesScreenView extends ScreenView {
     } );
     this.addChild( this.particleContainerNode );
 
-    // @private - heater/cooler node
+    // heater/cooler node
     const heaterCoolerNode = new HeaterCoolerNode( multipleParticleModel.heatingCoolingAmountProperty, {
       scale: 0.79,
       centerX: particleContainerViewBounds.centerX,
@@ -113,6 +110,8 @@ class StatesScreenView extends ScreenView {
     const solidLiquidGasPhaseControlNode = new StatesPhaseControlNode( multipleParticleModel, {
       right: moleculesControlPanel.right,
       top: moleculesControlPanel.bottom + CONTROL_PANEL_Y_INSET,
+
+      // @ts-expect-error
       buttonWidth: CONTROL_PANEL_WIDTH,
       tandem: tandem.createTandem( 'solidLiquidGasPhaseControlNode' )
     } );
@@ -153,7 +152,7 @@ class StatesScreenView extends ScreenView {
     } ) );
   }
 
-  public step( dt: number ): void {
+  public override step( dt: number ): void {
     this.particleContainerNode.step( dt );
   }
 }

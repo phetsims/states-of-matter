@@ -1,8 +1,5 @@
 // Copyright 2015-2025, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * Programmatically generated icon for the 'Phase Changes' screen.
  *
@@ -90,7 +87,7 @@ class PhaseChangesIcon extends ScreenIcon {
     const gasCloudNode = new Node();
     const gasCloudRadius = size.height * 0.3;
 
-    const createGasParticle = ( angle, radius ) => {
+    const createGasParticle = ( angle: number, radius: number ) => {
       return new Circle( particleRadius, {
         fill: PARTICLE_COLOR,
         centerX: radius * Math.cos( angle ),

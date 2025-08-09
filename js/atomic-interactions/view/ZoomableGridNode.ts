@@ -1,8 +1,5 @@
 // Copyright 2015-2025, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * Scenery node that shows the grid lines.  Highly leveraged from energy-skate-park's GridNode implementation.
  *
@@ -14,6 +11,7 @@ import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Range from '../../../../dot/js/Range.js';
 import Shape from '../../../../kite/js/Shape.js';
 import optionize from '../../../../phet-core/js/optionize.js';
+import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import MagnifyingGlassZoomButtonGroup from '../../../../scenery-phet/js/MagnifyingGlassZoomButtonGroup.js';
 import Node, { NodeOptions } from '../../../../scenery/js/nodes/Node.js';
 import Path from '../../../../scenery/js/nodes/Path.js';
@@ -39,10 +37,10 @@ type ZoomableGridNodeOptions = SelfOptions & NodeOptions;
 class ZoomableGridNode extends Node {
 
   // horizontal grid lines
-  private horizontalLinesNode: Path;
+  private readonly horizontalLinesNode: Path;
 
   // zoom level, passed in to the zoom button group if zoom is enabled
-  private zoomLevelProperty: NumberProperty;
+  private readonly zoomFactorProperty: NumberProperty;
 
   /**
    * @param atomsView
@@ -52,7 +50,7 @@ class ZoomableGridNode extends Node {
    * @param height - height of the graph
    * @param providedOptions
    */
-  public constructor( atomsView: any, offsetX: number, offsetY: number, width: number, height: number, providedOptions?: ZoomableGridNodeOptions ) {
+  public constructor( atomsView: IntentionalAny, offsetX: number, offsetY: number, width: number, height: number, providedOptions?: ZoomableGridNodeOptions ) {
 
     const options = optionize<ZoomableGridNodeOptions, SelfOptions, NodeOptions>()( {
       addZoomButtons: true,
@@ -68,7 +66,7 @@ class ZoomableGridNode extends Node {
     // vertical grid lines
     const verticalLinesNode = new Path( null, GRID_LINES_OPTIONS );
 
-    this.zoomLevelProperty = new NumberProperty( 0, {
+    this.zoomFactorProperty = new NumberProperty( 0, {
       tandem: options.tandem.createTandem( 'zoomFactorProperty' ),
       range: new Range( -2, 0 )
     } );
@@ -76,7 +74,7 @@ class ZoomableGridNode extends Node {
     if ( options.addZoomButtons ) {
 
       // Create the zoom button group that will allow the user to zoom in and out on the vertical range of the grid.
-      const zoomButtonGroup = new MagnifyingGlassZoomButtonGroup( this.zoomLevelProperty, {
+      const zoomButtonGroup = new MagnifyingGlassZoomButtonGroup( this.zoomFactorProperty, {
         orientation: 'vertical',
         spacing: 5,
 
@@ -104,7 +102,7 @@ class ZoomableGridNode extends Node {
       const nominalScalingFactor = atomsView.verticalScalingFactor;
 
       // Update the vertical scale of the graph as well as the number of horizontal lines when the zoom level changes.
-      this.zoomLevelProperty.lazyLink( zoomFactor => {
+      this.zoomFactorProperty.lazyLink( zoomFactor => {
         atomsView.horizontalLineCount = MIN_LINES_HORIZONTAL - 2 * zoomFactor; // empirically determined to look decent
         this.updateHorizontalLines( offsetX, offsetY, width, height, atomsView.horizontalLineCount );
         atomsView.verticalScalingFactor = nominalScalingFactor * Math.pow( 3.33, zoomFactor );
@@ -148,7 +146,7 @@ class ZoomableGridNode extends Node {
    * restore initial state
    */
   public reset(): void {
-    this.zoomLevelProperty.reset();
+    this.zoomFactorProperty.reset();
   }
 }
 
