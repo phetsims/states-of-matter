@@ -1,12 +1,9 @@
 // Copyright 2016-2020, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * Creates the namespace for this simulation.
  *
- * @author Aadish Gupta
+ * @author Aadish Gupta (PhET Interactive Simulations)
  */
 
 import Namespace from '../../phet-core/js/Namespace.js';
