@@ -1,8 +1,5 @@
 // Copyright 2015-2025, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * Main view for the "Atomic Interactions" sim and for the "Interactions" screen in the States of Matter simulation.
  *
@@ -106,8 +103,11 @@ class AtomicInteractionsScreenView extends ScreenView {
       top: this.layoutBounds.minY + INSET,
       tickTextColor: tickTextColor,
       textColor: textColor,
+      // @ts-expect-error
       fill: panelFill,
+      // @ts-expect-error
       stroke: panelStroke,
+      // @ts-expect-error
       panelTextFill: panelTextFill,
       maxWidth: PANEL_WIDTH,
       minWidth: PANEL_WIDTH,
@@ -120,6 +120,7 @@ class AtomicInteractionsScreenView extends ScreenView {
     const graphXOffset = enableHeterogeneousAtoms ? -43 : -31;
 
     this.interactivePotentialGraph = new InteractivePotentialGraph( dualAtomModel, {
+      // @ts-expect-error
       zoomable: enableHeterogeneousAtoms,
       left: this.modelViewTransform.modelToViewX( 0 ) + graphXOffset,
       top: atomsControlPanel.top + 5, // additional offset empirically determined to look good
@@ -163,10 +164,12 @@ class AtomicInteractionsScreenView extends ScreenView {
       dualAtomModel.forcesDisplayModeProperty,
       dualAtomModel.forcesExpandedProperty,
       {
+        // @ts-expect-error
         tickTextColor: tickTextColor,
         textColor: textColor,
         fill: panelFill,
         stroke: panelStroke,
+        // @ts-expect-error
         textFill: panelTextFill,
         buttonAlign: forceControlPanelButtonAlign,
         showTitleWhenExpanded: !enableHeterogeneousAtoms,
@@ -224,6 +227,7 @@ class AtomicInteractionsScreenView extends ScreenView {
     // moved.  This will be dynamically added and removed from the scene graph.
     this.handNode = new HandNode(
       this.dualAtomModel,
+      // @ts-expect-error
       this.dualAtomModel.movableAtom,
       this.modelViewTransform,
       0,
@@ -261,6 +265,7 @@ class AtomicInteractionsScreenView extends ScreenView {
     this.movableParticleLayer.addChild( this.handNode );
 
     // associate the hand node with the movable atom
+    // @ts-expect-error
     this.handNode.setParticle( dualAtomModel.movableAtom );
 
     // Create and add the push pin node that will be used to convey the idea that the fixed atom is pinned to the canvas.
@@ -307,8 +312,10 @@ class AtomicInteractionsScreenView extends ScreenView {
   /**
    * Called by the animation loop.
    */
-  public step(): void {
+  public override step(): void {
     this.handlePositionChanged();
+
+    // TODO: Should it call super.step()? See https://github.com/phetsims/states-of-matter/issues/368
   }
 
   /**
