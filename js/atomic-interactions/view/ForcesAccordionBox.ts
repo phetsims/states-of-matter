@@ -45,6 +45,10 @@ const ICON_PADDING = 35; // empirically determined to put the icons in a good po
 type SelfOptions = {
   tickTextColor?: string;
   textFill?: string;
+  xMargin?: number;
+  yMargin?: number;
+  fill?: string;
+  stroke?: string;
 };
 
 type ForcesAccordionBoxOptions = SelfOptions & AccordionBoxOptions;
@@ -60,7 +64,6 @@ class ForcesAccordionBox extends AccordionBox {
 
     const options = optionize<ForcesAccordionBoxOptions, SelfOptions, AccordionBoxOptions>()( {
 
-      // @ts-expect-error - see https://github.com/phetsims/states-of-matter/issues/371
       xMargin: 5,
       yMargin: 8,
       fill: 'black',
@@ -146,9 +149,8 @@ class ForcesAccordionBox extends AccordionBox {
 
     // compute the maximum item width
     const widestItem = _.maxBy( [ hideForcesText, totalForceText, attractiveText, vanderwaalsText, repulsiveText,
-      electronOverlapText ], item => {
+      electronOverlapText ], ( item: { label: Node; icon?: Node } ) => {
 
-      // @ts-expect-error
       return item.label.width + ( ( item.icon ) ? item.icon.width + ICON_PADDING : 0 );
     } );
 
@@ -156,8 +158,7 @@ class ForcesAccordionBox extends AccordionBox {
     const maxWidth = widestItem.label.width + ( ( widestItem.icon ) ? widestItem.icon.width + ICON_PADDING : 0 );
 
     // inserts a spacing node (HStrut) so that the text, space and image together occupy a certain fixed width
-    // @ts-expect-error
-    const createConsistentlySpacedLabel = labelSpec => {
+    const createConsistentlySpacedLabel = ( labelSpec: { label: Node; icon?: Node } ) => {
       if ( labelSpec.icon ) {
         const strutWidth = maxWidth - labelSpec.label.width - labelSpec.icon.width;
         return new HBox( { children: [ labelSpec.label, new HStrut( strutWidth ), labelSpec.icon ] } );

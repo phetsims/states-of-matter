@@ -53,8 +53,7 @@ class ParticleImageCanvasNode extends CanvasNode {
   // create a table of particle view radii so they don't have to keep being recalculated, populated below
   private readonly particleRadii: Record<string, number>;
 
-  // @ts-expect-error
-  private useStrokedParticles: boolean;
+  private useStrokedParticles!: boolean;
 
   /**
    * @param particles - that need to be rendered on the canvas

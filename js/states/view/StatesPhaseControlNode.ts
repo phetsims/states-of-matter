@@ -39,9 +39,14 @@ const ICON_HEIGHT = 25; // in screen coordinates, empirically determined
 const SELECTED_BUTTON_COLOR = '#a5a7ff';
 const DESELECTED_BUTTON_COLOR = '#F8D980';
 
-// Since no new options are introduced (all options are from NodeOptions), use EmptySelfOptions
 type SelfOptions = {
   buttonWidth?: number;
+  xMargin?: number;
+  yMargin?: number;
+  fill?: string;
+  stroke?: string;
+  lineWidth?: number;
+  cornerRadius?: number;
 };
 
 type StatesPhaseControlNodeOptions = SelfOptions & NodeOptions;
@@ -56,7 +61,6 @@ class StatesPhaseControlNode extends Node {
 
     const options = optionize<StatesPhaseControlNodeOptions, SelfOptions, NodeOptions>()( {
 
-      // @ts-expect-error - see https://github.com/phetsims/states-of-matter/issues/371
       xMargin: 5,
       yMargin: 8,
       fill: '#C8C8C8',

@@ -39,8 +39,7 @@ class InteractionPotentialCanvasNode extends CanvasNode {
   // Reusable vector for positioning the epsilon arrow
   private readonly epsilonArrowStartPoint: Vector2;
 
-  // @ts-expect-error
-  private strokeColor: string;
+  private strokeColor!: string;
 
   /**
    * @param potentialGraphNode
@@ -195,7 +194,7 @@ class InteractionPotentialCanvasNode extends CanvasNode {
       // @ts-expect-error
       this.potentialGraph.epsilonControls!.arrow.setVisible( this.potentialGraph.interactionEnabled );
       // @ts-expect-error
-      this.potentialGraph.epsilonControls!.line.setVisible( this.potentialGraph.interactionEnabled );
+      this.potentialGraph.epsilonControls!.line!.setVisible( this.potentialGraph.interactionEnabled );
       this.potentialGraph.epsilonControls!.arrow.centerX = this.potentialGraph.epsilonControls!.line!.right;
       this.potentialGraph.epsilonControls!.arrow.centerY = this.potentialGraph.epsilonControls!.line!.centerY;
     }

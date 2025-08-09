@@ -53,10 +53,8 @@ class MoleculeForceAndMotionDataSet {
   public nextMoleculeTorques: Float64Array;
 
   // Molecule properties
-  // @ts-expect-error
-  public moleculeMass: number;
-  // @ts-expect-error
-  public moleculeRotationalInertia: number;
+  public moleculeMass!: number;
+  public moleculeRotationalInertia!: number;
 
   /**
    * This creates the data set with the capacity to hold the maximum number of atoms/molecules, but does not create the

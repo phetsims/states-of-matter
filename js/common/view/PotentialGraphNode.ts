@@ -120,7 +120,6 @@ class PotentialGraphNode extends Node {
    */
   public constructor( sigma: number, epsilon: number, providedOptions?: PotentialGraphNodeOptions ) {
 
-    // @ts-expect-error
     const options = optionize<PotentialGraphNodeOptions, SelfOptions, NodeOptions>()( {
 
       // {boolean} - true if the widescreen version of the graph is needed, false if not
@@ -130,7 +129,10 @@ class PotentialGraphNode extends Node {
       includePositionMarker: false,
 
       // {boolean} - whether or not this graph instance should allow interactivity (see usage for more information)
-      allowInteraction: false
+      allowInteraction: false,
+
+      // {boolean} - whether or not this graph instance should have zoom buttons (only applicable when wide is true)
+      zoomable: false
 
     }, providedOptions );
 
@@ -150,16 +152,14 @@ class PotentialGraphNode extends Node {
       this.heightOfGraph = this.widthOfGraph * 0.75;
       GREEK_LETTER_FONT = new PhetFont( 22 );
 
-      // @ts-expect-error
-      axisLabelFont = new PhetFont( { size: 16, fill: SOMColors.controlPanelTextProperty } );
+      axisLabelFont = new PhetFont( { size: 16 } );
       GREEK_LETTER_MAX_WIDTH = 60;
     }
     else {
       this.widthOfGraph = NARROW_VERSION_WIDTH;
       this.heightOfGraph = this.widthOfGraph * 0.8;
 
-      // @ts-expect-error
-      axisLabelFont = new PhetFont( { size: 11, fill: SOMColors.controlPanelTextProperty } );
+      axisLabelFont = new PhetFont( { size: 11 } );
       GREEK_LETTER_FONT = new PhetFont( GREEK_LETTER_FONT_SIZE );
       GREEK_LETTER_MAX_WIDTH = 17;
     }

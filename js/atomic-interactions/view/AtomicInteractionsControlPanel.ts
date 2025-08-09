@@ -65,6 +65,9 @@ type SelfOptions = {
   fill?: string;
   lineWidth?: number; // width of the stroke around the panel
   cornerRadius?: number; // radius of the corners of the panel
+  xMargin?: number; // horizontal margin
+  yMargin?: number; // vertical margin
+  tickTextColor?: string; // color of tick text
 };
 
 type AtomicInteractionsControlPanelOptions = SelfOptions & NodeOptions;
@@ -79,8 +82,6 @@ class AtomicInteractionsControlPanel extends Node {
   public constructor( dualAtomModel: DualAtomModel, enableHeterogeneousAtoms: boolean, providedOptions?: AtomicInteractionsControlPanelOptions ) {
 
     const options = optionize<AtomicInteractionsControlPanelOptions, SelfOptions, NodeOptions>()( {
-
-      // @ts-expect-error - see https://github.com/phetsims/states-of-matter/issues/371
       xMargin: 5,
       yMargin: 8,
       fill: 'black',

@@ -101,6 +101,7 @@ class AtomicInteractionsScreenView extends ScreenView {
     const atomsControlPanel = new AtomicInteractionsControlPanel( dualAtomModel, enableHeterogeneousAtoms, {
       right: this.layoutBounds.maxX - INSET,
       top: this.layoutBounds.minY + INSET,
+      // @ts-expect-error
       tickTextColor: tickTextColor,
       textColor: textColor,
       // @ts-expect-error
@@ -167,7 +168,9 @@ class AtomicInteractionsScreenView extends ScreenView {
         // @ts-expect-error
         tickTextColor: tickTextColor,
         textColor: textColor,
+        // @ts-expect-error
         fill: panelFill,
+        // @ts-expect-error
         stroke: panelStroke,
         // @ts-expect-error
         textFill: panelTextFill,

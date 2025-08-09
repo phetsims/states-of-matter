@@ -69,8 +69,7 @@ class MonatomicPhaseStateChanger extends AbstractPhaseStateChanger {
     // Place the molecules into a cube, a.k.a. a crystal.
     this.formCrystal(
 
-      // @ts-expect-error
-      Utils.roundSymmetric( Math.sqrt( this.multipleParticleModel.moleculeDataSet.getNumberOfMolecules() ) ),
+      Utils.roundSymmetric( Math.sqrt( this.multipleParticleModel.moleculeDataSet!.getNumberOfMolecules() ) ),
       MIN_INITIAL_INTER_PARTICLE_DISTANCE,
       MIN_INITIAL_INTER_PARTICLE_DISTANCE * 0.866,
       MIN_INITIAL_INTER_PARTICLE_DISTANCE / 2,
