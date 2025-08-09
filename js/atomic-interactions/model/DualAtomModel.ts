@@ -332,12 +332,12 @@ class DualAtomModel {
 
     let distance = this.movableAtom.positionProperty.value.distance( Vector2.ZERO );
 
-    // @ts-expect-error
+    // @ts-expect-error TODO see https://github.com/phetsims/states-of-matter/issues/370
     if ( distance < ( this.fixedAtom.radius + this.movableAtom.radius ) / 8 ) {
 
       // The atoms are too close together, and calculating the force will cause unusable levels of speed later, so
       // we limit it.
-      // @ts-expect-error
+      // @ts-expect-error TODO see https://github.com/phetsims/states-of-matter/issues/370
       distance = ( this.fixedAtom.radius + this.movableAtom.radius ) / 8;
     }
 
