@@ -46,10 +46,13 @@ class ParticleImageCanvasNode extends CanvasNode {
 
   private readonly particles: ObservableArray<ScaledAtom>;
   private readonly modelViewTransform: ModelViewTransform2;
+
   // canvas where particle images will reside, one row with strokes and one row without
   private readonly particleImageCanvas: HTMLCanvasElement;
+
   // create a map of particle types to position in the particle image canvas, will be populated below
   private readonly mapAtomTypeToImageXPosition: Record<string, number>;
+
   // create a table of particle view radii so they don't have to keep being recalculated, populated below
   private readonly particleRadii: Record<string, number>;
 
