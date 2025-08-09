@@ -1,8 +1,5 @@
 // Copyright 2014-2025, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * A phase diagram that is specific to the needs of the States of Matter simulation.  This is not very general.
  *
@@ -166,10 +163,14 @@ class PhaseDiagram extends Node {
     this.addChild( diagramComponents.liquidGasLine );
 
     diagramComponents.triplePoint = new Path( new Shape()
+
+      // @ts-expect-error
       .ellipse( 0, 0, POINT_MARKER_DIAMETER, POINT_MARKER_DIAMETER ), { fill: 'black' } );
     this.addChild( diagramComponents.triplePoint );
 
     diagramComponents.criticalPoint = new Path( new Shape()
+
+      // @ts-expect-error
       .ellipse( 0, 0, POINT_MARKER_DIAMETER, POINT_MARKER_DIAMETER ), { fill: 'black' } );
     this.addChild( diagramComponents.criticalPoint );
 
@@ -264,6 +265,8 @@ class PhaseDiagram extends Node {
 
     // Create and add the marker that shows the current phase state.
     diagramComponents.currentStateMarker = new Path(
+
+      // @ts-expect-error
       new Shape().ellipse( 0, 0, CURRENT_STATE_MARKER_DIAMETER, CURRENT_STATE_MARKER_DIAMETER ),
       { fill: 'red' }
     );

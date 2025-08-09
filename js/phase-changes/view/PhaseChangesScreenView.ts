@@ -1,8 +1,5 @@
 // Copyright 2014-2025, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * view for the Phase Changes screen
  *
@@ -29,6 +26,7 @@ import TimeControlNode from '../../../../scenery-phet/js/TimeControlNode.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import RichText from '../../../../scenery/js/nodes/RichText.js';
 import TextPushButton from '../../../../sun/js/buttons/TextPushButton.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
 import MultipleParticleModel from '../../common/model/MultipleParticleModel.js';
 import SOMConstants from '../../common/SOMConstants.js';
 import SOMQueryParameters from '../../common/SOMQueryParameters.js';
@@ -36,11 +34,10 @@ import SubstanceType from '../../common/SubstanceType.js';
 import ParticleContainerNode from '../../common/view/ParticleContainerNode.js';
 import statesOfMatter from '../../statesOfMatter.js';
 import StatesOfMatterStrings from '../../StatesOfMatterStrings.js';
+import PhaseChangesModel from '../PhaseChangesModel.js';
 import InteractionPotentialAccordionBox from './InteractionPotentialAccordionBox.js';
 import PhaseChangesMoleculesControlPanel from './PhaseChangesMoleculesControlPanel.js';
 import PhaseDiagramAccordionBox from './PhaseDiagramAccordionBox.js';
-import PhaseChangesModel from '../PhaseChangesModel.js';
-import Tandem from '../../../../tandem/js/Tandem.js';
 
 // strings
 const returnLidString = StatesOfMatterStrings.returnLid;
@@ -83,6 +80,8 @@ class PhaseChangesScreenView extends ScreenView {
     super( merge( { tandem: tandem }, SOMConstants.SCREEN_VIEW_OPTIONS ) );
 
     this.multipleParticleModel = model;
+
+    // @ts-expect-error
     this.modelTemperatureHistory = createObservableArray( { allowDuplicates: true } );
 
     // Create the model-view transform. The multipliers for the 2nd parameter can be used to adjust where the point
@@ -214,9 +213,12 @@ class PhaseChangesScreenView extends ScreenView {
     // add bicycle pump node
     this.pumpNode = new BicyclePumpNode(
       model.targetNumberOfMoleculesProperty,
-      numberOfMoleculesRangeProperty,
-      {
+      numberOfMoleculesRangeProperty, {
+
+        // @ts-expect-error
         nodeEnabledProperty: bicyclePumpEnabledProperty,
+
+        // @ts-expect-error
         injectionEnabledProperty: model.isInjectionAllowedProperty,
         translation: pumpPosition,
         hoseAttachmentOffset: hoseAttachmentPoint.minus( pumpPosition ),
@@ -250,7 +252,7 @@ class PhaseChangesScreenView extends ScreenView {
     model.isExplodedProperty.linkAttribute( this.returnLidButton, 'visible' );
 
     // add interaction potential diagram
-    let interactionPotentialAccordionBox = null;
+    let interactionPotentialAccordionBox: InteractionPotentialAccordionBox;
     if ( isPotentialGraphEnabled ) {
       interactionPotentialAccordionBox = new InteractionPotentialAccordionBox(
         SOMConstants.MAX_SIGMA,
@@ -343,6 +345,7 @@ class PhaseChangesScreenView extends ScreenView {
         if ( substance === SubstanceType.ADJUSTABLE_ATOM ||
              substance === SubstanceType.DIATOMIC_OXYGEN ||
              substance === SubstanceType.WATER ) {
+
           interactionPotentialAccordionBox.setMolecular( true );
         }
         else {
@@ -402,8 +405,10 @@ class PhaseChangesScreenView extends ScreenView {
     } );
   }
 
-  public step( dt: number ): void {
+  public override step( dt: number ): void {
     this.particleContainerNode.step( dt );
+
+    // TODO: Want to call super.step(dt) here? See https://github.com/phetsims/states-of-matter/issues/368
   }
 
   /**
