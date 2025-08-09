@@ -1,8 +1,5 @@
 // Copyright 2015-2025, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * This extension of the ParticleNode class allows users to grab the node and move it, thus changing the position
  * within the underlying model.
@@ -15,8 +12,8 @@ import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransfo
 import DragListener from '../../../../scenery/js/listeners/DragListener.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import statesOfMatter from '../../statesOfMatter.js';
-import ScaledAtom from '../../common/model/particle/ScaledAtom.js';
 import DualAtomModel from '../model/DualAtomModel.js';
+import MotionAtom from '../model/MotionAtom.js';
 import ParticleForceNode from './ParticleForceNode.js';
 
 class GrabbableParticleNode extends ParticleForceNode {
@@ -32,7 +29,7 @@ class GrabbableParticleNode extends ParticleForceNode {
    * @param minX - grabbable particle  min x position
    * @param tandem - support for exporting instances from the sim
    */
-  public constructor( dualAtomModel: DualAtomModel, particle: ScaledAtom, modelViewTransform: ModelViewTransform2, enableOverlap: boolean, minX: number, tandem: Tandem ) {
+  public constructor( dualAtomModel: DualAtomModel, particle: MotionAtom, modelViewTransform: ModelViewTransform2, enableOverlap: boolean, minX: number, tandem: Tandem ) {
 
     super( particle, modelViewTransform, enableOverlap, tandem );
 
@@ -44,7 +41,7 @@ class GrabbableParticleNode extends ParticleForceNode {
     // Put a cursor handler into place.
     this.cursor = 'pointer';
 
-    let startDragX;
+    let startDragX: number;
     let endDragX;
     let initialStartX = this.x;
 
@@ -90,7 +87,7 @@ class GrabbableParticleNode extends ParticleForceNode {
     };
   }
 
-  public dispose(): void {
+  public override dispose(): void {
     this.disposeGrabbableParticleNode();
     super.dispose();
   }

@@ -26,10 +26,11 @@ const OVERLAP_ENLARGEMENT_FACTOR = 1.25;
 
 class ParticleNode extends Node {
 
-  private readonly particle: MotionAtom;
+  public readonly particle: MotionAtom;
   private readonly modelViewTransform: ModelViewTransform2;
   private readonly overlapEnabled: boolean;
   private position: Vector2;
+
   // node that will represent this particle, initialized arbitrarily, updated below
   private readonly circle: Circle;
 
