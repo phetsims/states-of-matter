@@ -91,18 +91,18 @@ class EpsilonControlPotentialGraph extends PotentialGraphNode {
     const epsilonLinePressListener = new PressListener( { attach: false, tandem: Tandem.OPT_OUT } );
     this.epsilonControls!.line.addInputListener( epsilonLinePressListener );
     epsilonLinePressListener.isHighlightedProperty.link( isHighlighted => {
-      this.epsilonControls!.line.stroke = isHighlighted ? RESIZE_HANDLE_HIGHLIGHTED_COLOR : RESIZE_HANDLE_NORMAL_COLOR;
+      this.epsilonControls!.line!.stroke = isHighlighted ? RESIZE_HANDLE_HIGHLIGHTED_COLOR : RESIZE_HANDLE_NORMAL_COLOR;
     } );
 
     // drag listener
     this.epsilonControls!.line.addInputListener( new DragListener( {
 
       start: event => {
-        startDragY = this.epsilonControls!.line.globalToParentPoint( event.pointer.point ).y;
+        startDragY = this.epsilonControls!.line!.globalToParentPoint( event.pointer.point ).y;
       },
 
       drag: event => {
-        endDragY = this.epsilonControls!.line.globalToParentPoint( event.pointer.point ).y;
+        endDragY = this.epsilonControls!.line!.globalToParentPoint( event.pointer.point ).y;
         const d = endDragY - startDragY;
         startDragY = endDragY;
         const scaleFactor = SOMConstants.MAX_EPSILON / ( this.getGraphHeight() / 2 );
@@ -142,11 +142,11 @@ class EpsilonControlPotentialGraph extends PotentialGraphNode {
     this.epsilonControls!.arrow.addInputListener( new DragListener( {
 
       start: event => {
-        startDragY = this.epsilonControls!.arrow.globalToParentPoint( event.pointer.point ).y;
+        startDragY = this.epsilonControls!.arrow!.globalToParentPoint( event.pointer.point ).y;
       },
 
       drag: event => {
-        endDragY = this.epsilonControls!.arrow.globalToParentPoint( event.pointer.point ).y;
+        endDragY = this.epsilonControls!.arrow!.globalToParentPoint( event.pointer.point ).y;
         const d = endDragY - startDragY;
         startDragY = endDragY;
         const scaleFactor = SOMConstants.MAX_EPSILON / ( this.getGraphHeight() / 2 );
@@ -165,7 +165,7 @@ class EpsilonControlPotentialGraph extends PotentialGraphNode {
     const epsilonArrowPressListener = new PressListener( { attach: false, tandem: Tandem.OPT_OUT } );
     this.epsilonControls!.arrow.addInputListener( epsilonArrowPressListener );
     epsilonArrowPressListener.isHighlightedProperty.link( isHighlighted => {
-      this.epsilonControls!.arrow.fill = isHighlighted ? RESIZE_HANDLE_HIGHLIGHTED_COLOR : RESIZE_HANDLE_NORMAL_COLOR;
+      this.epsilonControls!.arrow!.fill = isHighlighted ? RESIZE_HANDLE_HIGHLIGHTED_COLOR : RESIZE_HANDLE_NORMAL_COLOR;
     } );
 
     // @ts-expect-error

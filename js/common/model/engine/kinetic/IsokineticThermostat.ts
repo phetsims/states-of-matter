@@ -11,8 +11,7 @@
  */
 
 import dotRandom from '../../../../../../dot/js/dotRandom.js';
-import Vector2 from '../../../../../../dot/js/Vector2.js';
-import IntentionalAny from '../../../../../../phet-core/js/types/IntentionalAny.js';
+import Vector2, { Vector2StateObject } from '../../../../../../dot/js/Vector2.js';
 import IOType from '../../../../../../tandem/js/types/IOType.js';
 import NumberIO from '../../../../../../tandem/js/types/NumberIO.js';
 import statesOfMatter from '../../../../statesOfMatter.js';
@@ -171,7 +170,7 @@ class IsokineticThermostat {
    * Get an object that describes the current state, used to restore state using setState, used only for phet-io.
    * for phet-io support only
    */
-  public toStateObject(): IntentionalAny {
+  public toStateObject(): IsokineticThermostatStateObject {
 
     // Note: The moleculeDataSet is *not* included as part of the state because this is assumed to be a reference that
     // is shared with the model, and the model is responsible for updating its state during deserialization.
@@ -191,7 +190,7 @@ class IsokineticThermostat {
    * it is instead called during explicit de-serialization.
    * @param stateObject - returned from toStateObject
    */
-  public setState( stateObject: IntentionalAny ): void {
+  public setState( stateObject: IsokineticThermostatStateObject ): void {
 
     // Note: The moleculeDataSet is *not* included as part of the state because this is assumed to be a reference that
     // is shared with the model, and the model is responsible for updating its state during deserialization.
@@ -199,9 +198,9 @@ class IsokineticThermostat {
     this.targetTemperature = stateObject.targetTemperature;
     this.minModelTemperature = stateObject.minModelTemperature;
     this.previousTemperatureScaleFactor = stateObject.previousTemperatureScaleFactor;
-    this.previousParticleVelocity.set( stateObject.previousParticleVelocity );
-    this.totalVelocityChangeThisStep.set( stateObject.totalVelocityChangeThisStep );
-    this.accumulatedAverageVelocityChange.set( stateObject.accumulatedAverageVelocityChange );
+    this.previousParticleVelocity.set( Vector2.fromStateObject( stateObject.previousParticleVelocity ) );
+    this.totalVelocityChangeThisStep.set( Vector2.fromStateObject( stateObject.totalVelocityChangeThisStep ) );
+    this.accumulatedAverageVelocityChange.set( Vector2.fromStateObject( stateObject.accumulatedAverageVelocityChange ) );
   }
 
   public static readonly IsoKineticThermostatIO = new IOType( 'IsoKineticThermostatIO', {
@@ -216,6 +215,15 @@ class IsokineticThermostat {
     }
   } );
 }
+
+export type IsokineticThermostatStateObject = {
+  targetTemperature: number;
+  minModelTemperature: number;
+  previousTemperatureScaleFactor: number;
+  previousParticleVelocity: Vector2StateObject;
+  totalVelocityChangeThisStep: Vector2StateObject;
+  accumulatedAverageVelocityChange: Vector2StateObject;
+};
 
 statesOfMatter.register( 'IsokineticThermostat', IsokineticThermostat );
 export default IsokineticThermostat;

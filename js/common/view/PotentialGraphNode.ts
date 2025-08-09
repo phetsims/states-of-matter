@@ -9,11 +9,11 @@
 
 import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize from '../../../../phet-core/js/optionize.js';
-import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import Line from '../../../../scenery/js/nodes/Line.js';
 import Node, { NodeOptions } from '../../../../scenery/js/nodes/Node.js';
+import Path from '../../../../scenery/js/nodes/Path.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import PositionMarker from '../../atomic-interactions/view/PositionMarker.js';
 import ZoomableGridNode from '../../atomic-interactions/view/ZoomableGridNode.js';
@@ -96,14 +96,14 @@ class PotentialGraphNode extends Node {
   // An object where specific controls can be added for controlling the epsilon parameter in the Lennard-
   // Jones potential calculations, see usages in subclasses
   public readonly epsilonControls?: {
-    arrow: null | IntentionalAny;
-    line: null | IntentionalAny;
+    arrow: null | Path;
+    line: null | Path;
   };
   
   // An object where a specific control can be added for controlling the sigma parameter in the Lennard-
   // Jones potential calculations, see usages in subclasses. See usages in subclasses.
   public readonly sigmaControls?: {
-    arrow: null | IntentionalAny;
+    arrow: null | Path;
   };
   
   public readonly positionMarker?: PositionMarker;

@@ -132,7 +132,7 @@ class PhaseChangesModel extends MultipleParticleModel {
 
   public setEpsilon( epsilon: number ): void {
     if ( this.substanceProperty.get() === SubstanceType.ADJUSTABLE_ATOM ) {
-      this.moleculeForceAndMotionCalculator.setScaledEpsilon(
+      this.moleculeForceAndMotionCalculator!.setScaledEpsilon(
         convertEpsilonToScaledEpsilon( Utils.clamp( epsilon, MIN_ADJUSTABLE_EPSILON, MAX_ADJUSTABLE_EPSILON ) )
       );
     }

@@ -9,6 +9,7 @@
  */
 
 import Utils from '../../../../../dot/js/Utils.js';
+import affirm from '../../../../../perennial-alias/js/browser-and-node/affirm.js';
 import statesOfMatter from '../../../statesOfMatter.js';
 import PhaseStateEnum from '../../PhaseStateEnum.js';
 import SOMConstants from '../../SOMConstants.js';
@@ -95,7 +96,7 @@ class DiatomicPhaseStateChanger extends AbstractPhaseStateChanger {
     if ( this.multipleParticleModel.substanceProperty.get() === SubstanceType.DIATOMIC_OXYGEN ) {
       dataSetToLoad = LIQUID_INITIAL_STATES.oxygen;
     }
-    assert && assert( dataSetToLoad, `unhandled substance: ${this.multipleParticleModel.substanceProperty.get()}` );
+    affirm( dataSetToLoad, `unhandled substance: ${this.multipleParticleModel.substanceProperty.get()}` );
 
     // load the previously saved state
     this.loadSavedState( dataSetToLoad );

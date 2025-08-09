@@ -11,7 +11,6 @@
 import dotRandom from '../../../../../dot/js/dotRandom.js';
 import Random from '../../../../../dot/js/Random.js';
 import Vector2 from '../../../../../dot/js/Vector2.js';
-import IntentionalAny from '../../../../../phet-core/js/types/IntentionalAny.js';
 import statesOfMatter from '../../../statesOfMatter.js';
 import PhaseStateEnum from '../../PhaseStateEnum.js';
 import SOMConstants from '../../SOMConstants.js';
@@ -328,7 +327,14 @@ class AbstractPhaseStateChanger {
   /**
    * Load previously saved position and motion state, does NOT load forces state
    */
-  protected loadSavedState( savedState: IntentionalAny ): void {
+  protected loadSavedState( savedState: {
+    numberOfMolecules: number;
+    atomsPerMolecule: number;
+    moleculeCenterOfMassPositions: Array<{ x: number; y: number }>;
+    moleculeVelocities: Array<{ x: number; y: number }>;
+    moleculeRotationAngles?: number[];
+    moleculeRotationRates?: number[];
+  } ): void {
     const moleculeDataSet = this.multipleParticleModel.moleculeDataSet!;
 
     assert && assert(
@@ -357,7 +363,10 @@ class AbstractPhaseStateChanger {
       if ( savedState.moleculeRotationAngles ) {
         moleculeRotationAngles[ i ] = savedState.moleculeRotationAngles[ i ];
       }
+      // TODO: Should this be if ( savedState.moleculeRotationRates ) {  ? see https://github.com/phetsims/states-of-matter/issues/368
       if ( savedState.moleculeRotationAngles ) {
+
+        // @ts-expect-error
         moleculeRotationRates[ i ] = savedState.moleculeRotationRates[ i ];
       }
       moleculesInsideContainer[ i ] = true;

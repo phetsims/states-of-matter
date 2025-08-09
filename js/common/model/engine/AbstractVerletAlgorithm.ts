@@ -10,7 +10,6 @@
  */
 
 import NumberProperty from '../../../../../axon/js/NumberProperty.js';
-import IntentionalAny from '../../../../../phet-core/js/types/IntentionalAny.js';
 import isSettingPhetioStateProperty from '../../../../../tandem/js/isSettingPhetioStateProperty.js';
 import statesOfMatter from '../../../statesOfMatter.js';
 import SOMConstants from '../../SOMConstants.js';
@@ -39,7 +38,7 @@ abstract class AbstractVerletAlgorithm {
   protected topBounceInset: number;
 
   protected potentialEnergy: number;
-  protected calculatedTemperature: number;
+  public calculatedTemperature: number;
 
   // Flag that indicates whether the lid affected the velocity of one or more particles, set
   // during execution of the Verlet algorithm, must be cleared by the client.
@@ -52,7 +51,9 @@ abstract class AbstractVerletAlgorithm {
   private timeAboveExplosionPressure: number;
 
   // Abstract property that must be implemented by subclasses
-  protected abstract positionUpdater: IntentionalAny;
+  protected abstract positionUpdater: {
+    updateAtomPositions: ( moleculeDataSet: MoleculeForceAndMotionDataSet ) => void;
+  };
 
   protected constructor( multipleParticleModel: MultipleParticleModel ) {
 

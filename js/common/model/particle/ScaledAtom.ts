@@ -11,7 +11,7 @@
  */
 
 import Vector2 from '../../../../../dot/js/Vector2.js';
-import IntentionalAny from '../../../../../phet-core/js/types/IntentionalAny.js';
+import Color from '../../../../../scenery/js/util/Color.js';
 import statesOfMatter from '../../../statesOfMatter.js';
 import SOMConstants from '../../SOMConstants.js';
 import AtomType from '../AtomType.js';
@@ -27,7 +27,7 @@ class ScaledAtom {
   // Attributes of the atom, changed as the atom type changes
   public readonly radius: number;
   public readonly mass: number;
-  public readonly color: IntentionalAny;
+  public readonly color: Color;
   public readonly epsilon: number;
 
   /**
@@ -43,7 +43,6 @@ class ScaledAtom {
 
     this.radius = 0;
     this.mass = 0;
-    this.color = null;
     this.epsilon = 0;
 
     // set the attributes based on the atom type

@@ -33,7 +33,6 @@ import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import required from '../../../../phet-core/js/required.js';
-import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import PhetioObject, { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import BooleanIO from '../../../../tandem/js/types/BooleanIO.js';
@@ -46,18 +45,20 @@ import PhaseStateEnum from '../PhaseStateEnum.js';
 import SOMConstants from '../SOMConstants.js';
 import SubstanceType from '../SubstanceType.js';
 import AtomType from './AtomType.js';
+import AbstractPhaseStateChanger from './engine/AbstractPhaseStateChanger.js';
+import AbstractVerletAlgorithm from './engine/AbstractVerletAlgorithm.js';
 import DiatomicAtomPositionUpdater from './engine/DiatomicAtomPositionUpdater.js';
 import DiatomicPhaseStateChanger from './engine/DiatomicPhaseStateChanger.js';
 import DiatomicVerletAlgorithm from './engine/DiatomicVerletAlgorithm.js';
-import AndersenThermostat from './engine/kinetic/AndersenThermostat.js';
-import IsokineticThermostat from './engine/kinetic/IsokineticThermostat.js';
+import AndersenThermostat, { AndersenThermostatStateObject } from './engine/kinetic/AndersenThermostat.js';
+import IsokineticThermostat, { IsokineticThermostatStateObject } from './engine/kinetic/IsokineticThermostat.js';
 import MonatomicAtomPositionUpdater from './engine/MonatomicAtomPositionUpdater.js';
 import MonatomicPhaseStateChanger from './engine/MonatomicPhaseStateChanger.js';
 import MonatomicVerletAlgorithm from './engine/MonatomicVerletAlgorithm.js';
 import WaterAtomPositionUpdater from './engine/WaterAtomPositionUpdater.js';
 import WaterPhaseStateChanger from './engine/WaterPhaseStateChanger.js';
 import WaterVerletAlgorithm from './engine/WaterVerletAlgorithm.js';
-import MoleculeForceAndMotionDataSet from './MoleculeForceAndMotionDataSet.js';
+import MoleculeForceAndMotionDataSet, { MoleculeForceAndMotionDataSetStateObject } from './MoleculeForceAndMotionDataSet.js';
 import MovingAverage from './MovingAverage.js';
 import HydrogenAtom from './particle/HydrogenAtom.js';
 import ScaledAtom from './particle/ScaledAtom.js';
@@ -159,13 +160,13 @@ class MultipleParticleModel extends PhetioObject {
   private moleculeInjectionHoldoffTimer: number;
   protected heightChangeThisStep: number;
   private moleculeInjectedThisStep: boolean;
-  private atomPositionUpdater: IntentionalAny | null;
-  private phaseStateChanger: IntentionalAny | null;
+  private atomPositionUpdater: { updateAtomPositions: ( moleculeDataSet: MoleculeForceAndMotionDataSet ) => void } | null;
+  private phaseStateChanger: AbstractPhaseStateChanger | null;
   private isoKineticThermostat: IsokineticThermostat | null;
   private andersenThermostat: AndersenThermostat | null;
-  protected moleculeForceAndMotionCalculator: IntentionalAny | null;
+  protected moleculeForceAndMotionCalculator: AbstractVerletAlgorithm | null;
   private averageTemperatureDifference: MovingAverage;
-  private thermostatRunPreviousStep: IntentionalAny | null;
+  private thermostatRunPreviousStep: IsokineticThermostat | AndersenThermostat | null;
 
   public constructor( tandem: Tandem, providedOptions?: MultipleParticleModelOptions ) {
 
@@ -451,7 +452,7 @@ class MultipleParticleModel extends PhetioObject {
    * (such as atmospheres).
    */
   public getModelPressure(): number {
-    return this.moleculeForceAndMotionCalculator.pressureProperty.get();
+    return this.moleculeForceAndMotionCalculator!.pressureProperty.get();
   }
 
   /**
@@ -584,7 +585,7 @@ class MultipleParticleModel extends PhetioObject {
       phaseSate === PhaseStateEnum.SOLID || phaseSate === PhaseStateEnum.LIQUID || phaseSate === PhaseStateEnum.GAS,
       'invalid phase state specified'
     );
-    this.phaseStateChanger.setPhase( phaseSate );
+    this.phaseStateChanger!.setPhase( phaseSate );
     this.syncAtomPositions();
   }
 
@@ -659,7 +660,7 @@ class MultipleParticleModel extends PhetioObject {
     }
 
     // Position the atoms that comprise the molecules.
-    this.atomPositionUpdater.updateAtomPositions( this.moleculeDataSet );
+    this.atomPositionUpdater!.updateAtomPositions( this.moleculeDataSet! );
 
     // add the non-normalized atoms
     this.addAtomsForCurrentSubstance( 1 );
@@ -833,7 +834,7 @@ class MultipleParticleModel extends PhetioObject {
 
     // Execute the Verlet algorithm, a.k.a. the "particle engine", in order to determine the new atom positions.
     for ( let i = 0; i < numParticleEngineSteps; i++ ) {
-      this.moleculeForceAndMotionCalculator.updateForcesAndMotion( particleMotionTimeStep );
+      this.moleculeForceAndMotionCalculator!.updateForcesAndMotion( particleMotionTimeStep );
     }
 
     // Sync up the positions of the normalized molecules (the molecule data set) with the atoms being monitored by the
@@ -942,7 +943,7 @@ class MultipleParticleModel extends PhetioObject {
       return;
     }
 
-    const calculatedTemperature = this.moleculeForceAndMotionCalculator.calculatedTemperature;
+    const calculatedTemperature = this.moleculeForceAndMotionCalculator!.calculatedTemperature;
     const temperatureSetPoint = this.temperatureSetPointProperty.get();
     let temperatureAdjustmentNeeded = false;
     let thermostatRunThisStep = null;
@@ -964,7 +965,7 @@ class MultipleParticleModel extends PhetioObject {
                              injectedParticleTemperature / numMolecules;
       this.setTemperature( newTemperature );
     }
-    else if ( this.moleculeForceAndMotionCalculator.lidChangedParticleVelocity ) {
+    else if ( this.moleculeForceAndMotionCalculator!.lidChangedParticleVelocity ) {
 
       // The velocity of one or more molecules was changed through interaction with the lid.  Since this can change
       // the total kinetic energy of the molecules in the system, no thermostat is run.  Instead, the temperature is
@@ -981,7 +982,7 @@ class MultipleParticleModel extends PhetioObject {
       }
 
       // Clear the flag for the next time through.
-      this.moleculeForceAndMotionCalculator.lidChangedParticleVelocity = false;
+      this.moleculeForceAndMotionCalculator!.lidChangedParticleVelocity = false;
     }
     else if ( temperatureAdjustmentNeeded ||
               temperatureSetPoint > LIQUID_TEMPERATURE ||
@@ -1044,6 +1045,8 @@ class MultipleParticleModel extends PhetioObject {
     // Create the strategies that will work on this data set.
     this.phaseStateChanger = new DiatomicPhaseStateChanger( this );
     this.atomPositionUpdater = DiatomicAtomPositionUpdater;
+
+    // @ts-expect-error
     this.moleculeForceAndMotionCalculator = new DiatomicVerletAlgorithm( this );
     this.isoKineticThermostat = new IsokineticThermostat( this.moleculeDataSet, this.minModelTemperature! );
     this.andersenThermostat = new AndersenThermostat( this.moleculeDataSet, this.minModelTemperature! );
@@ -1095,8 +1098,10 @@ class MultipleParticleModel extends PhetioObject {
     this.moleculeDataSet = new MoleculeForceAndMotionDataSet( 3 );
 
     // Create the strategies that will work on this data set.
+    // @ts-expect-error
     this.phaseStateChanger = new WaterPhaseStateChanger( this );
     this.atomPositionUpdater = WaterAtomPositionUpdater;
+    // @ts-expect-error
     this.moleculeForceAndMotionCalculator = new WaterVerletAlgorithm( this );
     this.isoKineticThermostat = new IsokineticThermostat( this.moleculeDataSet, this.minModelTemperature! );
     this.andersenThermostat = new AndersenThermostat( this.moleculeDataSet, this.minModelTemperature! );
@@ -1171,6 +1176,8 @@ class MultipleParticleModel extends PhetioObject {
     // Create the strategies that will work on this data set.
     this.phaseStateChanger = new MonatomicPhaseStateChanger( this );
     this.atomPositionUpdater = MonatomicAtomPositionUpdater;
+
+    // @ts-expect-error
     this.moleculeForceAndMotionCalculator = new MonatomicVerletAlgorithm( this );
     this.isoKineticThermostat = new IsokineticThermostat( this.moleculeDataSet, this.minModelTemperature! );
     this.andersenThermostat = new AndersenThermostat( this.moleculeDataSet, this.minModelTemperature! );
@@ -1324,8 +1331,8 @@ class MultipleParticleModel extends PhetioObject {
     // Set the phase to be gas, since otherwise the extremely high kinetic energy of the molecules causes an
     // unreasonably high temperature for the molecules that remain in the container. Doing this generally cools them
     // down into a more manageable state.
-    if ( numMoleculesOutsideContainer > 0 && this.moleculeForceAndMotionCalculator.calculatedTemperature > GAS_TEMPERATURE ) {
-      this.phaseStateChanger.setPhase( PhaseStateEnum.GAS );
+    if ( numMoleculesOutsideContainer > 0 && this.moleculeForceAndMotionCalculator!.calculatedTemperature > GAS_TEMPERATURE ) {
+      this.phaseStateChanger!.setPhase( PhaseStateEnum.GAS );
     }
 
     // Sync up the property that tracks the number of molecules - mostly for the purposes of injecting new molecules -
@@ -1337,7 +1344,7 @@ class MultipleParticleModel extends PhetioObject {
    * serialize this instance for phet-io
    * for phet-io support only
    */
-  public toStateObject(): IntentionalAny {
+  public toStateObject(): MultipleParticleModelStateObject {
     return {
       _substance: EnumerationIO( SubstanceType ).toStateObject( this.substanceProperty.value ),
       _isExploded: this.isExplodedProperty.value,
@@ -1350,14 +1357,14 @@ class MultipleParticleModel extends PhetioObject {
       _moleculeDataSet: MoleculeForceAndMotionDataSet.MoleculeForceAndMotionDataSetIO.toStateObject( this.moleculeDataSet ),
       _isoKineticThermostatState: this.isoKineticThermostat!.toStateObject(),
       _andersenThermostatState: this.andersenThermostat!.toStateObject(),
-      _moleculeForcesAndMotionCalculatorPressure: this.moleculeForceAndMotionCalculator.pressureProperty.value
+      _moleculeForcesAndMotionCalculatorPressure: this.moleculeForceAndMotionCalculator!.pressureProperty.value
     };
   }
 
   /**
    * Set the state of this instance for phet-io
    */
-  public applyState( stateObject: IntentionalAny ): void {
+  public applyState( stateObject: MultipleParticleModelStateObject ): void {
     required( stateObject );
 
     // Setting the substance initializes a bunch of model parameters, so this is done first, then other items that may
@@ -1377,7 +1384,7 @@ class MultipleParticleModel extends PhetioObject {
     this.moleculeDataSet!.setState( stateObject._moleculeDataSet );
 
     // Preset the pressure in the accumulator that tracks it so that it doesn't have to start from zero.
-    this.moleculeForceAndMotionCalculator.presetPressure( stateObject._moleculeForcesAndMotionCalculatorPressure );
+    this.moleculeForceAndMotionCalculator!.presetPressure( stateObject._moleculeForcesAndMotionCalculatorPressure );
 
     // Make sure that we have the right number of scaled (i.e. non-normalized) atoms.
     const numberOfNormalizedMolecules = this.moleculeDataSet!.numberOfMolecules;
@@ -1404,7 +1411,7 @@ class MultipleParticleModel extends PhetioObject {
   public static readonly PARTICLE_CONTAINER_INITIAL_HEIGHT = CONTAINER_INITIAL_HEIGHT;
   public static readonly MAX_CONTAINER_EXPAND_RATE = MAX_CONTAINER_EXPAND_RATE;
 
-  public static readonly MultipleParticleModelIO = new IOType<MultipleParticleModel, IntentionalAny>( 'MultipleParticleModelIO', {
+  public static readonly MultipleParticleModelIO = new IOType<MultipleParticleModel, MultipleParticleModelStateObject>( 'MultipleParticleModelIO', {
     valueType: MultipleParticleModel,
     documentation: 'multiple particle model that simulates interactions that lead to phase-like behavior',
     toStateObject: multipleParticleModel => multipleParticleModel.toStateObject(),
@@ -1426,6 +1433,19 @@ class MultipleParticleModel extends PhetioObject {
     }
   } );
 }
+
+export type MultipleParticleModelStateObject = {
+  _substance: string;
+  _isExploded: boolean;
+  _containerHeight: number;
+  _gravitationalAcceleration: number;
+  _normalizedLidVelocityY: number;
+  _heatingCoolingAmount: number;
+  _moleculeDataSet: MoleculeForceAndMotionDataSetStateObject;
+  _isoKineticThermostatState: IsokineticThermostatStateObject;
+  _andersenThermostatState: AndersenThermostatStateObject;
+  _moleculeForcesAndMotionCalculatorPressure: number;
+};
 
 statesOfMatter.register( 'MultipleParticleModel', MultipleParticleModel );
 export default MultipleParticleModel;

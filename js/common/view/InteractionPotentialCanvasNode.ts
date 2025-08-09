@@ -190,14 +190,14 @@ class InteractionPotentialCanvasNode extends CanvasNode {
     // Position the control handles if used.
     if ( this.potentialGraph.epsilonControls!.arrow ) {
       const graphMin = this.potentialGraph.getGraphMin();
-      this.potentialGraph.epsilonControls!.line.setTranslation( graphMin.x, graphMin.y + EPSILON_LINE_WIDTH );
+      this.potentialGraph.epsilonControls!.line!.setTranslation( graphMin.x, graphMin.y + EPSILON_LINE_WIDTH );
 
       // @ts-expect-error
       this.potentialGraph.epsilonControls!.arrow.setVisible( this.potentialGraph.interactionEnabled );
       // @ts-expect-error
       this.potentialGraph.epsilonControls!.line.setVisible( this.potentialGraph.interactionEnabled );
-      this.potentialGraph.epsilonControls!.arrow.centerX = this.potentialGraph.epsilonControls!.line.right;
-      this.potentialGraph.epsilonControls!.arrow.centerY = this.potentialGraph.epsilonControls!.line.centerY;
+      this.potentialGraph.epsilonControls!.arrow.centerX = this.potentialGraph.epsilonControls!.line!.right;
+      this.potentialGraph.epsilonControls!.arrow.centerY = this.potentialGraph.epsilonControls!.line!.centerY;
     }
     if ( this.potentialGraph.sigmaControls!.arrow ) {
       this.potentialGraph.sigmaControls!.arrow.centerX = sigmaHandleXPos;

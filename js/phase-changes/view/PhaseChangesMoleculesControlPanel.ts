@@ -12,12 +12,12 @@ import Dimension2 from '../../../../dot/js/Dimension2.js';
 import Range from '../../../../dot/js/Range.js';
 import merge from '../../../../phet-core/js/merge.js';
 import optionize from '../../../../phet-core/js/optionize.js';
-import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import VBox from '../../../../scenery/js/layout/nodes/VBox.js';
 import Node, { type NodeOptions } from '../../../../scenery/js/nodes/Node.js';
 import Rectangle from '../../../../scenery/js/nodes/Rectangle.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
+import TPaint from '../../../../scenery/js/util/TPaint.js';
 import RectangularRadioButtonGroup from '../../../../sun/js/buttons/RectangularRadioButtonGroup.js';
 import Panel from '../../../../sun/js/Panel.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
@@ -55,8 +55,8 @@ type SelfOptions = {
   lineWidth?: number;
   cornerRadius?: number;
   minWidth?: number; // minimum width of the panel, will generally be set by constructor
-  stroke?: IntentionalAny; // Could be Color or Property<Color>
-  fill?: IntentionalAny; // Could be Color or Property<Color>
+  stroke?: TPaint;
+  fill?: TPaint;
 };
 
 type PhaseChangesMoleculesControlPanelOptions = SelfOptions & NodeOptions;

@@ -9,7 +9,6 @@
 
 import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize from '../../../../phet-core/js/optionize.js';
-import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import ArrowShape from '../../../../scenery-phet/js/ArrowShape.js';
 import Path, { PathOptions } from '../../../../scenery/js/nodes/Path.js';
 import statesOfMatter from '../../statesOfMatter.js';
@@ -20,6 +19,8 @@ type SelfOptions = {
   tailWidth?: number;
   doubleHead?: boolean; // true puts heads on both ends of the arrow, false puts a head at the tip
 };
+
+type ResolvedSelfOptions = Required<SelfOptions>;
 
 type DimensionalArrowNodeOptions = SelfOptions & PathOptions;
 
@@ -32,7 +33,7 @@ class DimensionalArrowNode extends Path {
   private readonly tipPosition: Vector2;
 
   // options
-  private options: IntentionalAny;
+  private options: ResolvedSelfOptions & PathOptions;
 
   /**
    * @param tailX - arrowNode tail X position

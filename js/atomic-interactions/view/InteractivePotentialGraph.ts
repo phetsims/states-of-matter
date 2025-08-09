@@ -135,7 +135,7 @@ class InteractivePotentialGraph extends PotentialGraphNode {
     const epsilonLinePressListener = new PressListener( { attach: false, tandem: Tandem.OPT_OUT } );
     this.epsilonControls!.line.addInputListener( epsilonLinePressListener );
     epsilonLinePressListener.isHighlightedProperty.link( isHighlighted => {
-      this.epsilonControls!.line.stroke = isHighlighted ? RESIZE_HANDLE_HIGHLIGHTED_COLOR : RESIZE_HANDLE_NORMAL_COLOR;
+      this.epsilonControls!.line!.stroke = isHighlighted ? RESIZE_HANDLE_HIGHLIGHTED_COLOR : RESIZE_HANDLE_NORMAL_COLOR;
     } );
 
     // Add the arrow nodes that will allow the user to control the epsilon value.
@@ -160,7 +160,7 @@ class InteractivePotentialGraph extends PotentialGraphNode {
     const epsilonArrowPressListener = new PressListener( { attach: false, tandem: Tandem.OPT_OUT } );
     this.epsilonControls!.arrow.addInputListener( epsilonArrowPressListener );
     epsilonArrowPressListener.isHighlightedProperty.link( isHighlighted => {
-      this.epsilonControls!.arrow.fill = isHighlighted ? RESIZE_HANDLE_HIGHLIGHTED_COLOR : RESIZE_HANDLE_NORMAL_COLOR;
+      this.epsilonControls!.arrow!.fill = isHighlighted ? RESIZE_HANDLE_HIGHLIGHTED_COLOR : RESIZE_HANDLE_NORMAL_COLOR;
     } );
     epsilonLayer.addChild( this.epsilonControls!.arrow );
     this.epsilonControls!.arrow.touchArea = this.epsilonControls!.arrow.localBounds.dilatedXY( 3, 10 );
@@ -181,7 +181,7 @@ class InteractivePotentialGraph extends PotentialGraphNode {
     const sigmaArrowPressListener = new PressListener( { attach: false, tandem: Tandem.OPT_OUT } );
     this.sigmaControls!.arrow.addInputListener( sigmaArrowPressListener );
     sigmaArrowPressListener.isHighlightedProperty.link( isHighlighted => {
-      this.sigmaControls!.arrow.fill = isHighlighted ? RESIZE_HANDLE_HIGHLIGHTED_COLOR : RESIZE_HANDLE_NORMAL_COLOR;
+      this.sigmaControls!.arrow!.fill = isHighlighted ? RESIZE_HANDLE_HIGHLIGHTED_COLOR : RESIZE_HANDLE_NORMAL_COLOR;
     } );
 
     sigmaLayer.addChild( this.sigmaControls!.arrow );
@@ -195,12 +195,12 @@ class InteractivePotentialGraph extends PotentialGraphNode {
 
       start: event => {
         dualAtomModel.setMotionPaused( true );
-        startDragX = this.sigmaControls!.arrow.globalToParentPoint( event.pointer.point ).x;
+        startDragX = this.sigmaControls!.arrow!.globalToParentPoint( event.pointer.point ).x;
         atomDiameterAtDragStart = dualAtomModel.adjustableAtomDiameterProperty.value;
       },
 
       drag: event => {
-        currentDragX = this.sigmaControls!.arrow.globalToParentPoint( event.pointer.point ).x;
+        currentDragX = this.sigmaControls!.arrow!.globalToParentPoint( event.pointer.point ).x;
         const dx = currentDragX - startDragX;
         const scaleFactor = this.xRange / this.getGraphWidth();
         dualAtomModel.adjustableAtomDiameterProperty.value = Utils.clamp(

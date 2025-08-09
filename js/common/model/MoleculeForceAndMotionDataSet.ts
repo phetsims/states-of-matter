@@ -13,9 +13,8 @@
  */
 
 import Utils from '../../../../dot/js/Utils.js';
-import Vector2 from '../../../../dot/js/Vector2.js';
+import Vector2, { Vector2StateObject } from '../../../../dot/js/Vector2.js';
 import required from '../../../../phet-core/js/required.js';
-import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import ArrayIO from '../../../../tandem/js/types/ArrayIO.js';
 import BooleanIO from '../../../../tandem/js/types/BooleanIO.js';
 import Float64ArrayIO from '../../../../tandem/js/types/Float64ArrayIO.js';
@@ -322,7 +321,7 @@ class MoleculeForceAndMotionDataSet {
    * serialize this instance for phet-io
    * for phet-io support only
    */
-  public toStateObject(): IntentionalAny {
+  public toStateObject(): MoleculeForceAndMotionDataSetStateObject {
     return {
       atomsPerMolecule: this.atomsPerMolecule,
       numberOfAtoms: this.numberOfAtoms,
@@ -349,7 +348,7 @@ class MoleculeForceAndMotionDataSet {
    * it is instead called during explicit de-serialization.
    * @param stateObject - returned from toStateObject
    */
-  public setState( stateObject: IntentionalAny ): void {
+  public setState( stateObject: MoleculeForceAndMotionDataSetStateObject ): void {
     required( stateObject );
 
     // single values that pertain to the entire data set
@@ -462,8 +461,25 @@ class MoleculeForceAndMotionDataSet {
       nextMoleculeTorques: Float64ArrayIO
     }
   } );
-
 }
+
+export type MoleculeForceAndMotionDataSetStateObject = {
+  atomsPerMolecule: number;
+  numberOfAtoms: number;
+  numberOfMolecules: number;
+  moleculeMass: number;
+  moleculeRotationalInertia: number;
+  atomPositions: Array<null | Vector2StateObject>;
+  moleculeCenterOfMassPositions: Array<null | Vector2StateObject>;
+  moleculeVelocities: Array<null | Vector2StateObject>;
+  moleculeForces: Array<null | Vector2StateObject>;
+  nextMoleculeForces: Array<null | Vector2StateObject>;
+  insideContainer: boolean[];
+  moleculeRotationAngles: number[];
+  moleculeRotationRates: number[];
+  moleculeTorques: number[];
+  nextMoleculeTorques: number[];
+};
 
 statesOfMatter.register( 'MoleculeForceAndMotionDataSet', MoleculeForceAndMotionDataSet );
 export default MoleculeForceAndMotionDataSet;

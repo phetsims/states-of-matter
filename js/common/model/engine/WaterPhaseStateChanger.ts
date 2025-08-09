@@ -8,6 +8,7 @@
  * @author Siddhartha Chinthapally (Actual Concepts)
  */
 
+import affirm from '../../../../../perennial-alias/js/browser-and-node/affirm.js';
 import statesOfMatter from '../../../statesOfMatter.js';
 import PhaseStateEnum from '../../PhaseStateEnum.js';
 import SOMConstants from '../../SOMConstants.js';
@@ -66,7 +67,7 @@ class WaterPhaseStateChanger extends AbstractPhaseStateChanger {
     if ( this.multipleParticleModel.substanceProperty.get() === SubstanceType.WATER ) {
       dataSetToLoad = SOLID_INITIAL_STATES.water;
     }
-    assert && assert( dataSetToLoad, `unhandled substance: ${this.multipleParticleModel.substanceProperty.get()}` );
+    affirm( dataSetToLoad, `unhandled substance: ${this.multipleParticleModel.substanceProperty.get()}` );
 
     // load the previously saved state
     this.loadSavedState( dataSetToLoad );
@@ -86,7 +87,7 @@ class WaterPhaseStateChanger extends AbstractPhaseStateChanger {
     if ( this.multipleParticleModel.substanceProperty.get() === SubstanceType.WATER ) {
       dataSetToLoad = LIQUID_INITIAL_STATES.water;
     }
-    assert && assert( dataSetToLoad, `unhandled substance: ${this.multipleParticleModel.substanceProperty.get()}` );
+    affirm( dataSetToLoad, `unhandled substance: ${this.multipleParticleModel.substanceProperty.get()}` );
 
     // load the previously saved state
     this.loadSavedState( dataSetToLoad );

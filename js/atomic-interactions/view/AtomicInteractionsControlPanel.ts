@@ -12,7 +12,6 @@ import Range from '../../../../dot/js/Range.js';
 import Utils from '../../../../dot/js/Utils.js';
 import merge from '../../../../phet-core/js/merge.js';
 import optionize from '../../../../phet-core/js/optionize.js';
-import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import BackgroundNode from '../../../../scenery-phet/js/BackgroundNode.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import HBox from '../../../../scenery/js/layout/nodes/HBox.js';
@@ -110,10 +109,10 @@ class AtomicInteractionsControlPanel extends Node {
     let neonAndArgonLabelItems: Text[];
     let neonAndOxygenLabelItems: Text[];
     let argonAndOxygenLabelItems: Text[];
-    let adjustableAttraction: IntentionalAny;
+    let adjustableAttraction: { label: Node; icon?: Node };
     let atomPairSelector;
     let labelWidth: number;
-    let createLabelNode: IntentionalAny;
+    let createLabelNode: ( atomSelectorLabelSpec: { label: Node; icon?: Node } ) => Node;
     let labelNodes;
     let titleNode;
     const sliderTrackWidth = 140; // empirically determined
@@ -251,7 +250,7 @@ class AtomicInteractionsControlPanel extends Node {
       );
 
       // create the title of the panel in such a way that it will align in a column with the atom selections
-      const createTitle = ( labelNodePair: IntentionalAny ) => {
+      const createTitle = ( labelNodePair: Node[] ) => {
         const strutWidth1 = RADIO_BUTTON_RADIUS;
         const strutWidth2 = ( labelWidth / 2 - labelNodePair[ 0 ].width );
         const strutWidth3 = ( labelWidth / 2 - labelNodePair[ 1 ].width );
@@ -312,7 +311,7 @@ class AtomicInteractionsControlPanel extends Node {
       const widestLabelAndIconSpec = _.maxBy(
         [ neon, argon, adjustableAttraction, labelNodes ],
         item => item.label.width + ( ( item.icon ) ? item.icon.width : 0 )
-      );
+      )!;
       labelWidth = widestLabelAndIconSpec.label.width + ( ( widestLabelAndIconSpec.icon ) ? widestLabelAndIconSpec.icon.width : 0 );
       labelWidth = Math.max(
         labelWidth,
@@ -320,7 +319,7 @@ class AtomicInteractionsControlPanel extends Node {
         options.minWidth - 2 * PANEL_X_MARGIN );
 
       // pad inserts a spacing node (HStrut) so that the text, space and image together occupy a certain fixed width.
-      createLabelNode = ( atomSelectorLabelSpec: IntentionalAny ) => {
+      createLabelNode = ( atomSelectorLabelSpec: { label: Node; icon?: Node } ) => {
         if ( atomSelectorLabelSpec.icon ) {
           const strutWidth = labelWidth - atomSelectorLabelSpec.label.width - atomSelectorLabelSpec.icon.width;
           return new HBox( { children: [ atomSelectorLabelSpec.label, new HStrut( strutWidth ), atomSelectorLabelSpec.icon ] } );

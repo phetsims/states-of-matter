@@ -9,6 +9,7 @@
 
 import dotRandom from '../../../../../dot/js/dotRandom.js';
 import Utils from '../../../../../dot/js/Utils.js';
+import affirm from '../../../../../perennial-alias/js/browser-and-node/affirm.js';
 import statesOfMatter from '../../../statesOfMatter.js';
 import SOMConstants from '../../SOMConstants.js';
 import SubstanceType from '../../SubstanceType.js';
@@ -92,7 +93,7 @@ class MonatomicPhaseStateChanger extends AbstractPhaseStateChanger {
     else if ( this.multipleParticleModel.substanceProperty.get() === SubstanceType.ADJUSTABLE_ATOM ) {
       dataSetToLoad = LIQUID_INITIAL_STATES.adjustableAttraction;
     }
-    assert && assert( dataSetToLoad, `unhandled substance: ${this.multipleParticleModel.substanceProperty.get()}` );
+    affirm( dataSetToLoad, `unhandled substance: ${this.multipleParticleModel.substanceProperty.get()}` );
     this.loadSavedState( dataSetToLoad );
   }
 }
