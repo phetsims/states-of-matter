@@ -1,8 +1,5 @@
 // Copyright 2017-2025, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * Icons, in the form of Scenery nodes, that are used in multiple places in the simulation to represent the various
  * atoms and molecules.
@@ -16,10 +13,10 @@ import statesOfMatter from '../../statesOfMatter.js';
 import SOMConstants from '../SOMConstants.js';
 import SubstanceType from '../SubstanceType.js';
 
-// define the object where all of the icons will be available
+// define the object where all icons will be available
 const AtomAndMoleculeIconFactory = {
 
-  createIcon: ( type: SubstanceType ): Node => {
+  createIcon: ( type: typeof SubstanceType ): Node => {
     let icon;
     switch( type ) {
 
@@ -59,6 +56,7 @@ const AtomAndMoleculeIconFactory = {
       default:
         assert && assert( false, 'unknown substance, unable to create icon' );
     }
+    // @ts-expect-error
     return icon;
   }
 };

@@ -1,8 +1,5 @@
 // Copyright 2016-2025, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * Query parameters supported by this simulation.
  *
@@ -21,8 +18,7 @@ const SOMQueryParameters = QueryStringMachine.getAll( {
     public: true
   },
 
-  // make the burners sticky
-  // @public, see https://github.com/phetsims/states-of-matter/issues/295
+  // make the burners sticky, see https://github.com/phetsims/states-of-matter/issues/295
   stickyBurners: {
     type: 'flag',
     public: true

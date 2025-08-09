@@ -1,8 +1,5 @@
 // Copyright 2015-2025, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * Arrow node for attractive, repulsive, and total forces.
  *
@@ -12,6 +9,7 @@
 
 import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize from '../../../../phet-core/js/optionize.js';
+import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import ArrowShape from '../../../../scenery-phet/js/ArrowShape.js';
 import Path, { PathOptions } from '../../../../scenery/js/nodes/Path.js';
 import statesOfMatter from '../../statesOfMatter.js';
@@ -28,13 +26,13 @@ type DimensionalArrowNodeOptions = SelfOptions & PathOptions;
 class DimensionalArrowNode extends Path {
 
   // arrowNode tail position
-  private tailPosition: Vector2;
+  private readonly tailPosition: Vector2;
 
   // arrowNode tip position
-  private tipPosition: Vector2;
+  private readonly tipPosition: Vector2;
 
   // options
-  private options: any;
+  private options: IntentionalAny;
 
   /**
    * @param tailX - arrowNode tail X position
