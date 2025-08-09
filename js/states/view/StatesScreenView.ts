@@ -110,8 +110,6 @@ class StatesScreenView extends ScreenView {
     const solidLiquidGasPhaseControlNode = new StatesPhaseControlNode( multipleParticleModel, {
       right: moleculesControlPanel.right,
       top: moleculesControlPanel.bottom + CONTROL_PANEL_Y_INSET,
-
-      // @ts-expect-error
       buttonWidth: CONTROL_PANEL_WIDTH,
       tandem: tandem.createTandem( 'solidLiquidGasPhaseControlNode' )
     } );

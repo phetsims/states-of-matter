@@ -1,8 +1,5 @@
 // Copyright 2014-2025, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * This class extends the interaction potential diagram to allow the user to adjust the interaction strength parameter
  * (i.e. epsilon) through direct interaction with the graph.
@@ -45,6 +42,7 @@ type SelfOptions = EmptySelfOptions;
 
 type EpsilonControlPotentialGraphOptions = SelfOptions & NodeOptions;
 
+// @ts-expect-error
 class EpsilonControlPotentialGraph extends PotentialGraphNode {
 
   // Flag that signifies if interaction is enabled
@@ -73,38 +71,38 @@ class EpsilonControlPotentialGraph extends PotentialGraphNode {
     this.interactionEnabled = false;
 
     // variables used to track dragging of controls related to epsilon value
-    let startDragY;
+    let startDragY: number;
     let endDragY;
 
     // Add the line that will indicate the value of epsilon.
     const controlLineLength = EPSILON_HANDLE_OFFSET_PROPORTION * this.widthOfGraph * 2.2;
-    this.epsilonControls.line = new Rectangle( -controlLineLength / 2, 0, controlLineLength, 1, {
+    this.epsilonControls!.line = new Rectangle( -controlLineLength / 2, 0, controlLineLength, 1, {
       cursor: 'ns-resize',
       pickable: true,
       fill: EPSILON_LINE_COLOR,
       stroke: EPSILON_LINE_COLOR,
-      tandem: this.interactiveControlsLayer.tandem.createTandem( 'epsilonLine' ),
+      tandem: this.interactiveControlsLayer!.tandem.createTandem( 'epsilonLine' ),
       phetioReadOnly: true
     } );
-    this.interactiveControlsLayer.addChild( this.epsilonControls.line );
-    this.epsilonControls.line.touchArea = this.epsilonControls.line.localBounds.dilatedXY( 20, 20 );
+    this.interactiveControlsLayer!.addChild( this.epsilonControls!.line );
+    this.epsilonControls!.line.touchArea = this.epsilonControls!.line.localBounds.dilatedXY( 20, 20 );
 
     // Highlight this control when the user is hovering over it and/or using it.
     const epsilonLinePressListener = new PressListener( { attach: false, tandem: Tandem.OPT_OUT } );
-    this.epsilonControls.line.addInputListener( epsilonLinePressListener );
+    this.epsilonControls!.line.addInputListener( epsilonLinePressListener );
     epsilonLinePressListener.isHighlightedProperty.link( isHighlighted => {
-      this.epsilonControls.line.stroke = isHighlighted ? RESIZE_HANDLE_HIGHLIGHTED_COLOR : RESIZE_HANDLE_NORMAL_COLOR;
+      this.epsilonControls!.line.stroke = isHighlighted ? RESIZE_HANDLE_HIGHLIGHTED_COLOR : RESIZE_HANDLE_NORMAL_COLOR;
     } );
 
     // drag listener
-    this.epsilonControls.line.addInputListener( new DragListener( {
+    this.epsilonControls!.line.addInputListener( new DragListener( {
 
       start: event => {
-        startDragY = this.epsilonControls.line.globalToParentPoint( event.pointer.point ).y;
+        startDragY = this.epsilonControls!.line.globalToParentPoint( event.pointer.point ).y;
       },
 
       drag: event => {
-        endDragY = this.epsilonControls.line.globalToParentPoint( event.pointer.point ).y;
+        endDragY = this.epsilonControls!.line.globalToParentPoint( event.pointer.point ).y;
         const d = endDragY - startDragY;
         startDragY = endDragY;
         const scaleFactor = SOMConstants.MAX_EPSILON / ( this.getGraphHeight() / 2 );
@@ -118,11 +116,11 @@ class EpsilonControlPotentialGraph extends PotentialGraphNode {
         this.drawPotentialCurve();
       },
 
-      tandem: this.epsilonControls.line.tandem.createTandem( 'dragListener' )
+      tandem: this.epsilonControls!.line.tandem.createTandem( 'dragListener' )
     } ) );
 
     // Add the arrow node that will allow the user to control the value of the epsilon parameter.
-    this.epsilonControls.arrow = new ArrowNode(
+    this.epsilonControls!.arrow = new ArrowNode(
       0,
       -RESIZE_HANDLE_SIZE_PROPORTION * this.widthOfGraph / 2,
       0,
@@ -136,19 +134,19 @@ class EpsilonControlPotentialGraph extends PotentialGraphNode {
         doubleHead: true,
         pickable: true,
         cursor: 'pointer',
-        tandem: this.interactiveControlsLayer.tandem.createTandem( 'epsilonArrow' ),
+        tandem: this.interactiveControlsLayer!.tandem.createTandem( 'epsilonArrow' ),
         phetioReadOnly: true
       }
     );
-    this.interactiveControlsLayer.addChild( this.epsilonControls.arrow );
-    this.epsilonControls.arrow.addInputListener( new DragListener( {
+    this.interactiveControlsLayer!.addChild( this.epsilonControls!.arrow );
+    this.epsilonControls!.arrow.addInputListener( new DragListener( {
 
       start: event => {
-        startDragY = this.epsilonControls.arrow.globalToParentPoint( event.pointer.point ).y;
+        startDragY = this.epsilonControls!.arrow.globalToParentPoint( event.pointer.point ).y;
       },
 
       drag: event => {
-        endDragY = this.epsilonControls.arrow.globalToParentPoint( event.pointer.point ).y;
+        endDragY = this.epsilonControls!.arrow.globalToParentPoint( event.pointer.point ).y;
         const d = endDragY - startDragY;
         startDragY = endDragY;
         const scaleFactor = SOMConstants.MAX_EPSILON / ( this.getGraphHeight() / 2 );
@@ -162,14 +160,15 @@ class EpsilonControlPotentialGraph extends PotentialGraphNode {
         this.drawPotentialCurve();
       },
 
-      tandem: this.epsilonControls.arrow.tandem.createTandem( 'dragListener' )
+      tandem: this.epsilonControls!.arrow.tandem.createTandem( 'dragListener' )
     } ) );
     const epsilonArrowPressListener = new PressListener( { attach: false, tandem: Tandem.OPT_OUT } );
-    this.epsilonControls.arrow.addInputListener( epsilonArrowPressListener );
+    this.epsilonControls!.arrow.addInputListener( epsilonArrowPressListener );
     epsilonArrowPressListener.isHighlightedProperty.link( isHighlighted => {
-      this.epsilonControls.arrow.fill = isHighlighted ? RESIZE_HANDLE_HIGHLIGHTED_COLOR : RESIZE_HANDLE_NORMAL_COLOR;
+      this.epsilonControls!.arrow.fill = isHighlighted ? RESIZE_HANDLE_HIGHLIGHTED_COLOR : RESIZE_HANDLE_NORMAL_COLOR;
     } );
 
+    // @ts-expect-error
     this.interactionPotentialCanvasNode = new InteractionPotentialCanvasNode( this, {
       canvasBounds: new Bounds2( 0, 0, 125, this.graphHeight )
     } );

@@ -78,7 +78,7 @@ class PotentialGraphNode extends Node {
   public readonly zeroCrossingPoint: Vector2;
   public markerDistance: number;
   public readonly ljPotentialCalculator: LjPotentialCalculator;
-  private readonly widthOfGraph: number;
+  protected readonly widthOfGraph: number;
   public readonly heightOfGraph: number;
   public readonly graphXOrigin: number;
   private readonly graphYOrigin: number;

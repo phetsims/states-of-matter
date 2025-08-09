@@ -1,8 +1,5 @@
 // Copyright 2014-2025, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * A node that allows user to select the phase of a substance.
  *
@@ -12,12 +9,13 @@
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import EnumerationDeprecatedProperty from '../../../../axon/js/EnumerationDeprecatedProperty.js';
-import optionize, { type EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
+import optionize from '../../../../phet-core/js/optionize.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import HBox from '../../../../scenery/js/layout/nodes/HBox.js';
 import VBox from '../../../../scenery/js/layout/nodes/VBox.js';
 import HStrut from '../../../../scenery/js/nodes/HStrut.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
+import { ImageableImage } from '../../../../scenery/js/nodes/Imageable.js';
 import Node, { NodeOptions } from '../../../../scenery/js/nodes/Node.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import BooleanRectangularStickyToggleButton from '../../../../sun/js/buttons/BooleanRectangularStickyToggleButton.js';
@@ -42,7 +40,9 @@ const SELECTED_BUTTON_COLOR = '#a5a7ff';
 const DESELECTED_BUTTON_COLOR = '#F8D980';
 
 // Since no new options are introduced (all options are from NodeOptions), use EmptySelfOptions
-type SelfOptions = EmptySelfOptions;
+type SelfOptions = {
+  buttonWidth?: number;
+};
 
 type StatesPhaseControlNodeOptions = SelfOptions & NodeOptions;
 
@@ -55,6 +55,8 @@ class StatesPhaseControlNode extends Node {
   public constructor( model: MultipleParticleModel, providedOptions?: StatesPhaseControlNodeOptions ) {
 
     const options = optionize<StatesPhaseControlNodeOptions, SelfOptions, NodeOptions>()( {
+
+      // @ts-expect-error
       xMargin: 5,
       yMargin: 8,
       fill: '#C8C8C8',
@@ -166,7 +168,7 @@ class StatesPhaseControlNode extends Node {
 }
 
 // helper function that puts icon and label together with some struts into an HBox for using as content node on button
-const createButtonContent = ( iconImage, string, buttonWidth ) => {
+const createButtonContent = ( iconImage: ImageableImage, string: string, buttonWidth: number ) => {
 
   assert && assert( iconImage && string, 'both icon and label must be defined' );
 
