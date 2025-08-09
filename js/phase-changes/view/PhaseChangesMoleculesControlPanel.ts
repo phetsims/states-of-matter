@@ -1,8 +1,5 @@
 // Copyright 2014-2025, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * panel for selecting the atoms/molecules
  *
@@ -14,7 +11,8 @@ import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import Range from '../../../../dot/js/Range.js';
 import merge from '../../../../phet-core/js/merge.js';
-import optionize, { type EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
+import optionize from '../../../../phet-core/js/optionize.js';
+import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import VBox from '../../../../scenery/js/layout/nodes/VBox.js';
 import Node, { type NodeOptions } from '../../../../scenery/js/nodes/Node.js';
@@ -50,7 +48,16 @@ const TICK_TEXT_MAX_WIDTH = 40;
 const NORMAL_TEXT_FONT_SIZE = 12;
 
 // Since this class doesn't add any new options beyond what Node provides, we use EmptySelfOptions
-type SelfOptions = EmptySelfOptions;
+type SelfOptions = {
+  showAdjustableAttraction?: boolean; // whether to show the adjustable attraction option
+  xMargin?: number; // margin on the left and right of the panel
+  yMargin?: number; // margin on the top and bottom of the panel
+  lineWidth?: number;
+  cornerRadius?: number;
+  minWidth?: number; // minimum width of the panel, will generally be set by constructor
+  stroke?: IntentionalAny; // Could be Color or Property<Color>
+  fill?: IntentionalAny; // Could be Color or Property<Color>
+};
 
 type PhaseChangesMoleculesControlPanelOptions = SelfOptions & NodeOptions;
 
@@ -200,6 +207,8 @@ class PhaseChangesMoleculesControlPanel extends Node {
           selectedLineWidth: 1,
           selectedStroke: 'white',
           deselectedLineWidth: 0,
+
+          // @ts-expect-error
           deselectedContentOpacity: 1
         }
       },
