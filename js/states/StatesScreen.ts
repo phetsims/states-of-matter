@@ -21,7 +21,7 @@ import StatesOfMatterStrings from '../StatesOfMatterStrings.js';
 import StatesIcon from './StatesIcon.js';
 import StatesScreenView from './view/StatesScreenView.js';
 
-class StatesScreen extends Screen {
+class StatesScreen extends Screen<MultipleParticleModel, StatesScreenView> {
 
   public constructor( tandem: Tandem ) {
 

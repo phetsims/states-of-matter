@@ -1,8 +1,5 @@
 // Copyright 2014-2024, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * Main entry point for the sim.
  *
@@ -23,7 +20,11 @@ const statesOfMatterTitleStringProperty = StatesOfMatterStrings[ 'states-of-matt
 
 simLauncher.launch( () => {
 
-  const simOptions = {
+  const sim = new Sim( statesOfMatterTitleStringProperty, [
+    new StatesScreen( Tandem.ROOT.createTandem( 'statesScreen' ) ),
+    new PhaseChangesScreen( true, Tandem.ROOT.createTandem( 'phaseChangesScreen' ) ),
+    new AtomicInteractionsScreen( false, interactionStringProperty, Tandem.ROOT.createTandem( 'interactionScreen' ) )
+  ], {
     credits: {
       leadDesign: 'Paul Beale, Yuen-ying Carpenter, Sarah McKagan, Emily B. Moore, Noah Podolefsky,<br>Amy Rouinfar',
       softwareDevelopment: 'John Blanco, Aaron Davis, Aadish Gupta',
@@ -38,12 +39,6 @@ simLauncher.launch( () => {
         supportsProjectorMode: true
       }
     } )
-  };
-
-  const sim = new Sim( statesOfMatterTitleStringProperty, [
-    new StatesScreen( Tandem.ROOT.createTandem( 'statesScreen' ) ),
-    new PhaseChangesScreen( true, Tandem.ROOT.createTandem( 'phaseChangesScreen' ) ),
-    new AtomicInteractionsScreen( false, interactionStringProperty, Tandem.ROOT.createTandem( 'interactionScreen' ) )
-  ], simOptions );
+  } );
   sim.start();
 } );

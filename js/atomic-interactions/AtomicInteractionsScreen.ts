@@ -9,6 +9,7 @@
  * @author Siddhartha Chinthapally (Actual Concepts)
  */
 
+import TReadOnlyProperty from '../../../axon/js/TReadOnlyProperty.js';
 import Screen from '../../../joist/js/Screen.js';
 import Tandem from '../../../tandem/js/Tandem.js';
 import SOMConstants from '../common/SOMConstants.js';
@@ -18,9 +19,9 @@ import AtomicInteractionsIcon from './AtomicInteractionsIcon.js';
 import DualAtomModel from './model/DualAtomModel.js';
 import AtomicInteractionsScreenView from './view/AtomicInteractionsScreenView.js';
 
-class AtomicInteractionsScreen extends Screen {
+class AtomicInteractionsScreen extends Screen<DualAtomModel, AtomicInteractionsScreenView> {
 
-  public constructor( enableHeterogeneousMolecules: boolean, screenTitle: string, tandem: Tandem ) {
+  public constructor( enableHeterogeneousMolecules: boolean, screenTitle: TReadOnlyProperty<string>, tandem: Tandem ) {
 
     const options = {
       name: screenTitle,

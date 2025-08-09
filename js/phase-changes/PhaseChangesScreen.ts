@@ -20,7 +20,7 @@ import PhaseChangesIcon from './PhaseChangesIcon.js';
 import PhaseChangesModel from './PhaseChangesModel.js';
 import PhaseChangesScreenView from './view/PhaseChangesScreenView.js';
 
-class PhaseChangesScreen extends Screen {
+class PhaseChangesScreen extends Screen<PhaseChangesModel, PhaseChangesScreenView> {
 
   public constructor( isPotentialGraphEnabled: boolean, tandem: Tandem ) {
 
