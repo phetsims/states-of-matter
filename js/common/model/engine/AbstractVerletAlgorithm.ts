@@ -54,7 +54,7 @@ abstract class AbstractVerletAlgorithm {
   // Abstract property that must be implemented by subclasses
   protected abstract positionUpdater: IntentionalAny;
 
-  public constructor( multipleParticleModel: MultipleParticleModel ) {
+  protected constructor( multipleParticleModel: MultipleParticleModel ) {
 
     this.multipleParticleModel = multipleParticleModel;
 
