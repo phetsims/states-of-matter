@@ -112,8 +112,8 @@ class InteractivePotentialGraph extends PotentialGraphNode {
     };
 
     // Add a parent node for the epsilon controls
-    const epsilonLayer = new Node( { tandem: this.interactiveControlsLayer!.tandem.createTandem( 'epsilon' ) } );
-    this.interactiveControlsLayer!.addChild( epsilonLayer );
+    const epsilonLayer = new Node( { tandem: this.interactiveControls!.tandem.createTandem( 'epsilon' ) } );
+    this.interactiveControls!.addChild( epsilonLayer );
 
     // Add the line that will indicate and control the value of epsilon.
     const epsilonLineLength = EPSILON_HANDLE_OFFSET_PROPORTION * this.widthOfGraph * 1.2;
@@ -167,8 +167,8 @@ class InteractivePotentialGraph extends PotentialGraphNode {
     addEpsilonDragListener( this.epsilonControls!.arrow, this.epsilonControls!.arrow.tandem.createTandem( 'dragListener' ) );
 
     // add a layer for the sigma controls (for consistency with the epsilon controls)
-    const sigmaLayer = new Node( { tandem: this.interactiveControlsLayer!.tandem.createTandem( 'sigma' ) } );
-    this.interactiveControlsLayer!.addChild( sigmaLayer );
+    const sigmaLayer = new Node( { tandem: this.interactiveControls!.tandem.createTandem( 'sigma' ) } );
+    this.interactiveControls!.addChild( sigmaLayer );
 
     // add sigma arrow node
     this.sigmaControls!.arrow = new ArrowNode(

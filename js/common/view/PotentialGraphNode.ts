@@ -91,7 +91,7 @@ class PotentialGraphNode extends Node {
   public readonly sigmaArrow: ArrowNode;
   
   // Layer where interactive controls can be added by subclasses
-  protected interactiveControlsLayer?: Node;
+  protected interactiveControls?: Node;
   
   // An object where specific controls can be added for controlling the epsilon parameter in the Lennard-
   // Jones potential calculations, see usages in subclasses
@@ -233,12 +233,11 @@ class PotentialGraphNode extends Node {
     // any interactivity by itself, it merely creates support for interactive controls that can be added by subclasses.
     if ( options.allowInteraction ) {
 
-      // eslint-disable-next-line phet/tandem-name-should-match
-      this.interactiveControlsLayer = new Node( {
+      this.interactiveControls = new Node( {
         tandem: options.tandem.createTandem( 'interactiveControls' ),
         phetioDocumentation: 'Used for \'Adjustable Attraction\' only'
       } );
-      this.ljPotentialGraph.addChild( this.interactiveControlsLayer );
+      this.ljPotentialGraph.addChild( this.interactiveControls );
 
       this.epsilonControls = {
         arrow: null,

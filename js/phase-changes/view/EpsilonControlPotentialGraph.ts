@@ -81,10 +81,10 @@ class EpsilonControlPotentialGraph extends PotentialGraphNode {
       pickable: true,
       fill: EPSILON_LINE_COLOR,
       stroke: EPSILON_LINE_COLOR,
-      tandem: this.interactiveControlsLayer!.tandem.createTandem( 'epsilonLine' ),
+      tandem: this.interactiveControls!.tandem.createTandem( 'epsilonLine' ),
       phetioReadOnly: true
     } );
-    this.interactiveControlsLayer!.addChild( this.epsilonControls!.line );
+    this.interactiveControls!.addChild( this.epsilonControls!.line );
     this.epsilonControls!.line.touchArea = this.epsilonControls!.line.localBounds.dilatedXY( 20, 20 );
 
     // Highlight this control when the user is hovering over it and/or using it.
@@ -134,11 +134,11 @@ class EpsilonControlPotentialGraph extends PotentialGraphNode {
         doubleHead: true,
         pickable: true,
         cursor: 'pointer',
-        tandem: this.interactiveControlsLayer!.tandem.createTandem( 'epsilonArrow' ),
+        tandem: this.interactiveControls!.tandem.createTandem( 'epsilonArrow' ),
         phetioReadOnly: true
       }
     );
-    this.interactiveControlsLayer!.addChild( this.epsilonControls!.arrow );
+    this.interactiveControls!.addChild( this.epsilonControls!.arrow );
     this.epsilonControls!.arrow.addInputListener( new DragListener( {
 
       start: event => {
