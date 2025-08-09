@@ -158,7 +158,7 @@ class StatesMoleculesControlPanel extends Node {
           selectedStroke: 'white',
           deselectedLineWidth: 0,
 
-          // @ts-expect-error
+          // @ts-expect-error - see https://github.com/phetsims/states-of-matter/issues/372
           deselectedContentOpacity: 1
         }
       },
