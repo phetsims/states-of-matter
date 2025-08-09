@@ -1,8 +1,5 @@
 // Copyright 2014-2025, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * panel for selecting the atoms/molecules
  *
@@ -10,10 +7,11 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import { Property } from '../../../../axon/js/imports.js';
+import Property from '../../../../axon/js/Property.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import merge from '../../../../phet-core/js/merge.js';
 import optionize from '../../../../phet-core/js/optionize.js';
+import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import HBox from '../../../../scenery/js/layout/nodes/HBox.js';
 import Node, { NodeOptions } from '../../../../scenery/js/nodes/Node.js';
@@ -42,8 +40,8 @@ const DEFAULT_WIDTH = 160;
 type SelfOptions = {
   xMargin?: number;
   yMargin?: number;
-  fill?: any; // Could be Color or Property<Color>
-  stroke?: any; // Could be Color or Property<Color>
+  fill?: IntentionalAny; // Could be Color or Property<Color>
+  stroke?: IntentionalAny; // Could be Color or Property<Color>
   lineWidth?: number;
   cornerRadius?: number;
   maxWidth?: number;
@@ -127,7 +125,7 @@ class StatesMoleculesControlPanel extends Node {
     const selectorWidth = options.minWidth - 2 * options.xMargin;
 
     // function to create the selector nodes that will go into the radio button group
-    const createSelectionNode = selectionNodeSpec => {
+    const createSelectionNode = ( selectionNodeSpec: IntentionalAny ) => {
       if ( selectionNodeSpec.icon ) {
         return new SubstanceSelectorNode( selectionNodeSpec.label, selectionNodeSpec.icon, selectorWidth );
       }
@@ -159,6 +157,8 @@ class StatesMoleculesControlPanel extends Node {
           selectedLineWidth: 1,
           selectedStroke: 'white',
           deselectedLineWidth: 0,
+
+          // @ts-expect-error
           deselectedContentOpacity: 1
         }
       },
@@ -166,6 +166,8 @@ class StatesMoleculesControlPanel extends Node {
     } );
 
     SOMColors.controlPanelBackgroundProperty.link( color => {
+
+      // @ts-expect-error
       radioButtonGroup.baseColor = color;
     } );
 

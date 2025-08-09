@@ -1,8 +1,5 @@
 // Copyright 2015-2025, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * Control panel used for selecting atom combinations.
  *
@@ -14,7 +11,8 @@ import Dimension2 from '../../../../dot/js/Dimension2.js';
 import Range from '../../../../dot/js/Range.js';
 import Utils from '../../../../dot/js/Utils.js';
 import merge from '../../../../phet-core/js/merge.js';
-import optionize, { type EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
+import optionize from '../../../../phet-core/js/optionize.js';
+import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import BackgroundNode from '../../../../scenery-phet/js/BackgroundNode.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import HBox from '../../../../scenery/js/layout/nodes/HBox.js';
@@ -60,7 +58,15 @@ const TITLE_TEXT_WIDTH = 130;
 const PANEL_X_MARGIN = 10;
 const AQUA_RADIO_BUTTON_X_SPACING = 8; // only used for atomic-interactions
 
-type SelfOptions = EmptySelfOptions;
+type SelfOptions = {
+  buttonTextFill?: string; // color of the text in the radio buttons
+  panelTextFill?: string; // color of the text in the radio buttons
+  minWidth?: number; // minimum width of the panel
+  stroke?: string;
+  fill?: string;
+  lineWidth?: number; // width of the stroke around the panel
+  cornerRadius?: number; // radius of the corners of the panel
+};
 
 type AtomicInteractionsControlPanelOptions = SelfOptions & NodeOptions;
 
@@ -74,6 +80,8 @@ class AtomicInteractionsControlPanel extends Node {
   public constructor( dualAtomModel: DualAtomModel, enableHeterogeneousAtoms: boolean, providedOptions?: AtomicInteractionsControlPanelOptions ) {
 
     const options = optionize<AtomicInteractionsControlPanelOptions, SelfOptions, NodeOptions>()( {
+
+      // @ts-expect-error
       xMargin: 5,
       yMargin: 8,
       fill: 'black',
@@ -96,16 +104,16 @@ class AtomicInteractionsControlPanel extends Node {
 
     // white text within SOM full version, black text in Atomic Interactions
     // white stroke around the atoms & molecules panel within SOM full version, black stroke in Atomic Interactions
-    let neonAndNeonLabelItems;
-    let argonAndArgonLabelItems;
-    let oxygenAndOxygenLabelItems;
-    let neonAndArgonLabelItems;
-    let neonAndOxygenLabelItems;
-    let argonAndOxygenLabelItems;
-    let adjustableAttraction;
+    let neonAndNeonLabelItems: Text[];
+    let argonAndArgonLabelItems: Text[];
+    let oxygenAndOxygenLabelItems: Text[];
+    let neonAndArgonLabelItems: Text[];
+    let neonAndOxygenLabelItems: Text[];
+    let argonAndOxygenLabelItems: Text[];
+    let adjustableAttraction: IntentionalAny;
     let atomPairSelector;
-    let labelWidth;
-    let createLabelNode;
+    let labelWidth: number;
+    let createLabelNode: IntentionalAny;
     let labelNodes;
     let titleNode;
     const sliderTrackWidth = 140; // empirically determined
@@ -185,7 +193,7 @@ class AtomicInteractionsControlPanel extends Node {
         options.minWidth - 2 * PANEL_X_MARGIN - 2 * RADIO_BUTTON_RADIUS - AQUA_RADIO_BUTTON_X_SPACING );
 
       // function to create a label node
-      const createLabelNode = atomNameTextNodes => {
+      const createLabelNode = ( atomNameTextNodes: Text[] ) => {
         const strutWidth1 = labelWidth / 2 - atomNameTextNodes[ 0 ].width;
         const strutWidth2 = labelWidth / 2 - atomNameTextNodes[ 1 ].width;
         return new HBox( {
@@ -243,7 +251,7 @@ class AtomicInteractionsControlPanel extends Node {
       );
 
       // create the title of the panel in such a way that it will align in a column with the atom selections
-      const createTitle = labelNodePair => {
+      const createTitle = ( labelNodePair: IntentionalAny ) => {
         const strutWidth1 = RADIO_BUTTON_RADIUS;
         const strutWidth2 = ( labelWidth / 2 - labelNodePair[ 0 ].width );
         const strutWidth3 = ( labelWidth / 2 - labelNodePair[ 1 ].width );
@@ -312,7 +320,7 @@ class AtomicInteractionsControlPanel extends Node {
         options.minWidth - 2 * PANEL_X_MARGIN );
 
       // pad inserts a spacing node (HStrut) so that the text, space and image together occupy a certain fixed width.
-      createLabelNode = atomSelectorLabelSpec => {
+      createLabelNode = ( atomSelectorLabelSpec: IntentionalAny ) => {
         if ( atomSelectorLabelSpec.icon ) {
           const strutWidth = labelWidth - atomSelectorLabelSpec.label.width - atomSelectorLabelSpec.icon.width;
           return new HBox( { children: [ atomSelectorLabelSpec.label, new HStrut( strutWidth ), atomSelectorLabelSpec.icon ] } );
@@ -348,6 +356,8 @@ class AtomicInteractionsControlPanel extends Node {
             selectedLineWidth: 1,
             selectedStroke: 'white',
             deselectedLineWidth: 0,
+
+            // @ts-expect-error
             deselectedContentOpacity: 1
           }
         },
@@ -368,7 +378,7 @@ class AtomicInteractionsControlPanel extends Node {
       trackSize: new Dimension2( sliderTrackWidth, 5 ),
       majorTickStroke: options.panelTextFill,
       trackStroke: options.panelTextFill,
-      constrainValue: value => Utils.roundToInterval( value, 5 ),
+      constrainValue: ( value: number ) => Utils.roundToInterval( value, 5 ),
       startDrag: () => {
         dualAtomModel.setMotionPaused( true );
       },
