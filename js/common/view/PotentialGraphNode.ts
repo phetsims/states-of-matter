@@ -1,8 +1,5 @@
 // Copyright 2014-2025, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * This class displays a graph that depicts and interaction potential.
  *
@@ -12,6 +9,7 @@
 
 import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize from '../../../../phet-core/js/optionize.js';
+import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import Line from '../../../../scenery/js/nodes/Line.js';
@@ -93,19 +91,19 @@ class PotentialGraphNode extends Node {
   public readonly sigmaArrow: ArrowNode;
   
   // Layer where interactive controls can be added by subclasses
-  protected readonly interactiveControlsLayer?: Node;
+  protected interactiveControlsLayer?: Node;
   
   // An object where specific controls can be added for controlling the epsilon parameter in the Lennard-
   // Jones potential calculations, see usages in subclasses
   public readonly epsilonControls?: {
-    arrow: null | any;
-    line: null | any;
+    arrow: null | IntentionalAny;
+    line: null | IntentionalAny;
   };
   
   // An object where a specific control can be added for controlling the sigma parameter in the Lennard-
   // Jones potential calculations, see usages in subclasses. See usages in subclasses.
   public readonly sigmaControls?: {
-    arrow: null | any;
+    arrow: null | IntentionalAny;
   };
   
   public readonly positionMarker?: PositionMarker;
@@ -122,6 +120,7 @@ class PotentialGraphNode extends Node {
    */
   public constructor( sigma: number, epsilon: number, providedOptions?: PotentialGraphNodeOptions ) {
 
+    // @ts-expect-error
     const options = optionize<PotentialGraphNodeOptions, SelfOptions, NodeOptions>()( {
 
       // {boolean} - true if the widescreen version of the graph is needed, false if not
@@ -150,12 +149,16 @@ class PotentialGraphNode extends Node {
       this.widthOfGraph = WIDE_VERSION_WIDTH;
       this.heightOfGraph = this.widthOfGraph * 0.75;
       GREEK_LETTER_FONT = new PhetFont( 22 );
+
+      // @ts-expect-error
       axisLabelFont = new PhetFont( { size: 16, fill: SOMColors.controlPanelTextProperty } );
       GREEK_LETTER_MAX_WIDTH = 60;
     }
     else {
       this.widthOfGraph = NARROW_VERSION_WIDTH;
       this.heightOfGraph = this.widthOfGraph * 0.8;
+
+      // @ts-expect-error
       axisLabelFont = new PhetFont( { size: 11, fill: SOMColors.controlPanelTextProperty } );
       GREEK_LETTER_FONT = new PhetFont( GREEK_LETTER_FONT_SIZE );
       GREEK_LETTER_MAX_WIDTH = 17;
@@ -230,6 +233,7 @@ class PotentialGraphNode extends Node {
     // any interactivity by itself, it merely creates support for interactive controls that can be added by subclasses.
     if ( options.allowInteraction ) {
 
+      // eslint-disable-next-line phet/tandem-name-should-match
       this.interactiveControlsLayer = new Node( {
         tandem: options.tandem.createTandem( 'interactiveControls' ),
         phetioDocumentation: 'Used for \'Adjustable Attraction\' only'
@@ -390,11 +394,11 @@ class PotentialGraphNode extends Node {
     const potential = this.calculateLennardJonesPotential( this.markerDistance );
     const yPos = ( ( this.graphHeight / 2 ) - ( potential * this.verticalScalingFactor ) );
     if ( xPos > 0 && xPos < this.graphWidth && yPos > 0 && yPos < this.graphHeight ) {
-      this.positionMarker.setVisible( true );
-      this.positionMarker.setTranslation( xPos, yPos );
+      this.positionMarker!.setVisible( true );
+      this.positionMarker!.setTranslation( xPos, yPos );
     }
     else {
-      this.positionMarker.setVisible( false );
+      this.positionMarker!.setVisible( false );
     }
   }
 
@@ -416,7 +420,6 @@ class PotentialGraphNode extends Node {
   /**
    * Calculate the Lennard-Jones potential for the given distance.
    * @param radius
-   * @returns {number}
    */
   public calculateLennardJonesPotential( radius: number ): number {
     return ( this.ljPotentialCalculator.getLjPotential( radius ) );
