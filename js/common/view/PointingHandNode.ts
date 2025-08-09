@@ -11,12 +11,12 @@
  * @author John Blanco
  */
 
-import merge from '../../../../phet-core/js/merge.js';
+import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import DragListener from '../../../../scenery/js/listeners/DragListener.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
-import Node from '../../../../scenery/js/nodes/Node.js';
+import Node, { NodeOptions } from '../../../../scenery/js/nodes/Node.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import pointingHand_png from '../../../mipmaps/pointingHand_png.js';
 import statesOfMatter from '../../statesOfMatter.js';
@@ -25,6 +25,10 @@ import MultipleParticleModel from '../model/MultipleParticleModel.js';
 
 // constants
 const WIDTH = 150; // in screen coords
+
+type SelfOptions = EmptySelfOptions;
+
+type PointingHandNodeOptions = SelfOptions & NodeOptions;
 
 class PointingHandNode extends Node {
 
@@ -35,11 +39,11 @@ class PointingHandNode extends Node {
    * @param phaseChangesModel - model of the simulation
    * @param modelViewTransform to convert between model and view co-ordinate frames
    */
-  public constructor( phaseChangesModel: PhaseChangesModel, modelViewTransform: ModelViewTransform2, options?: Object ) {
+  public constructor( phaseChangesModel: PhaseChangesModel, modelViewTransform: ModelViewTransform2, providedOptions?: PointingHandNodeOptions ) {
 
-    options = merge( {
+    const options = optionize<PointingHandNodeOptions, SelfOptions, NodeOptions>()( {
       tandem: Tandem.REQUIRED
-    }, options );
+    }, providedOptions );
 
     super();
 

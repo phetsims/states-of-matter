@@ -16,12 +16,12 @@ import EnumerationDeprecatedProperty from '../../../../axon/js/EnumerationDeprec
 import Range from '../../../../dot/js/Range.js';
 import Utils from '../../../../dot/js/Utils.js';
 import EnumerationDeprecated from '../../../../phet-core/js/EnumerationDeprecated.js';
-import merge from '../../../../phet-core/js/merge.js';
+import optionize, { type EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import ComboBoxDisplay from '../../../../scenery-phet/js/ComboBoxDisplay.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import ThermometerNode from '../../../../scenery-phet/js/ThermometerNode.js';
 import VBox from '../../../../scenery/js/layout/nodes/VBox.js';
-import Node from '../../../../scenery/js/nodes/Node.js';
+import Node, { type NodeOptions } from '../../../../scenery/js/nodes/Node.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import statesOfMatter from '../../statesOfMatter.js';
 import MultipleParticleModel from '../model/MultipleParticleModel.js';
@@ -49,19 +49,23 @@ const TemperatureUnits = EnumerationDeprecated.byKeys( [ 'KELVIN', 'CELSIUS' ] )
 // clamping the red mercury display at 1000
 const MAX_TEMPERATURE_TO_CLAMP_RED_MERCURY = 1000;
 
+type SelfOptions = EmptySelfOptions;
+
+type CompositeThermometerNodeOptions = SelfOptions & NodeOptions;
+
 class CompositeThermometerNode extends Node {
 
   private readonly temperatureUnitsProperty: EnumerationDeprecatedProperty;
 
   /**
    * @param multipleParticleModel - model of the simulation
-   * @param [options] that can be passed on to the underlying node
+   * @param [providedOptions] that can be passed on to the underlying node
    */
-  public constructor( multipleParticleModel: MultipleParticleModel, options?: any ) {
+  public constructor( multipleParticleModel: MultipleParticleModel, providedOptions?: CompositeThermometerNodeOptions ) {
 
-    options = merge( {
+    const options = optionize<CompositeThermometerNodeOptions, SelfOptions, NodeOptions>()( {
       tandem: Tandem.REQUIRED
-    }, options );
+    }, providedOptions );
 
     super();
 

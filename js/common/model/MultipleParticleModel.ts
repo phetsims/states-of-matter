@@ -30,10 +30,10 @@ import dotRandom from '../../../../dot/js/dotRandom.js';
 import Range from '../../../../dot/js/Range.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import merge from '../../../../phet-core/js/merge.js';
+import optionize from '../../../../phet-core/js/optionize.js';
 import required from '../../../../phet-core/js/required.js';
 import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
-import PhetioObject from '../../../../tandem/js/PhetioObject.js';
+import PhetioObject, { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import BooleanIO from '../../../../tandem/js/types/BooleanIO.js';
 import EnumerationIO from '../../../../tandem/js/types/EnumerationIO.js';
@@ -118,6 +118,12 @@ const ADJUSTABLE_ATOM_CRITICAL_POINT_IN_KELVIN = 140;
 const MOLECULE_INJECTION_HOLDOFF_TIME = 0.25; // seconds, empirically determined
 const MAX_MOLECULES_QUEUED_FOR_INJECTION = 3;
 
+type SelfOptions = {
+  validSubstances?: typeof SubstanceType[];
+};
+
+type MultipleParticleModelOptions = SelfOptions & PhetioObjectOptions;
+
 class MultipleParticleModel extends PhetioObject {
 
   // observable model properties
@@ -160,17 +166,15 @@ class MultipleParticleModel extends PhetioObject {
   private averageTemperatureDifference: MovingAverage;
   private thermostatRunPreviousStep: IntentionalAny | null;
 
-  public constructor( tandem: Tandem, options?: { validSubstances?: typeof SubstanceType[] } ) {
+  public constructor( tandem: Tandem, providedOptions?: MultipleParticleModelOptions ) {
 
-    // eslint-disable-next-line phet/bad-typescript-text
-    options = merge( {
-      validSubstances: SubstanceType.VALUES
-    }, options );
-
-    super( {
+    const options = optionize<MultipleParticleModelOptions, SelfOptions, PhetioObjectOptions>()( {
+      validSubstances: SubstanceType.VALUES,
       tandem: tandem,
       phetioType: MultipleParticleModel.MultipleParticleModelIO
-    } );
+    }, providedOptions );
+
+    super( options );
 
     this.substanceProperty = new EnumerationDeprecatedProperty( SubstanceType, DEFAULT_SUBSTANCE, {
       validValues: options.validSubstances,

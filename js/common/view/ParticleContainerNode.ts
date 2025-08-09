@@ -14,11 +14,11 @@ import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Matrix3 from '../../../../dot/js/Matrix3.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import Shape from '../../../../kite/js/Shape.js';
-import merge from '../../../../phet-core/js/merge.js';
+import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import HandleNode from '../../../../scenery-phet/js/HandleNode.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import DragListener from '../../../../scenery/js/listeners/DragListener.js';
-import Node from '../../../../scenery/js/nodes/Node.js';
+import Node, { NodeOptions } from '../../../../scenery/js/nodes/Node.js';
 import Path from '../../../../scenery/js/nodes/Path.js';
 import LinearGradient from '../../../../scenery/js/util/LinearGradient.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
@@ -38,6 +38,14 @@ const CONTAINER_CUTOUT_X_MARGIN = 25;
 const CONTAINER_CUTOUT_Y_MARGIN = 20;
 const BEVEL_WIDTH = 9;
 
+type SelfOptions = {
+  volumeControlEnabled?: boolean;
+  pressureGaugeEnabled?: boolean;
+  thermometerXOffsetFromCenter?: number;
+};
+
+type ParticleContainerNodeOptions = SelfOptions & NodeOptions;
+
 class ParticleContainerNode extends Node {
 
   // view bounds for the particle area, everything is basically constructed and positioned based on this
@@ -54,17 +62,17 @@ class ParticleContainerNode extends Node {
   /**
    * @param multipleParticleModel - model of the simulation
    * @param modelViewTransform
-   * @param [options]
+   * @param [providedOptions]
    */
-  public constructor( multipleParticleModel: MultipleParticleModel, modelViewTransform: ModelViewTransform2, options?: Object ) {
+  public constructor( multipleParticleModel: MultipleParticleModel, modelViewTransform: ModelViewTransform2, providedOptions?: ParticleContainerNodeOptions ) {
 
-    options = merge( {
+    const options = optionize<ParticleContainerNodeOptions, SelfOptions, NodeOptions>()( {
       volumeControlEnabled: false,
       pressureGaugeEnabled: false,
       thermometerXOffsetFromCenter: 0,
       preventFit: true, // improves performance
       tandem: Tandem.REQUIRED
-    }, options );
+    }, providedOptions );
 
     super( options );
 

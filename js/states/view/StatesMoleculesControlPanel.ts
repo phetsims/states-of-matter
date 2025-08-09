@@ -13,9 +13,10 @@
 import { Property } from '../../../../axon/js/imports.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import merge from '../../../../phet-core/js/merge.js';
+import optionize from '../../../../phet-core/js/optionize.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import HBox from '../../../../scenery/js/layout/nodes/HBox.js';
-import Node from '../../../../scenery/js/nodes/Node.js';
+import Node, { NodeOptions } from '../../../../scenery/js/nodes/Node.js';
 import Rectangle from '../../../../scenery/js/nodes/Rectangle.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import RectangularRadioButtonGroup from '../../../../sun/js/buttons/RectangularRadioButtonGroup.js';
@@ -38,15 +39,28 @@ const waterString = StatesOfMatterStrings.water;
 // constants
 const DEFAULT_WIDTH = 160;
 
+type SelfOptions = {
+  xMargin?: number;
+  yMargin?: number;
+  fill?: any; // Could be Color or Property<Color>
+  stroke?: any; // Could be Color or Property<Color>
+  lineWidth?: number;
+  cornerRadius?: number;
+  maxWidth?: number;
+  minWidth?: number;
+};
+
+type StatesMoleculesControlPanelOptions = SelfOptions & NodeOptions;
+
 class StatesMoleculesControlPanel extends Node {
 
   /**
    * @param substanceProperty - that tracks the substance selected in the panel
-   * @param options - for various panel display properties
+   * @param providedOptions - for various panel display properties
    */
-  public constructor( substanceProperty: Property<number>, options?: Object ) {
+  public constructor( substanceProperty: Property<number>, providedOptions?: StatesMoleculesControlPanelOptions ) {
 
-    options = merge( {
+    const options = optionize<StatesMoleculesControlPanelOptions, SelfOptions, NodeOptions>()( {
       xMargin: 5,
       yMargin: 8,
       fill: SOMColors.controlPanelBackgroundProperty,
@@ -56,7 +70,7 @@ class StatesMoleculesControlPanel extends Node {
       maxWidth: DEFAULT_WIDTH,
       minWidth: DEFAULT_WIDTH,
       tandem: Tandem.REQUIRED
-    }, options );
+    }, providedOptions );
 
     super();
     const maxTextWidth = options.maxWidth * 0.75;

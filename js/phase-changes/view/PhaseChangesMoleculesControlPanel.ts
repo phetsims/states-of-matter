@@ -14,9 +14,10 @@ import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import Range from '../../../../dot/js/Range.js';
 import merge from '../../../../phet-core/js/merge.js';
+import optionize, { type EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import VBox from '../../../../scenery/js/layout/nodes/VBox.js';
-import Node from '../../../../scenery/js/nodes/Node.js';
+import Node, { type NodeOptions } from '../../../../scenery/js/nodes/Node.js';
 import Rectangle from '../../../../scenery/js/nodes/Rectangle.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import RectangularRadioButtonGroup from '../../../../sun/js/buttons/RectangularRadioButtonGroup.js';
@@ -48,15 +49,20 @@ const INSET = 10;
 const TICK_TEXT_MAX_WIDTH = 40;
 const NORMAL_TEXT_FONT_SIZE = 12;
 
+// Since this class doesn't add any new options beyond what Node provides, we use EmptySelfOptions
+type SelfOptions = EmptySelfOptions;
+
+type PhaseChangesMoleculesControlPanelOptions = SelfOptions & NodeOptions;
+
 class PhaseChangesMoleculesControlPanel extends Node {
 
   /**
    * @param phaseChangesModel - model of the simulation
-   * @param options - options for various panel display properties
+   * @param providedOptions - options for various panel display properties
    */
-  public constructor( phaseChangesModel: PhaseChangesModel, options?: Object ) {
+  public constructor( phaseChangesModel: PhaseChangesModel, providedOptions?: PhaseChangesMoleculesControlPanelOptions ) {
 
-    options = merge( {
+    const options = optionize<PhaseChangesMoleculesControlPanelOptions, SelfOptions, NodeOptions>()( {
       showAdjustableAttraction: false,
       xMargin: 5,
       yMargin: 5,
@@ -66,7 +72,7 @@ class PhaseChangesMoleculesControlPanel extends Node {
       cornerRadius: SOMConstants.PANEL_CORNER_RADIUS,
       minWidth: 120, // somewhat arbitrary, will generally be set by constructor
       tandem: Tandem.REQUIRED
-    }, options );
+    }, providedOptions );
 
     const selectorWidth = options.minWidth - 2 * options.xMargin;
 

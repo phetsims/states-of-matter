@@ -14,7 +14,7 @@
 import Multilink from '../../../../axon/js/Multilink.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Utils from '../../../../dot/js/Utils.js';
-import merge from '../../../../phet-core/js/merge.js';
+import optionize, { type EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import DragListener from '../../../../scenery/js/listeners/DragListener.js';
 import PressListener from '../../../../scenery/js/listeners/PressListener.js';
@@ -27,6 +27,7 @@ import InteractionPotentialCanvasNode from '../../common/view/InteractionPotenti
 import PotentialGraphNode from '../../common/view/PotentialGraphNode.js';
 import statesOfMatter from '../../statesOfMatter.js';
 import PhaseChangesModel from '../PhaseChangesModel.js';
+import { NodeOptions } from '../../../../scenery/js/nodes/Node.js';
 
 // Size of handles as function of node width.
 const RESIZE_HANDLE_SIZE_PROPORTION = 0.18;
@@ -40,6 +41,10 @@ const RESIZE_HANDLE_HIGHLIGHTED_COLOR = new Color( 153, 255, 0 );
 const EPSILON_LINE_COLOR = RESIZE_HANDLE_NORMAL_COLOR;
 const POTENTIAL_LINE_COLOR = new Color( 'red' );
 
+type SelfOptions = EmptySelfOptions;
+
+type EpsilonControlPotentialGraphOptions = SelfOptions & NodeOptions;
+
 class EpsilonControlPotentialGraph extends PotentialGraphNode {
 
   // Flag that signifies if interaction is enabled
@@ -52,11 +57,13 @@ class EpsilonControlPotentialGraph extends PotentialGraphNode {
    * @param sigma - atom diameter
    * @param epsilon - interaction strength
    * @param phaseChangesModel - model of the simulation
-   * @param [options] that can be passed on to the underlying node
+   * @param [providedOptions] that can be passed on to the underlying node
    */
-  public constructor( sigma: number, epsilon: number, phaseChangesModel: PhaseChangesModel, options?: Object ) {
+  public constructor( sigma: number, epsilon: number, phaseChangesModel: PhaseChangesModel, providedOptions?: EpsilonControlPotentialGraphOptions ) {
 
-    options = merge( { tandem: Tandem.REQUIRED }, options );
+    const options = optionize<EpsilonControlPotentialGraphOptions, SelfOptions, NodeOptions>()( {
+      tandem: Tandem.REQUIRED
+    }, providedOptions );
 
     super( sigma, epsilon, {
       allowInteraction: true,

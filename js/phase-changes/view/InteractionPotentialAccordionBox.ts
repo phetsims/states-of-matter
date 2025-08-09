@@ -10,12 +10,12 @@
  * @author Siddhartha Chinthapally (Actual Concepts)
  */
 
-import merge from '../../../../phet-core/js/merge.js';
+import optionize from '../../../../phet-core/js/optionize.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import HBox from '../../../../scenery/js/layout/nodes/HBox.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
-import AccordionBox from '../../../../sun/js/AccordionBox.js';
+import AccordionBox, { type AccordionBoxOptions } from '../../../../sun/js/AccordionBox.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import MultipleParticleModel from '../../common/model/MultipleParticleModel.js';
 import SOMConstants from '../../common/SOMConstants.js';
@@ -26,6 +26,13 @@ import EpsilonControlPotentialGraph from './EpsilonControlPotentialGraph.js';
 
 const interactionPotentialString = StatesOfMatterStrings.interactionPotential;
 
+type SelfOptions = {
+  minWidth?: number;
+  maxWidth?: number;
+};
+
+type InteractionPotentialAccordionBoxOptions = SelfOptions & AccordionBoxOptions;
+
 class InteractionPotentialAccordionBox extends AccordionBox {
 
   public readonly graph: EpsilonControlPotentialGraph;
@@ -34,11 +41,13 @@ class InteractionPotentialAccordionBox extends AccordionBox {
    * @param sigma - atom diameter
    * @param epsilon - interaction strength
    * @param multipleParticleModel - model of the simulation
-   * @param options - that can be passed on to the underlying node
+   * @param providedOptions - that can be passed on to the underlying node
    */
-  public constructor( sigma: number, epsilon: number, multipleParticleModel: MultipleParticleModel, options?: Object ) {
+  public constructor( sigma: number, epsilon: number, multipleParticleModel: MultipleParticleModel, providedOptions?: InteractionPotentialAccordionBoxOptions ) {
 
-    options = merge( { tandem: Tandem.REQUIRED }, options );
+    const options = optionize<InteractionPotentialAccordionBoxOptions, SelfOptions, AccordionBoxOptions>()( {
+      tandem: Tandem.REQUIRED
+    }, providedOptions );
 
     const graph = new EpsilonControlPotentialGraph(
       sigma,
@@ -65,7 +74,7 @@ class InteractionPotentialAccordionBox extends AccordionBox {
     if ( titleNode.width > graph.horizontalAxis.width ) {
       titleNode.scale( graph.horizontalAxis.width / titleNode.width );
     }
-    super( accordionContentHBox, merge( {
+    super( accordionContentHBox, optionize<AccordionBoxOptions, AccordionBoxOptions, AccordionBoxOptions>()( {
       titleNode: titleNode,
       fill: SOMColors.controlPanelBackgroundProperty,
       stroke: SOMColors.controlPanelStrokeProperty,

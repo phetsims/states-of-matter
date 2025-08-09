@@ -11,11 +11,11 @@
  */
 
 import Vector2 from '../../../../dot/js/Vector2.js';
-import merge from '../../../../phet-core/js/merge.js';
+import optionize from '../../../../phet-core/js/optionize.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import Line from '../../../../scenery/js/nodes/Line.js';
-import Node from '../../../../scenery/js/nodes/Node.js';
+import Node, { NodeOptions } from '../../../../scenery/js/nodes/Node.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import PositionMarker from '../../atomic-interactions/view/PositionMarker.js';
 import ZoomableGridNode from '../../atomic-interactions/view/ZoomableGridNode.js';
@@ -53,6 +53,23 @@ let GREEK_LETTER_MAX_WIDTH;
 
 // zoom buttons height
 const ZOOM_BUTTONS_HEIGHT = 72;
+
+type SelfOptions = {
+  
+  // true if the widescreen version of the graph is needed, false if not
+  wide?: boolean;
+  
+  // whether or not this graph instance should have a position marker
+  includePositionMarker?: boolean;
+  
+  // whether or not this graph instance should allow interactivity (see usage for more information)
+  allowInteraction?: boolean;
+  
+  // whether or not this graph instance should have zoom buttons (only applicable when wide is true)
+  zoomable?: boolean;
+};
+
+type PotentialGraphNodeOptions = SelfOptions & NodeOptions;
 
 class PotentialGraphNode extends Node {
 
@@ -103,9 +120,9 @@ class PotentialGraphNode extends Node {
    * @param sigma - Initial value of sigma, a.k.a. the atom diameter
    * @param epsilon - Initial value of epsilon, a.k.a. the interaction strength
    */
-  public constructor( sigma: number, epsilon: number, options?: any ) {
+  public constructor( sigma: number, epsilon: number, providedOptions?: PotentialGraphNodeOptions ) {
 
-    options = merge( {
+    const options = optionize<PotentialGraphNodeOptions, SelfOptions, NodeOptions>()( {
 
       // {boolean} - true if the widescreen version of the graph is needed, false if not
       wide: false,
@@ -116,7 +133,7 @@ class PotentialGraphNode extends Node {
       // {boolean} - whether or not this graph instance should allow interactivity (see usage for more information)
       allowInteraction: false
 
-    }, options );
+    }, providedOptions );
 
     super();
 

@@ -9,11 +9,12 @@
  * @author Siddhartha Chinthapally (Actual Concepts)
  */
 
+import optionize, { type EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import merge from '../../../../phet-core/js/merge.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import Property from '../../../../axon/js/Property.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
-import AccordionBox from '../../../../sun/js/AccordionBox.js';
+import AccordionBox, { type AccordionBoxOptions } from '../../../../sun/js/AccordionBox.js';
 import SOMConstants from '../../common/SOMConstants.js';
 import SOMColors from '../../common/view/SOMColors.js';
 import statesOfMatter from '../../statesOfMatter.js';
@@ -22,6 +23,10 @@ import PhaseDiagram from './PhaseDiagram.js';
 
 const phaseDiagramString = StatesOfMatterStrings.phaseDiagram;
 
+type SelfOptions = EmptySelfOptions;
+
+type PhaseDiagramAccordionBoxOptions = SelfOptions & AccordionBoxOptions;
+
 class PhaseDiagramAccordionBox extends AccordionBox {
 
   // Make phase diagram available so that methods can access it
@@ -29,11 +34,11 @@ class PhaseDiagramAccordionBox extends AccordionBox {
 
   /**
    * @param expandedProperty - is to expand the phase diagram
-   * @param options that can be passed on to the underlying node
+   * @param providedOptions that can be passed on to the underlying node
    */
-  public constructor( expandedProperty: Property<boolean>, options?: Object ) {
+  public constructor( expandedProperty: Property<boolean>, providedOptions?: PhaseDiagramAccordionBoxOptions ) {
 
-    options = merge( {
+    const options = optionize<PhaseDiagramAccordionBoxOptions, SelfOptions, AccordionBoxOptions>()( {
       fill: SOMColors.controlPanelBackgroundProperty,
       stroke: SOMColors.controlPanelStrokeProperty,
       expandedProperty: expandedProperty,
@@ -52,9 +57,9 @@ class PhaseDiagramAccordionBox extends AccordionBox {
         touchAreaXDilation: 15,
         touchAreaYDilation: 10
       },
-      tandem: options.tandem.createTandem( 'accordionBox' ),
+      tandem: providedOptions?.tandem.createTandem( 'accordionBox' ),
       visiblePropertyOptions: { phetioReadOnly: true }
-    }, options );
+    }, providedOptions );
 
     const phaseDiagram = new PhaseDiagram();
 

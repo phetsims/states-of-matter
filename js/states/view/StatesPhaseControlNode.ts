@@ -12,7 +12,7 @@
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import EnumerationDeprecatedProperty from '../../../../axon/js/EnumerationDeprecatedProperty.js';
-import merge from '../../../../phet-core/js/merge.js';
+import optionize, { type EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import HBox from '../../../../scenery/js/layout/nodes/HBox.js';
 import VBox from '../../../../scenery/js/layout/nodes/VBox.js';
@@ -41,15 +41,20 @@ const ICON_HEIGHT = 25; // in screen coordinates, empirically determined
 const SELECTED_BUTTON_COLOR = '#a5a7ff';
 const DESELECTED_BUTTON_COLOR = '#F8D980';
 
+// Since no new options are introduced (all options are from NodeOptions), use EmptySelfOptions
+type SelfOptions = EmptySelfOptions;
+
+type StatesPhaseControlNodeOptions = SelfOptions & NodeOptions;
+
 class StatesPhaseControlNode extends Node {
 
   /**
    * @param model
-   * @param options - that can be passed on to the underlying node
+   * @param providedOptions - that can be passed on to the underlying node
    */
-  public constructor( model: MultipleParticleModel, options?: NodeOptions ) {
+  public constructor( model: MultipleParticleModel, providedOptions?: StatesPhaseControlNodeOptions ) {
 
-    options = merge( {
+    const options = optionize<StatesPhaseControlNodeOptions, SelfOptions, NodeOptions>()( {
       xMargin: 5,
       yMargin: 8,
       fill: '#C8C8C8',
@@ -58,7 +63,7 @@ class StatesPhaseControlNode extends Node {
       cornerRadius: 5, // radius of the rounded corners on the background
       buttonWidth: DEFAULT_BUTTON_WIDTH,
       tandem: Tandem.REQUIRED
-    }, options );
+    }, providedOptions );
 
     super();
 
@@ -199,3 +204,4 @@ const createButtonContent = ( iconImage, string, buttonWidth ) => {
 
 statesOfMatter.register( 'StatesPhaseControlNode', StatesPhaseControlNode );
 export default StatesPhaseControlNode;
+export { type StatesPhaseControlNodeOptions };

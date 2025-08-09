@@ -9,7 +9,9 @@
  * @author John Blanco
  */
 
+import optionize, { type EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import CanvasNode from '../../../../scenery/js/nodes/CanvasNode.js';
+import type { NodeOptions } from '../../../../scenery/js/nodes/Node.js';
 import type { ObservableArray } from '../../../../axon/js/createObservableArray.js';
 import type ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import statesOfMatter from '../../statesOfMatter.js';
@@ -37,6 +39,10 @@ PARTICLE_RADIUS_TABLE[ AtomType.OXYGEN ] = SOMConstants.OXYGEN_RADIUS;
 PARTICLE_RADIUS_TABLE[ AtomType.HYDROGEN ] = SOMConstants.HYDROGEN_RADIUS;
 PARTICLE_RADIUS_TABLE[ AtomType.ADJUSTABLE ] = SOMConstants.ADJUSTABLE_ATTRACTION_DEFAULT_RADIUS;
 
+type SelfOptions = EmptySelfOptions;
+
+type ParticleImageCanvasNodeOptions = SelfOptions & NodeOptions;
+
 class ParticleImageCanvasNode extends CanvasNode {
 
   private readonly particles: ObservableArray<ScaledAtom>;
@@ -52,9 +58,11 @@ class ParticleImageCanvasNode extends CanvasNode {
   /**
    * @param particles - that need to be rendered on the canvas
    * @param modelViewTransform - to convert between model and view coordinate frames
-   * @param options - that can be passed on to the underlying node
+   * @param providedOptions - that can be passed on to the underlying node
    */
-  public constructor( particles: ObservableArray<ScaledAtom>, modelViewTransform: ModelViewTransform2, options?: object ) {
+  public constructor( particles: ObservableArray<ScaledAtom>, modelViewTransform: ModelViewTransform2, providedOptions?: ParticleImageCanvasNodeOptions ) {
+
+    const options = optionize<ParticleImageCanvasNodeOptions, SelfOptions, NodeOptions>()( {}, providedOptions );
 
     super( options );
 

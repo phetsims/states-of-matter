@@ -13,17 +13,23 @@
 
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
+import optionize, { type EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import ArrowShape from '../../../../scenery-phet/js/ArrowShape.js';
 import CanvasNode from '../../../../scenery/js/nodes/CanvasNode.js';
+import type { NodeOptions } from '../../../../scenery/js/nodes/Node.js';
+import Color from '../../../../scenery/js/util/Color.js';
 import statesOfMatter from '../../statesOfMatter.js';
 import PotentialGraphNode from './PotentialGraphNode.js';
-import Color from '../../../../scenery/js/util/Color.js';
 
 // constants
 const AXIS_LINE_WIDTH = 1;
 const AXES_ARROW_HEAD_HEIGHT = 8 * AXIS_LINE_WIDTH;
 const SIGMA_HANDLE_OFFSET_PROPORTION = 0.08;  // Position of handle as function of node width.
 const EPSILON_LINE_WIDTH = 1;
+
+type SelfOptions = EmptySelfOptions;
+
+type InteractionPotentialCanvasNodeOptions = SelfOptions & NodeOptions;
 
 class InteractionPotentialCanvasNode extends CanvasNode {
 
@@ -40,9 +46,12 @@ class InteractionPotentialCanvasNode extends CanvasNode {
 
   /**
    * @param potentialGraphNode
-   * @param options - that can be passed on to the underlying node
+   * @param providedOptions - that can be passed on to the underlying node
    */
-  public constructor( potentialGraphNode: PotentialGraphNode, options?: Object ) {
+  public constructor( potentialGraphNode: PotentialGraphNode, providedOptions?: InteractionPotentialCanvasNodeOptions ) {
+    
+    const options = optionize<InteractionPotentialCanvasNodeOptions, SelfOptions, NodeOptions>()( {}, providedOptions );
+    
     super( options );
     this.potentialGraph = potentialGraphNode;
 

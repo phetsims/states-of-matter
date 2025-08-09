@@ -12,17 +12,24 @@
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Range from '../../../../dot/js/Range.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
-import merge from '../../../../phet-core/js/merge.js';
+import optionize from '../../../../phet-core/js/optionize.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import VBox from '../../../../scenery/js/layout/nodes/VBox.js';
-import Text from '../../../../scenery/js/nodes/Text.js';
+import VBox, { VBoxOptions } from '../../../../scenery/js/layout/nodes/VBox.js';
+import Text, { TextOptions } from '../../../../scenery/js/nodes/Text.js';
 import Color from '../../../../scenery/js/util/Color.js';
-import HSlider from '../../../../sun/js/HSlider.js';
+import HSlider, { HSliderOptions } from '../../../../sun/js/HSlider.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import statesOfMatter from '../../statesOfMatter.js';
 
 // constants
 const DEFAULT_TITLE_FONT = new PhetFont( 12 );
+
+type SelfOptions = {
+  titleOptions?: TextOptions;
+  sliderOptions?: HSliderOptions;
+};
+
+type TitledSliderOptions = SelfOptions & VBoxOptions;
 
 class TitledSlider extends VBox {
 
@@ -34,9 +41,9 @@ class TitledSlider extends VBox {
    * @param range - range for the value property
    * @param titleText - the text string that will be used to create the title
    */
-  public constructor( valueProperty: NumberProperty, range: Range, titleText: string, tandem: Tandem, options?: any ) {
+  public constructor( valueProperty: NumberProperty, range: Range, titleText: string, tandem: Tandem, providedOptions?: TitledSliderOptions ) {
 
-    options = merge( {
+    const options = optionize<TitledSliderOptions, SelfOptions, VBoxOptions>()( {
       spacing: 5,
       align: 'center',
       tandem: tandem,
@@ -49,15 +56,16 @@ class TitledSlider extends VBox {
         trackSize: new Dimension2( 140, 5 ), // empirically determined for this sim
         tandem: tandem.createTandem( 'slider' )
       }
-    }, options );
+    }, providedOptions );
 
     const title = new Text( titleText, options.titleOptions );
     const slider = new HSlider( valueProperty, range, options.sliderOptions );
 
     // VBox is used to make it easy to add additional options
-    super( merge( options, {
+    // TODO: https://github.com/phetsims/states-of-matter/issues/368 this looks broken, maybe combine options
+    super( optionize<VBoxOptions>()( {
       children: [ title, slider ]
-    } ) );
+    }, options ) );
 
     this.slider = slider;
   }

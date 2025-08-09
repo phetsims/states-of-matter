@@ -11,7 +11,7 @@
 
 import Screen from '../../../joist/js/Screen.js';
 import ScreenIcon, { ScreenIconOptions } from '../../../joist/js/ScreenIcon.js';
-import merge from '../../../phet-core/js/merge.js';
+import optionize, { type EmptySelfOptions } from '../../../phet-core/js/optionize.js';
 import HBox from '../../../scenery/js/layout/nodes/HBox.js';
 import Image from '../../../scenery/js/nodes/Image.js';
 import Rectangle from '../../../scenery/js/nodes/Rectangle.js';
@@ -21,16 +21,20 @@ import liquidIcon_png from '../../mipmaps/liquidIcon_png.js';
 import solidIcon_png from '../../mipmaps/solidIcon_png.js';
 import statesOfMatter from '../statesOfMatter.js';
 
+type SelfOptions = EmptySelfOptions;
+
+type StatesIconOptions = SelfOptions & ScreenIconOptions;
+
 class StatesIcon extends ScreenIcon {
 
-  public constructor( options?: ScreenIconOptions ) {
+  public constructor( providedOptions?: StatesIconOptions ) {
 
-    options = merge( {
+    const options = optionize<StatesIconOptions, SelfOptions, ScreenIconOptions>()( {
       size: Screen.MINIMUM_HOME_SCREEN_ICON_SIZE,
       maxIconWidthProportion: 0.9,
       maxIconHeightProportion: 0.9,
       fill: Color.BLACK
-    }, options );
+    }, providedOptions );
 
     // icons packed into a nice little box
     const iconsBox = new HBox( {

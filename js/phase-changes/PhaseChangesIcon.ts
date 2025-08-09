@@ -12,8 +12,8 @@
 
 // modules
 import Screen from '../../../joist/js/Screen.js';
-import ScreenIcon from '../../../joist/js/ScreenIcon.js';
-import merge from '../../../phet-core/js/merge.js';
+import ScreenIcon, { ScreenIconOptions } from '../../../joist/js/ScreenIcon.js';
+import optionize from '../../../phet-core/js/optionize.js';
 import ArrowNode from '../../../scenery-phet/js/ArrowNode.js';
 import Circle from '../../../scenery/js/nodes/Circle.js';
 import Node from '../../../scenery/js/nodes/Node.js';
@@ -28,16 +28,25 @@ const PARTICLE_COLOR = SOMConstants.NEON_COLOR;
 const CUBE_WIDTH = 5; // particles
 const CUBE_HEIGHT = 5; // particles
 
+type SelfOptions = {
+  size?: typeof Screen.MINIMUM_HOME_SCREEN_ICON_SIZE;
+  maxIconWidthProportion?: number;
+  maxIconHeightProportion?: number;
+  fill?: Color;
+};
+
+type PhaseChangesIconOptions = SelfOptions & ScreenIconOptions;
+
 class PhaseChangesIcon extends ScreenIcon {
 
-  public constructor( options?: Object ) {
+  public constructor( providedOptions?: PhaseChangesIconOptions ) {
 
-    options = merge( {
+    const options = optionize<PhaseChangesIconOptions, SelfOptions, ScreenIconOptions>()( {
       size: Screen.MINIMUM_HOME_SCREEN_ICON_SIZE,
       maxIconWidthProportion: 0.9,
       maxIconHeightProportion: 0.9,
       fill: Color.BLACK
-    }, options );
+    }, providedOptions );
 
     // convenience var
     const size = options.size;
