@@ -1,8 +1,5 @@
 // Copyright 2020-2025, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * slider with a title over the top
  *
@@ -63,6 +60,7 @@ class TitledSlider extends VBox {
 
     // VBox is used to make it easy to add additional options
     // TODO: https://github.com/phetsims/states-of-matter/issues/368 this looks broken, maybe combine options
+    // @ts-expect-error
     super( optionize<VBoxOptions>()( {
       children: [ title, slider ]
     }, options ) );

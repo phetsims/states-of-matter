@@ -1,8 +1,5 @@
 // Copyright 2015-2025, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * A pseudo-3D sphere with a halo that appears during interactions.  This was highly leveraged from Manipulator.js
  * in the Graphing Lines simulation.

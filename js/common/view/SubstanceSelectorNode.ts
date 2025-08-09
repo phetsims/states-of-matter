@@ -1,8 +1,5 @@
 // Copyright 2020-2025, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * SubstanceSelectorNode is a node with a label on the left and an icon - generally something that represents and atom
  * or molecule - on the right.  It maintains its initial width if the width of the label changes.
@@ -12,7 +9,7 @@
 
 import HBox from '../../../../scenery/js/layout/nodes/HBox.js';
 import Line from '../../../../scenery/js/nodes/Line.js';
-import { Node } from '../../../../scenery/js/imports.js';
+import Node from '../../../../scenery/js/nodes/Node.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import statesOfMatter from '../../statesOfMatter.js';
 
@@ -53,7 +50,7 @@ class SubstanceSelectorNode extends HBox {
   /**
    * release all memory to avoid memory leaks
    */
-  public dispose(): void {
+  public override dispose(): void {
     this.disposeSubstanceSelectorNode();
     super.dispose();
   }
