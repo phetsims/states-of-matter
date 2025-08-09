@@ -11,12 +11,12 @@ import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Range from '../../../../dot/js/Range.js';
 import Shape from '../../../../kite/js/Shape.js';
 import optionize from '../../../../phet-core/js/optionize.js';
-import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import MagnifyingGlassZoomButtonGroup from '../../../../scenery-phet/js/MagnifyingGlassZoomButtonGroup.js';
 import Node, { NodeOptions } from '../../../../scenery/js/nodes/Node.js';
 import Path from '../../../../scenery/js/nodes/Path.js';
 import ButtonNode from '../../../../sun/js/buttons/ButtonNode.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
+import PotentialGraphNode from '../../common/view/PotentialGraphNode.js';
 import SOMColors from '../../common/view/SOMColors.js';
 import statesOfMatter from '../../statesOfMatter.js';
 
@@ -50,7 +50,7 @@ class ZoomableGridNode extends Node {
    * @param height - height of the graph
    * @param providedOptions
    */
-  public constructor( atomsView: IntentionalAny, offsetX: number, offsetY: number, width: number, height: number, providedOptions?: ZoomableGridNodeOptions ) {
+  public constructor( atomsView: PotentialGraphNode, offsetX: number, offsetY: number, width: number, height: number, providedOptions?: ZoomableGridNodeOptions ) {
 
     const options = optionize<ZoomableGridNodeOptions, SelfOptions, NodeOptions>()( {
       addZoomButtons: true,
