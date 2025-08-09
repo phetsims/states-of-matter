@@ -1,8 +1,5 @@
 // Copyright 2014-2025, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * This class represents a node that looks like a hand with an extended finger, and is generally used to push down on
  * things.
@@ -19,8 +16,8 @@ import Image from '../../../../scenery/js/nodes/Image.js';
 import Node, { NodeOptions } from '../../../../scenery/js/nodes/Node.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import pointingHand_png from '../../../mipmaps/pointingHand_png.js';
+import PhaseChangesModel from '../../phase-changes/PhaseChangesModel.js';
 import statesOfMatter from '../../statesOfMatter.js';
-import PhaseChangesModel from '../../phase-changes/model/PhaseChangesModel.js';
 import MultipleParticleModel from '../model/MultipleParticleModel.js';
 
 // constants
@@ -91,9 +88,9 @@ class PointingHandNode extends Node {
     };
 
     // Set ourself up to listen for and handle mouse dragging events.
-    let startY;
+    let startY: number;
     let endY;
-    let containerSizeAtDragStart;
+    let containerSizeAtDragStart: number;
 
     // add a listener to handle drag events
     pointingHandImageNode.addInputListener( new DragListener( {
@@ -164,6 +161,8 @@ class PointingHandNode extends Node {
         upArrowNode.setVisible( false );
         downArrowNode.setVisible( true );
       }
+
+      // @ts-expect-error
       else if ( particleContainerHeight === MultipleParticleModel.PARTICLE_CONTAINER_MIN_HEIGHT ) {
 
         // Particle container all the way down, so show only the up arrow.

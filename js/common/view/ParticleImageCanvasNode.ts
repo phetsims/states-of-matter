@@ -1,19 +1,16 @@
 // Copyright 2016-2025, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * A particle layer rendered on canvas that uses images rather than calling context.arc for improved performance.
  *
  * @author John Blanco
  */
 
+import type { ObservableArray } from '../../../../axon/js/createObservableArray.js';
 import optionize, { type EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
+import type ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import CanvasNode from '../../../../scenery/js/nodes/CanvasNode.js';
 import type { NodeOptions } from '../../../../scenery/js/nodes/Node.js';
-import type { ObservableArray } from '../../../../axon/js/createObservableArray.js';
-import type ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import statesOfMatter from '../../statesOfMatter.js';
 import AtomType from '../model/AtomType.js';
 import type ScaledAtom from '../model/particle/ScaledAtom.js';
@@ -24,20 +21,22 @@ import SOMColors from './SOMColors.js';
 const PARTICLE_IMAGE_CANVAS_LENGTH = 32; // amount of canvas used to create a particle image, will be squared 
 
 // set up the association between atom types and the colors used to represent them
-const PARTICLE_COLOR_TABLE = {};
-PARTICLE_COLOR_TABLE[ AtomType.ARGON ] = SOMConstants.ARGON_COLOR.toCSS();
-PARTICLE_COLOR_TABLE[ AtomType.NEON ] = SOMConstants.NEON_COLOR.toCSS();
-PARTICLE_COLOR_TABLE[ AtomType.OXYGEN ] = SOMConstants.OXYGEN_COLOR.toCSS();
-PARTICLE_COLOR_TABLE[ AtomType.HYDROGEN ] = SOMConstants.HYDROGEN_COLOR.toCSS();
-PARTICLE_COLOR_TABLE[ AtomType.ADJUSTABLE ] = SOMConstants.ADJUSTABLE_ATTRACTION_COLOR.toCSS();
+const PARTICLE_COLOR_TABLE = {
+  ARGON: SOMConstants.ARGON_COLOR.toCSS(),
+  NEON: SOMConstants.NEON_COLOR.toCSS(),
+  OXYGEN: SOMConstants.OXYGEN_COLOR.toCSS(),
+  HYDROGEN: SOMConstants.HYDROGEN_COLOR.toCSS(),
+  ADJUSTABLE: SOMConstants.ADJUSTABLE_ATTRACTION_COLOR.toCSS()
+};
 
 // set up the association between atom types and their radii in the model
-const PARTICLE_RADIUS_TABLE = {};
-PARTICLE_RADIUS_TABLE[ AtomType.ARGON ] = SOMConstants.ARGON_RADIUS;
-PARTICLE_RADIUS_TABLE[ AtomType.NEON ] = SOMConstants.NEON_RADIUS;
-PARTICLE_RADIUS_TABLE[ AtomType.OXYGEN ] = SOMConstants.OXYGEN_RADIUS;
-PARTICLE_RADIUS_TABLE[ AtomType.HYDROGEN ] = SOMConstants.HYDROGEN_RADIUS;
-PARTICLE_RADIUS_TABLE[ AtomType.ADJUSTABLE ] = SOMConstants.ADJUSTABLE_ATTRACTION_DEFAULT_RADIUS;
+const PARTICLE_RADIUS_TABLE = {
+  ARGON: SOMConstants.ARGON_RADIUS,
+  NEON: SOMConstants.NEON_RADIUS,
+  OXYGEN: SOMConstants.OXYGEN_RADIUS,
+  HYDROGEN: SOMConstants.HYDROGEN_RADIUS,
+  ADJUSTABLE: SOMConstants.ADJUSTABLE_ATTRACTION_DEFAULT_RADIUS
+};
 
 type SelfOptions = EmptySelfOptions;
 
@@ -53,6 +52,8 @@ class ParticleImageCanvasNode extends CanvasNode {
   private readonly mapAtomTypeToImageXPosition: Record<string, number>;
   // create a table of particle view radii so they don't have to keep being recalculated, populated below
   private readonly particleRadii: Record<string, number>;
+
+  // @ts-expect-error
   private useStrokedParticles: boolean;
 
   /**
@@ -79,7 +80,7 @@ class ParticleImageCanvasNode extends CanvasNode {
 
     // Draw the particles on the canvas, top row is without black stroke, the bottom row is with black stroke (for
     // projector mode).
-    const context = this.particleImageCanvas.getContext( '2d' );
+    const context = this.particleImageCanvas.getContext( '2d' )!;
     let index = 0;
     for ( const atomType in AtomType ) {
 
@@ -89,7 +90,9 @@ class ParticleImageCanvasNode extends CanvasNode {
       }
 
       // draw particle with stroke that matches the fill
+      // @ts-expect-error
       context.strokeStyle = PARTICLE_COLOR_TABLE[ atomType ];
+      // @ts-expect-error
       context.fillStyle = PARTICLE_COLOR_TABLE[ atomType ];
       context.lineWidth = 1;
       context.beginPath();
@@ -120,6 +123,7 @@ class ParticleImageCanvasNode extends CanvasNode {
       this.mapAtomTypeToImageXPosition[ atomType ] = index * PARTICLE_IMAGE_CANVAS_LENGTH;
 
       // set the radius for this atom type
+      // @ts-expect-error
       this.particleRadii[ atomType ] = modelViewTransform.modelToViewDeltaX( PARTICLE_RADIUS_TABLE[ atomType ] );
 
       index++;
@@ -163,6 +167,7 @@ class ParticleImageCanvasNode extends CanvasNode {
     // than inside of it.
     for ( i = 0; i < this.particles.length; i++ ) {
       particle = this.particles.get( i );
+      // @ts-expect-error
       if ( particle.renderBelowOxygen ) {
         this.renderParticle( context, particle );
       }
@@ -171,6 +176,8 @@ class ParticleImageCanvasNode extends CanvasNode {
     // Paint the non-flagged particles.
     for ( i = 0; i < this.particles.length; i++ ) {
       particle = this.particles.get( i );
+
+      // @ts-expect-error
       if ( !particle.renderBelowOxygen ) {
         this.renderParticle( context, particle );
       }

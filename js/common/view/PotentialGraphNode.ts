@@ -79,36 +79,36 @@ class PotentialGraphNode extends Node {
   public markerDistance: number;
   public readonly ljPotentialCalculator: LjPotentialCalculator;
   private readonly widthOfGraph: number;
-  private readonly heightOfGraph: number;
-  private readonly graphXOrigin: number;
+  public readonly heightOfGraph: number;
+  public readonly graphXOrigin: number;
   private readonly graphYOrigin: number;
   public readonly graphWidth: number;
   public readonly graphHeight: number;
   public readonly ljPotentialGraph: Node;
   public verticalScalingFactor: number;
   public horizontalLineCount: number;
-  private readonly epsilonArrow: ArrowNode;
-  private readonly epsilonLabel: Text;
-  private readonly sigmaLabel: Text;
-  private readonly sigmaArrow: ArrowNode;
+  public readonly epsilonArrow: ArrowNode;
+  public readonly epsilonLabel: Text;
+  public readonly sigmaLabel: Text;
+  public readonly sigmaArrow: ArrowNode;
   
   // Layer where interactive controls can be added by subclasses
   protected readonly interactiveControlsLayer?: Node;
   
   // An object where specific controls can be added for controlling the epsilon parameter in the Lennard-
   // Jones potential calculations, see usages in subclasses
-  protected readonly epsilonControls?: {
+  public readonly epsilonControls?: {
     arrow: null | any;
     line: null | any;
   };
   
   // An object where a specific control can be added for controlling the sigma parameter in the Lennard-
   // Jones potential calculations, see usages in subclasses. See usages in subclasses.
-  protected readonly sigmaControls?: {
+  public readonly sigmaControls?: {
     arrow: null | any;
   };
   
-  private readonly positionMarker?: PositionMarker;
+  public readonly positionMarker?: PositionMarker;
   public readonly horizontalAxis: ArrowNode;
   public readonly horizontalAxisLabel: Text;
   public readonly verticalAxis: ArrowNode;

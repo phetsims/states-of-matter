@@ -1,8 +1,5 @@
 // Copyright 2014-2025, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * This class represents a node that displays a dial gauge, which is a circular instrument that can be used to portray
  * measurements of temperature, pressure, etc.
@@ -46,7 +43,7 @@ class DialGaugeNode extends Node {
 
   // Set through accessor methods
   private elbowHeight: number;
-  private connectorExtension: Rectangle;
+  private readonly connectorExtension: Rectangle;
 
   /**
    * @param multipleParticleModel - model of the simulation

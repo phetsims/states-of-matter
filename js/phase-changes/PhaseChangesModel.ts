@@ -1,8 +1,5 @@
 // Copyright 2020-2024, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * PhaseChangesModel is a multiple particle model that adds some additional items specific to the "PhaseChanges" screen.
  *
@@ -12,15 +9,16 @@
 import BooleanProperty from '../../../axon/js/BooleanProperty.js';
 import DerivedProperty from '../../../axon/js/DerivedProperty.js';
 import NumberProperty from '../../../axon/js/NumberProperty.js';
+import TReadOnlyProperty from '../../../axon/js/TReadOnlyProperty.js';
 import Range from '../../../dot/js/Range.js';
 import Utils from '../../../dot/js/Utils.js';
+import Tandem from '../../../tandem/js/Tandem.js';
 import AtomType from '../common/model/AtomType.js';
 import InteractionStrengthTable from '../common/model/InteractionStrengthTable.js';
 import MultipleParticleModel from '../common/model/MultipleParticleModel.js';
 import SOMConstants from '../common/SOMConstants.js';
 import SubstanceType from '../common/SubstanceType.js';
 import statesOfMatter from '../statesOfMatter.js';
-import Tandem from '../../../tandem/js/Tandem.js';
 
 // --------------------------------------------------------------------------------------------------------------------
 // constants
@@ -59,7 +57,7 @@ class PhaseChangesModel extends MultipleParticleModel {
   public targetContainerHeightProperty: NumberProperty;
 
   // a derived property that indicates whether the lid is higher than the injection point
-  public readonly lidAboveInjectionPointProperty: DerivedProperty<boolean>;
+  public readonly lidAboveInjectionPointProperty: TReadOnlyProperty<boolean>;
 
   // This flag is used to avoid problems when the superconstructor calls the overrides in this subclass
   // before the subclass-specific properties have been added.
@@ -146,7 +144,7 @@ class PhaseChangesModel extends MultipleParticleModel {
   /**
    * handler that sets up the various portions of the model to support the newly selected substance
    */
-  protected override handleSubstanceChanged( substance: SubstanceType ): void {
+  protected override handleSubstanceChanged( substance: typeof SubstanceType ): void {
 
     // reset the target container height whenever the substance changes
     this.targetContainerHeightProperty && this.targetContainerHeightProperty.reset();
@@ -211,22 +209,22 @@ class PhaseChangesModel extends MultipleParticleModel {
     }
   }
 
-  public reset(): void {
+  public override reset(): void {
     super.reset();
     this.targetContainerHeightProperty.reset();
     this.adjustableAtomInteractionStrengthProperty.reset();
     this.phaseDiagramExpandedProperty.reset();
     this.interactionPotentialExpandedProperty.reset();
   }
+
+  // static constants
+  public static readonly MAX_ADJUSTABLE_EPSILON = MAX_ADJUSTABLE_EPSILON;
 }
 
 // helper function - The following conversion of the target value for epsilon to a scaled value for the motion
 // calculator object was determined empirically such that the resulting behavior roughly matched that of the existing
 // monatomic molecules.
-const convertEpsilonToScaledEpsilon = epsilon => epsilon / ( SOMConstants.MAX_EPSILON / 2 );
-
-// static constants
-PhaseChangesModel.MAX_ADJUSTABLE_EPSILON = MAX_ADJUSTABLE_EPSILON;
+const convertEpsilonToScaledEpsilon = ( epsilon: number ) => epsilon / ( SOMConstants.MAX_EPSILON / 2 );
 
 statesOfMatter.register( 'PhaseChangesModel', PhaseChangesModel );
 export default PhaseChangesModel;

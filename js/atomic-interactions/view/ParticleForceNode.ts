@@ -1,13 +1,11 @@
 // Copyright 2015-2025, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * this type adds the ability to display force arrows to a particle node
  * @author Siddhartha Chinthapally (Actual Concepts)
  */
 
+import Vector2 from '../../../../dot/js/Vector2.js';
 import merge from '../../../../phet-core/js/merge.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import Color from '../../../../scenery/js/util/Color.js';
@@ -87,7 +85,7 @@ class ParticleForceNode extends ParticleNode {
     this.addChild( this.totalForceVectorNode );
     this.totalForceVectorNode.setVisible( false );
 
-    const handlePositionChanged = position => {
+    const handlePositionChanged = ( position: Vector2 ) => {
       this.setTranslation(
         modelViewTransform.modelToViewX( position.x ),
         modelViewTransform.modelToViewY( position.y )
@@ -101,7 +99,7 @@ class ParticleForceNode extends ParticleNode {
     };
   }
 
-  public dispose(): void {
+  public override dispose(): void {
     this.disposeParticleForceNode();
     super.dispose();
   }

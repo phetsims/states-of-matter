@@ -153,11 +153,11 @@ class MultipleParticleModel extends PhetioObject {
   protected readonly injectionPoint: Vector2;
 
   // internal model variables
-  private particleDiameter: number;
+  public particleDiameter: number;
   public minModelTemperature: number | null;
   private residualTime: number;
   private moleculeInjectionHoldoffTimer: number;
-  private heightChangeThisStep: number;
+  protected heightChangeThisStep: number;
   private moleculeInjectedThisStep: boolean;
   private atomPositionUpdater: IntentionalAny | null;
   private phaseStateChanger: IntentionalAny | null;

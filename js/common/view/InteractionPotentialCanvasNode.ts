@@ -1,8 +1,5 @@
 // Copyright 2015-2025, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * This type draws the interaction potential curve on a canvas.  This is done instead of using the Path node because
  * the curve requires numerous points and is therefore costly to render using a Path node.
@@ -42,6 +39,7 @@ class InteractionPotentialCanvasNode extends CanvasNode {
   // Reusable vector for positioning the epsilon arrow
   private readonly epsilonArrowStartPoint: Vector2;
 
+  // @ts-expect-error
   private strokeColor: string;
 
   /**
@@ -147,6 +145,8 @@ class InteractionPotentialCanvasNode extends CanvasNode {
                          this.potentialGraph.graphMin.y - 10 < this.potentialGraph.graphHeight;
       const tailY = this.potentialGraph.graphMin.y > this.potentialGraph.graphHeight ?
                     this.potentialGraph.graphHeight : this.potentialGraph.graphMin.y;
+
+      // @ts-expect-error
       this.potentialGraph.epsilonArrowShape = new ArrowShape(
         this.potentialGraph.graphMin.x,
         tailY,
@@ -154,6 +154,8 @@ class InteractionPotentialCanvasNode extends CanvasNode {
         this.epsilonArrowStartPoint.y,
         { doubleHead: doubleHead, headHeight: 5, headWidth: 6, tailWidth: 2 }
       );
+
+      // @ts-expect-error
       this.potentialGraph.epsilonArrow.setShape( this.potentialGraph.epsilonArrowShape );
     }
     else {
@@ -186,18 +188,23 @@ class InteractionPotentialCanvasNode extends CanvasNode {
     }
 
     // Position the control handles if used.
-    if ( this.potentialGraph.epsilonControls.arrow ) {
+    if ( this.potentialGraph.epsilonControls!.arrow ) {
       const graphMin = this.potentialGraph.getGraphMin();
-      this.potentialGraph.epsilonControls.line.setTranslation( graphMin.x, graphMin.y + EPSILON_LINE_WIDTH );
-      this.potentialGraph.epsilonControls.arrow.setVisible( this.potentialGraph.interactionEnabled );
-      this.potentialGraph.epsilonControls.line.setVisible( this.potentialGraph.interactionEnabled );
-      this.potentialGraph.epsilonControls.arrow.centerX = this.potentialGraph.epsilonControls.line.right;
-      this.potentialGraph.epsilonControls.arrow.centerY = this.potentialGraph.epsilonControls.line.centerY;
+      this.potentialGraph.epsilonControls!.line.setTranslation( graphMin.x, graphMin.y + EPSILON_LINE_WIDTH );
+
+      // @ts-expect-error
+      this.potentialGraph.epsilonControls!.arrow.setVisible( this.potentialGraph.interactionEnabled );
+      // @ts-expect-error
+      this.potentialGraph.epsilonControls!.line.setVisible( this.potentialGraph.interactionEnabled );
+      this.potentialGraph.epsilonControls!.arrow.centerX = this.potentialGraph.epsilonControls!.line.right;
+      this.potentialGraph.epsilonControls!.arrow.centerY = this.potentialGraph.epsilonControls!.line.centerY;
     }
-    if ( this.potentialGraph.sigmaControls.arrow ) {
-      this.potentialGraph.sigmaControls.arrow.centerX = sigmaHandleXPos;
-      this.potentialGraph.sigmaControls.arrow.centerY = sigmaHandleYPos;
-      this.potentialGraph.sigmaControls.arrow.setVisible( this.potentialGraph.interactionEnabled );
+    if ( this.potentialGraph.sigmaControls!.arrow ) {
+      this.potentialGraph.sigmaControls!.arrow.centerX = sigmaHandleXPos;
+      this.potentialGraph.sigmaControls!.arrow.centerY = sigmaHandleYPos;
+
+      // @ts-expect-error
+      this.potentialGraph.sigmaControls!.arrow.setVisible( this.potentialGraph.interactionEnabled );
     }
 
     // indicate that this should be repainted during the next paint cycle

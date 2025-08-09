@@ -1,8 +1,5 @@
 // Copyright 2015-2025, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * This class displays a control panel for controlling the display of attractive, repulsive, and total force.
  *
@@ -11,8 +8,9 @@
  */
 
 import Property from '../../../../axon/js/Property.js';
-import optionize from '../../../../phet-core/js/optionize.js';
+import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import merge from '../../../../phet-core/js/merge.js';
+import optionize from '../../../../phet-core/js/optionize.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import BracketNode from '../../../../scenery-phet/js/BracketNode.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
@@ -31,13 +29,13 @@ import StatesOfMatterStrings from '../../StatesOfMatterStrings.js';
 import ForceDisplayMode from '../model/ForceDisplayMode.js';
 
 //strings
-const attractiveString = StatesOfMatterStrings.attractive;
-const electronOverlapString = StatesOfMatterStrings.electronOverlap;
-const forcesString = StatesOfMatterStrings.forces;
-const hideForcesString = StatesOfMatterStrings.hideForces;
-const repulsiveString = StatesOfMatterStrings.repulsive;
-const totalForceString = StatesOfMatterStrings.totalForce;
-const vanderwaalsString = StatesOfMatterStrings.vanderwaals;
+const attractiveStringProperty = StatesOfMatterStrings.attractiveStringProperty;
+const electronOverlapStringProperty = StatesOfMatterStrings.electronOverlapStringProperty;
+const forcesStringProperty = StatesOfMatterStrings.forcesStringProperty;
+const hideForcesStringProperty = StatesOfMatterStrings.hideForcesStringProperty;
+const repulsiveStringProperty = StatesOfMatterStrings.repulsiveStringProperty;
+const totalForceStringProperty = StatesOfMatterStrings.totalForceStringProperty;
+const vanderwaalsStringProperty = StatesOfMatterStrings.vanderwaalsStringProperty;
 
 // constants
 const TEXT_LABEL_MAX_WIDTH = 175; // max width of text label in the panel
@@ -61,6 +59,8 @@ class ForcesAccordionBox extends AccordionBox {
   public constructor( forcesProperty: Property<string>, forceControlPanelExpandProperty: Property<boolean>, providedOptions?: ForcesAccordionBoxOptions ) {
 
     const options = optionize<ForcesAccordionBoxOptions, SelfOptions, AccordionBoxOptions>()( {
+
+      // @ts-expect-error
       xMargin: 5,
       yMargin: 8,
       fill: 'black',
@@ -89,7 +89,7 @@ class ForcesAccordionBox extends AccordionBox {
     }, providedOptions );
 
     // convenience function for creating text with the attributes needed by this panel
-    const createTextNode = ( string, width, fontSize ) => {
+    const createTextNode = ( string: TReadOnlyProperty<string>, width: number, fontSize: number ) => {
       return new Text( string, {
         font: new PhetFont( fontSize ),
         fill: options.textFill,
@@ -119,39 +119,44 @@ class ForcesAccordionBox extends AccordionBox {
       fill: '#FD17FF'
     }, arrowNodeOptions ) );
 
-    const hideForcesText = { label: createTextNode( hideForcesString, TEXT_LABEL_MAX_WIDTH * 0.65, 12 ) };
+    const hideForcesText = { label: createTextNode( hideForcesStringProperty, TEXT_LABEL_MAX_WIDTH * 0.65, 12 ) };
 
     const totalForceText = {
-      label: createTextNode( totalForceString, TEXT_LABEL_MAX_WIDTH * 0.65, 12 ),
+      label: createTextNode( totalForceStringProperty, TEXT_LABEL_MAX_WIDTH * 0.65, 12 ),
       icon: totalForceArrow
     };
 
     const attractiveText = {
-      label: createTextNode( attractiveString, TEXT_LABEL_MAX_WIDTH * 0.6, 12 ),
+      label: createTextNode( attractiveStringProperty, TEXT_LABEL_MAX_WIDTH * 0.6, 12 ),
       icon: attractiveArrow
     };
 
     const vanderwaalsText = {
-      label: createTextNode( vanderwaalsString, TEXT_LABEL_MAX_WIDTH * 0.8, 11 )
+      label: createTextNode( vanderwaalsStringProperty, TEXT_LABEL_MAX_WIDTH * 0.8, 11 )
     };
 
     const repulsiveText = {
-      label: createTextNode( repulsiveString, TEXT_LABEL_MAX_WIDTH * 0.6, 12 ),
+      label: createTextNode( repulsiveStringProperty, TEXT_LABEL_MAX_WIDTH * 0.6, 12 ),
       icon: repulsiveArrow
     };
 
     const electronOverlapText = {
-      label: createTextNode( electronOverlapString, TEXT_LABEL_MAX_WIDTH * 0.8, 11 )
+      label: createTextNode( electronOverlapStringProperty, TEXT_LABEL_MAX_WIDTH * 0.8, 11 )
     };
 
     // compute the maximum item width
     const widestItem = _.maxBy( [ hideForcesText, totalForceText, attractiveText, vanderwaalsText, repulsiveText,
       electronOverlapText ], item => {
+
+      // @ts-expect-error
       return item.label.width + ( ( item.icon ) ? item.icon.width + ICON_PADDING : 0 );
     } );
+
+    // @ts-expect-error
     const maxWidth = widestItem.label.width + ( ( widestItem.icon ) ? widestItem.icon.width + ICON_PADDING : 0 );
 
     // inserts a spacing node (HStrut) so that the text, space and image together occupy a certain fixed width
+    // @ts-expect-error
     const createConsistentlySpacedLabel = labelSpec => {
       if ( labelSpec.icon ) {
         const strutWidth = maxWidth - labelSpec.label.width - labelSpec.icon.width;
@@ -226,7 +231,7 @@ class ForcesAccordionBox extends AccordionBox {
     );
 
     accordionContent.addChild( radioButtonGroup );
-    options.titleNode = createTextNode( forcesString, TEXT_LABEL_MAX_WIDTH * 0.9, 14 );
+    options.titleNode = createTextNode( forcesStringProperty, TEXT_LABEL_MAX_WIDTH * 0.9, 14 );
 
     super( accordionContent, options );
   }
