@@ -81,7 +81,7 @@ class AtomicInteractionsControlPanel extends Node {
 
     const options = optionize<AtomicInteractionsControlPanelOptions, SelfOptions, NodeOptions>()( {
 
-      // @ts-expect-error
+      // @ts-expect-error - see https://github.com/phetsims/states-of-matter/issues/371
       xMargin: 5,
       yMargin: 8,
       fill: 'black',

@@ -56,7 +56,7 @@ class StatesPhaseControlNode extends Node {
 
     const options = optionize<StatesPhaseControlNodeOptions, SelfOptions, NodeOptions>()( {
 
-      // @ts-expect-error
+      // @ts-expect-error - see https://github.com/phetsims/states-of-matter/issues/371
       xMargin: 5,
       yMargin: 8,
       fill: '#C8C8C8',
