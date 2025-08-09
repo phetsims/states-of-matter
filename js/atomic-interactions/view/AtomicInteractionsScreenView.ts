@@ -318,7 +318,7 @@ class AtomicInteractionsScreenView extends ScreenView {
   public override step(): void {
     this.handlePositionChanged();
 
-    // TODO: Should it call super.step()? See https://github.com/phetsims/states-of-matter/issues/368
+    // TODO: Should it call super.step()? See https://github.com/phetsims/states-of-matter/issues/376
   }
 
   /**

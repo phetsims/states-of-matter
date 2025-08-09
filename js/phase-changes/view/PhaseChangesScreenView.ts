@@ -409,7 +409,7 @@ class PhaseChangesScreenView extends ScreenView {
   public override step( dt: number ): void {
     this.particleContainerNode.step( dt );
 
-    // TODO: Want to call super.step(dt) here? See https://github.com/phetsims/states-of-matter/issues/368
+    // TODO: Want to call super.step(dt) here? See https://github.com/phetsims/states-of-matter/issues/376
   }
 
   /**

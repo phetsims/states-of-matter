@@ -363,7 +363,7 @@ class AbstractPhaseStateChanger {
       if ( savedState.moleculeRotationAngles ) {
         moleculeRotationAngles[ i ] = savedState.moleculeRotationAngles[ i ];
       }
-      // TODO: Should this be if ( savedState.moleculeRotationRates ) {  ? see https://github.com/phetsims/states-of-matter/issues/368
+      // TODO: Should this be if ( savedState.moleculeRotationRates ) {  ? see https://github.com/phetsims/states-of-matter/issues/376
       if ( savedState.moleculeRotationAngles ) {
 
         // @ts-expect-error

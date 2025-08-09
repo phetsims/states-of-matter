@@ -59,7 +59,7 @@ class TitledSlider extends VBox {
     const slider = new HSlider( valueProperty, range, options.sliderOptions );
 
     // VBox is used to make it easy to add additional options
-    // TODO: https://github.com/phetsims/states-of-matter/issues/368 this looks broken, maybe combine options
+    // TODO: https://github.com/phetsims/states-of-matter/issues/376 this looks broken, maybe combine options
     // @ts-expect-error
     super( optionize<VBoxOptions>()( {
       children: [ title, slider ]

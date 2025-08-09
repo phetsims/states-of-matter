@@ -28,7 +28,7 @@ class MonatomicPhaseStateChanger extends AbstractPhaseStateChanger {
     super( multipleParticleModel );
     this.positionUpdater = MonatomicAtomPositionUpdater;
 
-    // @ts-expect-error Probably unnecessary, see https://github.com/phetsims/states-of-matter/issues/368
+    // @ts-expect-error Probably unnecessary, see https://github.com/phetsims/states-of-matter/issues/376
     this.random = dotRandom;
   }
 
