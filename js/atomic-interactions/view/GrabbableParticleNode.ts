@@ -11,8 +11,12 @@
  * @author John Blanco
  */
 
+import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import DragListener from '../../../../scenery/js/listeners/DragListener.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
 import statesOfMatter from '../../statesOfMatter.js';
+import ScaledAtom from '../../common/model/particle/ScaledAtom.js';
+import DualAtomModel from '../model/DualAtomModel.js';
 import ParticleForceNode from './ParticleForceNode.js';
 
 class GrabbableParticleNode extends ParticleForceNode {
@@ -21,14 +25,14 @@ class GrabbableParticleNode extends ParticleForceNode {
   private readonly disposeGrabbableParticleNode: () => void;
 
   /**
-   * @param {DualAtomModel} dualAtomModel - model of the simulation
-   * @param {ScaledAtom} particle
-   * @param {ModelViewTransform2} modelViewTransform to convert between model and view co-ordinates
-   * @param {boolean} enableOverlap - true if the node should be larger than the actual particle, thus allowing particles
-   * @param {number} minX - grabbable particle  min x position
-   * @param {Tandem} tandem - support for exporting instances from the sim
+   * @param dualAtomModel - model of the simulation
+   * @param particle
+   * @param modelViewTransform to convert between model and view co-ordinates
+   * @param enableOverlap - true if the node should be larger than the actual particle, thus allowing particles
+   * @param minX - grabbable particle  min x position
+   * @param tandem - support for exporting instances from the sim
    */
-  constructor( dualAtomModel, particle, modelViewTransform, enableOverlap, minX, tandem ) {
+  public constructor( dualAtomModel: DualAtomModel, particle: ScaledAtom, modelViewTransform: ModelViewTransform2, enableOverlap: boolean, minX: number, tandem: Tandem ) {
 
     super( particle, modelViewTransform, enableOverlap, tandem );
 
@@ -86,27 +90,19 @@ class GrabbableParticleNode extends ParticleForceNode {
     };
   }
 
-  /**
-   * @public
-   */
-  dispose() {
+  public dispose(): void {
     this.disposeGrabbableParticleNode();
     super.dispose();
   }
 
-  /**
-   * @returns {number}
-   * @public
-   */
-  getMinX() {
+  public getMinX(): number {
     return this.minX;
   }
 
   /**
-   * @param {number} minX - min x position
-   * @public
+   * @param minX - min x position
    */
-  setMinX( minX ) {
+  public setMinX( minX: number ): void {
     this.minX = minX;
   }
 }

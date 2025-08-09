@@ -1,8 +1,5 @@
 // Copyright 2014-2025, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * This singleton is a collection of constants that are used in multiple places throughout the simulation.
  *
@@ -28,9 +25,13 @@ const ARGON_RADIUS = Element.Ar.vanDerWaalsRadius;
 const OXYGEN_RADIUS = Element.O.vanDerWaalsRadius;
 const HYDROGEN_RADIUS = Element.H.vanDerWaalsRadius;
 const ADJUSTABLE_ATTRACTION_DEFAULT_RADIUS = 175;
+// @ts-expect-error
 const OXYGEN_COLOR = new Color( Element.O.color );
+// @ts-expect-error
 const NEON_COLOR = new Color( Element.Ne.color );
+// @ts-expect-error
 const ARGON_COLOR = new Color( Element.Ar.color );
+// @ts-expect-error
 const HYDROGEN_COLOR = new Color( Element.H.color );
 const ADJUSTABLE_ATTRACTION_COLOR = new Color( '#CC66CC' );
 

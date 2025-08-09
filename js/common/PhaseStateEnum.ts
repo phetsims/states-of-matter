@@ -1,8 +1,5 @@
 // Copyright 2015-2024, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * enumeration of the various possible phases of matter
  *

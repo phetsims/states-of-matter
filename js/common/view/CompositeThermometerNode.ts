@@ -1,8 +1,5 @@
 // Copyright 2014-2025, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * This class defines a node that has a liquid thermometer and a numerical readout that can display the temperature in
  * degrees Kelvin or degrees Celsius.
@@ -17,6 +14,7 @@ import Range from '../../../../dot/js/Range.js';
 import Utils from '../../../../dot/js/Utils.js';
 import EnumerationDeprecated from '../../../../phet-core/js/EnumerationDeprecated.js';
 import optionize, { type EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
+import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import ComboBoxDisplay from '../../../../scenery-phet/js/ComboBoxDisplay.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import ThermometerNode from '../../../../scenery-phet/js/ThermometerNode.js';
@@ -24,8 +22,8 @@ import VBox from '../../../../scenery/js/layout/nodes/VBox.js';
 import Node, { type NodeOptions } from '../../../../scenery/js/nodes/Node.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import statesOfMatter from '../../statesOfMatter.js';
-import MultipleParticleModel from '../model/MultipleParticleModel.js';
 import StatesOfMatterStrings from '../../StatesOfMatterStrings.js';
+import MultipleParticleModel from '../model/MultipleParticleModel.js';
 import SOMQueryParameters from '../SOMQueryParameters.js';
 
 // strings
@@ -33,7 +31,7 @@ const celsiusUnitsString = StatesOfMatterStrings.celsiusUnits;
 const kelvinUnitsString = StatesOfMatterStrings.kelvinUnits;
 
 // helper function
-const kelvinToCelsius = temperatureInKelvin => Utils.roundSymmetric( temperatureInKelvin - 273.15 );
+const kelvinToCelsius = ( temperatureInKelvin: number ) => Utils.roundSymmetric( temperatureInKelvin - 273.15 );
 
 // constants
 const KELVIN_TEMPERATURE_RANGE = new Range( 0, 5000 ); // this is an upper bound based on experimenting with the sim
@@ -44,7 +42,7 @@ const CELSIUS_TEMPERATURE_RANGE = new Range(
 const TEMPERATURE_READOUT_FONT = new PhetFont( 11 );
 
 // local enum
-const TemperatureUnits = EnumerationDeprecated.byKeys( [ 'KELVIN', 'CELSIUS' ] );
+const TemperatureUnits = EnumerationDeprecated.byKeys( [ 'KELVIN', 'CELSIUS' ] ) as IntentionalAny;
 
 // clamping the red mercury display at 1000
 const MAX_TEMPERATURE_TO_CLAMP_RED_MERCURY = 1000;

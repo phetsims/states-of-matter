@@ -25,6 +25,7 @@ import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import Emitter from '../../../../axon/js/Emitter.js';
 import EnumerationDeprecatedProperty from '../../../../axon/js/EnumerationDeprecatedProperty.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
+import ReadOnlyProperty from '../../../../axon/js/ReadOnlyProperty.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
 import Range from '../../../../dot/js/Range.js';
@@ -139,7 +140,7 @@ class MultipleParticleModel extends PhetioObject {
   private readonly numMoleculesQueuedForInjectionProperty: NumberProperty;
   public readonly isInjectionAllowedProperty: TReadOnlyProperty<boolean>;
   public readonly resetEmitter: Emitter;
-  public readonly temperatureInKelvinProperty: TReadOnlyProperty<number | null>;
+  public readonly temperatureInKelvinProperty: ReadOnlyProperty<number | null>;
 
   // other model attributes
   public readonly scaledAtoms: ReturnType<typeof createObservableArray>;
