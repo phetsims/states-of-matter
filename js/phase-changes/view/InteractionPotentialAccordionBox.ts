@@ -1,8 +1,5 @@
 // Copyright 2014-2025, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * an accordion box that holds an interactive potential diagram
  *
@@ -45,6 +42,7 @@ class InteractionPotentialAccordionBox extends AccordionBox {
    */
   public constructor( sigma: number, epsilon: number, multipleParticleModel: MultipleParticleModel, providedOptions?: InteractionPotentialAccordionBoxOptions ) {
 
+    // @ts-expect-error
     const options = optionize<InteractionPotentialAccordionBoxOptions, SelfOptions, AccordionBoxOptions>()( {
       tandem: Tandem.REQUIRED
     }, providedOptions );
@@ -52,6 +50,8 @@ class InteractionPotentialAccordionBox extends AccordionBox {
     const graph = new EpsilonControlPotentialGraph(
       sigma,
       epsilon,
+
+      // @ts-expect-error
       multipleParticleModel,
       { tandem: options.tandem.createTandem( 'graph' ) }
     );
@@ -74,10 +74,14 @@ class InteractionPotentialAccordionBox extends AccordionBox {
     if ( titleNode.width > graph.horizontalAxis.width ) {
       titleNode.scale( graph.horizontalAxis.width / titleNode.width );
     }
+
+    // @ts-expect-error
     super( accordionContentHBox, optionize<AccordionBoxOptions, AccordionBoxOptions, AccordionBoxOptions>()( {
       titleNode: titleNode,
       fill: SOMColors.controlPanelBackgroundProperty,
       stroke: SOMColors.controlPanelStrokeProperty,
+
+      // @ts-expect-error
       expandedProperty: multipleParticleModel.interactionPotentialExpandedProperty,
       contentAlign: 'center',
       titleAlignX: 'center',

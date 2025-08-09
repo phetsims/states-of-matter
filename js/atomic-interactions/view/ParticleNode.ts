@@ -1,8 +1,5 @@
 // Copyright 2015-2025, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * Scenery Node that represents a particle
  * @author Aaron Davis
@@ -70,12 +67,14 @@ class ParticleNode extends Node {
       }
 
       this.circle.setRadius( radiusInView );
+
+      // @ts-expect-error
       this.circle.fill = this.createFill( particle.color, particle.radiusProperty.value );
     };
     particle.radiusProperty.link( updateAppearance );
     particle.configurationChanged.addListener( updateAppearance );
 
-    // Set ourself to be initially non-pickable so that we don't get mouse events.
+    // Set this to be initially non-pickable so that we don't get mouse events.
     this.setPickable( false );
 
     this.updatePosition();

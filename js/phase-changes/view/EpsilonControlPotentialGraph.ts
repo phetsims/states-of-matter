@@ -51,7 +51,7 @@ class EpsilonControlPotentialGraph extends PotentialGraphNode {
   public interactionEnabled: boolean;
 
   // Canvas node for rendering the interaction potential
-  private interactionPotentialCanvasNode: InteractionPotentialCanvasNode;
+  public readonly interactionPotentialCanvasNode: InteractionPotentialCanvasNode;
 
   /**
    * @param sigma - atom diameter

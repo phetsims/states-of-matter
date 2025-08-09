@@ -1,8 +1,5 @@
 // Copyright 2014-2022, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * The 'Solid Liquid Gas' screen. Conforms to the contract specified in joist/Screen.
  *
@@ -39,7 +36,7 @@ class StatesScreen extends Screen<MultipleParticleModel, StatesScreenView> {
     };
 
     // remove the adjustable atom from the list of substances that are supported in this screen
-    const validSubstances = SubstanceType.VALUES.filter( substance => substance !== SubstanceType.ADJUSTABLE_ATOM );
+    const validSubstances = SubstanceType.VALUES.filter( ( substance: typeof SubstanceType ) => substance !== SubstanceType.ADJUSTABLE_ATOM );
 
     super(
       () => {

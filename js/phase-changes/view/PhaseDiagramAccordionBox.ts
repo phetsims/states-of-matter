@@ -1,8 +1,5 @@
 // Copyright 2014-2025, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * a phase diagram in an accordion box
  *
@@ -57,6 +54,8 @@ class PhaseDiagramAccordionBox extends AccordionBox {
         touchAreaXDilation: 15,
         touchAreaYDilation: 10
       },
+
+      // @ts-expect-error
       tandem: providedOptions?.tandem.createTandem( 'accordionBox' ),
       visiblePropertyOptions: { phetioReadOnly: true }
     }, providedOptions );
@@ -66,6 +65,8 @@ class PhaseDiagramAccordionBox extends AccordionBox {
     const titleNode = new Text( phaseDiagramString, {
       fill: SOMColors.controlPanelTextProperty,
       font: new PhetFont( { size: 13 } ),
+
+      // @ts-expect-error
       maxWidth: options.maxWidth * 0.75
     } );
 

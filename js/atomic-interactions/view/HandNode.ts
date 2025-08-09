@@ -1,8 +1,5 @@
 // Copyright 2015-2025, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * View for the hand node which looks like a cartoonish human hand with thumb and pointing finger expanded and the other
  * three fingers folded.
@@ -11,16 +8,17 @@
  * @author John Blanco
  */
 
+import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize, { type EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
+import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import hand_png from '../../../../scenery-phet/images/hand_png.js';
 import DragListener from '../../../../scenery/js/listeners/DragListener.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
 import Node, { type NodeOptions } from '../../../../scenery/js/nodes/Node.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
+import ScaledAtom from '../../common/model/particle/ScaledAtom.js';
 import statesOfMatter from '../../statesOfMatter.js';
 import DualAtomModel from '../model/DualAtomModel.js';
-import ScaledAtom from '../../common/model/particle/ScaledAtom.js';
-import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 
 // constants
 const WIDTH = 80; // empirically determined to look good
@@ -59,19 +57,22 @@ class HandNode extends Node {
 
     // add the main image that represents the hand
     this.addChild( new Image( hand_png, {
+      // @ts-expect-error
       minWidth: WIDTH,
       maxWidth: WIDTH,
+
+      // @ts-expect-error
       y: modelViewTransform.modelToViewY( this.particle.positionProperty.get().y )
     } ) );
 
     // control visibility
-    const visibilityListener = visible => {this.visible = visible;};
+    const visibilityListener = ( visible: boolean ) => {this.visible = visible;};
     dualAtomModel.movementHintVisibleProperty.link( visibilityListener );
 
     // add the drag handler
-    let startDragX;
+    let startDragX: number;
     let currentDragX;
-    let particleStartXPosition;
+    let particleStartXPosition: number;
     const dragListener = new DragListener( {
 
       start: event => {
@@ -107,11 +108,12 @@ class HandNode extends Node {
     } );
     this.addInputListener( dragListener );
 
-    const positionListener = position => {
+    const positionListener = ( position: Vector2 ) => {
       this.x = modelViewTransform.modelToViewX( position.x );
     };
 
     // move the hint with the particle
+    // @ts-expect-error
     particle.positionProperty.link( positionListener );
 
     // add a linked element in phet-io to the property that controls this node's visibility
@@ -122,12 +124,13 @@ class HandNode extends Node {
     // dispose function
     this.disposeHandNode = () => {
       this.removeInputListener( dragListener );
+      // @ts-expect-error
       particle.positionProperty.unlink( positionListener );
       dualAtomModel.movementHintVisibleProperty.unlink( visibilityListener );
     };
   }
 
-  public dispose(): void {
+  public override dispose(): void {
     this.disposeHandNode();
     super.dispose();
   }

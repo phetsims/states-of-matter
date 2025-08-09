@@ -1,8 +1,5 @@
 // Copyright 2014-2022, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * The 'Phase Changes' screen. Conforms to the contract specified in joist/Screen.
  *
@@ -30,6 +27,8 @@ class PhaseChangesScreen extends Screen<PhaseChangesModel, PhaseChangesScreenVie
       homeScreenIcon: new PhaseChangesIcon(),
       navigationBarIcon: new PhaseChangesIcon( {
         size: Screen.MINIMUM_NAVBAR_ICON_SIZE,
+
+        // @ts-expect-error
         fill: SOMColors.navigationBarIconBackgroundProperty
       } ),
       showUnselectedHomeScreenIconFrame: true,

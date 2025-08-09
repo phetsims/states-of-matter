@@ -84,7 +84,7 @@ class PotentialGraphNode extends Node {
   private readonly graphYOrigin: number;
   public readonly graphWidth: number;
   public readonly graphHeight: number;
-  private readonly ljPotentialGraph: Node;
+  public readonly ljPotentialGraph: Node;
   public verticalScalingFactor: number;
   public horizontalLineCount: number;
   private readonly epsilonArrow: ArrowNode;
@@ -109,11 +109,11 @@ class PotentialGraphNode extends Node {
   };
   
   private readonly positionMarker?: PositionMarker;
-  private readonly horizontalAxis: ArrowNode;
-  private readonly horizontalAxisLabel: Text;
-  private readonly verticalAxis: ArrowNode;
-  private readonly verticalAxisLabel: Text;
-  private readonly centerAxis: Line;
+  public readonly horizontalAxis: ArrowNode;
+  public readonly horizontalAxisLabel: Text;
+  public readonly verticalAxis: ArrowNode;
+  public readonly verticalAxisLabel: Text;
+  public readonly centerAxis: Line;
   private readonly gridNode?: ZoomableGridNode;
 
   /**
