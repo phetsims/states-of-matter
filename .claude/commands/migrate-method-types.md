@@ -58,8 +58,9 @@ Migrate all method signatures + constructor signatures in the file @$ARGUMENTS f
 ```
 
 Then remove it entirely.
+12. If the method has no return type, then `: void` must be explictly added to the method signature.
 
-12. If the file has:
+13. If the file has:
 ```
 /* eslint-disable */
 // @ts-nocheck

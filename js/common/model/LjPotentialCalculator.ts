@@ -1,11 +1,5 @@
 // Copyright 2014-2020, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
-import statesOfMatter from '../../statesOfMatter.js';
-import SOMConstants from '../SOMConstants.js';
-
 /**
  * This class calculates the Lennard-Jones potential based on values provided for the molecule size (sigma) and the
  * interaction strength (epsilon).  Note that this is a "real" calculation as opposed to a normalized calculation, which
@@ -14,6 +8,10 @@ import SOMConstants from '../SOMConstants.js';
  * @author John Blanco
  * @author Siddhartha Chinthapally (Actual Concepts)
  */
+
+import statesOfMatter from '../../statesOfMatter.js';
+import SOMConstants from '../SOMConstants.js';
+
 class LjPotentialCalculator {
 
   // Molecular diameter in picometers.
@@ -25,7 +23,7 @@ class LjPotentialCalculator {
   // Epsilon multiplied by k-boltzmann.
   private epsilonForCalcs: number;
 
-  constructor( sigma: number, epsilon: number ) {
+  public constructor( sigma: number, epsilon: number ) {
 
     assert && assert( sigma > 0, 'sigma must be greater than 0' );
 
@@ -38,7 +36,7 @@ class LjPotentialCalculator {
     return this.sigma;
   }
 
-  public setSigma( sigma: number ) {
+  public setSigma( sigma: number ): void {
     this.sigma = sigma;
   }
 
@@ -46,7 +44,7 @@ class LjPotentialCalculator {
     return this.epsilon;
   }
 
-  public setEpsilon( epsilon: number ) {
+  public setEpsilon( epsilon: number ): void {
     this.epsilon = epsilon;
     this.epsilonForCalcs = this.epsilon * SOMConstants.K_BOLTZMANN;
   }

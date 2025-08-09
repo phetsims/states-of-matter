@@ -1,7 +1,5 @@
 // Copyright 2014-2020, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
 
 /**
  * This class updates the positions of atoms in a diatomic data set (i.e. where each molecule is made up of two
@@ -14,15 +12,12 @@
 
 import statesOfMatter from '../../../statesOfMatter.js';
 import SOMConstants from '../../SOMConstants.js';
+import MoleculeForceAndMotionDataSet from '../MoleculeForceAndMotionDataSet.js';
 
 // static object (no constructor)
 const DiatomicAtomPositionUpdater = {
 
-  /**
-   * @public
-   * @param {MoleculeForceAndMotionDataSet} moleculeDataSet
-   */
-  updateAtomPositions: moleculeDataSet => {
+  updateAtomPositions: ( moleculeDataSet: MoleculeForceAndMotionDataSet ): void => {
 
     // Make sure this is not being used on an inappropriate data set.
     assert && assert( moleculeDataSet.atomsPerMolecule === 2 );
@@ -38,16 +33,16 @@ const DiatomicAtomPositionUpdater = {
     for ( let i = 0; i < moleculeDataSet.getNumberOfMolecules(); i++ ) {
       cosineTheta = Math.cos( moleculeRotationAngles[ i ] );
       sineTheta = Math.sin( moleculeRotationAngles[ i ] );
-      xPos = moleculeCenterOfMassPositions[ i ].x +
+      xPos = moleculeCenterOfMassPositions[ i ]!.x +
              cosineTheta * ( SOMConstants.DIATOMIC_PARTICLE_DISTANCE / 2 );
-      yPos = moleculeCenterOfMassPositions[ i ].y +
+      yPos = moleculeCenterOfMassPositions[ i ]!.y +
              sineTheta * ( SOMConstants.DIATOMIC_PARTICLE_DISTANCE / 2 );
-      atomPositions[ i * 2 ].setXY( xPos, yPos );
-      xPos = moleculeCenterOfMassPositions[ i ].x -
+      atomPositions[ i * 2 ]!.setXY( xPos, yPos );
+      xPos = moleculeCenterOfMassPositions[ i ]!.x -
              cosineTheta * ( SOMConstants.DIATOMIC_PARTICLE_DISTANCE / 2 );
-      yPos = moleculeCenterOfMassPositions[ i ].y -
+      yPos = moleculeCenterOfMassPositions[ i ]!.y -
              sineTheta * ( SOMConstants.DIATOMIC_PARTICLE_DISTANCE / 2 );
-      atomPositions[ i * 2 + 1 ].setXY( xPos, yPos );
+      atomPositions[ i * 2 + 1 ]!.setXY( xPos, yPos );
     }
   }
 };

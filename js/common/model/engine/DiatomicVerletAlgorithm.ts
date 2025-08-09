@@ -1,7 +1,5 @@
 // Copyright 2014-2020, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
 
 /**
  * Implementation of the Verlet algorithm for simulating molecular interaction based on the Lennard-Jones potential.
@@ -17,6 +15,7 @@ import DiatomicAtomPositionUpdater from './DiatomicAtomPositionUpdater.js';
 import MultipleParticleModel from '../MultipleParticleModel.js';
 import MoleculeForceAndMotionDataSet from '../MoleculeForceAndMotionDataSet.js';
 
+// @ts-expect-error
 class DiatomicVerletAlgorithm extends AbstractVerletAlgorithm {
 
   private readonly positionUpdater: typeof DiatomicAtomPositionUpdater;
@@ -24,17 +23,17 @@ class DiatomicVerletAlgorithm extends AbstractVerletAlgorithm {
   /**
    * @param multipleParticleModel - Model of a set of particles
    */
-  constructor( multipleParticleModel: MultipleParticleModel ) {
+  public constructor( multipleParticleModel: MultipleParticleModel ) {
     super( multipleParticleModel );
     this.positionUpdater = DiatomicAtomPositionUpdater;
   }
 
-  protected override initializeForces( moleculeDataSet: MoleculeForceAndMotionDataSet ) {
+  protected override initializeForces( moleculeDataSet: MoleculeForceAndMotionDataSet ): void {
     const accelerationDueToGravity = this.multipleParticleModel.gravitationalAcceleration;
     const nextMoleculeForces = moleculeDataSet.nextMoleculeForces;
     const nextMoleculeTorques = moleculeDataSet.nextMoleculeTorques;
     for ( let i = 0; i < moleculeDataSet.getNumberOfMolecules(); i++ ) {
-      nextMoleculeForces[ i ].setXY( 0, accelerationDueToGravity );
+      nextMoleculeForces[ i ]!.setXY( 0, accelerationDueToGravity );
       nextMoleculeTorques[ i ] = 0;
     }
   }
@@ -42,7 +41,7 @@ class DiatomicVerletAlgorithm extends AbstractVerletAlgorithm {
   /**
    * Update the forces acting on each molecule due to the other molecules in the data set.
    */
-  protected updateInteractionForces( moleculeDataSet: MoleculeForceAndMotionDataSet ) {
+  protected override updateInteractionForces( moleculeDataSet: MoleculeForceAndMotionDataSet ): void {
 
     const moleculeCenterOfMassPositions = moleculeDataSet.getMoleculeCenterOfMassPositions();
     const nextMoleculeForces = moleculeDataSet.getNextMoleculeForces();
@@ -51,17 +50,17 @@ class DiatomicVerletAlgorithm extends AbstractVerletAlgorithm {
     const numberOfMolecules = moleculeDataSet.numberOfMolecules;
 
     for ( let i = 0; i < numberOfMolecules; i++ ) {
-      const moleculeCenterOfMassIX = moleculeCenterOfMassPositions[ i ].x;
-      const moleculeCenterOfMassIY = moleculeCenterOfMassPositions[ i ].y;
+      const moleculeCenterOfMassIX = moleculeCenterOfMassPositions[ i ]!.x;
+      const moleculeCenterOfMassIY = moleculeCenterOfMassPositions[ i ]!.y;
       for ( let j = i + 1; j < numberOfMolecules; j++ ) {
-        const moleculeCenterOfMassJX = moleculeCenterOfMassPositions[ j ].x;
-        const moleculeCenterOfMassJY = moleculeCenterOfMassPositions[ j ].y;
+        const moleculeCenterOfMassJX = moleculeCenterOfMassPositions[ j ]!.x;
+        const moleculeCenterOfMassJY = moleculeCenterOfMassPositions[ j ]!.y;
         for ( let ii = 0; ii < 2; ii++ ) {
-          const atom1PosX = atomPositions[ 2 * i + ii ].x;
-          const atom1PosY = atomPositions[ 2 * i + ii ].y;
+          const atom1PosX = atomPositions[ 2 * i + ii ]!.x;
+          const atom1PosY = atomPositions[ 2 * i + ii ]!.y;
           for ( let jj = 0; jj < 2; jj++ ) {
-            const atom2PosX = atomPositions[ 2 * j + jj ].x;
-            const atom2PosY = atomPositions[ 2 * j + jj ].y;
+            const atom2PosX = atomPositions[ 2 * j + jj ]!.x;
+            const atom2PosY = atomPositions[ 2 * j + jj ]!.y;
 
             // Calculate the distance between the potentially interacting atoms.
             const dx = atom1PosX - atom2PosX;
@@ -77,8 +76,8 @@ class DiatomicVerletAlgorithm extends AbstractVerletAlgorithm {
               const forceScalar = 48 * r2inv * r6inv * ( r6inv - 0.5 );
               const fx = dx * forceScalar;
               const fy = dy * forceScalar;
-              nextMoleculeForces[ i ].addXY( fx, fy );
-              nextMoleculeForces[ j ].subtractXY( fx, fy );
+              nextMoleculeForces[ i ]!.addXY( fx, fy );
+              nextMoleculeForces[ j ]!.subtractXY( fx, fy );
               nextMoleculeTorques[ i ] += ( atom1PosX - moleculeCenterOfMassIX ) * fy -
                                           ( atom1PosY - moleculeCenterOfMassIY ) * fx;
               nextMoleculeTorques[ j ] -= ( atom2PosX - moleculeCenterOfMassJX ) * fy -
@@ -95,7 +94,8 @@ class DiatomicVerletAlgorithm extends AbstractVerletAlgorithm {
    * Update the translational and rotational velocities for the molecules, calculate the total energy, and record the
    * temperature value for the system.
    */
-  protected updateVelocitiesAndRotationRates( moleculeDataSet: MoleculeForceAndMotionDataSet, timeStep: number ) {
+  // @ts-expect-error
+  protected updateVelocitiesAndRotationRates( moleculeDataSet: MoleculeForceAndMotionDataSet, timeStep: number ): void {
 
     // Obtain references to the model data and parameters so that we can perform fast manipulations.
     const moleculeVelocities = moleculeDataSet.getMoleculeVelocities();
@@ -116,19 +116,19 @@ class DiatomicVerletAlgorithm extends AbstractVerletAlgorithm {
     // Update the velocities and rotation rates based on the forces being exerted on the molecules, then calculate
     // the kinetic energy of the system.
     for ( let i = 0; i < numberOfMolecules; i++ ) {
-      const xVel = moleculeVelocities[ i ].x +
-                   timeStepHalf * ( moleculeForces[ i ].x + nextMoleculeForces[ i ].x ) * massInverse;
-      const yVel = moleculeVelocities[ i ].y +
-                   timeStepHalf * ( moleculeForces[ i ].y + nextMoleculeForces[ i ].y ) * massInverse;
-      moleculeVelocities[ i ].setXY( xVel, yVel );
+      const xVel = moleculeVelocities[ i ]!.x +
+                   timeStepHalf * ( moleculeForces[ i ]!.x + nextMoleculeForces[ i ]!.x ) * massInverse;
+      const yVel = moleculeVelocities[ i ]!.y +
+                   timeStepHalf * ( moleculeForces[ i ]!.y + nextMoleculeForces[ i ]!.y ) * massInverse;
+      moleculeVelocities[ i ]!.setXY( xVel, yVel );
       moleculeRotationRates[ i ] += timeStepHalf * ( moleculeTorques[ i ] + nextMoleculeTorques[ i ] ) *
                                     inertiaInverse;
-      translationalKineticEnergy += 0.5 * moleculeDataSet.moleculeMass * moleculeVelocities[ i ].magnitudeSquared;
+      translationalKineticEnergy += 0.5 * moleculeDataSet.moleculeMass * moleculeVelocities[ i ]!.magnitudeSquared;
       rotationalKineticEnergy += 0.5 * moleculeDataSet.moleculeRotationalInertia *
                                  Math.pow( moleculeRotationRates[ i ], 2 );
 
       // Move the newly calculated forces and torques into the current spots.
-      moleculeForces[ i ].setXY( nextMoleculeForces[ i ].x, nextMoleculeForces[ i ].y );
+      moleculeForces[ i ]!.setXY( nextMoleculeForces[ i ]!.x, nextMoleculeForces[ i ]!.y );
       moleculeTorques[ i ] = nextMoleculeTorques[ i ];
     }
 
@@ -137,7 +137,7 @@ class DiatomicVerletAlgorithm extends AbstractVerletAlgorithm {
       this.calculatedTemperature = ( 2 / 3 ) * ( translationalKineticEnergy + rotationalKineticEnergy ) / numberOfMolecules;
     }
     else {
-      this.calculatedTemperature = this.multipleParticleModel.minModelTemperature;
+      this.calculatedTemperature = this.multipleParticleModel.minModelTemperature!;
     }
   }
 }

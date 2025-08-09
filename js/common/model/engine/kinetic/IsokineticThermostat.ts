@@ -1,7 +1,5 @@
 // Copyright 2014-2021, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
 
 /**
  * Model for an isokinetic thermostat that controls the kinetic energy of a set of particles such that they remain at
@@ -14,6 +12,7 @@
 
 import dotRandom from '../../../../../../dot/js/dotRandom.js';
 import Vector2 from '../../../../../../dot/js/Vector2.js';
+import IntentionalAny from '../../../../../../phet-core/js/types/IntentionalAny.js';
 import IOType from '../../../../../../tandem/js/types/IOType.js';
 import NumberIO from '../../../../../../tandem/js/types/NumberIO.js';
 import statesOfMatter from '../../../../statesOfMatter.js';
@@ -50,7 +49,7 @@ class IsokineticThermostat {
    * @param moleculeDataSet - Data set on which operations will be performed.
    * @param minTemperature - The temperature that should be considered absolute zero, below which motion should cease.
    */
-  constructor( moleculeDataSet: MoleculeForceAndMotionDataSet, minTemperature: number ) {
+  public constructor( moleculeDataSet: MoleculeForceAndMotionDataSet, minTemperature: number ) {
 
     this.moleculeDataSet = moleculeDataSet;
 
@@ -69,7 +68,7 @@ class IsokineticThermostat {
   /**
    * @param measuredTemperature - measured temperature of particles, in model units
    */
-  public adjustTemperature( measuredTemperature: number ) {
+  public adjustTemperature( measuredTemperature: number ): void {
 
     let i;
     const numberOfParticles = this.moleculeDataSet.getNumberOfMolecules();
@@ -100,7 +99,7 @@ class IsokineticThermostat {
       // This is the 'normal' case, where the scale factor is used to adjust the energy of the particles.
       for ( i = 0; i < numberOfParticles; i++ ) {
 
-        const moleculeVelocity = moleculeVelocities[ i ];
+        const moleculeVelocity = moleculeVelocities[ i ]!;
         this.previousParticleVelocity.set( moleculeVelocity );
 
         if ( moleculeVelocity.y < 0 ) {
@@ -146,7 +145,7 @@ class IsokineticThermostat {
         if ( angle < 0 ) {
           angle += Math.PI;
         }
-        moleculeVelocities[ i ].setPolar( MIN_POST_ZERO_VELOCITY, angle );
+        moleculeVelocities[ i ]!.setPolar( MIN_POST_ZERO_VELOCITY, angle );
       }
     }
 
@@ -164,7 +163,7 @@ class IsokineticThermostat {
    * clear the accumulated velocity bias, should be done when this thermostat starts being used for a number of steps
    * in a row
    */
-  public clearAccumulatedBias() {
+  public clearAccumulatedBias(): void {
     this.accumulatedAverageVelocityChange.setXY( 0, 0 );
   }
 
@@ -172,7 +171,7 @@ class IsokineticThermostat {
    * Get an object that describes the current state, used to restore state using setState, used only for phet-io.
    * for phet-io support only
    */
-  public toStateObject(): Object {
+  public toStateObject(): IntentionalAny {
 
     // Note: The moleculeDataSet is *not* included as part of the state because this is assumed to be a reference that
     // is shared with the model, and the model is responsible for updating its state during deserialization.
@@ -192,7 +191,7 @@ class IsokineticThermostat {
    * it is instead called during explicit de-serialization.
    * @param stateObject - returned from toStateObject
    */
-  public setState( stateObject: Object ) {
+  public setState( stateObject: IntentionalAny ): void {
 
     // Note: The moleculeDataSet is *not* included as part of the state because this is assumed to be a reference that
     // is shared with the model, and the model is responsible for updating its state during deserialization.
@@ -204,20 +203,19 @@ class IsokineticThermostat {
     this.totalVelocityChangeThisStep.set( stateObject.totalVelocityChangeThisStep );
     this.accumulatedAverageVelocityChange.set( stateObject.accumulatedAverageVelocityChange );
   }
-}
 
-// @public
-IsokineticThermostat.IsoKineticThermostatIO = new IOType( 'IsoKineticThermostatIO', {
-  valueType: IsokineticThermostat,
-  stateSchema: {
-    targetTemperature: NumberIO,
-    minModelTemperature: NumberIO,
-    previousTemperatureScaleFactor: NumberIO,
-    previousParticleVelocity: Vector2.Vector2IO,
-    totalVelocityChangeThisStep: Vector2.Vector2IO,
-    accumulatedAverageVelocityChange: Vector2.Vector2IO
-  }
-} );
+  public static readonly IsoKineticThermostatIO = new IOType( 'IsoKineticThermostatIO', {
+    valueType: IsokineticThermostat,
+    stateSchema: {
+      targetTemperature: NumberIO,
+      minModelTemperature: NumberIO,
+      previousTemperatureScaleFactor: NumberIO,
+      previousParticleVelocity: Vector2.Vector2IO,
+      totalVelocityChangeThisStep: Vector2.Vector2IO,
+      accumulatedAverageVelocityChange: Vector2.Vector2IO
+    }
+  } );
+}
 
 statesOfMatter.register( 'IsokineticThermostat', IsokineticThermostat );
 export default IsokineticThermostat;

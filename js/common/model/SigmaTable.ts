@@ -1,7 +1,5 @@
 // Copyright 2014-2021, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
 
 /**
  * This class provides the value of sigma for Lennard-Jones calculations.  The
@@ -11,7 +9,6 @@
  * @author John Blanco
  * @author Siddhartha Chinthapally (Actual Concepts)
  */
-
 import statesOfMatter from '../../statesOfMatter.js';
 import SOMConstants from '../SOMConstants.js';
 import AtomType from './AtomType.js';
@@ -22,7 +19,7 @@ const SigmaTable = {
   /**
    * Get the value of sigma, in picometers, for the atom types specified.
    */
-  getSigma: ( atomType1: AtomType, atomType2: AtomType ): number => {
+  getSigma: ( atomType1: typeof AtomType, atomType2: typeof AtomType ): number => {
     if ( atomType1 === atomType2 ) {
       // Heterogeneous pair of atoms.
       if ( atomType1 === AtomType.NEON ) {

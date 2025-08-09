@@ -1,8 +1,5 @@
 // Copyright 2014-2020, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * Implementation of the Verlet algorithm for simulating molecular interaction based on the Lennard-Jones potential -
  * monatomic (i.e. one atom per molecule) version.
@@ -18,11 +15,12 @@ import MultipleParticleModel from '../MultipleParticleModel.js';
 import AbstractVerletAlgorithm from './AbstractVerletAlgorithm.js';
 import MonatomicAtomPositionUpdater from './MonatomicAtomPositionUpdater.js';
 
+// @ts-expect-error
 class MonatomicVerletAlgorithm extends AbstractVerletAlgorithm {
 
   private positionUpdater: typeof MonatomicAtomPositionUpdater;
   private epsilon: number; // controls the strength of particle interaction
-  private velocityVector: Vector2; // reusable vector to save allocations
+  private readonly velocityVector: Vector2; // reusable vector to save allocations
 
   /**
    * @param multipleParticleModel of the simulation
@@ -35,11 +33,11 @@ class MonatomicVerletAlgorithm extends AbstractVerletAlgorithm {
     this.velocityVector = new Vector2( 0, 0 );
   }
 
-  public setScaledEpsilon( scaledEpsilon: number ): void {
+  public override setScaledEpsilon( scaledEpsilon: number ): void {
     this.epsilon = scaledEpsilon;
   }
 
-  public getScaledEpsilon(): number {
+  public override getScaledEpsilon(): number {
     return this.epsilon;
   }
 
@@ -47,7 +45,7 @@ class MonatomicVerletAlgorithm extends AbstractVerletAlgorithm {
     const accelerationDueToGravity = this.multipleParticleModel.gravitationalAcceleration;
     const nextAtomForces = moleculeDataSet.nextMoleculeForces;
     for ( let i = 0; i < moleculeDataSet.getNumberOfMolecules(); i++ ) {
-      nextAtomForces[ i ].setXY( 0, accelerationDueToGravity );
+      nextAtomForces[ i ]!.setXY( 0, accelerationDueToGravity );
     }
   }
 
@@ -59,14 +57,14 @@ class MonatomicVerletAlgorithm extends AbstractVerletAlgorithm {
 
     for ( let i = 0; i < numberOfAtoms; i++ ) {
 
-      const atomCenterOfMassPositionsIX = atomCenterOfMassPositions[ i ].x;
-      const atomCenterOfMassPositionsIY = atomCenterOfMassPositions[ i ].y;
+      const atomCenterOfMassPositionsIX = atomCenterOfMassPositions[ i ]!.x;
+      const atomCenterOfMassPositionsIY = atomCenterOfMassPositions[ i ]!.y;
       const nextAtomForcesI = nextAtomForces[ i ];
 
       for ( let j = i + 1; j < numberOfAtoms; j++ ) {
 
-        let dx = atomCenterOfMassPositionsIX - atomCenterOfMassPositions[ j ].x;
-        let dy = atomCenterOfMassPositionsIY - atomCenterOfMassPositions[ j ].y;
+        let dx = atomCenterOfMassPositionsIX - atomCenterOfMassPositions[ j ]!.x;
+        let dy = atomCenterOfMassPositionsIY - atomCenterOfMassPositions[ j ]!.y;
         let distanceSqrd = Math.max( dx * dx + dy * dy, AbstractVerletAlgorithm.MIN_DISTANCE_SQUARED );
 
         if ( distanceSqrd === 0 ) {
@@ -84,8 +82,8 @@ class MonatomicVerletAlgorithm extends AbstractVerletAlgorithm {
           const forceScalar = 48 * r2inv * r6inv * ( r6inv - 0.5 ) * this.epsilon;
           const forceX = dx * forceScalar;
           const forceY = dy * forceScalar;
-          nextAtomForcesI.addXY( forceX, forceY );
-          nextAtomForces[ j ].subtractXY( forceX, forceY );
+          nextAtomForcesI!.addXY( forceX, forceY );
+          nextAtomForces[ j ]!.subtractXY( forceX, forceY );
         }
       }
     }
@@ -104,11 +102,11 @@ class MonatomicVerletAlgorithm extends AbstractVerletAlgorithm {
 
     // Update the atom velocities based upon the forces that are acting on them, then calculate the kinetic energy.
     for ( let i = 0; i < numberOfAtoms; i++ ) {
-      atomVelocity = atomVelocities[ i ];
-      const moleculeForce = atomForces[ i ];
+      atomVelocity = atomVelocities[ i ]!;
+      const moleculeForce = atomForces[ i ]!;
       velocityVector = velocityVector.setXY(
-        atomVelocity.x + timeStepHalf * ( moleculeForce.x + nextAtomForces[ i ].x ),
-        atomVelocity.y + timeStepHalf * ( moleculeForce.y + nextAtomForces[ i ].y )
+        atomVelocity.x + timeStepHalf * ( moleculeForce.x + nextAtomForces[ i ]!.x ),
+        atomVelocity.y + timeStepHalf * ( moleculeForce.y + nextAtomForces[ i ]!.y )
       );
       if ( velocityVector.magnitude > 10 ) {
         velocityVector.setMagnitude( 10 );
@@ -118,7 +116,7 @@ class MonatomicVerletAlgorithm extends AbstractVerletAlgorithm {
       totalKineticEnergy += ( ( atomVelocity.x * atomVelocity.x ) + ( atomVelocity.y * atomVelocity.y ) ) / 2;
 
       // update to the new force value for the next model step
-      moleculeForce.setXY( nextAtomForces[ i ].x, nextAtomForces[ i ].y );
+      moleculeForce.setXY( nextAtomForces[ i ]!.x, nextAtomForces[ i ]!.y );
     }
 
     // Update the temperature.
@@ -126,7 +124,7 @@ class MonatomicVerletAlgorithm extends AbstractVerletAlgorithm {
       this.calculatedTemperature = ( 2 / 3 ) * ( totalKineticEnergy / numberOfAtoms );
     }
     else {
-      this.calculatedTemperature = this.multipleParticleModel.minModelTemperature;
+      this.calculatedTemperature = this.multipleParticleModel.minModelTemperature!;
     }
   }
 }

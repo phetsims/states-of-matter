@@ -1,7 +1,5 @@
 // Copyright 2014-2024, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
 
 /**
  * This class defines a data set that is used to specify the positions, motions, and external forces for a collection of
@@ -17,6 +15,7 @@
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import required from '../../../../phet-core/js/required.js';
+import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import ArrayIO from '../../../../tandem/js/types/ArrayIO.js';
 import BooleanIO from '../../../../tandem/js/types/BooleanIO.js';
 import Float64ArrayIO from '../../../../tandem/js/types/Float64ArrayIO.js';
@@ -38,7 +37,7 @@ class MoleculeForceAndMotionDataSet {
   public numberOfMolecules: number;
 
   // Attributes that apply to all elements of the data set
-  public readonly atomsPerMolecule: number;
+  public atomsPerMolecule: number;
 
   // Attributes of the individual molecules and the atoms that comprise them
   public atomPositions: Array<Vector2 | null>;
@@ -55,8 +54,10 @@ class MoleculeForceAndMotionDataSet {
   public nextMoleculeTorques: Float64Array;
 
   // Molecule properties
-  private moleculeMass: number;
-  private moleculeRotationalInertia: number;
+  // @ts-expect-error
+  public moleculeMass: number;
+  // @ts-expect-error
+  public moleculeRotationalInertia: number;
 
   /**
    * This creates the data set with the capacity to hold the maximum number of atoms/molecules, but does not create the
@@ -140,8 +141,8 @@ class MoleculeForceAndMotionDataSet {
       const rotationalInertia = this.getMoleculeRotationalInertia();
       for ( i = 0; i < numberOfParticles; i++ ) {
         translationalKineticEnergy += 0.5 * particleMass *
-                                      ( Math.pow( this.moleculeVelocities[ i ].x, 2 ) +
-                                        Math.pow( this.moleculeVelocities[ i ].y, 2 ) );
+                                      ( Math.pow( this.moleculeVelocities[ i ]!.x, 2 ) +
+                                        Math.pow( this.moleculeVelocities[ i ]!.y, 2 ) );
         rotationalKineticEnergy += 0.5 * rotationalInertia * Math.pow( this.moleculeRotationRates[ i ], 2 );
       }
     }
@@ -150,8 +151,8 @@ class MoleculeForceAndMotionDataSet {
 
         // For single-atom molecules only translational kinetic energy is used.
         translationalKineticEnergy += 0.5 * particleMass *
-                                      ( Math.pow( this.moleculeVelocities[ i ].x, 2 ) +
-                                        Math.pow( this.moleculeVelocities[ i ].y, 2 ) );
+                                      ( Math.pow( this.moleculeVelocities[ i ]!.x, 2 ) +
+                                        Math.pow( this.moleculeVelocities[ i ]!.y, 2 ) );
       }
     }
 
@@ -182,8 +183,8 @@ class MoleculeForceAndMotionDataSet {
   public getMoleculeKineticEnergy( moleculeIndex: number ): number {
     assert && assert( moleculeIndex >= 0 && moleculeIndex < this.numberOfMolecules );
     const translationalKineticEnergy = 0.5 * this.moleculeMass *
-                                       ( Math.pow( this.moleculeVelocities[ moleculeIndex ].x, 2 ) +
-                                         Math.pow( this.moleculeVelocities[ moleculeIndex ].y, 2 ) );
+                                       ( Math.pow( this.moleculeVelocities[ moleculeIndex ]!.x, 2 ) +
+                                         Math.pow( this.moleculeVelocities[ moleculeIndex ]!.y, 2 ) );
     const rotationalKineticEnergy = 0.5 * this.moleculeRotationalInertia *
                                     Math.pow( this.moleculeRotationRates[ moleculeIndex ], 2 );
     return translationalKineticEnergy + rotationalKineticEnergy;
@@ -321,7 +322,7 @@ class MoleculeForceAndMotionDataSet {
    * serialize this instance for phet-io
    * for phet-io support only
    */
-  public toStateObject(): Object {
+  public toStateObject(): IntentionalAny {
     return {
       atomsPerMolecule: this.atomsPerMolecule,
       numberOfAtoms: this.numberOfAtoms,
@@ -348,7 +349,7 @@ class MoleculeForceAndMotionDataSet {
    * it is instead called during explicit de-serialization.
    * @param stateObject - returned from toStateObject
    */
-  public setState( stateObject: Object ): void {
+  public setState( stateObject: IntentionalAny ): void {
     required( stateObject );
 
     // single values that pertain to the entire data set
@@ -403,7 +404,7 @@ class MoleculeForceAndMotionDataSet {
     console.log( 'moleculeCenterOfMassPositions:' );
     console.log( '[' );
     for ( i = 0; i < numMolecules; i++ ) {
-      const comPos = this.moleculeCenterOfMassPositions[ i ];
+      const comPos = this.moleculeCenterOfMassPositions[ i ]!;
       console.log( '{', 'x: ', Utils.toFixed( comPos.x, 3 ), ', y: ', Utils.toFixed( comPos.y, 3 ), '}' );
     }
     console.log( '],' );
@@ -411,7 +412,7 @@ class MoleculeForceAndMotionDataSet {
     console.log( 'moleculeVelocities:' );
     console.log( '[' );
     for ( i = 0; i < numMolecules; i++ ) {
-      const vel = this.moleculeVelocities[ i ];
+      const vel = this.moleculeVelocities[ i ]!;
       console.log( '{', 'x: ', Utils.toFixed( vel.x, 3 ), ', y: ', Utils.toFixed( vel.y, 3 ), '}' );
     }
     console.log( '],' );
@@ -432,34 +433,37 @@ class MoleculeForceAndMotionDataSet {
     }
     console.log( '],' );
   }
+
+  // PhET-iO Type for MoleculeForceAndMotionDataSet, uses "data type" serialization where `fromStateObject returns a new
+  // instance.
+  public static MoleculeForceAndMotionDataSetIO = new IOType( 'MoleculeForceAndMotionDataSetIO', {
+    valueType: MoleculeForceAndMotionDataSet,
+    documentation: 'particle data set',
+
+    // @ts-expect-error
+    toStateObject: moleculeForceAndMotionDataSet => moleculeForceAndMotionDataSet.toStateObject(),
+    stateSchema: {
+      atomsPerMolecule: NumberIO,
+      numberOfAtoms: NumberIO,
+      numberOfMolecules: NumberIO,
+      moleculeMass: NumberIO,
+      moleculeRotationalInertia: NumberIO,
+
+      // arrays
+      atomPositions: ArrayIONullableIOVector2IO,
+      moleculeCenterOfMassPositions: ArrayIONullableIOVector2IO,
+      moleculeVelocities: ArrayIONullableIOVector2IO,
+      moleculeForces: ArrayIONullableIOVector2IO,
+      nextMoleculeForces: ArrayIONullableIOVector2IO,
+      insideContainer: ArrayIOBooleanIO,
+      moleculeRotationAngles: Float64ArrayIO,
+      moleculeRotationRates: Float64ArrayIO,
+      moleculeTorques: Float64ArrayIO,
+      nextMoleculeTorques: Float64ArrayIO
+    }
+  } );
+
 }
-
-// PhET-iO Type for MoleculeForceAndMotionDataSet, uses "data type" serialization where `fromStateObject returns a new
-// instance.
-MoleculeForceAndMotionDataSet.MoleculeForceAndMotionDataSetIO = new IOType( 'MoleculeForceAndMotionDataSetIO', {
-  valueType: MoleculeForceAndMotionDataSet,
-  documentation: 'particle data set',
-  toStateObject: moleculeForceAndMotionDataSet => moleculeForceAndMotionDataSet.toStateObject(),
-  stateSchema: {
-    atomsPerMolecule: NumberIO,
-    numberOfAtoms: NumberIO,
-    numberOfMolecules: NumberIO,
-    moleculeMass: NumberIO,
-    moleculeRotationalInertia: NumberIO,
-
-    // arrays
-    atomPositions: ArrayIONullableIOVector2IO,
-    moleculeCenterOfMassPositions: ArrayIONullableIOVector2IO,
-    moleculeVelocities: ArrayIONullableIOVector2IO,
-    moleculeForces: ArrayIONullableIOVector2IO,
-    nextMoleculeForces: ArrayIONullableIOVector2IO,
-    insideContainer: ArrayIOBooleanIO,
-    moleculeRotationAngles: Float64ArrayIO,
-    moleculeRotationRates: Float64ArrayIO,
-    moleculeTorques: Float64ArrayIO,
-    nextMoleculeTorques: Float64ArrayIO
-  }
-} );
 
 statesOfMatter.register( 'MoleculeForceAndMotionDataSet', MoleculeForceAndMotionDataSet );
 export default MoleculeForceAndMotionDataSet;

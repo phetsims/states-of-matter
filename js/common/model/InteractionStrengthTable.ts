@@ -1,8 +1,5 @@
 // Copyright 2014-2021, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * This class provides the interaction strength value between a number of
  * different pairs of atoms.  To do them all would be too much, so this is a
@@ -32,7 +29,7 @@ const InteractionStrengthTable = {
    * it is generally done.  Note that this value is used as the "epsilon"
    * parameter in Lennard-Jones potential calculations.
    */
-  getInteractionPotential: ( atomType1: AtomType, atomType2: AtomType ): number => {
+  getInteractionPotential: ( atomType1: typeof AtomType, atomType2: typeof AtomType ): number => {
     if ( atomType1 === atomType2 ) {
       // Heterogeneous pair of atoms.
       if ( atomType1 === AtomType.NEON ) {

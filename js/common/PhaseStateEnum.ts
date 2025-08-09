@@ -10,8 +10,9 @@
  */
 
 import EnumerationDeprecated from '../../../phet-core/js/EnumerationDeprecated.js';
+import IntentionalAny from '../../../phet-core/js/types/IntentionalAny.js';
 import statesOfMatter from '../statesOfMatter.js';
 
-const PhaseStateEnum = EnumerationDeprecated.byKeys( [ 'SOLID', 'LIQUID', 'GAS', 'UNKNOWN' ] );
+const PhaseStateEnum = EnumerationDeprecated.byKeys( [ 'SOLID', 'LIQUID', 'GAS', 'UNKNOWN' ] ) as IntentionalAny;
 statesOfMatter.register( 'PhaseStateEnum', PhaseStateEnum );
 export default PhaseStateEnum;

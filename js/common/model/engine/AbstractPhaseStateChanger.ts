@@ -1,8 +1,5 @@
 // Copyright 2014-2024, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * This is the base class for the objects that directly change the state of the molecules within the multi-particle
  * simulation.
@@ -12,7 +9,9 @@
  */
 
 import dotRandom from '../../../../../dot/js/dotRandom.js';
+import Random from '../../../../../dot/js/Random.js';
 import Vector2 from '../../../../../dot/js/Vector2.js';
+import IntentionalAny from '../../../../../phet-core/js/types/IntentionalAny.js';
 import statesOfMatter from '../../../statesOfMatter.js';
 import PhaseStateEnum from '../../PhaseStateEnum.js';
 import SOMConstants from '../../SOMConstants.js';
@@ -25,9 +24,9 @@ const MIN_INITIAL_GAS_PARTICLE_DISTANCE = 1.1; // empirically determined
 
 class AbstractPhaseStateChanger {
 
-  private readonly multipleParticleModel: MultipleParticleModel;
+  protected readonly multipleParticleModel: MultipleParticleModel;
   private readonly moleculePosition: Vector2;
-  private readonly random: typeof dotRandom;
+  private random: Random;
   private readonly reusableVector: Vector2;
 
   /**
@@ -45,7 +44,7 @@ class AbstractPhaseStateChanger {
    * Set the phase based on the specified ID.  This often needs to be overridden in descendant classes to do more
    * specific activities.
    */
-  public setPhase( phaseID: PhaseStateEnum ) {
+  public setPhase( phaseID: typeof PhaseStateEnum ): void {
     switch( phaseID ) {
       case PhaseStateEnum.SOLID:
         this.setPhaseSolid();
@@ -64,12 +63,14 @@ class AbstractPhaseStateChanger {
   /**
    * Set the positions and velocities of the particles without setting the model temperature.
    */
-  public setParticleConfigurationForPhase( phaseID: PhaseStateEnum ) {
+  public setParticleConfigurationForPhase( phaseID: typeof PhaseStateEnum ): void {
     switch( phaseID ) {
       case PhaseStateEnum.SOLID:
+        // @ts-expect-error
         this.setParticleConfigurationSolid();
         break;
       case PhaseStateEnum.LIQUID:
+        // @ts-expect-error
         this.setParticleConfigurationLiquid();
         break;
       case PhaseStateEnum.GAS:
@@ -83,7 +84,7 @@ class AbstractPhaseStateChanger {
   /**
    * Set the model temperature for the specified phase.
    */
-  public setTemperatureForPhase( phaseID: PhaseStateEnum ) {
+  public setTemperatureForPhase( phaseID: typeof PhaseStateEnum ): void {
     switch( phaseID ) {
       case PhaseStateEnum.SOLID:
         this.multipleParticleModel.setTemperature( SOMConstants.SOLID_TEMPERATURE );
@@ -102,23 +103,25 @@ class AbstractPhaseStateChanger {
   /**
    * set the phase to solid
    */
-  protected setPhaseSolid() {
+  protected setPhaseSolid(): void {
     this.setTemperatureForPhase( PhaseStateEnum.SOLID );
+    // @ts-expect-error
     this.setParticleConfigurationSolid();
   }
 
   /**
    * set the phase to liquid
    */
-  protected setPhaseLiquid() {
+  protected setPhaseLiquid(): void {
     this.setTemperatureForPhase( PhaseStateEnum.LIQUID );
+    // @ts-expect-error
     this.setParticleConfigurationLiquid();
   }
 
   /**
    * set the phase to gas
    */
-  protected setPhaseGas() {
+  protected setPhaseGas(): void {
     this.setTemperatureForPhase( PhaseStateEnum.GAS );
     this.setParticleConfigurationGas();
   }
@@ -133,7 +136,7 @@ class AbstractPhaseStateChanger {
     let posX;
     let posY;
     const moleculeDataSet = this.multipleParticleModel.moleculeDataSet;
-    const moleculeCenterOfMassPositions = moleculeDataSet.moleculeCenterOfMassPositions;
+    const moleculeCenterOfMassPositions = moleculeDataSet!.moleculeCenterOfMassPositions;
 
     const minInitialInterParticleDistance = 1.2; // empirically chosen
     const rangeX = this.multipleParticleModel.normalizedContainerWidth - ( 2 * MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE );
@@ -145,8 +148,8 @@ class AbstractPhaseStateChanger {
 
         // See if this position is available.
         let positionAvailable = true;
-        for ( let k = 0; k < moleculeDataSet.getNumberOfMolecules(); k++ ) {
-          if ( moleculeCenterOfMassPositions[ k ].distanceXY( posX, posY ) < minInitialInterParticleDistance ) {
+        for ( let k = 0; k < moleculeDataSet!.getNumberOfMolecules(); k++ ) {
+          if ( moleculeCenterOfMassPositions[ k ]!.distanceXY( posX, posY ) < minInitialInterParticleDistance ) {
             positionAvailable = false;
             break;
           }
@@ -167,15 +170,15 @@ class AbstractPhaseStateChanger {
   /**
    * form the molecules into a crystal, which is essentially a cube shape
    */
-  protected formCrystal( moleculesPerLayer: number, xSpacing: number, ySpacing: number, alternateRowOffset: number, bottomY: number, randomizeRotationalAngle: boolean ) {
+  protected formCrystal( moleculesPerLayer: number, xSpacing: number, ySpacing: number, alternateRowOffset: number, bottomY: number, randomizeRotationalAngle: boolean ): void {
 
     // Get references to the various elements of the data set.
-    const moleculeDataSet = this.multipleParticleModel.moleculeDataSet;
+    const moleculeDataSet = this.multipleParticleModel.moleculeDataSet!;
     const numberOfMolecules = moleculeDataSet.getNumberOfMolecules();
     const moleculeCenterOfMassPositions = moleculeDataSet.moleculeCenterOfMassPositions;
     const moleculeVelocities = moleculeDataSet.moleculeVelocities;
     const moleculeRotationAngles = moleculeDataSet.moleculeRotationAngles;
-    const moleculesInsideContainer = this.multipleParticleModel.moleculeDataSet.insideContainer;
+    const moleculesInsideContainer = moleculeDataSet.insideContainer;
 
     // Set up other variables needed to do the job.
     const temperatureSqrt = Math.sqrt( this.multipleParticleModel.temperatureSetPointProperty.get() );
@@ -199,14 +202,14 @@ class AbstractPhaseStateChanger {
         }
         yPos = bottomY + ( i * ySpacing );
         const moleculeIndex = ( i * moleculesPerLayer ) + j;
-        moleculeCenterOfMassPositions[ moleculeIndex ].setXY( xPos, yPos );
+        moleculeCenterOfMassPositions[ moleculeIndex ]!.setXY( xPos, yPos );
         moleculeRotationAngles[ moleculeIndex ] = 0;
         moleculesPlaced++;
 
         // Assign each molecule an initial velocity.
         const xVel = temperatureSqrt * this.random.nextGaussian();
         const yVel = temperatureSqrt * this.random.nextGaussian();
-        moleculeVelocities[ moleculeIndex ].setXY( xVel, yVel );
+        moleculeVelocities[ moleculeIndex ]!.setXY( xVel, yVel );
 
         // Track total velocity in the X direction.
         this.reusableVector.addXY( xVel, yVel );
@@ -228,15 +231,15 @@ class AbstractPhaseStateChanger {
    * Set the particle configuration for gas.  This can be generalized more than the liquid and solid phases, hence it
    * can be defined in the base class.
    */
-  protected setParticleConfigurationGas() {
+  protected setParticleConfigurationGas(): void {
 
     // Get references to the various elements of the data set.
-    const moleculeDataSet = this.multipleParticleModel.moleculeDataSet;
+    const moleculeDataSet = this.multipleParticleModel.moleculeDataSet!;
     const moleculeCenterOfMassPositions = moleculeDataSet.getMoleculeCenterOfMassPositions();
     const moleculeVelocities = moleculeDataSet.getMoleculeVelocities();
     const moleculeRotationAngles = moleculeDataSet.getMoleculeRotationAngles();
     const moleculeRotationRates = moleculeDataSet.getMoleculeRotationRates();
-    const moleculesInsideContainer = this.multipleParticleModel.moleculeDataSet.insideContainer;
+    const moleculesInsideContainer = moleculeDataSet.insideContainer;
 
     // Set up other variables needed to do the job.
     const temperatureSqrt = Math.sqrt( this.multipleParticleModel.temperatureSetPointProperty.get() );
@@ -245,10 +248,10 @@ class AbstractPhaseStateChanger {
     for ( let i = 0; i < numberOfMolecules; i++ ) {
 
       // Temporarily position the molecules at (0,0).
-      moleculeCenterOfMassPositions[ i ].setXY( 0, 0 );
+      moleculeCenterOfMassPositions[ i ]!.setXY( 0, 0 );
 
       // Assign each molecule an initial velocity.
-      moleculeVelocities[ i ].setXY(
+      moleculeVelocities[ i ]!.setXY(
         temperatureSqrt * this.random.nextGaussian(),
         temperatureSqrt * this.random.nextGaussian()
       );
@@ -278,15 +281,15 @@ class AbstractPhaseStateChanger {
 
         // See if this position is available.
         for ( let k = 0; k < i; k++ ) {
-          if ( moleculeCenterOfMassPositions[ k ].distanceXY( newPosX, newPosY ) < MIN_INITIAL_GAS_PARTICLE_DISTANCE ) {
+          if ( moleculeCenterOfMassPositions[ k ]!.distanceXY( newPosX, newPosY ) < MIN_INITIAL_GAS_PARTICLE_DISTANCE ) {
             positionAvailable = false;
             break;
           }
         }
         if ( positionAvailable || j === MAX_PLACEMENT_ATTEMPTS - 1 ) {
 
-          // We found an open position or we've done all the searching we can.
-          moleculeCenterOfMassPositions[ i ].setXY( newPosX, newPosY );
+          // We found an open position, or we've done all the searching we can.
+          moleculeCenterOfMassPositions[ i ]!.setXY( newPosX, newPosY );
           break;
         }
         else if ( j === MAX_PLACEMENT_ATTEMPTS - 2 ) {
@@ -294,7 +297,7 @@ class AbstractPhaseStateChanger {
           // This is the second to last attempt, so try a linear search for a usable spot.
           const openPoint = this.findOpenMoleculePosition();
           if ( openPoint !== null ) {
-            moleculeCenterOfMassPositions[ i ].set( openPoint );
+            moleculeCenterOfMassPositions[ i ]!.set( openPoint );
             break;
           }
         }
@@ -305,48 +308,49 @@ class AbstractPhaseStateChanger {
   /**
    * zero out the collective velocity of the substance, generally used to help prevent drift after changing phase
    */
-  protected zeroOutCollectiveVelocity() {
+  protected zeroOutCollectiveVelocity(): void {
 
-    const moleculeDataSet = this.multipleParticleModel.moleculeDataSet;
+    const moleculeDataSet = this.multipleParticleModel.moleculeDataSet!;
     const numberOfMolecules = moleculeDataSet.getNumberOfMolecules();
     const moleculeVelocities = moleculeDataSet.getMoleculeVelocities();
     this.reusableVector.setXY( 0, 0 );
     let i;
     for ( i = 0; i < numberOfMolecules; i++ ) {
-      this.reusableVector.add( moleculeVelocities[ i ] );
+      this.reusableVector.add( moleculeVelocities[ i ]! );
     }
     const xAdjustment = -this.reusableVector.x / numberOfMolecules;
     const yAdjustment = -this.reusableVector.y / numberOfMolecules;
     for ( i = 0; i < numberOfMolecules; i++ ) {
-      moleculeVelocities[ i ].addXY( xAdjustment, yAdjustment );
+      moleculeVelocities[ i ]!.addXY( xAdjustment, yAdjustment );
     }
   }
 
   /**
    * Load previously saved position and motion state, does NOT load forces state
    */
-  protected loadSavedState( savedState: any ) {
+  protected loadSavedState( savedState: IntentionalAny ): void {
+    const moleculeDataSet = this.multipleParticleModel.moleculeDataSet!;
 
     assert && assert(
-      this.multipleParticleModel.moleculeDataSet.numberOfMolecules === savedState.numberOfMolecules,
+      moleculeDataSet.numberOfMolecules === savedState.numberOfMolecules,
       'unexpected number of particles in saved data set'
     );
 
     // Set the initial velocity for each of the atoms based on the new temperature.
-    const numberOfMolecules = this.multipleParticleModel.moleculeDataSet.numberOfMolecules;
-    const moleculeCenterOfMassPositions = this.multipleParticleModel.moleculeDataSet.moleculeCenterOfMassPositions;
-    const moleculeVelocities = this.multipleParticleModel.moleculeDataSet.moleculeVelocities;
-    const moleculeRotationAngles = this.multipleParticleModel.moleculeDataSet.moleculeRotationAngles;
-    const moleculeRotationRates = this.multipleParticleModel.moleculeDataSet.moleculeRotationRates;
-    const moleculesInsideContainer = this.multipleParticleModel.moleculeDataSet.insideContainer;
+    const numberOfMolecules = moleculeDataSet.numberOfMolecules;
+    const moleculeCenterOfMassPositions = moleculeDataSet.moleculeCenterOfMassPositions;
+    const moleculeVelocities = moleculeDataSet.moleculeVelocities;
+    const moleculeRotationAngles = moleculeDataSet.moleculeRotationAngles;
+    const moleculeRotationRates = moleculeDataSet.moleculeRotationRates;
+    const moleculesInsideContainer = moleculeDataSet.insideContainer;
 
     // for ( var i = 0; i < numberOfMolecules; i++ ) {
     for ( let i = 0; i < numberOfMolecules; i++ ) {
-      moleculeCenterOfMassPositions[ i ].setXY(
+      moleculeCenterOfMassPositions[ i ]!.setXY(
         savedState.moleculeCenterOfMassPositions[ i ].x,
         savedState.moleculeCenterOfMassPositions[ i ].y
       );
-      moleculeVelocities[ i ].setXY(
+      moleculeVelocities[ i ]!.setXY(
         savedState.moleculeVelocities[ i ].x,
         savedState.moleculeVelocities[ i ].y
       );
@@ -359,12 +363,12 @@ class AbstractPhaseStateChanger {
       moleculesInsideContainer[ i ] = true;
     }
   }
-}
 
-// statics
-AbstractPhaseStateChanger.MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE = MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE;
-AbstractPhaseStateChanger.DISTANCE_BETWEEN_PARTICLES_IN_CRYSTAL = 0.12; // in particle diameters
-AbstractPhaseStateChanger.MAX_PLACEMENT_ATTEMPTS = MAX_PLACEMENT_ATTEMPTS; // for random placement of particles
+  // statics
+  public static readonly MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE = MIN_INITIAL_PARTICLE_TO_WALL_DISTANCE;
+  public static readonly DISTANCE_BETWEEN_PARTICLES_IN_CRYSTAL = 0.12; // in particle diameters
+  public static readonly MAX_PLACEMENT_ATTEMPTS = MAX_PLACEMENT_ATTEMPTS; // for random placement of particles
+}
 
 statesOfMatter.register( 'AbstractPhaseStateChanger', AbstractPhaseStateChanger );
 export default AbstractPhaseStateChanger;

@@ -1,8 +1,5 @@
 // Copyright 2020, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * ScaledAtom is a simple model of an atom with the attributes needed by the particle interaction simulation portion of
  * the States of Matter simulation.  It is "scaled" in the sense that it has position and radius values that are set to
@@ -14,6 +11,7 @@
  */
 
 import Vector2 from '../../../../../dot/js/Vector2.js';
+import IntentionalAny from '../../../../../phet-core/js/types/IntentionalAny.js';
 import statesOfMatter from '../../../statesOfMatter.js';
 import SOMConstants from '../../SOMConstants.js';
 import AtomType from '../AtomType.js';
@@ -21,7 +19,7 @@ import AtomType from '../AtomType.js';
 class ScaledAtom {
 
   // The type of atom being modeled, e.g. Argon, Neon, etc.
-  public atomType: AtomType;
+  public atomType: typeof AtomType;
 
   // Accessed through getter and setter methods below, see those methods for details
   private position: Vector2;
@@ -29,7 +27,7 @@ class ScaledAtom {
   // Attributes of the atom, changed as the atom type changes
   public readonly radius: number;
   public readonly mass: number;
-  public readonly color: any;
+  public readonly color: IntentionalAny;
   public readonly epsilon: number;
 
   /**
@@ -37,7 +35,7 @@ class ScaledAtom {
    * @param initialXPosition - x position in the model, in picometers
    * @param initialYPosition - y position in the model, in picometers
    */
-  constructor( atomType: AtomType, initialXPosition: number, initialYPosition: number ) {
+  public constructor( atomType: typeof AtomType, initialXPosition: number, initialYPosition: number ) {
 
     this.atomType = atomType;
 
@@ -73,7 +71,7 @@ class ScaledAtom {
     return this.position.y;
   }
 
-  public getType(): AtomType {
+  public getType(): typeof AtomType {
     return this.atomType;
   }
 }

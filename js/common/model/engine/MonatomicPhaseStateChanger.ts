@@ -1,8 +1,5 @@
 // Copyright 2014-2021, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * This class is used to change the phase state (i.e. solid, liquid, or gas) for a set of atoms.
  *
@@ -25,11 +22,12 @@ const MIN_INITIAL_INTER_PARTICLE_DISTANCE = 1.12; // empirically determined
 class MonatomicPhaseStateChanger extends AbstractPhaseStateChanger {
 
   private readonly positionUpdater: typeof MonatomicAtomPositionUpdater;
-  private readonly random: typeof dotRandom;
 
-  constructor( multipleParticleModel: MultipleParticleModel ) {
+  public constructor( multipleParticleModel: MultipleParticleModel ) {
     super( multipleParticleModel );
     this.positionUpdater = MonatomicAtomPositionUpdater;
+
+    // @ts-expect-error Probably unnecessary, see https://github.com/phetsims/states-of-matter/issues/368
     this.random = dotRandom;
   }
 
@@ -52,6 +50,7 @@ class MonatomicPhaseStateChanger extends AbstractPhaseStateChanger {
     }
 
     // Sync up the atom positions with the molecule positions.
+    // @ts-expect-error
     this.positionUpdater.updateAtomPositions( moleculeDataSet, offset );
 
     // Step the model a number of times in order to prevent the particles from looking too organized.  The number of
@@ -68,6 +67,8 @@ class MonatomicPhaseStateChanger extends AbstractPhaseStateChanger {
 
     // Place the molecules into a cube, a.k.a. a crystal.
     this.formCrystal(
+
+      // @ts-expect-error
       Utils.roundSymmetric( Math.sqrt( this.multipleParticleModel.moleculeDataSet.getNumberOfMolecules() ) ),
       MIN_INITIAL_INTER_PARTICLE_DISTANCE,
       MIN_INITIAL_INTER_PARTICLE_DISTANCE * 0.866,

@@ -1,8 +1,5 @@
 // Copyright 2014-2021, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * This class is used to change the phase state (i.e. solid, liquid, or gas) for a set of diatomic (i.e. two atoms per
  * molecule) molecules.
@@ -26,23 +23,21 @@ const MIN_INITIAL_DIAMETER_DISTANCE = 2.02;
 class DiatomicPhaseStateChanger extends AbstractPhaseStateChanger {
 
   private readonly positionUpdater: typeof DiatomicAtomPositionUpdater;
-  private readonly multipleParticleModel: MultipleParticleModel;
 
   public constructor( multipleParticleModel: MultipleParticleModel ) {
 
     // Make sure this is not being used on an inappropriate data set.
-    assert && assert( multipleParticleModel.moleculeDataSet.getAtomsPerMolecule() === 2 );
+    assert && assert( multipleParticleModel.moleculeDataSet!.getAtomsPerMolecule() === 2 );
 
     // initialization
     super( multipleParticleModel );
     this.positionUpdater = DiatomicAtomPositionUpdater;
-    this.multipleParticleModel = multipleParticleModel;
   }
 
   /**
    * @param phaseState - phase state (solid/liquid/gas) of the collection of molecules
    */
-  public setPhase( phaseState: PhaseStateEnum ): void {
+  public override setPhase( phaseState: typeof PhaseStateEnum ): void {
     let postChangeModelSteps = 0;
     switch( phaseState ) {
       case PhaseStateEnum.SOLID:
@@ -61,7 +56,7 @@ class DiatomicPhaseStateChanger extends AbstractPhaseStateChanger {
         throw new Error( `invalid phaseState: ${phaseState}` );
     }
 
-    const moleculeDataSet = this.multipleParticleModel.moleculeDataSet;
+    const moleculeDataSet = this.multipleParticleModel.moleculeDataSet!;
 
     // Sync up the atom positions with the molecule positions.
     this.positionUpdater.updateAtomPositions( moleculeDataSet );
@@ -80,7 +75,7 @@ class DiatomicPhaseStateChanger extends AbstractPhaseStateChanger {
 
     // Place the molecules into a cube, a.k.a. a crystal.
     this.formCrystal(
-      Utils.roundSymmetric( Math.sqrt( this.multipleParticleModel.moleculeDataSet.getNumberOfMolecules() * 2 ) ) / 2,
+      Utils.roundSymmetric( Math.sqrt( this.multipleParticleModel.moleculeDataSet!.getNumberOfMolecules() * 2 ) ) / 2,
       MIN_INITIAL_DIAMETER_DISTANCE,
       MIN_INITIAL_DIAMETER_DISTANCE * 0.5,
       0.5,

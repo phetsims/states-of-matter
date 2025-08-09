@@ -1,7 +1,5 @@
 // Copyright 2014-2021, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
 
 /**
  * Implementation of the Verlet algorithm for simulating molecular interaction based on the Lennard-Jones potential.
@@ -14,6 +12,8 @@
  */
 
 import statesOfMatter from '../../../statesOfMatter.js';
+import MoleculeForceAndMotionDataSet from '../MoleculeForceAndMotionDataSet.js';
+import MultipleParticleModel from '../MultipleParticleModel.js';
 import AbstractVerletAlgorithm from './AbstractVerletAlgorithm.js';
 import WaterAtomPositionUpdater from './WaterAtomPositionUpdater.js';
 
@@ -26,6 +26,7 @@ const MAX_REPULSIVE_SCALING_FACTOR_FOR_WATER = 5.25;
 const MAX_ROTATION_RATE = 16; // revolutions per second, empirically determined, see usage below
 const TEMPERATURE_BELOW_WHICH_GRAVITY_INCREASES = 0.10;
 
+// @ts-expect-error
 class WaterVerletAlgorithm extends AbstractVerletAlgorithm {
 
   private readonly positionUpdater: typeof WaterAtomPositionUpdater;
@@ -37,28 +38,20 @@ class WaterVerletAlgorithm extends AbstractVerletAlgorithm {
   // Pre-allocated arrays to avoid reallocation with each force and position update
   private readonly normalCharges: number[];
   private readonly alteredCharges: number[];
-
-  /**
-   * @param {MultipleParticleModel} multipleParticleModel
-   */
-  constructor( multipleParticleModel ) {
+  
+  public constructor( multipleParticleModel: MultipleParticleModel ) {
 
     super( multipleParticleModel );
     this.positionUpdater = WaterAtomPositionUpdater;
 
-    this.massInverse = 1 / multipleParticleModel.moleculeDataSet.getMoleculeMass();
-    this.inertiaInverse = 1 / multipleParticleModel.moleculeDataSet.getMoleculeRotationalInertia();
+    this.massInverse = 1 / multipleParticleModel.moleculeDataSet!.getMoleculeMass();
+    this.inertiaInverse = 1 / multipleParticleModel.moleculeDataSet!.getMoleculeRotationalInertia();
 
     this.normalCharges = new Array( 3 );
     this.alteredCharges = new Array( 3 );
   }
 
-  /**
-   * @param {MoleculeForceAndMotionDataSet} moleculeDataSet
-   * @override
-   * @protected
-   */
-  initializeForces( moleculeDataSet ) {
+  protected override initializeForces( moleculeDataSet: MoleculeForceAndMotionDataSet ): void {
     const temperatureSetPoint = this.multipleParticleModel.temperatureSetPointProperty.get();
     let accelerationDueToGravity = this.multipleParticleModel.gravitationalAcceleration;
     if ( temperatureSetPoint < TEMPERATURE_BELOW_WHICH_GRAVITY_INCREASES ) {
@@ -71,17 +64,12 @@ class WaterVerletAlgorithm extends AbstractVerletAlgorithm {
     const nextMoleculeForces = moleculeDataSet.nextMoleculeForces;
     const nextMoleculeTorques = moleculeDataSet.nextMoleculeTorques;
     for ( let i = 0; i < moleculeDataSet.getNumberOfMolecules(); i++ ) {
-      nextMoleculeForces[ i ].setXY( 0, accelerationDueToGravity );
+      nextMoleculeForces[ i ]!.setXY( 0, accelerationDueToGravity );
       nextMoleculeTorques[ i ] = 0;
     }
   }
 
-  /**
-   * @param moleculeDataSet
-   * @override
-   * @protected
-   */
-  updateInteractionForces( moleculeDataSet ) {
+  protected override updateInteractionForces( moleculeDataSet: MoleculeForceAndMotionDataSet ): void {
 
     const moleculeCenterOfMassPositions = moleculeDataSet.moleculeCenterOfMassPositions;
     const atomPositions = moleculeDataSet.atomPositions;
@@ -136,7 +124,7 @@ class WaterVerletAlgorithm extends AbstractVerletAlgorithm {
     // Calculate the force and torque due to inter-particle interactions.
     const numberOfMolecules = moleculeDataSet.getNumberOfMolecules();
     for ( let i = 0; i < numberOfMolecules; i++ ) {
-      const moleculeCenterOfMassPosition1 = moleculeCenterOfMassPositions[ i ];
+      const moleculeCenterOfMassPosition1 = moleculeCenterOfMassPositions[ i ]!;
       const m1x = moleculeCenterOfMassPosition1.x;
       const m1y = moleculeCenterOfMassPosition1.y;
       const nextMoleculeForceI = nextMoleculeForces[ i ];
@@ -152,7 +140,7 @@ class WaterVerletAlgorithm extends AbstractVerletAlgorithm {
       }
 
       for ( let j = i + 1; j < numberOfMolecules; j++ ) {
-        const moleculeCenterOfMassPosition2 = moleculeCenterOfMassPositions[ j ];
+        const moleculeCenterOfMassPosition2 = moleculeCenterOfMassPositions[ j ]!;
         const m2x = moleculeCenterOfMassPosition2.x;
         const m2y = moleculeCenterOfMassPosition2.y;
         const nextMoleculeForceJ = nextMoleculeForces[ j ];
@@ -178,8 +166,8 @@ class WaterVerletAlgorithm extends AbstractVerletAlgorithm {
           let forceScalar = 48 * r2inv * r6inv * ( ( r6inv * repulsiveForceScalingFactor ) - 0.5 );
           let forceX = dx * forceScalar;
           let forceY = dy * forceScalar;
-          nextMoleculeForceI.addXY( forceX, forceY );
-          nextMoleculeForceJ.subtractXY( forceX, forceY );
+          nextMoleculeForceI!.addXY( forceX, forceY );
+          nextMoleculeForceJ!.subtractXY( forceX, forceY );
           this.potentialEnergy += 4 * r6inv * ( r6inv - 1 ) + 0.016316891136;
 
           // Calculate coulomb-like interactions between atoms on individual water molecules.
@@ -194,7 +182,7 @@ class WaterVerletAlgorithm extends AbstractVerletAlgorithm {
             }
 
             const chargeAii = chargesA[ ii ];
-            const atomPosition1 = atomPositions[ atomIndex1 ];
+            const atomPosition1 = atomPositions[ atomIndex1 ]!;
             const a1x = atomPosition1.x;
             const a1y = atomPosition1.y;
 
@@ -208,7 +196,7 @@ class WaterVerletAlgorithm extends AbstractVerletAlgorithm {
                 continue;
               }
 
-              const atomPosition2 = atomPositions[ atomIndex2 ];
+              const atomPosition2 = atomPositions[ atomIndex2 ]!;
               const a2x = atomPosition2.x;
               const a2y = atomPosition2.y;
 
@@ -219,8 +207,8 @@ class WaterVerletAlgorithm extends AbstractVerletAlgorithm {
               forceScalar = chargeAii * chargesB[ jj ] * r2inv * r2inv;
               forceX = dx * forceScalar;
               forceY = dy * forceScalar;
-              nextMoleculeForceI.addXY( forceX, forceY );
-              nextMoleculeForceJ.subtractXY( forceX, forceY );
+              nextMoleculeForceI!.addXY( forceX, forceY );
+              nextMoleculeForceJ!.subtractXY( forceX, forceY );
               nextMoleculeTorques[ i ] += ( a1x - m1x ) * forceY - ( a1y - m1y ) * forceX;
               nextMoleculeTorques[ j ] -= ( a2x - m2x ) * forceY - ( a2y - m2y ) * forceX;
             }
@@ -230,13 +218,7 @@ class WaterVerletAlgorithm extends AbstractVerletAlgorithm {
     }
   }
 
-  /**
-   * @param {MoleculeForceAndMotionDataSet} moleculeDataSet
-   * @param {number} timeStep
-   * @override
-   * @protected
-   */
-  updateVelocitiesAndRotationRates( moleculeDataSet, timeStep ) {
+  protected override updateVelocitiesAndRotationRates( moleculeDataSet: MoleculeForceAndMotionDataSet, timeStep: number ): void {
 
     const numberOfMolecules = moleculeDataSet.getNumberOfMolecules();
     const moleculeVelocities = moleculeDataSet.moleculeVelocities;
@@ -255,9 +237,9 @@ class WaterVerletAlgorithm extends AbstractVerletAlgorithm {
     let translationalKineticEnergy = 0;
     let rotationalKineticEnergy = 0;
     for ( let i = 0; i < numberOfMolecules; i++ ) {
-      const xVel = moleculeVelocities[ i ].x + timeStepHalf * ( moleculeForces[ i ].x + nextMoleculeForces[ i ].x ) * this.massInverse;
-      const yVel = moleculeVelocities[ i ].y + timeStepHalf * ( moleculeForces[ i ].y + nextMoleculeForces[ i ].y ) * this.massInverse;
-      moleculeVelocities[ i ].setXY( xVel, yVel );
+      const xVel = moleculeVelocities[ i ]!.x + timeStepHalf * ( moleculeForces[ i ]!.x + nextMoleculeForces[ i ]!.x ) * this.massInverse;
+      const yVel = moleculeVelocities[ i ]!.y + timeStepHalf * ( moleculeForces[ i ]!.y + nextMoleculeForces[ i ]!.y ) * this.massInverse;
+      moleculeVelocities[ i ]!.setXY( xVel, yVel );
       let rotationRate = moleculeRotationRates[ i ] +
                          timeStepHalf * ( moleculeTorques[ i ] + nextMoleculeTorques[ i ] ) * this.inertiaInverse;
 
@@ -272,11 +254,11 @@ class WaterVerletAlgorithm extends AbstractVerletAlgorithm {
       moleculeRotationRates[ i ] = rotationRate;
 
       // calculate the kinetic energy
-      translationalKineticEnergy += 0.5 * moleculeMass * moleculeVelocities[ i ].magnitudeSquared;
+      translationalKineticEnergy += 0.5 * moleculeMass * moleculeVelocities[ i ]!.magnitudeSquared;
       rotationalKineticEnergy += 0.5 * moleculeRotationalInertia * moleculeRotationRates[ i ] * moleculeRotationRates[ i ];
 
       // Move the newly calculated forces and torques into the current spots.
-      moleculeForces[ i ].setXY( nextMoleculeForces[ i ].x, nextMoleculeForces[ i ].y );
+      moleculeForces[ i ]!.setXY( nextMoleculeForces[ i ]!.x, nextMoleculeForces[ i ]!.y );
       moleculeTorques[ i ] = nextMoleculeTorques[ i ];
     }
 
@@ -285,7 +267,7 @@ class WaterVerletAlgorithm extends AbstractVerletAlgorithm {
       this.calculatedTemperature = ( translationalKineticEnergy + rotationalKineticEnergy ) / numberOfMolecules;
     }
     else {
-      this.calculatedTemperature = this.multipleParticleModel.minModelTemperature;
+      this.calculatedTemperature = this.multipleParticleModel.minModelTemperature!;
     }
   }
 }

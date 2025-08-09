@@ -1,7 +1,5 @@
 // Copyright 2019-2020, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
 
 /**
  * simple moving average calculator
@@ -22,12 +20,12 @@ class MovingAverage {
 
   public size: number;
   public average: number;
-  private initialValue: number;
-  private array: number[];
-  private currentIndex: number;
-  private total: number;
+  private readonly initialValue: number;
+  private readonly array: number[];
+  private currentIndex = 0;
+  private total?: number;
 
-  constructor( size: number, providedOptions?: MovingAverageOptions ) {
+  public constructor( size: number, providedOptions?: MovingAverageOptions ) {
 
     const options = optionize<MovingAverageOptions, SelfOptions>()( {
       initialValue: 0
@@ -46,15 +44,15 @@ class MovingAverage {
   /**
    * add a value to the moving average
    */
-  public addValue( newValue: number ) {
+  public addValue( newValue: number ): void {
     const replacedValue = this.array[ this.currentIndex ];
     this.array[ this.currentIndex ] = newValue;
     this.currentIndex = ( this.currentIndex + 1 ) % this.size;
-    this.total = ( this.total - replacedValue ) + newValue;
+    this.total = ( this.total! - replacedValue ) + newValue;
     this.average = this.total / this.size;
   }
 
-  public reset() {
+  public reset(): void {
     for ( let i = 0; i < this.size; i++ ) {
       this.array[ i ] = this.initialValue;
     }

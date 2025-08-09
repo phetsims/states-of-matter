@@ -1,8 +1,5 @@
 // Copyright 2014-2021, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * Model for an Andersen Thermostat, which adjusts the velocity of all atoms/molecules in the system by the same amount
  * in order to get the overall system temperature to the desired set point.  There is a short Wikipedia entry for this
@@ -15,6 +12,7 @@
 
 import dotRandom from '../../../../../../dot/js/dotRandom.js';
 import Vector2 from '../../../../../../dot/js/Vector2.js';
+import IntentionalAny from '../../../../../../phet-core/js/types/IntentionalAny.js';
 import IOType from '../../../../../../tandem/js/types/IOType.js';
 import NumberIO from '../../../../../../tandem/js/types/NumberIO.js';
 import statesOfMatter from '../../../../statesOfMatter.js';
@@ -52,7 +50,7 @@ class AndersenThermostat {
    * @param moleculeDataSet - Data set on which operations will be performed.
    * @param minTemperature - The temperature that should be considered absolute zero, below which motion should cease
    */
-  constructor( moleculeDataSet: MoleculeForceAndMotionDataSet, minTemperature: number ) {
+  public constructor( moleculeDataSet: MoleculeForceAndMotionDataSet, minTemperature: number ) {
 
     this.targetTemperature = SOMConstants.INITIAL_TEMPERATURE;
 
@@ -69,7 +67,7 @@ class AndersenThermostat {
     this.accumulatedAverageVelocityChange = new Vector2( 0, 0 );
   }
 
-  public adjustTemperature() {
+  public adjustTemperature(): void {
 
     // A Note to Future Maintainers: This code was originally provided by Paul Beale of the University of Colorado and
     // converted into Java, and then JavaScript, by @jbphet. For many years, it had separate gamma values the X and Y
@@ -112,7 +110,7 @@ class AndersenThermostat {
     const moleculeRotationRates = this.moleculeDataSet.moleculeRotationRates;
 
     for ( let i = 0; i < numMolecules; i++ ) {
-      const moleculeVelocity = moleculeVelocities[ i ];
+      const moleculeVelocity = moleculeVelocities[ i ]!;
       this.previousParticleVelocity.set( moleculeVelocity );
 
       // Calculate the new x and y velocity for this particle.
@@ -137,7 +135,7 @@ class AndersenThermostat {
    * clear the accumulated velocity bias, should be done when this thermostat starts being used for a number of steps
    * in a row
    */
-  public clearAccumulatedBias() {
+  public clearAccumulatedBias(): void {
     this.accumulatedAverageVelocityChange.setXY( 0, 0 );
     this.totalVelocityChangePreviousStep.setXY( 0, 0 );
   }
@@ -146,7 +144,7 @@ class AndersenThermostat {
    * Get an object that describes the current state, used to restore state using setState, used only for phet-io.
    * for phet-io support only
    */
-  public toStateObject(): Object {
+  public toStateObject(): IntentionalAny {
 
     // Note: The moleculeDataSet is *not* included as part of the state because this is assumed to be a reference that
     // is shared with the model, and the model is responsible for updating its state during deserialization.
@@ -166,7 +164,7 @@ class AndersenThermostat {
    * it is instead called during explicit de-serialization.
    * @param stateObject - returned from toStateObject
    */
-  public setState( stateObject: Object ) {
+  public setState( stateObject: IntentionalAny ): void {
 
     // Note: The moleculeDataSet is *not* included as part of the state because this is assumed to be a reference that
     // is shared with the model, and the model is responsible for updating its state during deserialization.
@@ -178,20 +176,19 @@ class AndersenThermostat {
     this.totalVelocityChangeThisStep.set( stateObject.totalVelocityChangeThisStep );
     this.accumulatedAverageVelocityChange.set( stateObject.accumulatedAverageVelocityChange );
   }
-}
 
-// @public
-AndersenThermostat.AndersenThermostatIO = new IOType( 'AndersenThermostatIO', {
-  valueType: AndersenThermostat,
-  stateSchema: {
-    targetTemperature: NumberIO,
-    minModelTemperature: NumberIO,
-    previousParticleVelocity: Vector2.Vector2IO,
-    totalVelocityChangePreviousStep: Vector2.Vector2IO,
-    totalVelocityChangeThisStep: Vector2.Vector2IO,
-    accumulatedAverageVelocityChange: Vector2.Vector2IO
-  }
-} );
+  public static readonly AndersenThermostatIO = new IOType( 'AndersenThermostatIO', {
+    valueType: AndersenThermostat,
+    stateSchema: {
+      targetTemperature: NumberIO,
+      minModelTemperature: NumberIO,
+      previousParticleVelocity: Vector2.Vector2IO,
+      totalVelocityChangePreviousStep: Vector2.Vector2IO,
+      totalVelocityChangeThisStep: Vector2.Vector2IO,
+      accumulatedAverageVelocityChange: Vector2.Vector2IO
+    }
+  } );
+}
 
 statesOfMatter.register( 'AndersenThermostat', AndersenThermostat );
 export default AndersenThermostat;

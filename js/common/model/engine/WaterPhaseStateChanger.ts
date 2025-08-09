@@ -1,8 +1,5 @@
 // Copyright 2014-2021, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * This class is used to change the phase state (i.e. solid, liquid, or gas) for a set of water molecules.  It only
  * works for water and would need to be generalized to handle other triatomic molecules.
@@ -12,24 +9,27 @@
  */
 
 import statesOfMatter from '../../../statesOfMatter.js';
+import PhaseStateEnum from '../../PhaseStateEnum.js';
 import SOMConstants from '../../SOMConstants.js';
 import SubstanceType from '../../SubstanceType.js';
 import MultipleParticleModel from '../MultipleParticleModel.js';
 import AbstractPhaseStateChanger from './AbstractPhaseStateChanger.js';
 import WaterAtomPositionUpdater from './WaterAtomPositionUpdater.js';
 
+// @ts-expect-error
 class WaterPhaseStateChanger extends AbstractPhaseStateChanger {
 
+  // @ts-expect-error
   private readonly multipleParticleModel: MultipleParticleModel;
   private readonly positionUpdater: typeof WaterAtomPositionUpdater;
 
   /**
-   * @param { MultipleParticleModel } multipleParticleModel - model of a set of particles
+   * @param multipleParticleModel - model of a set of particles
    */
-  constructor( multipleParticleModel ) {
+  public constructor( multipleParticleModel: MultipleParticleModel ) {
 
     // Make sure this is not being used on an inappropriate data set.
-    assert && assert( multipleParticleModel.moleculeDataSet.getAtomsPerMolecule() === 3 );
+    assert && assert( multipleParticleModel.moleculeDataSet!.getAtomsPerMolecule() === 3 );
 
     super( multipleParticleModel );
 
@@ -38,14 +38,14 @@ class WaterPhaseStateChanger extends AbstractPhaseStateChanger {
   }
 
   /**
-   * @public
-   * @param {PhaseStateEnum} phaseID - state(solid/liquid/gas) of Molecule
+   * @param phaseID - state(solid/liquid/gas) of Molecule
    */
-  setPhase( phaseID ) {
+  public override setPhase( phaseID: typeof PhaseStateEnum ): void {
 
     super.setPhase( phaseID );
 
     // Sync up the atom positions with the molecule positions.
+    // @ts-expect-error
     this.positionUpdater.updateAtomPositions( this.multipleParticleModel.moleculeDataSet );
 
     // Step the model a number of times in order to prevent the particles from looking too organized.  The number of
@@ -57,9 +57,8 @@ class WaterPhaseStateChanger extends AbstractPhaseStateChanger {
 
   /**
    * Set the particle configuration for the solid phase.
-   * @protected
    */
-  setParticleConfigurationSolid() {
+  protected setParticleConfigurationSolid(): void {
 
     let dataSetToLoad;
 
@@ -78,9 +77,8 @@ class WaterPhaseStateChanger extends AbstractPhaseStateChanger {
 
   /**
    * Set the particle configuration for the liquid phase.
-   * @protected
    */
-  setParticleConfigurationLiquid() {
+  protected setParticleConfigurationLiquid(): void {
 
     let dataSetToLoad;
 

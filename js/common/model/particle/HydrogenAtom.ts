@@ -1,8 +1,5 @@
 // Copyright 2014-2020, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
-
 /**
  * The class represents a single atom of hydrogen in the model.
  *
@@ -23,7 +20,7 @@ class HydrogenAtom extends ScaledAtom {
    * @param y - atom y position in picometers
    * @param renderBelowOxygen - flag which says whether it has to be in the front or at the back of oxygen
    */
-  constructor( x: number, y: number, renderBelowOxygen: boolean ) {
+  public constructor( x: number, y: number, renderBelowOxygen: boolean ) {
     super( AtomType.HYDROGEN, x, y );
     this.renderBelowOxygen = renderBelowOxygen;
   }

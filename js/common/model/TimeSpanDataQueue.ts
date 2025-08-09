@@ -1,7 +1,5 @@
 // Copyright 2016-2021, University of Colorado Boulder
 
-/* eslint-disable */
-// @ts-nocheck
 
 /**
  * A queue that stores data values along with time change (dt) values and automatically removes data when it exceeds
@@ -24,7 +22,7 @@ class TimeSpanDataQueue {
   // The amount of time currently represent by the entries in the queue
   private timeSpan: number;
 
-  private maxTimeSpan: number;
+  private readonly maxTimeSpan: number;
 
   // Data queue, which is an array where entries are kept that track times and values
   private dataQueue: DataQueueEntry[];
@@ -61,14 +59,14 @@ class TimeSpanDataQueue {
    * Add a new value with associated dt (delta time).  This automatically removes data values that go beyond the max
    * time span from the queue, and also updates the total value and the current time span.
    */
-  public add( value: number, dt: number ) {
+  public add( value: number, dt: number ): void {
 
     assert && assert( dt < this.maxTimeSpan, 'dt value is greater than max time span, this won\'t work' );
 
     // Add the new data item to the queue.
     let dataQueueEntry;
     if ( this.unusedDataQueueEntries.length > 0 ) {
-      dataQueueEntry = this.unusedDataQueueEntries.pop();
+      dataQueueEntry = this.unusedDataQueueEntries.pop()!;
       dataQueueEntry.dt = dt;
       dataQueueEntry.value = value;
     }
@@ -86,9 +84,9 @@ class TimeSpanDataQueue {
     // Check if the total time span represented by the items in the queue exceeds the max time and, if so, remove items.
     while ( this.timeSpan > this.maxTimeSpan ) {
       assert && assert( this.dataQueue.length > 0, 'data queue is empty but max time is exceeded, there must ba a bug' );
-      const removedDataQueueEntry = this.dataQueue.shift();
+      const removedDataQueueEntry = this.dataQueue.shift()!;
       this.timeSpan -= removedDataQueueEntry.dt;
-      this.total -= removedDataQueueEntry.value;
+      this.total -= removedDataQueueEntry.value!;
 
       // Mark the removed entry as unused and return it to the pool.
       removedDataQueueEntry.value = null;
@@ -99,7 +97,7 @@ class TimeSpanDataQueue {
   /**
    * Clear all data from the queue.
    */
-  public clear() {
+  public clear(): void {
     this.total = 0;
     this.timeSpan = 0;
     this.dataQueue.forEach( dataQueueItem => {
@@ -125,7 +123,7 @@ class DataQueueEntry {
    * @param dt - delta time, in seconds
    * @param value - the value for this entry, null if this entry is unused
    */
-  constructor( dt: number, value: number | null ) {
+  public constructor( dt: number, value: number | null ) {
     this.dt = dt;
     this.value = value;
   }
