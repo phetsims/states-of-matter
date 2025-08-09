@@ -18,7 +18,7 @@ import ParticleForceNode from './ParticleForceNode.js';
 class GrabbableParticleNode extends ParticleForceNode {
 
   private minX: number;
-  private disposeGrabbableParticleNode: () => void;
+  private readonly disposeGrabbableParticleNode: () => void;
 
   /**
    * @param {DualAtomModel} dualAtomModel - model of the simulation
