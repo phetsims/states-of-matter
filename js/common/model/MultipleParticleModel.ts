@@ -1,4 +1,4 @@
-// Copyright 2014-2023, University of Colorado Boulder
+// Copyright 2014-2025, University of Colorado Boulder
 
 /**
  * This is the main class for the model portion of the first two screens of the "States of Matter" simulation.  Its

@@ -1,4 +1,4 @@
-// Copyright 2014-2021, University of Colorado Boulder
+// Copyright 2014-2025, University of Colorado Boulder
 
 /**
  * This class is used to change the phase state (i.e. solid, liquid, or gas) for a set of diatomic (i.e. two atoms per

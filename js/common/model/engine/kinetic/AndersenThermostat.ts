@@ -1,4 +1,4 @@
-// Copyright 2014-2021, University of Colorado Boulder
+// Copyright 2014-2025, University of Colorado Boulder
 
 /**
  * Model for an Andersen Thermostat, which adjusts the velocity of all atoms/molecules in the system by the same amount

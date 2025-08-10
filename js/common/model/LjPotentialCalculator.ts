@@ -1,4 +1,4 @@
-// Copyright 2014-2020, University of Colorado Boulder
+// Copyright 2014-2025, University of Colorado Boulder
 
 /**
  * This class calculates the Lennard-Jones potential based on values provided for the molecule size (sigma) and the

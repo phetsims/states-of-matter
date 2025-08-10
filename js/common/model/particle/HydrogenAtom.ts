@@ -1,4 +1,4 @@
-// Copyright 2014-2020, University of Colorado Boulder
+// Copyright 2014-2025, University of Colorado Boulder
 
 /**
  * The class represents a single atom of hydrogen in the model.
