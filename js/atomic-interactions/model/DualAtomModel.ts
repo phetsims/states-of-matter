@@ -144,7 +144,11 @@ class DualAtomModel {
 
     // update the atom pair when the atom pair property is set
     this.atomPairProperty.link( atomPair => {
+
+      // @ts-expect-error
       this.fixedAtom.atomTypeProperty.set( atomPair.fixedAtomType );
+
+      // @ts-expect-error
       this.movableAtom.atomTypeProperty.set( atomPair.movableAtomType );
       this.ljPotentialCalculator.setSigma(
         SigmaTable.getSigma( this.fixedAtom.getType(), this.movableAtom.getType() )

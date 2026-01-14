@@ -162,17 +162,15 @@ class AtomicInteractionsScreenView extends ScreenView {
 
     // add force control
     const forcesAccordionBox = new ForcesAccordionBox(
+
+      // @ts-expect-error
       dualAtomModel.forcesDisplayModeProperty,
       dualAtomModel.forcesExpandedProperty,
       {
-        // @ts-expect-error
         tickTextColor: tickTextColor,
         textColor: textColor,
-        // @ts-expect-error
         fill: panelFill,
-        // @ts-expect-error
         stroke: panelStroke,
-        // @ts-expect-error
         textFill: panelTextFill,
         buttonAlign: forceControlPanelButtonAlign,
         showTitleWhenExpanded: !enableHeterogeneousAtoms,
@@ -301,6 +299,8 @@ class AtomicInteractionsScreenView extends ScreenView {
       this.setShowRepulsiveForces( forces === ForceDisplayMode.COMPONENTS );
       this.setShowTotalForces( forces === ForceDisplayMode.TOTAL );
       if ( !this.showAttractiveForces && !this.showTotalForces && forces !== ForceDisplayMode.HIDDEN ) {
+
+        // eslint-disable-next-line @typescript-eslint/no-base-to-string
         throw new Error( `invalid forces: ${forces}` );
       }
     } );

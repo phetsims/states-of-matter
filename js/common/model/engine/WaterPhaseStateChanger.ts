@@ -67,6 +67,8 @@ class WaterPhaseStateChanger extends AbstractPhaseStateChanger {
     if ( this.multipleParticleModel.substanceProperty.get() === SubstanceType.WATER ) {
       dataSetToLoad = SOLID_INITIAL_STATES.water;
     }
+
+    // eslint-disable-next-line @typescript-eslint/no-base-to-string
     affirm( dataSetToLoad, `unhandled substance: ${this.multipleParticleModel.substanceProperty.get()}` );
 
     // load the previously saved state
@@ -87,6 +89,8 @@ class WaterPhaseStateChanger extends AbstractPhaseStateChanger {
     if ( this.multipleParticleModel.substanceProperty.get() === SubstanceType.WATER ) {
       dataSetToLoad = LIQUID_INITIAL_STATES.water;
     }
+
+    // eslint-disable-next-line @typescript-eslint/no-base-to-string
     affirm( dataSetToLoad, `unhandled substance: ${this.multipleParticleModel.substanceProperty.get()}` );
 
     // load the previously saved state

@@ -97,6 +97,7 @@ class StatesScreenView extends ScreenView {
     );
 
     // selection panel for the atoms/molecules
+    // @ts-expect-error
     const moleculesControlPanel = new StatesMoleculesControlPanel( multipleParticleModel.substanceProperty, {
       right: this.layoutBounds.right - CONTROL_PANEL_X_INSET,
       top: this.layoutBounds.top + CONTROL_PANEL_Y_INSET,

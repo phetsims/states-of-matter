@@ -130,6 +130,8 @@ class StatesPhaseControlNode extends Node {
         // If the change is from the state engine, then the phase will be set implicitly when the positions and velocities
         // of the molecules are set.
         if ( !isSettingPhetioStateProperty.value ) {
+
+          // @ts-expect-error
           model.setPhase( state );
         }
       }

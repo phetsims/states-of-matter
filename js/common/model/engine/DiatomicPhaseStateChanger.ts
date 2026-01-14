@@ -96,6 +96,8 @@ class DiatomicPhaseStateChanger extends AbstractPhaseStateChanger {
     if ( this.multipleParticleModel.substanceProperty.get() === SubstanceType.DIATOMIC_OXYGEN ) {
       dataSetToLoad = LIQUID_INITIAL_STATES.oxygen;
     }
+
+    // eslint-disable-next-line @typescript-eslint/no-base-to-string
     affirm( dataSetToLoad, `unhandled substance: ${this.multipleParticleModel.substanceProperty.get()}` );
 
     // load the previously saved state

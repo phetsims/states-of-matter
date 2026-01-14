@@ -738,6 +738,8 @@ class MultipleParticleModel extends PhetioObject {
     // Initialize the atoms.
     switch( this.substanceProperty.get() ) {
       case SubstanceType.DIATOMIC_OXYGEN:
+
+        // @ts-expect-error
         this.initializeDiatomic( this.substanceProperty.get(), phase );
         break;
       case SubstanceType.NEON:
@@ -750,6 +752,8 @@ class MultipleParticleModel extends PhetioObject {
         this.initializeMonatomic( this.substanceProperty.get(), phase );
         break;
       case SubstanceType.WATER:
+
+        // @ts-expect-error
         this.initializeTriatomic( this.substanceProperty.get(), phase );
         break;
       default:
@@ -1354,6 +1358,8 @@ class MultipleParticleModel extends PhetioObject {
    */
   public toStateObject(): MultipleParticleModelStateObject {
     return {
+
+      // @ts-expect-error
       _substance: EnumerationIO( SubstanceType ).toStateObject( this.substanceProperty.value ),
       _isExploded: this.isExplodedProperty.value,
       _containerHeight: this.containerHeightProperty.value,
