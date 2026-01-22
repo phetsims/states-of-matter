@@ -1,4 +1,4 @@
-// Copyright 2015, University of Colorado Boulder
+// Copyright 2015-2016, University of Colorado Boulder
 
 /**
  * The 'Atomic Interaction' screen. Conforms to the contract specified in joist/Screen.

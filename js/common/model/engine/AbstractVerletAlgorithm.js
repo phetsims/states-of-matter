@@ -1,4 +1,4 @@
-// Copyright 2014-2015, University of Colorado Boulder
+// Copyright 2014-2016, University of Colorado Boulder
 
 /**
  * This is an abstract base class for classes that implement the Verlet algorithm for simulating molecular interactions

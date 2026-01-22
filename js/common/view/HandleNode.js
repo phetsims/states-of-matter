@@ -1,4 +1,4 @@
-// Copyright 2014-2015, University of Colorado Boulder
+// Copyright 2014-2016, University of Colorado Boulder
 
 /**
  * View for the particle container handle node. It looks like a smooth sine wave at the top and the bottom.
