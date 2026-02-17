@@ -5,7 +5,7 @@
  * is used to support different color schemes, such as a default that looks good on a laptop or tablet, and a
  * "projector mode" that looks good when projected on a large screen.
  *
- * @author Jonathan Olson <jonathan.olson@colorado.edu>
+ * @author Jonathan Olson (PhET Interactive Simulations)
  * @author Siddhartha Chinthapally (Actual Concepts)
  */
 
