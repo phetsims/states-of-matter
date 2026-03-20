@@ -10,7 +10,6 @@
  * @author Siddhartha Chinthapally (Actual Concepts)
  */
 
-import statesOfMatter from '../../../statesOfMatter.js';
 import SOMConstants from '../../SOMConstants.js';
 import MoleculeForceAndMotionDataSet from '../MoleculeForceAndMotionDataSet.js';
 
@@ -46,7 +45,5 @@ const DiatomicAtomPositionUpdater = {
     }
   }
 };
-
-statesOfMatter.register( 'DiatomicAtomPositionUpdater', DiatomicAtomPositionUpdater );
 
 export default DiatomicAtomPositionUpdater;

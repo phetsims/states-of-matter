@@ -11,7 +11,6 @@ import Screen from '../../../joist/js/Screen.js';
 import Tandem from '../../../tandem/js/Tandem.js';
 import SOMConstants from '../common/SOMConstants.js';
 import SOMColors from '../common/view/SOMColors.js';
-import statesOfMatter from '../statesOfMatter.js';
 import AtomicInteractionsIcon from './AtomicInteractionsIcon.js';
 import DualAtomModel from './model/DualAtomModel.js';
 import AtomicInteractionsScreenView from './view/AtomicInteractionsScreenView.js';
@@ -38,5 +37,4 @@ class AtomicInteractionsScreen extends Screen<DualAtomModel, AtomicInteractionsS
   }
 }
 
-statesOfMatter.register( 'AtomicInteractionsScreen', AtomicInteractionsScreen );
 export default AtomicInteractionsScreen;

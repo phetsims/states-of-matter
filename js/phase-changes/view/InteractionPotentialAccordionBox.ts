@@ -17,7 +17,6 @@ import Tandem from '../../../../tandem/js/Tandem.js';
 import MultipleParticleModel from '../../common/model/MultipleParticleModel.js';
 import SOMConstants from '../../common/SOMConstants.js';
 import SOMColors from '../../common/view/SOMColors.js';
-import statesOfMatter from '../../statesOfMatter.js';
 import StatesOfMatterStrings from '../../StatesOfMatterStrings.js';
 import EpsilonControlPotentialGraph from './EpsilonControlPotentialGraph.js';
 
@@ -113,5 +112,4 @@ class InteractionPotentialAccordionBox extends AccordionBox {
   }
 }
 
-statesOfMatter.register( 'InteractionPotentialAccordionBox', InteractionPotentialAccordionBox );
 export default InteractionPotentialAccordionBox;

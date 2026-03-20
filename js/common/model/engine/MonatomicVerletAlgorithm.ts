@@ -9,7 +9,6 @@
  */
 
 import Vector2 from '../../../../../dot/js/Vector2.js';
-import statesOfMatter from '../../../statesOfMatter.js';
 import MoleculeForceAndMotionDataSet from '../MoleculeForceAndMotionDataSet.js';
 import MultipleParticleModel from '../MultipleParticleModel.js';
 import AbstractVerletAlgorithm from './AbstractVerletAlgorithm.js';
@@ -129,5 +128,4 @@ class MonatomicVerletAlgorithm extends AbstractVerletAlgorithm {
   }
 }
 
-statesOfMatter.register( 'MonatomicVerletAlgorithm', MonatomicVerletAlgorithm );
 export default MonatomicVerletAlgorithm;

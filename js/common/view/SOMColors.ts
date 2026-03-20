@@ -50,6 +50,4 @@ const SOMColors = {
   } )
 };
 
-statesOfMatter.register( 'SOMColors', SOMColors );
-
 export default SOMColors;

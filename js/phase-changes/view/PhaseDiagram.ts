@@ -16,7 +16,6 @@ import Path from '../../../../scenery/js/nodes/Path.js';
 import RichText from '../../../../scenery/js/nodes/RichText.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import SOMColors from '../../common/view/SOMColors.js';
-import statesOfMatter from '../../statesOfMatter.js';
 import StatesOfMatterStrings from '../../StatesOfMatterStrings.js';
 
 const criticalPointString = StatesOfMatterStrings.criticalPoint;
@@ -448,5 +447,4 @@ class PhaseDiagram extends Node {
   }
 }
 
-statesOfMatter.register( 'PhaseDiagram', PhaseDiagram );
 export default PhaseDiagram;

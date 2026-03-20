@@ -22,7 +22,6 @@ import MultipleParticleModel from '../../common/model/MultipleParticleModel.js';
 import SOMConstants from '../../common/SOMConstants.js';
 import SOMQueryParameters from '../../common/SOMQueryParameters.js';
 import ParticleContainerNode from '../../common/view/ParticleContainerNode.js';
-import statesOfMatter from '../../statesOfMatter.js';
 import StatesMoleculesControlPanel from './StatesMoleculesControlPanel.js';
 import StatesPhaseControlNode from './StatesPhaseControlNode.js';
 
@@ -156,5 +155,4 @@ class StatesScreenView extends ScreenView {
   }
 }
 
-statesOfMatter.register( 'StatesScreenView', StatesScreenView );
 export default StatesScreenView;

@@ -19,7 +19,6 @@ import Node, { NodeOptions } from '../../../../scenery/js/nodes/Node.js';
 import Path from '../../../../scenery/js/nodes/Path.js';
 import LinearGradient from '../../../../scenery/js/util/LinearGradient.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
-import statesOfMatter from '../../statesOfMatter.js';
 import MultipleParticleModel from '../model/MultipleParticleModel.js';
 import SOMConstants from '../SOMConstants.js';
 import CompositeThermometerNode from './CompositeThermometerNode.js';
@@ -510,5 +509,4 @@ class ParticleContainerNode extends Node {
   }
 }
 
-statesOfMatter.register( 'ParticleContainerNode', ParticleContainerNode );
 export default ParticleContainerNode;

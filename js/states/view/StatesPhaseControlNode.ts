@@ -26,7 +26,6 @@ import liquidIcon_png from '../../../mipmaps/liquidIcon_png.js';
 import solidIcon_png from '../../../mipmaps/solidIcon_png.js';
 import MultipleParticleModel from '../../common/model/MultipleParticleModel.js';
 import PhaseStateEnum from '../../common/PhaseStateEnum.js';
-import statesOfMatter from '../../statesOfMatter.js';
 import StatesOfMatterStrings from '../../StatesOfMatterStrings.js';
 
 const gasString = StatesOfMatterStrings.Gas;
@@ -210,6 +209,5 @@ const createButtonContent = ( iconImage: ImageableImage, string: string, buttonW
   } );
 };
 
-statesOfMatter.register( 'StatesPhaseControlNode', StatesPhaseControlNode );
 export default StatesPhaseControlNode;
 export { type StatesPhaseControlNodeOptions };

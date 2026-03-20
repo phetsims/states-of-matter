@@ -17,7 +17,6 @@ import Image from '../../../../scenery/js/nodes/Image.js';
 import Node, { type NodeOptions } from '../../../../scenery/js/nodes/Node.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import ScaledAtom from '../../common/model/particle/ScaledAtom.js';
-import statesOfMatter from '../../statesOfMatter.js';
 import DualAtomModel from '../model/DualAtomModel.js';
 
 // constants
@@ -154,5 +153,4 @@ class HandNode extends Node {
   }
 }
 
-statesOfMatter.register( 'HandNode', HandNode );
 export default HandNode;

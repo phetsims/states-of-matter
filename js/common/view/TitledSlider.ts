@@ -16,7 +16,6 @@ import Text, { TextOptions } from '../../../../scenery/js/nodes/Text.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import HSlider, { HSliderOptions } from '../../../../sun/js/HSlider.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
-import statesOfMatter from '../../statesOfMatter.js';
 
 // constants
 const DEFAULT_TITLE_FONT = new PhetFont( 12 );
@@ -69,5 +68,4 @@ class TitledSlider extends VBox {
   }
 }
 
-statesOfMatter.register( 'TitledSlider', TitledSlider );
 export default TitledSlider;

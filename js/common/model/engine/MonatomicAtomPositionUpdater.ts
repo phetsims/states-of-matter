@@ -7,7 +7,6 @@
  * @author Aaron Davis
  */
 
-import statesOfMatter from '../../../statesOfMatter.js';
 import MoleculeForceAndMotionDataSet from '../MoleculeForceAndMotionDataSet.js';
 
 // static object (no constructor)
@@ -28,7 +27,5 @@ const MonatomicAtomPositionUpdater = {
     }
   }
 };
-
-statesOfMatter.register( 'MonatomicAtomPositionUpdater', MonatomicAtomPositionUpdater );
 
 export default MonatomicAtomPositionUpdater;

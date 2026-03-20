@@ -12,7 +12,6 @@ import Dimension2 from '../../../dot/js/Dimension2.js';
 import Element from '../../../nitroglycerin/js/Element.js';
 import PhetFont from '../../../scenery-phet/js/PhetFont.js';
 import Color from '../../../scenery/js/util/Color.js';
-import statesOfMatter from '../statesOfMatter.js';
 import AtomType from './model/AtomType.js';
 import SOMColors from './view/SOMColors.js';
 
@@ -186,7 +185,5 @@ const SOMConstants = {
   PLAY_PAUSE_BUTTON_RADIUS: 18,
   STEP_BUTTON_RADIUS: 12
 };
-
-statesOfMatter.register( 'SOMConstants', SOMConstants );
 
 export default SOMConstants;

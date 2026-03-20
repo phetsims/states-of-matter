@@ -18,7 +18,6 @@ import TextPushButton from '../../../../sun/js/buttons/TextPushButton.js';
 import SOMConstants from '../../common/SOMConstants.js';
 import SOMColors from '../../common/view/SOMColors.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
-import statesOfMatter from '../../statesOfMatter.js';
 import StatesOfMatterStrings from '../../StatesOfMatterStrings.js';
 import DualAtomModel from '../model/DualAtomModel.js';
 import ForceDisplayMode from '../model/ForceDisplayMode.js';
@@ -422,7 +421,5 @@ class AtomicInteractionsScreenView extends ScreenView {
     }
   }
 }
-
-statesOfMatter.register( 'AtomicInteractionsScreenView', AtomicInteractionsScreenView );
 
 export default AtomicInteractionsScreenView;

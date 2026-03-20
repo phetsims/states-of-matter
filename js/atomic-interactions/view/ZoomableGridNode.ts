@@ -18,7 +18,6 @@ import ButtonNode from '../../../../sun/js/buttons/ButtonNode.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import PotentialGraphNode from '../../common/view/PotentialGraphNode.js';
 import SOMColors from '../../common/view/SOMColors.js';
-import statesOfMatter from '../../statesOfMatter.js';
 
 // constants
 const MIN_LINES_HORIZONTAL = 5;
@@ -150,5 +149,4 @@ class ZoomableGridNode extends Node {
   }
 }
 
-statesOfMatter.register( 'ZoomableGridNode', ZoomableGridNode );
 export default ZoomableGridNode;

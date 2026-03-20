@@ -32,7 +32,6 @@ import SOMConstants from '../../common/SOMConstants.js';
 import SOMQueryParameters from '../../common/SOMQueryParameters.js';
 import SubstanceType from '../../common/SubstanceType.js';
 import ParticleContainerNode from '../../common/view/ParticleContainerNode.js';
-import statesOfMatter from '../../statesOfMatter.js';
 import StatesOfMatterStrings from '../../StatesOfMatterStrings.js';
 import PhaseChangesModel from '../PhaseChangesModel.js';
 import InteractionPotentialAccordionBox from './InteractionPotentialAccordionBox.js';
@@ -490,5 +489,4 @@ class PhaseChangesScreenView extends ScreenView {
   }
 }
 
-statesOfMatter.register( 'PhaseChangesScreenView', PhaseChangesScreenView );
 export default PhaseChangesScreenView;

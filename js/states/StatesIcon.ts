@@ -16,7 +16,6 @@ import Color from '../../../scenery/js/util/Color.js';
 import gasIcon_png from '../../mipmaps/gasIcon_png.js';
 import liquidIcon_png from '../../mipmaps/liquidIcon_png.js';
 import solidIcon_png from '../../mipmaps/solidIcon_png.js';
-import statesOfMatter from '../statesOfMatter.js';
 
 type SelfOptions = EmptySelfOptions;
 
@@ -51,5 +50,4 @@ class StatesIcon extends ScreenIcon {
   }
 }
 
-statesOfMatter.register( 'StatesIcon', StatesIcon );
 export default StatesIcon;

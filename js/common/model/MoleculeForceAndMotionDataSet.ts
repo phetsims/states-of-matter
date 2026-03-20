@@ -21,7 +21,6 @@ import Float64ArrayIO from '../../../../tandem/js/types/Float64ArrayIO.js';
 import IOType from '../../../../tandem/js/types/IOType.js';
 import NullableIO from '../../../../tandem/js/types/NullableIO.js';
 import NumberIO from '../../../../tandem/js/types/NumberIO.js';
-import statesOfMatter from '../../statesOfMatter.js';
 import SOMConstants from '../SOMConstants.js';
 import WaterMoleculeStructure from './engine/WaterMoleculeStructure.js';
 
@@ -479,5 +478,4 @@ export type MoleculeForceAndMotionDataSetStateObject = {
   nextMoleculeTorques: number[];
 };
 
-statesOfMatter.register( 'MoleculeForceAndMotionDataSet', MoleculeForceAndMotionDataSet );
 export default MoleculeForceAndMotionDataSet;

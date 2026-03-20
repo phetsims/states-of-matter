@@ -21,7 +21,6 @@ import InteractionStrengthTable from '../../common/model/InteractionStrengthTabl
 import LjPotentialCalculator from '../../common/model/LjPotentialCalculator.js';
 import SigmaTable from '../../common/model/SigmaTable.js';
 import SOMConstants from '../../common/SOMConstants.js';
-import statesOfMatter from '../../statesOfMatter.js';
 import AtomPair from './AtomPair.js';
 import ForceDisplayMode from './ForceDisplayMode.js';
 import MotionAtom from './MotionAtom.js';
@@ -393,5 +392,4 @@ class DualAtomModel {
   public static readonly NORMAL_MOTION_TIME_MULTIPLIER = NORMAL_MOTION_TIME_MULTIPLIER;
 }
 
-statesOfMatter.register( 'DualAtomModel', DualAtomModel );
 export default DualAtomModel;

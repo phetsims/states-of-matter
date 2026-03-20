@@ -9,7 +9,6 @@
 import Image from '../../../../scenery/js/nodes/Image.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import pushPin_png from '../../../images/pushPin_png.js';
-import statesOfMatter from '../../statesOfMatter.js';
 
 class PushPinNode extends Node {
 
@@ -22,5 +21,4 @@ class PushPinNode extends Node {
   }
 }
 
-statesOfMatter.register( 'PushPinNode', PushPinNode );
 export default PushPinNode;

@@ -24,7 +24,6 @@ import AccordionBox, { AccordionBoxOptions } from '../../../../sun/js/AccordionB
 import AquaRadioButtonGroup from '../../../../sun/js/AquaRadioButtonGroup.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import SOMConstants from '../../common/SOMConstants.js';
-import statesOfMatter from '../../statesOfMatter.js';
 import StatesOfMatterStrings from '../../StatesOfMatterStrings.js';
 import ForceDisplayMode from '../model/ForceDisplayMode.js';
 
@@ -242,5 +241,4 @@ class ForcesAccordionBox extends AccordionBox {
   }
 }
 
-statesOfMatter.register( 'ForcesAccordionBox', ForcesAccordionBox );
 export default ForcesAccordionBox;

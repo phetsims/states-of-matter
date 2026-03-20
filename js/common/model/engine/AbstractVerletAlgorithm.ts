@@ -11,7 +11,6 @@
 
 import NumberProperty from '../../../../../axon/js/NumberProperty.js';
 import isSettingPhetioStateProperty from '../../../../../tandem/js/isSettingPhetioStateProperty.js';
-import statesOfMatter from '../../../statesOfMatter.js';
 import SOMConstants from '../../SOMConstants.js';
 import MoleculeForceAndMotionDataSet from '../MoleculeForceAndMotionDataSet.js';
 import MultipleParticleModel from '../MultipleParticleModel.js';
@@ -333,5 +332,4 @@ abstract class AbstractVerletAlgorithm {
   public static readonly MIN_DISTANCE_SQUARED = 0.90;
 }
 
-statesOfMatter.register( 'AbstractVerletAlgorithm', AbstractVerletAlgorithm );
 export default AbstractVerletAlgorithm;

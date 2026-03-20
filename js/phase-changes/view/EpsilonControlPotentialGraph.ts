@@ -22,7 +22,6 @@ import SOMConstants from '../../common/SOMConstants.js';
 import SubstanceType from '../../common/SubstanceType.js';
 import InteractionPotentialCanvasNode from '../../common/view/InteractionPotentialCanvasNode.js';
 import PotentialGraphNode from '../../common/view/PotentialGraphNode.js';
-import statesOfMatter from '../../statesOfMatter.js';
 import PhaseChangesModel from '../PhaseChangesModel.js';
 import { NodeOptions } from '../../../../scenery/js/nodes/Node.js';
 
@@ -197,5 +196,4 @@ class EpsilonControlPotentialGraph extends PotentialGraphNode {
   }
 }
 
-statesOfMatter.register( 'EpsilonControlPotentialGraph', EpsilonControlPotentialGraph );
 export default EpsilonControlPotentialGraph;

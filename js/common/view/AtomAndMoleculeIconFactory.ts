@@ -9,7 +9,6 @@
 
 import Circle from '../../../../scenery/js/nodes/Circle.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
-import statesOfMatter from '../../statesOfMatter.js';
 import SOMConstants from '../SOMConstants.js';
 import SubstanceType from '../SubstanceType.js';
 
@@ -60,7 +59,5 @@ const AtomAndMoleculeIconFactory = {
     return icon;
   }
 };
-
-statesOfMatter.register( 'AtomAndMoleculeIconFactory', AtomAndMoleculeIconFactory );
 
 export default AtomAndMoleculeIconFactory;

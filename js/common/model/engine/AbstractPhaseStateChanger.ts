@@ -11,7 +11,6 @@
 import dotRandom from '../../../../../dot/js/dotRandom.js';
 import Random from '../../../../../dot/js/Random.js';
 import Vector2 from '../../../../../dot/js/Vector2.js';
-import statesOfMatter from '../../../statesOfMatter.js';
 import PhaseStateEnum from '../../PhaseStateEnum.js';
 import SOMConstants from '../../SOMConstants.js';
 import MultipleParticleModel from '../MultipleParticleModel.js';
@@ -379,5 +378,4 @@ class AbstractPhaseStateChanger {
   public static readonly MAX_PLACEMENT_ATTEMPTS = MAX_PLACEMENT_ATTEMPTS; // for random placement of particles
 }
 
-statesOfMatter.register( 'AbstractPhaseStateChanger', AbstractPhaseStateChanger );
 export default AbstractPhaseStateChanger;

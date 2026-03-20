@@ -9,7 +9,6 @@
  * @author John Blanco
  * @author Siddhartha Chinthapally (Actual Concepts)
  */
-import statesOfMatter from '../../statesOfMatter.js';
 import SOMConstants from '../SOMConstants.js';
 import AtomType from './AtomType.js';
 
@@ -70,7 +69,5 @@ const SigmaTable = {
     }
   }
 };
-
-statesOfMatter.register( 'SigmaTable', SigmaTable );
 
 export default SigmaTable;

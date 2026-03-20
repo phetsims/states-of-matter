@@ -16,7 +16,6 @@ import Rectangle from '../../../scenery/js/nodes/Rectangle.js';
 import Color from '../../../scenery/js/util/Color.js';
 import RadialGradient from '../../../scenery/js/util/RadialGradient.js';
 import SOMConstants from '../common/SOMConstants.js';
-import statesOfMatter from '../statesOfMatter.js';
 
 // constants
 const PARTICLE_COLOR = new Color( SOMConstants.ADJUSTABLE_ATTRACTION_COLOR );
@@ -70,5 +69,4 @@ class AtomicInteractionsIcon extends ScreenIcon {
   }
 }
 
-statesOfMatter.register( 'AtomicInteractionsIcon', AtomicInteractionsIcon );
 export default AtomicInteractionsIcon;

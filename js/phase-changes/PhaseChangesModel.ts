@@ -18,7 +18,6 @@ import InteractionStrengthTable from '../common/model/InteractionStrengthTable.j
 import MultipleParticleModel from '../common/model/MultipleParticleModel.js';
 import SOMConstants from '../common/SOMConstants.js';
 import SubstanceType from '../common/SubstanceType.js';
-import statesOfMatter from '../statesOfMatter.js';
 
 // --------------------------------------------------------------------------------------------------------------------
 // constants
@@ -226,5 +225,4 @@ class PhaseChangesModel extends MultipleParticleModel {
 // monatomic molecules.
 const convertEpsilonToScaledEpsilon = ( epsilon: number ) => epsilon / ( SOMConstants.MAX_EPSILON / 2 );
 
-statesOfMatter.register( 'PhaseChangesModel', PhaseChangesModel );
 export default PhaseChangesModel;

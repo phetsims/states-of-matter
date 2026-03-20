@@ -25,7 +25,6 @@ import SubstanceType from '../../common/SubstanceType.js';
 import AtomAndMoleculeIconFactory from '../../common/view/AtomAndMoleculeIconFactory.js';
 import SOMColors from '../../common/view/SOMColors.js';
 import SubstanceSelectorNode from '../../common/view/SubstanceSelectorNode.js';
-import statesOfMatter from '../../statesOfMatter.js';
 import StatesOfMatterStrings from '../../StatesOfMatterStrings.js';
 
 const argonString = StatesOfMatterStrings.argon;
@@ -219,5 +218,4 @@ class StatesMoleculesControlPanel extends Node {
   }
 }
 
-statesOfMatter.register( 'StatesMoleculesControlPanel', StatesMoleculesControlPanel );
 export default StatesMoleculesControlPanel;

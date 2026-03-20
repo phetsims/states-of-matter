@@ -8,7 +8,6 @@
  * @author Siddhartha Chinthapally (Actual Concepts)
  */
 
-import statesOfMatter from '../../../statesOfMatter.js';
 import MoleculeForceAndMotionDataSet from '../MoleculeForceAndMotionDataSet.js';
 import WaterMoleculeStructure from './WaterMoleculeStructure.js';
 
@@ -50,7 +49,5 @@ const WaterAtomPositionUpdater = {
     }
   }
 };
-
-statesOfMatter.register( 'WaterAtomPositionUpdater', WaterAtomPositionUpdater );
 
 export default WaterAtomPositionUpdater;

@@ -11,7 +11,6 @@ import HBox from '../../../../scenery/js/layout/nodes/HBox.js';
 import Line from '../../../../scenery/js/nodes/Line.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import Color from '../../../../scenery/js/util/Color.js';
-import statesOfMatter from '../../statesOfMatter.js';
 
 class SubstanceSelectorNode extends HBox {
 
@@ -56,5 +55,4 @@ class SubstanceSelectorNode extends HBox {
   }
 }
 
-statesOfMatter.register( 'SubstanceSelectorNode', SubstanceSelectorNode );
 export default SubstanceSelectorNode;

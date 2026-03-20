@@ -10,7 +10,6 @@
 
 import Utils from '../../../../../dot/js/Utils.js';
 import affirm from '../../../../../perennial-alias/js/browser-and-node/affirm.js';
-import statesOfMatter from '../../../statesOfMatter.js';
 import PhaseStateEnum from '../../PhaseStateEnum.js';
 import SOMConstants from '../../SOMConstants.js';
 import SubstanceType from '../../SubstanceType.js';
@@ -625,5 +624,4 @@ const LIQUID_INITIAL_STATES = {
   }
 };
 
-statesOfMatter.register( 'DiatomicPhaseStateChanger', DiatomicPhaseStateChanger );
 export default DiatomicPhaseStateChanger;

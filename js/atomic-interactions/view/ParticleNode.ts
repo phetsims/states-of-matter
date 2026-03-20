@@ -14,7 +14,6 @@ import Node from '../../../../scenery/js/nodes/Node.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import RadialGradient from '../../../../scenery/js/util/RadialGradient.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
-import statesOfMatter from '../../statesOfMatter.js';
 import MotionAtom from '../model/MotionAtom.js';
 
 // constants
@@ -108,5 +107,4 @@ class ParticleNode extends Node {
   }
 }
 
-statesOfMatter.register( 'ParticleNode', ParticleNode );
 export default ParticleNode;

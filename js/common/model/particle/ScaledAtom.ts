@@ -12,7 +12,6 @@
 
 import Vector2 from '../../../../../dot/js/Vector2.js';
 import Color from '../../../../../scenery/js/util/Color.js';
-import statesOfMatter from '../../../statesOfMatter.js';
 import SOMConstants from '../../SOMConstants.js';
 import AtomType from '../AtomType.js';
 
@@ -75,5 +74,4 @@ class ScaledAtom {
   }
 }
 
-statesOfMatter.register( 'ScaledAtom', ScaledAtom );
 export default ScaledAtom;

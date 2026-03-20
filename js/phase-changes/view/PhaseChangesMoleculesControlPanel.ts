@@ -27,7 +27,6 @@ import AtomAndMoleculeIconFactory from '../../common/view/AtomAndMoleculeIconFac
 import SOMColors from '../../common/view/SOMColors.js';
 import SubstanceSelectorNode from '../../common/view/SubstanceSelectorNode.js';
 import TitledSlider from '../../common/view/TitledSlider.js';
-import statesOfMatter from '../../statesOfMatter.js';
 import StatesOfMatterStrings from '../../StatesOfMatterStrings.js';
 import PhaseChangesModel from '../PhaseChangesModel.js';
 
@@ -292,5 +291,4 @@ class PhaseChangesMoleculesControlPanel extends Node {
   }
 }
 
-statesOfMatter.register( 'PhaseChangesMoleculesControlPanel', PhaseChangesMoleculesControlPanel );
 export default PhaseChangesMoleculesControlPanel;

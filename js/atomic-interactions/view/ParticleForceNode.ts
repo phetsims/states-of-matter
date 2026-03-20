@@ -10,7 +10,6 @@ import merge from '../../../../phet-core/js/merge.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
-import statesOfMatter from '../../statesOfMatter.js';
 import MotionAtom from '../model/MotionAtom.js';
 import DimensionalArrowNode from './DimensionalArrowNode.js';
 import ParticleNode from './ParticleNode.js';
@@ -160,5 +159,4 @@ class ParticleForceNode extends ParticleNode {
   }
 }
 
-statesOfMatter.register( 'ParticleForceNode', ParticleForceNode );
 export default ParticleForceNode;

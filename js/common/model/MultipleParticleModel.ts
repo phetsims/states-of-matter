@@ -40,7 +40,6 @@ import EnumerationIO from '../../../../tandem/js/types/EnumerationIO.js';
 import IOType from '../../../../tandem/js/types/IOType.js';
 import NullableIO from '../../../../tandem/js/types/NullableIO.js';
 import NumberIO from '../../../../tandem/js/types/NumberIO.js';
-import statesOfMatter from '../../statesOfMatter.js';
 import PhaseStateEnum from '../PhaseStateEnum.js';
 import SOMConstants from '../SOMConstants.js';
 import SubstanceType from '../SubstanceType.js';
@@ -1461,5 +1460,4 @@ export type MultipleParticleModelStateObject = {
   _moleculeForcesAndMotionCalculatorPressure: number;
 };
 
-statesOfMatter.register( 'MultipleParticleModel', MultipleParticleModel );
 export default MultipleParticleModel;

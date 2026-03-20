@@ -7,7 +7,6 @@
  * @author Aaron Davis
  */
 
-import statesOfMatter from '../../../statesOfMatter.js';
 import AtomType from '../AtomType.js';
 import ScaledAtom from './ScaledAtom.js';
 
@@ -26,5 +25,4 @@ class HydrogenAtom extends ScaledAtom {
   }
 }
 
-statesOfMatter.register( 'HydrogenAtom', HydrogenAtom );
 export default HydrogenAtom;

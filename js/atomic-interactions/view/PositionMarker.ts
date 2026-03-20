@@ -17,7 +17,6 @@ import Node, { NodeOptions } from '../../../../scenery/js/nodes/Node.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import RadialGradient from '../../../../scenery/js/util/RadialGradient.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
-import statesOfMatter from '../../statesOfMatter.js';
 
 type SelfOptions = {
   shadedSphereNodeOptions?: ShadedSphereNodeOptions;
@@ -93,5 +92,4 @@ class PositionMarker extends Node {
   }
 }
 
-statesOfMatter.register( 'PositionMarker', PositionMarker );
 export default PositionMarker;

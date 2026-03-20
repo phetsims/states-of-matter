@@ -21,7 +21,6 @@ import ThermometerNode from '../../../../scenery-phet/js/ThermometerNode.js';
 import VBox from '../../../../scenery/js/layout/nodes/VBox.js';
 import Node, { type NodeOptions } from '../../../../scenery/js/nodes/Node.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
-import statesOfMatter from '../../statesOfMatter.js';
 import StatesOfMatterStrings from '../../StatesOfMatterStrings.js';
 import MultipleParticleModel from '../model/MultipleParticleModel.js';
 import SOMQueryParameters from '../SOMQueryParameters.js';
@@ -148,5 +147,4 @@ class CompositeThermometerNode extends Node {
   }
 }
 
-statesOfMatter.register( 'CompositeThermometerNode', CompositeThermometerNode );
 export default CompositeThermometerNode;

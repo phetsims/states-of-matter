@@ -13,7 +13,6 @@
  * @author Chandrashekar Bemagoni (Actual Concepts)
  */
 
-import statesOfMatter from '../../statesOfMatter.js';
 import SOMConstants from '../SOMConstants.js';
 import AtomType from './AtomType.js';
 
@@ -80,7 +79,5 @@ const InteractionStrengthTable = {
     }
   }
 };
-
-statesOfMatter.register( 'InteractionStrengthTable', InteractionStrengthTable );
 
 export default InteractionStrengthTable;

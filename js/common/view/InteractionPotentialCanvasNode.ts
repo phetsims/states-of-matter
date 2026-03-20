@@ -15,7 +15,6 @@ import ArrowShape from '../../../../scenery-phet/js/ArrowShape.js';
 import CanvasNode from '../../../../scenery/js/nodes/CanvasNode.js';
 import type { NodeOptions } from '../../../../scenery/js/nodes/Node.js';
 import Color from '../../../../scenery/js/util/Color.js';
-import statesOfMatter from '../../statesOfMatter.js';
 import PotentialGraphNode from './PotentialGraphNode.js';
 
 // constants
@@ -211,5 +210,4 @@ class InteractionPotentialCanvasNode extends CanvasNode {
   }
 }
 
-statesOfMatter.register( 'InteractionPotentialCanvasNode', InteractionPotentialCanvasNode );
 export default InteractionPotentialCanvasNode;

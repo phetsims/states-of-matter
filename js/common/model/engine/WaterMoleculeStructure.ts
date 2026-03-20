@@ -9,7 +9,6 @@
  * @author Siddhartha Chinthapally (Actual Concepts)
  */
 
-import statesOfMatter from '../../../statesOfMatter.js';
 import SOMConstants from '../../SOMConstants.js';
 
 const moleculeStructureX = [];
@@ -41,7 +40,5 @@ const WaterMoleculeStructure = {
   moleculeStructureY: moleculeStructureY,
   rotationalInertia: rotationalInertia
 };
-
-statesOfMatter.register( 'WaterMoleculeStructure', WaterMoleculeStructure );
 
 export default WaterMoleculeStructure;

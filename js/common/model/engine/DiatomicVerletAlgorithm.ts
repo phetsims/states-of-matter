@@ -9,7 +9,6 @@
  * @author Siddhartha Chinthapally (Actual Concepts)
  */
 
-import statesOfMatter from '../../../statesOfMatter.js';
 import AbstractVerletAlgorithm from './AbstractVerletAlgorithm.js';
 import DiatomicAtomPositionUpdater from './DiatomicAtomPositionUpdater.js';
 import MultipleParticleModel from '../MultipleParticleModel.js';
@@ -142,5 +141,4 @@ class DiatomicVerletAlgorithm extends AbstractVerletAlgorithm {
   }
 }
 
-statesOfMatter.register( 'DiatomicVerletAlgorithm', DiatomicVerletAlgorithm );
 export default DiatomicVerletAlgorithm;

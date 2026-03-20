@@ -14,7 +14,6 @@ import Text from '../../../../scenery/js/nodes/Text.js';
 import AccordionBox, { type AccordionBoxOptions } from '../../../../sun/js/AccordionBox.js';
 import SOMConstants from '../../common/SOMConstants.js';
 import SOMColors from '../../common/view/SOMColors.js';
-import statesOfMatter from '../../statesOfMatter.js';
 import StatesOfMatterStrings from '../../StatesOfMatterStrings.js';
 import PhaseDiagram from './PhaseDiagram.js';
 
@@ -102,5 +101,4 @@ class PhaseDiagramAccordionBox extends AccordionBox {
   }
 }
 
-statesOfMatter.register( 'PhaseDiagramAccordionBox', PhaseDiagramAccordionBox );
 export default PhaseDiagramAccordionBox;

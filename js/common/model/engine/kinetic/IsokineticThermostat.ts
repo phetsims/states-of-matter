@@ -14,7 +14,6 @@ import dotRandom from '../../../../../../dot/js/dotRandom.js';
 import Vector2, { Vector2StateObject } from '../../../../../../dot/js/Vector2.js';
 import IOType from '../../../../../../tandem/js/types/IOType.js';
 import NumberIO from '../../../../../../tandem/js/types/NumberIO.js';
-import statesOfMatter from '../../../../statesOfMatter.js';
 import SOMConstants from '../../../SOMConstants.js';
 import MoleculeForceAndMotionDataSet from '../../MoleculeForceAndMotionDataSet.js';
 
@@ -225,5 +224,4 @@ export type IsokineticThermostatStateObject = {
   accumulatedAverageVelocityChange: Vector2StateObject;
 };
 
-statesOfMatter.register( 'IsokineticThermostat', IsokineticThermostat );
 export default IsokineticThermostat;

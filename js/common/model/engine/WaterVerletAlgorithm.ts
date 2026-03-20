@@ -11,7 +11,6 @@
  * @author Jonathan Olson
  */
 
-import statesOfMatter from '../../../statesOfMatter.js';
 import MoleculeForceAndMotionDataSet from '../MoleculeForceAndMotionDataSet.js';
 import MultipleParticleModel from '../MultipleParticleModel.js';
 import AbstractVerletAlgorithm from './AbstractVerletAlgorithm.js';
@@ -272,5 +271,4 @@ class WaterVerletAlgorithm extends AbstractVerletAlgorithm {
   }
 }
 
-statesOfMatter.register( 'WaterVerletAlgorithm', WaterVerletAlgorithm );
 export default WaterVerletAlgorithm;

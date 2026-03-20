@@ -8,7 +8,6 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import statesOfMatter from '../../statesOfMatter.js';
 import SOMConstants from '../SOMConstants.js';
 
 // constants
@@ -129,5 +128,4 @@ class DataQueueEntry {
   }
 }
 
-statesOfMatter.register( 'TimeSpanDataQueue', TimeSpanDataQueue );
 export default TimeSpanDataQueue;

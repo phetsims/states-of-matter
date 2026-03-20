@@ -8,7 +8,6 @@
 import EnumerationDeprecated from '../../../../phet-core/js/EnumerationDeprecated.js';
 import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
 import AtomType from '../../common/model/AtomType.js';
-import statesOfMatter from '../../statesOfMatter.js';
 
 const AtomPair = EnumerationDeprecated.byMap( {
     NEON_NEON: { fixedAtomType: AtomType.NEON, movableAtomType: AtomType.NEON },
@@ -21,5 +20,4 @@ const AtomPair = EnumerationDeprecated.byMap( {
   }
 ) as IntentionalAny;
 
-statesOfMatter.register( 'AtomPair', AtomPair );
 export default AtomPair;

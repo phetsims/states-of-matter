@@ -30,7 +30,6 @@ import SubstanceType from '../../common/SubstanceType.js';
 import AtomAndMoleculeIconFactory from '../../common/view/AtomAndMoleculeIconFactory.js';
 import SOMColors from '../../common/view/SOMColors.js';
 import TitledSlider from '../../common/view/TitledSlider.js';
-import statesOfMatter from '../../statesOfMatter.js';
 import StatesOfMatterStrings from '../../StatesOfMatterStrings.js';
 import AtomPair from '../model/AtomPair.js';
 import DualAtomModel from '../model/DualAtomModel.js';
@@ -492,5 +491,4 @@ class AtomicInteractionsControlPanel extends Node {
   }
 }
 
-statesOfMatter.register( 'AtomicInteractionsControlPanel', AtomicInteractionsControlPanel );
 export default AtomicInteractionsControlPanel;

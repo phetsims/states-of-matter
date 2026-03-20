@@ -122,6 +122,4 @@ type StringsType = {
 
 const StatesOfMatterStrings = getStringModule( 'STATES_OF_MATTER' ) as StringsType;
 
-statesOfMatter.register( 'StatesOfMatterStrings', StatesOfMatterStrings );
-
 export default StatesOfMatterStrings;

@@ -13,7 +13,6 @@ import MultipleParticleModel from '../common/model/MultipleParticleModel.js';
 import SOMConstants from '../common/SOMConstants.js';
 import SubstanceType from '../common/SubstanceType.js';
 import SOMColors from '../common/view/SOMColors.js';
-import statesOfMatter from '../statesOfMatter.js';
 import StatesOfMatterStrings from '../StatesOfMatterStrings.js';
 import StatesIcon from './StatesIcon.js';
 import StatesScreenView from './view/StatesScreenView.js';
@@ -48,5 +47,4 @@ class StatesScreen extends Screen<MultipleParticleModel, StatesScreenView> {
   }
 }
 
-statesOfMatter.register( 'StatesScreen', StatesScreen );
 export default StatesScreen;

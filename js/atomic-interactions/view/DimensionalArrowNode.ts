@@ -11,7 +11,6 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import ArrowShape from '../../../../scenery-phet/js/ArrowShape.js';
 import Path, { PathOptions } from '../../../../scenery/js/nodes/Path.js';
-import statesOfMatter from '../../statesOfMatter.js';
 
 type SelfOptions = {
   headHeight?: number;
@@ -101,5 +100,4 @@ class DimensionalArrowNode extends Path {
   }
 }
 
-statesOfMatter.register( 'DimensionalArrowNode', DimensionalArrowNode );
 export default DimensionalArrowNode;

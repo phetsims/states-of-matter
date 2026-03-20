@@ -17,7 +17,6 @@ import Node, { NodeOptions } from '../../../../scenery/js/nodes/Node.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import pointingHand_png from '../../../mipmaps/pointingHand_png.js';
 import PhaseChangesModel from '../../phase-changes/PhaseChangesModel.js';
-import statesOfMatter from '../../statesOfMatter.js';
 import MultipleParticleModel from '../model/MultipleParticleModel.js';
 
 // constants
@@ -190,5 +189,4 @@ class PointingHandNode extends Node {
   }
 }
 
-statesOfMatter.register( 'PointingHandNode', PointingHandNode );
 export default PointingHandNode;

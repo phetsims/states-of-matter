@@ -8,9 +8,7 @@
 
 import EnumerationDeprecated from '../../../../phet-core/js/EnumerationDeprecated.js';
 import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
-import statesOfMatter from '../../statesOfMatter.js';
 
 const AtomType = EnumerationDeprecated.byKeys( [ 'NEON', 'ARGON', 'OXYGEN', 'HYDROGEN', 'ADJUSTABLE' ] ) as IntentionalAny;
 
-statesOfMatter.register( 'AtomType', AtomType );
 export default AtomType;

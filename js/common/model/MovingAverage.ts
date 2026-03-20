@@ -8,7 +8,6 @@
  */
 
 import optionize from '../../../../phet-core/js/optionize.js';
-import statesOfMatter from '../../statesOfMatter.js';
 
 type SelfOptions = {
   initialValue?: number;
@@ -62,5 +61,4 @@ class MovingAverage {
   }
 }
 
-statesOfMatter.register( 'MovingAverage', MovingAverage );
 export default MovingAverage;

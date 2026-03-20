@@ -11,7 +11,6 @@ import optionize, { type EmptySelfOptions } from '../../../../phet-core/js/optio
 import type ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import CanvasNode from '../../../../scenery/js/nodes/CanvasNode.js';
 import type { NodeOptions } from '../../../../scenery/js/nodes/Node.js';
-import statesOfMatter from '../../statesOfMatter.js';
 import AtomType from '../model/AtomType.js';
 import type ScaledAtom from '../model/particle/ScaledAtom.js';
 import SOMConstants from '../SOMConstants.js';
@@ -191,5 +190,4 @@ class ParticleImageCanvasNode extends CanvasNode {
   }
 }
 
-statesOfMatter.register( 'ParticleImageCanvasNode', ParticleImageCanvasNode );
 export default ParticleImageCanvasNode;

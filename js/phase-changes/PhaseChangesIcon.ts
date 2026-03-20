@@ -18,7 +18,6 @@ import Rectangle from '../../../scenery/js/nodes/Rectangle.js';
 import Color from '../../../scenery/js/util/Color.js';
 import { rasterizeNode } from '../../../scenery/js/util/rasterizeNode.js';
 import SOMConstants from '../common/SOMConstants.js';
-import statesOfMatter from '../statesOfMatter.js';
 
 // constants
 const PARTICLE_COLOR = SOMConstants.NEON_COLOR;
@@ -131,5 +130,4 @@ class PhaseChangesIcon extends ScreenIcon {
   }
 }
 
-statesOfMatter.register( 'PhaseChangesIcon', PhaseChangesIcon );
 export default PhaseChangesIcon;

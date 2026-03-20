@@ -7,7 +7,6 @@
  */
 
 import { QueryStringMachine } from '../../../query-string-machine/js/QueryStringMachineModule.js';
-import statesOfMatter from '../statesOfMatter.js';
 
 const SOMQueryParameters = QueryStringMachine.getAll( {
 
@@ -25,7 +24,5 @@ const SOMQueryParameters = QueryStringMachine.getAll( {
   }
 
 } );
-
-statesOfMatter.register( 'SOMQueryParameters', SOMQueryParameters );
 
 export default SOMQueryParameters;

@@ -9,7 +9,6 @@
  * @author Siddhartha Chinthapally (Actual Concepts)
  */
 
-import statesOfMatter from '../../statesOfMatter.js';
 import SOMConstants from '../SOMConstants.js';
 
 class LjPotentialCalculator {
@@ -89,5 +88,4 @@ class LjPotentialCalculator {
   }
 }
 
-statesOfMatter.register( 'LjPotentialCalculator', LjPotentialCalculator );
 export default LjPotentialCalculator;

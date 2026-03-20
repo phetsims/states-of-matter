@@ -17,7 +17,6 @@ import Tandem from '../../../../tandem/js/Tandem.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import AtomType from '../../common/model/AtomType.js';
 import SOMConstants from '../../common/SOMConstants.js';
-import statesOfMatter from '../../statesOfMatter.js';
 
 class MotionAtom {
 
@@ -177,5 +176,4 @@ class MotionAtom {
   }
 }
 
-statesOfMatter.register( 'MotionAtom', MotionAtom );
 export default MotionAtom;

@@ -17,7 +17,6 @@ import Path from '../../../../scenery/js/nodes/Path.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import PositionMarker from '../../atomic-interactions/view/PositionMarker.js';
 import ZoomableGridNode from '../../atomic-interactions/view/ZoomableGridNode.js';
-import statesOfMatter from '../../statesOfMatter.js';
 import StatesOfMatterStrings from '../../StatesOfMatterStrings.js';
 import LjPotentialCalculator from '../model/LjPotentialCalculator.js';
 import SOMConstants from '../SOMConstants.js';
@@ -433,5 +432,4 @@ class PotentialGraphNode extends Node {
   }
 }
 
-statesOfMatter.register( 'PotentialGraphNode', PotentialGraphNode );
 export default PotentialGraphNode;

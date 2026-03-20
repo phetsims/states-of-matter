@@ -25,7 +25,6 @@ import SOMConstants from '../../common/SOMConstants.js';
 import InteractionPotentialCanvasNode from '../../common/view/InteractionPotentialCanvasNode.js';
 import PotentialGraphNode from '../../common/view/PotentialGraphNode.js';
 import SOMColors from '../../common/view/SOMColors.js';
-import statesOfMatter from '../../statesOfMatter.js';
 import DualAtomModel from '../model/DualAtomModel.js';
 
 // constants
@@ -346,5 +345,4 @@ class InteractivePotentialGraph extends PotentialGraphNode {
   }
 }
 
-statesOfMatter.register( 'InteractivePotentialGraph', InteractivePotentialGraph );
 export default InteractivePotentialGraph;

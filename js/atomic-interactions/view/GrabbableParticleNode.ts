@@ -11,7 +11,6 @@
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import DragListener from '../../../../scenery/js/listeners/DragListener.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
-import statesOfMatter from '../../statesOfMatter.js';
 import DualAtomModel from '../model/DualAtomModel.js';
 import MotionAtom from '../model/MotionAtom.js';
 import ParticleForceNode from './ParticleForceNode.js';
@@ -104,5 +103,4 @@ class GrabbableParticleNode extends ParticleForceNode {
   }
 }
 
-statesOfMatter.register( 'GrabbableParticleNode', GrabbableParticleNode );
 export default GrabbableParticleNode;

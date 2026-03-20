@@ -10,7 +10,6 @@
 import dotRandom from '../../../../../dot/js/dotRandom.js';
 import Utils from '../../../../../dot/js/Utils.js';
 import affirm from '../../../../../perennial-alias/js/browser-and-node/affirm.js';
-import statesOfMatter from '../../../statesOfMatter.js';
 import SOMConstants from '../../SOMConstants.js';
 import SubstanceType from '../../SubstanceType.js';
 import MultipleParticleModel from '../MultipleParticleModel.js';
@@ -2089,5 +2088,4 @@ const LIQUID_INITIAL_STATES = {
   }
 };
 
-statesOfMatter.register( 'MonatomicPhaseStateChanger', MonatomicPhaseStateChanger );
 export default MonatomicPhaseStateChanger;
