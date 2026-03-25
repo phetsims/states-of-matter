@@ -1,5 +1,5 @@
 {
-  "comment": "# states-of-matter 1.2.22-rc.1 Sat Mar 21 2026 10:50:45 GMT-0600 (Mountain Daylight Time)",
+  "comment": "# states-of-matter 1.2.22-rc.2 Wed Mar 25 2026 13:47:36 GMT-0600 (Mountain Daylight Time)",
   "assert": {
     "sha": "1a41cef653bbed1025af5768bea958d7e3e0f8ae",
     "branch": "HEAD"
@@ -73,7 +73,7 @@
     "branch": "HEAD"
   },
   "states-of-matter": {
-    "sha": "2b802a2999b2e01d2e162e5086fa8c95f8424aed",
+    "sha": "76cfb7094b5394f0e70e08c84eafaed6fe366683",
     "branch": "1.2"
   },
   "studio": {
